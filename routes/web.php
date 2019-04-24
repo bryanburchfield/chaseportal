@@ -92,6 +92,6 @@ Route::prefix('kpi')->group(function () {
         Route::post('toggle_kpi', 'KpiController@toggleKpi');
         Route::post('add_recipient', 'KpiController@addRecipient');
         Route::post('remove_recipient', 'KpiController@removeRecipientFromKpi');
-        Route::post('ajax_search', 'KpiController@ajaxSearch');
+        Route::post('ajax_search', 'KpiController@searchRecipients');
     });
 });

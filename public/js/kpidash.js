@@ -263,7 +263,7 @@ function searchRecips(el, value, kpi_id) {
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				query: value,
+				name: value,
 				kpi_id: kpi_id
 			},
 			success: function (response) {

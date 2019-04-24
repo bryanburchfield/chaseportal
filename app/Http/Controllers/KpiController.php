@@ -72,7 +72,7 @@ class KpiController extends Controller
         if ($request->addtoall == 'true') {
             $kpis = Kpi::all();
         } else {
-            $kpis = Kpi::find($request->kpi_id);
+            $kpis = Kpi::where('id', $request->kpi_id)->get();
         }
 
         foreach ($kpis as $kpi) {
@@ -149,6 +149,28 @@ class KpiController extends Controller
 
         // ajax return
         $return['adjust_interval'] = '1';
+        echo json_encode($return);
+    }
+
+    public function searchRecipients(Request $request)
+    {
+        $group_id = Auth::user()->group_id;
+        $kpi_id = $request->kpi_id;
+        $name = $request->name . '%';
+
+        $recipients = Recipient::where('group_id', $group_id)
+            ->where('name', 'like', $name)
+            ->whereNotExists(function ($query) use ($kpi_id) {
+                $query->select(DB::raw(1))
+                    ->from('kpi_recipients')
+                    ->whereRaw('kpi_id = ' . $kpi_id .
+                        ' AND recipient_id = recipients.id');
+            })
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+
+        $return['search_recip'] = $recipients;
         echo json_encode($return);
     }
 
