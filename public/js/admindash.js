@@ -191,7 +191,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/call_volume',
+            url: '/admindashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -387,7 +387,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/agent_call_count',
+            url: '/admindashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -536,7 +536,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/completed_calls',
+            url: '/admindashboard/completed_calls',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -559,7 +559,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/avg_hold_time',
+            url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -580,7 +580,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/service_level',
+            url: '/admindashboard/service_level',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -653,7 +653,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'admindashboard/abandon_rate',
+            url: '/admindashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -670,7 +670,7 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: 'admindashboard/rep_avg_handletime',
+            url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -705,7 +705,7 @@ var Dashboard = {
             }
         });
         $.ajax({
-            url: 'admindashboard/update_filters',
+            url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { datefilter: datefilter, campaign: campaign, inorout: inorout },

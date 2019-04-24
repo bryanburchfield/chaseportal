@@ -5,8 +5,8 @@ Route::redirect('/raw', '/raw');
 
 // Probably need a default landing page for this
 Route::get('/', function () {
-    // phpinfo();
-    return 'Nothing to see here';
+    phpinfo();
+    // return 'Nothing to see here';
 });
 
 // This is for user logins
@@ -72,5 +72,26 @@ Route::prefix('leaderdashboard')->group(function () {
         Route::post('leader_board', 'LeaderDashController@leaderBoard');
         Route::post('call_volume', 'LeaderDashController@callVolume');
         Route::post('calls_by_campaign', 'LeaderDashController@callsByCampaign');
+    });
+});
+
+// KPIs: all urls start with /kpi/
+Route::prefix('kpi')->group(function () {
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('optout/{recipient_id}', 'KpiController@optOut')->name('kpi.optout')->middleware('signed');
+
+    // must be logged in to access any of these
+    Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/', 'KpiController@index');
+        Route::get('recipients', 'KpiController@recipients');
+
+        // ajax targets
+        Route::post('run_kpi', 'KpiController@runKpi');
+        Route::post('adjust_interval', 'KpiController@adjustInterval');
+        Route::post('toggle_kpi', 'KpiController@toggleKpi');
+        Route::post('add_recipient', 'KpiController@addRecipient');
+        Route::post('remove_recipient', 'KpiController@removeRecipientFromKpi');
+        Route::post('ajax_search', 'KpiController@ajaxSearch');
     });
 });

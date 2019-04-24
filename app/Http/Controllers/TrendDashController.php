@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Campaign;
 use App\DialingResult;
 use App\AgentActivity;
@@ -53,7 +54,7 @@ class TrendDashController extends Controller
             $format = 'Y-m-d H:i:s.000';
             $modifier = "+1 hour";
             $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
-                CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
         } else {
             $mapFunction = 'dateTimeToDay';
             $format = 'Y-m-d 00:00:00.000';
@@ -66,21 +67,21 @@ class TrendDashController extends Controller
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $select = "'Time' = $xAxis,
-            'Inbound Count' = SUM(CASE WHEN CallType IN ('1','11') THEN 1 ELSE 0 END),
-            'Inbound Handled Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-              'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-              'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-            'Inbound Voicemails' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),
-            'Inbound Abandoned Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-            'Inbound Dropped Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-            'Duration Inbound' = SUM(CASE WHEN CallType IN ('1','11') THEN Duration ELSE 0 END),
-            'Outbound Count' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN 1 ELSE 0 END),
-            'Outbound Handled Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-              'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-              'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-            'Outbound Abandoned Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-            'Outbound Dropped Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-            'Duration Outbound' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN Duration ELSE 0 END)";
+        'Inbound Count' = SUM(CASE WHEN CallType IN ('1','11') THEN 1 ELSE 0 END),
+        'Inbound Handled Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+        'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+        'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+        'Inbound Voicemails' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),
+        'Inbound Abandoned Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
+        'Inbound Dropped Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
+        'Duration Inbound' = SUM(CASE WHEN CallType IN ('1','11') THEN Duration ELSE 0 END),
+        'Outbound Count' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN 1 ELSE 0 END),
+        'Outbound Handled Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+        'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+        'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+        'Outbound Abandoned Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
+        'Outbound Dropped Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
+        'Duration Outbound' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN Duration ELSE 0 END)";
 
         $query = DialingResult::select(DB::raw($select));
 

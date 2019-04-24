@@ -157,7 +157,7 @@ var Dashboard = {
             }
         });
         $.ajax({
-            url: 'leaderdashboard/update_filters',
+            url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { datefilter: datefilter, campaign: campaign, inorout: inorout },
@@ -169,7 +169,7 @@ var Dashboard = {
     leader_board: function () {
         $.ajax({
             'async': false,
-            url: 'leaderdashboard/leader_board',
+            url: '/leaderdashboard/leader_board',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -216,7 +216,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'leaderdashboard/call_volume',
+            url: '/leaderdashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -316,7 +316,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'leaderdashboard/calls_by_campaign',
+            url: '/leaderdashboard/calls_by_campaign',
             type: 'POST',
             dataType: 'json',
             success: function (response) {

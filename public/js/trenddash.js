@@ -162,7 +162,7 @@ var Dashboard = {
             }
         });
         $.ajax({
-            url: 'admindashboard/update_filters',
+            url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { datefilter: datefilter, campaign: campaign, inorout: inorout },
@@ -185,7 +185,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'trenddashboard/call_volume',
+            url: '/trenddashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -324,7 +324,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'trenddashboard/call_details',
+            url: '/trenddashboard/call_details',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -439,7 +439,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'trenddashboard/agent_calltime',
+            url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -511,7 +511,7 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: 'trenddashboard/service_level',
+            url: '/trenddashboard/service_level',
             type: 'POST',
             dataType: 'json',
             success: function (response) {

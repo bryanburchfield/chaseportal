@@ -37,6 +37,10 @@ trait DashTraits
         $this->dateFilter = Session::get('dateFilter', 'today');
         $this->inorout = Session::get('inorout', 'inbound');
         $this->isApi = Session::get('isApi', 0);
+
+        // set sqlsrv db up here too
+        $db = Auth::user()->db;
+        config(['database.connections.sqlsrv.database' => $db]);
     }
 
     private function formatVolume($result, $params)
@@ -52,10 +56,13 @@ trait DashTraits
         // before 8am
         // We'll use our from/to dates but convert them to local first
         // Subtract 1 second from end date since it'll be the start of the next day
+
+        $tz = Auth::user()->tz;
+
         $prevRecs = false;
         $delRecs = [];
-        $fromDate = Campaign::utcToLocal($params['fromDate']);
-        $toDate = Campaign::utcToLocal($params['toDate'])->modify('-1 second');
+        $fromDate = utcToLocal($params['fromDate'], $tz);
+        $toDate = utcToLocal($params['toDate'], $tz)->modify('-1 second');
 
         while ($fromDate <= $toDate) {
             $loopDate = $fromDate->format($params['format']);
@@ -131,6 +138,8 @@ trait DashTraits
 
     private function filterDetails()
     {
+        $tz = Auth::user()->tz;
+
         if (strpos($this->dateFilter, '/')) {
             $startDate = substr($this->dateFilter, 0, 10);
             $endDate = substr($this->dateFilter, 11);
@@ -143,7 +152,7 @@ trait DashTraits
             $this->campaign = ' - <b>' . $this->campaign . '</b>';
         }
 
-        $now = \App\Campaign::UtcToLocal(new \DateTime)->format('n/j/y g:i A');
+        $now = utcToLocal(new \DateTime, $tz)->format('n/j/y g:i A');
 
         switch ($this->dateFilter) {
                 /// filter selection | time | campaign
@@ -151,7 +160,7 @@ trait DashTraits
                 $details = 'Today | ' . $now . $this->campaign;
                 break;
             case 'yesterday':
-                $yesterday = \App\Campaign::UtcToLocal((new \DateTime)->modify('-1 day'))->format('n/j/y');
+                $yesterday = utcToLocal((new \DateTime)->modify('-1 day'), $tz)->format('n/j/y');
                 $details = 'Yesterday | ' . $yesterday . $this->campaign;
                 break;
             case 'week':
@@ -184,47 +193,49 @@ trait DashTraits
 
     private function dateRange($dateFilter)
     {
+        $tz = Auth::user()->tz;
+
         // the $toDate is non-inclusive
         switch ($dateFilter) {
             case 'today':
                 // from today at 00:00 to current date+time
-                $fromDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d')));
+                $fromDate = localToUtc(new \DateTime(date('Y-m-d')), $tz);
                 $toDate = new \DateTime;  // already UTC
                 break;
 
             case 'yesterday':
                 // all day yesterday
-                $fromDate = \App\Campaign::localToUtc((new \DateTime(date('Y-m-d')))->modify('-1 day'));
-                $toDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d')));
+                $fromDate = localToUtc((new \DateTime(date('Y-m-d')))->modify('-1 day'), $tz);
+                $toDate = localToUtc(new \DateTime(date('Y-m-d')), $tz);
                 break;
 
             case 'week':
                 // from monday thru sunday -- this will always include future datetimes
-                $fromDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d', strtotime('monday this week'))));
-                $toDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d', strtotime('monday next week'))));
+                $fromDate = localToUtc(new \DateTime(date('Y-m-d', strtotime('monday this week'))), $tz);
+                $toDate = localToUtc(new \DateTime(date('Y-m-d', strtotime('monday next week'))), $tz);
                 break;
 
             case 'last_week':
                 // from monday thru sunday -- this will always include future datetimes
-                $fromDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d', strtotime('monday last week'))));
-                $toDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-d', strtotime('monday this week'))));
+                $fromDate = localToUtc(new \DateTime(date('Y-m-d', strtotime('monday last week'))), $tz);
+                $toDate = localToUtc(new \DateTime(date('Y-m-d', strtotime('monday this week'))), $tz);
                 break;
 
             case 'month':
                 // from first day of this month at 00:00:00 to current date+time
-                $fromDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-1')));
+                $fromDate = localToUtc(new \DateTime(date('Y-m-1')), $tz);
                 $toDate = new \DateTime;  // already UTC
                 break;
 
             case 'last_month':
                 // from first day of last month at 00:00:00 to current date+time
-                $fromDate = \App\Campaign::localToUtc((new \DateTime(date('Y-m-1')))->modify('-1 month'));
-                $toDate = \App\Campaign::localToUtc(new \DateTime(date('Y-m-1')));
+                $fromDate = localToUtc((new \DateTime(date('Y-m-1')))->modify('-1 month'), $tz);
+                $toDate = localToUtc(new \DateTime(date('Y-m-1')), $tz);
                 break;
 
             default:  // custom range - add 1 to ending date
-                $fromDate = \App\Campaign::localToUtc(new \DateTime(substr($dateFilter, 0, 10)));
-                $toDate = \App\Campaign::localToUtc((new \DateTime(substr($dateFilter, 11)))->modify('+1 day'));
+                $fromDate = localToUtc(new \DateTime(substr($dateFilter, 0, 10)), $tz);
+                $toDate = localToUtc((new \DateTime(substr($dateFilter, 11)))->modify('+1 day'), $tz);
         }
 
         return [$fromDate, $toDate];
