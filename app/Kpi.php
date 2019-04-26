@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Kpi extends Model
 {
@@ -18,8 +19,10 @@ class Kpi extends Model
         return $this->hasMany('App\KpiRecipient');
     }
 
-    public static function getKpis($groupId)
+    public static function getKpis()
     {
+        $groupId = Auth::user()->group_id;
+
         $kpis = self::select('kpis.*', 'KG.active', 'KG.interval')
             ->leftJoin('kpi_groups as KG', 'kpis.id', '=', 'KG.kpi_id')
             ->where('KG.group_id', $groupId)

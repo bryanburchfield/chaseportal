@@ -16,13 +16,13 @@ class LeaderDashController extends Controller
     {
         $this->getSession();
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
         natcasesort($campaigns);
         array_unshift($campaigns, 'Total');
+
+        $jsfile[] = "leaderdash.js";
+        $cssfile[] = "leaderdash.css";
 
         $data = [
             'isApi' => $this->isApi,
@@ -31,6 +31,8 @@ class LeaderDashController extends Controller
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'leaderdash',
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile,
         ];
         return view('leaderdash')->with($data);
     }
@@ -141,7 +143,8 @@ class LeaderDashController extends Controller
         $new_result['tot_outbound'] = $tot_outbound;
         $new_result['tot_inbound'] = $tot_inbound;
 
-        $details = $this->filterDetails();
+        list($campaign, $details) = $this->filterDetails();
+        $new_result['campaign'] = $campaign;
         $new_result['details'] = $details;
 
         $return['call_volume'] = $new_result;

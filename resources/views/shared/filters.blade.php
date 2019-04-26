@@ -1,7 +1,10 @@
 <div class="row">
     <div class="col-sm-9">
         <div class="filter_time_camp_dets">
-            <p></p>
+            <p>
+                <span class="selected_datetime"></span> |
+                <span class="selected_campaign"></span>
+            </p>
         </div>
     </div>
     <div class="col-sm-3">

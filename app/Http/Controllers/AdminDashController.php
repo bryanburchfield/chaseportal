@@ -15,13 +15,13 @@ class AdminDashController extends Controller
     {
         $this->getSession();
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
         natcasesort($campaigns);
         array_unshift($campaigns, 'Total');
+
+        $jsfile[] = "admindash.js";
+        $cssfile[] = "admindash.css";
 
         $data = [
             'isApi' => $this->isApi,
@@ -30,6 +30,8 @@ class AdminDashController extends Controller
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'admindash',
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile,
         ];
         return view('admindash')->with($data);
     }
@@ -330,9 +332,9 @@ class AdminDashController extends Controller
             }
         }
 
-        $details = $this->filterDetails();
+        list($campaign, $details) = $this->filterDetails();
 
-        $return['completed_calls'] = ['total' => $total_completed_calls, 'outbound' => $outbound_completed_calls, 'inbound' => $inbound_completed_calls, 'details' => $details];
+        $return['completed_calls'] = ['total' => $total_completed_calls, 'outbound' => $outbound_completed_calls, 'inbound' => $inbound_completed_calls, 'campaign' => $campaign, 'details' => $details];
         echo json_encode($return);
     }
 

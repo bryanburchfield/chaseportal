@@ -95,3 +95,26 @@ Route::prefix('kpi')->group(function () {
         Route::post('ajax_search', 'KpiController@searchRecipients');
     });
 });
+
+// Master dashboard: all urls start with /master/
+Route::prefix('master')->group(function () {
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+    // must be logged in to access any of these
+    Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/', 'MasterDashController@index');
+        Route::get('recipients', 'MasterDashController@recipients');
+
+        // Admin only
+        Route::middleware('can:accessAdmin')->get('admin', 'MasterDashController@admin');
+
+        // ajax targets
+        Route::post('set_dashboard', 'MasterDashController@setDashboard');
+        Route::post('update_report', 'MasterDashController@updateReport');
+
+        // Admin only
+        Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
+        Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
+    });
+});

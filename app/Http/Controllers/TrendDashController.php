@@ -17,13 +17,13 @@ class TrendDashController extends Controller
     {
         $this->getSession();
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
         natcasesort($campaigns);
         array_unshift($campaigns, 'Total');
+
+        $jsfile[] = "trenddash.js";
+        $cssfile[] = "trenddash.css";
 
         $data = [
             'isApi' => $this->isApi,
@@ -32,6 +32,8 @@ class TrendDashController extends Controller
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'trenddash',
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile,
         ];
         return view('trenddash')->with($data);
     }
@@ -206,8 +208,12 @@ class TrendDashController extends Controller
         $new_result['total'] = $total;
 
 
+        list($campaign, $details) = $this->filterDetails();
+
         $return['call_volume'] = $new_result;
-        $return['call_volume']['details'] = $this->filterDetails();
+        $return['call_volume']['campaign'] = $campaign;
+        $return['call_volume']['details'] = $details;
+
         echo json_encode($return);
     }
 

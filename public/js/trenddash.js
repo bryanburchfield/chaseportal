@@ -190,7 +190,8 @@ var Dashboard = {
             dataType: 'json',
             success: function (response) {
 
-                $('.filter_time_camp_dets p').html(response['call_volume']['details']);
+                $('.selected_datetime').html(response['call_volume']['details']);
+                $('.selected_campaign').html(response['call_volume']['campaign']);
 
                 var total_calls_int = 0;
                 if (response['call_volume']['total'] != null) {

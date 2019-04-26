@@ -543,7 +543,8 @@ var Dashboard = {
                 $('#completed_calls .total').html(response['completed_calls']['total']);
                 $('#completed_calls p.inbound').html(response['completed_calls']['inbound'].toLocaleString());
                 $('#completed_calls p.outbound').html(response['completed_calls']['outbound'].toLocaleString());
-                $('.filter_time_camp_dets p').html(response['completed_calls']['details']);
+                $('.selected_datetime').html(response['completed_calls']['details']);
+                $('.selected_campaign').html(response['completed_calls']['campaign']);
             }, error: function (jqXHR, textStatus, errorThrown) {
                 var div = $('#completed_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);

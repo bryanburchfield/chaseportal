@@ -221,7 +221,8 @@ var Dashboard = {
             dataType: 'json',
             success: function (response) {
 
-                $('.filter_time_camp_dets p').html(response['call_volume']['details']);
+                $('.selected_datetime').html(response['call_volume']['details']);
+                $('.selected_campaign').html(response['call_volume']['campaign']);
 
                 $('.total_calls_out p').html(response['call_volume']['tot_outbound']);
                 $('.total_calls_in p').html(response['call_volume']['tot_inbound']);

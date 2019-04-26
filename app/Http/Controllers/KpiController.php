@@ -20,12 +20,14 @@ class KpiController extends Controller
     public function index()
     {
         $db = Auth::user()->db;
-        $groupId = Auth::user()->group_id;
         config(['database.connections.sqlsrv.database' => $db]);
 
+        $jsfile[] = "kpidash.js";
+        $cssfile[] = "kpidash.css";
+
         $data = [
-            'curdash' => 'kpidash',
-            'groupId' => $groupId,
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile
         ];
         return view('kpidash')->with($data);
     }

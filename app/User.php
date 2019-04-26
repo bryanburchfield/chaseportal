@@ -38,4 +38,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function type($type)
+    {
+        $type = (array)$type;
+        return in_array($this->user_type, $type);
+    }
 }

@@ -37,6 +37,7 @@ trait DashTraits
         $this->dateFilter = Session::get('dateFilter', 'today');
         $this->inorout = Session::get('inorout', 'inbound');
         $this->isApi = Session::get('isApi', 0);
+        $this->curdash = Session::get('curdash', 'admindash');
 
         // set sqlsrv db up here too
         $db = Auth::user()->db;
@@ -140,55 +141,43 @@ trait DashTraits
     {
         $tz = Auth::user()->tz;
 
+        $campaign = ($this->campaign == 'Total') ? 'All Campaigns' : $this->campaign;
+
         if (strpos($this->dateFilter, '/')) {
             $startDate = substr($this->dateFilter, 0, 10);
             $endDate = substr($this->dateFilter, 11);
         }
 
-        if ($this->campaign == 'Total') {
-            $this->campaign = 'All Campaigns';
-        }
-        if (!empty($this->campaign)) {
-            $this->campaign = ' - <b>' . $this->campaign . '</b>';
-        }
-
-        $now = utcToLocal(new \DateTime, $tz)->format('n/j/y g:i A');
-
         switch ($this->dateFilter) {
-                /// filter selection | time | campaign
             case 'today':
-                $details = 'Today | ' . $now . $this->campaign;
+                $details = 'Today | ' . utcToLocal(date('Y-m-d H:i:s'), $tz)->format('n/j/y');
                 break;
             case 'yesterday':
-                $yesterday = utcToLocal((new \DateTime)->modify('-1 day'), $tz)->format('n/j/y');
-                $details = 'Yesterday | ' . $yesterday . $this->campaign;
+                $details = 'Yesterday | ' . utcToLocal(date("Y-M-d H:i:s", strtotime('-1 day')), $tz)->format('n/j/y');
                 break;
             case 'week':
                 $monday = (new \DateTime(date('Y-m-d', strtotime('monday this week'))))->format('n/j/y');
                 $sunday = (new \DateTime(date('Y-m-d', strtotime('sunday this week'))))->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (This Week) | ' . $now . $this->campaign;
+                $details = $monday . ' - ' . $sunday . ' (This Week)';
                 break;
             case 'last_week':
                 $monday = (new \DateTime(date('Y-m-d', strtotime('monday last week'))))->format('n/j/y');
                 $sunday = (new \DateTime(date('Y-m-d', strtotime('sunday last week'))))->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (Last Week) | ' . $now . $this->campaign;
+                $details = $monday . ' - ' . $sunday . ' (Last Week)';
                 break;
             case 'month':
-                $month = (new \DateTime())->format('F Y');
-                $details = $month . ' (MTD) | ' . $now . $this->campaign;
+                $details = (new \DateTime())->format('F Y') . ' (MTD)';
                 break;
             case 'last_month':
-                $month = ((new \DateTime())->modify('-1 month'))->format('F Y');
-                $details = $month . ' | ' . $now . $this->campaign;
+                $details = ((new \DateTime())->modify('-1 month'))->format('F Y');
                 break;
             default:
                 $start = (new \DateTime($startDate))->format('n/j/y');
                 $end = (new \DateTime($endDate))->format('n/j/y');
-
-                $details = $start . ' - ' . $end . ' | ' . $now . $this->campaign;
+                $details = $start . ' - ' . $end;
         }
 
-        return $details;
+        return [$campaign, $details];
     }
 
     private function dateRange($dateFilter)

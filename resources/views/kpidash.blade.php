@@ -11,7 +11,7 @@
             <div class="col-sm-12">
                 <h2>KPI Notifications</h2>
             </div>
-            @foreach(\App\Kpi::getKpis($groupId) as $kpi)
+            @foreach(\App\Kpi::getKpis() as $kpi)
 
             <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">
                 <a href="#" class="kpi_trigger"> {{ $kpi->name }}</a>
