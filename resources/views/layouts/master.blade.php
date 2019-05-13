@@ -20,7 +20,7 @@
            width: 100%;
            height: 100%;
            z-index: 9999;
-           background-image: url('/admindashboard/img/loader2.gif');
+           background-image: url('/img/loader2.gif');
            background-repeat: no-repeat; 
            background-color: rgba(255,255,255,0.88);
            background-position: center;
