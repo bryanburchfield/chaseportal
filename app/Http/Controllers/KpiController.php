@@ -27,7 +27,8 @@ class KpiController extends Controller
 
         $data = [
             'jsfile' => $jsfile,
-            'cssfile' => $cssfile
+            'cssfile' => $cssfile,
+            'curdash' => 'kpidash',
         ];
         return view('kpidash')->with($data);
     }
