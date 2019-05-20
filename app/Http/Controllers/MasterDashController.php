@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use App\Campaign;
+use Illuminate\Http\RedirectResponse;
 
 
 class MasterDashController extends Controller
@@ -69,6 +70,13 @@ class MasterDashController extends Controller
 
         // ajax return
         $return['set_dash'] = $request->dashboard;
+        echo json_encode($return);
+    }
+
+    public function selectedReport(Request $request){
+
+        // return redirect()->route('/reports/call_details');
+        $return['report'] = $request->report;
         echo json_encode($return);
     }
 

@@ -12,12 +12,12 @@
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet" type="text/css"/>
-    @isset($cssfile)
+    <link href="/css/app.css" rel="stylesheet" type="text/css"/>
+   {{--  @isset($cssfile)
     @foreach($cssfile as $css)
     <link href="/css/{{ $css }}" rel="stylesheet" type="text/css"/>
     @endforeach
-    @endisset
+    @endisset --}}
     <link href="/css/jquery-ui.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.min.js"></script>

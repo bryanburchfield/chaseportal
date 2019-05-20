@@ -112,6 +112,7 @@ Route::prefix('master')->group(function () {
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_report', 'MasterDashController@updateReport');
+        Route::get('reports', 'MasterDashController@selectedReport');
 
         // Admin only
         Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
