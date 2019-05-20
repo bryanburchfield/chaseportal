@@ -98,7 +98,9 @@ Route::prefix('kpi')->group(function () {
 
 // Master dashboard: all urls start with /master/
 Route::prefix('master')->group(function () {
+    
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('reports/{report}', 'ReportController@index');
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
@@ -112,10 +114,14 @@ Route::prefix('master')->group(function () {
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_report', 'MasterDashController@updateReport');
-        Route::get('reports', 'MasterDashController@selectedReport');
+        // Route::get('reports/{route}', 'MasterDashController@selectedReport');
 
         // Admin only
         Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
         Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
     });
 });
+
+// Route::post('master/reports/calldetails', function(){
+//     return view('reports.call_details');
+// });

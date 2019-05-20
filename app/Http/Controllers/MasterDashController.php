@@ -74,8 +74,8 @@ class MasterDashController extends Controller
     }
 
     public function selectedReport(Request $request){
-
-        // return redirect()->route('/reports/call_details');
+        return view('reports.call_details');
+        // return redirect()->route('master/reports/call_details');
         $return['report'] = $request->report;
         echo json_encode($return);
     }
@@ -103,5 +103,9 @@ class MasterDashController extends Controller
     public function deleteUser(Request $request)
     {
         //
+    }
+
+    public function test(){
+        
     }
 }

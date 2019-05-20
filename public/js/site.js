@@ -20,7 +20,7 @@ var Master = {
 
 	init:function(){
 		$('.pag').clone().insertAfter('div.table-responsive');
-		// $('.view_report_btn').on('click', this.view_report);
+		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
 		$('#deleteRecipModal .remove_recip').on('click', this.remove_user);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
@@ -251,7 +251,7 @@ var Master = {
 		var selected_report = $('input.report_option:checked'). val();
 
 		if(selected_report != '' && selected_report != undefined){
-			// window.location ="reports.php?report="+selected_report;
+			window.location ="reports.php?report="+selected_report;
 		}else{
 			$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
 		}
@@ -855,36 +855,5 @@ var Master = {
 $(document).ready(function(){
 	Master.init();
 
-	$('.view_report_btn').on('click', function(){
-
-		$('.alert').hide();
-		var report = $('input.report_option:checked'). val();
-
-		// if(report != '' && report != undefined){
-		// 	window.location ="reports.php?report="+report;
-		// }else{
-		// 	$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
-		// }
-
-		// $.ajax({
-		// 	url: '/master/reports/'+report,
-		// 	type: 'POST',
-		// 	dataType: 'json',
-		// 	data: { 'report': report },
-		// 	success: function (response) {
-		// 		alert(report);
-		// 		// console.log(report);
-		// 		// return false;
-		// 		if (!$('.sidebar').hasClass('active')) {
-		// 			$('.sidebar').toggle();
-		// 			$('.preloader').show();
-		// 			window.location = "/reports/"+report;
-		// 		} else {
-		// 			window.location = "/reports/"+report;
-		// 		}
-
-		// 	}
-		// });
-	});
 
 });
