@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use App\Campaign;
 use App\DialingResult;
 use App\AgentActivity;
@@ -48,6 +49,10 @@ class ReportController extends Controller
             6 => 'TextMessage',
         ];
 
+        $report = $request->report;
+        $page['menuitem'] = 'reports';
+        $page['type'] = 'report';
+
         $data = [
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
@@ -55,7 +60,9 @@ class ReportController extends Controller
             'inbound_sources' => $inbound_sources,
             'rep' => $rep,
             'call_status' => $call_status,
-            'call_types' => $call_types
+            'call_types' => $call_types,
+            'report' => $report,
+            'page' => $page
         ];
 
         return view($view)->with($data);

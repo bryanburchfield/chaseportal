@@ -1,4 +1,4 @@
-@extends('layouts.dash')
+{{-- @extends('layouts.dash')
 
 @section('title', 'KPI Dashboard')
 @section('content')
@@ -133,4 +133,4 @@
     </div>
 </div>
 
-@endsection
+@endsection --}}

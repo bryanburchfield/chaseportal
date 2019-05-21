@@ -101,7 +101,6 @@ Route::prefix('master')->group(function () {
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     
-
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
 
@@ -121,7 +120,3 @@ Route::prefix('master')->group(function () {
         Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
     });
 });
-
-// Route::post('master/reports/calldetails', function(){
-//     return view('reports.call_details');
-// });

@@ -87,7 +87,7 @@ class MasterDashController extends Controller
 
     public function admin()
     {
-        return 'Admin menu';
+        return view('master.admin');
     }
 
     public function updateReport(Request $request)
@@ -106,6 +106,6 @@ class MasterDashController extends Controller
     }
 
     public function test(){
-        
+
     }
 }

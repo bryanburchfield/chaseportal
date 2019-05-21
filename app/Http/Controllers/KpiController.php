@@ -185,8 +185,9 @@ class KpiController extends Controller
     public function recipients()
     {
         $groupId = Auth::user()->group_id;
-
+        $page['menuitem'] = 'kpidash';
         $data = [
+            'page'=>$page,
             'curdash' => 'kpidash',
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')

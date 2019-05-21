@@ -6,51 +6,58 @@
 
 <div class="preloader"></div>
 
-@include('shared.navbar')
+<div class="wrapper">
+    @include('shared.sidenav')
 
-<div class="container-fluid bg">
-    <div class="container mt50">
-        <div class="row">
+    <div id="content">
+        @include('shared.reportnav')
 
-            <div class="col-sm-6">
-                <h2>Add Recipients</h2>
+        <div class="container-fluid bg dashboard p20">
+            <div class="container mt20">
+                <div class="row">
 
-                <form action="#" method="post" class="form user_email_form well clear add_recipient display"
-                    data-kpi="1">
-                    <div class="form-group">
-                        <input type="text" class="form-control name" name="name" placeholder="Name" required>
+                    <div class="col-sm-6">
+                        <h2>Add Recipients</h2>
+
+                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form, well clear add_recipient display', 'data-kpi'=> "1"]) !!}
+
+                            <div class="form-group">
+                                {!! Form::label('name', 'Full Name') !!}
+                                {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('email', 'Email Address') !!}
+                                {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}                                
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('phone', 'Phone') !!}
+                                {!! Form::tel('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}                                
+                            </div>
+                            
+                            {!! Form::hidden('redirect_url', 'recipients.php', ['class'=>'redirect_url']) !!}
+                            {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
+
+                        {!! Form::close() !!}
                     </div>
 
-                    <div class="form-group">
-                        <input type="email" class="form-control email" name="email" placeholder="Email Address"
-                            required>
+                    <div class="col-sm-6 expanded_emails display">
+                        <h2>Remove Recipients</h2>
+                        @foreach($recipients as $recipient)
+                            <div class="user clear" id="{{ $recipient->id }}">
+                                <p class="name">{{ $recipient->name }}</p>
+                                <p class="email">{{ $recipient->email }}</p>
+                                <p class="phone">{{ $recipient->phone }}</p>
+                                <a class="remove_recip_fromall" href="#" data-recip="{{ $recipient->id }}"><i class="glyphicon glyphicon-remove-sign"></i></a>
+                            </div>
+                        @endforeach
                     </div>
 
-                    <div class="form-group">
-                        <input type="tel" class="form-control phone" name="phone" placeholder="Phone Number">
-                    </div>
-
-                    <input type="checkbox" class="addtoall hide" checked name="addtoall" value="1">
-
-                    <input type="hidden" name="redirect_url" value="recipients.php" class="redirect_url">
-
-                    <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
-                </form>
+                </div>
             </div>
-
-            <div class="col-sm-6 expanded_emails display">
-                <h2>Remove Recipients</h2>
-                @foreach($recipients as $recipient)
-                    <div class="user clear" id="{{ $recipient->id }}">
-                        <p class="name">{{ $recipient->name }}</p>
-                        <p class="email">{{ $recipient->email }}</p>
-                        <p class="phone">{{ $recipient->phone }}</p>
-                        <a class="remove_recip_fromall" href="#" data-recip="{{ $recipient->id }}"><i class="glyphicon glyphicon-remove-sign"></i></a>
-                    </div>
-                @endforeach
-            </div>
-
         </div>
     </div>
 </div>
+
 @endsection

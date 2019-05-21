@@ -1,4 +1,4 @@
-<header>
+{{-- <header>
     <nav class="navbar navbar-default navbar-static-top dashboard">
         <div class="container navcontainer">
             <div class="navbar-header">
@@ -17,3 +17,4 @@
         </div>
     </nav>
 </header>
+ --}}
