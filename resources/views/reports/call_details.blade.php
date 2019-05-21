@@ -75,7 +75,7 @@
 					<div class="col-sm-4">
 						<div class="form-group">
 							{!! Form::label('calltype', 'Call Type') !!}
-							{!! Form::select("calltype[]", ['0'=>'Outbound', '1'=>'Inbound', '2'=>'Manual', '3'=>'Transferred', '4'=>'Conference', '5'=>'Progressive', '6'=>'Text Message'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
+							{!! Form::select("calltype[]", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 						</div>
 					</div>
 

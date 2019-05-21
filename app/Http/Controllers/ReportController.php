@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Campaign;
+use App\DialingResult;
+use App\AgentActivity;
+use App\InboundSource;
+use App\Rep;
+use App\Dispo;
 
 class ReportController extends Controller
 {
-	// use DashTraits;
+	use DashTraits;
 
     public function index(Request $request)
     {
@@ -20,32 +27,25 @@ class ReportController extends Controller
         $jsfile = [];
         $cssfile = [];
 
-        ///// add campaigns here
-        $campaigns = [
-        	'Camp1'=>'camp1',
-        	'Camp2'=>'camp2',
-        	'Camp3'=>'camp3',
-        	'Camp4'=>'camp4',
-        	'Camp5'=>'camp5',
-        	'Camp6'=>'camp6'
-        ];
+        $this->getSession();
 
-        $inbound_sources = [
-        	'source1'=>'source1',
-        	'source2'=>'source2',
-        	'source3'=>'source3'
-        ];
+        $groupId = Auth::user()->group_id;
+        $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
+        natcasesort($campaigns);
+        array_unshift($campaigns, 'Total');
 
-        $rep = [
-        	'rep1'=>'rep1',
-        	'rep2'=>'rep2',
-        	'rep3'=>'rep3'
-        ];
+        $call_status = Dispo::where('GroupId', $groupId)->orWhere('IsSystem', 1)->pluck('Disposition')->sortBy('Disposition')->toArray();
+		$inbound_sources = InboundSource::where('GroupId', $groupId)->pluck('InboundSource', 'Description')->sortBy('Description')->toArray();     
+        $rep = Rep::where('GroupId', $groupId)->where('IsActive', 1)->pluck('RepName')->toArray();
 
-        $call_status = [
-        	'rep1'=>'rep1',
-        	'rep2'=>'rep2',
-        	'rep3'=>'rep3'
+        $call_types = [
+            0 => 'Outbound',
+            1 => 'Inbound',
+            2 => 'Manual',
+            3 => 'Transferred',
+            4 => 'Conference',
+            5 => 'Progresive',
+            6 => 'TextMessage',
         ];
 
         $data = [
@@ -54,7 +54,8 @@ class ReportController extends Controller
             'campaigns' => $campaigns,
             'inbound_sources' => $inbound_sources,
             'rep' => $rep,
-            'call_status' => $call_status
+            'call_status' => $call_status,
+            'call_types' => $call_types
         ];
 
         return view($view)->with($data);
