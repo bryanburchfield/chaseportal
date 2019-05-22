@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use App\Campaign;
 use Illuminate\Http\RedirectResponse;
-
+use App\System;
+use App\User;
 
 class MasterDashController extends Controller
 {
@@ -87,7 +89,34 @@ class MasterDashController extends Controller
 
     public function admin()
     {
-        return view('master.admin');
+
+        $this->getSession();
+        $groupId = Auth::user()->group_id;
+
+        $timezones = System::all()->sortBy('current_utc_offset')->toArray();
+        $timezone_array=[''=>'Select One'];
+        foreach ($timezones as $tz) {
+            $timezone_array[$tz['name']]= '['.$tz['current_utc_offset'].'] '.$tz['name'];
+        }
+
+        $dbs=[''=>'Select One'];
+        for ($i = 0; $i < 24 ; $i++) {
+            $dbs['PowerV2_Reporting_Dialer-'.$i] = 'PowerV2_Reporting_Dialer-'.$i;
+        }
+
+        $users = User::all()->sortBy('name');
+
+        $page['menuitem'] = 'admin';
+        $page['type'] = 'page';
+        $data=[
+            'page'=>$page,
+            'timezone_array'=>$timezone_array,
+            'group_id'=>$groupId,
+            'dbs'=>$dbs,
+            'users'=>$users
+        ];
+        
+        return view('master.admin')->with($data);
     }
 
     public function updateReport(Request $request)
@@ -97,7 +126,9 @@ class MasterDashController extends Controller
 
     public function addUser(Request $request)
     {
-        //
+        $input = $request->all();
+        User::create($input);
+        return redirect('master/add_user');
     }
 
     public function deleteUser(Request $request)
@@ -105,7 +136,4 @@ class MasterDashController extends Controller
         //
     }
 
-    public function test(){
-
-    }
 }
