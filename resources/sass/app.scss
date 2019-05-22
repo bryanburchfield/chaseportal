@@ -1385,6 +1385,15 @@ a.run_kpi.btn{
   cursor:pointer;
 }
 
+#deleteRecipModal .modal-footer .btn-default{
+  float: left;
+}
+
+#deleteRecipModal .modal-footer form{
+  float: left;
+  margin-left: 10px;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

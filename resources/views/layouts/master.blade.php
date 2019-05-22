@@ -63,7 +63,7 @@
     <script src="/js/datetimepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script>
     <script src="/js/multiselect.js"></script>    
-    <script src="/js/site.js"></script>
+    <script src="/js/master.js"></script>
     <script src="/js/masternav.js"></script>
 
 

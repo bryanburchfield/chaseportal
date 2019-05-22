@@ -70,15 +70,41 @@
 
 						<div class="users">
 							@foreach($users as $user)
-								<p id="user{{$user->id}}">{{$user->group_id}} - <span class="user_name">{{$user->name}}</span><a data-toggle="modal" data-target="#deleteRecipModal" class="remove_user" href="#" data-user="1"><i class="glyphicon glyphicon-remove-sign"></i></a></p>
+								<p id="user{{$user->id}}">{{$user->group_id}} - <span class="user_name">{{$user->name}}</span><a data-toggle="modal" data-target="#deleteRecipModal" class="remove_user" href="#" data-userid="{{$user->id}}" data-username="{{$user->name}}"><i class="glyphicon glyphicon-remove-sign"></i></a></p>
 							@endforeach
 						</div>
-						
 					</div>
 				</div>
 			</div>
-			
 		</div>
 	</div>
 </div>
+
+<!-- Delete Recipient Modal -->
+<div class="modal fade" id="deleteRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Recipient Removal</h4>
+            </div>
+            <div class="modal-body">
+                
+               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
+            </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	            {!! Form::open(['method'=> 'POST', 'url'=> 'master/delete_user']) !!}
+		            {!! Form::hidden('userid', null, ['id'=>'userid']) !!}
+		            {!! Form::hidden('username', null, ['id'=>'username']) !!}
+		            {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}
+				{!! Form::close() !!}
+	        </div>
+	    </div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
 @endsection

@@ -104,7 +104,7 @@ class MasterDashController extends Controller
             $dbs['PowerV2_Reporting_Dialer-'.$i] = 'PowerV2_Reporting_Dialer-'.$i;
         }
 
-        $users = User::all()->sortBy('name');
+        $users = User::all()->sortBy('id');
 
         $page['menuitem'] = 'admin';
         $page['type'] = 'page';
@@ -128,12 +128,13 @@ class MasterDashController extends Controller
     {
         $input = $request->all();
         User::create($input);
-        return redirect('master/add_user');
+        return redirect('master/admin');
     }
 
     public function deleteUser(Request $request)
     {
-        //
+        $user = User::findOrFail($request->userid)->delete();
+        return redirect('master/admin');
     }
 
 }
