@@ -13,6 +13,7 @@ use App\AgentActivity;
 use App\InboundSource;
 use App\Rep;
 use App\Dispo;
+use App\Lead;
 
 class ReportController extends Controller
 {
@@ -68,5 +69,20 @@ class ReportController extends Controller
         return view($view)->with($data);
     }
 
+
+    public function getSubcampaigns($campaign){
+
+        $groupId = Auth::user()->group_id;
+        $subcampaigns = Lead::all()->where('GroupId', $groupId)->pluck('Subcampaign')->sortBy('Subcampaign');
+
+        // $sql =  "SELECT DISTINCT Subcampaign
+        // FROM Leads
+        // WHERE GroupId = ?
+        // AND Campaign IN ($qmarks)
+        // AND Subcampaign is not null
+        // AND Subcampaign != ''
+        // ORDER BY Subcampaign";
+
+    }
   
 }
