@@ -44,7 +44,8 @@
                         <a href="#" class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</a>
                         <div class="expanded_emails clear">
                             <a href="#" class="add_email"><i class="glyphicon glyphicon-plus-sign"></i> Add Recipient</a>
-
+                            
+                            
                             <form id="form{{ $kpi->id }}" data-kpi="{{ $kpi->id }}" action="#" method="post" class="form user_email_form well clear add_recipient" autocomplete="off">
                                 <div class="form-group prel">
                                     <input type="text" class="form-control name" name="name" placeholder="Name" required onkeyup="searchRecips(this, this.value, '{{ $kpi->id }}')" autocomplete="new-password">
@@ -67,7 +68,8 @@
                                 <input type="hidden" name="redirect_url" value="{{ url('/kpi') }}" class="redirect_url">
 
                                 <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
-                            </form>
+                            {!! Form::close() !!}
+
                             @foreach($kpi->recipients as $r)
                             <div class="user clear" id="{{ $r->id }}">
                                 <p class="name">{{ $r->name }}</p>

@@ -156,7 +156,8 @@ var KPI = {
 
 	add_recipient: function (kpi_id = 0, name = '', phone = 0, email = '') {
 		event.preventDefault();
-
+		console.log('test');
+		
 		var name = $(this).find('.name').val(),
 			email = $(this).find('.email').val(),
 			phone = $(this).find('.phone').val(),
@@ -184,6 +185,9 @@ var KPI = {
 			},
 
 			success: function (response) {
+
+				console.log(response);
+
 				var from_form,
 					append_user
 					;

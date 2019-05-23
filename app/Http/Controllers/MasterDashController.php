@@ -134,7 +134,7 @@ class MasterDashController extends Controller
     public function deleteUser(Request $request)
     {
         $user = User::findOrFail($request->userid)->delete();
-        return redirect('master/admin');
+        return redirect('master/admin');        
     }
 
 }

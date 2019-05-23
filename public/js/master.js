@@ -22,7 +22,7 @@ var Master = {
 		$('.pag').clone().insertAfter('div.table-responsive');
 		// $('.view_report_btn').on('click', this.view_report);
 		// $('.add_user').on('submit', this.add_user);
-		$('a.remove_user').on('click', this.remove_user);
+		$('a.remove_user, a.remove_recip_fromall').on('click', this.remove_user);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
 		$('.page-content').on('click', '.pagination li a', this.click_pag_btn);
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
@@ -229,10 +229,6 @@ var Master = {
 	// remove global user
 	remove_user:function(e){
 		e.preventDefault();
-
-		console.log($(this).data('username'));
-		console.log($(this).data('user'));
-
 		var username = $(this).data('username');
 		var userid = $(this).data('userid');
 

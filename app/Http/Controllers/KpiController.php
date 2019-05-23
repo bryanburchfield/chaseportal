@@ -37,7 +37,7 @@ class KpiController extends Controller
     {
         $this->removeRecipient($request->recipient_id);
 
-        return view('unsubscribed');
+        return $this->recipients();
     }
 
     public function removeRecipient($id)
@@ -59,6 +59,7 @@ class KpiController extends Controller
 
     public function addRecipient(Request $request)
     {
+
         // See if recip exists by email or phone
         $recipient = Recipient::where('phone', $this->formatPhone($request->phone))
             ->orWhere('email', $request->email)->first();
@@ -72,7 +73,7 @@ class KpiController extends Controller
             $recipient->save();
         }
 
-        if ($request->addtoall == 'true') {
+        if ($request->addtoall == 'true' || $request->redirect_url == 'recipients') { // this also needs to run based on if it came from the add_recip form on kpi/recipients
             $kpis = Kpi::all();
         } else {
             $kpis = Kpi::where('id', $request->kpi_id)->get();
@@ -85,9 +86,13 @@ class KpiController extends Controller
             $kr->save();
         }
 
-        // ajax return
-        $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
-        echo json_encode($return);
+        if($request->redirect_url == 'recipients'){
+           return $this->recipients();
+        }else{
+            // ajax return
+            $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
+            echo json_encode($return);
+        }
     }
 
     public function removeRecipientFromKpi(Request $request)

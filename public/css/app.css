@@ -1436,6 +1436,12 @@ h2 {
   color: #E15B23;
 }
 
+.opt .options a.remove_recip_glyph {
+  float: right;
+  position: relative;
+  bottom: 37px;
+}
+
 a.expand_dets {
   margin-bottom: 20px !important;
 }
@@ -1643,7 +1649,8 @@ a.run_kpi.btn {
   float: left;
 }
 
-#deleteRecipModal .modal-footer form {
+#deleteRecipModal .modal-footer form,
+.remove_recip {
   float: left;
   margin-left: 10px;
 }
