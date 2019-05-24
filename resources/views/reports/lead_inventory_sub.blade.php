@@ -13,7 +13,7 @@
 		@include('shared.reportnav')
 		
 		<div class="container-fluid bg dashboard p20">
-			<h3 class="heading">Campaign Usage</h3>
+			<h3 class="heading">Lead Inventory Subcampaign</h3>
 
 			<div class="report_filters well col-sm-12">
 				{!! Form::open(['method'=>'POST', 'url'=>'#', 'name'=>'report_filter_form', 'id'=>$report]) !!}

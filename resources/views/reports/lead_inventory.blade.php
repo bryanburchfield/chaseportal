@@ -13,18 +13,16 @@
 		@include('shared.reportnav')
 		
 		<div class="container-fluid bg dashboard p20">
-			<h3 class="heading">Campaign Usage</h3>
+			<h3 class="heading">Lead Inventory</h3>
 
 			<div class="report_filters well col-sm-12">
 				{!! Form::open(['method'=>'POST', 'url'=>'#', 'name'=>'report_filter_form', 'id'=>$report]) !!}
 
 					<div class="row">
-						
 						<div class="col-sm-4">
 							<div class="form-group">
-								
 								{!! Form::label('campaign', 'Campaign') !!}
-								{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+								{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 							</div>
 						</div>
 					</div>
