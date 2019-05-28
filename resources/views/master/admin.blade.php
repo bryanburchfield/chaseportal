@@ -35,17 +35,22 @@
 
 							<div class="form-group">
 								{!! Form::label('tz', 'Timezone') !!}
-								{!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz']) !!}
+								{!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
 							</div>
 
 							<div class="form-group">
 								{!! Form::label('user_type', 'Type') !!}
-								{!! Form::select("user_type", [''=> 'Choose One','client'=>'Client', 'admin'=>'Chase Admin'], null, ["class" => "form-control", 'id'=> 'user_type']) !!}
+								{!! Form::select("user_type", [''=> 'Choose One','client'=>'Client', 'admin'=>'Chase Admin'], null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
 							</div>
 
 							<div class="form-group">
 								{!! Form::label('db', 'Database') !!}
-								{!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db']) !!}
+								{!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+							</div>
+
+							<div class="form-group">
+								{!! Form::label('additional_db', 'Database 2') !!}
+								{!! Form::select("additional_db", $dbs, null, ["class" => "form-control", 'id'=> 'additional_db']) !!}
 							</div>
 							
 
