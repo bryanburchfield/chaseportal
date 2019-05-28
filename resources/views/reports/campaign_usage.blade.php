@@ -22,7 +22,7 @@
 						
 						<div class="col-sm-4">
 							<div class="form-group">
-								
+
 								{!! Form::label('campaign', 'Campaign') !!}
 								{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 							</div>

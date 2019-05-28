@@ -20,7 +20,7 @@ var Master = {
 
 	init:function(){
 		$('.pag').clone().insertAfter('div.table-responsive');
-		// $('.view_report_btn').on('click', this.view_report);
+		$('.view_report_btn').on('click', this.view_report);
 		// $('.add_user').on('submit', this.add_user);
 		$('a.remove_user, a.remove_recip_fromall').on('click', this.remove_user);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
@@ -28,7 +28,7 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.page-content').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select').on('change', this.get_subcampaigns); // check other reports to see if this needs to belongs to more than campaign_usage
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns); // check other reports to see if this needs to belongs to more than campaign_usage
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -153,12 +153,12 @@ var Master = {
 		
 		console.log(campaign);
 
-		if($('#subcampaign_select').length){
-			e.preventDefault();
-			var report = $('form.report_filter_form').attr('id');
-
+		// if($('#subcampaign_select').length){
+		// 	e.preventDefault();
+		// 	var report = $('form.report_filter_form').attr('id');
+		// return false;
 			$.ajax({
-				url: 'app/ajax/get_subcampaigns.php',
+				url: 'master/reports/get_subcampaigns',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -181,7 +181,7 @@ var Master = {
 					$("#subcampaign_select").multiselect('refresh');
 				}
 			});
-		}
+		// }
 	},
 
 	// add global user

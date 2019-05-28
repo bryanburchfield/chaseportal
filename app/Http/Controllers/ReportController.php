@@ -69,11 +69,13 @@ class ReportController extends Controller
         return view($view)->with($data);
     }
 
-
     public function getSubcampaigns($campaign){
 
         $groupId = Auth::user()->group_id;
-        $subcampaigns = Lead::all()->where('GroupId', $groupId)->pluck('Subcampaign')->sortBy('Subcampaign');
+        $subcampaigns = Lead::all()->distinct('Subcampaign')->where('GroupId', $groupId)->pluck('Subcampaign')->whereNotNull('Subcampaign')->where('Subcampaign', '!=', '')->sortBy('Subcampaign');
+
+        $return['subcampaigns'] = $campaign;
+        echo json_encode($return);
 
         // $sql =  "SELECT DISTINCT Subcampaign
         // FROM Leads
@@ -83,6 +85,5 @@ class ReportController extends Controller
         // AND Subcampaign != ''
         // ORDER BY Subcampaign";
 
-    }
-  
+    } 
 }

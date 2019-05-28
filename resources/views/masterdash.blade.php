@@ -43,13 +43,14 @@
                     <div class="input-group">
 
                         <div class="input-group-btn">
-
-                            {{-- <a href="{{ route('logout') }}" class="logout btn btn-primary btn-sm" onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">Log Out</a> --}}
                             
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                                 @csrf
-                            </form>
+                                <div class="btn-group">
+                                {!! Form::submit('Log Out',['class'=>'btn logout_btn']) !!}
+                                </div>
+                            {!! Form::close() !!}
+
                             @if($page['type'] =='dash')
                                 @include('master.dashnav')
                             @elseif($page['type'] == 'kpi_page')

@@ -128,13 +128,14 @@ img.text_logo {
   text-align: center;
 }
 
-button.btn.logout_btn {
+.btn.logout_btn {
+  border-radius: 0;
   background: #c14141;
   color: #fff;
   font-weight: 600;
 }
 
-button.logout_btn:hover {
+.logout_btn:hover {
   background: #9e2f2f;
   color: #fff;
 }
