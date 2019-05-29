@@ -1,4 +1,4 @@
-<div class="container mt20">
+<div class="container-full mt20">
     <div class="row">
         <div class="col-sm-12">
             <h2>KPI Notifications</h2>
