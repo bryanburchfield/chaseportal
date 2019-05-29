@@ -63,15 +63,15 @@
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								{!! Form::label('rep', 'Rep') !!}
-								{!! Form::select("rep[]", $rep, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+								{!! Form::label('reps', 'Rep') !!}
+								{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 							</div>
 						</div>
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								{!! Form::label('call_status', 'Call Status') !!}
-								{!! Form::select("call_status[]", $call_status, null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
+								{!! Form::label('call_statuses', 'Call Status') !!}
+								{!! Form::select("call_statuses[]", $call_statuses, null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 							</div>
 						</div>
 					</div>
@@ -79,8 +79,8 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								{!! Form::label('calltype', 'Call Type') !!}
-								{!! Form::select("calltype[]", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
+								{!! Form::label('call_types', 'Call Type') !!}
+								{!! Form::select("call_types[]", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 							</div>
 						</div>
 
@@ -98,7 +98,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								{!! Form::label('phone', 'Phone') !!}
-								{!! Form::tel('phone', null, ['class'=>'form-control', 'required' => true]) !!}
+								{!! Form::tel('phone', null, ['class'=>'form-control', 'required' => false]) !!}
 							</div>
 						</div>
 					</div>
@@ -109,13 +109,13 @@
 						</label>
 					</div>
 
-					@if(count($errors))
+					{{-- @if(count($errors))
 						<div class="alert alert-danger report_errors">
 							@foreach($errors as $error)
 								{{$error}}
 							@endforeach
 						</div>
-					@endif
+					@endif --}}
 
 					{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 					{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
