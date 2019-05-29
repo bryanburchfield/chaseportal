@@ -101,24 +101,27 @@ Route::prefix('kpi')->group(function () {
 Route::prefix('master')->group(function () {
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    
+
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/', 'MasterDashController@index');
         Route::get('recipients', 'MasterDashController@recipients');
 
-        // Admin only
-        Route::middleware('can:accessAdmin')->get('admin', 'MasterDashController@admin');
+        // Reports
+        Route::get('reports/{report}', 'ReportController@index');
+        Route::post('reports/{report}', 'ReportController@runReport');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_report', 'MasterDashController@updateReport');
-        Route::get('reports/{report}', 'ReportController@index');
         Route::get('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
 
         // Admin only
-        Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
-        Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::middleware('can:accessAdmin')->get('admin', 'MasterDashController@admin');
+            Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
+            Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
+        });
     });
 });
