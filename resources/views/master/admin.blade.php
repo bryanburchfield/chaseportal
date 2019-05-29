@@ -85,6 +85,8 @@
 	</div>
 </div>
 
+@include('shared.reportmodal')
+
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

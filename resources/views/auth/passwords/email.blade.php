@@ -22,7 +22,7 @@
                         
                         <h4>Reset Account Password</h4>
 
-                        {!! Form::open(['method' => 'POST', 'route'=> 'password.email', 'class' => 'form']) !!}
+                        {!! Form::open(['method' => 'POST', 'action'=> 'Auth\ForgotPasswordController@sendResetLinkEmail', 'class' => 'form']) !!}
                             {{-- @csrf --}}
 
                             <div class="form-group">

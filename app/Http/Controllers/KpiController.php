@@ -25,6 +25,13 @@ class KpiController extends Controller
         $jsfile[] = "kpidash.js";
         $cssfile[] = "kpidash.css";
 
+        // $page['menuitem'] = $this->currentDash;
+
+        // $page['type'] = 'dash';
+        // if ($this->currentDash == 'kpidash') {
+        //     $page['type'] = 'kpi_page';
+        // }
+
         $data = [
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
@@ -191,6 +198,8 @@ class KpiController extends Controller
     {
         $groupId = Auth::user()->group_id;
         $page['menuitem'] = 'kpidash';
+        $page['type'] = 'other';
+
         $data = [
             'page'=>$page,
             'curdash' => 'kpidash',
