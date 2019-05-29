@@ -8,7 +8,7 @@
 
     <div id="content">
 
-        @include('shared.reportnav')
+        @include('shared.defaultHeader')
         
         <div class="container-fluid bg dashboard p20">
             <div class="row">
@@ -22,7 +22,7 @@
                         
                         <h4>Reset Account Password</h4>
 
-                        {!! Form::open(['method' => 'POST', 'route'=> 'password.email', 'class' => 'form']) !!}
+                        {!! Form::open(['method' => 'POST', 'action'=> 'Auth\ForgotPasswordController@sendResetLinkEmail', 'class' => 'form']) !!}
                             {{-- @csrf --}}
 
                             <div class="form-group">
