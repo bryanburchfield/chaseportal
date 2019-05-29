@@ -44,4 +44,14 @@ class User extends Authenticatable
         $type = (array)$type;
         return in_array($this->user_type, $type);
     }
+
+    public function getDatabaseArray()
+    {
+        $dblist = (array)$this->db;
+
+        if (!empty($this->additional_db)) {
+            array_push($dblist, $this->additional_db);
+        }
+        return $dblist;
+    }
 }

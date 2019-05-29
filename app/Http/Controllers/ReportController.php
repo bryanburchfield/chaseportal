@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
+use Illuminate\Support\MessageBag;
 
 
 class ReportController extends Controller
@@ -30,10 +31,15 @@ class ReportController extends Controller
     {
         $results = $this->reportservice->getResults($request);
 
+        // check for errors
+        if (is_object($results)) {
+            return $this->returnView([], $results);
+        }
+
         return $this->returnView($results);
     }
 
-    public function returnView($results)
+    public function returnView($results, MessageBag $errors = null)
     {
         $view = $this->reportservice->viewName();
         $pagedata = $this->reportservice->getPageData();
@@ -43,6 +49,6 @@ class ReportController extends Controller
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
 
-        return view($view)->with(array_merge($filters, $pagedata, $results));
+        return view($view)->with(array_merge($filters, $pagedata, $results))->withErrors($errors);
     }
 }
