@@ -88,7 +88,6 @@ class MasterDashController extends Controller
 
     public function admin()
     {
-
         $this->getSession();
         $groupId = Auth::user()->group_id;
 
@@ -112,7 +111,8 @@ class MasterDashController extends Controller
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
             'dbs' => $dbs,
-            'users' => $users
+            'users' => $users,
+            'jsfile' => [],
         ];
 
         return view('master.admin')->with($data);
