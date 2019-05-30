@@ -40,9 +40,15 @@ trait ReportTraits
         }
         $sql .= " ORDER BY Campaign";
 
-        $results = $this->runSql($sql, $bind);
+        $results = $this->resultsToList($this->runSql($sql, $bind));
 
+        array_unshift($results, '_MANUAL_CALL_');
         return $results;
+    }
+
+    public function getAllSubcampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
+    {
+        return [];
     }
 
     public function getAllInboundSources()
@@ -61,7 +67,8 @@ trait ReportTraits
         }
         $sql .= " ORDER BY Description, InboundSource";
 
-        $results = $this->runSql($sql, $bind);
+        $results = $this->resultsToList($this->runSql($sql, $bind));
+
 
         return $results;
     }
@@ -83,7 +90,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY RepName";
 
-        $results = $this->runSql($sql, $bind);
+        $results = $this->resultsToList($this->runSql($sql, $bind));
 
         if ($rollups) {
             array_unshift($results, '[All Unanswered]');
@@ -109,7 +116,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY CallStatus";
 
-        $results = $this->runSql($sql, $bind);
+        $results = $this->resultsToList($this->runSql($sql, $bind));
 
         return $results;
     }
@@ -142,14 +149,24 @@ trait ReportTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        try {
+            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        } catch (\Exception $e) {
+            $results = [];
+        }
 
         if (count($results)) {
             // convert array of objects to array of arrays
             $results = json_decode(json_encode($results), true);
+        }
 
-            // flatten array.  If 2 cols then create k=>v pairs
+        return $results;
+    }
 
+    private function resultsToList($results)
+    {
+        // flatten array.  If 2 cols then create k=>v pairs
+        if (count($results)) {
             if (count($results[0]) == 1) {
                 $key = implode('', array_keys($results[0]));
                 $results = array_column($results, $key);

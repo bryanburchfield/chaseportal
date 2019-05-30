@@ -41,7 +41,12 @@ class ReportService
 
     public function getPageData()
     {
-        return $this->report->getPageData();
+        $pagedata['report'] = $this->reportName;
+        $pagedata['page']['menuitem'] = 'reports';
+        $pagedata['page']['type'] = 'report';
+        $pagedata['jsfile'] = ['site.js'];
+
+        return array_merge($pagedata, ['params' => $this->report->params]);
     }
 
     public function getResults(Request $request)

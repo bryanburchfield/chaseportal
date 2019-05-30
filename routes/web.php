@@ -102,11 +102,15 @@ Route::prefix('master')->group(function () {
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+    // ajax targets
+    Route::post('reports/update_report', 'ReportController@updateReport');
+
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/', 'MasterDashController@index');
         Route::get('recipients', 'MasterDashController@recipients');
+        Route::post('showreport', 'MasterDashController@showReport');
 
         // Reports
         Route::get('reports/{report}', 'ReportController@index');
@@ -114,7 +118,6 @@ Route::prefix('master')->group(function () {
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
-        Route::post('update_report', 'MasterDashController@updateReport');
         Route::get('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
 
         // Admin only
