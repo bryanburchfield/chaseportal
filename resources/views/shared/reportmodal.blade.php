@@ -7,7 +7,7 @@
                 <h4 class="modal-title" id="myModalLabel">Select a Report</h4>
             </div>
 
-            {!! Form::open(['method'=>'POST', 'action'=> 'ReportController@index' ]) !!}
+            {!! Form::open(['method'=>'POST', 'action'=> 'MasterDashController@showReport' ]) !!}
             <div class="modal-body">
                <div class="col-sm-6 nopad">
                    <div class="radio">

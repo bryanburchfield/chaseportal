@@ -76,12 +76,9 @@ class MasterDashController extends Controller
         echo json_encode($return);
     }
 
-    public function selectedReport(Request $request)
+    public function showReport(Request $request)
     {
-        return view('reports.call_details');
-        // return redirect()->route('master/reports/call_details');
-        $return['report'] = $request->report;
-        echo json_encode($return);
+        return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
 
     public function recipients()

@@ -110,6 +110,7 @@ Route::prefix('master')->group(function () {
 
         Route::get('/', 'MasterDashController@index');
         Route::get('recipients', 'MasterDashController@recipients');
+        Route::post('showreport', 'MasterDashController@showReport');
 
         // Reports
         Route::get('reports/{report}', 'ReportController@index');
