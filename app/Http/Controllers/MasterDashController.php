@@ -33,8 +33,6 @@ class MasterDashController extends Controller
             'currentDash' => $this->currentDash,
         ]);
 
-        Log::debug($this->currentDash);
-
         $jsfile[] = $this->currentDash . ".js";
         $jsfile[] = "master.js";
         $jsfile[] = "masternav.js";

@@ -49,7 +49,7 @@ var Master = {
 				}
 			});
 			$.ajax({
-				url: 'app/ajax/get_campaigns.php',
+				url: 'get_campaigns',
 				type: 'POST',
 				dataType: 'json',
 				async: false, /////////////////////// use async when rebuilding multi select menus
@@ -168,7 +168,7 @@ var Master = {
 				}
 			});
 			$.ajax({
-				url: 'app/ajax/get_subcampaigns.php',
+				url: 'get_subcampaigns',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -214,7 +214,7 @@ var Master = {
 			}
 		});
 		$.ajax({
-			url: 'app/ajax/add_user.php',
+			url: 'add_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -252,7 +252,7 @@ var Master = {
 			}
 		});
 		$.ajax({
-			url: 'app/ajax/delete_user.php',
+			url: 'delete_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {

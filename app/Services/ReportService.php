@@ -44,7 +44,7 @@ class ReportService
         $pagedata['report'] = $this->reportName;
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
-        $pagedata['jsfile'] = ['site.js'];
+        $pagedata['jsfile'] = [];
 
         return array_merge($pagedata, ['params' => $this->report->params]);
     }
