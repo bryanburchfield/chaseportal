@@ -19,7 +19,7 @@
 						<h3 class="heading">Call Details</h3>
 
 						<div class="report_filters well col-sm-12">
-							{!! Form::open(['method'=>'POST', 'url'=>'#', 'name'=>'report_filter_form', 'id'=>$report]) !!}
+							{!! Form::open(['method'=>'POST', 'name'=>'report_filter_form', 'id'=>$report]) !!}
 
 								<div class="row">
 									<div class="col-sm-4">
@@ -50,8 +50,8 @@
 
 									<div class="col-sm-4">
 										<div class="form-group">
-											{!! Form::label('campaign', 'Campaign') !!}
-											{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+											{!! Form::label('campaigns', 'Campaigns') !!}
+											{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 										</div>
 									</div>
 								</div>
@@ -59,21 +59,21 @@
 								<div class="row">
 									<div class="col-sm-4">
 										<div class="form-group">
-											{!! Form::label('callerid', 'Inbound Sources') !!}
-											{!! Form::select("callerid[]", $inbound_sources, null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
+											{!! Form::label('callerids', 'Inbound Sources') !!}
+											{!! Form::select("callerids[]", $inbound_sources, null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 										</div>
 									</div>
 
 									<div class="col-sm-4">
 										<div class="form-group">
-											{!! Form::label('reps', 'Rep') !!}
+											{!! Form::label('reps', 'Reps') !!}
 											{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 										</div>
 									</div>
 
 									<div class="col-sm-4">
 										<div class="form-group">
-											{!! Form::label('call_statuses', 'Call Status') !!}
+											{!! Form::label('call_statuses', 'Call Statuses') !!}
 											{!! Form::select("call_statuses[]", $call_statuses, null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 										</div>
 									</div>
@@ -82,8 +82,8 @@
 								<div class="row">
 									<div class="col-sm-4">
 										<div class="form-group">
-											{!! Form::label('call_types', 'Call Type') !!}
-											{!! Form::select("call_types[]", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
+											{!! Form::label('call_type', 'Call Type') !!}
+											{!! Form::select("call_type", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 										</div>
 									</div>
 
