@@ -1,4 +1,4 @@
-<div class="container mt20">
+<div class="container-full mt20">
 
 	<div class="row">
 	    <div class="col-sm-9">
@@ -33,11 +33,9 @@
 	            </div>
 	        </div>
 
-	        <div class="col-sm-4 pl0">
-	            <div class="card card-6" >
-	                <!-- <h1 class="title mb0">Calls by Campaign</h1> -->
-
-	                <div class="inbound inandout">
+	        <div class="col-md-4 col-sm-12 pl0 match_height_4_gt">
+	            <div class="card card-6 mb0" >
+	                <div class="inbound inandout mb0">
 	                    <canvas id="calls_by_campaign"></canvas>
 	                </div>
 	            </div>
@@ -55,11 +53,9 @@
 	            </div>
 	        </div>
 
-	       <div class="col-sm-4 pr0">
-	            <div class="card card-6" >
-	                <!-- <h1 class="title mb0">Agent Calls by Campaign</h1> -->
-
-	                <div class="inbound inandout">
+	       <div class="col-md-4 col-sm-12 pr0 match_height_4_st">
+	            <div class="card card-6 mb0" >
+	                <div class="inbound inandout mb0">
 	                    <canvas id="agent_calls_by_campaign"></canvas>
 	                </div>
 	            </div>

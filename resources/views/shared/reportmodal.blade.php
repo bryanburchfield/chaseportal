@@ -6,6 +6,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Select a Report</h4>
             </div>
+
+            {!! Form::open(['method'=>'POST', 'action'=> 'ReportController@index' ]) !!}
             <div class="modal-body">
                <div class="col-sm-6 nopad">
                    <div class="radio">
@@ -72,9 +74,13 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary view_report_btn">View Report</button>
+                {{-- @csrf --}}
+                {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                {!! Form::submit('View Report',['class'=>'btn btn-primary mb0']) !!}
             </div>
+
+            {!! Form::close() !!}
         </div>
     </div>
 </div>

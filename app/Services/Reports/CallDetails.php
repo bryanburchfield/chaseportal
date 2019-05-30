@@ -11,6 +11,8 @@ class CallDetails
 {
     public $params;
 
+    use ReportTraits;
+
     public function __construct()
     {
         $this->params = [
@@ -58,11 +60,11 @@ class CallDetails
     public function getFilters()
     {
         $filters = [
-            'campaigns' => ReportService::getAllCampaigns(),
-            'inbound_sources' => ReportService::getAllInboundSources(),
-            'reps' => ReportService::getAllReps(true),
-            'call_statuses' => ReportService::getAllCallStatuses(),
-            'call_types' => ReportService::getAllCallTypes(),
+            'campaigns' => $this->getAllCampaigns(),
+            'inbound_sources' => $this->getAllInboundSources(),
+            'reps' => $this->getAllReps(true),
+            'call_statuses' => $this->getAllCallStatuses(),
+            'call_types' => $this->getAllCallTypes(),
         ];
 
         // Add 'all' to list of call types
