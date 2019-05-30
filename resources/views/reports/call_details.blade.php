@@ -121,6 +121,7 @@
 									</div>
 								@endif
 
+								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 								{!! Form::close() !!}
 								@if(count($results) > 0)

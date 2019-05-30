@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Log;
 
 
 class ReportController extends Controller
@@ -58,6 +59,7 @@ class ReportController extends Controller
 
     public function updateReport(Request $request)
     {
+        Log::debug($request);
         // run report
         // json echo stuff
     }
