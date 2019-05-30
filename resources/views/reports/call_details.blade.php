@@ -112,13 +112,13 @@
 									</label>
 								</div>
 
-								{{-- @if(count($errors))
+								@if($errors->isNotEmpty())
 									<div class="alert alert-danger report_errors">
-										@foreach($errors as $error)
+										@foreach($errors->all() as $error)
 											{{$error}}
 										@endforeach
 									</div>
-								@endif --}}
+								@endif
 
 								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
