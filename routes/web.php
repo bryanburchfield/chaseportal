@@ -114,7 +114,7 @@ Route::prefix('master')->group(function () {
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
-        Route::post('update_report', 'MasterDashController@updateReport');
+        Route::post('update_report', 'ReportController@updateReport');
         Route::get('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
 
         // Admin only

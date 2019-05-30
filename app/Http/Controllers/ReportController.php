@@ -20,9 +20,11 @@ class ReportController extends Controller
         $this->reportservice = new ReportService($this->reportName);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $results = [];
+        // Push old input to form
+        $request->flash();
 
         return $this->returnView($results);
     }
@@ -35,6 +37,8 @@ class ReportController extends Controller
         if (is_object($results)) {
             return $this->returnView([], $results);
         }
+        // Push old input to form
+        $request->flash();
 
         return $this->returnView($results);
     }
@@ -45,10 +49,23 @@ class ReportController extends Controller
         $pagedata = $this->reportservice->getPageData();
         $filters = $this->reportservice->getFilters();
 
-        $pagedata['report'] = $this->reportName;
-        $pagedata['page']['menuitem'] = 'reports';
-        $pagedata['page']['type'] = 'report';
+        return view($view)->with(array_merge($filters, $pagedata, ['results' => $results]))->withErrors($errors);
+    }
 
-        return view($view)->with(array_merge($filters, $pagedata, $results))->withErrors($errors);
+    //////////////////////
+    // Ajax targets follow
+    //////////////////////
+
+    public function updateReport(Request $request)
+    {
+        // run report
+        // json echo stuff
+    }
+
+    public function getSubcampaigns()
+    {
+        $results = $this->reportservice->getAllSubcampaigns();
+
+        // json echo stuff
     }
 }

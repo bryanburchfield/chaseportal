@@ -26,7 +26,7 @@
 										<div class="form-group">
 											{!! Form::label('fromdate', 'From') !!}
 											<div class="input-group date">
-												{!! Form::text('fromdate', null, ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
+												{!! Form::text('fromdate', null, ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true ]) !!}
 												<span class="input-group-addon">
 								                    <span class="glyphicon glyphicon-calendar">
 								                    </span>
@@ -107,10 +107,11 @@
 								</div>
 								
 								<div class="checkbox">
-									<label>Show only termination status
-										{!! Form::checkbox('showonlyterm',false, ['id'=>'showonlyterm']) !!}
-									</label>
-								</div>
+                                    <label>
+                                        {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
+                                        Show only termination status
+                                    </label>
+                                </div>
 
 								@if($errors->isNotEmpty())
 									<div class="alert alert-danger report_errors">
@@ -120,10 +121,12 @@
 									</div>
 								@endif
 
-								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
-
-							{!! Form::close() !!}
+								{!! Form::close() !!}
+								@if(count($results) > 0)
+									@include('shared.reportpagination')
+									@include('shared.reporttable')
+								@endif
 						</div>
 					</div>
 				</div>
