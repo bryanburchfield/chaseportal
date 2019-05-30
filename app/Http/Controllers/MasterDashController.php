@@ -76,11 +76,9 @@ class MasterDashController extends Controller
         echo json_encode($return);
     }
 
-    public function selectedReport(Request $request){
-        return view('reports.call_details');
-        // return redirect()->route('master/reports/call_details');
-        $return['report'] = $request->report;
-        echo json_encode($return);
+    public function showReport(Request $request)
+    {
+        return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
 
     public function recipients()
@@ -90,39 +88,34 @@ class MasterDashController extends Controller
 
     public function admin()
     {
-
         $this->getSession();
         $groupId = Auth::user()->group_id;
 
         $timezones = System::all()->sortBy('current_utc_offset')->toArray();
-        $timezone_array=[''=>'Select One'];
+        $timezone_array = ['' => 'Select One'];
         foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']]= '['.$tz['current_utc_offset'].'] '.$tz['name'];
+            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
-        $dbs=[''=>'Select One'];
-        for ($i = 0; $i < 24 ; $i++) {
-            $dbs['PowerV2_Reporting_Dialer-'.$i] = 'PowerV2_Reporting_Dialer-'.$i;
+        $dbs = ['' => 'Select One'];
+        for ($i = 0; $i < 24; $i++) {
+            $dbs['PowerV2_Reporting_Dialer-' . $i] = 'PowerV2_Reporting_Dialer-' . $i;
         }
 
         $users = User::all()->sortBy('id');
 
         $page['menuitem'] = 'admin';
         $page['type'] = 'page';
-        $data=[
-            'page'=>$page,
-            'timezone_array'=>$timezone_array,
-            'group_id'=>$groupId,
-            'dbs'=>$dbs,
-            'users'=>$users
+        $data = [
+            'page' => $page,
+            'timezone_array' => $timezone_array,
+            'group_id' => $groupId,
+            'dbs' => $dbs,
+            'users' => $users,
+            'jsfile' => [],
         ];
-        
-        return view('master.admin')->with($data);
-    }
 
-    public function updateReport(Request $request)
-    {
-        //
+        return view('master.admin')->with($data);
     }
 
     public function addUser(Request $request)
@@ -136,7 +129,6 @@ class MasterDashController extends Controller
     public function deleteUser(Request $request)
     {
         $user = User::findOrFail($request->userid)->delete();
-        return redirect('master/admin');        
+        return redirect('master/admin');
     }
-
 }
