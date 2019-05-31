@@ -3,48 +3,37 @@
 namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 
 class CallDetails
 {
-    public $params;
-
     use ReportTraits;
 
     public function __construct()
     {
-        $this->params = [
-            'curpage' => 1,
-            'pagesize' => 50,
-            'totrows' => 0,
-            'totpages' => 0,
-            'orderby' => [],
-            'groupby' => null,
-            'hasTotals' => false,
-            'fromdate' => '',
-            'todate' => '',
-            'campaigns' => [],
-            'reps' => [],
-            'calltype' => '',
-            'phone' => '',
-            'callerids' => [],
-            'callstatuses' => [],
-            'durationfrom' => '',
-            'durationto' => '',
-            'showonlyterm' => 0,
-            'columns' => [
-                'Rep' => 'Rep',
-                'Campaign' => 'Campaign',
-                'Phone' => 'Phone',
-                'Date' => 'Date',
-                'CallStatus' => 'Call Status',
-                'Duration' => 'Duration',
-                'CallType' => 'Call Type',
-                'Details' => 'Call Details',
-            ],
+        $this->initilaizeParams();
+
+        $this->params['fromdate'] = '';
+        $this->params['todate'] = '';
+        $this->params['campaigns'] = [];
+        $this->params['reps'] = [];
+        $this->params['calltype'] = '';
+        $this->params['phone'] = '';
+        $this->params['callerids'] = [];
+        $this->params['callstatuses'] = [];
+        $this->params['durationfrom'] = '';
+        $this->params['durationto'] = '';
+        $this->params['showonlyterm'] = 0;
+        $this->params['columns'] = [
+            'Rep' => 'Rep',
+            'Campaign' => 'Campaign',
+            'Phone' => 'Phone',
+            'Date' => 'Date',
+            'CallStatus' => 'Call Status',
+            'Duration' => 'Duration',
+            'CallType' => 'Call Type',
+            'Details' => 'Call Details',
         ];
     }
 
@@ -64,19 +53,6 @@ class CallDetails
         return $filters;
     }
 
-    public function getResults(Request $request)
-    {
-        $this->processInput($request);
-
-        if ($this->errors->isNotEmpty()) {
-            return $this->errors;
-        }
-
-        $results = $this->executeReport();
-
-        return $results;
-    }
-
     private function executeReport($all = false)
     {
         // Log::debug($this->params);
@@ -87,10 +63,9 @@ class CallDetails
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $bind['group_id'] =  Auth::user()->group_id;
+        $bind['tz'] = Auth::user()->tz;
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
-
-        $tz = Auth::user()->tz;
 
         $answered = 0;
         $unanswered = 0;
@@ -175,7 +150,7 @@ class CallDetails
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Phone, 
-                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
+                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE :tz as Date,
                 CASE DR.LeadId
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')

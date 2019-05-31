@@ -50,9 +50,9 @@
 									</div>
 								</div>
 
-								@if(count($errors))
+								@if($errors->isNotEmpty())
 									<div class="alert alert-danger report_errors">
-										@foreach($errors as $error)
+										@foreach($errors->all() as $error)
 											{{$error}}
 										@endforeach
 									</div>
@@ -60,8 +60,11 @@
 
 								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
-
-							{!! Form::close() !!}
+								{!! Form::close() !!}
+								@if(count($results) > 0)
+									@include('shared.reportpagination')
+									@include('shared.reporttable')
+								@endif
 						</div>
 					</div>
 				</div>
