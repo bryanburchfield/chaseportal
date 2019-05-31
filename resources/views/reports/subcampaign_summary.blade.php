@@ -49,18 +49,23 @@
 									</div>
 								</div>
 
-								@if(count($errors))
-									<div class="alert alert-danger report_errors">
-										@foreach($errors as $error)
-											{{$error}}
-										@endforeach
-									</div>
-								@endif
+								<div class='reporterrors'>
+									@include('shared.reporterrors')
+								</div>
 
 								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 
 							{!! Form::close() !!}
+						</div>
+
+						<div class="report_results">
+							<div class="reportpag">
+								@include('shared.reportpagination')
+							</div>
+							<div class="reporttable">
+								@include('shared.reporttable')
+							</div>
 						</div>
 					</div>
 				</div>

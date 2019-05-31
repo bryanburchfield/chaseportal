@@ -24,9 +24,9 @@ var Master = {
 		// $('.add_user').on('submit', this.add_user);
 		$('a.remove_user, a.remove_recip_fromall').on('click', this.remove_user);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
-		$('.page-content').on('click', '.pagination li a', this.click_pag_btn);
+		$('.report_results').on('click', '.pagination li a', this.click_pag_btn);
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
-		$('.page-content').on('change', '.curpage, .pagesize', this.change_pag_inputs);
+		$('.report_results').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
 		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns); // check other reports to see if this needs to belongs to more than campaign_usage
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
