@@ -36,8 +36,8 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('campaign', 'Campaign') !!}
-						{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::label('campaigns', 'Campaign') !!}
+						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>

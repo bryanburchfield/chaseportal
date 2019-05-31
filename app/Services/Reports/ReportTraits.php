@@ -276,4 +276,33 @@ trait ReportTraits
 
         return $results;
     }
+
+    private function getPage($results, $all = false)
+    {
+        if ($all) {
+            return $results;
+        }
+
+        // there should be at least 2 rows, including tots
+        if (!count($results)) {
+            return $results;  // empty array
+        }
+
+        // remove totals row
+        if ($this->params['hasTotals']) {
+            $totals = $results[count($results) - 1];
+            array_pop($results);
+        }
+
+        $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
+        $limit = $this->params['pagesize'];
+
+        $page = array_slice($results, $offset, $limit);
+
+        if ($this->params['hasTotals']) {
+            $page[] = $totals;
+        }
+
+        return $page;
+    }
 }

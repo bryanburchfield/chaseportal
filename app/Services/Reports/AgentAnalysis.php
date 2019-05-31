@@ -310,7 +310,7 @@ class AgentAnalysis
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
-            $sql .= ' ORDER BY Date';
+            $sql .= ' ORDER BY Date, Rep, Campaign';
         }
 
         if (!$all) {
