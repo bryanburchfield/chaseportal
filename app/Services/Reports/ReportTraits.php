@@ -183,19 +183,22 @@ trait ReportTraits
 
     private function resultsToList($results)
     {
-        // flatten array.  If 2 cols then create k=>v pairs
+        // flatten array, create k=>v pairs
         if (count($results)) {
+            $arr = [];
             if (count($results[0]) == 1) {
                 $key = implode('', array_keys($results[0]));
                 $results = array_column($results, $key);
+                foreach ($results as $v) {
+                    $arr[$v] = $v;
+                }
             } elseif (count($results[0]) == 2) {
-                $arr = [];
                 foreach ($results as $rec) {
                     $vals = array_values($rec);
                     $arr[$vals[0]] = $vals[1];
                 }
-                $results = $arr;
             }
+            $results = $arr;
         }
         return $results;
     }
