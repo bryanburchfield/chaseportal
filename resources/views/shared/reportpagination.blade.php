@@ -1,4 +1,4 @@
-@if(count($results) > 0)
+@if($params['totpages'] > 1)
 <?php
         $curpage = $params['curpage'];
         $lastpage = $params['totpages'];

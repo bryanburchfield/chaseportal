@@ -88,8 +88,13 @@ trait ReportTraits
 
         $results = $this->resultsToList($this->runSql($sql, $bind));
 
+        $arr = [];
+        foreach ($results as $k => $v) {
+            $v = $v . " ($k)";
+            $arr[$k] = $v;
+        }
 
-        return $results;
+        return $arr;
     }
 
     public function getAllReps($rollups = false)
