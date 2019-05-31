@@ -98,9 +98,8 @@
                 </label>
 			</div>
 
-			<div class='reporterrors'>
-				@include('shared.reporterrors')
-			</div>
+			<div class='reporterrors'></div>
+			
 				{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 		{!! Form::close() !!}

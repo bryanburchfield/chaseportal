@@ -52,12 +52,8 @@
                                 @yield('content')
 
                             <div class="report_results">
-                                <div class="reportpag">
-                                    @include('shared.reportpagination')
-                                </div>
-                                <div class="reporttable table-responsive {{$report}}">
-                                    @include('shared.reporttable')
-                                </div>
+                                <div class="reportpag pag"></div>
+                                <div class="reporttable table-responsive {{$report}}"></div>
                             </div>
                         </div>
                     </div>
