@@ -60,7 +60,8 @@ trait ReportTraits
 
         $results = $this->resultsToList($this->runSql($sql, $bind));
 
-        array_unshift($results, '_MANUAL_CALL_');
+        $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
+
         return $results;
     }
 
@@ -128,7 +129,8 @@ trait ReportTraits
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= "$union SELECT DISTINCT CallStatus
         FROM [$db].[dbo].[DialingResults]
-        WHERE GroupId = :groupid";
+        WHERE GroupId = :groupid
+        AND CallStatus != ''";
 
             $union = ' UNION';
         }
