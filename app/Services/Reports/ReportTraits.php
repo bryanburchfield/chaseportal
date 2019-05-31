@@ -4,9 +4,12 @@ namespace App\Services\Reports;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
+use Illuminate\Http\Request;
 
 trait ReportTraits
 {
+    public $errors;
 
     public function getAllCampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
     {
@@ -180,5 +183,59 @@ trait ReportTraits
             }
         }
         return $results;
+    }
+
+    private function checkPageFilters(Request $request)
+    {
+        $this->errors = new MessageBag();
+
+        if (!empty($request->th_sort)) {
+            $col = array_search($request->th_sort, $this->params['columns']);
+            $dir = $request->sort_direction ?? 'asc';
+            $this->params['orderby'] = [$col => $dir];
+        }
+
+        if (!empty($request->curpage)) {
+            if ($request->curpage <= 0) {
+                $this->errors->add('pagenumb', "Invalid page number");
+            }
+            $this->params['curpage'] = $request->curpage;
+        }
+
+        if (!empty($request->pagesize)) {
+            if ($request->pagesize <= 0) {
+                $this->errors->add('pagesize', "Invalid page size");
+            }
+            $this->params['pagesize'] = $request->pagesize;
+        }
+    }
+
+    private function checkDateRangeFilters(Request $request)
+    {
+        if (empty($request->fromdate)) {
+            $this->errors->add('fromdate.required', "From date required");
+        } else {
+            $this->params['fromdate'] = $request->fromdate;
+            $from = strtotime($this->params['fromdate']);
+
+            if ($from === false) {
+                $this->errors->add('fromdate.invalid', "From date not a valid date/time");
+            }
+        }
+
+        if (empty($request->todate)) {
+            $this->errors->add('todate.required', "To date required");
+        } else {
+            $this->params['todate'] = $request->todate;
+            $to = strtotime($this->params['todate']);
+
+            if ($to === false) {
+                $this->errors->add('todate.invalid', "To date not a valid date/time");
+            }
+        }
+
+        if (!empty($from) && !empty($to) && $to < $from) {
+            $this->errors->add('daterange', "To date must be after From date");
+        }
     }
 }

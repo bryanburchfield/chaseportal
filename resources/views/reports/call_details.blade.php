@@ -19,7 +19,7 @@
 						<h3 class="heading">Call Details</h3>
 
 						<div class="report_filters well col-sm-12">
-							{!! Form::open(['method'=>'POST', 'url'=> '#','name'=>'report_filter_form', 'id'=>$report]) !!}
+							{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report]) !!}
 
 								<div class="row">
 									<div class="col-sm-4">
@@ -135,7 +135,4 @@
 		</div>
 	</div>
 </div>
-
-@include('shared.reportmodal')
-
 @endsection

@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class CallDetails
@@ -65,10 +66,10 @@ class CallDetails
 
     public function getResults(Request $request)
     {
-        $errors = $this->processInput($request);
+        $this->processInput($request);
 
-        if ($errors->isNotEmpty()) {
-            return $errors;
+        if ($this->errors->isNotEmpty()) {
+            return $this->errors;
         }
 
         $results = $this->executeReport();
@@ -78,6 +79,7 @@ class CallDetails
 
     private function executeReport($all = false)
     {
+        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -229,6 +231,7 @@ class CallDetails
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
+        // Log::debug($sql);
         $results = $this->runSql($sql, $bind);
 
         if (empty($results)) {
@@ -252,56 +255,14 @@ class CallDetails
 
     private function processInput(Request $request)
     {
-        $errors = new MessageBag();
+        // Check page filters
+        $this->checkPageFilters($request);
 
-        if (!empty($request->th_sort)) {
-            $col = array_search($request->th_sort, $this->params['columns']);
-            $dir = $request->sort_direction ?? 'asc';
-            $this->params['orderby'] = [$col => $dir];
-        }
-
-        if (!empty($request->curpage)) {
-            if ($request->curpage <= 0) {
-                $errors->add('pagenumb', "Invalid page number");
-            }
-            $this->params['curpage'] = $request->curpage;
-        }
-
-        if (!empty($request->pagesize)) {
-            if ($request->pagesize <= 0) {
-                $errors->add('pagesize', "Invalid page size");
-            }
-            $this->params['pagesize'] = $request->pagesize;
-        }
-
-        if (empty($request->fromdate)) {
-            $errors->add('fromdate.required', "From date required");
-        } else {
-            $this->params['fromdate'] = $request->fromdate;
-            $from = strtotime($this->params['fromdate']);
-
-            if ($from === false) {
-                $errors->add('fromdate.invalid', "From date not a valid date/time");
-            }
-        }
-
-        if (empty($request->todate)) {
-            $errors->add('todate.required', "To date required");
-        } else {
-            $this->params['todate'] = $request->todate;
-            $to = strtotime($this->params['todate']);
-
-            if ($to === false) {
-                $errors->add('todate.invalid', "To date not a valid date/time");
-            }
-        }
-
-        if (!empty($from) && !empty($to) && $to < $from) {
-            $errors->add('daterange', "To date must be after From date");
-        }
+        // Check report filters
+        $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', "Campaign required");
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
@@ -343,13 +304,13 @@ class CallDetails
         }
 
         if ($from > $to) {
-            $errors->add('duration', "Invalid Duration values");
+            $this->errors->add('duration', "Invalid Duration values");
         }
 
         if (!empty($request->showonlyterm)) {
             $this->params['showonlyterm'] = $request->showonlyterm;
         }
 
-        return $errors;
+        return $this->errors;
     }
 }
