@@ -16,9 +16,10 @@
 			<div class="container-full mt20">
 				<div class="row">
 					<div class="col-sm-12">
+						
 						<h3 class="heading">Call Details</h3>
-						<div class="page-content">							
-							<div class="report_filters well col-sm-12">
+						
+						<div class="report_filters well col-sm-12">
 							{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report]) !!}
 
 								<div class="row">
@@ -105,31 +106,32 @@
 										</div>
 									</div>
 								</div>
-								
+							
 								<div class="checkbox">
-                                    <label>
-                                        {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
-                                        Show only termination status
-                                    </label>
-                                </div>
+	                                <label>
+	                                    {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
+	                                    Show only termination status
+	                                </label>
+								</div>
 
-								@if($errors->isNotEmpty())
-									<div class="alert alert-danger report_errors">
-										@foreach($errors->all() as $error)
-											{{$error}}
-										@endforeach
-									</div>
-								@endif
-
+								<div class='reporterrors'>
+									@include('shared.reporterrors')
+								</div>
+							
 								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
-								{!! Form::close() !!}
-								@if(count($results) > 0)
-									@include('shared.reportpagination')
-									@include('shared.reporttable')
-								@endif
+							{!! Form::close() !!}
+						</div>
+
+						<div class="report_results">
+							<div class="reportpag">
+								@include('shared.reportpagination')
+							</div>
+							<div class="reporttable">
+								@include('shared.reporttable')
 							</div>
 						</div>
+						
 					</div>
 				</div>
 			</div>
