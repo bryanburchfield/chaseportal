@@ -60,14 +60,31 @@ class ReportController extends Controller
     public function updateReport(Request $request)
     {
         Log::debug($request);
-        // run report
-        // json echo stuff
+
+        $errors = [];
+        $results = $this->reportservice->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            $errors = $results;
+            $results = [];
+        }
+
+        $table = view('shared.reporttable')->with($results);
+        $pag = view('shared.reportpagination')->with($results);
+        $errors = view('shared.reporterrors')->withErrors($errors);
+
+        return [
+            'table' => $table,
+            'pag' => $pag,
+            'errors' => $errors,
+        ];
     }
 
     public function getSubcampaigns()
     {
         $results = $this->reportservice->getAllSubcampaigns();
 
-        // json echo stuff
+        return ['results' => $results];
     }
 }
