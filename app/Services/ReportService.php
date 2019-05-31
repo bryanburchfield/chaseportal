@@ -41,7 +41,7 @@ class ReportService
 
     public function getPageData()
     {
-        $pagedata['report'] = $this->reportName;
+        $pagedata['report'] = Str::snake($this->reportName);
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
         $pagedata['jsfile'] = [];

@@ -10,6 +10,21 @@ use Illuminate\Http\Request;
 trait ReportTraits
 {
     public $errors;
+    public $params;
+
+    private function initilaizeParams()
+    {
+        $this->params = [
+            'curpage' => 1,
+            'pagesize' => 50,
+            'totrows' => 0,
+            'totpages' => 0,
+            'orderby' => [],
+            'groupby' => null,
+            'hasTotals' => false,
+            'columns' => [],
+        ];
+    }
 
     public function getAllCampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
     {
@@ -152,11 +167,11 @@ trait ReportTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
+        // try {
+        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        // } catch (\Exception $e) {
+        //     $results = [];
+        // }
 
         if (count($results)) {
             // convert array of objects to array of arrays
@@ -237,5 +252,18 @@ trait ReportTraits
         if (!empty($from) && !empty($to) && $to < $from) {
             $this->errors->add('daterange', "To date must be after From date");
         }
+    }
+
+    public function getResults(Request $request)
+    {
+        $this->processInput($request);
+
+        if ($this->errors->isNotEmpty()) {
+            return $this->errors;
+        }
+
+        $results = $this->executeReport();
+
+        return $results;
     }
 }

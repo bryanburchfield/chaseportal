@@ -31,3 +31,16 @@ if (!function_exists('utcToLocal')) {
         return $dt;
     }
 }
+
+if (!function_exists('secondsToHms')) {
+    function secondsToHms($secs)
+    {
+        $secs = round($secs);
+
+        $hours = floor($secs / 3600);
+        $minutes = floor(($secs / 60) % 60);
+        $seconds = $secs % 60;
+
+        return sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
+    }
+}
