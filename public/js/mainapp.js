@@ -4910,8 +4910,6 @@ var Master = {
 	click_pag_btn: function (e) {
 		e.preventDefault();
 
-		alert('clicked pag')
-
 		if (!$(this).parent().hasClass('disabled')) {
 			this.curpage = $('.curpage').val();
 			this.pagesize = $('.pagesize').val();
