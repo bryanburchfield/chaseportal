@@ -34,8 +34,8 @@ class MasterDashController extends Controller
         ]);
 
         $jsfile[] = $this->currentDash . ".js";
-        $jsfile[] = "master.js";
-        $jsfile[] = "masternav.js";
+        // $jsfile[] = "master.js";
+        // $jsfile[] = "masternav.js";
 
         $cssfile[] = $this->currentDash . ".css";
         $cssfile[] = "master.css";

@@ -17,8 +17,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<h3 class="heading">Call Details</h3>
-
-						<div class="report_filters well col-sm-12">
+						<div class="page-content">							
+							<div class="report_filters well col-sm-12">
 							{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report]) !!}
 
 								<div class="row">
@@ -128,6 +128,7 @@
 									@include('shared.reportpagination')
 									@include('shared.reporttable')
 								@endif
+							</div>
 						</div>
 					</div>
 				</div>
@@ -135,4 +136,6 @@
 		</div>
 	</div>
 </div>
+
+@include('shared.reportmodal')
 @endsection

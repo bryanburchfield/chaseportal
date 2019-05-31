@@ -913,5 +913,12 @@ $(document).ready(function () {
 		modal.find("#username").val(username);
 	});
 
+	$('#sidebarCollapse').on('click', function () {
+	    $('#sidebar').toggleClass('active');
+	});
 
+});
+
+$(window).load(function() {
+	$('.preloader').fadeOut('slow');
 });
