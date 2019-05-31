@@ -61,8 +61,6 @@ class ReportController extends Controller
     {
         // form_data comes across as a url string
         parse_str($request->form_data, $output);
-
-        // break out form_data
         foreach ($output as $k => $v) {
             $request->request->add([$k => $v]);
         }
@@ -81,9 +79,9 @@ class ReportController extends Controller
         $data = array_merge(['results' => $results], $this->reportservice->getPageData());
 
         return [
-            'table' => view('shared.reporttable')->with($data),
-            'pag' => view('shared.reportpagination')->with($data),
-            'errors' => view('shared.reporterrors')->withErrors($errors),
+            'table' => view('shared.reporttable')->with($data)->render(),
+            'pag' => view('shared.reportpagination')->with($data)->render(),
+            'errors' => view('shared.reporterrors')->withErrors($errors)->render(),
         ];
     }
 
