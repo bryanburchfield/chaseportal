@@ -59,6 +59,14 @@ class ReportController extends Controller
 
     public function updateReport(Request $request)
     {
+        // form_data comes across as a url string
+        parse_str($request->form_data, $output);
+
+        // break out form_data
+        foreach ($output as $k => $v) {
+            $request->request->add([$k => $v]);
+        }
+
         Log::debug($request);
 
         $errors = [];
@@ -70,14 +78,12 @@ class ReportController extends Controller
             $results = [];
         }
 
-        $table = view('shared.reporttable')->with($results);
-        $pag = view('shared.reportpagination')->with($results);
-        $errors = view('shared.reporterrors')->withErrors($errors);
+        $data = array_merge(['results' => $results], $this->reportservice->getPageData());
 
         return [
-            'table' => $table,
-            'pag' => $pag,
-            'errors' => $errors,
+            'table' => view('shared.reporttable')->with($data),
+            'pag' => view('shared.reportpagination')->with($data),
+            'errors' => view('shared.reporterrors')->withErrors($errors),
         ];
     }
 
