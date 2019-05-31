@@ -1,5 +1,4 @@
-<div class="reporttable">
-    @if(count($results) > 0)
+@if(count($results) > 0)
     <table class="table table-hover reports_table">
         <thead>
             <tr>
@@ -26,5 +25,4 @@
         @endforeach
         </tbody>
     </table>
-    @endif
-</div>
+@endif

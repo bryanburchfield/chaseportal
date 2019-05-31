@@ -111,15 +111,21 @@
                                         {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
                                         Show only termination status
                                     </label>
-                                </div>
-								@include('shared.reporterrors')
-								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
+								</div>
+								<div class='reporterrors'>
+									@include('shared.reporterrors')
+								</div>
+									{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 								{!! Form::close() !!}
 							</div>
 						</div>
-						@include('shared.reportpagination')
-						@include('shared.reporttable')
+						<div class="reportpag">
+							@include('shared.reportpagination')
+						</div>
+						<div class="reporttable">
+							@include('shared.reporttable')
+						</div>
 					</div>
 				</div>
 			</div>

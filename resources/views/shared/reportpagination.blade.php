@@ -1,5 +1,4 @@
-<div class="reportpag">
-    @if(count($results) > 0)
+@if(count($results) > 0)
 <?php
         $curpage = $params['curpage'];
         $lastpage = $params['totpages'];
@@ -54,5 +53,4 @@
         <input type="hidden" name="totrows" class="sm-input form-control pag_input totrows" data-prevval="{{ $totrows }}" value="{{ $totrows }}">
     </div>
     <div class="alert alert-danger errors pag_report_errors"></div>
-    @endif
-</div>
+@endif
