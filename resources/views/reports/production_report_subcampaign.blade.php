@@ -19,7 +19,7 @@
 						<h3 class="heading">Production Report by Subcampaign</h3>
 
 						<div class="report_filters well col-sm-12">
-							{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report], 'class'=>'report_filter_form') !!}
+							{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 								<div class="row">
 									<div class="col-sm-4">
@@ -70,9 +70,9 @@
 							<div class="reportpag">
 								@include('shared.reportpagination')
 							</div>
-							<div class="reporttable">
-								@include('shared.reporttable')
-							</div>
+							<div class="reporttable table-responsive {{$report}}">
+	@include('shared.reporttable')
+</div>
 						</div>
 					</div>
 				</div>

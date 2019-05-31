@@ -381,6 +381,8 @@ var Master = {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			}
 		});
+		
+		console.log(form_data);
 
 		$.ajax({
 			url: 'update_report',
