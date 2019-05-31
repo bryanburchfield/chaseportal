@@ -78,14 +78,12 @@ class ReportController extends Controller
             $results = [];
         }
 
-        $table = view('shared.reporttable')->with($results);
-        $pag = view('shared.reportpagination')->with($results);
-        $errors = view('shared.reporterrors')->withErrors($errors);
+        $data = array_merge(['results' => $results], $this->reportservice->getPageData());
 
         return [
-            'table' => $table,
-            'pag' => $pag,
-            'errors' => $errors,
+            'table' => view('shared.reporttable')->with($data),
+            'pag' => view('shared.reportpagination')->with($data),
+            'errors' => view('shared.reporterrors')->withErrors($errors),
         ];
     }
 

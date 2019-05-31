@@ -4,6 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class CallDetails
@@ -81,19 +82,19 @@ class CallDetails
 
         $where = '';
         // load temp tables
-        if (!empty($this->params['campaign']) && $this->params['campaign'] != '*') {
+        if (!empty($this->params['campaigns']) && $this->params['campaigns'] != '*') {
             $where .= " AND C.CampaignName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['campaign']));
+            $list = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
             $sql .= "
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
 
-        if (!empty($this->params['rep']) && $this->params['rep'] != '*') {
+        if (!empty($this->params['reps']) && $this->params['reps'] != '*') {
 
-            if (isset($this->params['rep']['[ All Answered'])) {
+            if (isset($this->params['reps']['[ All Answered'])) {
                 $answered = 1;
             }
-            if (isset($this->params['rep']['[ All Unanswered'])) {
+            if (isset($this->params['reps']['[ All Unanswered'])) {
                 $unanswered = 1;
             }
             if ($answered && $unanswered) {
@@ -102,19 +103,19 @@ class CallDetails
             }
 
             $where .= " AND R.RepName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['rep']));
+            $list = str_replace("'", "''", implode('!#!', $this->params['reps']));
             $sql .= "
             INSERT INTO #SelectedRep SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
-        if (!empty($this->params['callstatus']) && $this->params['callstatus'] != '*') {
+        if (!empty($this->params['callstatuses']) && $this->params['callstatuses'] != '*') {
             $where .= " AND CS.CallStatusName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['callstatus']));
+            $list = str_replace("'", "''", implode('!#!', $this->params['callstatuses']));
             $sql .= "
             INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
-        if (!empty($this->params['callerid']) && $this->params['callerid'] != '*') {
+        if (!empty($this->params['callerids']) && $this->params['callerids'] != '*') {
             $where .= " AND S.SourceName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['callerid']));
+            $list = str_replace("'", "''", implode('!#!', $this->params['callerids']));
             $sql .= "
             INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
@@ -206,7 +207,6 @@ class CallDetails
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        // Log::debug($sql);
         $results = $this->runSql($sql, $bind);
 
         if (empty($results)) {
