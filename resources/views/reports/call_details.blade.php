@@ -112,24 +112,14 @@
                                         Show only termination status
                                     </label>
                                 </div>
-
-								@if($errors->isNotEmpty())
-									<div class="alert alert-danger report_errors">
-										@foreach($errors->all() as $error)
-											{{$error}}
-										@endforeach
-									</div>
-								@endif
-
+								@include('shared.reporterrors')
 								{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 								{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 								{!! Form::close() !!}
-								@if(count($results) > 0)
-									@include('shared.reportpagination')
-									@include('shared.reporttable')
-								@endif
 							</div>
 						</div>
+						@include('shared.reportpagination')
+						@include('shared.reporttable')
 					</div>
 				</div>
 			</div>
