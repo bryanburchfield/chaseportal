@@ -33,8 +33,8 @@
         $nextpageclass = ($curpage == $lastpage) ? 'class="disabled"' : '';
 ?>
     <ul class="pagination pg-blue">
-        <li {{ $prevpageclass }}><a href="#" data-paglink="1">First</a></li>
-        <li {{ $prevpageclass }}><a href="#" data-paglink="$prevpage">&laquo;</a></li>
+        <li {!! $prevpageclass !!}><a href="#" data-paglink="1">First</a></li>
+        <li {!! $prevpageclass !!}><a href="#" data-paglink="{{ $prevpage }}">&laquo;</a></li>
 
         @for($i = $startpage; $i <= $endpage; $i++)
             <li 
@@ -43,8 +43,8 @@
             @endif
             ><a href="#" data-paglink="{{ $i}}">{{ $i }}</a></li>
         @endfor
-        <li {{ $nextpageclass }}><a href="#" data-paglink="{{ $nextpage }}">&raquo;</a></li>
-        <li {{ $nextpageclass }}><a href="#" data-paglink="{{ $lastpage }}">Last</a></li>
+        <li {!! $nextpageclass !!}><a href="#" data-paglink="{{ $nextpage }}">&raquo;</a></li>
+        <li {!! $nextpageclass !!}><a href="#" data-paglink="{{ $lastpage }}">Last</a></li>
     </ul>
     <div class="pag_dets">
         <p>PAGE: <input type="number" min="1" max="{{ $lastpage }}" name="curpage" data-prevval="{{ $curpage }}" class="sm-input form-control pag_input curpage" value="{{ $curpage }}"> OF {{ $lastpage }}
