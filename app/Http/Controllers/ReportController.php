@@ -59,6 +59,14 @@ class ReportController extends Controller
 
     public function updateReport(Request $request)
     {
+        // form_data comes across as a url string
+        parse_str($request->form_data, $output);
+
+        // break out form_data
+        foreach ($output as $k => $v) {
+            $request->request->add([$k => $v]);
+        }
+
         Log::debug($request);
 
         $errors = [];
