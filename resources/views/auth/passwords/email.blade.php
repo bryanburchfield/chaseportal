@@ -10,7 +10,7 @@
 
         @include('shared.defaultHeader')
         
-        <div class="container-fluid bg">
+        <div class="container-fluid hero_bg">
             <div class="container">  
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3 ">
