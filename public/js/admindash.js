@@ -423,6 +423,7 @@ var Dashboard = {
                     $('#agent_call_count').empty();
                     $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count');
                 }
+            }
         });
     },
 
@@ -651,6 +652,22 @@ $(document).ready(function () {
                 }
             });
     });
+
+    resizeCardTableDivs();
+
+    if ($(window).width() > 1010) {
+        $(window).on('resize', function(){
+            resizeCardTableDivs();
+        });
+    }
+
+    function resizeCardTableDivs(){
+        var height_dt = $('.get_hgt').height();
+        height_dt=height_dt-20;
+        console.log(height_dt);
+        $('.set_hgt').css({'min-height':height_dt});
+        $('.set_hgt').css({'max-height':height_dt});
+    }
 
     $('.enddate').datepicker({ maxDate: '0' });
     $('.startdate').datepicker({ maxDate: '0' });
