@@ -36,8 +36,8 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('rep', 'Rep') !!}
-						{!! Form::select("rep[]", $rep, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+						{!! Form::label('reps', 'Rep') !!}
+						{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>

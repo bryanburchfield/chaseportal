@@ -11,6 +11,7 @@ class ReportService
 {
     private $report;
     private $reportName;
+    public $extras;
 
     public function __construct($reportName)
     {
@@ -46,12 +47,15 @@ class ReportService
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
         $pagedata['jsfile'] = [];
-        Log::debug(array_merge($pagedata, ['params' => $this->report->params]));
+
         return array_merge($pagedata, ['params' => $this->report->params]);
     }
 
     public function getResults(Request $request)
     {
-        return $this->report->getResults($request);
+        $results = $this->report->getResults($request);
+        $this->extras = $this->report->extras;
+
+        return $results;
     }
 }

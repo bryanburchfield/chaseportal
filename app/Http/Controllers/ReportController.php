@@ -65,7 +65,7 @@ class ReportController extends Controller
             $request->request->add([$k => $v]);
         }
 
-        Log::debug($request);
+        // Log::debug($request);
 
         $errors = [];
         $results = $this->reportservice->getResults($request);
@@ -77,12 +77,12 @@ class ReportController extends Controller
         }
 
         $data = array_merge(['results' => $results], $this->reportservice->getPageData());
-        Log::debug($data);
 
         return [
             'table' => view('shared.reporttable')->with($data)->render(),
             'pag' => view('shared.reportpagination')->with($data)->render(),
             'errors' => view('shared.reporterrors')->withErrors($errors)->render(),
+            'extras' => $this->reportservice->extras,
         ];
     }
 

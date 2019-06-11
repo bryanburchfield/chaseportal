@@ -11,6 +11,7 @@ trait ReportTraits
 {
     public $errors;
     public $params;
+    public $extras;
 
     private function initilaizeParams()
     {
