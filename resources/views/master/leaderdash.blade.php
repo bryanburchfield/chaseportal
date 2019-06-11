@@ -11,18 +11,21 @@
 	    </div>
 	</div>
 
-	<div class="row">
+	<div class="row leaderboard_main_row">
 
-	    <div class="col-sm-3">
-	        <div class="card plr0">
-	            <h1 class="title mb0">Top 10 Leaderboard</h1>
+	    <div class="col-md-3 col-sm-4 leader_table_div_colm card_table_prt">
+	        <div class="card plr0 leader_table_div card_table">
+	            <h1 class="title mb0">Sales Leaderboard</h1>
 
-	            <table class="table table-striped">
-	                <tbody></tbody>
-	            </table>
+	            <div class="table-responsive overflowauto">
+	            	<table class="table table-striped salesleaderboardtable">
+	            	    <tbody></tbody>
+	            	</table>
+	            </div>
 	        </div>
 	    </div>
-	    <div class="col-sm-9 nopad">
+
+	    <div class="col-md-9 col-sm-8 get_ldr_ht">
 	        <div class="card card-12" >
 	            <div class="call_volume_details">
 	                <h1 class="title tac">Call Volume</h1><br>
@@ -41,7 +44,7 @@
 	            </div>
 	        </div>
 
-	        <div class="col-sm-4">
+	        <div class="col-md-4 col-sm-12 match_height_4_st">
 	            <div class="total_calls_out" >
 	                <h2>Total Outbound Calls</h2>
 	                <p class="total"></p>

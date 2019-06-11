@@ -15,12 +15,9 @@ mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
 
 mix.scripts([
-	// 'resources/js/jquery.js',
-	// 'resources/js/bootstrap.min.js',
     'resources/js/moment.js',
     'resources/js/multiselect.js',
     'resources/js/master.js',
     'resources/js/masternav.js',
-    // 'resources/js/datetimepicker.js',
 
 ], 'public/js/mainapp.js');

@@ -384,7 +384,7 @@ var Dashboard = {
                         fontColor: '#203047',
                         fontSize: 16,
                         display: true,
-                        text: 'CALLS BY CAMPAIGN'
+                        text: 'SALES BY CAMPAIGN'
                     },
                 }
 
@@ -442,6 +442,28 @@ var Dashboard = {
 $(document).ready(function () {
 
     Dashboard.init();
+    resizeInOutDivs();
+    resizeLedTable();
+
+    if ($(window).width() > 1010) {
+        $(window).on('resize', function(){
+            resizeInOutDivs();
+            resizeLedTable();
+        });
+    }
+
+    function resizeInOutDivs(){
+        var height_dt = $('.match_height_4_gt').height();
+        console.log(height_dt);
+        $('.match_height_4_st').height(height_dt);
+    }
+
+    function resizeLedTable(){
+        var height_dt = $('.get_ldr_ht').height();
+        $('.leader_table_div').height(height_dt);
+        $('.leader_table_div').css({'max-height':$('.get_ldr_ht').height()});
+        $('.leader_table_div').css({'max-height':$('.get_ldr_ht').height()});
+    }
 
     $('.count').each(function () {
         $(this).prop('Counter', 0).animate({

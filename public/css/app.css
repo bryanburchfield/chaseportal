@@ -545,7 +545,7 @@ div.container-fluid.bg {
   box-shadow: 0 2px 3px #ccd6dd;
   border: 1px solid #d1d1d1;
   padding: 20px 10px 10px;
-  overflow: auto;
+  /*overflow: auto;*/
   margin-bottom: 20px;
 }
 
@@ -586,8 +586,15 @@ div.container-fluid.bg {
   height: 100%;
   overflow-y: scroll;
   padding-right: 17px;
-  /* Increase/decrease this value for cross-browser compatibility */
-  box-sizing: content-box;
+}
+
+.card_table::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+.card_table::-webkit-scrollbar-thumb {
+  background: #FF0000;
 }
 
 .card-6 h1.title {
@@ -1142,36 +1149,22 @@ h3.heading {
   overflow-x: inherit;
 }
 
-.table-responsive.nooverflow {
+.table-responsive.overflowauto {
+  overflow-x: auto;
+}
+
+.table-responsive.nooverflow{
   overflow: auto;
 }
 
-.reports_table th:hover {
-  cursor: pointer;
-}
+.salesleaderboardtable tr:last-child { font-weight:600; }
 
-.reports_table th:focus {
-  outline: none;
-}
-
-.reports_table th.active {
-  background: #293e5b;
-}
-
-.reports_table th a {
-  margin-left: 18px;
-  float: left;
-}
-
-.reports_table th.active_column,
-.reports_table th:hover {
-  background: #2f4c72;
-}
-
-.reports_table th > span {
-  float: left;
-  letter-spacing: -0.02em;
-}
+.reports_table th:hover, .uploader_table th:hover{cursor: pointer;}
+.reports_table th:focus, .uploader_table th:focus{outline:none;}
+.reports_table th.active, .uploader_table th.active{background: #293e5b;}
+.reports_table th a, .uploader_table th a{margin-left: 18px; float: left;}
+.reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover{background: #2f4c72;}
+.reports_table th > span, .uploader_table th > span{float: left;letter-spacing: -0.02em;}
 
 th a,
 td a {
@@ -1684,6 +1677,12 @@ a.run_kpi.btn {
   float: left;
   margin-left: 10px;
 }
+
+.card.leader_table_div{
+  padding-bottom: 0;
+}
+
+.leader_table_div{overflow-y:scroll;}
 
 /* ---------------------------------------------------
     MEDIAQUERIES

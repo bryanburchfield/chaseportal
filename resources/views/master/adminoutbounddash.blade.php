@@ -1,5 +1,4 @@
 <div class="container-full mt20">
-
     <div class="row">
         <div class="col-sm-3 col-xs-6">
             <div class="card-3 card" id="total_calls">

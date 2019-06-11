@@ -57,12 +57,11 @@ var Dashboard = {
     inorout_toggled:false,
 
     init:function(){
-        // this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
-        // this.agent_talk_time(this.datefilter, this.chartColors);
-        // this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
-        // // this.sales_per_campaign(this.datefilter, this.chartColors);
-        // this.calls_by_campaign(this.datefilter, this.chartColors);
-        // this.total_calls(this.datefilter);
+        this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
+        this.agent_talk_time(this.datefilter, this.chartColors);
+        this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
+        this.calls_by_campaign(this.datefilter, this.chartColors);
+        this.total_calls(this.datefilter);
         Dashboard.eventHandlers();
     },
 
@@ -340,72 +339,6 @@ var Dashboard = {
         });
     },
 
-    // sales_per_campaign:function(datefilter, chartColors){
-    //     var campaign = $('.filter_campaign li ').text();
-
-    //     $.ajax({
-    //         'async': false,
-    //         url: '../../adminoutbounddash/app/ajax/sales_per_campaign.php',
-    //         type: 'POST',
-    //         dataType: 'json',
-    //         data:{campaign:campaign, datefilter:datefilter},
-    //         success:function(response){
-    //             console.log(response);
-    //             if(window.sales_per_campaign_chart != undefined){
-    //                 window.sales_per_campaign_chart.destroy();
-    //             }
-
-    //             var response_length = response['sales_per_campaign']['Sales'].length;
-    //             var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
-                
-
-    //             var sales_per_campaign_data = {
-    //                 datasets: [{
-    //                     data: response['sales_per_campaign']['Sales'],
-    //                     backgroundColor: chart_colors_array,
-    //                     label: 'Dataset 1'
-    //                 }],
-    //                 elements: {
-    //                         center: {
-    //                         color: '#203047', 
-    //                         fontStyle: 'Segoeui', 
-    //                         sidePadding: 15 
-    //                     }
-    //                 },
-                   
-    //                 labels: response['sales_per_campaign']['Campaign']
-    //             };
-
-    //             var sales_per_campaign_options={
-    //                 responsive: true,
-    //                 legend: {
-    //                 display: false
-    //                 },
-    //                 tooltips: {
-    //                     enabled:true,
-    //                 },title: {
-    //                     fontColor:'#203047',
-    //                     fontSize:16,
-    //                     display: true,
-    //                      text: 'SALES PER CAMPAIGN'
-    //                 },
-    //             }
-
-    //             var ctx = document.getElementById('sales_per_campaign').getContext('2d');
-
-    //             window.sales_per_campaign_chart = new Chart(ctx,{
-    //                 type: 'doughnut',
-    //                 data: sales_per_campaign_data,
-    //                 options: sales_per_campaign_options
-    //             });
-
-    //         },error: function (jqXHR,textStatus,errorThrown) {
-    //             var div = $('#agent_talk_time');
-    //             Dashboard.display_error(div, textStatus, errorThrown);
-    //         }
-    //     });
-    // },
-
     calls_by_campaign:function(datefilter, chartColors){
 
         $.ajax({
@@ -586,7 +519,6 @@ var Dashboard = {
                 Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
                 Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
                 Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
-                // Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
                 Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
                 Dashboard.total_calls(datefilter);
                 Dashboard.update_datefilter(datefilter);
@@ -616,7 +548,6 @@ var Dashboard = {
                 Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);                
                 Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
                 Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
-                // Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
                 Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
                 Dashboard.total_calls(datefilter);
                 Dashboard.update_datefilter(datefilter);
@@ -646,7 +577,6 @@ var Dashboard = {
         Dashboard.get_call_volume(inorout, start_date + ' ' + end_date, Dashboard.chartColors);        
         Dashboard.agent_talk_time(start_date + ' ' + end_date, Dashboard.chartColors);
         Dashboard.sales_per_hour_per_rep(start_date + ' ' + end_date, Dashboard.chartColors);
-        // Dashboard.sales_per_campaign(start_date + ' ' + end_date, Dashboard.chartColors);
         Dashboard.calls_by_campaign(start_date + ' ' + end_date, Dashboard.chartColors);
         Dashboard.total_calls(start_date + ' ' + end_date);
         Dashboard.update_datefilter(start_date + ' ' + end_date);
