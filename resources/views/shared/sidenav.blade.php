@@ -6,6 +6,8 @@
 
     <ul class="list-unstyled components">
         <li {!! $page['menuitem'] == 'admindash' ? 'class="active"' : ''!!}><a class="dash" href="admindash"><i class="fas fa-user-shield"></i>Admin Dashboard</a></li>
+
+        <li {!! $page['menuitem'] == 'adminoutbounddash' ? 'class="active"' : ''!!}><a class="dash" href="adminoutbounddash"><i class="fas fa-user-shield"></i>Admin Outbound</a></li>
         <li {!! $page['menuitem'] == 'trenddash' ? 'class="active"' : ''!!}><a class="dash" href="trenddash"><i class="fas fa-chart-area"></i>Trend Dashboard</a></li>
         <li {!! $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''!!}><a class="dash" href="leaderdash"><i class="fas fa-trophy"></i>Leadboard</a></li>
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a class="dash" href="kpidash"><i class="fas fa-paper-plane"></i>KPIs</a></li>

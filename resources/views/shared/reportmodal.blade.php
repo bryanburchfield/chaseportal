@@ -27,7 +27,7 @@
                    </div>
                    <br>
                    <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_call_log">Agent Call Log</label>
+                       <label><input type="radio" name="report_option" class="report_option" value="agent_pause_time">Agent Pause Time</label>
                    </div>
                    <div class="radio">
                        <label><input type="radio" name="report_option" class="report_option" value="agent_activity">Agent Activity</label>

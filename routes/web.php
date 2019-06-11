@@ -36,6 +36,29 @@ Route::prefix('admindashboard')->group(function () {
     });
 });
 
+// Admin Dashboard: all urls start with /adminoutbounddashboard/
+Route::prefix('adminoutbounddashboard')->group(function () {
+    // Allow app_token login via /adminoutbounddashboard/api/{token}
+    Route::get('api/{token}', 'AdminOutboundDashController@apiLogin');
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+    // must be logged in to access any of these
+    Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/', 'AdminOutboundDashController@index');
+
+        // ajax targets
+        // Route::post('update_filters', 'AdminDashController@updateFilters');
+        // Route::post('call_volume', 'AdminDashController@callVolume');
+        // Route::post('completed_calls', 'AdminDashController@completedCalls');
+        // Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
+        // Route::post('abandon_rate', 'AdminDashController@abandonRate');
+        // Route::post('agent_call_count', 'AdminDashController@agentCallCount');
+        // Route::post('service_level', 'AdminDashController@serviceLevel');
+        // Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
+    });
+});
+
 // Trend Dashboard: all urls start with /trenddashboard/
 Route::prefix('trenddashboard')->group(function () {
     // Allow app_token login via /trenddashboard/api/{token}
