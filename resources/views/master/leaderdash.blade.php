@@ -39,7 +39,7 @@
 	        <div class="col-md-4 col-sm-12 pl0 match_height_4_gt">
 	            <div class="card card-6 mb0" >
 	                <div class="inbound inandout mb0">
-	                    <canvas id="calls_by_campaign"></canvas>
+	                    <canvas id="sales_per_campaign"></canvas>
 	                </div>
 	            </div>
 	        </div>
@@ -56,14 +56,21 @@
 	            </div>
 	        </div>
 
-	       <div class="col-md-4 col-sm-12 pr0 match_height_4_st">
-	            <div class="card card-6 mb0" >
-	                <div class="inbound inandout mb0">
-	                    <canvas id="agent_calls_by_campaign"></canvas>
-	                </div>
+			<div class="col-md-4 col-sm-12 pr0 match_height_4_st card_table_prt">
+	            <div class="card agent_sales_per_hour_card card_table set_hgt">
+	                <h1 class="title">Agent Sales Per Hour</h1>
+	                <table class="table table-condensed table-striped" id="agent_sales_per_hour">
+	                    <thead>
+	                        <tr>
+	                            <th>Rep</th>
+	                            <th>Sales Per Hour</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody></tbody>
+	                </table>
 	            </div>
 	        </div>
-
+	        
 	    </div>
 	</div>
 </div>

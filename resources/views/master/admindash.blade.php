@@ -110,9 +110,17 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-3">
-            <div class="card">
-                <canvas id="agent_call_count"></canvas>
+        <div class="col-sm-3 card_table_prt">
+            <div class="card agent_sales_per_hour_card card_table">
+                <h1 class="title">Agent Call Count</h1>
+                <table class="table table-condensed table-striped" id="agent_call_count">
+                    <thead>
+                        <tr>
+                            <th>Rep</th>
+                            <th>Calls</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
 
@@ -123,9 +131,17 @@
             </div>
         </div>
 
-        <div class="col-sm-3">
-            <div class="card">
-                <canvas id="agent_calltime"></canvas>
+        <div class="col-sm-3 card_table_prt">
+            <div class="card agent_sales_per_hour_card card_table set_hgt">
+                <h1 class="title">Agent Call Time</h1>
+                <table class="table table-condensed table-striped" id="agent_calltime">
+                    <thead>
+                        <tr>
+                            <th>Rep</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
 

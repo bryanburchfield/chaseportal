@@ -60,8 +60,8 @@ var Dashboard = {
     init: function () {
         this.update_filters(this.datefilter, this.campaign, this.inorout);
         this.get_call_volume(this.chartColors);
-        this.leader_board();
-        this.calls_by_campaign(this.chartColors);
+        this.call_details();
+        this.sales_per_campaign(this.datefilter, this.chartColors);
         Dashboard.eventHandlers();
     },
 
@@ -93,8 +93,8 @@ var Dashboard = {
             $('.preloader').show(400, function () {
                 Dashboard.update_filters(datefilter, campaign, inorout);
                 Dashboard.get_call_volume(Dashboard.chartColors);
-                Dashboard.leader_board();
-                Dashboard.calls_by_campaign(Dashboard.chartColors);
+                Dashboard.call_details();
+                Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
             });
         }
         $('.preloader').fadeOut('slow');
@@ -114,8 +114,8 @@ var Dashboard = {
             $('.preloader').show(400, function () {
                 Dashboard.update_filters(datefilter, campaign, inorout);
                 Dashboard.get_call_volume(Dashboard.chartColors);
-                Dashboard.leader_board();
-                Dashboard.calls_by_campaign(Dashboard.chartColors);
+                Dashboard.call_details();
+                Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
             });
         }
         $('.preloader').fadeOut('slow');
@@ -143,8 +143,8 @@ var Dashboard = {
 
             Dashboard.update_filters(datefilter, campaign, inorout);
             Dashboard.get_call_volume(Dashboard.chartColors);
-            Dashboard.leader_board();
-            Dashboard.calls_by_campaign(Dashboard.chartColors);
+            Dashboard.call_details();
+            Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
         });
 
         $('.preloader').fadeOut('slow');
@@ -166,21 +166,29 @@ var Dashboard = {
         });
     },
 
-    leader_board: function () {
+    call_details: function () {
         $.ajax({
             'async': false,
             url: '/leaderdashboard/leader_board',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
-                $('table.table tbody').empty();
-                var tr = '<tr class="lowpad"><th>Rep</th><th># Calls</th><th>Talk Time</th><th># Sales</th></tr>';
+               $('table.table tbody').empty();
+                var leaderboard_trs='<tr class="lowpad"><th>Rep</th><th># Calls</th><th>Talk Time</th><th># Sales</th></tr>';
 
-                for (var i = 0; i < response['leader_board'].length; i++) {
-                    tr += '<tr class="results"><td>' + response['leader_board'][i]['Rep'] + '</td><td>' + response['leader_board'][i]['Call Count'] + '</td><td>' + response['leader_board'][i]['Talk Secs'] + '</td><td>' + response['leader_board'][i]['Sales'] + '</td></tr>';
+                for (var i=0; i < response['call_details']['leaders'].length; i++) {
+                    leaderboard_trs+= '<tr class="results"><td>'+response['call_details']['leaders'][i]['Rep']+'</td><td>'+response['call_details']['leaders'][i]['Call Count']+'</td><td>'+response['call_details']['leaders'][i]['Talk Secs']+'</td><td>'+response['call_details']['leaders'][i]['Sales']+'</td></tr>';
                 }
 
-                $('table.table tbody').append(tr);
+                $('table.salesleaderboardtable tbody').append(leaderboard_trs);
+
+                var agent_sales_trs;
+
+                for (var i=0; i < response['call_details']['repsales'].length; i++) {
+                    agent_sales_trs+= '<tr class="results"><td>'+response['call_details']['repsales'][i]['Rep']+'</td><td>'+response['call_details']['repsales'][i]['PerHour']+'</td></tr>';
+                }
+
+                $('#agent_sales_per_hour tbody').append(agent_sales_trs);
             }
         });
     },
@@ -309,7 +317,7 @@ var Dashboard = {
         });
     },
 
-    calls_by_campaign: function (chartColors) {
+    sales_per_campaign: function (chartColors) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -317,21 +325,21 @@ var Dashboard = {
         });
         $.ajax({
             'async': false,
-            url: '/leaderdashboard/calls_by_campaign',
+            url: '/leaderdashboard/sales_per_campaign',
             type: 'POST',
             dataType: 'json',
             success: function (response) {
 
-                if (window.calls_by_campaign_chart != undefined) {
-                    window.calls_by_campaign_chart.destroy();
+                if (window.sales_per_campaign_chart != undefined) {
+                    window.sales_per_campaign_chart.destroy();
                 }
 
-                var response_length = response['calls_by_campaign']['call_count'].length;
+                var response_length = response['sales_per_campaign']['call_count'].length;
                 var chart_colors_array = Dashboard.return_chart_colors(response_length, chartColors);
 
-                var calls_by_campaign_data = {
+                var sales_per_campaign_data = {
                     datasets: [{
-                        data: response['calls_by_campaign']['call_count'],
+                        data: response['sales_per_campaign']['call_count'],
                         backgroundColor: chart_colors_array,
                         label: 'Dataset 1'
                     }],
@@ -348,32 +356,10 @@ var Dashboard = {
                         display: true,
                         text: 'AGENT CALL COUNT'
                     },
-                    labels: response['calls_by_campaign']['agent_call_campaigns']
+                    labels: response['sales_per_campaign']['agent_call_campaigns']
                 };
 
-                var agent_calls_by_campaign_data = {
-                    datasets: [{
-                        data: response['calls_by_campaign']['rep_call_count'],
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                        center: {
-                            color: '#203047',
-                            fontStyle: 'Segoeui',
-                            sidePadding: 15
-                        }
-                    },
-                    title: {
-                        fontColor: '#203047',
-                        fontSize: 16,
-                        display: true,
-                        // text: 'AGENT CALL COUNT'
-                    },
-                    labels: response['calls_by_campaign']['agent_call_campaigns']
-                };
-
-                var calls_by_campaign_options = {
+                var sales_per_campaign_options = {
                     responsive: true,
                     legend: {
                         display: false
@@ -388,36 +374,14 @@ var Dashboard = {
                     },
                 }
 
-                var agent_calls_by_campaign_options = {
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        enabled: true,
-                    }, title: {
-                        fontColor: '#203047',
-                        fontSize: 16,
-                        display: true,
-                        text: 'AGENT CALLS BY CAMPAIGN'
-                    },
-                }
+                var ctx = document.getElementById('sales_per_campaign').getContext('2d');
 
-                var ctx = document.getElementById('calls_by_campaign').getContext('2d');
-
-                window.calls_by_campaign_chart = new Chart(ctx, {
+                window.sales_per_campaign_chart = new Chart(ctx, {
                     type: 'doughnut',
-                    data: calls_by_campaign_data,
-                    options: calls_by_campaign_options
+                    data: sales_per_campaign_data,
+                    options: sales_per_campaign_options
                 });
 
-                var ctx = document.getElementById('agent_calls_by_campaign').getContext('2d');
-
-                window.calls_by_campaign_chart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: agent_calls_by_campaign_data,
-                    options: agent_calls_by_campaign_options
-                });
             }, error: function (jqXHR, textStatus, errorThrown) {
                 var div = $('#avg_handle_time');
                 Dashboard.display_error(div, textStatus, errorThrown);
@@ -461,7 +425,7 @@ $(document).ready(function () {
     function resizeLedTable(){
         var height_dt = $('.get_ldr_ht').height();
         $('.leader_table_div').height(height_dt);
-        $('.leader_table_div').css({'max-height':$('.get_ldr_ht').height()});
+        $('.leader_table_div').css({'min-height':$('.get_ldr_ht').height()});
         $('.leader_table_div').css({'max-height':$('.get_ldr_ht').height()});
     }
 

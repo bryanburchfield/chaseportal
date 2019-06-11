@@ -392,139 +392,37 @@ var Dashboard = {
             dataType: 'json',
             success: function (response) {
 
-                $('#agent_call_count').parent().find('.card_title').remove();
                 $('#agent_call_count').parent().find('.no_data').remove();
 
-                if (window.agent_callcnt_chart != undefined) {
-                    window.agent_callcnt_chart.destroy();
-                }
-
-                var response_length = response['agent_call_count']['count'].length;
-                var chart_colors_array = Dashboard.return_chart_colors(response_length, chartColors);
-
-
-
-                if (response['agent_call_count']['count'].length) {
-
-                    var agent_call_count_data = {
-                        datasets: [{
-                            data: response['agent_call_count']['count'],
-                            backgroundColor: chart_colors_array,
-                            label: 'Dataset 1'
-                        }],
-                        elements: {
-                            center: {
-                                color: '#203047',
-                                fontStyle: 'Segoeui',
-                                sidePadding: 15
-                            }
-                        },
-                        title: {
-                            fontColor: '#203047',
-                            fontSize: 16,
-                            display: true,
-                            text: 'AGENT CALL COUNT'
-                        },
-                        labels: response['agent_call_count']['rep']
-                    };
-
-                    var agent_call_count_options = {
-                        responsive: true,
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true,
-                        }, title: {
-                            fontColor: '#203047',
-                            fontSize: 16,
-                            display: true,
-                            text: 'AGENT CALL COUNT'
-                        },
+                if(response['agent_call_count'].length){
+                    
+                    var trs;
+                    for (var i = 0; i < response['agent_call_count'].length; i++) {
+                        if(response['agent_call_count'][i]['Rep'] != ''){
+                            trs+='<tr><td>'+response['agent_call_count'][i]['Rep']+'</td><td>'+response['agent_call_count'][i]['Count']+'</td></tr>';
+                        }
                     }
-
-                    var ctx = document.getElementById('agent_call_count').getContext('2d');
-
-                    window.agent_callcnt_chart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: agent_call_count_data,
-                        options: agent_call_count_options
-                    });
-                } else {
-                    $('<h2 class="card_title">AGENT CALL COUNT</h2><p class="no_data">No data yet</p>').insertBefore('#agent_call_count');
+                    $('#agent_call_count').append(trs);
+                }else{
+                    $('#agent_call_count').empty();
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count');
                 }
 
-                $('#agent_calltime').parent().find('.card_title').remove();
                 $('#agent_calltime').parent().find('.no_data').remove();
 
-                if (window.agent_calltime_chart != undefined) {
-                    window.agent_calltime_chart.destroy();
-                }
-
-                // check that each duration is not 0
-                var dur = false;
-                for (var i = 0; i < response['agent_call_count']['duration'].length; i++) {
-                    if (response['agent_call_count']['duration'][i]) {
-                        dur = true;
+                if(response['agent_call_count'].length){
+                    
+                    var trs;
+                    for (var i = 0; i < response['agent_call_count'].length; i++) {
+                        if(response['agent_call_count'][i]['Rep'] != ''){
+                            trs+='<tr><td>'+response['agent_call_count'][i]['Rep']+'</td><td>'+response['agent_call_count'][i]['Duration']+'</td></tr>';
+                        }
                     }
-                    break;
+                    $('#agent_calltime').append(trs);
+                }else{
+                    $('#agent_call_count').empty();
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count');
                 }
-
-                if (response['agent_call_count']['duration'].length && dur) {
-
-                    var agent_calltime_data = {
-                        datasets: [{
-                            data: response['agent_call_count']['duration'],
-                            backgroundColor: chart_colors_array,
-                            label: 'Dataset 1'
-                        }],
-                        elements: {
-                            center: {
-                                color: '#203047',
-                                fontStyle: 'Segoeui',
-                                sidePadding: 15
-                            }
-                        },
-                        title: {
-                            fontColor: '#203047',
-                            fontSize: 16,
-                            display: true,
-                            text: 'AGENT CALLTIME'
-                        },
-                        labels: response['agent_call_count']['rep']
-                    };
-
-                    var agent_calltime_options = {
-                        responsive: true,
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true,
-                        }, title: {
-                            fontColor: '#203047',
-                            fontSize: 16,
-                            display: true,
-                            text: 'AGENT CALLTIME'
-                        },
-                    }
-
-                    var ctx = document.getElementById('agent_calltime').getContext('2d');
-
-                    window.agent_calltime_chart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: agent_calltime_data,
-                        options: agent_calltime_options
-                    });
-                } else {
-                    $('#agent_calltime').parent().find('.card_title').remove();
-                    $('<h2 class="card_title">AGENT CALLTIME</h2><p class="no_data">No data yet</p>').insertBefore('#agent_calltime');
-                }
-
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                var div = $('#agent_call_count');
-                Dashboard.display_error(div, textStatus, errorThrown);
-            }
         });
     },
 
