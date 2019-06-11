@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 
 class ReportService
@@ -45,7 +46,7 @@ class ReportService
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
         $pagedata['jsfile'] = [];
-
+        Log::debug(array_merge($pagedata, ['params' => $this->report->params]));
         return array_merge($pagedata, ['params' => $this->report->params]);
     }
 
