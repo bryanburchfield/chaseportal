@@ -77,6 +77,7 @@ class ReportController extends Controller
         }
 
         $data = array_merge(['results' => $results], $this->reportservice->getPageData());
+        Log::debug($data);
 
         return [
             'table' => view('shared.reporttable')->with($data)->render(),
