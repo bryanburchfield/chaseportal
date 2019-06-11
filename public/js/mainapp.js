@@ -5013,8 +5013,6 @@ var Master = {
 			}
 		});
 		
-		console.log(form_data);
-
 		$.ajax({
 			url: 'update_report',
 			type: 'POST',
@@ -5030,29 +5028,40 @@ var Master = {
 
 			success: function (response) {
 
-				console.log(response);
+				console.log(response.errors);
 
 				// hide / empty everything and run report
-				$('.table-responsive, .pag, .report_errors').empty();
+				$('.table-responsive, .pag, .reporterrors').empty();
 				$('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
 				// check for errors
-				if (response.errors.length >= 1) {
-					for (var i = 0; i < response.errors.length; i++) {
-						$('.report_errors').show();
-						$('.report_errors').append(response.errors[i] + '<br>');
-					}
+				if (response.errors) {
+					$('.reporterrors').append(response.errors);
+					$('.report_errors').show();
+
+				// for (var i = 0; i < response.errors.length; i++) {
+				// 		$('.report_errors').show();
+				// 		$('.report_errors').append(response.errors[i] + '<br>');
+				// 	}
 
 					return false;
 				}
 
-				// check for result by counting total page
-				if (response.params.totrows) {
+				////// FINISH THIS ////// FINISH THIS ////// FINISH THIS ////// FINISH THIS////// FINISH THIS
+				if(response.table == ''){
+					alert('no results');
+				}else{
+					$('.pag').append(response.pag).show();
+				}
+				////// FINISH THIS ////// FINISH THIS ////// FINISH THIS ////// FINISH THIS ////// FINISH THIS
 
-					this.totpages = response.params.totpages;
-					this.curpage = response.params.curpage;
+				// check for result by counting total page
+				// if (response.params.totrows) {
+
+					// this.totpages = response.params.totpages;
+					// this.curpage = response.params.curpage;
 					this.th_sort = th_sort;
-					this.sort_direction = response.params.orderby['Campaign'];
+					// this.sort_direction = response.params.orderby['Campaign'];
 
 					// append table
 					$('.table-responsive').append(response.table);
@@ -5069,11 +5078,11 @@ var Master = {
 					}
 
 					// pagination - show pag if more than one page
-					if (response.params.totpages > 1) {
-						$('.pag').append(response.pag).show();
-						$('.pagination').find('li').removeClass('active');
-						$('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
-					}
+					// if (response.params.totpages > 1) {
+						// $('.pag').append(response.pag).show();
+						// $('.pagination').find('li').removeClass('active');
+						// $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
+					// }
 
 					// show sort order and reset button if sorting is active
 					if (this.th_sort) {
@@ -5081,23 +5090,23 @@ var Master = {
 						$('.reset_sorting').show();
 					}
 					// if no result	
-				} else {
-					$('.table-responsive').empty();
-					$('.pag').empty();
-					$('.report_download').hide();
-					$('.reset_sorting').hide();
-					$('.report_errors').append('No results found').show();
-				}
+				// } else {
+				// 	$('.table-responsive').empty();
+				// 	$('.pag').empty();
+				// 	$('.report_download').hide();
+				// 	$('.reset_sorting').hide();
+				// 	$('.report_errors').append('No results found').show();
+				// }
 
-				if (response.params.report == 'campaign_usage') {
+				if (report == 'campaign_usage') {
 					Master.campaign_usage(response);
 				}
 
-				if (response.params.report == 'campaign_call_log') {
+				if (report == 'campaign_call_log') {
 					Master.campaign_call_log(response);
 				}
 
-				if (response.params.report == 'lead_inventory') {
+				if (report == 'lead_inventory') {
 					Master.lead_inventory(response);
 				}
 			}

@@ -79,6 +79,26 @@ container {
   border-top: 1px solid #fff;
 }
 
+body,
+html {
+  height: 100%;
+}
+
+div.container-fluid.hero_bg .form-holder {
+  border: none;
+}
+
+div.container-fluid.hero_bg {
+  background: url(/img/banner.jpg);
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 5px 15px #19273d;
+  -moz-box-shadow: 0 5px 15px #19273d;
+  -webkit-box-shadow: 0 5px 15px #19273d;
+}
+
 .mt10 {
   margin-top: 10px;
 }
@@ -419,9 +439,18 @@ div.container-fluid.bg {
   line-height: 10px;
 }
 
+.navbar-brand img {
+  max-width: 210px;
+  position: relative;
+  bottom: 10px;
+  margin-top: 0;
+}
+
 .navbar-default {
-  background: #203047;
-  border-bottom: 1px solid #fff;
+  background: #fff;
+  box-shadow: 0 1px 2px #28426d;
+  -moz-box-shadow: 0 1px 2px #28426d;
+  -webkit-box-shadow: 0 1px 2px #28426d;
 }
 
 .navbar-right .btn.btn-default {
