@@ -465,27 +465,7 @@ class AdminDashController extends Controller
 
         $result = $query->get()->toArray();
 
-        // now turn results into something usable
-        $agent_labels = [];
-        $call_count = [];
-        $duration = [];
-
-        foreach ($result as $r) {
-
-            $r['Duration'] = round($r['Duration'] / 60);
-
-            if ($r['Rep'] != null) {
-                array_push($agent_labels, $r['Rep']);
-                array_push($call_count, $r['Count']);
-                array_push($duration, $r['Duration']);
-            }
-        }
-
-        $new_result['rep'] = $agent_labels;
-        $new_result['count'] = $call_count;
-        $new_result['duration'] = $duration;
-
-        $return['agent_call_count'] = $new_result;
+        $return['agent_call_count'] = $result;
         echo json_encode($return);
     }
 

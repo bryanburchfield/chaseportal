@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Campaign;
@@ -228,5 +229,24 @@ trait DashTraits
         }
 
         return [$fromDate, $toDate];
+    }
+
+    private function runSql($sql, $bind)
+    {
+        $db = Auth::user()->db;
+        config(['database.connections.sqlsrv.database' => $db]);
+
+        // try {
+        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        // } catch (\Exception $e) {
+        //     $results = [];
+        // }
+
+        if (count($results)) {
+            // convert array of objects to array of arrays
+            $results = json_decode(json_encode($results), true);
+        }
+
+        return $results;
     }
 }
