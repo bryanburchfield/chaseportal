@@ -36,8 +36,8 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('campaign', 'Campaign') !!}
-						{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::label('campaigns', 'Campaign') !!}
+						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
@@ -45,8 +45,8 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('rep', 'Rep') !!}
-						{!! Form::select("rep[]", $rep, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+						{!! Form::label('reps', 'Rep') !!}
+						{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
@@ -60,4 +60,31 @@
 
 		{!! Form::close() !!}
 	</div>
+@endsection
+
+@section('extras')
+<div class="col-sm-7 nopadright">
+	<div class="col-sm-12 nopad">
+		<div class="card card-6 hidetilloaded" >
+			<h1 class="title fw600">Call Volume Per 15 Min Interval</h1>
+			<div class="inbound inandout" style="min-height:300px;">
+				<canvas id="call_volume"></canvas>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-sm-6 nopadleft">
+		<div class="card hidetilloaded">
+			<!-- count of callstatuses -->
+			<canvas id="callstatus"></canvas>
+		</div>
+	</div>
+
+	<div class="col-sm-6 nopadright">
+		<div class="card hidetilloaded">
+			<!-- agent calls vs system calls -->
+			<canvas id="agent_system_calls"></canvas>
+		</div>
+	</div>
+</div>	
 @endsection

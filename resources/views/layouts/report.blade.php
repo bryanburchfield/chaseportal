@@ -49,11 +49,14 @@
                 <div class="container-full mt20">
                     <div class="row">
                         <div class="col-sm-12">
-                                @yield('content')
+                            @yield('content')
 
                             <div class="report_results">
                                 <div class="reportpag pag"></div>
                                 <div class="reporttable table-responsive {{$report}}"></div>
+                                <div class="reportextras">
+                                    @yield('extras')
+                                </div>
                             </div>
                         </div>
                     </div>

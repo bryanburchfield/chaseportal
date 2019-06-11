@@ -55,7 +55,6 @@ class AgentAnalysis
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $tz =  Auth::user()->tz;
-        // $bind['tz'] =  Auth::user()->tz;
         $bind['group_id1'] = Auth::user()->group_id;
         $bind['group_id2'] = $bind['group_id1'];
         $bind['group_id3'] = $bind['group_id1'];
