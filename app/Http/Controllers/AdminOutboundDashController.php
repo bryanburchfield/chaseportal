@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Campaign;
-use App\DialingResult;
 
 class AdminOutboundDashController extends Controller
 {
