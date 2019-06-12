@@ -111,7 +111,7 @@
 
     <div class="row">
         <div class="col-sm-3 card_table_prt">
-            <div class="card agent_sales_per_hour_card card_table">
+            <div class="card agent_sales_per_hour_card card_table set_hgt">
                 <h1 class="title">Agent Call Count</h1>
                 <table class="table table-condensed table-striped" id="agent_call_count">
                     <thead>
@@ -124,7 +124,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-3 get_hgt">
             <div class="card">
                 <p class="descrip">Handled/Total. Handled is answered with < 20 sec holdtime</p>
                 <canvas id="service_level"></canvas>
@@ -146,7 +146,7 @@
         </div>
 
         <div class="col-sm-3 card_table_prt">
-            <div class="card card_table">
+            <div class="card card_table set_hgt">
                 <h2 class="card_title">REP AVG HANDLE TIME</h2>
                 <table class="table table-condensed table-striped" id="rep_avg_handletime"></table>
             </div>
