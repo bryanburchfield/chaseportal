@@ -13,7 +13,7 @@
 					<div class="form-group">
 						
 						{!! Form::label('campaign', 'Campaign') !!}
-						{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+						{!! Form::select("campaign", $campaign, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 					</div>
 				</div>
 			</div>
@@ -27,4 +27,9 @@
 
 		{!! Form::close() !!}
 	</div>
+@endsection
+
+@section('extras')
+	<h4 class="total_leads"></h4><br>
+	<h4 class="available_leads"></h4>
 @endsection

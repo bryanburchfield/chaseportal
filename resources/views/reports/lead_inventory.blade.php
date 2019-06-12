@@ -10,8 +10,8 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('campaign', 'Campaign') !!}
-						{!! Form::select("campaign[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::label('campaigns', 'Campaign') !!}
+						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
@@ -25,4 +25,9 @@
 
 		{!! Form::close() !!}
 	</div>
+@endsection
+
+@section('extras')
+	<h4 class="total_leads"></h4><br>
+	<h4 class="available_leads"></h4>
 @endsection
