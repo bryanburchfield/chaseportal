@@ -15,7 +15,7 @@
             <div class="card-3 card" id="completed_calls">
 
                 <h1 class="title">Completed Calls</h1>
-                <h4 class="data count total"></h4>
+                <h4 class="data total"></h4>
 
                 <div class="divider"></div>
 
@@ -34,8 +34,8 @@
         <div class="col-sm-3 col-xs-12">
             <div class="card-3 card" id="total_minutes">
 
-                <h1 class="title">Total Minutes</h1>
-                <h4 class="data count total"></h4>
+                <h1 class="title">Talk Time</h1>
+                <h4 class="data total"></h4>
 
                 <div class="divider"></div>
 
@@ -100,7 +100,7 @@
         </div>
         <div class="col-sm-6">
             <div class="card-6 card" >
-                <h1 class="title">Call Duration</h1>
+                <h1 class="title mb42">Call Duration</h1><br><br><br>
 
                 <div class="inandout">
                     <canvas id="call_duration"></canvas>
@@ -110,45 +110,114 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-3 card_table_prt">
-            <div class="card agent_sales_per_hour_card card_table set_hgt">
-                <h1 class="title">Agent Call Count</h1>
-                <table class="table table-condensed table-striped" id="agent_call_count">
-                    <thead>
-                        <tr>
-                            <th>Rep</th>
-                            <th>Calls</th>
-                        </tr>
-                    </thead>
-                </table>
+
+        <div class="col-sm-3 set_hgt card_table_prt ">
+            <div class="card flipping_card card-3b">
+                <div class="front">
+                    <div class="card_table">
+                        <h1 class="title">Agent Call Count</h1>
+                        <div class="flip_card_btn"></div>
+                        <table class="table table-condensed table-striped" id="agent_call_count">
+                            <thead>
+                                <tr>
+                                    <th>Rep</th>
+                                    <th>Calls</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                </div>
+
+                <div class="back">
+                    <!-- <h1 class="title">Agent Call Count</h1> -->
+                    <div class="flip_card_btn"></div>
+                    <div class="inbound inandout mb0">
+                        <canvas id="agent_call_count_graph"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-3 get_hgt">
-            <div class="card">
-                <p class="descrip">Handled/Total. Handled is answered with < 20 sec holdtime</p>
+        <div class="col-sm-3 set_hgt ">
+            <div class="card card-3b mt70_mb">
+                <h1 class="title">Service Level</h1>
+                <!-- three dot menu -->
+                <div class="card_dropdown mv_left">
+                    <!-- three dots -->
+                    <ul class="card_dropbtn icons btn-left showLeft">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <!-- menu -->
+                    <div id="card_dropdown" class="card_dropdown-content service_level_time">
+                        <h3>Change Answered Time</h3>
+                        <a href="20">20 seconds</a>
+                        <a href="30">30 seconds</a>
+                        <a href="40">40 seconds</a>
+                        <a href="50">50 seconds</a>
+                        <a href="60">60 seconds</a>
+                    </div>
+                </div>
+                <p class="descrip">Handled/Total. Handled is answered with &lt; <span class="answer_secs">20</span> sec holdtime</p>
                 <canvas id="service_level"></canvas>
             </div>
         </div>
 
-        <div class="col-sm-3 card_table_prt">
-            <div class="card agent_sales_per_hour_card card_table set_hgt">
-                <h1 class="title">Agent Call Time</h1>
-                <table class="table table-condensed table-striped" id="agent_calltime">
-                    <thead>
-                        <tr>
-                            <th>Rep</th>
-                            <th>Duration</th>
-                        </tr>
-                    </thead>
-                </table>
+        <div class="col-sm-3 get_hgt card_table_prt ">
+            <div class="card flipping_card card-3b mt120_mb">
+                <div class="front ">
+                    <div class="card_table">
+                        <h1 class="title">Agent Call Time</h1>
+                        <div class="flip_card_btn"></div>
+                        <table class="table table-condensed table-striped" id="agent_calltime">
+                            <thead>
+                                <tr>
+                                    <th>Rep</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                </div>
+
+                <div class="back">
+                    <!-- <h1 class="title">Agent Call Time</h1> -->
+                    <div class="flip_card_btn"></div>
+                    <div class="inbound inandout mb0">
+                        <canvas id="agent_calltime_graph"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-3 card_table_prt">
-            <div class="card card_table set_hgt">
-                <h2 class="card_title">REP AVG HANDLE TIME</h2>
-                <table class="table table-condensed table-striped" id="rep_avg_handletime"></table>
+        <div class="col-sm-3 set_hgt card_table_prt">
+            <div class="card flipping_card card-3b">
+                <div class="front ">
+                    <div class="card_table">
+                        <h1 class="title">REP AVG HANDLE TIME</h1>
+                        <div class="flip_card_btn"></div>
+                        <table class="table table-condensed table-striped" id="rep_avg_handletime">
+                            <thead>
+                                <tr>
+                                    <th>Rep</th>
+                                    <th>Avg</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                </div>
+
+                <div class="back">
+                    <!-- <h1 class="title">REP AVG HANDLE TIME</h1> -->
+                    <div class="flip_card_btn"></div>
+                    <div class="inbound inandout mb0">
+                        <canvas id="rep_avg_handletime_graph"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
