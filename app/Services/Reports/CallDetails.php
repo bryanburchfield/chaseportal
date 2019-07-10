@@ -15,6 +15,7 @@ class CallDetails
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Call Details Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];

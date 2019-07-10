@@ -17,6 +17,7 @@ class CampaignUsage
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Campaign Usage Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaign'] = '';

@@ -16,6 +16,7 @@ class CampaignCallLog
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Campaign Call Log';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];

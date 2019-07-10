@@ -16,9 +16,11 @@ class AgentPauseTime
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Agent Pause Time Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['columns'] = [
             'Rep' => 'Rep',
             'Campaign' => 'Campaign',
@@ -37,6 +39,7 @@ class AgentPauseTime
     {
         $filters = [
             'reps' => $this->getAllReps(true),
+            'skills' => $this->getAllSkills(),
         ];
 
         return $filters;
@@ -56,12 +59,28 @@ class AgentPauseTime
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
 
-        $sql = '';
+        $sql = 'SET NOCOUNT ON;';
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= " $union SELECT CONVERT(datetimeoffset, Date) AT TIME ZONE :tz as Date,
             Campaign, Rep, [Action], Duration, Details, id
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
+            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
             WHERE GroupId = :group_id
             AND Date >= :startdate
             AND Date < :enddate";
@@ -232,6 +251,10 @@ class AgentPauseTime
 
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         return $this->errors;

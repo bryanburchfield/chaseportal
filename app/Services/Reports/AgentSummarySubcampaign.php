@@ -15,10 +15,12 @@ class AgentSummarySubcampaign
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Agent Summary by Subcampaign Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
@@ -49,6 +51,7 @@ class AgentSummarySubcampaign
     {
         $filters = [
             'reps' => $this->getAllReps(),
+            'skills' => $this->getAllSkills(),
             'campaigns' => $this->getAllCampaigns(),
         ];
 
@@ -76,8 +79,16 @@ class AgentSummarySubcampaign
         $bind['reps'] = $reps;
         $bind['campaigns'] = $campaigns;
 
-        $sql = "SET NOCOUNT ON;
-                    
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "                    
         CREATE TABLE #AgentSummary(
             Campaign varchar(50),
             Subcampaign varchar(50),
@@ -129,6 +140,12 @@ class AgentSummarySubcampaign
                 $sql .= " INNER JOIN #SelectedRep sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
             }
 
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
             $sql .= " INNER JOIN #SelectedCampaign sc ON sc.CampaignName = r.Campaign
                 WHERE r.GroupId = :group_id2
                 AND r.Date >= :startdate2
@@ -153,6 +170,12 @@ class AgentSummarySubcampaign
 
             if (!empty($reps)) {
                 $sql .= " INNER JOIN #SelectedRep sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
+            }
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
             }
 
             $sql .= " INNER JOIN #SelectedCampaign c on c.CampaignName = aa.Campaign
@@ -443,6 +466,10 @@ class AgentSummarySubcampaign
 
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         return $this->errors;
