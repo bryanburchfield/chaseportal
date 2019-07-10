@@ -46,9 +46,6 @@ class AgentSummary
     {
         $filters = [
             'reps' => $this->getAllReps(),
-        ];
-
-        $filters = [
             'skills' => $this->getAllSkills(),
         ];
 
@@ -149,7 +146,7 @@ class AgentSummary
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT aa.Rep, [Action], SUM(Duration) as Duration, COUNT(id) as [Count]
+            $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(aa.id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
             INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
 
@@ -160,10 +157,10 @@ class AgentSummary
             }
 
             $sql .= "
-            WHERE GroupId = :group_id3
-            AND Date >= :startdate2
-            AND Date < :enddate2
-            AND Duration > 0
+            WHERE aa.GroupId = :group_id3
+            AND aa.Date >= :startdate2
+            AND aa.Date < :enddate2
+            AND aa.Duration > 0
             GROUP BY aa.Rep, [Action]";
 
             $union = 'UNION ALL';

@@ -165,7 +165,7 @@ class AgentSummarySubcampaign
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT aa.Campaign, aa.Subcampaign, aa.Rep, [Action], SUM(Duration) as Duration, COUNT(id) as [Count]
+            $sql .= " $union SELECT aa.Campaign, aa.Subcampaign, aa.Rep, [Action], SUM(Duration) as Duration, COUNT(aa.id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)";
 
             if (!empty($reps)) {
@@ -179,10 +179,10 @@ class AgentSummarySubcampaign
             }
 
             $sql .= " INNER JOIN #SelectedCampaign c on c.CampaignName = aa.Campaign
-            WHERE GroupId = :group_id3
-            AND Date >= :startdate1
-            AND Date < :enddate1
-            AND Duration > 0
+            WHERE aa.GroupId = :group_id3
+            AND aa.Date >= :startdate1
+            AND aa.Date < :enddate1
+            AND aa.Duration > 0
             GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep, [Action]";
 
             $union = 'UNION ALL';

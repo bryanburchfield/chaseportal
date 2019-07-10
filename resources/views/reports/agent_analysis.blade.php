@@ -33,6 +33,13 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('skills', 'Skill') !!}
+						{!! Form::select("skills[]", $skills, null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
+					</div>
+				</div>
 			</div>
 
 			<div class='reporterrors'>

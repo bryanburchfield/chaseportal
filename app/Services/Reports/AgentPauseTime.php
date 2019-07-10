@@ -70,9 +70,9 @@ class AgentPauseTime
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT CONVERT(datetimeoffset, Date) AT TIME ZONE :tz as Date,
-            Campaign, Rep, [Action], Duration, Details, id
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)";
+            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE :tz as Date,
+            AA.Campaign, AA.Rep, [Action], AA.Duration, AA.Details, AA.id
+            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
@@ -81,9 +81,9 @@ class AgentPauseTime
             }
 
             $sql .= "
-            WHERE GroupId = :group_id
-            AND Date >= :startdate
-            AND Date < :enddate";
+            WHERE AA.GroupId = :group_id
+            AND AA.Date >= :startdate
+            AND AA.Date < :enddate";
 
             if (!empty($reps)) {
                 $bind['reps'] = $reps;

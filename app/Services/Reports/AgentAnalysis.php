@@ -109,13 +109,13 @@ class AgentAnalysis
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= " $union SELECT
-                CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date, 
-                Campaign,
-                Rep,
+                CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date) as Date, 
+                AA.Campaign,
+                AA.Rep,
                 [Action],
-                SUM(Duration) as Duration,
-                COUNT(id) as [Count]
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)";
+                SUM(AA.Duration) as Duration,
+                COUNT(AA.id) as [Count]
+            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
@@ -124,10 +124,10 @@ class AgentAnalysis
             }
 
             $sql .= "
-            WHERE GroupId = :group_id1
-            AND	Date >= :startdate1
-            AND Date < :enddate1
-            GROUP BY CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
+            WHERE AA.GroupId = :group_id1
+            AND	AA.Date >= :startdate1
+            AND AA.Date < :enddate1
+            GROUP BY CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
 
             $union = 'UNION ALL';
         }
