@@ -150,6 +150,7 @@ Route::prefix('dashboards')->group(function () {
             Route::middleware('can:accessAdmin')->get('admin', 'MasterDashController@admin');
             Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
             Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
+            Route::middleware('can:accessAdmin')->post('get_user', 'MasterDashController@getUser');
         });
     });
 });

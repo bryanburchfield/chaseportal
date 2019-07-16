@@ -130,4 +130,9 @@ class MasterDashController extends Controller
         return redirect('master/admin');
     }
 
+    public function getUser()
+    {
+        return 'user details';
+    }
+
 }
