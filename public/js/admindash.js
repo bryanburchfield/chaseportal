@@ -136,7 +136,8 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
+                console.log(response);
+                Master.trend_percentage( $('#total_minutes'), response.call_volume.pct_change, response.call_volume.pct_sign, response.call_volume.ntc );
                 $('#total_minutes').find('.total').html(Master.convertMinsToHrsMins(response['call_volume']['total']));
                 $('#total_minutes').find('p.inbound').html(Master.convertMinsToHrsMins(response['call_volume']['total_inbound_duration']));
                 $('#total_minutes').find('p.outbound').html(Master.convertMinsToHrsMins(response['call_volume']['total_outbound_duration']));
@@ -501,7 +502,7 @@ var Dashboard = {
             data:{datefilter:datefilter},
             success:function(response){
                 console.log(response);
-
+                Master.trend_percentage( $('#completed_calls'), response.completed_calls.pct_change, response.completed_calls.pct_sign, response.completed_calls.ntc );
                 $('#completed_calls .total').html(Master.formatNumber(response['completed_calls']['total']));
                 $('#completed_calls p.inbound').html(Master.formatNumber(response['completed_calls']['inbound']));
                 $('#completed_calls p.outbound').html(Master.formatNumber(response['completed_calls']['outbound']));
@@ -526,6 +527,7 @@ var Dashboard = {
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
+                Master.trend_percentage( $('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc );
                 $('#avg_hold_time').html(response['average_hold_time']['avg_hold_time']);
                 $('#total_hold_time').html(response['average_hold_time']['total_hold_time']);
             },error: function (jqXHR,textStatus,errorThrown) {
@@ -625,7 +627,7 @@ var Dashboard = {
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
-
+                Master.trend_percentage( $('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.ntc );
                 if(response['abandon_rate']['abandon_rate']=="NAN%"){
                     response['abandon_rate']['abandon_rate']='0'
                 }

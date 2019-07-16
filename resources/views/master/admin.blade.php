@@ -15,8 +15,7 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
-<<<<<<< HEAD
-=======
+
 					<div class="col-sm-6">
 						<h2 class="page_heading">New User</h2>
 						{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form well']) !!}
@@ -34,7 +33,6 @@
 								{!! Form::label('email', 'Email') !!}
 								{!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
 							</div>
->>>>>>> 2b59da349b3a87d8b0bda72b4c026a33799efe38
 
 					{{-- <div class="col-sm-6">
 

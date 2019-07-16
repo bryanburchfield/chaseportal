@@ -117,6 +117,28 @@ var Master = {
         });         
     },
 
+    trend_percentage:function(selector, change_perc, up_or_down, not_comparable){
+        // if there is data to compare
+        if(!not_comparable){
+            selector.find('.trend_indicator').show();
+            selector.find('.trend_indicator span').text(change_perc+'%');
+            selector.find('.trend_indicator').removeClass('up down');
+            selector.find('.trend_arrow').removeClass('arrow_up arrow_down');
+
+            // if percentage is up
+            if(up_or_down){
+                selector.find('.trend_indicator').addClass('up');
+                selector.find('.trend_arrow').addClass('arrow_up');
+
+            }else{ // if percentage is down
+                selector.find('.trend_indicator').addClass('down');
+                selector.find('.trend_arrow').addClass('arrow_down');
+            }
+        }else{
+            selector.find('.trend_indicator').hide();
+        }
+    },
+    
     select_database:function(e){
         var type = $('.page_type').val();
         var checked = $(".database_group:checkbox:checked").length;
