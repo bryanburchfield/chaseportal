@@ -1212,7 +1212,7 @@ var Master = {
 
 $(document).ready(function(){
     Master.init();
-    
+    $('.preloader').hide();
     console.log(Master);
     $('.stop-propagation').on('click', function (e) {
         e.stopPropagation();

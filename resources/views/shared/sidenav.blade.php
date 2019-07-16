@@ -12,7 +12,7 @@
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a class="dash" href="kpidash"><i class="fas fa-paper-plane"></i>KPIs</a></li>
         <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>Reports</a></li>
         @can('accessAdmin')
-            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ url('master/admin') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
+            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ url('dashboards/admin') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
         @endcan
     </ul>
 </nav>

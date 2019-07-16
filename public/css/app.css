@@ -142,13 +142,13 @@ img.text_logo {
   text-align: center;
 }
 
-button.btn.logout_btn {
+input.btn.logout_btn {
   background: #c14141;
   color: #fff;
   font-weight: 600;
 }
 
-button.logout_btn:hover {
+input.logout_btn:hover {
   background: #9e2f2f;
   color: #fff;
 }
@@ -945,6 +945,10 @@ p.total {
 
 .form-holder .input-group-addon:last-child {
   background: #fff;
+}
+
+.btn {
+  border-radius: 0;
 }
 
 .form-holder .btn {
