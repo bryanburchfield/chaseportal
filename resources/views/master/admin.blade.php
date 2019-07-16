@@ -17,7 +17,7 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<h2 class="page_heading">New User</h2>
-						{!! Form::open(['method'=>'POST', 'url'=>'/master/add_user', 'class'=>'form well']) !!}
+						{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form well']) !!}
 							<div class="form-group">
 								{!! Form::label('group_id', 'Group ID') !!}
 								{!! Form::text('group_id', $group_id, ['class'=>'form-control group_id', 'required'=>true]) !!}
@@ -101,7 +101,7 @@
             </div>
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	            {!! Form::open(['method'=> 'POST', 'url'=> 'master/delete_user']) !!}
+	            {!! Form::open(['method'=> 'POST', 'url'=> 'dashboards/delete_user']) !!}
 		            {!! Form::hidden('userid', null, ['id'=>'userid']) !!}
 		            {!! Form::hidden('username', null, ['id'=>'username']) !!}
 		            {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}
