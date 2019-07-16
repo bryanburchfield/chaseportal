@@ -11,13 +11,17 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+// mix.js('resources/js/master.js', 'public/js')
+ mix.sass('resources/sass/app.scss', 'public/css');
 
-mix.scripts([
-    'resources/js/moment.js',
-    'resources/js/multiselect.js',
-    'resources/js/master.js',
-    'resources/js/masternav.js',
+// mix.scripts([
+//     'resources/js/moment.js',
+//     'resources/js/multiselect.js',
+//     'resources/js/datetimepicker.js',
 
-], 'public/js/mainapp.js');
+// ], 'public/js/assets.js');
+
+// mix.scripts([
+//     'resources/js/master.js',
+
+// ], 'public/js/master.js');
