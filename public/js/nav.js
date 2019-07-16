@@ -10,7 +10,7 @@ $(document).ready(function () {
 			}
 		});
 		$.ajax({
-			url: '/master/set_dashboard',
+			url: '/dashboards/set_dashboard',
 			type: 'POST',
 			dataType: 'json',
 			data: { 'dashboard': dashboard },
@@ -18,9 +18,9 @@ $(document).ready(function () {
 				if (!$('.sidebar').hasClass('active')) {
 					$('.sidebar').toggle();
 					$('.preloader').show();
-					window.location = "/master";
+					window.location = "/dashboards";
 				} else {
-					window.location = "/master";
+					window.location = "/dashboards";
 				}
 
 			}
