@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -444,28 +445,95 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "Rep,
-        'Count' = COUNT(CallStatus),
-        'Duration' = SUM(HandleTime)";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = "SET NOCOUNT ON;
+        
+        SELECT Rep, Campaign,
+        'Count' = SUM([Count]),
+        'Duration' = SUM(Duration)
+        INTO #temp
+        FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT DR.Rep, DR.Campaign,
+            'Count' = COUNT(DR.CallStatus),
+            'Duration' = SUM(DR.Duration)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.CallType NOT IN (7,8)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND Duration <> 0
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid ";
 
-        $query->whereIn('CallType', [1, 11])
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound'])
-            ->where('Duration', '!=', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $sql .= " GROUP BY DR.Rep, DR.Campaign";
+
+            $union = 'UNION ALL';
         }
 
-        $query->groupBy('Rep');
+        $sql .= ") tmp GROUP BY Rep, Campaign;
+        
+        SELECT * FROM #temp
+        ORDER BY Rep, Campaign;;
+        
+        SELECT Rep, SUM(Count) as Count, SUM(Duration) as Duration
+        FROM #temp
+        GROUP BY Rep
+        ORDER by Rep";
 
-        $result = $query->get()->toArray();
+        $db = Auth::user()->db;
+        config(['database.connections.sqlsrv.database' => $db]);
 
-        $return['agent_call_count'] = $result;
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+
+        $stmt->execute();
+
+        try {
+            $bycamp = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $stmt->nextRowset();
+            $byrep = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $bycamp = [];
+            $byrep = [];
+        }
+
+        $reps = [];
+        $counts = [];
+        $durations_secs = [];
+        $durations_hms = [];
+
+        foreach ($byrep as $rec) {
+            $reps[] = $rec['Rep'];
+            $counts[] = $rec['Count'];
+            $durations_hms[] = secondsToHms($rec['Duration']);
+            $durations_secs[] = $rec['Duration'];
+        }
+
+        $table_count = deleteColumn($bycamp, 'Duration');
+        $table_duration = deleteColumn($bycamp, 'Count');
+
+        $return = [
+            'reps' => $reps,
+            'counts' => $counts,
+            'durations_secs' => $durations_secs,
+            'durations_hms' => $durations_hms,
+            'table_count' => $table_count,
+            'table_duration' => $table_duration,
+        ];
+
         echo json_encode($return);
     }
 
@@ -531,37 +599,92 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "Rep,
-        'Total Handle Time' =  CAST(DATEADD(SECOND, SUM(HandleTime), 0) AS TIME(0)),
-        'Average Handle Time' =  CAST(DATEADD(SECOND, (SUM(HandleTime) / COUNT(CallStatus)), 0) AS TIME(0))";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = "SET NOCOUNT ON;
+        SELECT Rep, Campaign,
+        'Duration' = SUM(Duration),
+        'Count' = COUNT(CallStatus)
+        INTO #temp
+        FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT Rep, Campaign,
+            Duration, CallStatus
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE CallType NOT IN (7,8)
+            AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+            AND HoldTime >= 0
+            AND Duration > 0
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid ";
 
-        $query->where('CallType', 1)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('HoldTime', '>=', 0)
-            ->where('HandleTime', '>', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $union = 'UNION ALL';
         }
 
-        $query->groupBy('Rep')
-            ->orderBy('Average Handle Time', 'desc');
+        $sql .= ") tmp
+        GROUP BY Rep, Campaign;
+        
+        SELECT Rep, Campaign, 'Average Handle Time' = [Duration]/[Count]
+        FROM #temp
+        ORDER BY Rep, Campaign;
+        
+        SELECT Rep,
+        'Average Handle Time' = SUM([Duration])/SUM([Count])
+        FROM #temp
+        GROUP BY Rep
+        ORDER BY 'Average Handle Time' DESC";
 
-        // DB::connection('sqlsrv')->enableQueryLog();
-        $result = $query->get()->toArray();
-        // Log::debug(DB::connection('sqlsrv')->getQueryLog());
+        $db = Auth::user()->db;
+        config(['database.connections.sqlsrv.database' => $db]);
 
-        // now turn results into something usable
-        $return['rep_avg_handletime'] = $result;
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+
+        $stmt->execute();
+
+        try {
+            $bycamp = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $stmt->nextRowset();
+            $byrep = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $bycamp = [];
+            $byrep = [];
+        }
+
+        $reps = [];
+        $handletime = [];
+        $handletimesecs = [];
+        foreach ($byrep as $rec) {
+            $reps[] = $rec['Rep'];
+            $handletimesecs[] = $rec['Average Handle Time'];
+            $handletime[] = secondsToHms($rec['Average Handle Time']);
+        }
+
+        $return = [
+            'reps' => $reps,
+            'avg_handletime' => $handletime,
+            'avg_handletimesecs' => $handletimesecs,
+            'table' => $bycamp,
+        ];
+
         echo json_encode($return);
     }
 
-    public function setCampaign(Request $request){
+    public function setCampaign(Request $request)
+    {
         return 'set camp here';
     }
 }

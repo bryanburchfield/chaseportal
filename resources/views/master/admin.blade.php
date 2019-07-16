@@ -15,6 +15,26 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
+<<<<<<< HEAD
+=======
+					<div class="col-sm-6">
+						<h2 class="page_heading">New User</h2>
+						{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form well']) !!}
+							<div class="form-group">
+								{!! Form::label('group_id', 'Group ID') !!}
+								{!! Form::text('group_id', $group_id, ['class'=>'form-control group_id', 'required'=>true]) !!}
+							</div>
+
+							<div class="form-group">
+								{!! Form::label('name', 'Name') !!}
+								{!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
+							</div>
+
+							<div class="form-group">
+								{!! Form::label('email', 'Email') !!}
+								{!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+							</div>
+>>>>>>> 2b59da349b3a87d8b0bda72b4c026a33799efe38
 
 					{{-- <div class="col-sm-6">
 
@@ -144,7 +164,7 @@
             </div>
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	            {!! Form::open(['method'=> 'POST', 'url'=> 'master/delete_user']) !!}
+	            {!! Form::open(['method'=> 'POST', 'url'=> 'dashboards/delete_user']) !!}
 		            {!! Form::hidden('userid', null, ['id'=>'userid']) !!}
 		            {!! Form::hidden('username', null, ['id'=>'username']) !!}
 		            {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}

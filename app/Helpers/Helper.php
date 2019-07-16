@@ -44,3 +44,13 @@ if (!function_exists('secondsToHms')) {
         return sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
     }
 }
+
+if (!function_exists('deleteColumn')) {
+    function deleteColumn($array, $key)
+    {
+        array_walk($array, function (&$v) use ($key) {
+            unset($v[$key]);
+        });
+        return $array;
+    }
+}
