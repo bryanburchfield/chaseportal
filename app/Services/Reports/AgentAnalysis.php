@@ -15,8 +15,10 @@ class AgentAnalysis
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Agent Analysis Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
+        $this->params['skills'] = [];
         $this->params['columns'] = [
             'Date' => 'Date',
             'Rep' => 'Rep',
@@ -42,7 +44,11 @@ class AgentAnalysis
 
     public function getFilters()
     {
-        return [];
+        $filters = [
+            'skills' => $this->getAllSkills(),
+        ];
+
+        return $filters;
     }
 
     private function executeReport($all = false)
@@ -66,8 +72,16 @@ class AgentAnalysis
         $bind['enddate2'] = $endDate;
         $bind['enddate3'] = $endDate;
 
-        $sql = "SET NOCOUNT ON;
-        
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "        
         CREATE TABLE #AgentAnalysis(
             Date date,
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
@@ -95,17 +109,25 @@ class AgentAnalysis
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= " $union SELECT
-                CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date, 
-                Campaign,
-                Rep,
+                CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date) as Date, 
+                AA.Campaign,
+                AA.Rep,
                 [Action],
-                SUM(Duration) as Duration,
-                COUNT(id) as [Count]
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
-            WHERE GroupId = :group_id1
-            AND	Date >= :startdate1
-            AND Date < :enddate1
-            GROUP BY CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
+                SUM(AA.Duration) as Duration,
+                COUNT(AA.id) as [Count]
+            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE AA.GroupId = :group_id1
+            AND	AA.Date >= :startdate1
+            AND AA.Date < :enddate1
+            GROUP BY CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
 
             $union = 'UNION ALL';
         }
@@ -134,7 +156,15 @@ class AgentAnalysis
                 r.Rep,
                 d.Type,
                 COUNT(r.id) as [Count]
-            FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
+            FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
             CROSS APPLY (SELECT TOP 1 [Type]
                         FROM [$db].[dbo].[Dispos]
                         WHERE Disposition=r.CallStatus
@@ -352,6 +382,10 @@ class AgentAnalysis
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
+        }
 
         return $this->errors;
     }

@@ -16,6 +16,7 @@ class LeadInventory
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Lead Inventory Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];

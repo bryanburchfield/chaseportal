@@ -122,8 +122,8 @@ Route::prefix('kpi')->group(function () {
     });
 });
 
-// Master dashboard: all urls start with /master/
-Route::prefix('master')->group(function () {
+// Master dashboard: all urls start with /dashboards/
+Route::prefix('dashboards')->group(function () {
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

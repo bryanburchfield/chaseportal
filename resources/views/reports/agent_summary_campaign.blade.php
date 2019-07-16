@@ -40,15 +40,21 @@
 						{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
-			</div>
 
-			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('skills', 'Skill') !!}
+						{!! Form::select("skills[]", $skills, null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
+					</div>
+				</div>
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('campaigns', 'Campaign') !!}
 						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
+
 			</div>
 
 			<div class='reporterrors'>

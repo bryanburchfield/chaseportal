@@ -16,6 +16,7 @@ class CampaignSummary
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Campaign Summary Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['columns'] = [

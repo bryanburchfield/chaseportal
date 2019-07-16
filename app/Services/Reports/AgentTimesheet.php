@@ -19,6 +19,7 @@ class AgentTimesheet
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Date' => 'Date',
@@ -35,6 +36,7 @@ class AgentTimesheet
     {
         $filters = [
             'reps' => $this->getAllReps(),
+            'skills' => $this->getAllSkills(),
         ];
 
         return $filters;
@@ -55,24 +57,40 @@ class AgentTimesheet
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
 
-        $sql = '';
+        $sql = 'SET NOCOUNT ON;';
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as Date,
-            Campaign, Rep, [Action], Duration
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
-            WHERE GroupId = :group_id
-            AND Date >= :startdate
-            AND Date < :enddate";
+            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as Date,
+            AA.Campaign, AA.Rep, [Action], AA.Duration
+            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE AA.GroupId = :group_id
+            AND AA.Date >= :startdate
+            AND AA.Date < :enddate";
 
             if (!empty($reps)) {
                 $bind['reps'] = $reps;
-                $sql .= " AND Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps, '!#!'))";
+                $sql .= " AND AA.Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps, '!#!'))";
             }
 
             $union = 'UNION';
         }
-        $sql .= " ORDER BY Rep, Date";
+        $sql .= " ORDER BY AA.Rep, AA.Date";
 
         $results = $this->processResults($sql, $bind);
 
@@ -204,6 +222,10 @@ class AgentTimesheet
             $this->errors->add('reps.required', "At least 1 Rep required");
         } else {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         return $this->errors;

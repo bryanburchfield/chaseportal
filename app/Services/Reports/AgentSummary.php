@@ -15,9 +15,11 @@ class AgentSummary
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Agent Summary Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'Rep',
@@ -44,6 +46,7 @@ class AgentSummary
     {
         $filters = [
             'reps' => $this->getAllReps(),
+            'skills' => $this->getAllSkills(),
         ];
 
         return $filters;
@@ -68,8 +71,16 @@ class AgentSummary
         $bind['enddate2'] = $endDate;
         $bind['reps'] = $reps;
 
-        $sql = "SET NOCOUNT ON;
+        $sql = "SET NOCOUNT ON;";
 
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "
         CREATE TABLE #AgentSummary(
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
             Contacts int DEFAULT 0,
@@ -107,7 +118,15 @@ class AgentSummary
                     WHERE Disposition=r.CallStatus AND (GroupId=:group_id1 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
                     r.id
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
+                INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                    INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
+                    INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
                 WHERE r.GroupId = :group_id2
                 AND r.Date >= :startdate1
                 AND r.Date < :enddate1
@@ -127,13 +146,21 @@ class AgentSummary
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT aa.Rep, [Action], SUM(Duration) as Duration, COUNT(id) as [Count]
+            $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(aa.id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
-            INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
-            WHERE GroupId = :group_id3
-            AND Date >= :startdate2
-            AND Date < :enddate2
-            AND Duration > 0
+            INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE aa.GroupId = :group_id3
+            AND aa.Date >= :startdate2
+            AND aa.Date < :enddate2
+            AND aa.Duration > 0
             GROUP BY aa.Rep, [Action]";
 
             $union = 'UNION ALL';
@@ -376,6 +403,10 @@ class AgentSummary
             $this->errors->add('reps.required', "At least 1 Rep required");
         } else {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         return $this->errors;

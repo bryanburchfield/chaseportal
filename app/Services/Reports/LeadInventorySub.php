@@ -16,6 +16,7 @@ class LeadInventorySub
     {
         $this->initilaizeParams();
 
+        $this->params['reportName'] = 'Lead Inventory by Subcampaign Report';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaign'] = '';

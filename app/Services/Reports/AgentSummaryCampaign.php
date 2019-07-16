@@ -18,6 +18,7 @@ class AgentSummaryCampaign
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
@@ -45,6 +46,7 @@ class AgentSummaryCampaign
     {
         $filters = [
             'reps' => $this->getAllReps(),
+            'skills' => $this->getAllSkills(),
             'campaigns' => $this->getAllCampaigns(),
         ];
 
@@ -72,8 +74,16 @@ class AgentSummaryCampaign
         $bind['reps'] = $reps;
         $bind['campaigns'] = $campaigns;
 
-        $sql = "SET NOCOUNT ON;
-                            
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "                            
                 CREATE TABLE #AgentSummary(
                     Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
                     Contacts int DEFAULT 0,
@@ -96,9 +106,24 @@ class AgentSummaryCampaign
                     AvDispoTime numeric(18,2) DEFAULT 0,
                     ConnectedTimeSec int DEFAULT 0
                     );
-                
-                INSERT #AgentSummary(Rep)
-                SELECT DISTINCT [value] from dbo.SPLIT(:reps, '!#!');
+
+                    INSERT #AgentSummary(Rep)
+                    SELECT DISTINCT Rep FROM (";
+
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= "
+                        $union SELECT [value] Rep from dbo.SPLIT(:reps, '!#!')";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                            INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = [value]
+                            INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+            $union = "UNION";
+        }
+
+        $sql .= ") tmp;
 
                 CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
                 INSERT INTO #SelectedCampaign
@@ -394,6 +419,10 @@ class AgentSummaryCampaign
             $this->errors->add('reps.required', "At least 1 Rep required");
         } else {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         return $this->errors;

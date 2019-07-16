@@ -125,6 +125,27 @@ trait ReportTraits
         return $results;
     }
 
+    public function getAllSkills()
+    {
+        $groupId = Auth::user()->group_id;
+        $bind = ['groupid' => $groupId];
+
+        $sql = '';
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT SkillName
+            FROM [$db].[dbo].[Skills]
+            WHERE GroupId = :groupid";
+
+            $union = ' UNION';
+        }
+        $sql .= " ORDER BY SkillName";
+
+        $results = $this->resultsToList($this->runSql($sql, $bind));
+
+        return $results;
+    }
+
     public function getAllCallStatuses()
     {
         $groupId = Auth::user()->group_id;
