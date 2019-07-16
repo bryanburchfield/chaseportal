@@ -1,19 +1,21 @@
 <div class="container-full mt20">
-	<div class="row">
-	    <div class="col-sm-9">
+    <div class="row">
+        <div class="col-sm-12">
             <div class="filter_time_camp_dets">
-                <p>
-                    <span class="selected_datetime"></span> |
-                    <span class="selected_campaign"></span>
-                </p>
+                <p></p>
             </div>
-	    </div>
-	</div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-3 col-xs-12">
             <div class="card-3 card" id="completed_calls">
 
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+               
                 <h1 class="title">Completed Calls</h1>
                 <h4 class="data total"></h4>
 
@@ -34,6 +36,11 @@
         <div class="col-sm-3 col-xs-12">
             <div class="card-3 card" id="total_minutes">
 
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+
                 <h1 class="title">Talk Time</h1>
                 <h4 class="data total"></h4>
 
@@ -53,6 +60,11 @@
 
         <div class="col-sm-3 col-xs-12">
             <div class="card-3 card avg_hold_time_card">
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+
                 <h1 class="title">Average Hold Time</h1>
                 <h4 class="data" id="avg_hold_time"></h4>
 
@@ -67,14 +79,19 @@
 
         <div class="col-sm-3 col-xs-12">
             <div class="card-3 card abandon_calls_card">
-                <h1 class="title">Abandoned Calls</h1>
-                <h4 class="data count" id="abandon_calls"></h4>
+
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+                <h1 class="title">Abandoned Rate</h1>
+                <h4 class="data" id="abandon_rate"></h4>
 
                 <div class="divider"></div>
 
                 <div class="details tac">
-                    <p class="data" id="abandon_rate"></p>
-                    <p class="type">Abandon Rate</p>
+                    <p class="data" id="abandon_calls"></p>
+                    <p class="type">Abandon Calls</p>
                 </div>
             </div><!-- end card -->
         </div><!-- end column -->
@@ -121,9 +138,11 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Calls</th>
                                 </tr>
                             </thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                     
@@ -175,9 +194,11 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Duration</th>
                                 </tr>
                             </thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                     
@@ -203,9 +224,11 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Avg</th>
                                 </tr>
                             </thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                     

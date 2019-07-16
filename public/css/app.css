@@ -65,7 +65,7 @@ container {
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background-image: url("/admindashboard/img/loader2.gif");
+  background-image: url("/img/loader2.gif");
   background-repeat: no-repeat;
   background-color: rgba(255, 255, 255, 0.88);
   background-position: center;
@@ -111,6 +111,10 @@ container {
   padding-bottom: 20px;
 }
 
+.carb_mb30_mb {
+  margin-bottom: 0;
+}
+
 a,
 a:hover,
 a:focus {
@@ -138,17 +142,13 @@ img.text_logo {
   text-align: center;
 }
 
-.btn {
-  border-radius: 0;
-}
-
-input.btn.logout_btn {
+button.btn.logout_btn {
   background: #c14141;
   color: #fff;
   font-weight: 600;
 }
 
-input.logout_btn:hover {
+button.logout_btn:hover {
   background: #9e2f2f;
   color: #fff;
 }
@@ -263,7 +263,7 @@ span {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  /*background: #203047;*/
+  /*background: $blue;*/
 }
 
 #sidebar .sidebar-header strong {
@@ -428,6 +428,10 @@ div.container-fluid.hero_bg .form-holder {
   margin: 20px;
 }
 
+.edit_user .alert {
+  display: none;
+}
+
 .mb_logo {
   display: block;
   margin: 0 auto;
@@ -563,6 +567,10 @@ div.container-fluid.bg {
   background-color: #e4e4e4;
 }
 
+.filters ul.dropdown-menu {
+  right: -65px;
+}
+
 .filters {
   margin-bottom: 10px;
   float: right;
@@ -576,6 +584,16 @@ div.container-fluid.bg {
 .filters .btn.btn-primary {
   margin-bottom: 0;
   background: none;
+}
+
+.filters .btn.btn-primary.select_database {
+  position: relative;
+  margin-bottom: 10px;
+  background-color: #e49831;
+  border: 1px solid #f2ad4d;
+  border-radius: 0;
+  color: #fff;
+  font-weight: 600;
 }
 
 .navbar-right {
@@ -609,7 +627,6 @@ input[type=file] {
 .card {
   background: #fff;
   box-shadow: 0 2px 3px #ccd6dd;
-  /*border: 1px solid #d8d8d8;*/
   border-top: 3px solid #acb4c1;
   padding: 20px;
   /*overflow: auto;*/
@@ -628,6 +645,7 @@ input[type=file] {
   font-weight: 700;
   margin-bottom: 10px;
   color: #203047;
+  letter-spacing: -0.015em;
 }
 
 .card.flipping_card .title {
@@ -652,10 +670,15 @@ input[type=file] {
 }
 
 .card.flipping_card {
-  overflow: scroll;
+  /*overflow: scroll;*/
   background: #fff;
   overflow: hidden;
   padding: 1px;
+}
+
+.card.flipping_card.card-3 {
+  padding: 0px;
+  padding-top: 20px;
 }
 
 .flip_card_btn:after,
@@ -673,7 +696,34 @@ input[type=file] {
   cursor: pointer;
 }
 
-.card .card_table {
+.mvup_btn .front .flip_card_btn:after,
+.mvup_btn .back .flip_card_btn:after {
+  top: -10px;
+}
+
+.mvup_btn.card .back {
+  padding: 0;
+}
+
+.mvup_btn.card .back .card_table {
+  padding: 10px;
+  padding-top: 0 !important;
+}
+
+.mvuo_btn.card::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.mvuo_btn.card {
+  overflow: -moz-scrollbars-none;
+}
+
+.mvuo_btn.card {
+  -ms-overflow-style: none;
+}
+
+.card .card_table,
+.card .card_table2 {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -697,7 +747,7 @@ input[type=file] {
 }
 
 .card_table_prt {
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .card input {
@@ -708,14 +758,16 @@ input[type=file] {
   float: left;
 }
 
-.card.card_table {
+.card.card_table,
+.card.card_table2 {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
   padding: 20px 10px;
 }
 
-.card_table::-webkit-scrollbar {
+.card_table::-webkit-scrollbar,
+.card_table2::-webkit-scrollbar {
   width: 0px;
   /* Remove scrollbar space */
   background: transparent;
@@ -794,13 +846,13 @@ p.total {
 .total_calls_in,
 .total_calls_out {
   padding: 17px;
-  height: 48%;
+  /*height: 48%;*/
 }
 
 .total_calls_out {
   background: #E15B23;
   color: #fff;
-  margin-bottom: 4%;
+  margin-bottom: 10px;
 }
 
 .total_calls_in {
@@ -1079,6 +1131,13 @@ h2.card_title {
 
 p.no_data {
   text-align: center;
+  position: absolute;
+  left: 35%;
+  top: 40%;
+}
+
+canvas#service_level {
+  margin-bottom: 10px;
 }
 
 h2.avg_sl,
@@ -1242,7 +1301,8 @@ input[type=number]::-webkit-outer-spin-button {
 .report_filters form select,
 .report_filters form button.multiselect,
 .form.adjust_interval select,
-.add_user select {
+.add_user select,
+.edit_user select {
   background: #eee !important;
 }
 
@@ -1577,7 +1637,8 @@ h2 {
   overflow: auto;
 }
 
-.opt a {
+.opt a,
+.opt h4 {
   float: left;
   display: inline-block;
   font-size: 17px;
@@ -1846,8 +1907,8 @@ a.run_kpi.btn {
 
 .icons li {
   background: none repeat scroll 0 0 #4286f4;
-  height: 7px;
-  width: 7px;
+  height: 6px;
+  width: 6px;
   line-height: 0;
   list-style: none outside none;
   margin-right: 15px;
@@ -1878,6 +1939,11 @@ a.run_kpi.btn {
   font-size: 16px;
   border: none;
   cursor: pointer;
+}
+
+.card_dropdown.mv_left {
+  left: 20px;
+  top: 20px;
 }
 
 .card_dropdown {
@@ -1941,6 +2007,35 @@ a.run_kpi.btn {
   border-radius: 0;
 }
 
+.db_select.ls_style_none {
+  list-style: none;
+  margin-top: 13px;
+}
+
+.db_select.dropdown-menu {
+  padding: 10px !important;
+}
+
+ul.db_select li.active > a,
+a[aria-expanded=true] {
+  background: none;
+  color: #33A09B;
+}
+
+.db_select a.dropdown-toggle {
+  float: right;
+}
+
+.db_select label {
+  margin-bottom: 6px;
+}
+
+.total_calls_in {
+  margin-bottom: 0;
+}
+
+/*.get_ldr_ht{border: 1px solid red;}*/
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -1981,9 +2076,18 @@ a.run_kpi.btn {
     padding: 0;
   }
 
-  /*.total_calls_in{margin-bottom: 20px;}*/
+  .col-md-4.col-sm-12.set_hgt,
+  .get_hgt {
+    padding: 0;
+  }
 
-  /*img.text_logo{display: none;}*/
+  .carb_mb30_mb {
+    margin-bottom: 20px;
+  }
+
+  .total_calls_in {
+    margin-bottom: 0px;
+  }
 
   .card h4.data {
     font-size: 32px;
@@ -1998,10 +2102,9 @@ a.run_kpi.btn {
     margin-bottom: 20px;
   }
 
-  .total_calls_in,
-  .total_calls_out {
+  /*.total_calls_in, .total_calls_out{
     max-height: 160px;
-  }
+  }*/
 
   .total_calls_in h2,
   .total_calls_out h2 {
@@ -2026,6 +2129,18 @@ a.run_kpi.btn {
 }
 
 @media handheld, only screen and (max-width: 768px) {
+  .mt70_mb {
+    margin-top: 70px;
+  }
+
+  .mt120_mb {
+    margin-top: 120px;
+  }
+
+  canvas#service_level {
+    margin-bottom: 30px;
+  }
+
   .col-sm-3.report_download {
     margin-top: 20px;
   }
@@ -2074,6 +2189,20 @@ a.run_kpi.btn {
 }*/
 
 @media handheld, only screen and (max-width: 556px) {
+  .card h4.data.bg_rounded {
+    padding-top: 32px;
+  }
+
+  .card .back {
+    padding-left: 35px;
+    padding-right: 35px;
+  }
+
+  .col-xs-6 .card .back {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   h2.page_heading {
     font-size: 22px;
   }
@@ -2158,7 +2287,7 @@ a.run_kpi.btn {
     font-size: 38px;
   }
 
-  .card.card-3 h1.title {
+  .col-xs-6 .card h1.title {
     font-size: 12px;
   }
 }

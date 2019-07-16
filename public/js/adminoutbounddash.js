@@ -55,6 +55,7 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
     inorout : document.getElementById("inorout").value,
     inorout_toggled:false,
+    time: new Date().getTime(),
 
     init:function(){
         this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
@@ -63,11 +64,13 @@ var Dashboard = {
         this.calls_by_campaign(this.datefilter, this.chartColors);
         this.total_calls(this.datefilter);
         Dashboard.eventHandlers();
+        Master.check_reload();
+        $('#avg_wait_time').closest('.flipping_card').flip(true);
     },
 
     eventHandlers:function(){
         $('.date_filters li a').on('click', this.filter_date);
-        $('.filter_campaign li').on('click', this.filter_campaign);
+        $('.filter_campaign').on('click', 'li', this.filter_campaign);
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.card-6 .btn-group .btn').on('click', this.toggle_inorout_btn_class);
         $('.callvolume_inorout .btn').on('click', this.call_volume_type);
@@ -94,14 +97,38 @@ var Dashboard = {
         return chart_colors_array;
     },
 
+    refresh:function(datefilter, campaign, inorout){
+
+        Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
+        Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
+        Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
+        Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
+        Dashboard.total_calls(datefilter);
+        Dashboard.update_datefilter(datefilter);
+        Master.check_reload();
+        $('.preloader').fadeOut('slow');
+    },
+
+    flip_card:function(len, sel){
+        if(len < 15){
+            $(sel).closest('.flipping_card').flip(true);
+        }
+    },
+
     // call volume, call duration line graphs & total minutes
     get_call_volume:function(inorout, datefilter, chartColors){
 
         var activeBtn = $('.callvolume_inorout').find("[data-type='" + this.inorout + "']");
         $(activeBtn).siblings().addClass('btn-default');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
         $.ajax({
             'async': false,
-            url: '../../adminoutbounddash/app/ajax/call_volume.php',
+            url: '/adminoutbounddash/app/ajax/call_volume',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -110,9 +137,10 @@ var Dashboard = {
             },
             success:function(response){
 
-                $('#total_minutes').find('.total').html(response['call_volume']['total']);
-                $('#total_minutes').find('p.inbound').html(response['call_volume']['total_inbound_duration']);
-                $('#total_minutes').find('p.outbound').html(response['call_volume']['total_outbound_duration']);
+                Master.trend_percentage( $('#total_minutes'), response.call_volume.pct_change, response.call_volume.pct_sign, response.call_volume.ntc );
+                $('#total_minutes').find('.total').html(Master.convertMinsToHrsMins(response['call_volume']['total']));
+                $('#total_minutes').find('p.inbound').html(Master.convertMinsToHrsMins(response['call_volume']['total_inbound_duration']));
+                $('#total_minutes').find('p.outbound').html(Master.convertMinsToHrsMins(response['call_volume']['total_outbound_duration']));
 
                 var call_volume_inbound = {
 
@@ -226,8 +254,7 @@ var Dashboard = {
 
 
                 if(!Dashboard.inorout_toggled){
-                
-                    var call_duration = {
+                    var call_duration = {   
                         labels: response['call_volume']['duration_time'],
                         datasets: [{
                             label: 'Inbound',
@@ -256,6 +283,15 @@ var Dashboard = {
                                 display: true,
                                 position: 'left',
                                 id: 'y-axis-1',
+                                // ticks: {
+                                //     callback: function(value, index, values) {
+                                //         return value/60;
+                                //     }
+                                // },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Minutes'
+                                },
                             }, {
                                 type: 'linear',
                                 display: false,
@@ -272,6 +308,16 @@ var Dashboard = {
                                 boxWidth: 12
                             }
                         },
+
+                        tooltips: {
+                            enabled: true,
+                            mode: 'single',
+                            callbacks: {
+                                label: function(tooltipItems, data) { 
+                                    return Master.convertSecsToHrsMins(tooltipItems.yLabel);
+                                }
+                            }
+                        }
                     }
 
                     // call duration line graph
@@ -295,42 +341,127 @@ var Dashboard = {
 
     sales_per_hour_per_rep:function(datefilter, chartColors){
         var campaign = $('.filter_campaign li ').text();
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
 
         $.ajax({
-            'async': false,
-            url: '../../adminoutbounddash/app/ajax/sales_per_hour_per_rep.php',
+            url:'/adminoutbounddash/app/ajax/avg_wait_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-                console.log(response);
+
+                $('#avg_wait_time tbody').empty();
+                if(response['avg_wait_time'].length){
+                
+                    var trs;
+                    for (var i = 0; i < response['avg_wait_time'].length; i++) {
+                        if(response['avg_wait_time'][i]['Rep'] != ''){
+                            trs+='<tr><td>'+response['avg_wait_time'][i]['Rep']+'</td><td>'+Master.convertSecsToHrsMins(response['avg_wait_time'][i]['AvgWaitTime'])+'</td></tr>';
+                        }
+                    }
+                    $('#avg_wait_time tbody').append(trs);
+                }
+            }
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            'async': false,
+            url: '/adminoutbounddash/app/ajax/sales_per_hour_per_rep',
+            type: 'POST',
+            dataType: 'json',
+            data:{campaign:campaign, datefilter:datefilter},
+            success:function(response){
+
+                Dashboard.flip_card(response['table'].length, '#sales_per_hour_per_rep');
+                Master.trend_percentage( $('.sales_per_hour'), response.perhour_pct_change, response.perhour_pct_sign, response.perhour_ntc );
+                Master.trend_percentage( $('.total_sales_card '), response.sales_pct_change, response.sales_pct_sign, response.sales_ntc );
+                $('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph').parent().find('.no_data').remove();
+
                 var tot_mins = $('#total_minutes .outbound .data.outbound').text();
                 tot_mins = parseInt(tot_mins);
                 var tot_sales = response['total_sales'];
-                
+
                 if(tot_sales){
-                    var sales_per_hour = (tot_mins / 60) / tot_sales;
-                    sales_per_hour = Math.round(sales_per_hour * 100) / 100;
-                    $('#sales_per_hour').text(sales_per_hour);
+                    $('#sales_per_hour').text(response['total_sales_per_hour']);
                 }else{
                     $('#sales_per_hour').text('0');
                 }
 
-                $('#total_sales').html(response['total_sales']);
+                if(response['total_sales'] == 0 || response['total_sales_per_hour'].toString().length < 5){
+                    $('#sales_per_hour').addClass('bg_rounded');
+                }else{
+                    $('#sales_per_hour').removeClass('bg_rounded');
+                }
+
+                if(response['total_sales'].toString().length < 4){
+                    $('#total_sales').addClass('bg_rounded');
+                }else{
+                    $('#total_sales').removeClass('bg_rounded');
+                }
+                $('#total_sales').html(Master.formatNumber(response['total_sales']));
                 $('#sales_per_hour_per_rep tbody').empty();
-                if(response['sales_per_hour_per_rep'].length){
+
+                if(response['reps'].length){
                 
                     var trs;
-                    for (var i = 0; i < response['sales_per_hour_per_rep'].length; i++) {
-                        if(response['sales_per_hour_per_rep'][i]['Rep'] != ''){
-                            trs+='<tr><td>'+response['sales_per_hour_per_rep'][i]['Rep']+'</td><td>'+response['sales_per_hour_per_rep'][i]['Sales']+'</td><td>'+response['sales_per_hour_per_rep'][i]['PerHour']+'</td></tr>';
+                    for (var i = 0; i < response['table'].length; i++) {
+                        if(response['table'][i]['Rep'] != ''){
+                            trs+='<tr><td>'+response['table'][i]['Rep']+'</td><td>'+response['table'][i]['Sales']+'</td><td>'+response['table'][i]['PerHour']+'</td></tr>';
                         }
                     }
-                    $('#sales_per_hour_per_rep').append(trs);
+                    $('#sales_per_hour_per_rep tbody').append(trs);
                 }else{
-                    $('#sales_per_hour_per_rep').empty();
-                    $('<p class="no_data">No data yet</p>').insertBefore('#sales_per_hour_per_rep');
+                    $('#sales_per_hour_per_rep tbody').empty(); 
+                    $('<p class="no_data">No data yet</p>').insertBefore('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph');
                 }
+
+                var response_length = response['sales'].length;
+                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+
+                var sales_per_hour_per_rep_data = {
+                    datasets: [{
+                        data: response['sales'],
+                        backgroundColor: chart_colors_array,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response['reps']
+                };
+                 
+                var sales_per_hour_per_rep_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled:true,
+                    }
+                }
+
+                var ctx = document.getElementById('sales_per_hour_per_rep_graph').getContext('2d');
+
+                window.sales_per_hour_per_rep_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: sales_per_hour_per_rep_data,
+                    options: sales_per_hour_per_rep_options
+                });
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#sales_per_hour_per_rep');
@@ -340,10 +471,15 @@ var Dashboard = {
     },
 
     calls_by_campaign:function(datefilter, chartColors){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
 
         $.ajax({
             'async': false,
-            url: '../../adminoutbounddash/app/ajax/calls_by_campaign.php',
+            url: '/adminoutbounddash/app/ajax/calls_by_campaign',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -351,11 +487,26 @@ var Dashboard = {
             },
             success:function(response){
 
+                Dashboard.flip_card(response.Table.length, '#calls_by_campaign');
+                $('#calls_by_campaign, #calls_by_campaign_graph').parent().find('.no_data').remove();
+
+                if(response.Table.length){
+                
+                    let trs;
+                    for (var i = 0; i < response['Table'].length; i++) {
+                        if(response['Table'][i]['Campaign'] != ''){
+                            trs+='<tr><td>'+response['Table'][i]['Campaign']+'</td><td>'+Master.formatNumber(response['Table'][i]['Call Count'])+'</td></tr>';
+                        }
+                    }
+                    $('#calls_by_campaign tbody').append(trs);
+                }else{
+                    $('#calls_by_campaign tbody').empty();
+                    $('<p class="no_data">No data yet</p>').insertBefore('#calls_by_campaign, #calls_by_campaign_graph');
+                }
+
                 if(window.calls_by_campaign_chart != undefined){
                     window.calls_by_campaign_chart.destroy();
                 }
-                console.log(response);
-                console.log(response['Campaigns'].length);
 
                 var response_length = response['Counts'].length;
                 var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
@@ -373,12 +524,6 @@ var Dashboard = {
                             sidePadding: 15 
                         }
                     },
-                    title: {
-                        fontColor:'#203047',
-                        fontSize:16,
-                        display: true,
-                        text: 'AGENT CALL COUNT'
-                    },
                     labels: response['Campaigns']
                 };
                 
@@ -389,15 +534,10 @@ var Dashboard = {
                     },
                     tooltips: {
                         enabled:true,
-                    },title: {
-                        fontColor:'#203047',
-                        fontSize:16,
-                        display: true,
-                        text: 'CALLS BY CAMPAIGN'
-                    },
+                    }
                 }
 
-                var ctx = document.getElementById('calls_by_campaign').getContext('2d');
+                var ctx = document.getElementById('calls_by_campaign_graph').getContext('2d');
 
                 window.calls_by_campaign_chart = new Chart(ctx,{
                     type: 'doughnut',
@@ -416,46 +556,151 @@ var Dashboard = {
     agent_talk_time:function(datefilter, chartColors){
 
         var campaign = $('.filter_campaign li ').text();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
 
         $.ajax({
             'async': false,
-            url: '../../adminoutbounddash/app/ajax/agent_talk_time.php',
+            url: '/adminoutbounddash/app/ajax/agent_talk_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-                console.log(response);
+                Dashboard.flip_card(response.agent_call_count.AvgCount.length, '#agent_call_count');
+                Dashboard.flip_card(response['agent_talk_time']['Rep'].length, '#agent_talk_time');
 
+                $('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph').parent().find('.no_data').remove();
+                
                 $('#agent_call_count tbody').empty();
                 $('#agent_talk_time tbody').empty();
 
-                if(response['agent_call_count'].length){
+                if(response.agent_call_count.AvgCount.length){
                 
                     let trs;
-                    for (var i = 0; i < response['agent_call_count'].length; i++) {
-                        if(response['agent_call_count'][i]['Rep'] != ''){
-                            trs+='<tr><td>'+response['agent_call_count'][i]['Rep']+'</td><td>'+response['agent_call_count'][i]['Count']+'</td><td>'+response['agent_call_count'][i]['AvgCount']+'</td></tr>';
+                    for (var i = 0; i < response['agent_call_count']['Count'].length; i++) {
+                        if(response['agent_call_count']['Rep'][i] != ''){
+                            trs+='<tr><td>'+response['agent_call_count']['Rep'][i]+'</td><td>'+Master.formatNumber(response['agent_call_count']['Count'][i])+'</td><td>'+response['agent_call_count']['AvgCount'][i]+'</td></tr>';
                         }
                     }
-                    $('#agent_call_count').append(trs);
+                    $('#agent_call_count tbody').append(trs);
                 }else{
-                    $('#agent_call_count').empty();
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count');
+                    $('#agent_call_count tbody').empty();
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
                 }
 
-                if(response['agent_talk_time'].length){
-                
+                if(response['agent_talk_time']['Rep'].length){
+                     $('#agent_talk_time').show();
                     let trs;
-                    for (var i = 0; i < response['agent_talk_time'].length; i++) {
-                        if(response['agent_talk_time'][i]['Rep'] != ''){
-                            trs+='<tr><td>'+response['agent_talk_time'][i]['Rep']+'</td><td>'+response['agent_talk_time'][i]['Duration']+'</td><td>'+response['agent_talk_time'][i]['AvgDuration']+'</td></tr>';
+                    for (var i = 0; i < response['agent_talk_time']['Rep'].length; i++) {
+                        if(response['agent_talk_time']['Rep'][i] != ''){
+                            trs+='<tr><td>'+response['agent_talk_time']['Rep'][i]+'</td><td>'+response['agent_talk_time']['DurationHms'][i]+'</td><td>'+response['agent_talk_time']['AvgDurationHms'][i]+'</td></tr>';
                         }
                     }
-                    $('#agent_talk_time').append(trs);
+                    $('#agent_talk_time tbody').append(trs);
                 }else{
-                    $('#agent_talk_time').empty();
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_talk_time');
+                    $('#agent_talk_time tbody').empty();
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
                 }
+
+                ////////////////////////////////////////////////////////////
+                ////    AGENT CALL COUNT GRAPH
+                ///////////////////////////////////////////////////////////
+
+                if(window.agent_call_count_chart != undefined){
+                    window.agent_call_count_chart.destroy();
+                }
+
+                var response_length = response['agent_call_count']['Count'].length;
+                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+
+                var agent_call_count_data = {
+                    datasets: [{
+                        data: response['agent_call_count']['Count'],
+                        backgroundColor: chart_colors_array,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response['agent_call_count']['Rep']
+                };
+
+                var agent_call_count_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: true,
+                       
+                    }
+                }
+
+                var ctx = document.getElementById('agent_call_count_graph').getContext('2d');
+
+                window.agent_call_count_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: agent_call_count_data,
+                    options: agent_call_count_options
+                });
+
+                ////////////////////////////////////////////////////////////
+                ////    AGENT TALK TIME GRAPH
+                ///////////////////////////////////////////////////////////
+
+                if(window.agent_talk_time_chart != undefined){
+                    window.agent_talk_time_chart.destroy();
+                }
+
+                var response_length = response['agent_talk_time']['Rep'].length;
+                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+
+                var agent_talk_time_data = {
+                    datasets: [{
+                        data: response['agent_talk_time']['DurationSecs'],
+                        backgroundColor: chart_colors_array,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response['agent_talk_time']['Rep']
+                };
+                
+                var agent_talk_time_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItem, data) { 
+                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMins(data['datasets'][0]['data'][tooltipItem['index']]);
+                            }
+                        }
+                    }
+                }
+
+                var ctx = document.getElementById('agent_talk_time_graph').getContext('2d');
+
+                window.agent_talk_time_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: agent_talk_time_data,
+                    options: agent_talk_time_options
+                });
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#agent_talk_time');
@@ -466,17 +711,24 @@ var Dashboard = {
 
     total_calls:function(datefilter){
 
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
         $.ajax({
             'async': false,
-            url: '../../adminoutbounddash/app/ajax/total_calls.php',
+            url: '/adminoutbounddash/app/ajax/total_calls',
             type: 'POST',
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
-                console.log(response);
-                $('#total_calls .total').html(response['total_calls']['total']);
-                $('#total_calls p.inbound').html(response['total_calls']['inbound']);
-                $('#total_calls p.outbound').html(response['total_calls']['outbound']);
+
+                Master.trend_percentage( $('#total_calls'), response.total_calls.pct_change, response.total_calls.pct_sign, response.total_calls.ntc );
+                $('#total_calls .total').html(Master.formatNumber(response['total_calls']['total']));
+                $('#total_calls p.inbound').html(Master.formatNumber(response['total_calls']['inbound']));
+                $('#total_calls p.outbound').html(Master.formatNumber(response['total_calls']['outbound']));
                 $('.filter_time_camp_dets p').html(response['total_calls']['details']);
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#total_calls .divider');
@@ -486,8 +738,14 @@ var Dashboard = {
     },
 
     update_datefilter:function(datefilter){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
         $.ajax({
-            url: '../../adminoutbounddash/app/ajax/update_datefilter.php',
+            url: '/adminoutbounddash/app/ajax/update_datefilter',
             type: 'POST',
             dataType: 'json',
             data: {datefilter: datefilter},
@@ -501,31 +759,57 @@ var Dashboard = {
         $(this).parent().siblings().removeClass('active');
         $(this).parent().addClass('active');
         datefilter = $(this).data('datefilter');
+
         $('#datefilter').val(datefilter);
         var campaign = $('.filter_campaign li').hasClass('active');
         campaign = $(campaign).find('a').text();
         var inorout = $('#inorout').val();
         $('#inorout').val();  
         Dashboard.inorout_toggled=false; 
-        
+        Dashboard.datefilter = datefilter;
+
         if(datefilter !='custom'){
             $('.preloader').show();
-           $.ajax({
-            url: '../../adminoutbounddash/app/ajax/set_campaign.php',
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/adminoutbounddash/app/ajax/set_campaign',
+                type: 'POST',
+                dataType: 'json',
+                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                success:function(response){
+                    Dashboard.refresh(datefilter, campaign, inorout);
+                }
+            });          
+        }
+    },
+
+    set_databases:function(databases){
+        Dashboard.databases=databases;
+        var campaign = $('.filter_campaign li').hasClass('active');
+        campaign = $(campaign).find('a').text();
+        var datefilter = $('#datefilter').val();
+        var inorout = $('#inorout').val();
+        $('.preloader').show();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/admindashboard/app/ajax/set_campaign',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {databases:databases},
             success:function(response){
-                Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
-                Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
-                Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
-                Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
-                Dashboard.total_calls(datefilter);
-                Dashboard.update_datefilter(datefilter);
-                $('.preloader').fadeOut('slow');
+                Dashboard.refresh(datefilter, campaign, inorout);
             }
-          });          
-        }
+        });  
     },
 
     filter_campaign:function(){
@@ -538,21 +822,20 @@ var Dashboard = {
         datefilter = $('#datefilter').val();
         var inorout =$('#inorout').val();
         var campaign = $(this).text();
-
+        Master.active_camp_search = campaign;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
         $.ajax({
-            url: '../../adminoutbounddash/app/ajax/set_campaign.php',
+            url: '/adminoutbounddash/app/ajax/set_campaign',
             type: 'POST',
             dataType: 'json',
             data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
-                Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);                
-                Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
-                Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
-                Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
-                Dashboard.total_calls(datefilter);
-                Dashboard.update_datefilter(datefilter);
-
-                $('.preloader').fadeOut('slow');
+                Dashboard.refresh(datefilter, campaign, inorout);
             }
         });
     },
@@ -567,21 +850,16 @@ var Dashboard = {
         ;
         datefilter = start_date + ' ' + end_date;
         var inorout = $('#inorout').val();
+        var campaign = $('.filter_campaign li').hasClass('active');
+        campaign = $(campaign).find('a').text();
         $('#inorout').val();
 
         $('.startdate').val('');
         $('.enddate').val('');
         $('#datefilter_modal').modal('toggle');
         $('#datefilter').val(start_date + ' ' + end_date);
-        
-        Dashboard.get_call_volume(inorout, start_date + ' ' + end_date, Dashboard.chartColors);        
-        Dashboard.agent_talk_time(start_date + ' ' + end_date, Dashboard.chartColors);
-        Dashboard.sales_per_hour_per_rep(start_date + ' ' + end_date, Dashboard.chartColors);
-        Dashboard.calls_by_campaign(start_date + ' ' + end_date, Dashboard.chartColors);
-        Dashboard.total_calls(start_date + ' ' + end_date);
-        Dashboard.update_datefilter(start_date + ' ' + end_date);
-        
-        $('.preloader').fadeOut('slow');
+        Dashboard.datefilter = datefilter;
+        Dashboard.refresh(datefilter, campaign, inorout);
     },
 
     toggle_inorout_btn_class:function(){
@@ -599,6 +877,22 @@ var Dashboard = {
         $(this).parent().parent().find('.inandout').hide(0, function(){
             $(this).parent().parent().find('.'+Dashboard.inorout).show();
         });
+
+        var inorout = Dashboard.inorout;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/adminoutbounddash/app/ajax/set_campaign',
+            type: 'POST',
+            dataType: 'json',
+            data: { inorout:inorout},
+            success:function(response){
+            }
+        }); 
     },
 
     title_options :{
@@ -609,7 +903,20 @@ var Dashboard = {
 
 $(document).ready(function(){
 
+    $(".flipping_card").flip({trigger: 'manual',reverse:true});
+    $(".flip_card_btn").on('click', function(){
+        $(this).closest('.flipping_card').flip('toggle');
+    });
+
     Dashboard.init();
+    resizeTopFlippingCard();
+    resizeCardTableDivs();
+
+    function resizeTopFlippingCard(){
+        var height_dt2 = $('.get_hgt2').outerHeight();
+        $('.set_hgt2').css({'min-height':height_dt2});
+        $('.set_hgt2').css({'max-height':height_dt2});        
+    }
 
     $('.count').each(function () {
         $(this).prop('Counter',0).animate({
@@ -623,8 +930,6 @@ $(document).ready(function(){
         });
     });
 
-    resizeCardTableDivs();
-
     if ($(window).width() > 1010) {
         $(window).on('resize', function(){
             resizeCardTableDivs();
@@ -632,18 +937,16 @@ $(document).ready(function(){
     }
 
     function resizeCardTableDivs(){
-        var height_dt = $('.get_hgt').height();
-        console.log(height_dt);
-        // $('.set_hgt').height(height_dt);
-        // height_dt=height_dt-20;
+        var height_dt = $('.get_hgt').outerHeight();
         $('.set_hgt').css({'min-height':height_dt});
-        $('.set_hgt').css({'max-height':height_dt});
-        
+        $('.set_hgt').css({'max-height':height_dt}); 
     }
 
     $('.enddate').datepicker({maxDate: '0'});
     $('.startdate').datepicker({maxDate: '0'});
     
+    
 });
+
 
 

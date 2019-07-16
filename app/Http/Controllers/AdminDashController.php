@@ -560,4 +560,8 @@ class AdminDashController extends Controller
         $return['rep_avg_handletime'] = $result;
         echo json_encode($return);
     }
+
+    public function setCampaign(Request $request){
+        return 'set camp here';
+    }
 }

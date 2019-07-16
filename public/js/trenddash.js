@@ -1,48 +1,48 @@
 Chart.pluginService.register({
-    beforeDraw: function (chart) {
-        if (chart.config.options.elements.center) {
-            //Get ctx from string
-            var ctx = chart.chart.ctx;
+  beforeDraw: function (chart) {
+    if (chart.config.options.elements.center) {
+      //Get ctx from string
+      var ctx = chart.chart.ctx;
 
-            //Get options from the center object in options
-            var centerConfig = chart.config.options.elements.center;
-            var fontStyle = centerConfig.fontStyle || 'Arial';
-            var txt = centerConfig.text;
-            var color = '#203047';
-            var sidePadding = centerConfig.sidePadding || 20;
-            var sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
-            //Start with a base font of 30px
-            ctx.font = "40px " + fontStyle;
+      //Get options from the center object in options
+      var centerConfig = chart.config.options.elements.center;
+      var fontStyle = centerConfig.fontStyle || 'Arial';
+      var txt = centerConfig.text;
+      var color =  '#203047';
+      var sidePadding = centerConfig.sidePadding || 20;
+      var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
+      //Start with a base font of 30px
+      ctx.font = "40px " + fontStyle;
 
-            //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-            var stringWidth = ctx.measureText(txt).width;
-            var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+      //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+      var stringWidth = ctx.measureText(txt).width;
+      var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
 
-            // Find out how much the font can grow in width.
-            var widthRatio = elementWidth / stringWidth;
-            var newFontSize = Math.floor(20 * widthRatio);
-            var elementHeight = (chart.innerRadius * 2);
+      // Find out how much the font can grow in width.
+      var widthRatio = elementWidth / stringWidth;
+      var newFontSize = Math.floor(20 * widthRatio);
+      var elementHeight = (chart.innerRadius * 2);
 
-            // Pick a new font size so it will not be larger than the height of label.
-            var fontSizeToUse = Math.min(newFontSize, elementHeight);
+      // Pick a new font size so it will not be larger than the height of label.
+      var fontSizeToUse = Math.min(newFontSize, elementHeight);
 
-            //Set font settings to draw it correctly.
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
-            var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-            var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 1.7);
-            ctx.font = fontSizeToUse + "px " + fontStyle;
-            ctx.fillStyle = color;
+      //Set font settings to draw it correctly.
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+      var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 1.7);
+      ctx.font = fontSizeToUse+"px " + fontStyle;
+      ctx.fillStyle = color;
 
-            //Draw text in center
-            ctx.fillText(txt, centerX, centerY);
-        }
+      //Draw text in center
+      ctx.fillText(txt, centerX, centerY);
     }
+  }
 });
 
 var Dashboard = {
 
-    chartColors: {
+    chartColors : {
         red: 'rgb(255,67,77)',
         orange: 'rgb(228,154,49)',
         yellow: 'rgb(255, 205, 86)',
@@ -51,153 +51,85 @@ var Dashboard = {
         purple: 'rgb(153, 102, 255)',
         grey: 'rgb(68,68,68)'
     },
-
-    datefilter: document.getElementById("datefilter").value,
-    campaign: document.getElementById("campaign").value,
-    inorout: document.getElementById("inorout").value,
-    inorout_toggled: false,
-
-    init: function () {
-        this.update_filters(this.datefilter, this.campaign, this.inorout);
-        this.get_call_volume(this.chartColors);
-        this.get_avg_handle_time(this.chartColors);
-        this.agent_calltime(this.chartColors);
-        this.service_level(this.chartColors);
-        Dashboard.eventHandlers();
+    chartColors2 : {
+        red: 'rgb(255,67,77, 0.55)',
+        orange: 'rgb(228,154,49, 0.55)',
+        yellow: 'rgb(255, 205, 86, 0.55)',
+        green: 'rgb(51,160,155, 0.55)',
+        blue: 'rgb(1,1,87, 0.55)',
+        purple: 'rgb(153, 102, 255, 0.55)',
+        grey: 'rgb(68,68,68, 0.55)'
     },
 
-    eventHandlers: function () {
+    datefilter : document.getElementById("datefilter").value,
+    inorout : document.getElementById("inorout").value,
+    time: new Date().getTime(),
+
+    init:function(){
+        this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
+        this.get_avg_handle_time(this.datefilter, this.chartColors);
+        this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2);
+        this.service_level(this.datefilter, this.chartColors);
+        Dashboard.eventHandlers();
+        Master.check_reload();
+    },
+
+    eventHandlers:function(){
         $('.date_filters li a').on('click', this.filter_date);
-        $('.filter_campaign li').on('click', this.filter_campaign);
+        $('.filter_campaign').on('click', 'li', this.filter_campaign);
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.card-6 .btn-group .btn').on('click', this.toggle_inorout_btn_class);
         $('.callvolume_inorout .btn').on('click', this.call_volume_type);
+        $('.service_level_time a').on('click', this.set_service_level_time);
     },
 
-    display_error: function (div, textStatus, errorThrown) {
+    display_error:function(div, textStatus, errorThrown){
+        $(div).parent().find('.ajax_error').remove();
         $(div).parent().append('<p class="ajax_error alert alert-danger">Something went wrong. Please reolad the page.</p>');
     },
 
-    filter_date: function (e) {
-        e.preventDefault();
-
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        var campaign = $('#campaign').val();
-        var inorout = $('#inorout').val();
-
-        datefilter = $(this).data('datefilter');
-
-        $('#datefilter').val(datefilter);
-        $('#inorout').val();
-
-        if (datefilter != 'custom') {
-            $('.preloader').show(400, function () {
-                Dashboard.update_filters(datefilter, campaign, inorout);
-                Dashboard.agent_calltime(Dashboard.chartColors);
-                Dashboard.service_level(Dashboard.chartColors);
-                Dashboard.get_call_volume(Dashboard.chartColors);
-                Dashboard.get_avg_handle_time(Dashboard.chartColors);
-            });
-        }
+    refresh:function(datefilter, campaign, inorout){
+        Dashboard.agent_calltime(datefilter, Dashboard.chartColors, Dashboard.chartColors2);
+        Dashboard.service_level(datefilter, Dashboard.chartColors);
+        Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
+        Dashboard.get_avg_handle_time(datefilter, Dashboard.chartColors);
+        Dashboard.update_datefilter(datefilter);
+        Master.check_reload();
         $('.preloader').fadeOut('slow');
     },
 
-    filter_campaign: function () {
-        $(this).siblings().removeClass('active')
-        $(this).addClass('active');
+    get_call_volume:function(inorout, datefilter, chartColors){
 
-        var campaign = $(this).text();
-        $('#campaign').val(campaign);
-
-        var datefilter = $('#datefilter').val();
-        var inorout = $('#inorout').val();
-
-        if (datefilter != 'custom') {
-            $('.preloader').show(400, function () {
-                Dashboard.update_filters(datefilter, campaign, inorout);
-                Dashboard.agent_calltime(Dashboard.chartColors);
-                Dashboard.service_level(Dashboard.chartColors);
-                Dashboard.get_call_volume(Dashboard.chartColors);
-                Dashboard.get_avg_handle_time(Dashboard.chartColors);
-            });
-        }
-        $('.preloader').fadeOut('slow');
-    },
-
-    custom_date_filter: function () {
-        $('#datefilter_modal').hide();
-        $('.modal-backdrop').hide();
-
-        $('.preloader').show(400, function () {
-            var start_date = $('.startdate').val(),
-                end_date = $('.enddate').val()
-                ;
-            datefilter = start_date + ' ' + end_date;
-
-            var inorout = $('#inorout').val();
-            var campaign = $('#campaign').val();
-
-            $('#inorout').val();
-
-            $('.startdate').val('');
-            $('.enddate').val('');
-            $('#datefilter_modal').modal('toggle');
-            $('#datefilter').val(start_date + ' ' + end_date);
-
-            Dashboard.update_filters(datefilter, campaign, inorout);
-            Dashboard.agent_calltime(Dashboard.chartColors);
-            Dashboard.service_level(Dashboard.chartColors);
-            Dashboard.get_call_volume(Dashboard.chartColors);
-            Dashboard.get_avg_handle_time(Dashboard.chartColors);
-        });
-
-        $('.preloader').fadeOut('slow');
-    },
-
-    update_filters: function (datefilter, campaign, inorout) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: '/admindashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: { datefilter: datefilter, campaign: campaign, inorout: inorout },
-            success: function (response) {
-            }
-        });
-    },
-
-    get_call_volume: function (chartColors) {
         $('.callvolume_inorout').find('button').removeClass('btn-primary');
         $('.callvolume_inorout').find('button').removeClass('btn-default');
         var activeBtn = $('.callvolume_inorout').find("[data-type='" + this.inorout + "']");
         activeBtn.addClass('btn-primary');
         $(activeBtn).siblings().addClass('btn-default');
-
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
         $.ajax({
             'async': false,
-            url: '/trenddashboard/call_volume',
+            url: '/trenddashboard/app/ajax/call_volume',
             type: 'POST',
             dataType: 'json',
-            success: function (response) {
+            data:{
+                inorout:inorout,
+                datefilter:datefilter
+            },
+            success:function(response){
 
-                $('.selected_datetime').html(response['call_volume']['details']);
-                $('.selected_campaign').html(response['call_volume']['campaign']);
+                $('.filter_time_camp_dets p').html(response['call_volume']['details']);
 
-                var total_calls_int = 0;
-                if (response['call_volume']['total'] != null) {
-                    total_calls_int = response['call_volume']['total'];
+                var total_calls_int=0;
+                if(response['call_volume']['total'] != null){
+                    total_calls_int=response['call_volume']['total'];
                 }
-                $('.call_volume_details p.total').html('Total Calls: ' + total_calls_int);
+                $('.call_volume_details p.total').html('Total Calls: '+Master.formatNumber(total_calls_int));
                 var call_volume_inbound = {
 
                     labels: response['call_volume']['inbound_time_labels'],
@@ -208,21 +140,21 @@ var Dashboard = {
                         fill: false,
                         data: response['call_volume']['total_inbound_calls'],
                         yAxisID: 'y-axis-1',
-                    }, {
+                    },{
                         label: 'Handled',
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response['call_volume']['inbound_handled'],
                         yAxisID: 'y-axis-1'
-                    }, {
+                    },{
                         label: 'Voicemails',
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
                         data: response['call_volume']['inbound_voicemails'],
                         yAxisID: 'y-axis-1'
-                    }, {
+                    },{
                         label: 'Abandoned',
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
@@ -248,7 +180,7 @@ var Dashboard = {
                         fill: false,
                         data: response['call_volume']['outbound_handled'],
                         yAxisID: 'y-axis-1'
-                    }, {
+                    },{
                         label: 'Dropped',
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
@@ -258,7 +190,7 @@ var Dashboard = {
                     }]
                 };
 
-                var call_volume_options = {
+                var call_volume_options={
                     responsive: true,
                     maintainAspectRatio: false,
                     hoverMode: 'index',
@@ -290,7 +222,7 @@ var Dashboard = {
 
                 // call volume inbound line graph
                 var ctx = document.getElementById('call_volume_inbound').getContext('2d');
-                if (window.call_volume_inbound_chart != undefined) {
+                if(window.call_volume_inbound_chart != undefined){
                     window.call_volume_inbound_chart.destroy();
                 }
                 window.call_volume_inbound_chart = new Chart(ctx, {
@@ -298,10 +230,10 @@ var Dashboard = {
                     data: call_volume_inbound,
                     options: call_volume_options
                 });
-
+                
                 // call volume outbound line graph
                 var ctx = document.getElementById('call_volume_outbound').getContext('2d');
-                if (window.call_volume_outbound_chart != undefined) {
+                if(window.call_volume_outbound_chart != undefined){
                     window.call_volume_outbound_chart.destroy();
                 }
                 window.call_volume_outbound_chart = new Chart(ctx, {
@@ -309,32 +241,37 @@ var Dashboard = {
                     data: call_volume_outbound,
                     options: call_volume_options
                 });
-            }, error: function (jqXHR, textStatus, errorThrown) {
+            },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume_inbound');
                 Dashboard.display_error(div, textStatus, errorThrown);
-
-            }
+                
+            } 
         });
     },
 
-    get_avg_handle_time: function (chartColors) {
+    get_avg_handle_time:function(datefilter, chartColors){
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
         $.ajax({
             'async': false,
-            url: '/trenddashboard/call_details',
+            url: '/trenddashboard/app/ajax/call_details',
             type: 'POST',
             dataType: 'json',
-            success: function (response) {
-
-                if (response['call_details']['datetime'] != undefined) {
-                    $('h2.avg_ht').html('Avg Handle Time: ' + response['call_details']['avg_ht'] + ' minutes');
-                    $('h2.avg_tt').html('Avg Talk Time: ' + response['call_details']['avg_call_time'] + ' minutes');
-
-                    var avg_handle_time_data = {
+            data:{
+                datefilter:datefilter
+            },
+            success:function(response){
+                console.log(response);
+                if( response['call_details']['datetime'] != undefined){
+                    $('h2.avg_ht').html('Avg Handle Time: '+response['call_details']['avg_ht'] +' minutes');
+                    $('h2.avg_tt').html('Avg Talk Time: '+response['call_details']['avg_call_time'] +' minutes');
+                    
+                    var avg_handle_time_data  = {
                         labels: response['call_details']['datetime'],
                         datasets: [{
                             label: 'Avg Handle Time',
@@ -355,14 +292,14 @@ var Dashboard = {
                             fill: false,
                             data: response['call_details']['calls'],
                             yAxisID: 'y-axis-1',
-                        }, {
+                        },{
                             label: 'Hold Time',
                             borderColor: chartColors.blue,
                             backgroundColor: chartColors.blue,
                             fill: false,
                             data: response['call_details']['hold_time'],
                             yAxisID: 'y-axis-1',
-                        }, {
+                        },{
                             label: 'After Call Work',
                             borderColor: chartColors.orange,
                             backgroundColor: chartColors.orange,
@@ -372,7 +309,7 @@ var Dashboard = {
                         }]
                     };
 
-                    var call_details_options = {
+                    var call_details_options={
                         responsive: true,
                         maintainAspectRatio: false,
                         hoverMode: 'index',
@@ -383,6 +320,10 @@ var Dashboard = {
                                 display: true,
                                 position: 'left',
                                 id: 'y-axis-1',
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Minutes'
+                                },
                             }, {
                                 type: 'linear',
                                 display: false,
@@ -399,13 +340,22 @@ var Dashboard = {
                             labels: {
                                 boxWidth: 12
                             }
+                        },
+                        tooltips: {
+                            enabled: true,
+                            mode: 'single',
+                            callbacks: {
+                                label: function(tooltipItems, data) { 
+                                    return Master.convertMinsToHrsMins(tooltipItems.yLabel);
+                                }
+                            }
                         }
                     }
 
                     // // call duration inbound line graph
                     var ctx = document.getElementById('avg_handle_time').getContext('2d');
 
-                    if (window.avg_handle_time_chart != undefined) {
+                    if(window.avg_handle_time_chart != undefined){
                         window.avg_handle_time_chart.destroy();
                     }
                     window.avg_handle_time_chart = new Chart(ctx, {
@@ -416,7 +366,7 @@ var Dashboard = {
 
                     var ctx = document.getElementById('call_details').getContext('2d');
 
-                    if (window.call_details_chart != undefined) {
+                    if(window.call_details_chart != undefined){
                         window.call_details_chart.destroy();
                     }
                     window.call_details_chart = new Chart(ctx, {
@@ -424,57 +374,106 @@ var Dashboard = {
                         data: call_details_data,
                         options: call_details_options
                     });
+
+                    var max_hold_time_data = {
+                        labels: response['call_details']['datetime'],
+                        datasets: [
+                          {
+                            label: "Longest Hold Time (minutes)",
+                            backgroundColor: chartColors.green,
+                            data: response['call_details']['max_hold']
+                          }
+                        ]
+                    };
+
+                    var max_hold_time_options={
+                        responsive: true,
+                        maintainAspectRatio:false,
+                        legend: {  
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12
+                            } },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            enabled: true,
+                            mode: 'single',
+                            callbacks: {
+                                label: function(tooltipItems, data) { 
+                                    return Master.convertSecsToHrsMins(tooltipItems.yLabel);
+                                }
+                            }
+                        }
+                    }
+
+                    var ctx = document.getElementById('max_hold_time').getContext('2d');
+
+                    if(window.max_hold_time_chart != undefined){
+                      window.max_hold_time_chart.destroy();
+                    }
+
+                    window.max_hold_time_chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: max_hold_time_data,
+                        options: max_hold_time_options
+                    });
                 }
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                var div = $('#avg_handle_time');
-                Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
     },
 
-    agent_calltime: function (chartColors) {
+    agent_calltime:function(datefilter, chartColors, chartColors2){
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
         $.ajax({
             'async': false,
-            url: '/trenddashboard/agent_calltime',
+            url: '/trenddashboard/app/ajax/agent_calltime',
             type: 'POST',
             dataType: 'json',
-            success: function (response) {
+            data:{datefilter:datefilter},
+            success:function(response){
 
-                if (response['agent_calltime']['avg_ct'] != undefined) {
-                    $('h2.avg_ct').html('Avg Call Time: ' + response['agent_calltime']['avg_ct'] + ' minutes');
-                    $('h2.avg_cc').html('Avg Call Count: ' + response['agent_calltime']['avg_cc'] + ' ');
+                if( response['agent_calltime']['avg_ct'] != undefined){
+                    $('h2.avg_ct').html('Avg Rep Time: '+response['agent_calltime']['avg_ct'] +' minutes');
+                    $('h2.avg_cc').html('Avg Call Count: '+response['agent_calltime']['avg_cc'] +' ');
                 }
 
                 var agent_talktime_data = {
-                    labels: response['agent_calltime']['rep'],
-                    datasets: [
-                        {
+                  labels: response['agent_calltime']['rep'],
+                        datasets: [
+                          {
                             label: "Call Time (minutes)",
                             backgroundColor: chartColors.green,
                             data: response['agent_calltime']['duration']
-                        },
-                        {
+                          },
+                          {
                             label: "Call Count",
                             backgroundColor: chartColors.orange,
-                            fillOpacity: .5,
+                            fillOpacity: .5, 
                             data: response['agent_calltime']['total_calls']
-                        }
-                    ]
+                          }
+                        ]
                 };
 
-                var agent_talktime_options = {
+                var agent_talktime_options={
                     responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
+                    maintainAspectRatio:false,
+                    legend: {  
                         position: 'bottom',
                         labels: {
                             boxWidth: 12
-                        }
+                        } 
                     },
                     scales: {
                         yAxes: [{
@@ -482,12 +481,25 @@ var Dashboard = {
                                 beginAtZero: true
                             }
                         }]
+                    },
+                    tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItems, data) { 
+                                if (tooltipItems.datasetIndex === 0) {
+                                    return Master.convertMinsToHrsMins(tooltipItems.yLabel);
+                                }else{
+                                    return tooltipItems.yLabel;
+                                }
+                            }
+                        }
                     }
                 }
 
                 var ctx = document.getElementById('rep_talktime').getContext('2d');
 
-                if (window.rep_talktime_chart != undefined) {
+                if(window.rep_talktime_chart != undefined){
                     window.rep_talktime_chart.destroy();
                 }
 
@@ -496,54 +508,61 @@ var Dashboard = {
                     data: agent_talktime_data,
                     options: agent_talktime_options
                 });
-
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                var div = $('#agent_calltime');
+                
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#rep_talktime');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
-        });
+        });        
     },
 
-    service_level: function (chartColors) {
+    service_level:function(datefilter, chartColors, answer_secs=20){
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
         $.ajax({
             'async': false,
-            url: '/trenddashboard/service_level',
+            url: '/trenddashboard/app/ajax/service_level',
             type: 'POST',
             dataType: 'json',
-            success: function (response) {
-
+            data:{
+                datefilter:datefilter,
+                answer_secs:answer_secs
+            },
+            success:function(response){
+               
+                $('.answer_secs').html(answer_secs);
                 var baseline_cnt = response['service_level']['handled_calls'].length;
-                var baseline = [];
+                var baseline=[];
                 for (var i = 0; i < baseline_cnt; i++) {
-                    baseline.push(100);
+                    baseline.push(answer_secs);
                 }
 
-                $('h2.avg_sl').html('Avg Service Level: ' + response['service_level']['avg'] + '%');
+                $('h2.avg_sl').html('Avg Service Level: '+response['service_level']['avg'] + '%');
                 var service_level_data = {
 
                     labels: response['service_level']['time'],
                     datasets: [{
                         label: 'Service Level ',
-                        borderColor: chartColors.green,
-                        backgroundColor: 'rgba(51,160,155,0.6)',
+                        borderColor: chartColors.orange,
+                        backgroundColor: 'rgb(228,154,49, 0.55)',
                         fill: true,
                         data: response['service_level']['servicelevel'],
                         yAxisID: 'y-axis-1'
-                    }, {
+                    },{
                         type: 'line',
-                        label: 'Service Level Goal',
+                        label: 'Call Answered by Time',
                         data: baseline,
                         backgroundColor: 'rgba(238,238,238)'
 
                     }]
                 };
 
-                var service_level_options = {
+                var service_level_options={
                     responsive: true,
                     maintainAspectRatio: false,
                     hoverMode: 'index',
@@ -575,7 +594,7 @@ var Dashboard = {
 
                 // call volume inbound line graph
                 var ctx = document.getElementById('service_level').getContext('2d');
-                if (window.service_level_chart != undefined) {
+                if(window.service_level_chart != undefined){
                     window.service_level_chart.destroy();
                 }
                 window.service_level_chart = new Chart(ctx, {
@@ -583,75 +602,203 @@ var Dashboard = {
                     data: service_level_data,
                     options: service_level_options
                 });
-
-            }, error: function (jqXHR, textStatus, errorThrown) {
+                
+            },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#service_level');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
+    },   
+        
+    update_datefilter:function(datefilter){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/trenddashboard/app/ajax/update_datefilter',
+            type: 'POST',
+            dataType: 'json',
+            data: {datefilter: datefilter},
+            success:function(response){
+            }
+        });
     },
 
-    toggle_inorout_btn_class: function () {
+    filter_date:function(){
+            
+        $(this).parent().siblings().removeClass('active');
+        $(this).parent().addClass('active');
+        datefilter = $(this).data('datefilter');
+        $('#datefilter').val(datefilter);
+        var campaign = $('.filter_campaign li').hasClass('active');
+        campaign = $(campaign).find('a').text();
+        var inorout = $('#inorout').val();
+        $('#inorout').val();
+        Dashboard.datefilter = datefilter;
+
+        if(datefilter !='custom'){
+            $('.preloader').show();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '../../admindashboard/app/ajax/set_campaign',
+                type: 'POST',
+                dataType: 'json',
+                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                success:function(response){
+                    Dashboard.refresh(datefilter, campaign, inorout);
+                }
+            });
+        }
+    },
+
+    set_databases:function(databases){
+        Dashboard.databases=databases;
+        var campaign = $('.filter_campaign li').hasClass('active');
+        campaign = $(campaign).find('a').text();
+        var datefilter = $('#datefilter').val();
+        var inorout = $('#inorout').val();
+        $('.preloader').show();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '../../admindashboard/app/ajax/set_campaign',
+            type: 'POST',
+            dataType: 'json',
+            data: {databases:databases},
+            success:function(response){
+                Dashboard.refresh(datefilter, campaign, inorout);
+            }
+        });  
+    },
+
+    filter_campaign:function(){
+
+        $('.preloader').show();
+
+        $(this).siblings().removeClass('active')
+        $(this).addClass('active');
+        var active_date = $('.date_filters li.active');
+        datefilter = $('#datefilter').val();
+        var inorout =$('#inorout').val();
+        var campaign = $(this).text();
+        Master.active_camp_search = campaign;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/trenddashboard/app/ajax/set_campaign',
+            type: 'POST',
+            dataType: 'json',
+            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            success:function(response){
+                Dashboard.refresh(datefilter, campaign, inorout);
+            }
+        });
+    },
+
+    custom_date_filter:function(){
+        $('.preloader').show();
+        $('#datefilter_modal').hide();
+        $('.modal-backdrop').hide();
+        
+        var start_date = $('.startdate').val(),
+            end_date = $('.enddate').val()
+        ;
+        datefilter = start_date + ' ' + end_date;
+        var inorout = $('#inorout').val();
+
+        var campaign = $('.filter_campaign li').hasClass('active');
+        campaign = $(campaign).find('a').text();
+        $('#inorout').val();
+
+        $('.startdate').val('');
+        $('.enddate').val('');
+        $('#datefilter_modal').modal('toggle');
+        $('#datefilter').val(start_date + ' ' + end_date);
+        Dashboard.datefilter = datefilter;
+        Dashboard.refresh(datefilter, campaign, inorout);
+    },
+
+    toggle_inorout_btn_class:function(){
         $(this).siblings().removeClass('btn-primary');
         $(this).siblings().addClass('btn-default');
         $(this).removeClass('btn-default');
         $(this).addClass('btn-primary');
     },
 
-    call_volume_type: function () {
+    call_volume_type: function(){
         Dashboard.inorout = $(this).data('type');
         datefilter = $('#datefilter').val();
         $('#inorout').val(Dashboard.inorout);
-        // Dashboard.get_call_volume(Dashboard.inorout, datefilter, Dashboard.chartColors);
         $(this).parent().parent().find('.inandout').hide();
-        $(this).parent().parent().find('.' + Dashboard.inorout).show();
+        $(this).parent().parent().find('.'+Dashboard.inorout).show();
+
+        var inorout = Dashboard.inorout;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/trenddashboard/app/ajax/set_campaign',
+            type: 'POST',
+            dataType: 'json',
+            data: { inorout:inorout},
+            success:function(response){
+            }
+        }); 
     },
 
-    title_options: {
-        fontColor: '#144da1',
-        fontSize: 16,
+    set_service_level_time:function(e){
+        e.preventDefault();
+        var answer_secs = $(this).attr('href');
+        var datefilter = $('#datefilter').val();
+        Dashboard.service_level(datefilter, Dashboard.chartColors, answer_secs);
+    },
+
+    title_options :{
+        fontColor:'#144da1',
+        fontSize:16,
     }
 }
 
-$(document).ready(function () {
+$(document).ready(function(){
 
     Dashboard.init();
 
     $('.count').each(function () {
-        $(this).prop('Counter', 0).animate({
+        $(this).prop('Counter',0).animate({
             Counter: $(this).text()
         }, {
-                duration: 1500,
-                easing: 'swing',
-                step: function (now) {
-                    $(this).text(Math.ceil(now));
-                }
-            });
+            duration: 1500,
+            easing: 'swing',
+            step: function (now) {
+                $(this).text(Math.ceil(now));
+            }
+        });
     });
 
-    $(".startdate").datepicker({
-        maxDate: '0',
-        onSelect: function () {
-
-            var dt2 = $('.enddate');
-            var startDate = $(this).datepicker('getDate');
-            var minDate = $(this).datepicker('getDate');
-            var dt2Date = dt2.datepicker('getDate');
-            var dateDiff = (dt2Date - minDate) / (86400 * 1000);
-
-            startDate.setDate(startDate.getDate() + 60);
-            if (dt2Date == null || dateDiff < 0) {
-                dt2.datepicker('setDate', minDate);
-            }
-            else if (dateDiff > 60) {
-                dt2.datepicker('setDate', startDate);
-            }
-
-            dt2.datepicker('option', 'maxDate', startDate);
-            dt2.datepicker('option', 'minDate', minDate);
-        }
-    });
-
-    $('.enddate').datepicker({ maxDate: '0' });
-
+    $('.enddate').datepicker({maxDate: '0'});
+    $('.startdate').datepicker({maxDate: '0'});
+    
 });
+
+
