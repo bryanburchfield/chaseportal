@@ -68,7 +68,8 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
-                                    <th>Avg Wait Time</th>
+                                    <th>Campaign</th>
+                                    <th>Avg Wait</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -143,8 +144,8 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Calls</th>
-                                    <th>Calls Per Hour</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -200,8 +201,8 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Time</th>
-                                    <th>Avg</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -229,8 +230,9 @@
                             <thead>
                                 <tr>
                                     <th>Rep</th>
+                                    <th>Campaign</th>
                                     <th>Sales</th>
-                                    <th>Per Hour</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody></tbody>

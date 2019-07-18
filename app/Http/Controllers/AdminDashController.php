@@ -914,15 +914,15 @@ class AdminDashController extends Controller
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
         
-        SELECT Rep, Campaign, 'Average Handle Time' = [Duration]/[Count]
+        SELECT Rep, Campaign, 'AverageHandleTime' = [Duration]/[Count]
         FROM #temp
         ORDER BY Rep, Campaign;
         
         SELECT Rep,
-        'Average Handle Time' = SUM([Duration])/SUM([Count])
+        'AverageHandleTime' = SUM([Duration])/SUM([Count])
         FROM #temp
         GROUP BY Rep
-        ORDER BY 'Average Handle Time' DESC";
+        ORDER BY 'AverageHandleTime' DESC";
 
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
@@ -950,8 +950,8 @@ class AdminDashController extends Controller
         $handletimesecs = [];
         foreach ($byrep as $rec) {
             $reps[] = $rec['Rep'];
-            $handletimesecs[] = $rec['Average Handle Time'];
-            $handletime[] = secondsToHms($rec['Average Handle Time']);
+            $handletimesecs[] = $rec['AverageHandleTime'];
+            $handletime[] = secondsToHms($rec['AverageHandleTime']);
         }
 
         $return = [
