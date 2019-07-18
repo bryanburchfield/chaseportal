@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Campaign;
-use App\DialingResult;
 
 class AdminDashController extends Controller
 {
@@ -37,7 +37,122 @@ class AdminDashController extends Controller
         return view('admindash')->with($data);
     }
 
-    public function callVolume(Request $request)
+    public function callVolume()
+    {
+        $result = $this->getCallVolume();
+        $prev_result = $this->getCallVolume(true);
+
+        $inbound_time_labels = [];
+        $total_inbound_calls = [];
+        $inbound_voicemails = [];
+        $inbound_abandoned = [];
+        $inbound_handled = [];
+        $inbound_duration = [];
+
+        $outbound_time_labels = [];
+        $total_outbound_calls = [];
+        $outbound_handled = [];
+        $outbound_dropped = [];
+        $outbound_duration = [];
+        $duration_time = [];
+        $new_result = [];
+        $total_outbound_duration = 0;
+        $total_inbound_duration = 0;
+
+        $total_duration = 0;
+        $prev_total_duration = 0;
+
+        foreach ($result[0] as $r) {
+
+            if (!strpos($r['Time'], ':')) {
+                $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
+            }
+
+            array_push($inbound_time_labels, $datetime);
+            array_push($total_inbound_calls, $r['Inbound Count']);
+            array_push($inbound_voicemails, $r['Inbound Voicemails']);
+            array_push($inbound_abandoned, $r['Inbound Abandoned Calls']);
+            array_push($inbound_handled, $r['Inbound Handled Calls']);
+        }
+
+        foreach ($result[1] as $r) {
+
+            if (!strpos($r['Time'], ':')) {
+                $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
+            }
+
+            array_push($outbound_time_labels, $datetime);
+            array_push($total_outbound_calls, $r['Outbound Count']);
+            array_push($outbound_handled, $r['Outbound Handled Calls']);
+            array_push($outbound_dropped, $r['Outbound Dropped Calls']);
+        }
+
+        foreach ($result[2] as $r) {
+            if (!strpos($r['Time'], ':')) {
+                $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
+            }
+
+            $total_duration += $r['Duration Inbound'] + $r['Duration Outbound'];
+
+            $r['Duration Inbound'] = round($r['Duration Inbound'] / 60);
+            $r['Duration Outbound'] = round($r['Duration Outbound'] / 60);
+            array_push($duration_time, $r['Time']);
+            array_push($inbound_duration, $r['Duration Inbound']);
+            array_push($outbound_duration, $r['Duration Outbound']);
+
+            $total_inbound_duration += $r['Duration Inbound'];
+            $total_outbound_duration += $r['Duration Outbound'];
+        }
+
+        foreach ($prev_result[2] as $r) {
+            $prev_total_duration += $r['Duration Inbound'] + $r['Duration Outbound'];
+        }
+
+        if ($prev_total_duration == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($total_duration - $prev_total_duration) / $prev_total_duration * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
+        }
+
+        // this uses mins instead of secs
+        $total_duration = $total_inbound_duration + $total_outbound_duration;
+
+        $new_result['inbound_time_labels'] = $inbound_time_labels;
+        $new_result['outbound_time_labels'] = $outbound_time_labels;
+        $new_result['total_inbound_calls'] = $total_inbound_calls;
+        $new_result['inbound_voicemails'] = $inbound_voicemails;
+        $new_result['inbound_abandoned'] = $inbound_abandoned;
+        $new_result['inbound_handled'] = $inbound_handled;
+        $new_result['inbound_duration'] = $inbound_duration;
+        $new_result['outbound_handled'] = $outbound_handled;
+        $new_result['total_outbound_calls'] = $total_outbound_calls;
+        $new_result['outbound_dropped'] = $outbound_dropped;
+        $new_result['outbound_handled'] = $outbound_handled;
+        $new_result['outbound_duration'] = $outbound_duration;
+        $new_result['total_inbound_duration'] = $total_inbound_duration;
+        $new_result['total_outbound_duration'] = $total_outbound_duration;
+        $new_result['duration_time'] = $duration_time;
+        $new_result['total'] = $total_duration;
+        $new_result['pct_change'] = $pctdiff;
+        $new_result['pct_sign'] = $pctsign;
+        $new_result['ntc'] = $ntc;
+
+        $return['call_volume'] = $new_result;
+        echo json_encode($return);
+    }
+
+    private function getCallVolume($prev = false)
     {
         $this->getSession();
 
@@ -45,7 +160,11 @@ class AdminDashController extends Controller
         $dateFilter = $this->dateFilter;
         $timeZoneName = Auth::user()->tz;
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
 
         $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
 
@@ -67,39 +186,81 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "'Time' = $xAxis,
-        'Inbound Count' = SUM(CASE WHEN CallType IN ('1','11') THEN 1 ELSE 0 END),
-        'Inbound Handled Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-          'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-          'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-        'Inbound Voicemails' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),
-        'Inbound Abandoned Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-        'Inbound Dropped Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-        'Duration Inbound' = SUM(CASE WHEN CallType IN ('1','11') THEN Duration ELSE 0 END),
-        'Outbound Count' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN 1 ELSE 0 END),
-        'Outbound Handled Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-          'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-          'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-        'Outbound Abandoned Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-        'Outbound Dropped Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-        'Duration Outbound' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN Duration ELSE 0 END)";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = "SELECT
+        Time,
+        SUM([Inbound Count]) AS 'Inbound Count',
+        SUM([Inbound Handled Calls]) AS 'Inbound Handled Calls',
+        SUM([Inbound Voicemails]) AS 'Inbound Voicemails',
+        SUM([Inbound Abandoned Calls]) AS 'Inbound Abandoned Calls',
+        SUM([Inbound Dropped Calls]) AS 'Inbound Dropped Calls',
+        SUM([Duration Inbound]) AS 'Duration Inbound',
+        SUM([Outbound Count]) AS 'Outbound Count',
+        SUM([Outbound Handled Calls]) AS 'Outbound Handled Calls',
+        SUM([Outbound Abandoned Calls]) AS 'Outbound Abandoned Calls', 
+        SUM([Outbound Dropped Calls]) AS 'Outbound Dropped Calls',
+        SUM([Duration Outbound]) AS 'Duration Outbound'
+        FROM (";
 
-        $query->where('CallType', '!=', 7)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound'])
-            ->where('Duration', '>', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT $xAxis as 'Time',
+    'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END), 
+    'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+    'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
+    'Inbound Voicemails' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END), 
+    'Inbound Abandoned Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
+    'Inbound Dropped Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'Duration Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.Duration ELSE 0 END),
+    'Outbound Count' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN 1 ELSE 0 END), 
+    'Outbound Handled Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+    'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
+    'Outbound Abandoned Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
+    'Outbound Dropped Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'Duration Outbound' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN DR.Duration ELSE 0 END)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.CallType NOT IN ('7','8')
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND Duration > 0
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid ";
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
+
+            $sql .= "
+            GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp
+        GROUP BY [Time]
+        ORDER BY [Time]";
+
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
         }
 
-        $query->groupBy(DB::raw($xAxis));
+        $stmt->execute();
 
-        $result = $query->get()->toArray();
+        try {
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $result = [];
+        }
 
         // split the results into three arrays
         $params = [
@@ -114,101 +275,11 @@ class AdminDashController extends Controller
         $outResult = $this->outboundVolume($result, $params);
         $durResult = $this->callDuration($result, $params);
 
-        // now format the xAxis datetimes and return the results
-        $this->returnCallVolume(
-            array_map(array(&$this, $mapFunction), $inResult),
-            array_map(array(&$this, $mapFunction), $outResult),
-            array_map(array(&$this, $mapFunction), $durResult)
-        );
-    }
-
-    private function returnCallVolume($inbound, $outbound, $duration)
-    {
-        $inbound_time_labels = [];
-        $total_inbound_calls = [];
-        $inbound_voicemails = [];
-        $inbound_abandoned = [];
-        $inbound_handled = [];
-        $inbound_duration = [];
-
-        $outbound_time_labels = [];
-        $total_outbound_calls = [];
-        $outbound_handled = [];
-        $outbound_dropped = [];
-        $outbound_duration = [];
-        $duration_time = [];
-        $new_result = [];
-        $total_outbound_duration = 0;
-        $total_inbound_duration = 0;
-
-        foreach ($inbound as $r) {
-
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
-                $datetime = $r['Time'];
-            }
-
-            array_push($inbound_time_labels, $datetime);
-            array_push($total_inbound_calls, $r['Inbound Count']);
-            array_push($inbound_voicemails, $r['Inbound Voicemails']);
-            array_push($inbound_abandoned, $r['Inbound Abandoned Calls']);
-            array_push($inbound_handled, $r['Inbound Handled Calls']);
-        }
-
-        foreach ($outbound as $r) {
-
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
-                $datetime = $r['Time'];
-            }
-
-            array_push($outbound_time_labels, $datetime);
-            array_push($total_outbound_calls, $r['Outbound Count']);
-            array_push($outbound_handled, $r['Outbound Handled Calls']);
-            array_push($outbound_dropped, $r['Outbound Dropped Calls']);
-        }
-
-        foreach ($duration as $r) {
-
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
-                $datetime = $r['Time'];
-            }
-
-            $r['Duration Inbound'] = round($r['Duration Inbound'] / 60);
-            $r['Duration Outbound'] = round($r['Duration Outbound'] / 60);
-            array_push($duration_time, $r['Time']);
-            array_push($inbound_duration, $r['Duration Inbound']);
-            array_push($outbound_duration, $r['Duration Outbound']);
-
-            $total_inbound_duration += $r['Duration Inbound'];
-            $total_outbound_duration += $r['Duration Outbound'];
-        }
-
-        $total = $total_inbound_duration + $total_outbound_duration;
-
-        $new_result['inbound_time_labels'] = $inbound_time_labels;
-        $new_result['outbound_time_labels'] = $outbound_time_labels;
-        $new_result['total_inbound_calls'] = $total_inbound_calls;
-        $new_result['inbound_voicemails'] = $inbound_voicemails;
-        $new_result['inbound_abandoned'] = $inbound_abandoned;
-        $new_result['inbound_handled'] = $inbound_handled;
-        $new_result['inbound_duration'] = $inbound_duration;
-        $new_result['outbound_handled'] = $outbound_handled;
-        $new_result['total_outbound_calls'] = $total_outbound_calls;
-        $new_result['outbound_dropped'] = $outbound_dropped;
-        $new_result['outbound_handled'] = $outbound_handled;
-        $new_result['outbound_duration'] = $outbound_duration;
-        $new_result['total_inbound_duration'] = $total_inbound_duration;
-        $new_result['total_outbound_duration'] = $total_outbound_duration;
-        $new_result['duration_time'] = $duration_time;
-        $new_result['total'] = $total;
-
-        $return['call_volume'] = $new_result;
-        echo json_encode($return);
+        return [
+            $inResult,
+            $outResult,
+            $durResult,
+        ];
     }
 
     private function inboundVolume($result, $params)
@@ -285,46 +356,22 @@ class AdminDashController extends Controller
         return ($this->zeroRecs($duration, $zeroRec, $params));
     }
 
-    public function completedCalls(Request $request)
+    public function completedCalls()
     {
-        $this->getSession();
+        $completed_calls = $this->getCompletedCalls();
+        $prev_completed_calls = $this->getCompletedCalls(true);
 
-        $campaign = $this->campaign;
-        $dateFilter = $this->dateFilter;
+        // $details = $this->filterDetails($datefilter, $campaign);
+        $details = '';
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
-
-        $select = "CallType AS 'CallType',
-                    COUNT(CallStatus) AS 'Agent Calls'";
-
-        $query = DialingResult::select(DB::raw($select));
-
-        $query->where('CallType', '!=', 7)
-            ->whereNotIn('CallStatus', ['CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound'])
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
-
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
-        }
-
-        $query->groupBy('CallType');
-
-        $result = $query->get()->toArray();
-
-        // now turn results into something usable
         $inbound = ['1', '11'];
 
         $total_completed_calls = 0;
+        $prev_total_completed_calls = 0;
         $outbound_completed_calls = 0;
         $inbound_completed_calls = 0;
 
-        foreach ($result as $call) {
+        foreach ($completed_calls as $call) {
             $total_completed_calls += $call['Agent Calls'];
             if (in_array($call['CallType'], $inbound)) {
                 $inbound_completed_calls += $call['Agent Calls'];
@@ -333,103 +380,309 @@ class AdminDashController extends Controller
             }
         }
 
-        list($campaign, $details) = $this->filterDetails();
+        foreach ($prev_completed_calls as $call) {
+            $prev_total_completed_calls += $call['Agent Calls'];
+        }
 
-        $return['completed_calls'] = ['total' => $total_completed_calls, 'outbound' => $outbound_completed_calls, 'inbound' => $inbound_completed_calls, 'campaign' => $campaign, 'details' => $details];
+        if ($prev_total_completed_calls == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($total_completed_calls - $prev_total_completed_calls) / $prev_total_completed_calls * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff), 0);
+            $ntc = 0;
+        }
+
+        $return['completed_calls'] =  [
+            'total' => $total_completed_calls,
+            'outbound' => $outbound_completed_calls,
+            'inbound' => $inbound_completed_calls,
+            'details' => $details,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
         echo json_encode($return);
     }
 
-    public function avgHoldTime(Request $request)
+    private function getCompletedCalls($prev = false)
     {
         $this->getSession();
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "'Total Calls' = COUNT(CallStatus),
-                'Hold Time' = CAST(DATEADD(SECOND, SUM(HoldTime), 0) AS TIME(0)),
-                'Average Hold Time' = CAST(DATEADD(SECOND, (SUM(HoldTime) / COUNT(CallStatus)), 0) AS TIME(0))";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = 'SELECT CallType, SUM([Agent Calls]) as [Agent Calls] FROM (';
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT DR.CallType AS 'CallType',
+                COUNT(DR.CallStatus) AS 'Agent Calls'
+                FROM [$db].[dbo].[DialingResults] DR
+                WHERE DR.CallType NOT IN ('7','8')
+                AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
+                AND DR.Date >= :fromdate
+                AND DR.Date < :todate
+                AND DR.GroupId = :groupid ";
 
-        $query->where('CallType', 1)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('Holdtime', '>=', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $sql .= "
+                GROUP BY DR.CallType";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp GROUP BY CallType";
+
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
         }
 
-        $result = $query->get()->toArray();
+        $stmt->execute();
 
-        // now turn results into something usable
-        if (!$result[0]['Total Calls']) {
-            $avg_hold_time = '0:00';
+        try {
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $result = [];
+        }
+
+        return $result;
+    }
+
+    public function avgHoldTime()
+    {
+        $average_hold_time = $this->getAvgHoldTime();
+        $prev_average_hold_time = $this->getAvgHoldTime(true);
+
+        if ($average_hold_time['Total Calls'] == 0) {
+            $avg_hold_time = 0;
         } else {
-            $avg_hold_time = $result[0]['Average Hold Time'];
+            $avg_hold_time = $average_hold_time['Hold Secs'] / $average_hold_time['Total Calls'];
         }
 
-        if (empty($result[0]['Hold Time'])) {
-            $total_hold_time = '0:00';
+        if ($prev_average_hold_time['Total Calls'] == 0) {
+            $prev_avg_hold_time = 0;
         } else {
-            $total_hold_time = $result[0]['Hold Time'];
+            $prev_avg_hold_time = $prev_average_hold_time['Hold Secs'] / $prev_average_hold_time['Total Calls'];
         }
 
-        $return['average_hold_time'] =  ['avg_hold_time' => $avg_hold_time, 'total_hold_time' => $total_hold_time];
+        if ($prev_avg_hold_time == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($avg_hold_time - $prev_avg_hold_time) / $prev_avg_hold_time * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff), 0);
+            $ntc = 0;
+        }
+
+        $avg_hold_time = secondsToHms($avg_hold_time);
+        $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
+
+        $return['average_hold_time'] = [
+            'avg_hold_time' => $avg_hold_time,
+            'total_hold_time' => $total_hold_time,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
         echo json_encode($return);
     }
 
-    public function abandonRate(Request $request)
+    private function getAvgHoldTime($prev = false)
     {
         $this->getSession();
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "'Total Inbound Calls' = COUNT(CallStatus),
-        'Abandoned Calls' = COUNT(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE NULL END)";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = "SELECT
+        SUM(Cnt) as 'Total Calls',
+        SUM(HoldTime) as 'Hold Secs'
+        FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT 'Cnt' = COUNT(CallStatus),
+                'HoldTime' = SUM(HoldTime)
+                FROM [$db].[dbo].[DialingResults] DR
+                WHERE CallType = 1
+                AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+                AND HoldTime >= 0
+                AND DR.Date >= :fromdate
+                AND DR.Date < :todate
+                AND DR.GroupId = :groupid";
 
-        $query->where('CallType', 1)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp";
+
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
         }
 
-        $result = $query->get()->toArray();
+        $stmt->execute();
 
-        // now turn results into something usable
-        $abandon_calls = $result[0]['Abandoned Calls'];
-        $total_calls = $result[0]['Total Inbound Calls'];
+        try {
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $result[0];
+        } catch (\Exception $e) {
+            $result = [];
+        }
 
-        if (empty($abandon_calls)) {
-            $abandon_pct = '0.00%';
+        return $result;
+    }
+
+    public function abandonRate()
+    {
+        $abandon_rate = $this->getAbandonRate();
+        $prev_abandon_rate = $this->getAbandonRate(true);
+
+        $abandon_pct = ($abandon_rate['Calls'] == 0) ? 0 : $abandon_rate['Abandoned'] / $abandon_rate['Calls'] * 100;
+        $prev_abandon_pct = ($prev_abandon_rate['Calls'] == 0) ? 0 : $prev_abandon_rate['Abandoned'] / $prev_abandon_rate['Calls'] * 100;
+
+        if ($prev_abandon_pct == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
         } else {
-            $abandon_pct = round(($abandon_calls / $total_calls) * 100, 2) . '%';
+            $pctdiff = ($abandon_pct - $prev_abandon_pct) / $prev_abandon_pct * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff), 0);
+            $ntc = 0;
         }
 
-        $return['abandon_rate'] = ['abandon_calls' => $abandon_calls, 'abandon_rate' => $abandon_pct];
+        $abandon_pct = round($abandon_pct, 2) . '%';
+
+        $return['abandon_rate'] = [
+            'abandon_calls' => $abandon_rate['Abandoned'],
+            'abandon_rate' => $abandon_pct,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
         echo json_encode($return);
+    }
+
+    private function getAbandonRate($prev = false)
+    {
+        $this->getSession();
+
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
+
+        $sql = "SELECT
+        'Calls' = SUM(Calls),
+        'Abandoned' = SUM(Abandoned)
+        FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT
+            'Calls' = COUNT(CallStatus),
+            'Abandoned' = SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE CallType = 1
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
+
+            $sql .= "
+            GROUP BY Campaign";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp";
+
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+
+        $stmt->execute();
+
+        try {
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $result[0];
+        } catch (\Exception $e) {
+            $result = [];
+        }
+
+        return $result;
     }
 
     public function agentCallCount(Request $request)
@@ -543,6 +796,7 @@ class AdminDashController extends Controller
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
+        $answerSecs = $request->answer_secs ?? 20;
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
@@ -550,28 +804,55 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $select = "'handled' = COUNT(CASE WHEN HoldTime < 20 AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
-         'count' = COUNT(CallStatus)";
+        $bind['groupid'] = Auth::user()->group_id;
+        $bind['fromdate'] = $startDate;
+        $bind['todate'] = $endDate;
+        $bind['answersecs'] = $answerSecs;
 
-        $query = DialingResult::select(DB::raw($select));
+        $sql = "SELECT
+         SUM([Handled]) as [Handled], 
+         SUM([Count]) as [Count]
+         FROM ( ";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $db) {
+            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+            'Count' = COUNT(CallStatus)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE CallType = 1
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid";
 
-        $query->where('CallType', 1)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign";
+                $bind['campaign'] = $campaign;
+            }
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp";
+
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        $pdo = DB::connection('sqlsrv')->getPdo();
+        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
+
+        foreach ($bind as $k => $v) {
+            $stmt->bindValue($k, $v);
         }
 
-        // DB::connection('sqlsrv')->enableQueryLog();
-        $result = $query->get()->toArray();
-        // Log::debug(DB::connection('sqlsrv')->getQueryLog());
+        $stmt->execute();
+
+        try {
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $result = [];
+        }
 
         // now turn results into something usable
-        $handled = $result[0]['handled'];
-        $count = $result[0]['count'];
+        $handled = $result[0]['Handled'];
+        $count = $result[0]['Count'];
 
         if ($count > 0) {
             $pct = $handled / $count * 100;

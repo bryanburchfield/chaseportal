@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -78,14 +79,14 @@ trait DashTraits
             // them now we screw up the loop
 
 
-            if ($found !== false && $params['byHour'] && (int)$fromDate->format('H') < 8 && !$prevRecs) {
+            if ($found !== false && $params['byHour'] && (int) $fromDate->format('H') < 8 && !$prevRecs) {
                 if (!array_diff($result[$found], $zeroRec)) {
                     array_unshift($delRecs, $found);
                     $found = false;
                 }
             }
             if ($found === false) {
-                if (($params['byHour'] && (int)$fromDate->format('H') >= 8) || $prevRecs) {
+                if (($params['byHour'] && (int) $fromDate->format('H') >= 8) || $prevRecs) {
                     array_push($result, $zeroRec);
                     $prevRecs = true;
                 }
@@ -226,6 +227,68 @@ trait DashTraits
             default:  // custom range - add 1 to ending date
                 $fromDate = localToUtc(new \DateTime(substr($dateFilter, 0, 10)), $tz);
                 $toDate = localToUtc((new \DateTime(substr($dateFilter, 11)))->modify('+1 day'), $tz);
+        }
+
+        return [$fromDate, $toDate];
+    }
+
+    public function previousDateRange($dateFilter)
+    {
+        $tz = Auth::user()->tz;
+
+        // the $toDate is non-inclusive
+        switch ($dateFilter) {
+            case 'today':
+                // yesterday
+                $fromDate = localToUtc(date('Y-m-d', strtotime('-1 day')), $tz);
+                $toDate = (new \DateTime)->modify('-1 day');
+                break;
+
+            case 'yesterday':
+                // day before yesterday
+                $fromDate = localToUtc(date('Y-m-d', strtotime('-2 days')), $tz);
+                $toDate = localToUtc(date('Y-m-d', strtotime('-1 day')), $tz);
+                break;
+
+            case 'week':
+                // last week
+                $fromDate = localToUtc(date('Y-m-d', strtotime('monday last week')), $tz);
+                $toDate = $toDate = (new \DateTime)->modify('-7 days');
+                break;
+
+            case 'last_week':
+                // week before last
+                $fromDate = localToUtc(date('Y-m-d', strtotime('monday last week')), $tz)->modify('-7 days');
+                $toDate = localToUtc(date('Y-m-d', strtotime('monday this week')), $tz)->modify('-7 days');
+                break;
+
+            case 'month':
+                // last month
+                $fromDate = localToUtc(date('Y-m-1', strtotime('-1 month', strtotime(date('Y-m-1')))), $tz);
+                $toDate = $toDate = (new \DateTime)->modify('-1 month');
+                break;
+
+            case 'last_month':
+                // month before last
+                $fromDate = localToUtc(date('Y-m-1', strtotime('-2 months', strtotime(date('Y-m-1')))), $tz);
+                $toDate = localToUtc(date('Y-m-1', strtotime('-1 month', strtotime(date('Y-m-1')))), $tz);
+                break;
+
+            default:
+                // same number of previous days
+                $date1 = localToUtc(substr($dateFilter, 0, 10), $tz);
+                $date2 = localToUtc(date('Y-m-d', strtotime('+1 day', strtotime(substr($dateFilter, 11)))), $tz);
+
+                $days = (int) $date1->diff($date2)->format('%a');
+
+                $fromDate = (clone $date1)->modify('-' . $days . ' days');
+                $toDate = $date1;
+        }
+
+        // if previous date range is a single day and a Sunday, use Friday instead
+        if ($fromDate->format('Y-m-d') == (clone $toDate)->modify('-1 day')->format('Y-m-d') && $fromDate->format('w') == '0') {
+            $fromDate->modify('-2 days');
+            $toDate->modify('-2 days');
         }
 
         return [$fromDate, $toDate];
