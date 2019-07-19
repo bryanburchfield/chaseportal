@@ -135,10 +135,10 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
-
+                console.log(response);
                 Master.trend_percentage( $('#total_minutes'), response.call_volume.pct_change, response.call_volume.pct_sign, response.call_volume.ntc );
                 $('#total_minutes').find('.total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total));
                 $('#total_minutes').find('p.inbound').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_inbound_duration));
@@ -365,7 +365,7 @@ var Dashboard = {
             url: '/admindashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
-            data:{campaign:campaign, datefilter:datefilter},
+            data:{campaign:campaign, dateFilter:datefilter},
             success:function(response){
 
                 Master.flip_card(response.reps.length, '#agent_call_count');
@@ -515,7 +515,7 @@ var Dashboard = {
             url: '/admindashboard/completed_calls',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter:datefilter},
             success:function(response){
                 console.log(response);
                 Master.trend_percentage( $('#completed_calls'), response.completed_calls.pct_change, response.completed_calls.pct_sign, response.completed_calls.ntc );
@@ -523,7 +523,7 @@ var Dashboard = {
                 $('#completed_calls .total').html(Master.formatNumber(response.completed_calls.total));
                 $('#completed_calls p.inbound').html(Master.formatNumber(response.completed_calls.inbound));
                 $('#completed_calls p.outbound').html(Master.formatNumber(response.completed_calls.outbound));
-                $('.filter_time_camp_dets p').html(response.completed_calls.details);
+                $('.filter_time_camp_dets p').html('<span class="selected_datetime">'+response.completed_calls.details[1] + '</span> | <span class="selected_campaign"> ' +  response.completed_calls.details[0] +'</span>');
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#completed_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);
@@ -543,7 +543,7 @@ var Dashboard = {
             url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter:datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc );
@@ -577,7 +577,7 @@ var Dashboard = {
             url: '/admindashboard/service_level',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter, answer_secs:answer_secs},
+            data:{dateFilter:datefilter, answer_secs:answer_secs},
             success:function(response){
 
                 var service_level_data = {
@@ -646,7 +646,7 @@ var Dashboard = {
             url: '/admindashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter:datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.ntc );
@@ -675,7 +675,7 @@ var Dashboard = {
             url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter:datefilter},
             success:function(response){
                 console.log(response);
                 Master.flip_card(response.avg_handletime.length, '#rep_avg_handletime');
@@ -765,7 +765,7 @@ var Dashboard = {
             url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter: datefilter},
             success:function(response){
             }
         });
@@ -784,7 +784,7 @@ var Dashboard = {
         $('#inorout').val(inorout);  
         Dashboard.inorout_toggled=false; 
         Dashboard.datefilter = datefilter;
-        
+        console.log(datefilter);
         if(datefilter !='custom'){
             $('.preloader').show();
             $.ajaxSetup({
@@ -797,8 +797,9 @@ var Dashboard = {
                 url: '/admindashboard/set_campaign',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter, inorout:inorout},
+                data: {dateFilter:datefilter, inorout:inorout},
                 success:function(response){
+                    console.log(response);
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
             });          
@@ -852,7 +853,7 @@ var Dashboard = {
             url: '/admindashboard/set_campaign',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
