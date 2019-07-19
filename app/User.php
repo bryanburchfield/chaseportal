@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -41,16 +41,16 @@ class User extends Authenticatable
 
     public function type($type)
     {
-        $type = (array)$type;
+        $type = (array) $type;
         return in_array($this->user_type, $type);
     }
 
     public function getDatabaseArray()
     {
-        $dblist = (array)$this->db;
+        $dblist = (array) $this->db;
 
-        if (!empty($this->additional_db)) {
-            array_push($dblist, $this->additional_db);
+        if (!empty($this->additional_dbs)) {
+            $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
         }
         return $dblist;
     }
