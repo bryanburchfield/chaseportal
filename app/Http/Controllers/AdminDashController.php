@@ -246,22 +246,7 @@ class AdminDashController extends Controller
         GROUP BY [Time]
         ORDER BY [Time]";
 
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
-
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $result = [];
-        }
+        $result = $this->runSql($sql, $bind);
 
         // split the results into three arrays
         $params = [
@@ -454,22 +439,7 @@ class AdminDashController extends Controller
         }
         $sql .= ") tmp GROUP BY CallType";
 
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
-
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $result = [];
-        }
+        $result = $this->runSql($sql, $bind);
 
         return $result;
     }
@@ -563,25 +533,9 @@ class AdminDashController extends Controller
         }
         $sql .= ") tmp";
 
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+        $result = $this->runSql($sql, $bind);
 
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $result = $result[0];
-        } catch (\Exception $e) {
-            $result = [];
-        }
-
-        return $result;
+        return $result[0];
     }
 
     public function abandonRate()
@@ -667,25 +621,9 @@ class AdminDashController extends Controller
 
         $sql .= ") tmp";
 
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+        $result = $this->runSql($sql, $bind);
 
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $result = $result[0];
-        } catch (\Exception $e) {
-            $result = [];
-        }
-
-        return $result;
+        return $result[0];
     }
 
     public function agentCallCount(Request $request)
@@ -746,26 +684,10 @@ class AdminDashController extends Controller
         GROUP BY Rep
         ORDER by Rep";
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
+        $result = $this->runMultiSql($sql, $bind);
 
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $bycamp = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $stmt->nextRowset();
-            $byrep = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $bycamp = [];
-            $byrep = [];
-        }
+        $bycamp = $result[0];
+        $byrep = $result[1];
 
         $reps = [];
         $counts = [];
@@ -838,22 +760,7 @@ class AdminDashController extends Controller
         }
         $sql .= ") tmp";
 
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
-
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $result = [];
-        }
+        $result = $this->runSql($sql, $bind);
 
         // now turn results into something usable
         $handled = $result[0]['Handled'];
@@ -930,26 +837,10 @@ class AdminDashController extends Controller
         GROUP BY Rep
         ORDER BY 'AverageHandleTime' DESC";
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
+        $result = $this->runMultiSql($sql, $bind);
 
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $bycamp = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $stmt->nextRowset();
-            $byrep = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $bycamp = [];
-            $byrep = [];
-        }
+        $bycamp = $result[0];
+        $byrep = $result[1];
 
         $reps = [];
         $handletime = [];
