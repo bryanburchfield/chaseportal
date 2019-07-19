@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Campaign;
 
@@ -67,7 +66,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("H:i", strtotime($r['Time']));
             }
 
             array_push($inbound_time_labels, $datetime);
@@ -82,7 +81,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("H:i", strtotime($r['Time']));
             }
 
             array_push($outbound_time_labels, $datetime);
@@ -95,14 +94,14 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("H:i", strtotime($r['Time']));
             }
 
             $total_duration += $r['Duration Inbound'] + $r['Duration Outbound'];
 
             $r['Duration Inbound'] = round($r['Duration Inbound'] / 60);
             $r['Duration Outbound'] = round($r['Duration Outbound'] / 60);
-            array_push($duration_time, $r['Time']);
+            array_push($duration_time, $datetime);
             array_push($inbound_duration, $r['Duration Inbound']);
             array_push($outbound_duration, $r['Duration Outbound']);
 
