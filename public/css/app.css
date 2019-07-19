@@ -229,9 +229,73 @@ span {
   max-width: 250px;
   color: #fff;
   background: #263854;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #263854 0%, #171f33 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#263854", endColorstr="#171f33",GradientType=1 );
+  /* IE6-9 */
   transition: all, ease, 0.3s;
+}
+
+#sidebar ul.components {
+  padding: 20px 0;
+}
+
+#sidebar ul li:first-of-type {
+  border-top: 1px solid #111d2d;
+}
+
+#sidebar ul li:last-of-type a {
+  border-bottom: none;
+}
+
+#sidebar ul li.active,
+#sidebar ul li a[aria-expanded=true] {
+  color: #e49831;
+  background: #1c273d;
+  background: linear-gradient(to right, #1c273d 0%, #263854 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
+}
+
+#sidebar ul li.active > a i,
+#sidebar ul li a[aria-expanded=true] > a i {
+  color: #ddd;
+}
+
+#sidebar ul li a {
+  text-align: left;
+  padding: 10px;
+  font-size: 1.3em;
+  display: block;
+  border-top: 1px solid #254556;
+  border-bottom: 1px solid #111d2d;
+}
+
+#sidebar ul li a:hover {
+  color: #fff;
+  background: #1c273d;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #1c273d 0%, #263854 98%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1c273d", endColorstr="#263854", GradientType=1);
+  /* IE6-9 */
+}
+
+#sidebar ul li a i {
+  margin-right: 10px;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+}
+
+#sidebar .sidebar-header strong {
+  display: none;
+  font-size: 1.8em;
 }
 
 #sidebar.active {
@@ -247,10 +311,6 @@ span {
 
 #sidebar.active .sidebar-header strong {
   display: block;
-}
-
-#sidebar ul li a {
-  text-align: left;
 }
 
 #sidebar.active ul li a {
@@ -278,60 +338,10 @@ span {
   transform: translateX(50%);
 }
 
-#sidebar .sidebar-header {
-  padding: 20px;
-  /*background: $blue;*/
-}
-
-#sidebar .sidebar-header strong {
-  display: none;
-  font-size: 1.8em;
-}
-
-#sidebar ul.components {
-  padding: 20px 0;
-}
-
-#sidebar ul li a {
-  padding: 10px;
-  font-size: 1.3em;
-  display: block;
-  border-top: 1px solid #254556;
-  border-bottom: 1px solid #111d2d;
-}
-
-#sidebar ul li:first-of-type {
-  border-top: 1px solid #111d2d;
-}
-
-#sidebar ul li:first-of-type a {
-  border-top: none;
-}
-
-#sidebar ul li:last-of-type a {
-  border-bottom: none;
-}
-
 button,
 button:active,
 button:focus {
   outline: none !important;
-}
-
-#sidebar ul li a:hover {
-  color: #fff;
-  background: #1c273d;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right, #1c273d 0%, #263854 98%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1c273d", endColorstr="#263854", GradientType=1);
-  /* IE6-9 */
-}
-
-#sidebar ul li a i {
-  margin-right: 10px;
 }
 
 #sidebarCollapse {
@@ -352,24 +362,6 @@ button:focus {
 #sidebarCollapse .fas,
 #sidebarCollapse .fa {
   color: #fff;
-}
-
-#sidebar ul li.active > a,
-a[aria-expanded=true] {
-  color: #e49831;
-  background: #172336;
-  background: #1c273d;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right, #1c273d 0%, #263854 98%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1c273d", endColorstr="#263854", GradientType=1);
-  /* IE6-9 */
-}
-
-#sidebar ul li.active > a i {
-  color: #ddd;
 }
 
 a[data-toggle=collapse] {
@@ -498,6 +490,10 @@ div.container-fluid.bg {
   -webkit-box-shadow: 0 1px 2px #28426d;
 }
 
+.navbar-default .navbar-nav > li > a {
+  color: #eee;
+}
+
 .navbar-right .btn.btn-default {
   margin-bottom: 0;
   margin-top: 21px;
@@ -522,10 +518,6 @@ div.container-fluid.bg {
   position: relative;
 }
 
-.navbar-default .navbar-nav > li > a {
-  color: #eee;
-}
-
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:focus,
 .navbar-default .navbar-nav > .open > a:hover,
@@ -545,13 +537,8 @@ div.container-fluid.bg {
 .dropdown-menu > .active > a:hover,
 .dropdown-menu.filter_campaign .active > a {
   background: #263854;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #263854 0%, #1c273d 99%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#263854", endColorstr="#1c273d", GradientType=0);
-  /* IE6-9 */
+  background: linear-gradient(to right, #263854 0%, #1c273d 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
   color: #fff;
 }
 
@@ -563,14 +550,14 @@ div.container-fluid.bg {
   background-color: #e4e4e4;
 }
 
-.filters ul.dropdown-menu {
-  right: -65px;
-}
-
 .filters {
   margin-bottom: 10px;
   float: right;
   padding: 0;
+}
+
+.filters ul.dropdown-menu {
+  right: -65px;
 }
 
 .filters .btn-group {
@@ -634,6 +621,43 @@ input[type=file] {
   box-shadow: 0 3px 5px #b5c3cc;
 }
 
+.card.card_table,
+.card.card_table2 {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 20px 10px;
+}
+
+.card.card_table table,
+.card.card_table2 table {
+  font-size: 12px;
+}
+
+.card input {
+  background: #eee;
+}
+
+.card .card_table,
+.card .card_table2 {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 20px 10px;
+  background: #fff;
+}
+
+.card .front,
+.card .back {
+  overflow: none;
+  background: #fff;
+}
+
+.card .back {
+  padding: 20px;
+  padding-top: 20px;
+}
+
 .card .title {
   text-transform: uppercase;
   text-align: center;
@@ -642,10 +666,6 @@ input[type=file] {
   margin-bottom: 10px;
   color: #203047;
   letter-spacing: -0.015em;
-}
-
-.card.flipping_card .title {
-  margin-bottom: 20px;
 }
 
 .card h4.data {
@@ -666,7 +686,6 @@ input[type=file] {
 }
 
 .card.flipping_card {
-  /*overflow: scroll;*/
   background: #fff;
   overflow: hidden;
   padding: 1px;
@@ -675,6 +694,18 @@ input[type=file] {
 .card.flipping_card.card-3 {
   padding: 0px;
   padding-top: 20px;
+}
+
+.card.flipping_card .title {
+  margin-bottom: 20px;
+}
+
+.card_table::-webkit-scrollbar,
+.card_table2::-webkit-scrollbar {
+  width: 0px;
+  /* Remove scrollbar space */
+  background: transparent;
+  /* Optional: just make scrollbar invisible */
 }
 
 .flip_card_btn:after,
@@ -712,65 +743,12 @@ input[type=file] {
 
 .mvuo_btn.card {
   overflow: -moz-scrollbars-none;
-}
-
-.mvuo_btn.card {
   -ms-overflow-style: none;
-}
-
-.card .card_table,
-.card .card_table2 {
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  padding: 20px 10px;
-  background: #fff;
-}
-
-.card .front,
-.card .back {
-  overflow: none;
-  background: #fff;
-}
-
-.card .back {
-  padding: 20px;
-  padding-top: 20px;
-}
-
-.card.card_table table {
-  font-size: 12px;
-}
-
-.card_table_prt {
-  /*overflow: hidden;*/
-}
-
-.card input {
-  background: #eee;
 }
 
 .call_volume_details {
   float: left;
 }
-
-.card.card_table,
-.card.card_table2 {
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  padding: 20px 10px;
-}
-
-.card_table::-webkit-scrollbar,
-.card_table2::-webkit-scrollbar {
-  width: 0px;
-  /* Remove scrollbar space */
-  background: transparent;
-  /* Optional: just make scrollbar invisible */
-}
-
-/* Optional: show position indicator in red */
 
 .card-6 h1.title {
   text-align: left;
@@ -1021,13 +999,8 @@ ul.dropdown-menu.filter_campaign {
 
 .modal-header {
   background: #263854;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#263854", endColorstr="#171f33", GradientType=0);
-  /* IE6-9 */
+  background: linear-gradient(to right, #263854 0%, #171f33 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
   color: #fff;
   margin-bottom: 20px;
 }

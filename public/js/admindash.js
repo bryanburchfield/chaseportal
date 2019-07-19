@@ -135,7 +135,7 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                dateFilter:datefilter
+                datefilter:datefilter
             },
             success:function(response){
                 console.log(response);
@@ -365,7 +365,7 @@ var Dashboard = {
             url: '/admindashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
-            data:{campaign:campaign, dateFilter:datefilter},
+            data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
 
                 Master.flip_card(response.reps.length, '#agent_call_count');
@@ -515,7 +515,7 @@ var Dashboard = {
             url: '/admindashboard/completed_calls',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
                 console.log(response);
                 Master.trend_percentage( $('#completed_calls'), response.completed_calls.pct_change, response.completed_calls.pct_sign, response.completed_calls.ntc );
@@ -543,7 +543,7 @@ var Dashboard = {
             url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc );
@@ -577,7 +577,7 @@ var Dashboard = {
             url: '/admindashboard/service_level',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter, answer_secs:answer_secs},
+            data:{datefilter:datefilter, answer_secs:answer_secs},
             success:function(response){
 
                 var service_level_data = {
@@ -646,7 +646,7 @@ var Dashboard = {
             url: '/admindashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.ntc );
@@ -675,7 +675,7 @@ var Dashboard = {
             url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
                 console.log(response);
                 Master.flip_card(response.avg_handletime.length, '#rep_avg_handletime');
@@ -765,7 +765,7 @@ var Dashboard = {
             url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter: datefilter},
+            data: {datefilter: datefilter},
             success:function(response){
             }
         });
@@ -797,7 +797,7 @@ var Dashboard = {
                 url: '/admindashboard/set_campaign',
                 type: 'POST',
                 dataType: 'json',
-                data: {dateFilter:datefilter, inorout:inorout},
+                data: {datefilter:datefilter, inorout:inorout},
                 success:function(response){
                     console.log(response);
                     Dashboard.refresh(datefilter, campaign, inorout);
@@ -853,7 +853,7 @@ var Dashboard = {
             url: '/admindashboard/set_campaign',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
