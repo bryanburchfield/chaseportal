@@ -66,7 +66,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = date("H:i", strtotime($r['Time']));
+                $datetime = date("h:i", strtotime($r['Time']));
             }
 
             array_push($inbound_time_labels, $datetime);
@@ -81,7 +81,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = date("H:i", strtotime($r['Time']));
+                $datetime = date("h:i", strtotime($r['Time']));
             }
 
             array_push($outbound_time_labels, $datetime);
@@ -94,7 +94,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = date("H:i", strtotime($r['Time']));
+                $datetime = date("h:i", strtotime($r['Time']));
             }
 
             $total_duration += $r['Duration Inbound'] + $r['Duration Outbound'];
