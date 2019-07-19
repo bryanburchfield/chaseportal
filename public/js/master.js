@@ -38,6 +38,7 @@ var Master = {
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
 		$('.edit_user').on('submit', this.edit_user);
+		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.users table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
@@ -58,15 +59,14 @@ var Master = {
 		$('.campaign_search').on('keyup', this.search_campaigns);
 		$('.select_database').on('click', this.select_database);
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
-		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
-		
+		$('.cdr_lookup_form').on('submit', this.cdr_lookup);		
 	},
 
 	formatNumber:function(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	},
 
-	convertSecsToHrsMins:function(secs) {
+	convertSecsToHrsMinsSecs:function(secs) {
 	    let sec_num = parseInt(secs, 10)
 	    let hours   = Math.floor(sec_num / 3600)
 	    let minutes = Math.floor(sec_num / 60) % 60
@@ -74,16 +74,39 @@ var Master = {
 
 	    return [hours,minutes,seconds]
 	        .map(v => v < 10 ? "0" + v : v)
-	        .filter((v,i) => v !== "00" || i > 0)
+	        .filter((v,i) => v  || i > 0)
 	        .join(":")
 	},
 
-	convertMinsToHrsMins:function(mins) {
-        let h = Math.floor(mins / 60);
-        let m = mins % 60;
-        h = h < 10 ? '0' + h : h;
-        m = m < 10 ? '0' + m : m;
-        return `${h}:${m}`;
+	// convertMinsToHrsMins:function(mins) {
+ //        let h = Math.floor(mins / 60);
+ //        let m = mins % 60;
+ //        h = h < 10 ? '0' + h : h;
+ //        m = m < 10 ? '0' + m : m;
+ //        return `${h}:${m}`;
+ //    },
+
+    ylabel_format:function(data){
+        var show_decimal=false;
+        
+        for(var i=0;i<data.length;i++){
+            if(data[i] > 300){
+                show_decimal=false;
+                break;
+            }else{
+                show_decimal=true;
+            }
+        }
+
+        return show_decimal;
+    },
+
+    flip_card:function(len, sel){
+        if(len < 15){
+            $(sel).closest('.flipping_card').flip(true);
+        }else{
+        	$(sel).closest('.flipping_card').flip(false);
+        }
     },
 
     trend_percentage:function(selector, change_perc, up_or_down, not_comparable){
@@ -325,10 +348,10 @@ var Master = {
 		$('#settingModal').modal('toggle');
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
 
 		$.ajax({
 			url: 'uploader_action',
@@ -348,10 +371,10 @@ var Master = {
 		var form_data = $(this).serialize();
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
 
 		$.ajax({
 			url: 'uploader_action',
@@ -361,15 +384,15 @@ var Master = {
 				form_data: form_data
 			},
 			success:function(response){
-				if(response['data']['status'] == 'success'){
+				if(response.data.status == 'success'){
 					$('.uploader_part1').hide();
 					$('.uploader_part2').show();
 
 					Master.set_uploader_info(response);
 				}else{
 					var errors;
-					for (var i=0; i <response['errors']; i++) {
-						errors+='<p>'+response['errors'][i]+'</p>';
+					for (var i=0; i <response.errors; i++) {
+						errors+='<p>'+response.errors[i]+'</p>';
 					}
 					$('.errors').append('<div class="alert alert-danger">'+errors+'</div>');
 				}
@@ -380,17 +403,17 @@ var Master = {
 	set_uploader_info:function(response){
 
 		$('td.uploader_details').remove();
-		var server1_dets = '<td class="uploader_details">'+response['data']['Campaign_A']+'</td><td class="uploader_details">'+response['data']['Subcampaign_A']+'</td><td class="uploader_details">'+response['data']['Rate_A']+'%</td>';
-		var server2_dets = '<td class="uploader_details">'+response['data']['Campaign_B']+'</td><td class="uploader_details">'+response['data']['Subcampaign_B']+'</td><td class="uploader_details">'+response['data']['Rate_B']+'%</td>';
+		var server1_dets = '<td class="uploader_details">'+response.data.Campaign_A+'</td><td class="uploader_details">'+response.data.Subcampaign_A+'</td><td class="uploader_details">'+response.data.Rate_A+'%</td>';
+		var server2_dets = '<td class="uploader_details">'+response.data.Campaign_B+'</td><td class="uploader_details">'+response.data.Subcampaign_B+'</td><td class="uploader_details">'+response.data.Rate_B+'%</td>';
 		$('#settingsTable .server1').append(server1_dets);
 		$('#settingsTable .server2').append(server2_dets);
 
-		$('input[name="Campaign_A"]').val(response['data']['Campaign_A']);
-		$('input[name="Campaign_B"]').val(response['data']['Campaign_B']);
-		$('input[name="Subcampaign_A"]').val(response['data']['Subcampaign_A']);
-		$('input[name="Subcampaign_B"]').val(response['data']['Subcampaign_B']);
-		$('input[name="Rate_A"]').val(response['data']['Rate_A']);
-		$('input[name="Rate_B"]').val(response['data']['Rate_B']);
+		$('input[name="Campaign_A"]').val(response.data.Campaign_A);
+		$('input[name="Campaign_B"]').val(response.data.Campaign_B);
+		$('input[name="Subcampaign_A"]').val(response.data.Subcampaign_A);
+		$('input[name="Subcampaign_B"]').val(response.data.Subcampaign_B);
+		$('input[name="Rate_A"]').val(response.data.Rate_A);
+		$('input[name="Rate_B"]').val(response.data.Rate_B);
 	},
 
 	import:function(e){
@@ -400,10 +423,10 @@ var Master = {
 		var action = $('#import .input_action').val();
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
 
 		$.ajax({
 			url: 'uploader_action',
@@ -432,6 +455,7 @@ var Master = {
 		;
 
 		if(todate !='' && fromdate !=''){
+
 			$.ajaxSetup({
 			    headers: {
 			        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -570,10 +594,10 @@ var Master = {
 		$('form.add_user .alert').remove();
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
 
 		$.ajax({
 			url: 'add_user',
@@ -668,6 +692,37 @@ var Master = {
 				}
 			}
 		});	
+	},
+
+	populate_user_edit:function(e){
+		e.preventDefault();
+		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
+		var user_id = $(this).attr('href');
+
+		$.ajaxSetup({
+		    headers: {
+		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+		    }
+		});
+
+		$.ajax({
+			url: 'get_user_details',
+			type: 'POST',
+			dataType: 'json',
+			data: {user_id: user_id},
+			success:function(response){
+
+				var form = $('form.edit_user');
+				form.find('.group_id').val(response.user_details.group_id);
+				form.find('.name').val(response.user_details.name);
+				form.find('.email').val(response.user_details.email);
+				form.find('#tz').val(response.user_details.tz);
+				form.find('#user_type').val(response.user_details.user_type);
+				form.find('#db').val(response.user_details.db);
+				form.find('#additional_dbs').val(response.user_details.additional_dbs);
+				form.find('.user_id').val(response.user_details.user_id);
+			}
+		});
 	},
 
 	pass_user_removemodal:function(){
@@ -877,7 +932,7 @@ var Master = {
 					this.totpages = response.params.totpages;
 					this.curpage = response.params.curpage;
 					this.th_sort = th_sort;
-					this.sort_direction = response.params.orderby['Campaign'];
+					this.sort_direction = response.params.orderby.Campaign;
 
 					// append table
 					$('.table-responsive').append(response.table);
@@ -941,10 +996,10 @@ var Master = {
 		;
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
 
 		$.ajax({
 			url: 'cdr_lookup',
@@ -957,8 +1012,8 @@ var Master = {
 				search_type:search_type
 			},
 			success:function(response){
-
-				$('.table-responsive').find('.alert').remove();
+				console.log(response);
+				$('.report_filters.card').parent().find('.alert').remove();
 				$('.cdr_results_table tbody').empty();
 
 				if($('#sidebar').hasClass('active')){
@@ -992,8 +1047,8 @@ var Master = {
 					Master.cdr_dataTable.draw();
 
 				}else{
-					$('.cdr_results_table').hide();
-					$('.table-responsive').append('<div class="alert alert-danger">No records found</div>');
+					$('.cdr_table').hide();
+					$('<div class="alert alert-danger">No records found</div>').insertAfter('.report_filters.card')
 				}
 				
 				$('.preloader').fadeOut('slow');
@@ -1007,7 +1062,7 @@ var Master = {
 		var chartColors = Master.chartColors;
 		
 		var xaxis_labels=[];
-		for(var i=0; i<response.extras['callable'].length;i++){
+		for(var i=0; i<response.extras.callable.length;i++){
 			xaxis_labels.push(i);	
 		}
 
@@ -1018,12 +1073,12 @@ var Master = {
 		          {
 		            label: "Callable",
 		            backgroundColor: chartColors.green,
-		            data: response.extras['callable']
+		            data: response.extras.callable
 		          },
 		          {
 		            label: "NonCallable",
 		            backgroundColor: chartColors.orange,
-		            data: response.extras['noncallable']
+		            data: response.extras.noncallable
 		          }
 		        ]
 		};
@@ -1066,15 +1121,18 @@ var Master = {
 		    window.subcampaigns_chart.destroy();
 		}
 
-		var response_length = response.extras['subcampaigns'].length;
+		var response_length = response.extras.subcampaigns.length;
 		var chart_colors_array= Master.return_chart_colors(response_length, chartColors);
 		
 		var subcampaigns=[];
 		var subcampaigns_cnt=[];
-		for(var i=0; i<response.extras['subcampaigns'].length;i++){
-			subcampaigns_cnt.push(response.extras['subcampaigns'][i]['Cnt']);
-			subcampaigns.push(response.extras['subcampaigns'][i]['Subcampaign']);
+		for(var i=0; i<response.extras.subcampaigns.length;i++){
+			subcampaigns_cnt.push(response.extras.subcampaigns[i].Cnt);
+			subcampaigns.push(response.extras.subcampaigns[i].Subcampaign);
 		}
+
+		$('#subcampaigns').parent().find('.card_title').remove();
+		$('#subcampaigns').parent().find('.no_data').remove();
 
 		if(response_length){
 		    var subcampaigns_data = {
@@ -1122,25 +1180,26 @@ var Master = {
 		        options: subcampaigns_options
 		    });
 		}else{
-		    $('<h2 class="card_title">CALLABLE LEADS BY SUBCAMPAIGN</h2><p class="no_data">No data yet</p>').insertBefore('#subcampaigns');
-		}
-
-		$('#subcampaigns').parent().find('.card_title').remove();
-		$('#subcampaigns').parent().find('.no_data').remove();
+            $('#subcampaigns').empty();                    
+            $('<p class="no_data">No data yet</p>').insertBefore('#subcampaigns');
+        }
 
 		if(window.call_stats_chart != undefined){
 		    window.call_stats_chart.destroy();
 		}
 
-		var response_length = response.extras['callstats'].length;
+		var response_length = response.extras.callstats.length;
 		var chart_colors_array= Master.return_chart_colors(response_length, chartColors);
 
 		var call_stats=[];
 		var call_stats_cnt=[];
-		for(var i=0; i<response.extras['callstats'].length;i++){
-			call_stats_cnt.push(response.extras['callstats'][i]['Cnt']);
-			call_stats.push(response.extras['callstats'][i]['CallStatus']);
+		for(var i=0; i<response.extras.callstats.length;i++){
+			call_stats_cnt.push(response.extras.callstats[i].Cnt);
+			call_stats.push(response.extras.callstats[i].CallStatus);
 		}
+
+		$('#call_stats').parent().find('.card_title').remove();
+		$('#call_stats').parent().find('.no_data').remove();
 
 		if(response_length){
 		    var call_stats_data = {
@@ -1187,10 +1246,11 @@ var Master = {
 		        data: call_stats_data,
 		        options: call_stats_options
 		    });
-		}
-
-		$('#call_stats').parent().find('.card_title').remove();
-		$('#call_stats').parent().find('.no_data').remove();
+		}else{
+            $('#call_stats').empty();                    
+            $('<p class="no_data">No data yet</p>').insertBefore('#call_stats');
+        }
+		
 	},
 
 	campaign_call_log:function(response){
@@ -1200,18 +1260,18 @@ var Master = {
 		var chartColors = Master.chartColors;
 
 		var xaxis_labels=[];
-		for(var i=0; i<response.extras['calldetails'].length;i++){
-			xaxis_labels.push(response.extras['calldetails'][i]['Time']);	
+		for(var i=0; i<response.extras.calldetails.length;i++){
+			xaxis_labels.push(response.extras.calldetails[i].Time);	
 		}
 
 	    var handled_calls=[];
-	    for(var i=0; i<response.extras['calldetails'].length;i++){
-			handled_calls.push(response.extras['calldetails'][i]['HandledCalls']);	
+	    for(var i=0; i<response.extras.calldetails.length;i++){
+			handled_calls.push(response.extras.calldetails[i].HandledCalls);	
 		}
 
 		var total_calls=[];
-	    for(var i=0; i<response.extras['calldetails'].length;i++){
-			total_calls.push(response.extras['calldetails'][i]['TotCalls']);	
+	    for(var i=0; i<response.extras.calldetails.length;i++){
+			total_calls.push(response.extras.calldetails[i].TotCalls);	
 		}
 
 	    var call_volume_data = {
@@ -1282,8 +1342,8 @@ var Master = {
 
 		var chart_colors_array= Master.return_chart_colors(2, chartColors);
 		var agent_sys_calls=[];
-    	agent_sys_calls.push(response.extras['donut']['AgentCalls']);
-		agent_sys_calls.push(response.extras['donut']['SystemCalls']);
+    	agent_sys_calls.push(response.extras.donut.AgentCalls);
+		agent_sys_calls.push(response.extras.donut.SystemCalls);
 
 		var agent_system_calls_data = {
 		    datasets: [{
@@ -1334,12 +1394,12 @@ var Master = {
 		////////////////////////////////////////////////////////
 		var callstatus=[];
 		var callstatus_label=[];		
-		var response_length = response.extras['stats'].length
+		var response_length = response.extras.stats.length
 		var chart_colors_array= Master.return_chart_colors(response_length, chartColors);
 
 		for(var i=0;i<response_length;i++){
-			callstatus.push(response.extras['stats'][i]['Count']);
-			callstatus_label.push(response.extras['stats'][i]['CallStatus']);
+			callstatus.push(response.extras.stats[i].Count);
+			callstatus_label.push(response.extras.stats[i].CallStatus);
 		}
 
 		var callstatus_data = {
@@ -1388,9 +1448,8 @@ var Master = {
 	},
 
 	lead_inventory:function(response){
-		$('.total_leads').html('<b>Available Leads: '+response.extras['AvailableLeads']+'</b>');
-		$('.available_leads').html('<b>Total Leads: '+response.extras['TotalLeads']+'</b>');
-
+		$('.total_leads').html('<b>Available Leads: '+response.extras.AvailableLeads+'</b>');
+		$('.available_leads').html('<b>Total Leads: '+response.extras.TotalLeads+'</b>');
 	},
 
 	toggle_dotmenu:function(){
@@ -1430,9 +1489,16 @@ var Master = {
 	}
 }
 
+$(window).load(function() {
+    $('.preloader').fadeOut('slow');
+});
+
 $(document).ready(function(){
 	Master.init();
-	$('.preloader').hide();
+	
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
 
 	$('.stop-propagation').on('click', function (e) {
 	    e.stopPropagation();
@@ -1457,37 +1523,6 @@ $(document).ready(function(){
 	    $(this).tab('show');
 	    window.location.hash = this.hash;
 		$('html,body').scrollTop($('body').scrollTop());
-	});
-
-	$('.users').on('click', 'a.edit_user', function(e){
-		e.preventDefault();
-		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
-		var user_id = $(this).attr('href');
-
-		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
-		});
-
-		$.ajax({
-			url: 'get_user',
-			type: 'POST',
-			dataType: 'json',
-			data: {user_id: user_id},
-			success:function(response){
-				console.log(response);
-				var form = $('form.edit_user');
-				form.find('.group_id').val(response.user_details.group_id);
-				form.find('.name').val(response.user_details.name);
-				form.find('.email').val(response.user_details.email);
-				form.find('#tz').val(response.user_details.tz);
-				form.find('#user_type').val(response.user_details.user_type);
-				form.find('#db').val(response.user_details.db);
-				form.find('#additional_dbs').val(response.user_details.additional_dbs);
-				form.find('.user_id').val(response.user_details.user_id);
-			}
-		});
 	});
 
 });

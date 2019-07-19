@@ -110,13 +110,8 @@ var Dashboard = {
         $('.preloader').fadeOut('slow');
     },
 
-    flip_card:function(len, sel){
-        if(len < 15){
-            $(sel).closest('.flipping_card').flip(true);
-        }
-    },
+    call_details:function(datefilter, chartColors){
 
-     call_details:function(datefilter, chartColors){
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -125,31 +120,31 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/app/ajax/call_details',
+            url: '/leaderboarddash/call_details',
             type: 'POST',
             dataType: 'json',
             data:{
                 datefilter:datefilter
             },
             success:function(response){
-                Dashboard.flip_card(response['call_details']['repsales'].length, '#agent_sales_per_hour');
-                console.log(response);
+                Master.flip_card(response.call_details.repsales.length, '#agent_sales_per_hour');
+
                 $('.salesleaderboardtable, #agent_sales_per_hour, #agent_sales_per_hour_graph').parent().find('.no_data').remove();                
                 $('.salesleaderboardtable tbody, #agent_sales_per_hour tbody').empty();
 
                 var leaderboard_trs='<tr class="lowpad"><th>Rep</th><th># Calls</th><th>Talk Time</th><th># Sales</th></tr>';
-                for (var i=0; i < response['call_details']['leaders'].length; i++) {
-                    leaderboard_trs+= '<tr class="results"><td>'+response['call_details']['leaders'][i]['Rep']+'</td><td>'+Master.formatNumber(response['call_details']['leaders'][i]['Call Count'])+'</td><td>'+response['call_details']['leaders'][i]['Talk Secs']+'</td><td>'+Master.formatNumber(response['call_details']['leaders'][i]['Sales'])+'</td></tr>';
+                for (var i=0; i < response.call_details.leaders.length; i++) {
+                    leaderboard_trs+= '<tr class="results"><td>'+response.call_details.leaders[i].Rep+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].CallCount)+'</td><td>'+response.call_details.leaders[i].TalkSecs+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].Sales)+'</td></tr>';
                 }
 
                 $('.salesleaderboardtable tbody').append(leaderboard_trs);
 
                
-                if(response['call_details']['repsales'].length){
+                if(response.call_details.repsales.length){
                     var agent_sales_trs;
 
-                    for (var i=0; i < response['call_details']['repsales'].length; i++) {
-                        agent_sales_trs+= '<tr class="results"><td>'+response['call_details']['repsales'][i]['Rep']+'</td><td>'+response['call_details']['repsales'][i]['PerHour']+'</td></tr>';
+                    for (var i=0; i < response.call_details.repsales.length; i++) {
+                        agent_sales_trs+= '<tr class="results"><td>'+response.call_details.repsales[i].Rep+'</td><td>'+response.call_details.repsales[i].PerHour+'</td></tr>';
                     }
 
                     $('#agent_sales_per_hour tbody').append(agent_sales_trs);
@@ -162,12 +157,12 @@ var Dashboard = {
                     window.rep_avg_handletime_chart.destroy();
                 }
 
-                var response_length = response['Sales'].length;
+                var response_length = response.Sales.length;
                 var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
 
                 var agent_sales_per_hour_data = {
                     datasets: [{
-                        data: response['Sales'],
+                        data: response.Sales,
                         backgroundColor: chart_colors_array,
                         label: 'Dataset 1'
                     }],
@@ -178,7 +173,7 @@ var Dashboard = {
                             sidePadding: 15 
                         }
                     },
-                    labels: response['Rep']
+                    labels: response.Rep
                 };
 
                 var agent_sales_per_hour_options={
@@ -219,7 +214,7 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/app/ajax/call_volume',
+            url: '/leaderboarddash/call_volume',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -228,39 +223,39 @@ var Dashboard = {
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html(response['call_volume']['details']);
+                $('.filter_time_camp_dets p').html(response.call_volume.details);
 
-                $('.total_calls_out p').html(Master.formatNumber(response['call_volume']['tot_outbound']));
-                $('.total_calls_in p').html(Master.formatNumber(response['call_volume']['tot_inbound']));
+                $('.total_calls_out p').html(Master.formatNumber(response.call_volume.tot_outbound));
+                $('.total_calls_in p').html(Master.formatNumber(response.call_volume.tot_inbound));
 
                 var total_calls_int=0;
-                if(response['call_volume']['total'] != null){
-                    total_calls_int=response['call_volume']['total'];
+                if(response.call_volume.total != null){
+                    total_calls_int=response.call_volume.total;
                 }
                 $('.call_volume_details p.total').html('Total Calls: '+total_calls_int);
                 var call_volume_data = {
 
-                    labels: response['call_volume']['time_labels'],
+                    labels: response.call_volume.time_labels,
                     datasets: [{
                         label: 'Inbound',
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
-                        data: response['call_volume']['inbound'],
+                        data: response.call_volume.inbound,
                         yAxisID: 'y-axis-1',
                     },{
                         label: 'Outbound',
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
-                        data: response['call_volume']['outbound'],
+                        data: response.call_volume.outbound,
                         yAxisID: 'y-axis-1'
                     },{
                         label: 'Manual',
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
-                        data: response['call_volume']['manual'],
+                        data: response.call_volume.manual,
                         yAxisID: 'y-axis-1'
                     }]
                 };
@@ -321,6 +316,7 @@ var Dashboard = {
     },
 
     sales_per_campaign:function(datefilter, chartColors){
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -329,15 +325,15 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/app/ajax/sales_per_campaign',
+            url: '/leaderboarddash/sales_per_campaign',
             type: 'POST',
             dataType: 'json',
             data:{
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
-                Dashboard.flip_card(response.Campaign.length, '#sales_per_campaign');
+
+                Master.flip_card(response.Campaign.length, '#sales_per_campaign');
 
                 var sales_camp_arr = [];
                 for(var i=0;i<response.Campaign.length;i++){
@@ -349,13 +345,12 @@ var Dashboard = {
                 $('#sales_per_campaign tbody').empty();
                 var spc_trs;
                 for (var i=0; i < sales_camp_arr.length; i++) {
-                    spc_trs+= '<tr class="results"><td>'+sales_camp_arr[i]['Campaign']+'</td><td>'+Master.formatNumber(sales_camp_arr[i]['Sales'])+'</td></tr>';
+                    spc_trs+= '<tr class="results"><td>'+sales_camp_arr[i].Campaign+'</td><td>'+Master.formatNumber(sales_camp_arr[i].Sales)+'</td></tr>';
                 }
-                console.log(spc_trs);
 
                 $('#sales_per_campaign tbody').append(spc_trs);
                 
-                if(response['Campaign'].length){
+                if(response.Campaign.length){
                     $('#sales_per_campaign_graph, #sales_per_campaign').show();
                 }else{
                     $('#sales_per_campaign tbody').empty();                    
@@ -366,12 +361,12 @@ var Dashboard = {
                      window.sales_per_campaign_chart.destroy();
                  }
 
-                 var response_length = response['Campaign'].length;
+                 var response_length = response.Campaign.length;
                  var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
 
                 var sales_per_campaign_data = {
                      datasets: [{
-                         data: response['Sales'],
+                         data: response.Sales,
                          backgroundColor: chart_colors_array,
                          label: 'Dataset 1'
                      }],
@@ -382,7 +377,7 @@ var Dashboard = {
                              sidePadding: 15 
                          }
                      },
-                     labels: response['Campaign']
+                     labels: response.Campaign
                  };
 
                  var sales_per_campaign_options={
@@ -418,9 +413,9 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
+
         $.ajax({
-            url: '/leaderboarddash/app/ajax/update_datefilter',
+            url: '/leaderboarddash/update_datefilter',
             type: 'POST',
             dataType: 'json',
             data: {datefilter: datefilter},
@@ -450,7 +445,7 @@ var Dashboard = {
             });
 
             $.ajax({
-                url: '../../admindashboard/app/ajax/set_campaign',
+                url: '/admindashboard/set_campaign',
                 type: 'POST',
                 dataType: 'json',
                 data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
@@ -468,6 +463,7 @@ var Dashboard = {
         var datefilter = $('#datefilter').val();
         var inorout = $('#inorout').val();
         $('.preloader').show();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -475,7 +471,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '../../admindashboard/app/ajax/set_campaign',
+            url: '/admindashboard/set_campaign',
             type: 'POST',
             dataType: 'json',
             data: {databases:databases},
@@ -496,6 +492,7 @@ var Dashboard = {
         var inorout =$('#inorout').val();
         var campaign = $(this).text();
         Master.active_camp_search = campaign;
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -503,7 +500,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/leaderboarddash/app/ajax/set_campaign',
+            url: '/leaderboarddash/set_campaign',
             type: 'POST',
             dataType: 'json',
             data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
@@ -545,6 +542,7 @@ var Dashboard = {
         $(this).parent().parent().find('.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -552,7 +550,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/leaderboarddash/app/ajax/set_campaign',
+            url: '/leaderboarddash/set_campaign',
             type: 'POST',
             dataType: 'json',
             data: { inorout:inorout},
