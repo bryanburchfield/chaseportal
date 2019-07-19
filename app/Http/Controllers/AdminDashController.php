@@ -186,10 +186,6 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = "SELECT
         Time,
         SUM([Inbound Count]) AS 'Inbound Count',
@@ -206,7 +202,12 @@ class AdminDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT $xAxis as 'Time',
     'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END), 
     'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
@@ -227,13 +228,13 @@ class AdminDashController extends Controller
             WHERE DR.CallType NOT IN ('7','8')
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid ";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i ";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $sql .= "
@@ -361,8 +362,7 @@ class AdminDashController extends Controller
         $completed_calls = $this->getCompletedCalls();
         $prev_completed_calls = $this->getCompletedCalls(true);
 
-        // $details = $this->filterDetails($datefilter, $campaign);
-        $details = '';
+        $details = $this->filterDetails();
 
         $inbound = ['1', '11'];
 
@@ -425,25 +425,26 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = 'SELECT CallType, SUM([Agent Calls]) as [Agent Calls] FROM (';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT DR.CallType AS 'CallType',
                 COUNT(DR.CallStatus) AS 'Agent Calls'
                 FROM [$db].[dbo].[DialingResults] DR
                 WHERE DR.CallType NOT IN ('7','8')
                 AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
-                AND DR.Date >= :fromdate
-                AND DR.Date < :todate
-                AND DR.GroupId = :groupid ";
+                AND DR.Date >= :fromdate$i
+                AND DR.Date < :todate$i
+                AND DR.GroupId = :groupid$i ";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $sql .= "
@@ -532,29 +533,30 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = "SELECT
         SUM(Cnt) as 'Total Calls',
         SUM(HoldTime) as 'Hold Secs'
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT 'Cnt' = COUNT(CallStatus),
                 'HoldTime' = SUM(HoldTime)
                 FROM [$db].[dbo].[DialingResults] DR
                 WHERE CallType = 1
                 AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
                 AND HoldTime >= 0
-                AND DR.Date >= :fromdate
-                AND DR.Date < :todate
-                AND DR.GroupId = :groupid";
+                AND DR.Date >= :fromdate$i
+                AND DR.Date < :todate$i
+                AND DR.GroupId = :groupid$i";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $union = 'UNION ALL';
@@ -631,29 +633,30 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = "SELECT
         'Calls' = SUM(Calls),
         'Abandoned' = SUM(Abandoned)
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT
             'Calls' = COUNT(CallStatus),
             'Abandoned' = SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE CallType = 1
             AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $sql .= "
@@ -698,10 +701,6 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = "SET NOCOUNT ON;
         
         SELECT Rep, Campaign,
@@ -710,7 +709,12 @@ class AdminDashController extends Controller
         INTO #temp
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT DR.Rep, DR.Campaign,
             'Count' = COUNT(DR.CallStatus),
             'Duration' = SUM(DR.Duration)
@@ -718,13 +722,13 @@ class AdminDashController extends Controller
             WHERE DR.CallType NOT IN (7,8)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration <> 0
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid ";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i ";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $sql .= " GROUP BY DR.Rep, DR.Campaign";
@@ -804,29 +808,30 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-        $bind['answersecs'] = $answerSecs;
-
         $sql = "SELECT
          SUM([Handled]) as [Handled], 
          SUM([Count]) as [Count]
          FROM ( ";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+            $bind['answersecs' . $i] = $answerSecs;
+
+            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
             'Count' = COUNT(CallStatus)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE CallType = 1
             AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $union = 'UNION ALL';
@@ -880,10 +885,6 @@ class AdminDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['groupid'] = Auth::user()->group_id;
-        $bind['fromdate'] = $startDate;
-        $bind['todate'] = $endDate;
-
         $sql = "SET NOCOUNT ON;
         SELECT Rep, Campaign,
         'Duration' = SUM(Duration),
@@ -891,7 +892,12 @@ class AdminDashController extends Controller
         INTO #temp
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT Rep, Campaign,
             Duration, CallStatus
             FROM [$db].[dbo].[DialingResults] DR
@@ -899,13 +905,13 @@ class AdminDashController extends Controller
             AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
             AND HoldTime >= 0
             AND Duration > 0
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid ";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i ";
 
             if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign";
-                $bind['campaign'] = $campaign;
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
             }
 
             $union = 'UNION ALL';
