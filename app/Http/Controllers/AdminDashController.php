@@ -859,9 +859,4 @@ class AdminDashController extends Controller
 
         echo json_encode($return);
     }
-
-    public function setCampaign(Request $request)
-    {
-        return 'set camp here';
-    }
 }

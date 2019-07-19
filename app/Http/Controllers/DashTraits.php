@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\User;
-use App\Campaign;
 
 trait DashTraits
 {
+    private $databases;
     private $campaign;
     private $dateFilter;
     private $inorout;
@@ -35,6 +34,7 @@ trait DashTraits
     private function getSession()
     {
         // This won't work inside __construct()
+        $this->databases = Session::get('databases', []);
         $this->campaign = Session::get('campaign', 'Total');
         $this->dateFilter = Session::get('dateFilter', 'today');
         $this->inorout = Session::get('inorout', 'inbound');
@@ -143,7 +143,7 @@ trait DashTraits
     {
         $tz = Auth::user()->tz;
 
-        $campaign = ($this->campaign == 'Total') ? 'All Campaigns' : $this->campaign;
+        $campaign = ($this->campaign == 'Total' || $this->campaign == null) ? 'All Campaigns' : $this->campaign;
 
         if (strpos($this->dateFilter, '/')) {
             $startDate = substr($this->dateFilter, 0, 10);
@@ -333,5 +333,26 @@ trait DashTraits
         } while ($stmt->nextRowset());
 
         return $result;
+    }
+
+    public function setCampaign(Request $request)
+    {
+        $filters = [
+            'databases',
+            'campaign',
+            'dateFilter',
+            'inorout',
+        ];
+
+        foreach ($filters as $filter) {
+            if (isset($request->$filter)) {
+                Session::put([
+                    $filter => $request->$filter,
+                ]);
+            }
+        }
+
+        $return['campaigns'] = [];
+        echo json_encode($return);
     }
 }
