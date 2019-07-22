@@ -5,11 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
 use App\Campaign;
-use Illuminate\Http\RedirectResponse;
 use App\System;
 use App\User;
 
@@ -21,17 +17,15 @@ class MasterDashController extends Controller
 
     public function index(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
         natcasesort($campaigns);
         array_unshift($campaigns, 'Total');
 
-        $this->currentDash = Session::get('currentDash', 'admindash');
-        Session::put([
-            'currentDash' => $this->currentDash,
-        ]);
+        $this->currentDash = session('currentDash', 'admindash');
+        session(['currentDash' => $this->currentDash]);
 
         $jsfile[] = $this->currentDash . ".js";
         // $jsfile[] = "master.js";
@@ -65,9 +59,7 @@ class MasterDashController extends Controller
 
     public function setDashboard(Request $request)
     {
-        Session::put([
-            'currentDash' => $request->dashboard,
-        ]);
+        session(['currentDash' => $request->dashboard]);
 
         // ajax return
         $return['set_dash'] = $request->dashboard;
@@ -84,9 +76,9 @@ class MasterDashController extends Controller
         return 'Recipients';
     }
 
-    public function admin()
+    public function admin(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
         $groupId = Auth::user()->group_id;
 
         $timezones = System::all()->sortBy('current_utc_offset')->toArray();
@@ -134,5 +126,4 @@ class MasterDashController extends Controller
     {
         return 'user details';
     }
-
 }
