@@ -149,8 +149,8 @@ Route::prefix('dashboards')->group(function () {
         Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::get('admin/', 'Admin@index');
             Route::post('admin/add_user', 'Admin@addUser');
-            Route::post('admin/delete_user/{id}', 'Admin@deleteUser');
-            Route::get('admin/get_user/{id}', 'Admin@getUser');
+            Route::post('admin/delete_user/', 'Admin@deleteUser');
+            Route::post('admin/get_user/', 'Admin@getUser');
         });
     });
 });
