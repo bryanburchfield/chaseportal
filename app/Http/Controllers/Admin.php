@@ -7,6 +7,7 @@ use App\User;
 use App\System;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Admin extends Controller
@@ -78,12 +79,12 @@ class Admin extends Controller
     {
         /// check if name or email is used by another user
         $user_check = User::where('id', '!=', $request->id)
-           ->where(function ($query) use ($request) {
-               $query->where('name', $request->name)
-                   ->orWhere('email', $request->email);
-           })
-           ->first();
-        
+            ->where(function ($query) use ($request) {
+                $query->where('name', $request->name)
+                    ->orWhere('email', $request->email);
+            })
+            ->first();
+
 
         if ($user_check) {
             $return['status'] = 'Name or email in use by another user';
@@ -95,9 +96,87 @@ class Admin extends Controller
         echo json_encode($return);
     }
 
-    public function cdrLookup()
+    public function cdrLookup(Request $request)
     {
-        $return['cdr_lookup'] = 'something here';
+        $phone = preg_replace("/[^0-9]/", "", $request->phone);
+        $fromdate = (new \DateTime($request->fromdate))->format('Y-m-d H:i:s');
+        $todate = (new \DateTime($request->todate))->format('Y-m-d H:i:s');
+
+        if ($request->search_type == 'number_dialed') {
+            $search_field = 'Phone';
+        } else {
+            $search_field = 'CallerId';
+        }
+
+        $field_array = [
+            'id',
+            'LeadId',
+            'Phone',
+            'Rep',
+            'Date',
+            'Campaign',
+            'GroupId',
+            'Attempt',
+            'Duration',
+            'CallStatus',
+            'CallerId',
+            'CallType',
+            'Subcampaign',
+            'CallDate',
+        ];
+
+        $fields = '';
+        foreach ($field_array as $field) {
+            $fields .= '[' . $field . '],';
+        }
+        $fields = substr($fields, 0, -1);
+
+        array_unshift($field_array, 'Server');
+
+        $sql = "DECLARE @phone varchar(50) = :phone;
+		DECLARE @fromdate datetime = :fromdate;
+		DECLARE @todate datetime = :todate;
+		
+		SELECT [Server], $fields
+		FROM (";
+
+        $union = '';
+        for ($db = 1; $db <= 25; $db++) {
+            if ($db == 13) continue;
+
+            $sql .= " $union
+			SELECT $db as [Server], $fields
+			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $db) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
+
+            $union = "UNION";
+        }
+
+        $sql .= ") tmp";
+
+        $bind = [
+            'phone' => $phone,
+            'fromdate' => $fromdate,
+            'todate' => $todate,
+        ];
+
+        $this->setDb();
+
+        try {
+            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        } catch (\Exception $e) {
+            $results = [];
+        }
+
+        if (count($results)) {
+            // convert array of objects to array of arrays
+            $results = json_decode(json_encode($results), true);
+        }
+
+        $return = [
+            'columns' => $field_array,
+            'search_result' => $results,
+        ];
+
         echo json_encode($return);
     }
 }
