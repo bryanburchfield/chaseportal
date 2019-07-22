@@ -75,7 +75,7 @@ class Admin extends Controller
     }
 
     public function updateUser(Request $request)
-   {
+    {
         /// check if name or email is used by another user
         $user_check = User::where('id', '!=', $request->id)
            ->where(function ($query) use ($request) {
@@ -93,5 +93,11 @@ class Admin extends Controller
             $return['status'] = 'success';
         }
         echo json_encode($return);
-   }
+    }
+
+    public function cdrLookup()
+    {
+        $return['cdr_lookup'] = 'something here';
+        echo json_encode($return);
+    }
 }

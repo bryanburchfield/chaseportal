@@ -152,6 +152,7 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/delete_user/', 'Admin@deleteUser');
             Route::post('admin/get_user/', 'Admin@getUser');
             Route::post('admin/update_user/', 'Admin@updateUser');
+            Route::post('admin/cdr_lookup/', 'Admin@cdrLookup');
         });
     });
 });

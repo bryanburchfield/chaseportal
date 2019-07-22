@@ -999,7 +999,7 @@ var Master = {
     	});
 
 		$.ajax({
-			url: 'cdr_lookup',
+			url: '/dashboards/admin/cdr_lookup',
 			type: 'POST',
 			dataType: 'json',
 			data: {
