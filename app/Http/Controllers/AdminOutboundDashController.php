@@ -13,7 +13,7 @@ class AdminOutboundDashController extends Controller
 
     public function index(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();

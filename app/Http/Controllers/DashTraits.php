@@ -123,10 +123,8 @@ trait DashTraits
         return $rec;
     }
 
-    private function filterDetails(Request $request)
+    private function filterDetails()
     {
-        $this->getSession($request);
-
         $tz = Auth::user()->tz;
 
         $campaign = ($this->campaign == 'Total' || $this->campaign == null) ? 'All Campaigns' : $this->campaign;

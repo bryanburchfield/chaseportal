@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class LeaderDashController extends Controller
 
     public function index(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
@@ -39,7 +40,7 @@ class LeaderDashController extends Controller
 
     public function callVolume(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -153,7 +154,7 @@ class LeaderDashController extends Controller
 
     public function salesPerCampaign(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -216,7 +217,7 @@ class LeaderDashController extends Controller
 
     public function leaderBoard(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;

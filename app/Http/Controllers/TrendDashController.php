@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class TrendDashController extends Controller
 
     public function index(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
@@ -40,7 +41,7 @@ class TrendDashController extends Controller
 
     public function callVolume(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -291,9 +292,9 @@ class TrendDashController extends Controller
         return ($this->zeroRecs($duration, $zeroRec, $params));
     }
 
-    public function callDetails()
+    public function callDetails(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -458,10 +459,10 @@ class TrendDashController extends Controller
         return array_merge($arr, $newRecs);
     }
 
-    public function agentCallTime()
+    public function agentCallTime(Request $request)
     {
 
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -527,9 +528,9 @@ class TrendDashController extends Controller
         echo json_encode($return);
     }
 
-    public function serviceLevel()
+    public function serviceLevel(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;

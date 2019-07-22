@@ -145,11 +145,12 @@ Route::prefix('dashboards')->group(function () {
         Route::get('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
 
         // Admin only
+        // prefix('admin') isn't working for some reason
         Route::group(['middleware' => 'can:accessAdmin'], function () {
-            Route::middleware('can:accessAdmin')->get('admin', 'MasterDashController@admin');
-            Route::middleware('can:accessAdmin')->post('add_user', 'MasterDashController@addUser');
-            Route::middleware('can:accessAdmin')->post('delete_user', 'MasterDashController@deleteUser');
-            Route::middleware('can:accessAdmin')->post('get_user', 'MasterDashController@getUser');
+            Route::get('admin/', 'Admin@index');
+            Route::post('admin/add_user', 'Admin@addUser');
+            Route::post('admin/delete_user/{id}', 'Admin@deleteUser');
+            Route::get('admin/get_user/{id}', 'Admin@getUser');
         });
     });
 });

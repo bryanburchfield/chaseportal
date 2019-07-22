@@ -343,10 +343,12 @@ class AdminDashController extends Controller
 
     public function completedCalls(Request $request)
     {
-        $completed_calls = $this->getCompletedCalls($request);
-        $prev_completed_calls = $this->getCompletedCalls($request, true);
+        $this->getSession($request);
 
-        $details = $this->filterDetails($request);
+        $completed_calls = $this->getCompletedCalls();
+        $prev_completed_calls = $this->getCompletedCalls(true);
+
+        $details = $this->filterDetails();
 
         $inbound = ['1', '11'];
 
@@ -392,10 +394,8 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getCompletedCalls(Request $request, $prev = false)
+    private function getCompletedCalls($prev = false)
     {
-        $this->getSession($request);
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -445,8 +445,10 @@ class AdminDashController extends Controller
 
     public function avgHoldTime(Request $request)
     {
-        $average_hold_time = $this->getAvgHoldTime($request);
-        $prev_average_hold_time = $this->getAvgHoldTime($request, true);
+        $this->getSession($request);
+
+        $average_hold_time = $this->getAvgHoldTime();
+        $prev_average_hold_time = $this->getAvgHoldTime(true);
 
         if ($average_hold_time['Total Calls'] == 0) {
             $avg_hold_time = 0;
@@ -485,10 +487,8 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getAvgHoldTime(Request $request, $prev = false)
+    private function getAvgHoldTime($prev = false)
     {
-        $this->getSession($request);
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -539,8 +539,10 @@ class AdminDashController extends Controller
 
     public function abandonRate(Request $request)
     {
-        $abandon_rate = $this->getAbandonRate($request);
-        $prev_abandon_rate = $this->getAbandonRate($request, true);
+        $this->getSession($request);
+
+        $abandon_rate = $this->getAbandonRate();
+        $prev_abandon_rate = $this->getAbandonRate(true);
 
         $abandon_pct = ($abandon_rate['Calls'] == 0) ? 0 : $abandon_rate['Abandoned'] / $abandon_rate['Calls'] * 100;
         $prev_abandon_pct = ($prev_abandon_rate['Calls'] == 0) ? 0 : $prev_abandon_rate['Abandoned'] / $prev_abandon_rate['Calls'] * 100;
@@ -569,10 +571,8 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getAbandonRate(Request $request, $prev = false)
+    private function getAbandonRate($prev = false)
     {
-        $this->getSession($request);
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
