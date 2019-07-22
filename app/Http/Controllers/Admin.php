@@ -55,11 +55,24 @@ class Admin extends Controller
 
     public function addUser(Request $request)
     {
-        $input = $request->all();
-        $input['password'] = Hash::make('password');
+        /// check if name or email is used by another user
+        $user_check = User::where('id', '!=', $request->id)
+            ->where(function ($query) use ($request) {
+                $query->where('name', $request->name)
+                    ->orWhere('email', $request->email);
+            })
+            ->first();
 
-        User::create($input);
-        return redirect('master/admin');
+        if(!$user_check){
+            $input = $request->all();
+            $input['password'] = Hash::make('password');
+            $newuser = User::create($input);
+            $return['success'] = $newuser;
+        }else{
+            $return['errors'] = 'Name or email already in use';
+        }
+
+        echo json_encode($return);
     }
 
     public function deleteUser(Request $request)

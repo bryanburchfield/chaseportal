@@ -30,7 +30,7 @@
         								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form well add_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
-        										{!! Form::text('group_id', $group_id, ['class'=>'form-control group_id', 'required'=>true]) !!}
+        										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
         									</div>
 
         									<div class="form-group">

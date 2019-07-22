@@ -600,7 +600,7 @@ var Master = {
     	});
 
 		$.ajax({
-			url: 'add_user',
+			url: '/dashboards/admin/add_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -614,18 +614,13 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
-				if(response.status != 'success'){
-					var errors=[];
-					for(var i=0;i<response.errors.length;i++){
-						errors.push(response.errors[i]);
-					}
 
-					$('form.add_user').append('<div class="alert alert-danger">'+errors+'</div>');
+				if(response.errors){
+					$('form.add_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
 				}else{
 					$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
-					$('.users table tbody').append('<tr id="user'+response.user_id+'" data-id="'+response.user_id+'"><td>'+group_id+' - '+ name+'</td><td><a href="'+response.user_id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.user_id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
+					$('.users table tbody').append('<tr id="user'+response.success.id+'" data-id="'+response.success.id+'"><td>'+group_id+' - '+ name+'</td><td><a href="'+response.success.id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.success.id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
 					setTimeout(function(){ 
 						$('.alert').remove();
 						$('form.add_user').trigger("reset");
