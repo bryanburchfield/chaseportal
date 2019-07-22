@@ -739,14 +739,14 @@ var Master = {
 		});
 
 		$.ajax({
-			url: 'delete_user',
+			url: '/dashboards/admin/delete_user',
 			type:'POST',
 			dataType:'json',
 			data:{
 				id:id
 			},
 			success:function(response){
-				
+				console.log(response);
 				$('.users table tbody tr#user'+id).remove();
 				$('#deleteUserModal').modal('toggle');
 

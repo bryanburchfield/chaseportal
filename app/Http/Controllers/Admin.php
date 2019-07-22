@@ -55,7 +55,7 @@ class Admin extends Controller
 
     public function addUser(Request $request)
     {
-        /// check if name or email is used by another user
+        /// check if name or email exists
         $user_check = User::where('id', '!=', $request->id)
             ->where(function ($query) use ($request) {
                 $query->where('name', $request->name)
@@ -78,7 +78,8 @@ class Admin extends Controller
     public function deleteUser(Request $request)
     {
         $user = User::findOrFail($request->id)->delete();
-        return redirect('master/admin');
+        $return['status'] = 'user deleted';
+        echo json_encode($return);
     }
 
     public function getUser(Request $request)

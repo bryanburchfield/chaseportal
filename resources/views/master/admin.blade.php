@@ -114,7 +114,7 @@
 			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form well edit_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
-        										{!! Form::text('group_id', $group_id, ['class'=>'form-control group_id', 'required'=>true]) !!}
+        										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
         									</div>
 
         									<div class="form-group">
@@ -281,27 +281,25 @@
 @include('shared.reportmodal')
 
 <!-- Delete Recipient Modal -->
-<div class="modal fade" id="deleteRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm User Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">Confirm Recipient Removal</h4>
             </div>
             <div class="modal-body">
-                
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
                <h3>Are you sure you want to delete <span class="username"></span>?</h3>
             </div>
-	        <div class="modal-footer">
-	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	            {!! Form::open(['method'=> 'POST', 'url'=> 'dashboards/delete_user']) !!}
-		            {!! Form::hidden('userid', null, ['id'=>'userid']) !!}
-		            {!! Form::hidden('username', null, ['id'=>'username']) !!}
-		            {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}
-				{!! Form::close() !!}
-	        </div>
-	    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+        </div>
+    </div>
     </div>
 </div>
+
 
 @endsection
