@@ -640,7 +640,7 @@ var Master = {
 		e.preventDefault();
 		var form = $('form.edit_user');
 		var group_id = form.find('.group_id').val(),
-			user_id = form.find('.user_id').val(),
+			id = form.find('#id').val(),
 			name = form.find('.name').val(),
 			email = form.find('.email').val(),
 			tz = form.find('#tz').val(),
@@ -658,11 +658,11 @@ var Master = {
 		});
 
 		$.ajax({
-			url: 'update_user',
+			url: '/dashboards/admin/update_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				user_id:user_id,
+				id:id,
 				group_id:group_id,
 				name: name,
 				email:email,
@@ -673,8 +673,9 @@ var Master = {
 			},
 
 			success:function(response){
-
-				if(response.status != 'success'){
+				console.log(response);
+				return false;
+				if(!response){
 					var errors=[];
 					for(var i=0;i<response.errors.length;i++){
 						errors.push(response.errors[i]);
@@ -697,30 +698,30 @@ var Master = {
 	populate_user_edit:function(e){
 		e.preventDefault();
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
-		var user_id = $(this).attr('href');
+		var id = $(this).attr('href');
 		
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		    }
 		});
-		console.log(user_id);
+
 		$.ajax({
-			url: 'get_user',
-			type: 'GET',
+			url: '/dashboards/admin/get_user',
+			type: 'POST',
 			dataType: 'json',
-			data: {user_id: user_id},
+			data: {id: id},
 			success:function(response){
 				console.log(response);
 				var form = $('form.edit_user');
-				form.find('.group_id').val(response.user_details.group_id);
-				form.find('.name').val(response.user_details.name);
-				form.find('.email').val(response.user_details.email);
-				form.find('#tz').val(response.user_details.tz);
-				form.find('#user_type').val(response.user_details.user_type);
-				form.find('#db').val(response.user_details.db);
-				form.find('#additional_dbs').val(response.user_details.additional_dbs);
-				form.find('.user_id').val(response.user_details.user_id);
+				form.find('.group_id').val(response.group_id);
+				form.find('.name').val(response.name);
+				form.find('.email').val(response.email);
+				form.find('#tz').val(response.tz);
+				form.find('#user_type').val(response.user_type);
+				form.find('#db').val(response.db);
+				form.find('#additional_dbs').val(response.additional_dbs);
+				form.find('#id').val(response.id);
 			}
 		});
 	},

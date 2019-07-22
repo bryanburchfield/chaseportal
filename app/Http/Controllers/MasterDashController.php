@@ -72,4 +72,6 @@ class MasterDashController extends Controller
     {
         return 'Recipients';
     }
+
+    
 }

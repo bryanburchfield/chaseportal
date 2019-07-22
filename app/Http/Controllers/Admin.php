@@ -73,4 +73,14 @@ class Admin extends Controller
 
         return $user;
     }
+
+    public function updateUser(Request $request)
+    {
+
+        $user = User::findOrFail($request->id);
+        $input = $request->all();
+        $user->update($input);
+
+        return 'true';
+    }
 }

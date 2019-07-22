@@ -151,6 +151,7 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/add_user', 'Admin@addUser');
             Route::post('admin/delete_user/', 'Admin@deleteUser');
             Route::post('admin/get_user/', 'Admin@getUser');
+            Route::post('admin/update_user/', 'Admin@updateUser');
         });
     });
 });
