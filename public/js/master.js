@@ -614,7 +614,7 @@ var Master = {
 			},
 
 			success:function(response){
-
+				console.log(response);
 				if(response.status != 'success'){
 					var errors=[];
 					for(var i=0;i<response.errors.length;i++){
@@ -698,20 +698,20 @@ var Master = {
 		e.preventDefault();
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var user_id = $(this).attr('href');
-
+		
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		    }
 		});
-
+		console.log(user_id);
 		$.ajax({
-			url: 'get_user_details',
-			type: 'POST',
+			url: 'get_user',
+			type: 'GET',
 			dataType: 'json',
 			data: {user_id: user_id},
 			success:function(response){
-
+				console.log(response);
 				var form = $('form.edit_user');
 				form.find('.group_id').val(response.user_details.group_id);
 				form.find('.name').val(response.user_details.name);

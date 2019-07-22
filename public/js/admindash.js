@@ -794,7 +794,7 @@ var Dashboard = {
             });
 
             $.ajax({
-                url: '/admindashboard/set_campaign',
+                url: '/admindashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
                 data: {datefilter:datefilter, inorout:inorout},
@@ -821,7 +821,7 @@ var Dashboard = {
         });
         
         $.ajax({
-            url: '/admindashboard/set_campaign',
+            url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {databases:databases},
@@ -850,7 +850,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/admindashboard/set_campaign',
+            url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
@@ -908,7 +908,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/admindashboard/set_campaign',
+            url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { inorout:inorout},
