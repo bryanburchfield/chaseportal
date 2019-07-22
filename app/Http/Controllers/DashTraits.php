@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\User;
@@ -25,21 +24,21 @@ trait DashTraits
 
         // Login that user and set session var so we know it's via API
         Auth::loginUsingId($user->id);
-        Session::put(['isApi' => 1]);
+        session(['isApi' => 1]);
 
         // And off we go!
         return redirect($request->route()->action['prefix']);
     }
 
-    private function getSession()
+    private function getSession(Request $request)
     {
         // This won't work inside __construct()
-        $this->databases = Session::get('databases', []);
-        $this->campaign = Session::get('campaign', 'Total');
-        $this->dateFilter = Session::get('dateFilter', 'today');
-        $this->inorout = Session::get('inorout', 'inbound');
-        $this->isApi = Session::get('isApi', 0);
-        $this->curdash = Session::get('curdash', 'admindash');
+        $this->databases = session('databases', []);
+        $this->campaign = session('campaign', 'Total');
+        $this->dateFilter = session('dateFilter', 'today');
+        $this->inorout = session('inorout', 'inbound');
+        $this->isApi = session('isApi', 0);
+        $this->curdash = session('curdash', 'admindash');
 
         // set sqlsrv db up here too
         $db = Auth::user()->db;
@@ -124,23 +123,10 @@ trait DashTraits
         return $rec;
     }
 
-    public function updateFilters(Request $request)
+    private function filterDetails(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
-        $this->campaign = $request->campaign;
-        $this->dateFilter = $request->datefilter;
-        $this->inorout = $request->inorout;
-
-        Session::put([
-            'campaign' => $this->campaign,
-            'dateFilter' => $this->dateFilter,
-            'inorout' => $this->inorout,
-        ]);
-    }
-
-    private function filterDetails()
-    {
         $tz = Auth::user()->tz;
 
         $campaign = ($this->campaign == 'Total' || $this->campaign == null) ? 'All Campaigns' : $this->campaign;
@@ -335,7 +321,7 @@ trait DashTraits
         return $result;
     }
 
-    public function setCampaign(Request $request)
+    public function updateFilters(Request $request)
     {
         $filters = [
             'databases',
@@ -346,9 +332,7 @@ trait DashTraits
 
         foreach ($filters as $filter) {
             if (isset($request->$filter)) {
-                Session::put([
-                    $filter => $request->$filter,
-                ]);
+                session([$filter => $request->$filter]);
             }
         }
 

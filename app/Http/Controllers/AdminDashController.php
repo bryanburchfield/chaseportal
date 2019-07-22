@@ -13,7 +13,7 @@ class AdminDashController extends Controller
 
     public function index(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $groupId = Auth::user()->group_id;
         $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
@@ -36,8 +36,10 @@ class AdminDashController extends Controller
         return view('admindash')->with($data);
     }
 
-    public function callVolume()
+    public function callVolume(Request $request)
     {
+        $this->getSession($request);
+
         $result = $this->getCallVolume();
         $prev_result = $this->getCallVolume(true);
 
@@ -153,8 +155,6 @@ class AdminDashController extends Controller
 
     private function getCallVolume($prev = false)
     {
-        $this->getSession();
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
         $timeZoneName = Auth::user()->tz;
@@ -341,12 +341,12 @@ class AdminDashController extends Controller
         return ($this->zeroRecs($duration, $zeroRec, $params));
     }
 
-    public function completedCalls()
+    public function completedCalls(Request $request)
     {
-        $completed_calls = $this->getCompletedCalls();
-        $prev_completed_calls = $this->getCompletedCalls(true);
+        $completed_calls = $this->getCompletedCalls($request);
+        $prev_completed_calls = $this->getCompletedCalls($request, true);
 
-        $details = $this->filterDetails();
+        $details = $this->filterDetails($request);
 
         $inbound = ['1', '11'];
 
@@ -392,9 +392,9 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getCompletedCalls($prev = false)
+    private function getCompletedCalls(Request $request, $prev = false)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -443,10 +443,10 @@ class AdminDashController extends Controller
         return $result;
     }
 
-    public function avgHoldTime()
+    public function avgHoldTime(Request $request)
     {
-        $average_hold_time = $this->getAvgHoldTime();
-        $prev_average_hold_time = $this->getAvgHoldTime(true);
+        $average_hold_time = $this->getAvgHoldTime($request);
+        $prev_average_hold_time = $this->getAvgHoldTime($request, true);
 
         if ($average_hold_time['Total Calls'] == 0) {
             $avg_hold_time = 0;
@@ -485,9 +485,9 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getAvgHoldTime($prev = false)
+    private function getAvgHoldTime(Request $request, $prev = false)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -537,10 +537,10 @@ class AdminDashController extends Controller
         return $result[0];
     }
 
-    public function abandonRate()
+    public function abandonRate(Request $request)
     {
-        $abandon_rate = $this->getAbandonRate();
-        $prev_abandon_rate = $this->getAbandonRate(true);
+        $abandon_rate = $this->getAbandonRate($request);
+        $prev_abandon_rate = $this->getAbandonRate($request, true);
 
         $abandon_pct = ($abandon_rate['Calls'] == 0) ? 0 : $abandon_rate['Abandoned'] / $abandon_rate['Calls'] * 100;
         $prev_abandon_pct = ($prev_abandon_rate['Calls'] == 0) ? 0 : $prev_abandon_rate['Abandoned'] / $prev_abandon_rate['Calls'] * 100;
@@ -569,9 +569,9 @@ class AdminDashController extends Controller
         echo json_encode($return);
     }
 
-    private function getAbandonRate($prev = false)
+    private function getAbandonRate(Request $request, $prev = false)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -627,7 +627,7 @@ class AdminDashController extends Controller
 
     public function agentCallCount(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -717,7 +717,7 @@ class AdminDashController extends Controller
 
     public function serviceLevel(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -780,7 +780,7 @@ class AdminDashController extends Controller
 
     public function repAvgHandleTime(Request $request)
     {
-        $this->getSession();
+        $this->getSession($request);
 
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
