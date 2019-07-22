@@ -63,6 +63,7 @@ var Dashboard = {
 
     datefilter : document.getElementById("datefilter").value,
     inorout : document.getElementById("inorout").value,
+    inorout_toggled:false,
     time: new Date().getTime(),
 
     init:function(){
@@ -70,6 +71,7 @@ var Dashboard = {
         this.get_avg_handle_time(this.datefilter, this.chartColors);
         this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2);
         this.service_level(this.datefilter, this.chartColors);
+        this.call_volume_type();
         Dashboard.eventHandlers();
         Master.check_reload();
     },
@@ -732,6 +734,7 @@ var Dashboard = {
         campaign = $(campaign).find('a').text();
         var inorout = $('#inorout').val();
         $('#inorout').val();
+        Dashboard.inorout_toggled=false; 
         Dashboard.datefilter = datefilter;
 
         if(datefilter !='custom'){
@@ -839,11 +842,27 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
-        Dashboard.inorout = $(this).data('type');
+       if(this.inorout != undefined){
+            inorout = Dashboard.inorout;
+        }else{
+            Dashboard.inorout = $(this).data('type');
+            $('#inorout').val(Dashboard.inorout);
+        }
+
+        $('.callvolume_inorout .btn').removeClass('btn-primary');
+        $('.callvolume_inorout .btn').each(function(){
+            if($(this).data('type') === Dashboard.inorout){
+                $(this).addClass('btn-primary');
+            }
+        });
+        
         datefilter = $('#datefilter').val();
-        $('#inorout').val(Dashboard.inorout);
-        $(this).parent().parent().find('.inandout').hide();
-        $(this).parent().parent().find('.'+Dashboard.inorout).show();
+        
+        Dashboard.inorout_toggled=true;  
+        
+        $('.callvolume_inorout').siblings('.inandout').hide();
+
+        $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;
 

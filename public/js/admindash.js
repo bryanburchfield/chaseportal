@@ -891,14 +891,28 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
-        Dashboard.inorout = $(this).data('type');
-        datefilter = $('#datefilter').val();
-        $('#inorout').val(Dashboard.inorout);
-        Dashboard.inorout_toggled=true;  
+        if(this.inorout != undefined){
+            inorout = Dashboard.inorout;
+        }else{
+            Dashboard.inorout = $(this).data('type');
+            $('#inorout').val(Dashboard.inorout);
+        }
 
-        $(this).parent().parent().find('.inandout').hide(0, function(){
-            $(this).parent().parent().find('.'+Dashboard.inorout).show();
+        $('.callvolume_inorout .btn').removeClass('btn-primary');
+        $('.callvolume_inorout .btn').each(function(){
+            if($(this).data('type') === Dashboard.inorout){
+                $(this).addClass('btn-primary');
+            }
         });
+        
+        datefilter = $('#datefilter').val();
+        
+        Dashboard.inorout_toggled=true;  
+        
+        $('.callvolume_inorout').siblings('.inandout').hide();
+
+        $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
+
         var inorout = Dashboard.inorout;
 
         $.ajaxSetup({

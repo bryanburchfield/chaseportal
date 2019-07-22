@@ -63,6 +63,7 @@ var Dashboard = {
         this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
         this.calls_by_campaign(this.datefilter, this.chartColors);
         this.total_calls(this.datefilter);
+        this.call_volume_type();
         Dashboard.eventHandlers();
         Master.check_reload();
         $('#avg_wait_time').closest('.flipping_card').flip(true);
@@ -875,13 +876,27 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
-        Dashboard.inorout = $(this).data('type');
-        datefilter = $('#datefilter').val();
-        $('#inorout').val(Dashboard.inorout);
-        Dashboard.inorout_toggled=true;        
-        $(this).parent().parent().find('.inandout').hide(0, function(){
-            $(this).parent().parent().find('.'+Dashboard.inorout).show();
+       if(this.inorout != undefined){
+            inorout = Dashboard.inorout;
+        }else{
+            Dashboard.inorout = $(this).data('type');
+            $('#inorout').val(Dashboard.inorout);
+        }
+
+        $('.callvolume_inorout .btn').removeClass('btn-primary');
+        $('.callvolume_inorout .btn').each(function(){
+            if($(this).data('type') === Dashboard.inorout){
+                $(this).addClass('btn-primary');
+            }
         });
+        
+        datefilter = $('#datefilter').val();
+        
+        Dashboard.inorout_toggled=true;  
+        
+        $('.callvolume_inorout').siblings('.inandout').hide();
+
+        $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;
 

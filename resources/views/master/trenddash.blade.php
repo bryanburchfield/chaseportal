@@ -21,11 +21,11 @@
 	                <button data-type="outbound" type="button" class="btn btn-default">Outbound</button>
 	            </div>
 
-	            <div class="inbound inandout" style="height: 300px">
+	            <div class="inbound inandout" >
 	                <canvas id="call_volume_inbound"></canvas>
 	            </div>
 
-	            <div class="outbound inandout " style="height: 300px">
+	            <div class="outbound inandout " >
 	                <canvas id="call_volume_outbound"></canvas>
 	            </div>
 	        </div>
@@ -35,9 +35,9 @@
 		    <div class="card card-6" >
 		        <h1 class="title mb0">Call Details</h1>
 		        <h2 class="avg_tt mb_hide"></h2>
-		        <div class="btn-group btn-group-sm callvolume_inorout" role="group" aria-label="...">
+		        <div class="btn-group btn-group-sm " role="group" aria-label="...">
 		        </div>
-		        <div class="inbound inandout" style="height: 300px">
+		        <div class="inbound inandout" >
 		            <canvas id="call_details"></canvas>
 		        </div>
 		    </div>
@@ -53,7 +53,7 @@
 	            <h2 class="avg_ht mb_hide"></h2>
 	            <p class="descrip mt10 top14 mb_hide">Talk Time + Hold Time + After Call Work / Total Calls</p><br>
 
-	            <div class="btn-group btn-group-sm callvolume_inorout" role="group" aria-label="..."></div>
+	            <div class="btn-group btn-group-sm " role="group" aria-label="..."></div>
 
 	            <div class="inbound inandout" style="height: 300px">
 	                <canvas id="avg_handle_time"></canvas>
@@ -84,7 +84,7 @@
 		        </div>
 		        <p class="descrip top14 mt10 mb_hide">Handled/Total. Handled is answered with < <span class="answer_secs">20</span> sec holdtime</p><br>
 
-		        <div class="btn-group btn-group-sm callvolume_inorout" role="group" aria-label="..."></div>
+		        <div class="btn-group btn-group-sm " role="group" aria-label="..."></div>
 
 		        <div class="inbound inandout" style="height: 300px">
 		            <canvas id="service_level"></canvas>
