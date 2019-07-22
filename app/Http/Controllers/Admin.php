@@ -77,17 +77,19 @@ class Admin extends Controller
     public function updateUser(Request $request)
     {
         /// check if user name or email exists
-        $user_check = User::where('name', $request->name)
-            ->orWhere('email', $request->email)->first();
+        $user_check = User::where('id', '!=', $request->id)
+            ->where(function ($query) use ($request) {
+                $query->where('name', $request->name)
+                    ->orWhere('email', $request->email);
+            })
+            ->first();
 
-        if($user_check->id == $request->id){
-            $user = User::findOrFail($request->id);
-            $input = $request->all();
-            $user->update($input);
-            return 'true';
-        }else{
+        if ($user_check) {
             return 'User already exists';
+        } else {
+            $user = User::findOrFail($request->id);
+            $user->update($request->all());
+            return 'true';
         }
-        
     }
 }
