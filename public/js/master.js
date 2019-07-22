@@ -674,21 +674,17 @@ var Master = {
 
 			success:function(response){
 				console.log(response);
-				return false;
-				if(!response){
-					var errors=[];
-					for(var i=0;i<response.errors.length;i++){
-						errors.push(response.errors[i]);
-					}
 
-					$('form.edit_user').append('<div class="alert alert-danger">'+errors+'</div>');
+				if(response.status != 'success'){
+
+					$('form.edit_user').append('<div class="alert alert-danger">'+response.status+'</div>');
 					$('.alert-danger').show();
 				}else{
 					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
 					$('.alert-success').show();
 					$('form.edit_user').trigger("reset");
 					setTimeout(function(){
-						window.location.href="admin.php";
+						window.location.href="/dashboards/admin";
 					}, 3500);
 				}
 			}
