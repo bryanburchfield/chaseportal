@@ -42,7 +42,7 @@
         @include('shared.sidenav')
         <div id="content">
 
-            @include('shared.reportnav')
+            @include('shared.navbar')
 
             <div class="container-fluid bg dashboard p20">
 
@@ -77,7 +77,7 @@
     <script src="/js/datetimepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
     <script src="/js/multiselect.js"></script> 
-    <script src="/js/app.js"></script> 
+    <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
 
     @isset($jsfile)

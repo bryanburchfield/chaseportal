@@ -108,14 +108,6 @@ class KpiController extends Controller
             $kr->save();
         }
 
-        // if($request->redirect_url == 'recipients'){
-        //    return $this->recipients();
-        // }else{
-        //     // ajax return
-        //     $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
-        //     echo json_encode($return);
-        // }
-
         $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
         echo json_encode($return);
     }

@@ -117,7 +117,7 @@ Route::prefix('kpi')->group(function () {
         Route::post('toggle_kpi', 'KpiController@toggleKpi');
         Route::post('add_recipient', 'KpiController@addRecipient');
         Route::post('remove_recipient_from_kpi', 'KpiController@removeRecipientFromKpi');
-        Route::post('remove_recipient', 'KpiController@removeRecipient');
+        Route::post('remove_recipient_from_all', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');
     });
 });
@@ -140,6 +140,7 @@ Route::prefix('dashboards')->group(function () {
         // Reports
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
+        Route::post('reportsettings', 'ReportController@reportSettings');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');

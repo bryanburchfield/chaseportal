@@ -235,7 +235,7 @@ var KPI = {
         //// if removing from recips page to remove from all kpis
         if(fromall == 1){
             $.ajax({
-                url:'/kpi/remove_recipient',
+                url:'/kpi/remove_recipient_from_all',
                 type:'POST',
                 dataType:'json',
                 data:{

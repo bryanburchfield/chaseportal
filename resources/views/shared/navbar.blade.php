@@ -1,20 +1,37 @@
-{{-- <header>
-    <nav class="navbar navbar-default navbar-static-top dashboard">
-        <div class="container navcontainer">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><img class="img-responsive logo" src="/img/chase_logo_blue.png" alt=""></a>
-                <ul class="nav navbar-nav navbar-right">
-                    @if($curdash == 'kpidash')
-                    <a href="{{ url('kpi/recipients') }}" class="btn btn-info btn-sm new_user_btn">Recipients</a>
-                    @endif
-                    <a href="{{ route('logout') }}" class="logout btn btn-primary btn-sm" onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">Log Out</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+       <div class="col-xs-5 col-sm-6 brand">
+           <button type="button" id="sidebarCollapse" class="btn">
+               <i class="fas fa-align-left"></i>
+           </button>
+           
+           <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo">
+       </div>
+
+        <div class="filters col-xs-7 col-sm-6">
+            <div class="input-group">
+
+                <div class="input-group-btn">
+                    
+                    {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                         @csrf
-                    </form>
-                </ul>
+                        <div class="btn-group">
+                        {!! Form::submit('Log Out',['class'=>'btn logout_btn']) !!}
+                        </div>
+                    {!! Form::close() !!}
+
+
+
+                    @if($page['type'] =='dash')
+                        @include('master.dashnav')
+                    @elseif($page['type'] == 'kpi_page')
+                        @include('master.kpinav')
+                    @elseif($page['type'] == 'report')
+                        @include('master.reportnav')
+                    @endif
+                </div>
             </div>
         </div>
-    </nav>
-</header>
- --}}
+
+    </div>
+</nav>

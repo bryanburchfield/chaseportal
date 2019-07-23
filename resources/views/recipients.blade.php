@@ -10,7 +10,7 @@
     @include('shared.sidenav')
 
     <div id="content">
-        @include('shared.reportnav')
+        @include('shared.navbar')
 
         <div class="container-fluid bg dashboard p20">
             <div class="container mt20">
