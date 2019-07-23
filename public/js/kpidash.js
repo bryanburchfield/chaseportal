@@ -198,8 +198,6 @@ var KPI = {
                     append_user=$('.expanded_emails');                  
                 }
 
-                console.log($(from_form));
-
                 $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
                 $(from_form).find('input.form-control').val("");
                 $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
@@ -215,7 +213,7 @@ var KPI = {
 
         var id = $(this).data('recip');
         var name = $(this).parent().find('p.name').text();
-        console.log(id +' '+ name);
+
         $('#deleteRecipModal .user_id').val(id);
         $('#deleteRecipModal .name').val(name);
         $('#deleteRecipModal .username').html(name);
@@ -245,7 +243,6 @@ var KPI = {
                     fromall:fromall
                 },
                 success:function(response){
-                    console.log(response);
                     $('div#'+id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
@@ -260,7 +257,6 @@ var KPI = {
                     fromall:fromall
                 },
                 success:function(response){
-                    console.log(response);
                     $('div#'+id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
@@ -295,7 +291,6 @@ function searchRecips(el, value, kpi_id){
                 kpi_id:kpi_id
             },
             success:function(response){
-                console.log(response);
                 if(response.search_recip.length){
                     $(el).next('.search_results').css({'display' : 'block'});
                 }else{

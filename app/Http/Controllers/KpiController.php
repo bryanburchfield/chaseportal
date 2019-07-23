@@ -64,7 +64,7 @@ class KpiController extends Controller
     public function removeRecipientFromKpi(Request $request)
     {   
 
-        $kr = KpiRecipient::find($request->id)->delete();
+        $recipient = KpiRecipient::find($request->id)->delete();
 
         $return['remove_recipient'] = 1;
         echo json_encode($return);
@@ -73,9 +73,9 @@ class KpiController extends Controller
     public function removeRecipientFromAll($id)
     {
 
-        $kpi_recip = KpiRecipient::where('recipient_id', $id)->get();
-        foreach ($kpi_recip as $kr) {
-            $kr->delete();
+        $recipients = KpiRecipient::where('recipient_id', $id)->get();
+        foreach ($recipients as $recip) {
+            $recip->delete();
         }
     }
 
