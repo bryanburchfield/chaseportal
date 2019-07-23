@@ -116,7 +116,8 @@ Route::prefix('kpi')->group(function () {
         Route::post('adjust_interval', 'KpiController@adjustInterval');
         Route::post('toggle_kpi', 'KpiController@toggleKpi');
         Route::post('add_recipient', 'KpiController@addRecipient');
-        Route::post('remove_recipient', 'KpiController@removeRecipientFromKpi');
+        Route::post('remove_recipient_from_kpi', 'KpiController@removeRecipientFromKpi');
+        Route::post('remove_recipient', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');
     });
 });

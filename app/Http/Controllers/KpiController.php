@@ -47,19 +47,34 @@ class KpiController extends Controller
         return $this->recipients();
     }
 
-    public function removeRecipient($id)
+    public function removeRecipient(Request $request)
     {
-        $this->removeRecipientFromAll($id);
 
-        $recipient = Recipient::find($id);
+        $this->removeRecipientFromAll($request->id);
+
+        $recipient = Recipient::find($request->id);
         if (!empty($recipient)) {
             $recipient->delete();
         }
+
+        $return['remove_recip'] = 1;
+        echo json_encode($return);
+    }
+
+    public function removeRecipientFromKpi(Request $request)
+    {   
+
+        $kr = KpiRecipient::find($request->id)->delete();
+
+        $return['remove_recipient'] = 1;
+        echo json_encode($return);
     }
 
     public function removeRecipientFromAll($id)
     {
-        foreach (KpiRecipient::where('recipient_id', $id) as $kr) {
+
+        $kpi_recip = KpiRecipient::where('recipient_id', $id)->get();
+        foreach ($kpi_recip as $kr) {
             $kr->delete();
         }
     }
@@ -93,31 +108,15 @@ class KpiController extends Controller
             $kr->save();
         }
 
-        if($request->redirect_url == 'recipients'){
-           return $this->recipients();
-        }else{
-            // ajax return
-            $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
-            echo json_encode($return);
-        }
-    }
+        // if($request->redirect_url == 'recipients'){
+        //    return $this->recipients();
+        // }else{
+        //     // ajax return
+        //     $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
+        //     echo json_encode($return);
+        // }
 
-    public function removeRecipientFromKpi(Request $request)
-    {   
-
-        $kr = KpiRecipient::find($request->id);
-
-        if (!empty($request->fromall)) {
-
-            foreach (KpiRecipient::where('recipient_id', $kr->recipient_id) as $rec) {
-                $rec->delete();
-            }
-        } else {
-            $kr->delete();
-        }
-
-        // ajax return
-        $return['remove_recipient'] = 1;
+        $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
         echo json_encode($return);
     }
 

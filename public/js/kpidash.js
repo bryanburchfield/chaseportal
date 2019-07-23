@@ -4,7 +4,7 @@ var KPI = {
         $('.opt a.kpi_trigger').on('click', this.toggle_kpi_info);
         $('.expand_dets,.add_email').on('click', this.toggle_email_opts);
         $('.switch input').on('click', this.toggle_kpi);
-        $('.remove_recip_glyph').on('click', this.pass_user_removemodal);
+        $('.expanded_emails').on('click', 'a.remove_recip_glyph', this.pass_user_removemodal);
         $('#deleteRecipModal .remove_recip').on('click', this.remove_recipient);
         $('.add_recipient').on('submit', this.add_recipient);
         $('.adjust_interval').on('submit', this.adjust_interval);
@@ -186,7 +186,7 @@ var KPI = {
             },
 
             success:function(response){
-
+               
                 var from_form,
                     append_user
                 ;
@@ -198,7 +198,9 @@ var KPI = {
                     append_user=$('.expanded_emails');                  
                 }
 
-                $(from_form).append('<div class="mt12 alert alert-success">User successfully added.</div>');
+                console.log($(from_form));
+
+                $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
                 $(from_form).find('input.form-control').val("");
                 $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
 
@@ -224,26 +226,46 @@ var KPI = {
         e.preventDefault();
         var id = $('.user_id').val();
         var fromall = $('.fromall').val();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
 
-        $.ajax({
-            url:'/kpi/remove_recipient',
-            type:'POST',
-            dataType:'json',
-            data:{
-                id:id,
-                fromall:fromall
-            },
-            success:function(response){
-                console.log(response);
-                $('div#'+id).remove();
-                $('#deleteRecipModal').modal('toggle');
-            }
-        });
+
+        //// if removing from recips page to remove from all kpis
+        if(fromall == 1){
+            $.ajax({
+                url:'/kpi/remove_recipient',
+                type:'POST',
+                dataType:'json',
+                data:{
+                    id:id,
+                    fromall:fromall
+                },
+                success:function(response){
+                    console.log(response);
+                    $('div#'+id).remove();
+                    $('#deleteRecipModal').modal('toggle');
+                }
+            });
+        }else{  ///// if removing from an kpi to remove from only that kpi
+            $.ajax({
+                url:'/kpi/remove_recipient_from_kpi',
+                type:'POST',
+                dataType:'json',
+                data:{
+                    id:id,
+                    fromall:fromall
+                },
+                success:function(response){
+                    console.log(response);
+                    $('div#'+id).remove();
+                    $('#deleteRecipModal').modal('toggle');
+                }
+            });
+        }
     },
 }
 

@@ -98,6 +98,7 @@
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
                 <input type="hidden" class="name" name="name" value="">
+                <input type="hidden" class="fromall" name="fromall" value="0">
                <h3>Are you sure you want to delete <span class="username"></span>?</h3>
             </div>
         <div class="modal-footer">
