@@ -103,10 +103,12 @@ class KpiController extends Controller
     }
 
     public function removeRecipientFromKpi(Request $request)
-    {
+    {   
+
         $kr = KpiRecipient::find($request->id);
 
         if (!empty($request->fromall)) {
+
             foreach (KpiRecipient::where('recipient_id', $kr->recipient_id) as $rec) {
                 $rec->delete();
             }
@@ -199,8 +201,10 @@ class KpiController extends Controller
         $groupId = Auth::user()->group_id;
         $page['menuitem'] = 'kpidash';
         $page['type'] = 'other';
+        $jsfile[] = "kpidash.js";
 
         $data = [
+            'jsfile' => $jsfile,
             'page'=>$page,
             'curdash' => 'kpidash',
             'recipients' => Recipient::where('group_id', $groupId)

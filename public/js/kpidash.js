@@ -213,7 +213,7 @@ var KPI = {
 
         var id = $(this).data('recip');
         var name = $(this).parent().find('p.name').text();
-
+        console.log(id +' '+ name);
         $('#deleteRecipModal .user_id').val(id);
         $('#deleteRecipModal .name').val(name);
         $('#deleteRecipModal .username').html(name);
@@ -239,6 +239,7 @@ var KPI = {
                 fromall:fromall
             },
             success:function(response){
+                console.log(response);
                 $('div#'+id).remove();
                 $('#deleteRecipModal').modal('toggle');
             }

@@ -48,14 +48,14 @@ Route::prefix('adminoutbounddashboard')->group(function () {
         Route::get('/', 'AdminOutboundDashController@index');
 
         // ajax targets
-        // Route::post('update_filters', 'AdminDashController@updateFilters');
-        // Route::post('call_volume', 'AdminDashController@callVolume');
-        // Route::post('completed_calls', 'AdminDashController@completedCalls');
-        // Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
-        // Route::post('abandon_rate', 'AdminDashController@abandonRate');
-        // Route::post('agent_call_count', 'AdminDashController@agentCallCount');
-        // Route::post('service_level', 'AdminDashController@serviceLevel');
-        // Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
+        Route::post('update_filters', 'AdminDashController@updateFilters');
+        Route::post('call_volume', 'AdminDashController@callVolume');
+        Route::post('completed_calls', 'AdminDashController@completedCalls');
+        Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
+        Route::post('abandon_rate', 'AdminDashController@abandonRate');
+        Route::post('agent_call_count', 'AdminDashController@agentCallCount');
+        Route::post('service_level', 'AdminDashController@serviceLevel');
+        Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
     });
 });
 

@@ -49,7 +49,7 @@
                                 <p class="name">{{ $recipient->name }}</p>
                                 <p class="email">{{ $recipient->email }}</p>
                                 <p class="phone">{{ $recipient->phone }}</p>
-                                <a class="remove_recip_fromall" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="glyphicon glyphicon-remove-sign"></i></a>
+                                <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="glyphicon glyphicon-remove-sign"></i></a>
                             </div>
                         @endforeach
                     </div>
@@ -70,18 +70,16 @@
                 <h4 class="modal-title" id="myModalLabel">Confirm Recipient Removal</h4>
             </div>
             <div class="modal-body">
-                
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
+                <input type="hidden" class="fromall" name="fromall" value="1">
                <h3>Are you sure you want to delete <span class="username"></span>?</h3>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                {!! Form::open(['method'=> 'POST', 'url'=> 'kpi/optout/']) !!}
-                    {!! Form::hidden('recipient_id', null, ['id'=>'userid']) !!}
-                    {!! Form::hidden('username', null, ['id'=>'username']) !!}
-                    {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}
-                {!! Form::close() !!}
-            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
         </div>
+    </div>
     </div>
 </div>
 
