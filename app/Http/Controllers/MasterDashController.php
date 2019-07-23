@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Campaign;
+use App\AutomatedReport;
 
 class MasterDashController extends Controller
 {
@@ -73,8 +74,54 @@ class MasterDashController extends Controller
         return 'Recipients';
     }
 
+    public function getAutomatedReports()
+    {
+
+        $automated_reports = AutomatedReport::all();
+
+        // $sql = "SELECT report FROM automated_reports WHERE user_id = :user_id";
+        // $bind = ['user_id' => $this->user->getUserId()];
+        // $selected = array_column($this->mySqlDb->fetchAll($sql, $bind), 'report');
+
+        // $list = [];
+        // foreach($this->automatedReportList() as $k => $v) {
+        //     $list[] = [
+        //         'report' => $k,
+        //         'name' => $v,
+        //         'selected' => (in_array($k, $selected)) ? 1 : 0
+        //     ];
+        // }
+
+        return $list;
+    }
+
     public function reportSettings()
     {
-        return view('reportsettings');
+        $list = [
+            'agent_analysis' => 'Agent Analysis',
+            'agent_pause_time' => 'Agent Pause Time',
+            'agent_summary_campaign' => 'Agent Summary by Campaign',
+            'agent_summary' => 'Agent Summary',
+            'agent_summary_subcampaign' => 'Agent Summary by Subcampaign',
+            'agent_timesheet' => 'Agent Timesheet',
+            'campaign_call_log' => 'Campaign Call Log',
+            'campaign_summary' => 'Campaign Summary',
+            'inbound_summary' => 'Inbound Summary',
+            'production_report' => 'Production Report',
+            'production_report_subcampaign' => 'Production by Subcampaign Report',
+            'shift_report' => 'Shift Report',
+            'subcampaign_summary' => 'Subcampaign Summary',
+        ];
+
+
+        $page['menuitem'] = 'reports';
+        $page['type'] = 'other';
+
+        $data = [
+            'page'=>$page,
+            'reports'=>$list
+        ];
+
+        return view('reportsettings')->with($data);
     }
 }

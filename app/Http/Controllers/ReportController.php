@@ -93,8 +93,4 @@ class ReportController extends Controller
         return ['results' => $results];
     }
 
-    public function reportSettings()
-    {
-        return view('reportsettings');
-    }
 }
