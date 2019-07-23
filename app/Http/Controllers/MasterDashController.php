@@ -73,5 +73,8 @@ class MasterDashController extends Controller
         return 'Recipients';
     }
 
-    
+    public function reportSettings()
+    {
+        return view('reportsettings');
+    }
 }

@@ -63,12 +63,12 @@ class Admin extends Controller
             })
             ->first();
 
-        if(!$user_check){
+        if (!$user_check) {
             $input = $request->all();
             $input['password'] = Hash::make('password');
             $newuser = User::create($input);
             $return['success'] = $newuser;
-        }else{
+        } else {
             $return['errors'] = 'Name or email already in use';
         }
 

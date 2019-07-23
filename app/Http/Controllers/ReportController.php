@@ -95,7 +95,6 @@ class ReportController extends Controller
 
     public function reportSettings()
     {
-        
         return view('reportsettings');
     }
 }
