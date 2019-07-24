@@ -628,7 +628,7 @@ class AdminOutboundDashController extends Controller
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $bind = [
-            'groupid' => $this->user->getGroupID(),
+            'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
             'campaign' => $campaign,
@@ -694,5 +694,59 @@ class AdminOutboundDashController extends Controller
         list($bycamp, $byrep) = $this->runMultiSql($sql, $bind);
 
         return [$bycamp, $byrep];
+    }
+
+    public function avgWaitTime(Request $request)
+    {
+        $this->getSession($request);
+
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+            'groupid' => Auth::user()->group_id,
+            'campaign' => $campaign,
+        ];
+
+        $sql = 'SELECT Rep, Campaign, SUM(Duration)/SUM(Cnt) as AvgWaitTime FROM (';
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT Rep, Campaign, SUM(Duration) as Duration, COUNT(AA.id) as Cnt
+                FROM [$db].[dbo].[AgentActivity] AA
+                WHERE [Action] = 'Waiting'
+                AND AA.Duration > 0
+                AND AA.Date >= :fromdate
+                AND AA.Date < :todate
+                AND AA.GroupId = :groupid";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY AA.Rep, AA.Campaign";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp GROUP BY Rep, Campaign
+            ORDER BY Rep, Campaign";
+
+        $result = $this->runSql($sql, $bind);
+
+        foreach ($result as &$rec) {
+            $rec['AvgWaitTime'] = round($rec['AvgWaitTime']);
+        }
+
+        $return['avg_wait_time'] = $result;
+        echo json_encode($return);
     }
 }
