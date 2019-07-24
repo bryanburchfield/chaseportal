@@ -48,15 +48,15 @@ Route::prefix('adminoutbounddashboard')->group(function () {
         Route::get('/', 'AdminOutboundDashController@index');
 
         // ajax targets
-        Route::post('update_filters', 'AdminDashController@updateFilters');
-        Route::post('call_volume', 'AdminDashController@callVolume');
-        Route::post('completed_calls', 'AdminDashController@completedCalls');
-        Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
-        Route::post('avg_wait_time', 'AdminDashController@avgWaitTime');
-        Route::post('abandon_rate', 'AdminDashController@abandonRate');
-        Route::post('agent_call_count', 'AdminDashController@agentCallCount');
-        Route::post('service_level', 'AdminDashController@serviceLevel');
-        Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
+        Route::post('update_filters', 'AdminOutboundDashController@updateFilters');
+        Route::post('call_volume', 'AdminOutboundDashController@callVolume');
+        Route::post('completed_calls', 'AdminOutboundDashController@completedCalls');
+        Route::post('avg_hold_time', 'AdminOutboundDashController@avgHoldTime');
+        Route::post('avg_wait_time', 'AdminOutboundDashController@avgWaitTime');
+        Route::post('abandon_rate', 'AdminOutboundDashController@abandonRate');
+        Route::post('agent_call_count', 'AdminOutboundDashController@agentCallCount');
+        Route::post('service_level', 'AdminOutboundDashController@serviceLevel');
+        Route::post('rep_avg_handletime', 'AdminOutboundDashController@repAvgHandleTime');
     });
 });
 
