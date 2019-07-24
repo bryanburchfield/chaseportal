@@ -749,4 +749,107 @@ class AdminOutboundDashController extends Controller
         $return['avg_wait_time'] = $result;
         echo json_encode($return);
     }
+
+    public function totalCalls(Request $request)
+    {
+        $this->getSession($request);
+
+        $total_calls = $this->getTotalCalls();
+        $prev_total_calls = $this->getTotalCalls(true);
+
+        $inbound = ['1', '11'];
+
+        $total_total_calls = 0;
+        $prev_total_total_calls = 0;
+        $outbound_total_calls = 0;
+        $inbound_total_calls = 0;
+
+        foreach ($total_calls as $call) {
+            $total_total_calls += $call['Agent Calls'];
+            if (in_array($call['CallType'], $inbound)) {
+                $inbound_total_calls += $call['Agent Calls'];
+            } else {
+                $outbound_total_calls += $call['Agent Calls'];
+            }
+        }
+
+        foreach ($prev_total_calls as $call) {
+            $prev_total_total_calls += $call['Agent Calls'];
+        }
+
+        if ($prev_total_total_calls == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($total_total_calls - $prev_total_total_calls) / $prev_total_total_calls * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
+        }
+
+        $details = $this->filterDetails($this->dateFilter, $this->campaign);
+
+        $return['total_calls'] = [
+            'total' => $total_total_calls,
+            'outbound' => $outbound_total_calls,
+            'inbound' => $inbound_total_calls,
+            'details' => $details,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
+        echo json_encode($return);
+    }
+
+    public function getTotalCalls($prev = false)
+    {
+
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+            'groupid' => Auth::user()->group_id,
+            'campaign' => $campaign,
+        ];
+
+        $sql = 'SELECT CallType, SUM([Agent Calls]) as [Agent Calls] FROM (';
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT DR.CallType AS 'CallType',
+                COUNT(DR.CallStatus) AS 'Agent Calls'
+                FROM [$db].[dbo].[DialingResults] DR
+                WHERE DR.CallType NOT IN (1,7,8,11)
+                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','TRANSFERRED','PARKED','Inbound')
+                AND DR.Date >= :fromdate
+                AND DR.Date < :todate
+                AND DR.GroupId = :groupid";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY DR.CallType";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp GROUP BY CallType";
+
+        return $this->runSql($sql, $bind);
+    }
 }
