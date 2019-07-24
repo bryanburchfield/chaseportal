@@ -130,25 +130,27 @@ class AdminOutboundDashController extends Controller
 
         $total = $total_inbound_duration + $total_outbound_duration;
 
-        $new_result['inbound_time_labels'] = $inbound_time_labels;
-        $new_result['outbound_time_labels'] = $outbound_time_labels;
-        $new_result['total_inbound_calls'] = $total_inbound_calls;
-        $new_result['inbound_voicemails'] = $inbound_voicemails;
-        $new_result['inbound_abandoned'] = $inbound_abandoned;
-        $new_result['inbound_handled'] = $inbound_handled;
-        $new_result['inbound_duration'] = $inbound_duration;
-        $new_result['outbound_handled'] = $outbound_handled;
-        $new_result['total_outbound_calls'] = $total_outbound_calls;
-        $new_result['outbound_dropped'] = $outbound_dropped;
-        $new_result['outbound_handled'] = $outbound_handled;
-        $new_result['outbound_duration'] = $outbound_duration;
-        $new_result['total_inbound_duration'] = $total_inbound_duration;
-        $new_result['total_outbound_duration'] = $total_outbound_duration;
-        $new_result['duration_time'] = $duration_time;
-        $new_result['total'] = $total;
-        $new_result['pct_change'] = $pctdiff;
-        $new_result['pct_sign'] = $pctsign;
-        $new_result['ntc'] = $ntc;
+        $new_result = [
+            'inbound_time_labels' => $inbound_time_labels,
+            'outbound_time_labels' => $outbound_time_labels,
+            'total_inbound_calls' => $total_inbound_calls,
+            'inbound_voicemails' => $inbound_voicemails,
+            'inbound_abandoned' => $inbound_abandoned,
+            'inbound_handled' => $inbound_handled,
+            'inbound_duration' => $inbound_duration,
+            'outbound_handled' => $outbound_handled,
+            'total_outbound_calls' => $total_outbound_calls,
+            'outbound_dropped' => $outbound_dropped,
+            'outbound_handled' => $outbound_handled,
+            'outbound_duration' => $outbound_duration,
+            'total_inbound_duration' => $total_inbound_duration,
+            'total_outbound_duration' => $total_outbound_duration,
+            'duration_time' => $duration_time,
+            'total' => $total,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
 
         $return['call_volume'] = $new_result;
         echo json_encode($return);
@@ -447,7 +449,6 @@ class AdminOutboundDashController extends Controller
 
     public function callsByCampaign(Request $request)
     {
-
         $this->getSession($request);
 
         $campaign = $this->campaign;
@@ -460,9 +461,12 @@ class AdminOutboundDashController extends Controller
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
+            'groupid1' => Auth::user()->group_id,
+            'groupid2' => Auth::user()->group_id,
+            'fromdate1' => $startDate,
+            'fromdate2' => $startDate,
+            'todate1' => $endDate,
+            'todate2' => $endDate,
         ];
 
         $sql = "SELECT Campaign,
@@ -479,10 +483,10 @@ class AdminOutboundDashController extends Controller
 				AND (GroupId = DR.GroupId OR IsSystem=1)
 				AND (Campaign = DR.Campaign OR Campaign = '') 
 				ORDER BY [Description] Desc) DI
-			WHERE DR.GroupId = :groupid
+			WHERE DR.GroupId = :groupid1
 			AND DR.Rep != ''
-			AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+			AND DR.Date >= :fromdate1
+            AND DR.Date < :todate1";
 
             if (!empty($campaign) && $campaign != 'Total') {
                 $sql .= " AND DR.Campaign = :campaign$i";
@@ -495,11 +499,11 @@ class AdminOutboundDashController extends Controller
             SELECT DR.Campaign,
 			'Cnt' = COUNT(DR.CallStatus)
 			FROM [$db].[dbo].[DialingResults] DR
-			WHERE DR.GroupId = :groupid
+			WHERE DR.GroupId = :groupid2
 			AND DR.Rep = ''
 			AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
-			AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+			AND DR.Date >= :fromdate2
+            AND DR.Date < :todate2";
 
             if (!empty($campaign) && $campaign != 'Total') {
                 $sql .= " AND DR.Campaign = :campaign$i";
@@ -516,7 +520,10 @@ class AdminOutboundDashController extends Controller
 		GROUP BY Campaign
 		ORDER BY SUM(Cnt) DESC";
 
+        Log::debug($sql);
+        Log::debug($bind);
         $result = $this->runSql($sql, $bind);
+        Log::debug($result);
 
         $camps = array_column($result, 'Campaign');
         $counts = array_column($result, 'CallCount');
