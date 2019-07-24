@@ -121,7 +121,7 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                datefilter:datefilter
+                dateFilter :datefilter
             },
             success:function(response){
 
@@ -265,7 +265,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter :datefilter
             },
             success:function(response){
 
@@ -525,7 +525,7 @@ var Dashboard = {
             url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter :datefilter},
             success:function(response){
 
                 if( response.agent_calltime.avg_ct != undefined){
@@ -627,7 +627,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter,
+                dateFilter :datefilter,
                 answer_secs:answer_secs
             },
             success:function(response){
@@ -718,7 +718,7 @@ var Dashboard = {
             url: '/trenddashboard/update_datefilter',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter : datefilter},
             success:function(response){
             }
         });
@@ -749,7 +749,7 @@ var Dashboard = {
                 url: '/admindashboard/set_campaign',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -804,7 +804,7 @@ var Dashboard = {
             url: '/trenddashboard/set_campaign',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
