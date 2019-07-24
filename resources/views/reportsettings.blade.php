@@ -11,7 +11,7 @@
 
     <div id="content">
         @include('shared.navbar')
-
+    {{-- {{$automated_reports}} --}}
         <div class="container-fluid bg dashboard p20">
             <div class="container-full mt20">
                 <div class="row">            

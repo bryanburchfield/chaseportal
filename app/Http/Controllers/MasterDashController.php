@@ -74,28 +74,7 @@ class MasterDashController extends Controller
         return 'Recipients';
     }
 
-    public function getAutomatedReports()
-    {
-
-        $automated_reports = AutomatedReport::all();
-
-        // $sql = "SELECT report FROM automated_reports WHERE user_id = :user_id";
-        // $bind = ['user_id' => $this->user->getUserId()];
-        // $selected = array_column($this->mySqlDb->fetchAll($sql, $bind), 'report');
-
-        // $list = [];
-        // foreach($this->automatedReportList() as $k => $v) {
-        //     $list[] = [
-        //         'report' => $k,
-        //         'name' => $v,
-        //         'selected' => (in_array($k, $selected)) ? 1 : 0
-        //     ];
-        // }
-
-        return $list;
-    }
-
-    public function reportSettings()
+    public function automatedReportList()
     {
         $list = [
             'agent_analysis' => 'Agent Analysis',
@@ -113,13 +92,38 @@ class MasterDashController extends Controller
             'subcampaign_summary' => 'Subcampaign Summary',
         ];
 
+        return $list;
+    }
+
+    public function getAutomatedReports()
+    {
+
+
+        $user_id= Auth::user()->id;
+        $selected = AutomatedReport::pluck('report')->where('user_id', $user_id)->get()->toArray();
+        $selected = array_column($selected, 'report');
+
+        $list = [];
+        foreach($this->automatedReportList() as $k => $v) {
+            $list[] = [
+                'report' => $k,
+                'name' => $v,
+                'selected' => (in_array($k, $selected)) ? 1 : 0
+            ];
+        }
+
+        return $list;
+    }
+
+    public function reportSettings()
+    {
 
         $page['menuitem'] = 'reports';
         $page['type'] = 'other';
 
         $data = [
             'page'=>$page,
-            'reports'=>$list
+            'reports'=>$this->getAutomatedReports()
         ];
 
         return view('reportsettings')->with($data);
