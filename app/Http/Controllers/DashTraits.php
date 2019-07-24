@@ -319,6 +319,19 @@ trait DashTraits
         return $result;
     }
 
+    public function byHour($dateFilter)
+    {
+        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+
+        if (strlen($dateFilter) > 10) {
+            if (substr($dateFilter, 0, 10) == substr($dateFilter, 11)) {
+                $byHour = true;
+            }
+        }
+
+        return $byHour;
+    }
+
     public function updateFilters(Request $request)
     {
         $filters = [

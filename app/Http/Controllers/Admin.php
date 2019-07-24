@@ -33,8 +33,9 @@ class Admin extends Controller
         }
 
         $dbs = ['' => 'Select One'];
-        for ($i = 0; $i <= 24; $i++) {
-            $dbs['PowerV2_Reporting_Dialer-' . $i] = 'PowerV2_Reporting_Dialer-' . $i;
+        for ($i = 1; $i <= 25; $i++) {
+            if ($i == 13) continue;  // there is no db 13
+            $dbs['PowerV2_Reporting_Dialer-' . sprintf("%02d", $i)] = 'PowerV2_Reporting_Dialer-' . sprintf("%02d", $i);
         }
 
         $users = User::all()->sortBy('id');
@@ -56,11 +57,8 @@ class Admin extends Controller
     public function addUser(Request $request)
     {
         /// check if name or email exists
-        $user_check = User::where('id', '!=', $request->id)
-            ->where(function ($query) use ($request) {
-                $query->where('name', $request->name)
-                    ->orWhere('email', $request->email);
-            })
+        $user_check = User::where('name', $request->name)
+            ->orWhere('email', $request->email)
             ->first();
 
         if (!$user_check) {
@@ -77,6 +75,8 @@ class Admin extends Controller
 
     public function deleteUser(Request $request)
     {
+        // delete automated reports too
+
         $user = User::findOrFail($request->id)->delete();
         $return['status'] = 'user deleted';
         echo json_encode($return);
@@ -84,9 +84,7 @@ class Admin extends Controller
 
     public function getUser(Request $request)
     {
-        $user = User::findOrFail($request->id);
-
-        return $user;
+        return User::findOrFail($request->id);
     }
 
     public function updateUser(Request $request)

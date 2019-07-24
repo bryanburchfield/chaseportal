@@ -52,6 +52,7 @@ Route::prefix('adminoutbounddashboard')->group(function () {
         Route::post('call_volume', 'AdminDashController@callVolume');
         Route::post('completed_calls', 'AdminDashController@completedCalls');
         Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
+        Route::post('avg_wait_time', 'AdminDashController@avgWaitTime');
         Route::post('abandon_rate', 'AdminDashController@abandonRate');
         Route::post('agent_call_count', 'AdminDashController@agentCallCount');
         Route::post('service_level', 'AdminDashController@serviceLevel');
