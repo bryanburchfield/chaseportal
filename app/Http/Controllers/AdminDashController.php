@@ -165,7 +165,7 @@ class AdminDashController extends Controller
             list($fromDate, $toDate) = $this->dateRange($dateFilter);
         }
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+        $byHour = $this->byHour($dateFilter);
 
         // group by date/hour or just date
         if ($byHour) {
