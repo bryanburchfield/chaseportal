@@ -124,7 +124,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter :datefilter
             },
             success:function(response){
                 Master.flip_card(response.call_details.repsales.length, '#agent_sales_per_hour');
@@ -219,7 +219,7 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                datefilter:datefilter
+                dateFilter :datefilter
             },
             success:function(response){
 
@@ -329,7 +329,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter :datefilter
             },
             success:function(response){
 
@@ -418,7 +418,7 @@ var Dashboard = {
             url: '/leaderboarddash/update_datefilter',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter : datefilter},
             success:function(response){
             }
         });
@@ -448,7 +448,7 @@ var Dashboard = {
                 url: '/admindashboard/set_campaign',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -503,7 +503,7 @@ var Dashboard = {
             url: '/leaderboarddash/set_campaign',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
