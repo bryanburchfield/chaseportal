@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Campaign;
 
 class AdminOutboundDashController extends Controller
@@ -191,7 +191,6 @@ class AdminOutboundDashController extends Controller
             'fromdate' => $startDate,
             'todate' => $endDate,
             'groupid' =>  Auth::user()->group_id,
-            'campaign' => $campaign,
         ];
 
         $sql = "SELECT
@@ -363,7 +362,6 @@ class AdminOutboundDashController extends Controller
             'fromdate' => $startDate,
             'todate' => $endDate,
             'groupid' => Auth::user()->group_id,
-            'campaign' => $campaign,
         ];
 
         $sql = "SET NOCOUNT ON;
@@ -465,7 +463,6 @@ class AdminOutboundDashController extends Controller
             'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
-            'campaign' => $campaign,
         ];
 
         $sql = "SELECT Campaign,
@@ -631,7 +628,6 @@ class AdminOutboundDashController extends Controller
             'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
-            'campaign' => $campaign,
         ];
 
         $sql = "SET NOCOUNT ON;
@@ -713,7 +709,6 @@ class AdminOutboundDashController extends Controller
             'fromdate' => $startDate,
             'todate' => $endDate,
             'groupid' => Auth::user()->group_id,
-            'campaign' => $campaign,
         ];
 
         $sql = 'SELECT Rep, Campaign, SUM(Duration)/SUM(Cnt) as AvgWaitTime FROM (';
@@ -823,7 +818,6 @@ class AdminOutboundDashController extends Controller
             'fromdate' => $startDate,
             'todate' => $endDate,
             'groupid' => Auth::user()->group_id,
-            'campaign' => $campaign,
         ];
 
         $sql = 'SELECT CallType, SUM([Agent Calls]) as [Agent Calls] FROM (';
