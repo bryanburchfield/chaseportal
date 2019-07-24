@@ -237,7 +237,7 @@ var Master = {
     	});
 
     	$.ajax({
-    		url: 'toggle_report',
+    		url: 'toggle_automated_report',
     		type:'POST',
     		data:{
     			active:active,

@@ -142,6 +142,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('reportsettings', 'MasterDashController@reportSettings');
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
+        Route::post('toggle_automated_report', 'MasterDashController@toggleAutomatedReport');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');

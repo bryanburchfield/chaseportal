@@ -125,4 +125,19 @@ class MasterDashController extends Controller
 
         return view('reportsettings')->with($data);
     }
+
+    public function toggleAutomatedReport(Request $request)
+    {
+
+        $active = (int)$request->active;
+        $user_id = Auth::user()->id;
+        $report = $request->report;
+
+        if($active) {
+            AutomatedReport::create(['user_id'=>$user_id, 'report'=>$report]);
+        } else {
+            $uncheck_report = AutomatedReport::where('user_id', '=', $user_id)->where('report', '=',$report);
+            $uncheck_report->delete();
+        }
+    }
 }
