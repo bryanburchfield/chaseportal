@@ -543,7 +543,7 @@ var Dashboard = {
             url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter :datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc );
@@ -577,7 +577,7 @@ var Dashboard = {
             url: '/admindashboard/service_level',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter, answer_secs:answer_secs},
+            data:{dateFilter :datefilter, answer_secs:answer_secs},
             success:function(response){
 
                 var service_level_data = {
@@ -646,7 +646,7 @@ var Dashboard = {
             url: '/admindashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter :datefilter},
             success:function(response){
 
                 Master.trend_percentage( $('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.ntc );
@@ -675,7 +675,7 @@ var Dashboard = {
             url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter :datefilter},
             success:function(response){
                 console.log(response);
                 Master.flip_card(response.avg_handletime.length, '#rep_avg_handletime');
@@ -765,7 +765,7 @@ var Dashboard = {
             url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter : datefilter},
             success:function(response){
             }
         });
@@ -797,7 +797,7 @@ var Dashboard = {
                 url: '/admindashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter, inorout:inorout},
+                data: {dateFilter :datefilter, inorout:inorout},
                 success:function(response){
                     console.log(response);
                     Dashboard.refresh(datefilter, campaign, inorout);
@@ -853,7 +853,7 @@ var Dashboard = {
             url: '/admindashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
