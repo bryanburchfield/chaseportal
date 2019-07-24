@@ -57,6 +57,10 @@ Route::prefix('adminoutbounddashboard')->group(function () {
         Route::post('agent_call_count', 'AdminOutboundDashController@agentCallCount');
         Route::post('service_level', 'AdminOutboundDashController@serviceLevel');
         Route::post('rep_avg_handletime', 'AdminOutboundDashController@repAvgHandleTime');
+        Route::post('agent_talk_time', 'AdminOutboundDashController@agentTalkTime');
+        Route::post('sales_per_hour_per_rep', 'AdminOutboundDashController@salesPerHourPerRep');
+        Route::post('calls_by_campaign', 'AdminOutboundDashController@callsByCampaign');
+        Route::post('total_calls', 'AdminOutboundDashController@totalCalls');
     });
 });
 

@@ -60,8 +60,10 @@
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
     
-    @foreach($jsfile as $js)
-    <script src="/js/{{ $js }}" type="text/javascript"></script>
-    @endforeach
+    @isset($jsfile)
+        @foreach($jsfile as $js)
+        <script src="/js/{{ $js }}" type="text/javascript"></script>
+        @endforeach
+        @endisset
   </body>
 </html>
