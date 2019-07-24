@@ -97,14 +97,11 @@ class MasterDashController extends Controller
 
     public function getAutomatedReports()
     {
-
-
-        $user_id= Auth::user()->id;
-        $selected = AutomatedReport::pluck('report')->where('user_id', $user_id)->get()->toArray();
-        $selected = array_column($selected, 'report');
+        $user_id = Auth::user()->id;
+        $selected = AutomatedReport::where('user_id', $user_id)->pluck('report')->toArray();
 
         $list = [];
-        foreach($this->automatedReportList() as $k => $v) {
+        foreach ($this->automatedReportList() as $k => $v) {
             $list[] = [
                 'report' => $k,
                 'name' => $v,
@@ -122,8 +119,8 @@ class MasterDashController extends Controller
         $page['type'] = 'other';
 
         $data = [
-            'page'=>$page,
-            'reports'=>$this->getAutomatedReports()
+            'page' => $page,
+            'reports' => $this->getAutomatedReports(),
         ];
 
         return view('reportsettings')->with($data);
