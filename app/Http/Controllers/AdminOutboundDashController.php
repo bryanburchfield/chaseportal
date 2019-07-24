@@ -520,10 +520,7 @@ class AdminOutboundDashController extends Controller
 		GROUP BY Campaign
 		ORDER BY SUM(Cnt) DESC";
 
-        Log::debug($sql);
-        Log::debug($bind);
         $result = $this->runSql($sql, $bind);
-        Log::debug($result);
 
         $camps = array_column($result, 'Campaign');
         $counts = array_column($result, 'CallCount');
