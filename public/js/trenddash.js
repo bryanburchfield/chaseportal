@@ -125,7 +125,7 @@ var Dashboard = {
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html(response.call_volume.details);
+                $('.filter_time_camp_dets p').html('<span class="selected_datetime">'+response.call_volume.details[1] + '</span> | <span class="selected_campaign"> ' +  response.call_volume.details[0] +'</span>');
 
                 var total_calls_int=0;
                 if(response.call_volume.total != null){

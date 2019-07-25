@@ -120,7 +120,7 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/call_details',
+            url: '/leaderdashboard/call_details',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -214,7 +214,7 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/call_volume',
+            url: '/leaderdashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -223,7 +223,7 @@ var Dashboard = {
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html(response.call_volume.details);
+                $('.filter_time_camp_dets p').html('<span class="selected_datetime">'+response.call_volume.details[1] + '</span> | <span class="selected_campaign"> ' +  response.call_volume.details[0] +'</span>');
 
                 $('.total_calls_out p').html(Master.formatNumber(response.call_volume.tot_outbound));
                 $('.total_calls_in p').html(Master.formatNumber(response.call_volume.tot_inbound));
@@ -325,7 +325,7 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/leaderboarddash/sales_per_campaign',
+            url: '/leaderdashboard/sales_per_campaign',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -415,7 +415,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/leaderboarddash/update_datefilter',
+            url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {dateFilter : datefilter},
@@ -445,7 +445,7 @@ var Dashboard = {
             });
 
             $.ajax({
-                url: '/admindashboard/set_campaign',
+                url: '/leaderdashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
                 data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
@@ -471,7 +471,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/admindashboard/set_campaign',
+            url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {databases:databases},
@@ -500,7 +500,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/leaderboarddash/set_campaign',
+            url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
@@ -550,7 +550,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/leaderboarddash/set_campaign',
+            url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { inorout:inorout},
