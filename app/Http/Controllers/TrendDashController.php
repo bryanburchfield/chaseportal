@@ -43,89 +43,8 @@ class TrendDashController extends Controller
     {
         $this->getSession($request);
 
-        $campaign = $this->campaign;
-        $dateFilter = $this->dateFilter;
-        $timeZoneName = Auth::user()->tz;
+        $result = $this->getCallVolume();
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
-            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)";
-        }
-
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
-
-        $select = "'Time' = $xAxis,
-        'Inbound Count' = SUM(CASE WHEN CallType IN ('1','11') THEN 1 ELSE 0 END),
-        'Inbound Handled Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-        'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-        'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-        'Inbound Voicemails' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),
-        'Inbound Abandoned Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-        'Inbound Dropped Calls' = SUM(CASE WHEN CallType IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-        'Duration Inbound' = SUM(CASE WHEN CallType IN ('1','11') THEN Duration ELSE 0 END),
-        'Outbound Count' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN 1 ELSE 0 END),
-        'Outbound Handled Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-        'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-        'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-        'Outbound Abandoned Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-        'Outbound Dropped Calls' = SUM(CASE WHEN CallType NOT IN ('1','11') AND CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
-        'Duration Outbound' = SUM(CASE WHEN CallType NOT IN ('1','11') THEN Duration ELSE 0 END)";
-
-        $query = DialingResult::select(DB::raw($select));
-
-        $query->where('CallType', '!=', 7)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound'])
-            ->where('Duration', '>', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
-
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
-        }
-
-        $query->groupBy(DB::raw($xAxis));
-
-        $result = $query->get()->toArray();
-
-        // split the results into three arrays
-        $params = [
-            'fromDate' => $fromDate,
-            'toDate' => $toDate,
-            'modifier' => $modifier,
-            'byHour' => $byHour,
-            'format' => $format,
-        ];
-
-        $inResult = $this->inboundVolume($result, $params);
-        $outResult = $this->outboundVolume($result, $params);
-        $durResult = $this->callDuration($result, $params);
-
-        // now format the xAxis datetimes and return the results
-        $this->returnCallVolume(
-            array_map(array(&$this, $mapFunction), $inResult),
-            array_map(array(&$this, $mapFunction), $outResult),
-            array_map(array(&$this, $mapFunction), $durResult)
-        );
-    }
-
-    private function returnCallVolume($inbound, $outbound, $duration)
-    {
         $inbound_time_labels = [];
         $total_inbound_calls = [];
         $inbound_voicemails = [];
@@ -143,7 +62,7 @@ class TrendDashController extends Controller
         $total_outbound_duration = 0;
         $total_inbound_duration = 0;
 
-        foreach ($inbound as $r) {
+        foreach ($result[0] as $r) {
 
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
@@ -158,7 +77,7 @@ class TrendDashController extends Controller
             array_push($inbound_handled, $r['Inbound Handled Calls']);
         }
 
-        foreach ($outbound as $r) {
+        foreach ($result[1] as $r) {
 
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
@@ -172,7 +91,7 @@ class TrendDashController extends Controller
             array_push($outbound_dropped, $r['Outbound Dropped Calls']);
         }
 
-        foreach ($duration as $r) {
+        foreach ($result[2] as $r) {
 
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
@@ -191,31 +110,126 @@ class TrendDashController extends Controller
         }
 
         $total = $total_inbound_duration + $total_outbound_duration;
+        $details = $this->filterDetails();
 
-        $new_result['inbound_time_labels'] = $inbound_time_labels;
-        $new_result['outbound_time_labels'] = $outbound_time_labels;
-        $new_result['total_inbound_calls'] = $total_inbound_calls;
-        $new_result['inbound_voicemails'] = $inbound_voicemails;
-        $new_result['inbound_abandoned'] = $inbound_abandoned;
-        $new_result['inbound_handled'] = $inbound_handled;
-        $new_result['inbound_duration'] = $inbound_duration;
-        $new_result['outbound_handled'] = $outbound_handled;
-        $new_result['total_outbound_calls'] = $total_outbound_calls;
-        $new_result['outbound_dropped'] = $outbound_dropped;
-        $new_result['outbound_duration'] = $outbound_duration;
-        $new_result['total_inbound_duration'] = $total_inbound_duration;
-        $new_result['total_outbound_duration'] = $total_outbound_duration;
-        $new_result['duration_time'] = $duration_time;
-        $new_result['total'] = $total;
-
-
-        list($campaign, $details) = $this->filterDetails();
+        $new_result = [
+            'inbound_time_labels' => $inbound_time_labels,
+            'outbound_time_labels' => $outbound_time_labels,
+            'total_inbound_calls' => $total_inbound_calls,
+            'inbound_voicemails' => $inbound_voicemails,
+            'inbound_abandoned' => $inbound_abandoned,
+            'inbound_handled' => $inbound_handled,
+            'inbound_duration' => $inbound_duration,
+            'outbound_handled' => $outbound_handled,
+            'total_outbound_calls' => $total_outbound_calls,
+            'outbound_dropped' => $outbound_dropped,
+            'outbound_duration' => $outbound_duration,
+            'total_inbound_duration' => $total_inbound_duration,
+            'total_outbound_duration' => $total_outbound_duration,
+            'duration_time' => $duration_time,
+            'total' => $total,
+            'details' => $details,
+        ];
 
         $return['call_volume'] = $new_result;
-        $return['call_volume']['campaign'] = $campaign;
-        $return['call_volume']['details'] = $details;
-
         echo json_encode($return);
+    }
+
+    public function getCallVolume($prev = false)
+    {
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+        $timeZoneName = Auth::user()->tz;
+
+        if ($prev) {
+            list($fromDate, $toDate) = $this->previousDateRange($dateFilter);
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        }
+
+        $byHour = $this->byHour($dateFilter);
+
+        // group by date/hour or just date
+        if ($byHour) {
+            $mapFunction = 'dateTimeToHour';
+            $format = 'Y-m-d H:i:s.000';
+            $modifier = "+1 hour";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName'),
+            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+        } else {
+            $mapFunction = 'dateTimeToDay';
+            $format = 'Y-m-d 00:00:00.000';
+            $modifier = "+1 day";
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)
+            ";
+        }
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+        ];
+
+        $sql = "SELECT Time,
+		'Outbound' = SUM([Outbound]),
+		'Inbound' = SUM([Inbound]),
+		'Manual' = SUM([Manual]),
+		'Duration' = SUM([Duration])
+		FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT $xAxis as 'Time',
+			'Outbound' = SUM(CASE WHEN DR.CallType IN ('0','4','5','6','10','12','14','15') THEN 1 ELSE 0 END),
+			'Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
+			'Manual' = SUM(CASE WHEN DR.CallType IN ('2') THEN 1 ELSE 0 END),
+			'Duration' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.HandleTime ELSE 0 END)
+			FROM [$db].[dbo].[DialingResults] DR
+			WHERE DR.CallType NOT IN (7,8)
+			AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+			AND DR.GroupId = :groupid
+			AND DR.Date >= :fromdate
+            AND DR.Date < :todate";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+		GROUP BY [Time]
+		ORDER BY [Time]";
+
+        $result = $this->runSql($sql, $bind);
+
+        $params = [
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+            'modifier' => $modifier,
+            'byHour' => $byHour,
+            'format' => $format,
+            'zeroRec' => [
+                'Time' => '',
+                'Outbound' => 0,
+                'Inbound' => 0,
+                'Manual' => 0,
+                'Duration' => 0,
+            ],
+        ];
+
+        $result = $this->formatVolume($result, $params);
+
+        // now format the xAxis datetimes and return the results
+        return array_map(array(&$this, $mapFunction), $result);
     }
 
     private function inboundVolume($result, $params)
@@ -292,242 +306,6 @@ class TrendDashController extends Controller
         return ($this->zeroRecs($duration, $zeroRec, $params));
     }
 
-    public function callDetails(Request $request)
-    {
-        $this->getSession($request);
-
-        $campaign = $this->campaign;
-        $dateFilter = $this->dateFilter;
-        $timeZoneName = Auth::user()->tz;
-
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
-            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)";
-        }
-
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
-
-        $select = "'Time' = $xAxis,
-        'Call Count' = SUM(CASE WHEN Action IN ('Call', 'ManualCall', 'InboundCall') THEN 1 ELSE 0 END),
-        'Call Time' = CAST(SUM(CASE WHEN Action IN ('Call', 'ManualCall', 'InboundCall') THEN Duration ELSE 0 END) AS INTEGER),
-        'Wrap Up Time' = CAST(SUM(CASE WHEN Action = 'Disposition' THEN Duration ELSE 0 END) AS INTEGER)";
-
-        $query = AgentActivity::select(DB::raw($select));
-
-        $query->where('Rep', '!=', '')
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
-
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
-        }
-
-        $query->groupBy(DB::raw($xAxis));
-
-        $result1 = $query->get()->toArray();
-
-        // We have to get HoldTime from another table, then merge it in.  sigh....
-
-        $select = "$xAxis Time,
-        'Hold Time' = SUM(CASE WHEN HoldTime <= 0 THEN 0 ELSE HoldTime END)";
-
-        $query = DialingResult::select(DB::raw($select));
-
-        $query->where('Rep', '!=', '')
-            ->where('CallType', 1)
-            ->whereNotNull('CallStatus')
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
-
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
-        }
-
-        $query->groupBy(DB::raw($xAxis));
-
-        $result2 = $query->get()->toArray();
-
-        $params = [
-            'fromDate' => $fromDate,
-            'toDate' => $toDate,
-            'modifier' => $modifier,
-            'byHour' => $byHour,
-            'format' => $format,
-            'zeroRec' => [
-                'Time' => '',
-                'Call Count' => 0,
-                'Call Time' => 0,
-                'Wrap Up Time' => 0,
-                'Hold Time' => 0,
-            ],
-        ];
-
-        $result = $this->combineArrays($result1, $result2, $params['zeroRec']);
-
-        $result = $this->formatVolume($result, $params);
-
-        // now format the xAxis datetimes
-        $details = array_map(array(&$this, $mapFunction), $result);
-
-        // Now calculate avg handle time
-        foreach ($details as &$rec) {
-            $rec['Avg Handle Time'] = (empty($rec['Call Count'])) ? 0 : intval(($rec['Call Time'] + $rec['Wrap Up Time'] + $rec['Hold Time']) / $rec['Call Count']);
-        }
-
-        // now format the results
-        $avg_handle_time = [];
-
-        $time_labels = [];
-        $calls = [];
-        $num_calls = 0;
-        $calltimes = 0;
-        $avg_ht = 0;
-        $wrapup = [];
-        $holdtime = [];
-
-        foreach ($details as $r) {
-            array_push($time_labels, $r['Time']);
-            array_push($calls, round($r['Call Time'] / 60));
-            array_push($holdtime, round($r['Hold Time'] / 60));
-            array_push($wrapup, round($r['Wrap Up Time'] / 60));
-            $calltimes += round($r['Call Time'] / 60);
-            $num_calls += $r['Call Count'];
-
-            $avg = empty($r['Call Count']) ? 0 : round(($r['Call Time'] / 60 + $r['Hold Time'] / 60 + $r['Wrap Up Time'] / 60) / $r['Call Count']);
-            array_push($avg_handle_time, $avg);
-
-            $avg_ht += $avg;
-        }
-
-        $avg_ht = round($avg_ht / count($result[0]));
-        $avg_call_time = !empty($num_calls) ? round($calltimes / $num_calls) : 0;
-
-        $new_result['datetime'] = $time_labels;
-        $new_result['calls'] = $calls;
-        $new_result['hold_time'] = $holdtime;
-        $new_result['wrapup_time'] = $wrapup;
-        $new_result['avg_handle_time'] = $avg_handle_time;
-        $new_result['avg_call_time'] = $avg_call_time;
-        $new_result['avg_ht'] = $avg_ht;
-
-        $return['call_details'] = $new_result;
-        echo json_encode($return);
-    }
-
-    private function combineArrays($arr, $hold, $zeroRec)
-    {
-        // This is certainly not the most efficient way to do this....
-        // first, go thru time recs and add hold time if we can find one
-        foreach ($arr as &$rec) {
-            $found = array_search($rec['Time'], array_column($hold, 'Time'));
-            if ($found === false) {
-                $rec['Hold Time'] = 0;
-            } else {
-                $rec['Hold Time'] = $hold[$found]['Hold Time'];
-            }
-        }
-
-        // Now, go thru hold recs and add a blank time rec
-        $newRecs = [];
-        foreach ($hold as $holdRec) {
-            $found = array_search($holdRec['Time'], array_column($arr, 'Time'));
-            if ($found === false) {
-                $zeroRec['Time'] = $holdRec['Time'];
-                $zeroRec['Hold Time'] = $holdRec['Hold Time'];
-                $newRecs[] = $zeroRec;
-            }
-        }
-
-        return array_merge($arr, $newRecs);
-    }
-
-    public function agentCallTime(Request $request)
-    {
-
-        $this->getSession($request);
-
-        $campaign = $this->campaign;
-        $dateFilter = $this->dateFilter;
-        $timeZoneName = Auth::user()->tz;
-
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
-
-        $select = "Rep,
-        'Total Calls' = COUNT(CallStatus),
-        'Duration' = SUM(HandleTime)";
-
-        $query = DialingResult::select(DB::raw($select));
-
-        $query->whereNotIn('CallType', [7, 8])
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('HandleTime', '!=', 0)
-            ->where('Duration', '!=', 0)
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
-
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
-        }
-
-        $query->groupBy('Rep');
-
-        $result = $query->get()->toArray();
-
-        // now process result
-        $agent_labels = [];
-        $total_calls = [];
-        $call_duration = [];
-        $cnt = 0;
-        $avg_ct = 0;
-        $avg_cc = 0;
-
-        foreach ($result as $r) {
-            if ($r['Rep'] != null) {
-                array_push($agent_labels, $r['Rep']);
-                array_push($total_calls, $r['Total Calls']);
-                array_push($call_duration, round($r['Duration'] / 60));
-                $avg_ct += round($r['Duration'] / 60);
-                $avg_cc += $r['Total Calls'];
-                $cnt++;
-            }
-        }
-
-        $avg_ct = $avg_ct > 0 ? round($avg_ct / $avg_cc) : 0;
-        $avg_cc = $avg_cc > 0 ? round($avg_cc / $cnt) : 0;
-
-        $new_result['rep'] = $agent_labels;
-        $new_result['duration'] = $call_duration;
-        $new_result['total_calls'] = $total_calls;
-        $new_result['avg_ct'] = $avg_ct;
-        $new_result['avg_cc'] = $avg_cc;
-
-        $return['agent_calltime'] = $new_result;
-        echo json_encode($return);
-    }
-
     public function serviceLevel(Request $request)
     {
         $this->getSession($request);
@@ -542,42 +320,62 @@ class TrendDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+        $bind = [
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+            'groupid' => Auth::user()->group_id,
+            'answersecs' => $request->answer_secs ?? 20,
+        ];
+
+        $byHour = $this->byHour($dateFilter);
 
         // group by date/hour or just date
         if ($byHour) {
             $mapFunction = 'dateTimeToHour';
             $format = 'Y-m-d H:i:s.000';
             $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
-            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName'),
+            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
         } else {
             $mapFunction = 'dateTimeToDay';
             $format = 'Y-m-d 00:00:00.000';
             $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)
             ";
         }
 
-        $select = "$xAxis Time,
-        'Handled Calls' = COUNT(CASE WHEN HoldTime < 20 AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
-        'Total Inbound Calls' = COUNT(CallStatus)";
+        $sql = "SELECT Time,
+		'Handled Calls' = SUM(HandledCalls),
+		'Total Inbound Calls' = SUM(Cnt)
+		FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT $xAxis Time,
+			'HandledCalls' = COUNT(CASE WHEN HoldTime < :answersecs AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+			'Cnt' = COUNT(CallStatus)
+			FROM [$db].[dbo].[DialingResults] DR
+			WHERE CallType = 1
+			AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+			AND DR.Date >= :fromdate
+			AND DR.Date < :todate
+            AND DR.GroupId = :groupid ";
 
-        $query = DialingResult::select(DB::raw($select));
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
 
-        $query->where('CallType', 1)
-            ->whereNotIn('CallStatus', ['CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'Inbound', 'TRANSFERRED', 'PARKED'])
-            ->where('Date', '>=', $startDate)
-            ->where('Date', '<', $endDate)
-            ->where('GroupId', Auth::user()->group_id);
+            $sql .= "
+                GROUP BY $xAxis";
 
-        if (!empty($campaign) && $campaign != 'Total') {
-            $query->where('Campaign', $campaign);
+            $union = 'UNION ALL';
         }
 
-        $query->groupBy(DB::raw($xAxis));
+        $sql .= ") tmp
+		GROUP BY [Time]
+		ORDER BY [Time]";
 
-        $result = $query->get()->toArray();
+        $result = $this->runSql($sql, $bind);
 
         $params = [
             'fromDate' => $fromDate,
@@ -597,7 +395,6 @@ class TrendDashController extends Controller
 
         $result = array_map(array(&$this, $mapFunction), $result);
 
-        // now process result
         $time_labels = [];
         $total_calls = [];
         $handled_calls = [];
@@ -629,6 +426,308 @@ class TrendDashController extends Controller
         $new_result['avg'] = $avg_sl;
 
         $return['service_level'] = $new_result;
+        echo json_encode($return);
+    }
+
+    public function callDetails(Request $request)
+    {
+        $this->getSession($request);
+
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+        $timeZoneName = Auth::user()->tz;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+        ];
+
+        $byHour = $this->byHour($dateFilter);
+
+        // group by date/hour or just date
+        if ($byHour) {
+            $mapFunction = 'dateTimeToHour';
+            $format = 'Y-m-d H:i:s.000';
+            $modifier = "+1 hour";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
+            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+        } else {
+            $mapFunction = 'dateTimeToDay';
+            $format = 'Y-m-d 00:00:00.000';
+            $modifier = "+1 day";
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)";
+        }
+
+        $sql = "SELECT Time,
+		'Call Count' = SUM(CallCount),
+		'Call Time' = CAST(SUM(CallTime) AS INTEGER),
+		'Wrap Up Time' = CAST(SUM(WrapUpTime) AS INTEGER)
+		FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT $xAxis Time,
+			'CallCount' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN 1 ELSE 0 END),
+			'CallTime' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN AA.Duration ELSE 0 END),
+			'WrapUpTime' = SUM(CASE WHEN AA.Action = 'Disposition' THEN AA.Duration ELSE 0 END)
+			FROM [$db].[dbo].[AgentActivity] AA
+			WHERE Rep != ''
+			AND AA.GroupId = :groupid
+			AND AA.Date >= :fromdate
+            AND AA.Date < :todate";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+		GROUP BY [Time]
+		ORDER BY [Time]";
+
+        $result1 = $this->runSql($sql, $bind);
+
+        // We have to get HoldTime from another table, then merge it in.  sigh....
+        $sql = "SELECT Time,
+		'Hold Time' = SUM(HoldTime),
+		'Max Hold' = MAX(HoldTime)
+		FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT $xAxis Time,
+			'HoldTime' = SUM(CASE WHEN HoldTime <= 0 THEN 0 ELSE HoldTime END)
+			FROM [$db].[dbo].[DialingResults] DR
+			WHERE DR.CallType = 1
+			AND DR.Rep != ''
+			AND DR.CallStatus IS NOT NULL
+			AND DR.CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+			AND DR.GroupId = :groupid
+			AND Date >= :fromdate
+            AND Date < :todate";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+		GROUP BY [Time]
+		ORDER BY [Time]";
+
+        $result2 = $this->runSql($sql, $bind);
+
+        $params = [
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+            'modifier' => $modifier,
+            'byHour' => $byHour,
+            'format' => $format,
+            'zeroRec' => [
+                'Time' => '',
+                'Call Count' => 0,
+                'Call Time' => 0,
+                'Wrap Up Time' => 0,
+                'Hold Time' => 0,
+                'Max Hold' => 0,
+            ],
+        ];
+
+        $result = $this->combineArrays($result1, $result2, $params['zeroRec']);
+
+        $result = $this->formatVolume($result, $params);
+
+        // now format the xAxis datetimes
+        $result = array_map(array(&$this, $mapFunction), $result);
+
+        // Now calculate avg handle time
+        foreach ($result as &$rec) {
+            $rec['Avg Handle Time'] = (empty($rec['Call Count'])) ? 0 : intval(($rec['Call Time'] + $rec['Wrap Up Time'] + $rec['Hold Time']) / $rec['Call Count']);
+        }
+
+        $avg_handle_time = [];
+
+        $time_labels = [];
+        $calls = [];
+        $num_calls = 0;
+        $calltimes = 0;
+        $avg_ht = 0;
+        $wrapup = [];
+        $holdtime = [];
+        $maxhold = [];
+
+        foreach ($result as $r) {
+            array_push($time_labels, $r['Time']);
+            array_push($calls, round($r['Call Time'] / 60));
+            array_push($holdtime, round($r['Hold Time'] / 60));
+            array_push($maxhold, round($r['Max Hold'] / 60));
+            array_push($wrapup, round($r['Wrap Up Time'] / 60));
+            $calltimes += round($r['Call Time'] / 60);
+            $num_calls += $r['Call Count'];
+
+            $avg = empty($r['Call Count']) ? 0 : round(($r['Call Time'] / 60 + $r['Hold Time'] / 60 + $r['Wrap Up Time'] / 60) / $r['Call Count']);
+            array_push($avg_handle_time, $avg);
+
+            $avg_ht += $avg;
+        }
+
+
+        $avg_ht = round($avg_ht / count($result[0]));
+        $avg_call_time = !empty($num_calls) ? round($calltimes / $num_calls) : 0;
+
+        $new_result = [
+            'datetime' => $time_labels,
+            'calls' => $calls,
+            'hold_time' => $holdtime,
+            'max_hold' => $maxhold,
+            'wrapup_time' => $wrapup,
+            'avg_handle_time' => $avg_handle_time,
+            'avg_call_time' => $avg_call_time,
+            'avg_ht' => $avg_ht,
+        ];
+
+        $return['call_details'] = $new_result;
+        echo json_encode($return);
+    }
+
+    private function formatVolume($result, $params)
+    {
+        // define recs with no data to compare against or insert if we need to fill in gaps
+        return ($this->zeroRecs($result, $params['zeroRec'], $params));
+    }
+
+    private function combineArrays($arr, $hold, $zeroRec)
+    {
+        // This is certainly not the most efficient way to do this....
+        // first, go thru time recs and add hold time if we can find one
+        foreach ($arr as &$rec) {
+            $found = array_search($rec['Time'], array_column($hold, 'Time'));
+            if ($found === false) {
+                $rec['Hold Time'] = 0;
+                $rec['Max Hold'] = 0;
+            } else {
+                $rec['Hold Time'] = $hold[$found]['Hold Time'];
+                $rec['Max Hold'] = $hold[$found]['Max Hold'];
+            }
+        }
+
+        // Now, go thru hold recs and add a blank time rec
+        $newRecs = [];
+        foreach ($hold as $holdRec) {
+            $found = array_search($holdRec['Time'], array_column($arr, 'Time'));
+            if ($found === false) {
+                $zeroRec['Time'] = $holdRec['Time'];
+                $zeroRec['Hold Time'] = $holdRec['Hold Time'];
+                $zeroRec['Max Hold'] = $holdRec['Max Hold'];
+                $newRecs[] = $zeroRec;
+            }
+        }
+
+        return array_merge($arr, $newRecs);
+    }
+
+    public function agentTimes(Request $request)
+    {
+
+        $this->getSession($request);
+
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'fromdate' => $startDate,
+            'todate' => $endDate,
+        ];
+
+        $sql = "SELECT Rep,
+		'Total Calls' = SUM(Cnt),
+		'Duration' = SUM(Duration)
+		FROM (";
+        $union = '';
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $sql .= " $union SELECT DR.Rep,
+			'Cnt' = COUNT(DR.CallStatus),
+			'Duration' = SUM(DR.HandleTime)
+			FROM [$db].[dbo].[DialingResults] DR
+			WHERE DR.CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+			AND DR.CallType NOT IN ('7','8')
+			AND DR.HandleTime != 0
+			AND DR.Duration != 0
+			AND DR.GroupId = :groupid
+			AND DR.Date >= :fromdate
+            AND DR.Date < :todate";
+
+            if (!empty($campaign) && $campaign != 'Total') {
+                $sql .= " AND DR.Campaign = :campaign$i";
+                $bind['campaign' . $i] = $campaign;
+            }
+
+            $sql .= "
+                GROUP BY(DR.Rep)";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+		GROUP BY Rep
+		ORDER BY Rep";
+
+        $result = $this->runSql($sql, $bind);
+
+        $agent_labels = [];
+        $total_calls = [];
+        $call_duration = [];
+        $cnt = 0;
+        $avg_ct = 0;
+        $avg_cc = 0;
+
+        foreach ($result as $r) {
+            if ($r['Rep'] != Null) {
+                array_push($agent_labels, $r['Rep']);
+                array_push($total_calls, $r['Total Calls']);
+                array_push($call_duration, round($r['Duration'] / 60));
+                $avg_ct += round($r['Duration'] / 60);
+                $avg_cc += $r['Total Calls'];
+                $cnt++;
+            }
+        }
+
+        $avg_ct = $avg_ct > 0 ? round($avg_ct / $avg_cc) : 0;
+        $avg_cc = $avg_cc > 0 ? round($avg_cc / $cnt) : 0;
+
+        $new_result = [
+            'rep' => $agent_labels,
+            'duration' => $call_duration,
+            'total_calls' => $total_calls,
+            'avg_ct' => $avg_ct,
+            'avg_cc' => $avg_cc,
+        ];
+
+        $return['agent_calltime'] = $new_result;
         echo json_encode($return);
     }
 }
