@@ -370,7 +370,7 @@ var Dashboard = {
                     var show_decimal2= Master.ylabel_format(response.call_details.wrapup_time);
                     var call_details_options={
                         responsive: true,
-                        maintainAspectRatio: false,
+                        // maintainAspectRatio: false,
                         hoverMode: 'index',
                         stacked: false,
                         scales: {
