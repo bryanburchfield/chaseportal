@@ -194,7 +194,7 @@ var Dashboard = {
 
                 var call_volume_options={
                     responsive: true,
-                    maintainAspectRatio: false,
+                    // maintainAspectRatio: false,
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
