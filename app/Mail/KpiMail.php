@@ -18,11 +18,6 @@ class KpiMail extends Mailable
         $this->data = $data;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->subject($this->data['subject'])
