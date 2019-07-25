@@ -715,7 +715,7 @@ var Dashboard = {
         });
         
         $.ajax({
-            url: '/trenddashboard/update_datefilter',
+            url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {dateFilter : datefilter},
@@ -746,7 +746,7 @@ var Dashboard = {
             });
 
             $.ajax({
-                url: '/admindashboard/set_campaign',
+                url: '/trenddashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
                 data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
@@ -772,7 +772,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/admindashboard/set_campaign',
+            url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {databases:databases},
@@ -801,7 +801,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/trenddashboard/set_campaign',
+            url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
@@ -873,7 +873,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/trenddashboard/set_campaign',
+            url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { inorout:inorout},
