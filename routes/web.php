@@ -140,14 +140,13 @@ Route::prefix('dashboards')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/', 'MasterDashController@index');
-        Route::get('recipients', 'MasterDashController@recipients');
         Route::post('showreport', 'MasterDashController@showReport');
 
         // Reports
-        Route::get('reportsettings', 'MasterDashController@reportSettings');
+        Route::get('reportsettings', 'AutomatedReportController@reportSettings');
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
-        Route::post('toggle_automated_report', 'MasterDashController@toggleAutomatedReport');
+        Route::post('toggle_automated_report', 'AutomatedReportController@toggleAutomatedReport');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
