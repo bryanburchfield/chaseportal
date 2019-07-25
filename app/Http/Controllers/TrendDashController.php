@@ -174,25 +174,46 @@ class TrendDashController extends Controller
             'todate' => $endDate,
         ];
 
-        $sql = "SELECT Time,
-		'Outbound' = SUM([Outbound]),
-		'Inbound' = SUM([Inbound]),
-		'Manual' = SUM([Manual]),
-		'Duration' = SUM([Duration])
-		FROM (";
+        $sql = "SELECT
+        Time,
+        SUM([Inbound Count]) AS 'Inbound Count',
+        SUM([Inbound Handled Calls]) AS 'Inbound Handled Calls',
+        SUM([Inbound Voicemails]) AS 'Inbound Voicemails',
+        SUM([Inbound Abandoned Calls]) AS 'Inbound Abandoned Calls',
+        SUM([Inbound Dropped Calls]) AS 'Inbound Dropped Calls',
+        SUM([Duration Inbound]) AS 'Duration Inbound',
+        SUM([Outbound Count]) AS 'Outbound Count',
+        SUM([Outbound Handled Calls]) AS 'Outbound Handled Calls',
+        SUM([Outbound Abandoned Calls]) AS 'Outbound Abandoned Calls', 
+        SUM([Outbound Dropped Calls]) AS 'Outbound Dropped Calls',
+        SUM([Duration Outbound]) AS 'Duration Outbound'
+        FROM (";
+
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $sql .= " $union SELECT $xAxis as 'Time',
-			'Outbound' = SUM(CASE WHEN DR.CallType IN ('0','4','5','6','10','12','14','15') THEN 1 ELSE 0 END),
-			'Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
-			'Manual' = SUM(CASE WHEN DR.CallType IN ('2') THEN 1 ELSE 0 END),
-			'Duration' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.HandleTime ELSE 0 END)
-			FROM [$db].[dbo].[DialingResults] DR
-			WHERE DR.CallType NOT IN (7,8)
-			AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
-			AND DR.GroupId = :groupid
-			AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+    'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END), 
+    'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+    'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
+    'Inbound Voicemails' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END), 
+    'Inbound Abandoned Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
+    'Inbound Dropped Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'Duration Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.Duration ELSE 0 END),
+    'Outbound Count' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN 1 ELSE 0 END), 
+    'Outbound Handled Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+    'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
+    'Outbound Abandoned Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
+    'Outbound Dropped Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'Duration Outbound' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN DR.Duration ELSE 0 END)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.CallType NOT IN ('7','8')
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND Duration > 0
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid";
 
             if (!empty($campaign) && $campaign != 'Total') {
                 $sql .= " AND DR.Campaign = :campaign$i";
@@ -200,36 +221,35 @@ class TrendDashController extends Controller
             }
 
             $sql .= "
-                GROUP BY $xAxis";
+            GROUP BY $xAxis";
 
             $union = 'UNION ALL';
         }
-
         $sql .= ") tmp
-		GROUP BY [Time]
-		ORDER BY [Time]";
+        GROUP BY [Time]
+        ORDER BY [Time]";
 
         $result = $this->runSql($sql, $bind);
 
+        // split the results into three arrays
         $params = [
             'fromDate' => $fromDate,
             'toDate' => $toDate,
             'modifier' => $modifier,
             'byHour' => $byHour,
             'format' => $format,
-            'zeroRec' => [
-                'Time' => '',
-                'Outbound' => 0,
-                'Inbound' => 0,
-                'Manual' => 0,
-                'Duration' => 0,
-            ],
         ];
 
-        $result = $this->formatVolume($result, $params);
+        $inResult = $this->inboundVolume($result, $params);
+        $outResult = $this->outboundVolume($result, $params);
+        $durResult = $this->callDuration($result, $params);
 
         // now format the xAxis datetimes and return the results
-        return array_map(array(&$this, $mapFunction), $result);
+        return [
+            array_map(array(&$this, $mapFunction), $inResult),
+            array_map(array(&$this, $mapFunction), $outResult),
+            array_map(array(&$this, $mapFunction), $durResult),
+        ];
     }
 
     private function inboundVolume($result, $params)
@@ -643,7 +663,7 @@ class TrendDashController extends Controller
         return array_merge($arr, $newRecs);
     }
 
-    public function agentTimes(Request $request)
+    public function agentCallTime(Request $request)
     {
 
         $this->getSession($request);
