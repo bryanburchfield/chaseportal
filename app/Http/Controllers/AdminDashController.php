@@ -421,7 +421,23 @@ class AdminDashController extends Controller
                 COUNT(DR.CallStatus) AS 'Agent Calls'
                 FROM [$db].[dbo].[DialingResults] DR
                 WHERE DR.CallType NOT IN ('7','8')
-                AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
+                AND DR.CallStatus NOT IN (
+                    ' ',
+                    'CR_BUSY',
+                    'CR_CEPT',
+                    'CR_CNCT/CON_CAD',
+                    'CR_CNCT/CON_PAMD',
+                    'CR_CNCT/CON_PVD',
+                    'CR_DISCONNECTED',
+                    'CR_DROPPED',
+                    'CR_FAILED',
+                    'CR_FAXTONE',
+                    'CR_HANGUP',
+                    'CR_NOANS',
+                    'CR_NORB',
+                    'Inbound',
+                    'Inbound Voicemail'
+                )
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i
                 AND DR.GroupId = :groupid$i ";
