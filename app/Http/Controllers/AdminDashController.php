@@ -757,7 +757,7 @@ class AdminDashController extends Controller
             $bind['todate' . $i] = $endDate;
             $bind['answersecs' . $i] = $answerSecs;
 
-            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' AND CallStatus <> 'Inbound Voicemail' THEN 1 ELSE NULL END),
             'Count' = COUNT(CallStatus)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE CallType = 1
