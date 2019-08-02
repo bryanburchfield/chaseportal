@@ -615,7 +615,7 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
+
 				if(response.errors){
 					$('form.add_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
@@ -669,7 +669,6 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
 
 				if(response.status != 'success'){
 
@@ -691,6 +690,7 @@ var Master = {
 		e.preventDefault();
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var id = $(this).attr('href');
+		var dialer = $(this).data('dialer');
 		
 		$.ajaxSetup({
 		    headers: {
@@ -704,7 +704,12 @@ var Master = {
 			dataType: 'json',
 			data: {id: id},
 			success:function(response){
-				console.log(response);
+
+				$('html,body').scrollTop($('body').scrollTop());
+				$('#edit_dialer'+dialer).addClass('in');
+				$('#edit_dialer'+dialer).attr('aria-expanded', true);
+				$('#edit_heading'+dialer+' h4 a').attr('aria-expanded', true);
+
 				var form = $('form.edit_user');
 				form.find('.group_id').val(response.group_id);
 				form.find('.name').val(response.name);
@@ -747,10 +752,8 @@ var Master = {
 				id:id
 			},
 			success:function(response){
-				console.log(response);
 				$('.users table tbody tr#user'+id).remove();
 				$('#deleteUserModal').modal('toggle');
-
 			}
 		});
 	},
@@ -920,7 +923,7 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
+
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
@@ -1025,7 +1028,7 @@ var Master = {
 				search_type:search_type
 			},
 			success:function(response){
-				console.log(response);
+
 				$('.report_filters.card').parent().find('.alert').remove();
 				$('.cdr_results_table tbody').empty();
 

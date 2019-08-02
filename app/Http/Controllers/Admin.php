@@ -56,12 +56,7 @@ class Admin extends Controller
 
     public function token_exists($hash)
     {
-        // $sql = "SELECT COUNT(*) FROM users WHERE app_token = :hash";
-        // $bind = ['hash' => $hash];
-
-        // return $this->mySqlDb->fetchValue($sql, $bind);
-
-        return $token = User::where('app_token', $hash)->exists();
+        return User::where('app_token', $hash)->exists();
     }
 
     public function addUser(Request $request)
@@ -79,7 +74,7 @@ class Admin extends Controller
         if (!$user_check) {
             $input = $request->all();
             $input['password'] = Hash::make('password');
-            $newuser = User::create($input);
+            $newuser = User::create(array_merge($input, ['app_token' => $hash]));
             $return['success'] = $newuser;
         } else {
             $return['errors'] = 'Name or email already in use';

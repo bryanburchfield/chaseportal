@@ -63,7 +63,6 @@
         										{!! Form::select("additional_db", $dbs, null, ["class" => "form-control", 'id'=> 'additional_db']) !!}
         									</div>
         									
-
         									{!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
 
         									<br><br>
@@ -78,8 +77,6 @@
         									
         								{!! Form::close() !!}
         							</div>
-
-				    				
 
 				    				<div class="col-sm-6 mbp0 pr0">
 				    					<h2 class="page_heading">All Users</h2>
@@ -127,7 +124,7 @@
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
 												            			<td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">{{$user->app_token}}</a></td>
-												            			<td><a data-dialer="'.$db.'" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
 												            		
@@ -253,7 +250,7 @@
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
 												            			<td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">{{$user->app_token}}</a></td>
-												            			<td><a data-dialer="'.$db.'" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
 												            		
