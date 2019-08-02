@@ -421,7 +421,23 @@ class AdminDashController extends Controller
                 COUNT(DR.CallStatus) AS 'Agent Calls'
                 FROM [$db].[dbo].[DialingResults] DR
                 WHERE DR.CallType NOT IN ('7','8')
-                AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
+                AND DR.CallStatus NOT IN (
+                    ' ',
+                    'CR_BUSY',
+                    'CR_CEPT',
+                    'CR_CNCT/CON_CAD',
+                    'CR_CNCT/CON_PAMD',
+                    'CR_CNCT/CON_PVD',
+                    'CR_DISCONNECTED',
+                    'CR_DROPPED',
+                    'CR_FAILED',
+                    'CR_FAXTONE',
+                    'CR_HANGUP',
+                    'CR_NOANS',
+                    'CR_NORB',
+                    'Inbound',
+                    'Inbound Voicemail'
+                )
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i
                 AND DR.GroupId = :groupid$i ";
@@ -477,6 +493,8 @@ class AdminDashController extends Controller
         $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
 
         $return['average_hold_time'] = [
+            'min_hold_time' => $average_hold_time['MinHold'],
+            'max_hold_time' => $average_hold_time['MaxHold'],
             'avg_hold_time' => $avg_hold_time,
             'total_hold_time' => $total_hold_time,
             'pct_change' => $pctdiff,
@@ -504,7 +522,9 @@ class AdminDashController extends Controller
 
         $sql = "SELECT
         SUM(Cnt) as 'Total Calls',
-        SUM(HoldTime) as 'Hold Secs'
+        SUM(HoldTime) as 'Hold Secs',
+        MIN(MinHold) as 'MinHold',
+        MAX(MaxHold) as 'MaxHold'
         FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
@@ -513,8 +533,11 @@ class AdminDashController extends Controller
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
 
-            $sql .= " $union SELECT 'Cnt' = COUNT(CallStatus),
-                'HoldTime' = SUM(HoldTime)
+            $sql .= " $union SELECT
+                'Cnt' = COUNT(CallStatus),
+                'HoldTime' = SUM(HoldTime),
+                'MinHold' = MIN(HoldTime),
+                'MaxHold' = MAX(HoldTime)
                 FROM [$db].[dbo].[DialingResults] DR
                 WHERE CallType = 1
                 AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
@@ -741,7 +764,7 @@ class AdminDashController extends Controller
             $bind['todate' . $i] = $endDate;
             $bind['answersecs' . $i] = $answerSecs;
 
-            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+            $sql .= " $union SELECT 'Handled' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' AND CallStatus <> 'Inbound Voicemail' THEN 1 ELSE NULL END),
             'Count' = COUNT(CallStatus)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE CallType = 1

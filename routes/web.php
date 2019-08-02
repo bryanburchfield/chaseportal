@@ -5,8 +5,8 @@ Route::redirect('/raw', '/raw');
 
 // Probably need a default landing page for this
 Route::get('/', function () {
-    phpinfo();
-    // return 'Nothing to see here';
+    // phpinfo();
+    return 'Nothing to see here';
 });
 
 // This is for user logins
