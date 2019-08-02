@@ -16,19 +16,8 @@
                 </div>
 
                 <h1 class="title">Total Dials</h1>
-                <h4 class="data total"></h4>
-
-                <div class="divider"></div>
-
-                <div class="inbound">
-                    <p class="data inbound"></p>
-                    <p class="type">Inbound</p>
-                </div>
-
-                <div class="outbound">
-                    <p class="data outbound"></p>
-                    <p class="type">Outbound</p>
-                </div>
+                <h4 class="data total mt30"></h4>
+                
             </div><!-- end card -->
         </div><!-- end column -->
 
@@ -41,19 +30,8 @@
                 </div>
 
                 <h1 class="title">Total Duration</h1>
-                <h4 class="data total"></h4>
+                <h4 class="data total mt30"></h4>
 
-                <div class="divider"></div>
-
-                <div class="inbound">
-                    <p class="data inbound"></p>
-                    <p class="type">Inbound</p>
-                </div>
-
-                <div class="outbound">
-                    <p class="data outbound"></p>
-                    <p class="type">Outbound</p>
-                </div>
             </div><!-- end card -->
         </div><!-- end column -->
 
@@ -108,14 +86,6 @@
         <div class="col-sm-6">
             <div class="card-6 card outbound_default" >
                 <h1 class="title">Call Volume</h1>
-                <div class="btn-group btn-group-sm callvolume_inorout" role="group" aria-label="...">
-                    <button data-type="outbound" type="button" class="btn btn-primary">Outbound</button>
-                    <button data-type="inbound" type="button" class="btn btn-default">Inbound</button>
-                </div>
-
-                <div class="inbound inandout">
-                    <canvas id="call_volume_inbound"></canvas>
-                </div>
 
                 <div class="outbound inandout">
                     <canvas id="call_volume_outbound"></canvas>
@@ -124,7 +94,7 @@
         </div>
         <div class="col-sm-6">
             <div class="card-6 card" >
-                <h1 class="title">Call Duration</h1><br><br><br>
+                <h1 class="title">Call Duration in Minutes</h1><br><br><br>
 
                 <div class="inandout">
                     <canvas id="call_duration"></canvas>

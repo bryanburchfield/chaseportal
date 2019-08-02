@@ -96,16 +96,14 @@ var Dashboard = {
         Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
         Dashboard.get_avg_handle_time(datefilter, Dashboard.chartColors);
         Dashboard.update_datefilter(datefilter);
+        Dashboard.call_volume_type();
         Master.check_reload();
         $('.preloader').fadeOut('slow');
     },
 
     get_call_volume:function(inorout, datefilter, chartColors){
 
-        $('.callvolume_inorout').find('button').removeClass('btn-primary');
-        $('.callvolume_inorout').find('button').removeClass('btn-default');
         var activeBtn = $('.callvolume_inorout').find("[data-type='" + this.inorout + "']");
-        activeBtn.addClass('btn-primary');
         $(activeBtn).siblings().addClass('btn-default');
         
         $.ajaxSetup({
@@ -121,11 +119,11 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                dateFilter :datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html('<span class="selected_datetime">'+response.call_volume.details[1] + '</span> | <span class="selected_campaign"> ' +  response.call_volume.details[0] +'</span>');
+                $('.filter_time_camp_dets p').html(response.call_volume.details);
 
                 var total_calls_int=0;
                 if(response.call_volume.total != null){
@@ -265,13 +263,13 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter :datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
                 if( response.call_details.datetime != undefined){
-                    $('h2.avg_ht').html('Avg Handle Time: '+response.call_details.avg_ht +' minutes');
-                    $('h2.avg_tt').html('Avg Talk Time: '+response.call_details.avg_call_time +' minutes');
+                    $('h2.avg_ht').html('Avg Handle Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
+                    $('h2.avg_tt').html('Avg Talk Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
                     
                     var avg_handle_time_data  = {
                         labels: response.call_details.datetime,
@@ -370,7 +368,6 @@ var Dashboard = {
                     var show_decimal2= Master.ylabel_format(response.call_details.wrapup_time);
                     var call_details_options={
                         responsive: true,
-                        // maintainAspectRatio: false,
                         hoverMode: 'index',
                         stacked: false,
                         scales: {
@@ -525,11 +522,11 @@ var Dashboard = {
             url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter :datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
 
                 if( response.agent_calltime.avg_ct != undefined){
-                    $('h2.avg_ct').html('Avg Rep Time: '+response.agent_calltime.avg_ct +' minutes');
+                    $('h2.avg_ct').html('Avg Rep Time: '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
                     $('h2.avg_cc').html('Avg Call Count: '+response.agent_calltime.avg_cc +' ');
                 }
 
@@ -537,11 +534,13 @@ var Dashboard = {
                   labels: response.agent_calltime.rep,
                         datasets: [
                           {
+                            yAxisID: 'A',
                             label: "Call Time (minutes)",
                             backgroundColor: chartColors.green,
                             data: response.agent_calltime.duration
                           },
                           {
+                            yAxisID: 'B',
                             label: "Call Count",
                             backgroundColor: chartColors.orange,
                             fillOpacity: .5, 
@@ -562,22 +561,41 @@ var Dashboard = {
                         } 
                     },
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Minutes'
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                callback: function(value, index, values) {
-                                    if(show_decimal){
-                                        return Math.round((parseInt(value) /60) * 10) / 10;
-                                    }else{
-                                        return Math.round(parseInt(value) / 60);
+                        yAxes: [
+                            {
+                                id:'A',
+                                type: 'linear',
+                                position:'left',
+                                scalePositionLeft: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Minutes'
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function(value, index, values) {
+                                        if(show_decimal){
+                                            return Math.round((parseInt(value) /60) * 10) / 10;
+                                        }else{
+                                            return Math.round(parseInt(value) / 60);
+                                        }
                                     }
                                 }
+                            },
+                            {
+                                id:'B',
+                                type: 'linear',
+                                position:'right',
+                                scalePositionLeft: false,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Call Count'
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                }
                             }
-                        }]
+                        ]
                     },
                     tooltips: {
                         enabled: true,
@@ -627,7 +645,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter :datefilter,
+                datefilter:datefilter,
                 answer_secs:answer_secs
             },
             success:function(response){
@@ -713,12 +731,12 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
+
         $.ajax({
             url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter : datefilter},
+            data: {datefilter: datefilter},
             success:function(response){
             }
         });
@@ -749,7 +767,7 @@ var Dashboard = {
                 url: '/trenddashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
+                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -770,7 +788,7 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+        
         $.ajax({
             url: '/trenddashboard/update_filters',
             type: 'POST',
@@ -804,7 +822,7 @@ var Dashboard = {
             url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
+            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }
@@ -842,7 +860,7 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
-       if(this.inorout != undefined){
+        if(this.inorout != undefined){
             inorout = Dashboard.inorout;
         }else{
             Dashboard.inorout = $(this).data('type');
@@ -861,7 +879,6 @@ var Dashboard = {
         Dashboard.inorout_toggled=true;  
         
         $('.callvolume_inorout').siblings('.inandout').hide();
-
         $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;

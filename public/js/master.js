@@ -59,7 +59,8 @@ var Master = {
 		$('.campaign_search').on('keyup', this.search_campaigns);
 		$('.select_database').on('click', this.select_database);
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
-		$('.cdr_lookup_form').on('submit', this.cdr_lookup);		
+		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
+		$('a#getAppToken').on('click', this.get_app_token);	
 	},
 
 	formatNumber:function(x) {
@@ -614,13 +615,13 @@ var Master = {
 			},
 
 			success:function(response){
-
+				console.log(response);
 				if(response.errors){
 					$('form.add_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
 				}else{
 					$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
-					$('.users table tbody').append('<tr id="user'+response.success.id+'" data-id="'+response.success.id+'"><td>'+group_id+' - '+ name+'</td><td><a href="'+response.success.id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.success.id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
+					$('.users table tbody').append('<tr id="user'+response.success.id+'" data-id="'+response.success.id+'"><td>'+group_id+' - '+ name+'</td><td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">'+response.success.app_token+'</a></td><td><a href="'+response.success.id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.success.id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
 					setTimeout(function(){ 
 						$('.alert').remove();
 						$('form.add_user').trigger("reset");
@@ -752,6 +753,26 @@ var Master = {
 
 			}
 		});
+	},
+
+	get_app_token:function(e){
+		e.preventDefault();
+
+		$(this).tooltip({
+		    animated: 'fade',
+		    placement: 'left',
+		    trigger: 'click'
+		});
+
+		setTimeout(function () {
+            $('.tooltip').fadeOut('slow');
+        }, 3500);
+
+		var $temp = $("<input>");
+	    $("body").append($temp);
+	    $temp.val($(this).text()).select();
+	    document.execCommand("copy");
+	    $temp.remove();
 	},
 
 	// select report from modal

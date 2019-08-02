@@ -54,8 +54,23 @@ class Admin extends Controller
         return view('master.admin')->with($data);
     }
 
+    public function token_exists($hash)
+    {
+        // $sql = "SELECT COUNT(*) FROM users WHERE app_token = :hash";
+        // $bind = ['hash' => $hash];
+
+        // return $this->mySqlDb->fetchValue($sql, $bind);
+
+        return $token = User::where('app_token', $hash)->exists();
+    }
+
     public function addUser(Request $request)
     {
+
+        do {
+            $hash = md5(uniqid());
+        }   while ($this->token_exists($hash));
+
         /// check if name or email exists
         $user_check = User::where('name', $request->name)
             ->orWhere('email', $request->email)
