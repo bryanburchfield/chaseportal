@@ -111,7 +111,6 @@ var Dashboard = {
     },
 
     call_details:function(datefilter, chartColors){
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -124,7 +123,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter :datefilter
+                datefilter:datefilter
             },
             success:function(response){
                 Master.flip_card(response.call_details.repsales.length, '#agent_sales_per_hour');
@@ -219,11 +218,11 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                dateFilter :datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html('<span class="selected_datetime">'+response.call_volume.details[1] + '</span> | <span class="selected_campaign"> ' +  response.call_volume.details[0] +'</span>');
+                $('.filter_time_camp_dets p').html(response.call_volume.details);
 
                 $('.total_calls_out p').html(Master.formatNumber(response.call_volume.tot_outbound));
                 $('.total_calls_in p').html(Master.formatNumber(response.call_volume.tot_inbound));
@@ -329,7 +328,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter :datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
@@ -413,12 +412,12 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+        
         $.ajax({
             url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter : datefilter},
+            data: {datefilter: datefilter},
             success:function(response){
             }
         });
@@ -448,7 +447,7 @@ var Dashboard = {
                 url: '/leaderdashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
+                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -503,7 +502,7 @@ var Dashboard = {
             url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {dateFilter :datefilter,campaign: campaign, inorout:inorout},
+            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }

@@ -59,7 +59,8 @@ var Master = {
 		$('.campaign_search').on('keyup', this.search_campaigns);
 		$('.select_database').on('click', this.select_database);
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
-		$('.cdr_lookup_form').on('submit', this.cdr_lookup);		
+		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
+		$('a#getAppToken').on('click', this.get_app_token);	
 	},
 
 	formatNumber:function(x) {
@@ -620,7 +621,7 @@ var Master = {
 					$('.alert-danger').show();
 				}else{
 					$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
-					$('.users table tbody').append('<tr id="user'+response.success.id+'" data-id="'+response.success.id+'"><td>'+group_id+' - '+ name+'</td><td><a href="'+response.success.id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.success.id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
+					$('.users table tbody').append('<tr id="user'+response.success.id+'" data-id="'+response.success.id+'"><td>'+group_id+' - '+ name+'</td><td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">'+response.success.app_token+'</a></td><td><a href="'+response.success.id+'" class="edit_user"><i class="fas fa-user-edit"></i></a></td><td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="'+name+'" data-user="'+response.success.id+'"><i class="glyphicon glyphicon-remove-sign"></i></a></td>');
 					setTimeout(function(){ 
 						$('.alert').remove();
 						$('form.add_user').trigger("reset");
@@ -668,7 +669,6 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
 
 				if(response.status != 'success'){
 
@@ -690,6 +690,7 @@ var Master = {
 		e.preventDefault();
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var id = $(this).attr('href');
+		var dialer = $(this).data('dialer');
 		
 		$.ajaxSetup({
 		    headers: {
@@ -703,7 +704,12 @@ var Master = {
 			dataType: 'json',
 			data: {id: id},
 			success:function(response){
-				console.log(response);
+
+				$('html,body').scrollTop($('body').scrollTop());
+				$('#edit_dialer'+dialer).addClass('in');
+				$('#edit_dialer'+dialer).attr('aria-expanded', true);
+				$('#edit_heading'+dialer+' h4 a').attr('aria-expanded', true);
+
 				var form = $('form.edit_user');
 				form.find('.group_id').val(response.group_id);
 				form.find('.name').val(response.name);
@@ -746,12 +752,30 @@ var Master = {
 				id:id
 			},
 			success:function(response){
-				console.log(response);
 				$('.users table tbody tr#user'+id).remove();
 				$('#deleteUserModal').modal('toggle');
-
 			}
 		});
+	},
+
+	get_app_token:function(e){
+		e.preventDefault();
+
+		$(this).tooltip({
+		    animated: 'fade',
+		    placement: 'left',
+		    trigger: 'click'
+		});
+
+		setTimeout(function () {
+            $('.tooltip').fadeOut('slow');
+        }, 3500);
+
+		var $temp = $("<input>");
+	    $("body").append($temp);
+	    $temp.val($(this).text()).select();
+	    document.execCommand("copy");
+	    $temp.remove();
 	},
 
 	// select report from modal
@@ -899,7 +923,7 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
+
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
@@ -1004,7 +1028,7 @@ var Master = {
 				search_type:search_type
 			},
 			success:function(response){
-				console.log(response);
+
 				$('.report_filters.card').parent().find('.alert').remove();
 				$('.cdr_results_table tbody').empty();
 

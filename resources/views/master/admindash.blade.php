@@ -8,53 +8,99 @@
     </div>
 
     <div class="row">
+
         <div class="col-sm-3 col-xs-12">
-            <div class="card-3 card" id="completed_calls">
+            <div class="card-3 card" id="calls_offered">
+
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>               
+                <h1 class="title">Calls Offered</h1>
+                <h4 class="data total mt30"></h4>
+
+            </div><!-- end card -->
+        </div><!-- end column -->
+
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card" id="calls_answered">
 
                 <div class="trend_indicator">
                     <div class="trend_arrow"></div>
                     <span></span>
                 </div>
                
-                <h1 class="title">Completed Calls</h1>
-                <h4 class="data total"></h4>
+                <h1 class="title">Calls Answered</h1>
+                <h4 class="data total mt30"></h4>
 
-                <div class="divider"></div>
-
-                <div class="inbound">
-                    <p class="data inbound"></p>
-                    <p class="type">Inbound</p>
-                </div>
-
-                <div class="outbound">
-                    <p class="data outbound"></p>
-                    <p class="type">Outbound</p>
-                </div>
             </div><!-- end card -->
         </div><!-- end column -->
 
         <div class="col-sm-3 col-xs-12">
-            <div class="card-3 card" id="total_minutes">
+            <div class="card-3 card" id="missed_calls">
 
                 <div class="trend_indicator">
                     <div class="trend_arrow"></div>
                     <span></span>
                 </div>
 
-                <h1 class="title">Talk Time</h1>
+                <h1 class="title">Missed Calls</h1>
                 <h4 class="data total"></h4>
+                
+                <div class="divider"></div>
+                
+                <div class="inbound">
+                    <p class="data abandoned"></p>
+                    <p class="type">Abandoned</p>
+                </div>
+
+                <div class="outbound">
+                    <p class="data voicemails"></p>
+                    <p class="type">Voicemails</p>
+                </div>
+
+            </div><!-- end card -->
+        </div><!-- end column -->
+
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card total_sales">
+
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+                <h1 class="title">Total Sales</h1>
+                <h4 class="data mt30" id="total_sales"></h4>
+            </div><!-- end card -->
+        </div><!-- end column -->
+        
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card" id="avg_talk_time">
+
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+
+                <h1 class="title">Avgerage Talk Time</h1>
+                <h4 class="data total "></h4>
 
                 <div class="divider"></div>
 
                 <div class="inbound">
-                    <p class="data inbound"></p>
-                    <p class="type">Inbound</p>
+                    <p class="data lowest"></p>
+                    <p class="type">Lowest</p>
                 </div>
 
                 <div class="outbound">
-                    <p class="data outbound"></p>
-                    <p class="type">Outbound</p>
+                    <p class="data highest"></p>
+                    <p class="type">Highest</p>
                 </div>
+
             </div><!-- end card -->
         </div><!-- end column -->
 
@@ -70,10 +116,41 @@
 
                 <div class="divider"></div>
 
-                <div class="details tac">
-                    <p class="data" id="total_hold_time"></p>
-                    <p class="type">Total Hold Time</p>
+                <div class="inbound">
+                    <p class="data lowest"></p>
+                    <p class="type">Lowest</p>
                 </div>
+
+                <div class="outbound">
+                    <p class="data highest"></p>
+                    <p class="type">Highest</p>
+                </div>
+
+            </div><!-- end card -->
+        </div><!-- end column -->
+
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card avg_handle_time_card">
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+
+                <h1 class="title">Average Handle Time</h1>
+                <h4 class="data" id="avg_handle_time"></h4>
+
+                <div class="divider"></div>
+
+                <div class="inbound">
+                    <p class="data lowest"></p>
+                    <p class="type">Lowest</p>
+                </div>
+
+                <div class="outbound">
+                    <p class="data highest"></p>
+                    <p class="type">Highest</p>
+                </div>
+
             </div><!-- end card -->
         </div><!-- end column -->
 
@@ -95,29 +172,22 @@
                 </div>
             </div><!-- end card -->
         </div><!-- end column -->
+        
     </div>
 
     <div class="row">
         <div class="col-sm-6">
             <div class="card-6 card" >
                 <h1 class="title">Call Volume</h1>
-                <div class="btn-group btn-group-sm callvolume_inorout" role="group" aria-label="...">
-                    <button data-type="inbound" type="button" class="btn btn-primary">Inbound</button>
-                    <button data-type="outbound" type="button" class="btn btn-default">Outbound</button>
-                </div>
 
                 <div class="inbound inandout">
                     <canvas id="call_volume_inbound"></canvas>
-                </div>
-
-                <div class="outbound inandout">
-                    <canvas id="call_volume_outbound"></canvas>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="card-6 card" >
-                <h1 class="title mb42">Call Duration</h1><br><br><br>
+                <h1 class="title mb42">Call Duration in Minutes</h1><br><br><br>
 
                 <div class="inandout">
                     <canvas id="call_duration"></canvas>
@@ -149,7 +219,6 @@
                 </div>
 
                 <div class="back">
-                    <!-- <h1 class="title">Agent Call Count</h1> -->
                     <div class="flip_card_btn"></div>
                     <div class="inbound inandout mb0">
                         <canvas id="agent_call_count_graph"></canvas>
@@ -205,7 +274,6 @@
                 </div>
 
                 <div class="back">
-                    <!-- <h1 class="title">Agent Call Time</h1> -->
                     <div class="flip_card_btn"></div>
                     <div class="inbound inandout mb0">
                         <canvas id="agent_calltime_graph"></canvas>
@@ -235,7 +303,6 @@
                 </div>
 
                 <div class="back">
-                    <!-- <h1 class="title">REP AVG HANDLE TIME</h1> -->
                     <div class="flip_card_btn"></div>
                     <div class="inbound inandout mb0">
                         <canvas id="rep_avg_handletime_graph"></canvas>
