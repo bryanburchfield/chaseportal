@@ -27,7 +27,7 @@ Route::prefix('admindashboard')->group(function () {
         // ajax targets
         Route::post('update_filters', 'AdminDashController@updateFilters');
         Route::post('call_volume', 'AdminDashController@callVolume');
-        Route::post('completed_calls', 'AdminDashController@completedCalls');
+        Route::post('total_sales', 'AdminDashController@totalSales');
         Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
         Route::post('abandon_rate', 'AdminDashController@abandonRate');
         Route::post('agent_call_count', 'AdminDashController@agentCallCount');

@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use App\Campaign;
 
 class AdminOutboundDashController extends Controller
 {
     use DashTraits;
 
+    /**
+     * return view
+     *
+     * @param Request $request
+     * @return view
+     */
     public function index(Request $request)
     {
         $this->getSession($request);
@@ -36,126 +41,96 @@ class AdminOutboundDashController extends Controller
         return view('adminoutbounddash')->with($data);
     }
 
+    /**
+     * return call volume
+     *
+     * @param Request $request
+     * @return void
+     */
     public function callVolume(Request $request)
     {
         $this->getSession($request);
 
-        $call_volume = $this->getCallVolume();
-        $prev_call_volume = $this->getCallVolume(true);
+        $result = $this->getCallVolume();
+        $prev_result = $this->getCallVolume(true);
 
-        $inbound_time_labels = [];
-        $total_inbound_calls = [];
-        $inbound_voicemails = [];
-        $inbound_abandoned = [];
-        $inbound_handled = [];
-        $inbound_duration = [];
+        // cards to be populated
+        $call_volume = [
+            'time_labels' => [],
+            'total_calls' => [],
+            'handled' => [],
+            'dropped' => [],
+        ];
+        $call_duration = [
+            'time_labels' => [],
+            'duration' => [],
+        ];
+        $total_duration = [
+            'duration' => 0,
+            'pct_change' => 0,
+            'pct_sign' => 0,
+            'ntc' => 0,
+        ];
 
-        $outbound_time_labels = [];
-        $total_outbound_calls = [];
-        $outbound_handled = [];
-        $outbound_dropped = [];
-        $outbound_duration = [];
-        $duration_time = [];
-        $new_result = [];
-        $total_outbound_duration = 0;
-        $total_inbound_duration = 0;
+        // Prev tots for rate change calcs
         $prev_total_duration = 0;
 
-        foreach ($call_volume[0] as $r) {
-
+        foreach ($result[0] as $r) {
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
                 $datetime = $r['Time'];
             }
 
-            array_push($inbound_time_labels, $datetime);
-            array_push($total_inbound_calls, $r['Inbound Count']);
-            array_push($inbound_voicemails, $r['Inbound Voicemails']);
-            array_push($inbound_abandoned, $r['Inbound Abandoned Calls']);
-            array_push($inbound_handled, $r['Inbound Handled Calls']);
+            array_push($call_volume['time_labels'], $datetime);
+            array_push($call_volume['total_calls'], $r['Outbound Count']);
+            array_push($call_volume['handled'], $r['Outbound Handled Calls']);
+            array_push($call_volume['dropped'], $r['Outbound Dropped Calls']);
         }
 
-        foreach ($call_volume[1] as $r) {
-
+        foreach ($result[1] as $r) {
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
                 $datetime = $r['Time'];
             }
 
-            array_push($outbound_time_labels, $datetime);
-            array_push($total_outbound_calls, $r['Outbound Count']);
-            array_push($outbound_handled, $r['Outbound Handled Calls']);
-            array_push($outbound_dropped, $r['Outbound Dropped Calls']);
+            array_push($call_duration['time_labels'], $datetime);
+            array_push($call_duration['duration'], $r['Duration Outbound']);
+
+            $total_duration['duration'] += $r['Duration Outbound'];
         }
 
-        foreach ($call_volume[2] as $r) {
-            $total_inbound_duration += $r['Duration Inbound'];
-            $total_outbound_duration += $r['Duration Outbound'];
-
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
-                $datetime = $r['Time'];
-            }
-
-            $r['Duration Inbound'] = round($r['Duration Inbound'] / 60);
-            $r['Duration Outbound'] = round($r['Duration Outbound'] / 60);
-
-            array_push($duration_time, $r['Time']);
-            array_push($inbound_duration, $r['Duration Inbound']);
-            array_push($outbound_duration, $r['Duration Outbound']);
+        foreach ($prev_result[1] as $r) {
+            $prev_total_duration += $r['Duration Outbound'];
         }
-
-        foreach ($prev_call_volume[2] as $r) {
-            $prev_total_duration += $r['Duration Inbound'] + $r['Duration Outbound'];
-        }
-
-        $total_duration = $total_inbound_duration + $total_outbound_duration;
 
         if ($prev_total_duration == 0) {
-            $pctdiff = null;
-            $pctsign = null;
-            $ntc = 1;  // nothing to compare
+            $total_duration['pct_change'] = null;
+            $total_duration['pct_sign'] = null;
+            $total_duration['ntc'] = 1;  // nothing to compare
         } else {
-            $pctdiff = ($total_duration - $prev_total_duration) / $prev_total_duration * 100;
-            $pctsign = $pctdiff < 0 ? 0 : 1;
-            $pctdiff = round(abs($pctdiff));
+            $total_duration['pct_change'] = ($total_duration['duration'] - $prev_total_duration) / $prev_total_duration * 100;
+            $total_duration['pct_sign'] = $total_duration['pct_change'] < 0 ? 0 : 1;
+            $total_duration['pct_change'] = round(abs($total_duration['pct_change']));
             $ntc = 0;
         }
 
-        $total_inbound_duration = round($total_inbound_duration / 60);
-        $total_outbound_duration = round($total_outbound_duration / 60);
-
-        $total = $total_inbound_duration + $total_outbound_duration;
-
-        $new_result = [
-            'inbound_time_labels' => $inbound_time_labels,
-            'outbound_time_labels' => $outbound_time_labels,
-            'total_inbound_calls' => $total_inbound_calls,
-            'inbound_voicemails' => $inbound_voicemails,
-            'inbound_abandoned' => $inbound_abandoned,
-            'inbound_handled' => $inbound_handled,
-            'inbound_duration' => $inbound_duration,
-            'outbound_handled' => $outbound_handled,
-            'total_outbound_calls' => $total_outbound_calls,
-            'outbound_dropped' => $outbound_dropped,
-            'outbound_handled' => $outbound_handled,
-            'outbound_duration' => $outbound_duration,
-            'total_inbound_duration' => $total_inbound_duration,
-            'total_outbound_duration' => $total_outbound_duration,
-            'duration_time' => $duration_time,
-            'total' => $total,
-            'pct_change' => $pctdiff,
-            'pct_sign' => $pctsign,
-            'ntc' => $ntc,
+        $return['call_volume'] = [
+            'call_volume' => $call_volume,
+            'call_duration' => $call_duration,
+            'total_duration' => $total_duration,
         ];
 
-        $return['call_volume'] = $new_result;
         echo json_encode($return);
     }
 
+    /**
+     * query call volume
+     *
+     * @param boolean $prev
+     * @return array
+     */
     public function getCallVolume($prev = false)
     {
         $campaign = $this->campaign;
@@ -197,39 +172,25 @@ class AdminOutboundDashController extends Controller
 
         $sql = "SELECT
         Time,
-        SUM([Inbound Count]) AS 'Inbound Count',
-        SUM([Inbound Handled Calls]) AS 'Inbound Handled Calls',
-        SUM([Inbound Voicemails]) AS 'Inbound Voicemails',
-        SUM([Inbound Abandoned Calls]) AS 'Inbound Abandoned Calls',
-        SUM([Inbound Dropped Calls]) AS 'Inbound Dropped Calls',
-        SUM([Duration Inbound]) AS 'Duration Inbound',
-        SUM([Outbound Count]) AS 'Outbound Count',
-        SUM([Outbound Handled Calls]) AS 'Outbound Handled Calls',
-        SUM([Outbound Abandoned Calls]) AS 'Outbound Abandoned Calls', 
-        SUM([Outbound Dropped Calls]) AS 'Outbound Dropped Calls',
-        SUM([Duration Outbound]) AS 'Duration Outbound'
+        SUM([Count]) AS 'Count',
+        SUM([Handled Calls]) AS 'Handled Calls',
+        SUM([Abandoned Calls]) AS 'Abandoned Calls',
+        SUM([Dropped Calls]) AS 'Dropped Calls',
+        SUM([Duration]) AS 'Duration'
         FROM (";
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $sql .= " $union SELECT $xAxis as 'Time',
-    'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END), 
-    'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+    'Count' = SUM(1),
+    'Handled Calls' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
     'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
-    'Inbound Voicemails' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END), 
-    'Inbound Abandoned Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
-    'Inbound Dropped Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
-    'Duration Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.Duration ELSE 0 END),
-    'Outbound Count' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN 1 ELSE 0 END), 
-    'Outbound Handled Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-    'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
-    'Outbound Abandoned Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
-    'Outbound Dropped Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
-    'Duration Outbound' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN DR.Duration ELSE 0 END)
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+    'Abandoned Calls' = SUM(CASE WHEN DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
+    'Dropped Calls' = SUM(CASE WHEN DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
+    'Duration' = SUM(DR.Duration)
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.CallType NOT IN ('7','8')
+            WHERE DR.CallType NOT IN (1,7,8,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
             AND DR.Date >= :fromdate
@@ -261,76 +222,51 @@ class AdminOutboundDashController extends Controller
             'format' => $format,
         ];
 
-        $inResult = $this->inboundVolume($result, $params);
         $outResult = $this->outboundVolume($result, $params);
         $durResult = $this->callDuration($result, $params);
 
         // now format the xAxis datetimes and return the results
         return [
-            array_map(array(&$this, $mapFunction), $inResult),
             array_map(array(&$this, $mapFunction), $outResult),
             array_map(array(&$this, $mapFunction), $durResult),
         ];
     }
 
-    protected function inboundVolume($result, $params)
-    {
-        // extract Time and Inbound fields from array
-        $inbound = [];
-        foreach ($result as $rec) {
-            foreach ($rec as $k => $v) {
-                if ($k[0] !== 'I' && $k[0] !== 'T') {
-                    unset($rec[$k]);
-                }
-            }
-            $inbound[] = $rec;
-        }
-
-        // define recs with no data to compare against or insert if we need to fill in gaps
-        $zeroRec = [
-            'Time' => '',
-            'Inbound Count' => 0,
-            'Inbound Handled Calls' => 0,
-            'Inbound Voicemails' => 0,
-            'Inbound Abandoned Calls' => 0,
-            'Inbound Dropped Calls' => 0,
-        ];
-
-        return ($this->zeroRecs($inbound, $zeroRec, $params));
-    }
-
+    /**
+     * return outbound volume
+     *
+     * @param array $result
+     * @param array $params
+     * @return array
+     */
     protected function outboundVolume($result, $params)
     {
-        // extract Time and Outbound fields from array
-        $outbound = [];
-        foreach ($result as $rec) {
-            foreach ($rec as $k => $v) {
-                if ($k[0] !== 'O' && $k[0] !== 'T') {
-                    unset($rec[$k]);
-                }
-            }
-            $outbound[] = $rec;
-        }
-
         // define recs with no data to compare against or insert if we need to fill in gaps
         $zeroRec = [
             'Time' => '',
-            'Outbound Count' => 0,
-            'Outbound Handled Calls' => 0,
-            'Outbound Abandoned Calls' => 0,
-            'Outbound Dropped Calls' => 0,
+            'Count' => 0,
+            'Handled Calls' => 0,
+            'Abandoned Calls' => 0,
+            'Dropped Calls' => 0,
         ];
 
-        return ($this->zeroRecs($outbound, $zeroRec, $params));
+        return ($this->zeroRecs($result, $zeroRec, $params));
     }
 
+    /**
+     * return call duration
+     *
+     * @param array $result
+     * @param array $params
+     * @return array
+     */
     protected function callDuration($result, $params)
     {
         // extract Time and Duration fields from array
         $duration = [];
         foreach ($result as $rec) {
             foreach ($rec as $k => $v) {
-                if ($k[0] !== 'D' && $k[0] !== 'T') {
+                if ($k != 'Time' && $k != 'Duration') {
                     unset($rec[$k]);
                 }
             }
@@ -340,13 +276,18 @@ class AdminOutboundDashController extends Controller
         // define recs with no data to compare against or insert if we need to fill in gaps
         $zeroRec = [
             'Time' => '',
-            'Duration Inbound' => 0,
-            'Duration Outbound' => 0,
+            'Duration' => 0,
         ];
 
         return ($this->zeroRecs($duration, $zeroRec, $params));
     }
 
+    /**
+     * return agent talk time
+     *
+     * @param Request $request
+     * @return void
+     */
     public function agentTalkTime(Request $request)
     {
         $this->getSession($request);
@@ -367,7 +308,7 @@ class AdminOutboundDashController extends Controller
         ];
 
         $sql = "SET NOCOUNT ON;
-        
+
         SELECT Rep, Campaign,
         'Count' = SUM([Count]),
         'Duration' = SUM(Duration)
@@ -403,12 +344,12 @@ class AdminOutboundDashController extends Controller
 
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
-        
+
         SELECT Rep, Campaign, SUM([Count]) as [Count], SUM(Duration) as Duration
         FROM #temp
         GROUP BY Rep, Campaign
         ORDER BY Rep, Campaign;
-        
+
         SELECT Rep, SUM([Count]) as [Count], SUM(Duration) as Duration
         FROM #temp
         GROUP BY Rep
@@ -447,6 +388,12 @@ class AdminOutboundDashController extends Controller
         echo json_encode($return);
     }
 
+    /**
+     * return calls by campaign
+     *
+     * @param Request $request
+     * @return void
+     */
     public function callsByCampaign(Request $request)
     {
         $this->getSession($request);
@@ -481,7 +428,7 @@ class AdminOutboundDashController extends Controller
 				FROM  [$db].[dbo].[Dispos]
 				WHERE Disposition = DR.CallStatus
 				AND (GroupId = DR.GroupId OR IsSystem=1)
-				AND (Campaign = DR.Campaign OR Campaign = '') 
+				AND (Campaign = DR.Campaign OR Campaign = '')
 				ORDER BY [Description] Desc) DI
 			WHERE DR.GroupId = :groupid1
 			AND DR.Rep != ''
@@ -534,6 +481,12 @@ class AdminOutboundDashController extends Controller
         echo json_encode($return);
     }
 
+    /**
+     * return sales per hour per rep
+     *
+     * @param Request $request
+     * @return void
+     */
     public function salesPerHourPerRep(Request $request)
     {
         $this->getSession($request);
@@ -613,6 +566,12 @@ class AdminOutboundDashController extends Controller
         echo json_encode($return);
     }
 
+    /**
+     * query sales per hour per rep
+     *
+     * @param boolean $prev
+     * @return array
+     */
     public function getSalesPerHourPerRep($prev = false)
     {
         $campaign = $this->campaign;
@@ -653,7 +612,7 @@ class AdminOutboundDashController extends Controller
                 FROM  [$db].[dbo].[Dispos]
                 WHERE Disposition = DR.CallStatus
                 AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '') 
+                AND (Campaign = DR.Campaign OR Campaign = '')
                 ORDER BY [Description] Desc) DI
             WHERE DR.GroupId = :groupid
             AND DR.Rep != ''
@@ -680,12 +639,12 @@ class AdminOutboundDashController extends Controller
 
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
-        
+
         SELECT Rep, Campaign, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
         GROUP BY Rep, Campaign
         ORDER BY Rep, Campaign;
-        
+
         SELECT Rep, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
         GROUP BY Rep
@@ -696,6 +655,12 @@ class AdminOutboundDashController extends Controller
         return [$bycamp, $byrep];
     }
 
+    /**
+     * return average wait time
+     *
+     * @param Request $request
+     * @return void
+     */
     public function avgWaitTime(Request $request)
     {
         $this->getSession($request);
@@ -749,6 +714,12 @@ class AdminOutboundDashController extends Controller
         echo json_encode($return);
     }
 
+    /**
+     * return total calls
+     *
+     * @param Request $request
+     * @return void
+     */
     public function totalCalls(Request $request)
     {
         $this->getSession($request);
@@ -802,6 +773,12 @@ class AdminOutboundDashController extends Controller
         echo json_encode($return);
     }
 
+    /**
+     * query total calls
+     *
+     * @param boolean $prev
+     * @return array
+     */
     public function getTotalCalls($prev = false)
     {
 
