@@ -65,8 +65,6 @@ class ReportController extends Controller
             $request->request->add([$k => $v]);
         }
 
-        // Log::debug($request);
-
         $errors = [];
         $results = $this->reportservice->getResults($request);
 
@@ -83,6 +81,7 @@ class ReportController extends Controller
             'pag' => view('shared.reportpagination')->with($data)->render(),
             'errors' => view('shared.reporterrors')->withErrors($errors)->render(),
             'extras' => $this->reportservice->extras,
+            'params' => $this->reportservice->report->params,
         ];
     }
 
@@ -92,5 +91,4 @@ class ReportController extends Controller
 
         return ['results' => $results];
     }
-
 }

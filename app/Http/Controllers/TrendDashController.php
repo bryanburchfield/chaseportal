@@ -4,11 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Campaign;
-use App\DialingResult;
-use App\AgentActivity;
 
 class TrendDashController extends Controller
 {
@@ -131,8 +127,7 @@ class TrendDashController extends Controller
             'details' => $details,
         ];
 
-        $return['call_volume'] = $new_result;
-        echo json_encode($return);
+        return ['call_volume' => $new_result];
     }
 
     public function getCallVolume($prev = false)
@@ -184,7 +179,7 @@ class TrendDashController extends Controller
         SUM([Duration Inbound]) AS 'Duration Inbound',
         SUM([Outbound Count]) AS 'Outbound Count',
         SUM([Outbound Handled Calls]) AS 'Outbound Handled Calls',
-        SUM([Outbound Abandoned Calls]) AS 'Outbound Abandoned Calls', 
+        SUM([Outbound Abandoned Calls]) AS 'Outbound Abandoned Calls',
         SUM([Outbound Dropped Calls]) AS 'Outbound Dropped Calls',
         SUM([Duration Outbound]) AS 'Duration Outbound'
         FROM (";
@@ -192,20 +187,20 @@ class TrendDashController extends Controller
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $sql .= " $union SELECT $xAxis as 'Time',
-    'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END), 
+    'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
     'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
     'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
-    'Inbound Voicemails' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END), 
-    'Inbound Abandoned Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
-    'Inbound Dropped Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+    'Inbound Voicemails' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),
+    'Inbound Abandoned Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
+    'Inbound Dropped Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
     'Duration Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.Duration ELSE 0 END),
-    'Outbound Count' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN 1 ELSE 0 END), 
+    'Outbound Count' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN 1 ELSE 0 END),
     'Outbound Handled Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
     'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
-    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END), 
-    'Outbound Abandoned Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END), 
-    'Outbound Dropped Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END), 
+    'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+    'Outbound Abandoned Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
+    'Outbound Dropped Calls' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') AND DR.CallStatus='CR_DROPPED' THEN 1 ELSE 0 END),
     'Duration Outbound' = SUM(CASE WHEN DR.CallType NOT IN ('1','11') THEN DR.Duration ELSE 0 END)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE DR.CallType NOT IN ('7','8')
@@ -439,14 +434,15 @@ class TrendDashController extends Controller
 
         $avg_sl = $tot_calls == 0 ? 0 : round($tot_handled / $tot_calls * 100);
 
-        $new_result['time'] = $time_labels;
-        $new_result['total'] = $total_calls;
-        $new_result['handled_calls'] = $handled_calls;
-        $new_result['servicelevel'] = $servicelevel;
-        $new_result['avg'] = $avg_sl;
+        $new_result = [
+            'time' => $time_labels,
+            'total' => $total_calls,
+            'handled_calls' => $handled_calls,
+            'servicelevel' => $servicelevel,
+            'avg' => $avg_sl,
+        ];
 
-        $return['service_level'] = $new_result;
-        echo json_encode($return);
+        return ['service_level' => $new_result];
     }
 
     public function callDetails(Request $request)
@@ -623,8 +619,7 @@ class TrendDashController extends Controller
             'avg_ht' => $avg_ht,
         ];
 
-        $return['call_details'] = $new_result;
-        echo json_encode($return);
+        return ['call_details' => $new_result];
     }
 
     private function formatVolume($result, $params)
@@ -747,7 +742,6 @@ class TrendDashController extends Controller
             'avg_cc' => $avg_cc,
         ];
 
-        $return['agent_calltime'] = $new_result;
-        echo json_encode($return);
+        return ['agent_calltime' => $new_result];
     }
 }

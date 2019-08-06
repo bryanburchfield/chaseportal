@@ -4,13 +4,11 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-
 
 class ReportService
 {
-    private $report;
     private $reportName;
+    public $report;
     public $extras;
 
     public function __construct($reportName)

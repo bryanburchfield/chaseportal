@@ -83,9 +83,9 @@ class AdminOutboundDashController extends Controller
             }
 
             array_push($call_volume['time_labels'], $datetime);
-            array_push($call_volume['total_calls'], $r['Outbound Count']);
-            array_push($call_volume['handled'], $r['Outbound Handled Calls']);
-            array_push($call_volume['dropped'], $r['Outbound Dropped Calls']);
+            array_push($call_volume['total_calls'], $r['Count']);
+            array_push($call_volume['handled'], $r['Handled Calls']);
+            array_push($call_volume['dropped'], $r['Dropped Calls']);
         }
 
         foreach ($result[1] as $r) {
@@ -96,13 +96,13 @@ class AdminOutboundDashController extends Controller
             }
 
             array_push($call_duration['time_labels'], $datetime);
-            array_push($call_duration['duration'], $r['Duration Outbound']);
+            array_push($call_duration['duration'], $r['Duration']);
 
-            $total_duration['duration'] += $r['Duration Outbound'];
+            $total_duration['duration'] += $r['Duration'];
         }
 
         foreach ($prev_result[1] as $r) {
-            $prev_total_duration += $r['Duration Outbound'];
+            $prev_total_duration += $r['Duration'];
         }
 
         if ($prev_total_duration == 0) {
@@ -116,13 +116,13 @@ class AdminOutboundDashController extends Controller
             $ntc = 0;
         }
 
-        $return['call_volume'] = [
-            'call_volume' => $call_volume,
-            'call_duration' => $call_duration,
-            'total_duration' => $total_duration,
+        return [
+            'call_volume' => [
+                'call_volume' => $call_volume,
+                'call_duration' => $call_duration,
+                'total_duration' => $total_duration,
+            ],
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -376,7 +376,7 @@ class AdminOutboundDashController extends Controller
         $table_count = deleteColumn($bycamp, 'Duration');
         $table_duration = deleteColumn($bycamp, 'Count');
 
-        $return = [
+        return [
             'reps' => $reps,
             'counts' => $counts,
             'durations_secs' => $durations_secs,
@@ -384,8 +384,6 @@ class AdminOutboundDashController extends Controller
             'table_count' => $table_count,
             'table_duration' => $table_duration,
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -472,13 +470,11 @@ class AdminOutboundDashController extends Controller
         $camps = array_column($result, 'Campaign');
         $counts = array_column($result, 'CallCount');
 
-        $return = [
+        return [
             'Table' => $result,
             'Campaigns' => $camps,
             'Counts' => $counts,
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -549,7 +545,7 @@ class AdminOutboundDashController extends Controller
             $perhour_ntc = 0;
         }
 
-        $return = [
+        return [
             'table' => $bycamp,
             'total_sales' => $tots['Sales'],
             'total_sales_per_hour' => $tots['PerHour'],
@@ -562,8 +558,6 @@ class AdminOutboundDashController extends Controller
             'perhour_pct_sign' => $perhour_pctsign,
             'perhour_ntc' => $perhour_ntc,
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -710,8 +704,7 @@ class AdminOutboundDashController extends Controller
             $rec['AvgWaitTime'] = round($rec['AvgWaitTime']);
         }
 
-        $return['avg_wait_time'] = $result;
-        echo json_encode($return);
+        return ['avg_wait_time' => $result];
     }
 
     /**
@@ -760,17 +753,17 @@ class AdminOutboundDashController extends Controller
 
         $details = $this->filterDetails($this->dateFilter, $this->campaign);
 
-        $return['total_calls'] = [
-            'total' => $total_total_calls,
-            'outbound' => $outbound_total_calls,
-            'inbound' => $inbound_total_calls,
-            'details' => $details,
-            'pct_change' => $pctdiff,
-            'pct_sign' => $pctsign,
-            'ntc' => $ntc,
+        return [
+            'total_calls' => [
+                'total' => $total_total_calls,
+                'outbound' => $outbound_total_calls,
+                'inbound' => $inbound_total_calls,
+                'details' => $details,
+                'pct_change' => $pctdiff,
+                'pct_sign' => $pctsign,
+                'ntc' => $ntc,
+            ],
         ];
-
-        echo json_encode($return);
     }
 
     /**

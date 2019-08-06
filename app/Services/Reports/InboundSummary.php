@@ -59,10 +59,10 @@ class InboundSummary
         $bind['campaigns'] = $campaigns;
 
         $sql = "SET NOCOUNT ON;
-                
+
             CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
-            
+
             CREATE TABLE #CampaignSummary(
                 Source varchar(50),
                 Campaign varchar(50),
@@ -75,20 +75,20 @@ class InboundSummary
                 VoiceMail int DEFAULT 0,
                 Duration  int DEFAULT 0
             );
-            
+
             CREATE TABLE #Avgs(
                 GAvgHoldTime numeric(18,2) DEFAULT 0,
                 GAvgTalkTime numeric(18,2) DEFAULT 0
             );
             insert into #Avgs values (0,0);
-            
+
             CREATE UNIQUE INDEX IX_CampaignDate ON #CampaignSummary (Source, Campaign);
-            
+
             SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT 
+            $sql .= " $union SELECT
                     IsNull(dr.CallerId, '') as Source,
                     dr.Campaign as Campaign,
                     dr.CallStatus as CallStatus,
@@ -105,11 +105,11 @@ class InboundSummary
         }
 
         $sql .= ") tmp;
-            
+
             INSERT #CampaignSummary(Source, Campaign)
             SELECT DISTINCT dr.Source, dr.Campaign
             FROM #DialingResultsStats dr
-            
+
             UPDATE #CampaignSummary
             SET Total = b.Total
             FROM (SELECT a.Source, a.Campaign, SUM(a.Total) as Total
@@ -120,7 +120,7 @@ class InboundSummary
                   GROUP BY a.Source, a.Campaign) b
             WHERE #CampaignSummary.Source = b.Source
             AND #CampaignSummary.Campaign = b.Campaign
-            
+
             UPDATE #CampaignSummary
             SET Duration = b.Duration
             FROM (SELECT a.Source, a.Campaign, SUM(a.Duration) as Duration
@@ -131,7 +131,7 @@ class InboundSummary
                   GROUP BY a.Source, a.Campaign) b
             WHERE #CampaignSummary.Source = b.Source
             AND #CampaignSummary.Campaign = b.Campaign
-            
+
             UPDATE #CampaignSummary
             SET HandledByRep = a.Total
             FROM (SELECT dr.Source, dr.Campaign, COUNT(*) as Total
@@ -140,7 +140,7 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #CampaignSummary
             SET HandledByIVR = a.Total
             FROM (SELECT dr.Source, dr.Campaign, COUNT(*) as Total
@@ -150,7 +150,7 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #CampaignSummary
             SET AvgHoldTime = a.HoldTime
             FROM (SELECT dr.Source, dr.Campaign, AVG(HoldTime) as HoldTIme
@@ -159,7 +159,7 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #CampaignSummary
             SET AvgTalkTime = a.TalkTime
             FROM (SELECT dr.Source, dr.Campaign, AVG(Duration) as TalkTime
@@ -169,7 +169,7 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #CampaignSummary
             SET VoiceMail = a.VoiceMail
             FROM (SELECT dr.Source, dr.Campaign, COUNT(*) as VoiceMail
@@ -178,7 +178,7 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #CampaignSummary
             SET Abandoned = a.Abandoned
             FROM (SELECT dr.Source, dr.Campaign, COUNT(*) as Abandoned
@@ -187,21 +187,21 @@ class InboundSummary
                   GROUP BY dr.Source, dr.Campaign) a
             WHERE #CampaignSummary.Source = a.Source
             AND #CampaignSummary.Campaign = a.Campaign
-            
+
             UPDATE #Avgs
             SET GAvgHoldTime =
             (SELECT AVG(HoldTime)
              FROM #DialingResultsStats dr
              WHERE dr.HoldTime > 0)
-            
+
             UPDATE #Avgs
             SET GAvgTalkTime =
              (SELECT AVG(Duration)
               FROM #DialingResultsStats dr
               WHERE dr.Rep <> ''
               AND dr.Duration > 0)
-            
-            SELECT 
+
+            SELECT
              cs.Campaign,
              IsNull(s.Description + ' [' + cs.Source + ']', cs.Source) as Source,
              cs.Total,
@@ -247,6 +247,7 @@ class InboundSummary
         }
 
         $results = $this->processResults($results);
+
         return $this->getPage($results);
     }
 

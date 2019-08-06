@@ -57,17 +57,15 @@ class KpiController extends Controller
             $recipient->delete();
         }
 
-        $return['remove_recip'] = 1;
-        echo json_encode($return);
+        return ['remove_recip' => 1];
     }
 
     public function removeRecipientFromKpi(Request $request)
-    {   
+    {
 
         $recipient = KpiRecipient::find($request->id)->delete();
 
-        $return['remove_recipient'] = 1;
-        echo json_encode($return);
+        return ['remove_recipient' => 1];
     }
 
     public function removeRecipientFromAll($id)
@@ -108,8 +106,14 @@ class KpiController extends Controller
             $kr->save();
         }
 
-        $return['add_recipient'] = [$recipient->name, $recipient->email, $recipient->phone, $recipient->id];
-        echo json_encode($return);
+        return [
+            'add_recipient' => [
+                $recipient->name,
+                $recipient->email,
+                $recipient->phone,
+                $recipient->id,
+            ],
+        ];
     }
 
     public function toggleKpi(Request $request)
@@ -132,8 +136,7 @@ class KpiController extends Controller
         $kpiGroup->save();
 
         //ajax return
-        $return['kpi_update'] = '1';
-        echo json_encode($return);
+        return ['kpi_update' => '1'];
     }
 
     public function adjustInterval(Request $request)
@@ -156,8 +159,7 @@ class KpiController extends Controller
         $kpiGroup->save();
 
         // ajax return
-        $return['adjust_interval'] = '1';
-        echo json_encode($return);
+        return ['adjust_interval' => '1'];
     }
 
     public function searchRecipients(Request $request)
@@ -178,8 +180,7 @@ class KpiController extends Controller
             ->get()
             ->toArray();
 
-        $return['search_recip'] = $recipients;
-        echo json_encode($return);
+        return ['search_recip' => $recipients];
     }
 
     private function formatPhone($phone)
@@ -196,7 +197,7 @@ class KpiController extends Controller
 
         $data = [
             'jsfile' => $jsfile,
-            'page'=>$page,
+            'page' => $page,
             'curdash' => 'kpidash',
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')
@@ -334,14 +335,14 @@ class KpiController extends Controller
 
     private function getHeaders($results)
     {
-        return empty($results) ? [] : array_keys((array)$results[0]);
+        return empty($results) ? [] : array_keys((array) $results[0]);
     }
 
     private function getValues($results)
     {
         $values = [];
         foreach ($results as $rec) {
-            $values[] = array_values((array)$rec);
+            $values[] = array_values((array) $rec);
         }
         return $values;
     }

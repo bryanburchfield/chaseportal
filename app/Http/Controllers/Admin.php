@@ -64,7 +64,7 @@ class Admin extends Controller
 
         do {
             $hash = md5(uniqid());
-        }   while ($this->token_exists($hash));
+        } while ($this->token_exists($hash));
 
         /// check if name or email exists
         $user_check = User::where('name', $request->name)
@@ -80,7 +80,7 @@ class Admin extends Controller
             $return['errors'] = 'Name or email already in use';
         }
 
-        echo json_encode($return);
+        return $return;
     }
 
     public function deleteUser(Request $request)
@@ -88,8 +88,7 @@ class Admin extends Controller
         // delete automated reports too
 
         $user = User::findOrFail($request->id)->delete();
-        $return['status'] = 'user deleted';
-        echo json_encode($return);
+        return ['status' => 'user deleted'];
     }
 
     public function getUser(Request $request)
@@ -115,7 +114,8 @@ class Admin extends Controller
             $user->update($request->all());
             $return['status'] = 'success';
         }
-        echo json_encode($return);
+
+        return $return;
     }
 
     public function cdrLookup(Request $request)
@@ -158,7 +158,7 @@ class Admin extends Controller
         $sql = "DECLARE @phone varchar(50) = :phone;
 		DECLARE @fromdate datetime = :fromdate;
 		DECLARE @todate datetime = :todate;
-		
+
 		SELECT [Server], $fields
 		FROM (";
 
@@ -194,11 +194,9 @@ class Admin extends Controller
             $results = json_decode(json_encode($results), true);
         }
 
-        $return = [
+        return [
             'columns' => $field_array,
             'search_result' => $results,
         ];
-
-        echo json_encode($return);
     }
 }

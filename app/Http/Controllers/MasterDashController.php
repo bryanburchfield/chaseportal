@@ -59,8 +59,7 @@ class MasterDashController extends Controller
         session(['currentDash' => $request->dashboard]);
 
         // ajax return
-        $return['set_dash'] = $request->dashboard;
-        echo json_encode($return);
+        return ['set_dash' => $request->dashboard];
     }
 
     public function showReport(Request $request)

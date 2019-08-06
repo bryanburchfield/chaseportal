@@ -256,8 +256,7 @@ class AdminDashController extends Controller
             'details' => $details,
         ];
 
-        $return['call_volume'] = $new_result;
-        echo json_encode($return);
+        return ['call_volume' => $new_result];
     }
 
     /**
@@ -482,17 +481,17 @@ class AdminDashController extends Controller
         $avg_hold_time = secondsToHms($avg_hold_time);
         $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
 
-        $return['average_hold_time'] = [
-            'min_hold_time' => $average_hold_time['MinHold'],
-            'max_hold_time' => $average_hold_time['MaxHold'],
-            'avg_hold_time' => $avg_hold_time,
-            'total_hold_time' => $total_hold_time,
-            'pct_change' => $pctdiff,
-            'pct_sign' => $pctsign,
-            'ntc' => $ntc,
+        return [
+            'average_hold_time' => [
+                'min_hold_time' => $average_hold_time['MinHold'],
+                'max_hold_time' => $average_hold_time['MaxHold'],
+                'avg_hold_time' => $avg_hold_time,
+                'total_hold_time' => $total_hold_time,
+                'pct_change' => $pctdiff,
+                'pct_sign' => $pctsign,
+                'ntc' => $ntc,
+            ],
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -584,15 +583,15 @@ class AdminDashController extends Controller
 
         $abandon_pct = round($abandon_pct, 2) . '%';
 
-        $return['abandon_rate'] = [
-            'abandon_calls' => $abandon_rate['Abandoned'],
-            'abandon_rate' => $abandon_pct,
-            'pct_change' => $pctdiff,
-            'pct_sign' => $pctsign,
-            'ntc' => $ntc,
+        return [
+            'abandon_rate' => [
+                'abandon_calls' => $abandon_rate['Abandoned'],
+                'abandon_rate' => $abandon_pct,
+                'pct_change' => $pctdiff,
+                'pct_sign' => $pctsign,
+                'ntc' => $ntc,
+            ],
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -681,14 +680,14 @@ class AdminDashController extends Controller
             $ntc = 0;
         }
 
-        $return['total_sales'] = [
-            'sales' => $total_sales,
-            'pct_change' => $pct_change,
-            'pct_sign' => $pct_sign,
-            'ntc' => $ntc,
+        return [
+            'total_sales' => [
+                'sales' => $total_sales,
+                'pct_change' => $pct_change,
+                'pct_sign' => $pct_sign,
+                'ntc' => $ntc,
+            ],
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -840,7 +839,7 @@ class AdminDashController extends Controller
         $table_count = deleteColumn($bycamp, 'Duration');
         $table_duration = deleteColumn($bycamp, 'Count');
 
-        $return = [
+        return [
             'reps' => $reps,
             'counts' => $counts,
             'durations_secs' => $durations_secs,
@@ -848,8 +847,6 @@ class AdminDashController extends Controller
             'table_count' => $table_count,
             'table_duration' => $table_duration,
         ];
-
-        echo json_encode($return);
     }
 
     /**
@@ -916,8 +913,12 @@ class AdminDashController extends Controller
         $rem = 100 - $pct;
         $pct = round($pct);
 
-        $return['service_level'] = ['service_level' => $pct, 'remainder' => $rem];
-        echo json_encode($return);
+        return [
+            'service_level' => [
+                'service_level' => $pct,
+                'remainder' => $rem,
+            ],
+        ];
     }
 
     /**
@@ -997,13 +998,11 @@ class AdminDashController extends Controller
             $handletime[] = secondsToHms($rec['AverageHandleTime']);
         }
 
-        $return = [
+        return [
             'reps' => $reps,
             'avg_handletime' => $handletime,
             'avg_handletimesecs' => $handletimesecs,
             'table' => $bycamp,
         ];
-
-        echo json_encode($return);
     }
 }

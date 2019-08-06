@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Campaign;
-use App\DialingResult;
 
 class LeaderDashController extends Controller
 {
@@ -83,8 +81,7 @@ class LeaderDashController extends Controller
             'details' => $details,
         ];
 
-        $return['call_volume'] = $new_result;
-        echo json_encode($return);
+        return ['call_volume' => $new_result];
     }
 
     public function getCallVolume($prev = false)
@@ -221,7 +218,7 @@ class LeaderDashController extends Controller
 				FROM  [$db].[dbo].[Dispos]
 				WHERE Disposition = DR.CallStatus
 				AND (GroupId = DR.GroupId OR IsSystem=1)
-				AND (Campaign = DR.Campaign OR Campaign = '') 
+				AND (Campaign = DR.Campaign OR Campaign = '')
 				ORDER BY [Description] Desc) DI
 			WHERE DR.GroupId = :groupid
 			AND DR.Rep != ''
@@ -279,13 +276,11 @@ class LeaderDashController extends Controller
         }
         $result[] = $tots;
 
-        $return = [
+        return [
             'call_details' => ['leaders' => $result, 'repsales' => $repsales],
             'Rep' => array_column($repsales, 'Rep'),
             'Sales' => array_column($repsales, 'Sales'),
         ];
-
-        echo json_encode($return);
     }
 
     public function salesPerCampaign(Request $request)
@@ -322,7 +317,7 @@ class LeaderDashController extends Controller
                 FROM  [$db].[dbo].[Dispos]
                 WHERE Disposition = DR.CallStatus
                 AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '') 
+                AND (Campaign = DR.Campaign OR Campaign = '')
                 ORDER BY [Description] Desc) DI
             WHERE DR.GroupId = :groupid
             AND DR.CallType NOT IN (1,7,8,11)
@@ -352,11 +347,9 @@ class LeaderDashController extends Controller
 
         $result = $this->runSql($sql, $bind);
 
-        $return = [
+        return [
             'Campaign' => array_column($result, 'Campaign'),
             'Sales' => array_column($result, 'Sales'),
         ];
-
-        echo json_encode($return);
     }
 }

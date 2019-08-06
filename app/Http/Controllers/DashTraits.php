@@ -347,7 +347,6 @@ trait DashTraits
             }
         }
 
-        $return['campaigns'] = [];
-        echo json_encode($return);
+        return ['campaigns' => []];
     }
 }
