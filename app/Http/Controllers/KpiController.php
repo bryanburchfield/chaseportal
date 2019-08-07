@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Log;
 
 class KpiController extends Controller
@@ -216,10 +217,18 @@ class KpiController extends Controller
         return [$fromDate, $toDate];
     }
 
+    /**
+     * Set SQL Server db in config and also run a USE statement
+     *
+     * @return void
+     */
     private function setDb()
     {
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
+
+        $query = "USE [$db];";
+        DB::connection('sqlsrv')->statement($query);
     }
 
     public function runKpi(Request $request)
@@ -237,12 +246,12 @@ class KpiController extends Controller
         $group_id = Auth::user()->group_id;
 
         // Get kpi info
-        $kpi = \App\Kpi::where('id', $kpiId)->first();
+        $kpi = Kpi::where('id', $kpiId)->first();
 
         $kpi_name = $kpi->name;
         $query = $kpi->query;
 
-        $recipients = $kpi->getRecipients();
+        $recipients = $kpi->getRecipients($group_id);
 
         if (empty($recipients)) {
             return "No recipients have been added";
@@ -255,7 +264,7 @@ class KpiController extends Controller
             'todate' => $endDate,
         ];
 
-        $results = DB::connection('sqlsrv')->select(DB::raw($query), $bind);
+        $results = DB::connection('sqlsrv')->select($query, $bind);
 
         $sms = $this->getSms($kpi_name, $results);
 
@@ -345,5 +354,66 @@ class KpiController extends Controller
             $values[] = array_values((array) $rec);
         }
         return $values;
+    }
+
+    /**
+     * Return all kpi_group records that are due to run at this time
+     *
+     * @return KpiGroup collection
+     */
+    public static function cronDue()
+    {
+        // We could use the user's tz, but that would require
+        // looking up a user for each kpi_group record, slowing
+        // us down.
+        $timezone = windowsToUnixTz('Eastern Standard Time');
+
+        $return = collect();
+
+        foreach (KpiGroup::where('active', 1)->orderBy('group_id')->get() as $rec) {
+            switch ($rec->interval) {
+                case 15:
+                    $expression = '0,15,30,45 * * * 1-5';
+                    break;
+                case 30:
+                    $expression = '0,30 * * * 1-5';
+                    break;
+                case 60:
+                    $expression = '0 * * * 1-5';
+                    $expression = '* * * * 1-5';
+                    break;
+                case 720:
+                    $expression = '0 12,20 * * 1-5';
+                    break;
+                case 1440:
+                    $expression = '0, 20 * * 1-5';
+                    break;
+                default:
+                    continue;
+            }
+
+            // This is where we would look up a user to get their
+            // timezone - if we were going to do that
+
+            if ($rec->isDue($expression, $timezone)) {
+                $return->add($rec);
+            }
+        }
+
+        return $return;
+    }
+
+    public static function cronRun(KpiGroup $kpiGroup)
+    {
+        // authenticate as user of the group
+        $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
+        Auth::logout();
+        Auth::login($user);
+        $kpi = new KpiController();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
+        $kpi->runKpi($request);
     }
 }
