@@ -1,5 +1,12 @@
 <?php
 
+if (!function_exists('windowsToUnixTz')) {
+    function windowsToUnixTz($windowsTz)
+    {
+        return \IntlTimeZone::getIDForWindowsID($windowsTz);
+    }
+}
+
 if (!function_exists('localToUtc')) {
     function localToUtc($datetime, $windowsTz)
     {
@@ -7,7 +14,7 @@ if (!function_exists('localToUtc')) {
             $datetime = $datetime->format('Y-m-d H:i:s');
         }
 
-        $ianaTz = \IntlTimeZone::getIDForWindowsID($windowsTz);
+        $ianaTz = windowsToUnixTz($windowsTz);
 
         $dt = new \DateTime($datetime, new \DateTimeZone($ianaTz));
         $dt->setTimeZone(new \DateTimeZone('UTC'));
@@ -23,7 +30,7 @@ if (!function_exists('utcToLocal')) {
             $datetime = $datetime->format('Y-m-d H:i:s');
         }
 
-        $ianaTz = \IntlTimeZone::getIDForWindowsID($windowsTz);
+        $ianaTz = windowsToUnixTz($windowsTz);
 
         $dt = new \DateTime($datetime, new \DateTimeZone('UTC'));
         $dt->setTimeZone(new \DateTimeZone($ianaTz));
