@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class AgentAnalysis
 {
@@ -81,7 +80,7 @@ class AgentAnalysis
             INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
 
-        $sql .= "        
+        $sql .= "
         CREATE TABLE #AgentAnalysis(
             Date date,
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
@@ -103,13 +102,13 @@ class AgentAnalysis
             DispositionTimeSec numeric(18,3) DEFAULT 0,
             LoggedInTimeSec numeric(18,3) DEFAULT 0
         );
-        
+
         SELECT * INTO #AgentActivityDuration FROM (";
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= " $union SELECT
-                CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date) as Date, 
+                CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date) as Date,
                 AA.Campaign,
                 AA.Rep,
                 [Action],
@@ -151,7 +150,7 @@ class AgentAnalysis
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
             $sql .= " $union SELECT
-                CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date, 
+                CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date,
                 r.Campaign,
                 r.Rep,
                 d.Type,
@@ -169,7 +168,7 @@ class AgentAnalysis
                         FROM [$db].[dbo].[Dispos]
                         WHERE Disposition=r.CallStatus
                         AND (GroupId=:group_id2 OR IsSystem=1)
-                        AND (Campaign=r.Campaign OR Campaign='') 
+                        AND (Campaign=r.Campaign OR Campaign='')
                         ORDER BY [Description] Desc) d
             WHERE r.GroupId = :group_id3
             AND r.Date >= :startdate2
@@ -311,7 +310,7 @@ class AgentAnalysis
                 GROUP BY Campaign, Rep, Date) a
         WHERE #AgentAnalysis.Campaign = a.Campaign
         AND	#AgentAnalysis.Rep = a.Rep
-        AND	#AgentAnalysis.Date = a.Date;        
+        AND	#AgentAnalysis.Date = a.Date;
 
         UPDATE #AgentAnalysis
         SET CPH = Connects/Hours,

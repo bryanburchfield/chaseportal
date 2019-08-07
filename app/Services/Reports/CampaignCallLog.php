@@ -5,8 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class CampaignCallLog
 {
@@ -57,7 +56,7 @@ class CampaignCallLog
         $bind['enddate'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
-        
+
         SELECT COUNT(DISTINCT Rep) TotReps, SUM(ManHours) ManHours FROM (";
 
         $union = '';
@@ -102,7 +101,7 @@ class CampaignCallLog
             DI.Description,
             DI.IsSystem
             FROM [$db].[dbo].[DialingResults] DR
-            LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign) 
+            LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)
             WHERE DR.GroupId = :group_id
             AND DR.Date >= :startdate
             AND DR.Date < :enddate

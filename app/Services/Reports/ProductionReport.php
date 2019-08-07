@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class ProductionReport
 {
@@ -94,12 +93,12 @@ class ProductionReport
         }
 
         $sql .= "
-        DECLARE 
+        DECLARE
             @cols NVARCHAR(MAX),
             @params NVARCHAR(500),
             @query NVARCHAR(MAX),
             @temp_table_name NVARCHAR(100)
-        
+
         SET @cols = ''
         SET @temp_table_name = '[##' + REPLACE(NEWID(), '-','') + ']'
 
@@ -162,7 +161,7 @@ class ProductionReport
 
             $sql .= "
                 WHERE dr.GroupId = '''+CAST(:group_id3 as varchar)+''' AND '
-        
+
         SET @query = @query + N'dr.Date between '''+CAST(:startdate2 as nvarchar)+''' and '''+CAST(:enddate2 as nvarchar)+''' AND
                 (((d.GroupId='''+CAST(:group_id4 as varchar)+''' OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR
                 dr.CallStatus = ''UNFINISHED'')";
@@ -179,9 +178,9 @@ class ProductionReport
         @cols +' )
         ) AS pvt
         ORDER BY Rep'
-        
+
         SET @params = '@CampaignIN varchar(max)'
-        
+
         BEGIN TRY";
 
         if (!empty($campaigns)) {
@@ -189,7 +188,7 @@ class ProductionReport
             execute sp_executesql @query";
         } else {
             $sql .= "
-            execute sp_executesql 
+            execute sp_executesql
                 @query, @params,
                 @CampaignIN=:campaigns";
         }
@@ -197,7 +196,7 @@ class ProductionReport
         $sql .= "
             IF OBJECT_ID('tempdb..' + @temp_table_name ) IS NULL
                 RETURN
-        
+
             set @query = N'UPDATE ' + @temp_table_name + N' SET ManHours = IsNull(a.ManHours/3600, 0)
             FROM (SELECT Rep, SUM(Duration) as ManHours
                   FROM AgentActivity aa WITH(NOLOCK)'";
@@ -207,9 +206,9 @@ class ProductionReport
                 set @query = @query + N' INNER JOIN #SelectedCampaign c on c.CampaignName = aa.Campaign'";
         }
 
-        $sql .= "        
+        $sql .= "
             set @query = @query + N' WHERE aa.GroupId = ' + CAST(:group_id5 as nvarchar) + N' AND '
-        
+
             set @query = @query + N'aa.Date >= '''+CAST(:startdate3 as nvarchar)+''' AND aa.Date < '''+CAST(:enddate3 as nvarchar)+''' AND
                     [Action] <> ''Paused''
                 GROUP BY Rep) a
@@ -218,7 +217,7 @@ class ProductionReport
 
         if (!empty($campaigns)) {
             $sql .= "
-            execute sp_executesql 
+            execute sp_executesql
             @query, @params,
             @CampaignIN=:campaigns";
         } else {
@@ -232,8 +231,8 @@ class ProductionReport
                 [Type] int,
                 [Count] int
             )
-        
-                INSERT INTO #DialingResultsStats 
+
+                INSERT INTO #DialingResultsStats
                 SELECT Rep, Type, SUM(Cnt) as [Count]
                 FROM (";
 
@@ -242,8 +241,8 @@ class ProductionReport
             $sql .= "
                 $union SELECT r.Rep, d.Type, count(r.id) as [Cnt]
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                    CROSS APPLY (SELECT TOP 1 [Type] FROM Dispos WHERE Disposition=r.CallStatus AND 
-                            (GroupId=:group_id6 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') 
+                    CROSS APPLY (SELECT TOP 1 [Type] FROM Dispos WHERE Disposition=r.CallStatus AND
+                            (GroupId=:group_id6 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
                             ORDER BY [Description] Desc) d";
 
             if (!empty($campaigns)) {
@@ -271,7 +270,7 @@ class ProductionReport
 
             CREATE INDEX IX_CampaignType ON #DialingResultsStats (Rep, [Type]);
             CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
-        
+
             set @query = N'UPDATE ' + @temp_table_name + N' SET
                 Connects = a.Connects
             FROM (SELECT Rep, SUM([Count]) as Connects
@@ -279,9 +278,9 @@ class ProductionReport
                 WHERE [Type] > 0
                 GROUP BY Rep) a
             WHERE ' + @temp_table_name + N'.Rep = a.Rep'
-        
+
             execute sp_executesql @query
-        
+
             set @query = N'UPDATE ' + @temp_table_name + N' SET
                 Contacts = a.Contacts
             FROM (SELECT Rep, SUM([Count]) as Contacts
@@ -289,9 +288,9 @@ class ProductionReport
                 WHERE [Type] > 1
                 GROUP BY Rep) a
             WHERE ' + @temp_table_name + N'.Rep = a.Rep'
-        
+
             execute sp_executesql @query
-        
+
             set @query = N'UPDATE ' + @temp_table_name + N' SET
                 SalesCount = a.SalesCount
             FROM (SELECT Rep, SUM([Count]) as SalesCount
@@ -299,36 +298,36 @@ class ProductionReport
                 WHERE [Type] = 3
                 GROUP BY Rep) a
             WHERE ' + @temp_table_name + N'.Rep = a.Rep'
-        
+
             execute sp_executesql @query
-        
+
             set @query = N'UPDATE ' + @temp_table_name + N' SET
                 ContactsPerHour = Contacts/ManHours,
                 SalesPerHour = SalesCount/ManHours
             WHERE ManHours > 0'
-        
+
             execute sp_executesql @query
-        
+
             DROP TABLE #DialingResultsStats
         END TRY
-        
+
         BEGIN CATCH
-        
+
             DECLARE @ErrorMessage NVARCHAR(4000);
             DECLARE @ErrorSeverity INT;
             DECLARE @ErrorState INT;
-        
+
             SELECT @ErrorMessage = ERROR_MESSAGE(),
                     @ErrorSeverity = ERROR_SEVERITY(),
                     @ErrorState = ERROR_STATE();
-        
+
             RAISERROR (@ErrorMessage,
                         @ErrorSeverity,
                         @ErrorState
                         );
             return
         END CATCH
-        
+
         SET @query = 'SELECT * FROM ' + @temp_table_name  + ' ' + :orderby
         execute sp_executesql @query";
 

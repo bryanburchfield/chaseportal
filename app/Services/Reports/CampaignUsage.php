@@ -5,9 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class CampaignUsage
 {
@@ -58,13 +56,13 @@ class CampaignUsage
         }
 
         $sql = "SET NOCOUNT ON;
-        
+
         CREATE TABLE #CampaignUsage(
-            Attempt int, 
+            Attempt int,
             Callable bit,
             Tries int default 0
         );
-        
+
         INSERT INTO #CampaignUsage(Attempt,Callable) VALUES
         (0,0),(0,1),(1,0),(1,1),(2,0),(2,1),(3,0),(3,1),(4,0),(4,1),
         (5,0),(5,1),(6,0),(6,1),(7,0),(7,1),(8,0),(8,1),(9,0),(9,1),
@@ -77,7 +75,7 @@ class CampaignUsage
             SET #CampaignUsage.Tries += a.Tries
             FROM (SELECT l2.Attempt, sum(l2.Tries) as Tries
                     FROM (SELECT
-                        case when l.Attempt > 20 then 20 else l.Attempt end as Attempt, 
+                        case when l.Attempt > 20 then 20 else l.Attempt end as Attempt,
                         COUNT(Attempt) as Tries
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         WHERE l.GroupId = :group_id1
@@ -94,7 +92,7 @@ class CampaignUsage
             $sql .= " UPDATE #CampaignUsage
             SET #CampaignUsage.Tries += a.Tries
             FROM (SELECT l2.Attempt, sum(l2.Tries) as Tries
-                    FROM (SELECT 
+                    FROM (SELECT
                     case when l.Attempt > 20 then 20 else l.Attempt end as Attempt,
                     COUNT(Attempt) as Tries
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
@@ -145,8 +143,8 @@ class CampaignUsage
         GROUP BY Subcampaign
         ORDER BY Cnt desc;
 
-        SELECT 
-        case 
+        SELECT
+        case
           when Callable = 0 then 'NonCallable'
           when Callable = 1 then 'Callable'
         end [Stat],

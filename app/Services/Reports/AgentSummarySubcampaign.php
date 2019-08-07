@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class AgentSummarySubcampaign
 {
@@ -88,7 +87,7 @@ class AgentSummarySubcampaign
             INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
 
-        $sql .= "                    
+        $sql .= "
         CREATE TABLE #AgentSummary(
             Campaign varchar(50),
             Subcampaign varchar(50),
@@ -114,15 +113,15 @@ class AgentSummarySubcampaign
             AvDispoTime numeric(18,2) DEFAULT 0,
             ConnectedTimeSec int DEFAULT 0
             );
-        
+
         CREATE TABLE #SelectedRep(Rep varchar(50) Primary Key);
         INSERT #SelectedRep(Rep)
         SELECT DISTINCT [value] from dbo.SPLIT(:reps, '!#!');
-        
+
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
         INSERT INTO #SelectedCampaign
         SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
-        
+
         SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
@@ -151,16 +150,16 @@ class AgentSummarySubcampaign
                 AND r.Date >= :startdate2
                 AND r.Date < :enddate2
                 ) a
-            WHERE [Type] > 0 
+            WHERE [Type] > 0
             GROUP BY Campaign, Subcampaign, Rep, [Type]";
 
             $union = 'UNION ALL';
         }
 
         $sql .= ") tmp;
-        
+
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
-        
+
         SELECT * INTO #AgentSummaryDuration FROM (";
 
         $union = '';
@@ -189,62 +188,62 @@ class AgentSummarySubcampaign
         }
 
         $sql .= ") tmp;
-        
+
         CREATE INDEX IX_Rep ON #AgentSummaryDuration (Campaign, Subcampaign, Rep);
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Contacts)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
         WHERE [Type] > 1
         GROUP BY Campaign, Subcampaign, Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Connects)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
         WHERE [Type] > 0
         GROUP BY Campaign, Subcampaign, Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Hours)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, IsNull(SUM(Duration)/3600,0)
         FROM #AgentSummaryDuration aa
         WHERE aa.Action <> 'Paused'
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Leads)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
         WHERE [Type] = 3
         GROUP BY Campaign, Subcampaign, Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, TalkTimeSec, TalkTimeCount)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration), SUM([Count])
         FROM #AgentSummaryDuration aa WITH(NOLOCK)
         WHERE aa.Action in ('Call', 'ManualCall', 'InboundCall')
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, PausedTimeSec)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration)
         FROM #AgentSummaryDuration aa
         WHERE aa.Action = 'Paused'
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, WaitTimeSec, WaitTimeCount)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration), SUM([Count])
         FROM #AgentSummaryDuration aa WITH(NOLOCK)
         WHERE aa.Action = 'Waiting'
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, DispositionTimeSec, DispositionTimeCount)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration), SUM([Count])
         FROM #AgentSummaryDuration aa WITH(NOLOCK)
         WHERE aa.Action = 'Disposition'
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, ConnectedTimeSec)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration)
         FROM #AgentSummaryDuration aa
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
-        
+
         SELECT Campaign, Subcampaign, Rep,
         SUM(TalkTimeCount) AS Calls,
         SUM(Contacts) AS Contacts,
@@ -270,34 +269,34 @@ class AgentSummarySubcampaign
         FROM #AgentSummary
         GROUP BY Campaign, Subcampaign, Rep
         ORDER BY Campaign, Subcampaign, Rep
-        
+
         UPDATE #Final
         SET CPH = Connects/Hours,
             APH = Leads/Hours
         WHERE Hours > 0;
-        
+
         UPDATE #Final
         SET ConversionRate = (CAST(Leads as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100
         WHERE Contacts > 0;
-        
+
         UPDATE #Final
         SET ConversionFactor = (CAST(Leads as numeric(18,2)) /CAST(Contacts as numeric(18,2))) / Hours
         WHERE Hours > 0 AND Contacts > 0;
-        
+
         UPDATE #Final
         SET AvWaitTime = WaitTimeSec / WaitTimeCount
         WHERE WaitTimeCount > 0;
-        
+
         UPDATE #Final
         SET AvTalkTime = TalkTimeSec / TalkTimeCount
         WHERE TalkTimeCount > 0;
-        
+
         UPDATE #Final
         SET AvDispoTime = DispositionTimeSec / DispositionTimeCount
         WHERE DispositionTimeCount > 0;
-        
+
         SELECT
-         Campaign, 
+         Campaign,
          Subcampaign,
          Rep,
          Calls,

@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class CallDetails
 {
@@ -148,17 +147,17 @@ class CallDetails
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT 
+            $sql .= " $union SELECT
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
-                DR.Phone, 
+                DR.Phone,
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE :tz as Date,
                 CASE DR.LeadId
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')
                 END as CallStatus,
                 DR.Duration,
-                CASE 
+                CASE
                     WHEN DR.CallType= -1 THEN ''
                     WHEN DR.CallType = 0 THEN 'Outbound'
                     WHEN DR.CallType = 1 THEN 'Inbound'

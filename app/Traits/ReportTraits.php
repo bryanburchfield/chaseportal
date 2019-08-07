@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Reports;
+namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

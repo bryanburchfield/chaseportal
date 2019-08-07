@@ -5,8 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class AgentActivity
 {
@@ -59,7 +58,7 @@ class AgentActivity
         $bind['reps2'] = $reps;
 
         $sql = "SET NOCOUNT ON;
-    
+
         SELECT * INTO #AgentLog FROM (";
 
         $union = '';
@@ -82,16 +81,16 @@ class AgentActivity
         }
 
         $sql .= ") tmp;
-    
+
     CREATE INDEX IX_CampaignAction ON #AgentLog (Campaign, [Action], Date);
     CREATE INDEX IX_Action ON #AgentLog ([Action]);
-    
+
     UPDATE #AgentLog SET [Action] = 'Unpaused' WHERE [Action] = 'Paused';
-    
+
     INSERT INTO #AgentLog(Campaign, Date, [Action], Duration, Details, Rep)
     SELECT Campaign, dateadd(ss, -1*Duration, Date), 'Paused', 0, Details, Rep
     FROM #AgentLog WHERE [Action] = 'Unpaused';
-    
+
     SELECT Rep,
     Campaign,
     [Action] as Event,

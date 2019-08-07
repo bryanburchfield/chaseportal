@@ -4,9 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class CampaignSummary
 {
@@ -68,7 +66,7 @@ class CampaignSummary
         $bind['enddate3'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
-    
+
     CREATE TABLE #CampaignSummary(
         Campaign varchar(50),
         Total int DEFAULT 0,
@@ -86,9 +84,9 @@ class CampaignSummary
         DropCallsPercentage numeric(18,2) DEFAULT 0,
         Dropped numeric(18,2) DEFAULT 0,
     );
-    
+
     CREATE UNIQUE INDEX IX_CampaignDate ON #CampaignSummary (Campaign);
-    
+
     SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
@@ -111,25 +109,25 @@ class CampaignSummary
         }
 
         $sql .= ") tmp;
-    
+
     CREATE INDEX IX_CampaignType ON #DialingResultsStats (Campaign, [Type]);
     CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
-    
+
     INSERT #CampaignSummary(Campaign)
     SELECT DISTINCT Campaign
     FROM #DialingResultsStats;
-    
+
     CREATE TABLE #DialingSettings
     (
         Campaign varchar(50),
         MaxDialingAttempts int
     );
-    
+
     INSERT INTO #DialingSettings(Campaign, MaxDialingAttempts)
     SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id3, Campaign, 'MaxDialingAttempts', 0)
     FROM #CampaignSummary
     GROUP BY Campaign;
-    
+
     UPDATE #CampaignSummary
     SET Connects = a.Connects
     FROM (SELECT Campaign, SUM([Count]) as Connects
@@ -137,7 +135,7 @@ class CampaignSummary
           WHERE [Type] > 0
           GROUP BY Campaign) a
     WHERE #CampaignSummary.Campaign = a.Campaign;
-    
+
     UPDATE #CampaignSummary
     SET Sales = a.Sales
     FROM (SELECT Campaign, SUM([Count]) as Sales
@@ -159,7 +157,7 @@ class CampaignSummary
             AND [Action] <> 'Paused'
             GROUP BY Campaign) a
         WHERE #CampaignSummary.Campaign = a.Campaign;
- 
+
         UPDATE #CampaignSummary
         SET Total += a.Total
         FROM (SELECT l.Campaign, COUNT(l.id) as Total
@@ -218,7 +216,7 @@ class CampaignSummary
           FROM  #DialingResultsStats WITH(NOLOCK)
           GROUP BY Campaign) a
     WHERE #CampaignSummary.Campaign = a.Campaign;
-    
+
     UPDATE #CampaignSummary
     SET Dropped = a.Dropped
     FROM (SELECT Campaign, SUM([Count]) as Dropped
@@ -226,26 +224,26 @@ class CampaignSummary
           WHERE CallStatus = 'CR_DROPPED'
           GROUP BY Campaign) a
     WHERE #CampaignSummary.Campaign = a.Campaign;
-    
+
     UPDATE #CampaignSummary
     SET CPH = Connects/ManHours,
         SPH = Sales/ManHours,
         DPH = Dialed/ManHours
     WHERE ManHours > 0;
-    
+
     UPDATE #CampaignSummary
     SET DropCallsPercentage = (Dropped / (Connects + Dropped)) * 100
     WHERE Connects + Dropped > 0;
-    
+
     UPDATE #CampaignSummary
     SET ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
     WHERE Dialed > 0;
-    
+
     UPDATE #CampaignSummary
     SET ConversionFactor = (CAST(Sales as numeric(18,2)) /CAST(Dialed as numeric(18,2))) / ManHours
     WHERE ManHours > 0 AND Dialed > 0;
-    
-    SELECT 
+
+    SELECT
         Campaign,
         Total,
         Dialed,

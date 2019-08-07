@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class AgentSummaryCampaign
 {
@@ -83,7 +82,7 @@ class AgentSummaryCampaign
             INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
 
-        $sql .= "                            
+        $sql .= "
                 CREATE TABLE #AgentSummary(
                     Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
                     Contacts int DEFAULT 0,
@@ -147,17 +146,17 @@ class AgentSummaryCampaign
                         AND r.Date >= :startdate1
                         AND r.Date < :enddate1
                     ) a
-                    WHERE [Type] > 0 	
+                    WHERE [Type] > 0
                     GROUP BY Rep, [Type]";
 
             $union = 'UNION ALL';
         }
 
         $sql .= ") tmp;
-                
+
                 CREATE INDEX IX_RepType ON #DialingResultsStats (Rep, [Type]);
                 CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
-        
+
                 SELECT * INTO #AgentSummaryDuration FROM (";
 
         $union = '';
@@ -176,12 +175,12 @@ class AgentSummaryCampaign
         }
 
         $sql .= ") tmp;
-                
+
                 CREATE INDEX IX_Rep ON #AgentSummaryDuration (Rep);
                 CREATE INDEX IX_RepDuration ON #AgentSummaryDuration (Rep, Duration);
                 CREATE INDEX IX_Action ON #AgentSummaryDuration ([Action]);
                 CREATE INDEX IX_RepAction ON #AgentSummaryDuration (Rep, Duration, [Action]);
-                
+
                 UPDATE #AgentSummary
                 SET Contacts = a.Contacts
                 FROM (SELECT Rep, SUM([Count]) as Contacts
@@ -189,7 +188,7 @@ class AgentSummaryCampaign
                       WHERE [Type] > 1
                       GROUP BY Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET Connects = a.Connects
                 FROM (SELECT Rep, SUM([Count]) as Connects
@@ -197,7 +196,7 @@ class AgentSummaryCampaign
                       WHERE [Type] > 0
                       GROUP BY Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-                
+
                 UPDATE #AgentSummary
                 SET Hours = IsNull(a.Hours/3600, 0)
                 FROM (SELECT aa.Rep, SUM(Duration) as Hours
@@ -205,7 +204,7 @@ class AgentSummaryCampaign
                       WHERE aa.Action <> 'Paused'
                       GROUP BY aa.Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-                
+
                 UPDATE #AgentSummary
                 SET Leads = a.Leads
                 FROM (SELECT Rep, SUM([Count]) as Leads
@@ -213,20 +212,20 @@ class AgentSummaryCampaign
                       WHERE [Type] = 3
                       GROUP BY Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET CPH = Connects/Hours,
                     APH = Leads/Hours
                 WHERE Hours > 0;
-        
+
                 UPDATE #AgentSummary
                 SET ConversionRate = (CAST(Leads as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100
                 WHERE Contacts > 0;
-                
+
                 UPDATE #AgentSummary
                 SET ConversionFactor = (CAST(Leads as numeric(18,2)) /CAST(Contacts as numeric(18,2))) / Hours
                 WHERE Hours > 0 AND Contacts > 0;
-        
+
                 UPDATE #AgentSummary
                 SET TalkTimeSec = a.TalkTime,
                     TalkTimeCount = a.tot
@@ -235,7 +234,7 @@ class AgentSummaryCampaign
                       WHERE aa.Action in ('Call', 'ManualCall', 'InboundCall')
                       GROUP BY aa.Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET PausedTimeSec = a.PausedTime
                 FROM (SELECT aa.Rep, SUM(Duration) as PausedTime
@@ -243,7 +242,7 @@ class AgentSummaryCampaign
                       WHERE aa.Action = 'Paused'
                       GROUP BY aa.Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET WaitTimeSec = a.WaitTime,
                     WaitTimeCount = a.tot
@@ -252,16 +251,16 @@ class AgentSummaryCampaign
                       WHERE aa.Action = 'Waiting'
                       GROUP BY aa.Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET DispositionTimeSec = a.DispositionTime,
-                    DispositionTimeCount = a.tot 
+                    DispositionTimeCount = a.tot
                 FROM (SELECT aa.Rep, SUM(Duration) as DispositionTime, COUNT(*) as tot
                       FROM #AgentSummaryDuration aa WITH(NOLOCK)
                       WHERE aa.Action = 'Disposition'
                       GROUP BY aa.Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
-        
+
                 UPDATE #AgentSummary
                 SET ConnectedTimeSec = a.Hours
                 FROM (SELECT aa.Rep, SUM(Duration) as Hours
@@ -280,7 +279,7 @@ class AgentSummaryCampaign
                 UPDATE #AgentSummary
                 SET AvDispoTime = DispositionTimeSec / DispositionTimeCount
                 WHERE DispositionTimeCount > 0;
-        
+
                 SELECT * FROM #AgentSummary WHERE Hours > 0";
 
 

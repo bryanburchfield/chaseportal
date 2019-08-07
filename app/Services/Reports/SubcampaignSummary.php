@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class SubcampaignSummary
 {
@@ -72,14 +71,14 @@ class SubcampaignSummary
         $bind['enddate3'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
-        
+
         CREATE TABLE #SubcampaignSummary(
             Date varchar(50),
             Campaign varchar(50),
             Subcampaign varchar(50),
             Total int DEFAULT 0,
             Dialed int DEFAULT 0,
-            Available numeric(18,2) DEFAULT 0,	 
+            Available numeric(18,2) DEFAULT 0,
             AvAttempt int DEFAULT 0,
             ManHours numeric(18,2) DEFAULT 0,
             Connects int DEFAULT 0,
@@ -94,14 +93,14 @@ class SubcampaignSummary
             Cepts int DEFAULT 0,
             CeptsPercentage numeric(18,2) DEFAULT 0
         );
-        
+
         CREATE UNIQUE INDEX IX_CampaignDate ON #SubcampaignSummary (Campaign, Subcampaign, Date);
-        
+
         SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT 
+            $sql .= " $union SELECT
             CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
             dr.Campaign,
             IsNull(dr.Subcampaign, '') as Subcampaign,
@@ -126,23 +125,23 @@ class SubcampaignSummary
 
         CREATE INDEX IX_CampaignType ON #DialingResultsStats (Campaign, Subcampaign, [Type], Date);
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type], Date);
-        
+
         INSERT #SubcampaignSummary(Campaign, Subcampaign, Date)
         SELECT Campaign, Subcampaign, Date
         FROM #DialingResultsStats
         GROUP BY Campaign, Subcampaign, Date
-        
+
         CREATE TABLE #DialingSettings
         (
             Campaign varchar(50),
             MaxDialingAttempts int
-        )	
-        
+        )
+
         INSERT INTO #DialingSettings(Campaign, MaxDIalingAttempts)
         SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id3, Campaign, 'MaxDialingAttempts', 0)
         FROM #SubcampaignSummary
-        GROUP BY Campaign	
-        
+        GROUP BY Campaign
+
         UPDATE #SubcampaignSummary
         SET Connects = a.Connects
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Connects, Date
@@ -152,7 +151,7 @@ class SubcampaignSummary
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
-        
+
         UPDATE #SubcampaignSummary
         SET Sales = a.Sales
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Sales, Date
@@ -162,7 +161,7 @@ class SubcampaignSummary
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
-            
+
         UPDATE #SubcampaignSummary
         SET Cepts = a.Cepts
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Cepts
@@ -171,7 +170,7 @@ class SubcampaignSummary
               GROUP BY Campaign, Subcampaign) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
-            
+
         UPDATE #SubcampaignSummary
         SET ManHours = a.ManHours/3600 FROM (
            SELECT Campaign, Subcampaign, Date, SUM(IsNull(ManHours, 0)) as ManHours FROM (";
@@ -237,7 +236,7 @@ class SubcampaignSummary
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
-        
+
         UPDATE #SubcampaignSummary
         SET Available = (a.Available/CAST(#SubcampaignSummary.Total as numeric(18,2))) * 100
         FROM (
@@ -264,7 +263,7 @@ class SubcampaignSummary
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Total > 0
-        
+
         UPDATE #SubcampaignSummary
         SET Dialed = a.Dialed
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Dialed, Date
@@ -273,27 +272,27 @@ class SubcampaignSummary
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
-        
+
         UPDATE #SubcampaignSummary
         SET CPH = CAST(Connects as numeric(18,2))/ManHours,
             SPH = CAST(Sales as numeric(18,2))/ManHours,
             DPH = CAST(Dialed as numeric(18,2))/ManHours
         WHERE ManHours > 0
-        
+
         UPDATE #SubcampaignSummary
         SET ConversionFactor = (CAST(Sales as numeric(18,2)) /CAST(Dialed as numeric(18,2))) / ManHours
         WHERE ManHours > 0 AND Dialed > 0
-        
+
         UPDATE #SubcampaignSummary
         SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100,
             ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100,
             CeptsPercentage = (CAST(Cepts as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
         WHERE Dialed > 0
-        
+
         UPDATE #SubcampaignSummary
         SET SaleRateValue = CAST(Dialed as numeric(18,2))/CAST(Sales as numeric(18,2))
         WHERE Sales > 0
-        
+
         SELECT
             Date,
             Campaign,

@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class ShiftReport
 {
@@ -74,26 +73,26 @@ class ShiftReport
             $sql .= " $union SELECT
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
-         dr.CallStatus, 
+         dr.CallStatus,
          IsNull(
-            (SELECT TOP 1 
-              CASE 
+            (SELECT TOP 1
+              CASE
                 WHEN [Description] = '' THEN dr.CallStatus
                 ELSE [Description]
-              END 
+              END
              FROM [$db].[dbo].[Dispos]
              WHERE Disposition = dr.CallStatus
              AND (GroupId=:group_id1 OR IsSystem=1)
-            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description], 
+            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
          count(dr.CallStatus) as Calls,
          IsNull(
-            (SELECT TOP 1 
+            (SELECT TOP 1
               dt.TypeName
              FROM [$db].[dbo].[Dispos] d
              INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
              WHERE d.Disposition = dr.CallStatus
              AND (GroupId=:group_id2 OR IsSystem=1)
-            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName, 
+            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
          0 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
         WHERE dr.GroupId = :group_id3
@@ -103,36 +102,36 @@ class ShiftReport
         AND dr.Date < :enddate1
         AND CallStatus in (
                     'CR_CNCT/CON_PAMD',
-                    'CR_ERROR', 
-                    'CR_NOANS', 
-                    'CR_DROPPED', 
-                    'CR_BUSY', 
+                    'CR_ERROR',
+                    'CR_NOANS',
+                    'CR_DROPPED',
+                    'CR_BUSY',
                     'CR_FAILED',
-                    'CR_DISCONNECTED', 
-                    'CR_UNFINISHED', 
-                    'CR_NORB', 
-                    'UNKNOWN', 
+                    'CR_DISCONNECTED',
+                    'CR_UNFINISHED',
+                    'CR_NORB',
+                    'UNKNOWN',
                     'CR_BAD_NUMBER',
-                    'CR_CEPT', 
+                    'CR_CEPT',
                     'CR_FAXTONE')
         GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus
-        UNION		
+        UNION
         SELECT
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
-         dr.CallStatus, 
-         IsNull((SELECT TOP 1 
-                  CASE 
+         dr.CallStatus,
+         IsNull((SELECT TOP 1
+                  CASE
                     WHEN [Description] = '' THEN dr.CallStatus
                     ELSE [Description]
-                  END 
-                 FROM [$db].[dbo].[Dispos] 
+                  END
+                 FROM [$db].[dbo].[Dispos]
                  WHERE Disposition = dr.CallStatus
                  AND (GroupId=:group_id4 OR IsSystem=1)
-                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description], 
+                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
          count(dr.CallStatus) as Calls,
           IsNull(
-            (SELECT TOP 1 
+            (SELECT TOP 1
               dt.TypeName
              FROM [$db].[dbo].[Dispos] d
              INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
@@ -148,17 +147,17 @@ class ShiftReport
         AND dr.Date < :enddate2
         AND CallStatus not in (
                         'CR_CNCT/CON_PAMD',
-                        'CR_ERROR', 
-                        'CR_NOANS', 
-                        'CR_DROPPED', 
-                        'CR_BUSY', 
+                        'CR_ERROR',
+                        'CR_NOANS',
+                        'CR_DROPPED',
+                        'CR_BUSY',
                         'CR_FAILED',
-                        'CR_DISCONNECTED', 
-                        'CR_UNFINISHED', 
-                        'CR_NORB', 
-                        'UNKNOWN', 
+                        'CR_DISCONNECTED',
+                        'CR_UNFINISHED',
+                        'CR_NORB',
+                        'UNKNOWN',
                         'CR_BAD_NUMBER',
-                        'CR_CEPT', 
+                        'CR_CEPT',
                         'CR_FAXTONE')
         GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus";
 

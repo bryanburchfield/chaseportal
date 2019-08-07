@@ -4,9 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class LeadInventory
 {
@@ -53,12 +51,12 @@ class LeadInventory
         $sql = "SET NOCOUNT ON;
 
         DECLARE @MaxDialingAttempts int;
-        
+
         SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id1, '', 'MaxDialingAttempts', 0) -- unlimited
-        
+
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key)
         INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!')
-        
+
         CREATE TABLE #ShiftReport(
             CallStatus varchar(50),
             IsCallable bit DEFAULT 0,
@@ -69,18 +67,18 @@ class LeadInventory
             TotalLeads int default 0,
             AvailableLeads int default 0,
         )
-        
+
         CREATE UNIQUE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, WasDialed);
-        
+
         SELECT * INTO #LeadCounts FROM (";
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT 
+            $sql .= " $union SELECT
             CASE IsNull(dr.CallStatus, '')
                 WHEN '' THEN '[ Not Called ]'
                 ELSE dr.CallStatus
-            END as CallStatus, 
+            END as CallStatus,
             IsNull((SELECT TOP 1 IsCallable
                     FROM [$db].[dbo].[Dispos]
                     INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
@@ -93,18 +91,18 @@ class LeadInventory
              FROM [$db].[dbo].[Dispos]
              INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
              WHERE Disposition = dr.CallStatus
-             AND (GroupId = :group_id3 OR IsSystem = 1)				
+             AND (GroupId = :group_id3 OR IsSystem = 1)
              ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
-            IsNull((SELECT TOP 1 
-                CASE [Type]	
+            IsNull((SELECT TOP 1
+                CASE [Type]
                     WHEN 0 THEN 'No Connect'
                     WHEN 1 THEN 'Connect'
                     WHEN 2 THEN 'Contact'
                     WHEN 3 THEN 'Lead/Sale'
                 END
-                FROM [$db].[dbo].[Dispos] 
+                FROM [$db].[dbo].[Dispos]
                 INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
-                WHERE Disposition = dr.CallStatus AND (GroupId = :group_id4 OR IsSystem = 1) 
+                WHERE Disposition = dr.CallStatus AND (GroupId = :group_id4 OR IsSystem = 1)
                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect'
                 ) as [Type],
                count(dr.CallStatus) as Leads
@@ -149,19 +147,19 @@ class LeadInventory
         UPDATE #ShiftReport
         SET [Description] = CallStatus
         WHERE IsNull([Description], '') = ''
-        
+
         UPDATE #ShiftReport
         SET IsCallable = 1
         WHERE CallStatus in ('[ Not Called ]', 'AGENTSPCB', 'SYS_CALLBACK')
-        
-        SELECT 
-            [Description], 
+
+        SELECT
+            [Description],
             [Type],
-            SUM(Leads) as Leads, 
+            SUM(Leads) as Leads,
             TotalLeads,
             AvailableLeads,
             totRows = COUNT(*) OVER()
-        FROM #ShiftReport 
+        FROM #ShiftReport
         GROUP BY [Description], [Type], TotalLeads, AvailableLeads, IsCallable";
 
         // Check params

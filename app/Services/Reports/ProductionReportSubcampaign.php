@@ -4,8 +4,7 @@ namespace App\Services\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use \App\Traits\ReportTraits;
 
 class ProductionReportSubcampaign
 {
@@ -88,11 +87,11 @@ class ProductionReportSubcampaign
         }
 
         $sql .= "
-        DECLARE 
+        DECLARE
             @cols NVARCHAR(MAX),
             @query NVARCHAR(MAX),
             @temp_table_name NVARCHAR(100)
-        
+
         SET @cols = ''
         SET @temp_table_name = '[##' + REPLACE(NEWID(), '-','') + ']';
 
@@ -128,7 +127,7 @@ class ProductionReportSubcampaign
             ) AS t2
         ORDER BY '],[' + t2.CallStatus
         FOR XML PATH('')), 1, 2, '') + ']'
-        
+
         SET @query = N'SELECT Subcampaign, '+
         @cols +', CAST(0 as int) as Connects,
         CAST(0 as int) as Contacts,
@@ -171,18 +170,18 @@ class ProductionReportSubcampaign
          count(CallStatus) FOR CallStatus IN ( '+ @cols +' )
         ) AS pvt
         ORDER BY Subcampaign'
-        
+
         execute sp_executesql @query
-                          
+
         IF OBJECT_ID('tempdb..' + @temp_table_name ) IS NULL
             RETURN
-    
+
         CREATE TABLE #DialingResultsStats(
             Subcampaign varchar(50),
             [Type] int,
             [Count] int
         )
-    
+
         INSERT INTO #DialingResultsStats
         SELECT Subcampaign, Type, SUM([Count]) as [Count] FROM (";
 
@@ -193,7 +192,7 @@ class ProductionReportSubcampaign
                 CROSS APPLY (SELECT TOP 1 [Type]
                             FROM [$db].[dbo].[Dispos]
                             WHERE Disposition=r.CallStatus
-                            AND (GroupId=:group_id5 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') 
+                            AND (GroupId=:group_id5 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
                             ORDER BY [Description] Desc) d";
 
             if (!empty($campaigns)) {
@@ -219,10 +218,10 @@ class ProductionReportSubcampaign
 
         $sql .= ") tmp
         GROUP BY Subcampaign, Type
-                 
+
         CREATE INDEX IX_CampaignType ON #DialingResultsStats (Subcampaign, [Type]);
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
-    
+
         set @query = N'UPDATE ' + @temp_table_name + N' SET
             Connects = a.Connects
         FROM (SELECT Subcampaign, SUM([Count]) as Connects
@@ -230,9 +229,9 @@ class ProductionReportSubcampaign
             WHERE [Type] > 0
             GROUP BY Subcampaign) a
         WHERE ' + @temp_table_name + N'.Subcampaign = a.Subcampaign'
-    
+
         execute sp_executesql @query
-    
+
         set @query = N'UPDATE ' + @temp_table_name + N' SET
             Contacts = a.Contacts
         FROM (SELECT Subcampaign, SUM([Count]) as Contacts
@@ -240,9 +239,9 @@ class ProductionReportSubcampaign
             WHERE [Type] > 1
             GROUP BY Subcampaign) a
         WHERE ' + @temp_table_name + N'.Subcampaign = a.Subcampaign'
-    
+
         execute sp_executesql @query
-    
+
         set @query = N'UPDATE ' + @temp_table_name + N' SET
             SalesCount = a.SalesCount
         FROM (SELECT Subcampaign, SUM([Count]) as SalesCount
@@ -250,9 +249,9 @@ class ProductionReportSubcampaign
             WHERE [Type] = 3
             GROUP BY Subcampaign) a
         WHERE ' + @temp_table_name + N'.Subcampaign = a.Subcampaign'
-    
+
         execute sp_executesql @query
-    
+
         SET @query = 'SELECT * FROM ' + @temp_table_name  + ' ' + :orderby
         execute sp_executesql @query";
 
