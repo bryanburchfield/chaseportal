@@ -365,7 +365,8 @@ class KpiController extends Controller
     {
         // We could use the user's tz, but that would require
         // looking up a user for each kpi_group record, slowing
-        // us down.
+        // us down.  This function is being fired once a minute, 24/7
+
         $timezone = windowsToUnixTz('Eastern Standard Time');
 
         $return = collect();
