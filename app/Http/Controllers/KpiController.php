@@ -43,9 +43,15 @@ class KpiController extends Controller
 
     public function optOut(Request $request)
     {
-        $this->removeRecipient($request->recipient_id);
+        // $request->recipient_id is the recip to remove
+        // We need to create a request->id to pass to removeRecipient()
+        $newRequest = new Request();
+        $newRequest->setMethod('POST');
+        $newRequest->request->add(['id' => $request->recipient_id]);
 
-        return $this->recipients();
+        $this->removeRecipient($newRequest);
+
+        return view('unsubscribed');
     }
 
     public function removeRecipient(Request $request)
