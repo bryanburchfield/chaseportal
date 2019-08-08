@@ -26,13 +26,6 @@ class KpiController extends Controller
         $jsfile[] = "kpidash.js";
         $cssfile[] = "kpidash.css";
 
-        // $page['menuitem'] = $this->currentDash;
-
-        // $page['type'] = 'dash';
-        // if ($this->currentDash == 'kpidash') {
-        //     $page['type'] = 'kpi_page';
-        // }
-
         $data = [
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
@@ -41,6 +34,13 @@ class KpiController extends Controller
         return view('kpidash')->with($data);
     }
 
+    /**
+     * Opt-out of KPI mailings/texts
+     * This is triggered from an optout link in the emails
+     *
+     * @param Request $request
+     * @return view
+     */
     public function optOut(Request $request)
     {
         // $request->recipient_id is the recip to remove
@@ -54,9 +54,14 @@ class KpiController extends Controller
         return view('unsubscribed');
     }
 
+    /**
+     * Remove recipient entirely
+     *
+     * @param Request $request
+     * @return void
+     */
     public function removeRecipient(Request $request)
     {
-
         $this->removeRecipientFromAll($request->id);
 
         $recipient = Recipient::find($request->id);
@@ -67,6 +72,12 @@ class KpiController extends Controller
         return ['remove_recip' => 1];
     }
 
+    /**
+     * Remove recipient from a single KPI
+     *
+     * @param Request $request
+     * @return void
+     */
     public function removeRecipientFromKpi(Request $request)
     {
 
@@ -75,6 +86,12 @@ class KpiController extends Controller
         return ['remove_recipient' => 1];
     }
 
+    /**
+     * Remove recipient from all KPIs
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function removeRecipientFromAll($id)
     {
 
@@ -84,6 +101,13 @@ class KpiController extends Controller
         }
     }
 
+    /**
+     * Add a new recipient
+     * If 'addtoall' is set, add them to all KPIs
+     *
+     * @param Request $request
+     * @return void
+     */
     public function addRecipient(Request $request)
     {
 
@@ -123,6 +147,12 @@ class KpiController extends Controller
         ];
     }
 
+    /**
+     * Toggle KPI active/inactive
+     *
+     * @param Request $request
+     * @return void
+     */
     public function toggleKpi(Request $request)
     {
         $kpi_id = $request->kpi;
@@ -146,6 +176,12 @@ class KpiController extends Controller
         return ['kpi_update' => '1'];
     }
 
+    /**
+     * Update interval at which KPI runs
+     *
+     * @param Request $request
+     * @return void
+     */
     public function adjustInterval(Request $request)
     {
         $kpi_id = $request->kpi_id;
@@ -169,6 +205,12 @@ class KpiController extends Controller
         return ['adjust_interval' => '1'];
     }
 
+    /**
+     * Find recipients by partial name match
+     *
+     * @param Request $request
+     * @return void
+     */
     public function searchRecipients(Request $request)
     {
         $group_id = Auth::user()->group_id;
@@ -190,11 +232,22 @@ class KpiController extends Controller
         return ['search_recip' => $recipients];
     }
 
+    /**
+     * Remove all non-digits from a phone number
+     *
+     * @param [type] $phone
+     * @return void
+     */
     private function formatPhone($phone)
     {
         return preg_replace('/[^0-9]/', '', $phone);
     }
 
+    /**
+     * Recipients view
+     *
+     * @return view
+     */
     public function recipients()
     {
         $groupId = Auth::user()->group_id;
@@ -213,6 +266,11 @@ class KpiController extends Controller
         return view('recipients')->with($data);
     }
 
+    /**
+     * Calculate date range from midnight local to current time
+     *
+     * @return array
+     */
     private function dateRange()
     {
         $tz = Auth::user()->tz;
@@ -237,6 +295,12 @@ class KpiController extends Controller
         DB::connection('sqlsrv')->statement($query);
     }
 
+    /**
+     * Run a KPI
+     *
+     * @param Request $request
+     * @return void
+     */
     public function runKpi(Request $request)
     {
         $this->setDb();
@@ -300,6 +364,13 @@ class KpiController extends Controller
         return 'true';
     }
 
+    /**
+     * Construct text message from KPI results
+     *
+     * @param string $kpi_name
+     * @param array $results
+     * @return string
+     */
     private function getSms($kpi_name, $results)
     {
         $sms = ' -== ' . $kpi_name . ' ==-' . PHP_EOL . PHP_EOL;
@@ -325,6 +396,14 @@ class KpiController extends Controller
         return $sms;
     }
 
+    /**
+     * Send text message
+     *
+     * @param object $twilio
+     * @param object $recipient
+     * @param string $sms
+     * @return void
+     */
     private function sendSms($twilio, $recipient, $sms)
     {
         if (empty($recipient->phone)) {
@@ -342,17 +421,35 @@ class KpiController extends Controller
         return;
     }
 
+    /**
+     * Send KPI results in an email
+     *
+     * @param object $message
+     * @return void
+     */
     private function sendEmail($message)
     {
         Mail::to($message['to'])
             ->send(new KpiMail($message));
     }
 
+    /**
+     * Extract column headers from KPI results
+     *
+     * @param array $results
+     * @return array
+     */
     private function getHeaders($results)
     {
         return empty($results) ? [] : array_keys((array) $results[0]);
     }
 
+    /**
+     * Extract values from KPI results
+     *
+     * @param array $results
+     * @return array
+     */
     private function getValues($results)
     {
         $values = [];
@@ -410,6 +507,12 @@ class KpiController extends Controller
         return $return;
     }
 
+    /**
+     * Run KPI in background (from scheduler)
+     *
+     * @param KpiGroup $kpiGroup
+     * @return void
+     */
     public static function cronRun(KpiGroup $kpiGroup)
     {
         // authenticate as user of the group
