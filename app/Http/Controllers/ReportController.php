@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use App\Services\ReportService;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Log;
-
+use function GuzzleHttp\default_ca_bundle;
 
 class ReportController extends Controller
 {
@@ -53,17 +53,24 @@ class ReportController extends Controller
         return view($view)->with(array_merge($filters, $pagedata, ['results' => $results]))->withErrors($errors);
     }
 
-    //////////////////////
-    // Ajax targets follow
-    //////////////////////
-
-    public function updateReport(Request $request)
+    private function parseRequest(Request $request)
     {
         // form_data comes across as a url string
         parse_str($request->form_data, $output);
         foreach ($output as $k => $v) {
             $request->request->add([$k => $v]);
         }
+
+        return $request;
+    }
+
+    //////////////////////
+    // Ajax targets follow
+    //////////////////////
+
+    public function updateReport(Request $request)
+    {
+        $request = $this->parseRequest($request);
 
         $errors = [];
         $results = $this->reportservice->getResults($request);
@@ -90,5 +97,20 @@ class ReportController extends Controller
         $results = $this->reportservice->getAllSubcampaigns();
 
         return ['results' => $results];
+    }
+
+    public function exportReport(Request $request)
+    {
+        $request = $this->parseRequest($request);
+
+        $request->request->add(['all' => 1]);
+
+        $function = strtolower($request['format']) . 'Export';
+
+        if (method_exists($this->reportservice, $function)) {
+            return $this->reportservice->$function($request);
+        }
+
+        return null;
     }
 }

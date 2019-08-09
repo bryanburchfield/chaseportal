@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
+use App\Services\PDF;
 
 trait ReportTraits
 {
@@ -294,7 +295,9 @@ trait ReportTraits
             return $this->errors;
         }
 
-        $results = $this->executeReport();
+        $all = empty($request->all) ? false : true;
+
+        $results = $this->executeReport($all);
 
         return $results;
     }
@@ -326,5 +329,67 @@ trait ReportTraits
         }
 
         return $page;
+    }
+
+    private function pdfExport($request)
+    {
+        ini_set('max_execution_time', 600);
+
+        $this->params['pagesize'] = 29;
+
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+
+        $headers = array_values($this->params['columns']);
+
+        $pdf = new PDF();
+
+        for ($i = 1; $i <= $this->params['totpages']; $i++) {
+            // Grab the page we want from results
+            $data = $this->arrayData(array_slice($results, ($i - 1) * $this->params['pagesize'], $this->params['pagesize']));
+
+            $pdf->AddPage('L', 'Legal');
+            $pdf->FancyTable($headers, $data);
+        }
+
+        if (empty($email)) {
+            $pdf->Output();
+        } else {
+            return $pdf->Output('S');
+        }
+    }
+
+    private function csvExport($request)
+    {
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+    }
+
+    private function xlsExport($request)
+    {
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+    }
+
+    private function htmlExport($request)
+    {
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
     }
 }
