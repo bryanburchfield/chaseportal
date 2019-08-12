@@ -502,12 +502,12 @@ var Dashboard = {
 
         $.ajax({
             'async': false,
-            url: '/admindashboard/average_hold_time',
+            url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
-                console.log(response);
+
                 Master.trend_percentage( $('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc );
                 $('#avg_hold_time').html(response.average_hold_time.avg_hold_time);
                 

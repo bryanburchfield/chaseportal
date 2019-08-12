@@ -1013,8 +1013,5 @@ class AdminDashController extends Controller
      * @param Request $request
      * @return void
      */
-    public function avgHoldTime(Request $request)
-    {
 
-    }
 }
