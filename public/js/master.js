@@ -1001,12 +1001,14 @@ var Master = {
 		}); /// end ajax
 	}, /// end update_report function
 
-	post_report_form_data:function(){
-		
+	post_report_form_data:function(e){
+		e.preventDefault();
 		var report = $(this).data('report');
-		console.log(report);
+		var format = $(this).data('format');
+		window.open(report, '_blank'); 
+		
 		$.ajax({
-			url: 'report_export/'+report,
+			url: 'report_export/'+report+'/'+format,
 			type: 'POST',
 			dataType: 'json',
 			data: {
