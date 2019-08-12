@@ -4,7 +4,7 @@
 @section('content')	
 	<h3 class="heading">Campaign Usage</h3>
 
-	<div class="report_filters well col-sm-12">
+	<div class="report_filters card col-sm-12">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
