@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Campaign;
 use \App\Traits\DashTraits;
 
@@ -56,6 +57,7 @@ class TrendDashController extends Controller
         $outbound_duration = [];
         $duration_time = [];
         $new_result = [];
+        $total_calls = 0;
         $total_outbound_duration = 0;
         $total_inbound_duration = 0;
 
@@ -71,6 +73,8 @@ class TrendDashController extends Controller
             array_push($inbound_voicemails, $r['Inbound Voicemails']);
             array_push($inbound_abandoned, $r['Inbound Abandoned Calls']);
             array_push($inbound_handled, $r['Inbound Handled Calls']);
+
+            $total_calls += $r['Inbound Count'];
         }
 
         foreach ($result[1] as $r) {
@@ -84,6 +88,9 @@ class TrendDashController extends Controller
             array_push($total_outbound_calls, $r['Outbound Count']);
             array_push($outbound_handled, $r['Outbound Handled Calls']);
             array_push($outbound_dropped, $r['Outbound Dropped Calls']);
+
+
+            $total_calls += $r['Outbound Count'];
         }
 
         foreach ($result[2] as $r) {
@@ -93,8 +100,8 @@ class TrendDashController extends Controller
                 $datetime = date("n/j/y", strtotime($r['Time']));
             }
 
-            $r['Duration Inbound'] = round($r['Duration Inbound'] / 60);
-            $r['Duration Outbound'] = round($r['Duration Outbound'] / 60);
+            $r['Duration Inbound'] = round($r['Duration Inbound']);
+            $r['Duration Outbound'] = round($r['Duration Outbound']);
             array_push($duration_time, $r['Time']);
             array_push($inbound_duration, $r['Duration Inbound']);
             array_push($outbound_duration, $r['Duration Outbound']);
@@ -121,7 +128,7 @@ class TrendDashController extends Controller
             'total_inbound_duration' => $total_inbound_duration,
             'total_outbound_duration' => $total_outbound_duration,
             'duration_time' => $duration_time,
-            'total' => $total,
+            'total' => $total_calls,
             'details' => $details,
         ];
 
@@ -589,14 +596,14 @@ class TrendDashController extends Controller
 
         foreach ($result as $r) {
             array_push($time_labels, $r['Time']);
-            array_push($calls, round($r['Call Time'] / 60));
-            array_push($holdtime, round($r['Hold Time'] / 60));
-            array_push($maxhold, round($r['Max Hold'] / 60));
-            array_push($wrapup, round($r['Wrap Up Time'] / 60));
-            $calltimes += round($r['Call Time'] / 60);
+            array_push($calls, round($r['Call Time']));
+            array_push($holdtime, round($r['Hold Time']));
+            array_push($maxhold, round($r['Max Hold']));
+            array_push($wrapup, round($r['Wrap Up Time']));
+            $calltimes += round($r['Call Time']);
             $num_calls += $r['Call Count'];
 
-            $avg = empty($r['Call Count']) ? 0 : round(($r['Call Time'] / 60 + $r['Hold Time'] / 60 + $r['Wrap Up Time'] / 60) / $r['Call Count']);
+            $avg = empty($r['Call Count']) ? 0 : round(($r['Call Time'] + $r['Hold Time'] + $r['Wrap Up Time']) / $r['Call Count']);
             array_push($avg_handle_time, $avg);
 
             $avg_ht += $avg;
@@ -722,8 +729,8 @@ class TrendDashController extends Controller
             if ($r['Rep'] != Null) {
                 array_push($agent_labels, $r['Rep']);
                 array_push($total_calls, $r['Total Calls']);
-                array_push($call_duration, round($r['Duration'] / 60));
-                $avg_ct += round($r['Duration'] / 60);
+                array_push($call_duration, round($r['Duration']));
+                $avg_ct += round($r['Duration']);
                 $avg_cc += $r['Total Calls'];
                 $cnt++;
             }
