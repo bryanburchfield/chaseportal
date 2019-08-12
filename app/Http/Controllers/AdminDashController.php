@@ -114,10 +114,10 @@ class AdminDashController extends Controller
         $prev_talk_duration = 0;
 
         foreach ($result[0] as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
+            if ($this->byHour($this->dateFilter)) {
                 $datetime = date("g:i", strtotime($r['Time']));
+            } else {
+                $datetime = date("n/j/y", strtotime($r['Time']));
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -175,10 +175,10 @@ class AdminDashController extends Controller
         }
 
         foreach ($result[1] as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
-            } else {
+            if ($this->byHour($this->dateFilter)) {
                 $datetime = date("g:i", strtotime($r['Time']));
+            } else {
+                $datetime = date("n/j/y", strtotime($r['Time']));
             }
 
             array_push($call_duration['time_labels'], $datetime);
@@ -1006,6 +1006,4 @@ class AdminDashController extends Controller
             'table' => $bycamp,
         ];
     }
-
-    
 }
