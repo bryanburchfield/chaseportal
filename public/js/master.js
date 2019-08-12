@@ -48,8 +48,8 @@ var Master = {
 		$('.page-content').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
 		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns);
-		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
-		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
+		// $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
+		// $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
 		$('#uploader_camp_info').on('submit', this.uploader_details);
 		$('#settingsForm').on('submit', this.update_uploader_info);
@@ -1002,6 +1002,28 @@ var Master = {
 	}, /// end update_report function
 
 	post_report_form_data:function(e){
+
+		// if($(this).hasClass('pdf')){
+		// 	var tot_rows = parseInt($('.totrows').val());
+		// 	$('.report_dl_warning .modal-footer button').show();
+
+		// 	if (tot_rows > 1000 && tot_rows < 2000) {
+		// 		$('#report_dl_warning').modal('toggle');
+		// 		$('.dl_alert.alert').removeClass('alert-danger');
+		// 		$('.dl_alert.alert').addClass('alert-warning');
+		// 		$('.dl_alert.alert p').text('This is a large dataset. It may be faster to download multiple smaller reports.');
+		// 	} else if (tot_rows >= 2000) {
+		// 		$('.dl_alert.alert').removeClass('alert-warning');
+		// 		$('.dl_alert.alert').addClass('alert-danger');
+		// 		$('.dl_alert.alert p').text('Report is too large to download. Please run smaller reports or choose a different format');
+		// 		$('.report_dl_warning .modal-footer button').hide();
+		// 		$('#report_dl_warning').modal('toggle');
+		// 	} else {
+		// 		pdf_dl_link = $('.report_dl_option.pdf').attr('href');
+		// 		window.open(pdf_dl_link, '_blank');
+		// 	}
+		// }
+		
 		e.preventDefault();
 		var report = $(this).data('report');
 		var format = $(this).data('format');

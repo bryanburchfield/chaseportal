@@ -11,7 +11,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', 'From') !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', null, ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true ]) !!}
+							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true ]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -24,7 +24,7 @@
 					<div class="form-group">
 						{!! Form::label('todate', 'To') !!}
 						<div class="input-group date">
-							{!! Form::text('todate', null, ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
+							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -36,7 +36,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('campaigns', 'Campaigns') !!}
-						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
@@ -45,21 +45,21 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('callerids', 'Inbound Sources') !!}
-						{!! Form::select("callerids[]", $inbound_sources, null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
+						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('reps', 'Reps') !!}
-						{!! Form::select("reps[]", $reps, null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('call_statuses', 'Call Statuses') !!}
-						{!! Form::select("call_statuses[]", $call_statuses, null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
+						{!! Form::select("call_statuses[]", $filters['call_statuses'], null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
@@ -68,7 +68,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('call_type', 'Call Type') !!}
-						{!! Form::select("call_type", $call_types, null, ["class" => "form-control", 'id'=> 'call_type']) !!}
+						{!! Form::select("call_type", $filters['call_types'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 					</div>
 				</div>
 

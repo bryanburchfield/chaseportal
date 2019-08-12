@@ -13,7 +13,7 @@
 					<div class="form-group">
 
 						{!! Form::label('campaign', 'Campaign') !!}
-						{!! Form::select("campaign", $campaign, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+						{!! Form::select("campaign", $filters['campaign'], null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 					</div>
 				</div>
 			</div>

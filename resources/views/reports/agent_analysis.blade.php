@@ -25,7 +25,7 @@
 					<div class="form-group">
 						{!! Form::label('todate', 'To') !!}
 						<div class="input-group date">
-							{!! Form::text('todate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
+							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -37,7 +37,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('skills', 'Skill') !!}
-						{!! Form::select("skills[]", $skills, null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
+						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			</div>
