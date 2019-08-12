@@ -90,7 +90,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="checkbox">
                 <label>
                     {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
@@ -99,7 +99,7 @@
 			</div>
 
 			<div class='reporterrors'></div>
-			
+
 				{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 		{!! Form::close() !!}
@@ -109,5 +109,5 @@
 
 	<div class="table-responsive report_table {{$report}}">
 		@include('shared.reporttable')
-	</div>	
+	</div>
 @endsection
