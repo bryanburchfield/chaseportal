@@ -12,7 +12,7 @@
 <!-- start download options -->
 <div class="col-sm-3 col-xs-6 report_download">
 	<h3>Download Report:</h3>
-	<a target="_blank" href="app/ajax/report_export.php?report={{$report}}&format=csv" class="report_dl_option" title="Download CSV" data-dl_option="csv"><i class="fas fa-file-csv"></i></a>
+	<a target="_blank" href="#" data-report="{{$report}}" class="report_dl_option" title="Download CSV" data-dl_option="csv"><i class="fas fa-file-csv"></i></a>
 	<a target="_blank" href="app/ajax/report_export.php?report={{$report}}&format=xls" class="report_dl_option" title="Download Excel" data-dl_option="excel"><i class="fas fa-file-excel"></i></a>
 	<a target="_blank" href="app/ajax/report_export.php?report={{$report}}&format=pdf" class="report_dl_option pdf" title="Download PDF" data-dl_option="pdf"><i class="fas fa-file-pdf"></i></a>
 	<a target="_blank" href="app/ajax/report_export.php?report={{$report}}&format=html" class="report_dl_option" title="Download HTML" data-dl_option="html"><i class="fas fa-file-code"></i></a>

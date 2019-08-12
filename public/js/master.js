@@ -19,6 +19,7 @@ var Master = {
 	pdf_dl_link: '',
 	first_search: true,
 	active_camp_search: '',
+	report_form_data:'',
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
 	}),
@@ -61,6 +62,7 @@ var Master = {
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
 		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 		$('a#getAppToken').on('click', this.get_app_token);
+		$('.report_download').on('click', '.report_dl_option', this.post_report_form_data);
 	},
 
 	formatNumber: function (x) {
@@ -892,12 +894,12 @@ var Master = {
 	},
 
 	update_report: function (th_sort = '', pagesize = '', curpage = '', pag_link = '', sort_direction = '') {
-
+		Master.report_form_data= $('form.report_filter_form').serialize();
 		var form_data = $('form.report_filter_form').serialize(),
 			report = $('#report').val(),
 			pagesize = $('.pagesize').val()
 			;
-
+			
 		if (curpage == '') { curpage = $('.curpage').val(); }
 		if (report == '') { report = $('#report').val(); }
 		if (curpage != pag_link && pag_link != '') { curpage = pag_link; }
@@ -995,11 +997,26 @@ var Master = {
 				if (response.params.report == 'lead_inventory') {
 					Master.lead_inventory(response);
 				}
-
-
 			}
 		}); /// end ajax
 	}, /// end update_report function
+
+	post_report_form_data:function(){
+		
+		var report = $(this).data('report');
+		console.log(report);
+		$.ajax({
+			url: 'report_export/'+report,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				form_data: Master.report_form_data
+			},
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	},
 
 	cdr_lookup: function (e) {
 		e.preventDefault();
