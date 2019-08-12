@@ -49,8 +49,16 @@ class ReportController extends Controller
         $view = $this->reportservice->viewName();
         $pagedata = $this->reportservice->getPageData();
         $filters = $this->reportservice->getFilters();
+        $params = $this->reportservice->report->params;
 
-        return view($view)->with(array_merge($filters, $pagedata, ['results' => $results]))->withErrors($errors);
+        return view($view)
+            ->with(array_merge(
+                $filters,
+                $pagedata,
+                $params,
+                ['results' => $results]
+            ))
+            ->withErrors($errors);
     }
 
     private function parseRequest(Request $request)
