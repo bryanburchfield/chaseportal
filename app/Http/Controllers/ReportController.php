@@ -56,7 +56,7 @@ class ReportController extends Controller
             return $this->reportservice->$function($request);
         }
 
-        return null;
+        return ['status' => 0];
     }
 
     public function returnView($results, MessageBag $errors = null)
