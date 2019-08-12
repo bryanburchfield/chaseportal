@@ -1,7 +1,6 @@
 @extends('layouts.report')
 @section('title', 'Report')
 
-
 @section('content')
 	<h3 class="heading">Agent Analysis</h3>
 
