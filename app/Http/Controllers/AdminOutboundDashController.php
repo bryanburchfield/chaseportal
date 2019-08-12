@@ -80,7 +80,7 @@ class AdminOutboundDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("g:i", strtotime($r['Time']));
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -93,7 +93,7 @@ class AdminOutboundDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("g:i", strtotime($r['Time']));
             }
 
             array_push($call_duration['time_labels'], $datetime);
