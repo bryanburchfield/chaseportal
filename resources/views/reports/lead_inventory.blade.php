@@ -29,7 +29,7 @@
 	@include('reports.report_tools_inc')
 
 	<div class="table-responsive report_table {{$report}}">
-		{{ $call_details_table}}
+		@include('shared.reporttable')
 	</div>
 @endsection
 
