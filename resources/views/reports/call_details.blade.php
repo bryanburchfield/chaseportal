@@ -1,9 +1,10 @@
 @extends('layouts.report')
 @section('title', 'Report')
 
+
 @section('content')
 	<h3 class="heading">Call Details</h3>
-	<div class="report_filters well col-sm-12">
+	<div class="report_filters card col-sm-12">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
@@ -103,5 +104,11 @@
 				{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 		{!! Form::close() !!}
-	</div>
+	</div><!-- end report_filters -->
+
+	@include('reports.report_tools_inc')
+
+	<div class="table-responsive report_table {{$report}}">
+		{{ $call_details_table}}
+	</div>	
 @endsection
