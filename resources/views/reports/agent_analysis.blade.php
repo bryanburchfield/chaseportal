@@ -49,5 +49,11 @@
 			{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
 		{!! Form::close() !!}
+	</div><!-- end report_filters -->
+
+	@include('reports.report_tools_inc')
+
+	<div class="table-responsive report_table {{$report}}">
+		{{ $call_details_table}}
 	</div>
 @endsection
