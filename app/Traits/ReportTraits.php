@@ -338,7 +338,6 @@ trait ReportTraits
 
         $this->params['pagesize'] = 29;
 
-        Log::debug($request);
         $results = $this->getResults($request);
 
         // check for errors
@@ -358,7 +357,6 @@ trait ReportTraits
         }
 
         if (empty($email)) {
-            Log::debug('output pdf');
             $pdf->Output();
             exit;
         } else {
