@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use App\Services\PDF;
@@ -331,12 +332,13 @@ trait ReportTraits
         return $page;
     }
 
-    private function pdfExport($request)
+    public function pdfExport($request)
     {
         ini_set('max_execution_time', 600);
 
         $this->params['pagesize'] = 29;
 
+        Log::debug($request);
         $results = $this->getResults($request);
 
         // check for errors
@@ -351,19 +353,20 @@ trait ReportTraits
         for ($i = 1; $i <= $this->params['totpages']; $i++) {
             // Grab the page we want from results
             $data = $this->arrayData(array_slice($results, ($i - 1) * $this->params['pagesize'], $this->params['pagesize']));
-
             $pdf->AddPage('L', 'Legal');
             $pdf->FancyTable($headers, $data);
         }
 
         if (empty($email)) {
+            Log::debug('output pdf');
             $pdf->Output();
+            exit;
         } else {
             return $pdf->Output('S');
         }
     }
 
-    private function csvExport($request)
+    public function csvExport($request)
     {
         $results = $this->getResults($request);
 
@@ -373,7 +376,7 @@ trait ReportTraits
         }
     }
 
-    private function xlsExport($request)
+    public function xlsExport($request)
     {
         $results = $this->getResults($request);
 
@@ -383,7 +386,7 @@ trait ReportTraits
         }
     }
 
-    private function htmlExport($request)
+    public function htmlExport($request)
     {
         $results = $this->getResults($request);
 
@@ -391,5 +394,16 @@ trait ReportTraits
         if (is_object($results)) {
             return null;
         }
+    }
+
+    private function arrayData($array)
+    {
+        $data = [];
+
+        foreach ($array as $rec) {
+            $data[] = array_values($rec);
+        }
+
+        return $data;
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use App\Services\ReportService;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Log;
-use function GuzzleHttp\default_ca_bundle;
 
 class ReportController extends Controller
 {
@@ -50,25 +49,25 @@ class ReportController extends Controller
 
         $request->request->add(['all' => 1]);
 
-        $function = strtolower($request['format']) . 'Export';
+        $function = strtolower($request->format) . 'Export';
 
-        if (method_exists($this->reportservice, $function)) {
-            return $this->reportservice->$function($request);
+        if (method_exists($this->reportservice->report, $function)) {
+            return $this->reportservice->report->$function($request);
         }
 
-        return null;
+        abort(404);
     }
 
     public function returnView($results, MessageBag $errors = null)
     {
         $view = $this->reportservice->viewName();
         $pagedata = $this->reportservice->getPageData();
-        $filters = $this->reportservice->getFilters();
+        $filters = $this->reportservice->report->getFilters();
         $params = $this->reportservice->report->params;
 
         return view($view)
             ->with(array_merge(
-                $filters,
+                ['filters' => $filters],
                 $pagedata,
                 $params,
                 ['results' => $results]
