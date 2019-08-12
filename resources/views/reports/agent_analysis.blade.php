@@ -1,9 +1,7 @@
 @extends('layouts.report')
 @section('title', 'Report')
 
-<?php
-	dd($params);
-?>
+
 @section('content')
 	<h3 class="heading">Agent Analysis</h3>
 						
