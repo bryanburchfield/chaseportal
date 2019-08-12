@@ -117,7 +117,7 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("g:i", strtotime($r['Time']));
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -178,10 +178,10 @@ class AdminDashController extends Controller
             if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("g:i", strtotime($r['Time']));
             }
 
-            array_push($call_duration['time_labels'], $r['Time']);
+            array_push($call_duration['time_labels'], $datetime);
             array_push($call_duration['duration'], $r['Duration']);
         }
 
@@ -1007,5 +1007,5 @@ class AdminDashController extends Controller
         ];
     }
 
-
+    
 }
