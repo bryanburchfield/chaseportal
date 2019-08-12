@@ -58,10 +58,10 @@ class LeaderDashController extends Controller
             $tot_outbound += $r['Outbound'];
             $tot_outbound += $r['Manual'];
 
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("n/j/y", strtotime($r['Time']));
             }
 
             array_push($time_labels, $datetime);
