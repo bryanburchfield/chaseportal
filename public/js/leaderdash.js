@@ -123,7 +123,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
                 Master.flip_card(response.call_details.repsales.length, '#agent_sales_per_hour');
@@ -218,11 +218,12 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html(response.call_volume.details);
+                $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
+                $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
                 $('.total_calls_out p').html(Master.formatNumber(response.call_volume.tot_outbound));
                 $('.total_calls_in p').html(Master.formatNumber(response.call_volume.tot_inbound));
@@ -328,7 +329,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
 
@@ -417,7 +418,7 @@ var Dashboard = {
             url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter: datefilter},
             success:function(response){
             }
         });
@@ -447,7 +448,7 @@ var Dashboard = {
                 url: '/leaderdashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -502,7 +503,7 @@ var Dashboard = {
             url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }

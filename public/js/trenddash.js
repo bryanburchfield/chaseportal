@@ -119,11 +119,12 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
 
-                $('.filter_time_camp_dets p').html(response.call_volume.details);
+                $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
+                $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
                 var total_calls_int=0;
                 if(response.call_volume.total != null){
@@ -263,7 +264,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter
+                dateFilter:datefilter
             },
             success:function(response){
 
@@ -522,7 +523,7 @@ var Dashboard = {
             url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
-            data:{datefilter:datefilter},
+            data:{dateFilter:datefilter},
             success:function(response){
 
                 if( response.agent_calltime.avg_ct != undefined){
@@ -645,7 +646,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                datefilter:datefilter,
+                dateFilter:datefilter,
                 answer_secs:answer_secs
             },
             success:function(response){
@@ -736,7 +737,7 @@ var Dashboard = {
             url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter: datefilter},
+            data: {dateFilter: datefilter},
             success:function(response){
             }
         });
@@ -767,7 +768,7 @@ var Dashboard = {
                 url: '/trenddashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+                data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
                 success:function(response){
                     Dashboard.refresh(datefilter, campaign, inorout);
                 }
@@ -822,7 +823,7 @@ var Dashboard = {
             url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: {datefilter:datefilter,campaign: campaign, inorout:inorout},
+            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
             success:function(response){
                 Dashboard.refresh(datefilter, campaign, inorout);
             }

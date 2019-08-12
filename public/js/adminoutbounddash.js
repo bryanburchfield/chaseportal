@@ -120,7 +120,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data: {
-                datefilter: datefilter
+                dateFilter: datefilter
             },
             success: function (response) {
                 console.log(response);
@@ -293,7 +293,7 @@ var Dashboard = {
             url: '/adminoutbounddashboard/avg_wait_time',
             type: 'POST',
             dataType: 'json',
-            data: { campaign: campaign, datefilter: datefilter },
+            data: { campaign: campaign, dateFilter: datefilter },
             success: function (response) {
 
                 $('#avg_wait_time tbody').empty();
@@ -320,7 +320,7 @@ var Dashboard = {
             url: '/adminoutbounddashboard/sales_per_hour_per_rep',
             type: 'POST',
             dataType: 'json',
-            data: { campaign: campaign, datefilter: datefilter },
+            data: { campaign: campaign, dateFilter: datefilter },
             success: function (response) {
 
                 Master.flip_card(response.table.length, '#sales_per_hour_per_rep');
@@ -416,7 +416,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data: {
-                datefilter: datefilter
+                dateFilter: datefilter
             },
             success: function (response) {
 
@@ -501,7 +501,7 @@ var Dashboard = {
             url: '/adminoutbounddashboard/agent_talk_time',
             type: 'POST',
             dataType: 'json',
-            data: { campaign: campaign, datefilter: datefilter },
+            data: { campaign: campaign, dateFilter: datefilter },
             success: function (response) {
 
                 Master.flip_card(response.reps.length, '#agent_call_count');
@@ -656,14 +656,17 @@ var Dashboard = {
             url: '/adminoutbounddashboard/total_calls',
             type: 'POST',
             dataType: 'json',
-            data: { datefilter: datefilter },
+            data: { dateFilter: datefilter },
             success: function (response) {
 
                 Master.trend_percentage($('#total_calls'), response.total_calls.pct_change, response.total_calls.pct_sign, response.total_calls.ntc);
                 Master.add_bg_rounded_class($('#total_calls .total'), response.total_calls.total, 4);
 
                 $('#total_calls .total').html(Master.formatNumber(response.total_calls.total));
-                $('.filter_time_camp_dets p').html(response.total_calls.details);
+
+                $('.filter_time_camp_dets p .selected_campaign').html(response.total_calls.details[0]);
+                $('.filter_time_camp_dets p .selected_datetime').html(response.total_calls.details[1]);
+
             }, error: function (jqXHR, textStatus, errorThrown) {
                 var div = $('#total_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);
@@ -682,7 +685,7 @@ var Dashboard = {
             url: '/adminoutbounddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: { datefilter: datefilter },
+            data: { dateFilter: datefilter },
             success: function (response) {
             }
         });
@@ -715,7 +718,7 @@ var Dashboard = {
                 url: '/adminoutbounddashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
-                data: { datefilter: datefilter, campaign: campaign },
+                data: { dateFilter: datefilter, campaign: campaign },
                 success: function (response) {
                     Dashboard.refresh(datefilter, campaign);
                 }
@@ -763,7 +766,7 @@ var Dashboard = {
             url: '/adminoutbounddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
-            data: { datefilter: datefilter, campaign: campaign },
+            data: { dateFilter: datefilter, campaign: campaign },
             success: function (response) {
                 Dashboard.refresh(datefilter, campaign);
             }

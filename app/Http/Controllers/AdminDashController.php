@@ -1007,11 +1007,5 @@ class AdminDashController extends Controller
         ];
     }
 
-    /**
-     * average hold time
-     *
-     * @param Request $request
-     * @return void
-     */
 
 }
