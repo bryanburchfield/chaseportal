@@ -44,6 +44,21 @@ class ReportController extends Controller
         return $this->returnView($results);
     }
 
+    public function exportReport(Request $request)
+    {
+        $request = $this->parseRequest($request);
+
+        $request->request->add(['all' => 1]);
+
+        $function = strtolower($request['format']) . 'Export';
+
+        if (method_exists($this->reportservice, $function)) {
+            return $this->reportservice->$function($request);
+        }
+
+        return null;
+    }
+
     public function returnView($results, MessageBag $errors = null)
     {
         $view = $this->reportservice->viewName();
@@ -105,20 +120,5 @@ class ReportController extends Controller
         $results = $this->reportservice->getAllSubcampaigns();
 
         return ['results' => $results];
-    }
-
-    public function exportReport(Request $request)
-    {
-        $request = $this->parseRequest($request);
-
-        $request->request->add(['all' => 1]);
-
-        $function = strtolower($request['format']) . 'Export';
-
-        if (method_exists($this->reportservice, $function)) {
-            return $this->reportservice->$function($request);
-        }
-
-        return null;
     }
 }

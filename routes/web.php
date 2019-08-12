@@ -135,6 +135,7 @@ Route::prefix('dashboards')->group(function () {
 
     // ajax targets
     Route::post('reports/update_report', 'ReportController@updateReport');
+    Route::post('reports/report_export/{report}', 'ReportController@exportReport');
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
