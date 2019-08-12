@@ -79,13 +79,13 @@ var Master = {
 			.join(":")
 	},
 
-	// convertMinsToHrsMins:function(mins) {
-	//        let h = Math.floor(mins / 60);
-	//        let m = mins % 60;
-	//        h = h < 10 ? '0' + h : h;
-	//        m = m < 10 ? '0' + m : m;
-	//        return `${h}:${m}`;
-	//    },
+	add_bg_rounded_class:function(selector, data, limit) {
+        if(data == 0 || data.toString().length < limit){
+            selector.addClass('bg_rounded');
+        }else{
+            selector.removeClass('bg_rounded');
+        }
+    },
 
 	ylabel_format: function (data) {
 		var show_decimal = false;

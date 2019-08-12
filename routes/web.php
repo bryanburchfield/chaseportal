@@ -33,6 +33,7 @@ Route::prefix('admindashboard')->group(function () {
         Route::post('agent_call_count', 'AdminDashController@agentCallCount');
         Route::post('service_level', 'AdminDashController@serviceLevel');
         Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
+        Route::post('average_hold_time', 'AdminDashController@avgHoldTime');
     });
 });
 

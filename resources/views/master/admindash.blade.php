@@ -100,7 +100,6 @@
                     <p class="data highest"></p>
                     <p class="type">Highest</p>
                 </div>
-
             </div><!-- end card -->
         </div><!-- end column -->
 

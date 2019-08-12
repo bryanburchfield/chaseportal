@@ -1006,4 +1006,15 @@ class AdminDashController extends Controller
             'table' => $bycamp,
         ];
     }
+
+    /**
+     * average hold time
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function avgHoldTime(Request $request)
+    {
+
+    }
 }
