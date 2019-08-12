@@ -1,7 +1,6 @@
 @extends('layouts.report')
 @section('title', 'Report')
 
-
 @section('content')
 	<h3 class="heading">Call Details</h3>
 	<div class="report_filters card col-sm-12">
