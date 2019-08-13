@@ -110,4 +110,6 @@
 	<div class="table-responsive report_table {{$report}}">
 		@include('shared.reporttable')
 	</div>
+
+	@include('reports.report_warning_inc')
 @endsection

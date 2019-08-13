@@ -33,6 +33,8 @@
 	<div class="table-responsive report_table {{$report}}">
 		@include('shared.reporttable')
 	</div>
+
+	@include('reports.report_warning_inc')
 @endsection
 @section('extras')
 <div class="col-sm-7 nopadright">
