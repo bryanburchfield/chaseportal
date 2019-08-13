@@ -50,14 +50,17 @@
                     <div class="row">
                         <div class="col-sm-12">
                             @yield('content')
-
-                            <div class="report_results">
+                            
+                            <div class="reportextras">
+                                @yield('extras')
+                            </div>
+                            {{-- <div class="report_results">
                                 <div class="reportpag pag"></div>
                                 <div class="reporttable table-responsive {{$report}}"></div>
                                 <div class="reportextras">
                                     @yield('extras')
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
