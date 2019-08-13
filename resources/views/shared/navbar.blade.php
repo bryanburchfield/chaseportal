@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-       <div class="col-xs-5 col-sm-6 brand">
+       <div class="col-xs-5 col-sm-6 brand pl0">
            <button type="button" id="sidebarCollapse" class="btn">
                <i class="fas fa-align-left"></i>
            </button>

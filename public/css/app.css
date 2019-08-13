@@ -1671,7 +1671,7 @@ a.expand_dets {
 
 .expanded_options .user:nth-child(even),
 .expanded_emails .user:nth-child(even) {
-  background: #eee;
+  background: #ddd;
 }
 
 .expanded_options .user.clear,

@@ -25,9 +25,9 @@
 
 							<div class="tab-content">
 								<div class="tab-pane active mt30" id="new_user">
-					        		<div class="col-sm-6 mb0 pl0">
+					        		<div class="col-sm-6 mb0 card">
         								<h2 class="page_heading">New User</h2>
-        								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form well add_user']) !!}
+        								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form add_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
         										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
@@ -79,7 +79,7 @@
         							</div>
 
 				    				<div class="col-sm-6 mbp0 pr0">
-				    					<h2 class="page_heading">All Users</h2>
+				    					<h2 class="page_heading mb0">All Users</h2>
 				    					
 				    					<div class="users">
 
@@ -148,10 +148,10 @@
 								</div>		
 
 								<div class="tab-pane mt30" id="edit_user">
-					         		<div class="col-sm-6 pl0 mbp0">
+					         		<div class="col-sm-6 mbp0 card">
 			         					<h2 class="page_heading">Edit User</h2>
 			         					
-			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form well edit_user']) !!}
+			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form edit_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
         										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
@@ -205,7 +205,7 @@
 			         				</div>
 
 			         				<div class="col-sm-6 mbp0 pr0">
-				    					<h2 class="page_heading">Edit Users</h2>
+				    					<h2 class="page_heading mb0">All Users</h2>
 				    					
 				    					<div class="users">
 
