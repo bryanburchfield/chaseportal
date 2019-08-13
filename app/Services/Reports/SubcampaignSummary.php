@@ -15,8 +15,8 @@ class SubcampaignSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'Subcampaign Summary Report';
-        $this->params['fromdate'] = '';
-        $this->params['todate'] = '';
+        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
+        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
             'Date' => 'Date',
             'Campaign' => 'Campaign',
