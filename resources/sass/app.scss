@@ -111,6 +111,7 @@ a, a:hover, a:focus {
 .navbar button#sidebarCollapse {
     float: left;
     margin-right: 20px;
+    @include border-radius(3px);
 }
 
 img.text_logo {
@@ -1924,8 +1925,10 @@ MEDIAQUERIES
     }
 
     .col-md-4.col-sm-12.set_hgt, .get_hgt {
-        padding: 0;
+        // padding: 0;
     }
+
+    .mb80{margin-bottom: 80px;}
 
     .carb_mb30_mb {
         margin-bottom: 20px;
@@ -2093,14 +2096,10 @@ img.text_logo{
     }
 
     .filters {
-
-        /*float: left;*/
-
-        /*width: 85%;*/
         margin-bottom: 10px;
     }
 
-    .filters button {
+    .filters button, .filters .logout_btn {
         padding: 5px 8px;
     }
 

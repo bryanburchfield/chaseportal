@@ -200,7 +200,7 @@
 
     <div class="row">
 
-        <div class="col-sm-3 set_hgt card_table_prt ">
+        <div class="col-sm-6 col-md-3 set_hgt card_table_prt ">
             <div class="card flipping_card card-3b">
                 <div class="front">
                     <div class="card_table">
@@ -229,8 +229,8 @@
             </div>
         </div>
 
-        <div class="col-sm-3 set_hgt ">
-            <div class="card card-3b mt70_mb">
+        <div class="col-sm-6 col-md-3 set_hgt ">
+            <div class="card card-3b mb80">
                 <h1 class="title">Service Level</h1>
                 <!-- three dot menu -->
                 <div class="card_dropdown mv_left">
@@ -255,8 +255,8 @@
             </div>
         </div>
 
-        <div class="col-sm-3 get_hgt card_table_prt ">
-            <div class="card flipping_card card-3b mt120_mb">
+        <div class="col-sm-6 col-md-3 get_hgt card_table_prt ">
+            <div class="card flipping_card card-3b">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Agent Call Time</h1>
@@ -284,7 +284,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 set_hgt card_table_prt">
+        <div class="col-sm-6 col-md-3 set_hgt card_table_prt">
             <div class="card flipping_card card-3b">
                 <div class="front ">
                     <div class="card_table">
@@ -315,4 +315,3 @@
     </div>
 </div>
 
-@include('shared.datepicker')

@@ -864,6 +864,9 @@ var Dashboard = {
         $('.preloader').show();
         $('#datefilter_modal').hide();
         $('.modal-backdrop').hide();
+
+        $(this).parent().siblings().removeClass('active');
+        $(this).parent().addClass('active');
         
         var start_date = $('.startdate').val(),
             end_date = $('.enddate').val()
@@ -877,6 +880,22 @@ var Dashboard = {
         $('#datefilter_modal').modal('toggle');
         $('#datefilter').val(start_date + ' ' + end_date);
         Dashboard.datefilter = datefilter;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/admindashboard/update_filters',
+            type: 'POST',
+            dataType: 'json',
+            data: {dateFilter:datefilter},
+            success:function(response){
+                console.log(response);
+                Dashboard.refresh(datefilter, campaign);
+            }
+        });  
         Dashboard.refresh(datefilter, campaign);
         
     },

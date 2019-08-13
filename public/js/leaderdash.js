@@ -66,6 +66,7 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
+        
         this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
         this.call_details(this.datefilter, this.chartColors);
         this.sales_per_campaign(this.datefilter, this.chartColors);
@@ -429,6 +430,7 @@ var Dashboard = {
         $(this).parent().siblings().removeClass('active');
         $(this).parent().addClass('active');
         datefilter = $(this).data('datefilter');
+        console.log(datefilter);
         $('#datefilter').val(datefilter);
         var campaign = $('.filter_campaign li').hasClass('active');
         campaign = $(campaign).find('a').text();
@@ -487,6 +489,7 @@ var Dashboard = {
 
         $(this).siblings().removeClass('active')
         $(this).addClass('active');
+        console.log(datefilter);
         var active_date = $('.date_filters li.active');
         datefilter = $('#datefilter').val();
         var inorout =$('#inorout').val();
@@ -515,6 +518,9 @@ var Dashboard = {
         $('.preloader').show();
         $('#datefilter_modal').hide();
         $('.modal-backdrop').hide();
+
+        $(this).parent().siblings().removeClass('active');
+        $(this).parent().addClass('active');
         
         var start_date = $('.startdate').val(),
             end_date = $('.enddate').val()
@@ -531,6 +537,21 @@ var Dashboard = {
         $('#datefilter_modal').modal('toggle');
         $('#datefilter').val(start_date + ' ' + end_date);
         Dashboard.datefilter = datefilter;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/leaderdashboard/update_filters',
+            type: 'POST',
+            dataType: 'json',
+            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
+            success:function(response){
+                Dashboard.refresh(datefilter, campaign, inorout);
+            }
+        });
         Dashboard.refresh(datefilter, campaign, inorout);
     },
 

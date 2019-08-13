@@ -11,7 +11,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-3 col-xs-6">
+        <div class="col-sm-3 ">
             <div class="card-3 card" id="total_calls">
                 <div class="trend_indicator down">
                     <div class="trend_arrow arrow_down"></div>
@@ -24,7 +24,7 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-3 col-xs-6">
+        <div class="col-sm-3 ">
             <div class="card-3 card get_hgt2" id="total_minutes">
 
                 <div class="trend_indicator up">
@@ -38,7 +38,7 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-3 col-xs-6 card_table_prt">
+        <div class="col-sm-3  card_table_prt">
             <div class="card set_hgt2 flipping_card card-3b">
 
                 <div class="front ">
@@ -72,7 +72,7 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-3 col-xs-6">
+        <div class="col-sm-3 ">
             <div class="card-3 card total_sales_card set_hgt2">
                 <div class="trend_indicator up">
                     <div class="trend_arrow arrow_up"></div>
@@ -137,7 +137,7 @@
         </div><!-- end column -->
 
         <div class="col-sm-3 card_table_prt get_hgt">
-            <div class="card flipping_card card-3b mt70_mb">
+            <div class="card flipping_card card-3b">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Calls by Campaign</h1>
@@ -194,7 +194,7 @@
         </div><!-- end column -->
 
         <div class="col-sm-3 card_table_prt set_hgt">
-            <div class="card flipping_card card-3b mt70_mb">
+            <div class="card flipping_card card-3b">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Sales Per Hour</h1>
@@ -225,5 +225,3 @@
     
     </div>
 </div>
-
-@include('shared.datepicker')

@@ -107,4 +107,3 @@
 	</div>
 </div>
 
-@include('shared.datepicker')

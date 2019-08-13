@@ -502,9 +502,8 @@ var Master = {
 		if($(this).hasClass('pdf')){
 			var tot_rows = parseInt($('.totrows').val());
 			$('.report_dl_warning .modal-footer button').show();
-			console.log(tot_rows);
+
 			if (tot_rows >= 2000) {
-				console.log('else if');
 				$('.dl_alert.alert').removeClass('alert-warning');
 				$('.dl_alert.alert').addClass('alert-danger');
 				$('#report_dl_warning .alert p').text('Report is too large to download. Please run smaller reports or choose a different format');
@@ -527,7 +526,6 @@ var Master = {
 					form_data: Master.report_form_data
 				},
 				success: function (response) {
-					console.log(response);
 				}
 			});
 		}		
