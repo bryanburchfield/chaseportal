@@ -111,7 +111,6 @@ var Dashboard = {
         $('.preloader').fadeOut('slow');
     },
 
-
     // call volume, call duration line graphs & total minutes
     get_call_volume:function(datefilter, chartColors){
 

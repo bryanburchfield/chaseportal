@@ -1493,14 +1493,17 @@ var Master = {
 
 		if (typeof Dashboard !== 'undefined') {
 
-			$(document.body).on('mousemove keypress', function (e) {
-				Dashboard.time = new Date().getTime();
+			Dashboard.time = new Date().getTime();
+			$(document.body).bind("mousemove keypress", function(e) {
+			    Dashboard.time = new Date().getTime();
 			});
-			// reload if idle 60 seconds
+
+			console.log(new Date().getTime());
+			console.log(Dashboard.time);
+
 			function reload() {
-				if (new Date().getTime() - Dashboard.time >= 60000) {
+				if(new Date().getTime() - Dashboard.time >= 60000)  {
 					Dashboard.refresh(Dashboard.datefilter, Dashboard.campaign, Dashboard.inorout);
-					Dashboard.time = new Date().getTime();
 				} else {
 					setTimeout(reload, 5000);
 				}
