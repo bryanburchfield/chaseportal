@@ -13,6 +13,44 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+// Agent Dashboard: all urls start with /agentdashboard/
+Route::prefix('agentdashboard')->group(function(){
+    // Allow app_token login via /agentdashboard/api/{token}
+    Route::get('api/{token}', 'AgentDashController@apiLogin');
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+    Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/', 'AgentDashController@index');
+
+        // ajax targets
+        Route::post('call_volume', 'AgentDashController@callVolume');
+        Route::post('rep_performance', 'AgentDashController@repPerformance');
+        Route::post('call_status_count', 'AgentDashController@callStatusCount');
+        Route::post('update_filters', 'AgentDashController@updateFilters');
+
+    });
+});
+
+// Agent Outbound Dashboard: all urls start with /agentoutbounddashboard/
+Route::prefix('agentoutbounddashboard')->group(function(){
+    // Allow app_token login via /agentoutbounddashboard/api/{token}
+    Route::get('api/{token}', 'AgentOutboundDashController@apiLogin');
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+    Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/', 'AgentOutboundDashController@index');
+
+        // ajax targets
+        // Route::post('call_volume', 'AgentOutboundDashController@callVolume');
+        // Route::post('rep_performance', 'AgentOutboundDashController@repPerformance');
+        // Route::post('call_status_count', 'AgentOutboundDashController@callStatusCount');
+        // Route::post('update_filters', 'AgentOutboundDashController@updateFilters');
+
+    });
+});
+
 // Admin Dashboard: all urls start with /admindashboard/
 Route::prefix('admindashboard')->group(function () {
     // Allow app_token login via /admindashboard/api/{token}
@@ -36,7 +74,7 @@ Route::prefix('admindashboard')->group(function () {
     });
 });
 
-// Admin Dashboard: all urls start with /adminoutbounddashboard/
+// Admin Outbound Dashboard: all urls start with /adminoutbounddashboard/
 Route::prefix('adminoutbounddashboard')->group(function () {
     // Allow app_token login via /adminoutbounddashboard/api/{token}
     Route::get('api/{token}', 'AdminOutboundDashController@apiLogin');

@@ -32,7 +32,7 @@ class AdminOutboundDashController extends Controller
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
-            'dateFilter' => $this->dateFilter,
+            'datefilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'adminoutbounddash',

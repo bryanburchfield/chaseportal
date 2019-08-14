@@ -1497,10 +1497,7 @@ var Master = {
 			$(document.body).bind("mousemove keypress", function(e) {
 			    Dashboard.time = new Date().getTime();
 			});
-
-			console.log(new Date().getTime());
-			console.log(Dashboard.time);
-
+		
 			function reload() {
 				if(new Date().getTime() - Dashboard.time >= 60000)  {
 					Dashboard.refresh(Dashboard.datefilter, Dashboard.campaign, Dashboard.inorout);
