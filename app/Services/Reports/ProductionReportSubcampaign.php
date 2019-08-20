@@ -313,6 +313,9 @@ class ProductionReportSubcampaign
 
     private function processInput(Request $request)
     {
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
+
         // Check page filters
         $this->checkPageFilters($request);
 
@@ -326,6 +329,9 @@ class ProductionReportSubcampaign
         if (!empty($request->skills)) {
             $this->params['skills'] = $request->skills;
         }
+
+        // Save params to session
+        $this->saveSessionParams();
 
         return $this->errors;
     }

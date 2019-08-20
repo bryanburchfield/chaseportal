@@ -205,6 +205,9 @@ class LeadInventory
 
     private function processInput(Request $request)
     {
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
+
         // Check page filters
         $this->checkPageFilters($request);
 
@@ -213,6 +216,9 @@ class LeadInventory
         } else {
             $this->errors->add('campaigns.required', "Campaign required");
         }
+
+        // Save params to session
+        $this->saveSessionParams();
 
         return $this->errors;
     }

@@ -216,6 +216,9 @@ class CampaignUsage
 
     private function processInput(Request $request)
     {
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
+
         // Check page filters
         $this->checkPageFilters($request);
 
@@ -228,6 +231,9 @@ class CampaignUsage
         if (!empty($request->subcampaign)) {
             $this->params['subcampaign'] = $request->subcampaign;
         }
+
+        // Save params to session
+        $this->saveSessionParams();
 
         return $this->errors;
     }

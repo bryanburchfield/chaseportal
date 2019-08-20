@@ -221,11 +221,17 @@ class ShiftReport
 
     private function processInput(Request $request)
     {
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
+
         // Check page filters
         $this->checkPageFilters($request);
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        // Save params to session
+        $this->saveSessionParams();
 
         return $this->errors;
     }
