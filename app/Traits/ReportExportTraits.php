@@ -32,7 +32,7 @@ trait ReportExportTraits
             $pdf->FancyTable($headers, $data);
         }
 
-        if (empty($email)) {
+        if (empty($request->email)) {
             $pdf->Output();
             exit;
         } else {
@@ -55,7 +55,7 @@ trait ReportExportTraits
         return $this->doExport($request, 'html');
     }
 
-    public function doExport($request, $format)
+    private function doExport($request, $format)
     {
         $results = $this->getResults($request);
 
@@ -68,18 +68,17 @@ trait ReportExportTraits
 
         $export = new ReportExport($results);
 
+        // need to figure this out why this doesn't work
         // $class = '\Maatwebsite\Excel\Excel::' . strtoupper($format);
+        // return Excel::download($export, 'report.' . $format, $class);
 
         switch ($format) {
             case 'csv':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::CSV);
-                break;
             case 'xls':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLS);
-                break;
             case 'html':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::HTML);
-                break;
             default:
                 return $results;
         }
