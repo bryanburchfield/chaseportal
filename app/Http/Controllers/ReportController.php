@@ -48,6 +48,7 @@ class ReportController extends Controller
         $request = $this->parseRequest($request);
 
         $request->request->add(['all' => 1]);
+        $request->request->add(['export' => 1]);
 
         $function = strtolower($request->format) . 'Export';
 

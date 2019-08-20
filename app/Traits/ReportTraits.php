@@ -367,6 +367,11 @@ trait ReportTraits
 
     private function getSessionParams($request)
     {
+        // if we're not doing report export, return
+        if (empty($request->export)) {
+            return $request;
+        }
+
         $newrequest = $request;
 
         $report = join('', array_slice(explode('\\', get_class($this)), -1));
@@ -382,12 +387,10 @@ trait ReportTraits
                 $k != 'hasTotals' &&
                 $k != 'columns'
             ) {
-                if (!isset($request->$k)) {
-                    $param = $report . "_params['$k']";
-                    if ($request->session()->has($param)) {
-                        $v = $request->session()->get($param);
-                        $newrequest->request->add([$k => $v]);
-                    }
+                $param = $report . "_params['$k']";
+                if ($request->session()->has($param)) {
+                    $v = $request->session()->get($param);
+                    $newrequest->request->add([$k => $v]);
                 }
             }
         }
