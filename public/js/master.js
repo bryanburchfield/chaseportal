@@ -60,7 +60,7 @@ var Master = {
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
 		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 		$('a#getAppToken').on('click', this.get_app_token);
-		$('.report_download').on('click', '.report_dl_option', this.post_report_form_data);
+		// $('.report_download').on('click', '.report_dl_option', this.post_report_form_data);
 	},
 
 	formatNumber: function (x) {
@@ -520,12 +520,13 @@ var Master = {
 			
 			$.ajax({
 				url: 'report_export/'+report+'/'+format,
-				type: 'POST',
+				type: 'GET',
 				dataType: 'json',
 				data: {
 					form_data: Master.report_form_data
 				},
 				success: function (response) {
+					console.log(response);
 				}
 			});
 		}		

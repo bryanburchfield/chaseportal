@@ -9,6 +9,9 @@
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
 <input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
+<?php
+	dd(Session::get('userId'));
+?>
 @includeWhen(!$isApi, 'shared.navbar')
 
 <div class="container-fluid bg">

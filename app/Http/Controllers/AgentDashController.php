@@ -31,6 +31,7 @@ class AgentDashController extends Controller
 
         $data = [
             'isApi' => $this->isApi,
+            'userId' => Session::get('userId'),
             'campaign' => $this->campaign,
             'datefilter' => $this->dateFilter,
             'inorout' => $this->inorout,
@@ -50,8 +51,7 @@ class AgentDashController extends Controller
      */
     public function callVolume(Request $request)
     {
-    	// return ['call_volume' =>'test'];
-
+    	
         $this->getSession($request);
 
         $result = $this->getCallVolume();
@@ -59,7 +59,9 @@ class AgentDashController extends Controller
         $prev_result = $this->getCallVolume(true);
 
         $details = $this->filterDetails();
-        
+
+        return $result;
+
         $time_labels = [];
         $outbound = [];
         $inbound = [];
@@ -173,6 +175,7 @@ class AgentDashController extends Controller
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['rep'.$i] = $rep;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
 

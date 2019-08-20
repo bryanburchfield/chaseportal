@@ -25,6 +25,7 @@ trait DashTraits
         // Login that user and set session var so we know it's via API
         Auth::loginUsingId($user->id);
         session(['isApi' => 1]);
+        // session(['userId' => $user->id]);
 
         // And off we go!
         return redirect($request->route()->action['prefix']);
