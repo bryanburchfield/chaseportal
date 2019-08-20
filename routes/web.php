@@ -6,7 +6,7 @@ Route::redirect('/raw', '/raw');
 // Probably need a default landing page for this
 Route::get('/', function () {
     // phpinfo();
-    return 'Nothing to see here';
+    return redirect('dashboards');
 });
 
 // This is for user logins
@@ -14,13 +14,12 @@ Auth::routes(['register' => false]);
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 // Agent Dashboard: all urls start with /agentdashboard/
-Route::prefix('agentdashboard')->group(function(){
+Route::prefix('agentdashboard')->group(function () {
     // Allow app_token login via /agentdashboard/api/{token}
     Route::get('api/{token}', 'AgentDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'AgentDashController@index');
 
         // ajax targets
@@ -28,18 +27,16 @@ Route::prefix('agentdashboard')->group(function(){
         Route::post('rep_performance', 'AgentDashController@repPerformance');
         Route::post('call_status_count', 'AgentDashController@callStatusCount');
         Route::post('update_filters', 'AgentDashController@updateFilters');
-
     });
 });
 
 // Agent Outbound Dashboard: all urls start with /agentoutbounddashboard/
-Route::prefix('agentoutbounddashboard')->group(function(){
+Route::prefix('agentoutbounddashboard')->group(function () {
     // Allow app_token login via /agentoutbounddashboard/api/{token}
     Route::get('api/{token}', 'AgentOutboundDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'AgentOutboundDashController@index');
 
         // ajax targets
@@ -47,7 +44,6 @@ Route::prefix('agentoutbounddashboard')->group(function(){
         // Route::post('rep_performance', 'AgentOutboundDashController@repPerformance');
         // Route::post('call_status_count', 'AgentOutboundDashController@callStatusCount');
         // Route::post('update_filters', 'AgentOutboundDashController@updateFilters');
-
     });
 });
 
@@ -59,7 +55,6 @@ Route::prefix('admindashboard')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'AdminDashController@index');
 
         // ajax targets
@@ -82,7 +77,6 @@ Route::prefix('adminoutbounddashboard')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'AdminOutboundDashController@index');
 
         // ajax targets
@@ -110,7 +104,6 @@ Route::prefix('trenddashboard')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'TrendDashController@index');
 
         // ajax targets
@@ -130,7 +123,6 @@ Route::prefix('leaderdashboard')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'LeaderDashController@index');
 
         // ajax targets
@@ -151,7 +143,6 @@ Route::prefix('kpi')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'KpiController@index');
         Route::get('recipients', 'KpiController@recipients');
 
@@ -168,7 +159,6 @@ Route::prefix('kpi')->group(function () {
 
 // Master dashboard: all urls start with /dashboards/
 Route::prefix('dashboards')->group(function () {
-
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     // ajax targets
@@ -177,7 +167,6 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-
         Route::get('/', 'MasterDashController@index');
         Route::post('showreport', 'MasterDashController@showReport');
 
