@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
-use App\Services\PDF;
+use \App\Traits\ReportExportTraits;
 
 trait ReportTraits
 {
     public $errors;
     public $params;
     public $extras;
+
+    use ReportExportTraits;
 
     private function initilaizeParams()
     {
@@ -332,68 +334,6 @@ trait ReportTraits
         return $page;
     }
 
-    public function pdfExport($request)
-    {
-        ini_set('max_execution_time', 600);
-
-        $this->params['pagesize'] = 29;
-
-        $results = $this->getResults($request);
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
-
-        $headers = array_values($this->params['columns']);
-
-        $pdf = new PDF();
-
-        for ($i = 1; $i <= $this->params['totpages']; $i++) {
-            // Grab the page we want from results
-            $data = $this->arrayData(array_slice($results, ($i - 1) * $this->params['pagesize'], $this->params['pagesize']));
-            $pdf->AddPage('L', 'Legal');
-            $pdf->FancyTable($headers, $data);
-        }
-
-        if (empty($email)) {
-            $pdf->Output();
-            exit;
-        } else {
-            return $pdf->Output('S');
-        }
-    }
-
-    public function csvExport($request)
-    {
-        $results = $this->getResults($request);
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
-    }
-
-    public function xlsExport($request)
-    {
-        $results = $this->getResults($request);
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
-    }
-
-    public function htmlExport($request)
-    {
-        $results = $this->getResults($request);
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
-    }
-
     private function arrayData($array)
     {
         $data = [];
@@ -403,5 +343,58 @@ trait ReportTraits
         }
 
         return $data;
+    }
+
+    private function saveSessionParams()
+    {
+        $report = join('', array_slice(explode('\\', get_class($this)), -1));
+
+        foreach ($this->params as $k => $v) {
+            if (
+                $k != 'reportName' &&
+                $k != 'curpage' &&
+                $k != 'pagesize' &&
+                $k != 'totrows' &&
+                $k != 'totpages' &&
+                $k != 'groupby' &&
+                $k != 'hasTotals' &&
+                $k != 'columns'
+            ) {
+                session([$report . "_params['$k']" => $v]);
+            }
+        }
+    }
+
+    private function getSessionParams($request)
+    {
+        // if we're not doing report export, return
+        if (empty($request->export)) {
+            return $request;
+        }
+
+        $newrequest = $request;
+
+        $report = join('', array_slice(explode('\\', get_class($this)), -1));
+
+        foreach ($this->params as $k => $v) {
+            if (
+                $k != 'reportName' &&
+                $k != 'curpage' &&
+                $k != 'pagesize' &&
+                $k != 'totrows' &&
+                $k != 'totpages' &&
+                $k != 'groupby' &&
+                $k != 'hasTotals' &&
+                $k != 'columns'
+            ) {
+                $param = $report . "_params['$k']";
+                if ($request->session()->has($param)) {
+                    $v = $request->session()->get($param);
+                    $newrequest->request->add([$k => $v]);
+                }
+            }
+        }
+
+        return $newrequest;
     }
 }

@@ -48,12 +48,12 @@ class ReportController extends Controller
         $request = $this->parseRequest($request);
 
         $request->request->add(['all' => 1]);
+        $request->request->add(['export' => 1]);
 
         $function = strtolower($request->format) . 'Export';
 
         if (method_exists($this->reportservice->report, $function)) {
-            $this->reportservice->report->$function($request);
-            exit;
+            return $this->reportservice->report->$function($request);
         }
 
         abort(404);

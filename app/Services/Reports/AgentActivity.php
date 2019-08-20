@@ -139,6 +139,9 @@ class AgentActivity
 
     private function processInput(Request $request)
     {
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
+
         // Check page filters
         $this->checkPageFilters($request);
 
@@ -148,6 +151,9 @@ class AgentActivity
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
         }
+
+        // Save params to session
+        $this->saveSessionParams();
 
         return $this->errors;
     }
