@@ -19,7 +19,7 @@ var Master = {
 	pdf_dl_link: '',
 	first_search: true,
 	active_camp_search: '',
-	report_form_data:'',
+	report_form_data: '',
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
 	}),
@@ -79,13 +79,13 @@ var Master = {
 			.join(":")
 	},
 
-	add_bg_rounded_class:function(selector, data, limit) {
-        if(data == 0 || data.toString().length < limit){
-            selector.addClass('bg_rounded');
-        }else{
-            selector.removeClass('bg_rounded');
-        }
-    },
+	add_bg_rounded_class: function (selector, data, limit) {
+		if (data == 0 || data.toString().length < limit) {
+			selector.addClass('bg_rounded');
+		} else {
+			selector.removeClass('bg_rounded');
+		}
+	},
 
 	ylabel_format: function (data) {
 		var show_decimal = false;
@@ -495,11 +495,11 @@ var Master = {
 		}
 	},
 
-	post_report_form_data:function(e){
+	post_report_form_data: function (e) {
 		e.preventDefault();
-		var ok_to_dl=true;
+		var ok_to_dl = true;
 
-		if($(this).hasClass('pdf')){
+		if ($(this).hasClass('pdf')) {
 			var tot_rows = parseInt($('.totrows').val());
 			$('.report_dl_warning .modal-footer button').show();
 
@@ -509,26 +509,40 @@ var Master = {
 				$('#report_dl_warning .alert p').text('Report is too large to download. Please run smaller reports or choose a different format');
 				$('#report_dl_warning .modal-footer button').hide();
 				$('#report_dl_warning').modal('toggle');
-				ok_to_dl=false;
+				ok_to_dl = false;
 			}
 		}
 
-		if(ok_to_dl){
+		if (ok_to_dl) {
 			var report = $(this).data('report');
 			var format = $(this).data('format');
-			window.open(report, '_blank'); 
-			
+
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+				}
+			});
 			$.ajax({
-				url: 'report_export/'+report+'/'+format,
+				url: 'report_export/' + report + '/' + format,
 				type: 'POST',
-				dataType: 'json',
+				// dataType: 'json',
+				dataType: 'text',
 				data: {
 					form_data: Master.report_form_data
 				},
 				success: function (response) {
+					console.log(response);
+					var w = window.open(report, '_blank');
+					w.document.open();
+					w.document.write(response);
+					w.document.close();
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					alert(xhr.status);
+					alert(thrownError);
 				}
 			});
-		}		
+		}
 	},
 
 	return_chart_colors: function (response_length, chartColors) {
@@ -899,12 +913,12 @@ var Master = {
 	},
 
 	update_report: function (th_sort = '', pagesize = '', curpage = '', pag_link = '', sort_direction = '') {
-		Master.report_form_data= $('form.report_filter_form').serialize();
+		Master.report_form_data = $('form.report_filter_form').serialize();
 		var form_data = $('form.report_filter_form').serialize(),
 			report = $('#report').val(),
 			pagesize = $('.pagesize').val()
 			;
-			
+
 		if (curpage == '') { curpage = $('.curpage').val(); }
 		if (report == '') { report = $('#report').val(); }
 		if (curpage != pag_link && pag_link != '') { curpage = pag_link; }
@@ -1494,12 +1508,12 @@ var Master = {
 		if (typeof Dashboard !== 'undefined') {
 
 			Dashboard.time = new Date().getTime();
-			$(document.body).bind("mousemove keypress", function(e) {
-			    Dashboard.time = new Date().getTime();
+			$(document.body).bind("mousemove keypress", function (e) {
+				Dashboard.time = new Date().getTime();
 			});
-		
+
 			function reload() {
-				if(new Date().getTime() - Dashboard.time >= 60000)  {
+				if (new Date().getTime() - Dashboard.time >= 60000) {
 					Dashboard.refresh(Dashboard.datefilter, Dashboard.campaign, Dashboard.inorout);
 				} else {
 					setTimeout(reload, 5000);

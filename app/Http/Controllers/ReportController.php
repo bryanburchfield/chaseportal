@@ -52,8 +52,7 @@ class ReportController extends Controller
         $function = strtolower($request->format) . 'Export';
 
         if (method_exists($this->reportservice->report, $function)) {
-            $this->reportservice->report->$function($request);
-            exit;
+            return $this->reportservice->report->$function($request);
         }
 
         abort(404);

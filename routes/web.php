@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 // Anything in the /public/raw directory will get processed outside the framework
 Route::redirect('/raw', '/raw');
 
@@ -163,6 +165,7 @@ Route::prefix('dashboards')->group(function () {
 
     // ajax targets
     Route::post('reports/update_report', 'ReportController@updateReport');
+
     Route::post('reports/report_export/{report}/{format}', 'ReportController@exportReport');
 
     // must be logged in to access any of these
