@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use \App\Traits\ReportExportTraits;
@@ -342,5 +343,55 @@ trait ReportTraits
         }
 
         return $data;
+    }
+
+    private function saveSessionParams()
+    {
+        $report = join('', array_slice(explode('\\', get_class($this)), -1));
+
+        foreach ($this->params as $k => $v) {
+            if (
+                $k != 'reportName' &&
+                $k != 'curpage' &&
+                $k != 'pagesize' &&
+                $k != 'totrows' &&
+                $k != 'totpages' &&
+                $k != 'groupby' &&
+                $k != 'hasTotals' &&
+                $k != 'columns'
+            ) {
+                session([$report . "_params['$k']" => $v]);
+            }
+        }
+    }
+
+    private function getSessionParams($request)
+    {
+        $newrequest = $request;
+
+        $report = join('', array_slice(explode('\\', get_class($this)), -1));
+
+        foreach ($this->params as $k => $v) {
+            if (
+                $k != 'reportName' &&
+                $k != 'curpage' &&
+                $k != 'pagesize' &&
+                $k != 'totrows' &&
+                $k != 'totpages' &&
+                $k != 'groupby' &&
+                $k != 'hasTotals' &&
+                $k != 'columns'
+            ) {
+                if (!isset($request->$k)) {
+                    $param = $report . "_params['$k']";
+                    if ($request->session()->has($param)) {
+                        $v = $request->session()->get($param);
+                        $newrequest->request->add([$k => $v]);
+                    }
+                }
+            }
+        }
+
+        return $newrequest;
     }
 }
