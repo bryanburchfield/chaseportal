@@ -92,7 +92,7 @@ class PDF extends Fpdf
         if ($w == 0) {
             $w = $this->w - $this->rMargin - $this->x;
         }
-        $ratio = ($w - $this->cMargin * 2) / $str_width;
+        $ratio = $str_width == 0 ? 0 : ($w - $this->cMargin * 2) / $str_width;
 
         $fit = ($ratio < 1 || ($ratio > 1 && $force));
         if ($fit) {

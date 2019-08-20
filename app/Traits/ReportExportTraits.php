@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Services\PDF;
+use App\Exports\ReportExport;
 
 trait ReportExportTraits
 {
@@ -32,53 +32,56 @@ trait ReportExportTraits
             $pdf->FancyTable($headers, $data);
         }
 
-        $response = $pdf->Output('S');
-
-        return Response::make($response, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="report.pdf"',
-        ]);
-
-
-        // if (empty($email)) {
-        //     $pdf->Output();
-        //     exit;
-        // } else {
-        //     return $pdf->Output('S');
-        // }
+        if (empty($email)) {
+            $pdf->Output();
+            exit;
+        } else {
+            return $pdf->Output('S');
+        }
     }
 
     public function csvExport($request)
     {
-        $results = $this->getResults($request);
-
-        return $results;
-
-
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
+        return $this->doExport($request, 'csv');
     }
 
     public function xlsExport($request)
     {
-        $results = $this->getResults($request);
-
-        // check for errors
-        if (is_object($results)) {
-            return null;
-        }
+        return $this->doExport($request, 'xls');
     }
 
     public function htmlExport($request)
+    {
+        return $this->doExport($request, 'html');
+    }
+
+    public function doExport($request, $format)
     {
         $results = $this->getResults($request);
 
         // check for errors
         if (is_object($results)) {
             return null;
+        }
+
+        array_unshift($results, array_values($this->params['columns']));
+
+        $export = new ReportExport($results);
+
+        // $class = '\Maatwebsite\Excel\Excel::' . strtoupper($format);
+
+        switch ($format) {
+            case 'csv':
+                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::CSV);
+                break;
+            case 'xls':
+                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLS);
+                break;
+            case 'html':
+                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::HTML);
+                break;
+            default:
+                return $results;
         }
     }
 }
