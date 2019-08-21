@@ -32,12 +32,30 @@ trait ReportExportTraits
             $pdf->FancyTable($headers, $data);
         }
 
-        if (empty($email)) {
+        if (empty($request->email)) {
             $pdf->Output();
             exit;
         } else {
             return $pdf->Output('S');
         }
+    }
+
+    public function htmlExport($request)
+    {
+        ini_set('max_execution_time', 600);
+
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+
+        return view('reports.export')
+            ->with([
+                'params' => $this->params,
+                'results' => $results,
+            ]);
     }
 
     public function csvExport($request)
@@ -50,13 +68,10 @@ trait ReportExportTraits
         return $this->doExport($request, 'xls');
     }
 
-    public function htmlExport($request)
+    private function doExport($request, $format)
     {
-        return $this->doExport($request, 'html');
-    }
+        ini_set('max_execution_time', 600);
 
-    public function doExport($request, $format)
-    {
         $results = $this->getResults($request);
 
         // check for errors
@@ -68,18 +83,17 @@ trait ReportExportTraits
 
         $export = new ReportExport($results);
 
+        // need to figure this out why this doesn't work
         // $class = '\Maatwebsite\Excel\Excel::' . strtoupper($format);
+        // return Excel::download($export, 'report.' . $format, $class);
 
         switch ($format) {
             case 'csv':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::CSV);
-                break;
             case 'xls':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLS);
-                break;
-            case 'html':
-                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::HTML);
-                break;
+            case 'xlsx':
+                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLSX);
             default:
                 return $results;
         }

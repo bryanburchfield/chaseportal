@@ -17,10 +17,12 @@ class MasterDashController extends Controller
     {
         $this->getSession($request);
 
-        $groupId = Auth::user()->group_id;
-        $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
-        natcasesort($campaigns);
-        array_unshift($campaigns, 'Total');
+        // $groupId = Auth::user()->group_id;
+        // $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
+        // natcasesort($campaigns);
+        // array_unshift($campaigns, 'Total');
+
+        $campaigns = $this->campaignGroups();
 
         $this->currentDash = session('currentDash', 'admindash');
         session(['currentDash' => $this->currentDash]);

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Campaign;
 use \App\Traits\DashTraits;
 
 class LeaderDashController extends Controller
@@ -15,10 +14,7 @@ class LeaderDashController extends Controller
     {
         $this->getSession($request);
 
-        $groupId = Auth::user()->group_id;
-        $campaigns = Campaign::where('GroupId', $groupId)->where('IsActive', 1)->pluck('CampaignName')->toArray();
-        natcasesort($campaigns);
-        array_unshift($campaigns, 'Total');
+        $campaigns = $this->campaignGroups();
 
         $jsfile[] = "leaderdash.js";
         $cssfile[] = "leaderdash.css";

@@ -348,6 +348,80 @@ trait DashTraits
             }
         }
 
-        return ['campaigns' => []];
+        return ['campaigns' => $this->campaignGroups()];
+    }
+
+    public function campaignGroups($partial = null)
+    {
+        $groupId = Auth::user()->group_id;
+        $partial = trim($partial);
+        $dateFilter = session('datefilter') ?? 'today';
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $sql = '';
+        $union = '';
+
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
+            $sql .= "$union SELECT DISTINCT Campaign
+            FROM [$db].[dbo].[DialingResults]
+            WHERE GroupId = :groupid$i
+            AND Campaign != ''
+            AND Date >= :startdate$i
+            AND Date < :enddate$i";
+
+            if (!empty($partial)) {
+                $bind['name' . $i] = $partial . '%';
+                $sql .= " AND Campaign LIKE :name$i";
+            }
+
+            $union = ' UNION';
+        }
+
+        $result = $this->runSql($sql, $bind);
+
+        $result = array_column($result, 'Campaign');
+
+        if (empty($_SESSION['campaign'])) {
+            $selected = [];
+        } else {
+            $selected = (array) session('campaign');
+        }
+
+        // add any selected camps that aren't in the result set
+        foreach ($selected as $camp) {
+            if (!in_array($camp, $result)) {
+                $result[] = $camp;
+            }
+        }
+
+        natcasesort($result);
+
+        $camparray = [];
+
+        $camparray[] = [
+            'name' => 'All Campaigns',
+            'value' => '',
+            'selected' => empty($selected) ? 1 : 0,
+        ];
+
+        foreach ($result as $camp) {
+            $camparray[] = [
+                'name' => $camp,
+                'value' => $camp,
+                'selected' => in_array($camp, $selected) ? 1 : 0,
+            ];
+        }
+
+        return $camparray;
     }
 }
