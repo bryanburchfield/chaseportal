@@ -92,8 +92,8 @@ trait ReportExportTraits
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::CSV);
             case 'xls':
                 return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLS);
-            case 'html':
-                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::HTML);
+            case 'xlsx':
+                return Excel::download($export, 'report.' . $format, \Maatwebsite\Excel\Excel::XLSX);
             default:
                 return $results;
         }
