@@ -40,6 +40,24 @@ trait ReportExportTraits
         }
     }
 
+    public function htmlExport($request)
+    {
+        ini_set('max_execution_time', 600);
+
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+
+        return view('reports.export')
+            ->with([
+                'params' => $this->params,
+                'results' => $results,
+            ]);
+    }
+
     public function csvExport($request)
     {
         return $this->doExport($request, 'csv');
@@ -50,13 +68,10 @@ trait ReportExportTraits
         return $this->doExport($request, 'xls');
     }
 
-    public function htmlExport($request)
-    {
-        return $this->doExport($request, 'html');
-    }
-
     private function doExport($request, $format)
     {
+        ini_set('max_execution_time', 600);
+
         $results = $this->getResults($request);
 
         // check for errors
