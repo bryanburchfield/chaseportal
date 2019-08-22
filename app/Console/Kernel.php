@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\KpiController;
+use App\Http\Controllers\ReportController;
 
 class Kernel extends ConsoleKernel
 {
@@ -31,6 +32,16 @@ class Kernel extends ConsoleKernel
             }
         })
             ->everyMinute()
+            ->runInBackground();
+
+        $schedule->call(function () {
+            foreach (ReportController::cronDue() as $rec) {
+                ReportController::cronRun($rec);
+            }
+        })
+            // ->dailyAt('6:00')
+            ->everyMinute()
+            ->timezone('America/New_York')
             ->runInBackground();
     }
 
