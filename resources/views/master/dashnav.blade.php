@@ -2,19 +2,24 @@
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span>Interaction</span>
     </button>
-    <ul class="dropdown-menu filter_campaign">
+    <ul class="dropdown-menu filter_campaign stop-propagation">
 
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
-        
-    <?php
+        <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+        <?php 
         $t = array_search('Total', $campaign_list);
         unset($campaign_list[$t]);
         array_unshift($campaign_list, 'Total');
-    ?>
-        @foreach($campaign_list as $camp)
-            <li class="{{ ($camp == $campaign) ? 'active' : '' }}" ><a href="#">{{ $camp }}</a></li>
-        @endforeach
-    
+        ?>
+        @foreach($campaign_list as $campaign)
+
+            $checked = $campaign['selected'] ? $checked = "checked" : $checked= " ";
+            <div class="checkbox">
+            <label class="campaign_label"><input class="campaign_group" required type="checkbox"  {{$checked}} value="{{$campaign['value']}}" name="campaigns"><span>{{$campaign['name']}}</span></label>
+            </div>
+        @endforeach                                           
+                                    
+
     </ul>
 </div>
 
