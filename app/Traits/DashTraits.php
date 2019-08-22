@@ -354,13 +354,11 @@ trait DashTraits
 
     public function campaignSearch(Request $request)
     {
-        return ['search_result' => $this->campaignGroups($request->query)];
+        return ['search_result' => $this->campaignGroups(trim($request->get('query')))];
     }
 
-    public function campaignGroups($request = null)
+    public function campaignGroups($partial = null)
     {
-        $partial = empty($request->query) ? '' : trim($request->query);
-
         $dateFilter = session('dateFilter') ?? 'today';
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
