@@ -104,15 +104,15 @@ trait ReportExportTraits
 
     public function emailReport($request)
     {
-        $pdf = $this->pdfExport($request);
-
         $reportName = $this->params['reportName'];
 
         // default date range if report reqs it and not already set
         if (isset($this->params['fromdate'])) {
-            $this->params['fromdate'] = date("m/d/Y", strtotime('-1 day'));
-            $this->params['todate'] = date("m/d/Y");
+            $request->request->add(['fromdate' => date("m/d/Y", strtotime('-1 day'))]);
+            $request->request->add(['todate' => date("m/d/Y")]);
         }
+
+        $pdf = $this->pdfExport($request);
 
         if (isset($this->params['fromdate'])) {
             $daterange = "Date Range: " . date('m/d/Y g:i:s A', strtotime($this->params['fromdate'])) .
@@ -122,14 +122,20 @@ trait ReportExportTraits
             $daterange = "As of: $now\n";
         }
 
+        // store pdf to temp file
+        $filename = tempnam(sys_get_temp_dir(), 'report_');
+        $fp = fopen($filename, 'w');
+        fwrite($fp, $pdf);
+        fclose($fp);
+
         // email report
         $message = [
             'to' => $request->email,
             'subject' => $reportName,
             'reportName' => $reportName,
             'daterange' => $daterange,
+            'pdf' => $filename,
             'url' => url('/') . '/dashboards/',
-            'pdf' => $pdf,
         ];
         $this->sendEmail($message);
     }
