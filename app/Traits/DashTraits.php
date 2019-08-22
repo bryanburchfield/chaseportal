@@ -352,6 +352,11 @@ trait DashTraits
         return ['campaigns' => $this->campaignGroups()];
     }
 
+    public function campaignSearch(Request $request)
+    {
+        return ['search_result' => $this->campaignGroups($request->query)];
+    }
+
     public function campaignGroups($partial = null)
     {
         $partial = trim($partial);
