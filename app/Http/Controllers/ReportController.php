@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AutomatedReport;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
@@ -55,6 +58,17 @@ class ReportController extends Controller
         if (method_exists($this->reportservice->report, $function)) {
             return $this->reportservice->report->$function($request);
         }
+
+        abort(404);
+    }
+
+    public function emailReport(Request $request)
+    {
+        $request = $this->parseRequest($request);
+
+        $request->request->add(['all' => 1]);
+
+        return $this->reportservice->report->emailReport($request);
 
         abort(404);
     }
@@ -120,5 +134,43 @@ class ReportController extends Controller
         $results = $this->reportservice->getAllSubcampaigns();
 
         return ['results' => $results];
+    }
+
+    /**
+     * Return all automated report records
+     * We may add some conditionals later
+     *
+     * @return AutomatedReport collection
+     */
+    public static function cronDue()
+    {
+        return AutomatedReport::orderBy('user_id')->get();
+    }
+
+    /**
+     * Run report in background (from scheduler)
+     *
+     * @param AutomatedReport $automatedReport
+     * @return void
+     */
+    public static function cronRun(AutomatedReport $automatedReport)
+    {
+        // authenticate as user
+        $user = User::where('id', '=', $automatedReport->user_id)->first();
+        Auth::logout();
+        Auth::login($user);
+
+        // create report controller object
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->request->add(['report' => $automatedReport->report]);
+        $report = new ReportController($request);
+
+        // Run report
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->request->add(['form_data' => $automatedReport->filters]);
+        $request->request->add(['email' => $user->email]);
+        $report->emailReport($request);
     }
 }
