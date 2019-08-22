@@ -183,7 +183,7 @@ Route::prefix('dashboards')->group(function () {
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_filters', 'MasterDashController@updateFilters');
-        Route::post('campaign_search', 'MasterDashController@campaignGroups');
+        Route::post('campaign_search', 'MasterDashController@campaignSearch');
 
         // Admin only
         // prefix('admin') isn't working for some reason

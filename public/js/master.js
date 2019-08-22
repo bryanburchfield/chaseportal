@@ -331,9 +331,9 @@ var Master = {
 			data: {query: query},
 			success:function(response){
 				console.log(response);
-				
-				var is_array = Array.isArray(response.search_result);				
-				var obj = response['search_result'];
+
+				var is_array = Array.isArray(response);				
+				var obj = response;
 				$('.filter_campaign .checkbox').remove();
 				var campaign_searchresults='';
 
