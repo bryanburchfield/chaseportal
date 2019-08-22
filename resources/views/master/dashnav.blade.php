@@ -5,6 +5,7 @@
     <ul class="dropdown-menu filter_campaign stop-propagation">
 
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
+<<<<<<< HEAD
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
         <?php 
         $t = array_search('Total', $campaign_list);
@@ -19,6 +20,12 @@
             </div>
         @endforeach                                           
                                     
+=======
+
+        @foreach($campaign_list as $camprec)
+            <li class="{{ ($camprec['name'] == $campaign) ? 'active' : '' }}" ><a href="#">{{ $camprec['name'] }}</a></li>
+        @endforeach
+>>>>>>> 729c0d930918904fa82547378e47fe2928c43240
 
     </ul>
 </div>
