@@ -5,9 +5,8 @@
     <ul class="dropdown-menu filter_campaign stop-propagation">
 
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
-<<<<<<< HEAD
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
-        <?php 
+        <?php
         $t = array_search('Total', $campaign_list);
         unset($campaign_list[$t]);
         array_unshift($campaign_list, 'Total');
@@ -18,14 +17,8 @@
             <div class="checkbox">
             <label class="campaign_label"><input class="campaign_group" required type="checkbox"  {{$checked}} value="{{$campaign['value']}}" name="campaigns"><span>{{$campaign['name']}}</span></label>
             </div>
-        @endforeach                                           
-                                    
-=======
-
-        @foreach($campaign_list as $camprec)
-            <li class="{{ ($camprec['name'] == $campaign) ? 'active' : '' }}" ><a href="#">{{ $camprec['name'] }}</a></li>
         @endforeach
->>>>>>> 729c0d930918904fa82547378e47fe2928c43240
+
 
     </ul>
 </div>
