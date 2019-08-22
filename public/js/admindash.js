@@ -94,7 +94,7 @@ var Dashboard = {
         return chart_colors_array;
     },
 
-    refresh:function(datefilter, campaign){
+    refresh:function(datefilter){
 
         Dashboard.average_hold_time(datefilter);
         Dashboard.abandon_rate(datefilter);
@@ -105,8 +105,9 @@ var Dashboard = {
         Dashboard.total_sales(datefilter);
         Dashboard.update_datefilter(datefilter);
         Master.check_reload();
-        $('.preloader').fadeOut('slow');console.log(Dashboard.datefilter);
+        $('.preloader').fadeOut('slow');
     },
+
 
     // call volume, call duration line graphs & total minutes
     get_call_volume:function(datefilter, chartColors){
@@ -116,7 +117,7 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        console.log('SENDING '+ datefilter);
+
         $.ajax({
             'async': false,
             url: '/admindashboard/call_volume',
@@ -126,8 +127,7 @@ var Dashboard = {
                 dateFilter:datefilter
             },
             success:function(response){
-                console.log(response);
-
+                
                 ///////////////// CALLS ANSWERED CARD
                 Master.trend_percentage( $('#calls_answered'), response.call_volume.calls_answered.pct_change, response.call_volume.calls_answered.pct_sign, response.call_volume.calls_answered.ntc );
                 Master.add_bg_rounded_class($('#calls_answered .total'), response.call_volume.calls_answered.count, 4);
@@ -771,30 +771,6 @@ var Dashboard = {
             success:function(response){
             }
         });
-    },
-
-    set_databases:function(databases){
-        Dashboard.databases=databases;
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        var datefilter = $('#datefilter').val();
-        $('.preloader').show();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/admindashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {databases:databases},
-            success:function(response){
-                Dashboard.refresh(datefilter, campaign);
-            }
-        });  
     },
 
     title_options :{
