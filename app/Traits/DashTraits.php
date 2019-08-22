@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\User;
 
 trait DashTraits
@@ -352,9 +353,8 @@ trait DashTraits
 
     public function campaignGroups($partial = null)
     {
-        $groupId = Auth::user()->group_id;
         $partial = trim($partial);
-        $dateFilter = session('datefilter') ?? 'today';
+        $dateFilter = session('dateFilter') ?? 'today';
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 

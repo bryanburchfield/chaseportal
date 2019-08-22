@@ -5,16 +5,11 @@
     <ul class="dropdown-menu filter_campaign">
 
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
-        
-    <?php
-        $t = array_search('Total', $campaign_list);
-        unset($campaign_list[$t]);
-        array_unshift($campaign_list, 'Total');
-    ?>
-        @foreach($campaign_list as $camp)
-            <li class="{{ ($camp == $campaign) ? 'active' : '' }}" ><a href="#">{{ $camp }}</a></li>
+
+        @foreach($campaign_list as $camprec)
+            <li class="{{ ($camprec['name'] == $campaign) ? 'active' : '' }}" ><a href="#">{{ $camprec['name'] }}</a></li>
         @endforeach
-    
+
     </ul>
 </div>
 
