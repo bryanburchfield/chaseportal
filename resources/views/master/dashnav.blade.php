@@ -6,19 +6,17 @@
 
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
-        <?php
-        $t = array_search('Total', $campaign_list);
-        unset($campaign_list[$t]);
-        array_unshift($campaign_list, 'Total');
-        ?>
         @foreach($campaign_list as $campaign)
 
-            $checked = $campaign['selected'] ? $checked = "checked" : $checked= " ";
             <div class="checkbox">
-            <label class="campaign_label"><input class="campaign_group" required type="checkbox"  {{$checked}} value="{{$campaign['value']}}" name="campaigns"><span>{{$campaign['name']}}</span></label>
+                <label class="campaign_label">
+                    <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
+                    <span>
+                        {{$campaign['name']}}
+                    </span>
+                </label>
             </div>
         @endforeach
-
 
     </ul>
 </div>
