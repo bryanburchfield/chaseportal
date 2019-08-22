@@ -12,6 +12,7 @@ class ReportMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $data;
+    public $pdf;
 
     public function __construct($data = [])
     {
@@ -20,10 +21,14 @@ class ReportMail extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject($this->data['subject'])
+        return $this
             ->view('mail.report')
-            ->attachData($this->data['pdf'], 'report.pdf', [
-                'mime' => 'application/pdf',
-            ]);
+            ->attach(
+                $this->data['pdf'],
+                [
+                    'as' => 'report.pdf',
+                    'mime' => 'application/pdf',
+                ]
+            );
     }
 }
