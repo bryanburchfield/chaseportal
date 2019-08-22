@@ -47,14 +47,15 @@
     <script src="/js/datetimepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
     <script src="/js/multiselect.js"></script> 
-    <script src="/js/master.js"></script> 
-    <script src="/js/nav.js"></script> 
 
     @isset($jsfile)
     @foreach($jsfile as $js)
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
+
+    <script src="/js/master.js"></script> 
+    <script src="/js/nav.js"></script> 
     
   </body>
 </html>

@@ -476,7 +476,7 @@ div.container-fluid.bg {
         margin-bottom: 0;
         background: none;
 
-        &.select_database {
+        &.select_database, &.select_campaign {
             position: relative;
             margin-bottom: 10px;
             background-color: #e49831;

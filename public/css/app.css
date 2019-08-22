@@ -570,7 +570,8 @@ div.container-fluid.bg {
   background: none;
 }
 
-.filters .btn.btn-primary.select_database {
+.filters .btn.btn-primary.select_database,
+.filters .btn.btn-primary.select_campaign {
   position: relative;
   margin-bottom: 10px;
   background-color: #e49831;

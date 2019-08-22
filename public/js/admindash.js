@@ -70,9 +70,6 @@ var Dashboard = {
     },
 
     eventHandlers:function(){
-        $('.date_filters li a').on('click', this.filter_date);
-        $('.filter_campaign').on('click', 'li', this.filter_campaign);
-        $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.service_level_time a').on('click', this.set_service_level_time);
     },
 
@@ -108,7 +105,7 @@ var Dashboard = {
         Dashboard.total_sales(datefilter);
         Dashboard.update_datefilter(datefilter);
         Master.check_reload();
-        $('.preloader').fadeOut('slow');
+        $('.preloader').fadeOut('slow');console.log(Dashboard.datefilter);
     },
 
     // call volume, call duration line graphs & total minutes
@@ -119,7 +116,7 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+        console.log('SENDING '+ datefilter);
         $.ajax({
             'async': false,
             url: '/admindashboard/call_volume',
@@ -358,7 +355,7 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, dateFilter:datefilter},
             success:function(response){
-                console.log(response);
+
                 Master.flip_card(response.reps.length, '#agent_call_count');
                 Master.flip_card(response.reps.length, '#agent_calltime');
                 $('#agent_call_count tbody, #agent_calltime tbody').empty();  
@@ -776,37 +773,6 @@ var Dashboard = {
         });
     },
 
-    filter_date:function(){
-        
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        datefilter = $(this).data('datefilter');
-        $('#datefilter').val(datefilter);
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        Dashboard.datefilter = datefilter;
-
-        if(datefilter !='custom'){
-            $('.preloader').show();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: '/admindashboard/update_filters',
-                type: 'POST',
-                dataType: 'json',
-                data: {dateFilter:datefilter},
-                success:function(response){
-                    console.log(response);
-                    Dashboard.refresh(datefilter, campaign);
-                }
-            });          
-        }
-    },
-
     set_databases:function(databases){
         Dashboard.databases=databases;
         var campaign = $('.filter_campaign li').hasClass('active');
@@ -829,74 +795,6 @@ var Dashboard = {
                 Dashboard.refresh(datefilter, campaign);
             }
         });  
-    },
-
-    filter_campaign:function(){
-
-        $('.preloader').show();
-
-        $(this).siblings().removeClass('active')
-        $(this).addClass('active');
-        var active_date = $('.date_filters li.active');
-        datefilter = $('#datefilter').val();
-        var campaign = $(this).text();
-        Master.active_camp_search = campaign;
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/admindashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter:datefilter,campaign: campaign},
-            success:function(response){
-                Dashboard.refresh(datefilter, campaign);
-            }
-        });
-    },
-
-    custom_date_filter:function(){
-        $('.preloader').show();
-        $('#datefilter_modal').hide();
-        $('.modal-backdrop').hide();
-
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        
-        var start_date = $('.startdate').val(),
-            end_date = $('.enddate').val()
-        ;
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        datefilter = start_date + ' ' + end_date;
-
-        $('.startdate').val('');
-        $('.enddate').val('');
-        $('#datefilter_modal').modal('toggle');
-        $('#datefilter').val(start_date + ' ' + end_date);
-        Dashboard.datefilter = datefilter;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/admindashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter:datefilter},
-            success:function(response){
-                console.log(response);
-                Dashboard.refresh(datefilter, campaign);
-            }
-        });  
-        Dashboard.refresh(datefilter, campaign);
-        
     },
 
     title_options :{

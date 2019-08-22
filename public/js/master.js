@@ -60,6 +60,10 @@ var Master = {
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
 		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 		$('a#getAppToken').on('click', this.get_app_token);
+		$('.select_campaign').on('click', this.filter_campaign);
+		$('.date_filters li a').on('click', this.filter_date);
+		$('.submit_date_filter').on('click', this.custom_date_filter);
+		$('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
 		// $('.report_download').on('click', '.report_dl_option', this.post_report_form_data);
 	},
 
@@ -130,6 +134,181 @@ var Master = {
 		} else {
 			selector.find('.trend_indicator').hide();
 		}
+	},
+
+	filter_date:function(){
+
+		var that = $(this);
+		console.log(that.data('datefilter'));
+	    that.parent().siblings().removeClass('active');
+	    that.parent().addClass('active');
+	    datefilter = that.data('datefilter');
+	    $('#datefilter').val(datefilter);
+	    var campaigns=[];
+	    $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function() {
+	        campaigns.push(that.val());
+	    });
+
+	    Dashboard.datefilter = datefilter;
+
+	    if(datefilter !='custom'){
+	        $('.preloader').show();
+
+	        $.ajaxSetup({
+	        	headers: {
+	        		'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        	}
+	        });
+
+	        console.log(datefilter);
+	        $.ajax({
+	            url: 'dashboards/update_filters',
+	            type: 'POST',
+	            dataType: 'json',
+	            data: {datefilter:datefilter},
+	            success:function(response){
+	            	console.log(response);
+	                Master.set_campaigns(response);
+	            }
+	        });          
+	    }
+	},
+
+	custom_date_filter:function(){
+	    $('.preloader').show();
+	    $('#datefilter_modal').hide();
+	    $('.modal-backdrop').hide();
+	    
+	    var start_date = $('.startdate').val(),
+	        end_date = $('.enddate').val()
+	    ;
+	    var campaign = $('.filter_campaign li').hasClass('active');
+	    campaign = $(campaign).find('a').text();
+	    datefilter = start_date + ' ' + end_date;
+
+	    $('.startdate').val('');
+	    $('.enddate').val('');
+	    $('#datefilter_modal').modal('toggle');
+	    $('#datefilter').val(start_date + ' ' + end_date);
+	    Dashboard.datefilter = datefilter;
+
+	    $.ajaxSetup({
+	    	headers: {
+	    		'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	    	}
+	    });
+
+	    $.ajax({
+	        url: 'dashboards/update_filters',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: {datefilter:datefilter},
+	        success:function(response){
+	            Master.set_campaigns(response);
+
+	        }
+	    });
+	},
+
+	// check/uncheck campaigns based on whats being clicked
+	adjust_campaign_filters:function(){
+
+	    // Get amount of selected checkboxes
+	    var checked = [];
+	    $('.campaign_label input:checked').each(function() {
+	        checked.push($(this).attr('name'));
+	    });
+
+	    /// check if target is NOT All Camps
+	    if($(this).val() !=''){
+	        // See if others are checked
+	        if(checked.length){
+	            // check if All Camps is checked
+	            if($('.filter_campaign .campaign_group').eq(0).is(':checked')){
+	                // uncheck all camps because others are being selected
+	                $('.filter_campaign .campaign_group').eq(0).removeAttr('checked');
+	            }
+	        }            
+	    }else{ /// ALL camps is being checked
+	        // check if All Camps was already checked
+	        if($('.filter_campaign .campaign_group').eq(0).is(':checked')){
+	            $('.filter_campaign .campaign_group').removeAttr('checked'); /// uncheck all other camps
+	            $('.filter_campaign .campaign_group').eq(0).prop('checked',true); // recheck all camps
+	        }
+
+	        if(!checked.length){ // if nothing is selected reselect All Camps because something has to be checked
+	            $('.filter_campaign .campaign_group').eq(0).prop('checked',true);
+	        }
+	    }
+	},
+
+	// ran after submit is clicked in the interaction menu, after filter_campaign()
+	set_campaigns:function(response){
+	    var campaigns=[];
+	    $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function() {
+	        campaigns.push($(this).val());
+	        //// if total is selected, uncheck all checkboxes
+	        if($(this).val()==''){
+	            $('.filter_campaign .checkbox label input[name="campaigns"]:checkbox').removeAttr('checked');
+	        }
+	    });
+
+	    var is_array = Array.isArray(response.campaigns);               
+	    var obj = response['campaigns'];
+	    $('.filter_campaign .checkbox').remove();
+	    var campaign_searchresults='';
+
+	    if(!is_array){                      
+	        var obj = Object.keys(obj).map(function(key) {
+	            return [obj[key]];
+	        });
+	    }
+	    var checked;
+	    
+	    for(var i=0;i<obj.length;i++){
+	        checked=obj[i].selected;
+	        if(checked){checked='checked';}else{checked='';}
+	        campaign_searchresults+='<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" '+checked+' value="'+obj[i].value+'" name="campaigns"><span>'+obj[i].name+'</span></label></div>';
+	    }
+
+	    $('.filter_campaign').append(campaign_searchresults);
+	    Dashboard.refresh(datefilter);
+	},
+
+	// ran when submit is clicked in the interaction menu
+	filter_campaign:function(){
+
+	    $('.preloader').show();
+
+	    datefilter = $('#datefilter').val();
+	    var checked = $(".campaign_group:checkbox:checked").length;
+	    $('.alert').remove();
+	    $('.campaign_search').val('');
+
+	    if(checked){
+	        $('.filter_campaign').parent().removeClass('open');
+	        $('.filter_campaign').prev('.dropdown-toggle').attr('aria-expanded', false);
+	        var campaigns=[];
+	        $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function() {
+	            campaigns.push($(this).val());
+	        });
+	    }
+
+	    $.ajaxSetup({
+	    	headers: {
+	    		'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	    	}
+	    });
+
+	    $.ajax({
+	        url: 'dashboards/update_filters',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: {campaign: campaigns},
+	        success:function(response){
+	            Master.set_campaigns(response);
+	        }
+	    });
 	},
 
 	search_campaigns: function () {
@@ -252,7 +431,6 @@ var Master = {
 	upload_file: function (e) {
 		e.preventDefault();
 		$('#file_upload').parent().find('.alert').remove();
-
 		function hasExtension(inputID, exts) {
 			var fileName = document.getElementById(inputID).value;
 			return (new RegExp('(' + exts.join('|').replace(/\./g, '\\.') + ')$')).test(fileName);

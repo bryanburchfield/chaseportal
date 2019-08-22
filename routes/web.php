@@ -28,7 +28,7 @@ Route::prefix('agentdashboard')->group(function () {
         Route::post('call_volume', 'AgentDashController@callVolume');
         Route::post('rep_performance', 'AgentDashController@repPerformance');
         Route::post('call_status_count', 'AgentDashController@callStatusCount');
-        Route::post('update_filters', 'AgentDashController@updateFilters');
+        // Route::post('update_filters', 'AgentDashController@updateFilters');
     });
 });
 
@@ -181,6 +181,7 @@ Route::prefix('dashboards')->group(function () {
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
+        Route::post('update_filters', 'MasterDashController@updateFilters');
         Route::get('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
 
         // Admin only
