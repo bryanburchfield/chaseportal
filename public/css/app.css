@@ -1326,6 +1326,10 @@ h3.heading {
   display: none;
 }
 
+.table-responsive.report_table.report_export_table {
+  display: block;
+}
+
 .table-responsive.overflowauto {
   overflow-x: auto;
 }

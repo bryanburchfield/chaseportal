@@ -1025,7 +1025,7 @@ var Master = {
 	submit_report_filter_form:function(e){
 		e.preventDefault();
 		$('.preloader').show();
-		
+		console.log('test');
 		$([document.documentElement, document.body]).animate({
 	        scrollTop: $(".table-responsive").offset().top -100
 	    }, 1500);
@@ -1134,6 +1134,8 @@ var Master = {
 		if(curpage != pag_link && pag_link != ''){curpage = pag_link;}
 		if(th_sort == pag_link){th_sort='';}
 		
+		console.log(form_data);
+
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1141,7 +1143,7 @@ var Master = {
 		});
 
 		$.ajax({
-			url: 'reports/update_report',
+			url: 'update_report',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -1154,7 +1156,7 @@ var Master = {
 			},
 
 			success:function(response){
-
+				console.log(response);
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
