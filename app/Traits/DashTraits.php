@@ -36,7 +36,7 @@ trait DashTraits
     {
         // This won't work inside __construct()
         $this->databases = session('databases', []);
-        $this->campaign = session('campaign', 'Total');
+        $this->campaign = session('campaign', '');
         $this->dateFilter = session('dateFilter', 'today');
         $this->inorout = session('inorout', 'inbound');
         $this->isApi = session('isApi', 0);
@@ -433,10 +433,10 @@ trait DashTraits
 
         $result = array_column($result, 'Campaign');
 
-        if (empty($_SESSION['campaign'])) {
+        if (empty($this->campaign)) {
             $selected = [];
         } else {
-            $selected = (array) session('campaign');
+            $selected = (array) $this->campaign;
         }
 
         // add any selected camps that aren't in the result set
