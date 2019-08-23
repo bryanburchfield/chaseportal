@@ -34,9 +34,28 @@ trait DashTraits
 
     private function getSession(Request $request)
     {
+        // Check if there's a 'campaign' session var
+        // set from db if not
+        if (!session()->has('campaign')) {
+            $filters = (array) json_decode(Auth::user()->persist_filters);
+
+            if (isset($filters['campaign'])) {
+                $campaign = array_filter($filters['campaign']);
+            } else {
+                $campaign = '';
+            }
+
+            if (!empty($campaign)) {
+                $this->campaign = $campaign;
+            } else {
+                $this->campaign = '';
+            }
+            session(['campaign' => $this->campaign]);
+        }
+
         // This won't work inside __construct()
-        $this->databases = session('databases', []);
         $this->campaign = session('campaign', '');
+        $this->databases = session('databases', []);
         $this->dateFilter = session('dateFilter', 'today');
         $this->inorout = session('inorout', 'inbound');
         $this->isApi = session('isApi', 0);
@@ -395,6 +414,7 @@ trait DashTraits
             }
         }
 
+        Auth::user()->persistFilters($request);
 
         return ['campaigns' => $this->campaignGroups()];
     }

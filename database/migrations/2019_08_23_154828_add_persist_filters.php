@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAutomatedReportsTable extends Migration
+class AddPersistFilters extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateAutomatedReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('automated_reports', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->string('report', 50);
-            $table->string('filters', 255)->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('persist_filters')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateAutomatedReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('automated_reports');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('persist_filters');
+        });
     }
 }

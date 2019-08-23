@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,14 @@ class User extends Authenticatable
             $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
         }
         return $dblist;
+    }
+
+    public function persistFilters(Request $request)
+    {
+        if ($request->has('campaign')) {
+            $val = json_encode(['campaign' => $request->input('campaign')]);
+            $this->persist_filters = $val;
+            $this->save();
+        }
     }
 }
