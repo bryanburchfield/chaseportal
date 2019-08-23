@@ -47,6 +47,33 @@ trait DashTraits
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
+    /**
+     * Create sql snippet for Campaign IN (....) clause
+     *
+     * @param string $table
+     * @param array $campaign
+     * @return [string, array]
+     */
+    private function campaignClause($table, $iteration, $campaign)
+    {
+        if (empty($campaign) || $campaign == 'Total') {
+            return ['', []];
+        }
+
+        $where = "AND $table.Campaign IN (";
+        $bind = [];
+
+        foreach ((array) $campaign as $i => $camp) {
+            $param = 'camp_' . $iteration . '_' . $i;
+            $where .= ":$param,";
+            $bind[$param] = $camp;
+        }
+
+        $where = substr($where, 0, -1) . ")";
+
+        return [$where, $bind];
+    }
+
     private function formatVolume($result, $params)
     {
         // define recs with no data to compare against or insert if we need to fill in gaps
@@ -129,7 +156,18 @@ trait DashTraits
     {
         $tz = Auth::user()->tz;
 
-        $campaign = ($this->campaign == 'Total' || $this->campaign == null) ? 'All Campaigns' : $this->campaign;
+        if (empty($this->campaign)) {
+            $campaign = 'All Campaigns';
+        }
+
+        $campaign = (array) $this->campaign;
+        $cnt = count($campaign);
+
+        if ($cnt > 1) {
+            $campaign = "$cnt Campaigns Selected";
+        } else {
+            $campaign = $campaign[0];
+        }
 
         if (strpos($this->dateFilter, '/')) {
             $startDate = substr($this->dateFilter, 0, 10);

@@ -140,10 +140,9 @@ class LeaderDashController extends Controller
 			AND DR.Date >= :fromdate
             AND DR.Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
                 GROUP BY $xAxis";
@@ -227,10 +226,9 @@ class LeaderDashController extends Controller
             AND DR.Date >= :fromdate
             AND DR.Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
 			GROUP BY DR.Rep";
@@ -327,10 +325,9 @@ class LeaderDashController extends Controller
             AND DR.Date >= :fromdate
             AND DR.Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
             GROUP BY DR.Campaign";

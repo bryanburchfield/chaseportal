@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use \App\Traits\DashTraits;
 
 class AdminDashController extends Controller
@@ -347,10 +348,9 @@ class AdminDashController extends Controller
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
             GROUP BY $xAxis";
@@ -537,10 +537,9 @@ class AdminDashController extends Controller
                 AND DR.Date < :todate$i
                 AND DR.GroupId = :groupid$i";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $union = 'UNION ALL';
         }
@@ -632,10 +631,9 @@ class AdminDashController extends Controller
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
             GROUP BY Campaign";
@@ -737,10 +735,9 @@ class AdminDashController extends Controller
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $union = 'UNION ALL';
         }
@@ -796,10 +793,9 @@ class AdminDashController extends Controller
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= " GROUP BY DR.Rep, DR.Campaign";
 
@@ -886,10 +882,9 @@ class AdminDashController extends Controller
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $union = 'UNION ALL';
         }
@@ -960,10 +955,9 @@ class AdminDashController extends Controller
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $union = 'UNION ALL';
         }
