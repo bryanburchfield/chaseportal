@@ -103,7 +103,6 @@ var Dashboard = {
         Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
         Dashboard.rep_avg_handletime(datefilter, Dashboard.chartColors);
         Dashboard.total_sales(datefilter);
-        Dashboard.update_datefilter(datefilter);
         Master.check_reload();
         $('.preloader').fadeOut('slow');
     },
@@ -756,23 +755,6 @@ var Dashboard = {
         });
     },
         
-    update_datefilter:function(datefilter){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/admindashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter: datefilter},
-            success:function(response){
-            }
-        });
-    },
-
     title_options :{
         fontColor:'#144da1',
         fontSize:16,
