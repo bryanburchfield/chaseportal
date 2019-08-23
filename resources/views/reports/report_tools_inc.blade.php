@@ -12,10 +12,10 @@
 <!-- start download options -->
 <div class="col-sm-3 col-xs-6 report_download">
 	<h3>Download Report:</h3>
-	<a target="_blank" href="report_export/agent_analysis/csv" data-report="{{$report}}" data-format="csv" class="report_dl_option" title="Download CSV" data-dl_option="csv"><i class="fas fa-file-csv"></i></a>
-	<a target="_blank" href="report_export/agent_analysis/xls" data-report="{{$report}}" data-format="xls" class="report_dl_option" title="Download Excel" data-dl_option="excel"><i class="fas fa-file-excel"></i></a>
-	<a target="_blank" href="report_export/agent_analysis/pdf" data-report="{{$report}}" data-format="pdf" class="report_dl_option pdf" title="Download PDF" data-dl_option="pdf"><i class="fas fa-file-pdf"></i></a>
-	<a target="_blank" href="report_export/agent_analysis/html" data-report="{{$report}}" data-format="html" class="report_dl_option" title="Download HTML" data-dl_option="html"><i class="fas fa-file-code"></i></a>
+	<a target="_blank" href="report_export/{{$report}}/csv" data-report="{{$report}}" data-format="csv" class="report_dl_option" title="Download CSV" data-dl_option="csv"><i class="fas fa-file-csv"></i></a>
+	<a target="_blank" href="report_export/{{$report}}/xls" data-report="{{$report}}" data-format="xls" class="report_dl_option" title="Download Excel" data-dl_option="excel"><i class="fas fa-file-excel"></i></a>
+	<a target="_blank" href="report_export/{{$report}}/pdf" data-report="{{$report}}" data-format="pdf" class="report_dl_option pdf" title="Download PDF" data-dl_option="pdf"><i class="fas fa-file-pdf"></i></a>
+	<a target="_blank" href="report_export/{{$report}}/html" data-report="{{$report}}" data-format="html" class="report_dl_option" title="Download HTML" data-dl_option="html"><i class="fas fa-file-code"></i></a>
 </div>
 <!-- end download options -->
 
