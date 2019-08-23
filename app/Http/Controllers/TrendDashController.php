@@ -210,10 +210,9 @@ class TrendDashController extends Controller
             AND DR.Date < :todate
             AND DR.GroupId = :groupid";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
             GROUP BY $xAxis";
@@ -375,10 +374,9 @@ class TrendDashController extends Controller
 			AND DR.Date < :todate
             AND DR.GroupId = :groupid ";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
                 GROUP BY $xAxis";
@@ -498,10 +496,9 @@ class TrendDashController extends Controller
 			AND AA.Date >= :fromdate
             AND AA.Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
                 GROUP BY $xAxis";
@@ -533,10 +530,9 @@ class TrendDashController extends Controller
 			AND Date >= :fromdate
             AND Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
                 GROUP BY $xAxis";
@@ -696,10 +692,9 @@ class TrendDashController extends Controller
 			AND DR.Date >= :fromdate
             AND DR.Date < :todate";
 
-            if (!empty($campaign) && $campaign != 'Total') {
-                $sql .= " AND DR.Campaign = :campaign$i";
-                $bind['campaign' . $i] = $campaign;
-            }
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
 
             $sql .= "
                 GROUP BY(DR.Rep)";
