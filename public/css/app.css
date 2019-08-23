@@ -957,6 +957,11 @@ ul.dropdown-menu.filter_campaign {
   overflow-y: scroll;
 }
 
+ul.dropdown-menu.filter_campaign .checkbox {
+  padding: 5px 0 5px 10px;
+  border-bottom: 1px solid #ddd;
+}
+
 .filters button {
   font-weight: 600;
 }

@@ -77,9 +77,6 @@ var Dashboard = {
     },
 
     eventHandlers:function(){
-        $('.date_filters li a').on('click', this.filter_date);
-        $('.filter_campaign').on('click', 'li', this.filter_campaign);
-        $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.card-6 .btn-group .btn').on('click', this.toggle_inorout_btn_class);
         $('.callvolume_inorout .btn').on('click', this.call_volume_type);
         $('.service_level_time a').on('click', this.set_service_level_time);
@@ -95,7 +92,6 @@ var Dashboard = {
         Dashboard.service_level(datefilter, Dashboard.chartColors);
         Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
         Dashboard.get_avg_handle_time(datefilter, Dashboard.chartColors);
-        Dashboard.update_datefilter(datefilter);
         Dashboard.call_volume_type();
         Master.check_reload();
         $('.preloader').fadeOut('slow');
@@ -119,7 +115,7 @@ var Dashboard = {
             dataType: 'json',
             data:{
                 inorout:inorout,
-                dateFilter:datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
@@ -264,7 +260,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter:datefilter
+                datefilter:datefilter
             },
             success:function(response){
 
@@ -523,7 +519,7 @@ var Dashboard = {
             url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
-            data:{dateFilter:datefilter},
+            data:{datefilter:datefilter},
             success:function(response){
 
                 if( response.agent_calltime.avg_ct != undefined){
@@ -633,7 +629,6 @@ var Dashboard = {
     },
 
     service_level:function(datefilter, chartColors, answer_secs=20){
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -646,7 +641,7 @@ var Dashboard = {
             type: 'POST',
             dataType: 'json',
             data:{
-                dateFilter:datefilter,
+                datefilter:datefilter,
                 answer_secs:answer_secs
             },
             success:function(response){
@@ -725,152 +720,7 @@ var Dashboard = {
             }
         });
     },   
-        
-    update_datefilter:function(datefilter){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/trenddashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter: datefilter},
-            success:function(response){
-            }
-        });
-    },
-
-    filter_date:function(){
-            
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        datefilter = $(this).data('datefilter');
-        $('#datefilter').val(datefilter);
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        var inorout = $('#inorout').val();
-        $('#inorout').val();
-        Dashboard.inorout_toggled=false; 
-        Dashboard.datefilter = datefilter;
-
-        if(datefilter !='custom'){
-            $('.preloader').show();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: '/trenddashboard/update_filters',
-                type: 'POST',
-                dataType: 'json',
-                data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
-                success:function(response){
-                    Dashboard.refresh(datefilter, campaign, inorout);
-                }
-            });
-        }
-    },
-
-    set_databases:function(databases){
-        Dashboard.databases=databases;
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        var datefilter = $('#datefilter').val();
-        var inorout = $('#inorout').val();
-        $('.preloader').show();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-        
-        $.ajax({
-            url: '/trenddashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {databases:databases},
-            success:function(response){
-                Dashboard.refresh(datefilter, campaign, inorout);
-            }
-        });  
-    },
-
-    filter_campaign:function(){
-
-        $('.preloader').show();
-
-        $(this).siblings().removeClass('active')
-        $(this).addClass('active');
-        var active_date = $('.date_filters li.active');
-        datefilter = $('#datefilter').val();
-        var inorout =$('#inorout').val();
-        var campaign = $(this).text();
-        Master.active_camp_search = campaign;
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/trenddashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter:datefilter,campaign: campaign, inorout:inorout},
-            success:function(response){
-                Dashboard.refresh(datefilter, campaign, inorout);
-            }
-        });
-    },
-
-    custom_date_filter:function(){
-        $('.preloader').show();
-        $('#datefilter_modal').hide();
-        $('.modal-backdrop').hide();
-
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        
-        var start_date = $('.startdate').val(),
-            end_date = $('.enddate').val()
-        ;
-        datefilter = start_date + ' ' + end_date;
-        var inorout = $('#inorout').val();
-
-        var campaign = $('.filter_campaign li').hasClass('active');
-        campaign = $(campaign).find('a').text();
-        $('#inorout').val();
-
-        $('.startdate').val('');
-        $('.enddate').val('');
-        $('#datefilter_modal').modal('toggle');
-        $('#datefilter').val(start_date + ' ' + end_date);
-        Dashboard.datefilter = datefilter;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/trenddashboard/update_filters',
-            type: 'POST',
-            dataType: 'json',
-            data: {dateFilter:datefilter,campaign: campaign},
-            success:function(response){
-                Dashboard.refresh(datefilter, campaign, inorout);
-            }
-        });
-        Dashboard.refresh(datefilter, campaign, inorout);
-    },
-
+          
     toggle_inorout_btn_class:function(){
         $(this).siblings().removeClass('btn-primary');
         $(this).siblings().addClass('btn-default');

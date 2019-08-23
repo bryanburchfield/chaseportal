@@ -850,6 +850,11 @@ ul.dropdown-menu.filter_campaign {
     min-width: 240px;
     max-width: 240px;
     overflow-y: scroll;
+
+    .checkbox {
+        padding: 5px 0 5px 10px;
+        border-bottom: 1px solid #ddd;
+    }
 }
 
 .filters button {
