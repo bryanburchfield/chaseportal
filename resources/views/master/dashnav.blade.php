@@ -3,7 +3,7 @@
         <span>Interaction</span>
     </button>
     <ul class="dropdown-menu filter_campaign stop-propagation">
-
+        
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
         @foreach($campaign_list as $campaign)

@@ -950,6 +950,14 @@ a.dropdown-toggle {
   color: #fff !important;
 }
 
+#reports_modal .modal-footer .btn.btn_flgrgt {
+  float: right;
+  margin-bottom: 0 !important;
+  margin-right: 10px;
+  background: #33A09B;
+  color: #fff;
+}
+
 ul.dropdown-menu.filter_campaign {
   max-height: 270px;
   min-width: 240px;
