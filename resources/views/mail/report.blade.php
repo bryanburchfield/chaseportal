@@ -102,15 +102,14 @@
                     <tr>
 
                         <td valign='middle' style='text-align:center;padding:0 10px 10px 0'>
-                            <a href='#'
-                                style='text-decoration: none; font-size: 30px; line-height: 55px; color:#203047;font-weight: bold; font-family:Arial, sans-serif '0>{{ $data['reportName'] }}
-                                <span style='color:#777; font-size:20px;'>({{ $data['daterange'] }})</span></a>
+                            <span style='color:#777; font-size:20px;'>{{ $data['reportName'] }}</span>
+                            <br>
+                            <span style='color:#777; font-size:15px;'>{{ $data['daterange'] }}</span>
 
-                                <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
+                            <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
                                 <tr style='padding:10px; color:#fff; background-color:#203047;'>
                                 </tr>
                             </table>
-
                         </td>
                     </tr>
                 </table>
