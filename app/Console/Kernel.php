@@ -39,8 +39,7 @@ class Kernel extends ConsoleKernel
                 ReportController::cronRun($rec);
             }
         })
-            // ->dailyAt('6:00')
-            ->everyMinute()
+            ->dailyAt('6:00')
             ->timezone('America/New_York')
             ->runInBackground();
     }
