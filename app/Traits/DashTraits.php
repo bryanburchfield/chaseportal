@@ -42,6 +42,11 @@ trait DashTraits
         $this->isApi = session('isApi', 0);
         $this->curdash = session('curdash', 'admindash');
 
+        // this is a bugfix for js bug
+        if (empty($this->dateFilter)) {
+            $this->dateFilter = 'today';
+        }
+
         // set sqlsrv db up here too
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
@@ -156,17 +161,14 @@ trait DashTraits
     {
         $tz = Auth::user()->tz;
 
+        $cnt = count((array) $this->campaign);
+
         if (empty($this->campaign)) {
-            $campaign = 'All Campaigns';
-        }
-
-        $campaign = (array) $this->campaign;
-        $cnt = count($campaign);
-
-        if ($cnt > 1) {
+            $campaign = "All Campaigns";
+        } elseif ($cnt > 1) {
             $campaign = "$cnt Campaigns Selected";
         } else {
-            $campaign = $campaign[0];
+            $campaign = $this->campaign[0];
         }
 
         if (strpos($this->dateFilter, '/')) {
@@ -374,6 +376,8 @@ trait DashTraits
 
     public function updateFilters(Request $request)
     {
+        Log::info($request);
+
         $filters = [
             'databases',
             'campaign',
@@ -383,9 +387,14 @@ trait DashTraits
 
         foreach ($filters as $filter) {
             if (isset($request->$filter)) {
-                session([$filter => $request->$filter]);
+                $val = $request->input($filter);
+                if (is_array($val)) {
+                    $val = array_filter($val);
+                }
+                session([$filter => $val]);
             }
         }
+
 
         return ['campaigns' => $this->campaignGroups()];
     }
@@ -397,9 +406,11 @@ trait DashTraits
 
     public function campaignGroups($partial = null)
     {
-        $dateFilter = session('dateFilter') ?? 'today';
+        $request = new Request();
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        $this->getSession($request);
+
+        list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
