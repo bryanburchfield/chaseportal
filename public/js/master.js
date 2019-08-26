@@ -915,29 +915,27 @@ var Master = {
 		    }
 		});
 		
-		console.log(user_id);
-
 		$.ajax({
 			url: 'admin/get_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {user_id: user_id},
 			success:function(response){
-				console.log(response);
+
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');
 				$('#edit_dialer'+dialer).attr('aria-expanded', true);
 				$('#edit_heading'+dialer+' h4 a').attr('aria-expanded', true);
 				var form = $('form.edit_user');
-				form.find('.group_id').val(response.user_details.group_id);
-				form.find('.name').val(response.user_details.name);
-				form.find('.email').val(response.user_details.email);
-				form.find('#tz').val(response.user_details.tz);
-				form.find('#user_type').val(response.user_details.user_type);
-				form.find('#db').val(response.user_details.db);
-				form.find('#additional_dbs').val(response.user_details.additional_dbs);
-				form.find('.user_id').val(response.user_details.user_id);
+				form.find('.group_id').val(response.group_id);
+				form.find('.name').val(response.name);
+				form.find('.email').val(response.email);
+				form.find('#tz').val(response.tz);
+				form.find('#user_type').val(response.user_type);
+				form.find('#db').val(response.db);
+				form.find('#additional_dbs').val(response.additional_dbs);
+				form.find('.user_id').val(response.user_id);
 			}
 		});
 	},
