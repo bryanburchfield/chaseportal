@@ -860,7 +860,6 @@ var Master = {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		    }
 		});
-		console.log(user_id);
 
 		$.ajax({
 			url: 'admin/update_user',
@@ -877,8 +876,7 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
-				return false;
+
 				if(response.errors){
 					$('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
@@ -899,7 +897,7 @@ var Master = {
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var user_id = $(this).attr('href');
 		var dialer = $(this).data('dialer');
-		console.log(user_id);
+
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -912,7 +910,7 @@ var Master = {
 			dataType: 'json',
 			data: {id: user_id},
 			success:function(response){
-				console.log(response);
+
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');
