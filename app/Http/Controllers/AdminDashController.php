@@ -786,7 +786,7 @@ class AdminDashController extends Controller
             'Count' = COUNT(DR.CallStatus),
             'Duration' = SUM(DR.Duration)
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.CallType NOT IN (7,8)
+            WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration <> 0
             AND DR.Date >= :fromdate$i
@@ -947,7 +947,7 @@ class AdminDashController extends Controller
             $sql .= " $union SELECT Rep, Campaign,
             Duration, CallStatus
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE CallType NOT IN (7,8)
+            WHERE CallType IN (1,11)
             AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
             AND HoldTime >= 0
             AND Duration > 0

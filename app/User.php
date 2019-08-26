@@ -61,4 +61,9 @@ class User extends Authenticatable
             $this->save();
         }
     }
+
+    public function isMultiDb()
+    {
+        return !empty($this->additional_dbs);
+    }
 }
