@@ -797,7 +797,7 @@ var Master = {
 			db = $('#db').val(),
 			additional_dbs = $('#additional_dbs').val()
 		;
-		
+		console.log(additional_dbs);
 		var dialer = db.slice(-2);
 
 		$('form.add_user .alert').remove();
@@ -910,7 +910,7 @@ var Master = {
 			dataType: 'json',
 			data: {id: user_id},
 			success:function(response){
-
+				console.log(response);
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');

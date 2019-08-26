@@ -54,8 +54,8 @@
         									</div>
 
         									<div class="form-group">
-        										{!! Form::label('additional_db', 'Database 2') !!}
-        										{!! Form::select("additional_db", $dbs, null, ["class" => "form-control", 'id'=> 'additional_db']) !!}
+        										{!! Form::label('additional_dbs', 'Database 2') !!}
+        										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
         									</div>
         									
         									{!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
@@ -173,8 +173,8 @@
         									</div>
 
         									<div class="form-group">
-        										{!! Form::label('additional_db', 'Database 2') !!}
-        										{!! Form::select("additional_db", $dbs, null, ["class" => "form-control", 'id'=> 'additional_db']) !!}
+        										{!! Form::label('additional_dbs', 'Database 2') !!}
+        										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
         									</div>
         									
         									{!! Form::hidden('id', null, ['id'=>'user_id']) !!}
