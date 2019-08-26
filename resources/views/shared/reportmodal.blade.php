@@ -81,9 +81,9 @@
                 {{-- @csrf --}}
                 {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn mb0 dropdown-toggle btn_flgrgt" data-toggle="dropdown" onclick="window.location.href = '{{ url('dashboards/reportsettings') }}';">
+                <a href="#" class="mb0 btn_flgrgt" onclick="window.location.href = '{{ url('dashboards/reportsettings') }}';">
                     <span><i class="fa fa-cog"></i> Report Settings</span>
-                </button>
+                </a>
                 {!! Form::submit('View Report',['class'=>'btn btn-primary mb0']) !!}
             </div>
 

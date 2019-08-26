@@ -914,6 +914,8 @@ var Master = {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		    }
 		});
+		
+		console.log(user_id);
 
 		$.ajax({
 			url: 'admin/get_user',
@@ -921,7 +923,7 @@ var Master = {
 			dataType: 'json',
 			data: {user_id: user_id},
 			success:function(response){
-
+				console.log(response);
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');
@@ -955,6 +957,7 @@ var Master = {
 			name = $(this).data('name'),
 			app_token = $(this).data('token')
 		;
+
 		$('#userLinksModal .user_id').val(id);
 		$('#userLinksModal .name').val(name);
 		$('#userLinksModal .app_token').val(app_token);

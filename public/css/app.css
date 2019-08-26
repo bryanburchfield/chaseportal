@@ -950,12 +950,16 @@ a.dropdown-toggle {
   color: #fff !important;
 }
 
-#reports_modal .modal-footer .btn.btn_flgrgt {
+#reports_modal .modal-footer .btn_flgrgt {
   float: right;
   margin-bottom: 0 !important;
   margin-right: 10px;
-  background: #33A09B;
-  color: #fff;
+  color: #33A09B;
+  font-weight: 600;
+}
+
+#reports_modal .modal-footer .btn_flgrgt:hover {
+  color: #277976;
 }
 
 ul.dropdown-menu.filter_campaign {
@@ -2094,6 +2098,17 @@ div#cdr_dataTable_paginate {
 h4.panel-title a {
   display: block;
   width: 100%;
+}
+
+.user_links_modal a:nth-of-type(odd) {
+  background-color: #e6e6e6;
+}
+
+.user_links_modal a {
+  padding: 3px 5px;
+  font-weight: 600;
+  display: block;
+  clear: both;
 }
 
 /* ---------------------------------------------------

@@ -108,7 +108,7 @@
 												            		<thead>
 												            			<tr>
 												            				<th>User</th>
-												            				<th>Token</th>
+												            				<th>Links</th>
 												            				<th>Edit</th>
 												            				<th>Delete</th>
 												            			</tr>
@@ -123,7 +123,7 @@
 												            			
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
-												            			<td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">{{$user->app_token}}</a></td>
+												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
 												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
@@ -234,7 +234,7 @@
 												            		<thead>
 												            			<tr>
 												            				<th>User</th>
-												            				<th>Token</th>
+												            				<th>Links</th>
 												            				<th>Edit</th>
 												            				<th>Delete</th>
 												            			</tr>
@@ -249,7 +249,7 @@
 												            			
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
-												            			<td><a data-toggle="tooltip"  title="Token Copied!" href="#" id="getAppToken">{{$user->app_token}}</a></td>
+												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
 												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
@@ -376,6 +376,35 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- User Links Modal -->
+<div class="modal fade" id="userLinksModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">User Links</h4>
+            </div>
+            <div class="modal-body user_links_modal">
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
+                <input type="hidden" class="app_token" name="app_token" value="">
+                <h3 class="mb10"><span class="username"></span></h3>
+            	<p>Double click a link below to copy.</p><br>
+            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/agentdashboard/?app_token=<span class="url_token"></span>&rep=</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/agentdashboard_outbound/?app_token=<span class="url_token"></span>&rep=</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/admindashboard/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/adminoutbounddash/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/leaderboarddash/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/trenddashboard/?app_token=<span class="url_token"></span></a>
+
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
     </div>
     </div>
