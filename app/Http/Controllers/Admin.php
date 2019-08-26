@@ -119,6 +119,8 @@ class Admin extends Controller
             $user->update($request->all());
             $return['success'] = $user;
         }
+
+        return $return;
     }
 
     public function cdrLookup(Request $request)
