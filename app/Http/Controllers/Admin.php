@@ -93,7 +93,7 @@ class Admin extends Controller
 
     public function getUser(Request $request)
     {
-        return User::findOrFail($request->id);
+        return User::findOrFail($request->user_id);
     }
 
     public function updateUser(Request $request)
