@@ -51,11 +51,11 @@ class AgentDashController extends Controller
      */
     public function callVolume(Request $request)
     {
-    	
+
         $this->getSession($request);
 
         $result = $this->getCallVolume();
-        
+
         $prev_result = $this->getCallVolume(true);
 
         $details = $this->filterDetails();
@@ -82,7 +82,7 @@ class AgentDashController extends Controller
         $prev_answer_duration = 0;
         $prev_talk_count = 0;
         $prev_talk_duration = 0;
-        
+
 
         foreach ($result as $r) {
             if ($this->byHour($this->dateFilter)) {
@@ -106,9 +106,9 @@ class AgentDashController extends Controller
         $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
 
         if ($tot_total) {
-        	$avg_handle_time = Helpers::secondsToHms($duration / $tot_total);
+            $avg_handle_time = Helpers::secondsToHms($duration / $tot_total);
         } else {
-        	$avg_handle_time = '00:00:00';
+            $avg_handle_time = '00:00:00';
         }
         $duration = date('H:i:s', $duration);
 
@@ -175,7 +175,7 @@ class AgentDashController extends Controller
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['rep'.$i] = $rep;
+            $bind['rep' . $i] = $this->rep;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
 
@@ -200,7 +200,7 @@ class AgentDashController extends Controller
         GROUP BY [Time]
         ORDER BY [Time]";
 
-        
+
         // split the results into three arrays
         $params = [
             'fromDate' => $fromDate,
@@ -275,12 +275,8 @@ class AgentDashController extends Controller
     }
 
     public function callStatusCount(Request $request)
-    {
-
-    }
+    { }
 
     public function repPerformance(Request $request)
-    {
-    	
-    }
+    { }
 }
