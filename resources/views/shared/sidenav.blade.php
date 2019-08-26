@@ -7,7 +7,15 @@
     <ul class="list-unstyled components">
         <li <?php echo $page['menuitem'] == 'admindash' ? 'class="active"' : ''; ?>><a class="dash" href="admindash"><i class="fas fa-sign-in-alt"></i>Admin Inbound</a></li>
         <li <?php echo $page['menuitem'] == 'adminoutbounddash' ? 'class="active"' : ''; ?>><a class="dash" href="adminoutbounddash"><i class="fas fa-sign-out-alt"></i>Admin Outbound</a></li>
-        <li {!! $page['menuitem'] == 'trenddash' ? 'class="active"' : ''!!}><a class="dash" href="trenddash"><i class="fas fa-chart-area"></i>Trend Dashboard</a></li>
+        
+        <?php 
+          if(Auth::user()->email != 'btmarketing@chasedatacorp.com'){
+        ?>
+          <li {!! $page['menuitem'] == 'trenddash' ? 'class="active"' : ''!!}><a class="dash" href="trenddash"><i class="fas fa-chart-area"></i>Trend Dashboard</a></li>
+        <?php
+          }
+        ?>
+        
         <li {!! $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''!!}><a class="dash" href="leaderdash"><i class="fas fa-trophy"></i>Leadboard</a></li>
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a class="dash" href="kpidash"><i class="fas fa-paper-plane"></i>KPIs</a></li>
         <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>Reports</a></li>
