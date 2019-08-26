@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use \App\Traits\ReportExportTraits;
@@ -33,8 +32,7 @@ trait ReportTraits
 
     public function getAllCampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
     {
-        $groupId = Auth::user()->group_id;
-        $bind = ['groupid' => $groupId];
+        $bind = [];
 
         if (!empty($fromDate) && !empty($toDate)) {
             list($fromDate, $toDate) = $this->dateRange($fromDate, $toDate);
@@ -42,21 +40,23 @@ trait ReportTraits
             // convert to datetime strings
             $startDate = $fromDate->format('Y-m-d H:i:s');
             $endDate = $toDate->format('Y-m-d H:i:s');
-
-            $bind = array_merge($bind, ['startdate' => $startDate, 'enddate' => $endDate]);
         }
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
             $sql .= "$union SELECT CampaignName AS Campaign
-        FROM [$db].[dbo].[Campaigns]
-        WHERE isActive = 1
-        AND GroupId = :groupid
-        AND CampaignName != ''";
+            FROM [$db].[dbo].[Campaigns]
+            WHERE isActive = 1
+            AND GroupId = :groupid$i
+            AND CampaignName != ''";
 
             if (!empty($fromDate) && !empty($toDate)) {
-                $sql .= " AND Date >= :startdate AND Date < :enddate";
+                $sql .= " AND Date >= :startdate$i AND Date < :enddate$i";
+                $bind['startdate' . $i] = $startDate;
+                $bind['enddate' . $i] = $endDate;
             }
 
             $union = ' UNION';
@@ -82,10 +82,12 @@ trait ReportTraits
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
             $sql .= "$union SELECT InboundSource, Description
-        FROM [$db].[dbo].[InboundSources]
-        WHERE GroupId = :groupid";
+            FROM [$db].[dbo].[InboundSources]
+            WHERE GroupId = :groupid$i";
 
             $union = ' UNION';
         }
@@ -105,15 +107,17 @@ trait ReportTraits
     public function getAllReps($rollups = false)
     {
         $groupId = Auth::user()->group_id;
-        $bind = ['groupid' => $groupId];
+        $bind = [];
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
             $sql .= " $union SELECT RepName
-        FROM [$db].[dbo].[Reps]
-        WHERE isActive = 1
-        AND GroupId = :groupid";
+            FROM [$db].[dbo].[Reps]
+            WHERE isActive = 1
+            AND GroupId = :groupid$i";
 
             $union = ' UNION';
         }
@@ -131,15 +135,15 @@ trait ReportTraits
 
     public function getAllSkills()
     {
-        $groupId = Auth::user()->group_id;
-        $bind = ['groupid' => $groupId];
-
+        $bind = [];
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
             $sql .= " $union SELECT SkillName
             FROM [$db].[dbo].[Skills]
-            WHERE GroupId = :groupid";
+            WHERE GroupId = :groupid$i";
 
             $union = ' UNION';
         }
@@ -153,15 +157,17 @@ trait ReportTraits
     public function getAllCallStatuses()
     {
         $groupId = Auth::user()->group_id;
-        $bind = ['groupid' => $groupId];
+        $bind = [];
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
             $sql .= "$union SELECT DISTINCT CallStatus
-        FROM [$db].[dbo].[DialingResults]
-        WHERE GroupId = :groupid
-        AND CallStatus != ''";
+            FROM [$db].[dbo].[DialingResults]
+            WHERE GroupId = :groupid$i
+            AND CallStatus != ''";
 
             $union = ' UNION';
         }
@@ -200,11 +206,11 @@ trait ReportTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        // try {
-        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        // } catch (\Exception $e) {
-        //     $results = [];
-        // }
+        try {
+            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        } catch (\Exception $e) {
+            $results = [];
+        }
 
         if (count($results)) {
             // convert array of objects to array of arrays
