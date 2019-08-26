@@ -177,8 +177,8 @@
         										{!! Form::select("additional_db", $dbs, null, ["class" => "form-control", 'id'=> 'additional_db']) !!}
         									</div>
         									
-        									{!! Form::hidden('id', null, ['id'=>'id']) !!}
-			
+        									{!! Form::hidden('id', null, ['id'=>'user_id']) !!}
+											
         									{!! Form::submit('Update User', ['class'=>'btn btn-primary mb0'] ) !!}
 
         									<br><br>

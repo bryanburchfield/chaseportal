@@ -817,27 +817,23 @@ var Master = {
 				name: name,
 				email:email,
 				tz:tz,
-				// user_type:user_type,
 				db:db,
 				additional_dbs:additional_dbs
 			},
 
 			success:function(response){
+				console.log(response);
 
-				if(response.status != 'success'){
-					var errors=[];
-					for(var i=0;i<response.errors.length;i++){
-						errors.push(response.errors[i]);
-					}
+				if(response.errors){
 
-					$('form.add_user').append('<div class="alert alert-danger">'+errors+'</div>');
+					$('form.add_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
 				}else{
 					$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
 					setTimeout(function(){ 
 						$('.alert').remove();
 						$('form.add_user').trigger("reset");
-						window.location.href="admin.php";
+						window.location.href = "/dashboards/admin";
 					}, 3500);
 				}
 			}
@@ -849,11 +845,10 @@ var Master = {
 		e.preventDefault();
 		var form = $('form.edit_user');
 		var group_id = form.find('.group_id').val(),
-			user_id = form.find('.user_id').val(),
+			user_id = form.find('#user_id').val(),
 			name = form.find('.name').val(),
 			email = form.find('.email').val(),
 			tz = form.find('#tz').val(),
-			// user_type = form.find('#user_type').val(),
 			db = form.find('#db').val(),
 			additional_dbs = form.find('#additional_dbs').val()
 		;
@@ -865,38 +860,34 @@ var Master = {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		    }
 		});
+		console.log(user_id);
 
 		$.ajax({
 			url: 'admin/update_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				user_id:user_id,
+				id:user_id,
 				group_id:group_id,
 				name: name,
 				email:email,
 				tz:tz,
-				// user_type:user_type,
 				db:db,
 				additional_dbs:additional_dbs
 			},
 
 			success:function(response){
-
-				if(response.status != 'success'){
-					var errors=[];
-					for(var i=0;i<response.errors.length;i++){
-						errors.push(response.errors[i]);
-					}
-
-					$('form.edit_user').append('<div class="alert alert-danger">'+errors+'</div>');
+				console.log(response);
+				return false;
+				if(response.errors){
+					$('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
 				}else{
 					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
 					$('.alert-success').show();
 					$('form.edit_user').trigger("reset");
 					setTimeout(function(){
-						window.location.href="admin.php";
+						window.location.href = "/dashboards/admin";
 					}, 3500);
 				}
 			}
@@ -908,7 +899,7 @@ var Master = {
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var user_id = $(this).attr('href');
 		var dialer = $(this).data('dialer');
-
+		console.log(user_id);
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -919,9 +910,9 @@ var Master = {
 			url: 'admin/get_user',
 			type: 'POST',
 			dataType: 'json',
-			data: {user_id: user_id},
+			data: {id: user_id},
 			success:function(response){
-
+				console.log(response);
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');
@@ -935,7 +926,7 @@ var Master = {
 				form.find('#user_type').val(response.user_type);
 				form.find('#db').val(response.db);
 				form.find('#additional_dbs').val(response.additional_dbs);
-				form.find('.user_id').val(response.user_id);
+				form.find('#user_id').val(response.id);
 			}
 		});
 	},
