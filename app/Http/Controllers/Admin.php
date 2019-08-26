@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\AutomatedReport;
 use App\System;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Admin extends Controller
 {
@@ -34,7 +34,9 @@ class Admin extends Controller
 
         $dbs = ['' => 'Select One'];
         for ($i = 1; $i <= 25; $i++) {
-            if ($i == 13) continue;  // there is no db 13
+            if ($i == 13) {
+                continue;
+            }  // there is no db 13
             $dbs['PowerV2_Reporting_Dialer-' . sprintf("%02d", $i)] = 'PowerV2_Reporting_Dialer-' . sprintf("%02d", $i);
         }
 
@@ -61,7 +63,6 @@ class Admin extends Controller
 
     public function addUser(Request $request)
     {
-
         do {
             $hash = md5(uniqid());
         } while ($this->token_exists($hash));
@@ -85,15 +86,20 @@ class Admin extends Controller
 
     public function deleteUser(Request $request)
     {
-        // delete automated reports too
+        $user = User::findOrFail($request->id);
 
-        $user = User::findOrFail($request->id)->delete();
+        // delete automated reports
+        AutomatedReport::where('user_id', $user->id)->delete();
+
+        // delete user
+        $user->delete();
+
         return ['status' => 'user deleted'];
     }
 
     public function getUser(Request $request)
     {
-        return User::findOrFail($request->user_id);
+        return User::findOrFail($request->id);
     }
 
     public function updateUser(Request $request)
@@ -106,16 +112,13 @@ class Admin extends Controller
             })
             ->first();
 
-
         if ($user_check) {
-            $return['status'] = 'Name or email in use by another user';
+            $return['errors'] = 'Name or email in use by another user';
         } else {
             $user = User::findOrFail($request->id);
             $user->update($request->all());
-            $return['status'] = 'success';
+            $return['success'] = $user;
         }
-
-        return $return;
     }
 
     public function cdrLookup(Request $request)
@@ -164,7 +167,9 @@ class Admin extends Controller
 
         $union = '';
         for ($db = 1; $db <= 25; $db++) {
-            if ($db == 13) continue;
+            if ($db == 13) {
+                continue;
+            }
 
             $sql .= " $union
 			SELECT $db as [Server], $fields
