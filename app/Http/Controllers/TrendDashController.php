@@ -581,6 +581,7 @@ class TrendDashController extends Controller
         $num_calls = 0;
         $calltimes = 0;
         $avg_ht = 0;
+        $total_handle_time = 0;
         $wrapup = [];
         $holdtime = [];
         $maxhold = [];
@@ -593,16 +594,19 @@ class TrendDashController extends Controller
             array_push($wrapup, round($r['Wrap Up Time']));
             $calltimes += round($r['Call Time']);
             $num_calls += $r['Call Count'];
+            $total_handle_time += $r['Call Time'] + $r['Hold Time'] + $r['Wrap Up Time'];
 
             $avg = empty($r['Call Count']) ? 0 : round(($r['Call Time'] + $r['Hold Time'] + $r['Wrap Up Time']) / $r['Call Count']);
             array_push($avg_handle_time, $avg);
-
-            $avg_ht += $avg;
         }
 
-
-        $avg_ht = round($avg_ht / count($result[0]));
-        $avg_call_time = !empty($num_calls) ? round($calltimes / $num_calls) : 0;
+        if ($num_calls > 0) {
+            $avg_ht = round($total_handle_time / $num_calls);
+            $avg_call_time = round($calltimes / $num_calls);
+        } else {
+            $avg_ht = 0;
+            $avg_call_time = 0;
+        }
 
         $new_result = [
             'datetime' => $time_labels,
