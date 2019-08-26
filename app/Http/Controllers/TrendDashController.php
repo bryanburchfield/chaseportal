@@ -163,11 +163,7 @@ class TrendDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $sql = "SELECT
         Time,
@@ -186,6 +182,10 @@ class TrendDashController extends Controller
 
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT $xAxis as 'Time',
     'Inbound Count' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
     'Inbound Handled Calls' = SUM(CASE WHEN DR.CallType IN ('1','11') AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
@@ -206,9 +206,9 @@ class TrendDashController extends Controller
             WHERE DR.CallType NOT IN ('7','8')
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate
-            AND DR.GroupId = :groupid";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -334,12 +334,7 @@ class TrendDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-            'groupid' => Auth::user()->group_id,
-            'answersecs' => $request->answer_secs ?? 20,
-        ];
+        $bind = [];
 
         $byHour = $this->byHour($dateFilter);
 
@@ -364,15 +359,20 @@ class TrendDashController extends Controller
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+            $bind['answersecs' . $i] = $request->answer_secs ?? 20;
+
             $sql .= " $union SELECT $xAxis Time,
-			'HandledCalls' = COUNT(CASE WHEN HoldTime < :answersecs AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
+			'HandledCalls' = COUNT(CASE WHEN HoldTime < :answersecs$i AND CallStatus <> 'CR_HANGUP' THEN 1 ELSE NULL END),
 			'Cnt' = COUNT(CallStatus)
 			FROM [$db].[dbo].[DialingResults] DR
 			WHERE CallType = 1
 			AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
-			AND DR.Date >= :fromdate
-			AND DR.Date < :todate
-            AND DR.GroupId = :groupid ";
+			AND DR.Date >= :fromdate$i
+			AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -457,11 +457,7 @@ class TrendDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $byHour = $this->byHour($dateFilter);
 
@@ -486,15 +482,19 @@ class TrendDashController extends Controller
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT $xAxis Time,
 			'CallCount' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN 1 ELSE 0 END),
 			'CallTime' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN AA.Duration ELSE 0 END),
 			'WrapUpTime' = SUM(CASE WHEN AA.Action = 'Disposition' THEN AA.Duration ELSE 0 END)
 			FROM [$db].[dbo].[AgentActivity] AA
 			WHERE Rep != ''
-			AND AA.GroupId = :groupid
-			AND AA.Date >= :fromdate
-            AND AA.Date < :todate";
+			AND AA.GroupId = :groupid$i
+			AND AA.Date >= :fromdate$i
+            AND AA.Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -513,12 +513,18 @@ class TrendDashController extends Controller
         $result1 = $this->runSql($sql, $bind);
 
         // We have to get HoldTime from another table, then merge it in.  sigh....
+        $bind = [];
+
         $sql = "SELECT Time,
 		'Hold Time' = SUM(HoldTime),
 		'Max Hold' = MAX(HoldTime)
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT $xAxis Time,
 			'HoldTime' = SUM(CASE WHEN HoldTime <= 0 THEN 0 ELSE HoldTime END)
 			FROM [$db].[dbo].[DialingResults] DR
@@ -526,9 +532,9 @@ class TrendDashController extends Controller
 			AND DR.Rep != ''
 			AND DR.CallStatus IS NOT NULL
 			AND DR.CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
-			AND DR.GroupId = :groupid
-			AND Date >= :fromdate
-            AND Date < :todate";
+			AND DR.GroupId = :groupid$i
+			AND Date >= :fromdate$i
+            AND Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -672,11 +678,7 @@ class TrendDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $sql = "SELECT Rep,
 		'Total Calls' = SUM(Cnt),
@@ -684,6 +686,10 @@ class TrendDashController extends Controller
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT DR.Rep,
 			'Cnt' = COUNT(DR.CallStatus),
 			'Duration' = SUM(DR.HandleTime)
@@ -692,9 +698,9 @@ class TrendDashController extends Controller
 			AND DR.CallType NOT IN ('7','8')
 			AND DR.HandleTime != 0
 			AND DR.Duration != 0
-			AND DR.GroupId = :groupid
-			AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+			AND DR.GroupId = :groupid$i
+			AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";

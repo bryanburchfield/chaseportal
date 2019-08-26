@@ -114,11 +114,7 @@ class LeaderDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $sql = "SELECT Time,
 		'Outbound' = SUM([Outbound]),
@@ -128,6 +124,10 @@ class LeaderDashController extends Controller
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT $xAxis as 'Time',
 			'Outbound' = SUM(CASE WHEN DR.CallType IN ('0','4','5','6','10','12','14','15') THEN 1 ELSE 0 END),
 			'Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
@@ -136,9 +136,9 @@ class LeaderDashController extends Controller
 			FROM [$db].[dbo].[DialingResults] DR
 			WHERE DR.CallType NOT IN (7,8)
 			AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
-			AND DR.GroupId = :groupid
-			AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+			AND DR.GroupId = :groupid$i
+			AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -190,11 +190,7 @@ class LeaderDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $sql = "SELECT
 		Rep,
@@ -204,6 +200,10 @@ class LeaderDashController extends Controller
 		FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT
 			DR.Rep,
 			'Cnt' = COUNT(DR.CallStatus),
@@ -216,15 +216,15 @@ class LeaderDashController extends Controller
 				AND (GroupId = DR.GroupId OR IsSystem=1)
 				AND (Campaign = DR.Campaign OR Campaign = '')
 				ORDER BY [Description] Desc) DI
-			WHERE DR.GroupId = :groupid
+			WHERE DR.GroupId = :groupid$i
 			AND DR.Rep != ''
 			AND DR.CallStatus NOT IN (
 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
@@ -292,11 +292,7 @@ class LeaderDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [
-            'groupid' => Auth::user()->group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        $bind = [];
 
         $sql = "SELECT
         Campaign,
@@ -304,6 +300,10 @@ class LeaderDashController extends Controller
         FROM (";
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
             $sql .= " $union SELECT
             DR.Campaign,
             'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE NULL END)
@@ -314,7 +314,7 @@ class LeaderDashController extends Controller
                 AND (GroupId = DR.GroupId OR IsSystem=1)
                 AND (Campaign = DR.Campaign OR Campaign = '')
                 ORDER BY [Description] Desc) DI
-            WHERE DR.GroupId = :groupid
+            WHERE DR.GroupId = :groupid$i
             AND DR.CallType NOT IN (1,7,8,11)
             AND DR.Campaign != ''
             AND DR.CallStatus NOT IN (
@@ -322,8 +322,8 @@ class LeaderDashController extends Controller
 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
-            AND DR.Date >= :fromdate
-            AND DR.Date < :todate";
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
