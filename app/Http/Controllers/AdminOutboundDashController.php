@@ -410,6 +410,9 @@ class AdminOutboundDashController extends Controller
             $bind['groupid1_' . $i] = Auth::user()->group_id;
             $bind['fromdate1_' . $i] = $startDate;
             $bind['todate1_' . $i] = $endDate;
+            $bind['groupid2_' . $i] = Auth::user()->group_id;
+            $bind['fromdate2_' . $i] = $startDate;
+            $bind['todate2_' . $i] = $endDate;
 
             $sql .= " $union SELECT DR.Campaign,
 			'Cnt' = COUNT(DR.CallStatus)
@@ -441,7 +444,7 @@ class AdminOutboundDashController extends Controller
 			AND DR.Date >= :fromdate2_$i
             AND DR.Date < :todate2_$i";
 
-            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            list($where, $extrabind) = $this->campaignClause('DR', $i + 999, $campaign);
             $sql .= " $where";
             $bind = array_merge($bind, $extrabind);
 
