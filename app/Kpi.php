@@ -10,6 +10,12 @@ class Kpi extends Model
 {
     public $timestamps = false;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'query',
+    ];
+
     public function kpiGroups()
     {
         return $this->hasMany('App\KpiGroup');
