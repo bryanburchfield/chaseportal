@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use \App\Traits\DashTraits;
 
 class AdminDashController extends Controller
@@ -30,7 +29,6 @@ class AdminDashController extends Controller
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
             'dateFilter' => $this->dateFilter,
-            'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'admindash',
             'jsfile' => $jsfile,

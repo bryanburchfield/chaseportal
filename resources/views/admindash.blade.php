@@ -3,11 +3,10 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-    
+
 <div class="preloader"></div>
 <input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
-<input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
 @includeWhen(!$isApi, 'shared.navbar')
 
@@ -23,7 +22,7 @@
                     <div class="trend_indicator">
                         <div class="trend_arrow"></div>
                         <span></span>
-                    </div>               
+                    </div>
                     <h1 class="title">Calls Offered</h1>
                     <h4 class="data total mt30"></h4>
 
@@ -37,7 +36,7 @@
                         <div class="trend_arrow"></div>
                         <span></span>
                     </div>
-                   
+
                     <h1 class="title">Calls Answered</h1>
                     <h4 class="data total mt30"></h4>
 
@@ -54,9 +53,9 @@
 
                     <h1 class="title">Missed Calls</h1>
                     <h4 class="data total"></h4>
-                    
+
                     <div class="divider"></div>
-                    
+
                     <div class="inbound">
                         <p class="data abandoned"></p>
                         <p class="type">Abandoned</p>
@@ -81,7 +80,7 @@
                     <h4 class="data mt30" id="total_sales"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
-            
+
         </div>
 
         <div class="row">
@@ -179,7 +178,7 @@
                     </div>
                 </div><!-- end card -->
             </div><!-- end column -->
-            
+
         </div>
 
         <div class="row">
@@ -222,7 +221,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">
@@ -277,7 +276,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">
@@ -306,7 +305,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">

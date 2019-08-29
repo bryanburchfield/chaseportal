@@ -3,20 +3,16 @@
 @section('title', 'Agent Dashboard')
 
 @section('content')
-    
+
 <div class="preloader"></div>
 <input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
 <input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
-<?php
-	dd(Session::get('userId'));
-?>
-@includeWhen(!$isApi, 'shared.navbar')
+{{-- @includeWhen(!$isApi, 'shared.navbar') --}}
 
 <div class="container-fluid bg">
     <div class="container mt50">
-        @include('shared.filters')
 			<div class="row">
                 <div class="col-sm-3 col-xs-6">
                     <div class="card-3 card blue" id="total_outbound">

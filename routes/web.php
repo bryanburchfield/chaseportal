@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
-
 // Anything in the /public/raw directory will get processed outside the framework
 Route::redirect('/raw', '/raw');
 
-// Probably need a default landing page for this
+// Redirect root to /dashboards
 Route::get('/', function () {
     // phpinfo();
     return redirect('dashboards');
@@ -18,17 +16,21 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 // Agent Dashboard: all urls start with /agentdashboard/
 Route::prefix('agentdashboard')->group(function () {
     // Allow app_token login via /agentdashboard/api/{token}
-    Route::get('api/{token}', 'AgentDashController@apiLogin');
+    Route::get('api/{token}/{rep}', 'AgentDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'AgentDashController@index');
+        // There is no root route for this
+        Route::get('/', function () {
+            return redirect('agentdashboard/api/InvalidToken');
+        });
 
         // ajax targets
         Route::post('call_volume', 'AgentDashController@callVolume');
         Route::post('rep_performance', 'AgentDashController@repPerformance');
         Route::post('call_status_count', 'AgentDashController@callStatusCount');
-        // Route::post('update_filters', 'AgentDashController@updateFilters');
+        Route::post('get_sales', 'AgentDashController@sales');
+        Route::post('update_filters', 'AgentDashController@updateFilters');
     });
 });
 

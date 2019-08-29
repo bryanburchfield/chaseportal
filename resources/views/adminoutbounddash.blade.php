@@ -3,11 +3,10 @@
 @section('title', 'Adminoutbound Dashboard')
 
 @section('content')
-    
+
 <div class="preloader"></div>
 <input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
-<input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
 @includeWhen(!$isApi, 'shared.navbar')
 
@@ -24,7 +23,7 @@
 
                     <h1 class="title">Total Dials</h1>
                     <h4 class="data total mt30"></h4>
-                    
+
                 </div><!-- end card -->
             </div><!-- end column -->
 
@@ -60,7 +59,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back sales_per_hour">
@@ -71,7 +70,7 @@
                         </div>
                         <h1 class="title">Sales Per Hour</h1>
                         <h4 class="data" id="sales_per_hour"></h4>
-                        <div class="flip_card_btn"></div> 
+                        <div class="flip_card_btn"></div>
                     </div>
                 </div><!-- end card -->
             </div><!-- end column -->
@@ -128,7 +127,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">
@@ -156,7 +155,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">
@@ -185,7 +184,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">
@@ -209,13 +208,13 @@
                                         <th>Rep</th>
                                         <th>Campaign</th>
                                         <th>Sales</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
+
                     </div>
 
                     <div class="back">

@@ -14,11 +14,13 @@ trait DashTraits
     private $campaign;
     private $dateFilter;
     private $inorout;
+    public $isApi;
+    public $curdash;
 
     public function apiLogin(Request $request)
     {
         // find first user record with that token
-        $user = User::select('id')->where('app_token', $request->token)->first();
+        $user = User::where('app_token', $request->token)->first();
         if ($user === null) {
             abort(403, 'Invalid token');
         }
@@ -26,10 +28,10 @@ trait DashTraits
         // Login that user and set session var so we know it's via API
         Auth::loginUsingId($user->id);
         session(['isApi' => 1]);
-        // session(['userId' => $user->id]);
 
         // And off we go!
-        return redirect($request->route()->action['prefix']);
+        // return redirect($request->route()->action['prefix']);
+        return $this->index($request);
     }
 
     private function getSession(Request $request)
@@ -67,8 +69,7 @@ trait DashTraits
         }
 
         // set sqlsrv db up here too
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
     }
 
     /**

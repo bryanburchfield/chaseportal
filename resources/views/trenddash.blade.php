@@ -7,7 +7,6 @@
 <div class="preloader"></div>
 <input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
-<input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
 @includeWhen(!$isApi, 'shared.navbar')
 
@@ -37,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-6 ">
                     <div class="card card-6" >
                         <h1 class="title mb0">Call Details</h1>
@@ -49,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="row">
@@ -67,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-6">
                     <div class="card card-6" >
                         <h1 class="title mb0">Service Level</h1>
