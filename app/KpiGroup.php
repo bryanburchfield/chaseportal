@@ -9,8 +9,6 @@ class KpiGroup extends Model
 {
     use Schedulable;
 
-    public $timestamps = false;
-
     public function kpi()
     {
         return $this->belongsTo('App\Kpi');

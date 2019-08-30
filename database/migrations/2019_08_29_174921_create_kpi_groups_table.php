@@ -18,7 +18,7 @@ class CreateKpiGroupsTable extends Migration
             $table->unsignedBigInteger('kpi_id');
             $table->integer('group_id');
             $table->boolean('active');
-            $table->smallInteger('interval');
+            $table->smallInteger('interval')->nullable();
             $table->timestamps();
 
             $table->foreign('kpi_id')->references('id')->on('kpis');

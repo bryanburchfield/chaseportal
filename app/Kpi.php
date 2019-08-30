@@ -5,11 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\KpiRecipient;
 
 class Kpi extends Model
 {
-    public $timestamps = false;
-
     protected $fillable = [
         'name',
         'description',
@@ -28,16 +27,16 @@ class Kpi extends Model
 
     public static function getKpis()
     {
-        $groupId = Auth::user()->group_id;
-
-        $kpis = self::select('kpis.*', 'KG.active', 'KG.interval')
-            ->leftJoin('kpi_groups as KG', 'kpis.id', '=', 'KG.kpi_id')
-            ->where('KG.group_id', $groupId)
+        $kpis = self::select('kpis.id', 'kpis.name', 'kpis.description', 'KG.active', 'KG.interval')
+            ->leftJoin('kpi_groups as KG', function ($join) {
+                $join->on('kpis.id', '=', 'KG.kpi_id')
+                    ->where('KG.group_id', '=', Auth::user()->group_id);
+            })
             ->get();
 
         foreach ($kpis as &$k) {
             $k->{'recipients'} =
-                \App\KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
+                KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
                 ->where('kpi_recipients.kpi_id', $k->id)
                 ->join('recipients as R', 'kpi_recipients.recipient_id', '=', 'R.id')
                 ->orderby('R.name')
@@ -50,7 +49,7 @@ class Kpi extends Model
     public function getRecipients($group_id)
     {
         return
-            \App\KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
+            KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
             ->where('kpi_recipients.kpi_id', $this->id)
             ->join('recipients as R', function ($join) use ($group_id) {
                 $join->on('R.id', '=', 'kpi_recipients.recipient_id')
