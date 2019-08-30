@@ -15,7 +15,6 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 // Agent Dashboard: all urls start with /agentdashboard/
 Route::prefix('agentdashboard')->group(function () {
-    // Allow app_token login via /agentdashboard/api/{token}
     Route::get('api/{token}/{rep}', 'AgentDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
@@ -36,18 +35,21 @@ Route::prefix('agentdashboard')->group(function () {
 
 // Agent Outbound Dashboard: all urls start with /agentoutbounddashboard/
 Route::prefix('agentoutbounddashboard')->group(function () {
-    // Allow app_token login via /agentoutbounddashboard/api/{token}
-    Route::get('api/{token}', 'AgentOutboundDashController@apiLogin');
+    Route::get('api/{token}/{rep}', 'AgentOutboundDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'AgentOutboundDashController@index');
+        // There is no root route for this
+        Route::get('/', function () {
+            return redirect('agentoutbounddashboard/api/InvalidToken');
+        });
 
         // ajax targets
-        // Route::post('call_volume', 'AgentOutboundDashController@callVolume');
-        // Route::post('rep_performance', 'AgentOutboundDashController@repPerformance');
-        // Route::post('call_status_count', 'AgentOutboundDashController@callStatusCount');
-        // Route::post('update_filters', 'AgentOutboundDashController@updateFilters');
+        Route::post('call_status_count', 'AgentOutboundDashController@callStatusCount');
+        Route::post('call_volume', 'AgentOutboundDashController@callVolume');
+        Route::post('get_sales', 'AgentOutboundDashController@sales');
+        Route::post('rep_performance', 'AgentOutboundDashController@repPerformance');
+        Route::post('update_filters', 'AgentOutboundDashController@updateFilters');
     });
 });
 

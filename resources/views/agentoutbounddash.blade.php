@@ -3,7 +3,7 @@
 @section('title', 'Agent Dashboard')
 
 @section('content')
-    
+
 <div class="preloader"></div>
 <input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
@@ -13,7 +13,6 @@
 
 <div class="container-fluid bg">
     <div class="container mt50">
-        @include('shared.filters')
         <div class="row">
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card blue" id="total_outbound">
