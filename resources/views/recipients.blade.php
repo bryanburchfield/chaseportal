@@ -19,7 +19,7 @@
                     <div class="col-sm-6">
                         <h2>Add Recipients</h2>
 
-                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form well clear  display', 'data-kpi'=> "1"]) !!}
+                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form well clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group">
                                 {!! Form::label('name', 'Full Name') !!}
