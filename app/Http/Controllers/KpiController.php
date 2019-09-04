@@ -125,8 +125,15 @@ class KpiController extends Controller
                     );
             })->first();
 
+        if($request->redirect_url == 'recipients'){
+            $origin ='recips_page';
+        }else{
+            $origin='kpi_page';
+        }
+
         if (!empty($recipient)) {
             return [
+                'origin'=> $origin,
                 'add_recipient' => [],
                 'errors' => ['Recipient with that email or phone already exists'],
             ];
@@ -153,6 +160,7 @@ class KpiController extends Controller
         }
 
         return [
+            'origin'=> $origin,
             'add_recipient' => [
                 $recipient->name,
                 $recipient->email,

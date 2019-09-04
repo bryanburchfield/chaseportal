@@ -157,6 +157,7 @@ var KPI = {
 
     add_recipient:function(kpi_id=0, name='', phone=0, email=''){
         event.preventDefault();
+        $('.alert').remove();
 
         var name = $(this).find('.name').val(),
             email = $(this).find('.email').val(),
@@ -186,25 +187,35 @@ var KPI = {
             },
 
             success:function(response){
-               
+
                 var from_form,
                     append_user
                 ;
-                if(redirect_url == '/dashboards/'){
-                    from_form=$('form#form'+kpi_id);
-                    append_user=$('form#form'+kpi_id).parent('.expanded_emails');
+                
+                if(response.origin == 'recips_page'){
+                    from_form=$('form.user_email_form.add_recipient ');
+                    append_user=$('.expanded_emails'); 
                 }else{
-                    from_form=$('form.user_email_form');
-                    append_user=$('.expanded_emails');                  
+                    from_form=$('form#form'+kpi_id);
+                    if(addtoall){
+                        append_user=$('.expanded_emails');
+                    }else{
+                        append_user=$('form#form'+kpi_id).parent('.expanded_emails');
+                    }                                     
                 }
 
-                $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
-                $(from_form).find('input.form-control').val("");
-                $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
+                if(response.errors){
+                    $(from_form).append('<div class="alert alert-danger clear mt20">'+ response.errors[0]+'</div>');
+                }else{
+                    $(from_form).find('input.form-control').val("");
+                    $(from_form).find('.addtoall').prop("checked", false);
+                    $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
+                    $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
 
-                setTimeout(function(){ 
-                    $('.alert').remove();
-                }, 4500);
+                    setTimeout(function(){ 
+                        $('.alert').remove();
+                    }, 4500);
+                }                
             }
         }); 
     },
