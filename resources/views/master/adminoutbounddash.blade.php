@@ -24,22 +24,8 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-3 ">
-            <div class="card-3 card get_hgt2" id="total_minutes">
-
-                <div class="trend_indicator up">
-                    <div class="trend_arrow arrow_up"></div>
-                    <span></span>
-                </div>
-
-                <h1 class="title">Total Duration</h1>
-                <h4 class="data total mt30"></h4>
-
-            </div><!-- end card -->
-        </div><!-- end column -->
-
-        <div class="col-sm-3  card_table_prt">
-            <div class="card set_hgt2 flipping_card card-3b">
+        <div class="col-sm-3 col-xs-6 card_table_prt">
+            <div class=" card set_hgt2 flipping_card card-3b" id="total_minutes">
 
                 <div class="front ">
                     <div class="card_table2">
@@ -59,16 +45,28 @@
                     
                 </div>
 
-                <div class="back sales_per_hour">
-
-                    <div class="trend_indicator down">
-                        <div class="trend_arrow arrow_down"></div>
+                <div class="back">
+                    <div class="trend_indicator up">
+                        <div class="trend_arrow arrow_up"></div>
                         <span></span>
                     </div>
-                    <h1 class="title">Sales Per Hour</h1>
-                    <h4 class="data" id="sales_per_hour"></h4>
+                    <h1 class="title">Total Duration</h1>
+                    <h4 class="data total mt30"></h4>
                     <div class="flip_card_btn"></div> 
                 </div>
+            </div><!-- end card -->
+        </div><!-- end column -->
+
+        <div class="col-sm-3 col-xs-6 ">
+            <div class="card-3 card get_hgt2 sales_per_hour">
+
+                <div class="trend_indicator down">
+                    <div class="trend_arrow arrow_down"></div>
+                    <span></span>
+                </div>
+                <h1 class="title">Sales Per Hour</h1>
+                <h4 class="data" id="sales_per_hour"></h4>
+               
             </div><!-- end card -->
         </div><!-- end column -->
 

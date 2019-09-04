@@ -1,3 +1,6 @@
+// var ColorHash = require('color-hash');
+var colorHash = new ColorHash();
+
 var Master = {
 
 	chartColors : {
@@ -67,6 +70,46 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
 	},
+
+    return_chart_colors_hash:function(reps){
+
+        var chart_colors_array=[];
+        var customHash = function(str) {
+            var hash = 0;
+            for(var i = 0; i < str.length; i++) {
+                hash += str.charCodeAt(i);
+            }
+
+            return hash;
+        };
+
+        // var colorHash = new ColorHash({hash: customHash});
+        var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
+
+        var new_hash;
+        var new_rgb;
+        for (var i=0;i<reps.length;i++) {
+            new_hash=colorHash.rgb(reps[i]);
+            new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
+            chart_colors_array.push(new_rgb);
+        }
+
+        return chart_colors_array;
+
+        // const chart_colors = Object.keys(Dashboard.chartColors)
+        // var chart_colors_array=[];
+        
+        // var j=0;
+        // for (var i=0; i < reps; i++) {
+        //     if(j==chart_colors.length){
+        //         j=0;
+        //     }
+        //     chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
+        //     j++;
+        // }
+
+        // return chart_colors_array;
+    },
 
 	formatNumber:function(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

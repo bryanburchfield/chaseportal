@@ -153,7 +153,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.Sales.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.Rep);
 
                 var agent_sales_per_hour_data = {
                     datasets: [{
@@ -358,7 +358,7 @@ var Dashboard = {
                  }
 
                  var response_length = response.Campaign.length;
-                 var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.Campaign);
 
                 var sales_per_campaign_data = {
                      datasets: [{
