@@ -17,7 +17,7 @@ class CreateRecipientsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email');
-            $table->string('phone', 25);
+            $table->string('phone', 25)->nullable();
             $table->integer('group_id');
             $table->timestamps();
         });
