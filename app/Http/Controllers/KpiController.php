@@ -80,7 +80,6 @@ class KpiController extends Controller
      */
     public function removeRecipientFromKpi(Request $request)
     {
-
         $recipient = KpiRecipient::find($request->id)->delete();
 
         return ['remove_recipient' => 1];
@@ -94,7 +93,6 @@ class KpiController extends Controller
      */
     public function removeRecipientFromAll($id)
     {
-
         $recipients = KpiRecipient::where('recipient_id', $id)->get();
         foreach ($recipients as $recip) {
             $recip->delete();
@@ -110,19 +108,36 @@ class KpiController extends Controller
      */
     public function addRecipient(Request $request)
     {
+        $group_id = Auth::user()->group_id;
+        $email = $request->email;
+        $phone = $request->phone;
 
         // See if recip exists by email or phone
-        $recipient = Recipient::where('phone', $this->formatPhone($request->phone))
-            ->orWhere('email', $request->email)->first();
+        $recipient = Recipient::where('group_id', $group_id)
+            ->whereExists(function ($query) use ($group_id, $email, $phone) {
+                $query->select(DB::raw(1))
+                    ->from('recipients')
+                    ->whereRaw(
+                        'group_id = ?' .
+                            ' AND (email = ?' .
+                            ' OR (phone IS NOT NULL AND phone = ?))',
+                        [$group_id, $email, $phone]
+                    );
+            })->first();
 
-        if (empty($recipient)) {
-            $recipient = new Recipient();
-            $recipient->name = $request->name;
-            $recipient->email = $request->email;
-            $recipient->phone = $this->formatPhone($request->phone);
-            $recipient->group_id = Auth::user()->group_id;
-            $recipient->save();
+        if (!empty($recipient)) {
+            return [
+                'add_recipient' => [],
+                'error' => 'Recipient with email or phone already exists',
+            ];
         }
+
+        $recipient = new Recipient();
+        $recipient->name = $request->name;
+        $recipient->email = $request->email;
+        $recipient->phone = $this->formatPhone($request->phone);
+        $recipient->group_id = Auth::user()->group_id;
+        $recipient->save();
 
         if ($request->addtoall == 'true' || $request->redirect_url == 'recipients') { // this also needs to run based on if it came from the add_recip form on kpi/recipients
             $kpis = Kpi::all();
@@ -222,8 +237,9 @@ class KpiController extends Controller
             ->whereNotExists(function ($query) use ($kpi_id) {
                 $query->select(DB::raw(1))
                     ->from('kpi_recipients')
-                    ->whereRaw('kpi_id = ' . $kpi_id .
-                        ' AND recipient_id = recipients.id');
+                    ->whereRaw('kpi_id = ?' .
+                        ' AND recipient_id = recipients.id' .
+                        [$kpi_id]);
             })
             ->orderBy('name')
             ->get()
