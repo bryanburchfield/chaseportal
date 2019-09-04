@@ -40,6 +40,17 @@
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
 
                         {!! Form::close() !!}
+
+                        @if($errors->any())
+
+                            <div class="alert alert-danger">
+                                @foreach($errors->all() as $error)
+                                    <li>{{$error}}</li>
+                                @endforeach
+                            </div>
+                        
+                        @endif
+
                     </div>
 
                     <div class="col-sm-6 expanded_emails display">
