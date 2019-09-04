@@ -41,12 +41,10 @@
 
                         {!! Form::close() !!}
 
-                        @if($errors->any())
+                        @if($error->any())
 
                             <div class="alert alert-danger">
-                                @foreach($errors->all() as $error)
-                                    <li>{{$error}}</li>
-                                @endforeach
+                                <li>{{$error}}</li>
                             </div>
                         
                         @endif
