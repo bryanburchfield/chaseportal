@@ -128,7 +128,7 @@ class KpiController extends Controller
         if (!empty($recipient)) {
             return [
                 'add_recipient' => [],
-                'error' => 'Recipient with email or phone already exists',
+                'error' => 'Recipient with that email or phone already exists',
             ];
         }
 
@@ -509,7 +509,7 @@ class KpiController extends Controller
                     $expression = '0, 20 * * 1-5';
                     break;
                 default:
-                    continue;
+                    continue 2;
             }
 
             // This is where we would look up a user to get their
