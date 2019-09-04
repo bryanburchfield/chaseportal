@@ -41,7 +41,7 @@
 
                         {!! Form::close() !!}
 
-                        @if($error->any())
+                        @if($errors->any())
 
                             <div class="alert alert-danger">
                                 <li>{{$error}}</li>
