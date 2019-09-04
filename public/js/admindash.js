@@ -396,7 +396,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.counts.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var agent_call_count_data = {
                     datasets: [{
@@ -440,7 +440,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.durations_secs.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var agent_calltime_data = {
                     datasets: [{
@@ -680,7 +680,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.avg_handletime.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var rep_avg_handletime_data = {
                     datasets: [{

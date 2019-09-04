@@ -74,21 +74,21 @@ var Dashboard = {
         $(div).parent().append('<p class="ajax_error alert alert-danger">Something went wrong. Please reload the page.</p>');
     },
 
-    return_chart_colors:function(response_length, chartColors){
-        const chart_colors = Object.keys(Dashboard.chartColors)
-        var chart_colors_array=[];
+    // return_chart_colors:function(response_length, chartColors){
+    //     const chart_colors = Object.keys(Dashboard.chartColors)
+    //     var chart_colors_array=[];
 
-        var j=0;
-        for (var i=0; i < response_length; i++) {
-            if(j==chart_colors.length){
-                j=0;
-            }
-            chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
-            j++;
-        }
+    //     var j=0;
+    //     for (var i=0; i < response_length; i++) {
+    //         if(j==chart_colors.length){
+    //             j=0;
+    //         }
+    //         chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
+    //         j++;
+    //     }
 
-        return chart_colors_array;
-    },
+    //     return chart_colors_array;
+    // },
 
     refresh:function(datefilter, campaign){
 
@@ -355,7 +355,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.sales.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var sales_per_hour_per_rep_data = {
                     datasets: [{
@@ -438,7 +438,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.Counts.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
 
                var calls_by_campaign_data = {
                     datasets: [{
@@ -544,7 +544,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.reps.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var agent_call_count_data = {
                     datasets: [{
@@ -590,7 +590,7 @@ var Dashboard = {
                 }
 
                 var response_length = response.reps.length;
-                var chart_colors_array= Dashboard.return_chart_colors(response_length, chartColors);
+                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
 
                 var agent_talk_time_data = {
                     datasets: [{

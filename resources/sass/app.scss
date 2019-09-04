@@ -1,5 +1,5 @@
 @import "~compass-sass-mixins/lib/compass";
-
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
 applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, eal, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, caption, img, header, container {
     margin: 0;
     padding: 0;
@@ -28,8 +28,12 @@ body {
     background: #efefef;
     color: #595C63;
     font-size: 13px;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Helvetica', 'Arial', sans-serif;
     padding-bottom: 50px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
 }
 
 .btn {
@@ -1821,6 +1825,15 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     color: $green;
 }
 
+.panel-default>.panel-heading{
+    background: #263854; /* Old browsers */
+    background: -moz-linear-gradient(top,  #263854 0%, #171f33 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
+    color:#fff;
+}
+
 .db_select a.dropdown-toggle {
     float: right;
 }
@@ -1909,9 +1922,38 @@ h4.panel-title a{
     clear: both;
 }
 
+.user_links_modal h3 span{color: #111;}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
+
+@media handheld, only screen and (min-width: 1800px) {
+
+    .card.card-3, .card.card-3b, .card.card-3b2{
+        min-height: 215px;
+    }
+
+    .card.card-3 .title, .card.card-3b .title, .card.card-3b2 .title{
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .card.card-3 h4.data, .card.card-3b h4.data, .card.card-3b2 h4.data{
+        margin-top: 35px;
+    }
+
+    .card.card-6, .card.card-12{
+        min-height: 450px;
+    }
+
+    .card.card-6 .title, .card.card-12 .title{
+        font-size: 20px;
+        margin-bottom: 25px;
+    }
+
+}
+
 @media handheld, only screen and (max-width:1200px) {
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
