@@ -128,7 +128,7 @@ class KpiController extends Controller
         if (!empty($recipient)) {
             return [
                 'add_recipient' => [],
-                'error' => 'Recipient with that email or phone already exists',
+                'errors' => ['Recipient with that email or phone already exists'],
             ];
         }
 
