@@ -33,7 +33,7 @@
 
                             <div class="form-group">
                                 {!! Form::label('phone', 'Phone') !!}
-                                {!! Form::tel('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}                                
+                                {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}                                
                             </div>
                             
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
