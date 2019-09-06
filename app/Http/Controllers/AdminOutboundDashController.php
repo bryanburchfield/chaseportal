@@ -692,6 +692,44 @@ class AdminOutboundDashController extends Controller
     {
         $this->getSession($request);
 
+        $result = $this->getAvgWaitTime();
+
+        $summ = [];
+        $camps = [];
+        $avgs = [];
+        $table = [];
+
+        foreach ($result as $rec) {
+            if (!isset($summ[$rec['Campaign']])) {
+                $summ[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
+                $summ[$rec['Campaign']]['Duration'] = 0;
+                $summ[$rec['Campaign']]['Cnt'] = 0;
+            }
+
+            $summ[$rec['Campaign']]['Duration'] += $rec['Duration'];
+            $summ[$rec['Campaign']]['Cnt'] += $rec['Cnt'];
+
+            $table[] = [
+                'Rep' => $rec['Rep'],
+                'Campaign' => $rec['Campaign'],
+                'Avg' => round($rec['Duration'] / $rec['Cnt']),
+            ];
+        }
+
+        foreach ($summ as $rec) {
+            $camps[] = $rec['Campaign'];
+            $avgs[] = round($rec['Duration'] / $rec['Cnt']);
+        }
+
+        return [
+            'Table' => $table,
+            'Campaigns' => $camps,
+            'Avgs' => $avgs,
+        ];
+    }
+
+    public function getAvgWaitTime()
+    {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -703,7 +741,7 @@ class AdminOutboundDashController extends Controller
 
         $bind = [];
 
-        $sql = 'SELECT Rep, Campaign, SUM(Duration)/SUM(Cnt) as AvgWaitTime FROM (';
+        $sql = 'SELECT Rep, Campaign, SUM(Duration) as Duration, SUM(Cnt) as Cnt FROM (';
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
@@ -730,13 +768,7 @@ class AdminOutboundDashController extends Controller
         $sql .= ") tmp GROUP BY Rep, Campaign
             ORDER BY Rep, Campaign";
 
-        $result = $this->runSql($sql, $bind);
-
-        foreach ($result as &$rec) {
-            $rec['AvgWaitTime'] = round($rec['AvgWaitTime']);
-        }
-
-        return ['avg_wait_time' => $result];
+        return $this->runSql($sql, $bind);
     }
 
     /**
