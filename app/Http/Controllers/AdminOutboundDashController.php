@@ -484,7 +484,7 @@ class AdminOutboundDashController extends Controller
 
         $reps = array_column($byrep, 'Rep');
         $sales = array_column($byrep, 'Sales');
-        $bycamp = Helpers::deleteColumn($bycamp, 'Talk Secs');
+        $bycamp = deleteColumn($bycamp, 'Talk Secs');
 
         // Check for no return, set to zeros if so
         if (!count($bycamp)) {
