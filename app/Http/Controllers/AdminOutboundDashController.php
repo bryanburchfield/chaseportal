@@ -358,7 +358,6 @@ class AdminOutboundDashController extends Controller
         $durations_hms = [];
 
         foreach ($byrep as &$rec) {
-
             $rec['AvgDurationSecs'] = $rec['Duration'] / $rec['Count'];
             $rec['AvgCallsPerHour'] = round($rec['Count'] / ($rec['Duration'] / 60 / 60), 2);
 
@@ -485,11 +484,40 @@ class AdminOutboundDashController extends Controller
 
         $reps = array_column($byrep, 'Rep');
         $sales = array_column($byrep, 'Sales');
-        $bycamp = deleteColumn($bycamp, 'Talk Secs');
+        $bycamp = Helpers::deleteColumn($bycamp, 'Talk Secs');
+
+        // Check for no return, set to zeros if so
+        if (!count($bycamp)) {
+            $bycamp = [[
+                'Rep' => '',
+                'Campaign' => '',
+                'Contacts' => 0,
+                'Sales' => 0,
+                'Talk Secs' => 0,
+            ]];
+        }
+        if (!count($byrep)) {
+            $byrep = [[
+                'Rep' => '',
+                'Contacts' => 0,
+                'Sales' => 0,
+                'Talk Secs' => 0,
+            ]];
+        }
+        if (!count($prev_byrep)) {
+            $prev_byrep = [[
+                'Rep' => '',
+                'Contacts' => 0,
+                'Sales' => 0,
+                'Talk Secs' => 0,
+            ]];
+        }
 
         $tots = [
             'Rep' => 'TOTAL',
             'Talk Secs' => 0,
+            'Contacts' => 0,
+            'Prev Contacts' => 0,
             'Sales' => 0,
             'PerHour' => 0,
         ];
@@ -499,6 +527,7 @@ class AdminOutboundDashController extends Controller
 
         foreach ($byrep as &$rec) {
             $tots['Talk Secs'] += $rec['Talk Secs'];
+            $tots['Contacts'] += $rec['Contacts'];
             $tots['Sales'] += $rec['Sales'];
 
             $rec['PerHour'] = $rec['Talk Secs'] != 0 ? round($rec['Sales'] / $rec['Talk Secs'] * 3600, 2) : 0;
@@ -512,44 +541,54 @@ class AdminOutboundDashController extends Controller
         foreach ($prev_byrep as &$rec) {
             $prev_tot_secs += $rec['Talk Secs'];
             $prev_tot_sales += $rec['Sales'];
+            $tots['Prev Contacts'] += $rec['Contacts'];
         }
 
         if ($prev_tot_sales == 0) {
-            $sales_pctdiff = null;
-            $sales_pctsign = null;
-            $sales_ntc = 1;  // nothing to compare
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
         } else {
-            $sales_pctdiff = ($tots['Sales'] - $prev_tot_sales) / $prev_tot_sales * 100;
-            $sales_pctsign = $sales_pctdiff < 0 ? 0 : 1;
-            $sales_pctdiff = round(abs($sales_pctdiff));
-            $sales_ntc = 0;
+            $pctdiff = ($tots['Sales'] - $prev_tot_sales) / $prev_tot_sales * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
         }
+
+        $total_sales = [
+            'total' => $tots['Sales'],
+            'conversion_rate' => $tots['Contacts'] > 0 ? round($tots['Sales'] / $tots['Contacts'] * 100, 2) : 0,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
 
         $prev_per_hour = $prev_tot_secs != 0 ? round($prev_tot_sales / $prev_tot_secs * 3600, 2) : 0;
 
         if ($prev_per_hour == 0) {
-            $perhour_pctdiff = null;
-            $perhour_pctsign = null;
-            $perhour_ntc = 1;  // nothing to compare
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
         } else {
-            $perhour_pctdiff = ($tots['PerHour'] - $prev_per_hour) / $prev_per_hour * 100;
-            $perhour_pctsign = $perhour_pctdiff < 0 ? 0 : 1;
-            $perhour_pctdiff = round(abs($perhour_pctdiff));
-            $perhour_ntc = 0;
+            $pctdiff = ($tots['PerHour'] - $prev_per_hour) / $prev_per_hour * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
         }
+
+        $sales_per_hour = [
+            'total' => $tots['PerHour'],
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
 
         return [
             'table' => $bycamp,
-            'total_sales' => $tots['Sales'],
-            'total_sales_per_hour' => $tots['PerHour'],
             'reps' => $reps,
             'sales' => $sales,
-            'sales_pct_change' => $sales_pctdiff,
-            'sales_pct_sign' => $sales_pctsign,
-            'sales_ntc' => $sales_ntc,
-            'perhour_pct_change' => $perhour_pctdiff,
-            'perhour_pct_sign' => $perhour_pctsign,
-            'perhour_ntc' => $perhour_ntc,
+            'total_sales' => $total_sales,
+            'sales_per_hour' => $sales_per_hour,
         ];
     }
 
@@ -580,6 +619,7 @@ class AdminOutboundDashController extends Controller
 
         SELECT Rep, Campaign,
         'Duration' = SUM(Duration),
+        'Contacts' = SUM(Contacts),
         'Sales' = SUM(Sales)
         INTO #temp
         FROM (";
@@ -593,7 +633,8 @@ class AdminOutboundDashController extends Controller
             $sql .= " $union SELECT
             DR.Rep, DR.Campaign,
             'Duration' = SUM(DR.Duration),
-            'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE NULL END)
+            'Contacts' = COUNT(CASE WHEN DI.Type > 1 THEN 1 ELSE NULL END),
+            'Sales' = COUNT(CASE WHEN DI.Type = 3 THEN 1 ELSE NULL END)
             FROM [$db].[dbo].[DialingResults] DR
             CROSS APPLY (SELECT TOP 1 [Type]
                 FROM  [$db].[dbo].[Dispos]
@@ -626,12 +667,12 @@ class AdminOutboundDashController extends Controller
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
 
-        SELECT Rep, Campaign, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
+        SELECT Rep, Campaign, SUM(Contacts) as Contacts, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
         GROUP BY Rep, Campaign
         ORDER BY Rep, Campaign;
 
-        SELECT Rep, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
+        SELECT Rep, SUM(Contacts) as Contacts, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
         GROUP BY Rep
         ORDER BY Rep";
@@ -711,49 +752,73 @@ class AdminOutboundDashController extends Controller
         $total_calls = $this->getTotalCalls();
         $prev_total_calls = $this->getTotalCalls(true);
 
-        $inbound = ['1', '11'];
+        $total_calls = $total_calls[0];
+        $prev_total_calls = $prev_total_calls[0];
 
-        $total_total_calls = 0;
-        $prev_total_total_calls = 0;
-        $outbound_total_calls = 0;
-        $inbound_total_calls = 0;
-
-        foreach ($total_calls as $call) {
-            $total_total_calls += $call['Agent Calls'];
-            if (in_array($call['CallType'], $inbound)) {
-                $inbound_total_calls += $call['Agent Calls'];
-            } else {
-                $outbound_total_calls += $call['Agent Calls'];
-            }
-        }
-
-        foreach ($prev_total_calls as $call) {
-            $prev_total_total_calls += $call['Agent Calls'];
-        }
-
-        if ($prev_total_total_calls == 0) {
+        if ($prev_total_calls['Total'] == 0) {
             $pctdiff = null;
             $pctsign = null;
             $ntc = 1;  // nothing to compare
         } else {
-            $pctdiff = ($total_total_calls - $prev_total_total_calls) / $prev_total_total_calls * 100;
+            $pctdiff = ($total_calls['Total'] - $prev_total_calls['Total']) / $prev_total_calls['Total'] * 100;
             $pctsign = $pctdiff < 0 ? 0 : 1;
             $pctdiff = round(abs($pctdiff));
             $ntc = 0;
         }
 
+        $total_dials = [
+            'total' => $total_calls['Total'],
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
+        if ($prev_total_calls['Contacts'] == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($total_calls['Contacts'] - $prev_total_calls['Contacts']) / $prev_total_calls['Contacts'] * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
+        }
+
+        $total_contacts = [
+            'total' => $total_calls['Contacts'],
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
+        $rate = $total_calls['Total'] > 0 ? round($total_calls['Contacts'] / $total_calls['Total'] * 100, 2) : 0;
+        $prev_rate = $prev_total_calls['Total'] > 0 ? round($prev_total_calls['Contacts'] / $prev_total_calls['Total'] * 100, 2) : 0;
+
+        if ($prev_rate == 0) {
+            $pctdiff = null;
+            $pctsign = null;
+            $ntc = 1;  // nothing to compare
+        } else {
+            $pctdiff = ($rate - $prev_rate) / $prev_rate * 100;
+            $pctsign = $pctdiff < 0 ? 0 : 1;
+            $pctdiff = round(abs($pctdiff));
+            $ntc = 0;
+        }
+
+        $contact_rate = [
+            'rate' => $rate,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ];
+
         $details = $this->filterDetails($this->dateFilter, $this->campaign);
 
         return [
-            'total_calls' => [
-                'total' => $total_total_calls,
-                'outbound' => $outbound_total_calls,
-                'inbound' => $inbound_total_calls,
-                'details' => $details,
-                'pct_change' => $pctdiff,
-                'pct_sign' => $pctsign,
-                'ntc' => $ntc,
-            ],
+            'total_dials' => $total_dials,
+            'total_contacts' => $total_contacts,
+            'contact_rate' => $contact_rate,
+            'details' => $details,
         ];
     }
 
@@ -765,7 +830,6 @@ class AdminOutboundDashController extends Controller
      */
     public function getTotalCalls($prev = false)
     {
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -781,32 +845,37 @@ class AdminOutboundDashController extends Controller
 
         $bind = [];
 
-        $sql = 'SELECT CallType, SUM([Agent Calls]) as [Agent Calls] FROM (';
+        $sql = 'SELECT COUNT(*) as [Total],
+        ISNULL(SUM(CASE WHEN [Type] > 1 THEN 1 ELSE 0 END),0) as [Contacts]
+        FROM (';
+
         $union = '';
         foreach (Auth::user()->getDatabaseArray() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
 
-            $sql .= " $union SELECT DR.CallType AS 'CallType',
-                COUNT(DR.CallStatus) AS 'Agent Calls'
-                FROM [$db].[dbo].[DialingResults] DR
-                WHERE DR.CallType NOT IN (1,7,8,11)
-                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','TRANSFERRED','PARKED','Inbound')
-                AND DR.Date >= :fromdate$i
-                AND DR.Date < :todate$i
-                AND DR.GroupId = :groupid$i";
+            $sql .= " $union SELECT
+            IsNull((SELECT TOP 1 DI.[Type]
+            FROM [$db].[dbo].[Dispos] DI
+            WHERE Disposition=DR.CallStatus
+            AND (GroupId=DR.GroupId OR IsSystem=1)
+            AND (Campaign=DR.Campaign OR Campaign='')
+            ORDER BY [Description] Desc), 0) as [Type]
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.CallType NOT IN (1,7,8,11)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','TRANSFERRED','PARKED','Inbound')
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i";
 
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
             $bind = array_merge($bind, $extrabind);
 
-            $sql .= "
-                GROUP BY DR.CallType";
-
             $union = 'UNION ALL';
         }
-        $sql .= ") tmp GROUP BY CallType";
+        $sql .= ") tmp";
 
         return $this->runSql($sql, $bind);
     }
