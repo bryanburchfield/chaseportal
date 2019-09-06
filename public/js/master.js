@@ -1794,10 +1794,10 @@ $(document).ready(function(){
         }
     }
 
-    $('.front .card_table').each(function(){
-    	var title = $(this).find('h1.title').text();
-    	$(this).parent().next('.back').prepend('<h1 class="title">'+title+'</h1>');
-    });
+    // $('.front .card_table').each(function(){
+    // 	var title = $(this).find('h1.title').text();
+    // 	$(this).parent().next('.back').prepend('<h1 class="title">'+title+'</h1>');
+    // });
 
 	var hash = window.location.hash;
 	hash && $('ul.nav-tabs a[href="' + hash + '"]').tab('show');

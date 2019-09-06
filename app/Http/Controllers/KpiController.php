@@ -236,6 +236,7 @@ class KpiController extends Controller
      */
     public function searchRecipients(Request $request)
     {
+
         $group_id = Auth::user()->group_id;
         $kpi_id = $request->kpi_id;
         $name = $request->name . '%';

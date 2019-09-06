@@ -191,7 +191,7 @@ var KPI = {
                 var from_form,
                     append_user
                 ;
-                
+
                 if(response.origin == 'recips_page'){
                     from_form=$('form.user_email_form.add_recipient ');
                     append_user=$('.expanded_emails'); 
@@ -291,7 +291,7 @@ function searchRecips(el, value, kpi_id){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+            console.log(value);
         $.ajax({
             'async': false,
             url: '/kpi/ajax_search',

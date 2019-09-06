@@ -54,13 +54,15 @@ var Dashboard = {
 
     datefilter : document.getElementById("datefilter").value,
     time: new Date().getTime(),
+    total_dials:'',
 
     init:function(){
         this.get_call_volume(this.datefilter, this.chartColors);
         this.agent_talk_time(this.datefilter, this.chartColors);
+        this.total_calls(this.datefilter);
         this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
         this.calls_by_campaign(this.datefilter, this.chartColors);
-        this.total_calls(this.datefilter);
+        
         Dashboard.eventHandlers();
         Master.check_reload();
         $('#avg_wait_time').closest('.flipping_card').flip(true);
@@ -74,29 +76,14 @@ var Dashboard = {
         $(div).parent().append('<p class="ajax_error alert alert-danger">Something went wrong. Please reload the page.</p>');
     },
 
-    // return_chart_colors:function(response_length, chartColors){
-    //     const chart_colors = Object.keys(Dashboard.chartColors)
-    //     var chart_colors_array=[];
-
-    //     var j=0;
-    //     for (var i=0; i < response_length; i++) {
-    //         if(j==chart_colors.length){
-    //             j=0;
-    //         }
-    //         chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
-    //         j++;
-    //     }
-
-    //     return chart_colors_array;
-    // },
-
     refresh:function(datefilter, campaign){
 
         Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
         Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
+        Dashboard.total_calls(datefilter);
         Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
         Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
-        Dashboard.total_calls(datefilter);
+        
         Master.check_reload();
         $('.preloader').fadeOut('slow');
     },
@@ -119,12 +106,10 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
 
                 /////// TOTAL DURATION
-                Master.trend_percentage( $('#total_minutes'), response.call_volume.total_duration.pct_change, response.call_volume.total_duration.pct_sign, response.call_volume.total_duration.ntc );
-                $('#total_minutes').find('.total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_duration.duration));
-
+                $('#total_contacts_card').find('.total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_duration.duration));
+                
                 ////// CALL VOLUME
                 var call_volume_outbound = {
                     labels: response.call_volume.call_volume.time_labels,
@@ -206,6 +191,7 @@ var Dashboard = {
 
                 var show_decimal= Master.ylabel_format(response.call_volume.call_duration.duration);
                 if(show_decimal){Master.ylabel_format(response.call_volume.call_duration.duration);}
+
                 var call_duration_options={
                     responsive: true,
                     hoverMode: 'index',
@@ -291,17 +277,69 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-
+                console.log(response);
                 $('#avg_wait_time tbody').empty();
-                if(response.avg_wait_time.length){
+                if(response.Avgs.length){
                     var trs;
-                    for (var i = 0; i < response.avg_wait_time.length; i++) {
-                        if(response.avg_wait_time[i].Rep != ''){
-                            trs+='<tr><td>'+response.avg_wait_time[i].Rep+'</td><td>'+response.avg_wait_time[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.avg_wait_time[i].AvgWaitTime)+'</td></tr>';
+                    for (var i = 0; i < response.Table.length; i++) {
+                        if(response.Table[i].Rep != ''){
+                            trs+='<tr><td>'+response.Table[i].Rep+'</td><td>'+response.Table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.Table[i].Avg)+'</td></tr>';
                         }
                     }
                     $('#avg_wait_time tbody').append(trs);
                 }
+
+                ////////////////////////////////////////////////////////////
+                ////    AVG WAIT TIME GRAPH
+                ///////////////////////////////////////////////////////////
+
+                if(window.avg_wait_time_chart != undefined){
+                    window.avg_wait_time_chart.destroy();
+                }
+
+                var response_length = response.Campaigns.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
+
+                var avg_wait_time_data = {
+                    datasets: [{
+                        data: response.Avgs,
+                        backgroundColor: chart_colors_array,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.Campaigns
+                };
+
+                var avg_wait_time_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    
+                    tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItem, data) { 
+                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
+                            }
+                        }
+                    }
+                }
+
+                var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
+
+                window.avg_wait_time_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: avg_wait_time_data,
+                    options: avg_wait_time_options
+                });
             }
         });
 
@@ -319,26 +357,30 @@ var Dashboard = {
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
 
-                Master.flip_card(response.table.length, '#sales_per_hour_per_rep');
-                Master.trend_percentage( $('.sales_per_hour'), response.perhour_pct_change, response.perhour_pct_sign, response.perhour_ntc );
-                Master.trend_percentage( $('.total_sales_card '), response.sales_pct_change, response.sales_pct_sign, response.sales_ntc );
+                $('#conversion_rate').html(response.total_sales.conversion_rate +'%');
+                $('#conversion_rate').closest('.flipping_card').flip(true);
+                $('#total_sales').closest('.flipping_card').flip(true);
+
+                Master.trend_percentage( $('.sales_per_hour'), response.sales_per_hour.pct_change, response.sales_per_hour.pct_sign, response.sales_per_hour.ntc );
+                Master.trend_percentage( $('.total_sales_card '), response.total_sales.pct_change, response.total_sales.pct_sign, response.total_sales.ntc );
                 $('#sales_per_hour_per_rep tbody').empty(); 
                 $('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph').parent().find('.no_data').remove();
 
-                var tot_mins = $('#total_minutes .outbound .data.outbound').text();
+                var tot_mins = $('#total_contacts_card .outbound .data.outbound').text();
                 tot_mins = parseInt(tot_mins);
-                var tot_sales = response.total_sales;
+                var tot_sales = response.total_sales.total;
 
                 if(tot_sales){
-                    $('#sales_per_hour').text(response.total_sales_per_hour);
+                    $('#sales_per_hour').text(response.sales_per_hour.total);
                 }else{
                     $('#sales_per_hour').text('0');
                 }
 
-                Master.add_bg_rounded_class($('#sales_per_hour'), response.total_sales_per_hour, 5);
-                Master.add_bg_rounded_class($('#total_sales'), response.total_sales, 4);
+                Master.add_bg_rounded_class($('#sales_per_hour'), response.sales_per_hour.total, 5);
+                Master.add_bg_rounded_class($('#total_sales'), response.total_sales.total, 4);
 
-                $('#total_sales').html(Master.formatNumber(response.total_sales));
+
+                $('#total_sales').html(Master.formatNumber(response.total_sales.total));
                 $('#sales_per_hour_per_rep tbody').empty();
 
                 if(response.reps.length){
@@ -354,42 +396,6 @@ var Dashboard = {
                     $('<p class="no_data">No data yet</p>').insertBefore('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph');
                 }
 
-                var response_length = response.sales.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
-
-                var sales_per_hour_per_rep_data = {
-                    datasets: [{
-                        data: response.sales,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.reps
-                };
-                 
-                var sales_per_hour_per_rep_options={
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        enabled:true,
-                    }
-                }
-
-                var ctx = document.getElementById('sales_per_hour_per_rep_graph').getContext('2d');
-
-                window.sales_per_hour_per_rep_chart = new Chart(ctx,{
-                    type: 'doughnut',
-                    data: sales_per_hour_per_rep_data,
-                    options: sales_per_hour_per_rep_options
-                });
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#sales_per_hour_per_rep');
@@ -405,7 +411,7 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+        
         $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/calls_by_campaign',
@@ -654,13 +660,29 @@ var Dashboard = {
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
+                console.log(response);
 
-                Master.trend_percentage( $('#total_calls'), response.total_calls.pct_change, response.total_calls.pct_sign, response.total_calls.ntc );
-                Master.add_bg_rounded_class($('#total_calls .total'), response.total_calls.total, 4);
+                $('.filter_time_camp_dets p .selected_campaign').html(response.details[0]);
+                $('.filter_time_camp_dets p .selected_datetime').html(response.details[1]);
+                $('#total_contacts').html(response.total_contacts.total);
+                Master.add_bg_rounded_class($('#total_contacts'), response.total_contacts.total, 4);
+                
+                var total_contacts=parseInt(response.total_contacts.total); 
+                if(total_contacts == 0){
+                    var contact_rate = 0;
+                }else{
+                    var contact_rate = response.total_dials.total/total_contacts;
+                }           
+                
+                contact_rate = contact_rate.toFixed(2);
+                $('#contact_rate').html(contact_rate +'%');
 
-                $('#total_calls .total').html(Master.formatNumber(response.total_calls.total));
-                $('.filter_time_camp_dets p .selected_campaign').html(response.total_calls.details[0]);
-                $('.filter_time_camp_dets p .selected_datetime').html(response.total_calls.details[1]);
+                Master.trend_percentage( $('#total_calls'), response.total_dials.pct_change, response.total_dials.pct_sign, response.total_dials.ntc );
+                Master.add_bg_rounded_class($('#total_calls .total'), response.total_dials.total, 4);
+                Dashboard.total_dials=response.total_dials.total;
+
+                $('#total_calls .total').html(Master.formatNumber(response.total_dials.total));
+                // $('.filter_time_camp_dets p').html(response.details);
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#total_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);
