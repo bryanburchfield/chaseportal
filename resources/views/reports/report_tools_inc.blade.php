@@ -1,12 +1,6 @@
 <!-- start pagination -->
-
 <div class="pag col-sm-5 col-xs-12 nopad">
 	<input type="hidden" name="report" value="{{$report}}">
-	<?php
-		if($params['totrows']){
-			// echo $report->getPageLinks();
-		}
-	?>
 </div>
 <!-- end pagination -->
 

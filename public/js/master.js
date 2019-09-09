@@ -1,5 +1,4 @@
-// var ColorHash = require('color-hash');
-var colorHash = new ColorHash();
+// var colorHash = new ColorHash();
 
 var Master = {
 
@@ -46,9 +45,9 @@ var Master = {
 		$('.users table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
-		$('.page-content').on('click', '.pagination li a', this.click_pag_btn);
+		$('.pag').on('click', '.pagination li a', this.click_pag_btn);
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
-		$('.page-content').on('change', '.curpage, .pagesize', this.change_pag_inputs);
+		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
 		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns); 
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
@@ -83,7 +82,6 @@ var Master = {
             return hash;
         };
 
-        // var colorHash = new ColorHash({hash: customHash});
         var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
 
         var new_hash;
@@ -373,7 +371,6 @@ var Master = {
 			dataType: 'json',
 			data: {query: query},
 			success:function(response){
-				console.log(response);
 				
 				var is_array = Array.isArray(response.search_result);				
 				var obj = response['search_result'];
@@ -840,7 +837,7 @@ var Master = {
 			db = $('#db').val(),
 			additional_dbs = $('#additional_dbs').val()
 		;
-		console.log(additional_dbs);
+
 		var dialer = db.slice(-2);
 
 		$('form.add_user .alert').remove();
@@ -865,7 +862,6 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
 
 				if(response.errors){
 
@@ -953,7 +949,6 @@ var Master = {
 			dataType: 'json',
 			data: {id: user_id},
 			success:function(response){
-				console.log(response);
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer'+dialer).addClass('in');
@@ -1058,7 +1053,7 @@ var Master = {
 	submit_report_filter_form:function(e){
 		e.preventDefault();
 		$('.preloader').show();
-		console.log('test');
+
 		$([document.documentElement, document.body]).animate({
 	        scrollTop: $(".table-responsive").offset().top -100
 	    }, 1500);
@@ -1167,8 +1162,6 @@ var Master = {
 		if(curpage != pag_link && pag_link != ''){curpage = pag_link;}
 		if(th_sort == pag_link){th_sort='';}
 		
-		console.log(form_data);
-
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1189,7 +1182,7 @@ var Master = {
 			},
 
 			success:function(response){
-				console.log(response);
+
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
