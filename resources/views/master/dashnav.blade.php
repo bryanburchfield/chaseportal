@@ -1,13 +1,47 @@
+
+@if($page['type'] =='dash')
+    @if($has_multiple_dbs)
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span>Database</span>
+            </button>
+            <ul class="dropdown-menu db_select stop-propagation">
+                
+                @foreach ($db_list as $db)
+
+                    {{-- $checked = $db['selected'] ? $checked = "checked" : $checked= " "; --}}
+                    <div class="checkbox">
+                    <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox"  '. $checked .' value="'.$db['database'].'" name="databases"><span>{{$db}}</span></label>
+                    </div>
+                @endforeach                                                                                    
+
+                <input type="hidden" class="page_type" value="{{$page['type']}}">
+                <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> Submit</button>                                        
+            </ul>
+        </div>
+
+    @endif
+@endif
+
+@if($page['type']=='report')
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="window.location.href = 'reportsettings.php';">
+            <span>Report Settings</span>
+        </button>
+    </div>
+@endif
+
 <div class="btn-group">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span>Interaction</span>
     </button>
-    <ul class="dropdown-menu filter_campaign stop-propagation">
 
+    <ul class="dropdown-menu filter_campaign stop-propagation">
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+        
         @foreach($campaign_list as $campaign)
-
             <div class="checkbox">
                 <label class="campaign_label">
                     <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
@@ -17,7 +51,6 @@
                 </label>
             </div>
         @endforeach
-
     </ul>
 </div>
 
@@ -40,5 +73,6 @@
         <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">This Month</a></li>
         <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">Last Month</a></li>
         <li {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">Custom</a></li>
+        <li><?php echo $has_multiple_dbs; ?></li>
     </ul>
 </div>

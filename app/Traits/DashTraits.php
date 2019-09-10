@@ -498,4 +498,16 @@ trait DashTraits
 
         return $camparray;
     }
+
+    public function isMultiDb()
+    {
+        return !empty(Auth::user()->additional_dbs);
+    }
+
+    public function getDatabaseArray()
+    {
+        return Auth::user()->getDatabaseArray();
+    }
+
+
 }

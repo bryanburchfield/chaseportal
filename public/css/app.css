@@ -137,6 +137,10 @@ h6 {
   padding: 0;
 }
 
+.p20 {
+  padding: 20px;
+}
+
 .pb20 {
   padding-bottom: 20px;
 }
@@ -156,6 +160,10 @@ a:focus {
 .table > tbody > tr.lowpad > th {
   padding: 8px 5px;
   font-size: 13px;
+}
+
+.card .back.p0 {
+  padding: 0;
 }
 
 .navbar button#sidebarCollapse {

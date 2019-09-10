@@ -225,6 +225,7 @@
                     </div>
 
                     <div class="back">
+                        <h1 class="title">Agent Call Count</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_call_count_graph"></canvas>
@@ -276,10 +277,10 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-
                     </div>
 
                     <div class="back">
+                        <h1 class="title">Agent Call Time</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_calltime_graph"></canvas>
@@ -309,6 +310,7 @@
                     </div>
 
                     <div class="back">
+                        <h1 class="title">REP AVG HANDLE TIME</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="rep_avg_handletime_graph"></canvas>

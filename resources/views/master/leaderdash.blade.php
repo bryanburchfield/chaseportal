@@ -55,6 +55,7 @@
 	                </div>
 
 	                <div class="back">
+	                	<h1 class="title">Sales Per Campaign</h1>
 	                    <div class="flip_card_btn"></div>
 	                    <div class="inbound inandout mb0">
 	                        <canvas id="sales_per_campaign_graph"></canvas>
@@ -95,6 +96,7 @@
 	                </div>
 
 	                <div class="back">
+	                	<h1 class="title">Agent Sales Per Hour</h1>
 	                    <div class="flip_card_btn"></div>
 	                    <div class="inbound inandout mb0">
 	                        <canvas id="agent_sales_per_hour_graph"></canvas>
