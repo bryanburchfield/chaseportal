@@ -46,6 +46,8 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
+            'has_multiple_dbs'=> $this->isMultiDb(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         // Add 'all' to list of call types

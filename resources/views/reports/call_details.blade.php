@@ -7,6 +7,29 @@
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
+
+				<?php 
+					if($filters['has_multiple_dbs']){
+						$show_multi_db='show_multi_db';
+					}else{
+						$show_multi_db='';
+					}
+				?>
+
+				<div class="col-sm-4 multi_db<?php echo $show_multi_db;?>">
+					<div class="form-group">
+						<label>Database</label>
+			            <select name="databases[]" id="database_select" multiple class="form-control multiselect" value="<?php if(isset($_POST['databases'])){echo $_POST['databases'];}?>">
+
+							@foreach ($filters['db_list'] as $db) {
+				                <option value="{{$db}}">{{$db}}</option>
+				            @endforeach
+
+						</select>
+			        </div>
+				</div>
+
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('fromdate', 'From') !!}

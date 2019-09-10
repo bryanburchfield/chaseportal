@@ -59,6 +59,27 @@ class User extends Authenticatable
             $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
         }
         return $dblist;
+
+
+        // if (empty($_SESSION['databases'])) {
+        //     $selected = $dblist;
+        // } else {
+        //     $selected = $_SESSION['databases'];
+        // }
+
+        // $sql = 'SELECT dialer_name FROM dialers WHERE reporting_db = ?';
+        // $dbarray = [];
+        // foreach ($dblist as $db) {
+        //     $dialer_name = $this->db->fetchValue($sql, [$db]);
+        //     $checked = in_array($db, $selected) ? 1 : 0;
+        //     $dbarray[$db] = [
+        //         'name' => $dialer_name,
+        //         'database' => $db,
+        //         'selected' => $checked,
+        //     ];
+        // }
+
+        // return $dbarray;
     }
 
     public function persistFilters(Request $request)
