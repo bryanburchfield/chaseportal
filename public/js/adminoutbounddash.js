@@ -63,12 +63,9 @@ var Dashboard = {
         this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
         this.calls_by_campaign(this.datefilter, this.chartColors);
         
-        Dashboard.eventHandlers();
+        Dashboard.resizeCardTableDivs();
         Master.check_reload();
         $('#avg_wait_time').closest('.flipping_card').flip(true);
-    },
-
-    eventHandlers:function(){
     },
 
     display_error:function(div, textStatus, errorThrown){
@@ -83,7 +80,7 @@ var Dashboard = {
         Dashboard.total_calls(datefilter);
         Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
         Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
-        
+        Dashboard.resizeCardTableDivs();
         Master.check_reload();
         $('.preloader').fadeOut('slow');
     },
@@ -272,84 +269,6 @@ var Dashboard = {
         });
 
         $.ajax({
-            url:'/adminoutbounddashboard/avg_wait_time',
-            type: 'POST',
-            dataType: 'json',
-            data:{campaign:campaign, datefilter:datefilter},
-            success:function(response){
-                console.log(response);
-                $('#avg_wait_time tbody').empty();
-                if(response.Avgs.length){
-                    var trs;
-                    for (var i = 0; i < response.Table.length; i++) {
-                        if(response.Table[i].Rep != ''){
-                            trs+='<tr><td>'+response.Table[i].Rep+'</td><td>'+response.Table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.Table[i].Avg)+'</td></tr>';
-                        }
-                    }
-                    $('#avg_wait_time tbody').append(trs);
-                }
-
-                ////////////////////////////////////////////////////////////
-                ////    AVG WAIT TIME GRAPH
-                ///////////////////////////////////////////////////////////
-
-                if(window.avg_wait_time_chart != undefined){
-                    window.avg_wait_time_chart.destroy();
-                }
-
-                var response_length = response.Campaigns.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
-
-                var avg_wait_time_data = {
-                    datasets: [{
-                        data: response.Avgs,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.Campaigns
-                };
-
-                var avg_wait_time_options={
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    
-                    tooltips: {
-                        enabled: true,
-                        mode: 'single',
-                        callbacks: {
-                            label: function(tooltipItem, data) { 
-                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
-                            }
-                        }
-                    }
-                }
-
-                var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
-
-                window.avg_wait_time_chart = new Chart(ctx,{
-                    type: 'doughnut',
-                    data: avg_wait_time_data,
-                    options: avg_wait_time_options
-                });
-            }
-        });
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/sales_per_hour_per_rep',
             type: 'POST',
@@ -402,6 +321,87 @@ var Dashboard = {
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/adminoutbounddashboard/avg_wait_time',
+            type: 'POST',
+            dataType: 'json',
+            data:{campaign:campaign, datefilter:datefilter},
+            success:function(response){
+                console.log(response);
+                $('#avg_wait_time tbody').empty();
+                if(response.Avgs.length){
+                    var trs;
+                    for (var i = 0; i < response.Table.length; i++) {
+                        if(response.Table[i].Rep != ''){
+                            trs+='<tr><td>'+response.Table[i].Rep+'</td><td>'+response.Table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.Table[i].Avg)+'</td></tr>';
+                        }
+                    }
+                    $('#avg_wait_time tbody').append(trs);
+                }
+
+                ////////////////////////////////////////////////////////////
+                ////    AVG WAIT TIME GRAPH
+                ///////////////////////////////////////////////////////////
+
+                var response_length = response.Campaigns.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
+
+                var avg_wait_time_data = {
+                    datasets: [{
+                        data: response.Avgs,
+                        backgroundColor: chart_colors_array,
+                        
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.Campaigns
+                };
+
+                var avg_wait_time_options={
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    
+                    tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItem, data) { 
+                                return  Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
+                            }
+                        }
+                    }
+                }
+
+                var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
+                
+                if(window.avg_wait_time_chart != undefined){
+                    window.avg_wait_time_chart.destroy();
+                }
+
+                window.avg_wait_time_chart = new Chart(ctx,{
+                    type: 'horizontalBar',
+                    data: avg_wait_time_data,
+                    options: avg_wait_time_options
+                });
+
+                Dashboard.resizeCardTableDivs();
+            }
+        });
     },
 
     calls_by_campaign:function(datefilter, chartColors){
@@ -446,12 +446,12 @@ var Dashboard = {
                 var response_length = response.Counts.length;
                 var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
 
-               var calls_by_campaign_data = {
+                var calls_by_campaign_data = {
                     datasets: [{
                         data: response.Counts,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
+                        backgroundColor: chart_colors_array
                     }],
+
                     elements: {
                             center: {
                             color: '#203047', 
@@ -464,6 +464,7 @@ var Dashboard = {
                 
                 var calls_by_campaign_options={
                     responsive: true,
+                    maintainAspectRatio: false,
                     legend: {
                     display: false
                     },
@@ -473,9 +474,9 @@ var Dashboard = {
                 }
 
                 var ctx = document.getElementById('calls_by_campaign_graph').getContext('2d');
-
+               
                 window.calls_by_campaign_chart = new Chart(ctx,{
-                    type: 'doughnut',
+                    type: 'horizontalBar',
                     data: calls_by_campaign_data,
                     options: calls_by_campaign_options
                 });
@@ -690,6 +691,14 @@ var Dashboard = {
         });
     },
 
+    resizeCardTableDivs:function(){
+
+        var height_dt = $('.get_hgt .front').innerHeight();
+        console.log(height_dt);
+        $('.set_hgt').css({'height':height_dt });
+        $('.set_hgt canvas').css({'height':height_dt -50, 'padding-bottom' : 20 });
+    },
+
     title_options :{
         fontColor:'#144da1',
         fontSize:16,
@@ -705,7 +714,7 @@ $(document).ready(function(){
 
     Dashboard.init();
     resizeTopFlippingCard();
-    resizeCardTableDivs();
+    Dashboard.resizeCardTableDivs();
 
     function resizeTopFlippingCard(){
         var height_dt2 = $('.get_hgt2').outerHeight();
@@ -727,14 +736,8 @@ $(document).ready(function(){
 
     if ($(window).width() > 1010) {
         $(window).on('resize', function(){
-            resizeCardTableDivs();
+            Dashboard.resizeCardTableDivs();
         });
-    }
-
-    function resizeCardTableDivs(){
-        var height_dt = $('.get_hgt').outerHeight();
-        $('.set_hgt').css({'min-height':height_dt});
-        $('.set_hgt').css({'max-height':height_dt}); 
     }
 
     $('.enddate').datepicker({maxDate: '0'});
