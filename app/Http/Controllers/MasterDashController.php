@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Auth;
 
 class MasterDashController extends Controller
 {
@@ -16,7 +17,6 @@ class MasterDashController extends Controller
         $this->getSession($request);
 
         $campaigns = $this->campaignGroups();
-        $has_multiple_dbs = $this->isMultiDb();
         $db_list = $this->getDatabaseArray();
 
         $this->currentDash = session('currentDash', 'admindash');
@@ -48,7 +48,7 @@ class MasterDashController extends Controller
             'cssfile' => $cssfile,
             'page' => $page,
             'dashbody' => $dashbody,
-            'has_multiple_dbs' => $has_multiple_dbs,
+            'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $db_list
         ];
         return view('masterdash')->with($data);

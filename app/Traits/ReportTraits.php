@@ -404,11 +404,6 @@ trait ReportTraits
         return $newrequest;
     }
 
-    private function isMultiDb()
-    {
-        return !empty(Auth::user()->additional_dbs);
-    }
-
     private function getDatabaseArray()
     {
         return Auth::user()->getDatabaseArray();
