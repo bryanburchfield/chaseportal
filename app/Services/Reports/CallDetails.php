@@ -46,7 +46,6 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
-            'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $this->getDatabaseArray(),
         ];
 
