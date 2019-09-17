@@ -53,9 +53,8 @@ class User extends Authenticatable
     }
 
     public function getDatabaseArray()
-    {   
-
-        $dialers=[];
+    {
+        $dialers = [];
         $dblist = (array) $this->db;
 
         if (!empty($this->additional_dbs)) {
@@ -63,31 +62,12 @@ class User extends Authenticatable
         }
 
         foreach ($dblist as $db) {
-            $dialer = Dialer::where('reporting_db', $db)->pluck('reporting_db','dialer_name')->all();
-            array_push($dialers, $dialer);
+            $dialer = Dialer::where('reporting_db', $db)->pluck('reporting_db', 'dialer_name')->all();
+            if ($dialer) {
+                $dialers[key($dialer)] = current($dialer);
+            }
         }
         return $dialers;
-
-
-        // if (empty($_SESSION['databases'])) {
-        //     $selected = $dblist;
-        // } else {
-        //     $selected = $_SESSION['databases'];
-        // }
-
-        // $sql = 'SELECT dialer_name FROM dialers WHERE reporting_db = ?';
-        // $dbarray = [];
-        // foreach ($dblist as $db) {
-        //     $dialer_name = $this->db->fetchValue($sql, [$db]);
-        //     $checked = in_array($db, $selected) ? 1 : 0;
-        //     $dbarray[$db] = [
-        //         'name' => $dialer_name,
-        //         'database' => $db,
-        //         'selected' => $checked,
-        //     ];
-        // }
-
-        // return $dbarray;
     }
 
     public function persistFilters(Request $request)
