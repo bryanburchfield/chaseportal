@@ -7,7 +7,13 @@
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
+				<?php
+					echo '<pre>';
 
+					print_r($filters['db_list']);
+
+					echo '</pre>';
+				?>
 				@if(Auth::user()->isMultiDb())
 					@php $show_multi_db = 'show_multi_db'; @endphp
 				@else
@@ -26,7 +32,6 @@
 						</select>
 			        </div>
 				</div>
-
 
 				<div class="col-sm-4">
 					<div class="form-group">

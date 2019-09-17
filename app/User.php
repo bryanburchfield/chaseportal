@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
+use App\Dialer;
 
 class User extends Authenticatable
 {
@@ -52,13 +53,20 @@ class User extends Authenticatable
     }
 
     public function getDatabaseArray()
-    {
+    {   
+
+        $dialers=[];
         $dblist = (array) $this->db;
 
         if (!empty($this->additional_dbs)) {
             $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
         }
-        return $dblist;
+
+        foreach ($dblist as $db) {
+            $dialer = Dialer::where('reporting_db', $db)->pluck('reporting_db','dialer_name')->all();
+            array_push($dialers, $dialer);
+        }
+        return $dialers;
 
 
         // if (empty($_SESSION['databases'])) {
