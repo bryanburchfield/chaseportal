@@ -173,7 +173,7 @@ class AdminOutboundDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -307,7 +307,7 @@ class AdminOutboundDashController extends Controller
         INTO #temp
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -405,7 +405,7 @@ class AdminOutboundDashController extends Controller
 		'CallCount' = SUM(Cnt)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid1_' . $i] = Auth::user()->group_id;
             $bind['fromdate1_' . $i] = $startDate;
             $bind['todate1_' . $i] = $endDate;
@@ -625,7 +625,7 @@ class AdminOutboundDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -743,7 +743,7 @@ class AdminOutboundDashController extends Controller
 
         $sql = 'SELECT Rep, Campaign, SUM(Duration) as Duration, SUM(Cnt) as Cnt FROM (';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -882,7 +882,7 @@ class AdminOutboundDashController extends Controller
         FROM (';
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;

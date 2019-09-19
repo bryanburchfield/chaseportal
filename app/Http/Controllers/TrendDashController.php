@@ -181,7 +181,7 @@ class TrendDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -358,7 +358,7 @@ class TrendDashController extends Controller
 		'Total Inbound Calls' = SUM(Cnt)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -481,7 +481,7 @@ class TrendDashController extends Controller
 		'Wrap Up Time' = CAST(SUM(WrapUpTime) AS INTEGER)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -520,7 +520,7 @@ class TrendDashController extends Controller
 		'Max Hold' = MAX(HoldTime)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -685,7 +685,7 @@ class TrendDashController extends Controller
 		'Duration' = SUM(Duration)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;

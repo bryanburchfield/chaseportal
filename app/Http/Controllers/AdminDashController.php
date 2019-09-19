@@ -310,7 +310,7 @@ class AdminDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -517,7 +517,7 @@ class AdminDashController extends Controller
         MAX(MaxHold) as 'MaxHold'
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -614,7 +614,7 @@ class AdminDashController extends Controller
         'Abandoned' = SUM(Abandoned)
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -708,7 +708,7 @@ class AdminDashController extends Controller
         $sql = "SELECT 'Sales' = SUM(Sales)
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
 
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
@@ -775,7 +775,7 @@ class AdminDashController extends Controller
         INTO #temp
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -865,7 +865,7 @@ class AdminDashController extends Controller
          SUM([Count]) as [Count]
          FROM ( ";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -937,7 +937,7 @@ class AdminDashController extends Controller
         INTO #temp
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;

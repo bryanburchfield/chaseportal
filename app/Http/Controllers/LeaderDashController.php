@@ -123,7 +123,7 @@ class LeaderDashController extends Controller
 		'Duration' = SUM([Duration])
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -199,7 +199,7 @@ class LeaderDashController extends Controller
 		'Sales' = SUM(Sales)
 		FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
@@ -299,7 +299,7 @@ class LeaderDashController extends Controller
         'Sales' = SUM(Sales)
         FROM (";
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;

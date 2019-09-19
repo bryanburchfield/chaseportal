@@ -154,7 +154,7 @@ class AgentDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
@@ -340,7 +340,7 @@ class AgentDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
@@ -426,7 +426,7 @@ class AgentDashController extends Controller
          FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
@@ -478,7 +478,7 @@ class AgentDashController extends Controller
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;

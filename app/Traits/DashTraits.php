@@ -63,6 +63,11 @@ trait DashTraits
         $this->isApi = session('isApi', 0);
         $this->curdash = session('curdash', 'admindash');
 
+        if (empty($this->databases)) {
+            $this->databases = array_values(Auth::user()->getDatabaseArray());
+            session(['databases' => $this->databases]);
+        }
+
         // this is a bugfix for js bug
         if (empty($this->dateFilter)) {
             $this->dateFilter = 'today';
@@ -242,7 +247,7 @@ trait DashTraits
         switch ($dateFilter) {
             case 'today':
                 $fromDate = localToUtc($todayLocal, $tz);
-                $toDate = new DateTime;  // already UTC
+                $toDate = new \DateTime;  // already UTC
                 break;
 
             case 'yesterday':
@@ -266,7 +271,7 @@ trait DashTraits
             case 'month':
                 // from first day of this month at 00:00:00 to current date+time
                 $fromDate = localToUtc(date('Y-m-1', strtotime($todayLocal)), $tz);
-                $toDate = new DateTime;  // already UTC
+                $toDate = new \DateTime;  // already UTC
                 break;
 
             case 'last_month':
@@ -446,7 +451,7 @@ trait DashTraits
         $sql = '';
         $union = '';
 
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->databases as $i => $db) {
 
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['startdate' . $i] = $startDate;
