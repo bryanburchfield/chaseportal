@@ -8,13 +8,11 @@ if (!function_exists('windowsToUnixTz')) {
 }
 
 if (!function_exists('localToUtc')) {
-    function localToUtc($datetime, $windowsTz)
+    function localToUtc($datetime, $ianaTz)
     {
         if (is_a($datetime, '\DateTime')) {
             $datetime = $datetime->format('Y-m-d H:i:s');
         }
-
-        $ianaTz = windowsToUnixTz($windowsTz);
 
         $dt = new \DateTime($datetime, new \DateTimeZone($ianaTz));
         $dt->setTimeZone(new \DateTimeZone('UTC'));
@@ -24,13 +22,11 @@ if (!function_exists('localToUtc')) {
 }
 
 if (!function_exists('utcToLocal')) {
-    function utcToLocal($datetime, $windowsTz)
+    function utcToLocal($datetime, $ianaTz)
     {
         if (is_a($datetime, '\DateTime')) {
             $datetime = $datetime->format('Y-m-d H:i:s');
         }
-
-        $ianaTz = windowsToUnixTz($windowsTz);
 
         $dt = new \DateTime($datetime, new \DateTimeZone('UTC'));
         $dt->setTimeZone(new \DateTimeZone($ianaTz));

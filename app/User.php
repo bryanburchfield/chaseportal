@@ -46,7 +46,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function type($type)
+    public function isType($type)
     {
         $type = (array) $type;
         return in_array($this->user_type, $type);
@@ -82,5 +82,10 @@ class User extends Authenticatable
     public function isMultiDb()
     {
         return !empty($this->additional_dbs);
+    }
+
+    public function getIanaTz()
+    {
+        return windowsToUnixTz($this->tz);
     }
 }

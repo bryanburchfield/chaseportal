@@ -367,7 +367,7 @@ class KpiController extends Controller
         $token  = env('TWILIO_TOKEN');
         $twilio = new Client($sid, $token);
 
-        $tz = Auth::user()->tz;
+        $tz = Auth::user()->getIanaTz();
 
         foreach ($recipients as $recipient) {
             $this->sendSms($twilio, $recipient, $sms);

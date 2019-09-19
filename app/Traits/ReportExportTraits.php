@@ -118,7 +118,7 @@ trait ReportExportTraits
             $daterange = "Date Range: " . date('m/d/Y g:i:s A', strtotime($this->params['fromdate'])) .
                 " to " . date('m/d/Y g:i:s A', strtotime($this->params['todate'])) . "\n";
         } else {
-            $now = utcToLocal((new \DateTime()), Auth::user()->tz)->format('m/d/Y h:i:s A');
+            $now = utcToLocal((new \DateTime()), Auth::user()->getIanaTz())->format('m/d/Y h:i:s A');
             $daterange = "As of: $now\n";
         }
 
