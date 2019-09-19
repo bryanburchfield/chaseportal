@@ -31,6 +31,7 @@ class ProductionReport
                 new \DateTime($this->params['todate'])
             ),
             'skills' => $this->getAllSkills(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;

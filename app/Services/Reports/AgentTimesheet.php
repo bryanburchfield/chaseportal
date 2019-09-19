@@ -37,6 +37,7 @@ class AgentTimesheet
         $filters = [
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;

@@ -7,13 +7,7 @@
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
-				<?php
-					echo '<pre>';
-
-					print_r($filters['db_list']);
-
-					echo '</pre>';
-				?>
+				
 				@if(Auth::user()->isMultiDb())
 					@php $show_multi_db = 'show_multi_db'; @endphp
 				@else
@@ -25,8 +19,8 @@
 						<label>Database</label>
 			            <select name="databases[]" id="database_select" multiple class="form-control multiselect" value="<?php if(isset($_POST['databases'])){echo $_POST['databases'];}?>">
 
-							@foreach ($filters['db_list'] as $db) {
-				                <option value="{{$db}}">{{$db}}</option>
+							@foreach ($filters['db_list'] as $key => $value) {
+				                <option value="{{$value}}">{{$key}}</option>
 				            @endforeach
 
 						</select>

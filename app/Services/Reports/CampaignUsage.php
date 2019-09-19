@@ -32,6 +32,7 @@ class CampaignUsage
         $filters = [
             'campaign' => $this->getAllCampaigns(),
             'subampaign' => $this->getAllSubcampaigns(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;

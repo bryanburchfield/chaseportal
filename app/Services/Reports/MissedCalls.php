@@ -29,7 +29,9 @@ class MissedCalls
 
     public function getFilters()
     {
-        $filters = [];
+        $filters = [
+            'db_list' => $this->getDatabaseArray()
+        ];
 
         return $filters;
     }

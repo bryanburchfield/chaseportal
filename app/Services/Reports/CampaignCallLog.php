@@ -34,6 +34,7 @@ class CampaignCallLog
         $filters = [
             'reps' => $this->getAllReps(),
             'campaigns' => $this->getAllCampaigns(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;
