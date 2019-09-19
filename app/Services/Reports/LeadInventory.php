@@ -29,6 +29,7 @@ class LeadInventory
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;

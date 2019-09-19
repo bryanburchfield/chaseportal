@@ -46,7 +46,7 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
-            'db_list' => $this->getDatabaseArray(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         // Add 'all' to list of call types

@@ -1126,7 +1126,7 @@ p.descrip {
   position: absolute;
   top: 26%;
   left: 50%;
-  width: 70%;
+  width: 80%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
 }
@@ -2142,6 +2142,14 @@ h4.panel-title a {
 
 .user_links_modal h3 span {
   color: #111;
+}
+
+.multi_db {
+  display: none;
+}
+
+.multi_db.show_multi_db {
+  display: block;
 }
 
 /* ---------------------------------------------------

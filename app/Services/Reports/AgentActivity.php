@@ -32,6 +32,7 @@ class AgentActivity
     {
         $filters = [
             'reps' => $this->getAllReps(true),
+            'db_list' => $this->getDatabaseArray(),
         ];
 
         return $filters;

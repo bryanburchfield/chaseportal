@@ -52,6 +52,7 @@ class AgentSummarySubcampaign
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
             'campaigns' => $this->getAllCampaigns(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;

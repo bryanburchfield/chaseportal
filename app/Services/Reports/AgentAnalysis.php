@@ -45,6 +45,7 @@ class AgentAnalysis
     {
         $filters = [
             'skills' => $this->getAllSkills(),
+            'db_list' => $this->getDatabaseArray()
         ];
 
         return $filters;
