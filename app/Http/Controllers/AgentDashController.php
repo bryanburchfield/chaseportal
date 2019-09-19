@@ -118,7 +118,7 @@ class AgentDashController extends Controller
      */
     private function getCallVolume()
     {
-        $tz = Auth::user()->tz;
+        $tz = Auth::user()->getIanaTz();
 
         $dateFilter = $this->dateFilter;
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
@@ -303,7 +303,7 @@ class AgentDashController extends Controller
 
     public function getRepPerformance()
     {
-        $tz = Auth::user()->tz;
+        $tz = Auth::user()->getIanaTz();
 
         $dateFilter = $this->dateFilter;
         list($fromDate, $toDate) = $this->dateRange($dateFilter);

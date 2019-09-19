@@ -40,6 +40,7 @@ class LeaderDashController extends Controller
         $dateFilter = $this->dateFilter;
 
         $result = $this->getCallVolume();
+        $details = $this->filterDetails($dateFilter, $campaign);
 
         $time_labels = [];
         $inbound = [];
@@ -49,15 +50,14 @@ class LeaderDashController extends Controller
         $tot_outbound = 0;
 
         foreach ($result as $r) {
-
             $tot_inbound += $r['Inbound'];
             $tot_outbound += $r['Outbound'];
             $tot_outbound += $r['Manual'];
 
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
+            if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
             }
 
             array_push($time_labels, $datetime);
@@ -66,9 +66,7 @@ class LeaderDashController extends Controller
             array_push($manual, $r['Manual']);
         }
 
-        $details = $this->filterDetails($dateFilter, $campaign);
-
-        $new_result = [
+        return ['call_volume' => [
             'time_labels' => $time_labels,
             'inbound' => $inbound,
             'outbound' => $outbound,
@@ -76,9 +74,7 @@ class LeaderDashController extends Controller
             'tot_outbound' => $tot_outbound,
             'tot_inbound' => $tot_inbound,
             'details' => $details,
-        ];
-
-        return ['call_volume' => $new_result];
+        ]];
     }
 
     public function getCallVolume($prev = false)
@@ -129,12 +125,12 @@ class LeaderDashController extends Controller
             $bind['todate' . $i] = $endDate;
 
             $sql .= " $union SELECT $xAxis as 'Time',
-			'Outbound' = SUM(CASE WHEN DR.CallType IN ('0','4','5','6','10','12','14','15') THEN 1 ELSE 0 END),
-			'Inbound' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN 1 ELSE 0 END),
-			'Manual' = SUM(CASE WHEN DR.CallType IN ('2') THEN 1 ELSE 0 END),
-			'Duration' = SUM(CASE WHEN DR.CallType IN ('1','11') THEN DR.HandleTime ELSE 0 END)
+            'Outbound' = CASE WHEN DR.CallType NOT IN (1,2,11) THEN 1 ELSE 0 END,
+            'Inbound' = CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END,
+            'Manual' = CASE WHEN DR.CallType IN (2) THEN 1 ELSE 0 END
 			FROM [$db].[dbo].[DialingResults] DR
-			WHERE DR.CallType NOT IN (7,8)
+            WHERE DR.CallType NOT IN (7,8)
+            AND DR.Duration > 0
 			AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
 			AND DR.GroupId = :groupid$i
 			AND DR.Date >= :fromdate$i
@@ -143,9 +139,6 @@ class LeaderDashController extends Controller
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
             $bind = array_merge($bind, $extrabind);
-
-            $sql .= "
-                GROUP BY $xAxis";
 
             $union = 'UNION ALL';
         }
@@ -167,7 +160,6 @@ class LeaderDashController extends Controller
                 'Outbound' => 0,
                 'Inbound' => 0,
                 'Manual' => 0,
-                'Duration' => 0,
             ],
         ];
 
@@ -244,12 +236,13 @@ class LeaderDashController extends Controller
 
         $repsales = [];
         $tots = [
-            'Rep' => 'TOTAL',
+            'Rep' => 'ROOM TOTAL',
             'CallCount' => 0,
             'TalkSecs' => 0,
             'Sales' => 0,
         ];
 
+        $i = 0;
         foreach ($result as &$rec) {
             if ($rec['Sales'] > 0) {
                 $repsales[] = [
@@ -262,17 +255,27 @@ class LeaderDashController extends Controller
             $tots['CallCount'] += $rec['CallCount'];
             $tots['Sales'] += $rec['Sales'];
             $rec['TalkSecs'] = secondsToHms($rec['TalkSecs']);
+            $i++;
         }
+
         $tots['TalkSecs'] = secondsToHms($tots['TalkSecs']);
 
-        // Top 20
-        if (count($result) > 20) {
-            $results = array_slice($result, 0, 20);
-        }
+        // Top 20 for the leaderboard
+        $result = array_slice($result, 0, 20);
         $result[] = $tots;
 
+        // sort and top 10 the per hour recs
+        usort($repsales, function ($a, $b) {
+            return $b['PerHour'] <=> $a['PerHour'];
+        });
+
+        $repsales = array_slice($repsales, 0, 10);
+
         return [
-            'call_details' => ['leaders' => $result, 'repsales' => $repsales],
+            'call_details' => [
+                'leaders' => $result,
+                'repsales' => $repsales,
+            ],
             'Rep' => array_column($repsales, 'Rep'),
             'Sales' => array_column($repsales, 'Sales'),
         ];
@@ -294,7 +297,7 @@ class LeaderDashController extends Controller
 
         $bind = [];
 
-        $sql = "SELECT
+        $sql = "SELECT TOP 10
         Campaign,
         'Sales' = SUM(Sales)
         FROM (";
@@ -337,6 +340,7 @@ class LeaderDashController extends Controller
 
         $sql .= ") tmp
         GROUP BY Campaign
+        HAVING SUM(Sales) > 0
         ORDER BY Sales DESC";
 
         $result = $this->runSql($sql, $bind);

@@ -49,7 +49,6 @@ class AdminOutboundDashController extends Controller
         $this->getSession($request);
 
         $result = $this->getCallVolume();
-        $prev_result = $this->getCallVolume(true);
 
         // cards to be populated
         $call_volume = [
@@ -73,53 +72,36 @@ class AdminOutboundDashController extends Controller
         $prev_total_duration = 0;
 
         foreach ($result[0] as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
+            if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
             }
 
             array_push($call_volume['time_labels'], $datetime);
-            array_push($call_volume['total_calls'], $r['Count']);
-            array_push($call_volume['handled'], $r['Handled Calls']);
-            array_push($call_volume['dropped'], $r['Dropped Calls']);
+            array_push($call_volume['total_calls'], $r['Outbound Count']);
+            array_push($call_volume['handled'], $r['Outbound Handled Calls']);
+            array_push($call_volume['dropped'], $r['Outbound Dropped Calls']);
         }
 
         foreach ($result[1] as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
+            if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
             }
 
             array_push($call_duration['time_labels'], $datetime);
-            array_push($call_duration['duration'], $r['Duration']);
+            array_push($call_duration['duration'], $r['Duration Outbound']);
 
-            $total_duration['duration'] += $r['Duration'];
+            $total_duration['duration'] += $r['Duration Outbound'];
         }
 
-        foreach ($prev_result[1] as $r) {
-            $prev_total_duration += $r['Duration'];
-        }
-
-        if ($prev_total_duration == 0) {
-            $total_duration['pct_change'] = null;
-            $total_duration['pct_sign'] = null;
-            $total_duration['ntc'] = 1;  // nothing to compare
-        } else {
-            $total_duration['pct_change'] = ($total_duration['duration'] - $prev_total_duration) / $prev_total_duration * 100;
-            $total_duration['pct_sign'] = $total_duration['pct_change'] < 0 ? 0 : 1;
-            $total_duration['pct_change'] = round(abs($total_duration['pct_change']));
-            $ntc = 0;
-        }
-
-        return [
-            'call_volume' => [
-                'call_volume' => $call_volume,
-                'call_duration' => $call_duration,
-                'total_duration' => $total_duration,
-            ],
-        ];
+        return ['call_volume' => [
+            'call_volume' => $call_volume,
+            'call_duration' => $call_duration,
+            'total_duration' => $total_duration,
+        ]];
     }
 
     /**
@@ -316,6 +298,7 @@ class AdminOutboundDashController extends Controller
             'Count' = COUNT(DR.CallStatus),
             'Duration' = SUM(DR.Duration)
             FROM [$db].[dbo].[DialingResults] DR
+            WITH (INDEX(IX_GroupDateDurationStatusType))
             WHERE DR.CallType NOT IN (1,7,8,11)
             AND DR.CallStatus NOT IN (
                 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
@@ -352,31 +335,48 @@ class AdminOutboundDashController extends Controller
 
         list($bycamp, $byrep) = $this->runMultiSql($sql, $bind);
 
-        $reps = [];
-        $counts = [];
-        $durations_secs = [];
-        $durations_hms = [];
+        $call_count_table = deleteColumn($bycamp, 'Duration');
+        $talk_time_table = deleteColumn($bycamp, 'Count');
 
-        foreach ($byrep as &$rec) {
-            $rec['AvgDurationSecs'] = $rec['Duration'] / $rec['Count'];
-            $rec['AvgCallsPerHour'] = round($rec['Count'] / ($rec['Duration'] / 60 / 60), 2);
+        // sort arrays
+        usort($call_count_table, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        usort($talk_time_table, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
 
-            $reps[] = $rec['Rep'];
-            $counts[] = $rec['Count'];
-            $durations_hms[] = secondsToHms($rec['Duration']);
-            $durations_secs[] = $rec['Duration'];
+        // take top 10
+        $call_count_table = array_slice($call_count_table, 0, 10);
+        $talk_time_table = array_slice($talk_time_table, 0, 10);
+
+        // Sort byrep array by Counts first
+        usort($byrep, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        $call_count_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $call_count_counts = array_column(array_slice($byrep, 0, 10), 'Count');
+
+        // Now Sort byrep array by Duration
+        usort($byrep, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
+        $talk_time_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $talk_time_secs = array_column(array_slice($byrep, 0, 10), 'Duration');
+
+        $talk_time_hms = [];
+        foreach ($talk_time_secs as $d) {
+            $talk_time_hms[] = secondsToHms($d);
         }
 
-        $table_count = deleteColumn($bycamp, 'Duration');
-        $table_duration = deleteColumn($bycamp, 'Count');
-
         return [
-            'reps' => $reps,
-            'counts' => $counts,
-            'durations_secs' => $durations_secs,
-            'durations_hms' => $durations_hms,
-            'table_count' => $table_count,
-            'table_duration' => $table_duration,
+            'call_count_table' => $call_count_table,
+            'call_count_reps' => $call_count_reps,
+            'call_count_counts' => $call_count_counts,
+            'talk_time_table' => $talk_time_table,
+            'talk_time_reps' => $talk_time_reps,
+            'talk_time_secs' => $talk_time_secs,
+            'talk_time_hms' => $talk_time_hms,
         ];
     }
 
@@ -401,7 +401,8 @@ class AdminOutboundDashController extends Controller
 
         $bind = [];
 
-        $sql = "SELECT Campaign,
+        $sql = "SELECT TOP 10
+        Campaign,
 		'CallCount' = SUM(Cnt)
 		FROM (";
         $union = '';
@@ -667,10 +668,11 @@ class AdminOutboundDashController extends Controller
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
 
-        SELECT Rep, Campaign, SUM(Contacts) as Contacts, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
+        SELECT TOP 10
+        Rep, Campaign, SUM(Contacts) as Contacts, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
         GROUP BY Rep, Campaign
-        ORDER BY Rep, Campaign;
+        ORDER BY SUM(Sales) DESC;
 
         SELECT Rep, SUM(Contacts) as Contacts, SUM(Sales) as Sales, SUM(Duration) as [Talk Secs]
         FROM #temp
@@ -695,19 +697,21 @@ class AdminOutboundDashController extends Controller
         $result = $this->getAvgWaitTime();
 
         $summ = [];
-        $camps = [];
+        $reps = [];
         $avgs = [];
         $table = [];
 
         foreach ($result as $rec) {
-            if (!isset($summ[$rec['Campaign']])) {
-                $summ[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
-                $summ[$rec['Campaign']]['Duration'] = 0;
-                $summ[$rec['Campaign']]['Cnt'] = 0;
+            if (!isset($summ[$rec['Rep']])) {
+                $summ[$rec['Rep']]['Rep'] = $rec['Rep'];
+                $summ[$rec['Rep']]['Duration'] = 0;
+                $summ[$rec['Rep']]['Cnt'] = 0;
+                $summ[$rec['Rep']]['Avg'] = 0;
             }
 
-            $summ[$rec['Campaign']]['Duration'] += $rec['Duration'];
-            $summ[$rec['Campaign']]['Cnt'] += $rec['Cnt'];
+            $summ[$rec['Rep']]['Duration'] += $rec['Duration'];
+            $summ[$rec['Rep']]['Cnt'] += $rec['Cnt'];
+            $summ[$rec['Rep']]['Avg'] = round($summ[$rec['Rep']]['Duration'] / $summ[$rec['Rep']]['Cnt']);
 
             $table[] = [
                 'Rep' => $rec['Rep'],
@@ -716,14 +720,40 @@ class AdminOutboundDashController extends Controller
             ];
         }
 
+        // sort summ aray by avg desc
+        usort($summ, function ($a, $b) {
+            return $b['Avg'] <=> $a['Avg'];
+        });
+
+        // sort table by avg desc
+        usort($table, function ($a, $b) {
+            return $b['Avg'] <=> $a['Avg'];
+        });
+
+        // remove any with zero avgs
+        foreach ($summ as $i => $rec) {
+            if ($rec['Avg'] == 0) {
+                unset($summ[$i]);
+            }
+        }
+        foreach ($table as $i => $rec) {
+            if ($rec['Avg'] == 0) {
+                unset($table[$i]);
+            }
+        }
+
+        // take top 10 from each
+        $summ = array_slice($summ, 0, 10);
+        $table = array_slice($table, 0, 10);
+
         foreach ($summ as $rec) {
-            $camps[] = $rec['Campaign'];
-            $avgs[] = round($rec['Duration'] / $rec['Cnt']);
+            $reps[] = $rec['Rep'];
+            $avgs[] = $rec['Avg'];
         }
 
         return [
             'Table' => $table,
-            'Campaigns' => $camps,
+            'Reps' => $reps,
             'Avgs' => $avgs,
         ];
     }
@@ -765,8 +795,7 @@ class AdminOutboundDashController extends Controller
 
             $union = 'UNION ALL';
         }
-        $sql .= ") tmp GROUP BY Rep, Campaign
-            ORDER BY Rep, Campaign";
+        $sql .= ") tmp GROUP BY Rep, Campaign";
 
         return $this->runSql($sql, $bind);
     }

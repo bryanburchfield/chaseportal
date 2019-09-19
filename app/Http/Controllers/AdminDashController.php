@@ -49,7 +49,6 @@ class AdminDashController extends Controller
 
         $result = $this->getCallVolume();
         $prev_result = $this->getCallVolume(true);
-
         $details = $this->filterDetails();
 
         // cards to be populated
@@ -109,10 +108,10 @@ class AdminDashController extends Controller
         $prev_talk_duration = 0;
 
         foreach ($result[0] as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
+            if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -170,13 +169,13 @@ class AdminDashController extends Controller
         }
 
         foreach ($result[1] as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
+            if (!strpos($r['Time'], ':')) {
                 $datetime = date("n/j/y", strtotime($r['Time']));
+            } else {
+                $datetime = $r['Time'];
             }
 
-            array_push($call_duration['time_labels'], $datetime);
+            array_push($call_duration['time_labels'], $r['Time']);
             array_push($call_duration['duration'], $r['Duration']);
         }
 
@@ -242,7 +241,7 @@ class AdminDashController extends Controller
             $talk_time['ntc'] = 0;
         }
 
-        $new_result = [
+        return ['call_volume' => [
             'calls_offered' => $calls_offered,
             'calls_answered' => $calls_answered,
             'calls_missed' => $calls_missed,
@@ -250,9 +249,8 @@ class AdminDashController extends Controller
             'call_volume' => $call_volume,
             'call_duration' => $call_duration,
             'details' => $details,
-        ];
-
-        return ['call_volume' => $new_result];
+            'missed_call_details' => [],
+        ]];
     }
 
     /**
@@ -450,16 +448,16 @@ class AdminDashController extends Controller
         $average_hold_time = $this->getAvgHoldTime();
         $prev_average_hold_time = $this->getAvgHoldTime(true);
 
-        if ($average_hold_time['Total Calls'] == 0) {
+        if ($average_hold_time[0]['Total Calls'] == 0) {
             $avg_hold_time = 0;
         } else {
-            $avg_hold_time = $average_hold_time['Hold Secs'] / $average_hold_time['Total Calls'];
+            $avg_hold_time = $average_hold_time[0]['Hold Secs'] / $average_hold_time[0]['Total Calls'];
         }
 
-        if ($prev_average_hold_time['Total Calls'] == 0) {
+        if ($prev_average_hold_time[0]['Total Calls'] == 0) {
             $prev_avg_hold_time = 0;
         } else {
-            $prev_avg_hold_time = $prev_average_hold_time['Hold Secs'] / $prev_average_hold_time['Total Calls'];
+            $prev_avg_hold_time = $prev_average_hold_time[0]['Hold Secs'] / $prev_average_hold_time[0]['Total Calls'];
         }
 
         if ($prev_avg_hold_time == 0) {
@@ -473,20 +471,18 @@ class AdminDashController extends Controller
             $ntc = 0;
         }
 
-        $avg_hold_time = secondsToHms($avg_hold_time);
-        $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
+        $avg_hold_time = Helpers::secondsToHms($avg_hold_time);
+        $total_hold_time = Helpers::secondsToHms($average_hold_time[0]['Hold Secs']);
 
-        return [
-            'average_hold_time' => [
-                'min_hold_time' => $average_hold_time['MinHold'],
-                'max_hold_time' => $average_hold_time['MaxHold'],
-                'avg_hold_time' => $avg_hold_time,
-                'total_hold_time' => $total_hold_time,
-                'pct_change' => $pctdiff,
-                'pct_sign' => $pctsign,
-                'ntc' => $ntc,
-            ],
-        ];
+        return ['average_hold_time' => [
+            'min_hold_time' => $average_hold_time[0]['MinHold'],
+            'max_hold_time' => $average_hold_time[0]['MaxHold'],
+            'avg_hold_time' => $avg_hold_time,
+            'total_hold_time' => $total_hold_time,
+            'pct_change' => $pctdiff,
+            'pct_sign' => $pctsign,
+            'ntc' => $ntc,
+        ]];
     }
 
     /**
@@ -623,8 +619,9 @@ class AdminDashController extends Controller
             'Calls' = COUNT(CallStatus),
             'Abandoned' = SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END)
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE CallType = 1
-            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+            WHERE CallType IN (1,11)
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND DR.Duration > 0
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i";
@@ -673,14 +670,12 @@ class AdminDashController extends Controller
             $ntc = 0;
         }
 
-        return [
-            'total_sales' => [
-                'sales' => $total_sales,
-                'pct_change' => $pct_change,
-                'pct_sign' => $pct_sign,
-                'ntc' => $ntc,
-            ],
-        ];
+        return ['total_sales' => [
+            'sales' => $total_sales,
+            'pct_change' => $pct_change,
+            'pct_sign' => $pct_sign,
+            'ntc' => $ntc,
+        ]];
     }
 
     /**
@@ -784,9 +779,10 @@ class AdminDashController extends Controller
             'Count' = COUNT(DR.CallStatus),
             'Duration' = SUM(DR.Duration)
             FROM [$db].[dbo].[DialingResults] DR
+            WITH (INDEX(IX_Billing))
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
-            AND Duration <> 0
+            AND Duration > 0
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
@@ -815,28 +811,48 @@ class AdminDashController extends Controller
         $bycamp = $result[0];
         $byrep = $result[1];
 
-        $reps = [];
-        $counts = [];
-        $durations_secs = [];
-        $durations_hms = [];
+        $call_count_table = deleteColumn($bycamp, 'Duration');
+        $call_time_table = deleteColumn($bycamp, 'Count');
 
-        foreach ($byrep as $rec) {
-            $reps[] = $rec['Rep'];
-            $counts[] = $rec['Count'];
-            $durations_hms[] = secondsToHms($rec['Duration']);
-            $durations_secs[] = $rec['Duration'];
+        // sort arrays
+        usort($call_count_table, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        usort($call_time_table, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
+
+        // take top 10
+        $call_count_table = array_slice($call_count_table, 0, 10);
+        $call_time_table = array_slice($call_time_table, 0, 10);
+
+        // Sort byrep array by Counts first
+        usort($byrep, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        $call_count_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $call_count_counts = array_column(array_slice($byrep, 0, 10), 'Count');
+
+        // Now Sort byrep array by Duration
+        usort($byrep, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
+        $call_time_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $call_time_secs = array_column(array_slice($byrep, 0, 10), 'Duration');
+
+        $call_time_hms = [];
+        foreach ($call_time_secs as $d) {
+            $call_time_hms[] = secondsToHms($d);
         }
 
-        $table_count = deleteColumn($bycamp, 'Duration');
-        $table_duration = deleteColumn($bycamp, 'Count');
-
         return [
-            'reps' => $reps,
-            'counts' => $counts,
-            'durations_secs' => $durations_secs,
-            'durations_hms' => $durations_hms,
-            'table_count' => $table_count,
-            'table_duration' => $table_duration,
+            'call_count_table' => $call_count_table,
+            'call_count_reps' => $call_count_reps,
+            'call_count_counts' => $call_count_counts,
+            'call_time_table' => $call_time_table,
+            'call_time_reps' => $call_time_reps,
+            'call_time_secs' => $call_time_secs,
+            'call_time_hms' => $call_time_hms,
         ];
     }
 
@@ -890,25 +906,22 @@ class AdminDashController extends Controller
 
         $result = $this->runSql($sql, $bind);
 
-        // now turn results into something usable
         $handled = $result[0]['Handled'];
         $count = $result[0]['Count'];
 
-        if ($count > 0) {
-            $pct = $handled / $count * 100;
+        if (!$count) {
+            $svc_level = 100;
         } else {
-            $pct = 0;
+            $svc_level = $handled / $count * 100;
         }
 
-        $rem = 100 - $pct;
-        $pct = round($pct);
+        $rem = 100 - $svc_level;
+        $svc_level = round($svc_level);
 
-        return [
-            'service_level' => [
-                'service_level' => $pct,
-                'remainder' => $rem,
-            ],
-        ];
+        return ['service_level' => [
+            'service_level' => $svc_level,
+            'remainder' => $rem
+        ]];
     }
 
     /**
@@ -945,6 +958,7 @@ class AdminDashController extends Controller
             $sql .= " $union SELECT Rep, Campaign,
             Duration, CallStatus
             FROM [$db].[dbo].[DialingResults] DR
+            WITH (INDEX(IX_Billing))
             WHERE CallType IN (1,11)
             AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
             AND HoldTime >= 0
@@ -963,11 +977,12 @@ class AdminDashController extends Controller
         $sql .= ") tmp
         GROUP BY Rep, Campaign;
 
-        SELECT Rep, Campaign, 'AverageHandleTime' = [Duration]/[Count]
+        SELECT TOP 10 Rep, Campaign,
+        'AverageHandleTime' = [Duration]/[Count]
         FROM #temp
-        ORDER BY Rep, Campaign;
+        ORDER BY 'AverageHandleTime' DESC;
 
-        SELECT Rep,
+        SELECT TOP 10 Rep,
         'AverageHandleTime' = SUM([Duration])/SUM([Count])
         FROM #temp
         GROUP BY Rep
@@ -981,17 +996,32 @@ class AdminDashController extends Controller
         $reps = [];
         $handletime = [];
         $handletimesecs = [];
+
         foreach ($byrep as $rec) {
             $reps[] = $rec['Rep'];
             $handletimesecs[] = $rec['AverageHandleTime'];
             $handletime[] = secondsToHms($rec['AverageHandleTime']);
         }
 
+        $max_handle_time = max($handletimesecs);
+
+        if (count($handletimesecs)) {
+            $handletimesecs = array_filter($handletimesecs);
+            $total_avg_handle_time = round(array_sum($handletimesecs) / count($handletimesecs));
+        }
+
+        $total_avg_handle_time = round($total_avg_handle_time / $max_handle_time * 100);
+
+        $remainder = 100 - $total_avg_handle_time;
+
         return [
             'reps' => $reps,
             'avg_handletime' => $handletime,
             'avg_handletimesecs' => $handletimesecs,
             'table' => $bycamp,
+            'max_handle_time' => $max_handle_time,
+            'total_avg_handle_time' => $total_avg_handle_time,
+            'remainder' => $remainder
         ];
     }
 }

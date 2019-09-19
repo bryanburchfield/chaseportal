@@ -298,7 +298,7 @@ class KpiController extends Controller
      */
     private function dateRange()
     {
-        $tz = Auth::user()->tz;
+        $tz = Auth::user()->getIanaTz();
 
         $fromDate = localToUtc(date('Y-m-d'), $tz);
         $toDate = new \DateTime();
