@@ -20,6 +20,14 @@ $(document).ready(function(){
 		.multiselect('selectAll', false)
     	.multiselect('updateButtonText');
 
+    // preselect all dbs on reports
+    $('#database_select')
+    	.multiselect({nonSelectedText: 'Select Report',})
+		.multiselect('selectAll', false)
+    	.multiselect('updateButtonText');
+
+    	
+
     //// remove select all option
     $('#lead_inventory #campaign_select').next('div').find('ul li.multiselect-item.multiselect-all').remove();
 	
