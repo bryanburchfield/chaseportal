@@ -79,9 +79,9 @@ class AdminOutboundDashController extends Controller
             }
 
             array_push($call_volume['time_labels'], $datetime);
-            array_push($call_volume['total_calls'], $r['Outbound Count']);
-            array_push($call_volume['handled'], $r['Outbound Handled Calls']);
-            array_push($call_volume['dropped'], $r['Outbound Dropped Calls']);
+            array_push($call_volume['total_calls'], $r['Count']);
+            array_push($call_volume['handled'], $r['Handled Calls']);
+            array_push($call_volume['dropped'], $r['Dropped Calls']);
         }
 
         foreach ($result[1] as $r) {
@@ -92,9 +92,9 @@ class AdminOutboundDashController extends Controller
             }
 
             array_push($call_duration['time_labels'], $datetime);
-            array_push($call_duration['duration'], $r['Duration Outbound']);
+            array_push($call_duration['duration'], $r['Duration']);
 
-            $total_duration['duration'] += $r['Duration Outbound'];
+            $total_duration['duration'] += $r['Duration'];
         }
 
         return ['call_volume' => [

@@ -448,6 +448,20 @@ class AdminDashController extends Controller
         $average_hold_time = $this->getAvgHoldTime();
         $prev_average_hold_time = $this->getAvgHoldTime(true);
 
+        if (empty($average_hold_time[0]['Total Calls'])) {
+            $average_hold_time[0]['Total Calls'] = 0;
+            $average_hold_time[0]['Hold Secs'] = 0;
+            $average_hold_time[0]['MinHold'] = 0;
+            $average_hold_time[0]['MaxHold'] = 0;
+        }
+
+        if (empty($prev_average_hold_time[0]['Total Calls'])) {
+            $prev_average_hold_time[0]['Total Calls'] = 0;
+            $prev_average_hold_time[0]['Hold Secs'] = 0;
+            $prev_average_hold_time[0]['MinHold'] = 0;
+            $prev_average_hold_time[0]['MaxHold'] = 0;
+        }
+
         if ($average_hold_time[0]['Total Calls'] == 0) {
             $avg_hold_time = 0;
         } else {
@@ -471,8 +485,8 @@ class AdminDashController extends Controller
             $ntc = 0;
         }
 
-        $avg_hold_time = Helpers::secondsToHms($avg_hold_time);
-        $total_hold_time = Helpers::secondsToHms($average_hold_time[0]['Hold Secs']);
+        $avg_hold_time = secondsToHms($avg_hold_time);
+        $total_hold_time = secondsToHms($average_hold_time[0]['Hold Secs']);
 
         return ['average_hold_time' => [
             'min_hold_time' => $average_hold_time[0]['MinHold'],
