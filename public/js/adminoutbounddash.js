@@ -58,7 +58,6 @@ var Dashboard = {
 
     init:function(){
         $.when(this.agent_talk_time(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.total_calls(this.datefilter, this.chartColors), this.sales_per_hour_per_rep(this.datefilter, this.chartColors), this.calls_by_campaign(this.datefilter, this.chartColors), this.avg_wait_time(this.datefilter, this.chartColors)).done(function(){
-            console.log('init');
             Dashboard.resizeCardTableDivs();
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -91,7 +90,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/adminoutbounddashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -265,7 +264,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/adminoutbounddashboard/sales_per_hour_per_rep',
             type: 'POST',
             dataType: 'json',
@@ -328,13 +327,12 @@ var Dashboard = {
     avg_wait_time:function(datefilter, chartColors){
         var campaign = $('.filter_campaign li ').text();
         return $.ajax({
-            'async': true,
+            async: true,
             url:'/adminoutbounddashboard/avg_wait_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 $('#avg_wait_time tbody').empty();
                 if(response.Avgs.length){
@@ -411,7 +409,7 @@ var Dashboard = {
         });
         
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/adminoutbounddashboard/calls_by_campaign',
             type: 'POST',
             dataType: 'json',
@@ -498,13 +496,12 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/adminoutbounddashboard/agent_talk_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 Master.flip_card(response.call_count_reps.length, '#agent_call_count');
                                 Master.flip_card(response.talk_time_reps.length, '#agent_talk_time');
@@ -590,8 +587,6 @@ var Dashboard = {
                                 ////    AGENT TALK TIME GRAPH
                                 ///////////////////////////////////////////////////////////
 
-                                console.log(response);
-
                                 var response_length = response.talk_time_reps.length;
                                 var chart_colors_array= Master.return_chart_colors_hash(response.talk_time_reps);
 
@@ -657,13 +652,12 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/adminoutbounddashboard/total_calls',
             type: 'POST',
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 $('.filter_time_camp_dets p .selected_campaign').html(response.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.details[1]);
@@ -696,7 +690,6 @@ var Dashboard = {
     resizeCardTableDivs:function(){
 
         var height_dt = $('.get_hgt .front').innerHeight();
-        console.log(height_dt);
         $('.set_hgt').css({'height':height_dt });
         $('.set_hgt canvas').css({'height':height_dt -50, 'padding-bottom' : 20 });
     },

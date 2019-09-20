@@ -110,7 +110,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -340,7 +340,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
@@ -489,7 +489,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
@@ -538,7 +538,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/service_level',
             type: 'POST',
             dataType: 'json',
@@ -607,7 +607,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
@@ -637,7 +637,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
@@ -735,7 +735,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            'async': false,
+            async: true,
             url: '/admindashboard/total_sales',
             type: 'POST',
             dataType: 'json',

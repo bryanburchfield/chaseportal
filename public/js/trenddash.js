@@ -67,13 +67,13 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
-        this.get_avg_handle_time(this.datefilter, this.chartColors);
-        this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2);
-        this.service_level(this.datefilter, this.chartColors);
-        this.call_volume_type();
+        $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.get_avg_handle_time(this.datefilter, this.chartColors), this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2), this.service_level(this.datefilter, this.chartColors), this.call_volume_type()).done(function(){
+            
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
+                
         Dashboard.eventHandlers();
-        Master.check_reload();
     },
 
     eventHandlers:function(){
@@ -88,13 +88,11 @@ var Dashboard = {
     },
 
     refresh:function(datefilter, campaign, inorout){
-        Dashboard.agent_calltime(datefilter, Dashboard.chartColors, Dashboard.chartColors2);
-        Dashboard.service_level(datefilter, Dashboard.chartColors);
-        Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
-        Dashboard.get_avg_handle_time(datefilter, Dashboard.chartColors);
-        Dashboard.call_volume_type();
-        Master.check_reload();
-        $('.preloader').fadeOut('slow');
+        $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.get_avg_handle_time(this.datefilter, this.chartColors), this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2), this.service_level(this.datefilter, this.chartColors), this.call_volume_type()).done(function(){
+            
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
     },
 
     get_call_volume:function(inorout, datefilter, chartColors){
@@ -108,8 +106,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/trenddashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -254,8 +252,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/trenddashboard/call_details',
             type: 'POST',
             dataType: 'json',
@@ -514,8 +512,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/trenddashboard/agent_calltime',
             type: 'POST',
             dataType: 'json',
@@ -635,8 +633,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/trenddashboard/service_level',
             type: 'POST',
             dataType: 'json',
@@ -758,7 +756,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
+            async: true,
             url: '/trenddashboard/update_filters',
             type: 'POST',
             dataType: 'json',

@@ -66,11 +66,13 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        this.get_call_volume(this.inorout, this.datefilter, this.chartColors);
-        this.call_details(this.datefilter, this.chartColors);
-        this.sales_per_campaign(this.datefilter, this.chartColors);
+        $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.call_details(this.datefilter, this.chartColors), this.sales_per_campaign(this.datefilter, this.chartColors, this.chartColors2)).done(function(){
+            
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
+                
         Dashboard.eventHandlers();
-        Master.check_reload();
     },
 
     eventHandlers:function(){
@@ -98,12 +100,11 @@ var Dashboard = {
     },
 
     refresh:function(datefilter, campaign, inorout){
-        Dashboard.get_call_volume(inorout, datefilter, Dashboard.chartColors);
-        Dashboard.sales_per_campaign(datefilter, Dashboard.chartColors);
-        Dashboard.call_details(datefilter, Dashboard.chartColors);
-        Dashboard.resizeDivs();
-        Master.check_reload();
-        $('.preloader').fadeOut('slow');
+        $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.call_details(this.datefilter, this.chartColors), this.sales_per_campaign(this.datefilter, this.chartColors, this.chartColors2)).done(function(){
+            
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
     },
 
     call_details:function(datefilter, chartColors){
@@ -113,8 +114,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/leaderdashboard/call_details',
             type: 'POST',
             dataType: 'json',
@@ -207,8 +208,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/leaderdashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -319,8 +320,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
-            'async': false,
+        return $.ajax({
+            async: true,
             url: '/leaderdashboard/sales_per_campaign',
             type: 'POST',
             dataType: 'json',
@@ -418,7 +419,8 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
+            async: true,
             url: '/leaderdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
