@@ -10,11 +10,11 @@
                 
                 @foreach ($db_list as $db)
 
-                    {{-- $checked = $db['selected'] ? $checked = "checked" : $checked= " "; --}}
+                    @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">
-                    <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox"  '. $checked .' value="'.$db['database'].'" name="databases"><span>{{$db}}</span></label>
+                    <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['database']}}" name="databases"><span>{{$db['name']}}</span></label>
                     </div>
-                @endforeach                                                                                    
+                @endforeach                                                                         
 
                 <input type="hidden" class="page_type" value="{{$page['type']}}">
                 <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> Submit</button>                                        
