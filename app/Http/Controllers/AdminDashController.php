@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Log;
 
 class AdminDashController extends Controller
 {
@@ -45,6 +46,8 @@ class AdminDashController extends Controller
      */
     public function callVolume(Request $request)
     {
+        Log::debug('start call vol');
+
         $this->getSession($request);
 
         $result = $this->getCallVolume();
@@ -240,6 +243,8 @@ class AdminDashController extends Controller
             $talk_time['pct_change'] = round(abs($talk_time['pct_change']));
             $talk_time['ntc'] = 0;
         }
+
+        Log::debug('done call vol');
 
         return ['call_volume' => [
             'calls_offered' => $calls_offered,
@@ -443,6 +448,7 @@ class AdminDashController extends Controller
      */
     public function avgHoldTime(Request $request)
     {
+        Log::debug('start avg hold');
         $this->getSession($request);
 
         $average_hold_time = $this->getAvgHoldTime();
@@ -488,6 +494,7 @@ class AdminDashController extends Controller
         $avg_hold_time = secondsToHms($avg_hold_time);
         $total_hold_time = secondsToHms($average_hold_time[0]['Hold Secs']);
 
+        Log::debug('done avg hold');
         return ['average_hold_time' => [
             'min_hold_time' => $average_hold_time[0]['MinHold'],
             'max_hold_time' => $average_hold_time[0]['MaxHold'],
@@ -566,6 +573,7 @@ class AdminDashController extends Controller
      */
     public function abandonRate(Request $request)
     {
+        Log::debug('start abandon');
         $this->getSession($request);
 
         $abandon_rate = $this->getAbandonRate();
@@ -586,6 +594,8 @@ class AdminDashController extends Controller
         }
 
         $abandon_pct = round($abandon_pct, 2) . '%';
+
+        Log::debug('done abandon');
 
         return [
             'abandon_rate' => [
@@ -665,6 +675,7 @@ class AdminDashController extends Controller
      */
     public function totalSales(Request $request)
     {
+        Log::debug('start tot sales');
         $this->getSession($request);
 
         $result = $this->getTotalSales();
@@ -683,6 +694,7 @@ class AdminDashController extends Controller
             $pct_change = round(abs($pct_change), 0);
             $ntc = 0;
         }
+        Log::debug('done tot sales');
 
         return ['total_sales' => [
             'sales' => $total_sales,
@@ -700,7 +712,6 @@ class AdminDashController extends Controller
      */
     public function getTotalSales($prev = false)
     {
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -765,8 +776,59 @@ class AdminDashController extends Controller
      */
     public function agentCallCount(Request $request)
     {
+        Log::debug('start agt call count');
         $this->getSession($request);
 
+        list($bycamp, $byrep) = $this->getAgentCallCount();
+
+        $call_count_table = deleteColumn($bycamp, 'Duration');
+        $call_time_table = deleteColumn($bycamp, 'Count');
+
+        // sort arrays
+        usort($call_count_table, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        usort($call_time_table, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
+
+        // take top 10
+        $call_count_table = array_slice($call_count_table, 0, 10);
+        $call_time_table = array_slice($call_time_table, 0, 10);
+
+        // Sort byrep array by Counts first
+        usort($byrep, function ($a, $b) {
+            return $b['Count'] <=> $a['Count'];
+        });
+        $call_count_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $call_count_counts = array_column(array_slice($byrep, 0, 10), 'Count');
+
+        // Now Sort byrep array by Duration
+        usort($byrep, function ($a, $b) {
+            return $b['Duration'] <=> $a['Duration'];
+        });
+        $call_time_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
+        $call_time_secs = array_column(array_slice($byrep, 0, 10), 'Duration');
+
+        $call_time_hms = [];
+        foreach ($call_time_secs as $d) {
+            $call_time_hms[] = secondsToHms($d);
+        }
+        Log::debug('done agt call count');
+
+        return [
+            'call_count_table' => $call_count_table,
+            'call_count_reps' => $call_count_reps,
+            'call_count_counts' => $call_count_counts,
+            'call_time_table' => $call_time_table,
+            'call_time_reps' => $call_time_reps,
+            'call_time_secs' => $call_time_secs,
+            'call_time_hms' => $call_time_hms,
+        ];
+    }
+
+    public function getAgentCallCount()
+    {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -820,54 +882,7 @@ class AdminDashController extends Controller
         GROUP BY Rep
         ORDER by Rep";
 
-        $result = $this->runMultiSql($sql, $bind);
-
-        $bycamp = $result[0];
-        $byrep = $result[1];
-
-        $call_count_table = deleteColumn($bycamp, 'Duration');
-        $call_time_table = deleteColumn($bycamp, 'Count');
-
-        // sort arrays
-        usort($call_count_table, function ($a, $b) {
-            return $b['Count'] <=> $a['Count'];
-        });
-        usort($call_time_table, function ($a, $b) {
-            return $b['Duration'] <=> $a['Duration'];
-        });
-
-        // take top 10
-        $call_count_table = array_slice($call_count_table, 0, 10);
-        $call_time_table = array_slice($call_time_table, 0, 10);
-
-        // Sort byrep array by Counts first
-        usort($byrep, function ($a, $b) {
-            return $b['Count'] <=> $a['Count'];
-        });
-        $call_count_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
-        $call_count_counts = array_column(array_slice($byrep, 0, 10), 'Count');
-
-        // Now Sort byrep array by Duration
-        usort($byrep, function ($a, $b) {
-            return $b['Duration'] <=> $a['Duration'];
-        });
-        $call_time_reps = array_column(array_slice($byrep, 0, 10), 'Rep');
-        $call_time_secs = array_column(array_slice($byrep, 0, 10), 'Duration');
-
-        $call_time_hms = [];
-        foreach ($call_time_secs as $d) {
-            $call_time_hms[] = secondsToHms($d);
-        }
-
-        return [
-            'call_count_table' => $call_count_table,
-            'call_count_reps' => $call_count_reps,
-            'call_count_counts' => $call_count_counts,
-            'call_time_table' => $call_time_table,
-            'call_time_reps' => $call_time_reps,
-            'call_time_secs' => $call_time_secs,
-            'call_time_hms' => $call_time_hms,
-        ];
+        return $this->runMultiSql($sql, $bind);
     }
 
     /**
@@ -878,8 +893,33 @@ class AdminDashController extends Controller
      */
     public function serviceLevel(Request $request)
     {
+        Log::debug('start svc lvl');
         $this->getSession($request);
 
+        $result = $this->getServiceLevel($request);
+
+        $handled = $result[0]['Handled'];
+        $count = $result[0]['Count'];
+
+        if (!$count) {
+            $svc_level = 100;
+        } else {
+            $svc_level = $handled / $count * 100;
+        }
+
+        $rem = 100 - $svc_level;
+        $svc_level = round($svc_level);
+
+        Log::debug('done svc lvl');
+
+        return ['service_level' => [
+            'service_level' => $svc_level,
+            'remainder' => $rem
+        ]];
+    }
+
+    public function getServiceLevel(Request $request)
+    {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
         $answerSecs = $request->answer_secs ?? 20;
@@ -918,24 +958,7 @@ class AdminDashController extends Controller
         }
         $sql .= ") tmp";
 
-        $result = $this->runSql($sql, $bind);
-
-        $handled = $result[0]['Handled'];
-        $count = $result[0]['Count'];
-
-        if (!$count) {
-            $svc_level = 100;
-        } else {
-            $svc_level = $handled / $count * 100;
-        }
-
-        $rem = 100 - $svc_level;
-        $svc_level = round($svc_level);
-
-        return ['service_level' => [
-            'service_level' => $svc_level,
-            'remainder' => $rem
-        ]];
+        return $this->runSql($sql, $bind);
     }
 
     /**
@@ -946,8 +969,49 @@ class AdminDashController extends Controller
      */
     public function repAvgHandleTime(Request $request)
     {
+        Log::debug('start rep avg handle');
         $this->getSession($request);
 
+        list($bycamp, $byrep) = $this->getRepAvgHandleTime();
+
+        $reps = [];
+        $handletime = [];
+        $handletimesecs = [];
+
+        foreach ($byrep as $rec) {
+            $reps[] = $rec['Rep'];
+            $handletimesecs[] = $rec['AverageHandleTime'];
+            $handletime[] = secondsToHms($rec['AverageHandleTime']);
+        }
+
+        $max_handle_time = count($handletimesecs) ? max($handletimesecs) : 0;
+
+        if (count($handletimesecs)) {
+            $handletimesecs = array_filter($handletimesecs);
+            $total_avg_handle_time = round(array_sum($handletimesecs) / count($handletimesecs));
+        } else {
+            $total_avg_handle_time = 0;
+        }
+
+        $total_avg_handle_time = $max_handle_time != 0 ? round($total_avg_handle_time / $max_handle_time * 100) : 0;
+
+        $remainder = 100 - $total_avg_handle_time;
+
+        Log::debug('done rep avg handle');
+
+        return [
+            'reps' => $reps,
+            'avg_handletime' => $handletime,
+            'avg_handletimesecs' => $handletimesecs,
+            'table' => $bycamp,
+            'max_handle_time' => $max_handle_time,
+            'total_avg_handle_time' => $total_avg_handle_time,
+            'remainder' => $remainder
+        ];
+    }
+
+    private function getRepAvgHandleTime()
+    {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
@@ -1002,42 +1066,6 @@ class AdminDashController extends Controller
         GROUP BY Rep
         ORDER BY 'AverageHandleTime' DESC";
 
-        $result = $this->runMultiSql($sql, $bind);
-
-        $bycamp = $result[0];
-        $byrep = $result[1];
-
-        $reps = [];
-        $handletime = [];
-        $handletimesecs = [];
-
-        foreach ($byrep as $rec) {
-            $reps[] = $rec['Rep'];
-            $handletimesecs[] = $rec['AverageHandleTime'];
-            $handletime[] = secondsToHms($rec['AverageHandleTime']);
-        }
-
-        $max_handle_time = count($handletimesecs) ? max($handletimesecs) : 0;
-
-        if (count($handletimesecs)) {
-            $handletimesecs = array_filter($handletimesecs);
-            $total_avg_handle_time = round(array_sum($handletimesecs) / count($handletimesecs));
-        } else {
-            $total_avg_handle_time = 0;
-        }
-
-        $total_avg_handle_time = $max_handle_time != 0 ? round($total_avg_handle_time / $max_handle_time * 100) : 0;
-
-        $remainder = 100 - $total_avg_handle_time;
-
-        return [
-            'reps' => $reps,
-            'avg_handletime' => $handletime,
-            'avg_handletimesecs' => $handletimesecs,
-            'table' => $bycamp,
-            'max_handle_time' => $max_handle_time,
-            'total_avg_handle_time' => $total_avg_handle_time,
-            'remainder' => $remainder
-        ];
+        return $this->runMultiSql($sql, $bind);
     }
 }
