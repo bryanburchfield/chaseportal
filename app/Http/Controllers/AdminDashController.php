@@ -1005,18 +1005,18 @@ class AdminDashController extends Controller
 
         $max_handle_time = count($handletimesecs) ? max($handletimesecs) : 0;
 
-        if(count($handletimesecs)) {
+        if (count($handletimesecs)) {
             $handletimesecs = array_filter($handletimesecs);
-            $total_avg_handle_time = round(array_sum($handletimesecs)/count($handletimesecs));
+            $total_avg_handle_time = round(array_sum($handletimesecs) / count($handletimesecs));
         } else {
             $total_avg_handle_time = 0;
         }
 
-        $total_avg_handle_time = $max_handle_time != 0 ? round($total_avg_handle_time / $max_handle_time * 100 ) : 0;
+        $total_avg_handle_time = $max_handle_time != 0 ? round($total_avg_handle_time / $max_handle_time * 100) : 0;
 
         $remainder = 100 - $total_avg_handle_time;
 
-        $return = [
+        return [
             'reps' => $reps,
             'avg_handletime' => $handletime,
             'avg_handletimesecs' => $handletimesecs,
