@@ -193,8 +193,39 @@
     </div>
 
     <div class="row">
+
         <div class="col-sm-3 card_table_prt ">
-            <div class="card flipping_card card-3b">
+            <div class="card flipping_card card-3b mt70_mb ">
+
+                <div class="front ">
+                    <div class="card_table2">
+                        <h1 class="title">Avg Wait Time</h1>
+                        <div class="flip_card_btn"></div>
+                        <table class="table table-condensed table-striped" id="avg_wait_time">
+                            <thead>
+                                <tr>
+                                    <th>Rep</th>
+                                    <th>Campaign</th>
+                                    <th>Avg Wait</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="back">
+                    <h1 class="title">Avg Wait Time</h1>
+                    <div class="flip_card_btn"></div>
+                    <div class="inbound inandout mb0">
+                        <canvas id="avg_wait_time_graph"></canvas>
+                    </div>
+                </div>
+            </div><!-- end card -->
+        </div><!-- end column -->
+
+        <div class="col-sm-9 card_table_prt ">
+            <div class="card flipping_card card-3b set_hgt">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Agent Talk Time</h1>
@@ -223,34 +254,5 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-9 card_table_prt ">
-            <div class="card flipping_card card-3b mt70_mb set_hgt">
-
-                <div class="front ">
-                    <div class="card_table2">
-                        <h1 class="title">Avg Wait Time</h1>
-                        <div class="flip_card_btn"></div>
-                        <table class="table table-condensed table-striped" id="avg_wait_time">
-                            <thead>
-                                <tr>
-                                    <th>Rep</th>
-                                    <th>Campaign</th>
-                                    <th>Avg Wait</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="back">
-                    <h1 class="title">Avg Wait Time</h1>
-                    <div class="flip_card_btn"></div>
-                    <div class="inbound inandout mb0">
-                        <canvas id="avg_wait_time_graph"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card -->
-        </div><!-- end column -->
     </div>
 </div>

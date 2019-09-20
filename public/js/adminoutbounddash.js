@@ -57,14 +57,13 @@ var Dashboard = {
     total_dials:'',
 
     init:function(){
-        this.get_call_volume(this.datefilter, this.chartColors);
-        this.agent_talk_time(this.datefilter, this.chartColors);
-        this.total_calls(this.datefilter);
-        this.sales_per_hour_per_rep(this.datefilter, this.chartColors);
-        this.calls_by_campaign(this.datefilter, this.chartColors);
+        $.when(this.agent_talk_time(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.total_calls(this.datefilter, this.chartColors), this.sales_per_hour_per_rep(this.datefilter, this.chartColors), this.calls_by_campaign(this.datefilter, this.chartColors), this.avg_wait_time(this.datefilter, this.chartColors)).done(function(){
+            console.log('init');
+            Dashboard.resizeCardTableDivs();
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
         
-        Dashboard.resizeCardTableDivs();
-        Master.check_reload();
         $('#avg_wait_time').closest('.flipping_card').flip(true);
     },
 
@@ -75,14 +74,11 @@ var Dashboard = {
 
     refresh:function(datefilter, campaign){
 
-        Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
-        Dashboard.agent_talk_time(datefilter, Dashboard.chartColors);
-        Dashboard.total_calls(datefilter);
-        Dashboard.sales_per_hour_per_rep(datefilter, Dashboard.chartColors);
-        Dashboard.calls_by_campaign(datefilter, Dashboard.chartColors);
-        Dashboard.resizeCardTableDivs();
-        Master.check_reload();
-        $('.preloader').fadeOut('slow');
+        $.when(this.agent_talk_time(datefilter, this.chartColors), this.get_call_volume(datefilter, this.chartColors), this.total_calls(datefilter, this.chartColors), this.sales_per_hour_per_rep(datefilter, this.chartColors), this.calls_by_campaign(datefilter, this.chartColors), this.avg_wait_time(datefilter, this.chartColors)).done(function(){
+            $('.preloader').fadeOut('slow');
+            Dashboard.resizeCardTableDivs();
+            Master.check_reload();
+        });
     },
 
     // call volume, call duration line graphs & total minutes
@@ -94,7 +90,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/call_volume',
             type: 'POST',
@@ -268,7 +264,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/sales_per_hour_per_rep',
             type: 'POST',
@@ -327,14 +323,19 @@ var Dashboard = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+    },
 
-        $.ajax({
+    avg_wait_time:function(datefilter, chartColors){
+        var campaign = $('.filter_campaign li ').text();
+        return $.ajax({
+            'async': true,
             url:'/adminoutbounddashboard/avg_wait_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
                 console.log(response);
+
                 $('#avg_wait_time tbody').empty();
                 if(response.Avgs.length){
                     var trs;
@@ -350,14 +351,17 @@ var Dashboard = {
                 ////    AVG WAIT TIME GRAPH
                 ///////////////////////////////////////////////////////////
 
-                var response_length = response.Campaigns.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
+                if(window.avg_wait_time_chart != undefined){
+                    window.avg_wait_time_chart.destroy();
+                }
+
+                var response_length = response.Reps.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.Reps);
 
                 var avg_wait_time_data = {
                     datasets: [{
                         data: response.Avgs,
-                        backgroundColor: chart_colors_array,
-                        
+                        backgroundColor: chart_colors_array
                     }],
                     elements: {
                             center: {
@@ -366,35 +370,29 @@ var Dashboard = {
                             sidePadding: 15 
                         }
                     },
-                    labels: response.Campaigns
+                    labels: response.Reps
                 };
-
+                
                 var avg_wait_time_options={
                     responsive: true,
-                    maintainAspectRatio: false,
                     legend: {
                         display: false
                     },
-                    
                     tooltips: {
                         enabled: true,
                         mode: 'single',
                         callbacks: {
                             label: function(tooltipItem, data) { 
-                                return  Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
+                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
                             }
                         }
                     }
                 }
 
                 var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
-                
-                if(window.avg_wait_time_chart != undefined){
-                    window.avg_wait_time_chart.destroy();
-                }
 
                 window.avg_wait_time_chart = new Chart(ctx,{
-                    type: 'horizontalBar',
+                    type: 'doughnut',
                     data: avg_wait_time_data,
                     options: avg_wait_time_options
                 });
@@ -412,7 +410,7 @@ var Dashboard = {
             }
         });
         
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/calls_by_campaign',
             type: 'POST',
@@ -499,145 +497,149 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/agent_talk_time',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
+                console.log(response);
 
-                Master.flip_card(response.reps.length, '#agent_call_count');
-                Master.flip_card(response.reps.length, '#agent_talk_time');
+                Master.flip_card(response.call_count_reps.length, '#agent_call_count');
+                                Master.flip_card(response.talk_time_reps.length, '#agent_talk_time');
 
-                $('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph').parent().find('.no_data').remove();
-                
-                $('#agent_call_count tbody').empty();
-                $('#agent_talk_time tbody').empty();
+                                $('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph').parent().find('.no_data').remove();
+                                
+                                $('#agent_call_count tbody').empty();
+                                $('#agent_talk_time tbody').empty();
 
-                if(response.table_count.length){
-                    
-                    let trs;
-                    for (var i = 0; i < response.table_count.length; i++) {
-                        if(response.table_count[i].Rep != ''){
-                            trs+='<tr><td>'+response.table_count[i].Rep+'</td><td>'+response.table_count[i].Campaign+'</td><td>'+Master.formatNumber(response.table_count[i].Count)+'</td></tr>';
-                        }
-                    }
-                    $('#agent_call_count tbody').append(trs);
-                }else{
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
-                }
+                                if(response.call_count_table.length){
+                                    
+                                    let trs;
+                                    for (var i = 0; i < response.call_count_table.length; i++) {
+                                        if(response.call_count_table[i].Rep != ''){
+                                            trs+='<tr><td>'+response.call_count_table[i].Rep+'</td><td>'+response.call_count_table[i].Campaign+'</td><td>'+Master.formatNumber(response.call_count_table[i].Count)+'</td></tr>';
+                                        }
+                                    }
+                                    $('#agent_call_count tbody').append(trs);
+                                }else{
+                                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
+                                }
 
-                if(response.table_duration.length){
-                    $('#agent_talk_time').show();
-                    let trs;
-                    for (var i = 0; i < response.table_duration.length; i++) {
-                        if(response.table_duration[i].Rep != ''){
-                            trs+='<tr><td>'+response.table_duration[i].Rep+'</td><td>'+response.table_duration[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.table_duration[i].Duration)+'</td></tr>';
-                        }
-                    }
-                    $('#agent_talk_time tbody').append(trs);
-                }else{
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
-                }
-                
+                                if(response.talk_time_table.length){
+                                    $('#agent_talk_time').show();
+                                    let trs;
+                                    for (var i = 0; i < response.talk_time_table.length; i++) {
+                                        if(response.talk_time_table[i].Rep != ''){
+                                            trs+='<tr><td>'+response.talk_time_table[i].Rep+'</td><td>'+response.talk_time_table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.talk_time_table[i].Duration)+'</td></tr>';
+                                        }
+                                    }
+                                    $('#agent_talk_time tbody').append(trs);
+                                }else{
+                                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
+                                }
+                                
 
-                ////////////////////////////////////////////////////////////
-                ////    AGENT CALL COUNT GRAPH
-                ///////////////////////////////////////////////////////////
+                                ////////////////////////////////////////////////////////////
+                                ////    AGENT CALL COUNT GRAPH
+                                ///////////////////////////////////////////////////////////
 
-                if(window.agent_call_count_chart != undefined){
-                    window.agent_call_count_chart.destroy();
-                }
+                                if(window.agent_call_count_chart != undefined){
+                                    window.agent_call_count_chart.destroy();
+                                }
 
-                var response_length = response.reps.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
+                                var response_length = response.call_count_reps.length;
+                                var chart_colors_array= Master.return_chart_colors_hash(response.call_count_reps);
 
-                var agent_call_count_data = {
-                    datasets: [{
-                        data: response.counts,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.reps
-                };
+                                var agent_call_count_data = {
+                                    datasets: [{
+                                        data: response.call_count_counts,
+                                        backgroundColor: chart_colors_array
+                                    }],
+                                    elements: {
+                                            center: {
+                                            color: '#203047', 
+                                            fontStyle: 'Segoeui', 
+                                            sidePadding: 15 
+                                        }
+                                    },
+                                    labels: response.call_count_reps
+                                };
 
-                var agent_call_count_options={
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        enabled: true,
-                       
-                    }
-                }
+                                var agent_call_count_options={
+                                    responsive: true,
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltips: {
+                                        enabled: true,
+                                       
+                                    }
+                                }
 
-                var ctx = document.getElementById('agent_call_count_graph').getContext('2d');
+                                var ctx = document.getElementById('agent_call_count_graph').getContext('2d');
 
-                window.agent_call_count_chart = new Chart(ctx,{
-                    type: 'doughnut',
-                    data: agent_call_count_data,
-                    options: agent_call_count_options
-                });
+                                window.agent_call_count_chart = new Chart(ctx,{
+                                    type: 'doughnut',
+                                    data: agent_call_count_data,
+                                    options: agent_call_count_options
+                                });
 
-                ////////////////////////////////////////////////////////////
-                ////    AGENT TALK TIME GRAPH
-                ///////////////////////////////////////////////////////////
+                                ////////////////////////////////////////////////////////////
+                                ////    AGENT TALK TIME GRAPH
+                                ///////////////////////////////////////////////////////////
 
-                if(window.agent_talk_time_chart != undefined){
-                    window.agent_talk_time_chart.destroy();
-                }
+                                console.log(response);
 
-                var response_length = response.reps.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
+                                var response_length = response.talk_time_reps.length;
+                                var chart_colors_array= Master.return_chart_colors_hash(response.talk_time_reps);
 
-                var agent_talk_time_data = {
-                    datasets: [{
-                        data: response.durations_secs,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.reps
-                };
-                
-                var agent_talk_time_options={
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        enabled: true,
-                        mode: 'single',
-                        callbacks: {
-                            label: function(tooltipItem, data) { 
-                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
-                            }
-                        }
-                    }
-                }
+                                var agent_talk_time_data = {
+                                    datasets: [{
+                                        data: response.talk_time_secs,
+                                        backgroundColor: chart_colors_array,
+                                        
+                                    }],
+                                    elements: {
+                                            center: {
+                                            color: '#203047', 
+                                            fontStyle: 'Segoeui', 
+                                            sidePadding: 15 
+                                        }
+                                    },
+                                    labels: response.talk_time_reps
+                                };
 
-                var ctx = document.getElementById('agent_talk_time_graph').getContext('2d');
+                                var agent_talk_time_options={
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    legend: {
+                                        display: false
+                                    },
+                                    
+                                    tooltips: {
+                                        enabled: true,
+                                        mode: 'single',
+                                        callbacks: {
+                                            label: function(tooltipItem, data) { 
+                                                return  Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
+                                            }
+                                        }
+                                    }
+                                }
 
-                window.agent_talk_time_chart = new Chart(ctx,{
-                    type: 'doughnut',
-                    data: agent_talk_time_data,
-                    options: agent_talk_time_options
-                });
+                                var ctx = document.getElementById('agent_talk_time_graph').getContext('2d');
+                                
+                                if(window.agent_talk_time_chart != undefined){
+                                    window.agent_talk_time_chart.destroy();
+                                }
+
+                                window.agent_talk_time_chart = new Chart(ctx,{
+                                    type: 'horizontalBar',
+                                    data: agent_talk_time_data,
+                                    options: agent_talk_time_options
+                                });
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#agent_talk_time');
@@ -654,7 +656,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/adminoutbounddashboard/total_calls',
             type: 'POST',

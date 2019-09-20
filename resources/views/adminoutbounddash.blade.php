@@ -32,8 +32,8 @@
                 <div class="card set_hgt2 flipping_card card-3b" id="total_contacts_card">
                     <div class="front p20">
                         <div class="flip_card_btn"></div> 
-                        <div class="trend_indicator up">
-                            <div class="trend_arrow arrow_up"></div>
+                        <div class="trend_indicator down">
+                            <div class="trend_arrow arrow_down"></div>
                             <span></span>
                         </div>
                         <h1 class="title">Total Contacts</h1>
@@ -42,8 +42,8 @@
 
                     <div class="back">
                         <div class="flip_card_btn"></div>
-                        <div class="trend_indicator up">
-                            <div class="trend_arrow arrow_up"></div>
+                        <div class="trend_indicator down">
+                            <div class="trend_arrow arrow_down"></div>
                             <span></span>
                         </div>
 
@@ -136,7 +136,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-3 card_table_prt set_hgt">
+            <div class="col-sm-3 card_table_prt get_hgt">
                 <div class="card flipping_card card-3b">
                     <div class="front ">
                         <div class="card_table">
@@ -166,8 +166,8 @@
                 </div><!-- end card -->
             </div><!-- end column -->
 
-            <div class="col-sm-3 card_table_prt get_hgt">
-                <div class="card flipping_card card-3b mt70_mb">
+            <div class="col-sm-9 card_table_prt ">
+                <div class="card flipping_card card-3b mt70_mb set_hgt">
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">Calls by Campaign</h1>
@@ -182,9 +182,8 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
                     </div>
-
+                        
                     <div class="back">
                         <h1 class="title">Calls by Campaign</h1>
                         <div class="flip_card_btn"></div>
@@ -194,9 +193,43 @@
                     </div>
                 </div><!-- end card -->
             </div><!-- end column -->
+        
+        </div>
 
-            <div class="col-sm-3 card_table_prt set_hgt">
-                <div class="card flipping_card card-3b">
+        <div class="row">
+
+            <div class="col-sm-3 card_table_prt ">
+                <div class="card flipping_card card-3b mt70_mb ">
+
+                    <div class="front ">
+                        <div class="card_table2">
+                            <h1 class="title">Avg Wait Time</h1>
+                            <div class="flip_card_btn"></div>
+                            <table class="table table-condensed table-striped" id="avg_wait_time">
+                                <thead>
+                                    <tr>
+                                        <th>Rep</th>
+                                        <th>Campaign</th>
+                                        <th>Avg Wait</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="back">
+                        <h1 class="title">Avg Wait Time</h1>
+                        <div class="flip_card_btn"></div>
+                        <div class="inbound inandout mb0">
+                            <canvas id="avg_wait_time_graph"></canvas>
+                        </div>
+                    </div>
+                </div><!-- end card -->
+            </div><!-- end column -->
+
+            <div class="col-sm-9 card_table_prt ">
+                <div class="card flipping_card card-3b set_hgt">
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">Agent Talk Time</h1>
@@ -225,37 +258,7 @@
                 </div><!-- end card -->
             </div><!-- end column -->
 
-            <div class="col-sm-3 card_table_prt set_hgt">
-                <div class="card flipping_card card-3b mt70_mb">
-
-                    <div class="front ">
-                        <div class="card_table2">
-                            <h1 class="title">Avg Wait Time</h1>
-                            <div class="flip_card_btn"></div>
-                            <table class="table table-condensed table-striped" id="avg_wait_time">
-                                <thead>
-                                    <tr>
-                                        <th>Rep</th>
-                                        <th>Campaign</th>
-                                        <th>Avg Wait</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="back">
-                        <div class="flip_card_btn"></div>
-                        <div class="inbound inandout mb0">
-                            <h1 class="title">Avg Wait Time</h1>
-                            <canvas id="avg_wait_time_graph"></canvas>
-                        </div>
-                    </div>
-                </div><!-- end card -->
-            </div><!-- end column -->
-        
-        </div>
+        </div>    
     </div>
 </div>
 

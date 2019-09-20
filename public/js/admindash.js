@@ -346,28 +346,28 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, dateFilter:datefilter},
             success:function(response){
-                return false;
-                Master.flip_card(response.reps.length, '#agent_call_count');
-                Master.flip_card(response.reps.length, '#agent_calltime');
+
+                Master.flip_card(response.call_count_reps.length, '#agent_call_count');
+                Master.flip_card(response.call_time_reps.length, '#agent_calltime');
                 $('#agent_call_count tbody, #agent_calltime tbody').empty();  
                 $('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph').parent().find('.no_data').remove();
 
 
-                if(response.reps.length){
+                if(response.call_count_reps.length){
                     /// agent call count table
                     var call_count_trs;
-                    for (var i = 0; i < response.table_count.length; i++) {
-                        if(response.table_count[i].Rep != ''){
-                            call_count_trs+='<tr><td>'+response.table_count[i].Rep+'</td><td>'+response.table_count[i].Campaign+'</td><td>'+response.table_count[i].Count+'</td></tr>';
+                    for (var i = 0; i < response.call_count_table.length; i++) {
+                        if(response.call_count_table[i].Rep != ''){
+                            call_count_trs+='<tr><td>'+response.call_count_table[i].Rep+'</td><td>'+response.call_count_table[i].Campaign+'</td><td>'+response.call_count_table[i].Count+'</td></tr>';
                         }
                     }
                     $('#agent_call_count tbody').append(call_count_trs);
 
                     /// agent call time table
                     var calltime_trs;
-                    for (var i = 0; i < response.table_duration.length; i++) {
-                        if(response.table_duration[i].Rep != ''){
-                            calltime_trs+='<tr><td>'+response.table_duration[i].Rep+'</td><td>'+response.table_duration[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.table_duration[i].Duration)+'</td></tr>';
+                    for (var i = 0; i < response.call_time_table.length; i++) {
+                        if(response.call_time_table[i].Rep != ''){
+                            calltime_trs+='<tr><td>'+response.call_time_table[i].Rep+'</td><td>'+response.call_time_table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.call_time_table[i].Duration)+'</td></tr>';
                         }
                     }
                     $('#agent_calltime tbody').append(calltime_trs);
@@ -386,13 +386,13 @@ var Dashboard = {
                 if(window.agent_call_count_chart != undefined){
                     window.agent_call_count_chart.destroy();
                 }
-
-                var response_length = response.counts.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
+                
+                var response_length = response.call_count_counts.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.call_count_reps);
 
                 var agent_call_count_data = {
                     datasets: [{
-                        data: response.counts,
+                        data: response.call_count_counts,
                         backgroundColor: chart_colors_array,
                         label: 'Dataset 1'
                     }],
@@ -403,7 +403,7 @@ var Dashboard = {
                             sidePadding: 15 
                         }
                     },
-                    labels: response.reps
+                    labels: response.call_count_reps
                 };
 
                 var agent_call_count_options={
@@ -431,12 +431,12 @@ var Dashboard = {
                     window.agent_calltime_chart.destroy();
                 }
 
-                var response_length = response.durations_secs.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
+                var response_length = response.call_time_hms.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.call_time_reps);
 
                 var agent_calltime_data = {
                     datasets: [{
-                        data: response.durations_secs,
+                        data: response.call_time_secs,
                         backgroundColor: chart_colors_array,
                         label: 'Dataset 1'
                     }],
@@ -447,7 +447,7 @@ var Dashboard = {
                             sidePadding: 15 
                         }
                     },
-                    labels: response.reps
+                    labels: response.call_time_reps
                 };
 
                 var agent_calltime_options={
