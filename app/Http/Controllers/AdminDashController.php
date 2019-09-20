@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
-use Illuminate\Support\Facades\Log;
 
 class AdminDashController extends Controller
 {
@@ -46,8 +45,6 @@ class AdminDashController extends Controller
      */
     public function callVolume(Request $request)
     {
-        Log::debug('start call vol');
-
         $this->getSession($request);
 
         $result = $this->getCallVolume();
@@ -243,8 +240,6 @@ class AdminDashController extends Controller
             $talk_time['pct_change'] = round(abs($talk_time['pct_change']));
             $talk_time['ntc'] = 0;
         }
-
-        Log::debug('done call vol');
 
         return ['call_volume' => [
             'calls_offered' => $calls_offered,
@@ -448,7 +443,6 @@ class AdminDashController extends Controller
      */
     public function avgHoldTime(Request $request)
     {
-        Log::debug('start avg hold');
         $this->getSession($request);
 
         $average_hold_time = $this->getAvgHoldTime();
@@ -494,7 +488,6 @@ class AdminDashController extends Controller
         $avg_hold_time = secondsToHms($avg_hold_time);
         $total_hold_time = secondsToHms($average_hold_time[0]['Hold Secs']);
 
-        Log::debug('done avg hold');
         return ['average_hold_time' => [
             'min_hold_time' => $average_hold_time[0]['MinHold'],
             'max_hold_time' => $average_hold_time[0]['MaxHold'],
@@ -573,7 +566,6 @@ class AdminDashController extends Controller
      */
     public function abandonRate(Request $request)
     {
-        Log::debug('start abandon');
         $this->getSession($request);
 
         $abandon_rate = $this->getAbandonRate();
@@ -594,8 +586,6 @@ class AdminDashController extends Controller
         }
 
         $abandon_pct = round($abandon_pct, 2) . '%';
-
-        Log::debug('done abandon');
 
         return [
             'abandon_rate' => [
@@ -675,7 +665,6 @@ class AdminDashController extends Controller
      */
     public function totalSales(Request $request)
     {
-        Log::debug('start tot sales');
         $this->getSession($request);
 
         $result = $this->getTotalSales();
@@ -694,7 +683,6 @@ class AdminDashController extends Controller
             $pct_change = round(abs($pct_change), 0);
             $ntc = 0;
         }
-        Log::debug('done tot sales');
 
         return ['total_sales' => [
             'sales' => $total_sales,
@@ -776,7 +764,6 @@ class AdminDashController extends Controller
      */
     public function agentCallCount(Request $request)
     {
-        Log::debug('start agt call count');
         $this->getSession($request);
 
         list($bycamp, $byrep) = $this->getAgentCallCount();
@@ -814,7 +801,6 @@ class AdminDashController extends Controller
         foreach ($call_time_secs as $d) {
             $call_time_hms[] = secondsToHms($d);
         }
-        Log::debug('done agt call count');
 
         return [
             'call_count_table' => $call_count_table,
@@ -893,10 +879,16 @@ class AdminDashController extends Controller
      */
     public function serviceLevel(Request $request)
     {
-        Log::debug('start svc lvl');
         $this->getSession($request);
 
         $result = $this->getServiceLevel($request);
+
+        if (empty($result[0]['Handled'])) {
+            $result[0]['Handled'] = 0;
+        }
+        if (empty($result[0]['Count'])) {
+            $result[0]['Count'] = 0;
+        }
 
         $handled = $result[0]['Handled'];
         $count = $result[0]['Count'];
@@ -909,8 +901,6 @@ class AdminDashController extends Controller
 
         $rem = 100 - $svc_level;
         $svc_level = round($svc_level);
-
-        Log::debug('done svc lvl');
 
         return ['service_level' => [
             'service_level' => $svc_level,
@@ -969,7 +959,6 @@ class AdminDashController extends Controller
      */
     public function repAvgHandleTime(Request $request)
     {
-        Log::debug('start rep avg handle');
         $this->getSession($request);
 
         list($bycamp, $byrep) = $this->getRepAvgHandleTime();
@@ -996,8 +985,6 @@ class AdminDashController extends Controller
         $total_avg_handle_time = $max_handle_time != 0 ? round($total_avg_handle_time / $max_handle_time * 100) : 0;
 
         $remainder = 100 - $total_avg_handle_time;
-
-        Log::debug('done rep avg handle');
 
         return [
             'reps' => $reps,
