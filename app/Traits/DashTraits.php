@@ -452,7 +452,6 @@ trait DashTraits
         $union = '';
 
         foreach ($this->databases as $i => $db) {
-
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
@@ -512,6 +511,15 @@ trait DashTraits
 
     public function getDatabaseArray()
     {
-        return Auth::user()->getDatabaseArray();
+        $dblist = [];
+        foreach (Auth::user()->getDatabaseArray() as $dbname => $db) {
+            $dblist[] = [
+                'database' => $db,
+                'name' => $dbname,
+                'selected' => in_array($db, $this->databases) ? 1 : 0,
+            ];
+        }
+
+        return $dblist;
     }
 }
