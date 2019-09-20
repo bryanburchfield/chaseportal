@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Log;
 
 class LeaderDashController extends Controller
 {
@@ -115,8 +116,7 @@ class LeaderDashController extends Controller
         $sql = "SELECT Time,
 		'Outbound' = SUM([Outbound]),
 		'Inbound' = SUM([Inbound]),
-		'Manual' = SUM([Manual]),
-		'Duration' = SUM([Duration])
+		'Manual' = SUM([Manual])
 		FROM (";
         $union = '';
         foreach ($this->databases as $i => $db) {
