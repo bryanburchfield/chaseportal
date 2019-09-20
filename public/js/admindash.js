@@ -57,16 +57,12 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        this.get_call_volume(this.datefilter, this.chartColors);
-        this.agent_call_count(this.datefilter, this.chartColors);
-        this.average_hold_time(this.datefilter);
-        this.service_level(this.datefilter);
-        this.abandon_rate(this.datefilter);
-        this.rep_avg_handletime(this.datefilter, this.chartColors);
-        this.total_sales(this.datefilter);
-        
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter)).done(function(){
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
+                
         Dashboard.eventHandlers();
-        Master.check_reload();
     },
 
     eventHandlers:function(){
@@ -96,15 +92,11 @@ var Dashboard = {
 
     refresh:function(datefilter){
 
-        Dashboard.average_hold_time(datefilter);
-        Dashboard.abandon_rate(datefilter);
-        Dashboard.agent_call_count(datefilter, Dashboard.chartColors);
-        Dashboard.service_level(datefilter);
-        Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
-        Dashboard.rep_avg_handletime(datefilter, Dashboard.chartColors);
-        Dashboard.total_sales(datefilter);
-        Master.check_reload();
-        $('.preloader').fadeOut('slow');
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter)).done(function(){
+            
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
     },
 
 
@@ -117,7 +109,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/call_volume',
             type: 'POST',
@@ -347,14 +339,14 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
             data:{campaign:campaign, dateFilter:datefilter},
             success:function(response){
-
+                return false;
                 Master.flip_card(response.reps.length, '#agent_call_count');
                 Master.flip_card(response.reps.length, '#agent_calltime');
                 $('#agent_call_count tbody, #agent_calltime tbody').empty();  
@@ -496,7 +488,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/avg_hold_time',
             type: 'POST',
@@ -545,7 +537,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/service_level',
             type: 'POST',
@@ -614,7 +606,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/abandon_rate',
             type: 'POST',
@@ -644,7 +636,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/rep_avg_handletime',
             type: 'POST',
@@ -671,32 +663,21 @@ var Dashboard = {
                     $('<p class="no_data">No data yet</p>').insertBefore('#rep_avg_handletime, #rep_avg_handletime_graph');
                 }
 
+
                 ////////////////////////////////////////////////////////////
                 ////    REP AVG HANDLE TIME GRAPH
                 ///////////////////////////////////////////////////////////
 
-                if(window.rep_avg_handletime_chart != undefined){
-                    window.rep_avg_handletime_chart.destroy();
-                }
-
-                var response_length = response.avg_handletime.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.reps);
-
+                $('.max_handle_time').text(Master.convertSecsToHrsMinsSecs(response.max_handle_time));
                 var rep_avg_handletime_data = {
                     datasets: [{
-                        data: response.avg_handletimesecs,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.reps
-                };
+                        data: [response.total_avg_handle_time, response.remainder],
+                        backgroundColor: [
+                            Dashboard.chartColors.orange,
+                            Dashboard.chartColors.grey,
+                        ]
+                    }]
+                }
 
                 var rep_avg_handletime_options={
                     responsive: true,
@@ -704,24 +685,41 @@ var Dashboard = {
                         display: false
                     },
                     tooltips: {
-                        enabled:true,
-                        mode: 'single',
-                        callbacks: {
-                            label: function(tooltipItem, data) { 
-                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
-                            }
+                        enabled:false,
+                    },
+                    elements: {
+                            center: {
+                            text: response.total_avg_handle_time+'%',
+                            color: '#203047', 
+                            fontStyle: 'Arial', 
+                            sidePadding: 15 
                         }
-                    }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    
+                    circumference: Math.PI,
+                    rotation : Math.PI,
+                    cutoutPercentage : 70, // precent
                 }
-
+                
                 var ctx = document.getElementById('rep_avg_handletime_graph').getContext('2d');
+
+                ctx.fillText('0%' ,1,1);
+                         ctx.fillText('100%',1,1);
+
+                if(window.rep_avg_handletime_chart != undefined){
+                    window.rep_avg_handletime_chart.destroy();
+                }
 
                 window.rep_avg_handletime_chart = new Chart(ctx,{
                     type: 'doughnut',
                     data: rep_avg_handletime_data,
                     options: rep_avg_handletime_options
                 });
-                
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#rep_avg_handletime');
                 Dashboard.display_error(div, textStatus, errorThrown);
@@ -736,7 +734,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             'async': false,
             url: '/admindashboard/total_sales',
             type: 'POST',
