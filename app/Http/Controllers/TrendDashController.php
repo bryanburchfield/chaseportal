@@ -52,10 +52,10 @@ class TrendDashController extends Controller
         $total_calls = 0;
 
         foreach ($result[0] as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             array_push($inbound_time_labels, $datetime);
@@ -68,10 +68,10 @@ class TrendDashController extends Controller
         }
 
         foreach ($result[1] as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             array_push($outbound_time_labels, $datetime);
