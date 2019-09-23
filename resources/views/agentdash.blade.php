@@ -9,7 +9,6 @@
 <input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
 <input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
-{{-- @includeWhen(!$isApi, 'shared.navbar') --}}
 
 <div class="container-fluid bg">
     <div class="container mt50">
