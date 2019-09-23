@@ -46,7 +46,7 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         // Add 'all' to list of call types
@@ -57,17 +57,13 @@ class CallDetails
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['group_id'] =  Auth::user()->group_id;
-        $bind['tz'] = Auth::user()->tz;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
+        $tz = Auth::user()->tz;
 
         $answered = 0;
         $unanswered = 0;
@@ -84,10 +80,12 @@ class CallDetails
         $where = '';
         // load temp tables
         if (!empty($this->params['campaigns']) && $this->params['campaigns'] != '*') {
+            $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
+            $bind['campaigns'] = $campaigns;
+
             $where .= " AND C.CampaignName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
             $sql .= "
-            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
         }
 
         if (!empty($this->params['reps']) && $this->params['reps'] != '*') {
@@ -103,37 +101,41 @@ class CallDetails
                 $unanswered = 0;
             }
 
+            $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
+            $bind['reps'] = $reps;
+
             $where .= " AND R.RepName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['reps']));
             $sql .= "
-            INSERT INTO #SelectedRep SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedRep SELECT DISTINCT [value] from dbo.SPLIT(:reps, '!#!');";
         }
         if (!empty($this->params['callstatuses']) && $this->params['callstatuses'] != '*') {
+            $callstatuses = str_replace("'", "''", implode('!#!', $this->params['callstatuses']));
+            $bind['callstatuses'] = $callstatuses;
+
             $where .= " AND CS.CallStatusName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['callstatuses']));
             $sql .= "
-            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT(:callstatuses, '!#!');";
         }
         if (!empty($this->params['callerids']) && $this->params['callerids'] != '*') {
+            $callerids = str_replace("'", "''", implode('!#!', $this->params['callerids']));
+            $bind['callerids'] = $callerids;
+
             $where .= " AND S.SourceName IS NOT NULL";
-            $list = str_replace("'", "''", implode('!#!', $this->params['callerids']));
             $sql .= "
-            INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT(:callerids, '!#!');";
         }
         if (!empty($this->params['durationfrom'])) {
-            $where .= " AND DR.Duration >= :durationfrom";
-            $bind['durationfrom'] = $this->params['durationfrom'];
+            $where .= " AND DR.Duration >= " . $this->params['durationfrom'];
         }
         if (!empty($this->params['durationto'])) {
-            $where .= " AND DR.Duration <= :durationto";
-            $bind['durationto'] = $this->params['durationto'];
+            $where .= " AND DR.Duration <= " . $this->params['durationto'];
         }
         if (!empty($this->params['showonlyterm'])) {
             $where .= " AND DR.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
         }
         if (!empty($this->params['phone']) && $this->params['phone'] != '*') {
-            $where .= " AND DR.Phone LIKE '1' + :phone + '%')";
             $bind['phone'] = $this->params['phone'];
+            $where .= " AND DR.Phone LIKE '1' + :phone + '%')";
         }
         if ($unanswered) {
             $where .= " AND DR.LeadSessionId IS NULL OR (IsNull(DR.Rep, '') = '' AND IsNull(DR.CallStatus, '') = '')";
@@ -147,12 +149,16 @@ class CallDetails
         $sql .= " SELECT * INTO #BigTable FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Phone,
-                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE :tz as Date,
+                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 CASE DR.LeadId
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')
@@ -176,9 +182,9 @@ class CallDetails
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
             LEFT JOIN #SelectedSource S on S.SourceName = DR.CallerId
-            WHERE DR.GroupId = :group_id
-            AND dr.Date >= :startdate
-            AND DR.Date <= :enddate
+            WHERE DR.GroupId = :group_id$i
+            AND dr.Date >= :startdate$i
+            AND DR.Date <= :enddate$i
             $where";
 
             $union = 'UNION ALL';

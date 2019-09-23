@@ -64,7 +64,7 @@ trait DashTraits
         $this->curdash = session('curdash', 'admindash');
 
         if (empty($this->databases)) {
-            $this->databases = array_values(Auth::user()->getDatabaseArray());
+            $this->databases = Auth::user()->getDatabaseList();
             session(['databases' => $this->databases]);
         }
 

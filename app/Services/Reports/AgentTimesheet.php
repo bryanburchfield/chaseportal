@@ -37,7 +37,7 @@ class AgentTimesheet
         $filters = [
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -52,23 +52,26 @@ class AgentTimesheet
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
         $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
+        $skills = str_replace("'", "''", implode('!#!', $this->params['skills']));
 
         $tz =  Auth::user()->tz;
-        $bind['group_id'] =  Auth::user()->group_id;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
 
         $sql = 'SET NOCOUNT ON;';
 
         if (!empty($this->params['skills'])) {
-            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $bind['skills'] = $skills;
+
             $sql .= "
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
-            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT(:skills, '!#!');";
         }
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as Date,
             AA.Campaign, AA.Rep, [Action], AA.Duration
             FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
@@ -80,18 +83,19 @@ class AgentTimesheet
             }
 
             $sql .= "
-            WHERE AA.GroupId = :group_id
-            AND AA.Date >= :startdate
-            AND AA.Date < :enddate";
+            WHERE AA.GroupId = :group_id$i
+            AND AA.Date >= :startdate$i
+            AND AA.Date < :enddate$i";
 
             if (!empty($reps)) {
-                $bind['reps'] = $reps;
-                $sql .= " AND AA.Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps, '!#!'))";
+                $bind['reps' . $i] = $reps;
+                $sql .= "
+                AND AA.Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps$i, '!#!'))";
             }
 
             $union = 'UNION';
         }
-        $sql .= " ORDER BY AA.Rep, AA.Date";
+        $sql .= " ORDER BY Rep, Date";
 
         $results = $this->processResults($sql, $bind);
 
@@ -125,7 +129,6 @@ class AgentTimesheet
         $oldrep = '';
         $i = 0;
         foreach (DB::connection('sqlsrv')->cursor(DB::raw($sql), $bind) as $rec) {
-
             if ($rec->Rep != $oldrep) {
                 $i++;
                 $oldrep = $rec->Rep;

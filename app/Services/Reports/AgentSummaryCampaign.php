@@ -48,7 +48,7 @@ class AgentSummaryCampaign
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
             'campaigns' => $this->getAllCampaigns(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -65,15 +65,6 @@ class AgentSummaryCampaign
         $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
 
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['enddate2'] = $endDate;
-        $bind['reps'] = $reps;
-        $bind['campaigns'] = $campaigns;
 
         $sql = "SET NOCOUNT ON;";
 
@@ -83,6 +74,8 @@ class AgentSummaryCampaign
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
             INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
+
+        $bind['campaigns'] = $campaigns;
 
         $sql .= "
                 CREATE TABLE #AgentSummary(
@@ -112,41 +105,47 @@ class AgentSummaryCampaign
                     SELECT DISTINCT Rep FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['reps' . $i] = $reps;
+
             $sql .= "
-                        $union SELECT [value] Rep from dbo.SPLIT(:reps, '!#!')";
+                $union SELECT [value] Rep from dbo.SPLIT(:reps$i, '!#!')";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
-                            INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = [value]
-                            INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+                    INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = [value]
+                    INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
             }
             $union = "UNION";
         }
 
         $sql .= ") tmp;
 
-                CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
-                INSERT INTO #SelectedCampaign
-                SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
+            CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
+            INSERT INTO #SelectedCampaign
+            SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
 
-                SELECT * INTO #DialingResultsStats FROM (";
+            SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT Rep, [Type], COUNT(id) as [Count]
                     FROM
                     (SELECT r.Rep,
                             IsNull((SELECT TOP 1 [Type]
                             FROM [$db].[dbo].[Dispos]
-                            WHERE Disposition=r.CallStatus AND (GroupId=:group_id1 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
+                            WHERE Disposition=r.CallStatus AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
                             r.id
                         FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
                         INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
                         INNER JOIN #SelectedCampaign sc ON sc.CampaignName = r.Campaign
-                        WHERE r.GroupId = :group_id2
-                        AND r.Date >= :startdate1
-                        AND r.Date < :enddate1
+                        WHERE r.GroupId = :group_id$i
+                        AND r.Date >= :startdate$i
+                        AND r.Date < :enddate$i
                     ) a
                     WHERE [Type] > 0
                     GROUP BY Rep, [Type]";
@@ -162,14 +161,18 @@ class AgentSummaryCampaign
                 SELECT * INTO #AgentSummaryDuration FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] =  Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT aa.Rep, [Action], SUM(Duration) as Duration, COUNT(id) as [Count]
                     FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
                     INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
                     INNER JOIN #SelectedCampaign c on c.CampaignName = aa.Campaign
-                    WHERE GroupId = :group_id3
-                    AND Date >= :startdate2
-                    AND Date < :enddate2
+                    WHERE GroupId = :group_id1$i
+                    AND Date >= :startdate1$i
+                    AND Date < :enddate1$i
                     AND Duration > 0
                     GROUP BY aa.Rep, [Action]";
 

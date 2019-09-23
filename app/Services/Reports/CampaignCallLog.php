@@ -34,7 +34,7 @@ class CampaignCallLog
         $filters = [
             'reps' => $this->getAllReps(),
             'campaigns' => $this->getAllCampaigns(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -52,31 +52,33 @@ class CampaignCallLog
         $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
 
         $tz = Auth::user()->tz;
-        $bind['group_id'] =  Auth::user()->group_id;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
 
         SELECT COUNT(DISTINCT Rep) TotReps, SUM(ManHours) ManHours FROM (";
 
+        $bind = [];
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT Rep, sum(Duration) ManHours
             FROM [$db].[dbo].[AgentActivity]
-            WHERE GroupId = :group_id
-            AND date >= :startdate
-            AND date < :enddate
+            WHERE GroupId = :group_id$i
+            AND date >= :startdate$i
+            AND date < :enddate$i
             AND [Action] NOT IN ('Paused','Login','Logout')";
 
             if (!empty($campaigns)) {
-                $bind['campaigns'] = $campaigns;
-                $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns, '!#!'))";
+                $bind['campaigns' . $i] = $campaigns;
+                $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
             }
 
             if (!empty($reps)) {
-                $bind['reps'] = $reps;
-                $sql .= " AND Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps, '!#!'))";
+                $bind['reps' . $i] = $reps;
+                $sql .= " AND Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps$i, '!#!'))";
             }
 
             $sql .= "GROUP BY Rep";
@@ -93,8 +95,13 @@ class CampaignCallLog
 
         // do this as 2nd query since it needs a yield() statement
         $sql = '';
+        $bind = [];
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] =  Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT
             CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
             DR.Rep,
@@ -103,17 +110,19 @@ class CampaignCallLog
             DI.IsSystem
             FROM [$db].[dbo].[DialingResults] DR
             LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)
-            WHERE DR.GroupId = :group_id
-            AND DR.Date >= :startdate
-            AND DR.Date < :enddate
+            WHERE DR.GroupId = :group_id1$i
+            AND DR.Date >= :startdate1$i
+            AND DR.Date < :enddate1$i
             AND DR.CallStatus not in ('','CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','CR_DISCONNECTED','SMS Delivered','SMS Received')";
 
             if (!empty($campaigns)) {
-                $sql .= " AND DR.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns, '!#!'))";
+                $bind['campaigns1' . $i] = $campaigns;
+                $sql .= " AND DR.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns1$i, '!#!'))";
             }
 
             if (!empty($reps)) {
-                $sql .= " AND DR.Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps, '!#!'))";
+                $bind['reps1' . $i] = $reps;
+                $sql .= " AND DR.Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps1$i, '!#!'))";
             }
 
             $union = 'UNION ALL';
@@ -249,17 +258,19 @@ class CampaignCallLog
             'HandledCalls' => 0,
         ];
 
-        $starttime = new \DateTime($calldetails[0]['Time']);
-        $endtime = new \DateTime($calldetails[count($calldetails) - 1]['Time']);
+        if (count($calldetails)) {
+            $starttime = new \DateTime($calldetails[0]['Time']);
+            $endtime = new \DateTime($calldetails[count($calldetails) - 1]['Time']);
 
-        while ($starttime < $endtime) {
-            $time = $starttime->format('H:i');
-            $key = array_search($time, array_column($calldetails, 'Time'));
-            if ($key === false) {
-                $detrec['Time'] = $time;
-                $calldetails[] = $detrec;
+            while ($starttime < $endtime) {
+                $time = $starttime->format('H:i');
+                $key = array_search($time, array_column($calldetails, 'Time'));
+                if ($key === false) {
+                    $detrec['Time'] = $time;
+                    $calldetails[] = $detrec;
+                }
+                $starttime->modify('+15 minutes');
             }
-            $starttime->modify('+15 minutes');
         }
 
         // sort the results again

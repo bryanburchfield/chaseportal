@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use \App\Traits\ReportExportTraits;
+use Illuminate\Support\Facades\Log;
 
 trait ReportTraits
 {
@@ -45,7 +46,7 @@ trait ReportTraits
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
 
             $sql .= "$union SELECT CampaignName AS Campaign
@@ -78,12 +79,9 @@ trait ReportTraits
 
     public function getAllInboundSources()
     {
-        $groupId = Auth::user()->group_id;
-        $bind = ['groupid' => $groupId];
-
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
 
             $sql .= "$union SELECT InboundSource, Description
@@ -107,12 +105,12 @@ trait ReportTraits
 
     public function getAllReps($rollups = false)
     {
-        $groupId = Auth::user()->group_id;
         $bind = [];
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
 
             $sql .= " $union SELECT RepName
@@ -139,7 +137,7 @@ trait ReportTraits
         $bind = [];
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
 
             $sql .= " $union SELECT SkillName
@@ -162,7 +160,7 @@ trait ReportTraits
 
         $sql = '';
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
 
             $sql .= "$union SELECT DISTINCT CallStatus
@@ -207,11 +205,12 @@ trait ReportTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
+        Log::warning('try/catch disabled in report traits');
+        // try {
+        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        // } catch (\Exception $e) {
+        //     $results = [];
+        // }
 
         if (count($results)) {
             // convert array of objects to array of arrays
@@ -412,10 +411,5 @@ trait ReportTraits
         }
 
         return $newrequest;
-    }
-
-    private function getDatabaseArray()
-    {
-        return Auth::user()->getDatabaseArray();
     }
 }

@@ -55,11 +55,7 @@ class User extends Authenticatable
     public function getDatabaseArray()
     {
         $dialers = [];
-        $dblist = (array) $this->db;
-
-        if (!empty($this->additional_dbs)) {
-            $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
-        }
+        $dblist = $this->getDatabaseList();
 
         foreach ($dblist as $db) {
             $dialer = Dialer::where('reporting_db', $db)->pluck('reporting_db', 'dialer_name')->all();
@@ -68,6 +64,17 @@ class User extends Authenticatable
             }
         }
         return $dialers;
+    }
+
+    public function getDatabaseList()
+    {
+        $dblist = (array) $this->db;
+
+        if (!empty($this->additional_dbs)) {
+            $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
+        }
+
+        return $dblist;
     }
 
     public function persistFilters(Request $request)

@@ -39,7 +39,7 @@ class AgentPauseTime
         $filters = [
             'reps' => $this->getAllReps(true),
             'skills' => $this->getAllSkills(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -49,15 +49,12 @@ class AgentPauseTime
     {
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
+        $tz =  Auth::user()->tz;
+
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
         $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
-
-        $bind['group_id'] =  Auth::user()->group_id;
-        $bind['tz'] = Auth::user()->tz;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
 
         $sql = 'SET NOCOUNT ON;';
 
@@ -69,8 +66,12 @@ class AgentPauseTime
         }
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
-            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE :tz as Date,
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
+            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as Date,
             AA.Campaign, AA.Rep, [Action], AA.Duration, AA.Details, AA.id
             FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
@@ -81,13 +82,13 @@ class AgentPauseTime
             }
 
             $sql .= "
-            WHERE AA.GroupId = :group_id
-            AND AA.Date >= :startdate
-            AND AA.Date < :enddate";
+            WHERE AA.GroupId = :group_id$i
+            AND AA.Date >= :startdate$i
+            AND AA.Date < :enddate$i";
 
             if (!empty($reps)) {
-                $bind['reps'] = $reps;
-                $sql .= " AND Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps, '!#!'))";
+                $bind['reps' . $i] = $reps;
+                $sql .= " AND Rep COLLATE SQL_Latin1_General_CP1_CS_AS IN (SELECT DISTINCT [value] FROM dbo.SPLIT(:reps$i, '!#!'))";
             }
 
             $union = 'UNION';

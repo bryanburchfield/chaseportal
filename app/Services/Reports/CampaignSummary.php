@@ -38,7 +38,7 @@ class CampaignSummary
     public function getFilters()
     {
         $filters = [
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -53,19 +53,7 @@ class CampaignSummary
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['group_id5'] =  Auth::user()->group_id;
-        $bind['group_id6'] =  Auth::user()->group_id;
-        $bind['group_id7'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['startdate2'] = $startDate;
-        $bind['startdate3'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['enddate2'] = $endDate;
-        $bind['enddate3'] = $endDate;
+        $bind['group_id'] =  Auth::user()->group_id;
 
         $sql = "SET NOCOUNT ON;
 
@@ -92,20 +80,24 @@ class CampaignSummary
     SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT
         dr.Campaign as Campaign,
         dr.CallStatus as CallStatus,
-        IsNull((SELECT TOP 1 [Type]	FROM Dispos WHERE Disposition=dr.CallStatus AND (GroupId=:group_id1 OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
+        IsNull((SELECT TOP 1 [Type]	FROM [$db].[dbo].Dispos WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
         count(dr.CallStatus) as [Count]
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-        WHERE dr.GroupId = :group_id2
-        AND dr.Date >= :startdate1
-        AND dr.Date < :enddate1
+        WHERE dr.GroupId = :group_id$i
+        AND dr.Date >= :startdate$i
+        AND dr.Date < :enddate$i
         AND dr.Campaign <> '_MANUAL_CALL_'
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-        GROUP BY dr.Campaign, dr.CallStatus";
+        GROUP BY dr.Campaign, dr.CallStatus, dr.GroupId";
 
             $union = 'UNION ALL';
         }
@@ -126,7 +118,7 @@ class CampaignSummary
     );
 
     INSERT INTO #DialingSettings(Campaign, MaxDialingAttempts)
-    SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id3, Campaign, 'MaxDialingAttempts', 0)
+    SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id, Campaign, 'MaxDialingAttempts', 0)
     FROM #CampaignSummary
     GROUP BY Campaign;
 
@@ -146,16 +138,20 @@ class CampaignSummary
           GROUP BY Campaign) a
     WHERE #CampaignSummary.Campaign = a.Campaign;";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] =  Auth::user()->group_id;
+            $bind['group_id11' . $i] =  Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
 
             $sql .= "
         UPDATE #CampaignSummary
         SET ManHours += IsNull(a.ManHours/3600, 0)
         FROM (SELECT Campaign, SUM(Duration) as ManHours
             FROM  [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)
-            WHERE aa.GroupId = :group_id4
-            AND aa.Date >= :startdate2
-            AND aa.Date < :enddate2
+            WHERE aa.GroupId = :group_id1$i
+            AND aa.Date >= :startdate1$i
+            AND aa.Date < :enddate1$i
             AND [Action] <> 'Paused'
             GROUP BY Campaign) a
         WHERE #CampaignSummary.Campaign = a.Campaign;
@@ -164,7 +160,7 @@ class CampaignSummary
         SET Total += a.Total
         FROM (SELECT l.Campaign, COUNT(l.id) as Total
             FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-            WHERE l.GroupId = :group_id5
+            WHERE l.GroupId = :group_id11$i
             GROUP BY l.Campaign) a
         WHERE #CampaignSummary.Campaign = a.Campaign;";
         }
@@ -176,12 +172,14 @@ class CampaignSummary
         SELECT Campaign, SUM(Available) as Available FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] =  Auth::user()->group_id;
+
             $sql .= " $union SELECT l.Campaign, COUNT(l.id) as Available
             FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
             LEFT JOIN #DialingSettings cs on cs.Campaign = l.Campaign
             WHERE l.WasDialed = 0
-            AND l.GroupId = :group_id6
+            AND l.GroupId = :group_id2$i
             AND (cs.MaxDialingAttempts = 0 OR l.Attempt < cs.MaxDialingAttempts)
             GROUP BY l.Campaign";
 
@@ -197,12 +195,16 @@ class CampaignSummary
     FROM ( SELECT Campaign, AVG(Attempt) as AvAttempt FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id3' . $i] =  Auth::user()->group_id;
+            $bind['startdate3' . $i] = $startDate;
+            $bind['enddate3' . $i] = $endDate;
+
             $sql .= " $union SELECT Campaign, Attempt
 				FROM [$db].[dbo].[Leads] WITH(NOLOCK)
-				WHERE GroupId = :group_id7
-				AND LastUpdated >= :startdate3
-				AND LastUpdated < :enddate3";
+				WHERE GroupId = :group_id3$i
+				AND LastUpdated >= :startdate3$i
+				AND LastUpdated < :enddate3$i";
 
             $union = 'UNION ALL';
         }

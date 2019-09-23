@@ -46,7 +46,7 @@ class AgentSummary
         $filters = [
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
@@ -62,15 +62,6 @@ class AgentSummary
         $endDate = $toDate->format('Y-m-d H:i:s');
         $reps = str_replace("'", "''", implode('!#!', $this->params['reps']));
 
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['enddate2'] = $endDate;
-        $bind['reps'] = $reps;
-
         $sql = "SET NOCOUNT ON;";
 
         if (!empty($this->params['skills'])) {
@@ -79,6 +70,8 @@ class AgentSummary
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
             INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
         }
+
+        $bind['reps'] = $reps;
 
         $sql .= "
         CREATE TABLE #AgentSummary(
@@ -110,12 +103,16 @@ class AgentSummary
         SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] =  Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT Rep, [Type], COUNT(id) as [Count]
             FROM
             (SELECT r.Rep, IsNull((SELECT TOP 1 [Type]
                     FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition=r.CallStatus AND (GroupId=:group_id1 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
+                    WHERE Disposition=r.CallStatus AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
                     r.id
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
                 INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
@@ -127,9 +124,9 @@ class AgentSummary
             }
 
             $sql .= "
-                WHERE r.GroupId = :group_id2
-                AND r.Date >= :startdate1
-                AND r.Date < :enddate1
+                WHERE r.GroupId = :group_id1$i
+                AND r.Date >= :startdate1$i
+                AND r.Date < :enddate1$i
             ) a
             WHERE [Type] > 0
             GROUP BY Rep, [Type]";
@@ -145,7 +142,11 @@ class AgentSummary
         SELECT * INTO #AgentSummaryDuration FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] =  Auth::user()->group_id;
+            $bind['startdate2' . $i] = $startDate;
+            $bind['enddate2' . $i] = $endDate;
+
             $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(aa.id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
             INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
@@ -157,9 +158,9 @@ class AgentSummary
             }
 
             $sql .= "
-            WHERE aa.GroupId = :group_id3
-            AND aa.Date >= :startdate2
-            AND aa.Date < :enddate2
+            WHERE aa.GroupId = :group_id2$i
+            AND aa.Date >= :startdate2$i
+            AND aa.Date < :enddate2$i
             AND aa.Duration > 0
             GROUP BY aa.Rep, [Action]";
 
