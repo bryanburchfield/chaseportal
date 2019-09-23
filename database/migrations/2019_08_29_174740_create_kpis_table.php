@@ -133,14 +133,15 @@ GROUP BY ROLLUP(Campaign)",
                 ],
                 [
                     'name' => 'Average Handle Time',
-                    'description' => 'Total amount of agent talk time divided by total amount of handled calls',
+                    'description' => 'Total amount of agent time divided by total amount of handled calls',
                     'query' => "SELECT 'Agent' = ISNULL(Rep, 'Total'),
 'Calls' = COUNT(id),
-'Talk-Time' = CAST(DATEADD(SECOND, SUM(Duration), 0) AS TIME(0)),
+'Call-Time' = CAST(DATEADD(SECOND, SUM(CASE WHEN Action IN ('InboundCall','Call','ManualCall') THEN Duration ELSE 0 END), 0) AS TIME(0)),
+'After-Call' = CAST(DATEADD(SECOND, SUM(CASE WHEN Action IN ('Disposition') THEN Duration ELSE 0 END), 0) AS TIME(0)),
 'Average Handle Time' = CAST(DATEADD(SECOND, (SUM(Duration) / COUNT(Rep)), 0) AS TIME (0))
 FROM AgentActivity
-WHERE Action IN ('InboundCall','Call','ManualCall')
-AND Duration <> 0
+WHERE Action IN ('InboundCall','Call','ManualCall','Disposition')
+AND Duration > 0
 AND GroupId = :groupid
 AND Date >= :fromdate
 AND Date < :todate
