@@ -14,6 +14,7 @@ trait DashTraits
     private $campaign;
     private $dateFilter;
     private $inorout;
+    private $rep;
     public $isApi;
     public $curdash;
 
@@ -28,6 +29,11 @@ trait DashTraits
         // Login that user and set session var so we know it's via API
         Auth::loginUsingId($user->id);
         session(['isApi' => 1]);
+
+        if (isset($request->rep)) {
+            $this->rep = $request->rep;
+            session(['rep' => $this->rep]);
+        }
 
         // And off we go!
         // return redirect($request->route()->action['prefix']);
@@ -62,6 +68,7 @@ trait DashTraits
         $this->inorout = session('inorout', 'inbound');
         $this->isApi = session('isApi', 0);
         $this->curdash = session('curdash', 'admindash');
+        $this->rep = session('rep', '');
 
         if (empty($this->databases)) {
             $this->databases = Auth::user()->getDatabaseList();
@@ -356,11 +363,13 @@ trait DashTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
+        Log::warning('try/catch disabled in dash traits');
+
+        // try {
+        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        // } catch (\Exception $e) {
+        //     $results = [];
+        // }
 
         if (count($results)) {
             // convert array of objects to array of arrays

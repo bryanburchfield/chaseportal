@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Campaign;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
-    private $rep;
-
     use DashTraits;
 
     /**
@@ -19,10 +17,9 @@ class AgentDashController extends Controller
      * @param Request $request
      * @return view
      */
+
     public function index(Request $request)
     {
-        $this->rep = $request->rep;
-
         $this->getSession($request);
 
         $campaigns = $this->campaignGroups();
@@ -68,10 +65,10 @@ class AgentDashController extends Controller
         $duration = 0;
 
         foreach ($result as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             $tot_outbound += $r['Outbound'];
@@ -86,13 +83,7 @@ class AgentDashController extends Controller
         }
 
         $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
-
-        if ($tot_total) {
-            $avg_handle_time = secondsToHms($duration / $tot_total);
-        } else {
-            $avg_handle_time = '00:00:00';
-        }
-        $duration = date('H:i:s', $duration);
+        $avg_handle_time = $tot_total != 0 ? round($duration / $tot_total) : 0;
 
         $new_result['time'] = $time_labels;
         $new_result['outbound'] = $outbound;
@@ -118,7 +109,7 @@ class AgentDashController extends Controller
      */
     private function getCallVolume()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->tz;
 
         $dateFilter = $this->dateFilter;
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
@@ -127,7 +118,7 @@ class AgentDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+        $byHour = $this->byHour($dateFilter);
 
         // group by date/hour or just date
         if ($byHour) {
@@ -221,30 +212,17 @@ class AgentDashController extends Controller
         $wrapup_time_array = [];
         $total_array = [];
 
-        function add_time($times)
-        {
-            $minutes = 0;
-            $seconds = 0;
-            foreach ($times as $time) {
-                list($hour, $minute, $second) = explode(':', $time);
-                $seconds += $hour * 3600;
-                $seconds += $minute * 60;
-                $seconds += $second;
-            }
-
-            $hours = floor($seconds / 3600);
-            $seconds -= $hours * 3600;
-            $minutes = floor($seconds / 60);
-            $seconds -= $minutes * 60;
-
-            return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-        }
+        $calls_time = 0;
+        $paused_time = 0;
+        $waiting_time = 0;
+        $wrapup_time = 0;
+        $total_time = 0;
 
         foreach ($result as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             array_push($calls_time_array, $r['Calls']);
@@ -252,38 +230,24 @@ class AgentDashController extends Controller
             array_push($waiting_time_array, $r['Waiting']);
             array_push($wrapup_time_array, $r['Wrap Up Time']);
 
-            $r['Calls'] = convert_to_seconds($r['Calls']);
-            $r['Paused'] = convert_to_seconds($r['Paused']);
-            $r['Waiting'] = convert_to_seconds($r['Waiting']);
-            $r['Wrap Up Time'] = convert_to_seconds($r['Wrap Up Time']);
-
             array_push($time_labels, $datetime);
             array_push($calls, $r['Calls']);
             array_push($paused, $r['Paused']);
             array_push($waiting, $r['Waiting']);
             array_push($wrapup, $r['Wrap Up Time']);
+
+            $calls_time += $r['Calls'];
+            $paused_time += $r['Paused'];
+            $waiting_time += $r['Waiting'];
+            $wrapup_time += $r['Wrap Up Time'];
+            $total_time +=
+                $r['Calls'] +
+                $r['Paused'] +
+                $r['Waiting'] +
+                $r['Wrap Up Time'];
         }
-
-        function convert_to_seconds($t)
-        {
-            $hours = substr($t, 0, 2);
-            $mins = substr($t, 3, 2);
-            $secs = substr($t, 6, 2);
-
-            $h = $hours * 3660;
-            $m = $mins * 60;
-            $s = $secs;
-            $time = $h + $m + $s;
-            return round($time / 60);
-        }
-
-        $calls_time = add_time($calls_time_array);
-        $paused_time = add_time($paused_time_array);
-        $waiting_time = add_time($waiting_time_array);
-        $wrapup_time = add_time($wrapup_time_array);
 
         $total_array = array_merge($calls_time_array, $paused_time_array, $waiting_time_array, $wrapup_time_array);
-        $total_time = add_time($total_array);
 
         return [
             'rep_performance' => [
@@ -303,7 +267,7 @@ class AgentDashController extends Controller
 
     public function getRepPerformance()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->tz;
 
         $dateFilter = $this->dateFilter;
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
@@ -333,10 +297,10 @@ class AgentDashController extends Controller
         $bind = [];
 
         $sql = "SELECT Time,
-        'Calls' = CAST(DATEADD(SECOND, SUM([Calls]), 0) AS TIME(0)),
-        'Paused' = CAST(DATEADD(SECOND, SUM([Paused]), 0) AS TIME(0)),
-        'Waiting' = CAST(DATEADD(SECOND, SUM([Waiting]), 0) AS TIME(0)),
-        'Wrap Up Time' = CAST(DATEADD(SECOND, SUM([Wrap Up Time]), 0) AS TIME(0))
+        'Calls' = SUM([Calls]),
+        'Paused' = SUM([Paused]),
+        'Waiting' = SUM([Waiting]),
+        'Wrap Up Time' = SUM([Wrap Up Time])
         FROM (";
 
         $union = '';
@@ -373,10 +337,10 @@ class AgentDashController extends Controller
             'format' => $format,
             'zeroRec' => [
                 'Time' => '',
-                'Calls' => '00:00:00',
-                'Paused' => '00:00:00',
-                'Waiting' => '00:00:00',
-                'Wrap Up Time' => '00:00:00',
+                'Calls' => '0',
+                'Paused' => '0',
+                'Waiting' => '0',
+                'Wrap Up Time' => '0',
             ],
         ];
 
