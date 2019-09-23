@@ -680,7 +680,7 @@ input[type=file] {
 .card .title {
   text-transform: uppercase;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   margin-bottom: 10px;
   color: #203047;
@@ -1646,9 +1646,14 @@ h2 {
   color: #203047;
 }
 
+.kpi_options_top {
+  border-top: 1px solid #d8d8d8;
+  padding-top: 25px;
+}
+
 .opt {
   margin-bottom: 20px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #d8d8d8;
   padding-bottom: 15px;
   overflow: auto;
 }
@@ -1682,24 +1687,26 @@ h2 {
   display: none;
 }
 
-.opt .options a {
+.opt .options a,
+.opt .options h4 {
   color: #203047;
   font-size: 16px;
   margin-bottom: 0px;
 }
 
-.opt .options a i {
+.opt .options a i,
+.opt .options h4 i {
   color: #E15B23;
 }
 
-a.expand_dets {
+a.expand_dets,
+h4.expand_dets {
   margin-bottom: 20px !important;
 }
 
 .expanded_options,
 .expanded_emails {
   clear: both;
-  display: none;
 }
 
 .expanded_options .user,
@@ -1726,7 +1733,6 @@ a.expand_dets {
 }
 
 .user_email_form {
-  display: none;
   clear: both;
 }
 

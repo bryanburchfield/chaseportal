@@ -2,7 +2,7 @@ var KPI = {
 
     init:function(){
         $('.opt a.kpi_trigger').on('click', this.toggle_kpi_info);
-        $('.expand_dets,.add_email').on('click', this.toggle_email_opts);
+        // $('.expand_dets,.add_email').on('click', this.toggle_email_opts);
         $('.switch input').on('click', this.toggle_kpi);
         $('.expanded_emails').on('click', 'a.remove_recip_glyph', this.pass_user_removemodal);
         $('#deleteRecipModal .remove_recip').on('click', this.remove_recipient);
@@ -200,7 +200,8 @@ var KPI = {
                     if(addtoall){
                         append_user=$('.expanded_emails');
                     }else{
-                        append_user=$('form#form'+kpi_id).parent('.expanded_emails');
+                        console.log(from_form);
+                        append_user=$('form#form'+kpi_id).parent().next().find('.expanded_emails');
                     }                                     
                 }
 

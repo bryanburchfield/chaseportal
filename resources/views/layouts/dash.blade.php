@@ -35,6 +35,7 @@
 
     @yield('content')
 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" type="text/javascript"></script>
@@ -57,11 +58,18 @@
 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
-    <script>
-        $(window).load(function() {
-            $('.preloader').fadeOut('slow');
-        });
 
+    @php
+        if($page['type'] !='dash'){
+                echo "<script>
+                $(window).load(function() {
+                    $('.preloader').fadeOut('slow');
+                });
+            </script>";
+        }
+    @endphp
+
+    <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');

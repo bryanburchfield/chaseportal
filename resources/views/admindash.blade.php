@@ -208,7 +208,7 @@
                 <div class="card flipping_card card-3b">
                     <div class="front">
                         <div class="card_table">
-                            <h1 class="title">Agent Call Count</h1>
+                            <h1 class="title">Top 10 Agent Call Counts</h1>
                             <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_call_count">
                                 <thead>
@@ -225,7 +225,7 @@
                     </div>
 
                     <div class="back">
-                        <h1 class="title">Agent Call Count</h1>
+                        <h1 class="title">Top 10 Agent Call Counts</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_call_count_graph"></canvas>
@@ -264,7 +264,7 @@
                 <div class="card flipping_card card-3b">
                     <div class="front ">
                         <div class="card_table">
-                            <h1 class="title">Agent Call Time</h1>
+                            <h1 class="title">Top 10 Agent Call Times</h1>
                             <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_calltime">
                                 <thead>
@@ -280,7 +280,7 @@
                     </div>
 
                     <div class="back">
-                        <h1 class="title">Agent Call Time</h1>
+                        <h1 class="title">Top 10 Agent Call Times</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_calltime_graph"></canvas>

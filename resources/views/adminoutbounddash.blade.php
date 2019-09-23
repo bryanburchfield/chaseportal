@@ -140,7 +140,7 @@
                 <div class="card flipping_card card-3b">
                     <div class="front ">
                         <div class="card_table">
-                            <h1 class="title">Agent Call Count</h1>
+                            <h1 class="title">Top 10 Agent Call Counts</h1>
                             <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_call_count">
                                 <thead>
@@ -158,7 +158,7 @@
 
                     <div class="back">
                         <div class="flip_card_btn"></div>
-                        <h1 class="title">Agent Call Count</h1>
+                        <h1 class="title">Top 10 Agent Call Counts</h1>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_call_count_graph"></canvas>
                         </div>
@@ -170,7 +170,7 @@
                 <div class="card flipping_card card-3b mt70_mb set_hgt">
                     <div class="front ">
                         <div class="card_table">
-                            <h1 class="title">Calls by Campaign</h1>
+                            <h1 class="title">Top 10 Calls by Campaign</h1>
                             <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="calls_by_campaign">
                                 <thead>
@@ -185,7 +185,7 @@
                     </div>
                         
                     <div class="back">
-                        <h1 class="title">Calls by Campaign</h1>
+                        <h1 class="title">Top 10 Calls by Campaign</h1>
                         <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="calls_by_campaign_graph"></canvas>
@@ -232,7 +232,7 @@
                 <div class="card flipping_card card-3b set_hgt">
                     <div class="front ">
                         <div class="card_table">
-                            <h1 class="title">Agent Talk Time</h1>
+                            <h1 class="title">Top 10 Agent Talk Times</h1>
                             <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_talk_time">
                                 <thead>
@@ -250,7 +250,7 @@
 
                     <div class="back">
                         <div class="flip_card_btn"></div>
-                        <h1 class="title">Agent Talk Time</h1>
+                        <h1 class="title">Top 10 Agent Talk Times</h1>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_talk_time_graph"></canvas>
                         </div>

@@ -19,11 +19,11 @@
 
             <div class="kpi">
                 <p>{{ $kpi->description }}</p>
-                <div class="row mt30 options">
-                    <div class="col-sm-6">
-                        <a href="#" class="expand_dets"><i class="glyphicon glyphicon-wrench exp"></i> Options</a>
-                        <div class="expanded_options clear">
-                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form well adjust_interval">
+                <div class="row mt30 options kpi_options_top">
+                    <div class="col-sm-4">
+                        <h4 class="expand_dets"><i class="glyphicon glyphicon-wrench exp"></i> Options</h4>
+                        <div class="expanded_options clear card">
+                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval">
                                 <div class="form-group">
                                     <label for="type">Interval</label>
                                     <select name="interval" class="form-control interval"  required>
@@ -40,35 +40,37 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
-                        <a href="#" class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</a>
+                    <div class="col-sm-4">
+                        <h4 class="expand_dets"><i class="glyphicon glyphicon-plus-sign"></i> Add Recipient</h4>
+                        
+                        <form id="form{{ $kpi->id }}" data-kpi="{{ $kpi->id }}" action="#" method="post" class="card form user_email_form well clear add_recipient" autocomplete="off">
+                            <div class="form-group prel">
+                                <input type="text" class="form-control name" name="name" placeholder="Name" required onkeyup="searchRecips(this, this.value, '{{ $kpi->id }}')" autocomplete="new-password">
+
+                                <div class="search_results"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="email" class="form-control email" name="email" placeholder="Email Address" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="tel" class="form-control phone" name="phone" placeholder="Phone Number">
+                            </div>
+
+                            <div class="checkbox mb20">
+                                <label><input type="checkbox" class="addtoall" name="addtoall" value="1">Add recipient to all KPI's?</label>
+                            </div>
+
+                            <input type="hidden" name="redirect_url" value="{{ url('/kpi') }}" class="redirect_url">
+
+                            <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
+                        {!! Form::close() !!}
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</h4>
                         <div class="expanded_emails clear">
-                            <a href="#" class="add_email"><i class="glyphicon glyphicon-plus-sign"></i> Add Recipient</a>
-                            
-                            
-                            <form id="form{{ $kpi->id }}" data-kpi="{{ $kpi->id }}" action="#" method="post" class="form user_email_form well clear add_recipient" autocomplete="off">
-                                <div class="form-group prel">
-                                    <input type="text" class="form-control name" name="name" placeholder="Name" required onkeyup="searchRecips(this, this.value, '{{ $kpi->id }}')" autocomplete="new-password">
-
-                                    <div class="search_results"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="email" class="form-control email" name="email" placeholder="Email Address" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="tel" class="form-control phone" name="phone" placeholder="Phone Number">
-                                </div>
-
-                                <div class="checkbox mb20">
-                                    <label><input type="checkbox" class="addtoall" name="addtoall" value="1">Add recipient to all KPI's?</label>
-                                </div>
-
-                                <input type="hidden" name="redirect_url" value="{{ url('/kpi') }}" class="redirect_url">
-
-                                <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
-                            {!! Form::close() !!}
 
                             @foreach($kpi->recipients as $r)
                             <div class="user clear" id="{{ $r->id }}">
