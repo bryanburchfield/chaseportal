@@ -26,6 +26,7 @@ trait ReportTraits
             'orderby' => [],
             'groupby' => null,
             'hasTotals' => false,
+            'databases' => [],
             'columns' => [],
         ];
     }
@@ -193,7 +194,7 @@ trait ReportTraits
 
     private function dateRange($start, $end)
     {
-        $tz = Auth::user()->tz;
+        $tz = Auth::user()->getIanaTz();
 
         $fromDate = localToUtc($start, $tz);
         $toDate = localToUtc($end, $tz);
@@ -245,6 +246,15 @@ trait ReportTraits
     private function checkPageFilters(Request $request)
     {
         $this->errors = new MessageBag();
+
+        if (!empty($request->databases)) {
+            if (count($request->databases) == 0) {
+                $this->errors->add('databases', "Must select at least 1 Database");
+            }
+            $this->params['databases'] = $request->databases;
+        } else {
+            $this->params['databases'] = ['defaultsomethinghere'];
+        }
 
         if (!empty($request->th_sort)) {
             $col = array_search($request->th_sort, $this->params['columns']);

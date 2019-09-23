@@ -178,7 +178,7 @@ trait DashTraits
     private function dateTimeToDay($rec)
     {
         // array_map target function
-        $rec['Time'] = (new \DateTime($rec['Time']))->format('n/j/y');
+        $rec['Time'] = (new \DateTime($rec['Time']))->format('D n/j/y');
         return $rec;
     }
 

@@ -61,16 +61,6 @@ class AgentAnalysis
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $tz =  Auth::user()->tz;
-        $bind['group_id1'] = Auth::user()->group_id;
-        $bind['group_id2'] = $bind['group_id1'];
-        $bind['group_id3'] = $bind['group_id1'];
-        $bind['group_id4'] = $bind['group_id1'];
-        $bind['startdate1'] = $startDate;
-        $bind['startdate2'] = $startDate;
-        $bind['startdate3'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['enddate2'] = $endDate;
-        $bind['enddate3'] = $endDate;
 
         $sql = "SET NOCOUNT ON;";
 
@@ -107,7 +97,11 @@ class AgentAnalysis
         SELECT * INTO #AgentActivityDuration FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT
                 CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date) as Date,
                 AA.Campaign,
@@ -124,9 +118,9 @@ class AgentAnalysis
             }
 
             $sql .= "
-            WHERE AA.GroupId = :group_id1
-            AND	AA.Date >= :startdate1
-            AND AA.Date < :enddate1
+            WHERE AA.GroupId = :group_id1$i
+            AND	AA.Date >= :startdate1$i
+            AND AA.Date < :enddate1$i
             GROUP BY CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
 
             $union = 'UNION ALL';
@@ -149,7 +143,11 @@ class AgentAnalysis
          SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] = Auth::user()->group_id;
+            $bind['startdate2' . $i] = $startDate;
+            $bind['enddate2' . $i] = $endDate;
+
             $sql .= " $union SELECT
                 CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date,
                 r.Campaign,
@@ -168,12 +166,12 @@ class AgentAnalysis
             CROSS APPLY (SELECT TOP 1 [Type]
                         FROM [$db].[dbo].[Dispos]
                         WHERE Disposition=r.CallStatus
-                        AND (GroupId=:group_id2 OR IsSystem=1)
+                        AND (GroupId=r.GroupId OR IsSystem=1)
                         AND (Campaign=r.Campaign OR Campaign='')
                         ORDER BY [Description] Desc) d
-            WHERE r.GroupId = :group_id3
-            AND r.Date >= :startdate2
-            AND r.Date < :enddate2
+            WHERE r.GroupId = :group_id2$i
+            AND r.Date >= :startdate2$i
+            AND r.Date < :enddate2$i
             AND d.Type > 0
             GROUP BY CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date), r.Campaign, r.Rep, d.Type";
 
@@ -185,7 +183,10 @@ class AgentAnalysis
         CREATE INDEX IX_CampaignRepType ON #DialingResultsStats (Campaign, Rep, [Type], Date);
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id3' . $i] = Auth::user()->group_id;
+            $bind['startdate3' . $i] = $startDate;
+            $bind['enddate3' . $i] = $endDate;
 
             $sql .= "UPDATE #AgentAnalysis
             SET CallBacks += a.CallBacks
@@ -193,10 +194,10 @@ class AgentAnalysis
                     COUNT(r.id) as CallBacks,
                     CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date
                     FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                    WHERE r.GroupId = :group_id4
+                    WHERE r.GroupId = :group_id3$i
                     AND r.CallStatus = 'AGENTSPCB'
-                    AND r.Date >= :startdate3
-                    AND r.Date < :enddate3
+                    AND r.Date >= :startdate3$i
+                    AND r.Date < :enddate3$i
                 GROUP BY r.Rep, r.Campaign, r.GroupId, CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date)) a
             WHERE #AgentAnalysis.Campaign = a.Campaign
             AND #AgentAnalysis.Rep = a.Rep

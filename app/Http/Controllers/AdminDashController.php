@@ -111,7 +111,7 @@ class AdminDashController extends Controller
             if ($this->byHour($this->dateFilter)) {
                 $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -172,7 +172,7 @@ class AdminDashController extends Controller
             if ($this->byHour($this->dateFilter)) {
                 $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             array_push($call_duration['time_labels'], $datetime);

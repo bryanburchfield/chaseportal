@@ -40,7 +40,6 @@ class AgentActivity
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -52,18 +51,19 @@ class AgentActivity
         }
 
         $tz =  Auth::user()->tz;
-        $bind['group_id'] = Auth::user()->group_id;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
-        $bind['reps1'] = $reps;
-        $bind['reps2'] = $reps;
 
         $sql = "SET NOCOUNT ON;
 
         SELECT * INTO #AgentLog FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+            $bind['reps1' . $i] = $reps;
+            $bind['reps2' . $i] = $reps;
+
             $sql .= " $union SELECT
         CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as Date,
         Campaign,
@@ -72,10 +72,10 @@ class AgentActivity
         IsNull(Details, '') as Details,
         IsNull(Rep, '') as Rep
     FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
-    WHERE GroupId = :group_id
-    AND	Date >= :startdate
-    AND Date < :enddate
-    AND	(:reps1 = '' OR Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps2, '!#!')))
+    WHERE GroupId = :group_id$i
+    AND	Date >= :startdate$i
+    AND Date < :enddate$i
+    AND	(:reps1$i = '' OR Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps2$i, '!#!')))
     AND	(([Action] = 'Paused' AND Duration > 30) OR ([Action] <> 'Paused'))";
 
             $union = 'UNION ALL';
