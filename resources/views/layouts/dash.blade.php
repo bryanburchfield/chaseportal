@@ -60,13 +60,16 @@
     <script src="/js/nav.js"></script> 
 
     @php
-        if($page['type'] !='dash'){
-                echo "<script>
-                $(window).load(function() {
-                    $('.preloader').fadeOut('slow');
-                });
-            </script>";
+        if(isset($page['type'])){
+            if($page['type'] !='dash'){
+                    echo "<script>
+                    $(window).load(function() {
+                        $('.preloader').fadeOut('slow');
+                    });
+                </script>";
+            }
         }
+        
     @endphp
 
     <script>

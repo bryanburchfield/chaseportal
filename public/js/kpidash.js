@@ -292,7 +292,9 @@ function searchRecips(el, value, kpi_id){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-            console.log(value);
+        
+        console.log(value);
+        
         $.ajax({
             'async': false,
             url: '/kpi/ajax_search',
@@ -303,6 +305,8 @@ function searchRecips(el, value, kpi_id){
                 kpi_id:kpi_id
             },
             success:function(response){
+                console.log(response);
+
                 if(response.search_recip.length){
                     $(el).next('.search_results').css({'display' : 'block'});
                 }else{
