@@ -207,7 +207,7 @@ var Dashboard = {
             },
             success:function(response){
                 console.log(response);
-                $('.total_conversions').html(response.total_sales.Sales);
+                $('.total_conversions').html(response.total_sales);
             }
         });
     },
