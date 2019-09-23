@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Log;
 
 class KpiController extends Controller
 {
@@ -235,22 +234,18 @@ class KpiController extends Controller
      * @return void
      */
     public function searchRecipients(Request $request)
-    {   
-
+    {
         $group_id = Auth::user()->group_id;
         $kpi_id = $request->kpi_id;
         $name = $request->input('query') . '%';
 
         $recipients = Recipient::where('group_id', $group_id)
             ->where('name', 'like', $name)
-            ->whereNotExists(function ($query) use ($kpi_id) {
-                $query->select(DB::raw(1))
-                    ->from('kpi_recipients')
-                    ;
-            })
+            ->whereNotIn('id', DB::table('kpi_recipients')
+                ->where('kpi_id', $kpi_id)
+                ->pluck('recipient_id'))
             ->orderBy('name')
-            ->get()
-            ->toArray();
+            ->get();
 
         return ['search_recip' => $recipients];
     }
