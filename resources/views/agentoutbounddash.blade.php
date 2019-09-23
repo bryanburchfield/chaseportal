@@ -13,6 +13,33 @@
 
 <div class="container-fluid bg">
     <div class="container mt50">
+
+        <div class="container-fluid">
+            <div class="filters col-xs-7 col-sm-6">
+                <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span>Date</span>
+                </button>
+
+                <?php
+                    $selected_date_filter = $datefilter;
+                    if (!in_array($selected_date_filter, ['today', 'yesterday', 'week', 'last_week', 'month', 'last_month'])) {
+                        $selected_date_filter = 'custom';
+                    }
+                ?>
+                <ul class="dropdown-menu date_filters">
+                    <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">Today</a></li>
+                    <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">Yesterday</a></li>
+                    <li {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">This Week</a></li>
+                    <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">Last Week</a></li>
+                    <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">This Month</a></li>
+                    <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">Last Month</a></li>
+                    <li {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">Custom</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card blue" id="total_outbound">

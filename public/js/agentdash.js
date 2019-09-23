@@ -55,12 +55,11 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
 
     init:function(){
-        this.get_call_volume(this.datefilter, this.chartColors);
-        // this.rep_performance(this.datefilter, this.chartColors);
-        // this.call_status_count(this.datefilter, this.chartColors);
-        $('.card_dropbtn').on('click', this.toggle_dotmenu);
-        Dashboard.eventHandlers();
-        this.update();
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors)).done(function(){
+            $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            Dashboard.eventHandlers();
+            Dashboard.update();
+        });        
     },
 
     toggle_dotmenu:function(){
@@ -91,7 +90,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentdashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -205,7 +204,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentdashboard/rep_performance',
             type: 'POST',
             dataType: 'json',
@@ -326,7 +325,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentdashboard/call_status_count',
             type: 'POST',
             dataType: 'json',
@@ -403,6 +402,7 @@ var Dashboard = {
         });
 
         $.ajax({
+            async: true,
             url: '/agentdashboard/update_filters',
             type: 'POST',
             dataType: 'json',

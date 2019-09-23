@@ -55,12 +55,12 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
 
     init:function(){
-        this.get_call_volume(this.datefilter, this.chartColors);
-        this.rep_performance(this.datefilter, this.chartColors);
-        this.call_status_count(this.datefilter, this.chartColors);
-        this.get_sales(this.datefilter, this.chartColors);
-        Dashboard.eventHandlers();
-        this.update();
+
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_sales(this.datefilter),).done(function(){
+            $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            Dashboard.eventHandlers();
+            this.update();
+        }); 
     },
 
     update(){
@@ -87,7 +87,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentoutbounddashboard/get_sales',
             type: 'POST',
             dataType: 'json',
@@ -111,7 +111,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentoutbounddashboard/call_volume',
             type: 'POST',
             dataType: 'json',
@@ -222,7 +222,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentoutbounddashboard/rep_performance',
             type: 'POST',
             dataType: 'json',
@@ -341,7 +341,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            'async': false,
+            async: true,
             url: '/agentoutbounddashboard/call_status_count',
             type: 'POST',
             dataType: 'json',
@@ -418,6 +418,7 @@ var Dashboard = {
         });
 
         $.ajax({
+            async: true,
             url: '/agentoutbounddashboard/update_filters',
             type: 'POST',
             dataType: 'json',
