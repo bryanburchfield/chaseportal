@@ -424,7 +424,7 @@ class AgentDashController extends Controller
 
         $result = $this->getSales();
 
-        return ['total_sales' => $result];
+        return ['total_sales' => $result[0]['Sales']];
     }
 
     public function getSales()
@@ -450,7 +450,7 @@ class AgentDashController extends Controller
             $bind['todate' . $i] = $toDate;
             $bind['rep' . $i] = $this->rep;
 
-            $sql .= " $union SELECT 'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE 0 END)
+            $sql .= " $union SELECT 'Sales' = COUNT(id)
                 FROM [$db].[dbo].[DialingResults] DR
                 CROSS APPLY (SELECT TOP 1 [Type]
                     FROM  [$db].[dbo].[Dispos] DI
@@ -463,7 +463,7 @@ class AgentDashController extends Controller
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i
                 AND DR.CallType IN (1,11)
-                AND DI.Type = '3'";
+                AND DI.Type = 3";
 
             $union = 'UNION ALL';
         }
