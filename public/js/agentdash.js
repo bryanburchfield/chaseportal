@@ -55,7 +55,7 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             Dashboard.eventHandlers();
             Dashboard.update();
@@ -100,43 +100,44 @@ var Dashboard = {
             success:function(response){
                 console.log(response);
                 // return false;
-                $('#avg_handle_time').html(response['call_volume']['avg_handle_time']);
+                $('#avg_handle_time').html(response.call_volume.avg_handle_time);
 
-                $('#total_outbound .total').html(parseInt(response['call_volume']['tot_outbound']) + parseInt(response['call_volume']['tot_manual']));
-                $('#total_inbound .total').html(response['call_volume']['tot_inbound']);
+                $('#total_outbound .total').html(parseInt(response.call_volume.tot_outbound) + parseInt(response.call_volume.tot_manual));
+                console.log(response.call_volume.tot_inbound);
+                $('#total_inbound .total').html(response.call_volume.tot_inbound);
 
-                var total_calls = parseInt(response['call_volume']['outbound']) + parseInt(response['call_volume']['inbound']) + parseInt(response['call_volume']['manual']);
+                var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
 
-                $('.inbound_total').html(response['call_volume']['tot_inbound']);
-                $('.outbound_total').html(response['call_volume']['tot_outbound']);
-                $('.manual_total').html(response['call_volume']['tot_manual']);
-                $('.total_calls').html(response['call_volume']['tot_total']);
+                $('.inbound_total').html(response.call_volume.tot_inbound);
+                $('.outbound_total').html(response.call_volume.tot_outbound);
+                $('.manual_total').html(response.call_volume.tot_manual);
+                $('.total_calls').html(response.call_volume.tot_total);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
                 
                 var call_volume = {
 
-                    labels: response['call_volume']['time'],
+                    labels: response.call_volume.time,
                     datasets: [{
                         label: 'Inbound',
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
-                        data: response['call_volume']['inbound'],
+                        data: response.call_volume.inbound,
                         yAxisID: 'y-axis-1',
                     },{
                         label: 'Outbound',
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
-                        data: response['call_volume']['outbound'],
+                        data: response.call_volume.outbound,
                         yAxisID: 'y-axis-1'
                     },{
                         label: 'Manual',
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
-                        data: response['call_volume']['manual'],
+                        data: response.call_volume.manual,
                         yAxisID: 'y-axis-1'
                     }]
                 };
@@ -195,6 +196,22 @@ var Dashboard = {
         });
     },
 
+    get_total_conversions:function(datefilter){
+        $.ajax({
+            async: true,
+            url: '/agentdashboard/get_sales',
+            type: 'POST',
+            dataType: 'json',
+            data:{
+                datefilter:datefilter
+            },
+            success:function(response){
+                console.log(response);
+                $('.total_conversions').html(response.total_sales.Sales);
+            }
+        });
+    },
+
     rep_performance:function(datefilter, chartColors){
 
         $.ajaxSetup({
@@ -212,14 +229,14 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
+                console.log(response);
+                $('#total_talktime').html(response.rep_performance.calls_time);
 
-                $('#total_talktime').html(response['rep_performance']['calls_time']);
-
-                var call_total = response['rep_performance']['calls_time'],
-                    paused_total = response['rep_performance']['paused_time'],
-                    waiting_total = response['rep_performance']['waiting_time'],
-                    wrapup_total = response['rep_performance']['wrapup_time'],
-                    total_total=response['rep_performance']['total']
+                var call_total = response.rep_performance.calls_time,
+                    paused_total = response.rep_performance.paused_time,
+                    waiting_total = response.rep_performance.waiting_time,
+                    wrapup_total = response.rep_performance.wrapup_time,
+                    total_total=response.rep_performance.total
                 ;
 
                 $('.call_total').text(call_total);
@@ -229,27 +246,27 @@ var Dashboard = {
                 $('.total_total').text(total_total);
 
                 var rep_performance = {
-                    labels: response['rep_performance']['time'],
+                    labels: response.rep_performance.time,
                     datasets: [{
                         label: 'Calls',
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
-                        data: response['rep_performance']['calls'],
+                        data: response.rep_performance.calls,
                         yAxisID: 'y-axis-1',
                     },{
                         label: 'Paused',
                         borderColor: chartColors.red,
                         backgroundColor: chartColors.red,
                         fill: false,
-                        data: response['rep_performance']['paused'],
+                        data: response.rep_performance.paused,
                         yAxisID: 'y-axis-1',
                     },{
                         label: 'Waiting',
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
-                        data: response['rep_performance']['waiting'],
+                        data: response.rep_performance.waiting,
                         yAxisID: 'y-axis-1',
                     },
                     {
@@ -257,7 +274,7 @@ var Dashboard = {
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
-                        data: response['rep_performance']['wrapup'],
+                        data: response.rep_performance.wrapup,
                         yAxisID: 'y-axis-1',
                     }
                     ]
@@ -457,17 +474,17 @@ $(document).ready(function(){
         }
     }
 
-    $('.count').each(function () {
-        $(this).prop('Counter',0).animate({
-            Counter: $(this).text()
-        }, {
-            duration: 1500,
-            easing: 'swing',
-            step: function (now) {
-                $(this).text(Math.ceil(now));
-            }
-        });
-    });
+    // $('.count').each(function () {
+    //     $(this).prop('Counter',0).animate({
+    //         Counter: $(this).text()
+    //     }, {
+    //         duration: 1500,
+    //         easing: 'swing',
+    //         step: function (now) {
+    //             $(this).text(Math.ceil(now));
+    //         }
+    //     });
+    // });
 
     $(".startdate").datepicker({
         maxDate: '0',
