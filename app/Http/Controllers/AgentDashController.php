@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
-use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -210,7 +209,6 @@ class AgentDashController extends Controller
         $waiting_time_array = [];
         $wrapup = [];
         $wrapup_time_array = [];
-        $total_array = [];
 
         $calls_time = 0;
         $paused_time = 0;
@@ -247,7 +245,11 @@ class AgentDashController extends Controller
                 $r['Wrap Up Time'];
         }
 
-        $total_array = array_merge($calls_time_array, $paused_time_array, $waiting_time_array, $wrapup_time_array);
+        $calls_time = secondsToHms(round($calls_time));
+        $paused_time = secondsToHms(round($paused_time));
+        $waiting_time = secondsToHms(round($waiting_time));
+        $wrapup_time = secondsToHms(round($wrapup_time));
+        $total_time = secondsToHms(round($total_time));
 
         return [
             'rep_performance' => [
