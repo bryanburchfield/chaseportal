@@ -12,6 +12,7 @@ Route::prefix('dashboards')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'MasterDashController@index');
         Route::post('showreport', 'MasterDashController@showReport');
+        Route::get('settings/', 'MasterDashController@showSettings');
 
         // Reports
         Route::get('reportsettings', 'AutomatedReportController@reportSettings');

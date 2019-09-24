@@ -66,4 +66,9 @@ class MasterDashController extends Controller
     {
         return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
+
+    public function showSettings()
+    {
+        return view('master.mysettings');
+    }
 }
