@@ -96,9 +96,8 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
-                $('#total_sales').html(response.total_sales);
-                $('#sales_per_hour').html(response.total_sales['SalesPerHour']);
+                $('#total_sales').html(response.total_sales.Sales);
+                $('#sales_per_hour').html(response.total_sales.SalesPerHour);
             }
         });
     },    
