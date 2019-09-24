@@ -50,6 +50,7 @@ class AgentDashController extends Controller
         $this->getSession($request);
 
         $result = $this->getCallVolume();
+        $details = $this->filterDetails($this->dateFilter);
 
         $time_labels = [];
         $outbound = [];
@@ -82,22 +83,20 @@ class AgentDashController extends Controller
         }
 
         $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
-        $avg_handle_time = $tot_total != 0 ? round($duration / $tot_total) : 0;
+        $avg_handle_time = secondsToHms($tot_total != 0 ? round($duration / $tot_total) : 0);
 
-        $new_result['time'] = $time_labels;
-        $new_result['outbound'] = $outbound;
-        $new_result['inbound'] = $inbound;
-        $new_result['manual'] = $manual;
-        $new_result['tot_outbound'] = $tot_outbound;
-        $new_result['tot_inbound'] = $tot_inbound;
-        $new_result['tot_manual'] = $tot_manual;
-        $new_result['tot_total'] = $tot_total;
-        $new_result['avg_handle_time'] = $avg_handle_time;
-
-        $details = $this->filterDetails($this->dateFilter);
-        $new_result['details'] = $details;
-
-        return ['call_volume' => $new_result];
+        return ['call_volume' => [
+            'time' => $time_labels,
+            'outbound' => $outbound,
+            'inbound' => $inbound,
+            'manual' => $manual,
+            'tot_outbound' => $tot_outbound,
+            'tot_inbound' => $tot_inbound,
+            'tot_manual' => $tot_manual,
+            'tot_total' => $tot_total,
+            'avg_handle_time' => $avg_handle_time,
+            'details' => $details,
+        ]];
     }
 
     /**
