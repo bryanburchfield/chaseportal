@@ -47,7 +47,7 @@ body {
 }
 
 div.container-fluid.bg {
-  background: url(/agentdashboard/img/mainBg.png) repeat-x;
+  background: url(/img/mainBg.png) repeat-x;
   min-height: 500px;
 }
 
@@ -536,7 +536,7 @@ tr td span.InboundCall, tr td span.Call{background: #e49a31;}
    width: 100%;
    height: 100%;
    z-index: 9999;
-   background-image: url('/agentdashboard/img/loader2.gif');
+   background-image: url('/img/loader2.gif');
    background-repeat: no-repeat; 
    background-color: rgba(255,255,255,0.88);
    background-position: center;

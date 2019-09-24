@@ -190,7 +190,7 @@ var Master = {
         });
 
         Dashboard.datefilter = datefilter;
-
+        
         if(datefilter !='custom'){
             $('.preloader').show();
 

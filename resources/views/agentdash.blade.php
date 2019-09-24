@@ -1,4 +1,4 @@
-@extends('layouts.dash')
+@extends('layouts.agentdash')
 
 @section('title', 'Agent Dashboard')
 

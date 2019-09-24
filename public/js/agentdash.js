@@ -57,8 +57,8 @@ var Dashboard = {
     init:function(){
         $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
-            Dashboard.update();
         });        
     },
 
@@ -66,10 +66,11 @@ var Dashboard = {
         $("#card_dropdown").toggle();
     },
 
-    update(){
-        window.setInterval(function(){
-            window.location ='/agentdashboard/';
-        }, 900000);
+    refresh(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+            $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            $('.preloader').fadeOut('slow');
+        }); 
     },
 
     eventHandlers:function(){
@@ -420,7 +421,7 @@ var Dashboard = {
 
         $.ajax({
             async: true,
-            url: '/agentdashboard/update_filters',
+            url: 'agentdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {datefilter: datefilter},
@@ -430,22 +431,39 @@ var Dashboard = {
     },
 
     filter_date:function(e){
-        e.preventDefault();
-        
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        datefilter = $(this).data('datefilter');
+        var that = $(this);
+        that.parent().siblings().removeClass('active');
+        that.parent().addClass('active');
+        datefilter = that.data('datefilter');
         $('#datefilter').val(datefilter);
+        var campaigns=[];
+        $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function() {
+            campaigns.push(that.val());
+        });
 
+        Dashboard.datefilter = datefilter;
+
+        console.log(Dashboard.datefilter);
+        
         if(datefilter !='custom'){
-            $('.preloader').show(400, function(){
-                Dashboard.call_status_count(datefilter, Dashboard.chartColors);
-                Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
-                Dashboard.rep_performance(datefilter, Dashboard.chartColors);
-                Dashboard.update_datefilter(datefilter);
-            });            
+            $('.preloader').show();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/agentdashboard/update_filters',
+                type: 'POST',
+                dataType: 'json',
+                data: {dateFilter:datefilter},
+                success:function(response){
+                    Dashboard.refresh(response);
+                }
+            });          
         }
-        $('.preloader').fadeOut('slow');
     },
 
     call_volume_type: function(){

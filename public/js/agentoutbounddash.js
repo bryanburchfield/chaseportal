@@ -56,17 +56,18 @@ var Dashboard = {
 
     init:function(){
 
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_sales(this.datefilter),).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_sales(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
-            this.update();
         }); 
     },
 
-    update(){
-        window.setInterval(function(){
-            window.location ='/agentdashboard_outbound/';
-        }, 900000);
+    refresh(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_sales(this.datefilter)).done(function(){
+            $('.card_dropbtn').on('click', this.toggle_dotmenu);
+            $('.preloader').fadeOut('slow');
+        });
     },
 
     eventHandlers:function(){
@@ -429,23 +430,38 @@ var Dashboard = {
     },
 
     filter_date:function(e){
-        e.preventDefault();
-        
-        $(this).parent().siblings().removeClass('active');
-        $(this).parent().addClass('active');
-        datefilter = $(this).data('datefilter');
+        var that = $(this);
+        that.parent().siblings().removeClass('active');
+        that.parent().addClass('active');
+        datefilter = that.data('datefilter');
         $('#datefilter').val(datefilter);
+        var campaigns=[];
+        $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function() {
+            campaigns.push(that.val());
+        });
 
+        Dashboard.datefilter = datefilter;
+
+        
         if(datefilter !='custom'){
-            $('.preloader').show(400, function(){
-                Dashboard.call_status_count(datefilter, Dashboard.chartColors);
-                Dashboard.get_call_volume(datefilter, Dashboard.chartColors);
-                Dashboard.get_sales(datefilter, Dashboard.chartColors);
-                Dashboard.rep_performance(datefilter, Dashboard.chartColors);
-                Dashboard.update_datefilter(datefilter);
-            });            
+            $('.preloader').show();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/agentoutbounddashboard/update_filters',
+                type: 'POST',
+                dataType: 'json',
+                data: {dateFilter:datefilter},
+                success:function(response){
+                    Dashboard.refresh(response);
+                }
+            });          
         }
-        $('.preloader').fadeOut('slow');
     },
 
     call_volume_type: function(){

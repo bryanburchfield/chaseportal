@@ -1,4 +1,4 @@
-@extends('layouts.dash')
+@extends('layouts.agentdash')
 
 @section('title', 'Agent Dashboard')
 
@@ -14,7 +14,17 @@
     <div class="container mt50">
 
         <div class="container-fluid">
-            <div class="filters col-xs-7 col-sm-6">
+
+            <div class="col-xs-7">
+                <div class="filter_time_camp_dets">
+                    <p>
+                        <span class="selected_datetime"></span> |
+                        <span class="selected_campaign"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="filters col-sm-5">
                 <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span>Date</span>
