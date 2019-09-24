@@ -8,8 +8,6 @@ use \App\Traits\DashTraits;
 
 class AgentOutboundDashController extends Controller
 {
-    private $rep;
-
     use DashTraits;
 
     /**
@@ -20,8 +18,6 @@ class AgentOutboundDashController extends Controller
      */
     public function index(Request $request)
     {
-        $this->rep = $request->rep;
-
         $this->getSession($request);
 
         $campaigns = $this->campaignGroups();
@@ -107,12 +103,12 @@ class AgentOutboundDashController extends Controller
         $this->getSession($request);
 
         $result = $this->getCallVolume();
+        $details = $this->filterDetails($this->dateFilter);
 
         $time_labels = [];
         $outbound = [];
         $inbound = [];
         $manual = [];
-        $new_result = [];
 
         $tot_outbound = 0;
         $tot_inbound = 0;
@@ -121,10 +117,10 @@ class AgentOutboundDashController extends Controller
         $duration = 0;
 
         foreach ($result as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             $tot_outbound += $r['Outbound'];
@@ -147,25 +143,23 @@ class AgentOutboundDashController extends Controller
         }
         $duration = date('H:i:s', $duration);
 
-        $new_result['time'] = $time_labels;
-        $new_result['outbound'] = $outbound;
-        $new_result['inbound'] = $inbound;
-        $new_result['manual'] = $manual;
-        $new_result['tot_outbound'] = $tot_outbound;
-        $new_result['tot_inbound'] = $tot_inbound;
-        $new_result['tot_manual'] = $tot_manual;
-        $new_result['tot_total'] = $tot_total;
-        $new_result['avg_handle_time'] = $avg_handle_time;
-
-        $details = $this->filterDetails($this->dateFilter);
-        $new_result['details'] = $details;
-
-        return ['call_volume' => $new_result];
+        return ['call_volume' => [
+            'details' => $details,
+            'time' => $time_labels,
+            'outbound' => $outbound,
+            'inbound' => $inbound,
+            'manual' => $manual,
+            'tot_outbound' => $tot_outbound,
+            'tot_inbound' => $tot_inbound,
+            'tot_manual' => $tot_manual,
+            'tot_total' => $tot_total,
+            'avg_handle_time' => $avg_handle_time,
+        ]];
     }
 
     private function getCallVolume()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->tz;
 
         $dateFilter = $this->dateFilter;
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
@@ -174,7 +168,7 @@ class AgentOutboundDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+        $byHour = $this->byHour($this->dateFilter);
 
         // group by date/hour or just date
         if ($byHour) {
@@ -257,7 +251,7 @@ class AgentOutboundDashController extends Controller
 
         $result = $this->getSales();
 
-        return ['total_sales' => $result];
+        return ['total_sales' => $result['Sales']];
     }
 
     private function getSales()
@@ -281,7 +275,7 @@ class AgentOutboundDashController extends Controller
             $bind['todate' . $i] = $toDate;
             $bind['rep' . $i] = $this->rep;
 
-            $sql .= " $union SELECT 'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE 0 END)
+            $sql .= " $union SELECT 'Sales' = COUNT(id)
                 FROM [$db].[dbo].[DialingResults] DR
                 CROSS APPLY (SELECT TOP 1 [Type]
                     FROM  [$db].[dbo].[Dispos] DI
@@ -301,39 +295,7 @@ class AgentOutboundDashController extends Controller
         $sql .= ") tmp";
 
         $result = $this->runSql($sql, $bind);
-
-        // Determine manhours
-        $bind = [];
-
-        $sql = "SELECT SUM(Duration) as Duration
-        FROM (";
-
-        $union = '';
-        foreach ($this->databases as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['fromdate' . $i] = $fromDate;
-            $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
-
-            $sql .= " $union SELECT  SUM(Duration) as Duration
-            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
-            WHERE GroupId = :groupid$i
-            AND Rep = :rep$i
-            AND Date >= :fromdate$i
-            AND Date < :todate$i
-            AND [Action] NOT IN ('Login','Logout','Paused')";
-
-            $union = 'UNION ALL';
-        }
-        $sql .= ") tmp";
-
-        $manhours = $this->runSql($sql, $bind);
-
-        $manhours = empty($manhours[0]['Duration']) ? 0 : $manhours[0]['Duration'];
-
-        $result['ManHours'] = $manhours[0] / 60 / 60;
-
-        $result['SalesPerHour'] = empty($result['ManHours']) ? 0 : round($result['Sales'] / $result['ManHours'], 2);
+        $result = $result[0];
 
         return $result;
     }
@@ -353,7 +315,6 @@ class AgentOutboundDashController extends Controller
         $waiting_time_array = [];
         $wrapup = [];
         $wrapup_time_array = [];
-        $total_array = [];
 
         $calls_time = 0;
         $paused_time = 0;
@@ -361,10 +322,10 @@ class AgentOutboundDashController extends Controller
         $wrapup_time = 0;
 
         foreach ($result as $r) {
-            if (!strpos($r['Time'], ':')) {
-                $datetime = date("n/j/y", strtotime($r['Time']));
+            if ($this->byHour($this->dateFilter)) {
+                $datetime = date("g:i", strtotime($r['Time']));
             } else {
-                $datetime = $r['Time'];
+                $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
             $calls_time += $r['Calls'];
@@ -384,7 +345,6 @@ class AgentOutboundDashController extends Controller
             array_push($wrapup, $r['Wrap Up Time']);
         }
 
-        $total_array = array_merge($calls_time_array, $paused_time_array, $waiting_time_array, $wrapup_time_array);
         $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
 
         return [
@@ -414,7 +374,7 @@ class AgentOutboundDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+        $byHour = $this->byHour($this->dateFilter);
 
         // group by date/hour or just date
         if ($byHour) {

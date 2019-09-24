@@ -16,7 +16,6 @@ class AgentDashController extends Controller
      * @param Request $request
      * @return view
      */
-
     public function index(Request $request)
     {
         $this->getSession($request);
@@ -56,7 +55,6 @@ class AgentDashController extends Controller
         $outbound = [];
         $inbound = [];
         $manual = [];
-        $new_result = [];
 
         $tot_outbound = 0;
         $tot_inbound = 0;
@@ -423,7 +421,7 @@ class AgentDashController extends Controller
 
         $result = $this->getSales();
 
-        return ['total_sales' => $result[0]['Sales']];
+        return ['total_sales' => $result['Sales']];
     }
 
     public function getSales()
@@ -468,6 +466,7 @@ class AgentDashController extends Controller
         }
         $sql .= ") tmp";
 
-        return $this->runSql($sql, $bind);
+        $result = $this->runSql($sql, $bind);
+        return $result[0];
     }
 }
