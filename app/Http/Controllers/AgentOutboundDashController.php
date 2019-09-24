@@ -322,9 +322,9 @@ class AgentOutboundDashController extends Controller
         $sql .= ") tmp";
 
         $manhours = $this->runSql($sql, $bind);
-        $result['ManHours'] = round($manhours[0]['Duration'] / 60 / 60, 2);
+        $manhours = round($manhours[0]['Duration'] / 60 / 60, 2);
 
-        $result['SalesPerHour'] = empty($result['ManHours']) ? 0 : round($result['Sales'] / $result['ManHours'], 2);
+        $result['SalesPerHour'] = empty($manhours) ? 0 : round($result['Sales'] / $manhours, 2);
 
         return $result;
     }
