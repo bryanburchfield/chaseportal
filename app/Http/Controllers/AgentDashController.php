@@ -235,12 +235,9 @@ class AgentDashController extends Controller
             $paused_time += $r['Paused'];
             $waiting_time += $r['Waiting'];
             $wrapup_time += $r['Wrap Up Time'];
-            $total_time +=
-                $r['Calls'] +
-                $r['Paused'] +
-                $r['Waiting'] +
-                $r['Wrap Up Time'];
         }
+
+        $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
 
         $calls_time = secondsToHms(round($calls_time));
         $paused_time = secondsToHms(round($paused_time));

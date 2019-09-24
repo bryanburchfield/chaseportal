@@ -328,11 +328,6 @@ class AgentOutboundDashController extends Controller
                 $datetime = date("D n/j/y", strtotime($r['Time']));
             }
 
-            $calls_time += $r['Calls'];
-            $paused_time += $r['Paused'];
-            $waiting_time += $r['Waiting'];
-            $wrapup_time += $r['Wrap Up Time'];
-
             array_push($calls_time_array, $r['Calls']);
             array_push($paused_time_array, $r['Paused']);
             array_push($waiting_time_array, $r['Waiting']);
@@ -343,9 +338,20 @@ class AgentOutboundDashController extends Controller
             array_push($paused, $r['Paused']);
             array_push($waiting, $r['Waiting']);
             array_push($wrapup, $r['Wrap Up Time']);
+
+            $calls_time += $r['Calls'];
+            $paused_time += $r['Paused'];
+            $waiting_time += $r['Waiting'];
+            $wrapup_time += $r['Wrap Up Time'];
         }
 
         $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
+
+        $calls_time = secondsToHms(round($calls_time));
+        $paused_time = secondsToHms(round($paused_time));
+        $waiting_time = secondsToHms(round($waiting_time));
+        $wrapup_time = secondsToHms(round($wrapup_time));
+        $total_time = secondsToHms(round($total_time));
 
         return [
             'rep_performance' => [
