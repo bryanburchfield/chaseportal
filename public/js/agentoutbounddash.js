@@ -96,8 +96,8 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
-                $('#total_sales').html(response.total_sales['Sales']);
+                console.log(response);
+                $('#total_sales').html(response.total_sales);
                 $('#sales_per_hour').html(response.total_sales['SalesPerHour']);
             }
         });
@@ -120,7 +120,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
+                
                 $('#total_outbound .total').html(parseInt(response['call_volume']['tot_outbound']) + parseInt(response['call_volume']['tot_manual']));
                 $('#total_inbound .total').html(response['call_volume']['tot_inbound']);
 
@@ -231,7 +231,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
+                
                 var call_total = response['rep_performance']['calls_time'],
                     paused_total = response['rep_performance']['paused_time'],
                     waiting_total = response['rep_performance']['waiting_time'],
