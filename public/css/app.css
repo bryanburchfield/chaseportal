@@ -1917,7 +1917,8 @@ a.run_kpi.btn {
   display: none;
 }
 
-.salesleaderboardtable tr:last-child {
+.salesleaderboardtable tr:last-child,
+.caller_id table tbody tr:last-of-type {
   font-weight: 600;
 }
 

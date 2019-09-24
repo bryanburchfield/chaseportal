@@ -1710,9 +1710,7 @@ a.run_kpi.btn {
     display: none;
 }
 
-.salesleaderboardtable tr:last-child {
-    font-weight: 600;
-}
+.salesleaderboardtable tr:last-child,  .caller_id table tbody tr:last-of-type { font-weight:600; }
 
 /* begin trenddash 3 dot dropdown */
 .showLeft {

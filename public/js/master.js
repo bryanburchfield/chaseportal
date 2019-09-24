@@ -190,7 +190,7 @@ var Master = {
         });
 
         Dashboard.datefilter = datefilter;
-        
+
         if(datefilter !='custom'){
             $('.preloader').show();
 
@@ -1763,11 +1763,6 @@ var Master = {
 	    }
 	}
 }
-
-
-$(window).load(function () {
-	$('.preloader').fadeOut('slow');
-});
 
 $(document).ready(function(){
 	Master.init();
