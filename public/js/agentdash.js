@@ -99,12 +99,9 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
-                // return false;
-                $('#avg_handle_time').html(response.call_volume.avg_handle_time);
 
+                $('#avg_handle_time').html(response.call_volume.avg_handle_time);
                 $('#total_outbound .total').html(parseInt(response.call_volume.tot_outbound) + parseInt(response.call_volume.tot_manual));
-                console.log(response.call_volume.tot_inbound);
                 $('#total_inbound .total').html(response.call_volume.tot_inbound);
 
                 var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
@@ -142,7 +139,6 @@ var Dashboard = {
                         yAxisID: 'y-axis-1'
                     }]
                 };
-
 
                 var call_volume_options={
                     responsive: true,
@@ -198,6 +194,7 @@ var Dashboard = {
     },
 
     get_total_conversions:function(datefilter){
+
         $.ajax({
             async: true,
             url: '/agentdashboard/get_sales',
@@ -207,7 +204,6 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
                 $('.total_conversions').html(response.total_sales);
             }
         });
@@ -230,7 +226,6 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
                 $('#total_talktime').html(response.rep_performance.calls_time);
 
                 var call_total = response.rep_performance.calls_time,
@@ -349,7 +344,6 @@ var Dashboard = {
             dataType: 'json',
             data:{ datefilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 var response_length = response['call_status_count']['labels'].length;
                 const chart_colors = Object.keys(Dashboard.chartColors)

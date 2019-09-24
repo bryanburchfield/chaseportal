@@ -667,6 +667,11 @@ table tr:first-of-type{
 
 .card_dropdown a:nth-child(even) {background-color: #efefef}
 .card_dropdown a:hover {background-color: #eaeaea}
+
+span.selected_campaign {
+    color: #33A09B;
+    font-weight: 600;
+}
   
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{

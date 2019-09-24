@@ -37,7 +37,7 @@ class InboundSummary
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;

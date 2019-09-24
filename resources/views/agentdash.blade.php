@@ -180,28 +180,7 @@
                     <h2 class="total_conversions cnt"></h2>
                 </div>
             </div>
-
-            <!-- <div class="col-sm-3 ">
-                <div class="card blue total_calls_card total_conversions">
-                    <h1 class="title">Total Conversions</h1>
-                    <div class="card_dropdown mv_left total_conversions">
-                        <ul class="card_dropbtn icons btn-right showLeft">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                        <div id="card_dropdown" class="card_dropdown-content service_level_time">
-                            <h3>Dispostion Type</h3>
-                            <a href="Sale">Sale</a>
-                            <a href="Appt">Appt</a>
-                            <a href="Lead">Lead</a>
-                        </div>
-                    </div>
-                    <h2 class="total_calls cnt"></h2>
-                </div>
-            </div> -->
         </div>
-
 	</div>
 </div>
 

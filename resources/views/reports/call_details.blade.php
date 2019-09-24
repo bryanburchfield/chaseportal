@@ -42,9 +42,7 @@
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
-			</div>
-
-			<div class="row">
+			
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('callerids', 'Inbound Sources') !!}
@@ -65,9 +63,7 @@
 						{!! Form::select("call_statuses[]", $filters['call_statuses'], null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 					</div>
 				</div>
-			</div>
-
-			<div class="row">
+			
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('call_type', 'Call Type') !!}

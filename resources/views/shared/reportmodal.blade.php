@@ -58,10 +58,12 @@
                     <div class="radio">
                         <label><input type="radio" name="report_option" class="report_option" value="campaign_call_log">Campaign Call Log</label>
                     </div>
-                    <br>
+                    
                     <div class="radio">
                         <label><input type="radio" name="report_option" class="report_option" value="shift_report">Shift Report</label>
                     </div>
+                    <br>
+                    
                     <div class="radio">
                         <label><input type="radio" name="report_option" class="report_option" value="production_report">Production Report</label>
                     </div>
@@ -80,9 +82,9 @@
             <div class="modal-footer">
                 {{-- @csrf --}}
                 {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default mr10" data-dismiss="modal">Close</button>
                 <a href="#" class="mb0 btn_flgrgt" onclick="window.location.href = '{{ url('dashboards/reportsettings') }}';">
-                    <span><i class="fa fa-cog"></i> Report Settings</span>
+                    <span><i class="fa fa-cog"></i> Automated Reports</span>
                 </a>
                 {!! Form::submit('View Report',['class'=>'btn btn-primary mb0']) !!}
             </div>

@@ -32,7 +32,7 @@ class CampaignUsage
         $filters = [
             'campaign' => $this->getAllCampaigns(),
             'subampaign' => $this->getAllSubcampaigns(),
-            'db_list' => $this->getDatabaseArray()
+            'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
