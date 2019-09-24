@@ -297,6 +297,35 @@ class AgentOutboundDashController extends Controller
         $result = $this->runSql($sql, $bind);
         $result = $result[0];
 
+        // Determine manhours
+        $bind = [];
+        $sql = "SELECT SUM(Duration) as Duration
+        FROM (";
+
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $fromDate;
+            $bind['todate' . $i] = $toDate;
+            $bind['rep' . $i] = $this->rep;
+
+            $sql .= " $union SELECT SUM(Duration) as Duration
+            FROM [$db].[dbo].[AgentActivity] WITH(NOLOCK)
+            WHERE GroupId = :groupid$i
+            AND Rep = :rep$i
+            AND Date >= :fromdate$i
+            AND Date < :todate$i
+            AND [Action] NOT IN ('Login','Logout','Paused')";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp";
+
+        $manhours = $this->runSql($sql, $bind);
+        $result['ManHours'] = $manhours[0]['Duration'] / 60 / 60;
+
+        $result['SalesPerHour'] = empty($result['ManHours']) ? 0 : round($result['Sales'] / $result['ManHours'], 2);
+
         return $result;
     }
 
