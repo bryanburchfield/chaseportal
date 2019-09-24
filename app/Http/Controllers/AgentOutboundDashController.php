@@ -251,7 +251,7 @@ class AgentOutboundDashController extends Controller
 
         $result = $this->getSales();
 
-        return ['total_sales' => $result['Sales']];
+        return ['total_sales' => $result];
     }
 
     private function getSales()
@@ -322,7 +322,7 @@ class AgentOutboundDashController extends Controller
         $sql .= ") tmp";
 
         $manhours = $this->runSql($sql, $bind);
-        $result['ManHours'] = $manhours[0]['Duration'] / 60 / 60;
+        $result['ManHours'] = round($manhours[0]['Duration'] / 60 / 60, 2);
 
         $result['SalesPerHour'] = empty($result['ManHours']) ? 0 : round($result['Sales'] / $result['ManHours'], 2);
 
