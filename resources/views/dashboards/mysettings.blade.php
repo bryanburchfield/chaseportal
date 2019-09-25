@@ -41,12 +41,12 @@
 
 							<div class="form-group">
 								{!! Form::label('new_password', 'New Password') !!}
-								{!! Form::password('new_password', ['class'=>'form-control new_password', 'required'=>true]) !!}
+								{!! Form::password('new_password', ['class'=>'form-control new_password']) !!}
 							</div>
 
 							<div class="form-group">
 								{!! Form::label('conf_password', 'Confirm Password') !!}
-								{!! Form::password('conf_password', ['class'=>'form-control conf_password', 'required'=>true]) !!}
+								{!! Form::password('conf_password', ['class'=>'form-control conf_password']) !!}
 							</div>
 
 							{!! Form::hidden('id', $user->id, ['id'=>'user_id']) !!}
