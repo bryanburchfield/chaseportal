@@ -27,8 +27,8 @@ class ProductionReport
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(
-                new \DateTime($this->params['fromdate']),
-                new \DateTime($this->params['todate'])
+                $this->params['fromdate'],
+                $this->params['todate']
             ),
             'skills' => $this->getAllSkills(),
             'db_list' => Auth::user()->getDatabaseArray(),

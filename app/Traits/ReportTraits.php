@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use \App\Traits\ReportExportTraits;
-use Illuminate\Support\Facades\Log;
 
 trait ReportTraits
 {
@@ -32,42 +31,56 @@ trait ReportTraits
         ];
     }
 
-    public function getAllCampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
+    public function getAllCampaigns($fromDate = null, $toDate = null)
     {
+        $sql = '';
         $bind = [];
 
-        if (!empty($fromDate) && !empty($toDate)) {
+        if (empty($fromDate) || empty($toDate)) {
+            $union = '';
+            foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
+                $bind['groupid' . $i] = Auth::user()->group_id;
+
+                $sql .= "$union SELECT CampaignName AS Campaign
+                FROM [$db].[dbo].[Campaigns]
+                WHERE isActive = 1
+                AND GroupId = :groupid$i
+                AND CampaignName != ''";
+
+                $union = ' UNION';
+            }
+        } else {
+            $fromDate = makeDateTime($fromDate);
+            $toDate = makeDateTime($toDate);
+
             list($fromDate, $toDate) = $this->dateRange($fromDate, $toDate);
 
             // convert to datetime strings
             $startDate = $fromDate->format('Y-m-d H:i:s');
             $endDate = $toDate->format('Y-m-d H:i:s');
-        }
 
-        $sql = '';
-        $union = '';
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-
-            $sql .= "$union SELECT CampaignName AS Campaign
-            FROM [$db].[dbo].[Campaigns]
-            WHERE isActive = 1
-            AND GroupId = :groupid$i
-            AND CampaignName != ''";
-
-            if (!empty($fromDate) && !empty($toDate)) {
-                $sql .= " AND Date >= :startdate$i AND Date < :enddate$i";
+            $union = '';
+            foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
+                $bind['groupid' . $i] = Auth::user()->group_id;
                 $bind['startdate' . $i] = $startDate;
                 $bind['enddate' . $i] = $endDate;
-            }
 
-            $union = ' UNION';
+                $sql .= "$union SELECT DISTINCT Campaign
+                FROM [$db].[dbo].[DialingResults]
+                WHERE GroupId = :groupid$i
+                AND Campaign != ''
+                AND Date >= :startdate$i
+                AND Date < :enddate$i";
+
+                $union = ' UNION';
+            }
         }
-        $sql .= " ORDER BY Campaign";
 
         $results = $this->resultsToList($this->runSql($sql, $bind));
 
         $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
+
+        ksort($results, SORT_NATURAL);
 
         return $results;
     }
@@ -205,12 +218,11 @@ trait ReportTraits
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        Log::warning('try/catch disabled in report traits');
-        // try {
-        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        // } catch (\Exception $e) {
-        //     $results = [];
-        // }
+        try {
+            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        } catch (\Exception $e) {
+            $results = [];
+        }
 
         if (count($results)) {
             // convert array of objects to array of arrays
