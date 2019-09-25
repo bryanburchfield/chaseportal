@@ -69,27 +69,27 @@ class MasterDashController extends Controller
         return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
 
-    public function showSettings()
+    public function showSettings($success = [], $errors = [])
     {
-        $user = Auth::user();
-
-        $page['menuitem'] = 'other';
-        $page['type'] = 'other';
-        $data = [
-            'user' => $user,
-            'page' => $page,
+        $page = [
+            'menuitem' => 'other',
+            'type' => 'other',
         ];
 
-        return view('dashboards.mysettings')->with($data);
+        $data = [
+            'user' => Auth::user(),
+            'page' => $page,
+            'success' => $success,
+        ];
+
+        return view('dashboards.mysettings')->with($data)->withErrors($errors);
     }
 
     public function updateUserSettings(Request $request)
     {
         $user = Auth::user();
-        $return = [
-            'errors' => [],
-            'success' => [],
-        ];
+        $errors = [];
+        $success = [];
 
         /// check if name or email is used by another user
         $user_check = User::where('id', '!=', $request->id)
@@ -101,23 +101,22 @@ class MasterDashController extends Controller
 
         /// check if current password is correct
         if (!Hash::check($request->current_password, $user->password)) {
-            array_push($return['errors'], 'Current password is incorrect');
+            $errors[] = 'Current password is incorrect';
         }
 
         /// check if new password matches confirm password
         if ($request->new_password != $request->conf_password) {
-            array_push($return['errors'], 'New password does not match');
+            $errors[] = 'New password does not match';
         }
 
         if ($user_check) {
-            array_push($return['errors'], 'Name or email in use by another user');
+            $errors[] = 'Name or email in use by another user';
         } else {
             $user = User::findOrFail($request->id);
             $user->update($request->all());
-            array_push($return['success'], $user);
+            $success[] = $user;
         }
 
-        return $return;
-        // return view('dashboards.mysettings')->with($return);
+        return $this->showSettings($success, $errors);
     }
 }
