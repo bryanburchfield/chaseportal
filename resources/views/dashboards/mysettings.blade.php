@@ -62,7 +62,7 @@
 	                                </div>
 								@endif
 
-								@if(isset($_POST['user_settings']) && empty($errors->any()))
+								@if(!empty($success))
 									<div class="alert alert-success mt20">User successfully updated</div>
 								@endif
 
