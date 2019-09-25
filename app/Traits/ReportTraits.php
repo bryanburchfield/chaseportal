@@ -85,9 +85,28 @@ trait ReportTraits
         return $results;
     }
 
-    public function getAllSubcampaigns(\DateTime $fromDate = null, \DateTime $toDate = null)
+    public function getSubcampaigns(Request $request)
     {
-        return [];
+        $sql = '';
+        $union = '';
+        foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['campaign' . $i] = $request->campaign;;
+
+            $sql .=  "$union SELECT DISTINCT Subcampaign
+            FROM [$db].[dbo].[Leads]
+            WHERE GroupId = :groupid$i
+            AND Campaign = :campaign$i
+            AND Subcampaign is not null
+            AND Subcampaign != ''";
+
+            $union = ' UNION';
+        }
+        $sql .= " ORDER BY Subcampaign";
+
+        $results = $this->resultsToList($this->runSql($sql, $bind));
+
+        return $results;
     }
 
     public function getAllInboundSources()
