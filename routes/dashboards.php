@@ -12,8 +12,8 @@ Route::prefix('dashboards')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'MasterDashController@index');
         Route::post('showreport', 'MasterDashController@showReport');
-        Route::get('settings/', 'MasterDashController@showSettings');
-        Route::post('update_user_settings', 'MasterDashController@updateUserSettings');
+        Route::get('settings', 'MasterDashController@showSettings');
+        Route::post('settings', 'MasterDashController@updateUserSettings');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

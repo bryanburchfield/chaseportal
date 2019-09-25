@@ -15,15 +15,15 @@
 
 		@include('shared.navbar')
 
-		<div class="container-full mt20">      
+		<div class="container-full mt20">
 		    <div class="row">
 
 				<div class="col-sm-12">
 					<h2>My settings</h2>
 
 					<div class="col-sm-6 card">
-						{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/update_user_settings', 'class'=>'form user_settings', 'name' => 'user_settings']) !!}
-							
+						{!! Form::open(['method'=>'POST', 'class'=>'form user_settings', 'name' => 'user_settings']) !!}
+
 							<div class="form-group">
 								{!! Form::label('name', 'Name') !!}
 								{!! Form::text('name', $user->name, ['class'=>'form-control name', 'required'=>true]) !!}
@@ -43,14 +43,14 @@
 								{!! Form::label('new_password', 'New Password') !!}
 								{!! Form::password('new_password', ['class'=>'form-control new_password', 'required'=>true]) !!}
 							</div>
-							
+
 							<div class="form-group">
 								{!! Form::label('conf_password', 'Confirm Password') !!}
 								{!! Form::password('conf_password', ['class'=>'form-control conf_password', 'required'=>true]) !!}
 							</div>
 
 							{!! Form::hidden('id', $user->id, ['id'=>'user_id']) !!}
-							
+
 							{!! Form::submit('Update', ['class'=>'btn btn-primary mb0'] ) !!}
 
 								@if($errors->any())
@@ -64,7 +64,7 @@
 								@if(isset($_POST['user_settings']) && empty($errors->any()))
 									<div class="alert alert-success">User successfully updated</div>
 								@endif
-								
+
 							{!! Form::close() !!}
 
 					</div>
