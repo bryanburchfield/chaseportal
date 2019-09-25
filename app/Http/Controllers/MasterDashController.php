@@ -99,6 +99,10 @@ class MasterDashController extends Controller
             })
             ->first();
 
+        if ($user_check) {
+            $errors[] = 'Name or email in use by another user';
+        }
+
         /// check if current password is correct
         if (!Hash::check($request->current_password, $user->password)) {
             $errors[] = 'Current password is incorrect';
@@ -109,9 +113,7 @@ class MasterDashController extends Controller
             $errors[] = 'New password does not match';
         }
 
-        if ($user_check) {
-            $errors[] = 'Name or email in use by another user';
-        } else {
+        if (empty($errors)) {
             $user = User::findOrFail($request->id);
             $user->update($request->all());
             $success[] = $user;

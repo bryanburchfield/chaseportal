@@ -54,15 +54,16 @@
 							{!! Form::submit('Update', ['class'=>'btn btn-primary mb0'] ) !!}
 
 								@if($errors->any())
-	                                <div class="alert alert-danger">
+
+	                                <div class="alert alert-danger mt20">
 	                                    @foreach($errors->all() as $e)
-	                                        {{ $e }}
+	                                        <li>{{ $e }}</li>
 	                                    @endforeach
 	                                </div>
 								@endif
 
 								@if(isset($_POST['user_settings']) && empty($errors->any()))
-									<div class="alert alert-success">User successfully updated</div>
+									<div class="alert alert-success mt20">User successfully updated</div>
 								@endif
 								
 							{!! Form::close() !!}
