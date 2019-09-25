@@ -30,6 +30,7 @@ class LeadInventorySub
     {
         $filters = [
             'campaign' => $this->getAllCampaigns(),
+            'subcampaign' => $this->getAllSubcampaigns(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -38,25 +39,13 @@ class LeadInventorySub
 
     private function executeReport($all = false)
     {
-        $bind['group_id1'] = Auth::user()->group_id;
-        $bind['group_id2'] = Auth::user()->group_id;
-        $bind['group_id3'] = Auth::user()->group_id;
-        $bind['group_id4'] = Auth::user()->group_id;
-        $bind['group_id5'] = Auth::user()->group_id;
-        $bind['group_id6'] = Auth::user()->group_id;
-        $bind['campaign1'] = $this->params['campaign'];
-        $bind['campaign2'] = $this->params['campaign'];
-        $bind['campaign3'] = $this->params['campaign'];
-        $bind['campaign4'] = $this->params['campaign'];
-        $bind['campaign5'] = $this->params['campaign'];
-        $bind['subcampaign1'] = $this->params['subcampaign'];
-        $bind['subcampaign2'] = $this->params['subcampaign'];
+        $bind['group_id'] = Auth::user()->group_id;
 
         $sql = "SET NOCOUNT ON;
 
         DECLARE @MaxDialingAttempts int;
 
-        SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id1, '', 'MaxDialingAttempts', 0)
+        SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id, '', 'MaxDialingAttempts', 0)
 
         CREATE TABLE #ShiftReport(
             CallStatus varchar(50),
@@ -74,7 +63,11 @@ class LeadInventorySub
         SELECT * INTO #LeadCounts FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['campaign' . $i] = $this->params['campaign'];
+            $bind['subcampaign' . $i] = $this->params['subcampaign'];
+
             $sql .= " $union SELECT
                 CASE IsNull(dr.CallStatus, '')
                     WHEN '' THEN '[ Not Called ]'
@@ -83,15 +76,15 @@ class LeadInventorySub
                 IsNull((SELECT TOP 1 IsCallable
                         FROM [$db].[dbo].[Dispos]
                         WHERE Disposition = dr.CallStatus
-                        AND Campaign = :campaign1
-                        AND (GroupId = :group_id2 OR IsSystem = 1)
+                        AND Campaign = dr.Campaign
+                        AND (GroupId = dr.GroupId OR IsSystem = 1)
                     ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 0) as IsCallable,
                 WasDialed,
                 (SELECT TOP 1 [Description]
                 FROM [$db].[dbo].[Dispos]
                 WHERE Disposition = dr.CallStatus
-                AND Campaign = :campaign2
-                AND (GroupId = :group_id3 OR IsSystem = 1)
+                AND Campaign = dr.Campaign
+                AND (GroupId = dr.GroupId OR IsSystem = 1)
                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
                 IsNull((SELECT TOP 1
                     CASE [Type]
@@ -102,16 +95,16 @@ class LeadInventorySub
                     END
                     FROM [$db].[dbo].[Dispos]
                     WHERE Disposition = dr.CallStatus
-                    AND Campaign = :campaign3
-                    AND (GroupId = :group_id4 OR IsSystem = 1)
+                    AND Campaign = dr.Campaign
+                    AND (GroupId = dr.GroupId OR IsSystem = 1)
                     ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as [Type],
                 count(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
-            WHERE dr.GroupId = :group_id5
-            AND dr.Campaign = :campaign4
-            AND dr.Subcampaign = :subcampaign1
+            WHERE dr.GroupId = :group_id$i
+            AND dr.Campaign = :campaign$i
+            AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, dr.WasDialed";
+            GROUP BY dr.CallStatus, dr.WasDialed, dr.Campaign, dr.GroupId";
 
             $union = 'UNION ALL';
         }
@@ -127,17 +120,21 @@ class LeadInventorySub
         SET TotalLeads = a.Leads
         FROM (SELECT SUM(Leads) as Leads FROM #ShiftReport) a";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['campaign1' . $i] = $this->params['campaign'];
+            $bind['subcampaign1' . $i] = $this->params['subcampaign'];
+
             $sql .= "
             UPDATE #ShiftReport
             SET AvailableLeads += a.Leads
                 FROM (SELECT COUNT(DISTINCT l.id) as Leads
-                        FROM Leads l WITH(NOLOCK)
+                        FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
                         LEFT JOIN dialer_DialingSettings ds2 on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign
-                        WHERE l.GroupId = :group_id6
-                        AND l.Campaign = :campaign5
-                        AND l.Subcampaign = :subcampaign2
+                        WHERE l.GroupId = :group_id1$i
+                        AND l.Campaign = :campaign1$i
+                        AND l.Subcampaign = :subcampaign1$i
                         AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
                         AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
                         AND l.WasDialed = 0

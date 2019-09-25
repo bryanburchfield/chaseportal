@@ -39,7 +39,6 @@ class ProductionReportSubcampaign
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -58,33 +57,25 @@ class ProductionReportSubcampaign
             $orderby = ' ORDER BY [Subcampaign]';
         }
 
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['group_id5'] =  Auth::user()->group_id;
-        $bind['group_id6'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate2'] = $endDate;
-        $bind['startdate3'] = $startDate;
-        $bind['enddate3'] = $endDate;
         $bind['orderby'] = $orderby;
 
         $sql = "SET NOCOUNT ON;";
 
         if (!empty($campaigns)) {
+            $bind['campaigns'] = $campaigns;
+
             $sql .= "
             CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key)
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!')";
         }
 
         if (!empty($this->params['skills'])) {
-            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $skills = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $bind['skills'] = $skills;
+
             $sql .= "
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
-            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT(:skills, '!#!');";
         }
 
         $sql .= "
@@ -100,7 +91,11 @@ class ProductionReportSubcampaign
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT DISTINCT dr.CallStatus
                 FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)";
 
@@ -117,10 +112,10 @@ class ProductionReportSubcampaign
 
             $sql .= "
                 LEFT JOIN [$db].[dbo].[Dispos] d on d.Disposition = dr.CallStatus
-                WHERE dr.GroupId = :group_id1
-                AND dr.Date >= :startdate1
-                AND dr.Date < :enddate1
-                AND (((d.GroupId=:group_id2 OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')";
+                WHERE dr.GroupId = :group_id$i
+                AND dr.Date >= :startdate$i
+                AND dr.Date < :enddate$i
+                AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')";
 
             $union = 'UNION';
         }
@@ -137,7 +132,11 @@ class ProductionReportSubcampaign
         FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT dr.CallStatus, dr.Subcampaign
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
             LEFT JOIN [$db].[dbo].[Dispos] d on d.Disposition = dr.CallStatus";
@@ -154,10 +153,10 @@ class ProductionReportSubcampaign
             }
 
             $sql .= "
-            WHERE dr.GroupId = '''+CAST(:group_id3 as varchar)+'''
-            AND dr.Date >= '''+CAST(:startdate2 as nvarchar)+'''
-            AND dr.Date < '''+CAST(:enddate2 as nvarchar)+'''
-            AND (((d.GroupId='''+CAST(:group_id4 as varchar)+''' OR d.IsSystem=1)
+            WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+'''
+            AND dr.Date >= '''+CAST(:startdate1$i as nvarchar)+'''
+            AND dr.Date < '''+CAST(:enddate1$i as nvarchar)+'''
+            AND (((d.GroupId=dr.GroupId OR d.IsSystem=1)
                 AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0)
                 OR dr.CallStatus = ''UNFINISHED'')";
 
@@ -187,13 +186,17 @@ class ProductionReportSubcampaign
         SELECT Subcampaign, Type, SUM([Count]) as [Count] FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] = Auth::user()->group_id;
+            $bind['startdate2' . $i] = $startDate;
+            $bind['enddate2' . $i] = $endDate;
+
             $sql .= " $union SELECT r.Subcampaign, d.Type, count(r.id) as [Count]
             FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
                 CROSS APPLY (SELECT TOP 1 [Type]
                             FROM [$db].[dbo].[Dispos]
                             WHERE Disposition=r.CallStatus
-                            AND (GroupId=:group_id5 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
+                            AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
                             ORDER BY [Description] Desc) d";
 
             if (!empty($campaigns)) {
@@ -208,9 +211,9 @@ class ProductionReportSubcampaign
             }
 
             $sql .= "
-            WHERE r.GroupId = :group_id6
-            AND r.Date >= :startdate3
-            AND r.Date < :enddate3
+            WHERE r.GroupId = :group_id2$i
+            AND r.Date >= :startdate2$i
+            AND r.Date < :enddate2$i
             AND d.Type > 0
             GROUP BY r.Subcampaign, d.Type";
 
@@ -255,9 +258,6 @@ class ProductionReportSubcampaign
 
         SET @query = 'SELECT * FROM ' + @temp_table_name  + ' ' + :orderby
         execute sp_executesql @query";
-
-        // Log::debug($sql);
-        // Log::debug($bind);
 
         $results = $this->runSql($sql, $bind);
 

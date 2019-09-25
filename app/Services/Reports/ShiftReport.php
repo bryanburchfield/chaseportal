@@ -37,7 +37,6 @@ class ShiftReport
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -45,16 +44,6 @@ class ShiftReport
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $tz =  Auth::user()->tz;
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['group_id5'] =  Auth::user()->group_id;
-        $bind['group_id6'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate2'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
 
@@ -71,7 +60,14 @@ class ShiftReport
         INSERT INTO #ShiftReport(Date, Campaign, CallStatus, [Description], Calls, TypeName, SortOrder)";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
@@ -84,7 +80,7 @@ class ShiftReport
               END
              FROM [$db].[dbo].[Dispos]
              WHERE Disposition = dr.CallStatus
-             AND (GroupId=:group_id1 OR IsSystem=1)
+             AND (GroupId=dr.GroupId OR IsSystem=1)
             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
          count(dr.CallStatus) as Calls,
          IsNull(
@@ -93,15 +89,15 @@ class ShiftReport
              FROM [$db].[dbo].[Dispos] d
              INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
              WHERE d.Disposition = dr.CallStatus
-             AND (GroupId=:group_id2 OR IsSystem=1)
+             AND (GroupId=dr.GroupId OR IsSystem=1)
             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
          0 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-        WHERE dr.GroupId = :group_id3
+        WHERE dr.GroupId = :group_id$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-        AND dr.Date >= :startdate1
-        AND dr.Date < :enddate1
+        AND dr.Date >= :startdate$i
+        AND dr.Date < :enddate$i
         AND CallStatus in (
                     'CR_CNCT/CON_PAMD',
                     'CR_ERROR',
@@ -116,7 +112,7 @@ class ShiftReport
                     'CR_BAD_NUMBER',
                     'CR_CEPT',
                     'CR_FAXTONE')
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId
         UNION
         SELECT
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
@@ -129,7 +125,7 @@ class ShiftReport
                   END
                  FROM [$db].[dbo].[Dispos]
                  WHERE Disposition = dr.CallStatus
-                 AND (GroupId=:group_id4 OR IsSystem=1)
+                 AND (GroupId=dr.GroupId OR IsSystem=1)
                  ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
          count(dr.CallStatus) as Calls,
           IsNull(
@@ -138,15 +134,15 @@ class ShiftReport
              FROM [$db].[dbo].[Dispos] d
              INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
              WHERE d.Disposition = dr.CallStatus
-             AND (GroupId=:group_id5 OR IsSystem=1)
+             AND (GroupId=dr.GroupId OR IsSystem=1)
             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
          1 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-        WHERE dr.GroupId = :group_id6
+        WHERE dr.GroupId = :group_id1$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-        AND dr.Date >= :startdate2
-        AND dr.Date < :enddate2
+        AND dr.Date >= :startdate1$i
+        AND dr.Date < :enddate1$i
         AND CallStatus not in (
                         'CR_CNCT/CON_PAMD',
                         'CR_ERROR',
@@ -161,7 +157,7 @@ class ShiftReport
                         'CR_BAD_NUMBER',
                         'CR_CEPT',
                         'CR_FAXTONE')
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus";
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId";
 
             $union = 'UNION ALL';
         }

@@ -9,14 +9,21 @@
 
 			<div class="row">
 				@include('shared.report_db_menu')
-				
+
 				<div class="col-sm-4">
 					<div class="form-group">
-						
 						{!! Form::label('campaign', 'Campaign') !!}
 						{!! Form::select("campaign", $filters['campaign'], null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('subcampaign', 'Subcampaign') !!}
+						{!! Form::select("subcampaign", $filters['subcampaign'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class='reporterrors'>

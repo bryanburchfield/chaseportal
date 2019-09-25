@@ -41,19 +41,14 @@ class LeadInventory
             $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
         }
 
-        $bind['group_id1'] = Auth::user()->group_id;
-        $bind['group_id2'] = Auth::user()->group_id;
-        $bind['group_id3'] = Auth::user()->group_id;
-        $bind['group_id4'] = Auth::user()->group_id;
-        $bind['group_id5'] = Auth::user()->group_id;
-        $bind['group_id6'] = Auth::user()->group_id;
+        $bind['group_id'] = Auth::user()->group_id;
         $bind['campaigns'] = $campaigns;
 
         $sql = "SET NOCOUNT ON;
 
         DECLARE @MaxDialingAttempts int;
 
-        SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id1, '', 'MaxDialingAttempts', 0) -- unlimited
+        SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id, '', 'MaxDialingAttempts', 0) -- unlimited
 
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key)
         INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!')
@@ -74,7 +69,9 @@ class LeadInventory
         SELECT * INTO #LeadCounts FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+
             $sql .= " $union SELECT
             CASE IsNull(dr.CallStatus, '')
                 WHEN '' THEN '[ Not Called ]'
@@ -84,7 +81,7 @@ class LeadInventory
                     FROM [$db].[dbo].[Dispos]
                     INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
                     WHERE Disposition = dr.CallStatus
-                    AND (GroupId = :group_id2 OR IsSystem = 1)
+                    AND (GroupId = dr.GroupId OR IsSystem = 1)
                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc
             ), 0) as IsCallable,
             WasDialed,
@@ -92,7 +89,7 @@ class LeadInventory
              FROM [$db].[dbo].[Dispos]
              INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
              WHERE Disposition = dr.CallStatus
-             AND (GroupId = :group_id3 OR IsSystem = 1)
+             AND (GroupId = dr.GroupId OR IsSystem = 1)
              ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
             IsNull((SELECT TOP 1
                 CASE [Type]
@@ -103,15 +100,15 @@ class LeadInventory
                 END
                 FROM [$db].[dbo].[Dispos]
                 INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
-                WHERE Disposition = dr.CallStatus AND (GroupId = :group_id4 OR IsSystem = 1)
+                WHERE Disposition = dr.CallStatus AND (GroupId = dr.GroupId OR IsSystem = 1)
                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect'
                 ) as [Type],
                count(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
             INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign
-            WHERE dr.GroupId = :group_id5
+            WHERE dr.GroupId = :group_id$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, dr.WasDialed";
+            GROUP BY dr.CallStatus, dr.WasDialed, dr.GroupId";
 
             $union = 'UNION ALL';
         }
@@ -127,7 +124,8 @@ class LeadInventory
         SET TotalLeads = a.Leads
         FROM (SELECT SUM(Leads) as Leads FROM #ShiftReport) a";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
 
             $sql .= "
             UPDATE #ShiftReport
@@ -137,7 +135,7 @@ class LeadInventory
                 LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
                 LEFT JOIN dialer_DialingSettings ds2 on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign
                 INNER JOIN #SelectedCampaign c on c.CampaignName = l.Campaign
-                WHERE l.GroupId = :group_id6
+                WHERE l.GroupId = :group_id1$i
                 AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
                 AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
                 AND l.WasDialed = 0
