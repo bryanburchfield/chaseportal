@@ -114,23 +114,22 @@ class MasterDashController extends Controller
         }
 
         if (empty($errors)) {
-            $user = User::findOrFail($request->id);
+            $user = Auth::user();
 
             $input = $request->all();
-            if($input['new_password'] != ''){
-                $input['new_password'] = Hash::make('new_password');
-                $password= $input['new_password'];
-            }else{
-                $input['password'] = Hash::make('password');
-                $password= $input['password'];
-            }
-            
-            $user->update([
+
+            $update = [
                 'name' => $input['name'],
                 'email' => $input['email'],
-                'password' => $password
-            ]);
-            $success[] = $user;
+            ];
+
+            if (!empty($input['new_password'])) {
+                $update['password'] = Hash::make($input['new_password']);
+            }
+
+            $result = $user->update($update);
+
+            $success[] = $result;
         }
 
         return $this->showSettings($success, $errors);
