@@ -49,8 +49,6 @@
 								{!! Form::password('conf_password', ['class'=>'form-control conf_password']) !!}
 							</div>
 
-							{!! Form::hidden('id', $user->id, ['id'=>'user_id']) !!}
-
 							{!! Form::submit('Update', ['class'=>'btn btn-primary mb0'] ) !!}
 
 								@if($errors->any())
