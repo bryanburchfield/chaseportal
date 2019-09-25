@@ -53,7 +53,7 @@ class Admin extends Controller
             'jsfile' => [],
         ];
 
-        return view('master.admin')->with($data);
+        return view('dashboards.admin')->with($data);
     }
 
     public function token_exists($hash)

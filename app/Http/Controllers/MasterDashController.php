@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class MasterDashController extends Controller
 {
@@ -36,7 +38,7 @@ class MasterDashController extends Controller
             $page['type'] = 'kpi_page';
         }
 
-        $dashbody = 'master.' . $this->currentDash;
+        $dashbody = 'dashboards.' . $this->currentDash;
 
         $data = [
             'campaign' => $this->campaign,
@@ -69,6 +71,53 @@ class MasterDashController extends Controller
 
     public function showSettings()
     {
-        return view('master.mysettings');
+        $user = Auth::user();
+
+        $page['menuitem'] = 'other';
+        $page['type'] = 'other';
+        $data = [
+            'user' => $user,
+            'page' => $page,
+        ];
+
+        return view('dashboards.mysettings')->with($data);
+    }
+
+    public function updateUserSettings(Request $request)
+    {   
+        $user = Auth::user();
+        $return=[
+            'errors' => [],
+            'success' => []
+        ];
+
+        /// check if name or email is used by another user
+        $user_check = User::where('id', '!=', $request->id)
+            ->where(function ($query) use ($request) {
+                $query->where('name', $request->name)
+                    ->orWhere('email', $request->email);
+            })
+            ->first();
+
+        /// check if current password is correct
+        if(Hash::make($request->current_password) != $user->password){
+            array_push($return['errors'], 'Current password is incorrect');
+        }
+
+        /// check if new password matches confirm password
+        if($request->new_password != $request->conf_password){
+            array_push($return['errors'], 'New password does not match');
+        }
+
+        if ($user_check) {
+            array_push($return['errors'], 'Name or email in use by another user');
+        } else {
+            $user = User::findOrFail($request->id);
+            $user->update($request->all());
+            array_push($return['success'], $user);
+        }
+
+        return $return;
+        // return view('dashboards.mysettings')->with($return);
     }
 }

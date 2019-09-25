@@ -13,9 +13,10 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/', 'MasterDashController@index');
         Route::post('showreport', 'MasterDashController@showReport');
         Route::get('settings/', 'MasterDashController@showSettings');
+        Route::post('update_user_settings', 'MasterDashController@updateUserSettings');
 
         // Reports
-        Route::get('reportsettings', 'AutomatedReportController@reportSettings');
+        Route::get('automatedreports', 'AutomatedReportController@automatedReports');
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
         Route::post('toggle_automated_report', 'AutomatedReportController@toggleAutomatedReport');

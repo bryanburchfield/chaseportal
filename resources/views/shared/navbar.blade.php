@@ -23,11 +23,11 @@
 
 
                     @if($page['type'] =='dash')
-                        @include('master.dashnav')
+                        @include('dashboards.dashnav')
                     @elseif($page['type'] == 'kpi_page')
-                        @include('master.kpinav')
+                        @include('dashboards.kpinav')
                     @elseif($page['type'] == 'report')
-                        @include('master.reportnav')
+                        @include('dashboards.reportnav')
                     @endif
                 </div>
             </div>

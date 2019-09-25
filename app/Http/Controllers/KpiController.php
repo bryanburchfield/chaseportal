@@ -281,7 +281,7 @@ class KpiController extends Controller
                 ->orderBy('name')
                 ->get(),
         ];
-        return view('recipients')->with($data);
+        return view('dashboards.recipients')->with($data);
     }
 
     /**

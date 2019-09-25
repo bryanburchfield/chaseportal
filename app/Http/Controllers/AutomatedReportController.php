@@ -45,7 +45,7 @@ class AutomatedReportController extends Controller
         return $list;
     }
 
-    public function reportSettings()
+    public function automatedReports()
     {
 
         $page['menuitem'] = 'reports';
@@ -56,7 +56,7 @@ class AutomatedReportController extends Controller
             'reports' => $this->getAutomatedReports(),
         ];
 
-        return view('reportsettings')->with($data);
+        return view('dashboards.automatedreports')->with($data);
     }
 
     public function toggleAutomatedReport(Request $request)

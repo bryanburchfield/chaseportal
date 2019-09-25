@@ -16,7 +16,7 @@
             <div class="container-full mt20">
                 <div class="row">            
                     <div class="col-sm-12">
-                        <h2 class="page_heading">Report Settings</h2>
+                        <h2 class="page_heading">Automated Reports</h2>
                         <h5 class="mb20">Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be <b>sent daily at 6:00am EST</b>.</h5><br>
                         
                         @foreach($reports as $report)
