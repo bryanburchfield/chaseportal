@@ -84,11 +84,11 @@ class MasterDashController extends Controller
     }
 
     public function updateUserSettings(Request $request)
-    {   
+    {
         $user = Auth::user();
-        $return=[
+        $return = [
             'errors' => [],
-            'success' => []
+            'success' => [],
         ];
 
         /// check if name or email is used by another user
@@ -100,12 +100,12 @@ class MasterDashController extends Controller
             ->first();
 
         /// check if current password is correct
-        if(Hash::make($request->current_password) != $user->password){
+        if (!Hash::check($request->current_password, $user->password)) {
             array_push($return['errors'], 'Current password is incorrect');
         }
 
         /// check if new password matches confirm password
-        if($request->new_password != $request->conf_password){
+        if ($request->new_password != $request->conf_password) {
             array_push($return['errors'], 'New password does not match');
         }
 
