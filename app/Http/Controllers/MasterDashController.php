@@ -92,7 +92,7 @@ class MasterDashController extends Controller
         $success = [];
 
         /// check if name or email is used by another user
-        $user_check = User::where('id', '!=', $request->id)
+        $user_check = User::where('id', '!=', $user->id)
             ->where(function ($query) use ($request) {
                 $query->where('name', $request->name)
                     ->orWhere('email', $request->email);
@@ -116,15 +116,13 @@ class MasterDashController extends Controller
         if (empty($errors)) {
             $user = Auth::user();
 
-            $input = $request->all();
-
             $update = [
-                'name' => $input['name'],
-                'email' => $input['email'],
+                'name' => $request->name,
+                'email' => $request->email,
             ];
 
-            if (!empty($input['new_password'])) {
-                $update['password'] = Hash::make($input['new_password']);
+            if (!empty($request->new_password)) {
+                $update['password'] = Hash::make($request->new_password);
             }
 
             $success[] = $user->update($update);
