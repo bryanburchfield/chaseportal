@@ -31,7 +31,7 @@ class CampaignUsage
     {
         $filters = [
             'campaign' => $this->getAllCampaigns(),
-            'subampaign' => $this->getAllSubcampaigns(),
+            'subcampaign' => $this->getAllSubcampaigns(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -40,21 +40,7 @@ class CampaignUsage
 
     private function executeReport($all = false)
     {
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['campaign1'] =  $this->params['campaign'];
-        $bind['campaign2'] =  $this->params['campaign'];
-        $bind['campaign3'] =  $this->params['campaign'];
-        $bind['campaign4'] =  $this->params['campaign'];
-
-        if (!empty($this->params['subcampaign'])) {
-            $subsql = "AND l.Subcampaign = :subcampaign";
-            $bind['subcampaign'] =  $this->params['subcampaign'];
-        } else {
-            $subsql = '';
-        }
+        $bind = [];
 
         $sql = "SET NOCOUNT ON;
 
@@ -71,7 +57,10 @@ class CampaignUsage
         (15,0),(15,1),(16,0),(16,1),(17,0),(17,1),(18,0),(18,1),(19,0),(19,1),
         (20,0),(20,1);";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['campaign' . $i] = $this->params['campaign'];
+
             $sql .= " UPDATE #CampaignUsage
             SET #CampaignUsage.Tries += a.Tries
             FROM (SELECT l2.Attempt, sum(l2.Tries) as Tries
@@ -79,9 +68,15 @@ class CampaignUsage
                         case when l.Attempt > 20 then 20 else l.Attempt end as Attempt,
                         COUNT(Attempt) as Tries
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-                        WHERE l.GroupId = :group_id1
-                        AND l.Campaign = :campaign1
-                    $subsql
+                        WHERE l.GroupId = :group_id$i
+                        AND l.Campaign = :campaign$i";
+
+            if (!empty($this->params['subcampaign'])) {
+                $bind['subcampaign' . $i] =  $this->params['subcampaign'];
+                $sql .= " AND l.Subcampaign = :subcampaign$i";
+            }
+
+            $sql .= "
                     AND l.WasDialed = 1
                     GROUP BY Attempt) l2
                     GROUP BY l2.Attempt) a
@@ -89,7 +84,10 @@ class CampaignUsage
             AND #CampaignUsage.Callable = 0;";
         }
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['campaign1' . $i] = $this->params['campaign'];
+
             $sql .= " UPDATE #CampaignUsage
             SET #CampaignUsage.Tries += a.Tries
             FROM (SELECT l2.Attempt, sum(l2.Tries) as Tries
@@ -97,10 +95,16 @@ class CampaignUsage
                     case when l.Attempt > 20 then 20 else l.Attempt end as Attempt,
                     COUNT(Attempt) as Tries
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-                        WHERE l.GroupId = :group_id2
-                        AND l.Campaign = :campaign2
-                        $subsql
-                        AND l.WasDialed = 0
+                        WHERE l.GroupId = :group_id1$i
+                        AND l.Campaign = :campaign1$i";
+
+            if (!empty($this->params['subcampaign'])) {
+                $bind['subcampaign1' . $i] =  $this->params['subcampaign'];
+                $sql .= " AND l.Subcampaign = :subcampaign1$i";
+            }
+
+            $sql .= "
+                    AND l.WasDialed = 0
                     GROUP BY Attempt) l2
                     GROUP BY l2.Attempt) a
             WHERE #CampaignUsage.Attempt = a.Attempt
@@ -108,14 +112,23 @@ class CampaignUsage
         }
 
         $sql .= "SELECT CallStatus, COUNT(*) as Cnt FROM (";
+
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] = Auth::user()->group_id;
+            $bind['campaign2' . $i] = $this->params['campaign'];
 
             $sql .= " $union SELECT CallStatus
             FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-            WHERE l.GroupId = :group_id3
-            AND l.Campaign = :campaign3
-            $subsql
+            WHERE l.GroupId = :group_id2$i
+            AND l.Campaign = :campaign2$i";
+
+            if (!empty($this->params['subcampaign'])) {
+                $bind['subcampaign2' . $i] =  $this->params['subcampaign'];
+                $sql .= " AND l.Subcampaign = :subcampaign2$i";
+            }
+
+            $sql .= "
             AND l.WasDialed = 1";
 
             $union = "UNION ALL";
@@ -128,13 +141,21 @@ class CampaignUsage
         SELECT Subcampaign, COUNT(*) as Cnt FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id3' . $i] = Auth::user()->group_id;
+            $bind['campaign3' . $i] = $this->params['campaign'];
 
             $sql .= " $union SELECT IsNull(Subcampaign, '') as Subcampaign
             FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-            WHERE l.GroupId = :group_id4
-            AND l.Campaign = :campaign4
-            $subsql
+            WHERE l.GroupId = :group_id3$i
+            AND l.Campaign = :campaign3$i";
+
+            if (!empty($this->params['subcampaign'])) {
+                $bind['subcampaign3' . $i] =  $this->params['subcampaign'];
+                $sql .= " AND l.Subcampaign = :subcampaign3$i";
+            }
+
+            $sql .= "
             AND l.WasDialed = 0";
 
             $union = "UNION ALL";
@@ -164,7 +185,7 @@ class CampaignUsage
             $stmt->bindValue($k, $v);
         }
 
-        $exec = $stmt->execute();
+        $stmt->execute();
 
         try {
             $this->extras['callstats'] = $stmt->fetchAll(\PDO::FETCH_ASSOC);

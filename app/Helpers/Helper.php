@@ -57,3 +57,13 @@ if (!function_exists('deleteColumn')) {
         return $array;
     }
 }
+
+if (!function_exists('makeDateTime')) {
+    function makeDateTime($datetime)
+    {
+        if (!is_a($datetime, '\DateTime')) {
+            $datetime = new \DateTime($datetime);
+        }
+        return $datetime;
+    }
+}

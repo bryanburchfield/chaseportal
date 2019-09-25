@@ -36,7 +36,10 @@ class InboundSummary
     public function getFilters()
     {
         $filters = [
-            'campaigns' => $this->getAllCampaigns(),
+            'campaigns' => $this->getAllCampaigns(
+                $this->params['fromdate'],
+                $this->params['todate']
+            ),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -45,7 +48,6 @@ class InboundSummary
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -53,9 +55,6 @@ class InboundSummary
         $endDate = $toDate->format('Y-m-d H:i:s');
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
 
-        $bind['group_id'] =  Auth::user()->group_id;
-        $bind['startdate'] = $startDate;
-        $bind['enddate'] = $endDate;
         $bind['campaigns'] = $campaigns;
 
         $sql = "SET NOCOUNT ON;
@@ -87,7 +86,11 @@ class InboundSummary
             SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT
                     IsNull(dr.CallerId, '') as Source,
                     dr.Campaign as Campaign,
@@ -97,9 +100,10 @@ class InboundSummary
                     dr.Duration as Duration
                 FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
                 INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign
-                WHERE dr.GroupId = :group_id
+                WHERE dr.GroupId = :group_id$i
                 AND dr.CallType = 1
-                AND dr.Date between :startdate and :enddate";
+                AND dr.Date >= :startdate$i
+                AND dr.Date < :enddate$i";
 
             $union = 'UNION ALL';
         }

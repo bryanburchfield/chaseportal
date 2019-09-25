@@ -52,7 +52,7 @@ class MissedCalls
         SELECT * INTO #MissedPhones FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
+        foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id' . $i] = Auth::user()->group_id;
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
@@ -84,9 +84,8 @@ class MissedCalls
         SELECT *, totRows = COUNT(*) OVER() FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $i => $db) {
-            $i += 99;
-            $bind['group_id' . $i] = Auth::user()->group_id;
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
 
             $sql .= " $union SELECT
                 MP.Phone,
@@ -100,7 +99,7 @@ class MissedCalls
                 SELECT TOP 1 Date, CallStatus
                 FROM [$db].[dbo].[DialingResults]
                 WHERE Phone = MP.Phone
-                AND GroupId = :group_id$i
+                AND GroupId = :group_id1$i
                 AND Date >= MP.MaxDate
                 ORDER BY Date DESC
             ) DR";

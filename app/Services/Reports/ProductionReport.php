@@ -27,8 +27,8 @@ class ProductionReport
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(
-                new \DateTime($this->params['fromdate']),
-                new \DateTime($this->params['todate'])
+                $this->params['fromdate'],
+                $this->params['todate']
             ),
             'skills' => $this->getAllSkills(),
             'db_list' => Auth::user()->getDatabaseArray(),
@@ -39,7 +39,6 @@ class ProductionReport
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -58,37 +57,28 @@ class ProductionReport
             $orderby = ' ORDER BY [Rep]';
         }
 
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['group_id5'] =  Auth::user()->group_id;
-        $bind['group_id6'] =  Auth::user()->group_id;
-        $bind['group_id7'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate2'] = $endDate;
-        $bind['startdate3'] = $startDate;
-        $bind['enddate3'] = $endDate;
-        $bind['startdate4'] = $startDate;
-        $bind['enddate4'] = $endDate;
-        $bind['campaigns'] = $campaigns;
+        $bind['group_id20'] =  Auth::user()->group_id;
+        $bind['startdate20'] = $startDate;
+        $bind['enddate20'] = $endDate;
         $bind['orderby'] = $orderby;
 
         $sql = "SET NOCOUNT ON;";
 
         if (!empty($this->params['skills'])) {
-            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $skills = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $bind['skills'] = $skills;
+
             $sql .= "
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
-            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT(:skills, '!#!');";
         }
 
         $sql .= "
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key)";
 
         if (!empty($campaigns)) {
+            $bind['campaigns'] = $campaigns;
+
             $sql .= "
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
         }
@@ -106,8 +96,13 @@ class ProductionReport
         SELECT  @cols = STUFF((
           SELECT '],[' + t2.CallStatus
           FROM (";
+
         $union = "";
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= "
                     $union SELECT dr.CallStatus
                     FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
@@ -125,11 +120,11 @@ class ProductionReport
             }
 
             $sql .= "
-                    WHERE dr.GroupId = :group_id1
-                    AND dr.Date >= :startdate1
-                    AND dr.Date < :enddate1
-                    AND (((d.GroupId=:group_id2 OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')
-                    GROUP BY dr.CallStatus";
+                    WHERE dr.GroupId = :group_id$i
+                    AND dr.Date >= :startdate$i
+                    AND dr.Date < :enddate$i
+                    AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')
+                    GROUP BY dr.CallStatus, dr.GroupId";
             $union = "UNION";
         }
         $sql .= ") AS t2
@@ -142,7 +137,10 @@ class ProductionReport
         FROM (";
 
         $union = "";
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
 
             $sql .= "
             $union SELECT dr.CallStatus, dr.Rep
@@ -161,10 +159,10 @@ class ProductionReport
             }
 
             $sql .= "
-                WHERE dr.GroupId = '''+CAST(:group_id3 as varchar)+''' AND '
+                WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+''' AND '
 
-        SET @query = @query + N'dr.Date between '''+CAST(:startdate2 as nvarchar)+''' and '''+CAST(:enddate2 as nvarchar)+''' AND
-                (((d.GroupId='''+CAST(:group_id4 as varchar)+''' OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR
+        SET @query = @query + N'dr.Date between '''+CAST(:startdate1$i as nvarchar)+''' and '''+CAST(:enddate1$i as nvarchar)+''' AND
+                (((d.GroupId=dr.GroupId OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR
                 dr.CallStatus = ''UNFINISHED'')";
 
             $union = 'UNION';
@@ -188,10 +186,12 @@ class ProductionReport
             $sql .= "
             execute sp_executesql @query";
         } else {
+            $bind['campaigns1'] = $campaigns;
+
             $sql .= "
             execute sp_executesql
                 @query, @params,
-                @CampaignIN=:campaigns";
+                @CampaignIN=:campaigns1";
         }
 
         $sql .= "
@@ -208,19 +208,21 @@ class ProductionReport
         }
 
         $sql .= "
-            set @query = @query + N' WHERE aa.GroupId = ' + CAST(:group_id5 as nvarchar) + N' AND '
+            set @query = @query + N' WHERE aa.GroupId = ' + CAST(:group_id20 as nvarchar) + N' AND '
 
-            set @query = @query + N'aa.Date >= '''+CAST(:startdate3 as nvarchar)+''' AND aa.Date < '''+CAST(:enddate3 as nvarchar)+''' AND
+            set @query = @query + N'aa.Date >= '''+CAST(:startdate20 as nvarchar)+''' AND aa.Date < '''+CAST(:enddate20 as nvarchar)+''' AND
                     [Action] <> ''Paused''
                 GROUP BY Rep) a
             WHERE
                 ' + @temp_table_name + N'.Rep = a.Rep'";
 
         if (!empty($campaigns)) {
+            $bind['campaigns20'] = $campaigns;
+
             $sql .= "
             execute sp_executesql
             @query, @params,
-            @CampaignIN=:campaigns";
+            @CampaignIN=:campaigns20";
         } else {
             $sql .= "
             execute sp_executesql @query";
@@ -238,12 +240,16 @@ class ProductionReport
                 FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id3' . $i] = Auth::user()->group_id;
+            $bind['startdate3' . $i] = $startDate;
+            $bind['enddate3' . $i] = $endDate;
+
             $sql .= "
                 $union SELECT r.Rep, d.Type, count(r.id) as [Cnt]
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
                     CROSS APPLY (SELECT TOP 1 [Type] FROM Dispos WHERE Disposition=r.CallStatus AND
-                            (GroupId=:group_id6 OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
+                            (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
                             ORDER BY [Description] Desc) d";
 
             if (!empty($campaigns)) {
@@ -258,9 +264,9 @@ class ProductionReport
             }
 
             $sql .= "
-                WHERE r.GroupId = :group_id7
-                AND r.Date >= :startdate4
-                AND r.Date < :enddate4
+                WHERE r.GroupId = :group_id3$i
+                AND r.Date >= :startdate3$i
+                AND r.Date < :enddate3$i
                 AND d.Type > 0
                 GROUP BY r.Rep, d.Type";
 

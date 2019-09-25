@@ -58,19 +58,8 @@ class SubcampaignSummary
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $tz =  Auth::user()->tz;
-        $bind['group_id1'] =  Auth::user()->group_id;
-        $bind['group_id2'] =  Auth::user()->group_id;
-        $bind['group_id3'] =  Auth::user()->group_id;
-        $bind['group_id4'] =  Auth::user()->group_id;
-        $bind['group_id5'] =  Auth::user()->group_id;
-        $bind['group_id6'] =  Auth::user()->group_id;
-        $bind['group_id7'] =  Auth::user()->group_id;
-        $bind['startdate1'] = $startDate;
-        $bind['enddate1'] = $endDate;
-        $bind['startdate2'] = $startDate;
-        $bind['enddate2'] = $endDate;
-        $bind['startdate3'] = $startDate;
-        $bind['enddate3'] = $endDate;
+
+        $bind['group_id'] = Auth::user()->group_id;
 
         $sql = "SET NOCOUNT ON;
 
@@ -101,7 +90,11 @@ class SubcampaignSummary
         SELECT * INTO #DialingResultsStats FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
             $sql .= " $union SELECT
             CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
             dr.Campaign,
@@ -109,16 +102,16 @@ class SubcampaignSummary
             dr.CallStatus as CallStatus,
             IsNull((SELECT TOP 1 [Type]
               FROM [$db].[dbo].[Dispos]
-              WHERE Disposition=dr.CallStatus AND (GroupId=:group_id1 OR IsSystem=1) AND (Campaign=dr.Campaign OR IsDefault=1) AND (Campaign=dr.Campaign OR IsDefault=1) ORDER BY [Description] Desc), 0) as [Type],
+              WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR IsDefault=1) AND (Campaign=dr.Campaign OR IsDefault=1) ORDER BY [Description] Desc), 0) as [Type],
             count(dr.CallStatus) as [Count]
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-            WHERE dr.GroupId = :group_id2
-            AND dr.Date >= :startdate1
-            AND dr.Date < :enddate1
+            WHERE dr.GroupId = :group_id$i
+            AND dr.Date >= :startdate$i
+            AND dr.Date < :enddate$i
             AND dr.Campaign <> '_MANUAL_CALL_'
             AND IsNull(dr.CallStatus, '') <> ''
             AND dr.CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
+            GROUP BY dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';
         }
@@ -140,7 +133,7 @@ class SubcampaignSummary
         )
 
         INSERT INTO #DialingSettings(Campaign, MaxDIalingAttempts)
-        SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id3, Campaign, 'MaxDialingAttempts', 0)
+        SELECT Campaign, dbo.GetGroupCampaignSetting(:group_id, Campaign, 'MaxDialingAttempts', 0)
         FROM #SubcampaignSummary
         GROUP BY Campaign
 
@@ -178,16 +171,20 @@ class SubcampaignSummary
            SELECT Campaign, Subcampaign, Date, SUM(IsNull(ManHours, 0)) as ManHours FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id1' . $i] = Auth::user()->group_id;
+            $bind['startdate1' . $i] = $startDate;
+            $bind['enddate1' . $i] = $endDate;
+
             $sql .= " $union SELECT
                 Campaign,
                 IsNull(Subcampaign, '') as Subcampaign,
                 CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
                 SUM(Duration) as ManHours
               FROM [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)
-              WHERE aa.GroupId = :group_id4
-              AND aa.Date >= :startdate2
-              AND aa.Date < :enddate2
+              WHERE aa.GroupId = :group_id1$i
+              AND aa.Date >= :startdate1$i
+              AND aa.Date < :enddate1$i
               AND [Action] <> 'Paused'
               GROUP BY Campaign, IsNull(Subcampaign, ''), CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
@@ -201,12 +198,14 @@ class SubcampaignSummary
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date;";
 
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] = Auth::user()->group_id;
+
             $sql .= "UPDATE #SubcampaignSummary
             SET Total += a.Total
             FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total
                 FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-                WHERE l.GroupId = :group_id5
+                WHERE l.GroupId = :group_id2$i
                 GROUP BY l.Campaign, IsNull(l.Subcampaign, '')) a
             WHERE #SubcampaignSummary.Campaign = a.Campaign
             AND #SubcampaignSummary.Subcampaign = a.Subcampaign;";
@@ -223,12 +222,16 @@ class SubcampaignSummary
             FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id3' . $i] = Auth::user()->group_id;
+            $bind['startdate3' . $i] = $startDate;
+            $bind['enddate3' . $i] = $endDate;
+
             $sql .= " $union SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, l.Attempt, CAST(CONVERT(datetimeoffset, LastUpdated) AT TIME ZONE '$tz' as date) as Date
             FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-            WHERE l.GroupId = :group_id6
-            AND l.LastUpdated >= :startdate3
-            AND l .LastUpdated < :enddate3";
+            WHERE l.GroupId = :group_id3$i
+            AND l.LastUpdated >= :startdate3$i
+            AND l .LastUpdated < :enddate3$i";
 
             $union = 'UNION ALL';
         }
@@ -245,14 +248,16 @@ class SubcampaignSummary
             SELECT Campaign, Subcampaign, SUM(Available) as Available FROM (";
 
         $union = '';
-        foreach (Auth::user()->getDatabaseArray() as $db) {
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id4' . $i] = Auth::user()->group_id;
+
             $sql .= " $union SELECT
                   l.Campaign,
                   IsNull(l.Subcampaign, '') as Subcampaign,
                   COUNT(l.id) as Available
                 FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                 LEFT JOIN #DialingSettings ds on ds.Campaign = l.Campaign
-                WHERE l.GroupId = :group_id7
+                WHERE l.GroupId = :group_id4$i
                 AND l.WasDialed = 0
                 AND (ds.MaxDialingAttempts = 0 OR l.Attempt < ds.MaxDialingAttempts)
                 GROUP BY l.Campaign, IsNull(l.Subcampaign, '')";
@@ -316,10 +321,6 @@ class SubcampaignSummary
             Cepts,
             totRows = COUNT(*) OVER()
         FROM #SubcampaignSummary";
-
-
-
-
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {

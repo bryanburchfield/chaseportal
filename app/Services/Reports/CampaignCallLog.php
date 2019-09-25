@@ -33,7 +33,10 @@ class CampaignCallLog
     {
         $filters = [
             'reps' => $this->getAllReps(),
-            'campaigns' => $this->getAllCampaigns(),
+            'campaigns' => $this->getAllCampaigns(
+                $this->params['fromdate'],
+                $this->params['todate']
+            ),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
