@@ -127,9 +127,7 @@ class MasterDashController extends Controller
                 $update['password'] = Hash::make($input['new_password']);
             }
 
-            $result = $user->update($update);
-
-            $success[] = $result;
+            $success[] = $user->update($update);
         }
 
         return $this->showSettings($success, $errors);
