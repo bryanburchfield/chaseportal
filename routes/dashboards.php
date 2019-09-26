@@ -18,10 +18,10 @@ Route::prefix('dashboards')->group(function () {
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
         Route::post('toggle_automated_report', 'AutomatedReportController@toggleAutomatedReport');
-        Route::get('reports/{report}', 'ReportController@index');
-        Route::post('reports/{report}', 'ReportController@runReport');
         Route::post('reports/get_campaigns', 'ReportController@getCampaigns');
         Route::post('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
+        Route::get('reports/{report}', 'ReportController@index');
+        Route::post('reports/{report}', 'ReportController@runReport');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
