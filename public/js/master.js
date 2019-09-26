@@ -37,7 +37,7 @@ var Master = {
 	init:function(){
 
 		$('.pag').clone().insertAfter('div.table-responsive');
-		$('.view_report_btn').on('click', this.view_report);
+		// $('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
 		$('.edit_user').on('submit', this.edit_user);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
@@ -1045,9 +1045,11 @@ var Master = {
 	view_report:function(){
 		$('.alert').hide();
 		var selected_report = $('input.report_option:checked'). val();
-
+        console.log(selected_report);
+        return false;
 		if(selected_report != '' && selected_report != undefined){
 			window.location ="reports.php?report="+selected_report;
+            
 		}else{
 			$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
 		}
