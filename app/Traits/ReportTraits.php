@@ -85,13 +85,17 @@ trait ReportTraits
         return $results;
     }
 
-    public function getSubcampaigns(Request $request)
+    public function getAllSubcampaigns($campaign = null)
     {
+        if (empty($campaign)) {
+            return [];
+        }
+
         $sql = '';
         $union = '';
         foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['campaign' . $i] = $request->campaign;;
+            $bind['campaign' . $i] = $campaign;;
 
             $sql .=  "$union SELECT DISTINCT Subcampaign
             FROM [$db].[dbo].[Leads]

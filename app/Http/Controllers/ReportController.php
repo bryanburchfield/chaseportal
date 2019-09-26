@@ -135,14 +135,16 @@ class ReportController extends Controller
 
         $results = $this->reportservice->report->getAllCampaigns($fromDate, $toDate);
 
-        return ['results' => $results];
+        return ['campaigns' => array_values($results)];
     }
 
-    public function getSubcampaigns()
+    public function getSubcampaigns(Request $request)
     {
-        $results = $this->reportservice->getAllSubcampaigns();
+        $campaign = $request->campaign;
 
-        return ['results' => $results];
+        $results = $this->reportservice->report->getAllSubcampaigns($campaign);
+
+        return ['subcampaigns' => array_values($results)];
     }
 
     /**
