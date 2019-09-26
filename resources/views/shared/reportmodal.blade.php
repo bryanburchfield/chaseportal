@@ -91,10 +91,9 @@
                 <a href="#" class="mb0 btn_flgrgt">
                     <span><i class="fa fa-cog"></i> Automated Reports</span>
                 </a>
-                {!! Form::submit('View Report',['class'=>'btn btn-primary mb0']) !!}
+                <a href="#" class="view_report_btn btn-primary btn">View Report</a>
             </div>
 
-            {!! Form::close() !!}
         </div>
     </div>
 </div>
