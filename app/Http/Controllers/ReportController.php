@@ -129,6 +129,16 @@ class ReportController extends Controller
         ];
     }
 
+    public function getCampaigns(Request $request)
+    {
+        $fromDate = $request->fromdate;
+        $toDate = $request->todate;
+
+        $results = $this->reportservice->getAllCampaigns($fromDate, $toDate);
+
+        return ['results' => $results];
+    }
+
     public function getSubcampaigns()
     {
         $results = $this->reportservice->getAllSubcampaigns();
