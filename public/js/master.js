@@ -726,8 +726,8 @@ var Master = {
 
 					$('#campaign_select').empty();
 					var camps_select;
-					for(var i=0; i<response.results.length; i++){
-						camps_select += '<option value="'+response.results[i]+'">'+response.results[i]+'</option>';
+					for(var i=0; i<response.campaigns.length; i++){
+						camps_select += '<option value="'+response.campaigns[i]+'">'+response.campaigns[i]+'</option>';
 					}
 
 					$('#campaign_select').append(camps_select);
