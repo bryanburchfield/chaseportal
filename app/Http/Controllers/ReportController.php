@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use App\Services\ReportService;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -134,7 +133,7 @@ class ReportController extends Controller
         $fromDate = $request->fromdate;
         $toDate = $request->todate;
 
-        $results = $this->reportservice->getAllCampaigns($fromDate, $toDate);
+        $results = $this->reportservice->report->getAllCampaigns($fromDate, $toDate);
 
         return ['results' => $results];
     }
