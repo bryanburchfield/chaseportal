@@ -709,7 +709,7 @@ var Master = {
 			        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			    }
 			});
-
+            console.log(report +' '+ todate +' '+ fromdate);
 			$.ajax({
 				url: 'get_campaigns',
 				type: 'POST',
