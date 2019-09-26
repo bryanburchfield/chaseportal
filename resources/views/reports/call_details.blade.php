@@ -97,7 +97,8 @@
                 </label>
 			</div>
 
-			<div class='reporterrors'></div>
+			<div class="alert alert-danger report_errors"></div>
+
 
 				{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}

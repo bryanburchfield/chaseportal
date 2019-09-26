@@ -1186,7 +1186,7 @@ var Master = {
 			},
 
 			success:function(response){
-
+                console.log(response);
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
@@ -1200,6 +1200,7 @@ var Master = {
 					for (var i = 0; i< response.errors.length; i++) {
 						$('.report_errors').show();
 						$('.report_errors').append(response.errors[i]+'<br>');
+                        console.log(response.errors[i]);
 					}
 
 					return false;
@@ -1241,11 +1242,10 @@ var Master = {
 					}
 				// if no result	
 				}else{
-					$('.table-responsive').empty();
-					$('.pag').empty();
-					$('.report_download').hide();
-					$('.reset_sorting').hide();
-					$('.report_errors').append('No results found').show();
+					// $('.table-responsive').empty();
+					// $('.pag').empty();
+					// $('.report_download').hide();
+					// $('.reset_sorting').hide();
 				}
 
 				if(response.params.report == 'campaign_usage'){
