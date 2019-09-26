@@ -34,6 +34,10 @@ class LeadInventorySub
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
+        $filters['campaign'] =
+            ['' => 'Select One'] +
+            $filters['campaign'];
+
         return $filters;
     }
 
