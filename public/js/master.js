@@ -1055,7 +1055,7 @@ var Master = {
             });
 
             $.ajax({
-                url: 'admin/update_user',
+                url: 'reports/'+selected_report,
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -1065,7 +1065,6 @@ var Master = {
                 success:function(response){
                 }
             });
-			// window.location ="/"+selected_report;
 		}else{
 			$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
 		}
