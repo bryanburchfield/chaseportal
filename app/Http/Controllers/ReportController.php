@@ -113,7 +113,7 @@ class ReportController extends Controller
 
         // check for errors
         if (is_object($results)) {
-            $errors = $results;
+            $errors = $results->all();
             $results = [];
         }
 
@@ -122,7 +122,7 @@ class ReportController extends Controller
         return [
             'table' => view('shared.reporttable')->with($data)->render(),
             'pag' => view('shared.reportpagination')->with($data)->render(),
-            'errors' => $errors->all(),
+            'errors' => $errors,
             'extras' => $this->reportservice->extras,
             'params' => $this->reportservice->report->params,
         ];
