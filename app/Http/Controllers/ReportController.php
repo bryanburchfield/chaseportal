@@ -113,7 +113,7 @@ class ReportController extends Controller
 
         // check for errors
         if (is_object($results)) {
-            $errors = $results;
+            $errors = $results->all();
             $results = [];
         }
 
