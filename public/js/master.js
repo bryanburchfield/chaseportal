@@ -805,7 +805,7 @@ var Master = {
 			});
 
 			$.ajax({
-				url: 'reports/get_subcampaigns',
+				url: 'get_subcampaigns',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -814,6 +814,7 @@ var Master = {
 				},
 
 				success:function(response){
+                    console.log(response);
 					$('#subcampaign_select').empty();
 					
 					var subcampaigns='<option value""> </option>';
