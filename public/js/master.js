@@ -792,9 +792,9 @@ var Master = {
 		var campaign;
 
 		$('#campaign_select option:selected').each(function() {
-		    campaign= $(this).val();
+		    campaign = $(this).val();
 		});
-        console.log(campaign);
+
 		if($('#subcampaign_select').length){
 			e.preventDefault();
 			var report = $('form.report_filter_form').attr('id');
