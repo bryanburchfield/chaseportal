@@ -11,7 +11,7 @@ Route::prefix('dashboards')->group(function () {
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'MasterDashController@index');
-        Route::post('showreport', 'MasterDashController@showReport');
+        Route::post('showreport{report}', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
 

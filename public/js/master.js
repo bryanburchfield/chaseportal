@@ -1047,7 +1047,25 @@ var Master = {
 		var selected_report = $('input.report_option:checked'). val();
         
 		if(selected_report != '' && selected_report != undefined){
-			window.location ="showreport/"+selected_report;
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: 'admin/update_user',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                   report:selected_report
+                },
+
+                success:function(response){
+                }
+            });
+			// window.location ="/"+selected_report;
 		}else{
 			$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
 		}
