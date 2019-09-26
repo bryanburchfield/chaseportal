@@ -790,10 +790,11 @@ var Master = {
 
 	get_subcampaigns:function(e){
 		var campaign=[];
-		$('option:selected').each(function() {
+
+		$('#campaign_select option:selected').each(function() {
 		    campaign.push($(this).val());
 		});
-		
+
 		if($('#subcampaign_select').length){
 			e.preventDefault();
 			var report = $('form.report_filter_form').attr('id');
