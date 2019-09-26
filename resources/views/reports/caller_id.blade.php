@@ -40,10 +40,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('caller_id', 'Caller ID') !!}
-						<div class="input-group ">
-							{!! Form::text('caller_id', $date = isset($_POST['caller_id']) ? $_POST['caller_id'] : $params['caller_id'], ['class'=>'form-control caller_id', 'required' => true, 'readonly'=>true]) !!}
-
-						</div>
+						{!! Form::tel('caller_id', null, ['class'=>'form-control', 'required' => false]) !!}
 					</div>
 				</div>
 			</div>
@@ -67,7 +64,6 @@
 			</div>
 		</div>
 	</div>
-
 	@include('reports.report_tools_inc')
 
 	<div class="table-responsive report_table {{$report}}">

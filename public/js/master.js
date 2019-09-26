@@ -696,7 +696,6 @@ var Master = {
 
 	// populate campaign multi-select based on dates
 	query_dates_for_camps:function(){
-        console.log('asdf');
 		var todate = $('.todate').val(),
 			fromdate = $('.fromdate').val()
 			report = $('form.report_filter_form').attr('id')
@@ -709,7 +708,7 @@ var Master = {
 			        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			    }
 			});
-            console.log(report +' '+ todate +' '+ fromdate);
+
 			$.ajax({
 				url: 'get_campaigns',
 				type: 'POST',
@@ -722,7 +721,6 @@ var Master = {
 				},
 
 				success:function(response){
-                    console.log(response);
 
 					$('#campaign_select').empty();
 					var camps_select;
@@ -733,7 +731,7 @@ var Master = {
 					$('#campaign_select').append(camps_select);
 					$("#campaign_select").multiselect('rebuild');
 					$("#campaign_select").multiselect('refresh');
-                    console.log(report);
+
 					$('#'+ report+ ' #campaign_select')
 						.multiselect({nonSelectedText: 'Select Campaign',})
 						.multiselect('selectAll', false)
@@ -1257,12 +1255,6 @@ var Master = {
 						$('.reset_sorting h3').html('Sorted in <span class="sort_direction">'+sort_direction+'</span> order by <span class="sorted_by">' + this.th_sort+'</span>');
 						$('.reset_sorting').show();
 					}
-				// if no result	
-				}else{
-					// $('.table-responsive').empty();
-					// $('.pag').empty();
-					// $('.report_download').hide();
-					// $('.reset_sorting').hide();
 				}
 
 				if(response.params.report == 'campaign_usage'){
@@ -1278,7 +1270,6 @@ var Master = {
 				}
 
                 if(response.params.report == 'caller_id'){
-                    console.log(response.params.report);
                     Master.caller_id(response);
                 }
 
@@ -1880,11 +1871,6 @@ $(document).ready(function(){
         	$('.card_dropdown-content').hide();
         }
     }
-
-    // $('.front .card_table').each(function(){
-    // 	var title = $(this).find('h1.title').text();
-    // 	$(this).parent().next('.back').prepend('<h1 class="title">'+title+'</h1>');
-    // });
 
 	var hash = window.location.hash;
 	hash && $('ul.nav-tabs a[href="' + hash + '"]').tab('show');
