@@ -1053,13 +1053,12 @@ var Master = {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             });
-
+            console.log(selected_report);
             $.ajax({
-                url: 'reports/'+selected_report,
-                type: 'POST',
+                url: 'dashboards/reports/'+selected_report,
+                type: 'GET',
                 dataType: 'json',
                 data: {
-                   report:selected_report
                 },
 
                 success:function(response){
@@ -1275,7 +1274,12 @@ var Master = {
 
 				if(response.params.report == 'lead_inventory'){
 					Master.lead_inventory(response);
-				}		
+				}
+
+                if(response.params.report == 'caller_id'){
+                    console.log(response.params.report);
+                    Master.caller_id(response);
+                }
 
 
 			}
@@ -1747,6 +1751,79 @@ var Master = {
 		$('.total_leads').html('<b>Available Leads: '+response.extras.AvailableLeads+'</b>');
 		$('.available_leads').html('<b>Total Leads: '+response.extras.TotalLeads+'</b>');
 	},
+
+    caller_id:function(response){
+        
+        var chartColors = Master.chartColors;
+
+        var caller_id_data = {
+          labels: response.extras.callerid,
+                datasets: [
+                  {
+                    label: "Agent Calls",
+                    backgroundColor: chartColors.green,
+                    data: response.extras.agent
+                  },
+                  {
+                    label: "Total Count",
+                    backgroundColor: chartColors.orange,
+                    fillOpacity: .5, 
+                    data: response.extras.total
+                  }
+                ]
+        };
+
+        var show_decimal= Master.ylabel_format(response.extras.callerid);
+
+        var caller_id_options={
+            responsive: true,
+            maintainAspectRatio:false,
+            legend: {  
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12
+                } 
+            },
+            scales: {
+                
+                yAxes: [
+                    {
+                        stacked:true,
+                        // type: 'linear',
+                        position:'left',
+                        scalePositionLeft: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Call Count'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                        }
+                    }
+                ],
+                xAxes: [{ stacked: true }],
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'single',
+            }
+        }
+
+        $('.hidetilloaded').show();
+
+        var ctx = document.getElementById('caller_id_graph').getContext('2d');
+
+        if(window.caller_id_chart != undefined){
+            window.caller_id_chart.destroy();
+        }
+
+        window.caller_id_chart = new Chart(ctx, {
+            type: 'bar',
+            data: caller_id_data,
+            options: caller_id_options
+        });
+    },
 
 	toggle_dotmenu:function(){
 		$("#card_dropdown").toggle();

@@ -43,6 +43,10 @@
                    <div class="radio">
                        <label><input type="radio" name="report_option" class="report_option" value="campaign_usage">Campaign Usage</label>
                    </div>
+
+                   <div class="radio">
+                       <label><input type="radio" name="report_option" class="report_option" value="caller_id">Caller ID</label>
+                   </div>
                </div>
 
                 <div class="col-sm-6 nopad">
