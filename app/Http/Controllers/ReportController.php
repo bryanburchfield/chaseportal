@@ -31,19 +31,19 @@ class ReportController extends Controller
         return $this->returnView($results);
     }
 
-    public function runReport(Request $request)
-    {
-        $results = $this->reportservice->getResults($request);
+    // public function runReport(Request $request)
+    // {
+    //     $results = $this->reportservice->getResults($request);
 
-        // check for errors
-        if (is_object($results)) {
-            return $this->returnView([], $results);
-        }
-        // Push old input to form
-        $request->flash();
+    //     // check for errors
+    //     if (is_object($results)) {
+    //         return $this->returnView([], $results);
+    //     }
+    //     // Push old input to form
+    //     $request->flash();
 
-        return $this->returnView($results);
-    }
+    //     return $this->returnView($results);
+    // }
 
     public function exportReport(Request $request)
     {
@@ -122,7 +122,7 @@ class ReportController extends Controller
         return [
             'table' => view('shared.reporttable')->with($data)->render(),
             'pag' => view('shared.reportpagination')->with($data)->render(),
-            'errors' => view('shared.reporterrors')->withErrors($errors)->render(),
+            'errors' => $errors,
             'extras' => $this->reportservice->extras,
             'params' => $this->reportservice->report->params,
         ];

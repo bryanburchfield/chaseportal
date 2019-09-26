@@ -4,24 +4,23 @@ Route::prefix('dashboards')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     // ajax targets
-    Route::post('reports/update_report', 'ReportController@updateReport');
-
-    Route::get('reports/report_export/{report}/{format}', 'ReportController@exportReport');
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'MasterDashController@index');
-        Route::post('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
+        Route::post('showreport', 'MasterDashController@showReport');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
         Route::post('toggle_automated_report', 'AutomatedReportController@toggleAutomatedReport');
+        Route::post('reports/update_report', 'ReportController@updateReport');
         Route::post('reports/get_campaigns', 'ReportController@getCampaigns');
         Route::post('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
+        Route::get('reports/report_export/{report}/{format}', 'ReportController@exportReport');
         Route::get('reports/{report}', 'ReportController@index');
-        Route::post('reports/{report}', 'ReportController@runReport');
+        // Route::post('reports/{report}', 'ReportController@runReport');
 
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
