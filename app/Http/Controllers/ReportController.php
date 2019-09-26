@@ -123,7 +123,7 @@ class ReportController extends Controller
             'table' => view('shared.reporttable')->with($data)->render(),
             'pag' => view('shared.reportpagination')->with($data)->render(),
             'errors' => $errors,
-            'extras' => $this->reportservice->extras,
+            'extras' => $this->reportservice->report->extras,
             'params' => $this->reportservice->report->params,
         ];
     }
