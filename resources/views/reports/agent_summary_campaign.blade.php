@@ -5,7 +5,7 @@
 	<h3 class="heading">Agent Summary by Campaign</h3>
 	
 	<div class="report_filters card col-sm-12">
-		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
+		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
 			<div class="row">
 				@include('shared.report_db_menu')
@@ -14,7 +14,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', 'From') !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true, 'readonly'=>true]) !!}
+							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker ', 'required' => true, 'readonly'=>true]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
