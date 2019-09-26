@@ -1055,13 +1055,14 @@ var Master = {
             });
             console.log(selected_report);
             $.ajax({
-                url: 'dashboards/reports/'+selected_report,
+                url: '/dashboards/reports/'+selected_report,
                 type: 'GET',
                 dataType: 'json',
                 data: {
                 },
 
                 success:function(response){
+                    console.log(response);
                 }
             });
 		}else{
