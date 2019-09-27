@@ -7,13 +7,9 @@
 
 <div class="col-sm-4 multi_db {{ $show_multi_db }}">
 	<div class="form-group">
-		<label>Database</label>
-        <select name="databases[]" id="database_select" multiple class="form-control multiselect" value="<?php if(isset($_POST['databases'])){echo $_POST['databases'];}?>">
 
-			@foreach ($filters['db_list'] as $key => $value) {
-                <option value="{{$value}}">{{$key}}</option>
-            @endforeach
-
-		</select>
+		{!! Form::label('databases', 'Database') !!}
+		{!! Form::select("databases", $filters['db_list'], null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select', 'multiple']) !!}
+		
     </div>
 </div>
