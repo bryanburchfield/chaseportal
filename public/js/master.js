@@ -813,7 +813,6 @@ var Master = {
 				},
 
 				success:function(response){
-                    console.log(response);
 					$('#subcampaign_select').empty();
 					
 					var subcampaigns='<option value""> </option>';
@@ -1199,8 +1198,9 @@ var Master = {
 					for (var i = 0; i< response.errors.length; i++) {
 						$('.report_errors').show();
 						$('.report_errors').append(response.errors[i]+'<br>');
-                        console.log(response.errors[i]);
 					}
+
+                    $('.hidetilloaded').hide();
 
 					return false;
 				}
@@ -1256,8 +1256,6 @@ var Master = {
                 if(response.params.report == 'caller_id'){
                     Master.caller_id(response);
                 }
-
-
 			}
 		}); /// end ajax
 	}, /// end update_report function
