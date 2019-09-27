@@ -12,7 +12,7 @@
 
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">
-                    <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['name']}}" name="databases"><span>{{$db['database']}}</span></label>
+                    <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['database']}}" name="databases"><span>{{$db['name']}}</span></label>
                     </div>
                 @endforeach                                                                         
 
