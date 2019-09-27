@@ -92,7 +92,7 @@
                 {{-- @csrf --}}
                 {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
                 <button type="button" class="btn btn-default mr10" data-dismiss="modal">Close</button>
-                <a href="#" class="mb0 btn_flgrgt">
+                <a href="#" class="mb0 btn_flgrgt" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
                     <span><i class="fa fa-cog"></i> Automated Reports</span>
                 </a>
                 <a href="#" class="view_report_btn btn-primary btn">View Report</a>
