@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use \App\Traits\ReportExportTraits;
+use Illuminate\Support\Str;
 
 trait ReportTraits
 {
@@ -19,7 +20,7 @@ trait ReportTraits
     private function initilaizeParams()
     {
         $this->params = [
-            'report' => snake_case(basename(get_class($this))),
+            'report' => Str::snake(basename(get_class($this))),
             'curpage' => 1,
             'pagesize' => 50,
             'totrows' => 0,
