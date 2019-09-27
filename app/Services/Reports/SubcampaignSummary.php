@@ -50,7 +50,6 @@ class SubcampaignSummary
 
     private function executeReport($all = false)
     {
-        // Log::debug($this->params);
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
