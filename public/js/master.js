@@ -201,7 +201,7 @@ var Master = {
             });
 
             $.ajax({
-                url: 'dashboards/update_filters',
+                url: '/dashboards/update_filters',
                 type: 'POST',
                 dataType: 'json',
                 data: {dateFilter:datefilter},
@@ -237,7 +237,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'dashboards/update_filters',
+            url: '/dashboards/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {dateFilter:datefilter},
@@ -340,7 +340,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'dashboards/update_filters',
+            url: '/dashboards/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {campaign: campaigns},
@@ -455,7 +455,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'dashboards/update_filters',
+            url: '/dashboards/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {databases:databases},
