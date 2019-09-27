@@ -301,9 +301,9 @@ class AgentSummary
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
         }
 
-        $results = $this->processResults($results);
         return $this->getPage($results);
     }
 
