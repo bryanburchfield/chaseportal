@@ -353,6 +353,12 @@ trait ReportTraits
 
         $results = $this->executeReport($all);
 
+        if (empty($results)) {
+            $this->errors = new MessageBag();
+            $this->errors->add('results', "No results found");
+            return $this->errors;
+        }
+
         return $results;
     }
 
