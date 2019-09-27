@@ -20,7 +20,7 @@ trait ReportTraits
     private function initilaizeParams()
     {
         $this->params = [
-            'report' => Str::snake(basename(get_class($this))),
+            // 'report' => Str::snake(basename(get_class($this))),
             'curpage' => 1,
             'pagesize' => 50,
             'totrows' => 0,
