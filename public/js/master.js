@@ -1184,11 +1184,11 @@ var Master = {
 			},
 
 			success:function(response){
-                console.log(response);
+
 				if($('#sidebar').hasClass('active')){
 					$('#sidebar').removeClass('active');
 				}
-				$('.table-responsive.report_table').show();
+				
 				// hide / empty everything and run report
 				$('.table-responsive, .pag, .report_errors').empty();
 				$('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
@@ -1199,11 +1199,13 @@ var Master = {
 						$('.report_errors').show();
 						$('.report_errors').append(response.errors[i]+'<br>');
 					}
-
+                    $('.table-responsive.report_table').hide();
                     $('.hidetilloaded').hide();
 
 					return false;
 				}
+
+                $('.table-responsive.report_table').show();
 
 				// check for result by counting total page
 				if(response.params.totrows){
