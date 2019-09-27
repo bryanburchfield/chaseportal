@@ -1243,6 +1243,10 @@ p.descrip.top14 {
   padding: 10px 4px;
 }
 
+.reports_table.table {
+  width: 99%;
+}
+
 .report_download {
   display: none;
   margin-bottom: 40px;
