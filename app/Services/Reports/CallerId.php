@@ -164,14 +164,22 @@ class CallerId
 
     private function createExtras($results)
     {
+        $this->extras['callerid'] = [];
+        $this->extras['agent'] = [];
+        $this->extras['total'] = [];
+        $this->extras['system'] = [];
+
         if (!count($results)) {
             return;
         }
 
         array_pop($results); // remove totals row
 
-        $this->extras['callerid'] = array_column($results, 'CallerId');
-        $this->extras['agent'] = array_column($results, 'Agent');
-        $this->extras['total'] = array_column($results, 'Total');
+        foreach ($results as $rec) {
+            $this->extras['callerid'][] = $rec['CallerId'];
+            $this->extras['agent'][] = (int) $rec['Agent'];
+            $this->extras['total'][] = (int) $rec['Total'];
+            $this->extras['system'][] = $rec['Total'] - $rec['Agent'];
+        }
     }
 }
