@@ -366,7 +366,7 @@ var Master = {
     	});
 
 		$.ajax({
-			url: 'dashboards/campaign_search',
+			url: '/dashboards/campaign_search',
 			type: 'POST',
 			dataType: 'json',
 			data: {query: query},

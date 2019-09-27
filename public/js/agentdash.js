@@ -415,7 +415,7 @@ var Dashboard = {
 
         $.ajax({
             async: true,
-            url: 'agentdashboard/update_filters',
+            url: '/agentdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {datefilter: datefilter},
