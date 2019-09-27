@@ -1757,10 +1757,10 @@ var Master = {
                     data: response.extras.agent
                   },
                   {
-                    label: "Total Count",
+                    label: "System Calls",
                     backgroundColor: chartColors.orange,
                     fillOpacity: .5, 
-                    data: response.extras.total
+                    data: response.extras.system
                   }
                 ]
         };
@@ -1789,16 +1789,16 @@ var Master = {
                             labelString: 'Call Count'
                         },
                         ticks: {
-                            beginAtZero: true,
-                            callback: function(value) {if (value % 1 === 0) {return value;}}
-                        }
+                                // display: false
+                            }
                     }
                 ],
                 xAxes: [{ stacked: true }],
             },
             tooltips: {
                 enabled: true,
-                mode: 'single',
+                mode: 'label',
+               
             }
         }
 
