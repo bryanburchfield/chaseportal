@@ -347,16 +347,15 @@ class AgentSummarySubcampaign
 
         if (empty($results)) {
             $this->params['totrows'] = 0;
-            $this->params['totrows'] = 0;
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
         }
 
-        $results = $this->processResults($results);
         return $this->getPage($results);
     }
 

@@ -221,7 +221,6 @@ class CallDetails
 
         if (empty($results)) {
             $this->params['totrows'] = 0;
-            $this->params['totrows'] = 0;
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {

@@ -98,7 +98,6 @@ class CallerId
 
         if (empty($results)) {
             $this->params['totrows'] = 0;
-            $this->params['totrows'] = 0;
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
             $results = [];
@@ -106,9 +105,8 @@ class CallerId
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
         }
-
-        $results = $this->processResults($results);
 
         $page = $this->getPage($results, $all);
         $this->createExtras($page);
@@ -166,14 +164,22 @@ class CallerId
 
     private function createExtras($results)
     {
+        $this->extras['callerid'] = [];
+        $this->extras['agent'] = [];
+        $this->extras['total'] = [];
+        $this->extras['system'] = [];
+
         if (!count($results)) {
             return;
         }
 
         array_pop($results); // remove totals row
 
-        $this->extras['callerid'] = array_column($results, 'CallerId');
-        $this->extras['agent'] = array_column($results, 'Agent');
-        $this->extras['total'] = array_column($results, 'Total');
+        foreach ($results as $rec) {
+            $this->extras['callerid'][] = $rec['CallerId'];
+            $this->extras['agent'][] = (int) $rec['Agent'];
+            $this->extras['total'][] = (int) $rec['Total'];
+            $this->extras['system'][] = $rec['Total'] - $rec['Agent'];
+        }
     }
 }
