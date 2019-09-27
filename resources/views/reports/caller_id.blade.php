@@ -55,7 +55,7 @@
 	</div><!-- end report_filters -->
 
 	<div class="row">
-		<div class="col-sm-12 nopad">
+		<div class="col-sm-12">
 			<div class="card card-6 hidetilloaded pb5" >
 				<h1 class="title fw600">Calls by Caller ID</h1>
 				<div class="inbound inandout" style="min-height:300px;">

@@ -1045,24 +1045,8 @@ var Master = {
 		var selected_report = $('input.report_option:checked'). val();
         
 		if(selected_report != '' && selected_report != undefined){
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-            console.log(selected_report);
-            $.ajax({
-                url: '/dashboards/reports/'+selected_report,
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                },
-
-                success:function(response){
-                    console.log(response);
-                }
-            });
+            window.location.href = "/dashboards/reports/"+selected_report;
+            
 		}else{
 			$('#reports_modal .modal-footer').append('<div class="alert alert-danger"><p>Please select a report</p></div>');
 		}
