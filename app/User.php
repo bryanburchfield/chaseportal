@@ -58,7 +58,7 @@ class User extends Authenticatable
         $dblist = $this->getDatabaseList();
 
         foreach ($dblist as $db) {
-            $dialer = Dialer::where('reporting_db', $db)->pluck('dialer_name', 'reporting_db')->all();
+            $dialer = Dialer::where('reporting_db', $db)->pluck('reporting_db', 'dialer_name')->all();
             if ($dialer) {
                 $dialers[key($dialer)] = current($dialer);
             }
