@@ -9,7 +9,7 @@
 	<div class="form-group">
 
 		{!! Form::label('databases', 'Database') !!}
-		{!! Form::select("databases[]", $filters['db_list'], null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select', 'multiple']) !!}
+		{!! Form::select("databases[]", $filters['db_list'], null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select', 'multiple'=>true]) !!}
 		
     </div>
 </div>
