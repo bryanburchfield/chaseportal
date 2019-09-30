@@ -73,11 +73,8 @@ class MasterDashController extends Controller
 
     public function showSettings($success = [], $errors = [])
     {
-        if (empty(Auth::user()->password_changed_at)) {
-            if (!is_object($errors)) {
-                $errors = new MessageBag();
-            }
-            $errors->add('newpassword', "You are required to change your password");
+        if (empty(Auth::user()->password_changed_at) && empty($errors)) {
+            $errors[] = "You are required to change your password";
         }
 
         $page = [
@@ -120,6 +117,14 @@ class MasterDashController extends Controller
         /// check if new password matches confirm password
         if ($request->new_password != $request->conf_password) {
             $errors[] = 'New password does not match';
+        } else {
+            if ($request->current_password == $request->new_password) {
+                $errors[] = 'New password must be different from current password';
+            }
+        }
+
+        if (empty(Auth::user()->password_changed_at) && empty($request->new_password)) {
+            $errors[] = "You are required to change your password";
         }
 
         if (empty($errors)) {

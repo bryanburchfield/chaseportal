@@ -7,10 +7,10 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
+        Route::get('/', 'MasterDashController@index')->middleware('check.password.changed');
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
-        Route::get('/', 'MasterDashController@index')->middleware('check.password.changed');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
