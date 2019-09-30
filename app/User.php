@@ -27,7 +27,6 @@ class User extends Authenticatable
         'group_id',
         'additional_dbs',
         'app_token',
-        'password_changed_at',
     ];
 
     /**

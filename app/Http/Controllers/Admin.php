@@ -74,7 +74,7 @@ class Admin extends Controller
 
         if (!$user_check) {
             $input = $request->all();
-            $input['password'] = Hash::make('password');
+            $input['password'] = Hash::make(uniqid());
             $newuser = User::create(array_merge($input, ['app_token' => $hash]));
             $return['success'] = $newuser;
         } else {

@@ -73,10 +73,6 @@ class MasterDashController extends Controller
 
     public function showSettings($success = [], $errors = [])
     {
-        if (empty(Auth::user()->password_changed_at) && empty($errors)) {
-            $errors[] = "You are required to change your password";
-        }
-
         $page = [
             'menuitem' => 'settings',
             'type' => 'other',
@@ -123,10 +119,6 @@ class MasterDashController extends Controller
             }
         }
 
-        if (empty(Auth::user()->password_changed_at) && empty($request->new_password)) {
-            $errors[] = "You are required to change your password";
-        }
-
         if (empty($errors)) {
             $user = Auth::user();
 
@@ -137,7 +129,6 @@ class MasterDashController extends Controller
 
             if (!empty($request->new_password)) {
                 $update['password'] = Hash::make($request->new_password);
-                $update['password_changed_at'] = Carbon::now();
             }
 
             $success[] = $user->update($update);
