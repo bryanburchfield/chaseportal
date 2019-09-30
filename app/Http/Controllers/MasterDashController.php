@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\MessageBag;
 
 class MasterDashController extends Controller
 {
@@ -71,6 +73,13 @@ class MasterDashController extends Controller
 
     public function showSettings($success = [], $errors = [])
     {
+        if (empty(Auth::user()->password_changed_at)) {
+            if (!is_object($errors)) {
+                $errors = new MessageBag();
+            }
+            $errors->add('newpassword', "You are required to change your password");
+        }
+
         $page = [
             'menuitem' => 'settings',
             'type' => 'other',
@@ -123,6 +132,7 @@ class MasterDashController extends Controller
 
             if (!empty($request->new_password)) {
                 $update['password'] = Hash::make($request->new_password);
+                $update['password_changed_at'] = Carbon::now();
             }
 
             $success[] = $user->update($update);
