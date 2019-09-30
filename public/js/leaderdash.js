@@ -70,8 +70,10 @@ var Dashboard = {
             
             $('.preloader').fadeOut('slow');
             Master.check_reload();
+            Dashboard.resizeDivs();
         });
-                
+        
+
         Dashboard.eventHandlers();
     },
 
@@ -438,17 +440,16 @@ var Dashboard = {
     resizeDivs:function(){
 
         if ($(window).width() > 767) {
-            var height_dt = $('.get_hgt').innerHeight();
+            var height_dt = $('.get_hgt').outerHeight();
 
             $('.set_hgt').css({'min-height':height_dt});  
             $('.set_hgt').css({'max-height':height_dt});    
-            $('.total_calls_in, .total_calls_out ').css({'min-height':(height_dt / 2), 'max-height':(height_dt / 2)});
+            $('.total_calls_in, .total_calls_out ').css({'min-height':(height_dt / 2) -20, 'max-height':(height_dt / 2) -20});
 
             var height_dt2 = $('.get_ldr_ht').innerHeight();
-            height_dt2=height_dt2+7;
             
-            $('.leader_table_div').css({'min-height':height_dt2});  
-            $('.leader_table_div').css({'max-height':height_dt2});  
+            $('.leader_table_div').css({'min-height':height_dt2-25});  
+            $('.leader_table_div').css({'max-height':height_dt2-25});  
 
             $('.leader_table_div').height(height_dt2);
         }
@@ -463,9 +464,7 @@ $(document).ready(function(){
     });
 
     Dashboard.init();
-    Dashboard.resizeDivs();
-    
-    
+        
     $(window).on('resize', function(){
         if ($(window).width() > 1010) {
         Dashboard.resizeDivs();
