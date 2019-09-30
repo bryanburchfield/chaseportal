@@ -24,11 +24,11 @@
 
                                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $email ?? old('email') }}" required autofocus>
 
-                                        @if ($errors->has('email'))
+                                        {{-- @if ($errors->has('email'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('email') }}</strong>
                                             </span>
-                                        @endif
+                                        @endif --}}
                                     </div>
 
                                     <div class="form-group">
@@ -36,18 +36,25 @@
 
                                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
-                                        @if ($errors->has('password'))
+                                        {{-- @if ($errors->has('password'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('password') }}</strong>
                                             </span>
-                                        @endif
+                                        @endif --}}
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
                                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                                     </div>
+
+                                    @if($errors->any())
+                                        <div class="alert alert-danger">
+                                            @foreach($errors->all as $error)
+                                                <li>{{$error}}</li>
+                                            @endforeach
+                                        </div>
+                                    @endif
 
                                     <button type="submit" class="btn btn-primary btn-md">
                                         {{ __('Reset Password') }}
