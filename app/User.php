@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use App\Dialer;
+use App\Notifications\ChaseResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -95,5 +96,10 @@ class User extends Authenticatable
     public function getIanaTz()
     {
         return windowsToUnixTz($this->tz);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ChaseResetPasswordNotification($token));
     }
 }
