@@ -42,11 +42,14 @@ class ChaseResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $link = url("/password/reset/" . $this->token . "?email=" . $notifiable->email);
+        $data = [
+            'link' => url("/password/reset/" . $this->token . "?email=" . $notifiable->email),
+            'url' => url('/') . '/',
+        ];
 
         return (new MailMessage)->view(
             'emails.resetpassword',
-            ['link' => $link]
+            ['data' => $data]
         );
     }
 
