@@ -193,7 +193,7 @@ trait DashTraits
     {
         $tz = Auth::user()->getIanaTz();
 
-        list($fromDate, $toDate) = $this->dateFilter;
+        list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
         // convert to local and back toDate up a second
         $fromDate = utcToLocal($fromDate, $tz);
