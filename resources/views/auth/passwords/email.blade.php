@@ -4,8 +4,6 @@
 @section('content')
 <div class="wrapper">
 
-    {{-- @include('shared.sidenav') --}}
-
     <div id="content">
 
         @include('shared.defaultHeader')
