@@ -22,5 +22,9 @@
         @can('accessAdmin')
             <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ url('dashboards/admin') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
         @endcan
+
+        @cannot('accessAdmin')
+            <li {!! $page['menuitem'] == 'settings' ? 'class="active"' : ''!!}><a href="{{ url('dashboards/settings') }}"><i class="fas fa-user-cog"></i>Settings</a></li>
+        @endcannot
     </ul>
 </nav>

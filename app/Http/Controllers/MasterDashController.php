@@ -72,7 +72,7 @@ class MasterDashController extends Controller
     public function showSettings($success = [], $errors = [])
     {
         $page = [
-            'menuitem' => 'other',
+            'menuitem' => 'settings',
             'type' => 'other',
         ];
 
