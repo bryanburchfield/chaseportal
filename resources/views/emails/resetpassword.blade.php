@@ -35,6 +35,19 @@
             margin-top: 2px;
         }
 
+        .btn {
+          position: relative;
+          width: 200px;
+          height: 35px;
+          margin: 0 auto;
+          display: block;
+          margin-bottom: 30px;
+          background-color: #e49831;
+          border: 1px solid #f2ad4d;
+          color: #fff;
+          font-weight: 600;
+        }
+
         @media only screen and (max-width: 640px) {
             .deviceWidth {
                 width: 440px !important;
@@ -91,7 +104,7 @@
     </table>
 
     <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'
-        style='margin:0 auto; background-image: url(img/mainBg.png); background-repeat: repeat-x;'>
+        style='margin:0 auto; background-image: url({{ $data['url'] }}img/mainBg.png); background-repeat: repeat-x;'>
 
         <tr>
             <td
