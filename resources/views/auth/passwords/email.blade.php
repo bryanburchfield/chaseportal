@@ -15,11 +15,6 @@
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3 ">
                         <div class="form-holder">
-                            @if (session('status'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
                             
                             <h4>Reset Account Password</h4>
 
@@ -35,13 +30,19 @@
                                             <i class="glyphicon glyphicon-user"></i>
                                         </span>
                                     </div>
-
-                                    @if ($errors->has('email'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </span>
-                                    @endif
                                 </div>
+
+                                @if ($errors->has('email'))
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </div>
+                                @endif
+
+                                @if (session('status'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
                                 
                                 {!! Form::submit('Send Password Reset Link', ['class'=>'btn btn-primary btn-lg']) !!}
                             {!! Form::close() !!}
