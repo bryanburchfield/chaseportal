@@ -60,19 +60,22 @@
     <script src="/js/color-hash.js"></script>
     
     @isset($jsfile)
-        @foreach($jsfile as $js)
-        <script src="/js/{{ $js }}" type="text/javascript"></script>
-        @endforeach
+    @foreach($jsfile as $js)
+    <script src="/js/{{ $js }}" type="text/javascript"></script>
+    @endforeach
+    @endisset
 
-        <script src="/js/master.js"></script> 
-        <script src="/js/nav.js"></script> 
-            @if($page['type'] !='dash')
-                    <script>
-                    $(window).load(function() {
-                        $('.preloader').fadeOut('slow');
-                    });
-                </script>
-            @endif
+    <script src="/js/master.js"></script> 
+    <script src="/js/nav.js"></script> 
+    
+    @isset($page)
+        @if($page['type'] !='dash')
+                <script>
+                $(window).load(function() {
+                    $('.preloader').fadeOut('slow');
+                });
+            </script>
+        @endif
     @endisset
 
     <script>
