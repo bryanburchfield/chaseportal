@@ -81,7 +81,9 @@ class Admin extends Controller
 
             $return['success'] = $newuser;
         } else {
-            $return['errors'] = 'Name or email already in use';
+            $return['errors'] = 'Name or email already in use by "' .
+                $user_check->name . '" in ' .
+                $user_check->db;
         }
 
         return $return;
