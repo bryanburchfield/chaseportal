@@ -23,16 +23,18 @@
                                     {!! Form::label('email', 'Email Address') !!}
 
                                     <div class="input-group">
-                                        {!! Form::email('email', null, ['class'=> 'form-control {{ $errors->has("email") ? " is-invalid" : "" }}', 'value'=> '{{ old("email") }}', 'required'=>true]) !!}
+                                        {!! Form::email('email', null, ['class'=> 'form-control ', 'value'=> '{{ old("email") }}', 'required'=>true]) !!}
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-user"></i>
                                         </span>
                                     </div>
                                 </div>
 
-                                @if ($errors->has('email'))
-                                    <div class="alert alert-danger" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                @if($errors->any())
+                                    <div class="alert alert-danger">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
                                     </div>
                                 @endif
 
