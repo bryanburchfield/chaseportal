@@ -42,10 +42,12 @@
           margin: 0 auto;
           display: block;
           margin-bottom: 30px;
+          padding-top: 10px;
           background-color: #e49831;
           border: 1px solid #f2ad4d;
-          color: #fff;
+          color: #fff !important;
           font-weight: 600;
+          text-decoration: none;
         }
 
         @media only screen and (max-width: 640px) {
