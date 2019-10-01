@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <title>Reset Password - Chase Data Corp</title>
+    <title>Welcome - Chase Data Corp</title>
 
     <style type='text/css'>
         .ReadMsgBody {
@@ -42,10 +42,12 @@
           margin: 0 auto;
           display: block;
           margin-bottom: 30px;
+          padding-top: 10px;
           background-color: #e49831;
           border: 1px solid #f2ad4d;
-          color: #fff;
+          color: #fff !important;
           font-weight: 600;
+          text-decoration: none;
         }
 
         @media only screen and (max-width: 640px) {
@@ -94,8 +96,6 @@
                                     </td>
                                 </tr>
                             </table><!-- End Logo -->
-
-
                         </td>
                     </tr>
                 </table><!-- End Header -->
@@ -189,9 +189,6 @@
         </tr>
     </table><!-- End 4 Columns -->
 
-    </td>
-    </tr>
-    </table> <!-- End Wrapper -->
     <div style='display:none; white-space:nowrap; font:15px courier; color:#ffffff;'>
     </div>
 </body>
