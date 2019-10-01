@@ -189,9 +189,7 @@
         </tr>
     </table><!-- End 4 Columns -->
 
-    </td>
-    </tr>
-    </table> <!-- End Wrapper -->
+    
     <div style='display:none; white-space:nowrap; font:15px courier; color:#ffffff;'>
     </div>
 </body>
