@@ -76,6 +76,9 @@ class Admin extends Controller
             $input = $request->all();
             $input['password'] = Hash::make(uniqid());
             $newuser = User::create(array_merge($input, ['app_token' => $hash]));
+
+            $newuser->sendWelcomeEmail($newuser);
+
             $return['success'] = $newuser;
         } else {
             $return['errors'] = 'Name or email already in use';

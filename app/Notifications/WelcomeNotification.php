@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ChaseResetPasswordNotification extends Notification
+class WelcomeNotification extends Notification
 {
+    private $user;
     private $token;
 
     use Queueable;
@@ -17,8 +18,9 @@ class ChaseResetPasswordNotification extends Notification
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($user, $token)
     {
+        $this->user = $user;
         $this->token = $token;
     }
 
@@ -47,7 +49,7 @@ class ChaseResetPasswordNotification extends Notification
         ];
 
         return (new MailMessage)->view(
-            'emails.resetpassword',
+            'emails.welcome',
             ['data' => $data]
         );
     }

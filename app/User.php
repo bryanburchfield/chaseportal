@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use App\Dialer;
 use App\Notifications\ChaseResetPasswordNotification;
+use App\Notifications\WelcomeNotification;
+use Illuminate\Support\Facades\Password;
 
 class User extends Authenticatable
 {
@@ -100,5 +102,12 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ChaseResetPasswordNotification($token));
+    }
+
+    public function sendWelcomeEmail($user)
+    {
+        $token = Password::broker()->createToken($user);
+
+        $this->notify(new WelcomeNotification($user, $token));
     }
 }
