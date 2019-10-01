@@ -6,7 +6,7 @@
     
     <div class="container-fluid hero_bg">
         <div class="container">
-            <div class="row mt50">
+            <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="form-holder">
                         <h4>Reset Password</h4>
