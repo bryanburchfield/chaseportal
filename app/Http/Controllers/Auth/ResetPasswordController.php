@@ -66,9 +66,7 @@ class ResetPasswordController extends Controller
                 ['token' => $token, 'email' => $request->email]
             );
         } else {
-            return view('auth.passwords.email')->with(
-                ['email' => $request->email]
-            );
+            return redirect('password/reset');
         }
     }
 }
