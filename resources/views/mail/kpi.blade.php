@@ -419,7 +419,7 @@ ul.social li{
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
           &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
         </div>
-        
+
         <div style="max-width: 600px; margin: 0 auto;" class="email-container">
             <!-- BEGIN BODY -->
             <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
@@ -457,8 +457,8 @@ ul.social li{
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                         <tr>
                                             <td class="bg_white email-section" valign='middle' style='text-align:center;padding:20px '>
-                                                <div class="heading-section" style="text-align: center; padding:  10px;">
-                                                    <h2 style="color:#e15b23;">{{ $data['current'] }}</h2>
+                                                <div class="heading-section" style="text-align: center; padding:10px;">
+                                                    <h2 style="color:#e15b23; font-size: 21px;">{{ $data['current'] }}</h2>
                                                 </div>
 
                                                     <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
@@ -494,11 +494,10 @@ ul.social li{
             </table>
         
             <!-- Begin footer-->    
-            <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center' style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
                 <tr>
-                    <td style='padding:20px 0 10px 0'>
-                        <table width='580' border='0' cellpadding='10' cellspacing='0' align='center' class='deviceWidth'
-                            style='margin:0 auto;'>
+                    <td style='padding:20px'>
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td>
                                     <table width='45%' cellpadding='0' cellspacing='0' border='0' align='left'
