@@ -410,21 +410,55 @@ ul.social li{
         text-align: left;
     }
 }
-    </style>
+
+body{
+    background: #222222;
+}
+
+center{
+    background-color: #f1f1f1;
+}
+
+tr.bg_blue{
+    background-color:#203047;
+}
+
+.m0{margin:0;}
+.m0auto{margin:0 auto;}
+.mauto{margin: auto;}
+.mt15{margin-top: 15px;}
+.mb10{margin-bottom: 10px;}
+.ml10{margin-left: 10px;}
+.mt10{margin-top: 10px;}
+
+.p0{padding: 0;}
+.p5{padding: 5px;}
+.p8{padding: 8px;}
+.p10{padding: 10px;}
+.p20{padding: 20px;}
+.pb0{padding-bottom: 0;}
+.pt5{padding-top: 5px;}
+
+.h13{height: 13px;}
+.h220{height: 220px;}
+
+
+</style>
+
 
 </head>
 
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #222222;">
-    <center style="width: 100%; background-color: #f1f1f1;">
+<body class="m0 p0" width="100%" style="!important; mso-line-height-rule: exactly;">
+    <center style="width: 100%;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
           &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
         </div>
 
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+        <div style="max-width: 600px;" class="email-container m0auto">
             <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="m0auto">
                 <tr>
-                    <td valign="top" class="bg_white" style="padding: 5px;">
+                    <td valign="top" class="bg_white p5">
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td width="100%" class="logo" style="text-align: center;">
@@ -435,7 +469,7 @@ ul.social li{
                     </td>
                 </tr><!-- end tr -->
                 <tr>
-                    <td valign="middle" class="hero bg_white" style="background-image: url({{ $data['url'] }}img/emailbg_1.jpg); background-size: cover; height: 220px;">
+                    <td valign="middle" class="hero bg_white h220" style="background-image: url({{ $data['url'] }}img/emailbg_1.jpg); background-size: cover; ">
                         <div class="overlay"></div>
                             <table>
                             <tr>
@@ -456,23 +490,23 @@ ul.social li{
                                 <td class="bg_white">
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                         <tr>
-                                            <td class="bg_white email-section" valign='middle' style='text-align:center;padding:20px '>
-                                                <div class="heading-section" style="text-align: center; padding:10px;">
+                                            <td class="bg_white email-section p20" valign='middle' style='text-align:center;'>
+                                                <div class="heading-section p10" style="text-align: center;">
                                                     <h2 style="color:#e15b23; font-size: 21px;">{{ $data['current'] }}</h2>
                                                 </div>
 
                                                     <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
-                                                    <tr style='padding:10px; color:#fff; background-color:#203047;'>
+                                                    <tr class="bg_blue p10" style='color:#fff; '>
                                                     @forelse($data['table_headers'] as $value)
-                                                        <th style="padding:10px;">{{ $value }}</th>
+                                                        <th class="p10">{{ $value }}</th>
                                                     @empty
-                                                        <th style="padding:10px;">No Data to Report</th>
+                                                        <th class="p10">No Data to Report</th>
                                                     @endforelse
                                                     </tr>
                                                     @foreach($data['table_rows'] as $i => $rec)
                                                     <tr {!! $i % 2 == 0 ? 'style="background:#eee;"' : ''  !!}>
                                                         @foreach($rec as $value)
-                                                            <td style="padding:8px; height:13px;">{{ $value }}</td>
+                                                            <td class="p8 h13">{{ $value }}</td>
                                                         @endforeach
                                                     </tr>
                                                     @endforeach    
@@ -494,9 +528,9 @@ ul.social li{
             </table>
         
             <!-- Begin footer-->    
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
+            <table class="mauto" align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
                 <tr>
-                    <td style='padding:20px'>
+                    <td class="p20">
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td>
@@ -504,16 +538,16 @@ ul.social li{
                                         class='deviceWidth'>
                                         <tr>
                                             <td valign='top'
-                                                style='font-size: 11px; color: #f1f1f1; color:#999; font-family: Arial, sans-serif; padding-bottom:0px'
-                                                class='center'>
+                                                style='font-size: 11px; color: #f1f1f1; color:#999; font-family: Arial, sans-serif; '
+                                                class='center pb0'>
 
-                                                <address
-                                                    style='margin-bottom:10px;line-height:17px;text-decoration: none; color: #ddd; font-weight: normal; font-style: normal;font-size: 12px;'>
+                                                <address class="mb10"
+                                                    style='line-height:17px;text-decoration: none; color: #ddd; font-weight: normal; font-style: normal;font-size: 12px;'>
                                                     8201 Peters Rd Ste, 1000 <br />Plantation, FL 33324<br />(888) 739-8218
                                                 </address>
 
-                                                <a href='mailto:sales@chasedatacorp.com'
-                                                    style='font-size: 12px;margin-top:15px;text-decoration: none; color: #ddd; font-weight: normal;'>sales@chasedatacorp.com</a>
+                                                <a href='mailto:sales@chasedatacorp.com' class="mt15"
+                                                    style='font-size: 12px;text-decoration: none; color: #ddd; font-weight: normal;'>sales@chasedatacorp.com</a>
 
                                             </td>
                                         </tr>
@@ -530,19 +564,19 @@ ul.social li{
                                                         src='{{ $data['url'] }}/img/facebook.png'
                                                         width='32' height='32' alt='Facebook' title='Facebook' border='0' /></a>
 
-                                                <a style='margin-left:10px;'
+                                                <a class="ml10"
                                                     href='https://www.youtube.com/channel/UCGm2112RvM7ws3GrIq2HoPg'><img
                                                         src='{{ $data['url'] }}/img/youtube.png'
                                                         width='32' height='32' alt='You Tube' title='You Tube' border='0' /></a>
 
-                                                <a style='margin-left:10px;'
+                                                <a class="ml10"
                                                     href='https://www.linkedin.com/company/chase-data-corp/'><img
                                                         src='{{ $data['url'] }}/img/linkedin.png'
                                                         width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
 
-                                                <a style='margin-top:10px; display: block;' href='#'><img width='160px'
+                                                <a class='mt10' style='display: block;' href='#'><img width='160px'
                                                         src='{{ $data['url'] }}img/logo-footer.png'
-                                                        alt='' border='0' style='padding-top: 5px;' /></a><br />
+                                                        alt='' border='0' class='pt5' /></a><br />
                                             </td>
                                         </tr>
                                     </table>
