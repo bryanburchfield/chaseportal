@@ -1,205 +1,559 @@
-<!doctype html>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
     <title>KPI - Chase Data Corp</title>
 
-    <style type='text/css'>
-        .ReadMsgBody {
-            width: 100%;
-            background-color: #ffffff;
-        }
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" rel="stylesheet">
 
-        .ExternalClass {
-            width: 100%;
-            background-color: #ffffff;
-        }
+    <style>
+        html,
+body {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    background: #f1f1f1;
+}
 
-        body {
-            width: 100%;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-            font-family: Georgia, Times, serif
-        }
+* {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
 
-        table {
-            border-collapse: collapse;
-        }
+div[style*="margin: 16px 0"] {
+    margin: 0 !important;
+}
 
-        br {
-            display: block;
-            content: '';
-            margin-top: 2px;
-        }
+table,
+td {
+    mso-table-lspace: 0pt !important;
+    mso-table-rspace: 0pt !important;
+}
 
-        @media only screen and (max-width: 640px) {
-            .deviceWidth {
-                width: 440px !important;
-                padding: 0;
-            }
+table {
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 auto !important;
+}
 
-            .center {
-                text-align: center !important;
-            }
-        }
+img {
+    -ms-interpolation-mode:bicubic;
+}
 
-        @media only screen and (max-width: 479px) {
-            .deviceWidth {
-                width: 280px !important;
-                padding: 0;
-            }
+a {
+    text-decoration: none;
+}
 
-            .center {
-                text-align: center !important;
-            }
-        }
+*[x-apple-data-detectors],  /* iOS */
+.unstyle-auto-detected-links *,
+.aBn {
+    border-bottom: 0 !important;
+    cursor: default !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+.a6S {
+    display: none !important;
+    opacity: 0.01 !important;
+}
+
+.im {
+    color: inherit !important;
+}
+
+img.g-img + div {
+    display: none !important;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+    u ~ div .email-container {
+        min-width: 320px !important;
+    }
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+    u ~ div .email-container {
+        min-width: 375px !important;
+    }
+}
+
+@media only screen and (min-device-width: 414px) {
+    u ~ div .email-container {
+        min-width: 414px !important;
+    }
+}
+
     </style>
+
+    <style>
+
+        .primary{
+    background: #f5564e;
+}
+.bg_white{
+    background: #ffffff;
+}
+.bg_light{
+    background: #fafafa;
+}
+.bg_black{
+    background: #000000;
+}
+.bg_dark{
+    background: rgba(0,0,0,.8);
+}
+.email-section{
+    padding:2.5em;
+}
+
+/*BUTTON*/
+.btn{
+    padding: 5px 15px;
+    display: inline-block;
+}
+.btn.btn-primary{
+    border-radius: 5px;
+    background: #f5564e;
+    color: #ffffff;
+}
+.btn.btn-white{
+    border-radius: 5px;
+    background: #ffffff;
+    color: #000000;
+}
+.btn.btn-white-outline{
+    border-radius: 5px;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Open Sans', sans-serif;
+    color: #000000;
+    margin-top: 0;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(0,0,0,.4);
+}
+
+a{
+    color: #f5564e;
+}
+
+table{
+}
+/*LOGO*/
+
+.logo h1{
+    margin: 0;
+}
+.logo h1 a{
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.navigation{
+    padding: 0;
+}
+.navigation li{
+    list-style: none;
+    display: inline-block;;
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.navigation li a{
+    color: rgba(0,0,0,.6);
+}
+
+/*HERO*/
+.hero{
+    position: relative;
+    z-index: 0;
+}
+.hero .overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    width: 100%;
+    background: #000000;
+    z-index: -1;
+    opacity: .3;
+}
+.hero .icon{
+}
+.hero .icon a{
+    display: block;
+    width: 60px;
+    margin: 0 auto;
+}
+.hero .text{
+    color: rgba(255,255,255,.8);
+    padding: 0 4em;
+}
+.hero .text h2{
+    color: #ffffff;
+    font-size: 38px;
+    margin-bottom: 0;
+    line-height: 1.2;
+    font-weight: 300;
+}
+
+.hero .text h2 span{font-weight: 700; font-size: 48px;}
+
+/*HEADING SECTION*/
+.heading-section{
+}
+.heading-section h2{
+    color: #000000;
+    font-size: 24px;
+    margin-top: 0;
+    line-height: 1.4;
+    font-weight: 700;
+}
+.heading-section .subheading{
+    margin-bottom: 20px !important;
+    display: inline-block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(0,0,0,.4);
+    position: relative;
+}
+.heading-section .subheading::after{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #f5564e;
+    margin: 0 auto;
+}
+
+.heading-section-white{
+    color: rgba(255,255,255,.8);
+}
+.heading-section-white h2{
+    font-family: 
+    line-height: 1;
+    padding-bottom: 0;
+}
+.heading-section-white h2{
+    color: #ffffff;
+}
+.heading-section-white .subheading{
+    margin-bottom: 0;
+    display: inline-block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,.4);
+}
+
+.icon{
+    text-align: center;
+}
+.icon img{
+}
+
+/*SERVICES*/
+.services{
+    background: rgba(0,0,0,.03);
+}
+.text-services{
+    padding: 10px 10px 0; 
+    text-align: center;
+}
+.text-services h3{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.services-list{
+    padding: 0;
+    margin: 0 0 10px 0;
+    width: 100%;
+    float: left;
+}
+
+.services-list .text{
+    width: 100%;
+    float: right;
+}
+.services-list h3{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+}
+.services-list p{
+    margin: 0;
+}
+
+/*DESTINATION*/
+.text-tour{
+    padding-top: 10px;
+}
+.text-tour h3{
+    margin-bottom: 0;
+}
+.text-tour h3 a{
+    color: #000;
+}
+
+/*BLOG*/
+.text-services .meta{
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/*TESTIMONY*/
+.text-testimony .name{
+    margin: 0;
+}
+.text-testimony .position{
+    color: rgba(0,0,0,.3);
+
+}
+
+/*COUNTER*/
+.counter{
+    width: 100%;
+    position: relative;
+    z-index: 0;
+}
+.counter .overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    width: 100%;
+    background: #000000;
+    z-index: -1;
+    opacity: .3;
+}
+.counter-text{
+    text-align: center;
+}
+.counter-text .num{
+    display: block;
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 700;
+}
+.counter-text .name{
+    display: block;
+    color: rgba(255,255,255,.9);
+    font-size: 13px;
+}
+
+ul.social{
+    padding: 0;
+}
+ul.social li{
+    display: inline-block;
+}
+
+/*FOOTER*/
+
+.footer .heading{
+    color: #ffffff;
+    font-size: 20px;
+}
+.footer ul{
+    margin: 0;
+    padding: 0;
+}
+.footer ul li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+.footer ul li a{
+    color: rgba(255,255,255,1);
+}
+
+@media screen and (max-width: 500px) {
+
+    .icon{
+        text-align: left;
+    }
+
+    .text-services{
+        padding-left: 0;
+        padding-right: 20px;
+        text-align: left;
+    }
+}
+    </style>
+
 </head>
 
-<body leftmargin='0' topmargin='0' marginwidth='0' marginheight='0' style='font-family: Georgia, Times, serif'>
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #222222;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+          &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tr>
+                    <td valign="top" class="bg_white" style="padding: 5px;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="100%" class="logo" style="text-align: center;">
+                                    <h1><a href="#"><image src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr><!-- end tr -->
+                <tr>
+                    <td valign="middle" class="hero bg_white" style="background-image: url({{ $data['url'] }}img/emailbg_1.jpg); background-size: cover; height: 220px;">
+                        <div class="overlay"></div>
+                            <table>
+                            <tr>
+                                <td>
+                                    <div class="text" style="text-align: center;">
+                                        <h2><span>KPI</span> <br>{{ $data['kpi_name'] }}</h2>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr><!-- end tr -->
+                
+                <tr>
+                    <td class="bg_white">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                                <td class="bg_white">
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                        <tr>
+                                            <td class="bg_white email-section" valign='middle' style='text-align:center;padding:20px '>
+                                                <div class="heading-section" style="text-align: center; padding:  10px;">
+                                                    <h2 style="color:#e15b23;">{{ $data['current'] }}</h2>
+                                                </div>
 
-    <!-- Wrapper -->
-    <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>
-        <tr>
-            <td width='100%' valign='top' bgcolor='#ffffff' style='padding-top:0px'>
+                                                    <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
+                                                    <tr style='padding:10px; color:#fff; background-color:#203047;'>
+                                                    @forelse($data['table_headers'] as $value)
+                                                        <th style="padding:10px;">{{ $value }}</th>
+                                                    @empty
+                                                        <th style="padding:10px;">No Data to Report</th>
+                                                    @endforelse
+                                                    </tr>
+                                                    @foreach($data['table_rows'] as $i => $rec)
+                                                    <tr {!! $i % 2 == 0 ? 'style="background:#eee;"' : ''  !!}>
+                                                        @foreach($rec as $value)
+                                                            <td style="padding:8px; height:13px;">{{ $value }}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                    @endforeach    
+                                                </table>
 
-                <!-- Start Header-->
-                <table width='580' border='0' cellpadding='0' cellspacing='0' align='center' class='deviceWidth'
-                    style='margin:0 auto;'>
-                    <tr>
-                        <td width='100%' bgcolor='#ffffff'>
+                                                <p>If you do not wish to receive e-mail messages from Chase Data Corp, please click the link
+                                                    to be removed.</p>
+                                                <a style='text-align:center;font-family: Arial, sans-serif;text-decoration:none; font-weight:600;'
+                                                    href="{{ $data['optouturl'] }}">Unsubscribe</a>
+                                            </td>
+                                        </tr><!-- end: tr -->
+                                    </table>
+                                </td>
+                            </tr><!-- end:tr -->
+                            
+                        </table>
+                    </td>
+                </tr><!-- end:tr -->
+            </table>
+        
+            <!-- Begin footer-->    
+            <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center' style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
+                <tr>
+                    <td style='padding:20px 0 10px 0'>
+                        <table width='580' border='0' cellpadding='10' cellspacing='0' align='center' class='deviceWidth'
+                            style='margin:0 auto;'>
+                            <tr>
+                                <td>
+                                    <table width='45%' cellpadding='0' cellspacing='0' border='0' align='left'
+                                        class='deviceWidth'>
+                                        <tr>
+                                            <td valign='top'
+                                                style='font-size: 11px; color: #f1f1f1; color:#999; font-family: Arial, sans-serif; padding-bottom:0px'
+                                                class='center'>
 
-                            <!-- Logo -->
-                            <table border='0' cellpadding='0' cellspacing='0' align='center' class='deviceWidth'>
-                                <tr>
-                                    <td style='padding:10px 20px' class='center'>
-                                        <a href='#'><img src='{{ $data['url'] }}img/logo.png' alt='' border='0'
-                                                style='display: block; margin:0 auto; max-width: 220px; text-align: center;' /></a>
-                                    </td>
-                                </tr>
-                            </table><!-- End Logo -->
+                                                <address
+                                                    style='margin-bottom:10px;line-height:17px;text-decoration: none; color: #ddd; font-weight: normal; font-style: normal;font-size: 12px;'>
+                                                    8201 Peters Rd Ste, 1000 <br />Plantation, FL 33324<br />(888) 739-8218
+                                                </address>
 
+                                                <a href='mailto:sales@chasedatacorp.com'
+                                                    style='font-size: 12px;margin-top:15px;text-decoration: none; color: #ddd; font-weight: normal;'>sales@chasedatacorp.com</a>
 
-                        </td>
-                    </tr>
-                </table><!-- End Header -->
-            </td>
-        </tr>
-    </table>
+                                            </td>
+                                        </tr>
+                                    </table>
 
-    <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'
-        style='margin:0 auto; background-image: url({{ $data['url'] }}img/mainBg.png); background-repeat: repeat-x;'>
+                                    <table width='40%' cellpadding='0' cellspacing='0' border='0' align='right'
+                                        class='deviceWidth'>
+                                        <tr>
+                                            <td valign='top'
+                                                style='font-size: 11px; color: #f1f1f1; font-weight: normal; font-family: Georgia, Times, serif; line-height: 26px; vertical-align: top; text-align:right'
+                                                class='center'>
 
-        <tr>
-            <td
-                style='font-size: 13px; color: #959595; font-weight: normal; text-align: left; font-family: Georgia, Times, serif; line-height: 24px; vertical-align: top; padding:50px 8px 10px 8px;'>
+                                                <a href='https://www.facebook.com/ChaseDataCorp/'><img
+                                                        src='http://chase.site/img/facebook.png'
+                                                        width='32' height='32' alt='Facebook' title='Facebook' border='0' /></a>
 
-                <table width='580' class='deviceWidth' border='0' cellpadding='0' cellspacing='0' align='center'
-                    style='margin:0 auto;'>
-                    <tr>
+                                                <a style='margin-left:10px;'
+                                                    href='https://www.youtube.com/channel/UCGm2112RvM7ws3GrIq2HoPg'><img
+                                                        src='http://chase.site/img/youtube.png'
+                                                        width='32' height='32' alt='You Tube' title='You Tube' border='0' /></a>
 
-                        <td valign='middle' style='text-align:center;padding:0 10px 10px 0'>
-                            <a href='#'
-                                style='text-decoration: none; font-size: 30px; line-height: 55px; color:#203047;font-weight: bold; font-family:Arial, sans-serif '0>{{ $data['kpi_name'] }}
-                                <span style='color:#777; font-size:20px;'>({{ $data['current'] }})</span></a>
+                                                <a style='margin-left:10px;'
+                                                    href='https://www.linkedin.com/company/chase-data-corp/'><img
+                                                        src='http://chase.site/img/linkedin.png'
+                                                        width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
 
-                                <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
-                                <tr style='padding:10px; color:#fff; background-color:#203047;'>
-                                @forelse($data['table_headers'] as $value)
-                                    <th style="padding:10px;">{{ $value }}</th>
-                                @empty
-                                    <th style="padding:10px;">No Data to Report</th>
-                                @endforelse
-                                </tr>
-                                @foreach($data['table_rows'] as $i => $rec)
-                                <tr {!! $i % 2 == 0 ? 'style="background:#eee;"' : ''  !!}>
-                                    @foreach($rec as $value)
-                                        <td style="padding:8px; height:13px;">{{ $value }}</td>
-                                    @endforeach
-                                </tr>
-                                @endforeach    
-                            </table>
-
-                            <p>If you do not wish to receive e-mail messages from Chase Data Corp, please click the link
-                                to be removed.</p>
-                            <a style='text-align:center;font-family: Arial, sans-serif;text-decoration:none; font-weight:600;'
-                                href="{{ $data['optouturl'] }}">Unsubscribe</a>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table><!-- End One Column -->
-
-    <div style='height:35px;margin:0 auto;'>&nbsp;</div><!-- spacer -->
-    <!-- 4 Columns -->
-    <table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>
-        <tr>
-            <td bgcolor='#203047' style='padding:30px 0'>
-                <table width='580' border='0' cellpadding='10' cellspacing='0' align='center' class='deviceWidth'
-                    style='margin:0 auto;'>
-                    <tr>
-                        <td>
-                            <table width='45%' cellpadding='0' cellspacing='0' border='0' align='left'
-                                class='deviceWidth'>
-                                <tr>
-                                    <td valign='top'
-                                        style='font-size: 11px; color: #f1f1f1; color:#999; font-family: Arial, sans-serif; padding-bottom:20px'
-                                        class='center'>
-
-                                        <address
-                                            style='margin-bottom:10px;line-height:17px;text-decoration: none; color: #ddd; font-weight: normal; font-style: normal;font-size: 12px;'>
-                                            8201 Peters Rd Ste, 1000 <br />Plantation, FL 33324<br />(888) 739-8218
-                                        </address>
-
-                                        <a href='mailto:sales@chasedatacorp.com'
-                                            style='font-size: 12px;margin-top:15px;text-decoration: none; color: #ddd; font-weight: normal;'>sales@chasedatacorp.com</a>
-
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <table width='40%' cellpadding='0' cellspacing='0' border='0' align='right'
-                                class='deviceWidth'>
-                                <tr>
-                                    <td valign='top'
-                                        style='font-size: 11px; color: #f1f1f1; font-weight: normal; font-family: Georgia, Times, serif; line-height: 26px; vertical-align: top; text-align:right'
-                                        class='center'>
-
-                                        <a href='https://www.facebook.com/ChaseDataCorp/'><img
-                                                src='{{ $data['url'] }}img/facebook.png'
-                                                width='32' height='32' alt='Facebook' title='Facebook' border='0' /></a>
-
-                                        <a style='margin-left:10px;'
-                                            href='https://www.youtube.com/channel/UCGm2112RvM7ws3GrIq2HoPg'><img
-                                                src='{{ $data['url'] }}img/youtube.png'
-                                                width='32' height='32' alt='You Tube' title='You Tube' border='0' /></a>
-
-                                        <a style='margin-left:10px;'
-                                            href='https://www.linkedin.com/company/chase-data-corp/'><img
-                                                src='{{ $data['url'] }}img/linkedin.png'
-                                                width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
-
-                                        <a style='margin-top:10px; display: block;' href='#'><img width='160px'
-                                                src='{{ $data['url'] }}img/chase_logo_blue.png'
-                                                alt='' border='0' style='padding-top: 5px;' /></a><br />
-                                    </td>
-                                </tr>
-                            </table>
-
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table><!-- End 4 Columns -->
-
-
-    <div style='display:none; white-space:nowrap; font:15px courier; color:#ffffff;'>
-    </div>
+                                                <a style='margin-top:10px; display: block;' href='#'><img width='160px'
+                                                        src='{{ $data['url'] }}img/logo-footer.png'
+                                                        alt='' border='0' style='padding-top: 5px;' /></a><br />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table><!-- End footer-->  
+        </div>
+</center>
 </body>
-
 </html>
