@@ -1,4 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);applet,
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);@charset "UTF-8";
+
+applet,
 object,
 iframe,
 body,
@@ -725,20 +727,14 @@ input[type=file] {
   /* Optional: just make scrollbar invisible */
 }
 
-.flip_card_btn,
-.card_drop_down {
+.flip_card_btn:after,
+.card_drop_down:after {
+  content: "\2807";
   color: #4286f4;
   font-size: 35px;
   position: absolute;
-  top: 1px;
+  top: 9px;
   left: 5px;
-}
-
-.flip_card_btn img,
-.card_drop_down img {
-  max-width: 22px;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-  opacity: 0.8;
 }
 
 .flip_card_btn:hover,

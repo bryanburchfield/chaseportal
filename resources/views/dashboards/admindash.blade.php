@@ -210,7 +210,7 @@
                     <div class="front">
                         <div class="card_table">
                             <h1 class="title">Top 10 Agent Call Counts</h1>
-                            <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                            <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_call_count">
                                 <thead>
                                     <tr>
@@ -227,7 +227,7 @@
 
                     <div class="back">
                         <h1 class="title">Top 10 Agent Call Counts</h1>
-                        <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                        <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_call_count_graph"></canvas>
                         </div>
@@ -266,7 +266,7 @@
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">Top 10 Agent Call Times</h1>
-                            <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                            <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="agent_calltime">
                                 <thead>
                                     <tr>
@@ -283,7 +283,7 @@
 
                     <div class="back">
                         <h1 class="title">Top 10 Agent Call Times</h1>
-                        <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                        <div class="flip_card_btn"></div>
                         <div class="inbound inandout mb0">
                             <canvas id="agent_calltime_graph"></canvas>
                         </div>
@@ -296,7 +296,7 @@
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">REP AVG HANDLE TIME</h1>
-                            <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                            <div class="flip_card_btn"></div>
                             <table class="table table-condensed table-striped" id="rep_avg_handletime">
                                 <thead>
                                     <tr>
@@ -313,7 +313,7 @@
 
                     <div class="back">
                         <h1 class="title">REP AVG HANDLE TIME</h1>
-                        <div class="flip_card_btn"><img src="img/rotate.png" alt=""></div>
+                        <div class="flip_card_btn"></div>
                         <p class="descrip">Max handle time: <span class="max_handle_time"></span> . The chart average is based on the max handle time.</p>
                             <canvas id="rep_avg_handletime_graph"></canvas>
                     </div>
