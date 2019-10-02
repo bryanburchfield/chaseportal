@@ -438,6 +438,7 @@ tr.bg_blue{
 .p20{padding: 20px;}
 .pb0{padding-bottom: 0;}
 .pt5{padding-top: 5px;}
+.pr20{padding-right: 20px;}
 
 .h13{height: 13px;}
 .h220{height: 220px;}
@@ -574,7 +575,7 @@ tr.bg_blue{
                                                         src='{{ $data['url'] }}/img/linkedin.png'
                                                         width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
 
-                                                <a class='mt10' style='display: block;' href='#'><img width='160px'
+                                                <a class='mt10 pr20' style='display: block;' href='#'><img width='160px'
                                                         src='{{ $data['url'] }}img/logo-footer.png'
                                                         alt='' border='0' class='pt5' /></a><br />
                                             </td>

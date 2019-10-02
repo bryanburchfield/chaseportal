@@ -385,12 +385,12 @@
                 <input type="hidden" class="app_token" name="app_token" value="">
                 <h3 class="mb10"><span class="username"></span></h3>
             	<p>Double click a link below to copy.</p><br>
-            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/agentdashboard/?app_token=<span class="url_token"></span>&rep=</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/agentdashboard_outbound/?app_token=<span class="url_token"></span>&rep=</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/admindashboard/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/adminoutbounddash/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/leaderboarddash/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">https://portal.chasedatacorp.com/trenddashboard/?app_token=<span class="url_token"></span></a>
+            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}agentdashboard/?app_token=<span class="url_token"></span>&rep=</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}agentdashboard_outbound/?app_token=<span class="url_token"></span>&rep=</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}admindashboard/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}adminoutbounddash/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}leaderboarddash/?app_token=<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}trenddashboard/?app_token=<span class="url_token"></span></a>
 
             </div>
         <div class="modal-footer">
