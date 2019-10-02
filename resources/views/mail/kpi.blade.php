@@ -216,7 +216,7 @@ table{
 }
 .hero .text h2{
     color: #ffffff;
-    font-size: 38px;
+    font-size: 36px;
     margin-bottom: 0;
     line-height: 1.2;
     font-weight: 300;
@@ -441,7 +441,7 @@ ul.social li{
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2><span>KPI</span> <br>{{ $data['kpi_name'] }}</h2>
+                                        <h2  style="color:#ffffff;"><span>KPI</span> <br>{{ $data['kpi_name'] }}</h2>
                                     </div>
                                 </td>
                             </tr>
@@ -527,17 +527,17 @@ ul.social li{
                                                 class='center'>
 
                                                 <a href='https://www.facebook.com/ChaseDataCorp/'><img
-                                                        src='http://chase.site/img/facebook.png'
+                                                        src='{{ $data['url'] }}/img/facebook.png'
                                                         width='32' height='32' alt='Facebook' title='Facebook' border='0' /></a>
 
                                                 <a style='margin-left:10px;'
                                                     href='https://www.youtube.com/channel/UCGm2112RvM7ws3GrIq2HoPg'><img
-                                                        src='http://chase.site/img/youtube.png'
+                                                        src='{{ $data['url'] }}/img/youtube.png'
                                                         width='32' height='32' alt='You Tube' title='You Tube' border='0' /></a>
 
                                                 <a style='margin-left:10px;'
                                                     href='https://www.linkedin.com/company/chase-data-corp/'><img
-                                                        src='http://chase.site/img/linkedin.png'
+                                                        src='{{ $data['url'] }}/img/linkedin.png'
                                                         width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
 
                                                 <a style='margin-top:10px; display: block;' href='#'><img width='160px'
