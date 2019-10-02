@@ -8,7 +8,7 @@ use App\Kpi;
 use App\Recipient;
 use App\KpiRecipient;
 use App\KpiGroup;
-use Twilio\Rest\Client;
+use Twilio\Rest\Client as Twilio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -356,9 +356,10 @@ class KpiController extends Controller
 
         $sms = $this->getSms($kpi_name, $results);
 
-        $sid    = env('TWILIO_SID');
-        $token  = env('TWILIO_TOKEN');
-        $twilio = new Client($sid, $token);
+        $sid    = config('twilio.sid');
+        $token  = config('twilio.token');
+
+        $twilio = new Twilio($sid, $token);
 
         $tz = Auth::user()->getIanaTz();
 
@@ -431,7 +432,7 @@ class KpiController extends Controller
         $twilio->messages->create(
             $recipient->phone,
             [
-                'from' => env('TWILIO_FROM'),
+                'from' => config('twilio.from'),
                 'body' => $sms
             ]
         );
