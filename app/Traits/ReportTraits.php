@@ -289,7 +289,7 @@ trait ReportTraits
             }
             $this->params['databases'] = $request->databases;
         } else {
-            $this->params['databases'] = ['defaultsomethinghere'];
+            $this->params['databases'] = Auth::user()->getDatabaseList();
         }
 
         if (!empty($request->th_sort)) {

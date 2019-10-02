@@ -7,7 +7,6 @@ use App\Services\PDF;
 use App\Exports\ReportExport;
 use App\Mail\ReportMail;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 
 trait ReportExportTraits
 {
