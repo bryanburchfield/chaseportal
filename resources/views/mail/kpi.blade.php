@@ -123,7 +123,7 @@ img.g-img + div {
 }
 .btn.btn-primary{
     border-radius: 5px;
-    background: #f5564e;
+    background: #e49831;
     color: #ffffff;
 }
 .btn.btn-white{
@@ -463,7 +463,7 @@ tr.bg_blue{
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td width="100%" class="logo" style="text-align: center;">
-                                    <h1><a href="#"><image src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
+                                    <h1><a href="#"><img src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
                                 </td>
                             </tr>
                         </table>
@@ -476,7 +476,7 @@ tr.bg_blue{
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2  style="color:#ffffff;"><span>KPI</span> <br>{{ $data['kpi_name'] }}</h2>
+                                        <h2 style="color:#ffffff;"><span>KPI</span> <br>{{ $data['kpi_name'] }}</h2>
                                     </div>
                                 </td>
                             </tr>
@@ -562,17 +562,17 @@ tr.bg_blue{
                                                 class='center'>
 
                                                 <a href='https://www.facebook.com/ChaseDataCorp/'><img
-                                                        src='{{ $data['url'] }}/img/facebook.png'
+                                                        src='{{ $data['url'] }}img/facebook.png'
                                                         width='32' height='32' alt='Facebook' title='Facebook' border='0' /></a>
 
                                                 <a class="ml10"
                                                     href='https://www.youtube.com/channel/UCGm2112RvM7ws3GrIq2HoPg'><img
-                                                        src='{{ $data['url'] }}/img/youtube.png'
+                                                        src='{{ $data['url'] }}img/youtube.png'
                                                         width='32' height='32' alt='You Tube' title='You Tube' border='0' /></a>
 
                                                 <a class="ml10"
                                                     href='https://www.linkedin.com/company/chase-data-corp/'><img
-                                                        src='{{ $data['url'] }}/img/linkedin.png'
+                                                        src='{{ $data['url'] }}img/linkedin.png'
                                                         width='32' height='32' alt='Linkedin' title='Linkedin' border='0' /></a>
 
                                                 <a class='mt10 pr20' style='display: block;' href='#'><img width='160px'

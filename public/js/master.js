@@ -1818,7 +1818,7 @@ var Master = {
 
 	/// keep alive and refresh data
 	check_reload:function(){
-	    
+	    alert('Check reload ran: '+Dashboard);
 	    if (typeof Dashboard !== 'undefined') {	        
 
 	        $(document.body).on('mousemove keypress', function(e){
@@ -1865,8 +1865,5 @@ $(document).ready(function(){
 		$('html,body').scrollTop($('body').scrollTop());
 	});
 
-
-
-	
 
 });
