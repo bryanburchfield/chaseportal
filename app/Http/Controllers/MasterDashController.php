@@ -89,9 +89,7 @@ class MasterDashController extends Controller
     public function updateUserSettings(Request $request)
     {
         $user = Auth::user();
-        $errors = [];
         $success = [];
-        $errors = [];
 
         $request->validate([
             'name' => [
@@ -103,19 +101,18 @@ class MasterDashController extends Controller
                 'email',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'current_password' => 'required',
+            'current_password' => [
+                'required',
+                function ($attribute, $value, $fail) use ($user) {
+                    if (!Hash::check($value, $user->password)) {
+                        $fail('Current password is incorrect');
+                    }
+                },
+
+            ],
             'new_password' => 'nullable|min:8|different:current_password',
             'conf_password' => 'same:new_password',
         ]);
-
-        /// check if current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
-            $errors[] = 'Current password is incorrect';
-        }
-
-        if (!empty($errors)) {
-            return redirect()->back()->withInput()->withErrors($errors);
-        }
 
         $update = [
             'name' => $request->name,
