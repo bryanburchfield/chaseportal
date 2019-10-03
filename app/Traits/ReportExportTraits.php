@@ -135,6 +135,7 @@ trait ReportExportTraits
             'daterange' => $daterange,
             'pdf' => $filename,
             'url' => url('/') . '/',
+            'settings' => url('/dashboards/automatedreports'),
         ];
         $this->sendEmail($message);
     }
