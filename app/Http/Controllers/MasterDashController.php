@@ -110,8 +110,7 @@ class MasterDashController extends Controller
                 },
 
             ],
-            'new_password' => 'nullable|min:8|different:current_password',
-            'conf_password' => 'same:new_password',
+            'new_password' => 'nullable|min:8|confirmed|different:current_password',
         ]);
 
         $update = [

@@ -42,8 +42,8 @@
 								</div>
 
 								<div class="form-group">
-									{!! Form::label('conf_password', 'Confirm Password') !!}
-									{!! Form::password('conf_password', ['class'=>'form-control conf_password']) !!}
+									{!! Form::label('new_password_confirmation', 'Confirm Password') !!}
+									{!! Form::password('new_password_confirmation', ['class'=>'form-control new_password_confirmation']) !!}
 								</div>
 
 								{!! Form::submit('Update', ['class'=>'btn btn-primary mb0'] ) !!}
