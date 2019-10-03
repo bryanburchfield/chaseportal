@@ -5,7 +5,6 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\User;
 
 trait DashTraits
@@ -414,8 +413,6 @@ trait DashTraits
 
     public function updateFilters(Request $request)
     {
-        Log::info($request);
-
         $filters = [
             'databases',
             'campaign',

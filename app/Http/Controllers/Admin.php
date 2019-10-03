@@ -68,11 +68,11 @@ class Admin extends Controller
         } while ($this->token_exists($hash));
 
         /// check if name or email exists
-        $user_check = User::where('name', $request->name)
+        $existing_user = User::where('name', $request->name)
             ->orWhere('email', $request->email)
             ->first();
 
-        if (!$user_check) {
+        if (!$existing_user) {
             $input = $request->all();
             $input['password'] = Hash::make(uniqid());
             $newuser = User::create(array_merge($input, ['app_token' => $hash]));
@@ -82,8 +82,8 @@ class Admin extends Controller
             $return['success'] = $newuser;
         } else {
             $return['errors'] = 'Name or email already in use by "' .
-                $user_check->name . '" in ' .
-                $user_check->db;
+                $existing_user->name . '" in ' .
+                $existing_user->db;
         }
 
         return $return;
@@ -110,15 +110,17 @@ class Admin extends Controller
     public function updateUser(Request $request)
     {
         /// check if name or email is used by another user
-        $user_check = User::where('id', '!=', $request->id)
+        $existing_user = User::where('id', '!=', $request->id)
             ->where(function ($query) use ($request) {
                 $query->where('name', $request->name)
                     ->orWhere('email', $request->email);
             })
             ->first();
 
-        if ($user_check) {
-            $return['errors'] = 'Name or email in use by another user';
+        if ($existing_user) {
+            $return['errors'] = 'Name or email already in use by "' .
+                $existing_user->name . '" in ' .
+                $existing_user->db;
         } else {
             $user = User::findOrFail($request->id);
             $user->update($request->all());

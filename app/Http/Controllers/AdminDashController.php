@@ -448,30 +448,30 @@ class AdminDashController extends Controller
         $average_hold_time = $this->getAvgHoldTime();
         $prev_average_hold_time = $this->getAvgHoldTime(true);
 
-        if (empty($average_hold_time[0]['Total Calls'])) {
-            $average_hold_time[0]['Total Calls'] = 0;
-            $average_hold_time[0]['Hold Secs'] = 0;
-            $average_hold_time[0]['MinHold'] = 0;
-            $average_hold_time[0]['MaxHold'] = 0;
+        if (empty($average_hold_time['Total Calls'])) {
+            $average_hold_time['Total Calls'] = 0;
+            $average_hold_time['Hold Secs'] = 0;
+            $average_hold_time['MinHold'] = 0;
+            $average_hold_time['MaxHold'] = 0;
         }
 
-        if (empty($prev_average_hold_time[0]['Total Calls'])) {
-            $prev_average_hold_time[0]['Total Calls'] = 0;
-            $prev_average_hold_time[0]['Hold Secs'] = 0;
-            $prev_average_hold_time[0]['MinHold'] = 0;
-            $prev_average_hold_time[0]['MaxHold'] = 0;
+        if (empty($prev_average_hold_time['Total Calls'])) {
+            $prev_average_hold_time['Total Calls'] = 0;
+            $prev_average_hold_time['Hold Secs'] = 0;
+            $prev_average_hold_time['MinHold'] = 0;
+            $prev_average_hold_time['MaxHold'] = 0;
         }
 
-        if ($average_hold_time[0]['Total Calls'] == 0) {
+        if ($average_hold_time['Total Calls'] == 0) {
             $avg_hold_time = 0;
         } else {
-            $avg_hold_time = $average_hold_time[0]['Hold Secs'] / $average_hold_time[0]['Total Calls'];
+            $avg_hold_time = $average_hold_time['Hold Secs'] / $average_hold_time['Total Calls'];
         }
 
-        if ($prev_average_hold_time[0]['Total Calls'] == 0) {
+        if ($prev_average_hold_time['Total Calls'] == 0) {
             $prev_avg_hold_time = 0;
         } else {
-            $prev_avg_hold_time = $prev_average_hold_time[0]['Hold Secs'] / $prev_average_hold_time[0]['Total Calls'];
+            $prev_avg_hold_time = $prev_average_hold_time['Hold Secs'] / $prev_average_hold_time['Total Calls'];
         }
 
         if ($prev_avg_hold_time == 0) {
@@ -486,11 +486,11 @@ class AdminDashController extends Controller
         }
 
         $avg_hold_time = secondsToHms($avg_hold_time);
-        $total_hold_time = secondsToHms($average_hold_time[0]['Hold Secs']);
+        $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
 
         return ['average_hold_time' => [
-            'min_hold_time' => $average_hold_time[0]['MinHold'],
-            'max_hold_time' => $average_hold_time[0]['MaxHold'],
+            'min_hold_time' => $average_hold_time['MinHold'],
+            'max_hold_time' => $average_hold_time['MaxHold'],
             'avg_hold_time' => $avg_hold_time,
             'total_hold_time' => $total_hold_time,
             'pct_change' => $pctdiff,
@@ -750,7 +750,6 @@ class AdminDashController extends Controller
 
         $sql .= ") tmp";
 
-
         $result = $this->runSql($sql, $bind);
 
         return $result[0];
@@ -883,15 +882,15 @@ class AdminDashController extends Controller
 
         $result = $this->getServiceLevel($request);
 
-        if (empty($result[0]['Handled'])) {
-            $result[0]['Handled'] = 0;
+        if (empty($result['Handled'])) {
+            $result['Handled'] = 0;
         }
-        if (empty($result[0]['Count'])) {
-            $result[0]['Count'] = 0;
+        if (empty($result['Count'])) {
+            $result['Count'] = 0;
         }
 
-        $handled = $result[0]['Handled'];
-        $count = $result[0]['Count'];
+        $handled = $result['Handled'];
+        $count = $result['Count'];
 
         if (!$count) {
             $svc_level = 100;
@@ -948,7 +947,9 @@ class AdminDashController extends Controller
         }
         $sql .= ") tmp";
 
-        return $this->runSql($sql, $bind);
+        $result = $this->runSql($sql, $bind);
+
+        return $result[0];
     }
 
     /**

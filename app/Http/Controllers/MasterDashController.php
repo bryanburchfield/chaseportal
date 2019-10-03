@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Facades\Auth;
-use App\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\MessageBag;
+use Illuminate\Validation\Rule;
 
 class MasterDashController extends Controller
 {
@@ -71,7 +69,7 @@ class MasterDashController extends Controller
         return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
 
-    public function showSettings($success = [], $errors = [])
+    public function showSettings($success = null)
     {
         $page = [
             'menuitem' => 'settings',
@@ -84,7 +82,8 @@ class MasterDashController extends Controller
             'success' => $success,
         ];
 
-        return view('dashboards.mysettings')->with($data)->withErrors($errors);
+        return view('dashboards.mysettings')
+            ->with($data);
     }
 
     public function updateUserSettings(Request $request)
@@ -92,48 +91,43 @@ class MasterDashController extends Controller
         $user = Auth::user();
         $errors = [];
         $success = [];
+        $errors = [];
 
-        /// check if name or email is used by another user
-        $user_check = User::where('id', '!=', $user->id)
-            ->where(function ($query) use ($request) {
-                $query->where('name', $request->name)
-                    ->orWhere('email', $request->email);
-            })
-            ->first();
-
-        if ($user_check) {
-            $errors[] = 'Name or email in use by another user';
-        }
+        $request->validate([
+            'name' => [
+                'required',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'current_password' => 'required',
+            'new_password' => 'nullable|min:8|different:current_password',
+            'conf_password' => 'same:new_password',
+        ]);
 
         /// check if current password is correct
         if (!Hash::check($request->current_password, $user->password)) {
             $errors[] = 'Current password is incorrect';
         }
 
-        /// check if new password matches confirm password
-        if ($request->new_password != $request->conf_password) {
-            $errors[] = 'New password does not match';
-        } else {
-            if ($request->current_password == $request->new_password) {
-                $errors[] = 'New password must be different from current password';
-            }
+        if (!empty($errors)) {
+            return redirect()->back()->withInput()->withErrors($errors);
         }
 
-        if (empty($errors)) {
-            $user = Auth::user();
+        $update = [
+            'name' => $request->name,
+            'email' => $request->email,
+        ];
 
-            $update = [
-                'name' => $request->name,
-                'email' => $request->email,
-            ];
-
-            if (!empty($request->new_password)) {
-                $update['password'] = Hash::make($request->new_password);
-            }
-
-            $success[] = $user->update($update);
+        if (!empty($request->new_password)) {
+            $update['password'] = Hash::make($request->new_password);
         }
 
-        return $this->showSettings($success, $errors);
+        $success[] = $user->update($update);
+
+        return $this->showSettings($success);
     }
 }
