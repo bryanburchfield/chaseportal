@@ -1550,15 +1550,17 @@ a.expand_dets, h4.expand_dets {
     display: block;
 }
 
-a.remove_recip_glyph, a.remove_recip_fromall {
+a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
     float: right;
     margin-right: 10px;
     position: absolute;
     bottom: 20px;
     right: 10px;
-    color: $orange;
+    color: #d9534f;
     font-size: 16px;
 }
+
+a.edit_recip_glyph{right:35px;color:#33A09B;}
 
 .users p {
     font-size: 16px;

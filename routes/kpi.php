@@ -18,5 +18,6 @@ Route::prefix('kpi')->group(function () {
         Route::post('remove_recipient_from_kpi', 'KpiController@removeRecipientFromKpi');
         Route::post('remove_recipient_from_all', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');
+        Route::post('edit_recipient', 'KpiController@editRecipient');
     });
 });

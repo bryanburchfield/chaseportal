@@ -72,6 +72,17 @@ class KpiController extends Controller
     }
 
     /**
+     * Edit recipient
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function editRecipient (Request $request)
+    {
+        
+    }
+
+    /**
      * Remove recipient from a single KPI
      *
      * @param Request $request
