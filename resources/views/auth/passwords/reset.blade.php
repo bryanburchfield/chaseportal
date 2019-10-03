@@ -19,7 +19,7 @@
 
                                 <div class="form-group">
                                     <label for="email">Email Address</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ $email ?? old('email') }}" required autofocus>
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ $email ?? old('email') }}" readonly autofocus>
                                 </div>
 
                                 <div class="form-group">
