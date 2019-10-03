@@ -69,7 +69,7 @@ class MasterDashController extends Controller
         return redirect()->action('ReportController@index', ['report' => $request->report_option]);
     }
 
-    public function showSettings()
+    public function showSettings($success = null)
     {
         $page = [
             'menuitem' => 'settings',
@@ -79,7 +79,7 @@ class MasterDashController extends Controller
         $data = [
             'user' => Auth::user(),
             'page' => $page,
-            'success' => [],
+            'success' => $success,
         ];
 
         return view('dashboards.mysettings')
@@ -113,21 +113,21 @@ class MasterDashController extends Controller
             $errors[] = 'Current password is incorrect';
         }
 
-        if (empty($errors)) {
-            $user = Auth::user();
-
-            $update = [
-                'name' => $request->name,
-                'email' => $request->email,
-            ];
-
-            if (!empty($request->new_password)) {
-                $update['password'] = Hash::make($request->new_password);
-            }
-
-            $success[] = $user->update($update);
+        if (!empty($errors)) {
+            return redirect()->back()->withInput()->withErrors($errors);
         }
 
-        return redirect()->back()->withInput()->withErrors($errors);
+        $update = [
+            'name' => $request->name,
+            'email' => $request->email,
+        ];
+
+        if (!empty($request->new_password)) {
+            $update['password'] = Hash::make($request->new_password);
+        }
+
+        $success[] = $user->update($update);
+
+        return $this->showSettings($success);
     }
 }
