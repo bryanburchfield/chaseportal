@@ -277,6 +277,7 @@ class KpiController extends Controller
             'jsfile' => $jsfile,
             'page' => $page,
             'curdash' => 'kpidash',
+            'kpis' => Kpi::all(),
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')
                 ->get(),
