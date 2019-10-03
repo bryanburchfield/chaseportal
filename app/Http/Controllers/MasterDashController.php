@@ -128,6 +128,6 @@ class MasterDashController extends Controller
             $success[] = $user->update($update);
         }
 
-        return redirect()->back()->withErrors($errors);
+        return redirect()->back()->withInput()->withErrors($errors);
     }
 }
