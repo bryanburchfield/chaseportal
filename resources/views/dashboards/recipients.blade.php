@@ -35,6 +35,11 @@
                                 {!! Form::label('phone', 'Phone') !!}
                                 {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}                                
                             </div>
+
+                            <div class="form-group">
+                                {!! Form::label('kpis', 'KPIs') !!}
+                                {!! Form::select("kpis[]", $kpis, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
+                            </div>
                             
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}

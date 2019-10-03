@@ -26,8 +26,6 @@ $(document).ready(function(){
 		.multiselect('selectAll', false)
     	.multiselect('updateButtonText');
 
-    	
-
     //// remove select all option
     $('#lead_inventory #campaign_select').next('div').find('ul li.multiselect-item.multiselect-all').remove();
 	

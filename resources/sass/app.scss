@@ -1939,6 +1939,12 @@ h4.panel-title a{
   display: block;
 }
 
+#kpi_select.multiselect + .btn-group li a label{
+    padding: 0px;
+    padding-left: 30px;
+
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
