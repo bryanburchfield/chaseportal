@@ -240,19 +240,29 @@ var KPI = {
             }
         });
 
-        var recip_id=$(this).data('recip');
-        console.log(recip_id);
+        var id=$(this).data('recip');
+        console.log(id);
 
         $.ajax({
             url:'/kpi/edit_recipient',
             type:'POST',
             dataType:'json',
             data:{
-                recip_id:recip_id
+                id:id
             },
             success:function(response){
-                $('div#'+id).remove();
-                $('#deleteRecipModal').modal('toggle');
+
+                $('#editRecipModal .modal-body form .kpi_list').empty();
+                $('#editRecipModal .modal-body form .user_id').val(id);
+
+                var kpi_list='<h4 class="mb20 mt0"><b>'+response.recipient.name+' - '+ response.recipient.email +'</b></h4>';
+                var selected;
+
+                for(var i=0; i<response.kpi_list.length;i++){
+                    selected =  response.kpi_list[i].selected ? 'checked' : '';
+                    kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.kpi_list[i].id+'"><b>'+response.kpi_list[i].name+'</b> - '+response.kpi_list[i].description+'</label></div>';
+                }
+                $('#editRecipModal .modal-body form .kpi_list').append(kpi_list);
             }
         });
 

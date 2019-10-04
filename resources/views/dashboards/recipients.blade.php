@@ -27,11 +27,7 @@
                                 <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
                                 <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
                               
-                                @foreach($recipient->kpiList() as $selected_kpi)
-                                    @if($selected_kpi['selected'])
-                                        {{$selected_kpi['name']}}
-                                    @endif
-                                @endforeach
+                                
                             </div>
                         @endforeach
                     </div>
@@ -39,7 +35,7 @@
                     <div class="col-sm-6">
                         <h2>Add Recipients</h2>
 
-                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form well clear add_recipient display', 'data-kpi'=> "1"]) !!}
+                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group">
                                 {!! Form::label('name', 'Full Name') !!}
@@ -73,7 +69,7 @@
     </div>
 </div>
 
-@include('shared.reportmodal')
+
 
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -100,23 +96,27 @@
 <!-- Edit Recipient Modal -->
 <div class="modal fade" id="editRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
+        
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Edit Recipient</h4>
             </div>
+            
             <div class="modal-body">
-                <input type="hidden" class="user_id" name="user_id" value="">
-                <input type="hidden" class="name" name="name" value="">
-                <input type="hidden" class="fromall" name="fromall" value="1">
-               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
-            </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+                {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@updateRecipient', 'class' => 'form clear display']) !!}
+                <div class="kpi_list"></div>
+                
+                {!! Form::hidden('user_id', 'user_id', ['class'=>'user_id']) !!}
+                
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}
+                {!! Form::close() !!}
+            </div>        
         </div>
     </div>
-    </div>
 </div>
+
+@include('shared.reportmodal')
 
 @endsection

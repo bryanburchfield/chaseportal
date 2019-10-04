@@ -72,14 +72,40 @@ class KpiController extends Controller
     }
 
     /**
-     * Edit recipient
+     * Edit recipient - return kpi list 
      *
      * @param Request $request
      * @return void
      */
-    public function editRecipient (Request $request)
+    public function editRecipient(Request $request)
     {
+        $recipient = Recipient::find($request->id);
+        return [
+            'recipient' => $recipient,
+            'kpi_list' => $recipient->kpiList()
+        ];
+    }
+
+    /**
+     * Update recipient
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function updateRecipient(Request $request)
+    {
+
+        $this->removeRecipientFromAll($request->user_id);
+
+        foreach ($request->kpi_list as $kpi_id) {
+            $kr = new KpiRecipient();
+            $kr->kpi_id = $kpi_id;
+            $kr->recipient_id = $request->user_id;
+            $kr->save();
+        }
         
+        return $this->recipients();
+    
     }
 
     /**
