@@ -16,7 +16,7 @@
             <div class="container-full mt20">
                 <div class="row">
                     
-                    <div class="col-sm-6 expanded_emails display">
+                    <div class="col-sm-7 expanded_emails display">
                         <h2>Recipients</h2>
                         
                         @foreach($recipients as $recipient)
@@ -32,8 +32,8 @@
                         @endforeach
                     </div>
 
-                    <div class="col-sm-6">
-                        <h2>Add Recipients</h2>
+                    <div class="col-sm-5 create_recips">
+                        <h2>Create Recipient</h2>
 
                         {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
@@ -52,7 +52,10 @@
                                 {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
                             </div>
 
-                            
+                            <div class="form-group">
+                                {!! Form::label('kpis', 'KPIs') !!}
+                                {!! Form::select("kpis[]", $kpi_list, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
+                            </div>
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}

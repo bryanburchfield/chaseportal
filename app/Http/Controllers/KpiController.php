@@ -310,10 +310,13 @@ class KpiController extends Controller
         $page['type'] = 'recipients';
         $jsfile[] = "kpidash.js";
 
+        $kpi_list = Kpi::pluck('name', 'id')->all();
+
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
             'curdash' => 'kpidash',
+            'kpi_list' =>  $kpi_list,
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')
                 ->get(),
