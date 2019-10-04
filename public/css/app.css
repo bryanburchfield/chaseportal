@@ -2183,6 +2183,18 @@ h4.panel-title a {
   margin-bottom: 20px;
 }
 
+.fltlft {
+  float: left;
+  margin-right: 20px;
+}
+
+.undoselection_btn {
+  color: #d9534f;
+  font-weight: 600;
+  position: relative;
+  top: 9px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

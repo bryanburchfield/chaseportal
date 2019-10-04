@@ -1,5 +1,7 @@
 var KPI = {
-
+    
+    org_kpis : [],
+    
     init:function(){
         $('.opt a.kpi_trigger').on('click', this.toggle_kpi_info);
         // $('.expand_dets,.add_email').on('click', this.toggle_email_opts);
@@ -11,6 +13,8 @@ var KPI = {
         $('.run_kpi').on('click', this.fire_kpi);
         $('.search_results').on('click', 'h5', this.populate_recipient);
         $('.expanded_emails').on('click', '.edit_recip_glyph', this.edit_recipient);
+        $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
+        $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
     },
 
     populate_recipient:function(){
@@ -233,6 +237,7 @@ var KPI = {
 
     edit_recipient:function(e){
         e.preventDefault();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -240,7 +245,6 @@ var KPI = {
         });
 
         var id=$(this).data('recip');
-        console.log(id);
 
         $.ajax({
             url:'/kpi/edit_recipient',
@@ -251,20 +255,53 @@ var KPI = {
             },
             success:function(response){
 
+                $('#editRecipModal').find('.kpi_recip_info').remove();
                 $('#editRecipModal .modal-body form .kpi_list').empty();
                 $('#editRecipModal .modal-body form .user_id').val(id);
 
-                var kpi_list='<h4 class="mb20 mt0"><b>'+response.recipient.name+' - '+ response.recipient.email +'</b></h4>';
+                var kpi_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>Select All</b></label></div><a href="#" class=" undoselection_btn"> Undo Selection</a>';
                 var selected;
 
                 for(var i=0; i<response.kpi_list.length;i++){
                     selected =  response.kpi_list[i].selected ? 'checked' : '';
                     kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.kpi_list[i].id+'"><b>'+response.kpi_list[i].name+'</b> - '+response.kpi_list[i].description+'</label></div>';
                 }
+
+                $('<h4 class="mb20 mt0 kpi_recip_info"><b>'+response.recipient.name+' - '+ response.recipient.email +'</b></h4>').insertBefore('#editRecipModal .modal-body form .kpi_list');
                 $('#editRecipModal .modal-body form .kpi_list').append(kpi_list);
+
+                // build array of originally selected kpis
+                $(".kpi_list div label input").each(function(i) {
+                    if (this.checked) {
+                        KPI.org_kpis.push(i);
+                    }
+                });
             }
         });
+    },
 
+    /// put kpi selection back to saved list
+    undo_kpi_selection:function(e){
+        e.preventDefault();
+        $(".kpi_list div label input").prop('checked', false);
+        $(".kpi_list div label input").each(function(i) {
+            for(var j=0;j<KPI.org_kpis.length;j++){
+                if(KPI.org_kpis[j]==i){
+                    $(this).prop( "checked", true );
+                }
+            }
+        });
+        $(".kpi_list").find('div.checkbox.select_all b').text('Select All');
+    },
+
+    toggle_all_kpis:function(){
+        if($(this).prop("checked")){
+            $(".kpi_list").find('div.checkbox.select_all b').text('Unselect All');
+            $(this).parent().parent().siblings().find('label input').prop( "checked", true );
+        }else{
+            $(".kpi_list").find('div.checkbox.select_all b').text('Select All');
+            $(this).parent().parent().siblings().find('label input').prop( "checked", false );
+        }
     },
 
     remove_recipient:function(e){
@@ -278,7 +315,6 @@ var KPI = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
 
         //// if removing from recips page to remove from all kpis
         if(fromall == 1){
@@ -328,9 +364,7 @@ function searchRecips(el, value, kpi_id){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
-        console.log(value);
-        
+                
         $.ajax({
             'async': false,
             url: '/kpi/ajax_search',
@@ -341,7 +375,6 @@ function searchRecips(el, value, kpi_id){
                 kpi_id:kpi_id
             },
             success:function(response){
-                console.log(response);
 
                 if(response.search_recip.length){
                     $(el).next('.search_results').css({'display' : 'block'});

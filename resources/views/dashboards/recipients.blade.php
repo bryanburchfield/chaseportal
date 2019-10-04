@@ -61,18 +61,12 @@
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
 
                         {!! Form::close() !!}
-
-
                     </div>
-
-                    
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -108,6 +102,7 @@
             
             <div class="modal-body">
                 {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@updateRecipient', 'class' => 'form clear display']) !!}
+                
                 <div class="kpi_list"></div>
                 
                 {!! Form::hidden('user_id', 'user_id', ['class'=>'user_id']) !!}
