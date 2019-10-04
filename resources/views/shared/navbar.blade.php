@@ -28,6 +28,8 @@
                         @include('dashboards.kpinav')
                     @elseif($page['type'] == 'report')
                         @include('dashboards.reportnav')
+                    @elseif($page['type'] == 'recipients')
+                        @include('dashboards.recipientsnav')
                     @endif
                 </div>
             </div>

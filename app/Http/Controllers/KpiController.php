@@ -307,7 +307,7 @@ class KpiController extends Controller
     {
         $groupId = Auth::user()->group_id;
         $page['menuitem'] = 'kpidash';
-        $page['type'] = 'other';
+        $page['type'] = 'recipients';
         $jsfile[] = "kpidash.js";
 
         $data = [
