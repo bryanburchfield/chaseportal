@@ -6,7 +6,7 @@ var KPI = {
         $('.switch input').on('click', this.toggle_kpi);
         $('.expanded_emails').on('click', 'a.remove_recip_glyph', this.pass_user_removemodal);
         $('#deleteRecipModal .remove_recip').on('click', this.remove_recipient);
-        $('.add_recipient').on('submit', this.add_recipient);
+        // $('.add_recipient').on('submit', this.add_recipient);
         $('.adjust_interval').on('submit', this.adjust_interval);
         $('.run_kpi').on('click', this.fire_kpi);
         $('.search_results').on('click', 'h5', this.populate_recipient);
@@ -156,71 +156,70 @@ var KPI = {
         $(this).next().toggle();
     },
 
-    add_recipient:function(kpi_id=0, name='', phone=0, email=''){
-        event.preventDefault();
-        $('.alert').remove();
+    // add_recipient:function(kpi_id=0, name='', phone=0, email=''){
+    //     event.preventDefault();
+    //     $('.alert').remove();
 
-        var name = $(this).find('.name').val(),
-            email = $(this).find('.email').val(),
-            phone = $(this).find('.phone').val(),
-            kpi_id = $(this).data('kpi'),
-            addtoall = $(this).find('.addtoall').is(':checked'),
-            redirect_url = $(this).find('.redirect_url').val()
-        ;
+    //     var name = $(this).find('.name').val(),
+    //         email = $(this).find('.email').val(),
+    //         phone = $(this).find('.phone').val(),
+    //         kpi_id = $(this).data('kpi'),
+    //         addtoall = $(this).find('.addtoall').is(':checked'),
+    //         redirect_url = $(this).find('.redirect_url').val()
+    //     ;
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         }
+    //     });
 
-        $.ajax({
-            url: '/kpi/add_recipient',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                name: name,
-                email:email,
-                phone:phone,
-                kpi_id:kpi_id,
-                addtoall:addtoall,
-                redirect_url:redirect_url
-            },
+    //     $.ajax({
+    //         url: '/kpi/add_recipient',
+    //         type: 'POST',
+    //         dataType: 'json',
+    //         data: {
+    //             name: name,
+    //             email:email,
+    //             phone:phone,
+    //             kpi_id:kpi_id,
+    //             addtoall:addtoall,
+    //             redirect_url:redirect_url
+    //         },
 
-            success:function(response){
+    //         success:function(response){
 
-                var from_form,
-                    append_user
-                ;
+    //             var from_form,
+    //                 append_user
+    //             ;
 
-                if(response.origin == 'recips_page'){
-                    from_form=$('form.user_email_form.add_recipient ');
-                    append_user=$('.expanded_emails'); 
-                }else{
-                    from_form=$('form#form'+kpi_id);
-                    if(addtoall){
-                        append_user=$('.expanded_emails');
-                    }else{
-                        console.log(from_form);
-                        append_user=$('form#form'+kpi_id).parent().next().find('.expanded_emails');
-                    }                                     
-                }
+    //             if(response.origin == 'recips_page'){
+    //                 from_form=$('form.user_email_form.add_recipient ');
+    //                 append_user=$('.expanded_emails'); 
+    //             }else{
+    //                 from_form=$('form#form'+kpi_id);
+    //                 if(addtoall){
+    //                     append_user=$('.expanded_emails');
+    //                 }else{
+    //                     append_user=$('form#form'+kpi_id).parent().next().find('.expanded_emails');
+    //                 }                                     
+    //             }
 
-                if(response.errors){
-                    $(from_form).append('<div class="alert alert-danger clear mt20">'+ response.errors[0]+'</div>');
-                }else{
-                    $(from_form).find('input.form-control').val("");
-                    $(from_form).find('.addtoall').prop("checked", false);
-                    $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
-                    $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
+    //             if(response.errors){
+    //                 $(from_form).append('<div class="alert alert-danger clear mt20">'+ response.errors[0]+'</div>');
+    //             }else{
+    //                 $(from_form).find('input.form-control').val("");
+    //                 $(from_form).find('.addtoall').prop("checked", false);
+    //                 $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
+    //                 $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
 
-                    setTimeout(function(){ 
-                        $('.alert').remove();
-                    }, 4500);
-                }                
-            }
-        }); 
-    },
+    //                 setTimeout(function(){ 
+    //                     $('.alert').remove();
+    //                 }, 4500);
+    //             }                
+    //         }
+    //     }); 
+    // },
 
     pass_user_removemodal:function(){
 

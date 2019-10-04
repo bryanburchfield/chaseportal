@@ -144,9 +144,11 @@ class KpiController extends Controller
      */
     public function addRecipient(Request $request)
     {
+
         $group_id = Auth::user()->group_id;
         $email = $request->email;
         $phone = $request->phone;
+        $kpis = $request->kpis;
 
         // See if recip exists by email or phone
         $recipient = Recipient::where('group_id', $group_id)
@@ -161,15 +163,8 @@ class KpiController extends Controller
                     );
             })->first();
 
-        if ($request->redirect_url == 'recipients') {
-            $origin = 'recips_page';
-        } else {
-            $origin = 'kpi_page';
-        }
-
         if (!empty($recipient)) {
             return [
-                'origin' => $origin,
                 'add_recipient' => [],
                 'errors' => ['Recipient with that email or phone already exists'],
             ];
@@ -182,28 +177,14 @@ class KpiController extends Controller
         $recipient->group_id = Auth::user()->group_id;
         $recipient->save();
 
-        if ($request->addtoall == 'true' || $request->redirect_url == 'recipients') { // this also needs to run based on if it came from the add_recip form on kpi/recipients
-            $kpis = Kpi::all();
-        } else {
-            $kpis = Kpi::where('id', $request->kpi_id)->get();
-        }
-
         foreach ($kpis as $kpi) {
             $kr = new KpiRecipient();
-            $kr->kpi_id = $kpi->id;
+            $kr->kpi_id = $kpi;
             $kr->recipient_id = $recipient->id;
             $kr->save();
         }
 
-        return [
-            'origin' => $origin,
-            'add_recipient' => [
-                $recipient->name,
-                $recipient->email,
-                $recipient->phone,
-                $recipient->id,
-            ],
-        ];
+        return $this->recipients();
     }
 
     /**
