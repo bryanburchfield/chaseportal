@@ -290,7 +290,7 @@ class KpiController extends Controller
         $page['type'] = 'recipients';
         $jsfile[] = "kpidash.js";
 
-        $all_kpis = Kpi::pluck('name', 'id')->all();
+        $all_kpis = Kpi::orderBy('name', 'asc')->pluck('name', 'id')->all();
 
         $data = [
             'jsfile' => $jsfile,
