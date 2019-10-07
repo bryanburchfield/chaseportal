@@ -57,17 +57,9 @@
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
-                            
-                            @if($errors->any())
-                            <div class="alert alert-danger mt20">
-                                @foreach($errors->all() as $e)
-                                    <li>{{ $e }}</li>
-                                @endforeach
-                            </div>
-                            @endif
 
-                        {!! Form::close() !!}                        
-                   
+                        {!! Form::close() !!}
+
                     </div>
                 </div>
             </div>
@@ -128,11 +120,23 @@
                 <div class="kpi_list"></div>
 
                 {!! Form::hidden('recipient_id', '', ['class'=>'recipient_id']) !!}
-                {!! Form::hidden('edit_form_submitted', '', ['class'=>'edit_form_submitted']) !!}
+
+                @if (old('recipient_id'))
+                    {!! Form::hidden('edit_form_submitted', '1', ['class'=>'edit_form_submitted']) !!}
+                @endif
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}
                 {!! Form::close() !!}
+
+                @if($errors->any())
+                <div class="alert alert-danger mt20">
+                    @foreach($errors->all() as $e)
+                        <li>{{ $e }}</li>
+                    @endforeach
+                </div>
+                @endif
+
             </div>
         </div>
     </div>

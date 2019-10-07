@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditRecipient;
 use App\Mail\KpiMail;
 use Illuminate\Http\Request;
 use App\Kpi;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Validation\Rule;
 
 class KpiController extends Controller
 {
@@ -93,7 +93,7 @@ class KpiController extends Controller
      * @param Request $request
      * @return void
      */
-    public function updateRecipient(Request $request)
+    public function updateRecipient(EditRecipient $request)
     {
         $group_id = Auth::user()->group_id;
 
@@ -102,49 +102,21 @@ class KpiController extends Controller
             ->where('id', $request->recipient_id)
             ->firstOrFail();
 
-        $request->validate([
-            'recipient_id' => 'required',
-            'name' => [
-                'required',
-                Rule::unique('recipients')->where(function ($query) use ($recipient) {
-                    return $query
-                        ->where('group_id', $recipient->group_id)
-                        ->where('id', '!=', $recipient->id);
-                }),
-            ],
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('recipients')->where(function ($query) use ($recipient) {
-                    return $query
-                        ->where('group_id', $recipient->group_id)
-                        ->where('id', '!=', $recipient->id)
-                        ->whereNotNull('email');
-                }),
-            ],
-            'phone' => [
-                'nullable',
-                Rule::unique('recipients')->where(function ($query) use ($recipient) {
-                    return $query
-                        ->where('group_id', $recipient->group_id)
-                        ->where('id', '!=', $recipient->id)
-                        ->whereNotNull('phone');
-                }),
-            ],
-        ]);
+        $validated = $request->validated();
 
-        $this->removeRecipientFromAll($recipient->id);
-
-        $recipient->email = $request->email;
-        $recipient->name = $request->name;
-        $recipient->phone = $this->formatPhone($request->phone);
+        $recipient->email = $request->edit_email;
+        $recipient->name = $request->edit_name;
+        $recipient->phone = $this->formatPhone($request->edit_phone);
         $recipient->save();
 
-        foreach ($request->kpi_list as $kpi_id) {
-            $kr = new KpiRecipient();
-            $kr->kpi_id = $kpi_id;
-            $kr->recipient_id = $recipient->id;
-            $kr->save();
+        $this->removeRecipientFromAll($recipient->id);
+        if (!empty($request->kpi_list)) {
+            foreach ($request->kpi_list as $kpi_id) {
+                $kr = new KpiRecipient();
+                $kr->kpi_id = $kpi_id;
+                $kr->recipient_id = $recipient->id;
+                $kr->save();
+            }
         }
 
         return $this->recipients();
@@ -186,7 +158,6 @@ class KpiController extends Controller
      */
     public function addRecipient(Request $request)
     {
-
         $group_id = Auth::user()->group_id;
         $email = $request->email;
         $phone = $request->phone;
@@ -410,7 +381,7 @@ class KpiController extends Controller
         list($sql, $bind) = $kpi->sql($db_list, $group_id, $startDate, $endDate);
 
         // Run the query
-        $results = DB::connection('sqlsrv')->select($query, $bind);
+        $results = DB::connection('sqlsrv')->select($sql, $bind);
 
         $sms = $this->getSms($kpi_name, $results);
 
