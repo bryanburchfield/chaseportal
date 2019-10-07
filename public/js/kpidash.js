@@ -294,7 +294,7 @@ var KPI = {
 
     update_recipient:function(e){
         e.preventDefault();
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -304,9 +304,13 @@ var KPI = {
         var name = $('.edit_name').val(),
             email = $('.edit_email').val(),
             phone = $('.edit_phone').val(),
-            recipient_id = $('.recipient_id').val()
+            recipient_id = $('.recipient_id').val(),
+            kpi_list = [];
         ;
 
+        $('input[type="checkbox"]:checked').each(function () {
+            kpi_list.push($(this).val());
+        });
 
         $.ajax({
             url:'/kpi/update_recipient',
@@ -316,7 +320,8 @@ var KPI = {
                 recipient_id:recipient_id,
                 name:name,
                 email:email,
-                phone:phone
+                phone:phone,
+                kpi_list:kpi_list
             },
             success:function(response){
                 console.log();
