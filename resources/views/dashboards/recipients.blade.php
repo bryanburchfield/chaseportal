@@ -107,7 +107,7 @@
                     {!! Form::label('name', 'Full Name') !!}
                     {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
                 </div>
-                
+
                 <div class="form-group">
                     {!! Form::label('email', 'Email Address') !!}
                     {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
@@ -120,7 +120,7 @@
 
                 <div class="kpi_list"></div>
 
-                {!! Form::hidden('user_id', 'user_id', ['class'=>'user_id']) !!}
+                {!! Form::hidden('recipient_id', 'recipient_id', ['class'=>'recipient_id']) !!}
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}
