@@ -94,10 +94,41 @@ class KpiController extends Controller
      */
     public function updateRecipient(Request $request)
     {
-
+        // return $request;
         $this->removeRecipientFromAll($request->user_id);
 
-        foreach ($request->all_kpis as $kpi_id) {
+        $group_id = Auth::user()->group_id;
+        $user_id = $request->user_id;
+        $email = $request->email;
+        $phone = $request->phone;
+
+        // See if recip exists by email or phone
+        $recipient = Recipient::where('id','<>', $user_id)->where('email', $email)->orWhere('phone', $phone)->first();
+            // ->whereExists(function($query) use($email, $phone){
+            // $query->select(DB::raw(1))
+            //         ->from('recipients')
+            //         ->whereRaw(
+            //             'email = ?'.
+            //             'phone = ?',
+            //             [$email, $phone]
+            //         );
+            //     })->first();
+
+        return $recipient;
+
+        if (!empty($recipient)) {
+            return [
+                'add_recipient' => [],
+                'errors' => ['Recipient with that email or phone already exists'],
+            ];
+        }
+
+        $recipient = Recipient::find($user_id);
+        $recipient->email = $request->email;
+        $recipient->phone = $this->formatPhone($request->phone);
+        $recipient->save();
+
+        foreach ($request->kpi_list as $kpi_id) {
             $kr = new KpiRecipient();
             $kr->kpi_id = $kpi_id;
             $kr->recipient_id = $request->user_id;

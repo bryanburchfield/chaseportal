@@ -269,7 +269,10 @@ var KPI = {
                     kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.kpi_list[i].id+'"><b>'+response.kpi_list[i].name+'</b> - '+response.kpi_list[i].description+'</label></div>';
                 }
 
-                $('<h4 class="mb20 mt0 kpi_recip_info"><b>'+response.recipient.name+' - '+ response.recipient.email +'</b></h4>').insertBefore('#editRecipModal .modal-body form .kpi_list');
+                $('<h4 class="mb20 mt0 kpi_recip_info"><b>'+response.recipient.name+'</b></h4>').prependTo('#editRecipModal .modal-body form');
+                $('#editRecipModal .modal-body form #email.form-control').val(response.recipient.email);
+                $('#editRecipModal .modal-body form #phone.form-control').val(response.recipient.phone);
+
                 $('#editRecipModal .modal-body form .kpi_list').append(kpi_list);
 
                 // build array of originally selected kpis

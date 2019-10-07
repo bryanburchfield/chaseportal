@@ -102,7 +102,17 @@
 
             <div class="modal-body">
                 {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@updateRecipient', 'class' => 'form clear display']) !!}
+                    
+                <div class="form-group">
+                    {!! Form::label('email', 'Email Address') !!}
+                    {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+                </div>
 
+                <div class="form-group">
+                    {!! Form::label('phone', 'Phone') !!}
+                    {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
+                </div>
+                
                 <div class="kpi_list"></div>
 
                 {!! Form::hidden('user_id', 'user_id', ['class'=>'user_id']) !!}
