@@ -26,8 +26,6 @@
                                 <p class="phone">{{ $recipient->phone }}</p>
                                 <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
                                 <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
-
-
                             </div>
                         @endforeach
                     </div>
@@ -59,16 +57,17 @@
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
+                            
+                            @if($errors->any())
+                            <div class="alert alert-danger mt20">
+                                @foreach($errors->all() as $e)
+                                    <li>{{ $e }}</li>
+                                @endforeach
+                            </div>
+                            @endif
 
-                        {!! Form::close() !!}
-
-                        @if($errors->any())
-                        <div class="alert alert-danger mt20">
-                            @foreach($errors->all() as $e)
-                                <li>{{ $e }}</li>
-                            @endforeach
-                        </div>
-                    @endif
+                        {!! Form::close() !!}                        
+                   
                     </div>
                 </div>
             </div>
@@ -113,22 +112,23 @@
 
                 <div class="form-group">
                     {!! Form::label('name', 'Full Name') !!}
-                    {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
+                    {!! Form::text('edit_name', null, ['class'=>'form-control edit_name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('email', 'Email Address') !!}
-                    {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+                    {!! Form::email('edit_email', null, ['class'=>'form-control edit_email', 'required'=>true]) !!}
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('phone', 'Phone') !!}
-                    {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
+                    {!! Form::tel('edit_phone', null, ['class'=>'form-control edit_phone']) !!}
                 </div>
 
                 <div class="kpi_list"></div>
 
                 {!! Form::hidden('recipient_id', '', ['class'=>'recipient_id']) !!}
+                {!! Form::hidden('edit_form_submitted', '', ['class'=>'edit_form_submitted']) !!}
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}
