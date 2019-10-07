@@ -10,6 +10,7 @@ Route::prefix('kpi')->group(function () {
         Route::get('/', 'KpiController@index');
         Route::get('recipients', 'KpiController@recipients');
         Route::post('recipients', 'KpiController@updateRecipient');
+        Route::post('update_recipient', 'KpiController@updateRecipient');
 
         // ajax targets
         Route::post('run_kpi', 'KpiController@runKpi');

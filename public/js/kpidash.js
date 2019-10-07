@@ -13,6 +13,7 @@ var KPI = {
         $('.run_kpi').on('click', this.fire_kpi);
         $('.search_results').on('click', 'h5', this.populate_recipient);
         $('.expanded_emails').on('click', '.edit_recip_glyph', this.open_edit_recipient_modal);
+        $('.update_recip').on('submit', this.update_recipient);
         $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
         $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
     },
@@ -287,6 +288,38 @@ var KPI = {
                 });
 
                 console.log(KPI.org_kpis);
+            }
+        });
+    },
+
+    update_recipient:function(e){
+        e.preventDefault();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        var name = $('.edit_name').val(),
+            email = $('.edit_email').val(),
+            phone = $('.edit_phone').val(),
+            recipient_id = $('.recipient_id').val()
+        ;
+
+
+        $.ajax({
+            url:'/kpi/update_recipient',
+            type:'POST',
+            dataType:'json',
+            data:{
+                recipient_id:recipient_id,
+                name:name,
+                email:email,
+                phone:phone
+            },
+            success:function(response){
+                console.log();
+                
             }
         });
     },
