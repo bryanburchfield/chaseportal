@@ -129,9 +129,9 @@
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}
                 {!! Form::close() !!}
 
-                @if($errors->any())
+                @if($errors->edit->any())
                 <div class="alert alert-danger mt20">
-                    @foreach($errors->all() as $e)
+                    @foreach($errors->edit->all() as $e)
                         <li>{{ $e }}</li>
                     @endforeach
                 </div>
