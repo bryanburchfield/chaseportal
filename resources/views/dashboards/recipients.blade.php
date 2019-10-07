@@ -34,7 +34,7 @@
 
                     <div class="col-sm-5 create_recips">
                         <h2>Create Recipient</h2>
-                        
+
                         {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group">
@@ -61,6 +61,14 @@
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
 
                         {!! Form::close() !!}
+
+                        @if($errors->any())
+                        <div class="alert alert-danger mt20">
+                            @foreach($errors->all() as $e)
+                                <li>{{ $e }}</li>
+                            @endforeach
+                        </div>
+                    @endif
                     </div>
                 </div>
             </div>
@@ -102,7 +110,7 @@
 
             <div class="modal-body">
                 {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@updateRecipient', 'class' => 'form clear display']) !!}
-                
+
                 <div class="form-group">
                     {!! Form::label('name', 'Full Name') !!}
                     {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}

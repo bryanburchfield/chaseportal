@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Validation\Rule;
 
 class KpiController extends Controller
 {
@@ -94,8 +95,6 @@ class KpiController extends Controller
      */
     public function updateRecipient(Request $request)
     {
-        dd($request);
-
         $group_id = Auth::user()->group_id;
 
         // check the group here just in case they're trying to hack the form
@@ -108,7 +107,9 @@ class KpiController extends Controller
             'name' => [
                 'required',
                 Rule::unique('recipients')->where(function ($query) use ($recipient) {
-                    return $query->where('group_id', $recipient->group_id);
+                    return $query
+                        ->where('group_id', $recipient->group_id)
+                        ->where('id', '!=', $recipient->id);
                 }),
             ],
             'email' => [
@@ -117,6 +118,7 @@ class KpiController extends Controller
                 Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
                         ->where('group_id', $recipient->group_id)
+                        ->where('id', '!=', $recipient->id)
                         ->whereNotNull('email');
                 }),
             ],
@@ -125,6 +127,7 @@ class KpiController extends Controller
                 Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
                         ->where('group_id', $recipient->group_id)
+                        ->where('id', '!=', $recipient->id)
                         ->whereNotNull('phone');
                 }),
             ],
@@ -137,7 +140,7 @@ class KpiController extends Controller
         $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
-        foreach ($request->all_kpis as $kpi_id) {
+        foreach ($request->kpi_list as $kpi_id) {
             $kr = new KpiRecipient();
             $kr->kpi_id = $kpi_id;
             $kr->recipient_id = $recipient->id;
