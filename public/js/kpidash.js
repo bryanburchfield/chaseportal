@@ -254,9 +254,9 @@ var KPI = {
                 id:id
             },
             success:function(response){
-
+                console.log(response);
                 KPI.org_kpis=[];
-                
+
                 $('#editRecipModal').find('.kpi_recip_info').remove();
                 $('#editRecipModal .modal-body form .kpi_list').empty();
                 $('#editRecipModal .modal-body form .user_id').val(id);

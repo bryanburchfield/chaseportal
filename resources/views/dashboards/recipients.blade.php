@@ -34,7 +34,7 @@
 
                     <div class="col-sm-5 create_recips">
                         <h2>Create Recipient</h2>
-
+                        
                         {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group">
@@ -54,7 +54,7 @@
 
                             <div class="form-group">
                                 {!! Form::label('kpis', 'KPIs') !!}
-                                {!! Form::select("kpis[]", $kpi_list, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
+                                {!! Form::select("kpis[]", $all_kpis, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
                             </div>
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
