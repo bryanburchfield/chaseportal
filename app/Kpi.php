@@ -59,4 +59,44 @@ class Kpi extends Model
             ->orderby('R.name')
             ->get();
     }
+
+    public function sql($db_list, $group_id, $fromdate, $todate)
+    {
+        list($inner_sql, $bind) = $this->parseInnerSql($db_list, $group_id, $fromdate, $todate);
+
+        $sql = str_replace('{{inner_sql}}', $inner_sql, $this->outer_sql);
+
+        return [$sql, $bind];
+    }
+
+    private function parseInnerSql($db_list, $group_id, $fromdate, $todate)
+    {
+        $sql = $this->inner_sql;
+
+        $bind = [];
+        $final = '';
+
+        $union = '';
+        foreach ($db_list as $i => $db) {
+            $snippet = str_replace('{{db}}', $db, $sql);
+
+            if (strpos($sql, '{{:fromdate}}') !== false) {
+                $bind['fromdate' . $i] = $fromdate;
+                $snippet = str_replace('{{:fromdate}}', ':fromdate' . $i, $snippet);
+            }
+            if (strpos($sql, '{:todate}') !== false) {
+                $bind['todate' . $i] = $todate;
+                $snippet = str_replace('{{:todate}}', ':todate' . $i, $snippet);
+            }
+            if (strpos($sql, '{:group_id}') !== false) {
+                $bind['group_id' . $i] = $group_id;
+                $snippet = str_replace('{{:group_id}}', ':group_id' . $i, $snippet);
+            }
+
+            $final .= " $union $snippet";
+            $union = $this->union_all ? 'UNION ALL' : 'UNION';
+        }
+
+        return [$final, $bind];
+    }
 }

@@ -318,7 +318,7 @@ class LeaderDashController extends Controller
                 AND (Campaign = DR.Campaign OR Campaign = '')
                 ORDER BY [Description] Desc) DI
             WHERE DR.GroupId = :groupid$i
-            AND DR.CallType NOT IN (1,7,8,11)
+            AND DR.CallType NOT IN (7,8)
             AND DR.Campaign != ''
             AND DR.CallStatus NOT IN (
 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',

@@ -94,44 +94,53 @@ class KpiController extends Controller
      */
     public function updateRecipient(Request $request)
     {
-        // return $request;
-        $this->removeRecipientFromAll($request->user_id);
+        dd($request);
 
         $group_id = Auth::user()->group_id;
-        $user_id = $request->user_id;
-        $email = $request->email;
-        $phone = $request->phone;
 
-        // See if recip exists by email or phone
-        $recipient = Recipient::where('id','<>', $user_id)->where('email', $email)->orWhere('phone', $phone)->first();
-            // ->whereExists(function($query) use($email, $phone){
-            // $query->select(DB::raw(1))
-            //         ->from('recipients')
-            //         ->whereRaw(
-            //             'email = ?'.
-            //             'phone = ?',
-            //             [$email, $phone]
-            //         );
-            //     })->first();
+        // check the group here just in case they're trying to hack the form
+        $recipient = Recipient::where('group_id', $group_id)
+            ->where('id', $request->recipient_id)
+            ->firstOrFail();
 
-        return $recipient;
+        $request->validate([
+            'recipient_id' => 'required',
+            'name' => [
+                'required',
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
+                    return $query->where('group_id', $recipient->group_id);
+                }),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
+                    return $query
+                        ->where('group_id', $recipient->group_id)
+                        ->whereNotNull('email');
+                }),
+            ],
+            'phone' => [
+                'nullable',
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
+                    return $query
+                        ->where('group_id', $recipient->group_id)
+                        ->whereNotNull('phone');
+                }),
+            ],
+        ]);
 
-        if (!empty($recipient)) {
-            return [
-                'add_recipient' => [],
-                'errors' => ['Recipient with that email or phone already exists'],
-            ];
-        }
+        $this->removeRecipientFromAll($recipient->id);
 
-        $recipient = Recipient::find($user_id);
         $recipient->email = $request->email;
+        $recipient->name = $request->name;
         $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
-        foreach ($request->kpi_list as $kpi_id) {
+        foreach ($request->all_kpis as $kpi_id) {
             $kr = new KpiRecipient();
             $kr->kpi_id = $kpi_id;
-            $kr->recipient_id = $request->user_id;
+            $kr->recipient_id = $recipient->id;
             $kr->save();
         }
 
@@ -383,26 +392,21 @@ class KpiController extends Controller
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $group_id = Auth::user()->group_id;
+        $db_list = array_values(Auth::user()->getDatabaseArray());
 
         // Get kpi info
         $kpi = Kpi::where('id', $kpiId)->first();
 
         $kpi_name = $kpi->name;
-        $query = $kpi->query;
-
         $recipients = $kpi->getRecipients($group_id);
 
         if (empty($recipients)) {
             return "No recipients have been added";
         }
 
-        // Run the query
-        $bind = [
-            'groupid' => $group_id,
-            'fromdate' => $startDate,
-            'todate' => $endDate,
-        ];
+        list($sql, $bind) = $kpi->sql($db_list, $group_id, $startDate, $endDate);
 
+        // Run the query
         $results = DB::connection('sqlsrv')->select($query, $bind);
 
         $sms = $this->getSms($kpi_name, $results);
