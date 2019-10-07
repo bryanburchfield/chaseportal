@@ -12,7 +12,7 @@ var KPI = {
         $('.adjust_interval').on('submit', this.adjust_interval);
         $('.run_kpi').on('click', this.fire_kpi);
         $('.search_results').on('click', 'h5', this.populate_recipient);
-        $('.expanded_emails').on('click', '.edit_recip_glyph', this.edit_recipient);
+        $('.expanded_emails').on('click', '.edit_recip_glyph', this.open_edit_recipient_modal);
         $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
         $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
     },
@@ -235,16 +235,19 @@ var KPI = {
         $('#deleteRecipModal .username').html(name);
     },
 
-    edit_recipient:function(e){
+    open_edit_recipient_modal:function(e){
         e.preventDefault();
+        var id=$(this).data('recip');
+        KPI.edit_recipient(id);
+    },
+
+    edit_recipient:function(id){
 
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
-        var id=$(this).data('recip');
 
         $.ajax({
             url:'/kpi/edit_recipient',
@@ -254,7 +257,7 @@ var KPI = {
                 id:id
             },
             success:function(response){
-                console.log(response);
+
                 KPI.org_kpis=[];
 
                 $('#editRecipModal').find('.kpi_recip_info').remove();
@@ -361,8 +364,15 @@ $(document).ready(function(){
     KPI.init();
 
     if($('.edit_form_submitted').val()){
+        var id = $('.recipient_id').val();
+        KPI.edit_recipient(id);
         $('#editRecipModal').modal('show');
     }
+
+    /// hide error div when closing edit recip modal because errors are populated in the blade
+    $('#editRecipModal').on('hidden.bs.modal', function () {
+        $('#editRecipModal .alert').hide();
+    });
 
 });
 
