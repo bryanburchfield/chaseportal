@@ -312,6 +312,8 @@ var KPI = {
             kpi_list.push($(this).val());
         });
 
+        $('#editRecipModal form .alert').empty();
+
         $.ajax({
             url:'/kpi/update_recipient',
             type:'POST',
@@ -324,8 +326,14 @@ var KPI = {
                 kpi_list:kpi_list
             },
             success:function(response){
-                console.log();
+                console.log(response);
                 
+            },
+            error :function( data ) {
+                console.log(data);
+                console.log(data.responseJSON.message);
+
+                $('#editRecipModal form .alert').text(data.responseJSON.message);
             }
         });
     },

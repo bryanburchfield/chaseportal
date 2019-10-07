@@ -127,15 +127,9 @@
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0 ']) !!}
+                
+                <div class="alert alert-danger mt20"></div>
                 {!! Form::close() !!}
-
-                @if($errors->edit->any())
-                <div class="alert alert-danger mt20">
-                    @foreach($errors->edit->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
-                </div>
-                @endif
 
             </div>
         </div>
