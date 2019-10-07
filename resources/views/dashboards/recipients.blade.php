@@ -120,7 +120,7 @@
 
                 <div class="kpi_list"></div>
 
-                {!! Form::hidden('recipient_id', 'recipient_id', ['class'=>'recipient_id']) !!}
+                {!! Form::hidden('recipient_id', '', ['class'=>'recipient_id']) !!}
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0']) !!}

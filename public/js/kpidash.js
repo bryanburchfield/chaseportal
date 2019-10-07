@@ -254,7 +254,7 @@ var KPI = {
                 id:id
             },
             success:function(response){
-
+                console.log(response);
                 KPI.org_kpis=[];
 
                 $('#editRecipModal').find('.kpi_recip_info').remove();
@@ -273,6 +273,7 @@ var KPI = {
                 $('#editRecipModal .modal-body form #email.form-control').val(response.recipient.email);
                 $('#editRecipModal .modal-body form #phone.form-control').val(response.recipient.phone);
 
+                $('#editRecipModal .modal-body form .recipient_id').val(response.recipient.id);
                 $('#editRecipModal .modal-body form .kpi_list').append(kpi_list);
 
                 // build array of originally selected kpis
