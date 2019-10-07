@@ -72,7 +72,7 @@ class KpiController extends Controller
     }
 
     /**
-     * Edit recipient - return kpi list 
+     * Edit recipient - return kpi list
      *
      * @param Request $request
      * @return void
@@ -97,15 +97,14 @@ class KpiController extends Controller
 
         $this->removeRecipientFromAll($request->user_id);
 
-        foreach ($request->kpi_list as $kpi_id) {
+        foreach ($request->all_kpis as $kpi_id) {
             $kr = new KpiRecipient();
             $kr->kpi_id = $kpi_id;
             $kr->recipient_id = $request->user_id;
             $kr->save();
         }
-        
+
         return $this->recipients();
-    
     }
 
     /**
