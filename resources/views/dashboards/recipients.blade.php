@@ -100,7 +100,7 @@
             </div>
 
             <div class="modal-body">
-                {!! Form::open(['method'=> 'POST', 'url' => '#', 'class' => 'form clear display']) !!}
+                {!! Form::open(['method'=> 'POST', 'url' => '#', 'class' => 'form clear display update_recip']) !!}
 
                 <div class="form-group">
                     {!! Form::label('name', 'Full Name') !!}
@@ -126,7 +126,7 @@
                 @endif
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0 update_recip']) !!}
+                {!! Form::submit('Submit', ['class'=>'btn btn-warning btn-md mb0 ']) !!}
                 {!! Form::close() !!}
 
                 @if($errors->edit->any())
