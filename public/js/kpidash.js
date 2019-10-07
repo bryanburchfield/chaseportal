@@ -254,7 +254,7 @@ var KPI = {
                 id:id
             },
             success:function(response){
-                console.log(response);
+
                 KPI.org_kpis=[];
 
                 $('#editRecipModal').find('.kpi_recip_info').remove();
@@ -264,9 +264,9 @@ var KPI = {
                 var kpi_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>Select All</b></label></div><a href="#" class=" undoselection_btn"> Undo Selection</a>';
                 var selected;
 
-                for(var i=0; i<response.all_kpis.length;i++){
-                    selected =  response.all_kpis[i].selected ? 'checked' : '';
-                    kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.all_kpis[i].id+'"><b>'+response.all_kpis[i].name+'</b> - '+response.all_kpis[i].description+'</label></div>';
+                for(var i=0; i<response.kpi_list.length;i++){
+                    selected =  response.kpi_list[i].selected ? 'checked' : '';
+                    kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.kpi_list[i].id+'"><b>'+response.kpi_list[i].name+'</b> - '+response.kpi_list[i].description+'</label></div>';
                 }
 
                 $('#editRecipModal .modal-body form #name.form-control').val(response.recipient.name);
