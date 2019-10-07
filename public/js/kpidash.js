@@ -301,9 +301,9 @@ var KPI = {
             }
         });
 
-        var name = $('.edit_name').val(),
-            email = $('.edit_email').val(),
-            phone = $('.edit_phone').val(),
+        var edit_name = $('.edit_name').val(),
+            edit_email = $('.edit_email').val(),
+            edit_phone = $('.edit_phone').val(),
             recipient_id = $('.recipient_id').val()
         ;
 
@@ -314,9 +314,9 @@ var KPI = {
             dataType:'json',
             data:{
                 recipient_id:recipient_id,
-                name:name,
-                email:email,
-                phone:phone
+                edit_name:edit_name,
+                edit_email:edit_email,
+                edit_phone:edit_phone
             },
             success:function(response){
                 console.log();
