@@ -32,6 +32,7 @@ class Kpi extends Model
                 $join->on('kpis.id', '=', 'KG.kpi_id')
                     ->where('KG.group_id', '=', Auth::user()->group_id);
             })
+            ->orderby('name')
             ->get();
 
         foreach ($kpis as &$k) {

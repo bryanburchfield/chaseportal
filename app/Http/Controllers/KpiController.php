@@ -72,7 +72,7 @@ class KpiController extends Controller
     }
 
     /**
-     * Edit recipient - return kpi list 
+     * Edit recipient - return kpi list
      *
      * @param Request $request
      * @return void
@@ -97,15 +97,14 @@ class KpiController extends Controller
 
         $this->removeRecipientFromAll($request->user_id);
 
-        foreach ($request->kpi_list as $kpi_id) {
+        foreach ($request->all_kpis as $kpi_id) {
             $kr = new KpiRecipient();
             $kr->kpi_id = $kpi_id;
             $kr->recipient_id = $request->user_id;
             $kr->save();
         }
-        
+
         return $this->recipients();
-    
     }
 
     /**
@@ -291,13 +290,13 @@ class KpiController extends Controller
         $page['type'] = 'recipients';
         $jsfile[] = "kpidash.js";
 
-        $kpi_list = Kpi::pluck('name', 'id')->all();
+        $all_kpis = Kpi::pluck('name', 'id')->all();
 
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
             'curdash' => 'kpidash',
-            'kpi_list' =>  $kpi_list,
+            'all_kpis' =>  $all_kpis,
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')
                 ->get(),
