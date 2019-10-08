@@ -378,7 +378,7 @@ var KPI = {
     remove_recipient:function(e){
 
         e.preventDefault();
-        var id = $('.user_id').val();
+        var recipient_id = $('.user_id').val();
         var fromall = parseInt($('.fromall').val());
 
         if(fromall){
@@ -393,11 +393,11 @@ var KPI = {
                 type:'POST',
                 dataType:'json',
                 data:{
-                    id:id
+                    recipient_id:recipient_id
                 },
                 success:function(response){
                     console.log(response);
-                    $('div#'+id).remove();
+                    $('div#'+recipient_id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
             });
@@ -413,17 +413,16 @@ var KPI = {
                 type:'POST',
                 dataType:'json',
                 data:{
-                    id:id,
+                    recipient_id:recipient_id,
                     kpi_id:kpi_id
                 },
                 success:function(response){
                     console.log(response);
-                    $('div#'+id).remove();
+                    $('div#'+recipient_id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
             });
         }
-        console.log(id);
 
         
     },
