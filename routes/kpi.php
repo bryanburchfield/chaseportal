@@ -16,7 +16,6 @@ Route::prefix('kpi')->group(function () {
         Route::post('run_kpi', 'KpiController@runKpi');
         Route::post('adjust_interval', 'KpiController@adjustInterval');
         Route::post('toggle_kpi', 'KpiController@toggleKpi');
-        Route::post('remove_recipient_from_kpi', 'KpiController@removeRecipientFromKpi');
         Route::post('remove_recipient_from_all', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');
         Route::post('get_recipient', 'KpiController@getRecipient');
