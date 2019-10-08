@@ -646,7 +646,7 @@ class AdminOutboundDashController extends Controller
             WHERE DR.GroupId = :groupid$i
             AND DR.Rep != ''
             AND DR.CallType NOT IN (1,7,8,11)
-            AND Duration <> 0
+            AND Duration > 0
             AND DR.CallStatus NOT IN (
                 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
                 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',

@@ -538,7 +538,7 @@ class AdminDashController extends Controller
                 'MinHold' = MIN(HoldTime),
                 'MaxHold' = MAX(HoldTime)
                 FROM [$db].[dbo].[DialingResults] DR
-                WHERE CallType = 1
+                WHERE CallType IN (1,11)
                 AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
                 AND HoldTime >= 0
                 AND DR.Date >= :fromdate$i
