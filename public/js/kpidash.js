@@ -275,9 +275,9 @@ var KPI = {
                     kpi_list+='<div class="checkbox mb20"><label><input name="kpi_list[]" '+selected+' type="checkbox" value="'+response.kpi_list[i].id+'"><b>'+response.kpi_list[i].name+'</b> - '+response.kpi_list[i].description+'</label></div>';
                 }
 
-                $('#editRecipModal .modal-body form .edit_name.form-control').val(response.recipient.name);
-                $('#editRecipModal .modal-body form .edit_email.form-control').val(response.recipient.email);
-                $('#editRecipModal .modal-body form .edit_phone.form-control').val(response.recipient.phone);
+                $('#editRecipModal .modal-body form .name.form-control').val(response.recipient.name);
+                $('#editRecipModal .modal-body form .email.form-control').val(response.recipient.email);
+                $('#editRecipModal .modal-body form .phone.form-control').val(response.recipient.phone);
 
                 $('#editRecipModal .modal-body form .recipient_id').val(response.recipient.id);
                 $('#editRecipModal .modal-body form .kpi_list').append(kpi_list);
@@ -303,9 +303,9 @@ var KPI = {
             }
         });
 
-        var name = $('.edit_name').val(),
-            email = $('.edit_email').val(),
-            phone = $('.edit_phone').val(),
+        var name = $('.update_recip .name').val(),
+            email = $('.update_recip .email').val(),
+            phone = $('.update_recip .phone').val(),
             recipient_id = $('.recipient_id').val(),
             kpi_list = [];
         ;

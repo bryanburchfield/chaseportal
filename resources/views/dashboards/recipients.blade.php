@@ -104,17 +104,17 @@
 
                 <div class="form-group">
                     {!! Form::label('name', 'Full Name') !!}
-                    {!! Form::text('edit_name', null, ['class'=>'form-control edit_name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
+                    {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('email', 'Email Address') !!}
-                    {!! Form::email('edit_email', null, ['class'=>'form-control edit_email', 'required'=>true]) !!}
+                    {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('phone', 'Phone') !!}
-                    {!! Form::tel('edit_phone', null, ['class'=>'form-control edit_phone']) !!}
+                    {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
                 </div>
 
                 <div class="kpi_list"></div>
