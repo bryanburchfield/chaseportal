@@ -385,36 +385,18 @@ var KPI = {
             }
         });
 
-        //// if removing from recips page to remove from all kpis
-        if(fromall == 1){
-            $.ajax({
-                url:'/kpi/remove_recipient_from_all',
-                type:'POST',
-                dataType:'json',
-                data:{
-                    id:id,
-                    fromall:fromall
-                },
-                success:function(response){
-                    $('div#'+id).remove();
-                    $('#deleteRecipModal').modal('toggle');
-                }
-            });
-        }else{  ///// if removing from an kpi to remove from only that kpi
-            $.ajax({
-                url:'/kpi/remove_recipient_from_kpi',
-                type:'POST',
-                dataType:'json',
-                data:{
-                    id:id,
-                    fromall:fromall
-                },
-                success:function(response){
-                    $('div#'+id).remove();
-                    $('#deleteRecipModal').modal('toggle');
-                }
-            });
-        }
+        $.ajax({
+            url:'/kpi/remove_recipient_from_all',
+            type:'POST',
+            dataType:'json',
+            data:{
+                id:id
+            },
+            success:function(response){
+                $('div#'+id).remove();
+                $('#deleteRecipModal').modal('toggle');
+            }
+        });
     },
 }
 
