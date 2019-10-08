@@ -137,6 +137,7 @@ var KPI = {
 
             },
             success:function(response){
+                $("div[data-kpi='" + response.kpi_group.kpi_id +"']").find('.kpi .interval').val(response.kpi_group.interval);
             }
         });
     },

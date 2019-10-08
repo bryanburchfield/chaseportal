@@ -10,7 +10,7 @@
             <a href="#" class="kpi_trigger"> {{ $kpi->name }}</a>
 
             <div class="controls">
-                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm"><span class="glyphicon glyphicon-flash"></span> Run KPI</a>
+                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm"><span class="glyphicon glyphicon-flash"></span> Run Now</a>
                 <label class="switch">
                     <input type="checkbox" {{ ($kpi->active) ? 'checked' : '' }} name="kpi_input">
                     <span></span>
@@ -27,7 +27,6 @@
                                 <div class="form-group">
                                     <label for="type">Interval</label>
                                     <select name="interval" class="form-control interval"  required>
-                                        <option >Choose One</option>
                                         <option {!! ($kpi->interval == '15') ? ' selected="selected"' : '' !!} value="15">Every 15 minutes</option>
                                         <option {!! ($kpi->interval == '30') ? ' selected="selected"' : '' !!} value="30">Every 30 minutes</option>
                                         <option {!! ($kpi->interval == '60') ? ' selected="selected"' : '' !!} value="60">Every Hour</option>

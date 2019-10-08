@@ -1818,7 +1818,7 @@ var Master = {
 
 	/// keep alive and refresh data
 	check_reload:function(){
-
+        alert('test');
 	    if (typeof Dashboard !== 'undefined') {	        
 
 	        $(document.body).on('mousemove keypress', function(e){
