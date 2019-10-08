@@ -253,7 +253,7 @@ var KPI = {
         });
 
         $.ajax({
-            url:'/kpi/edit_recipient',
+            url:'/kpi/get_recipient',
             type:'POST',
             dataType:'json',
             data:{

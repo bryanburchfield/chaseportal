@@ -78,7 +78,7 @@ class KpiController extends Controller
      * @param Request $request
      * @return void
      */
-    public function editRecipient(Request $request)
+    public function getRecipient(Request $request)
     {
         $recipient = Recipient::find($request->id);
         return [
