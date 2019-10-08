@@ -38,7 +38,7 @@ class AddRecipient extends FormRequest
                 }),
             ],
             'email' => [
-                'required',
+                'nullable',
                 'email',
                 Rule::unique('recipients')->where(function ($query) use ($group_id) {
                     return $query

@@ -96,10 +96,8 @@ class KpiController extends Controller
      */
     public function updateRecipient(EditRecipient $request)
     {
-        $group_id = Auth::user()->group_id;
-
         // check the group here just in case they're trying to hack the form
-        $recipient = Recipient::where('group_id', $group_id)
+        $recipient = Recipient::where('group_id', Auth::user()->group_id)
             ->where('id', $request->recipient_id)
             ->firstOrFail();
 
@@ -123,6 +121,26 @@ class KpiController extends Controller
         }
 
         return $this->recipients();
+    }
+
+    /**
+     * Remove recipient from KPI
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function removeRecipientFromKpi(Request $request)
+    {
+        // check the group here just in case they're trying to hack the form
+        $recipient = Recipient::where('group_id', Auth::user()->group_id)
+            ->where('id', $request->recipient_id)
+            ->firstOrFail();
+
+        $kpi_recipient = KpiRecipient::where('recipient_id', $recipient->id)
+            ->where('kpi_id', $request->kpi_id)
+            ->delete();
+
+        return ['kpi_recipient' => $kpi_recipient];
     }
 
     /**
