@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddRecipient;
 use App\Http\Requests\EditRecipient;
 use App\Mail\KpiMail;
 use Illuminate\Http\Request;
