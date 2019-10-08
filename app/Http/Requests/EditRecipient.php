@@ -33,7 +33,7 @@ class EditRecipient extends FormRequest
         return [
             'recipient_id' => 'required',
             'kpi_list' => 'nullable',
-            'edit_name' => [
+            'name' => [
                 'required',
                 Rule::unique('recipients', 'name')->where(function ($query) use ($recipient) {
                     return $query
@@ -42,7 +42,7 @@ class EditRecipient extends FormRequest
                         ->whereNotNull('email');
                 }),
             ],
-            'edit_email' => [
+            'email' => [
                 'required',
                 'email',
                 Rule::unique('recipients', 'email')->where(function ($query) use ($recipient) {
@@ -52,7 +52,7 @@ class EditRecipient extends FormRequest
                         ->whereNotNull('email');
                 }),
             ],
-            'edit_phone' => [
+            'phone' => [
                 'nullable',
                 Rule::unique('recipients', 'phone')->where(function ($query) use ($recipient) {
                     return $query
