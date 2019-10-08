@@ -42,7 +42,7 @@ class EditRecipient extends FormRequest
                 }),
             ],
             'email' => [
-                'required',
+                'nullable',
                 'email',
                 Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
