@@ -116,7 +116,7 @@
 
                 <div class="form-group">
                     {!! Form::label('email', 'Email Address') !!}
-                    {!! Form::email('email', null, ['class'=>'form-control email') !!}
+                    {!! Form::email('email', null, ['class'=>'form-control email']) !!}
                 </div>
 
                 <div class="form-group">
