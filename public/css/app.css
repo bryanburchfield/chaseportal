@@ -2199,6 +2199,10 @@ h4.panel-title a {
   background: #eee;
 }
 
+#editRecipModal .alert {
+  display: none;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

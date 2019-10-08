@@ -244,6 +244,8 @@ var KPI = {
 
     edit_recipient:function(id){
 
+        $('#editRecipModal .alert').hide();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -334,6 +336,7 @@ var KPI = {
                 console.log(data.responseJSON.message);
 
                 $('#editRecipModal form .alert').text(data.responseJSON.message);
+                $('#editRecipModal form .alert').show();
             }
         });
     },
