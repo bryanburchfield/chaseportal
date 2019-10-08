@@ -131,14 +131,14 @@ class KpiController extends Controller
      */
     public function removeRecipientFromKpi(Request $request)
     {
-        // check the group here just in case they're trying to hack the form
-        $recipient = Recipient::where('group_id', Auth::user()->group_id)
-            ->where('id', $request->recipient_id)
-            ->firstOrFail();
+        $kpi_recipient = KpiRecipient::find($request->id);
 
-        $kpi_recipient = KpiRecipient::where('recipient_id', $recipient->id)
-            ->where('kpi_id', $request->kpi_id)
-            ->delete();
+        // check the group here just in case they're trying to hack the form
+        if ($kpi_recipient->recipient->group_id != Auth::user()->group_id) {
+            abort(404);
+        }
+
+        $kpi_recipient->delete();
 
         return ['kpi_recipient' => $kpi_recipient];
     }
