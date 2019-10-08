@@ -126,19 +126,6 @@ class KpiController extends Controller
     }
 
     /**
-     * Remove recipient from a single KPI
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function removeRecipientFromKpi(Request $request)
-    {
-        $recipient = KpiRecipient::find($request->id)->delete();
-
-        return ['remove_recipient' => 1];
-    }
-
-    /**
      * Remove recipient from all KPIs
      *
      * @param [type] $id
