@@ -288,8 +288,6 @@ var KPI = {
                         KPI.org_kpis.push(i);
                     }
                 });
-
-                console.log(KPI.org_kpis);
             }
         });
     },
@@ -328,15 +326,25 @@ var KPI = {
                 kpi_list:kpi_list
             },
             success:function(response){
-                console.log(response);
                 
             },
             error :function( data ) {
-                console.log(data);
-                console.log(data.responseJSON.message);
+                if( data.status === 422 ) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
 
-                $('#editRecipModal form .alert').text(data.responseJSON.message);
-                $('#editRecipModal form .alert').show();
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {                       
+                            $('#editRecipModal form .alert').show().append(value+"<br/>");
+
+                            });
+                        }else{
+                        $('#editRecipModal form .alert').show().append(value+"<br/>");
+                        }
+                    });
+                }else{
+                    window.location.href = "/kpi/recipients";
+                }    
             }
         });
     },
