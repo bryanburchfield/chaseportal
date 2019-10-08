@@ -230,8 +230,10 @@ var KPI = {
 
         var id = $(this).data('recip');
         var name = $(this).parent().find('p.name').text();
+        var kpi_id = $(this).data('kpi');
 
         $('#deleteRecipModal .user_id').val(id);
+        $('#deleteRecipModal .kpi_id').val(kpi_id);
         $('#deleteRecipModal .name').val(name);
         $('#deleteRecipModal .username').html(name);
     },
@@ -385,18 +387,40 @@ var KPI = {
             }
         });
 
-        $.ajax({
-            url:'/kpi/remove_recipient_from_all',
-            type:'POST',
-            dataType:'json',
-            data:{
-                id:id
-            },
-            success:function(response){
-                $('div#'+id).remove();
-                $('#deleteRecipModal').modal('toggle');
-            }
-        });
+        if($('#deleteRecipModal').find('.fromall').val()){
+            $.ajax({
+                url:'/kpi/remove_recipient_from_all',
+                type:'POST',
+                dataType:'json',
+                data:{
+                    id:id
+                },
+                success:function(response){
+                    console.log(response);
+                    $('div#'+id).remove();
+                    $('#deleteRecipModal').modal('toggle');
+                }
+            });
+        }else{
+            var kpi_id = $('.kpi_id').val();
+            $.ajax({
+                url:'/kpi/remove_recipient_from_kpi',
+                type:'POST',
+                dataType:'json',
+                data:{
+                    id:id,
+                    kpi_id:kpi_id
+                },
+                success:function(response){
+                    console.log(response);
+                    $('div#'+id).remove();
+                    $('#deleteRecipModal').modal('toggle');
+                }
+            });
+        }
+        console.log(id);
+
+        
     },
 }
 

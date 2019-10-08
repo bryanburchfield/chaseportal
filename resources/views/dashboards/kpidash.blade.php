@@ -40,43 +40,15 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-sm-4">
-                        <h4 class="expand_dets"><i class="glyphicon glyphicon-plus-sign"></i> Add Recipient</h4>
-                        
-                        <form id="form{{ $kpi->id }}" data-kpi="{{ $kpi->id }}" action="#" method="post" class="card form user_email_form well clear add_recipient" autocomplete="off">
-                            <div class="form-group prel">
-                                <input type="text" class="form-control name" name="name" placeholder="Name" required onkeyup="searchRecips(this, this.value, '{{ $kpi->id }}')" autocomplete="new-password">
-
-                                <div class="search_results"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <input type="email" class="form-control email" name="email" placeholder="Email Address" required>
-                            </div>
-
-                            <div class="form-group">
-                                <input type="tel" class="form-control phone" name="phone" placeholder="Phone Number">
-                            </div>
-
-                            <div class="checkbox mb20">
-                                <label><input type="checkbox" class="addtoall" name="addtoall" value="1">Add recipient to all KPI's?</label>
-                            </div>
-
-                            <input type="hidden" name="redirect_url" value="{{ url('/kpi') }}" class="redirect_url">
-
-                            <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
-                        {!! Form::close() !!}
-                    </div> --}}
-
                     <div class="col-sm-4">
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</h4>
                         <div class="expanded_emails clear">
-                            
+
                             @foreach($kpi->recipients as $r)
                             <div class="user clear" id="{{ $r->id }}">
                                 <p class="name">{{ $r->name }} - {{ $r->email }} - {{ $r->phone }}</p>
 
-                                <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
+                                <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>
                             @endforeach
                         </div>
@@ -100,6 +72,7 @@
                 <input type="hidden" class="user_id" name="user_id" value="">
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="fromall" name="fromall" value="0">
+                <input type="hidden" class="kpi_id" name="kpi_id" value="">
                <h3>Are you sure you want to delete <span class="username"></span>?</h3>
             </div>
         <div class="modal-footer">

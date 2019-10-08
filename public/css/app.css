@@ -1735,6 +1735,17 @@ h4.expand_dets {
   position: relative;
 }
 
+.expanded_emails.recips a.remove_recip_glyph,
+.expanded_emails.recips a.edit_recip_glyph {
+  bottom: 20px;
+}
+
+.expanded_emails.recips .user.clear {
+  clear: both;
+  height: 65px;
+  position: relative;
+}
+
 .expanded_emails.display {
   display: block;
   clear: none !important;

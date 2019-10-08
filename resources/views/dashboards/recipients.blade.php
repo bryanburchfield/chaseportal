@@ -16,7 +16,7 @@
             <div class="container-full mt20">
                 <div class="row">
 
-                    <div class="col-sm-7 expanded_emails display">
+                    <div class="col-sm-7 expanded_emails display recips">
                         <h2>Recipients</h2>
 
                         @foreach($recipients as $recipient)
