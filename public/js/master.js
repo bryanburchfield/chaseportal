@@ -68,6 +68,7 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
+        console.log('Master init');
 	},
 
     return_chart_colors_hash:function(reps){
@@ -1818,7 +1819,7 @@ var Master = {
 
 	/// keep alive and refresh data
 	check_reload:function(){
-        
+        console.log('Check Reload ran');
 	    if (typeof Dashboard !== 'undefined') {	        
 
 	        $(document.body).on('mousemove keypress', function(e){
@@ -1826,6 +1827,7 @@ var Master = {
 	        });
 	        // reload if idle 60 seconds
 	        function reload(){
+                console.log('Dashboard reloaded');
 	            if(new Date().getTime() - Dashboard.time >= 60000){
 	                Dashboard.refresh(Dashboard.datefilter, Dashboard.campaign);
 	                Dashboard.time = new Date().getTime();
@@ -1840,7 +1842,7 @@ var Master = {
 
 $(document).ready(function(){
 	Master.init();
-
+    console.log('Master Dom Ready');
 	$('.stop-propagation').on('click', function (e) {
 	    e.stopPropagation();
 	});

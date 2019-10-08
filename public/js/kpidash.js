@@ -16,6 +16,7 @@ var KPI = {
         $('.update_recip').on('submit', this.update_recipient);
         $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
         $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
+        console.log('KPI init');
     },
 
     populate_recipient:function(){
@@ -432,6 +433,7 @@ var KPI = {
 
 $(document).ready(function(){
     KPI.init();
+    console.log('KPI Dom ready');
 });
 
 function searchRecips(el, value, kpi_id){
