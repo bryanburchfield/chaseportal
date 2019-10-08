@@ -104,9 +104,9 @@ class KpiController extends Controller
 
         $validated = $request->validated();
 
-        $recipient->email = $request->edit_email;
-        $recipient->name = $request->edit_name;
-        $recipient->phone = $this->formatPhone($request->edit_phone);
+        $recipient->email = $request->email;
+        $recipient->name = $request->name;
+        $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
         $this->removeRecipientFromAll($recipient->id);
