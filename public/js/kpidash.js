@@ -402,18 +402,6 @@ var KPI = {
 
 $(document).ready(function(){
     KPI.init();
-
-    // if($('.edit_form_submitted').val()){
-    //     var id = $('.recipient_id').val();
-    //     KPI.edit_recipient(id);
-    //     $('#editRecipModal').modal('show');
-    // }
-
-    /// hide error div when closing edit recip modal because errors are populated in the blade
-    $('#editRecipModal').on('hidden.bs.modal', function () {
-        $('#editRecipModal .alert').hide();
-    });
-
 });
 
 function searchRecips(el, value, kpi_id){
