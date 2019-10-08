@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Recipient;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 
 class EditRecipient extends FormRequest
@@ -33,43 +32,34 @@ class EditRecipient extends FormRequest
         return [
             'recipient_id' => 'required',
             'kpi_list' => 'nullable',
-            'edit_name' => [
+            'name' => [
                 'required',
-                Rule::unique('recipients', 'name')->where(function ($query) use ($recipient) {
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
                         ->where('group_id', $recipient->group_id)
                         ->where('id', '!=', $recipient->id)
                         ->whereNotNull('email');
                 }),
             ],
-            'edit_email' => [
+            'email' => [
                 'required',
                 'email',
-                Rule::unique('recipients', 'email')->where(function ($query) use ($recipient) {
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
                         ->where('group_id', $recipient->group_id)
                         ->where('id', '!=', $recipient->id)
                         ->whereNotNull('email');
                 }),
             ],
-            'edit_phone' => [
+            'phone' => [
                 'nullable',
-                Rule::unique('recipients', 'phone')->where(function ($query) use ($recipient) {
+                Rule::unique('recipients')->where(function ($query) use ($recipient) {
                     return $query
                         ->where('group_id', $recipient->group_id)
                         ->where('id', '!=', $recipient->id)
                         ->whereNotNull('phone');
                 }),
             ],
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'edit_email' => 'email',
-            'edit_name' => 'name',
-            'edit_phone' => 'phone',
         ];
     }
 }
