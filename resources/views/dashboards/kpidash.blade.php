@@ -45,8 +45,16 @@
                         <div class="expanded_emails clear">
 
                             @foreach($kpi->recipients as $r)
+                            
                             <div class="user clear" id="{{ $r->id }}">
-                                <p class="name"><span class="name">{{ $r->name }}</span> - {{ $r->email }} - {{ $r->phone }}</p>
+                                <p class="name"><span class="name">{{ $r->name }}</span> 
+                                    @if($r->email)
+                                    <i class="fas fa-envelope"></i>
+                                    @endif
+                                    @if($r->phone)
+                                    <i class="fas fa-sms"></i>
+                                    @endif
+                                </p>
 
                                 <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>

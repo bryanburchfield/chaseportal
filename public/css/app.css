@@ -2213,6 +2213,14 @@ h4.panel-title a {
   display: none;
 }
 
+p.name span.name {
+  width: 150px;
+}
+
+p.name i {
+  margin-right: 5px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
