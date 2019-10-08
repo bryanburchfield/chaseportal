@@ -112,10 +112,12 @@ class KpiController extends Controller
         $this->removeRecipientFromAll($recipient->id);
         if (!empty($request->kpi_list)) {
             foreach ($request->kpi_list as $kpi_id) {
-                $kr = new KpiRecipient();
-                $kr->kpi_id = $kpi_id;
-                $kr->recipient_id = $recipient->id;
-                $kr->save();
+                if (is_numeric($kpi_id)) {
+                    $kr = new KpiRecipient();
+                    $kr->kpi_id = $kpi_id;
+                    $kr->recipient_id = $recipient->id;
+                    $kr->save();
+                }
             }
         }
 
@@ -191,10 +193,12 @@ class KpiController extends Controller
         $recipient->save();
 
         foreach ($kpis as $kpi) {
-            $kr = new KpiRecipient();
-            $kr->kpi_id = $kpi;
-            $kr->recipient_id = $recipient->id;
-            $kr->save();
+            if (is_numeric($kpi)) {
+                $kr = new KpiRecipient();
+                $kr->kpi_id = $kpi;
+                $kr->recipient_id = $recipient->id;
+                $kr->save();
+            }
         }
 
         return $this->recipients();
