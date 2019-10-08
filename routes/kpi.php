@@ -9,14 +9,13 @@ Route::prefix('kpi')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'KpiController@index');
         Route::get('recipients', 'KpiController@recipients');
-        Route::post('recipients', 'KpiController@updateRecipient');
-        Route::post('update_recipient', 'KpiController@updateRecipient');
+        Route::post('recipients', 'KpiController@addRecipient');
 
         // ajax targets
+        Route::post('update_recipient', 'KpiController@updateRecipient');
         Route::post('run_kpi', 'KpiController@runKpi');
         Route::post('adjust_interval', 'KpiController@adjustInterval');
         Route::post('toggle_kpi', 'KpiController@toggleKpi');
-        Route::post('add_recipient', 'KpiController@addRecipient');
         Route::post('remove_recipient_from_kpi', 'KpiController@removeRecipientFromKpi');
         Route::post('remove_recipient_from_all', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');

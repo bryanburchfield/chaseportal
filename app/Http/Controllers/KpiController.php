@@ -73,7 +73,7 @@ class KpiController extends Controller
     }
 
     /**
-     * Edit recipient - return kpi list
+     * Get recipient - return recipient info
      *
      * @param Request $request
      * @return void
@@ -153,51 +153,30 @@ class KpiController extends Controller
 
     /**
      * Add a new recipient
-     * If 'addtoall' is set, add them to all KPIs
      *
      * @param Request $request
      * @return void
      */
-    public function addRecipient(Request $request)
+    public function addRecipient(AddRecipient $request)
     {
-        $group_id = Auth::user()->group_id;
-        $email = $request->email;
-        $phone = $request->phone;
-        $kpis = $request->kpis;
-
-        // See if recip exists by email or phone
-        $recipient = Recipient::where('group_id', $group_id)
-            ->whereExists(function ($query) use ($group_id, $email, $phone) {
-                $query->select(DB::raw(1))
-                    ->from('recipients')
-                    ->whereRaw(
-                        'group_id = ?' .
-                            ' AND (email = ?' .
-                            ' OR (phone IS NOT NULL AND phone = ?))',
-                        [$group_id, $email, $phone]
-                    );
-            })->first();
-
-        if (!empty($recipient)) {
-            return [
-                'add_recipient' => [],
-                'errors' => ['Recipient with that email or phone already exists'],
-            ];
-        }
+        $validated = $request->validated();
 
         $recipient = new Recipient();
-        $recipient->name = $request->name;
-        $recipient->email = $request->email;
-        $recipient->phone = $this->formatPhone($request->phone);
+
         $recipient->group_id = Auth::user()->group_id;
+        $recipient->email = $request->email;
+        $recipient->name = $request->name;
+        $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
-        foreach ($kpis as $kpi) {
-            if (is_numeric($kpi)) {
-                $kr = new KpiRecipient();
-                $kr->kpi_id = $kpi;
-                $kr->recipient_id = $recipient->id;
-                $kr->save();
+        if (!empty($request->kpi_list)) {
+            foreach ($request->kpi_list as $kpi_id) {
+                if (is_numeric($kpi_id)) {
+                    $kr = new KpiRecipient();
+                    $kr->kpi_id = $kpi_id;
+                    $kr->recipient_id = $recipient->id;
+                    $kr->save();
+                }
             }
         }
 
