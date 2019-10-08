@@ -51,8 +51,8 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('kpis', 'KPIs') !!}
-                                {!! Form::select("kpis[]", $all_kpis, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
+                                {!! Form::label('kpi_list', 'KPIs') !!}
+                                {!! Form::select("kpi_list[]", $all_kpis, null, ["class" => "form-control multiselect", 'id'=> 'kpi_select','multiple'=>true]) !!}
                             </div>
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
@@ -61,7 +61,7 @@
                             @if($errors->any())
                                 <div class="alert alert-danger mt20">
                                 @foreach($errors->all() as $e)
-                                    {{$e}}
+                                    <li>{{$e}}</li>
                                 @endforeach
                                 </div>
                             @endif
