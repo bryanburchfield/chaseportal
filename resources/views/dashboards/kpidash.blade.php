@@ -46,7 +46,7 @@
 
                             @foreach($kpi->recipients as $r)
                             <div class="user clear" id="{{ $r->id }}">
-                                <p class="name">{{ $r->name }} - {{ $r->email }} - {{ $r->phone }}</p>
+                                <p class="name"><span class="name">{{ $r->name }}</span> - {{ $r->email }} - {{ $r->phone }}</p>
 
                                 <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>
@@ -73,11 +73,11 @@
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="fromall" name="fromall" value="0">
                 <input type="hidden" class="kpi_id" name="kpi_id" value="">
-               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
+               <h3>Are you sure you want to remove <span class="username"></span>?</h3>
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+            <button type="button" class="btn btn-danger remove_recip">Remove User</button>
         </div>
     </div>
     </div>

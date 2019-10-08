@@ -229,7 +229,7 @@ var KPI = {
     pass_user_removemodal:function(){
 
         var id = $(this).data('recip');
-        var name = $(this).parent().find('p.name').text();
+        var name = $(this).parent().find('span.name').text();
         var kpi_id = $(this).data('kpi');
 
         $('#deleteRecipModal .user_id').val(id);
@@ -379,15 +379,15 @@ var KPI = {
 
         e.preventDefault();
         var id = $('.user_id').val();
-        var fromall = $('.fromall').val();
+        var fromall = parseInt($('.fromall').val());
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+        if(fromall){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-        if($('#deleteRecipModal').find('.fromall').val()){
             $.ajax({
                 url:'/kpi/remove_recipient_from_all',
                 type:'POST',
@@ -403,6 +403,11 @@ var KPI = {
             });
         }else{
             var kpi_id = $('.kpi_id').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
             $.ajax({
                 url:'/kpi/remove_recipient_from_kpi',
                 type:'POST',
