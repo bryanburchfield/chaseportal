@@ -209,13 +209,14 @@ class KpiController extends Controller
             $kpiGroup = new KpiGroup();
             $kpiGroup->kpi_id = $kpi_id;
             $kpiGroup->group_id = $group_id;
+            $kpiGroup->interval = 1440;
         }
 
         $kpiGroup->active = $active;
         $kpiGroup->save();
 
         //ajax return
-        return ['kpi_update' => '1'];
+        return ['kpi_group' => $kpiGroup];
     }
 
     /**
