@@ -42,7 +42,7 @@
 
                             <div class="form-group">
                                 {!! Form::label('email', 'Email Address') !!}
-                                {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+                                {!! Form::email('email', null, ['class'=>'form-control email']) !!}
                             </div>
 
                             <div class="form-group">
@@ -116,7 +116,7 @@
 
                 <div class="form-group">
                     {!! Form::label('email', 'Email Address') !!}
-                    {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+                    {!! Form::email('email', null, ['class'=>'form-control email') !!}
                 </div>
 
                 <div class="form-group">

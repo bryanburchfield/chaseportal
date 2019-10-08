@@ -1508,7 +1508,7 @@ h2 {
 
 .opt .options a, .opt .options h4 {
     color: $blue;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 0px;
 }
 
@@ -1536,7 +1536,7 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
     clear: both;
-    height: 65px;
+    // height: 65px;
     position: relative;
 }
 
@@ -1558,7 +1558,7 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
     float: right;
     margin-right: 10px;
     position: absolute;
-    bottom: 20px;
+    bottom: 1px;
     right: 10px;
     color: #d9534f;
     font-size: 16px;

@@ -40,7 +40,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-4">
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-plus-sign"></i> Add Recipient</h4>
                         
                         <form id="form{{ $kpi->id }}" data-kpi="{{ $kpi->id }}" action="#" method="post" class="card form user_email_form well clear add_recipient" autocomplete="off">
@@ -66,7 +66,7 @@
 
                             <input type="submit" class="btn btn-primary btn-md mb0" value="Submit">
                         {!! Form::close() !!}
-                    </div>
+                    </div> --}}
 
                     <div class="col-sm-4">
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</h4>
@@ -74,10 +74,8 @@
 
                             @foreach($kpi->recipients as $r)
                             <div class="user clear" id="{{ $r->id }}">
-                                <p class="name">{{ $r->name }}</p>
-                                <p class="email">{{ $r->email }}</p>
-                                <p class="phone">{{ $r->phone }}</p>
-                                <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="{{ $r->id }}"><i class="glyphicon glyphicon-remove-sign"></i></a>
+                                <p class="name">{{ $r->name }} - {{ $r->email }} - {{ $r->phone }}</p>
+                                <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>
                             @endforeach
                         </div>
