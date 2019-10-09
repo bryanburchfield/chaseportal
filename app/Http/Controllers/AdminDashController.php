@@ -889,9 +889,14 @@ class AdminDashController extends Controller
         foreach ($reps as $i => $rep) {
             foreach ($stats as $stat) {
                 if ($stat['Rep'] == $rep) {
-                    $dispositions[$stat['CallStatus']][$i] = $stat['Count'];
+                    $dispositions[$stat['CallStatus']][$i] = (int) $stat['Count'];
                 }
             }
+        }
+
+        if (isset($dispositions[''])) {
+            $dispositions['[No Status]'] = $dispositions[''];
+            unset($dispositions['']);
         }
 
         return [
