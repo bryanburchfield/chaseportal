@@ -535,32 +535,35 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-
-                console.log(response);
+                console.log(Dashboard.chartColors);
+                var chart_colors = Object.values(Dashboard.chartColors)
                 
-                return false;
+                
+                const dispos_obj = response.dispositions
+                console.log(dispos_obj);
+                console.log( Object.values(dispos_obj)[0]);
 
+                const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
+                console.log(dispos_obj_keys.length);
+                
+                var dispos = [];
+                for (var i=0; i < dispos_obj_keys.length; i++) {
+                    dispos.push({
+                        label: dispos_obj_keys[i],
+                        backgroundColor: chart_colors[i],
+                        data: Object.values(dispos_obj)[i],
+                    });
+                }
 
-                var chartColors = Master.chartColors;
+                console.log(dispos);
+                // return false;
 
                 var agent_call_status_data = {
-                  labels: response.extras.rep,
-                        datasets: [
-                          {
-                            label: "Dispo",
-                            backgroundColor: chartColors.green,
-                            data: response.extras.dispo
-                          },
-                          {
-                            label: "System Calls",
-                            backgroundColor: chartColors.orange,
-                            fillOpacity: .5, 
-                            data: response.extras.system
-                          }
-                        ]
+                  labels: response.reps,
+                        datasets: dispos
                 };
 
-                var show_decimal= Master.ylabel_format(response.extras.callerid);
+                // var show_decimal= Master.ylabel_format(response.extras.callerid);
 
                 var agent_call_status_options={
                     responsive: true,
@@ -599,16 +602,16 @@ var Dashboard = {
 
                 $('.hidetilloaded').show();
 
-                var ctx = document.getElementById('agent_call_status_graph').getContext('2d');
+                var ctx = document.getElementById('agent_call_status').getContext('2d');
 
                 if(window.agent_call_status_chart != undefined){
                     window.agent_call_status_chart.destroy();
                 }
 
                 window.agent_call_status_chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: caller_id_data,
-                    options: caller_id_options
+                    type: 'horizontalBar',
+                    data: agent_call_status_data,
+                    options: agent_call_status_options
                 });
 
                 

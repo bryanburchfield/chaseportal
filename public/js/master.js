@@ -93,6 +93,20 @@ var Master = {
         }
 
         return chart_colors_array;
+
+        // const chart_colors = Object.keys(Dashboard.chartColors)
+        // var chart_colors_array=[];
+        
+        // var j=0;
+        // for (var i=0; i < reps; i++) {
+        //     if(j==chart_colors.length){
+        //         j=0;
+        //     }
+        //     chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
+        //     j++;
+        // }
+
+        // return chart_colors_array;
     },
 
 	formatNumber:function(x) {
@@ -1715,7 +1729,7 @@ var Master = {
 	},
 
     caller_id:function(response){
-        console.log(response);
+        
         var chartColors = Master.chartColors;
 
         var caller_id_data = {
