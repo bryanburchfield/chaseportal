@@ -535,23 +535,18 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                console.log(Dashboard.chartColors);
+                console.log(response);
                 var chart_colors = Object.values(Dashboard.chartColors)
-                
-                
+                                
                 const dispos_obj = response.dispositions
-                console.log(dispos_obj);
-                console.log( Object.values(dispos_obj)[0]);
-
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
-                console.log(dispos_obj_keys.length);
                 
                 var dispos = [];
                 for (var i=0; i < dispos_obj_keys.length; i++) {
                     dispos.push({
                         label: dispos_obj_keys[i],
                         backgroundColor: chart_colors[i],
-                        data: Object.values(dispos_obj)[i],
+                        data: Object.values(dispos_obj)[i].sort(),
                     });
                 }
 
