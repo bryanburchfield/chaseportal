@@ -26,20 +26,20 @@ $(document).ready(function () {
 		})
 	});
 
-	var idleTime = 0;
-	var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+	// var idleTime = 0;
+	// var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
-	$(this).mousemove(function (e) {
-		idleTime = 0;
-	});
-	$(this).keypress(function (e) {
-		idleTime = 0;
-	});
+	// $(this).mousemove(function (e) {
+	// 	idleTime = 0;
+	// });
+	// $(this).keypress(function (e) {
+	// 	idleTime = 0;
+	// });
 
-	function timerIncrement() {
-		idleTime = idleTime + 1;
-		if (idleTime > 19) { // 20 minutes
-			window.location = "/logout";
-		}
-	}
+	// function timerIncrement() {
+	// 	idleTime = idleTime + 1;
+	// 	if (idleTime > 19) { // 20 minutes
+	// 		window.location = "/logout";
+	// 	}
+	// }
 });

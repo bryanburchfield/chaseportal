@@ -59,11 +59,11 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
     
-    {{-- @isset($jsfile)
+    @isset($jsfile)
     @foreach($jsfile as $js)
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
-    @endisset --}}
+    @endisset
 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
