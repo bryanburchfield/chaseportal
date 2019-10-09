@@ -870,6 +870,44 @@ class AdminDashController extends Controller
         return $this->runMultiSql($sql, $bind);
     }
 
+    public function agentCallStatus(Request $request)
+    {
+        $this->getSession($request);
+
+        $result = $this->getAgentCallStatus();
+
+
+
+
+        $reps = ['Rep1', 'Rep2', 'Rep3', 'Rep4', 'Rep5'];
+
+        $dispositions = [
+            'Dispo1' => ['Dispo One', 2, 3, 0, 1, 5],
+            'Dispo2' => ['Dispo Two', 0, 6, 2, 0, 3],
+            'Dispo3' => ['Dispo Three', 4, 2, 0, 2, 1],
+        ];
+
+        return [
+            'reps' = $reps,
+            'dispositions' = $dispositions,
+        ];
+    }
+
+    public function getAgentCallStatus()
+    {
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+
+        return [];
+    }
+
     /**
      * return service level
      *
