@@ -57,7 +57,7 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -516,6 +516,104 @@ var Dashboard = {
                 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#avg_hold_time');
+                Dashboard.display_error(div, textStatus, errorThrown);
+            }
+        });
+    },
+
+    agent_call_status:function(datefilter){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            async: true,
+            url: '/admindashboard/agent_call_status',
+            type: 'POST',
+            dataType: 'json',
+            data:{dateFilter:datefilter},
+            success:function(response){
+
+                console.log(response);
+                
+                return false;
+
+
+                var chartColors = Master.chartColors;
+
+                var agent_call_status_data = {
+                  labels: response.extras.rep,
+                        datasets: [
+                          {
+                            label: "Dispo",
+                            backgroundColor: chartColors.green,
+                            data: response.extras.dispo
+                          },
+                          {
+                            label: "System Calls",
+                            backgroundColor: chartColors.orange,
+                            fillOpacity: .5, 
+                            data: response.extras.system
+                          }
+                        ]
+                };
+
+                var show_decimal= Master.ylabel_format(response.extras.callerid);
+
+                var agent_call_status_options={
+                    responsive: true,
+                    maintainAspectRatio:false,
+                    legend: {  
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12
+                        } 
+                    },
+                    scales: {
+                        
+                        yAxes: [
+                            {
+                                stacked:true,
+                                // type: 'linear',
+                                position:'left',
+                                scalePositionLeft: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Call Count'
+                                },
+                                ticks: {
+                                        // display: false
+                                    }
+                            }
+                        ],
+                        xAxes: [{ stacked: true }],
+                    },
+                    tooltips: {
+                        enabled: true,
+                        mode: 'label',
+                       
+                    }
+                }
+
+                $('.hidetilloaded').show();
+
+                var ctx = document.getElementById('agent_call_status_graph').getContext('2d');
+
+                if(window.agent_call_status_chart != undefined){
+                    window.agent_call_status_chart.destroy();
+                }
+
+                window.agent_call_status_chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: caller_id_data,
+                    options: caller_id_options
+                });
+
+                
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#agent_call_status');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
