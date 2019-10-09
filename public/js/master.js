@@ -68,7 +68,6 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
-        console.log('Master init');
 	},
 
     return_chart_colors_hash:function(reps){
@@ -94,20 +93,6 @@ var Master = {
         }
 
         return chart_colors_array;
-
-        // const chart_colors = Object.keys(Dashboard.chartColors)
-        // var chart_colors_array=[];
-        
-        // var j=0;
-        // for (var i=0; i < reps; i++) {
-        //     if(j==chart_colors.length){
-        //         j=0;
-        //     }
-        //     chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
-        //     j++;
-        // }
-
-        // return chart_colors_array;
     },
 
 	formatNumber:function(x) {
@@ -1819,7 +1804,7 @@ var Master = {
 
 	/// keep alive and refresh data
 	check_reload:function(){
-        console.log('Check Reload ran');
+
 	    if (typeof Dashboard !== 'undefined') {	        
 
 	        $(document.body).on('mousemove keypress', function(e){
@@ -1827,7 +1812,6 @@ var Master = {
 	        });
 	        // reload if idle 60 seconds
 	        function reload(){
-                console.log('Dashboard reloaded');
 	            if(new Date().getTime() - Dashboard.time >= 60000){
 	                Dashboard.refresh(Dashboard.datefilter, Dashboard.campaign);
 	                Dashboard.time = new Date().getTime();
@@ -1842,7 +1826,7 @@ var Master = {
 
 $(document).ready(function(){
 	Master.init();
-    console.log('Master Dom Ready');
+
 	$('.stop-propagation').on('click', function (e) {
 	    e.stopPropagation();
 	});

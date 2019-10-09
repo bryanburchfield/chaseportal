@@ -436,8 +436,6 @@ var Dashboard = {
         });
 
         Dashboard.datefilter = datefilter;
-
-        console.log(Dashboard.datefilter);
         
         if(datefilter !='custom'){
             $('.preloader').show();

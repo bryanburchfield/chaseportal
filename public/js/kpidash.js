@@ -4,11 +4,9 @@ var KPI = {
     
     init:function(){
         $('.opt a.kpi_trigger').on('click', this.toggle_kpi_info);
-        // $('.expand_dets,.add_email').on('click', this.toggle_email_opts);
         $('.switch input').on('click', this.toggle_kpi);
         $('.expanded_emails').on('click', 'a.remove_recip_glyph', this.pass_user_removemodal);
         $('#deleteRecipModal .remove_recip').on('click', this.remove_recipient);
-        // $('.add_recipient').on('submit', this.add_recipient);
         $('.adjust_interval').on('submit', this.adjust_interval);
         $('.run_kpi').on('click', this.fire_kpi);
         $('.search_results').on('click', 'h5', this.populate_recipient);
@@ -16,7 +14,6 @@ var KPI = {
         $('.update_recip').on('submit', this.update_recipient);
         $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
         $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
-        console.log('KPI init');
     },
 
     populate_recipient:function(){
@@ -398,7 +395,6 @@ var KPI = {
                     id:id
                 },
                 success:function(response){
-                    console.log(response);
                     $('div#'+id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
@@ -419,21 +415,16 @@ var KPI = {
                     kpi_id:kpi_id
                 },
                 success:function(response){
-                    console.log(response);
                     $('div#'+id).remove();
                     $('#deleteRecipModal').modal('toggle');
                 }
             });
         }
-        console.log(id);
-
-        
     },
 }
 
 $(document).ready(function(){
     KPI.init();
-    console.log('KPI Dom ready');
 });
 
 function searchRecips(el, value, kpi_id){
