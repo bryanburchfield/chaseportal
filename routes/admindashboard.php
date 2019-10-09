@@ -16,6 +16,7 @@ Route::prefix('admindashboard')->group(function () {
         Route::post('avg_hold_time', 'AdminDashController@avgHoldTime');
         Route::post('abandon_rate', 'AdminDashController@abandonRate');
         Route::post('agent_call_count', 'AdminDashController@agentCallCount');
+        Route::post('agent_call_status', 'AdminDashController@agentCallStatus');
         Route::post('service_level', 'AdminDashController@serviceLevel');
         Route::post('rep_avg_handletime', 'AdminDashController@repAvgHandleTime');
         Route::post('agent_call_status', 'AdminDashController@agentCallStatus');
