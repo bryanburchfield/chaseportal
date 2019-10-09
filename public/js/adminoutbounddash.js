@@ -718,12 +718,15 @@ var Dashboard = {
                 let chart_colors_array= Master.return_chart_colors_hash(dispos_obj_keys);
                                 
                 let dispos = [];
-                for (let i=0; i < dispos_obj_keys.length; i++) {
-                    dispos.push({
-                        label: dispos_obj_keys[i],
-                        backgroundColor: chart_colors_array[i],
-                        data: Object.values(dispos_obj)[i],
-                    });
+
+                if(response.reps.length){
+                    for (let i=0; i < dispos_obj_keys.length; i++) {
+                        dispos.push({
+                            label: dispos_obj_keys[i],
+                            backgroundColor: chart_colors_array[i],
+                            data: Object.values(dispos_obj)[i],
+                        });
+                    }
                 }
 
                 let agent_call_status_data = {
