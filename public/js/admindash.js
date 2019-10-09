@@ -577,6 +577,7 @@ var Dashboard = {
                     },
                     scales: {
                         xAxes: [{
+                            stacked: true,
                              ticks: {
                                  beginAtZero: true,
                                  userCallback: function(label, index, labels) {
@@ -598,8 +599,7 @@ var Dashboard = {
                                     labelString: 'Reps'
                                 }
                             }
-                        ],
-                        xAxes: [{ stacked: true }],
+                        ]
                     },
                     tooltips: {
                         enabled: true,
