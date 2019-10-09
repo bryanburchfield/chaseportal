@@ -560,10 +560,14 @@ var Dashboard = {
                 }
 
                 let agent_call_status_data = {
-                  labels: response.reps,
+                    labels: response.reps,
                         datasets: dispos
                 };
 
+                function test(x){
+                    
+                    if(x !=0){console.log(x);return x;}else{return 'ddd';}
+                }
                 let agent_call_status_options={
                     responsive: true,
                     maintainAspectRatio:false,
@@ -595,6 +599,15 @@ var Dashboard = {
                     tooltips: {
                         enabled: true,
                         mode: 'label',
+                        filter: function (tooltipItem, data) {
+                            var datapointValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                            if (datapointValue ==0) {
+                                return false;
+                            }else {
+                                return true;
+                            }
+                        }
                        
                     }
                 }
