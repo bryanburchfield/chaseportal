@@ -1715,7 +1715,7 @@ var Master = {
 	},
 
     caller_id:function(response){
-        
+        console.log(response);
         var chartColors = Master.chartColors;
 
         var caller_id_data = {
