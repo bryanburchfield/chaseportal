@@ -708,23 +708,12 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 $('#agent_call_status').parent().find('.no_data').remove();
 
                 const dispos_obj = response.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
-
-                let chart_colors = Object.values(Dashboard.chartColors);
-                let chart_colors_array=[];
-                let j=0;
-                for (let i=0; i < dispos_obj_keys.length; i++) {
-                    if(j==chart_colors.length){
-                        j=0;
-                    }
-                    chart_colors_array.push(chart_colors[j]);
-                    j++;
-                }
+                let chart_colors_array= Master.return_chart_colors_hash(dispos_obj_keys);
                                 
                 let dispos = [];
                 for (let i=0; i < dispos_obj_keys.length; i++) {
@@ -752,15 +741,14 @@ var Dashboard = {
                     scales: {
                         xAxes: [{
                             stacked: true,
-                             ticks: {
-                                 beginAtZero: true,
-                                 userCallback: function(label, index, labels) {
-                                     if (Math.floor(label) === label) {
-                                         return label;
-                                     }
-
-                                 },
-                             }
+                            ticks: {
+                                beginAtZero: true,
+                                userCallback: function(label, index, labels) {
+                                    if (Math.floor(label) === label) {
+                                        return label;
+                                    }
+                                },
+                            }
                          }],
                         yAxes: [
                             {
