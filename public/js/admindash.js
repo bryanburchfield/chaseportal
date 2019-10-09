@@ -92,7 +92,7 @@ var Dashboard = {
 
     refresh:function(datefilter){
 
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
             
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -535,7 +535,7 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                console.log(response);
+
                 const dispos_obj = response.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
 
@@ -583,11 +583,8 @@ var Dashboard = {
                                 scalePositionLeft: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Call Count'
-                                },
-                                ticks: {
-                                        // display: false
-                                    }
+                                    labelString: 'Reps'
+                                }
                             }
                         ],
                         xAxes: [{ stacked: true }],
