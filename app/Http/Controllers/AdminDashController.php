@@ -880,6 +880,7 @@ class AdminDashController extends Controller
         $dispos = array_column($result[1], 'CallStatus');
         $stats = $result[2];
 
+        $dispositions = [];
         // load up our disposition array with 0's for each rep
         foreach ($dispos as $dispo) {
             $dispositions[$dispo] = array_fill(0, count($reps), 0);
