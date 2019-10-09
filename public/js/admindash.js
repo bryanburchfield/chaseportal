@@ -535,32 +535,36 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                console.log(response);
-                var chart_colors = Object.values(Dashboard.chartColors)
-                                
+                
                 const dispos_obj = response.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
-                
-                var dispos = [];
-                for (var i=0; i < dispos_obj_keys.length; i++) {
+
+                let chart_colors = Object.values(Dashboard.chartColors);
+                let chart_colors_array=[];
+                let j=0;
+                for (let i=0; i < dispos_obj_keys.length; i++) {
+                    if(j==chart_colors.length){
+                        j=0;
+                    }
+                    chart_colors_array.push(chart_colors[j]);
+                    j++;
+                }
+                                
+                let dispos = [];
+                for (let i=0; i < dispos_obj_keys.length; i++) {
                     dispos.push({
                         label: dispos_obj_keys[i],
-                        backgroundColor: chart_colors[i],
+                        backgroundColor: chart_colors_array[i],
                         data: Object.values(dispos_obj)[i].sort(),
                     });
                 }
 
-                console.log(dispos);
-                // return false;
-
-                var agent_call_status_data = {
+                let agent_call_status_data = {
                   labels: response.reps,
                         datasets: dispos
                 };
 
-                // var show_decimal= Master.ylabel_format(response.extras.callerid);
-
-                var agent_call_status_options={
+                let agent_call_status_options={
                     responsive: true,
                     maintainAspectRatio:false,
                     legend: {  
