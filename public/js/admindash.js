@@ -576,7 +576,17 @@ var Dashboard = {
                         } 
                     },
                     scales: {
-                        
+                        xAxes: [{
+                             ticks: {
+                                 beginAtZero: true,
+                                 userCallback: function(label, index, labels) {
+                                     if (Math.floor(label) === label) {
+                                         return label;
+                                     }
+
+                                 },
+                             }
+                         }],
                         yAxes: [
                             {
                                 stacked:true,
