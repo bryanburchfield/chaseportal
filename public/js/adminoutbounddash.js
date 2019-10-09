@@ -334,6 +334,8 @@ var Dashboard = {
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
 
+                $('#avg_wait_time_graph').parent().find('.no_data').remove();
+
                 $('#avg_wait_time tbody').empty();
                 if(response.Avgs.length){
                     var trs;
@@ -343,6 +345,8 @@ var Dashboard = {
                         }
                     }
                     $('#avg_wait_time tbody').append(trs);
+                }else{
+                    $('<p class="no_data">No data yet</p>').insertBefore('#avg_wait_time, #avg_wait_time_graph');
                 }
 
                 ////////////////////////////////////////////////////////////
@@ -396,6 +400,9 @@ var Dashboard = {
                 });
 
                 Dashboard.resizeCardTableDivs();
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#avg_wait_time_graph');
+                Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
     },
@@ -504,137 +511,137 @@ var Dashboard = {
             success:function(response){
 
                 Master.flip_card(response.call_count_reps.length, '#agent_call_count');
-                                Master.flip_card(response.talk_time_reps.length, '#agent_talk_time');
+                Master.flip_card(response.talk_time_reps.length, '#agent_talk_time');
 
-                                $('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph').parent().find('.no_data').remove();
-                                
-                                $('#agent_call_count tbody').empty();
-                                $('#agent_talk_time tbody').empty();
+                $('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph').parent().find('.no_data').remove();
+                
+                $('#agent_call_count tbody').empty();
+                $('#agent_talk_time tbody').empty();
 
-                                if(response.call_count_table.length){
-                                    
-                                    let trs;
-                                    for (var i = 0; i < response.call_count_table.length; i++) {
-                                        if(response.call_count_table[i].Rep != ''){
-                                            trs+='<tr><td>'+response.call_count_table[i].Rep+'</td><td>'+response.call_count_table[i].Campaign+'</td><td>'+Master.formatNumber(response.call_count_table[i].Count)+'</td></tr>';
-                                        }
-                                    }
-                                    $('#agent_call_count tbody').append(trs);
-                                }else{
-                                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
-                                }
+                if(response.call_count_table.length){
+                    
+                    let trs;
+                    for (var i = 0; i < response.call_count_table.length; i++) {
+                        if(response.call_count_table[i].Rep != ''){
+                            trs+='<tr><td>'+response.call_count_table[i].Rep+'</td><td>'+response.call_count_table[i].Campaign+'</td><td>'+Master.formatNumber(response.call_count_table[i].Count)+'</td></tr>';
+                        }
+                    }
+                    $('#agent_call_count tbody').append(trs);
+                }else{
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
+                }
 
-                                if(response.talk_time_table.length){
-                                    $('#agent_talk_time').show();
-                                    let trs;
-                                    for (var i = 0; i < response.talk_time_table.length; i++) {
-                                        if(response.talk_time_table[i].Rep != ''){
-                                            trs+='<tr><td>'+response.talk_time_table[i].Rep+'</td><td>'+response.talk_time_table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.talk_time_table[i].Duration)+'</td></tr>';
-                                        }
-                                    }
-                                    $('#agent_talk_time tbody').append(trs);
-                                }else{
-                                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
-                                }
-                                
+                if(response.talk_time_table.length){
+                    $('#agent_talk_time').show();
+                    let trs;
+                    for (var i = 0; i < response.talk_time_table.length; i++) {
+                        if(response.talk_time_table[i].Rep != ''){
+                            trs+='<tr><td>'+response.talk_time_table[i].Rep+'</td><td>'+response.talk_time_table[i].Campaign+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.talk_time_table[i].Duration)+'</td></tr>';
+                        }
+                    }
+                    $('#agent_talk_time tbody').append(trs);
+                }else{
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
+                }
+                
 
-                                ////////////////////////////////////////////////////////////
-                                ////    AGENT CALL COUNT GRAPH
-                                ///////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////
+                ////    AGENT CALL COUNT GRAPH
+                ///////////////////////////////////////////////////////////
 
-                                if(window.agent_call_count_chart != undefined){
-                                    window.agent_call_count_chart.destroy();
-                                }
+                if(window.agent_call_count_chart != undefined){
+                    window.agent_call_count_chart.destroy();
+                }
 
-                                var response_length = response.call_count_reps.length;
-                                var chart_colors_array= Master.return_chart_colors_hash(response.call_count_reps);
+                var response_length = response.call_count_reps.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.call_count_reps);
 
-                                var agent_call_count_data = {
-                                    datasets: [{
-                                        data: response.call_count_counts,
-                                        backgroundColor: chart_colors_array
-                                    }],
-                                    elements: {
-                                            center: {
-                                            color: '#203047', 
-                                            fontStyle: 'Segoeui', 
-                                            sidePadding: 15 
-                                        }
-                                    },
-                                    labels: response.call_count_reps
-                                };
+                var agent_call_count_data = {
+                    datasets: [{
+                        data: response.call_count_counts,
+                        backgroundColor: chart_colors_array
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.call_count_reps
+                };
 
-                                var agent_call_count_options={
-                                    responsive: true,
-                                    legend: {
-                                        display: false
-                                    },
-                                    tooltips: {
-                                        enabled: true,
-                                       
-                                    }
-                                }
+                var agent_call_count_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: true,
+                       
+                    }
+                }
 
-                                var ctx = document.getElementById('agent_call_count_graph').getContext('2d');
+                var ctx = document.getElementById('agent_call_count_graph').getContext('2d');
 
-                                window.agent_call_count_chart = new Chart(ctx,{
-                                    type: 'doughnut',
-                                    data: agent_call_count_data,
-                                    options: agent_call_count_options
-                                });
+                window.agent_call_count_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: agent_call_count_data,
+                    options: agent_call_count_options
+                });
 
-                                ////////////////////////////////////////////////////////////
-                                ////    AGENT TALK TIME GRAPH
-                                ///////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////
+                ////    AGENT TALK TIME GRAPH
+                ///////////////////////////////////////////////////////////
 
-                                var response_length = response.talk_time_reps.length;
-                                var chart_colors_array= Master.return_chart_colors_hash(response.talk_time_reps);
+                var response_length = response.talk_time_reps.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.talk_time_reps);
 
-                                var agent_talk_time_data = {
-                                    datasets: [{
-                                        data: response.talk_time_secs,
-                                        backgroundColor: chart_colors_array,
-                                        
-                                    }],
-                                    elements: {
-                                            center: {
-                                            color: '#203047', 
-                                            fontStyle: 'Segoeui', 
-                                            sidePadding: 15 
-                                        }
-                                    },
-                                    labels: response.talk_time_reps
-                                };
+                var agent_talk_time_data = {
+                    datasets: [{
+                        data: response.talk_time_secs,
+                        backgroundColor: chart_colors_array,
+                        
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.talk_time_reps
+                };
 
-                                var agent_talk_time_options={
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    legend: {
-                                        display: false
-                                    },
-                                    
-                                    tooltips: {
-                                        enabled: true,
-                                        mode: 'single',
-                                        callbacks: {
-                                            label: function(tooltipItem, data) { 
-                                                return  Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
-                                            }
-                                        }
-                                    }
-                                }
+                var agent_talk_time_options={
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    
+                    tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItem, data) { 
+                                return  Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
+                            }
+                        }
+                    }
+                }
 
-                                var ctx = document.getElementById('agent_talk_time_graph').getContext('2d');
-                                
-                                if(window.agent_talk_time_chart != undefined){
-                                    window.agent_talk_time_chart.destroy();
-                                }
+                var ctx = document.getElementById('agent_talk_time_graph').getContext('2d');
+                
+                if(window.agent_talk_time_chart != undefined){
+                    window.agent_talk_time_chart.destroy();
+                }
 
-                                window.agent_talk_time_chart = new Chart(ctx,{
-                                    type: 'horizontalBar',
-                                    data: agent_talk_time_data,
-                                    options: agent_talk_time_options
-                                });
+                window.agent_talk_time_chart = new Chart(ctx,{
+                    type: 'horizontalBar',
+                    data: agent_talk_time_data,
+                    options: agent_talk_time_options
+                });
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#agent_talk_time');

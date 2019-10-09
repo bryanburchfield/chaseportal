@@ -352,7 +352,6 @@ var Dashboard = {
                 $('#agent_call_count tbody, #agent_calltime tbody').empty();  
                 $('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph').parent().find('.no_data').remove();
 
-
                 if(response.call_count_reps.length){
                     /// agent call count table
                     var call_count_trs;
@@ -535,6 +534,9 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
+                console.log(response);
+
+                $('#agent_call_status').parent().find('.no_data').remove();
 
                 const dispos_obj = response.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
@@ -617,10 +619,9 @@ var Dashboard = {
                     options: agent_call_status_options
                 });
 
-                
-            },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#agent_call_status');
-                Dashboard.display_error(div, textStatus, errorThrown);
+                if(!response.reps.length){
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
+                }                
             }
         });
     },
