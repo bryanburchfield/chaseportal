@@ -940,4 +940,102 @@ class AdminOutboundDashController extends Controller
 
         return $this->runSql($sql, $bind);
     }
+
+    public function agentCallStatus(Request $request)
+    {
+        $this->getSession($request);
+
+        $result = $this->getAgentCallStatus();
+
+        $reps = array_column($result[0], 'Rep');
+        $dispos = array_column($result[1], 'CallStatus');
+        $stats = $result[2];
+
+        // load up our disposition array with 0's for each rep
+        foreach ($dispos as $dispo) {
+            $dispositions[$dispo] = array_fill(0, count($reps), 0);
+        }
+
+        // loop thru reps and fill in dispositon counts
+        foreach ($reps as $i => $rep) {
+            foreach ($stats as $stat) {
+                if ($stat['Rep'] == $rep) {
+                    $dispositions[$stat['CallStatus']][$i] = (int) $stat['Count'];
+                }
+            }
+        }
+
+        if (isset($dispositions[''])) {
+            $dispositions['[No Status]'] = $dispositions[''];
+            unset($dispositions['']);
+        }
+
+        return [
+            'reps' => $reps,
+            'dispositions' => $dispositions,
+        ];
+    }
+
+    public function getAgentCallStatus()
+    {
+        $campaign = $this->campaign;
+        $dateFilter = $this->dateFilter;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $sql = "SET NOCOUNT ON;
+
+        SELECT Rep, CallStatus, 'Count' = SUM([Count])
+        INTO #temp
+        FROM (";
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $startDate;
+            $bind['todate' . $i] = $endDate;
+
+            $sql .= " $union SELECT DR.Rep, DR.CallStatus, 'Count' = 1
+            FROM [$db].[dbo].[DialingResults] DR
+--            WITH (INDEX(IX_Billing))
+            WHERE DR.CallType NOT IN (1,7,8,11)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND DR.Duration > 0
+            AND DR.Rep != ''
+            AND DR.Date >= :fromdate$i
+            AND DR.Date < :todate$i
+            AND DR.GroupId = :groupid$i ";
+
+            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            $sql .= " $where";
+            $bind = array_merge($bind, $extrabind);
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp GROUP BY Rep, CallStatus;
+
+        SELECT TOP 10 Rep, 'Total' = SUM([Count])
+        INTO #reps
+        FROM #temp
+        GROUP BY Rep ORDER BY [Total] DESC
+
+        SELECT DISTINCT CallStatus
+        INTO #stats
+        FROM #temp
+        WHERE Rep IN (SELECT Rep FROM #reps)
+
+        SELECT Rep FROM #reps ORDER BY Rep
+
+        SELECT CallStatus FROM #stats ORDER BY CallStatus
+
+        SELECT Rep, CallStatus, [Count]
+        FROM #temp
+        WHERE Rep IN (SELECT Rep FROM #reps)";
+
+        return $this->runMultiSql($sql, $bind);
+    }
 }

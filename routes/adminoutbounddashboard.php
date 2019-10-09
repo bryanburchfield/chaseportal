@@ -23,5 +23,6 @@ Route::prefix('adminoutbounddashboard')->group(function () {
         Route::post('sales_per_hour_per_rep', 'AdminOutboundDashController@salesPerHourPerRep');
         Route::post('calls_by_campaign', 'AdminOutboundDashController@callsByCampaign');
         Route::post('total_calls', 'AdminOutboundDashController@totalCalls');
+        Route::post('agent_call_status', 'AdminOutboundDashController@agentCallStatus');
     });
 });
