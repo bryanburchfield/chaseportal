@@ -535,7 +535,7 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                
+                console.log(response);
                 const dispos_obj = response.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
 
@@ -555,7 +555,7 @@ var Dashboard = {
                     dispos.push({
                         label: dispos_obj_keys[i],
                         backgroundColor: chart_colors_array[i],
-                        data: Object.values(dispos_obj)[i].sort(),
+                        data: Object.values(dispos_obj)[i],
                     });
                 }
 
