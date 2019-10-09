@@ -57,7 +57,7 @@ var Dashboard = {
     total_dials:'',
 
     init:function(){
-        $.when(this.agent_talk_time(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.total_calls(this.datefilter, this.chartColors), this.sales_per_hour_per_rep(this.datefilter, this.chartColors), this.calls_by_campaign(this.datefilter, this.chartColors), this.avg_wait_time(this.datefilter, this.chartColors)).done(function(){
+        $.when(this.agent_talk_time(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.total_calls(this.datefilter, this.chartColors), this.sales_per_hour_per_rep(this.datefilter, this.chartColors), this.calls_by_campaign(this.datefilter, this.chartColors), this.avg_wait_time(this.datefilter, this.chartColors), this.agent_call_status(this.datefilter)).done(function(){
             Dashboard.resizeCardTableDivs();
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -73,7 +73,7 @@ var Dashboard = {
 
     refresh:function(datefilter, campaign){
 
-        $.when(this.agent_talk_time(datefilter, this.chartColors), this.get_call_volume(datefilter, this.chartColors), this.total_calls(datefilter, this.chartColors), this.sales_per_hour_per_rep(datefilter, this.chartColors), this.calls_by_campaign(datefilter, this.chartColors), this.avg_wait_time(datefilter, this.chartColors)).done(function(){
+        $.when(this.agent_talk_time(datefilter, this.chartColors), this.get_call_volume(datefilter, this.chartColors), this.total_calls(datefilter, this.chartColors), this.sales_per_hour_per_rep(datefilter, this.chartColors), this.calls_by_campaign(datefilter, this.chartColors), this.avg_wait_time(datefilter, this.chartColors), this.agent_call_status(this.datefilter)).done(function(){
             $('.preloader').fadeOut('slow');
             Dashboard.resizeCardTableDivs();
             Master.check_reload();
@@ -334,7 +334,7 @@ var Dashboard = {
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
 
-                $('#avg_wait_time_graph').parent().find('.no_data').remove();
+                $('#avg_wait_time_graph, #avg_wait_time').parent().find('.no_data').remove();
 
                 $('#avg_wait_time tbody').empty();
                 if(response.Avgs.length){
@@ -690,6 +690,112 @@ var Dashboard = {
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#total_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);
+            }
+        });
+    },
+
+    agent_call_status:function(datefilter){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            async: true,
+            url: '/admindashboard/agent_call_status',
+            type: 'POST',
+            dataType: 'json',
+            data:{dateFilter:datefilter},
+            success:function(response){
+                console.log(response);
+
+                $('#agent_call_status').parent().find('.no_data').remove();
+
+                const dispos_obj = response.dispositions
+                const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
+
+                let chart_colors = Object.values(Dashboard.chartColors);
+                let chart_colors_array=[];
+                let j=0;
+                for (let i=0; i < dispos_obj_keys.length; i++) {
+                    if(j==chart_colors.length){
+                        j=0;
+                    }
+                    chart_colors_array.push(chart_colors[j]);
+                    j++;
+                }
+                                
+                let dispos = [];
+                for (let i=0; i < dispos_obj_keys.length; i++) {
+                    dispos.push({
+                        label: dispos_obj_keys[i],
+                        backgroundColor: chart_colors_array[i],
+                        data: Object.values(dispos_obj)[i],
+                    });
+                }
+
+                let agent_call_status_data = {
+                    labels: response.reps,
+                        datasets: dispos
+                };
+
+                let agent_call_status_options={
+                    responsive: true,
+                    maintainAspectRatio:false,
+                    legend: {  
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12
+                        } 
+                    },
+                    scales: {
+                        
+                        yAxes: [
+                            {
+                                stacked:true,
+                                // type: 'linear',
+                                position:'left',
+                                scalePositionLeft: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Reps'
+                                }
+                            }
+                        ],
+                        xAxes: [{ stacked: true }],
+                    },
+                    tooltips: {
+                        enabled: true,
+                        mode: 'label',
+                        filter: function (tooltipItem, data) {
+                            var datapointValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                            if (datapointValue) {
+                                return true;
+                            }
+                        }
+                       
+                    }
+                }
+
+                $('.hidetilloaded').show();
+
+                var ctx = document.getElementById('agent_call_status').getContext('2d');
+
+                if(window.agent_call_status_chart != undefined){
+                    window.agent_call_status_chart.destroy();
+                }
+
+                window.agent_call_status_chart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: agent_call_status_data,
+                    options: agent_call_status_options
+                });
+
+                if(!response.reps.length){
+                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
+                }                
             }
         });
     },

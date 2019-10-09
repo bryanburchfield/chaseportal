@@ -255,4 +255,15 @@
         </div><!-- end column -->
 
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-12">
+                <h1 class="title fw600">Agent Call Status</h1>
+                <div class="inbound inandout" style="min-height:340px;">
+                    <canvas id="agent_call_status"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
