@@ -668,6 +668,7 @@ var Dashboard = {
 
                 $('.filter_time_camp_dets p .selected_campaign').html(response.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.details[1]);
+
                 $('#total_contacts').html(response.total_contacts.total);
                 Master.add_bg_rounded_class($('#total_contacts'), response.total_contacts.total, 4);
                 
@@ -681,12 +682,13 @@ var Dashboard = {
                 contact_rate = contact_rate.toFixed(2);
                 $('#contact_rate').html(contact_rate +'%');
 
+                Master.trend_percentage( $('#total_contacts_card'), response.total_contacts.pct_change, response.total_contacts.pct_sign, response.total_contacts.ntc );
                 Master.trend_percentage( $('#total_calls'), response.total_dials.pct_change, response.total_dials.pct_sign, response.total_dials.ntc );
                 Master.add_bg_rounded_class($('#total_calls .total'), response.total_dials.total, 4);
                 Dashboard.total_dials=response.total_dials.total;
 
                 $('#total_calls .total').html(Master.formatNumber(response.total_dials.total));
-                // $('.filter_time_camp_dets p').html(response.details);
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#total_calls .divider');
                 Dashboard.display_error(div, textStatus, errorThrown);
