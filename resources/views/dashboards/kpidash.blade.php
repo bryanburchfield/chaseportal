@@ -1,4 +1,4 @@
-<input type="hidden" class="open_kpi_id" name="open_kpi_id" value="">
+<input type="hidden" class="open_kpi_id" name="open_kpi_id" value="{{ old('kpi_id') }}">
 
 <div class="container-full mt20">
     <div class="row">
@@ -46,9 +46,9 @@
                         <div class="expanded_emails clear">
 
                             @foreach($kpi->recipients as $r)
-                            
+
                             <div class="user clear" id="{{ $r->id }}">
-                                <p class="name"><span class="name">{{ $r->name }}</span> 
+                                <p class="name"><span class="name">{{ $r->name }}</span>
                                     @if($r->email)
                                     <i class="fas fa-envelope"></i>
                                     @endif
@@ -56,7 +56,7 @@
                                     <i class="fas fa-sms"></i>
                                     @endif
                                 </p>
-                                
+
                                 <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
                                 <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>

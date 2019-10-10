@@ -96,6 +96,10 @@ class KpiController extends Controller
      */
     public function updateRecipient(EditRecipient $request)
     {
+        // flash the kpi id to session so we can re-open that one
+        if ($request->has('kpi_id')) {
+            $request->flashOnly('kpi_id');
+        }
 
         // check the group here just in case they're trying to hack the form
         $recipient = Recipient::where('group_id', Auth::user()->group_id)
@@ -121,8 +125,8 @@ class KpiController extends Controller
             }
         }
 
-        /// $request->kpi_id needs to be returned
-        // return $this->recipients();
+        // returning anything seems to hang the js ?
+        // return ['status' => 1];
     }
 
     /**
