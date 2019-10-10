@@ -406,7 +406,12 @@ class KpiController extends Controller
                     'table_headers' => $this->getHeaders($results),
                     'table_rows' => $this->getValues($results),
                 ];
-                $this->sendEmail($message);
+
+                try {
+                    $this->sendEmail($message);
+                } catch (\Exception $e) {
+                    // don't care
+                }
             }
         }
 
