@@ -96,6 +96,7 @@ class KpiController extends Controller
      */
     public function updateRecipient(EditRecipient $request)
     {
+
         // check the group here just in case they're trying to hack the form
         $recipient = Recipient::where('group_id', Auth::user()->group_id)
             ->where('id', $request->recipient_id)
@@ -121,6 +122,7 @@ class KpiController extends Controller
         }
 
         return $this->recipients();
+        
     }
 
     /**

@@ -160,71 +160,6 @@ var KPI = {
         $(this).next().toggle();
     },
 
-    // add_recipient:function(kpi_id=0, name='', phone=0, email=''){
-    //     event.preventDefault();
-    //     $('.alert').remove();
-
-    //     var name = $(this).find('.name').val(),
-    //         email = $(this).find('.email').val(),
-    //         phone = $(this).find('.phone').val(),
-    //         kpi_id = $(this).data('kpi'),
-    //         addtoall = $(this).find('.addtoall').is(':checked'),
-    //         redirect_url = $(this).find('.redirect_url').val()
-    //     ;
-
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //         }
-    //     });
-
-    //     $.ajax({
-    //         url: '/kpi/add_recipient',
-    //         type: 'POST',
-    //         dataType: 'json',
-    //         data: {
-    //             name: name,
-    //             email:email,
-    //             phone:phone,
-    //             kpi_id:kpi_id,
-    //             addtoall:addtoall,
-    //             redirect_url:redirect_url
-    //         },
-
-    //         success:function(response){
-
-    //             var from_form,
-    //                 append_user
-    //             ;
-
-    //             if(response.origin == 'recips_page'){
-    //                 from_form=$('form.user_email_form.add_recipient ');
-    //                 append_user=$('.expanded_emails'); 
-    //             }else{
-    //                 from_form=$('form#form'+kpi_id);
-    //                 if(addtoall){
-    //                     append_user=$('.expanded_emails');
-    //                 }else{
-    //                     append_user=$('form#form'+kpi_id).parent().next().find('.expanded_emails');
-    //                 }                                     
-    //             }
-
-    //             if(response.errors){
-    //                 $(from_form).append('<div class="alert alert-danger clear mt20">'+ response.errors[0]+'</div>');
-    //             }else{
-    //                 $(from_form).find('input.form-control').val("");
-    //                 $(from_form).find('.addtoall').prop("checked", false);
-    //                 $(from_form).append('<div class="mt20 alert alert-success">User successfully added.</div>');
-    //                 $(append_user).append('<div class="user clear" id="'+response.add_recipient[3]+'"><p class="name">'+response.add_recipient[0]+'</p><p class="email">'+response.add_recipient[1]+'</p><p class="phone">'+response.add_recipient[2]+'</p> <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-recip="' +response.add_recipient[3] +'"><i class="glyphicon glyphicon-remove-sign"></i></a></div>');
-
-    //                 setTimeout(function(){ 
-    //                     $('.alert').remove();
-    //                 }, 4500);
-    //             }                
-    //         }
-    //     }); 
-    // },
-
     pass_user_removemodal:function(){
 
         var id = $(this).data('recip');
@@ -239,7 +174,7 @@ var KPI = {
 
     open_edit_recipient_modal:function(e){
         e.preventDefault();
-        var id=$(this).data('recip');
+        var id=$(this).data('recip');        
         KPI.edit_recipient(id);
     },
 
@@ -306,6 +241,7 @@ var KPI = {
             email = $('.update_recip .email').val(),
             phone = $('.update_recip .phone').val(),
             recipient_id = $('.recipient_id').val(),
+            from_page = $('.from_page').val(),
             kpi_list = [];
         ;
 
@@ -327,7 +263,7 @@ var KPI = {
                 kpi_list:kpi_list
             },
             success:function(response){
-                
+
             },
             error :function( data ) {
                 if( data.status === 422 ) {
@@ -344,7 +280,11 @@ var KPI = {
                         }
                     });
                 }else{
-                    window.location.href = "/kpi/recipients";
+                    if(from_page == 'kpi_page'){
+                        window.location.href = "/dashboards";
+                    }else{
+                        window.location.href = "/kpi/recipients";
+                    }
                 }    
             }
         });

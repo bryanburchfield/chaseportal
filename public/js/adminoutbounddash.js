@@ -758,7 +758,6 @@ var Dashboard = {
                         yAxes: [
                             {
                                 stacked:true,
-                                // type: 'linear',
                                 position:'left',
                                 scalePositionLeft: true,
                                 scaleLabel: {
@@ -778,11 +777,8 @@ var Dashboard = {
                                 return true;
                             }
                         }
-                       
                     }
                 }
-
-                $('.hidetilloaded').show();
 
                 var ctx = document.getElementById('agent_call_status').getContext('2d');
 

@@ -542,7 +542,7 @@ var Dashboard = {
                 let chart_colors_array= Master.return_chart_colors_hash(dispos_obj_keys);
 
                 let dispos = [];
-                
+
                 if(response.reps.length){
                     for (let i=0; i < dispos_obj_keys.length; i++) {
                         dispos.push({
@@ -582,7 +582,6 @@ var Dashboard = {
                         yAxes: [
                             {
                                 stacked:true,
-                                // type: 'linear',
                                 position:'left',
                                 scalePositionLeft: true,
                                 scaleLabel: {
@@ -601,12 +600,9 @@ var Dashboard = {
                             if (datapointValue) {
                                 return true;
                             }
-                        }
-                       
+                        }                       
                     }
                 }
-
-                $('.hidetilloaded').show();
 
                 var ctx = document.getElementById('agent_call_status').getContext('2d');
 
