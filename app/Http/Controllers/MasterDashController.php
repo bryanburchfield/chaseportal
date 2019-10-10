@@ -50,7 +50,6 @@ class MasterDashController extends Controller
             'cssfile' => $cssfile,
             'page' => $page,
             'dashbody' => $dashbody,
-            'from_page' => 'kpi_page',
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $db_list
         ];

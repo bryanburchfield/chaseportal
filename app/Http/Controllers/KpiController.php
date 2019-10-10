@@ -30,8 +30,7 @@ class KpiController extends Controller
         $data = [
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
-            'curdash' => 'kpidash'
-
+            'curdash' => 'kpidash',
         ];
         return view('kpidash')->with($data);
     }
@@ -304,7 +303,6 @@ class KpiController extends Controller
             'page' => $page,
             'curdash' => 'kpidash',
             'all_kpis' =>  $all_kpis,
-            'from_page' => 'recipients',
             'recipients' => Recipient::where('group_id', $groupId)
                 ->orderBy('name')
                 ->get(),

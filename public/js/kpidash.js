@@ -280,11 +280,7 @@ var KPI = {
                         }
                     });
                 }else{
-                    if(from_page == 'kpi_page'){
-                        window.location.href = "/dashboards";
-                    }else{
-                        window.location.href = "/kpi/recipients";
-                    }
+                    window.location.href =from_page;
                 }    
             }
         });

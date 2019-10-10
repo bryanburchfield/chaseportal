@@ -29,7 +29,7 @@
                 <div class="kpi_list"></div>
 
                 {!! Form::hidden('recipient_id', '', ['class'=>'recipient_id']) !!}
-                {!! Form::hidden('from_page', $from_page, ['class'=>'from_page']) !!}
+                {!! Form::hidden('from_page', url()->current(), ['class'=>'from_page']) !!}
 
                 @if (old('recipient_id'))
                     {!! Form::hidden('edit_form_submitted', '1', ['class'=>'edit_form_submitted']) !!}
