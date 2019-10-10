@@ -35,34 +35,29 @@ var KPI = {
 
         e.preventDefault();
 
-        if(!$(this).parent().find('.switch input').is(':checked')){
-            alert('KPI must be turned on to run');
-            return false;
-        }else{
-            var $t = $(this).find('span');
-            $(this).find('span').addClass('glyphicon glyphicon-refresh');
-            $(this).find('span').removeClass('glyphicon-flash');
+        var $t = $(this).find('span');
+        $(this).find('span').addClass('glyphicon glyphicon-refresh');
+        $(this).find('span').removeClass('glyphicon-flash');
 
-            var kpi_id = $(this).parent().parent().data('kpi');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
+        var kpi_id = $(this).parent().parent().data('kpi');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
 
-            $.ajax({
-                url: '/kpi/run_kpi',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    kpi_id: kpi_id
-                },
-                success:function(response){
-                    $t.removeClass('glyphicon-refresh');
-                    $t.addClass('glyphicon-flash');
-                }
-            });     
-        }
+        $.ajax({
+            url: '/kpi/run_kpi',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                kpi_id: kpi_id
+            },
+            success:function(response){
+                $t.removeClass('glyphicon-refresh');
+                $t.addClass('glyphicon-flash');
+            }
+        });   
     },
 
     adjust_interval:function(e){
