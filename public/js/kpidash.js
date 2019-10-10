@@ -354,6 +354,7 @@ var KPI = {
                 },
                 success:function(response){
                     $('div#'+id).remove();
+                    
                     $('#deleteRecipModal').modal('toggle');
                 }
             });
