@@ -1,3 +1,5 @@
+<input type="hidden" class="open_kpi_id" name="open_kpi_id" value="">
+
 <div class="container-full mt20">
     <div class="row">
         <div class="col-sm-12">
