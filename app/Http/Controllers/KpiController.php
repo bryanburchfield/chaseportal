@@ -389,7 +389,12 @@ class KpiController extends Controller
         $tz = Auth::user()->getIanaTz();
 
         foreach ($recipients as $recipient) {
-            $this->sendSms($twilio, $recipient, $sms);
+            try {
+                $this->sendSms($twilio, $recipient, $sms);
+            } catch (\Exception $e) {
+                // don't care
+            }
+
             if (!empty($recipient->email)) {
                 $message = [
                     'to' => $recipient->email,
