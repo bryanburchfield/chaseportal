@@ -363,6 +363,12 @@ var KPI = {
 
 $(document).ready(function(){
     KPI.init();
+
+    var kpi_id = $('.open_kpi_id').val();
+    if(kpi_id){
+        $('.opt[data-kpi="'+kpi_id+'"]').find('.kpi_trigger').addClass('active_kpi');
+        $('.opt[data-kpi="'+kpi_id+'"]').find('.kpi').css({'display':'block'});
+    }
 });
 
 function searchRecips(el, value, kpi_id){
