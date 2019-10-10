@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App\Scripts;
 
 use App\User;
 

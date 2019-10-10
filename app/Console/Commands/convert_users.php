@@ -37,6 +37,6 @@ class convert_users extends Command
      */
     public function handle()
     {
-        include(app_path() . '/scripts/ConvertUsers.php');
+        include(app_path() . '/Scripts/ConvertUsers.php');
     }
 }
