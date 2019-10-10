@@ -121,8 +121,8 @@ class KpiController extends Controller
             }
         }
 
-        return $this->recipients();
-        
+        /// $request->kpi_id needs to be returned
+        // return $this->recipients();
     }
 
     /**

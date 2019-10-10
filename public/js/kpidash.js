@@ -242,6 +242,7 @@ var KPI = {
             phone = $('.update_recip .phone').val(),
             recipient_id = $('.recipient_id').val(),
             from_page = $('.from_page').val(),
+            kpi_id = $('.active_kpi').parent().data('kpi'),
             kpi_list = [];
         ;
 
@@ -260,6 +261,7 @@ var KPI = {
                 name:name,
                 email:email,
                 phone:phone,
+                kpi_id:kpi_id,
                 kpi_list:kpi_list
             },
             success:function(response){
@@ -280,7 +282,7 @@ var KPI = {
                         }
                     });
                 }else{
-                    window.location.href =from_page;
+                    window.location.href = from_page;
                 }    
             }
         });
