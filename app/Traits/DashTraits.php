@@ -19,8 +19,20 @@ trait DashTraits
 
     public function apiLogin(Request $request)
     {
+        // Allow either of these url formats:
+        // http://.../?app_token=XXXXXXXXX&rep=RepName
+        // http://.../api/XXXXXXXXX/RepName
+
+        if ($request->has('app_token')) {
+            $token = $request->app_token;
+            $rep = $request->rep;
+        } else {
+            $token = $request->token;
+            $rep = $request->rep;
+        }
+
         // find first user record with that token
-        $user = User::where('app_token', $request->token)->first();
+        $user = User::where('app_token', $token)->first();
         if ($user === null) {
             abort(403, 'Invalid token');
         }
@@ -29,7 +41,7 @@ trait DashTraits
         Auth::loginUsingId($user->id);
         session(['isApi' => 1]);
 
-        if (isset($request->rep)) {
+        if (isset($rep)) {
             $this->rep = $request->rep;
             session(['rep' => $this->rep]);
         }
