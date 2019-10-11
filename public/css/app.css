@@ -1314,7 +1314,9 @@ input[type=number]::-webkit-outer-spin-button {
 .form.adjust_interval select,
 .add_user select,
 .edit_user select,
-.create_recips form button.multiselect {
+.create_recips form button.multiselect,
+.tools button.multiselect,
+.tools .form-control {
   background: #eee !important;
 }
 
@@ -2218,6 +2220,18 @@ p.name span.name {
 
 p.name i {
   margin-right: 5px;
+}
+
+.tools h2.page_heading {
+  font-size: 20px;
+}
+
+.tools h2.page_heading i {
+  color: #E15B23;
+}
+
+.tools .form-group {
+  margin-bottom: 25px;
 }
 
 /* ---------------------------------------------------

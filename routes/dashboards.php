@@ -11,6 +11,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
+        Route::get('tools', 'LeadRulesController@index');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

@@ -6,10 +6,9 @@
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span>Database</span>
             </button>
+            
             <ul class="dropdown-menu db_select stop-propagation">
-                
                 @foreach ($db_list as $db)
-
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">
                     <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['database']}}" name="databases"><span>{{$db['name']}}</span></label>
@@ -17,10 +16,9 @@
                 @endforeach                                                                         
 
                 <input type="hidden" class="page_type" value="{{$page['type']}}">
-                <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> Submit</button>                                        
+                <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> Submit</button>
             </ul>
         </div>
-
     @endif
 @endif
 
