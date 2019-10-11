@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeadsController extends Controller
 {
@@ -11,6 +12,28 @@ class LeadsController extends Controller
 
     use SqlServerTraits;
 
+    public function rules(Request $request)
+    {
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+
+        $data = [
+            'user' => Auth::user(),
+            'page' => $page
+        ];
+
+        return view('dashboards.tools')->with($data);
+    }
+
+    /**
+     * Lead Dump
+     * pull a file and dump to an ftp server
+     *
+     * @param Request $request
+     * @return void
+     */
     public function leadDump(Request $request)
     {
         // http://127.0.0.1:8000/api/lead_dump/123/224347/EST/PowerV2_Reporting_Dialer-19
