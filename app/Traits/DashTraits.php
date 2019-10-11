@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\User;
 
 trait DashTraits
@@ -16,6 +15,8 @@ trait DashTraits
     private $rep;
     public $isApi;
     public $curdash;
+
+    use SqlServerTraits;
 
     public function apiLogin(Request $request)
     {
@@ -367,47 +368,6 @@ trait DashTraits
         }
 
         return [$fromDate, $toDate];
-    }
-
-    private function runSql($sql, $bind)
-    {
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
-
-        if (count($results)) {
-            // convert array of objects to array of arrays
-            $results = json_decode(json_encode($results), true);
-        }
-
-        return $results;
-    }
-
-    private function runMultiSql($sql, $bind)
-    {
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
-
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        $result = [];
-
-        do {
-            $result[] = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } while ($stmt->nextRowset());
-
-        return $result;
     }
 
     public function byHour($dateFilter)

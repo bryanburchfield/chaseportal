@@ -16,3 +16,5 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::get('lead_dump/{token}/{group_id}/{tz}/{db}', 'LeadsController@leadDump');
