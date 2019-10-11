@@ -20,8 +20,6 @@
                         </div>
                     {!! Form::close() !!}
 
-
-
                     @if($page['type'] =='dash')
                         @include('dashboards.dashnav')
                     @elseif($page['type'] == 'kpi_page')
