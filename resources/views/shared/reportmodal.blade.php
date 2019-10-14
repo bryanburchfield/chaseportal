@@ -97,6 +97,7 @@
                 </a>
                 <a href="#" class="view_report_btn btn-primary btn">View Report</a>
             </div>
+            {!! Form::close() !!}
 
         </div>
     </div>

@@ -1202,7 +1202,8 @@ p.descrip.top14 {
 .reports_table th,
 .rm_rptble_class table th,
 .uploader_table th,
-.cdr_results_table th {
+.cdr_results_table th,
+.rules_table th {
   background: #203047;
   border-top: 0;
   color: #fff;
@@ -1316,7 +1317,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_user select,
 .create_recips form button.multiselect,
 .tools button.multiselect,
-.tools .form-control {
+.tools .form-control,
+.edit_rule .form-control,
+.edit_rule button.multiselect {
   background: #eee !important;
 }
 
@@ -1512,7 +1515,8 @@ span.selected_campaign {
 }
 
 .reports_table tr:nth-of-type(odd),
-.cdr_results_table tr:nth-of-type(odd) {
+.cdr_results_table tr:nth-of-type(odd),
+.rules_table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -2232,6 +2236,10 @@ p.name i {
 
 .tools .form-group {
   margin-bottom: 25px;
+}
+
+#editRulesModal .modal-header {
+  margin-bottom: 0;
 }
 
 /* ---------------------------------------------------

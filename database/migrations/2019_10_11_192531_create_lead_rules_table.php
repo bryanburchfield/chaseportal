@@ -16,6 +16,7 @@ class CreateLeadRulesTable extends Migration
         Schema::create('lead_rules', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
+            $table->string('name');
             $table->string('source_campaign');
             $table->string('source_subcampaign');
             $table->string('filter_type');

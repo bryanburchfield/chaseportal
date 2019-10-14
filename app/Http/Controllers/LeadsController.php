@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Traits\SqlServerTraits;
+use App\LeadRule;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class LeadsController extends Controller
 {
@@ -14,6 +17,9 @@ class LeadsController extends Controller
 
     public function rules(Request $request)
     {
+
+        $lead_rules = LeadRule::where('user_id', Auth::user()->group_id)->get();
+
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
@@ -21,7 +27,9 @@ class LeadsController extends Controller
 
         $data = [
             'user' => Auth::user(),
-            'page' => $page
+            'page' => $page,
+            'group_id' => Auth::user()->group_id,
+            'lead_rules' => $lead_rules
         ];
 
         return view('dashboards.tools')->with($data);
