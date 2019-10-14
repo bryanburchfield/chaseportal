@@ -49,7 +49,7 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns); 
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select, .add_rule #campaign_select').on('change', this.get_subcampaigns); 
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -804,7 +804,7 @@ var Master = {
 			});
 
 			$.ajax({
-				url: 'get_subcampaigns',
+				url: 'reports/get_subcampaigns',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -813,6 +813,8 @@ var Master = {
 				},
 
 				success:function(response){
+                    console.log(response);
+
 					$('#subcampaign_select').empty();
 					
 					var subcampaigns='<option value""> </option>';
