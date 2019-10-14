@@ -36,6 +36,28 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
+    public function createRule(Request $request)
+    {
+        // insert new rule
+    }
+
+    public function updateRule(Request $request)
+    {
+        // make a copy
+        // set original to deteled
+        // update and insert copy as new record
+    }
+
+    public function deleteRule(Request $request)
+    {
+        // delete rule
+    }
+
+    public function changeRuleStatus(Request $request)
+    {
+        // toggle active flag
+    }
+
     /**
      * Lead Dump
      * pull a file and dump to an ftp server
