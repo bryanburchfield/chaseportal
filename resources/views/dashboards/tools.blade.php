@@ -5,12 +5,11 @@
 
 <div class="preloader"></div>
 
-
-{{-- 								@php
-            var_dump($lead_rules);
-        @endphp --}}
+@php
+// dd($campaigns);
+@endphp
 <div class="wrapper">
-	
+
 	@include('shared.sidenav')
 
 	<div id="content">
@@ -32,7 +31,7 @@
 	                            <div class="form-group">
 	                                <label for="campaign_select">Campaigns</label>
 	                                <select name="campaigns[]" id="campaign_select" multiple class="form-control multiselect" value="">
-	                                    
+
 	                                </select>
 	                            </div>
 
@@ -60,14 +59,14 @@
 	                            <div class="form-group">
 	                                <label for="campaign_select_destination">What would you like the destination Campaign of the lead to be after it meets criteria?</label>
 	                                <select name="campaign_destination[]" id="campaign_select_destination" multiple class="form-control multiselect" value="">
-	                                    
+
 	                                </select>
 	                            </div>
 
 	                            <div class="form-group">
 	                                <label for="subcampaign_select_destination">What would you like the destination Subcampaign  of the lead to be after it meets criteria?</label>
 	                                <select name="subcampaign_destination[]" id="subcampaign_select_destination" multiple class="form-control multiselect" value="">
-	                                    
+
 	                                </select>
 	                            </div>
 
@@ -100,7 +99,7 @@
 	                            </thead>
 
 								<tbody>
-	                            
+
 	                            @foreach($lead_rules as $lr)
 									<tr data-ruleid="{{$lr->id}}">
 										<td>{{$lr->name}}</td>
@@ -113,13 +112,13 @@
 										<td>{{$lr->description}}</td>
 										<td><a data-toggle="modal" data-target="#editRulesModal" class="edit_rules" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td>
 	                            @endforeach
-								
+
 								</tbody>
 
 	                        </table>
 	                    </div>
 	                </div>
-	            </div> 
+	            </div>
 			</div>
 		</div>
 	</div>
@@ -147,14 +146,14 @@
                     <div class="form-group">
                         <label for="campaign_select">Campaigns</label>
                         <select name="campaigns[]" id="campaign_select" multiple class="form-control multiselect" value="">
-                            
+
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="subcampaign_select">Sub Campaigns</label>
                         <select name="subcampaigns[]" id="subcampaign_select" multiple class="form-control multiselect" value="">
-                            
+
                         </select>
                     </div>
 
@@ -176,14 +175,14 @@
                     <div class="form-group">
                         <label for="campaign_select_destination">What would you like the destination Campaign of the lead to be after it meets criteria?</label>
                         <select name="campaign_destination[]" id="campaign_select_destination" multiple class="form-control multiselect" value="">
-                            
+
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="subcampaign_select_destination">What would you like the destination Subcampaign  of the lead to be after it meets criteria?</label>
                         <select name="subcampaign_destination[]" id="subcampaign_select_destination" multiple class="form-control multiselect" value="">
-                            
+
                         </select>
                     </div>
 

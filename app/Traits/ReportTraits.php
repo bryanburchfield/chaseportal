@@ -3,10 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
-use \App\Traits\ReportExportTraits;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -17,6 +15,7 @@ trait ReportTraits
 
     use ReportExportTraits;
     use SqlServerTraits;
+    use CampaignTraits;
 
     private function initilaizeParams()
     {
@@ -34,88 +33,6 @@ trait ReportTraits
         ];
     }
 
-    public function getAllCampaigns($fromDate = null, $toDate = null)
-    {
-        $sql = '';
-        $bind = [];
-
-        if (empty($fromDate) || empty($toDate)) {
-            $union = '';
-            foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
-                $bind['groupid' . $i] = Auth::user()->group_id;
-
-                $sql .= "$union SELECT CampaignName AS Campaign
-                FROM [$db].[dbo].[Campaigns]
-                WHERE isActive = 1
-                AND GroupId = :groupid$i
-                AND CampaignName != ''";
-
-                $union = ' UNION';
-            }
-        } else {
-            $fromDate = makeDateTime($fromDate);
-            $toDate = makeDateTime($toDate);
-
-            list($fromDate, $toDate) = $this->dateRange($fromDate, $toDate);
-
-            // convert to datetime strings
-            $startDate = $fromDate->format('Y-m-d H:i:s');
-            $endDate = $toDate->format('Y-m-d H:i:s');
-
-            $union = '';
-            foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
-                $bind['groupid' . $i] = Auth::user()->group_id;
-                $bind['startdate' . $i] = $startDate;
-                $bind['enddate' . $i] = $endDate;
-
-                $sql .= "$union SELECT DISTINCT Campaign
-                FROM [$db].[dbo].[DialingResults]
-                WHERE GroupId = :groupid$i
-                AND Campaign != ''
-                AND Date >= :startdate$i
-                AND Date < :enddate$i";
-
-                $union = ' UNION';
-            }
-        }
-
-        $results = $this->resultsToList($this->runSql($sql, $bind));
-
-        $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
-
-        ksort($results, SORT_NATURAL);
-
-        return $results;
-    }
-
-    public function getAllSubcampaigns($campaign = null)
-    {
-        if (empty($campaign)) {
-            return [];
-        }
-
-        $sql = '';
-        $union = '';
-        foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['campaign' . $i] = $campaign;;
-
-            $sql .=  "$union SELECT DISTINCT Subcampaign
-            FROM [$db].[dbo].[Leads]
-            WHERE GroupId = :groupid$i
-            AND Campaign = :campaign$i
-            AND Subcampaign is not null
-            AND Subcampaign != ''";
-
-            $union = ' UNION';
-        }
-        $sql .= " ORDER BY Subcampaign";
-
-        $results = $this->resultsToList($this->runSql($sql, $bind));
-
-        return $results;
-    }
-
     public function getAllInboundSources()
     {
         $sql = '';
@@ -131,7 +48,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY Description, InboundSource";
 
-        $results = $this->resultsToList($this->runSql($sql, $bind));
+        $results = resultsToList($this->runSql($sql, $bind));
 
         $arr = [];
         foreach ($results as $k => $v) {
@@ -161,7 +78,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY RepName";
 
-        $results = $this->resultsToList($this->runSql($sql, $bind));
+        $results = resultsToList($this->runSql($sql, $bind));
 
         if ($rollups) {
             array_unshift($results, '[All Unanswered]');
@@ -187,7 +104,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY SkillName";
 
-        $results = $this->resultsToList($this->runSql($sql, $bind));
+        $results = resultsToList($this->runSql($sql, $bind));
 
         return $results;
     }
@@ -211,7 +128,7 @@ trait ReportTraits
         }
         $sql .= " ORDER BY CallStatus";
 
-        $results = $this->resultsToList($this->runSql($sql, $bind));
+        $results = resultsToList($this->runSql($sql, $bind));
 
         return $results;
     }
@@ -227,38 +144,6 @@ trait ReportTraits
             'Progresive' => 'Progresive',
             'TextMessage' => 'TextMessage',
         ];
-    }
-
-    private function dateRange($start, $end)
-    {
-        $tz = Auth::user()->getIanaTz();
-
-        $fromDate = localToUtc($start, $tz);
-        $toDate = localToUtc($end, $tz);
-
-        return [$fromDate, $toDate];
-    }
-
-    private function resultsToList($results)
-    {
-        // flatten array, create k=>v pairs
-        if (count($results)) {
-            $arr = [];
-            if (count($results[0]) == 1) {
-                $key = implode('', array_keys($results[0]));
-                $results = array_column($results, $key);
-                foreach ($results as $v) {
-                    $arr[$v] = $v;
-                }
-            } elseif (count($results[0]) == 2) {
-                foreach ($results as $rec) {
-                    $vals = array_values($rec);
-                    $arr[$vals[0]] = $vals[1];
-                }
-            }
-            $results = $arr;
-        }
-        return $results;
     }
 
     private function checkPageFilters(Request $request)

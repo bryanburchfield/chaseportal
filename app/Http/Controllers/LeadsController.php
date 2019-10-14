@@ -2,27 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Traits\SqlServerTraits;
-use App\Services\ReportService;
-use App\Traits\ReportTraits;
 use App\LeadRule;
+use App\Traits\SqlServerTraits;
+use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LeadsController extends Controller
 {
-    use ReportTraits;
     use SqlServerTraits;
+    use CampaignTraits;
 
     protected $db;
-    protected $reportservice;
-    
+
     public function rules(Request $request)
     {
-
-        $lead_rules = LeadRule::where('user_id', Auth::user()->group_id)->get();
-        $campaigns = $this->reportservice->report->getAllCampaigns();
+        $lead_rules = LeadRule::where('user_id', Auth::user()->id)->get();
+        $campaigns = array_values($this->getAllCampaigns());
 
         $page = [
             'menuitem' => 'tools',
@@ -34,7 +30,7 @@ class LeadsController extends Controller
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'lead_rules' => $lead_rules,
-            'campaigns' => array_values($campaigns)
+            'campaigns' => $campaigns,
         ];
 
         return view('dashboards.tools')->with($data);
