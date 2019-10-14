@@ -11,7 +11,13 @@ Route::prefix('dashboards')->group(function () {
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
+
+        // Tools (lead filters for now)
         Route::get('tools', 'LeadsController@rules');
+        Route::post('tools/create_rule', 'LeadsController@createRule');
+        Route::post('tools/update_rule', 'LeadsController@updateRule');
+        Route::post('tools/delete_rule', 'LeadsController@deleteRule');
+        Route::post('tools/change_rule_status', 'LeadsController@changeRuleStatus');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
