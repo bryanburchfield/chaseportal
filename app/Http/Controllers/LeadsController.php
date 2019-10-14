@@ -58,6 +58,25 @@ class LeadsController extends Controller
         // toggle active flag
     }
 
+    public function getCampaigns(Request $request)
+    {
+        $fromDate = $request->fromdate;
+        $toDate = $request->todate;
+
+        $results = $this->getAllCampaigns($fromDate, $toDate);
+
+        return ['campaigns' => array_values($results)];
+    }
+
+    public function getSubcampaigns(Request $request)
+    {
+        $campaign = $request->campaign;
+
+        $results = $this->getAllSubcampaigns($campaign);
+
+        return ['subcampaigns' => array_values($results)];
+    }
+
     /**
      * Lead Dump
      * pull a file and dump to an ftp server

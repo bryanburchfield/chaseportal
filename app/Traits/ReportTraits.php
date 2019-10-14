@@ -15,7 +15,6 @@ trait ReportTraits
 
     use ReportExportTraits;
     use SqlServerTraits;
-    use CampaignTraits;
 
     private function initilaizeParams()
     {
