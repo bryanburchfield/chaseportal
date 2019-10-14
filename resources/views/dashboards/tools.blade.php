@@ -22,61 +22,47 @@
 	                <div class="col-sm-4">
 	                    <div class="card">
 	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Add New Rule</h2>
-	                        <form action="#" method="post" class="form mt20 add_rule">
+	                        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form mt20 add_rule']) !!}
 
 	                            <div class="form-group">
-	                                <label>Rule Name</label>
-	                                <input type="text" class="form-control rule_name" name="rule_name">
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="campaign_select">Campaigns</label>
-	                                <select name="campaigns[]" id="campaign_select" multiple class="form-control multiselect" value="">
-	                                    
-	                                </select>
+	                            	{!! Form::label('rule_name', 'Rule Name') !!}
+	                            	{!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
 	                            </div>
 
 	                            <div class="form-group">
-	                                <label for="subcampaign_select">Sub Campaigns</label>
-	                                <select name="subcampaigns[]" id="subcampaign_select" multiple class="form-control multiselect" value="">
-	                                </select>
-	                            </div>
+            						{!! Form::label('campaigns', 'Campaigns') !!}
+            						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+            					</div>
 
 	                            <div class="form-group">
-	                                <label for="filter_type">Filter Type</label>
-	                                <select name="filter_type" id="filter_type" class="form-control">
-	                                    <option value="">Select One</option>
-	                                    <option value="lead_age">Lead Age</option>
-	                                    <option value="lead_attempts"># of Attempts on Lead</option>
-	                                    <option value="days_called">Distinct Days Leads are Called</option>
-	                                </select>
-	                            </div>
+            						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
+            						{!! Form::select("subcampaigns[]", $subcampaigns, null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select','multiple'=>true]) !!}
+            					</div>
 
-	                            <div class="form-group">
-	                                <label for="filter_days">Days to Filter By</label>
-	                                <input type="number" class="form-control filter_days" name="filter_days">
-	                            </div>
+            					<div class="form-group">
+            						{!! Form::label('filter_type', 'Filter Type') !!}
+            						{!! Form::select("filter_type", array('lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+            					</div>
+								
+								<div class="form-group">
+									{!! Form::label('filter_days', 'Days to Filter By') !!}
+									{!! Form::text('filter_days', null, ['class'=>'form-control filter_days', 'required'=>true]) !!}
+								</div>
+								
+								<div class="form-group">
+            						{!! Form::label('campaign_select_destination', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
+            						{!! Form::select("campaign_select_destination[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select_destination','multiple'=>true]) !!}
+            					</div>
 
-	                            <div class="form-group">
-	                                <label for="campaign_select_destination">What would you like the destination Campaign of the lead to be after it meets criteria?</label>
-	                                <select name="campaign_destination[]" id="campaign_select_destination" multiple class="form-control multiselect" value="">
-	                                    
-	                                </select>
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="subcampaign_select_destination">What would you like the destination Subcampaign  of the lead to be after it meets criteria?</label>
-	                                <select name="subcampaign_destination[]" id="subcampaign_select_destination" multiple class="form-control multiselect" value="">
-	                                    
-	                                </select>
-	                            </div>
-
-	                            <input type="submit" class="btn btn-primary" value="Add Rule">
-
-	                            <div class="alert alert-danger mt20">
-	                                Demo error message
-	                            </div>
-	                        </form>
+            					<div class="form-group">
+            						{!! Form::label('subcampaign_select_destination', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+            						{!! Form::select("subcampaign_select_destination[]", $subcampaigns, null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
+            					</div>
+								
+								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
+								
+	                            <div class="alert alert-danger mt20"></div>
+	                        {!! Form::close() !!}
 	                    </div>
 	                </div>
 

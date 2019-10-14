@@ -27,6 +27,7 @@
 								<div class="tab-pane active mt30" id="new_user">
 					        		<div class="col-sm-6 mb0 card">
         								<h2 class="page_heading">New User</h2>
+        								
         								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form add_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
