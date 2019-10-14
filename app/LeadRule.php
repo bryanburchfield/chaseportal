@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LeadRule extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'source_campaign',
         'source_subcampaign',
