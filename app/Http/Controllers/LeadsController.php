@@ -36,9 +36,9 @@ class LeadsController extends Controller
      */
     public function leadDump(Request $request)
     {
-        $result = $this->getLeads($request);
-
-        dd($result);
+        foreach ($this->getLeads($request) as $i => $rec) {
+            echo $i . " " . $rec['id'] . "\n";
+        }
     }
 
     public function getLeads(Request $request)
@@ -113,6 +113,6 @@ AND Date < :to_date";
             'to_date' => $to_date,
         ];
 
-        return $this->runSql($sql, $bind);
+        return $this->yieldSql($sql, $bind);
     }
 }

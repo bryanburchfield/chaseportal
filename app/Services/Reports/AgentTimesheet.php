@@ -119,49 +119,46 @@ class AgentTimesheet
         // then do our sorting
         // finally, format fields
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $tmpsheet = [];
 
         $oldrep = '';
         $i = 0;
-        foreach (DB::connection('sqlsrv')->cursor(DB::raw($sql), $bind) as $rec) {
-            if ($rec->Rep != $oldrep) {
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+            if ($rec['Rep'] != $oldrep) {
                 $i++;
-                $oldrep = $rec->Rep;
+                $oldrep = $rec['Rep'];
                 $loggedin = false;
-                $tmpsheet[$i]['Date'] = $rec->Date;
-                $tmpsheet[$i]['Rep'] = $rec->Rep;
+                $tmpsheet[$i]['Date'] = $rec['Date'];
+                $tmpsheet[$i]['Rep'] = $rec['Rep'];
                 $tmpsheet[$i]['Campaign'] = '';
                 $tmpsheet[$i]['LogInTime'] = '';
                 $tmpsheet[$i]['LogOutTime'] = '';
                 $tmpsheet[$i]['ManHourSec'] = 0;
                 $tmpsheet[$i]['PausedTimeSec'] = 0;
             }
-            switch ($rec->Action) {
+            switch ($rec['Action']) {
                 case 'Login':
                     if (!$loggedin) {
-                        $tmpsheet[$i]['LogInTime'] = $rec->Date;
-                        $tmpsheet[$i]['Campaign'] = $rec->Campaign;
+                        $tmpsheet[$i]['LogInTime'] = $rec['Date'];
+                        $tmpsheet[$i]['Campaign'] = $rec['Campaign'];
                         $loggedin = true;
                     }
                     break;
                 case 'Logout':
                     if ($loggedin) {
-                        $tmpsheet[$i]['LogOutTime'] = $rec->Date;
+                        $tmpsheet[$i]['LogOutTime'] = $rec['Date'];
                         $loggedin = false;
                         $oldrep = '';  // force a new record
                     }
                     break;
                 case 'Paused':
                     if ($loggedin) {
-                        $tmpsheet[$i]['PausedTimeSec'] += $rec->Duration;
+                        $tmpsheet[$i]['PausedTimeSec'] += $rec['Duration'];
                     }
                     break;
                 default:
                     if ($loggedin) {
-                        $tmpsheet[$i]['ManHourSec'] += $rec->Duration;
+                        $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
                     }
             }
         }
