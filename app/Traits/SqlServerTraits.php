@@ -58,4 +58,24 @@ trait SqlServerTraits
 
         return $result;
     }
+
+    private function yieldSql($sql, $bind)
+    {
+        if (Auth::check()) {
+            $db = Auth::user()->db;
+        } else {
+            $db = $this->db;
+        }
+        config(['database.connections.sqlsrv.database' => $db]);
+
+        try {
+            foreach (DB::connection('sqlsrv')->cursor(DB::raw($sql), $bind) as $rec) {
+                // convert array of objects to array of arrays
+                $rec = json_decode(json_encode($rec), true);
+                yield ($rec);
+            }
+        } catch (\Exception $e) {
+            yield [];
+        }
+    }
 }

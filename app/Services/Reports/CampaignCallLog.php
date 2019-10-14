@@ -163,15 +163,12 @@ class CampaignCallLog
             'HandledCalls' => 0,
         ];
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $tot = 0;
-        foreach (DB::connection('sqlsrv')->cursor(DB::raw($sql), $bind) as $rec) {
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
 
             // extras
-            $detrec['Time'] = $this->roundToQuarterHour($rec->Date);
-            $detrec['HandledCalls'] = $rec->IsSystem == 1 ? 0 : 1;
+            $detrec['Time'] = $this->roundToQuarterHour($rec['Date']);
+            $detrec['HandledCalls'] = $rec['IsSystem'] == 1 ? 0 : 1;
 
             $key = array_search($detrec['Time'], array_column($calldetails, 'Time'));
 
@@ -182,16 +179,16 @@ class CampaignCallLog
                 $calldetails[$key]['HandledCalls'] += $detrec['HandledCalls'];
             }
 
-            if ($rec->IsSystem == 0) {
+            if ($rec['IsSystem'] == 0) {
                 $donut['AgentCalls']++;
             } else {
                 $donut['SystemCalls']++;
             }
 
-            $key = array_search($rec->CallStatus, array_column($callstats, 'CallStatus'));
+            $key = array_search($rec['CallStatus'], array_column($callstats, 'CallStatus'));
             if ($key === false) {
                 $callstats[] = [
-                    'CallStatus' => $rec->CallStatus,
+                    'CallStatus' => $rec['CallStatus'],
                     'Count' => 1,
                 ];
             } else {
@@ -200,16 +197,16 @@ class CampaignCallLog
 
             // results
             if ($tot == 0) {
-                $this->extras['summary']['starttime'] = $rec->Date;
+                $this->extras['summary']['starttime'] = $rec['Date'];
             }
-            $this->extras['summary']['stoptime'] = $rec->Date;
+            $this->extras['summary']['stoptime'] = $rec['Date'];
 
-            $stat = $rec->CallStatus;
+            $stat = $rec['CallStatus'];
             $tot++;
 
             if (!array_key_exists($stat, $stats)) {
                 $stats[$stat]['CallStatus'] = $stat;
-                $stats[$stat]['Description'] = !empty($rec->Description) ? $rec->Description : $stat;
+                $stats[$stat]['Description'] = !empty($rec['Description']) ? $rec['Description'] : $stat;
                 $stats[$stat]['Cnt'] = 0;
                 $stats[$stat]['Pct'] = 0;
             }

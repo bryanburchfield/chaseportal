@@ -178,30 +178,11 @@ class CampaignUsage
         FROM #CampaignUsage
         ORDER BY Callable DESC, Attempt";
 
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
-        $pdo = DB::connection('sqlsrv')->getPdo();
-        // $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        $stmt = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
-
-        foreach ($bind as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-
-        $stmt->execute();
-
-        try {
-            $this->extras['callstats'] = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $stmt->nextRowset();
-            $this->extras['subcampaigns'] = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $stmt->nextRowset();
-            $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $this->extras['callstats'] = [];
-            $this->extras['subcampaigns'] = [];
-            $results = [];
-        }
+        list(
+            $this->extras['callstats'],
+            $this->extras['subcampaigns'],
+            $results
+        ) = $this->runMultiSql($sql, $bind);
 
         if (empty($results)) {
             $this->params['totrows'] = 0;

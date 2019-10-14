@@ -134,53 +134,49 @@ class AgentPauseTime
             'PauseRecs' => [],
         ];
 
-
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
         $i = 0;
-        foreach (DB::connection('sqlsrv')->cursor(DB::raw($sql), $bind) as $rec) {
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
 
             if ($i == 0) {
                 $i++;
                 $tmparray[$i] = $blankrec;
-                $tmparray[$i]['Rep'] = $rec->Rep;
-                $tmparray[$i]['Campaign'] = $rec->Campaign;
+                $tmparray[$i]['Rep'] = $rec['Rep'];
+                $tmparray[$i]['Campaign'] = $rec['Campaign'];
             } else {
-                if ($rec->Rep != $tmparray[$i]['Rep'] || $rec->Campaign != $tmparray[$i]['Campaign'] || !empty($tmparray[$i]['LogOutTime'])) {
+                if ($rec['Rep'] != $tmparray[$i]['Rep'] || $rec['Campaign'] != $tmparray[$i]['Campaign'] || !empty($tmparray[$i]['LogOutTime'])) {
                     $i++;
                     $tmparray[$i] = $blankrec;
-                    $tmparray[$i]['Rep'] = $rec->Rep;
-                    $tmparray[$i]['Campaign'] = $rec->Campaign;
+                    $tmparray[$i]['Rep'] = $rec['Rep'];
+                    $tmparray[$i]['Campaign'] = $rec['Campaign'];
                 }
             }
 
-            switch ($rec->Action) {
+            switch ($rec['Action']) {
                 case 'Login':
                     if (empty($tmparray[$i]['LogInTime'])) {
-                        $tmparray[$i]['LogInTime'] = $rec->Date;
+                        $tmparray[$i]['LogInTime'] = $rec['Date'];
                     }
                     break;
                 case 'Logout':
                     if (!empty($tmparray[$i]['LogInTime'])) {
-                        $tmparray[$i]['LogOutTime'] = $rec->Date;
+                        $tmparray[$i]['LogOutTime'] = $rec['Date'];
                     }
                     break;
                 case 'Paused':
-                    if (!empty($tmparray[$i]['LogInTime']) && round($rec->Duration) > 0) {
-                        $tmparray[$i]['TotPausedSec'] += $rec->Duration;
-                        $tmparray[$i]['PauseRecs'][] = $rec->id;
+                    if (!empty($tmparray[$i]['LogInTime']) && round($rec['Duration']) > 0) {
+                        $tmparray[$i]['TotPausedSec'] += $rec['Duration'];
+                        $tmparray[$i]['PauseRecs'][] = $rec['id'];
                         $idarray[] = [
-                            'id' => $rec->id,
-                            'Date' => substr($rec->Date, 0, 26),  // strip offest
-                            'Duration' => round($rec->Duration),
-                            'Details' => $rec->Details,
+                            'id' => $rec['id'],
+                            'Date' => substr($rec['Date'], 0, 26),  // strip offest
+                            'Duration' => round($rec['Duration']),
+                            'Details' => $rec['Details'],
                         ];
                     }
                     break;
                 default:
                     if (!empty($tmparray[$i]['LogInTime'])) {
-                        $tmparray[$i]['TotManHours'] += $rec->Duration;
+                        $tmparray[$i]['TotManHours'] += $rec['Duration'];
                     }
             }
         }
