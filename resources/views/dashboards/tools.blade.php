@@ -6,7 +6,7 @@
 <div class="preloader"></div>
 
 @php
-// dd($campaigns);
+// dd($lead_rules);
 @endphp
 <div class="wrapper">
 
@@ -29,15 +29,11 @@
 	                            </div>
 
 	                            <div class="form-group">
-<<<<<<< HEAD
             						{!! Form::label('campaigns', 'Campaigns') !!}
             						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
             					</div>
 
-	                            <div class="form-group">
-            						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
-            						{!! Form::select("subcampaigns[]", $subcampaigns, null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select','multiple'=>true]) !!}
-            					</div>
+	                           
 
             					<div class="form-group">
             						{!! Form::label('filter_type', 'Filter Type') !!}
@@ -54,64 +50,12 @@
             						{!! Form::select("campaign_select_destination[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select_destination','multiple'=>true]) !!}
             					</div>
 
-            					<div class="form-group">
-            						{!! Form::label('subcampaign_select_destination', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("subcampaign_select_destination[]", $subcampaigns, null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
-            					</div>
+            					
 								
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
 	                            <div class="alert alert-danger mt20"></div>
 	                        {!! Form::close() !!}
-=======
-	                                <label for="campaign_select">Campaigns</label>
-	                                <select name="campaigns[]" id="campaign_select" multiple class="form-control multiselect" value="">
-
-	                                </select>
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="subcampaign_select">Sub Campaigns</label>
-	                                <select name="subcampaigns[]" id="subcampaign_select" multiple class="form-control multiselect" value="">
-	                                </select>
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="filter_type">Filter Type</label>
-	                                <select name="filter_type" id="filter_type" class="form-control">
-	                                    <option value="">Select One</option>
-	                                    <option value="lead_age">Lead Age</option>
-	                                    <option value="lead_attempts"># of Attempts on Lead</option>
-	                                    <option value="days_called">Distinct Days Leads are Called</option>
-	                                </select>
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="filter_days">Days to Filter By</label>
-	                                <input type="number" class="form-control filter_days" name="filter_days">
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="campaign_select_destination">What would you like the destination Campaign of the lead to be after it meets criteria?</label>
-	                                <select name="campaign_destination[]" id="campaign_select_destination" multiple class="form-control multiselect" value="">
-
-	                                </select>
-	                            </div>
-
-	                            <div class="form-group">
-	                                <label for="subcampaign_select_destination">What would you like the destination Subcampaign  of the lead to be after it meets criteria?</label>
-	                                <select name="subcampaign_destination[]" id="subcampaign_select_destination" multiple class="form-control multiselect" value="">
-
-	                                </select>
-	                            </div>
-
-	                            <input type="submit" class="btn btn-primary" value="Add Rule">
-
-	                            <div class="alert alert-danger mt20">
-	                                Demo error message
-	                            </div>
-	                        </form>
->>>>>>> a56bac392fbfcb9455ca1499098907fc2179a500
 	                    </div>
 	                </div>
 
@@ -146,7 +90,7 @@
 										<td>{{$lr->destination_campaign}}</td>
 										<td>{{$lr->destination_subcampaign}}</td>
 										<td>{{$lr->description}}</td>
-										<td><a data-toggle="modal" data-target="#editRulesModal" class="edit_rules" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td>
+										{{-- <td><a data-toggle="modal" data-target="#editRulesModal" class="edit_rules" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td> --}}
 	                            @endforeach
 
 								</tbody>
