@@ -36,13 +36,6 @@ class LeadsController extends Controller
      */
     public function leadDump(Request $request)
     {
-        // http://127.0.0.1:8000/api/lead_dump/123/224347/EST/PowerV2_Reporting_Dialer-19
-
-        // check token for some cheap security
-        if ($request->token != '123') {
-            abort(404);
-        }
-
         $result = $this->getLeads($request);
 
         dd($result);
