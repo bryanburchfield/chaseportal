@@ -5,9 +5,6 @@
 
 <div class="preloader"></div>
 
-@php
-// dd($lead_rules);
-@endphp
 <div class="wrapper">
 
 	@include('shared.sidenav')
@@ -33,7 +30,10 @@
             						{!! Form::select("campaigns[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
             					</div>
 
-	                           
+	                           {{--  <div class="form-group">
+            						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
+            						{!! Form::select("subcampaigns[]",  null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select','multiple'=>true]) !!}
+            					</div> --}}
 
             					<div class="form-group">
             						{!! Form::label('filter_type', 'Filter Type') !!}
@@ -50,8 +50,11 @@
             						{!! Form::select("campaign_select_destination[]", $campaigns, null, ["class" => "form-control multiselect", 'id'=> 'campaign_select_destination','multiple'=>true]) !!}
             					</div>
 
-            					
-								
+            					{{-- <div class="form-group">
+            						{!! Form::label('subcampaign_select_destination', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+            						{!! Form::select("subcampaign_select_destination[]",  null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
+            					</div>
+								 --}}
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
 	                            <div class="alert alert-danger mt20"></div>

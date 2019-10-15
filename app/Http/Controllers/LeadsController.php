@@ -20,7 +20,7 @@ class LeadsController extends Controller
 
     public function rules(Request $request)
     {
-        $lead_rules = LeadRule::where('group_id', Auth::user()->id)->get();
+        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)->get();
         $campaigns = array_values($this->getAllCampaigns());
 
         $page = [
