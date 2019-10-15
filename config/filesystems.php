@@ -51,7 +51,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -62,6 +62,15 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
+        ],
+
+        'ftp_224347' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST_224347'),
+            'username' => env('FTP_USERNAME_224347'),
+            'password' => env('FTP_PASSWORD_224347'),
+            'email' => env('FTP_EMAIL_224347'),
+            'root' => '/',
         ],
 
     ],
