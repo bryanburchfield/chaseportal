@@ -26,13 +26,13 @@
 	                            </div>
 								
 	                            <div class="form-group">
-            						{!! Form::label('campaigns', 'Campaigns') !!}
-            						{!! Form::select("campaigns", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+            						{!! Form::label('source_campaign', 'Campaigns') !!}
+            						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
             					</div>
 
 	                            <div class="form-group">
-            						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
-            						{!! Form::select("subcampaigns", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
+            						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
@@ -41,20 +41,20 @@
             					</div>
 								
 								<div class="form-group">
-									{!! Form::label('filter_days', 'Days to Filter By') !!}
-									{!! Form::text('filter_days', null, ['class'=>'form-control filter_days', 'required'=>true]) !!}
+									{!! Form::label('filter_value', 'Days to Filter By') !!}
+									{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
 								</div>
 								
 								<div class="form-group">
-            						{!! Form::label('campaign_select_destination', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("campaign_select_destination[]", $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select_destination']) !!}
+            						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
+            						{!! Form::select("destination_campaign", $campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign']) !!}
             					</div>
 
-            					{{-- <div class="form-group">
-            						{!! Form::label('subcampaign_select_destination', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("subcampaign_select_destination[]",  null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
+            					<div class="form-group">
+            						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
             					</div>
-								 --}}
+								
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
 	                            <div class="alert alert-danger mt20 hidetilloaded"></div>
@@ -127,13 +127,13 @@
                     </div>
 					
                     <div class="form-group">
-						{!! Form::label('campaigns', 'Campaigns') !!}
-						{!! Form::select("campaigns", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+						{!! Form::label('source_campaign', 'Campaigns') !!}
+						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 					</div>
 
                     <div class="form-group">
-						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
-						{!! Form::select("subcampaigns", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
+						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
 					</div>
 
 					<div class="form-group">
@@ -142,20 +142,20 @@
 					</div>
 					
 					<div class="form-group">
-						{!! Form::label('filter_days', 'Days to Filter By') !!}
-						{!! Form::text('filter_days', null, ['class'=>'form-control filter_days', 'required'=>true]) !!}
+						{!! Form::label('filter_value', 'Days to Filter By') !!}
+						{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
 					</div>
 					
 					<div class="form-group">
-						{!! Form::label('campaign_select_destination', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-						{!! Form::select("campaign_select_destination[]", $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select_destination']) !!}
+						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
+						{!! Form::select("destination_campaign[]", $campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign']) !!}
 					</div>
 
-					{{-- <div class="form-group">
-						{!! Form::label('subcampaign_select_destination', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-						{!! Form::select("subcampaign_select_destination[]",  null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
+					<div class="form-group">
+						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+						{!! Form::select("destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
 					</div>
-					 --}}
+					
 					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
 					
                     <div class="alert alert-danger mt20 hidetilloaded"></div>
