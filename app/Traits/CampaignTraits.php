@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 
 trait CampaignTraits
 {
+    // NOTE: parent must use SqlServerTraits
+
     public function getAllCampaigns($fromDate = null, $toDate = null)
     {
         $sql = '';
