@@ -36,6 +36,12 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
+    public function getLeadRule(Request $request)
+    {
+        $id = $request->id;
+        return $id;
+    }
+
     public function createRule(Request $request)
     {
         // insert new rule

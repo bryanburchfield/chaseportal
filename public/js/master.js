@@ -68,6 +68,7 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
+        $('.edit_rules').on('click', this.populate_leadrule_modal);
 	},
 
     return_chart_colors_hash:function(reps){
@@ -278,6 +279,28 @@ var Master = {
                 $('.filter_campaign .campaign_group').eq(0).prop('checked',true);
             }
         }
+    },
+
+    populate_leadrule_modal:function(){
+
+        var id = $(this).parent().parent().data('ruleid');
+        console.log(id);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'tools/get_lead_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: {id:id},
+            success:function(response){
+                console.log(response);
+            }
+        });
     },
 
     // ran after submit is clicked in the interaction menu, after filter_campaign()
@@ -803,8 +826,10 @@ var Master = {
 			    }
 			});
 
+            console.log(campaign);
+
 			$.ajax({
-				url: 'reports/get_subcampaigns',
+				url: '/dashboards/tools/get_subcampaigns' ,
 				type: 'POST',
 				dataType: 'json',
 				data: {

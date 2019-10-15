@@ -1319,7 +1319,8 @@ input[type=number]::-webkit-outer-spin-button {
 .tools button.multiselect,
 .tools .form-control,
 .edit_rule .form-control,
-.edit_rule button.multiselect {
+.edit_rule button.multiselect,
+.update_rule .form-control {
   background: #eee !important;
 }
 
