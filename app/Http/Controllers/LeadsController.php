@@ -42,16 +42,22 @@ class LeadsController extends Controller
     public function getLeadRule(Request $request)
     {
         $id = $request->id;
-        return $id;
+        $lead_rule = LeadRule::where('id', $id)->get();
+        return $lead_rule;
     }
 
     public function createRule(Request $request)
     {
-        // insert new rule
+        $validated = $request->validated();
+        
+        $lr = new LeadRule();
+        $lr->save();
     }
 
     public function updateRule(Request $request)
     {
+
+        return $request;
         // make a copy
         // set original to deteled
         // update and insert copy as new record

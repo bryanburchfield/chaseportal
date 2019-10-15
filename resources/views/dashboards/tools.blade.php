@@ -18,7 +18,7 @@
 	                <div class="col-sm-4">
 	                    <div class="card">
 	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Add New Rule</h2>
-	                        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/create_rule', 'class'=>'form mt20 add_rule']) !!}
+	                        {!! Form::open(['method'=>'POST', 'url'=>'tools/create_rule', 'class'=>'form mt20 add_rule']) !!}
 
 	                            <div class="form-group">
 	                            	{!! Form::label('rule_name', 'Rule Name') !!}
@@ -27,17 +27,17 @@
 								
 	                            <div class="form-group">
             						{!! Form::label('campaigns', 'Campaigns') !!}
-            						{!! Form::select("campaigns", [null=>'Please Select'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+            						{!! Form::select("campaigns", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
             					</div>
 
 	                            <div class="form-group">
             						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
-            						{!! Form::select("subcampaigns", [null=>'Please Select'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::select("subcampaigns", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('filter_type', 'Filter Type') !!}
-            						{!! Form::select("filter_type", array('lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+            						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
             					</div>
 								
 								<div class="form-group">
@@ -57,7 +57,7 @@
 								 --}}
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
-	                            <div class="alert alert-danger mt20"></div>
+	                            <div class="alert alert-danger mt20 hidetilloaded"></div>
 	                        {!! Form::close() !!}
 	                    </div>
 	                </div>
@@ -128,17 +128,17 @@
 					
                     <div class="form-group">
 						{!! Form::label('campaigns', 'Campaigns') !!}
-						{!! Form::select("campaigns", [null=>'Please Select'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
+						{!! Form::select("campaigns", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select']) !!}
 					</div>
 
                     <div class="form-group">
 						{!! Form::label('subcampaigns', 'Sub Campaigns') !!}
-						{!! Form::select("subcampaigns", [null=>'Please Select'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+						{!! Form::select("subcampaigns", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
 					</div>
 
 					<div class="form-group">
 						{!! Form::label('filter_type', 'Filter Type') !!}
-						{!! Form::select("filter_type", array('lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
 					</div>
 					
 					<div class="form-group">
@@ -156,9 +156,9 @@
 						{!! Form::select("subcampaign_select_destination[]",  null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select_destination','multiple'=>true]) !!}
 					</div>
 					 --}}
-					{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
+					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
 					
-                    <div class="alert alert-danger mt20"></div>
+                    <div class="alert alert-danger mt20 hidetilloaded"></div>
                 {!! Form::close() !!}
             </div>
 	    </div>

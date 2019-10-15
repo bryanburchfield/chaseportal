@@ -69,6 +69,7 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.edit_rules').on('click', this.populate_leadrule_modal);
+        $('.save_leadrule_update').on('click', this.save_leadrule_update);
 	},
 
     return_chart_colors_hash:function(reps){
@@ -298,6 +299,34 @@ var Master = {
             dataType: 'json',
             data: {id:id},
             success:function(response){
+                $('#editRulesModal').find('.rule_name').val(response[0].name);
+                $('#editRulesModal #campaign_select option[value="'+response[0].source_campaign+'"]').attr('selected','selected');
+                $('#editRulesModal #subcampaign_select option[value="'+response[0].source_subcampaign+'"]').attr('selected','selected');
+                $('#editRulesModal #filter_type option[value="'+response[0].filter_type+'"]').attr('selected','selected');
+                $('#editRulesModal').find('.filter_days').val(response[0].filter_value);
+                $('#editRulesModal #campaign_select_destination option[value="'+response[0].destination_campaign+'"]').attr('selected','selected');
+            }
+        });
+    },
+
+    save_leadrule_update:function(e){
+        e.preventDefault();
+            
+        var form_data = $(this).parent().serialize();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'tools/update_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: {form_data:form_data},
+            success:function(response){
+                console.log('test');
                 console.log(response);
             }
         });
@@ -842,7 +871,7 @@ var Master = {
 
 					$('#subcampaign_select').empty();
 					
-					var subcampaigns='<option value""> </option>';
+					var subcampaigns='<option value""> Select One</option>';
 					for(var i=0; i<response.subcampaigns.length;i++){
 						subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
 					}
