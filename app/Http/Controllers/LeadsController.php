@@ -49,7 +49,15 @@ class LeadsController extends Controller
     public function createRule(Request $request)
     {
         $validated = $request->validated();
-        
+        $name = $request->rule_name;
+        $source_campaign = $request->source_campaign;
+        $source_subcampaign = $request->source_subcampaign;
+        $filter_type = $request->filter_type;
+        $filter_value = $request->filter_value;
+        $destination_campaign = $request->destination_campaign;
+        $destination_subcampaign = $request->destination_subcampaign;
+
+
         $lr = new LeadRule();
         $lr->save();
     }

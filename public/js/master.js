@@ -321,7 +321,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'tools/update_rule',
+            url: '/tools/update_rule',
             type: 'POST',
             dataType: 'json',
             data: {form_data:form_data},
