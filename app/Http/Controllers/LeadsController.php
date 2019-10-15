@@ -21,7 +21,7 @@ class LeadsController extends Controller
     public function rules(Request $request)
     {
         $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)->get();
-        $campaigns = array_values($this->getAllCampaigns());
+        $campaigns = $this->getAllCampaigns();
 
         $page = [
             'menuitem' => 'tools',
@@ -163,7 +163,8 @@ class LeadsController extends Controller
         fputcsv($file, $colnames);
 
         $totalrecs = 0;
-        foreach ($this->getLeads($request, $columns) as $totalrecs => $rec) {
+        foreach ($this->getLeads($request, $columns) as $rec) {
+            $totalrecs++;
             fputcsv($file, array_values($rec));
         }
 
