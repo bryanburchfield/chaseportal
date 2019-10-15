@@ -41,16 +41,15 @@ class LeadsController extends Controller
 
     public function getLeadRule(Request $request)
     {
-        $id = $request->id;
-        $lead_rule = LeadRule::where('id', $id)->get();
-        return $lead_rule;
+        return LeadRule::find($request->id);
     }
 
     public function createRule(Request $request)
     {
-        $validated = $request->validated();
-        
+        // $validated = $request->validated();
+
         $lr = new LeadRule();
+        $lr->fill($request->all());
         $lr->save();
     }
 
@@ -66,6 +65,7 @@ class LeadsController extends Controller
     public function deleteRule(Request $request)
     {
         // delete rule
+        return LeadRule::find($request->id)->delete();
     }
 
     public function changeRuleStatus(Request $request)

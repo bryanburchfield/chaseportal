@@ -14,7 +14,9 @@ Route::prefix('dashboards')->group(function () {
 
         // Tools (lead filters for now)
         Route::get('tools', 'LeadsController@rules');
-        Route::post('tools/create_rule', 'LeadsController@createRule');
+        Route::post('tools', 'LeadsController@createRule');
+
+        // Ajax
         Route::post('tools/update_rule', 'LeadsController@updateRule');
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
         Route::post('tools/change_rule_status', 'LeadsController@changeRuleStatus');
