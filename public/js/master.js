@@ -333,8 +333,26 @@ var Master = {
             dataType: 'json',
             data: {form_data:form_data},
             success:function(response){
-                console.log('test');
                 console.log(response);
+            },
+            error :function( data ) {
+                console.log(data);
+                if( data.status === 422 ) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {                       
+                            $('#editRulesModal form .alert').show().append(value+"<br/>");
+
+                            });
+                        }else{
+                        $('#editRulesModal form .alert').show().append(value+"<br/>");
+                        }
+                    });
+                }else{
+                    // window.location.href = from_page;
+                }    
             }
         });
     },
