@@ -9,7 +9,6 @@ use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -61,13 +60,19 @@ class LeadsController extends Controller
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
-        LeadRule::findOrFail($request->id)->delete();
-        return $this->createRule($request);
+        $lr = LeadRule::find($request->id);
+        $lr->fill($request->all());
+
+        if ($lr->isDirty()) {
+            $lr->delete();
+            return $this->createRule($request);
+        }
+        return redirect()->back();
     }
 
     public function deleteRule(Request $request)
     {
-        LeadRule::find($request->id)->delete();
+        LeadRule::findOrFail($request->id)->delete();
         return redirect()->back();
     }
 

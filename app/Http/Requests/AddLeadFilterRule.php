@@ -42,6 +42,7 @@ class AddLeadFilterRule extends FormRequest
                 Rule::unique('lead_rules')->where(function ($query) use ($group_id, $id) {
                     return $query
                         ->where('group_id', $group_id)
+                        ->whereNull('deleted_at')
                         ->where('id', '!=', $id);
                 }),
             ],
