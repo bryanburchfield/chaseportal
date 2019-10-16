@@ -329,6 +329,8 @@ var Master = {
             lead_rule_id = $('.update_rule #lead_rule_id').val()
         ;
 
+        console.log(lead_rule_id);
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -347,7 +349,7 @@ var Master = {
                 filter_value:filter_value,
                 destination_campaign:update_destination_campaign,
                 destination_subcampaign:update_destination_subcampaign,
-                lead_rule_id:lead_rule_id
+                id:lead_rule_id
             },
 
             success:function(response){
