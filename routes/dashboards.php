@@ -19,7 +19,6 @@ Route::prefix('dashboards')->group(function () {
         // Ajax
         Route::post('tools/update_rule', 'LeadsController@updateRule');
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
-        Route::post('tools/change_rule_status', 'LeadsController@changeRuleStatus');
         Route::post('tools/get_campaigns', 'LeadsController@getCampaigns');
         Route::post('tools/get_subcampaigns', 'LeadsController@getSubcampaigns');
         Route::post('tools/get_lead_rule', 'LeadsController@getLeadRule');
