@@ -57,7 +57,13 @@
 								
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
-	                            <div class="alert alert-danger mt20 hidetilloaded"></div>
+    							@if($errors->any())
+                                    <div class="alert alert-danger mt20">
+                                        @foreach($errors->all() as $e)
+                                            {{ $e }}
+                                        @endforeach
+                                    </div>
+    							@endif
 	                        {!! Form::close() !!}
 	                    </div>
 	                </div>
