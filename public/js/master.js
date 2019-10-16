@@ -319,7 +319,17 @@ var Master = {
     save_leadrule_update:function(e){
         e.preventDefault();
             
-        var form_data = $(this).parent().serialize();
+        var rule_name = $('.update_rule .rule_name').val(),
+            source_campaign = $('.update_rule .source_campaign').val(),
+            source_subcampaign = $('.update_rule .source_subcampaign').val(),
+            filter_type = $('.update_rule .filter_type').val(),
+            filter_value = $('.update_rule .filter_value').val(),
+            update_destination_campaign = $('.update_rule .update_destination_campaign').val(),
+            update_destination_subcampaign = $('.update_rule .update_destination_subcampaign').val(),
+            lead_rule_id = $('.update_rule .lead_rule_id').val()
+        ;
+
+        console.log(rule_name);
 
         $.ajaxSetup({
             headers: {
@@ -343,11 +353,11 @@ var Master = {
 
                         if($.isPlainObject(value)) {
                             $.each(value, function (key, value) {                       
-                            $('#editRulesModal form .alert').show().append(value+"<br/>");
+                            $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
 
                             });
                         }else{
-                        $('#editRulesModal form .alert').show().append(value+"<br/>");
+                        $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
                         }
                     });
                 }else{

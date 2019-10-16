@@ -125,7 +125,7 @@
             </div>
             <div class="modal-body">
 
-        		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools//update_rule', 'class'=>'form mt20 update_rule']) !!}
+        		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools/update_rule', 'class'=>'form mt20 update_rule']) !!}
 
                     <div class="form-group">
                     	{!! Form::label('rule_name', 'Rule Name') !!}
