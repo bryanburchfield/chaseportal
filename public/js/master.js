@@ -345,8 +345,8 @@ var Master = {
                 source_subcampaign:source_subcampaign,
                 filter_type:filter_type,
                 filter_value:filter_value,
-                update_destination_campaign:update_destination_campaign,
-                update_destination_subcampaign:update_destination_subcampaign,
+                destination_campaign:update_destination_campaign,
+                destination_subcampaign:update_destination_subcampaign,
                 lead_rule_id:lead_rule_id
             },
 
