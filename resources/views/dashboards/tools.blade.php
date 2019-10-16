@@ -144,12 +144,12 @@
 
 					<div class="form-group">
 						{!! Form::label('filter_type', 'Filter Type') !!}
-						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
 					</div>
 					
 					<div class="form-group">
 						{!! Form::label('filter_value', 'Days to Filter By') !!}
-						{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
+						{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
 					</div>
 					
 					<div class="form-group">
