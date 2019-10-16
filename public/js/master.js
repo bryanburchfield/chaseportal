@@ -300,12 +300,16 @@ var Master = {
             data: {id:id},
             success:function(response){
                 console.log(response);
+
+                Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
+
                 $('#editRulesModal').find('.rule_name').val(response.rule_name);
-                $('#editRulesModal #campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
-                $('#editRulesModal #subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('selected','selected');
+                $('#editRulesModal #update_campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
+                $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('selected','selected');
                 $('#editRulesModal #filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
                 $('#editRulesModal').find('.filter_value').val(response.filter_value);
-                $('#editRulesModal #campaign_select_destination option[value="'+response.destination_campaign+'"]').attr('selected','selected');
+                $('#editRulesModal #update_destination_campaign option[value="'+response.destination_campaign+'"]').attr('selected','selected');
+                $('#editRulesModal #update_destination_subcampaign option[value="'+response.destination_subcampaign+'"]').attr('selected','selected');
 
                 $('#editRulesModal').find('#lead_rule_id').val(id);
             }
@@ -841,17 +845,23 @@ var Master = {
 	    return chart_colors_array;
 	},
 
-	get_subcampaigns:function(e){
-		var campaign;
+	get_subcampaigns:function(e, campaign=0, source=0){
+        
+        
+        if(!campaign){
+            e.preventDefault();
+            $(this).find('option:selected').each(function() {
+                campaign = $(this).val();
+            });
+        }
 
-		$(this).find('option:selected').each(function() {
-		    campaign = $(this).val();
-		});
-
-        var source = $(this).attr('id');
+        if(!source){
+            var source = $(this).attr('id');
+        }
 
 		if($('#subcampaign_select').length){
-			e.preventDefault();
+            console.log(source);
+			// e.preventDefault();
 			var report = $('form.report_filter_form').attr('id');
 
 			$.ajaxSetup({
