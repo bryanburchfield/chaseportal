@@ -370,7 +370,7 @@ var Master = {
 
                     $('#editRulesModal form .alert li').first().remove();
                 }else{
-                    window.location.href = 'dashboards/tools';
+                    window.location.href = 'tools';
                 }    
             }
         });
