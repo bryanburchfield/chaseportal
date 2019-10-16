@@ -32,12 +32,17 @@ class AddLeadFilterRule extends FormRequest
     {
         $group_id = Auth::user()->group_id;
 
+        // This validation is used for both add and update, so get the
+        // id of the rule being edited, or set to 0 for an add
+        $id = request('id', 0);
+
         return [
             'rule_name' => [
                 'required',
-                Rule::unique('lead_rules')->where(function ($query) use ($group_id) {
+                Rule::unique('lead_rules')->where(function ($query) use ($group_id, $id) {
                     return $query
-                        ->where('group_id', $group_id);
+                        ->where('group_id', $group_id)
+                        ->where('id', '!=', $id);
                 }),
             ],
             'source_campaign' => [

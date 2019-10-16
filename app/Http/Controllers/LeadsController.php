@@ -56,24 +56,18 @@ class LeadsController extends Controller
         return redirect()->back();
     }
 
-    public function updateRule(Request $request)
+    public function updateRule(AddLeadFilterRule $request)
     {
-
-        return $request;
-        // make a copy
-        // set original to deteled
-        // update and insert copy as new record
+        // We don't actually update a rule, we'll (soft) delete
+        // and insert a new one
+        LeadRule::findOrFail($request->id)->delete();
+        return $this->createRule($request);
     }
 
     public function deleteRule(Request $request)
     {
-        // delete rule
-        return LeadRule::find($request->id)->delete();
-    }
-
-    public function changeRuleStatus(Request $request)
-    {
-        // toggle active flag
+        LeadRule::find($request->id)->delete();
+        return redirect()->back();
     }
 
     public function getCampaigns(Request $request)
