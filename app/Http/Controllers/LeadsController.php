@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddLeadFilterRule;
 use App\LeadRule;
 use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
@@ -44,13 +45,17 @@ class LeadsController extends Controller
         return LeadRule::find($request->id);
     }
 
-    public function createRule(Request $request)
+    public function createRule(AddLeadFilterRule $request)
     {
+        $validated = $request->validated();
 
         $lr = new LeadRule();
         $lr->fill($request->all());
         $lr->group_id = Auth::user()->group_id;
+        $lr->active = true;
         $lr->save();
+
+        return redirect()->back();
     }
 
     public function updateRule(Request $request)
