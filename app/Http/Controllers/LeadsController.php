@@ -46,10 +46,10 @@ class LeadsController extends Controller
 
     public function createRule(Request $request)
     {
-        // $validated = $request->validated();
 
         $lr = new LeadRule();
         $lr->fill($request->all());
+        $lr->group_id = Auth::user()->group_id;
         $lr->save();
     }
 

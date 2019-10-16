@@ -18,7 +18,7 @@
 	                <div class="col-sm-4">
 	                    <div class="card">
 	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Add New Rule</h2>
-	                        {!! Form::open(['method'=>'POST', 'url'=>'tools/create_rule', 'class'=>'form mt20 add_rule']) !!}
+	                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
 
 	                            <div class="form-group">
 	                            	{!! Form::label('rule_name', 'Rule Name') !!}
