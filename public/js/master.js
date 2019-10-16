@@ -285,7 +285,6 @@ var Master = {
     populate_leadrule_modal:function(){
 
         var id = $(this).parent().parent().data('ruleid');
-        console.log(id);
 
         $.ajaxSetup({
             headers: {
@@ -299,7 +298,6 @@ var Master = {
             dataType: 'json',
             data: {id:id},
             success:function(response){
-                console.log(response);
 
                 Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
 
@@ -363,15 +361,16 @@ var Master = {
 
                         if($.isPlainObject(value)) {
                             $.each(value, function (key, value) {                       
-                            $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
-
+                                $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
                             });
                         }else{
-                        $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
+                            $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
                         }
                     });
+
+                    $('#editRulesModal form .alert li').first().remove();
                 }else{
-                    // window.location.href = from_page;
+                    window.location.href = 'dashboards/tools';
                 }    
             }
         });

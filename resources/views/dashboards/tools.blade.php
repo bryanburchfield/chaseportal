@@ -163,7 +163,7 @@
 					</div>
 
 					{!! Form::hidden('lead_rule_id', null, ['id'=>'lead_rule_id']) !!}
-					
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
 					
                     <div class="alert alert-danger mt20 hidetilloaded"></div>
