@@ -306,7 +306,7 @@ var Master = {
                 $('#editRulesModal').find('.rule_name').val(response.rule_name);
                 $('#editRulesModal #update_campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
                 $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('selected','selected');
-                $('#editRulesModal #filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
+                $('#editRulesModal #update_filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
                 $('#editRulesModal').find('.filter_value').val(response.filter_value);
                 $('#editRulesModal #update_destination_campaign option[value="'+response.destination_campaign+'"]').attr('selected','selected');
                 $('#editRulesModal #update_destination_subcampaign option[value="'+response.destination_subcampaign+'"]').attr('selected','selected');
@@ -328,8 +328,6 @@ var Master = {
             update_destination_subcampaign = $('.update_rule #update_destination_subcampaign').val(),
             lead_rule_id = $('.update_rule #lead_rule_id').val()
         ;
-
-        console.log(lead_rule_id);
 
         $.ajaxSetup({
             headers: {
