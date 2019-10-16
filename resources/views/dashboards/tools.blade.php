@@ -47,7 +47,7 @@
 								
 								<div class="form-group">
             						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_campaign", $campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+            						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
             					</div>
 
             					<div class="form-group">
@@ -147,13 +147,13 @@
 					</div>
 					
 					<div class="form-group">
-						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-						{!! Form::select("destination_campaign[]", $campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+						{!! Form::label('update_destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
+						{!! Form::select("update_destination_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
 					</div>
 
 					<div class="form-group">
-						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-						{!! Form::select("destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
+						{!! Form::label('update_destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+						{!! Form::select("update_destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
 					</div>
 					
 					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}

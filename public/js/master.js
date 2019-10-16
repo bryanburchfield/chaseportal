@@ -49,7 +49,7 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select, .add_rule #campaign_select, #update_campaign_select').on('change', this.get_subcampaigns); 
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select, .add_rule #campaign_select, #update_campaign_select, #update_destination_campaign, #destination_campaign').on('change', this.get_subcampaigns); 
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -304,7 +304,7 @@ var Master = {
                 $('#editRulesModal #campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
                 $('#editRulesModal #subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('selected','selected');
                 $('#editRulesModal #filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
-                $('#editRulesModal').find('.filter_days').val(response.filter_value);
+                $('#editRulesModal').find('.filter_value').val(response.filter_value);
                 $('#editRulesModal #campaign_select_destination option[value="'+response.destination_campaign+'"]').attr('selected','selected');
             }
         });
@@ -841,10 +841,12 @@ var Master = {
 
 	get_subcampaigns:function(e){
 		var campaign;
-//update_campaign_select
+
 		$(this).find('option:selected').each(function() {
 		    campaign = $(this).val();
 		});
+
+        var source = $(this).attr('id');
 
 		if($('#subcampaign_select').length){
 			e.preventDefault();
@@ -856,8 +858,6 @@ var Master = {
 			    }
 			});
 
-            console.log(campaign);
-
 			$.ajax({
 				url: '/dashboards/tools/get_subcampaigns' ,
 				type: 'POST',
@@ -868,16 +868,26 @@ var Master = {
 				},
 
 				success:function(response){
-                    console.log(response);
 
-					$('#subcampaign_select').empty();
-					
-					var subcampaigns='<option value""> Select One</option>';
-					for(var i=0; i<response.subcampaigns.length;i++){
-						subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-					}
+                    if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
+                        $('#'+source).parent().next().find('select').empty();
+                        
+                        var subcampaigns='<option value""> Select One</option>';
+                        for(var i=0; i<response.subcampaigns.length;i++){
+                            subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                        }
 
-					$('#subcampaign_select').append(subcampaigns);
+                        $('#'+source).parent().next().find('select').append(subcampaigns);
+                    }else{
+                        $('#subcampaign_select').empty();
+                        
+                        var subcampaigns='<option value""> Select One</option>';
+                        for(var i=0; i<response.subcampaigns.length;i++){
+                            subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                        }
+
+                        $('#subcampaign_select').append(subcampaigns);
+                    }
 				}
 			});
 		}
