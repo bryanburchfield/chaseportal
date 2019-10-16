@@ -47,8 +47,6 @@ class LeadsController extends Controller
 
     public function createRule(AddLeadFilterRule $request)
     {
-        $validated = $request->validated();
-
         $lr = new LeadRule();
         $lr->fill($request->all());
         $lr->group_id = Auth::user()->group_id;
