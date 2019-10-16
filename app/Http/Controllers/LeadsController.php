@@ -9,6 +9,7 @@ use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +22,7 @@ class LeadsController extends Controller
 
     public function rules(Request $request)
     {
-        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)->get();
+        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)->OrderBy('rule_name')->get();
         $campaigns = $this->getAllCampaigns();
 
         $page = [
