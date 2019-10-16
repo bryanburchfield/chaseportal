@@ -21,8 +21,8 @@
 	                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
 
 	                            <div class="form-group">
-	                            	{!! Form::label('name', 'Rule Name') !!}
-	                            	{!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
+	                            	{!! Form::label('rule_name', 'Rule Name') !!}
+	                            	{!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
 	                            </div>
 								
 	                            <div class="form-group">
@@ -85,7 +85,7 @@
 
 	                            @foreach($lead_rules as $lr)
 									<tr data-ruleid="{{$lr->id}}">
-										<td>{{$lr->name}}</td>
+										<td>{{$lr->rule_name}}</td>
 										<td>{{$lr->source_campaign}}</td>
 										<td>{{$lr->source_subcampaign}}</td>
 										<td>{{$lr->filter_type}}</td>
@@ -122,18 +122,18 @@
         		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/update_rule', 'class'=>'form mt20 update_rule']) !!}
 
                     <div class="form-group">
-                    	{!! Form::label('name', 'Rule Name') !!}
-                    	{!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
+                    	{!! Form::label('rule_name', 'Rule Name') !!}
+                    	{!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
                     </div>
 					
                     <div class="form-group">
 						{!! Form::label('source_campaign', 'Campaigns') !!}
-						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
 					</div>
 
                     <div class="form-group">
 						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
 					</div>
 
 					<div class="form-group">

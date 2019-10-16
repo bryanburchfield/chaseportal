@@ -10,6 +10,7 @@ class LeadRule extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'rule_name',
         'source_campaign',
         'source_subcampaign',
         'filter_type',
