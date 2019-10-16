@@ -32,7 +32,7 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select', 'required'=>true]) !!}
+            						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
@@ -52,7 +52,7 @@
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign', 'required'=>true]) !!}
+            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
             					</div>
 								
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
@@ -133,7 +133,7 @@
 
                     <div class="form-group">
 						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select', 'required'=>true]) !!}
+						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
 					</div>
 
 					<div class="form-group">
@@ -153,7 +153,7 @@
 
 					<div class="form-group">
 						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-						{!! Form::select("destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'destination_subcampaign', 'required'=>true]) !!}
+						{!! Form::select("destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
 					</div>
 					
 					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
