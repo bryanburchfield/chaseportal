@@ -60,7 +60,7 @@
     							@if($errors->any())
                                     <div class="alert alert-danger mt20">
                                         @foreach($errors->all() as $e)
-                                            {{ $e }}
+                                            <li>{{ $e }}</li>
                                         @endforeach
                                     </div>
     							@endif
@@ -125,7 +125,7 @@
             </div>
             <div class="modal-body">
 
-        		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/update_rule', 'class'=>'form mt20 update_rule']) !!}
+        		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools//update_rule', 'class'=>'form mt20 update_rule']) !!}
 
                     <div class="form-group">
                     	{!! Form::label('rule_name', 'Rule Name') !!}
@@ -161,6 +161,8 @@
 						{!! Form::label('update_destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
 						{!! Form::select("update_destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
 					</div>
+
+					{!! Form::hidden('lead_rule_id', null, ['id'=>'lead_rule_id']) !!}
 					
 					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
 					

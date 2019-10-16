@@ -306,6 +306,8 @@ var Master = {
                 $('#editRulesModal #filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
                 $('#editRulesModal').find('.filter_value').val(response.filter_value);
                 $('#editRulesModal #campaign_select_destination option[value="'+response.destination_campaign+'"]').attr('selected','selected');
+
+                $('#editRulesModal').find('#lead_rule_id').val(id);
             }
         });
     },
@@ -322,7 +324,7 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/update_rule',
+            url: 'tools/update_rule',
             type: 'POST',
             dataType: 'json',
             data: {form_data:form_data},
@@ -869,23 +871,17 @@ var Master = {
 
 				success:function(response){
 
+                    var subcampaigns='<option value=""> Select One</option>';
+                    for(var i=0; i<response.subcampaigns.length;i++){
+                        subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                    }
+
                     if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
                         $('#'+source).parent().next().find('select').empty();
-                        
-                        var subcampaigns='<option value""> Select One</option>';
-                        for(var i=0; i<response.subcampaigns.length;i++){
-                            subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-                        }
 
                         $('#'+source).parent().next().find('select').append(subcampaigns);
                     }else{
                         $('#subcampaign_select').empty();
-                        
-                        var subcampaigns='<option value""> Select One</option>';
-                        for(var i=0; i<response.subcampaigns.length;i++){
-                            subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-                        }
-
                         $('#subcampaign_select').append(subcampaigns);
                     }
 				}
