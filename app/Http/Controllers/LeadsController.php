@@ -47,10 +47,22 @@ class LeadsController extends Controller
     public function createRule(Request $request)
     {
 
-        $lr = new LeadRule();
-        $lr->fill($request->all());
-        $lr->group_id = Auth::user()->group_id;
-        $lr->save();
+        /// check if lead rule name exists
+        $lr_exists = LeadRule::where('rule_name', $request->rule_name)->first();
+
+        if(!$lr_exists){
+            $lr = new LeadRule();
+            $lr->fill($request->all());
+            $lr->group_id = Auth::user()->group_id;
+            $lr->save();
+            return view('dashboards.tools');
+        }else{
+            $data = [
+                'errors' => $errors
+            ];
+            return view('dashboards.tools')->with($data);
+        }
+        
     }
 
     public function updateRule(Request $request)
