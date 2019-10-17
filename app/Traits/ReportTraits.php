@@ -145,6 +145,16 @@ trait ReportTraits
         ];
     }
 
+    private function dateRange($start, $end)
+    {
+        $tz = Auth::user()->getIanaTz();
+
+        $fromDate = localToUtc($start, $tz);
+        $toDate = localToUtc($end, $tz);
+
+        return [$fromDate, $toDate];
+    }
+
     private function checkPageFilters(Request $request)
     {
         $this->errors = new MessageBag();
