@@ -40,9 +40,22 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
-    public function getLeadRule(Request $request)
-    {
-        return LeadRule::find($request->id);
+    public function getLeadRule($id)
+    {   
+
+        $lr = LeadRule::find($id);
+        $campaigns = $this->getAllCampaigns();
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+        $data = [
+            'lead_rule' => $lr,
+            'page' => $page,
+            'campaigns' => $campaigns
+        ];
+        return view('dashboards.tools_edit_rule')->with($data);
     }
 
     public function createRule(AddLeadFilterRule $request)
@@ -60,6 +73,7 @@ class LeadsController extends Controller
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
+        
         $lr = LeadRule::find($request->id);
         $lr->fill($request->all());
 
@@ -67,7 +81,9 @@ class LeadsController extends Controller
             $lr->delete();
             return $this->createRule($request);
         }
-        return redirect()->back();
+
+        return $this->rules();
+        
     }
 
     public function deleteRule(Request $request)
