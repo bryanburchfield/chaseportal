@@ -88,7 +88,7 @@ class LeadsController extends Controller
 
     public function deleteRule(Request $request)
     {
-        LeadRule::findOrFail($request->id)->delete();
+        LeadRule::find($request->id)->delete();
         return redirect()->back();
     }
 
