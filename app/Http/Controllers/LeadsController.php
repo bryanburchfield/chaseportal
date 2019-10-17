@@ -19,9 +19,12 @@ class LeadsController extends Controller
 
     protected $db;
 
-    public function rules(Request $request)
+    public function rules()
     {
-        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)->OrderBy('rule_name')->get();
+        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)
+            ->OrderBy('rule_name')
+            ->get();
+
         $campaigns = $this->getAllCampaigns();
 
         $page = [
@@ -40,10 +43,12 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
-    public function getLeadRule($id)
-    {   
+    public function editLeadRule(Request $request)
+    {
+        $lr = LeadRule::where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
 
-        $lr = LeadRule::find($id);
         $campaigns = $this->getAllCampaigns();
 
         $page = [
@@ -55,6 +60,7 @@ class LeadsController extends Controller
             'page' => $page,
             'campaigns' => $campaigns
         ];
+
         return view('dashboards.tools_edit_rule')->with($data);
     }
 
@@ -66,14 +72,14 @@ class LeadsController extends Controller
         $lr->active = true;
         $lr->save();
 
-        return redirect()->back();
+        return $this->rules();
     }
 
     public function updateRule(AddLeadFilterRule $request)
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
-        
+
         $lr = LeadRule::find($request->id);
         $lr->fill($request->all());
 
@@ -83,7 +89,6 @@ class LeadsController extends Controller
         }
 
         return $this->rules();
-        
     }
 
     public function deleteRule(Request $request)
