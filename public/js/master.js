@@ -68,7 +68,7 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
-        $('.edit_rules').on('click', this.populate_leadrule_modal);
+        // $('.edit_rules').on('click', this.populate_leadrule_modal);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
 	},
 
@@ -282,7 +282,60 @@ var Master = {
         }
     },
 
+    get_subcampaigns:function(e, campaign=0, source=0){
+        
+        if(!campaign){
+            e.preventDefault();
+            $(this).find('option:selected').each(function() {
+                campaign = $(this).val();
+            });
+        }
+
+        if(!source){
+            var source = $(this).attr('id');
+        }
+
+        if($('#subcampaign_select').length){
+            console.log(source);
+            // e.preventDefault();
+            var report = $('form.report_filter_form').attr('id');
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/dashboards/tools/get_subcampaigns' ,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    report:report,
+                    campaign: campaign,
+                },
+
+                success:function(response){
+
+                    var subcampaigns='<option value=""> Select One</option>';
+                    for(var i=0; i<response.subcampaigns.length;i++){
+                        subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                    }
+
+                    if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
+                        $('#'+source).parent().next().find('select').empty();
+                        $('#'+source).parent().next().find('select').append(subcampaigns);
+                    }else{
+                        $('#subcampaign_select').empty();
+                        $('#subcampaign_select').append(subcampaigns);
+                    }
+                }
+            });
+        }
+    },
+
     populate_leadrule_modal:function(){
+        $('#editRulesModal').find('.alert').remove();
 
         var id = $(this).parent().parent().data('ruleid');
 
@@ -298,17 +351,21 @@ var Master = {
             dataType: 'json',
             data: {id:id},
             success:function(response){
+                console.log(response);
 
                 Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
+                Master.get_subcampaigns($(this), response.destination_campaign, 'update_destination_campaign');
 
                 $('#editRulesModal').find('.rule_name').val(response.rule_name);
                 $('#editRulesModal #update_campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
-                $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('selected','selected');
+                
+                $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('defaultSelected','selected');
+
                 $('#editRulesModal #update_filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
                 $('#editRulesModal').find('.filter_value').val(response.filter_value);
                 $('#editRulesModal #update_destination_campaign option[value="'+response.destination_campaign+'"]').attr('selected','selected');
                 $('#editRulesModal #update_destination_subcampaign option[value="'+response.destination_subcampaign+'"]').attr('selected','selected');
-
+                $('#editRulesModal #update_subcampaign_select').val(response.source_subcampaign)
                 $('#editRulesModal').find('#lead_rule_id').val(id);
             }
         });
@@ -880,60 +937,6 @@ var Master = {
 	    }
 
 	    return chart_colors_array;
-	},
-
-	get_subcampaigns:function(e, campaign=0, source=0){
-        
-        
-        if(!campaign){
-            e.preventDefault();
-            $(this).find('option:selected').each(function() {
-                campaign = $(this).val();
-            });
-        }
-
-        if(!source){
-            var source = $(this).attr('id');
-        }
-
-		if($('#subcampaign_select').length){
-            console.log(source);
-			// e.preventDefault();
-			var report = $('form.report_filter_form').attr('id');
-
-			$.ajaxSetup({
-			    headers: {
-			        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-			    }
-			});
-
-			$.ajax({
-				url: '/dashboards/tools/get_subcampaigns' ,
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					report:report,
-					campaign: campaign,
-				},
-
-				success:function(response){
-
-                    var subcampaigns='<option value=""> Select One</option>';
-                    for(var i=0; i<response.subcampaigns.length;i++){
-                        subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-                    }
-
-                    if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
-                        $('#'+source).parent().next().find('select').empty();
-
-                        $('#'+source).parent().next().find('select').append(subcampaigns);
-                    }else{
-                        $('#subcampaign_select').empty();
-                        $('#subcampaign_select').append(subcampaigns);
-                    }
-				}
-			});
-		}
 	},
 
 	// add global user

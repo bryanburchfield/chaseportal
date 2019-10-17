@@ -15,13 +15,14 @@ Route::prefix('dashboards')->group(function () {
         // Tools (lead filters for now)
         Route::get('tools', 'LeadsController@rules');
         Route::post('tools', 'LeadsController@createRule');
+        Route::get('tools/edit_rule/{id}', 'LeadsController@getLeadRule');
+        Route::post('tools/update_rule', 'LeadsController@updateRule');
 
         // Ajax
-        Route::post('tools/update_rule', 'LeadsController@updateRule');
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
         Route::post('tools/get_campaigns', 'LeadsController@getCampaigns');
         Route::post('tools/get_subcampaigns', 'LeadsController@getSubcampaigns');
-        Route::post('tools/get_lead_rule', 'LeadsController@getLeadRule');
+        // Route::post('tools/get_lead_rule', 'LeadsController@getLeadRule');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

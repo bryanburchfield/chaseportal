@@ -99,7 +99,7 @@
 										<td>{{$lr->destination_campaign}}</td>
 										<td>{{$lr->destination_subcampaign}}</td>
 										<td>{{$lr->description}}</td>
-										<td><a data-toggle="modal" data-target="#editRulesModal" class="edit_rules" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td>
+										<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td>
 	                            @endforeach
 
 								</tbody>
