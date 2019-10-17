@@ -56,7 +56,7 @@
             						{!! Form::select("destination_subcampaign",  [null=>'Select One'], $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
             					</div>
 
-            					{!! Form::hidden('lead_rule_id', $lead_rule['id'], ['id'=>'lead_rule_id']) !!}
+            					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
 								
 								{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0'] ) !!}
 								
