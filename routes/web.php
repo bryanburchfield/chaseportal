@@ -4,10 +4,7 @@
 Route::redirect('/raw', '/raw');
 
 // Redirect root to /dashboards
-Route::get('/', function () {
-    // phpinfo();
-    return redirect('dashboards');
-});
+Route::redirect('/', '/dashboards');
 
 // This is for user logins
 Auth::routes(['register' => false]);

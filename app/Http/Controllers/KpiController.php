@@ -106,8 +106,6 @@ class KpiController extends Controller
             ->where('id', $request->recipient_id)
             ->firstOrFail();
 
-        $validated = $request->validated();
-
         $recipient->email = $request->email;
         $recipient->name = $request->name;
         $recipient->phone = $this->formatPhone($request->phone);
@@ -171,8 +169,6 @@ class KpiController extends Controller
      */
     public function addRecipient(AddRecipient $request)
     {
-        $validated = $request->validated();
-
         $recipient = new Recipient();
 
         $recipient->group_id = Auth::user()->group_id;
