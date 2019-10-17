@@ -7,7 +7,6 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        // Route::get('/', 'MasterDashController@index');
         Route::redirect('/', 'dashboards/admindashboard');
         Route::get('/admindashboard', 'MasterDashController@adminDashboard');
         Route::get('/adminoutbounddashboard', 'MasterDashController@adminOutboundDashboard');
