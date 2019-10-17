@@ -8,13 +8,9 @@
         <li <?php echo $page['menuitem'] == 'admindash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@adminDashboard') }}"><i class="fas fa-sign-in-alt"></i>Admin Inbound</a></li>
         <li <?php echo $page['menuitem'] == 'adminoutbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@adminOutboundDashboard') }}"><i class="fas fa-sign-out-alt"></i>Admin Outbound</a></li>
 
-        <?php
-          if(Auth::user()->email != 'btmarketing@chasedatacorp.com'){
-        ?>
+        @if(Auth::user()->email != 'btmarketing@chasedatacorp.com')
           <li {!! $page['menuitem'] == 'trenddash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@trendDashboard') }}"><i class="fas fa-chart-area"></i>Trend Dashboard</a></li>
-        <?php
-          }
-        ?>
+        @endif
 
         <li {!! $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@leaderDashboard') }}"><i class="fas fa-trophy"></i>Leadboard</a></li>
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@kpi') }}"><i class="fas fa-paper-plane"></i>KPIs</a></li>
