@@ -27,12 +27,12 @@
 	                            </div>
 								
 	                            <div class="form-group">
-            						{!! Form::label('source_campaign', 'Campaigns') !!}
+            						{!! Form::label('source_campaign', 'Campaign') !!}
             						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
             					</div>
 
 	                            <div class="form-group">
-            						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
+            						{!! Form::label('source_subcampaign', 'Sub Campaign') !!}
             						{!! Form::select("source_subcampaign", [null=>'Select One']+ $subcampaigns, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
             					</div>
 
@@ -54,6 +54,11 @@
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
             						{!! Form::select("destination_subcampaign",  [null=>'Select One'] + $destination_subcampaigns, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
+            					</div>
+
+            					<div class="form-group">
+            						{!! Form::label('description', 'Description') !!}
+            						{!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}

@@ -99,7 +99,7 @@ class LeadsController extends Controller
     public function deleteRule(Request $request)
     {
         LeadRule::find($request->id)->delete();
-        return redirect()->back();
+        return $this->rules();
     }
 
     public function getCampaigns(Request $request)

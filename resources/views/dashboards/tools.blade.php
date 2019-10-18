@@ -54,6 +54,11 @@
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
             						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
             					</div>
+
+            					<div class="form-group">
+            						{!! Form::label('description', 'Description') !!}
+            						{!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
+            					</div>
 								
 								{!! Form::submit('Add Rule', ['class'=>'btn btn-primary mb0'] ) !!}
 								
@@ -82,8 +87,8 @@
 	                            	    <th>Filter Value</th>
 	                            	    <th>Destination Campaign</th>
 	                            	    <th>Destination SubCampaign</th>
-	                            	    <th>Description</th>
 	                            	    <th>Edit</th>
+	                            	    <th>Delete</th>
 	                            	</tr>
 	                            </thead>
 
@@ -98,8 +103,8 @@
 										<td>{{$lr->filter_value}}</td>
 										<td>{{$lr->destination_campaign}}</td>
 										<td>{{$lr->destination_subcampaign}}</td>
-										<td>{{$lr->description}}</td>
-										<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-edit"></i></a></td>
+										<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
+										<td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
 	                            @endforeach
 
 								</tbody>
@@ -115,61 +120,24 @@
 
 @include('shared.reportmodal')
 
-<!-- Edit Rules Modal -->
-<div class="modal fade" id="editRulesModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+<!-- Delete Recipient Modal -->
+<div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editModalLabel">Edit Rule</h4>
+                <h4 class="modal-title" id="myModalLabel">Delete Rule</h4>
             </div>
             <div class="modal-body">
-
-        		{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools/update_rule', 'class'=>'form mt20 update_rule']) !!}
-
-                    <div class="form-group">
-                    	{!! Form::label('rule_name', 'Rule Name') !!}
-                    	{!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
-                    </div>
-					
-                    <div class="form-group">
-						{!! Form::label('source_campaign', 'Campaigns') !!}
-						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
-					</div>
-
-                    <div class="form-group">
-						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
-					</div>
-
-					<div class="form-group">
-						{!! Form::label('filter_type', 'Filter Type') !!}
-						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
-					</div>
-					
-					<div class="form-group">
-						{!! Form::label('filter_value', 'Days to Filter By') !!}
-						{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
-					</div>
-					
-					<div class="form-group">
-						{!! Form::label('update_destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-						{!! Form::select("update_destination_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
-					</div>
-
-					<div class="form-group">
-						{!! Form::label('update_destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-						{!! Form::select("update_destination_subcampaign", [null=>'Select One'],  null, ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
-					</div>
-
-					{!! Form::hidden('lead_rule_id', null, ['id'=>'lead_rule_id']) !!}
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0 save_leadrule_update'] ) !!}
-					
-                    <div class="alert alert-danger mt20 hidetilloaded"></div>
-                {!! Form::close() !!}
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
+               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
             </div>
-	    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger delete_rule">Delete Rule</button>
+        </div>
+    </div>
     </div>
 </div>
 

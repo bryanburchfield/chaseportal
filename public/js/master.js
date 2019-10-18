@@ -42,7 +42,7 @@ var Master = {
 		$('.edit_user').on('submit', this.edit_user);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
-		$('.users table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
+		$('.users table tbody, .rules_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
 		$('.pag').on('click', '.pagination li a', this.click_pag_btn);
@@ -70,6 +70,7 @@ var Master = {
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         // $('.edit_rules').on('click', this.populate_leadrule_modal);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
+        $('.delete_rule').on('click', this.delete_rule);
 	},
 
     return_chart_colors_hash:function(reps){
@@ -430,6 +431,54 @@ var Master = {
                 }    
             }
         });
+    },
+
+    delete_rule:function(e){
+        e.preventDefault();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        var lead_rule_id = $('.user_id').val();
+
+        $.ajax({
+            url: 'delete_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                
+                id:lead_rule_id
+            },
+
+            success:function(response){
+                console.log(response);
+            },
+            error :function( data ) {
+
+                console.log(data);
+                // if( data.status === 422 ) {
+                //     var errors = $.parseJSON(data.responseText);
+                //     $.each(errors, function (key, value) {
+
+                //         if($.isPlainObject(value)) {
+                //             $.each(value, function (key, value) {                       
+                //                 $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
+                //             });
+                //         }else{
+                //             $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
+                //         }
+                //     });
+
+                //     $('#editRulesModal form .alert li').first().remove();
+                // }else{
+                //     window.location.href = 'tools';
+                // }    
+            }
+        });
+
     },
 
     // ran after submit is clicked in the interaction menu, after filter_campaign()
@@ -1080,14 +1129,14 @@ var Master = {
 		});
 	},
 
+    /// Delete user and delete lead rule modals
 	pass_user_removemodal:function(){
-		
 		var id = $(this).data('user');
 		var name = $(this).data('name');
 
-		$('#deleteUserModal .user_id').val(id);
-		$('#deleteUserModal .name').val(name);
-		$('#deleteUserModal .username').html(name);
+		$('#deleteUserModal .user_id, #deleteRuleModal .user_id').val(id);
+		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
+		$('#deleteUserModal .username, #deleteRuleModal .username').html(name);
 	},
 
 	pass_user_linkmodal:function(){
