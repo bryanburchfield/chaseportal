@@ -1125,7 +1125,7 @@ class AdminDashController extends Controller
             FROM [$db].[dbo].[DialingResults] DR
             WITH (INDEX(IX_Billing))
             WHERE CallType IN (1,11)
-            AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
+            AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','CR_HANGUP','Inbound Voicemail')
             AND HoldTime >= 0
             AND Duration > 0
             AND DR.Date >= :fromdate$i
