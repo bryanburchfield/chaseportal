@@ -291,14 +291,8 @@ var Master = {
                 campaign = $(this).val();
             });
         }
-        console.log(campaign);
 
-        if(!source){
-            var source = $(this).attr('id');
-        }
-
-        console.log(source);
-        // e.preventDefault();
+        if(!source){var source = $(this).attr('id');}
         var report = $('form.report_filter_form').attr('id');
 
         $.ajaxSetup({
@@ -317,7 +311,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -451,10 +445,10 @@ var Master = {
             }
         });
 
-        var lead_rule_id = $('.user_id').val();
+        var lead_rule_id = $('.rule_id').val();
 
         $.ajax({
-            url: 'tools/delete_rule',
+            url: '/dashboards/tools/delete_rule',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -1124,9 +1118,9 @@ var Master = {
 		var id = $(this).data('user');
 		var name = $(this).data('name');
 
-		$('#deleteUserModal .user_id, #deleteRuleModal .user_id').val(id);
+		$('#deleteUserModal .user_id, #deleteRuleModal .rule_id').val(id);
 		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
-		$('#deleteUserModal .username, #deleteRuleModal .username').html(name);
+		$('#deleteUserModal .username, #deleteRuleModal .rule_name').html(name);
 	},
 
 	pass_user_linkmodal:function(){

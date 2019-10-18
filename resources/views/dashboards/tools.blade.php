@@ -78,37 +78,40 @@
 	                        <h2 class="page_heading"><i class="fa fa-cog"></i> Rules</h2>
 
 	                        <table class="table table-responsive rules_table mt20">
-	                            <thead>
-	                            	<tr>
-	                            	    <th>Name</th>
-	                            	    <th>Campaigns</th>
-	                            	    <th>SubCampaigns</th>
-	                            	    <th>Filter Type</th>
-	                            	    <th>Filter Value</th>
-	                            	    <th>Destination Campaign</th>
-	                            	    <th>Destination SubCampaign</th>
-	                            	    <th>Edit</th>
-	                            	    <th>Delete</th>
-	                            	</tr>
-	                            </thead>
+
+	                        	@if(!count($lead_rules))
+									<div class="alert alert-info">No Rules have been added yet</div>
+								@else
+		                            <thead>
+		                            	<tr>
+		                            	    <th>Name</th>
+		                            	    <th>Campaigns</th>
+		                            	    <th>SubCampaigns</th>
+		                            	    <th>Filter Type</th>
+		                            	    <th>Filter Value</th>
+		                            	    <th>Destination Campaign</th>
+		                            	    <th>Destination SubCampaign</th>
+		                            	    <th>Edit</th>
+		                            	    <th>Delete</th>
+		                            	</tr>
+		                            </thead>
+		                        @endif
 
 								<tbody>
-
-	                            @foreach($lead_rules as $lr)
-									<tr data-ruleid="{{$lr->id}}">
-										<td>{{$lr->rule_name}}</td>
-										<td>{{$lr->source_campaign}}</td>
-										<td>{{$lr->source_subcampaign}}</td>
-										<td>{{$lr->filter_type}}</td>
-										<td>{{$lr->filter_value}}</td>
-										<td>{{$lr->destination_campaign}}</td>
-										<td>{{$lr->destination_subcampaign}}</td>
-										<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
-										<td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
-	                            @endforeach
-
+																
+		                            @foreach($lead_rules as $lr)
+										<tr data-ruleid="{{$lr->id}}">
+											<td>{{$lr->rule_name}}</td>
+											<td>{{$lr->source_campaign}}</td>
+											<td>{{$lr->source_subcampaign}}</td>
+											<td>{{$lr->filter_type}}</td>
+											<td>{{$lr->filter_value}}</td>
+											<td>{{$lr->destination_campaign}}</td>
+											<td>{{$lr->destination_subcampaign}}</td>
+											<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
+											<td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
+		                            @endforeach	                            
 								</tbody>
-
 	                        </table>
 	                    </div>
 	                </div>
@@ -129,9 +132,9 @@
                 <h4 class="modal-title" id="myModalLabel">Delete Rule</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="rule_id" name="rule_id" value="">
                 <input type="hidden" class="name" name="name" value="">
-               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
+               <h3>Are you sure you want to delete <span class="rule_name"></span>?</h3>
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
