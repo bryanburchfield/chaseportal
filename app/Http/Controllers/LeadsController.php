@@ -51,6 +51,8 @@ class LeadsController extends Controller
 
         $campaigns = $this->getAllCampaigns();
 
+        $subcampaigns = $this->getSubcampaigns($lr['source_campaign']);
+
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
@@ -58,7 +60,8 @@ class LeadsController extends Controller
         $data = [
             'lead_rule' => $lr,
             'page' => $page,
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
+            'subcampaigns' => $subcampaigns
         ];
 
         return view('dashboards.tools_edit_rule')->with($data);

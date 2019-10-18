@@ -28,32 +28,32 @@
 								
 	                            <div class="form-group">
             						{!! Form::label('source_campaign', 'Campaigns') !!}
-            						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+            						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
             					</div>
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One'], $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::select("source_subcampaign", [null=>'Select One'], $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('filter_type', 'Filter Type') !!}
-            						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+            						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
             					</div>
 								
 								<div class="form-group">
 									{!! Form::label('filter_value', 'Days to Filter By') !!}
-									{!! Form::text('filter_value', $lead_rule['filter_value'], ['class'=>'form-control filter_value', 'required'=>true]) !!}
+									{!! Form::text('filter_value', $lead_rule['filter_value'], ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
 								</div>
 								
 								<div class="form-group">
             						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+            						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
+            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
@@ -80,3 +80,4 @@
 @include('shared.reportmodal')
 
 @endsection
+
