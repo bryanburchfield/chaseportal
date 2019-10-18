@@ -50,9 +50,8 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             LeadMoveService::runMove();
         })
-            // ->dailyAt('6:30')
-            ->everyMinute()
-            // ->runInBackground()
+            ->dailyAt('6:30')
+            ->runInBackground()
             ->timezone('America/New_York');
     }
 
