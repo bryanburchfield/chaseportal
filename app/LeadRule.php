@@ -20,4 +20,9 @@ class LeadRule extends Model
         'description',
         'active'
     ];
+
+    public function leadMoves()
+    {
+        return $this->hasMany('App\LeadMove');
+    }
 }

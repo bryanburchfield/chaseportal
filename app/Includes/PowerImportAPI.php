@@ -15,12 +15,12 @@ namespace App\Includes;
 class PowerImportAPI
 {
     // Crypto system parameters
-    private $p = PIAPI_p;
-    private $q = PIAPI_q;
-    private $b = PIAPI_b;
+    private $p;
+    private $q;
+    private $b;
 
     // Secret key.
-    private $a = PIAPI_a;
+    private $a;
 
     private $server = "";
     private $error  = "";
@@ -28,6 +28,11 @@ class PowerImportAPI
 
     public function __construct($ip)
     {
+        $this->a = config('services.powerapi.a');
+        $this->b = config('services.powerapi.b');
+        $this->p = config('services.powerapi.p');
+        $this->q = config('services.powerapi.q');
+
         $this->server = $ip;
 
         $v = bcpowmod($this->b, $this->a, $this->p);
@@ -420,15 +425,8 @@ class PowerImportAPI
             $signature["e"] == "" || $signature["e"] == "0" ||
             $signature["y"] == "" || $signature["y"] == "0"
         ) {
-            // try to re-sign again.
-            $signature = $this->sign($hash);
-        }
-
-        if (
-            $signature["e"] == "" || $signature["e"] == "0" ||
-            $signature["y"] == "" || $signature["y"] == "0"
-        )
             return $this->SetErrorAndExit("Signing message error. Please, contact support");
+        }
 
         $dataArray["[action]"]   = $action;
         $dataArray["[e]"]        = $signature["e"];
@@ -451,15 +449,8 @@ class PowerImportAPI
             $signature["e"] == "" || $signature["e"] == "0" ||
             $signature["y"] == "" || $signature["y"] == "0"
         ) {
-            // try to re-sign again.
-            $signature = $this->sign($hash);
-        }
-
-        if (
-            $signature["e"] == "" || $signature["e"] == "0" ||
-            $signature["y"] == "" || $signature["y"] == "0"
-        )
             return $this->SetErrorAndExit("Signing message error. Please, contact support");
+        }
 
         $dataArray["[action]"]   = $action;
         $dataArray["[e]"]        = $signature["e"];
