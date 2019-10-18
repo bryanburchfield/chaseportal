@@ -44,4 +44,11 @@ return [
         ],
     ],
 
+    'powerapi' => [
+        'a' => env('PIAPI_a'),
+        'b' => env('PIAPI_b'),
+        'p' => env('PIAPI_p'),
+        'q' => env('PIAPI_q'),
+    ],
+
 ];

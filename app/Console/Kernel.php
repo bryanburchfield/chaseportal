@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
+use App\Services\LeadMoveService;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // Run KPIs
         $schedule->call(function () {
             foreach (KpiController::cronDue() as $rec) {
                 KpiController::cronRun($rec);
@@ -34,6 +36,7 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->runInBackground();
 
+        // Run Automated Reports
         $schedule->call(function () {
             foreach (ReportController::cronDue() as $rec) {
                 ReportController::cronRun($rec);
@@ -42,6 +45,14 @@ class Kernel extends ConsoleKernel
             ->dailyAt('6:00')
             ->timezone('America/New_York')
             ->runInBackground();
+
+        // Run Lead Moves
+        $schedule->call(function () {
+            LeadMoveService::runMove();
+        })
+            ->dailyAt('6:30')
+            ->runInBackground()
+            ->timezone('America/New_York');
     }
 
     /**
