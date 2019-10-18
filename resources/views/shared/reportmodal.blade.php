@@ -13,79 +13,45 @@
 
             {!! Form::open(['method'=>'POST', 'action'=> 'MasterDashController@showReport' ]) !!}
             <div class="modal-body">
-               <div class="col-sm-6 nopad">
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="call_details">Call Details</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_analysis">Agent Analysis</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_summary">Agent Summary</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_summary_campaign">Agent Summary By Camp</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_summary_subcampaign">Agent Summary By Sub</label>
-                   </div>
-                   <br>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_pause_time">Agent Pause Time</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_activity">Agent Activity</label>
-                   </div>
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="agent_timesheet">Agent Time Sheet</label>
-                   </div>
-                   
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="campaign_usage">Campaign Usage</label>
-                   </div>
 
-                   <div class="radio">
-                       <label><input type="radio" name="report_option" class="report_option" value="caller_id">Caller ID Tracking</label>
-                   </div>
-               </div>
+                @php
 
-                <div class="col-sm-6 nopad">
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="inbound_summary">Inbound Summary</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="campaign_summary">Campaign Summary</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="subcampaign_summary">Subcampaign Summary</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="campaign_call_log">Campaign Call Log</label>
-                    </div>
+                $reports = [
+                    'call_details' => 'Call Details',
+                    'agent_analysis' => 'Agent Analysis',
+                    'agent_summary' => 'Agent Summary',
+                    'agent_summary_campaign' => 'Agent Summary By Camp',
+                    'agent_summary_subcampaign' => 'Agent Summary By Sub',
+                    'agent_pause_time' => 'Agent Pause Time',
+                    'agent_activity' => 'Agent Activity',
+                    'agent_timesheet' => 'Agent Time Sheet',
+                    'campaign_usage' => 'Campaign Usage',
+                    'caller_id' => 'Caller ID Tracking',
+                    'inbound_summary' => 'Inbound Summary',
+                    'campaign_summary' => 'Campaign Summary',
+                    'subcampaign_summary' => 'Subcampaign Summary',
+                    'campaign_call_log' => 'Campaign Call Log',
+                    'missed_calls' =>  'Missed Calls',
+                    'shift_report' => 'Shift Report',
+                    'production_report' => 'Production Report',
+                    'production_report_subcampaign' => 'Production By Sub',
+                    'lead_inventory' => 'Lead Inventory',
+                    'lead_inventory_sub' => 'Lead Inventory By Sub'
+                ];
 
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="missed_calls">Missed Calls</label>
-                    </div>
-                    
-                    <br>
+                asort($reports);
 
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="shift_report">Shift Report</label>
-                    </div>
-                    
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="production_report">Production Report</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="production_report_subcampaign">Production By Sub</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="lead_inventory">Lead Inventory</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="report_option" class="report_option" value="lead_inventory_sub">Lead Inventory By Sub</label>
-                    </div>
-                </div>
+                $i=0;
+                foreach($reports as $key => $value){
+                    if(!$i){echo '<div class="col-sm-6 nopad">';}
+                    if($i == count($reports) / 2 + 1){echo '<div class="col-sm-6 nopad">';}
+                    echo '<div class="radio">';
+                        echo '<label><input type="radio" name="report_option" class="report_option" value="'.$key.'">'.$value.'</label>';
+                    echo '</div>';
+                    if($i == count($reports) / 2 || $i == count($reports)){echo '</div>';}
+                    $i++;
+                }
+                @endphp
             </div>
 
             <div class="modal-footer">

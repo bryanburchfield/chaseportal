@@ -85,5 +85,11 @@
             });
         });
     </script>
+
+    @if($page['menuitem'] == 'tools')
+        <script>
+            Master.get_subcampaigns();
+        </script>
+    @endif
   </body>
 </html>

@@ -82,7 +82,7 @@ class LeadsController extends Controller
         $lr->active = true;
         $lr->save();
 
-        return $this->rules();
+        return redirect('dashboards/tools');
     }
 
     public function updateRule(AddLeadFilterRule $request)
@@ -98,7 +98,7 @@ class LeadsController extends Controller
             return $this->createRule($request);
         }
 
-        return $this->rules();
+        return redirect('dashboards/tools');
     }
 
     public function deleteRule(Request $request)

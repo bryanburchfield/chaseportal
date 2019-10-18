@@ -286,11 +286,13 @@ var Master = {
     get_subcampaigns:function(e, campaign=0, source=0){
         
         if(!campaign){
-            e.preventDefault();
+            // e.preventDefault();
             $(this).find('option:selected').each(function() {
                 campaign = $(this).val();
             });
         }
+
+        console.log(campaign);
 
         if(!source){var source = $(this).attr('id');}
         var report = $('form.report_filter_form').attr('id');
@@ -311,7 +313,7 @@ var Master = {
             },
 
             success:function(response){
-
+                console.log(response);
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';

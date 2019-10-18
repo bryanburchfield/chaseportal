@@ -18,7 +18,7 @@
         
         <li {!! $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''!!}><a class="dash" href="leaderdash"><i class="fas fa-trophy"></i>Leadboard</a></li>
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a class="dash" href="kpidash"><i class="fas fa-paper-plane"></i>KPIs</a></li>
-        <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>Reports</a></li>
+        <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a class="reports_modal_nav" href="#"><i class="fas fa-file-contract"></i>Reports</a></li>
         <li {!! $page['menuitem'] == 'tools' ? 'class="active"' : ''!!} ><a href="{{ url('dashboards/tools') }}"><i class="fas fa-tools"></i>Tools</a></li>
 
 
