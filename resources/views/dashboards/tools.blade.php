@@ -144,7 +144,5 @@
 
 @include('shared.reportmodal')
 
-
-
 @endsection
 
