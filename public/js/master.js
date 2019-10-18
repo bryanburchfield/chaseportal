@@ -68,7 +68,7 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
-        // $('.edit_rules').on('click', this.populate_leadrule_modal);
+        $('.add_rule #filter_type, .edit_rule #update_filter_type').on('change', this.change_filter_label);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
 	},
@@ -371,6 +371,15 @@ var Master = {
         });
     },
 
+    change_filter_label:function(){
+        console.log($(this).val());
+        if($(this).val() == 'lead_attempts'){
+            $(this).parent().next().find('label').html('Number of Attempts to Filter by');
+        }else{
+            $(this).parent().next().find('label').html('Days to Filter By');
+        }
+    },
+
     save_leadrule_update:function(e){
         e.preventDefault();
             
@@ -445,7 +454,7 @@ var Master = {
         var lead_rule_id = $('.user_id').val();
 
         $.ajax({
-            url: 'delete_rule',
+            url: 'tools/delete_rule',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -454,31 +463,12 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+                window.location.href = 'tools';
             },
             error :function( data ) {
-
-                console.log(data);
-                // if( data.status === 422 ) {
-                //     var errors = $.parseJSON(data.responseText);
-                //     $.each(errors, function (key, value) {
-
-                //         if($.isPlainObject(value)) {
-                //             $.each(value, function (key, value) {                       
-                //                 $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
-                //             });
-                //         }else{
-                //             $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
-                //         }
-                //     });
-
-                //     $('#editRulesModal form .alert li').first().remove();
-                // }else{
-                //     window.location.href = 'tools';
-                // }    
+                window.location.href = 'tools';
             }
         });
-
     },
 
     // ran after submit is clicked in the interaction menu, after filter_campaign()
