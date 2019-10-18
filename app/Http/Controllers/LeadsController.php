@@ -43,11 +43,16 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
-    public function editLeadRule(Request $request)
+    private function getRule($id)
     {
-        $lr = LeadRule::where('id', $request->id)
+        return LeadRule::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
+    }
+
+    public function editLeadRule(Request $request)
+    {
+        $lr = $this->getRule($request->id);
 
         $campaigns = $this->getAllCampaigns();
 
@@ -84,8 +89,8 @@ class LeadsController extends Controller
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
+        $lr = $this->getRule($request->id);
 
-        $lr = LeadRule::find($request->id);
         $lr->fill($request->all());
 
         if ($lr->isDirty()) {
@@ -98,8 +103,9 @@ class LeadsController extends Controller
 
     public function deleteRule(Request $request)
     {
-        LeadRule::find($request->id)->delete();
-        return $this->rules();
+        $lr = $this->getRule($request->id);
+
+        return $lr->delete();
     }
 
     public function getCampaigns(Request $request)
