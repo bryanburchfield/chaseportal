@@ -121,8 +121,6 @@
 	</div>
 </div>
 
-@include('shared.reportmodal')
-
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -136,13 +134,17 @@
                 <input type="hidden" class="name" name="name" value="">
                <h3>Are you sure you want to delete <span class="rule_name"></span>?</h3>
             </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger delete_rule">Delete Rule</button>
-        </div>
-    </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	            <button type="button" class="btn btn-danger delete_rule">Delete Rule</button>
+	        </div>
+	    </div>
     </div>
 </div>
+
+@include('shared.reportmodal')
+
+
 
 @endsection
 
