@@ -33,7 +33,7 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One'], $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
+            						{!! Form::select("source_subcampaign", [null=>'Select One']+ $subcampaigns, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
@@ -53,7 +53,7 @@
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
+            						{!! Form::select("destination_subcampaign",  [null=>'Select One'] + $destination_subcampaigns, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
