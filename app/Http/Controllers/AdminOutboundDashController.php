@@ -305,7 +305,8 @@ class AdminOutboundDashController extends Controller
                 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
                 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
                 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
-            AND Duration <> 0
+            AND DR.Duration <> 0
+            AND DR.Rep <> ''
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i";
