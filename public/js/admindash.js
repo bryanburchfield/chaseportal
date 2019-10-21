@@ -57,7 +57,7 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter), this.get_dispositions(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -92,7 +92,7 @@ var Dashboard = {
 
     refresh:function(datefilter){
 
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter), this.get_dispositions(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
             
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -328,74 +328,6 @@ var Dashboard = {
         });
     },
 
-    get_dispositions:function(datefilter, chartColors){
-
-        var campaign = $('.filter_campaign li ').text();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        return $.ajax({
-            async: true,
-            url: '/admindashboard/get_dispositions',
-            type: 'POST',
-            dataType: 'json',
-            data:{campaign:campaign, dateFilter:datefilter},
-            success:function(response){
-
-                console.log(response);
-
-                if(window.dispositions_chart != undefined){
-                    window.dispositions_chart.destroy();
-                }
-                
-                var response_length = response.dispos.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.dispos_count);
-
-                var dispositions_data = {
-                    datasets: [{
-                        data: response.dispos_count,
-                        backgroundColor: chart_colors_array,
-                        label: 'Dataset 1'
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.dispos
-                };
-
-                var dispositions_options={
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        enabled:true,
-                    }
-                }
-
-                var ctx = document.getElementById('dispositions_graph').getContext('2d');
-
-                window.dispositions_chart = new Chart(ctx,{
-                    type: 'doughnut',
-                    data: dispositions_data,
-                    options: dispositions_options
-                });
-
-            },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#dispositions_graph');
-                Dashboard.display_error(div, textStatus, errorThrown);
-            }
-        });        
-    },
-
     // agent call count & agent call time pie graphs
     agent_call_count:function(datefilter, chartColors){
 
@@ -603,15 +535,60 @@ var Dashboard = {
             data:{dateFilter:datefilter},
             success:function(response){
 
-                $('#agent_call_status').parent().find('.no_data').remove();
+                $('#agent_call_status, #dispositions_graph').parent().find('.no_data').remove();
 
-                const dispos_obj = response.dispositions
+                if(window.dispositions_chart != undefined){
+                    window.dispositions_chart.destroy();
+                }
+                
+                var response_length = response.top10_dispos.dispositions.length;
+                var chart_colors_array2= Master.return_chart_colors_hash(response.top10_dispos.counts);
+
+                var dispositions_data = {
+                    datasets: [{
+                        data: response.top10_dispos.counts,
+                        backgroundColor: chart_colors_array2,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.top10_dispos.dispositions
+                };
+
+                var dispositions_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled:true,
+                    }
+                }
+
+                var ctx = document.getElementById('dispositions_graph').getContext('2d');
+
+                window.dispositions_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: dispositions_data,
+                    options: dispositions_options
+                });
+
+                if(!response.top10_dispos.dispositions.length){
+                    $('<p class="no_data">No data yet</p>').insertBefore('#dispositions_graph');
+                }
+
+                const dispos_obj = response.agent_call_status.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
                 let chart_colors_array= Master.return_chart_colors_hash(dispos_obj_keys);
 
                 let dispos = [];
 
-                if(response.reps.length){
+                if(response.agent_call_status.reps.length){
                     for (let i=0; i < dispos_obj_keys.length; i++) {
                         dispos.push({
                             label: dispos_obj_keys[i],
@@ -622,7 +599,7 @@ var Dashboard = {
                 }
 
                 let agent_call_status_data = {
-                    labels: response.reps,
+                    labels: response.agent_call_status.reps,
                         datasets: dispos
                 };
 
@@ -684,7 +661,7 @@ var Dashboard = {
                     options: agent_call_status_options
                 });
 
-                if(!response.reps.length){
+                if(!response.agent_call_status.reps.length){
                     $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
                 }                
             }

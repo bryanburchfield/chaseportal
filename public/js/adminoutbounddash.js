@@ -57,7 +57,14 @@ var Dashboard = {
     total_dials:'',
 
     init:function(){
-        $.when(this.agent_talk_time(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.total_calls(this.datefilter, this.chartColors), this.sales_per_hour_per_rep(this.datefilter, this.chartColors), this.calls_by_campaign(this.datefilter, this.chartColors), this.avg_wait_time(this.datefilter, this.chartColors), this.agent_call_status(this.datefilter)).done(function(){
+        $.when(
+            this.agent_talk_time(this.datefilter, this.chartColors),
+            this.get_call_volume(this.datefilter, this.chartColors),
+            this.total_calls(this.datefilter, this.chartColors),
+            this.sales_per_hour_per_rep(this.datefilter, this.chartColors),
+            this.calls_by_campaign(this.datefilter, this.chartColors),
+            this.avg_wait_time(this.datefilter, this.chartColors),
+            this.agent_call_status(this.datefilter)).done(function(){
             Dashboard.resizeCardTableDivs();
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -711,15 +718,60 @@ var Dashboard = {
             data:{dateFilter:datefilter},
             success:function(response){
 
-                $('#agent_call_status').parent().find('.no_data').remove();
+                $('#agent_call_status, #dispositions_graph').parent().find('.no_data').remove();
 
-                const dispos_obj = response.dispositions
+                if(window.dispositions_chart != undefined){
+                    window.dispositions_chart.destroy();
+                }
+                
+                var response_length = response.top10_dispos.dispositions.length;
+                var chart_colors_array2= Master.return_chart_colors_hash(response.top10_dispos.counts);
+
+                var dispositions_data = {
+                    datasets: [{
+                        data: response.top10_dispos.counts,
+                        backgroundColor: chart_colors_array2,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.top10_dispos.dispositions
+                };
+
+                var dispositions_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled:true,
+                    }
+                }
+
+                var ctx = document.getElementById('dispositions_graph').getContext('2d');
+
+                window.dispositions_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: dispositions_data,
+                    options: dispositions_options
+                });
+
+                if(!response.top10_dispos.dispositions.length){
+                    $('<p class="no_data">No data yet</p>').insertBefore('#dispositions_graph');
+                }
+
+                const dispos_obj = response.agent_call_status.dispositions
                 const dispos_obj_keys = Object.getOwnPropertyNames(dispos_obj);
                 let chart_colors_array= Master.return_chart_colors_hash(dispos_obj_keys);
-                                
+
                 let dispos = [];
 
-                if(response.reps.length){
+                if(response.agent_call_status.reps.length){
                     for (let i=0; i < dispos_obj_keys.length; i++) {
                         dispos.push({
                             label: dispos_obj_keys[i],
@@ -730,7 +782,7 @@ var Dashboard = {
                 }
 
                 let agent_call_status_data = {
-                    labels: response.reps,
+                    labels: response.agent_call_status.reps,
                         datasets: dispos
                 };
 
@@ -776,7 +828,7 @@ var Dashboard = {
                             if (datapointValue) {
                                 return true;
                             }
-                        }
+                        }                       
                     }
                 }
 
@@ -792,9 +844,9 @@ var Dashboard = {
                     options: agent_call_status_options
                 });
 
-                if(!response.reps.length){
+                if(!response.agent_call_status.reps.length){
                     $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
-                }                
+                }                        
             }
         });
     },

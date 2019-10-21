@@ -257,7 +257,17 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-3 card_table_prt ">
+            <div class="card card-3b">
+                <h1 class="title">Top 10 Dispositions</h1>
+
+                <div class="inbound inandout mb0">
+                    <canvas id="dispositions_graph"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
             <div class="card card-12">
                 <h1 class="title">Agent Call Status</h1>
                 <div class="inbound inandout" style="min-height:340px;">
