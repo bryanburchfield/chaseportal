@@ -915,7 +915,7 @@ class AdminDashController extends Controller
                 'dispositions' => $dispositions,
             ],
             'top10_dispos' => [
-                'dispos' => array_keys($dispos),
+                'dispositions' => array_keys($dispos),
                 'counts' => array_values($dispos),
             ],
         ];

@@ -110,7 +110,7 @@ class AdminOutboundDashController extends Controller
      * @param boolean $prev
      * @return array
      */
-    public function getCallVolume($prev = false)
+    private function getCallVolume($prev = false)
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -599,7 +599,7 @@ class AdminOutboundDashController extends Controller
      * @param boolean $prev
      * @return array
      */
-    public function getSalesPerHourPerRep($prev = false)
+    private function getSalesPerHourPerRep($prev = false)
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -758,7 +758,7 @@ class AdminOutboundDashController extends Controller
         ];
     }
 
-    public function getAvgWaitTime()
+    private function getAvgWaitTime()
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -889,7 +889,7 @@ class AdminOutboundDashController extends Controller
      * @param boolean $prev
      * @return array
      */
-    public function getTotalCalls($prev = false)
+    private function getTotalCalls($prev = false)
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -970,13 +970,28 @@ class AdminOutboundDashController extends Controller
             unset($dispositions['']);
         }
 
+        // Top 10 array for dispo charts
+        $dispos = [];
+        foreach ($dispositions as $disponame => $disporec) {
+            $dispos[$disponame] = array_sum($disporec);
+        }
+        arsort($dispos, SORT_NUMERIC);
+
+        $dispos = array_slice($dispos, 0, 10);
+
         return [
-            'reps' => $reps,
-            'dispositions' => $dispositions,
+            'agent_call_status' => [
+                'reps' => $reps,
+                'dispositions' => $dispositions,
+            ],
+            'top10_dispos' => [
+                'dispositions' => array_keys($dispos),
+                'counts' => array_values($dispos),
+            ],
         ];
     }
 
-    public function getAgentCallStatus()
+    private function getAgentCallStatus()
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
