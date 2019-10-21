@@ -364,7 +364,6 @@ class TrendDashController extends Controller
         $total_calls = [];
         $handled_calls = [];
         $servicelevel = [];
-        $new_result = [];
 
         $tot_calls = 0;
         $tot_handled = 0;
@@ -384,15 +383,13 @@ class TrendDashController extends Controller
 
         $avg_sl = $tot_calls == 0 ? 0 : round($tot_handled / $tot_calls * 100);
 
-        $new_result = [
+        return ['service_level' => [
             'time' => $time_labels,
             'total' => $total_calls,
             'handled_calls' => $handled_calls,
             'servicelevel' => $servicelevel,
             'avg' => $avg_sl,
-        ];
-
-        return ['service_level' => $new_result];
+        ]];
     }
 
     public function callDetails(Request $request)
@@ -679,14 +676,12 @@ class TrendDashController extends Controller
         $avg_ct = $avg_ct > 0 ? round($avg_ct / $avg_cc) : 0;
         $avg_cc = $avg_cc > 0 ? round($avg_cc / $cnt) : 0;
 
-        $new_result = [
+        return ['agent_calltime' => [
             'rep' => $agent_labels,
             'duration' => $call_duration,
             'total_calls' => $total_calls,
             'avg_ct' => $avg_ct,
             'avg_cc' => $avg_cc,
-        ];
-
-        return ['agent_calltime' => $new_result];
+        ]];
     }
 }

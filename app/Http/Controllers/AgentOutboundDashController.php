@@ -46,17 +46,16 @@ class AgentOutboundDashController extends Controller
 
         $labels = [];
         $data = [];
-        $new_result = [];
 
         foreach ($result as $r) {
             array_push($labels, $r['CallStatus']);
             array_push($data, $r['Call Count']);
         }
 
-        $new_result['labels'] = $labels;
-        $new_result['data'] = $data;
-
-        return ['call_status_count' =>  $new_result];
+        return ['call_status_count' => [
+            'labels' => $labels,
+            'data' => $data,
+        ]];
     }
 
     private function getCallStatusCount()
