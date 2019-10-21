@@ -712,7 +712,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admindashboard/agent_call_status',
+            url: '/adminoutbounddashboard/agent_call_status',
             type: 'POST',
             dataType: 'json',
             data:{dateFilter:datefilter},
