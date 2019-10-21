@@ -292,8 +292,6 @@ var Master = {
             });
         }
 
-        console.log(campaign);
-
         if(!source){var source = $(this).attr('id');}
         var report = $('form.report_filter_form').attr('id');
 
@@ -313,7 +311,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -347,7 +345,6 @@ var Master = {
             dataType: 'json',
             data: {id:id},
             success:function(response){
-                console.log(response);
 
                 Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
                 Master.get_subcampaigns($(this), response.destination_campaign, 'update_destination_campaign');
@@ -368,7 +365,7 @@ var Master = {
     },
 
     change_filter_label:function(){
-        console.log($(this).val());
+
         if($(this).val() == 'lead_attempts'){
             $(this).parent().next().find('label').html('Number of Attempts to Filter by');
         }else{
@@ -411,12 +408,10 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
             },
             error :function( data ) {
                 $('#editRulesModal form .alert').empty();
 
-                console.log(data);
                 if( data.status === 422 ) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {

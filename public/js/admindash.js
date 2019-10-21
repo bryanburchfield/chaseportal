@@ -57,7 +57,7 @@ var Dashboard = {
     time: new Date().getTime(),
 
     init:function(){
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter), this.get_dispositions(this.datefilter)).done(function(){
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -92,7 +92,7 @@ var Dashboard = {
 
     refresh:function(datefilter){
 
-        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
+        $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter), this.get_dispositions(this.datefilter)).done(function(){
             
             $('.preloader').fadeOut('slow');
             Master.check_reload();
@@ -326,6 +326,74 @@ var Dashboard = {
                 Dashboard.display_error(div, textStatus, errorThrown);
             } 
         });
+    },
+
+    get_dispositions:function(datefilter, chartColors){
+
+        var campaign = $('.filter_campaign li ').text();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            async: true,
+            url: '/admindashboard/get_dispositions',
+            type: 'POST',
+            dataType: 'json',
+            data:{campaign:campaign, dateFilter:datefilter},
+            success:function(response){
+
+                console.log(response);
+
+                if(window.dispositions_chart != undefined){
+                    window.dispositions_chart.destroy();
+                }
+                
+                var response_length = response.dispos.length;
+                var chart_colors_array= Master.return_chart_colors_hash(response.dispos_count);
+
+                var dispositions_data = {
+                    datasets: [{
+                        data: response.dispos_count,
+                        backgroundColor: chart_colors_array,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.dispos
+                };
+
+                var dispositions_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled:true,
+                    }
+                }
+
+                var ctx = document.getElementById('dispositions_graph').getContext('2d');
+
+                window.dispositions_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: dispositions_data,
+                    options: dispositions_options
+                });
+
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#dispositions_graph');
+                Dashboard.display_error(div, textStatus, errorThrown);
+            }
+        });        
     },
 
     // agent call count & agent call time pie graphs

@@ -327,7 +327,7 @@
                 <h1 class="title">Top 10 Dispositions</h1>
 
                 <div class="inbound inandout mb0">
-                    <canvas id="disposition_graph"></canvas>
+                    <canvas id="dispositions_graph"></canvas>
                 </div>
             </div>
         </div>
