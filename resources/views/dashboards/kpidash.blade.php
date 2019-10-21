@@ -87,7 +87,7 @@
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger remove_recip">Remove User</button>
+            <button type="button" class="btn btn-danger remove_recip">Remove Recipient</button>
         </div>
     </div>
     </div>
