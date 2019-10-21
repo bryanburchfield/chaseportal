@@ -13,71 +13,71 @@
 
     <div class="row">
 
-            <div class="col-sm-3 col-xs-12">
-                <div class="card-3 card" id="calls_offered">
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card" id="calls_offered">
 
-                    <div class="trend_indicator">
-                        <div class="trend_arrow"></div>
-                        <span></span>
-                    </div>               
-                    <h1 class="title">Calls Offered</h1>
-                    <h4 class="data total mt30"></h4>
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>               
+                <h1 class="title">Calls Offered</h1>
+                <h4 class="data total mt30"></h4>
 
-                </div><!-- end card -->
-            </div><!-- end column -->
+            </div><!-- end card -->
+        </div><!-- end column -->
 
-            <div class="col-sm-3 col-xs-12">
-                <div class="card-3 card" id="calls_answered">
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card" id="calls_answered">
 
-                    <div class="trend_indicator">
-                        <div class="trend_arrow"></div>
-                        <span></span>
-                    </div>
-                   
-                    <h1 class="title">Calls Answered</h1>
-                    <h4 class="data total mt30"></h4>
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+               
+                <h1 class="title">Calls Answered</h1>
+                <h4 class="data total mt30"></h4>
 
-                </div><!-- end card -->
-            </div><!-- end column -->
+            </div><!-- end card -->
+        </div><!-- end column -->
 
-            <div class="col-sm-3 col-xs-12">
-                <div class="card-3 card" id="missed_calls">
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card" id="missed_calls">
 
-                    <div class="trend_indicator">
-                        <div class="trend_arrow"></div>
-                        <span></span>
-                    </div>
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
 
-                    <h1 class="title">Missed Calls</h1>
-                    <h4 class="data total"></h4>
-                    
-                    <div class="divider"></div>
-                    
-                    <div class="inbound">
-                        <p class="data abandoned"></p>
-                        <p class="type">Abandoned</p>
-                    </div>
+                <h1 class="title">Missed Calls</h1>
+                <h4 class="data total"></h4>
+                
+                <div class="divider"></div>
+                
+                <div class="inbound">
+                    <p class="data abandoned"></p>
+                    <p class="type">Abandoned</p>
+                </div>
 
-                    <div class="outbound">
-                        <p class="data voicemails"></p>
-                        <p class="type">Voicemails</p>
-                    </div>
+                <div class="outbound">
+                    <p class="data voicemails"></p>
+                    <p class="type">Voicemails</p>
+                </div>
 
-                </div><!-- end card -->
-            </div><!-- end column -->
+            </div><!-- end card -->
+        </div><!-- end column -->
 
 
-            <div class="col-sm-3 col-xs-12">
-                <div class="card-3 card total_sales">
+        <div class="col-sm-3 col-xs-12">
+            <div class="card-3 card total_sales">
 
-                    <div class="trend_indicator">
-                        <div class="trend_arrow"></div>
-                        <span></span>
-                    </div>
-                    <h1 class="title">Total Conversions</h1>
-                    <h4 class="data mt30" id="total_sales"></h4>
-                </div><!-- end card -->
-            </div><!-- end column -->
+                <div class="trend_indicator">
+                    <div class="trend_arrow"></div>
+                    <span></span>
+                </div>
+                <h1 class="title">Total Conversions</h1>
+                <h4 class="data mt30" id="total_sales"></h4>
+            </div><!-- end card -->
+        </div><!-- end column -->
             
     </div>
 
