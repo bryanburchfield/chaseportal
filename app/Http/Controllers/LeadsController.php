@@ -252,8 +252,8 @@ class LeadsController extends Controller
         $from_date = (clone $to_date)->modify('-1 day');
 
         $sql = "SELECT " . implode(',', $columns) . "
-FROM [PowerV2_Reporting_Dialer-19].[dbo].[Leads] L
-LEFT JOIN [PowerV2_Reporting_Dialer-19].[dbo].[ADVANCED_gridfields] A ON A.LeadId = L.IdGuid
+FROM [" . $this->db . "].[dbo].[Leads] L
+LEFT JOIN [" . $this->db . "].[dbo].[ADVANCED_gridfields] A ON A.LeadId = L.IdGuid
 WHERE L.GroupId = :group_id
 AND Date >= :from_date
 AND Date < :to_date";
