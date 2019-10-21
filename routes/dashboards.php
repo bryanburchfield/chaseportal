@@ -12,7 +12,12 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/adminoutbounddashboard', 'MasterDashController@adminOutboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
+
         Route::get('/kpi', 'MasterDashController@kpi');
+        Route::get('/kpi/recipients', 'KpiController@recipients');
+        Route::post('/kpi/recipients', 'KpiController@addRecipient');
+        Route::get('/kpi/optout', 'KpiController@optOut')->name('kpi.optout')->middleware('signed');
+
 
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
