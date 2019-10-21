@@ -698,7 +698,7 @@ class AdminDashController extends Controller
      * @param boolean $prev
      * @return array
      */
-    public function getTotalSales($prev = false)
+    private function getTotalSales($prev = false)
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -812,7 +812,7 @@ class AdminDashController extends Controller
         ];
     }
 
-    public function getAgentCallCount()
+    private function getAgentCallCount()
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -900,13 +900,28 @@ class AdminDashController extends Controller
             unset($dispositions['']);
         }
 
+        // Top 10 array for dispo charts
+        $dispos = [];
+        foreach ($dispositions as $disponame => $disporec) {
+            $dispos[$disponame] = array_sum($disporec);
+        }
+        arsort($dispos, SORT_NUMERIC);
+
+        $dispos = array_slice($dispos, 0, 10);
+
         return [
-            'reps' => $reps,
-            'dispositions' => $dispositions,
+            'agent_call_status' => [
+                'reps' => $reps,
+                'dispositions' => $dispositions,
+            ],
+            'top10_dispos' => [
+                'dispos' => array_keys($dispos),
+                'counts' => array_values($dispos),
+            ],
         ];
     }
 
-    public function getAgentCallStatus()
+    private function getAgentCallStatus()
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
@@ -1006,7 +1021,7 @@ class AdminDashController extends Controller
         ]];
     }
 
-    public function getServiceLevel(Request $request)
+    private function getServiceLevel(Request $request)
     {
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
