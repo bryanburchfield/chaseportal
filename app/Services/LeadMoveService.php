@@ -11,6 +11,31 @@ use App\LeadMove;
 use App\Traits\SqlServerTraits;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Lead Move Service
+ *
+ * Run from command line (ideally cron)
+ * php artisan command:dump_leads {group_id} {timezone} {database}
+ * eg: php artisan command:dump_leads 224347 America/New_York PowerV2_Reporting_Dialer-17
+ *
+ * NOTE: .env must contain the following keys for each client:
+ *   FTP_HOST_{group_id}
+ *   FTP_USERNAME_{group_id}
+ *   FTP_PASSWORD_{group_id}
+ *   FTP_EMAIL_{group_id}
+ *
+ * and config/filesystems.php must contain for each client:
+ * 'disks' => [
+ *       'ftp_{group_id}' => [
+ *           'driver' => 'ftp',
+ *           'host' => env('FTP_HOST_{group_id}'),
+ *           'username' => env('FTP_USERNAME_{group_id}'),
+ *           'password' => env('FTP_PASSWORD_{group_id}'),
+ *           'email' => env('FTP_EMAIL_{group_id}'),
+ *           'root' => '/',
+ *        ],
+ *   ]
+ */
 class LeadMoveService
 {
     private $api;
