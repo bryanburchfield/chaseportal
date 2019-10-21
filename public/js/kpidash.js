@@ -9,26 +9,54 @@ var KPI = {
         $('#deleteRecipModal .remove_recip').on('click', this.remove_recipient);
         $('.adjust_interval').on('submit', this.adjust_interval);
         $('.run_kpi').on('click', this.fire_kpi);
-        $('.search_results').on('click', 'h5', this.populate_recipient);
         $('.expanded_emails').on('click', '.edit_recip_glyph', this.open_edit_recipient_modal);
+        $('.user_email_form').on('click', '.search_result_item', this.open_edit_recipient_modal);
         $('.update_recip').on('submit', this.update_recipient);
         $('#editRecipModal').on('click', '#select_all', this.toggle_all_kpis);
         $('.kpi_list').on('click', '.undoselection_btn', this.undo_kpi_selection);
+        $('.user_email_form #name').on('keyup', this.searchRecips);
     },
 
-    populate_recipient:function(){
+    searchRecips(){
+        var el = $(this);
+        var value = $(this).val();
 
-        $('.search_results').hide();
+        $(el).next('.search_results').css({'display' : 'block'});
+        $(el).next('.search_results').empty();
 
-        var form = $(this).parent().parent().parent().attr('id');       
-        var kpi_id = $(this).data('kpiid');
-        var name = $(this).data('name');
-        var phone = $(this).data('phone');
-        var email = $(this).data('email');
+        if(value.length > 1){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+                    
+            $.ajax({
+                'async': false,
+                url: '/kpi/ajax_search',
+                type: 'POST',
+                dataType: 'json',
+                data:{
+                    query:value
+                },
+                success:function(response){
 
-        $('#'+form).find('.name').val(name);
-        $('#'+form).find('.email').val(email);
-        $('#'+form).find('.phone').val(phone);      
+                    if(response.search_recip.length){
+                        $(el).next('.search_results').css({'display' : 'block'});
+                    }else{
+                        $(el).next('.search_results').css({'display' : 'none'});
+                    }
+
+                    for(var i=0; i< response.search_recip.length;i++){
+                        
+                        $(el).next('.search_results').append('<h5 class="search_result_item"  data-toggle="modal" data-target="#editRecipModal" data-recip="'+response.search_recip[i]['id']+'" data-name="'+response.search_recip[i]['name']+'" data-phone="'+response.search_recip[i].phone+'" data-email="'+response.search_recip[i].email+'">'+response.search_recip[i]['name']+'</h5>');
+                    }
+                }
+            });
+        }else{
+            $(el).next('.search_results').css({'display' : 'none'});
+        }
+        
     },
 
     fire_kpi:function(e){
@@ -158,18 +186,18 @@ var KPI = {
     pass_user_removemodal:function(){
 
         var id = $(this).data('recip');
-        var name = $(this).parent().find('span.name').text();
-        var kpi_id = $(this).data('kpi');
+        var name = $(this).data('username');
 
         $('#deleteRecipModal .user_id').val(id);
-        $('#deleteRecipModal .kpi_id').val(kpi_id);
         $('#deleteRecipModal .name').val(name);
         $('#deleteRecipModal .username').html(name);
     },
 
     open_edit_recipient_modal:function(e){
+
+        $('.search_results').empty().hide();
         e.preventDefault();
-        var id=$(this).data('recip');        
+        var id=$(this).data('recip');    
         KPI.edit_recipient(id);
     },
 
@@ -366,44 +394,3 @@ $(document).ready(function(){
         $('.opt[data-kpi="'+kpi_id+'"]').find('.kpi').css({'display':'block'});
     }
 });
-
-function searchRecips(el, value, kpi_id){
-
-    $(el).next('.search_results').css({'display' : 'block'});
-    $(el).next('.search_results').empty();
-
-    if(value.length > 1){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-                
-        $.ajax({
-            'async': false,
-            url: '/kpi/ajax_search',
-            type: 'POST',
-            dataType: 'json',
-            data:{
-                query:value,
-                kpi_id:kpi_id
-            },
-            success:function(response){
-
-                if(response.search_recip.length){
-                    $(el).next('.search_results').css({'display' : 'block'});
-                }else{
-                    $(el).next('.search_results').css({'display' : 'none'});
-                }
-
-                for(var i=0; i< response.search_recip.length;i++){
-                    
-                    $(el).next('.search_results').append('<h5 class="search_result_item" data-kpiid="'+kpi_id+'" data-name="'+response.search_recip[i]['name']+'" data-phone="'+response.search_recip[i].phone+'" data-email="'+response.search_recip[i].email+'">'+response.search_recip[i]['name']+'</h5>');
-                }
-            }
-        });
-    }else{
-        $(el).next('.search_results').css({'display' : 'none'});
-    }
-    
-}

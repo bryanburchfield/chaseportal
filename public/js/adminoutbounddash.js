@@ -725,7 +725,7 @@ var Dashboard = {
                 }
                 
                 var response_length = response.top10_dispos.dispositions.length;
-                var chart_colors_array2= Master.return_chart_colors_hash(response.top10_dispos.counts);
+                var chart_colors_array2= Master.return_chart_colors_hash(response.top10_dispos.dispositions);
 
                 var dispositions_data = {
                     datasets: [{

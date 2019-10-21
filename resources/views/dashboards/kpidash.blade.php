@@ -58,7 +58,7 @@
                                 </p>
 
                                 <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
-                                <a data-toggle="modal" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
+                                <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                             </div>
                             @endforeach
                         </div>

@@ -259,14 +259,10 @@ class KpiController extends Controller
     public function searchRecipients(Request $request)
     {
         $group_id = Auth::user()->group_id;
-        $kpi_id = $request->kpi_id;
         $name = $request->input('query') . '%';
 
         $recipients = Recipient::where('group_id', $group_id)
-            ->where('name', 'like', $name)
-            ->whereNotIn('id', DB::table('kpi_recipients')
-                ->where('kpi_id', $kpi_id)
-                ->pluck('recipient_id'))
+            ->where('name', 'like', $name)            
             ->orderBy('name')
             ->get();
 

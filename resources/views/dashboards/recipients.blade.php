@@ -16,28 +16,15 @@
             <div class="container-full mt20">
                 <div class="row">
 
-                    <div class="col-sm-7 expanded_emails display recips">
-                        <h2>Recipients</h2>
-
-                        @foreach($recipients as $recipient)
-                            <div class="user clear" id="{{ $recipient->id }}">
-                                <p class="name">{{ $recipient->name }}</p>
-                                <p class="email">{{ $recipient->email }}</p>
-                                <p class="phone">{{ $recipient->phone }}</p>
-                                <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
-                                <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="col-sm-5 create_recips">
+                    <div class="col-sm-5 col-sm-push-7 create_recips">
                         <h2>Create Recipient</h2>
 
                         {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
-                            <div class="form-group">
+                            <div class="form-group searchCnt">
                                 {!! Form::label('name', 'Full Name') !!}
                                 {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
+                                <div class="search_results"></div>
                             </div>
 
                             <div class="form-group">
@@ -67,6 +54,20 @@
                             @endif
                         {!! Form::close() !!}
 
+                    </div>
+
+                    <div class="col-sm-7 col-sm-pull-5 expanded_emails display recips">
+                        <h2>Recipients</h2>
+
+                        @foreach($recipients as $recipient)
+                            <div class="user clear" id="{{ $recipient->id }}">
+                                <p class="name">{{ $recipient->name }}</p>
+                                <p class="email">{{ $recipient->email }}</p>
+                                <p class="phone">{{ $recipient->phone }}</p>
+                                <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
+                                <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
