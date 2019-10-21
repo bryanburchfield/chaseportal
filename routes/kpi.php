@@ -2,14 +2,9 @@
 // KPIs: all urls start with /kpi/
 Route::prefix('kpi')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    // Route::post('optout', 'KpiController@optOut')->name('kpi.optout');
-    Route::get('optout', 'KpiController@optOut')->name('kpi.optout')->middleware('signed');
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'KpiController@index');
-        Route::get('recipients', 'KpiController@recipients');
-        Route::post('recipients', 'KpiController@addRecipient');
 
         // ajax targets
         Route::post('update_recipient', 'KpiController@updateRecipient');

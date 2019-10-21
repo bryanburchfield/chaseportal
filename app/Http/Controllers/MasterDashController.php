@@ -25,8 +25,6 @@ class MasterDashController extends Controller
         session(['currentDash' => $this->currentDash]);
 
         $jsfile[] = $this->currentDash . ".js";
-        // $jsfile[] = "master.js";
-        // $jsfile[] = "masternav.js";
 
         $cssfile[] = $this->currentDash . ".css";
         $cssfile[] = "master.css";
@@ -54,6 +52,46 @@ class MasterDashController extends Controller
             'db_list' => $db_list
         ];
         return view('masterdash')->with($data);
+    }
+
+    public function adminDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'admindash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function adminOutboundDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'adminoutbounddash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function trendDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'trenddash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function leaderDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'leaderdash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function kpi(Request $request)
+    {
+        $request->merge(['dashboard' => 'kpidash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
     }
 
     public function setDashboard(Request $request)

@@ -7,7 +7,18 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'MasterDashController@index');
+        Route::redirect('/', 'dashboards/admindashboard');
+        Route::get('/admindashboard', 'MasterDashController@adminDashboard');
+        Route::get('/adminoutbounddashboard', 'MasterDashController@adminOutboundDashboard');
+        Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
+        Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
+
+        Route::get('/kpi', 'MasterDashController@kpi');
+        Route::get('/kpi/recipients', 'KpiController@recipients');
+        Route::post('/kpi/recipients', 'KpiController@addRecipient');
+        Route::get('/kpi/optout', 'KpiController@optOut')->name('kpi.optout')->middleware('signed');
+
+
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
