@@ -516,7 +516,7 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-
+                
                 Master.flip_card(response.call_count_reps.length, '#agent_call_count');
                 Master.flip_card(response.talk_time_reps.length, '#agent_talk_time');
 
