@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="preloader"></div>
-<input type="hidden" value="{{ $datefilter }}" id="datefilter" name="datefilter">
+<input type="hidden" value="{{ $dateFilter }}" id="datefilter" name="datefilter">
 
 @includeWhen(!$isApi, 'shared.navbar')
 
