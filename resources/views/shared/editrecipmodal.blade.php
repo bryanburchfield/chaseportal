@@ -37,7 +37,7 @@
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 {!! Form::submit('Save', ['class'=>'btn btn-warning btn-md mb0']) !!}
-                
+
                 <div class="alert alert-danger mt20"></div>
                 {!! Form::close() !!}
 

@@ -11,12 +11,12 @@
 	<div id="content">
 
 		@include('shared.navbar')
-		
+
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="mt20">	
+						<div class="mt20">
 							<ul class="nav nav-tabs">
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Users</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Users</a></li>
@@ -27,7 +27,7 @@
 								<div class="tab-pane active mt30" id="new_user">
 					        		<div class="col-sm-6 mb0 card">
         								<h2 class="page_heading">New User</h2>
-        								
+
         								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form add_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
@@ -58,7 +58,7 @@
         										{!! Form::label('additional_dbs', 'Database 2') !!}
         										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
         									</div>
-        									
+
         									{!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
 
         									<br><br>
@@ -70,26 +70,26 @@
         		                                    @endforeach
         		                                </div>
         									@endif
-        									
+
         								{!! Form::close() !!}
         							</div>
 
 				    				<div class="col-sm-6 mbp0 pr0">
 				    					<h2 class="page_heading mb0">All Users</h2>
-				    					
+
 				    					<div class="users">
 
 											<div class="panel-group" id="add_accordion" role="tablist" aria-multiselectable="true">
-											    
+
 											    @php
-											     	
+
 											    	$db=1;
 											    	for($i=1; $i<=25;$i++){
 											    		if($db <10){
 											    			$db='0'. $db;
 											    		}
 											    @endphp
-											    
+
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="add_heading{{$db}}">
 												            <h4 class="panel-title">
@@ -116,16 +116,16 @@
 												            			$user_db = substr($user['db'], -2);
 												            		@endphp
 												            		@if($user_db == $db)
-												            			
+
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
 												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
 												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
-												            		
+
 												            	@endforeach
-												            
+
 													            	</tbody>
 													            </table>
 												            </div>
@@ -137,16 +137,15 @@
 											    	$db++;
 											    	}
 											    @endphp
-											</div>	    							
+											</div>
 				    					</div>
 				    				</div>
 
-								</div>		
+								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
 					         		<div class="col-sm-6 mbp0 card">
 			         					<h2 class="page_heading">Edit User</h2>
-			         					
 			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form edit_user']) !!}
         									<div class="form-group">
         										{!! Form::label('group_id', 'Group ID') !!}
@@ -191,26 +190,26 @@
         		                                    @endforeach
         		                                </div>
         									@endif
-        									
+
         								{!! Form::close() !!}
 			         				</div>
 
 			         				<div class="col-sm-6 mbp0 pr0">
 				    					<h2 class="page_heading mb0">All Users</h2>
-				    					
+
 				    					<div class="users">
 
 											<div class="panel-group" id="edit_accordion" role="tablist" aria-multiselectable="true">
-											    
+
 											    @php
-											     	
+
 											    	$db=1;
 											    	for($i=1; $i<=25;$i++){
 											    		if($db <10){
 											    			$db='0'. $db;
 											    		}
 											    @endphp
-											    
+
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="edit_heading{{$db}}">
 												            <h4 class="panel-title">
@@ -236,17 +235,17 @@
 												            		@php 
 												            			$user_db = substr($user['db'], -2);
 												            		@endphp
+
 												            		@if($user_db == $db)
-												            			
 												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 												            			<td>{{$user->group_id}} - {{$user->name}}</td>
 												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
 												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
 												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
 												            		@endif
-												            		
+
 												            	@endforeach
-												            
+
 													            	</tbody>
 													            </table>
 												            </div>
@@ -258,7 +257,7 @@
 											    	$db++;
 											    	}
 											    @endphp
-											</div>	    							
+											</div>
 				    					</div>
 				    				</div>
 								</div>
@@ -303,43 +302,41 @@
 					        		                    </div>
 					        		                </div>
 					        		            </div>
-					        		        </div>                      
+					        		        </div>
 
 					        		        <div class="alert alert-danger report_errors"></div>
 					        		        <input type="submit" class="btn btn-primary mb0" value="Search">
 					        		    </form>
 					        		</div> <!-- end report_filters -->
 
-				        		    <!-- <div class="col-sm-12"> -->
-				        		        <div class="table-responsive cdr_table ">
-				        		            <table class="cdr_results_table table table-hover reports_table" id="cdr_dataTable">
-				        		                <thead>
-				        		                    <tr role="row">
-				        		                        <th>ID</th>
-				        		                        <th>Server</th>
-				        		                        <th>Attempt</th>
-				        		                        <th>Call Date</th>
-				        		                        <th>Call Status</th>
-				        		                        <th>Call Type</th>
-				        		                        <th>Caller ID</th>
-				        		                        <th>Campaign</th>
-				        		                        <th>Date</th>
-				        		                        <th>Duration</th>
-				        		                        <th>Group ID</th>
-				        		                        <th>Lead ID</th>
-				        		                        <th>Phone</th>
-				        		                        <th>Rep</th>
-				        		                        <th>Subcampaign</th>
-				        		                    </tr>
-				        		                </thead>
+			        		        <div class="table-responsive cdr_table ">
+			        		            <table class="cdr_results_table table table-hover reports_table" id="cdr_dataTable">
+			        		                <thead>
+			        		                    <tr role="row">
+			        		                        <th>ID</th>
+			        		                        <th>Server</th>
+			        		                        <th>Attempt</th>
+			        		                        <th>Call Date</th>
+			        		                        <th>Call Status</th>
+			        		                        <th>Call Type</th>
+			        		                        <th>Caller ID</th>
+			        		                        <th>Campaign</th>
+			        		                        <th>Date</th>
+			        		                        <th>Duration</th>
+			        		                        <th>Group ID</th>
+			        		                        <th>Lead ID</th>
+			        		                        <th>Phone</th>
+			        		                        <th>Rep</th>
+			        		                        <th>Subcampaign</th>
+			        		                    </tr>
+			        		                </thead>
 
-				        		                <tbody>
-				        		                    
-				        		                </tbody>
-				        		            </table>
-				        		        </div>
-					        		<!-- </div> -->
-								</div>					
+			        		                <tbody>
+
+			        		                </tbody>
+			        		            </table>
+			        		        </div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -384,14 +381,14 @@
                 <input type="hidden" class="user_id" name="user_id" value="">
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="app_token" name="app_token" value="">
-                <h3 class="mb10"><span class="username"></span></h3>
+                <h3 class="mb10"><span class="username mb20"></span></h3>
             	<p>Double click a link below to copy.</p><br>
-            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}agentdashboard/?app_token=<span class="url_token"></span>&rep=</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}agentdashboard_outbound/?app_token=<span class="url_token"></span>&rep=</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}admindashboard/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}adminoutbounddash/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}leaderboarddash/?app_token=<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url()->full()}}trenddashboard/?app_token=<span class="url_token"></span></a>
+            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard_outbound/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/admindashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/adminoutbounddash/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a>
 
             </div>
         <div class="modal-footer">

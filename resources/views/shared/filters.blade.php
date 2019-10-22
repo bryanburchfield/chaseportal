@@ -16,9 +16,18 @@
                             <span>Interaction</span>
                         </button>
 
-                        <ul class="dropdown-menu filter_campaign">
-                            @foreach ($campaign_list as $k => $camp)
-                            <li {!! ($camp == $campaign) ? 'class="active"' : '' !!}><a href="#">{{ $camp }}</a></li>
+                        <ul class="dropdown-menu filter_campaign stop-propagation">
+                            <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+
+                            @foreach($campaign_list as $campaign)
+                                <div class="checkbox">
+                                    <label class="campaign_label">
+                                        <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
+                                        <span>
+                                            {{$campaign['name']}}
+                                        </span>
+                                    </label>
+                                </div>
                             @endforeach
                         </ul>
                     </div>

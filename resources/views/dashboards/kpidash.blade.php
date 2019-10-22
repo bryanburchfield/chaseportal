@@ -83,7 +83,7 @@
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="fromall" name="fromall" value="0">
                 <input type="hidden" class="kpi_id" name="kpi_id" value="">
-               <h3>Are you sure you want to remove <span class="username"></span>?</h3>
+               <h3>Are you sure you want to remove <span class="username"></span> from this KPI?</h3>
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

@@ -262,7 +262,7 @@ class KpiController extends Controller
         $name = $request->input('query') . '%';
 
         $recipients = Recipient::where('group_id', $group_id)
-            ->where('name', 'like', $name)            
+            ->where('name', 'like', $name)
             ->orderBy('name')
             ->get();
 

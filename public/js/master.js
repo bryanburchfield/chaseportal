@@ -949,7 +949,7 @@ var Master = {
 		pdf_dl_link=$('.report_dl_option.pdf').attr('href');
 		window.open(pdf_dl_link);
 		$('#report_dl_warning').modal('hide');
-		$('.modal-backdrop').remove();	
+		$('.modal-backdrop').remove();
 	},
 
 	return_chart_colors:function(response_length, chartColors){
@@ -971,12 +971,11 @@ var Master = {
 	// add global user
 	add_user:function(e){
 		e.preventDefault();
-		
+
 		var group_id = $('.group_id').val(),
 			name = $('.name').val(),
 			email = $('.email').val(),
 			tz = $('#tz').val(),
-			// user_type = $('#user_type').val(),
 			db = $('#db').val(),
 			additional_dbs = $('#additional_dbs').val()
 		;

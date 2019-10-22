@@ -44,7 +44,7 @@
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
                             {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
-                            
+
                             @if($errors->any())
                                 <div class="alert alert-danger mt20">
                                 @foreach($errors->all() as $e)
