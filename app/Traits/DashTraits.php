@@ -306,50 +306,61 @@ trait DashTraits
         return [$fromDate, $toDate];
     }
 
+    /**
+     * Previous date range
+     *
+     * If current date range is a single day (today, yesterday, or custom) then
+     * the previous range will be the same day of week, the week before.
+     *
+     * @param string $dateFilter
+     * @return void
+     */
     public function previousDateRange($dateFilter)
     {
         $tz = Auth::user()->getIanaTz();
         $todayLocal = utcToLocal(new \DateTime, $tz)->format('Y-m-d');
+        $dom = utcToLocal(new \DateTime, $tz)->format('j');
+        $secsToday = time() - strtotime(date('Y-m-d'));
 
         // the $toDate is non-inclusive
         switch ($dateFilter) {
             case 'today':
-                // yesterday
-                $toDate = localToUtc(utcToLocal(new \DateTime, $tz)->format('Y-m-d'), $tz);
-                $fromDate = (clone $toDate)->modify('-1 day');
+                // same day last week
+                $fromDate = localToUtc($todayLocal, $tz)->modify('-1 week');
+                $toDate = (new \DateTime)->modify('-1 week');
                 break;
 
             case 'yesterday':
-                // day before yesterday
-                $toDate = localToUtc(utcToLocal(new \DateTime, $tz)->format('Y-m-d'), $tz)->modify('-1 day');
-                $fromDate = (clone $toDate)->modify('-1 day');
+                // same day prior week
+                $fromDate = localToUtc($todayLocal, $tz)->modify('-8 days');
+                $toDate = (clone $fromDate)->modify('+1 day');
                 break;
 
             case 'week':
-                // last week
+                // last monday thru same day last week
                 $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday last week'), $tz);
-                $toDate = (clone $fromDate)->modify('+1 week');
+                $toDate = (new \DateTime)->modify('-1 week');
                 break;
 
             case 'last_week':
-                // week before last
+                // two weeks ago
                 $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday last week'), $tz)->modify('-1 week');
                 $toDate = (clone $fromDate)->modify('+1 week');
                 break;
 
             case 'month':
-                // last month
-                $toDate = localToUtc(date('Y-m-1', strtotime($todayLocal)), $tz);
-                $fromDate = (clone $toDate)->modify('-1 month');
+                // 1st day of last month thru current number of days into the month
+                $fromDate = (new \DateTime($todayLocal))->modify('first day of last month');
+                $toDate = (clone $fromDate)->modify('+' . $dom - 1 . 'days')->modify('+' . $secsToday . 'seconds');
                 break;
 
             case 'last_month':
                 // month before last
-                $toDate = localToUtc(date('Y-m-1', strtotime($todayLocal)), $tz)->modify('-1 month');
-                $fromDate = (clone $toDate)->modify('-1 month');
+                $fromDate = (new \DateTime($todayLocal))->modify('first day of -2 month');
+                $toDate = (new \DateTime($todayLocal))->modify('last day of -2 month');
                 break;
 
-            default:
+            default:  // custom range
                 // same number of previous days
                 $date1 = localToUtc(substr($dateFilter, 0, 10), $tz);
                 $date2 = localToUtc(date('Y-m-d', strtotime('+1 day', strtotime(substr($dateFilter, 11)))), $tz);
@@ -358,12 +369,12 @@ trait DashTraits
 
                 $fromDate = (clone $date1)->modify('-' . $days . ' days');
                 $toDate = $date1;
-        }
 
-        // if previous date range is a single day and a Sunday, use Friday instead
-        if ($fromDate->format('Y-m-d') == (clone $toDate)->modify('-1 day')->format('Y-m-d') && $fromDate->format('w') == '0') {
-            $fromDate->modify('-2 days');
-            $toDate->modify('-2 days');
+                // if custom date range is a single day, compare to same day of week last week
+                if ($days == 1) {
+                    $fromDate->modify('-6 days');
+                    $toDate->modify('-6 days');
+                }
         }
 
         return [$fromDate, $toDate];
