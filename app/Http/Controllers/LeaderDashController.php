@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
-use Illuminate\Support\Facades\Log;
 
 class LeaderDashController extends Controller
 {
@@ -23,13 +22,14 @@ class LeaderDashController extends Controller
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
-            'datefilter' => $this->dateFilter,
+            'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'leaderdash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
+
         return view('leaderdash')->with($data);
     }
 

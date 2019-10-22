@@ -28,13 +28,14 @@ class AgentOutboundDashController extends Controller
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
-            'datefilter' => $this->dateFilter,
+            'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'agentoutbounddash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
+
         return view('agentoutbounddash')->with($data);
     }
 

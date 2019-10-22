@@ -28,13 +28,14 @@ class AgentDashController extends Controller
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
-            'datefilter' => $this->dateFilter,
+            'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'agentdash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
+
         return view('agentdash')->with($data);
     }
 

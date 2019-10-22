@@ -22,13 +22,14 @@ class TrendDashController extends Controller
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
-            'datefilter' => $this->dateFilter,
+            'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'trenddash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
+
         return view('trenddash')->with($data);
     }
 

@@ -34,6 +34,7 @@ class AdminDashController extends Controller
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
+
         return view('admindash')->with($data);
     }
 

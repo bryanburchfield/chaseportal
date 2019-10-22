@@ -40,7 +40,7 @@ class MasterDashController extends Controller
 
         $data = [
             'campaign' => $this->campaign,
-            'datefilter' => $this->dateFilter,
+            'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'currentDash' => $this->currentDash,
@@ -51,6 +51,7 @@ class MasterDashController extends Controller
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $db_list
         ];
+
         return view('masterdash')->with($data);
     }
 
