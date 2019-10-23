@@ -74,7 +74,7 @@
         								{!! Form::close() !!}
         							</div>
 
-				    				<div class="col-sm-6 mbp0 pr0">
+				    				<div class="col-sm-6 pr0 mbmt50 mbp0">
 				    					<h2 class="page_heading mb0">All Users</h2>
 
 				    					<div class="users">
@@ -144,7 +144,7 @@
 								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
-					         		<div class="col-sm-6 mbp0 card">
+					         		<div class="col-sm-6 card">
 			         					<h2 class="page_heading">Edit User</h2>
 			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form edit_user']) !!}
         									<div class="form-group">

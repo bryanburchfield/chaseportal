@@ -14,7 +14,7 @@
         @include('shared.filters')
         
         <div class="row">
-                <div class="col-sm-3 col-xs-6">
+                <div class="col-sm-3">
                     <div class="card-3 card get_hgt2" id="total_calls">
                         <div class="trend_indicator down">
                             <div class="trend_arrow arrow_down"></div>
@@ -27,7 +27,7 @@
                     </div><!-- end card -->
                 </div><!-- end column -->
 
-                <div class="col-sm-3 col-xs-6 card_table_prt">
+                <div class="col-sm-3 card_table_prt">
                     <div class="card set_hgt2 flipping_card card-3b" id="total_contacts_card">
                         <div class="front p20">
                             <div class="flip_card_btn"></div> 
@@ -48,12 +48,11 @@
 
                             <h1 class="title">Contact Rate</h1>
                             <h4 class="data mt30" id="contact_rate"></h4>
-                            
                         </div>
                     </div><!-- end card -->
                 </div><!-- end column -->
 
-                <div class="col-sm-3 col-xs-6 card_table_prt">
+                <div class="col-sm-3 card_table_prt">
                     <div class="card set_hgt2 flipping_card card-3b total_sales_card">
 
                         <div class="front">
@@ -66,14 +65,13 @@
                                             <th>Rep</th>
                                             <th>Campaign</th>
                                             <th>Sales</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
                             </div>
                         </div>
-                        
+
                         <div class="back">
                             <div class="flip_card_btn"></div>
                             <div class="trend_indicator up">
@@ -86,13 +84,13 @@
                     </div><!-- end card -->
                 </div><!-- end column -->
 
-                <div class="col-sm-3 col-xs-6 card_table_prt">
+                <div class="col-sm-3 card_table_prt">
                     <div class="card set_hgt2 flipping_card card-3b sales_per_hour">
                         <div class="front ">
                             <div class="card_table">
                                 <h1 class="title">Conversion Rate</h1>
                                 <h4 class="data" id="conversion_rate"></h4>
-                                <div class="flip_card_btn"></div>                        
+                                <div class="flip_card_btn"></div>
                             </div>
                         </div>
 
@@ -107,10 +105,8 @@
                                 <h4 class="data" id="sales_per_hour"></h4>
                             </div>
                         </div>
-                       
                     </div><!-- end card -->
                 </div><!-- end column -->
-
             </div>
 
             <div class="row">
