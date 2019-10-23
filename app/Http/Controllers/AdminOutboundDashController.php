@@ -954,6 +954,7 @@ class AdminOutboundDashController extends Controller
         $stats = $result[2];
 
         // load up our disposition array with 0's for each rep
+        $dispositions = [];
         foreach ($dispos as $dispo) {
             $dispositions[$dispo] = array_fill(0, count($reps), 0);
         }
