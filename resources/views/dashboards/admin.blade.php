@@ -100,6 +100,7 @@
 												        </div>
 												        <div id="add_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="add_heading{{$db}}">
 												            <div class="panel-body">
+
 												            	<table class="table table-responsive table-striped">
 												            		<thead>
 												            			<tr>
@@ -112,7 +113,7 @@
 
 												            		<tbody>
 												            	@foreach($users as $user)
-												            		@php 
+												            		@php
 												            			$user_db = substr($user['db'], -2);
 												            		@endphp
 												            		@if($user_db == $db)
