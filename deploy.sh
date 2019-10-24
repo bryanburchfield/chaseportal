@@ -31,5 +31,8 @@ php artisan view:cache
 # restart queues
 php artisan -v queue:restart
 
+# make sure anything in storage is writeable
+find storage -not -path '*/\.*' -exec chmod ug+rwx {} \;
+
 # stop maintenance mode
 php artisan up
