@@ -32,7 +32,7 @@ php artisan view:cache
 php artisan -v queue:restart
 
 # make sure anything in storage is writeable
-chmod -R ug+rwx storage bootstrap/cache
+find storage -not -path '*/\.*' -exec chmod ug+rwx {} \;
 
 # stop maintenance mode
 php artisan up
