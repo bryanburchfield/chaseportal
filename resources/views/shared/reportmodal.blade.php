@@ -5,9 +5,6 @@
             <div class="modal-header">
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {{-- <button type="button" class="btn btn-sm btn-primary dropdown-toggle btn_flgrgt" data-toggle="dropdown" onclick="window.location.href = '{{ url('dashboards/reportsettings') }}';">
-                    <span><i class="fa fa-cog"></i> Report Settings</span>
-                </button> --}}
                 <h4 class="modal-title" id="reportModalLabel">Select a Report</h4>
             </div>
 
