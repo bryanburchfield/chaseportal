@@ -211,7 +211,7 @@ class KpiController extends Controller
             $kpiGroup = new KpiGroup();
             $kpiGroup->kpi_id = $kpi_id;
             $kpiGroup->group_id = $group_id;
-            $kpiGroup->interval = 15;  // default interval
+            $kpiGroup->interval = 1440;  // default interval
         }
 
         $kpiGroup->active = $active;
@@ -530,13 +530,12 @@ class KpiController extends Controller
                     break;
                 case 60:
                     $expression = '0 * * * 1-5';
-                    $expression = '* * * * 1-5';
                     break;
                 case 720:
                     $expression = '0 12,20 * * 1-5';
                     break;
                 case 1440:
-                    $expression = '0, 20 * * 1-5';
+                    $expression = '0 20 * * 1-5';
                     break;
                 default:
                     continue 2;
