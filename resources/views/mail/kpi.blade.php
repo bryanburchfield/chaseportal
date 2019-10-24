@@ -513,7 +513,7 @@ tr.bg_blue{
                                                     @endforeach    
                                                 </table>
 
-                                                <p>If you do not wish to receive e-mail messages from Chase Data Corp, please click the link
+                                                <p>If you do not wish to receive KPI e-mails from Chase Data Corp, please click the link
                                                     to be removed.</p>
                                                 <a style='text-align:center;font-family: Arial, sans-serif;text-decoration:none; font-weight:600;'
                                                     href="{{ $data['optouturl'] }}">Unsubscribe</a>

@@ -64,6 +64,12 @@
 								{!! Form::close() !!}
 
 						</div>
+
+						<div class="col-sm-6">
+							<a class="link" href="{{url('dashboards/automatedreports')}}"><i class="fas fa-external-link-alt"></i> Automated Report Settings</a>
+							<a class="link" href="{{url('dashboards/kpi')}}"><i class="fas fa-external-link-alt"></i> KPI Settings</a>
+							<a class="link" href="{{url('dashboards/kpi/recipients')}}"><i class="fas fa-external-link-alt"></i> Recipient Settings</a>
+						</div>
 					</div>
 			    </div>
 			</div>
