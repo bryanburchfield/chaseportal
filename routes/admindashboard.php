@@ -7,7 +7,6 @@ Route::prefix('admindashboard')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'AdminDashController@index');
 
         // ajax targets
         Route::post('update_filters', 'AdminDashController@updateFilters');
