@@ -813,6 +813,11 @@ class AdminDashController extends Controller
         ];
     }
 
+    /**
+     * Get agent call counts
+     *
+     * @return array
+     */
     private function getAgentCallCount()
     {
         $campaign = $this->campaign;
