@@ -183,7 +183,7 @@ class LeadMoveService
 
     private function sqlAge($lead_rule)
     {
-        $date = localToUtc(date('Y-m-d'), Auth::user()->getIanaTz())
+        $date = localToUtc(date('Y-m-d'), Auth::user()->iana_tz)
             ->format('Y-m-d H:i:s');
 
         return "AND '$date' - Date > :param";

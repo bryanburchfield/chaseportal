@@ -313,7 +313,7 @@ class KpiController extends Controller
      */
     private function dateRange()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         $fromDate = localToUtc(date('Y-m-d'), $tz);
         $toDate = new \DateTime();
@@ -378,7 +378,7 @@ class KpiController extends Controller
 
         $twilio = new Twilio($sid, $token);
 
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         foreach ($recipients as $recipient) {
             try {

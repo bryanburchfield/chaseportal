@@ -135,7 +135,7 @@ class MissedCalls
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = UtcToLocal($rec['Date'], $tz = Auth::user()->getIanaTz())->format('Y-m-d H:i:s');
+                $rec['Date'] = UtcToLocal($rec['Date'], $tz = Auth::user()->iana_tz)->format('Y-m-d H:i:s');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;

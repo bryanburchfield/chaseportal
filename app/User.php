@@ -49,6 +49,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getIanaTzAttribute()
+    {
+        return windowsToUnixTz($this->tz);
+    }
+
     public function isType($type)
     {
         $type = (array) $type;
@@ -92,11 +97,6 @@ class User extends Authenticatable
     public function isMultiDb()
     {
         return !empty($this->additional_dbs);
-    }
-
-    public function getIanaTz()
-    {
-        return windowsToUnixTz($this->tz);
     }
 
     public function sendPasswordResetNotification($token)
