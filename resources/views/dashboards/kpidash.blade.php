@@ -29,11 +29,11 @@
                                 <div class="form-group">
                                     <label for="type">Interval</label>
                                     <select name="interval" class="form-control interval"  required>
-                                        <option {!! ($kpi->interval == '15') ? ' selected="selected"' : '' !!} value="15">Every 15 minutes</option>
-                                        <option {!! ($kpi->interval == '30') ? ' selected="selected"' : '' !!} value="30">Every 30 minutes</option>
-                                        <option {!! ($kpi->interval == '60') ? ' selected="selected"' : '' !!} value="60">Every Hour</option>
-                                        <option {!! ($kpi->interval == '720') ? ' selected="selected"' : '' !!} value="720">Twice a Day</option>
                                         <option {!! ($kpi->interval == '1440') ? ' selected="selected"' : '' !!} value="1440">Once a Day</option>
+                                        <option {!! ($kpi->interval == '720') ? ' selected="selected"' : '' !!} value="720">Twice a Day</option>
+                                        <option {!! ($kpi->interval == '60') ? ' selected="selected"' : '' !!} value="60">Every Hour</option>
+                                        <option {!! ($kpi->interval == '30') ? ' selected="selected"' : '' !!} value="30">Every 30 minutes</option>
+                                        <option {!! ($kpi->interval == '15') ? ' selected="selected"' : '' !!} value="15">Every 15 minutes</option>
                                     </select>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-md mb0" value="Save">
