@@ -561,14 +561,17 @@ class KpiController extends Controller
     public static function cronRun(KpiGroup $kpiGroup)
     {
         // authenticate as user of the group
-        $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
         Auth::logout();
-        Auth::login($user);
-        $kpi = new KpiController();
+        $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
 
-        $request = new Request();
-        $request->setMethod('POST');
-        $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
-        $kpi->runKpi($request);
+        if ($user) {
+            Auth::login($user);
+            $kpi = new KpiController();
+
+            $request = new Request();
+            $request->setMethod('POST');
+            $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
+            $kpi->runKpi($request);
+        }
     }
 }

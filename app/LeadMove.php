@@ -2,13 +2,10 @@
 
 namespace App;
 
-use App\Traits\Schedulable;
 use Illuminate\Database\Eloquent\Model;
 
 class LeadMove extends Model
 {
-    use Schedulable;
-
     public $timestamps = false;
 
     /**
