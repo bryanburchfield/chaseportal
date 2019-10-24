@@ -10,12 +10,12 @@ use App\Kpi;
 use App\Recipient;
 use App\KpiRecipient;
 use App\KpiGroup;
+use App\User;
 use Twilio\Rest\Client as Twilio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
-use Illuminate\Foundation\Auth\User;
 
 class KpiController extends Controller
 {
@@ -313,9 +313,7 @@ class KpiController extends Controller
      */
     private function dateRange()
     {
-        // $tz = Auth::user()->iana_tz;
-
-        $tz = \App\User::find(Auth::user()->id)->iana_tz;
+        $tz = Auth::user()->iana_tz;
 
         $fromDate = localToUtc(date('Y-m-d'), $tz);
         $toDate = new \DateTime();
@@ -356,8 +354,7 @@ class KpiController extends Controller
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $group_id = Auth::user()->group_id;
-        // $db_list = array_values(Auth::user()->getDatabaseArray());
-        $db_list = array_values(\App\User::find(Auth::user()->id)->getDatabaseArray());
+        $db_list = array_values(Auth::user()->getDatabaseArray());
 
         // Get kpi info
         $kpi = Kpi::where('id', $kpiId)->first();
@@ -381,8 +378,7 @@ class KpiController extends Controller
 
         $twilio = new Twilio($sid, $token);
 
-        // $tz = Auth::user()->iana_tz;
-        $tz = \App\User::find(Auth::user()->id)->iana_tz;
+        $tz = Auth::user()->iana_tz;
 
         foreach ($recipients as $recipient) {
             try {
