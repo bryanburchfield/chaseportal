@@ -30,7 +30,7 @@
                 </button>
 
                 <?php
-                    $selected_date_filter = $datefilter;
+                    $selected_date_filter = $dateFilter;
                     if (!in_array($selected_date_filter, ['today', 'yesterday', 'week', 'last_week', 'month', 'last_month'])) {
                         $selected_date_filter = 'custom';
                     }
