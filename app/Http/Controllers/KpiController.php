@@ -211,7 +211,7 @@ class KpiController extends Controller
             $kpiGroup = new KpiGroup();
             $kpiGroup->kpi_id = $kpi_id;
             $kpiGroup->group_id = $group_id;
-            $kpiGroup->interval = 15;  // default interval
+            $kpiGroup->interval = 1440;  // default interval
         }
 
         $kpiGroup->active = $active;
