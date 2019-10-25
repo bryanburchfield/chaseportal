@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
                 KpiController::cronRun($rec);
             }
         })
-            ->everyMinute()
+            ->everyFifteenMinutes()
             ->runInBackground();
 
         // Run Automated Reports
