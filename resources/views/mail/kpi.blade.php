@@ -497,7 +497,7 @@ tr.bg_blue{
                                                 </div>
 
                                                     <table align='center' width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #ccc;font-family:Arial, sans-serif'>
-                                                    <tr class="bg_blue p10" style='color:#fff; '>
+                                                    <tr class="bg_blue p10" style='color:#fff; background:#203047; '>
                                                     @forelse($data['table_headers'] as $value)
                                                         <th class="p10">{{ $value }}</th>
                                                     @empty
