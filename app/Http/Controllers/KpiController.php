@@ -512,24 +512,18 @@ class KpiController extends Controller
      */
     public static function cronDue()
     {
-        // We could use the user's tz, but that would require
-        // looking up a user for each kpi_group record, slowing
-        // us down.  This function is being fired once a minute, 24/7
-
-        $timezone = windowsToUnixTz('Eastern Standard Time');
-
         $return = collect();
 
         foreach (KpiGroup::where('active', 1)->orderBy('group_id')->get() as $rec) {
             switch ($rec->interval) {
                 case 15:
-                    $expression = '0,15,30,45 * * * 1-5';
+                    $expression = '0,15,30,45 8-20 * * 1-5';
                     break;
                 case 30:
-                    $expression = '0,30 * * * 1-5';
+                    $expression = '0,30 8-20 * * 1-5';
                     break;
                 case 60:
-                    $expression = '0 * * * 1-5';
+                    $expression = '0 8-20 * * 1-5';
                     break;
                 case 720:
                     $expression = '0 12,20 * * 1-5';
@@ -541,11 +535,15 @@ class KpiController extends Controller
                     continue 2;
             }
 
-            // This is where we would look up a user to get their
-            // timezone - if we were going to do that
+            // find timezone of first user of that group
+            $user = User::where('group_id', '=', $rec->group_id)->first();
 
-            if ($rec->isDue($expression, $timezone)) {
-                $return->add($rec);
+            if ($user) {
+                $timezone = $user->iana_tz;
+
+                if ($rec->isDue($expression, $timezone)) {
+                    $return->add($rec);
+                }
             }
         }
 
