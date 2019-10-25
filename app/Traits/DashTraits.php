@@ -284,7 +284,7 @@ trait DashTraits
                 break;
 
             case 'last_week':
-                // from monday thru sunday -- this will always include future datetimes
+                // from monday thru sunday
                 $fromDate = Carbon::parse('Monday last week', $tz)->tz('UTC');
                 $toDate = Carbon::parse('Monday this week', $tz)->tz('UTC');
                 break;
@@ -321,7 +321,6 @@ trait DashTraits
     public function previousDateRange($dateFilter)
     {
         $tz = Auth::user()->iana_tz;
-        $secsMonth = (Carbon::parse()->tz($tz))->diffInSeconds(new Carbon('midnight first day of this month', $tz));
 
         // the $toDate is non-inclusive
         switch ($dateFilter) {
@@ -350,7 +349,8 @@ trait DashTraits
                 break;
 
             case 'month':
-                // 1st day of last month thru current number of days into the month
+                // 1st day of last month thru current number of seconds into this month
+                $secsMonth = (Carbon::parse()->tz($tz))->diffInSeconds(new Carbon('midnight first day of this month', $tz));
                 $fromDate = Carbon::parse('midnight first day of last month', $tz)->tz('UTC');
                 $toDate = Carbon::parse($fromDate)->modify('+' . $secsMonth . 'seconds');
                 break;

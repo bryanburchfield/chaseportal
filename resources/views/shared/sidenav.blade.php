@@ -15,8 +15,10 @@
         <li {!! $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@leaderDashboard') }}"><i class="fas fa-trophy"></i>Leadboard</a></li>
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@kpi') }}"><i class="fas fa-paper-plane"></i>KPIs</a></li>
         <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>Reports</a></li>
-        <li {!! $page['menuitem'] == 'tools' ? 'class="active"' : ''!!} ><a href="{{ action('LeadsController@rules') }}"><i class="fas fa-tools"></i>Tools</a></li>
 
+        @if (config('app.env') != 'production')
+            <li {!! $page['menuitem'] == 'tools' ? 'class="active"' : ''!!} ><a href="{{ action('LeadsController@rules') }}"><i class="fas fa-tools"></i>Tools</a></li>
+        @endif
 
         @can('accessAdmin')
             <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ action('Admin@index') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
