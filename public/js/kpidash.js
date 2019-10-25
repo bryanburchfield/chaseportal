@@ -113,12 +113,12 @@ var KPI = {
             success:function(response){
 
                 if(response.adjust_interval == true){
-                    $('<div class="mt12 alert alert-success">Interval successfully updated.</div>').insertAfter('form.adjust_interval .btn');
+                    $('<div class="mt12 mt20 alert alert-success">Interval successfully updated.</div>').insertAfter('form.adjust_interval .btn');
                     setTimeout(function(){ 
                         $('.alert').remove();
                     }, 4500);
                 }else{
-                    $('<div class="mt12  alert-danger">Something went wrong. Please try again later.</div>').insertAfter('form.adjust_interval .btn');
+                    $('<div class="mt12 mt20 alert-danger">Something went wrong. Please try again later.</div>').insertAfter('form.adjust_interval .btn');
                     setTimeout(function(){ 
                         $('.alert').remove();
                     }, 4500);
