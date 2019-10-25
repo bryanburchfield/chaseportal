@@ -30,7 +30,7 @@ trait CampaignTraits
             $fromDate = makeDateTime($fromDate);
             $toDate = makeDateTime($toDate);
 
-            $tz = Auth::user()->getIanaTz();
+            $tz = Auth::user()->iana_tz;
 
             $fromDate = localToUtc($fromDate, $tz);
             $toDate = localToUtc($toDate, $tz);

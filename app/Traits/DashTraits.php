@@ -137,7 +137,7 @@ trait DashTraits
         // We'll use our from/to dates but convert them to local first
         // Subtract 1 second from end date since it'll be the start of the next day
 
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         $prevRecs = false;
         $delRecs = [];
@@ -203,7 +203,7 @@ trait DashTraits
 
     private function filterDetails()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
@@ -259,7 +259,7 @@ trait DashTraits
 
     private function dateRange($dateFilter)
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
         $todayLocal = utcToLocal(new \DateTime, $tz)->format('Y-m-d');
 
         // the $toDate is non-inclusive
@@ -318,7 +318,7 @@ trait DashTraits
      */
     public function previousDateRange($dateFilter)
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
         $todayLocal = utcToLocal(new \DateTime, $tz)->format('Y-m-d');
         $dom = utcToLocal(new \DateTime, $tz)->format('j');
         $secsToday = time() - strtotime(date('Y-m-d'));

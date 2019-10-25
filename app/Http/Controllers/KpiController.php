@@ -10,12 +10,12 @@ use App\Kpi;
 use App\Recipient;
 use App\KpiRecipient;
 use App\KpiGroup;
+use App\User;
 use Twilio\Rest\Client as Twilio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\URL;
-use Illuminate\Foundation\Auth\User;
 
 class KpiController extends Controller
 {
@@ -313,7 +313,7 @@ class KpiController extends Controller
      */
     private function dateRange()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         $fromDate = localToUtc(date('Y-m-d'), $tz);
         $toDate = new \DateTime();
@@ -378,7 +378,7 @@ class KpiController extends Controller
 
         $twilio = new Twilio($sid, $token);
 
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         foreach ($recipients as $recipient) {
             try {
@@ -512,24 +512,18 @@ class KpiController extends Controller
      */
     public static function cronDue()
     {
-        // We could use the user's tz, but that would require
-        // looking up a user for each kpi_group record, slowing
-        // us down.  This function is being fired once a minute, 24/7
-
-        $timezone = windowsToUnixTz('Eastern Standard Time');
-
         $return = collect();
 
         foreach (KpiGroup::where('active', 1)->orderBy('group_id')->get() as $rec) {
             switch ($rec->interval) {
                 case 15:
-                    $expression = '0,15,30,45 * * * 1-5';
+                    $expression = '0,15,30,45 8-20 * * 1-5';
                     break;
                 case 30:
-                    $expression = '0,30 * * * 1-5';
+                    $expression = '0,30 8-20 * * 1-5';
                     break;
                 case 60:
-                    $expression = '0 * * * 1-5';
+                    $expression = '0 8-20 * * 1-5';
                     break;
                 case 720:
                     $expression = '0 12,20 * * 1-5';
@@ -541,11 +535,15 @@ class KpiController extends Controller
                     continue 2;
             }
 
-            // This is where we would look up a user to get their
-            // timezone - if we were going to do that
+            // find timezone of first user of that group
+            $user = User::where('group_id', '=', $rec->group_id)->first();
 
-            if ($rec->isDue($expression, $timezone)) {
-                $return->add($rec);
+            if ($user) {
+                $timezone = $user->iana_tz;
+
+                if ($rec->isDue($expression, $timezone)) {
+                    $return->add($rec);
+                }
             }
         }
 
@@ -561,14 +559,17 @@ class KpiController extends Controller
     public static function cronRun(KpiGroup $kpiGroup)
     {
         // authenticate as user of the group
-        $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
         Auth::logout();
-        Auth::login($user);
-        $kpi = new KpiController();
+        $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
 
-        $request = new Request();
-        $request->setMethod('POST');
-        $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
-        $kpi->runKpi($request);
+        if ($user) {
+            Auth::login($user);
+            $kpi = new KpiController();
+
+            $request = new Request();
+            $request->setMethod('POST');
+            $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
+            $kpi->runKpi($request);
+        }
     }
 }
