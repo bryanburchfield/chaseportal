@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Services\PDF;
 use App\Exports\ReportExport;
 use App\Mail\ReportMail;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 trait ReportExportTraits
@@ -117,7 +118,7 @@ trait ReportExportTraits
             $daterange = "Date Range: " . date('m/d/Y g:i:s A', strtotime($this->params['fromdate'])) .
                 " to " . date('m/d/Y g:i:s A', strtotime($this->params['todate'])) . "\n";
         } else {
-            $now = utcToLocal((new \DateTime()), Auth::user()->iana_tz)->format('m/d/Y h:i:s A');
+            $now = Carbon::parse()->tz(Auth::user()->iana_tz)->toDayDateTimeString();
             $daterange = "As of: $now\n";
         }
 

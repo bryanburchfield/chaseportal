@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class AgentTimesheet
 {
@@ -191,16 +192,16 @@ class AgentTimesheet
             $total['ManHourSec'] += $rec['ManHourSec'];
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
 
-            $rec['Date'] = (new \DateTime($rec['Date']))->format('m/d/Y');
-            $rec['LogInTime'] = (new \DateTime($rec['LogInTime']))->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = (new \DateTime($rec['LogOutTime']))->format('m/d/Y h:i:s A');
-            $rec['ManHourSec'] = secondsToHms($rec['ManHourSec']);
-            $rec['PausedTimeSec'] = secondsToHms($rec['PausedTimeSec']);
+            $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
+            $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
+            $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
         }
 
         // format totals
-        $total['ManHourSec'] = secondsToHms($total['ManHourSec']);
-        $total['PausedTimeSec'] = secondsToHms($total['PausedTimeSec']);
+        $total['ManHourSec'] = $this->secondsToHms($total['ManHourSec']);
+        $total['PausedTimeSec'] = $this->secondsToHms($total['PausedTimeSec']);
 
         // Tack on the totals row
         $results[] = $total;
