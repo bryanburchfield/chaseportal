@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class ShiftReport
 {
@@ -211,7 +212,7 @@ class ShiftReport
     private function processResults($results)
     {
         foreach ($results as &$rec) {
-            $rec['Date'] = (new \DateTime($rec['Date']))->format('m/d/Y');
+            $rec['Date'] = Carbon::parse(($rec['Date']))->format('m/d/Y');
         }
         return $results;
     }

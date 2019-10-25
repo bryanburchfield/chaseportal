@@ -2,11 +2,12 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 trait CampaignTraits
 {
-    // NOTE: parent must use SqlServerTraits
+    // NOTE: parent must use SqlServerTraits TimeTraits
 
     public function getAllCampaigns($fromDate = null, $toDate = null)
     {
@@ -27,13 +28,14 @@ trait CampaignTraits
                 $union = ' UNION';
             }
         } else {
-            $fromDate = makeDateTime($fromDate);
-            $toDate = makeDateTime($toDate);
+            // make dates into Carbon objects if not already
+            $fromDate = $this->makeCarbon($fromDate);
+            $toDate = $this->makeCarbon($toDate);
 
             $tz = Auth::user()->iana_tz;
 
-            $fromDate = localToUtc($fromDate, $tz);
-            $toDate = localToUtc($toDate, $tz);
+            $fromDate = $this->localToUtc($fromDate, $tz);
+            $toDate = $this->localToUtc($toDate, $tz);
 
             // convert to datetime strings
             $startDate = $fromDate->format('Y-m-d H:i:s');
@@ -91,5 +93,13 @@ trait CampaignTraits
         $results = resultsToList($this->runSql($sql, $bind));
 
         return $results;
+    }
+
+    private function makeCarbon($datetime)
+    {
+        if (!is_a($datetime, 'Illuminate\Support\Carbon')) {
+            $datetime = new Carbon($datetime);
+        }
+        return $datetime;
     }
 }

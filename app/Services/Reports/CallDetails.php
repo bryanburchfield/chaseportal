@@ -6,6 +6,7 @@ use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class CallDetails
 {
@@ -230,7 +231,7 @@ class CallDetails
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = (new \DateTime($rec['Date']))->format('m/d/Y h:i:s A');
+                $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y h:i:s A');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;

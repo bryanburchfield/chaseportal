@@ -9,6 +9,7 @@ use App\User;
 use App\Dialer;
 use App\LeadMove;
 use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -38,10 +39,11 @@ use Illuminate\Support\Facades\DB;
  */
 class LeadMoveService
 {
+    use SqlServerTraits;
+    use TimeTraits;
+
     private $api;
     private $today;
-
-    use SqlServerTraits;
 
     public function __construct()
     {
@@ -183,7 +185,7 @@ class LeadMoveService
 
     private function sqlAge($lead_rule)
     {
-        $date = localToUtc(date('Y-m-d'), Auth::user()->iana_tz)
+        $date = $this->localToUtc(date('Y-m-d'), Auth::user()->iana_tz)
             ->format('Y-m-d H:i:s');
 
         return "AND '$date' - Date > :param";

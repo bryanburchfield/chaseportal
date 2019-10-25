@@ -411,14 +411,14 @@ class AgentSummarySubcampaign
             unset($rec['WaitTimeCount']);
             unset($rec['DispositionTimeCount']);
 
-            $rec['TalkTimeSec'] = secondsToHms($rec['TalkTimeSec']);
-            $rec['AvTalkTime'] = secondsToHms($rec['AvTalkTime']);
-            $rec['PausedTimeSec'] = secondsToHms($rec['PausedTimeSec']);
-            $rec['WaitTimeSec'] = secondsToHms($rec['WaitTimeSec']);
-            $rec['AvWaitTime'] = secondsToHms($rec['AvWaitTime']);
-            $rec['DispositionTimeSec'] = secondsToHms($rec['DispositionTimeSec']);
-            $rec['AvDispoTime'] = secondsToHms($rec['AvDispoTime']);
-            $rec['ConnectedTimeSec'] = secondsToHms($rec['ConnectedTimeSec']);
+            $rec['TalkTimeSec'] = $this->secondsToHms($rec['TalkTimeSec']);
+            $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+            $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+            $rec['WaitTimeSec'] = $this->secondsToHms($rec['WaitTimeSec']);
+            $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
+            $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+            $rec['AvDispoTime'] = $this->secondsToHms($rec['AvDispoTime']);
+            $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
 
             $rec['ConversionRate'] .= '%';
             $rec['ConversionFactor'] .= '%';
@@ -440,14 +440,14 @@ class AgentSummarySubcampaign
         unset($total['DispositionTimeCount']);
 
         // format totals
-        $total['TalkTimeSec'] = secondsToHms($total['TalkTimeSec']);
-        $total['AvTalkTime'] = secondsToHms($total['AvTalkTime']);
-        $total['PausedTimeSec'] = secondsToHms($total['PausedTimeSec']);
-        $total['WaitTimeSec'] = secondsToHms($total['WaitTimeSec']);
-        $total['AvWaitTime'] = secondsToHms($total['AvWaitTime']);
-        $total['DispositionTimeSec'] = secondsToHms($total['DispositionTimeSec']);
-        $total['AvDispoTime'] = secondsToHms($total['AvDispoTime']);
-        $total['ConnectedTimeSec'] = secondsToHms($total['ConnectedTimeSec']);
+        $total['TalkTimeSec'] = $this->secondsToHms($total['TalkTimeSec']);
+        $total['AvTalkTime'] = $this->secondsToHms($total['AvTalkTime']);
+        $total['PausedTimeSec'] = $this->secondsToHms($total['PausedTimeSec']);
+        $total['WaitTimeSec'] = $this->secondsToHms($total['WaitTimeSec']);
+        $total['AvWaitTime'] = $this->secondsToHms($total['AvWaitTime']);
+        $total['DispositionTimeSec'] = $this->secondsToHms($total['DispositionTimeSec']);
+        $total['AvDispoTime'] = $this->secondsToHms($total['AvDispoTime']);
+        $total['ConnectedTimeSec'] = $this->secondsToHms($total['ConnectedTimeSec']);
 
         // Tack on the totals row
         $results[] = $total;

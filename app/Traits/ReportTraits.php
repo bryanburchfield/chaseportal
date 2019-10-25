@@ -15,6 +15,7 @@ trait ReportTraits
 
     use ReportExportTraits;
     use SqlServerTraits;
+    use TimeTraits;
 
     private function initilaizeParams()
     {
@@ -149,8 +150,8 @@ trait ReportTraits
     {
         $tz = Auth::user()->iana_tz;
 
-        $fromDate = localToUtc($start, $tz);
-        $toDate = localToUtc($end, $tz);
+        $fromDate = $this->localToUtc($start, $tz);
+        $toDate = $this->localToUtc($end, $tz);
 
         return [$fromDate, $toDate];
     }

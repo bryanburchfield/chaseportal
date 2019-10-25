@@ -7,6 +7,7 @@ use App\LeadRule;
 use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -16,6 +17,7 @@ class LeadsController extends Controller
 {
     use SqlServerTraits;
     use CampaignTraits;
+    use TimeTraits;
 
     protected $db;
 
@@ -217,8 +219,7 @@ class LeadsController extends Controller
 
         // If there are recs, FTP the file
         if ($totalrecs) {
-            $yesterday = (localToUtc(utcToLocal(new \DateTime, $request->tz)->format('Y-m-d'), $request->tz))->modify('-1 day');
-            $yesterday = utcToLocal($yesterday, $request->tz)->format('Ymd');
+            $yesterday = Carbon::parse('yesterday', $request->tz)->format('Ymd');
 
             $targetfile = 'leads_' . $yesterday . '.csv';
             Storage::disk('ftp_' . $request->group_id)->put($targetfile, $file);
@@ -248,8 +249,8 @@ class LeadsController extends Controller
     {
         $this->db = $request->db;
 
-        $to_date = localToUtc(utcToLocal(new \DateTime, $request->tz)->format('Y-m-d'), $request->tz);
-        $from_date = (clone $to_date)->modify('-1 day');
+        $from_date = Carbon::parse('yesterday', $request->tz)->tz('UTC')->toDateTimeString();
+        $to_date = Carbon::parse('today', $request->tz)->tz('UTC')->toDateTimeString();
 
         $sql = "SELECT " . implode(',', $columns) . "
 FROM [" . $this->db . "].[dbo].[Leads] L

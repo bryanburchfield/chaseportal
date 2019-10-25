@@ -82,7 +82,7 @@ class AgentDashController extends Controller
         }
 
         $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
-        $avg_handle_time = secondsToHms($tot_total != 0 ? round($duration / $tot_total) : 0);
+        $avg_handle_time = $this->secondsToHms($tot_total != 0 ? round($duration / $tot_total) : 0);
 
         return ['call_volume' => [
             'time' => $time_labels,
@@ -240,11 +240,11 @@ class AgentDashController extends Controller
 
         $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
 
-        $calls_time = secondsToHms(round($calls_time));
-        $paused_time = secondsToHms(round($paused_time));
-        $waiting_time = secondsToHms(round($waiting_time));
-        $wrapup_time = secondsToHms(round($wrapup_time));
-        $total_time = secondsToHms(round($total_time));
+        $calls_time = $this->secondsToHms(round($calls_time));
+        $paused_time = $this->secondsToHms(round($paused_time));
+        $waiting_time = $this->secondsToHms(round($waiting_time));
+        $wrapup_time = $this->secondsToHms(round($wrapup_time));
+        $total_time = $this->secondsToHms(round($total_time));
 
         return [
             'rep_performance' => [
