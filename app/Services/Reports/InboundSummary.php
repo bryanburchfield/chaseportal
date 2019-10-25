@@ -286,15 +286,15 @@ class InboundSummary
             unset($rec['GAvgTalkTime']);
             unset($rec['GAvgHoldTime']);
 
-            $rec['Duration'] = secondsToHms($rec['Duration']);
-            $rec['AvgTalkTime'] = secondsToHms($rec['AvgTalkTime']);
-            $rec['AvgHoldTime'] = secondsToHms($rec['AvgHoldTime']);
+            $rec['Duration'] = $this->secondsToHms($rec['Duration']);
+            $rec['AvgTalkTime'] = $this->secondsToHms($rec['AvgTalkTime']);
+            $rec['AvgHoldTime'] = $this->secondsToHms($rec['AvgHoldTime']);
         }
 
         // format totals
-        $total['Duration'] = secondsToHms($total['Duration']);
-        $total['AvgTalkTime'] = secondsToHms($total['AvgTalkTime']);
-        $total['AvgHoldTime'] = secondsToHms($total['AvgHoldTime']);
+        $total['Duration'] = $this->secondsToHms($total['Duration']);
+        $total['AvgTalkTime'] = $this->secondsToHms($total['AvgTalkTime']);
+        $total['AvgHoldTime'] = $this->secondsToHms($total['AvgHoldTime']);
 
         // Tack on the totals row
         $results[] = $total;

@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use App\User;
 use App\AutomatedReport;
 use App\System;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class Admin extends Controller
 {
+    use TimeTraits;
+
     private function setDb($db = null)
     {
         if (empty($db)) {
@@ -132,9 +135,11 @@ class Admin extends Controller
 
     public function cdrLookup(Request $request)
     {
+        $tz = Auth::user()->iana_tz;
+
         $phone = preg_replace("/[^0-9]/", "", $request->phone);
-        $fromdate = (new \DateTime($request->fromdate))->format('Y-m-d H:i:s');
-        $todate = (new \DateTime($request->todate))->format('Y-m-d H:i:s');
+        $fromdate = $this->localToUtc($request->fromdate, $tz);
+        $todate = $this->localToUtc($request->todate, $tz);
 
         if ($request->search_type == 'number_dialed') {
             $search_field = 'Phone';

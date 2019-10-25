@@ -10,7 +10,9 @@ use App\Kpi;
 use App\Recipient;
 use App\KpiRecipient;
 use App\KpiGroup;
+use App\Traits\TimeTraits;
 use App\User;
+use Illuminate\Support\Carbon;
 use Twilio\Rest\Client as Twilio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,8 @@ use \Illuminate\Support\Facades\URL;
 
 class KpiController extends Controller
 {
+    use TimeTraits;
+
     public function index()
     {
         $db = Auth::user()->db;
@@ -315,8 +319,8 @@ class KpiController extends Controller
     {
         $tz = Auth::user()->iana_tz;
 
-        $fromDate = localToUtc(date('Y-m-d'), $tz);
-        $toDate = new \DateTime();
+        $fromDate = Carbon::parse('today', $tz)->tz('UTC');
+        $toDate = new Carbon();
 
         return [$fromDate, $toDate];
     }
@@ -391,7 +395,7 @@ class KpiController extends Controller
                 $message = [
                     'to' => $recipient->email,
                     'subject' => "Chase Data KPI",
-                    'current' => utcToLocal(date('Y-m-d H:i:s'), $tz)->format('m/d/Y H:i'),
+                    'current' => Carbon::parse()->tz($tz)->toDayDateTimeString(),
                     'url' => url('/') . '/',
                     'optouturl' => Url::signedRoute('kpi.optout', ['recipient_id' => $recipient->recipient_id]),
                     'kpi_name' => $kpi_name,

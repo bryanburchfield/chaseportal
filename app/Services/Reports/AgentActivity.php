@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class AgentActivity
 {
@@ -127,7 +128,7 @@ class AgentActivity
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = (new \DateTime($rec['Date']))->format('m/d/Y h:i:s A');
+                $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y h:i:s A');
                 $this->rowclass[] = 'agentcalllog_' . Str::snake($rec['Event']);
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
