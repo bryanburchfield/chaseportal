@@ -278,9 +278,9 @@ trait DashTraits
                 break;
 
             case 'week':
-                // from monday thru sunday -- this will always include future datetimes
+                // from monday thru current
                 $fromDate = Carbon::parse('Monday this week', $tz)->tz('UTC');
-                $toDate = Carbon::parse('Monday next week', $tz)->tz('UTC');
+                $toDate = new Carbon();  // already UTC
                 break;
 
             case 'last_week':
