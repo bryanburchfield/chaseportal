@@ -26,11 +26,44 @@ class Admin extends Controller
     public function index(Request $request)
     {
         $groupId = Auth::user()->group_id;
-
         $this->setDb();
-        $timezones = System::all()->sortBy('current_utc_offset')->toArray();
 
         $timezone_array = ['' => 'Select One'];
+
+        // Get US timezones first
+        $timezones = System::all()
+            ->whereIn(
+                'name',
+                [
+                    'Eastern Standard Time',
+                    'Central Standard Time',
+                    'Mountain Standard Time',
+                    'Pacific Standard Time',
+                    'Alaskan Standard Time',
+                    'Hawaiian Standard Time',
+                ]
+            )
+            ->sortBy('current_utc_offset')->toArray();
+
+        foreach ($timezones as $tz) {
+            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
+        }
+
+        // And then the rest
+        $timezones = System::all()
+            ->whereNotIn(
+                'name',
+                [
+                    'Eastern Standard Time',
+                    'Central Standard Time',
+                    'Mountain Standard Time',
+                    'Pacific Standard Time',
+                    'Alaskan Standard Time',
+                    'Hawaiian Standard Time',
+                ]
+            )
+            ->sortBy('current_utc_offset')->toArray();
+
         foreach ($timezones as $tz) {
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
