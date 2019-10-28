@@ -359,13 +359,13 @@ class AgentAnalysis
             foreach ($results as &$rec) {
                 array_pop($rec);
                 $rec['Date'] = date('m/d/Y', strtotime($rec['Date']));
-                $rec['AvTalkTime'] = SecondsToHms($rec['AvTalkTime']);
-                $rec['AvWaitTime'] = SecondsToHms($rec['AvWaitTime']);
-                $rec['AvailTimeSec'] = SecondsToHms($rec['AvailTimeSec']);
-                $rec['PausedTimeSec'] = SecondsToHms($rec['PausedTimeSec']);
-                $rec['ConnectedTimeSec'] = SecondsToHms($rec['ConnectedTimeSec']);
-                $rec['DispositionTimeSec'] = SecondsToHms($rec['DispositionTimeSec']);
-                $rec['LoggedInTimeSec'] = SecondsToHms($rec['LoggedInTimeSec']);
+                $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+                $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
+                $rec['AvailTimeSec'] = $this->secondsToHms($rec['AvailTimeSec']);
+                $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+                $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
+                $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+                $rec['LoggedInTimeSec'] = $this->secondsToHms($rec['LoggedInTimeSec']);
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
