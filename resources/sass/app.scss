@@ -2117,7 +2117,7 @@ MEDIAQUERIES
 @media handheld, only screen and (max-width:768px) {
     .mbmt50{margin-top: 50px;}
     .mbp0{padding: 0;}
-    
+
     .tab-pane .mbp0 {
         padding-left: 0;
         padding-right: 0;
@@ -2175,6 +2175,18 @@ MEDIAQUERIES
 
     .col-md-4.col-sm-12.card_table_prt.get_hgt.pl0, .col-md-4.col-sm-12.set_hgt{padding: 0;}
     .card.plr0.leader_table_div.card_table.card-3.mb0{margin-bottom: 30px !important;}
+}
+
+.link{
+    color: $blue;
+    font-weight: 600;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+
+    &:hover{
+        color: $orange;
+    }
 }
 
 /*@media handheld, only screen and (max-width: 668px){

@@ -1982,6 +1982,10 @@ var Master = {
 $(document).ready(function(){
 	Master.init();
 
+    if($('#campaign_select').val()){Master.get_subcampaigns($(this), $('#campaign_select').val(), 'campaign_select');}
+    if($('#destination_subcampaign').val()){Master.get_subcampaigns($(this), $('#destination_subcampaign').val(), 'destination_subcampaign');}
+    
+
 	$('.stop-propagation').on('click', function (e) {
 	    e.stopPropagation();
 	});

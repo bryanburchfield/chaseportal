@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class AgentPauseTime
 {
@@ -223,14 +224,14 @@ class AgentPauseTime
 
         // format fields
         foreach ($results as &$rec) {
-            $rec['LogInTime'] = (new \DateTime($rec['LogInTime']))->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = (new \DateTime($rec['LogOutTime']))->format('m/d/Y h:i:s A');
-            $rec['PausedTime'] = (new \DateTime($rec['PausedTime']))->format('m/d/Y h:i:s A');
-            $rec['UnPausedTime'] = (new \DateTime($rec['UnPausedTime']))->format('m/d/Y h:i:s A');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
+            $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->format('m/d/Y h:i:s A');
+            $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->format('m/d/Y h:i:s A');
 
-            $rec['PausedTimeSec'] = secondsToHms($rec['PausedTimeSec']);
-            $rec['TotPausedSec'] = secondsToHms($rec['TotPausedSec']);
-            $rec['TotManHours'] = secondsToHms($rec['TotManHours']);
+            $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+            $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);
+            $rec['TotManHours'] = $this->secondsToHms($rec['TotManHours']);
         }
 
         return $results;

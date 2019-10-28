@@ -368,7 +368,7 @@ class AdminOutboundDashController extends Controller
 
         $talk_time_hms = [];
         foreach ($talk_time_secs as $d) {
-            $talk_time_hms[] = secondsToHms($d);
+            $talk_time_hms[] = $this->secondsToHms($d);
         }
 
         return [
@@ -534,10 +534,10 @@ class AdminOutboundDashController extends Controller
             $tots['Sales'] += $rec['Sales'];
 
             $rec['PerHour'] = $rec['Talk Secs'] != 0 ? round($rec['Sales'] / $rec['Talk Secs'] * 3600, 2) : 0;
-            $rec['Talk Secs'] = secondsToHms($rec['Talk Secs']);
+            $rec['Talk Secs'] = $this->secondsToHms($rec['Talk Secs']);
         }
         $tots['PerHour'] = $tots['Talk Secs'] != 0 ? round($tots['Sales'] / $tots['Talk Secs'] * 3600, 2) : 0;
-        $tots['Talk Secs'] = secondsToHms($tots['Talk Secs']);
+        $tots['Talk Secs'] = $this->secondsToHms($tots['Talk Secs']);
 
         $byrep[] = $tots;
 

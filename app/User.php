@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 use App\Dialer;
 use App\Notifications\ChaseResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\Password;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use TimeTraits;
 
     /**
      * The attributes that are mass assignable.
@@ -48,6 +50,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getIanaTzAttribute()
+    {
+        return $this->windowsToUnixTz($this->tz);
+    }
 
     public function isType($type)
     {
@@ -92,11 +99,6 @@ class User extends Authenticatable
     public function isMultiDb()
     {
         return !empty($this->additional_dbs);
-    }
-
-    public function getIanaTz()
-    {
-        return windowsToUnixTz($this->tz);
     }
 
     public function sendPasswordResetNotification($token)

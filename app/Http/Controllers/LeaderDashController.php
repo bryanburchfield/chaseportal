@@ -254,11 +254,11 @@ class LeaderDashController extends Controller
             $tots['TalkSecs'] += $rec['TalkSecs'];
             $tots['CallCount'] += $rec['CallCount'];
             $tots['Sales'] += $rec['Sales'];
-            $rec['TalkSecs'] = secondsToHms($rec['TalkSecs']);
+            $rec['TalkSecs'] = $this->secondsToHms($rec['TalkSecs']);
             $i++;
         }
 
-        $tots['TalkSecs'] = secondsToHms($tots['TalkSecs']);
+        $tots['TalkSecs'] = $this->secondsToHms($tots['TalkSecs']);
 
         // Top 20 for the leaderboard
         $result = array_slice($result, 0, 20);

@@ -29,11 +29,11 @@
                                 <div class="form-group">
                                     <label for="type">Interval</label>
                                     <select name="interval" class="form-control interval"  required>
-                                        <option {!! ($kpi->interval == '15') ? ' selected="selected"' : '' !!} value="15">Every 15 minutes</option>
-                                        <option {!! ($kpi->interval == '30') ? ' selected="selected"' : '' !!} value="30">Every 30 minutes</option>
-                                        <option {!! ($kpi->interval == '60') ? ' selected="selected"' : '' !!} value="60">Every Hour</option>
-                                        <option {!! ($kpi->interval == '720') ? ' selected="selected"' : '' !!} value="720">Twice a Day</option>
                                         <option {!! ($kpi->interval == '1440') ? ' selected="selected"' : '' !!} value="1440">Once a Day</option>
+                                        <option {!! ($kpi->interval == '720') ? ' selected="selected"' : '' !!} value="720">Twice a Day</option>
+                                        <option {!! ($kpi->interval == '60') ? ' selected="selected"' : '' !!} value="60">Every Hour</option>
+                                        <option {!! ($kpi->interval == '30') ? ' selected="selected"' : '' !!} value="30">Every 30 minutes</option>
+                                        <option {!! ($kpi->interval == '15') ? ' selected="selected"' : '' !!} value="15">Every 15 minutes</option>
                                     </select>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-md mb0" value="Save">
@@ -45,22 +45,26 @@
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> Recipients</h4>
                         <div class="expanded_emails clear">
 
-                            @foreach($kpi->recipients as $r)
+                            @if(!count($kpi->recipients))
+                                <div class="alert alert-info">No Recipients have been added yet</div>
+                            @else
+                                @foreach($kpi->recipients as $r)
 
-                            <div class="user clear" id="{{ $r->id }}">
-                                <p class="name"><span class="name">{{ $r->name }}</span>
-                                    @if($r->email)
-                                    <i class="fas fa-envelope"></i>
-                                    @endif
-                                    @if($r->phone)
-                                    <i class="fas fa-sms"></i>
-                                    @endif
-                                </p>
+                                <div class="user clear" id="{{ $r->id }}">
+                                    <p class="name"><span class="name">{{ $r->name }}</span>
+                                        @if($r->email)
+                                        <i class="fas fa-envelope"></i>
+                                        @endif
+                                        @if($r->phone)
+                                        <i class="fas fa-sms"></i>
+                                        @endif
+                                    </p>
 
-                                <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
-                                <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
-                            </div>
-                            @endforeach
+                                    <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
+                                    <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div><!-- end options row -->

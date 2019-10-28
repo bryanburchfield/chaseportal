@@ -486,8 +486,8 @@ class AdminDashController extends Controller
             $ntc = 0;
         }
 
-        $avg_hold_time = secondsToHms($avg_hold_time);
-        $total_hold_time = secondsToHms($average_hold_time['Hold Secs']);
+        $avg_hold_time = $this->secondsToHms($avg_hold_time);
+        $total_hold_time = $this->secondsToHms($average_hold_time['Hold Secs']);
 
         return ['average_hold_time' => [
             'min_hold_time' => $average_hold_time['MinHold'],
@@ -799,7 +799,7 @@ class AdminDashController extends Controller
 
         $call_time_hms = [];
         foreach ($call_time_secs as $d) {
-            $call_time_hms[] = secondsToHms($d);
+            $call_time_hms[] = $this->secondsToHms($d);
         }
 
         return [
@@ -813,6 +813,11 @@ class AdminDashController extends Controller
         ];
     }
 
+    /**
+     * Get agent call counts
+     *
+     * @return array
+     */
     private function getAgentCallCount()
     {
         $campaign = $this->campaign;
@@ -1086,7 +1091,7 @@ class AdminDashController extends Controller
         foreach ($byrep as $rec) {
             $reps[] = $rec['Rep'];
             $handletimesecs[] = $rec['AverageHandleTime'];
-            $handletime[] = secondsToHms($rec['AverageHandleTime']);
+            $handletime[] = $this->secondsToHms($rec['AverageHandleTime']);
         }
 
         $max_handle_time = count($handletimesecs) ? max($handletimesecs) : 0;

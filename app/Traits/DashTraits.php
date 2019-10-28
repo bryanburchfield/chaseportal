@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use Illuminate\Support\Carbon;
 
 trait DashTraits
 {
@@ -17,6 +18,7 @@ trait DashTraits
     public $curdash;
 
     use SqlServerTraits;
+    use TimeTraits;
 
     public function apiLogin(Request $request)
     {
@@ -137,12 +139,12 @@ trait DashTraits
         // We'll use our from/to dates but convert them to local first
         // Subtract 1 second from end date since it'll be the start of the next day
 
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         $prevRecs = false;
         $delRecs = [];
-        $fromDate = utcToLocal($params['fromDate'], $tz);
-        $toDate = utcToLocal($params['toDate'], $tz)->modify('-1 second');
+        $fromDate = $this->utcToLocal($params['fromDate'], $tz);
+        $toDate = $this->utcToLocal($params['toDate'], $tz)->modify('-1 second');
 
         while ($fromDate <= $toDate) {
             $loopDate = $fromDate->format($params['format']);
@@ -181,7 +183,7 @@ trait DashTraits
 
         // sort our array in case we pushed any recs in
         usort($result, function ($a, $b) {
-            return (new \DateTime($a['Time'])) > (new \DateTime($b['Time']));
+            return (new Carbon($a['Time'])) > (new Carbon($b['Time']));
         });
 
         return $result;
@@ -190,26 +192,26 @@ trait DashTraits
     private function dateTimeToHour($rec)
     {
         // array_map target function
-        $rec['Time'] = (new \DateTime($rec['Time']))->format('g:i');
+        $rec['Time'] = Carbon::parse($rec['Time'])->format('g:i');
         return $rec;
     }
 
     private function dateTimeToDay($rec)
     {
         // array_map target function
-        $rec['Time'] = (new \DateTime($rec['Time']))->format('D n/j/y');
+        $rec['Time'] = Carbon::parse($rec['Time'])->format('D n/j/y');
         return $rec;
     }
 
     private function filterDetails()
     {
-        $tz = Auth::user()->getIanaTz();
+        $tz = Auth::user()->iana_tz;
 
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
-        // convert to local and back toDate up a second
-        $fromDate = utcToLocal($fromDate, $tz);
-        $toDate = utcToLocal($toDate, $tz)->modify('-1 second');
+        // convert to local and back toDate up a second since it's not inclusive
+        $fromDate = $this->utcToLocal($fromDate, $tz);
+        $toDate = $this->utcToLocal($toDate, $tz)->modify('-1 second');
 
         $cnt = count((array) $this->campaign);
 
@@ -259,49 +261,49 @@ trait DashTraits
 
     private function dateRange($dateFilter)
     {
-        $tz = Auth::user()->getIanaTz();
-        $todayLocal = utcToLocal(new \DateTime, $tz)->format('Y-m-d');
+        $tz = Auth::user()->iana_tz;
 
         // the $toDate is non-inclusive
+        // returns UTC dates
         switch ($dateFilter) {
             case 'today':
-                $fromDate = localToUtc($todayLocal, $tz);
-                $toDate = new \DateTime;  // already UTC
+                $fromDate = Carbon::parse('today', $tz)->tz('UTC');
+                $toDate = new Carbon();  // already UTC
                 break;
 
             case 'yesterday':
                 // all day yesterday
-                $toDate = localToUtc(utcToLocal(new \DateTime, $tz)->format('Y-m-d'), $tz);
-                $fromDate = (clone $toDate)->modify('-1 day');
+                $fromDate = Carbon::parse('yesterday', $tz)->tz('UTC');
+                $toDate = Carbon::parse('today', $tz)->tz('UTC');
                 break;
 
             case 'week':
-                // from monday thru sunday -- this will always include future datetimes
-                $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday this week'), $tz);
-                $toDate = (clone $fromDate)->modify('+1 week');
+                // from monday thru current
+                $fromDate = Carbon::parse('Monday this week', $tz)->tz('UTC');
+                $toDate = new Carbon();  // already UTC
                 break;
 
             case 'last_week':
-                // from monday thru sunday -- this will always include future datetimes
-                $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday last week'), $tz);
-                $toDate = (clone $fromDate)->modify('+1 week');
+                // from monday thru sunday
+                $fromDate = Carbon::parse('Monday last week', $tz)->tz('UTC');
+                $toDate = Carbon::parse('Monday this week', $tz)->tz('UTC');
                 break;
 
             case 'month':
                 // from first day of this month at 00:00:00 to current date+time
-                $fromDate = localToUtc(date('Y-m-1', strtotime($todayLocal)), $tz);
-                $toDate = new \DateTime;  // already UTC
+                $fromDate = Carbon::parse('midnight first day of this month', $tz)->tz('UTC');
+                $toDate = new Carbon();  // already UTC
                 break;
 
             case 'last_month':
                 // from first day of last month at 00:00:00 to current date+time
-                $toDate = localToUtc(date('Y-m-1', strtotime($todayLocal)), $tz);
-                $fromDate = (clone $toDate)->modify('-1 month');
+                $fromDate = Carbon::parse('midnight first day of last month', $tz)->tz('UTC');
+                $toDate = Carbon::parse('midnight first day of this month', $tz)->tz('UTC');
                 break;
 
             default:  // custom range - add 1 day to ending date
-                $fromDate = localToUtc(substr($dateFilter, 0, 10), $tz);
-                $toDate = localToUtc(date('Y-m-d', strtotime('+1 day', strtotime(substr($dateFilter, 11)))), $tz);
+                $fromDate = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
+                $toDate = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
         }
 
         return [$fromDate, $toDate];
@@ -318,60 +320,58 @@ trait DashTraits
      */
     public function previousDateRange($dateFilter)
     {
-        $tz = Auth::user()->getIanaTz();
-        $todayLocal = utcToLocal(new \DateTime, $tz)->format('Y-m-d');
-        $dom = utcToLocal(new \DateTime, $tz)->format('j');
-        $secsToday = time() - strtotime(date('Y-m-d'));
+        $tz = Auth::user()->iana_tz;
 
         // the $toDate is non-inclusive
         switch ($dateFilter) {
             case 'today':
-                // same day last week
-                $fromDate = localToUtc($todayLocal, $tz)->modify('-1 week');
-                $toDate = (new \DateTime)->modify('-1 week');
+                // same partial day last week
+                $fromDate = Carbon::parse('midnight -1 week', $tz)->tz('UTC');
+                $toDate = Carbon::parse('-1 week');
                 break;
 
             case 'yesterday':
-                // same day prior week
-                $fromDate = localToUtc($todayLocal, $tz)->modify('-8 days');
-                $toDate = (clone $fromDate)->modify('+1 day');
+                // same full day prior week
+                $fromDate = Carbon::parse('midnight -8 days', $tz)->tz('UTC');
+                $toDate = Carbon::parse('midnight -1 week', $tz)->tz('UTC');
                 break;
 
             case 'week':
-                // last monday thru same day last week
-                $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday last week'), $tz);
-                $toDate = (new \DateTime)->modify('-1 week');
+                // last monday thru same partial day last week
+                $fromDate = Carbon::parse('monday last week', $tz)->tz('UTC');
+                $toDate = Carbon::parse('-1 week');
                 break;
 
             case 'last_week':
-                // two weeks ago
-                $fromDate = localToUtc((new \DateTime($todayLocal))->modify('Monday last week'), $tz)->modify('-1 week');
-                $toDate = (clone $fromDate)->modify('+1 week');
+                // two full weeks ago
+                $fromDate = Carbon::parse('monday -3 weeks', $tz)->tz('UTC');
+                $toDate = Carbon::parse('monday -2 weeks', $tz)->tz('UTC');
                 break;
 
             case 'month':
-                // 1st day of last month thru current number of days into the month
-                $fromDate = (new \DateTime($todayLocal))->modify('first day of last month');
-                $toDate = (clone $fromDate)->modify('+' . $dom - 1 . 'days')->modify('+' . $secsToday . 'seconds');
+                // 1st day of last month thru current number of seconds into this month
+                $secsMonth = (Carbon::parse()->tz($tz))->diffInSeconds(new Carbon('midnight first day of this month', $tz));
+                $fromDate = Carbon::parse('midnight first day of last month', $tz)->tz('UTC');
+                $toDate = Carbon::parse($fromDate)->modify('+' . $secsMonth . 'seconds');
                 break;
 
             case 'last_month':
-                // month before last
-                $fromDate = (new \DateTime($todayLocal))->modify('first day of -2 month');
-                $toDate = (new \DateTime($todayLocal))->modify('last day of -2 month');
+                // full month before last
+                $fromDate = Carbon::parse('midnight first day of -2 months', $tz)->tz('UTC');
+                $toDate = Carbon::parse('midnight first day of last month', $tz)->tz('UTC');
                 break;
 
             default:  // custom range
                 // same number of previous days
-                $date1 = localToUtc(substr($dateFilter, 0, 10), $tz);
-                $date2 = localToUtc(date('Y-m-d', strtotime('+1 day', strtotime(substr($dateFilter, 11)))), $tz);
+                $date1 = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
+                $date2 = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
 
-                $days = (int) $date1->diff($date2)->format('%a');
+                $days = $date2->diffInDays($date1);
 
                 $fromDate = (clone $date1)->modify('-' . $days . ' days');
                 $toDate = $date1;
 
-                // if custom date range is a single day, compare to same day of week last week
+                // if custom date range is a single day, compare to the week before
                 if ($days == 1) {
                     $fromDate->modify('-6 days');
                     $toDate->modify('-6 days');

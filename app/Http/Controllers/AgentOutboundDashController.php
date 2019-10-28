@@ -137,7 +137,7 @@ class AgentOutboundDashController extends Controller
         $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
 
         if ($tot_inbound) {
-            $avg_handle_time = secondsToHms($duration / $tot_inbound);
+            $avg_handle_time = $this->secondsToHms($duration / $tot_inbound);
         } else {
             $avg_handle_time = '00:00:00';
         }
@@ -376,11 +376,11 @@ class AgentOutboundDashController extends Controller
 
         $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
 
-        $calls_time = secondsToHms(round($calls_time));
-        $paused_time = secondsToHms(round($paused_time));
-        $waiting_time = secondsToHms(round($waiting_time));
-        $wrapup_time = secondsToHms(round($wrapup_time));
-        $total_time = secondsToHms(round($total_time));
+        $calls_time = $this->secondsToHms(round($calls_time));
+        $paused_time = $this->secondsToHms(round($paused_time));
+        $waiting_time = $this->secondsToHms(round($waiting_time));
+        $wrapup_time = $this->secondsToHms(round($wrapup_time));
+        $total_time = $this->secondsToHms(round($total_time));
 
         return [
             'rep_performance' => [

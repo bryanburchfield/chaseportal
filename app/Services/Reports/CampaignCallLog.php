@@ -6,6 +6,7 @@ use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class CampaignCallLog
 {
@@ -258,8 +259,8 @@ class CampaignCallLog
         ];
 
         if (count($calldetails)) {
-            $starttime = new \DateTime($calldetails[0]['Time']);
-            $endtime = new \DateTime($calldetails[count($calldetails) - 1]['Time']);
+            $starttime = new Carbon($calldetails[0]['Time']);
+            $endtime = new Carbon($calldetails[count($calldetails) - 1]['Time']);
 
             while ($starttime < $endtime) {
                 $time = $starttime->format('H:i');
@@ -309,7 +310,7 @@ class CampaignCallLog
 
     private function roundToQuarterHour($timestring)
     {
-        $dt = new \DateTime($timestring);
+        $dt = new Carbon($timestring);
         $minute = $dt->format('i');
         return $dt->modify('-' . ($minute % 15) . 'minutes')->format('H:i');
     }
