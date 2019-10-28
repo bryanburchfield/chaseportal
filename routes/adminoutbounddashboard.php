@@ -2,6 +2,7 @@
 // Admin Outbound Dashboard: all urls start with /adminoutbounddashboard/
 Route::prefix('adminoutbounddashboard')->group(function () {
     // Allow app_token login via /adminoutbounddashboard/api/{token}
+    Route::get('/', 'AdminOutboundDashController@apiLogin');
     Route::get('api/{token}', 'AdminOutboundDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

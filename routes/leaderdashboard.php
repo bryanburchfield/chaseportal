@@ -2,6 +2,7 @@
 // Leader Dashboard: all urls start with /leaderdashboard/
 Route::prefix('leaderdashboard')->group(function () {
     // Allow app_token login via /Leaderdashboard/api/{token}
+    Route::get('/', 'LeaderDashController@apiLogin');
     Route::get('api/{token}', 'LeaderDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
