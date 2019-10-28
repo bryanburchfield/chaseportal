@@ -603,7 +603,7 @@ tr.bg_blue{
                                             $link = $list[$i]['link'];
                                             $description = substr($list[$i]['descript'],0,600).'...';
                                             $date = date('F d, Y', strtotime($list[$i]['date']));
-                                            
+
                                             echo '<td valign="top" width="50%">
                                             <table role="presentation" cellspacing="0" cellpadding="10" border="0" width="100%">
                                                 <tr>
@@ -617,14 +617,12 @@ tr.bg_blue{
                                             </table>
                                         </td>';
 
-                                            if($i == 1 || $i == 3){ 
-                                                    echo "</tr>";  
+                                            if($i == 1 || $i == 3){
+                                                    echo "</tr>";
                                             }
 
                                         }
-
                                     ?>
-                                    
                                 </table>
                             </td>
                         </tr><!-- end: tr -->

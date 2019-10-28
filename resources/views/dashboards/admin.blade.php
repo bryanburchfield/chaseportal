@@ -384,8 +384,8 @@
                 <input type="hidden" class="app_token" name="app_token" value="">
                 <h3 class="mb10"><span class="username mb20"></span></h3>
             	<p>Double click a link below to copy.</p><br>
-            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span></a>
+            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/Brandon</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/Brandon</a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/admindashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/adminoutbounddashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>
