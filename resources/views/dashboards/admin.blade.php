@@ -81,14 +81,10 @@
 
 											<div class="panel-group" id="add_accordion" role="tablist" aria-multiselectable="true">
 
-											    @php
-
-											    	$db=1;
-											    	for($i=1; $i<=25;$i++){
-											    		if($db <10){
-											    			$db='0'. $db;
-											    		}
-											    @endphp
+												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
+													@php
+													$db = sprintf("%02d", $dialer->dialer_numb);
+													@endphp
 
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="add_heading{{$db}}">
@@ -133,11 +129,7 @@
 												        </div>
 												    </div>
 
-											    @php
-
-											    	$db++;
-											    	}
-											    @endphp
+											    @endforeach
 											</div>
 				    					</div>
 				    				</div>
@@ -202,14 +194,10 @@
 
 											<div class="panel-group" id="edit_accordion" role="tablist" aria-multiselectable="true">
 
-											    @php
-
-											    	$db=1;
-											    	for($i=1; $i<=25;$i++){
-											    		if($db <10){
-											    			$db='0'. $db;
-											    		}
-											    @endphp
+												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
+													@php
+													$db = sprintf("%02d", $dialer->dialer_numb);
+													@endphp
 
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="edit_heading{{$db}}">
@@ -253,11 +241,7 @@
 												        </div>
 												    </div>
 
-											    @php
-
-											    	$db++;
-											    	}
-											    @endphp
+											    @endforeach
 											</div>
 				    					</div>
 				    				</div>
