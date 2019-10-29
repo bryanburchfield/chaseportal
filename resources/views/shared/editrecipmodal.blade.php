@@ -5,24 +5,24 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit Recipient</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('general.edit_recip')}}</h4>
             </div>
 
             <div class="modal-body">
                 {!! Form::open(['method'=> 'POST', 'url' => '#', 'class' => 'form clear display update_recip']) !!}
 
                 <div class="form-group">
-                    {!! Form::label('name', 'Full Name') !!}
+                    {!! Form::label('name', __('general.full_name')) !!}
                     {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('email', 'Email Address') !!}
+                    {!! Form::label('email', __('general.email')) !!}
                     {!! Form::email('email', null, ['class'=>'form-control email']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('phone', 'Phone') !!}
+                    {!! Form::label('phone', __('general.phone')) !!}
                     {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
                 </div>
 
@@ -35,8 +35,8 @@
                     {!! Form::hidden('edit_form_submitted', '1', ['class'=>'edit_form_submitted']) !!}
                 @endif
 
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                {!! Form::submit('Save', ['class'=>'btn btn-warning btn-md mb0']) !!}
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+                {!! Form::submit(__('general.save'), ['class'=>'btn btn-warning btn-md mb0']) !!}
 
                 <div class="alert alert-danger mt20"></div>
                 {!! Form::close() !!}
