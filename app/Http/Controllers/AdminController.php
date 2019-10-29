@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\AutomatedReport;
+use App\Dialer;
 use App\System;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\Auth;
@@ -109,11 +110,9 @@ class AdminController extends Controller
         }
 
         $dbs = ['' => 'Select One'];
-        for ($i = 1; $i <= 25; $i++) {
-            if ($i == 13) {
-                continue;
-            }  // there is no db 13
-            $dbs['PowerV2_Reporting_Dialer-' . sprintf("%02d", $i)] = 'PowerV2_Reporting_Dialer-' . sprintf("%02d", $i);
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
         $users = User::all()->sortBy('id');
@@ -253,14 +252,10 @@ class AdminController extends Controller
 		FROM (";
 
         $union = '';
-        for ($db = 1; $db <= 25; $db++) {
-            if ($db == 13) {
-                continue;
-            }
-
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $sql .= " $union
-			SELECT $db as [Server], $fields
-			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $db) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
+            SELECT " . $dialer->dialer_numb . " as [Server], $fields
+			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
 
             $union = "UNION";
         }
