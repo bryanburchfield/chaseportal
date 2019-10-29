@@ -5,10 +5,7 @@
 @section('content')
 
 <div class="preloader"></div>
-<input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $dateFilter }}" id="datefilter" name="datefilter">
-<input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
-
 
 <div class="container-fluid bg">
     <div class="container mt50">
@@ -43,12 +40,12 @@
                     <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">Last Week</a></li>
                     <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">This Month</a></li>
                     <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">Last Month</a></li>
-                    
+
                 </ul>
             </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card blue" id="total_outbound">

@@ -5,14 +5,11 @@
 @section('content')
 
 <div class="preloader"></div>
-<input type="hidden" value="{{ $campaign }}" id="campaign" name="campaign">
 <input type="hidden" value="{{ $dateFilter }}" id="datefilter" name="datefilter">
-<input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
-
 
 <div class="container-fluid bg">
     <div class="container mt50">
-        
+
         <div class="container-fluid">
             <div class="col-xs-7">
                 <div class="filter_time_camp_dets">
@@ -46,7 +43,7 @@
             </div>
             </div>
         </div>
-		
+
         <div class="row">
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card blue" id="total_outbound">
