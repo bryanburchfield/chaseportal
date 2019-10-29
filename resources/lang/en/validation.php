@@ -128,9 +128,15 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'password' => [
+            'min' => 'The :attribute must contain more than :min characters',
         ],
+        'email'    => [
+            'unique' => 'The :attribute has already been registered.',
+        ],
+        'filter_rule' => [
+            'same_source_destination' => 'Source and Destination campaign/subcampaign must be different.',
+        ]
     ],
 
     /*
