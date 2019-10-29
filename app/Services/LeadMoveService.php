@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\LeadRule;
@@ -10,6 +11,7 @@ use App\Dialer;
 use App\LeadMove;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -50,7 +52,135 @@ class LeadMoveService
         $this->today = date('Y-m-d');
     }
 
-    public static function runMove()
+    public function storeLead(Request $request)
+    {
+        $db_leadmove = new DbLeadmove();
+        $db_leadmove->lead_id = $request->lead;
+        $db_leadmove->db_from = $request->source;
+        $db_leadmove->db_to = $request->destination;
+        $db_leadmove->save();
+    }
+
+    public static function moveLeads()
+    {
+        $leadmover = new LeadMoveService();
+        $leadmover->startMove();
+    }
+
+    public function startMove()
+    {
+        $process_id = uniqid();
+
+        // set a process_id on all the recs we're about to process
+        DbLeadmove::whereNull('process_id')->update(['process_id' => $process_id]);
+        foreach (DbLeadmove::where('process_id', $process_id)->get() as $db_leadmove) {
+            $db_leadmove->succeeded = $this->moveLead($db_leadmove);
+            $db_leadmove->save();
+        }
+    }
+
+    private function moveLead(DbLeadmove $db_leadmove)
+    {
+        if ($this->uploadLead($db_leadmove)) {
+            $this->updateSource($db_leadmove->lead_id, $db_leadmove->db_from);
+            return true;
+        }
+
+        return false;
+    }
+
+    private function uploadLead(DbLeadmove $db_leadmove)
+    {
+        $leadData = $this->readLead($db_leadmove->lead_id, $db_leadmove->db_from);
+
+        if (empty($leadData)) {
+            echo "Can't find lead " . $db_leadmove->lead_id . "\n";
+            return false;
+        }
+        if ($leadData['Campaign'] == '_Moved_') {
+            echo "Already moved " . $db_leadmove->lead_id . "\n";
+            return false;
+        }
+
+        $groupid = $leadData['GroupId'];
+        $campaign = $leadData['Campaign'];
+        $subcampaign = $leadData['Subcampaign'];
+
+        $data['FirstName'] = $leadData['FirstName'];
+        $data['LastName'] = $leadData['LastName'];
+        $data['Address'] = $leadData['Address'];
+        $data['City'] = $leadData['City'];
+        $data['State'] = $leadData['State'];
+        $data['ZipCode'] = $leadData['ZipCode'];
+        $data['PrimaryPhone'] = $leadData['PrimaryPhone'];
+        $data['Campaign'] = $leadData['Campaign'];
+        $data['Subcampaign'] = $leadData['Subcampaign'];
+        $data['Notes'] = $leadData['Notes'];
+
+        $dialDups = 0;
+        $dialNonCallables = 0;
+        $duplicatesCheck = 1;
+
+        $api = $this->initApi($db_leadmove->db_to);
+
+        $result = $api->ImportData($data, $groupid, $campaign, $subcampaign, $dialDups, $dialNonCallables, $duplicatesCheck);
+
+        if ($result === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function readLead($lead_id, $db_from)
+    {
+        // get lead from reporting db
+
+        $db = Dialer::where('dialer_numb', $db_from)->select('reporting_db')->first();
+        $db = $db->reporting_db;
+
+        $table = "[$db].[dbo].[Leads]";
+
+        $sql = "SELECT
+            GroupId,
+            FirstName,
+            LastName,
+            Address,
+            City,
+            State,
+            ZipCode,
+            PrimaryPhone,
+            Campaign,
+            Subcampaign,
+            Notes
+        FROM $table WHERE id = :id";
+
+        $bind['id'] = $lead_id;
+
+        $data = $this->runSql($sql, $bind);
+        if (count($data)) {
+            $data = $data[0];
+        }
+
+        return $data;
+    }
+
+    private function updateSource($lead_id, $db_from)
+    {
+        $api = $this->initApi($db_from);
+
+        $data['Campaign'] = '_Moved_';
+
+        $result = $api->UpdateDataByLeadId($data, $this->leadData['GroupId'], '', '', $lead_id);
+
+        if ($result === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function runFilter()
     {
         $leadmover = new LeadMoveService();
 
@@ -65,7 +195,7 @@ class LeadMoveService
         }
 
         // And this does the actual moves
-        $leadmover->moveLeads();
+        $leadmover->filterLeads();
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -106,7 +236,7 @@ class LeadMoveService
         }
     }
 
-    private function moveLeads()
+    private function filterLeads()
     {
         // cursor thru the log and do the moves
         // this way if a single lead matches multiple rules
@@ -124,14 +254,14 @@ class LeadMoveService
 
             $api = $this->initApi($lead_move->reporting_db);
 
-            if ($this->moveLead($api, $lead_move)) {
+            if ($this->filterLead($api, $lead_move)) {
                 $lead_move->succeeded = true;
                 $lead_move->save();
             }
         }
     }
 
-    private function moveLead($api, $lead_move)
+    private function filterLead($api, $lead_move)
     {
         echo "Moving Lead: " . $lead_move->lead_id .
             " for group " . $lead_move->group_id .
