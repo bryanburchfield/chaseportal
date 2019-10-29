@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-class Admin extends Controller
+class AdminController extends Controller
 {
     use TimeTraits;
 
@@ -49,6 +49,39 @@ class Admin extends Controller
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
+        // Now UTC for the UK
+        $timezones = System::all()
+            ->whereIn(
+                'name',
+                [
+                    'Greenwich Standard Time',
+                ]
+            )
+            ->sortBy('current_utc_offset')->toArray();
+
+        foreach ($timezones as $tz) {
+            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
+        }
+
+        // And Australia
+        $timezones = System::all()
+            ->whereIn(
+                'name',
+                [
+                    'W. Australia Standard Time',
+                    'Aus Central W. Standard Time',
+                    'AUS Central Standard Time',
+                    'E. Australia Standard Time',
+                    'Cen. Australia Standard Time',
+                    'AUS Eastern Standard Time',
+                ]
+            )
+            ->sortBy('current_utc_offset')->toArray();
+
+        foreach ($timezones as $tz) {
+            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
+        }
+
         // And then the rest
         $timezones = System::all()
             ->whereNotIn(
@@ -60,6 +93,13 @@ class Admin extends Controller
                     'Pacific Standard Time',
                     'Alaskan Standard Time',
                     'Hawaiian Standard Time',
+                    'Greenwich Standard Time',
+                    'W. Australia Standard Time',
+                    'Aus Central W. Standard Time',
+                    'AUS Central Standard Time',
+                    'E. Australia Standard Time',
+                    'Cen. Australia Standard Time',
+                    'AUS Eastern Standard Time',
                 ]
             )
             ->sortBy('current_utc_offset')->toArray();
