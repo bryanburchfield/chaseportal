@@ -135,6 +135,9 @@ return [
         'email'    => [
             'unique' => 'El :attribute ya ha sido registrado.',
         ],
+        'filter_rule' => [
+            'same_source_destination' => 'La campaña / subcampaña de origen y destino debe ser diferente.',
+        ]
     ],
 
     /*

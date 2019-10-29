@@ -50,7 +50,7 @@ class AddLeadFilterRule extends FormRequest
                 'required',
                 function ($attribute, $value, $fail) {
                     if (!in_array($value, array_values($this->getAllCampaigns()))) {
-                        $fail('Source campaign is invalid.');
+                        $fail(trans('custom_validation.source_campaign_invalid'));
                     }
                 },
             ],
@@ -59,7 +59,7 @@ class AddLeadFilterRule extends FormRequest
                 function ($attribute, $value, $fail) {
                     $campaign = request('source_campaign');
                     if (!in_array($value, array_values($this->getAllSubcampaigns($campaign)))) {
-                        $fail('Source subcampaign is invalid.');
+                        $fail(trans('custom_validation.source_subcampaign_invalid'));
                     }
                 },
             ],
@@ -71,7 +71,7 @@ class AddLeadFilterRule extends FormRequest
                 'required',
                 function ($attribute, $value, $fail) {
                     if (!in_array($value, array_values($this->getAllCampaigns()))) {
-                        $fail('Destination campaign is invalid.');
+                        $fail(trans('custom_validation.destination_campaign_invalid'));
                     }
                 },
             ],
@@ -80,7 +80,7 @@ class AddLeadFilterRule extends FormRequest
                 function ($attribute, $value, $fail) {
                     $campaign = request('destination_campaign');
                     if (!in_array($value, array_values($this->getAllSubcampaigns($campaign)))) {
-                        $fail('Destination subcampaign is invalid.');
+                        $fail(trans('custom_validation.destination_subcampaign_invalid'));
                     }
                 },
             ],
@@ -97,7 +97,7 @@ class AddLeadFilterRule extends FormRequest
                     (is_null(request('source_subcampaign')) && is_null(request('destination_subcampaign'))) ||
                     request('source_subcampaign') == request('destination_subcampaign')
                 ) {
-                    $validator->errors()->add('destination_campaign', 'Source and Destination campaign/subcampaign must be different');
+                    $validator->errors()->add('destination_campaign', trans('custom_validation.same_source_destination'));
                 }
             }
         });
