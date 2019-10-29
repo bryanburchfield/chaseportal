@@ -21,7 +21,7 @@
         @endif
 
         @can('accessAdmin')
-            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ action('Admin@index') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
+            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ action('AdminController@index') }}"><i class="fas fa-user-cog"></i>Admin</a></li>
         @endcan
 
         @cannot('accessAdmin')

@@ -53,12 +53,12 @@ Route::prefix('dashboards')->group(function () {
         // Admin only
         // prefix('admin') isn't working for some reason
         Route::group(['middleware' => 'can:accessAdmin'], function () {
-            Route::get('admin/', 'Admin@index');
-            Route::post('admin/add_user', 'Admin@addUser');
-            Route::post('admin/delete_user', 'Admin@deleteUser');
-            Route::post('admin/get_user', 'Admin@getUser');
-            Route::post('admin/update_user', 'Admin@updateUser');
-            Route::post('admin/cdr_lookup', 'Admin@cdrLookup');
+            Route::get('admin/', 'AdminController@index');
+            Route::post('admin/add_user', 'AdminController@addUser');
+            Route::post('admin/delete_user', 'AdminController@deleteUser');
+            Route::post('admin/get_user', 'AdminController@getUser');
+            Route::post('admin/update_user', 'AdminController@updateUser');
+            Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
         });
     });
 });

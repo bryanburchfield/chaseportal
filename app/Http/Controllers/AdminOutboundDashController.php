@@ -69,9 +69,6 @@ class AdminOutboundDashController extends Controller
             'ntc' => 0,
         ];
 
-        // Prev tots for rate change calcs
-        $prev_total_duration = 0;
-
         foreach ($result[0] as $r) {
             if ($this->byHour($this->dateFilter)) {
                 $datetime = date("g:i", strtotime($r['Time']));
