@@ -57,8 +57,6 @@
 		'sec_holdtime'			=> 'sec holdtime',
 		'agent_call_times'		=>'Agent Call Times / Call Count',
 		'max_hold_time'		=> 'Max Hold Time'
-
-
 	];
 
 
