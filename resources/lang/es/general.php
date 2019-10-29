@@ -28,7 +28,8 @@
 		'recipients'				=> 'Destinatarios',
 		'full_name'					=> 'Nombre completo',
 		'email'						=> 'Email',
-		'phone'						=> 'Teléfono'
+		'phone'						=> 'Teléfono',
+		'logout'					=> 'Cerrar Sesión'
 	];
 
 ?>

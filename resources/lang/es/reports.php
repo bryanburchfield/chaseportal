@@ -20,7 +20,18 @@
          'production_report' => 'Reporte de produccion',
          'production_report_subcampaign' => 'Producción por subcampaña',
          'lead_inventory' => 'Inventario de plomo',
-         'lead_inventory_sub' => 'Inventario de plomo por subcampaña'
+         'lead_inventory_sub' => 'Inventario de plomo por subcampaña',
+
+         'from'               => 'De',
+          'to'                => 'A',
+          'rep'               => 'Reps',
+          'run_report'        => 'Sacar un reporte',
+          'skill'             => 'Habilidad',
+          'campaign'          => 'Campaña',
+          'inbound_sources'   => 'Fuentes entrantes',
+          'call_statuses'     => 'Estados de llamadas',
+          'call_type'         => 'Tipo de llamada'
+
      ];
 
 ?>

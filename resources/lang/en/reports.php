@@ -20,7 +20,17 @@
 		'production_report' => 'Production Report',
 		'production_report_subcampaign' => 'Production By Sub',
 		'lead_inventory' => 'Lead Inventory',
-		'lead_inventory_sub' => 'Lead Inventory By Sub'
+		'lead_inventory_sub' => 'Lead Inventory By Sub',
+
+		'from'				=> 'From',
+		'to'				=> 'To',
+		'rep'				=> 'Rep',
+		'run_report'		=> 'Run Report',
+		'skill'				=> 'Skill',
+		'campaign'			=> 'Campaign',
+		'inbound_sources'	=> 'Inbound Sources',
+		'call_statuses'		=> 'Call Statuses',
+		'call_type'			=> 'Call Type'
 	];
 
 ?>

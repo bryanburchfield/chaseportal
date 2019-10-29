@@ -9,7 +9,7 @@
 		'edit_recip'				=> 'Edit Recipient',
 		'date'						=> 'Date',
 		'start_date'				=> 'Start Date',
-		'end_date'					=> 'End Date'
+		'end_date'					=> 'End Date',
 		'today'						=> 'Today',
 		'yesterday'					=> 'Yesterday',
 		'this_week'					=> 'This Week',
@@ -28,7 +28,8 @@
 		'recipients'				=> 'Recipients',
 		'full_name'					=> 'Full Name',
 		'email'						=> 'Email Address',
-		'phone'						=> 'Phone'
+		'phone'						=> 'Phone',
+		'logout'					=> 'Log Out'
 	];
 
 ?>

@@ -13,7 +13,7 @@
                     <div class="checkbox">
                     <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['database']}}" name="databases"><span>{{$db['name']}}</span></label>
                     </div>
-                @endforeach                                                                         
+                @endforeach
 
                 <input type="hidden" class="page_type" value="{{$page['type']}}">
                 <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
@@ -38,7 +38,7 @@
     <ul class="dropdown-menu filter_campaign stop-propagation">
         <div class="form-group"><input type="text" class="form-control campaign_search" placeholder="Search..."></div>
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
-        
+
         @foreach($campaign_list as $campaign)
             <div class="checkbox">
                 <label class="campaign_label">

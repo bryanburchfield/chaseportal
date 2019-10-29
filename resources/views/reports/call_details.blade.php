@@ -2,7 +2,7 @@
 @section('title', 'Report')
 
 @section('content')
-	<h3 class="heading">Call Details</h3>
+	<h3 class="heading">{{__('reports.call_details')}}</h3>
 	<div class="report_filters card col-sm-12">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
@@ -12,7 +12,7 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('fromdate', 'From') !!}
+						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
 							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker fromdate', 'required' => true]) !!}
 							<span class="input-group-addon">
@@ -25,7 +25,7 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('todate', 'To') !!}
+						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
 							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker todate', 'required' => true]) !!}
 							<span class="input-group-addon">
@@ -38,35 +38,35 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('campaigns', 'Campaigns') !!}
+						{!! Form::label('campaigns', __('reports.campaign')) !!}
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('callerids', 'Inbound Sources') !!}
+						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
 						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('reps', 'Reps') !!}
+						{!! Form::label('reps', __('reports.rep')) !!}
 						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('call_statuses', 'Call Statuses') !!}
+						{!! Form::label('call_statuses', __('reports.call_statuses')) !!}
 						{!! Form::select("call_statuses[]", $filters['call_statuses'], null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 					</div>
 				</div>
 			
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('call_type', 'Call Type') !!}
+						{!! Form::label('call_type', __('reports.call_type')) !!}
 						{!! Form::select("call_type", $filters['call_types'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 					</div>
 				</div>
@@ -84,7 +84,7 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('phone', 'Phone') !!}
+						{!! Form::label('phone', __('general.phone')) !!}
 						{!! Form::tel('phone', null, ['class'=>'form-control', 'required' => false]) !!}
 					</div>
 				</div>
@@ -101,7 +101,7 @@
 
 
 				{!! Form::hidden('report', $report, ['id'=>'report']) !!}
-			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
+			{!! Form::submit(__('reports.run_report'), ['class'=>'btn btn-primary mb0']) !!}
 		{!! Form::close() !!}
 	</div><!-- end report_filters -->
 

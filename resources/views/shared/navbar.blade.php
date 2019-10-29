@@ -16,7 +16,7 @@
                     {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                         @csrf
                         <div class="btn-group">
-                        {!! Form::submit('Log Out',['class'=>'btn logout_btn']) !!}
+                        {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
                         </div>
                     {!! Form::close() !!}
 
