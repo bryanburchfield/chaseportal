@@ -14,16 +14,16 @@ class CallerId
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Caller ID Report';
+        $this->params['reportName'] = trans('reports.caller_id');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['caller_id'] = '';
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'CallerId' => 'Caller ID',
-            'Total' => 'Total Calls',
-            'Agent' => 'Agent Calls',
-            'ConnectPct' => 'Connect %',
+            'CallerId' => trans('reports.callerid'),
+            'Total' => trans('reports.totalcalls'),
+            'Agent' => trans('reports.agent'),
+            'ConnectPct' => trans('reports.connectpct'),
         ];
     }
 

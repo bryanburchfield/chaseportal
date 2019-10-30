@@ -16,14 +16,14 @@ class LeadInventory
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Lead Inventory Report';
+        $this->params['reportName'] = trans('reports.lead_inventory');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['columns'] = [
-            'Description' => 'Result Codes',
-            'Type' => 'Type',
-            'Leads' => 'Count',
+            'Description' => trans('reports.resultcodes'),
+            'Type' => trans('reports.type'),
+            'Leads' => trans('reports.count'),
         ];
     }
 

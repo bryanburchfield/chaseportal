@@ -16,16 +16,16 @@ class AgentActivity
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Activity Report';
+        $this->params['reportName'] = trans('reports.agent_activity');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = '';
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'Event' => 'Event',
-            'Date' => 'Date',
-            'Details' => 'Details',
+            'Rep' => trans('reports.rep'),
+            'Campaign' => trans('reports.campaign'),
+            'Event' => trans('reports.event'),
+            'Date' => trans('reports.date'),
+            'Details' => trans('reports.details'),
         ];
     }
 

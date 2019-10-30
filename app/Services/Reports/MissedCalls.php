@@ -14,16 +14,16 @@ class MissedCalls
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Missed Calls Report';
+        $this->params['reportName'] = trans('reports.missed_calls');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Phone' => 'Phone',
-            'Cnt' => 'Missed Calls',
-            'FirstName' => 'First',
-            'LastName' => 'Last',
-            'Date' => 'Most Recent',
-            'CallStatus' => 'Status',
+            'Phone' => trans('reports.phone'),
+            'MissedCalls' => trans('reports.missedcalls'),
+            'FirstName' => trans('reports.firstname'),
+            'LastName' => trans('reports.lastname'),
+            'Date' => trans('reports.mostrecent'),
+            'CallStatus' => trans('reports.callstatus'),
         ];
     }
 
@@ -56,7 +56,7 @@ class MissedCalls
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT DR.Phone, Max(DR.Date) as MaxDate, COUNT(DR.Phone) as Cnt,
+            $sql .= " $union SELECT DR.Phone, Max(DR.Date) as MaxDate, COUNT(DR.Phone) as MissedCalls,
             LD.FirstName, LD.LastName
             FROM [$db].[dbo].[DialingResults] DR
             CROSS APPLY (
@@ -88,7 +88,7 @@ class MissedCalls
 
             $sql .= " $union SELECT
                 MP.Phone,
-                MP.Cnt,
+                MP.MissedCalls,
                 MP.FirstName,
                 MP.LastName,
                 DR.Date,
@@ -135,7 +135,7 @@ class MissedCalls
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = UtcToLocal($rec['Date'], $tz = Auth::user()->iana_tz)->format('Y-m-d H:i:s');
+                $rec['Date'] = $this->utcToLocal($rec['Date'], $tz = Auth::user()->iana_tz)->format('Y-m-d H:i:s');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;

@@ -15,22 +15,22 @@ class AgentPauseTime
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Pause Time Report';
+        $this->params['reportName'] = trans('reports.agent_pause_time');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'LogInTime' => 'LogIn Time',
-            'LogOutTime' => 'LogOut Time',
-            'PausedTime' => 'Pause Time',
-            'UnPausedTime' => 'UnPause Time',
-            'PausedTimeSec' => 'Time Paused',
-            'BreakCode' => 'Break Code',
-            'TotPausedSec' => 'Total Paused',
-            'TotManHours' => 'Total Man Hours',
+            'Rep' => trans('reports.rep'),
+            'Campaign' => trans('reports.campaign'),
+            'LogInTime' => trans('reports.logintime'),
+            'LogOutTime' => trans('reports.logouttime'),
+            'PausedTime' => trans('reports.pausedtime'),
+            'UnPausedTime' => trans('reports.unpausedtime'),
+            'PausedTimeSec' => trans('reports.pausedtimesec'),
+            'BreakCode' => trans('reports.breakcode'),
+            'TotPausedSec' => trans('reports.totpausedsec'),
+            'TotManHours' => trans('reports.totmanhours'),
         ];
     }
 

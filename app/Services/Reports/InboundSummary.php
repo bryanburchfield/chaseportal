@@ -16,22 +16,22 @@ class InboundSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Inbound Summary Report';
+        $this->params['reportName'] = trans('reports.inbound_summary');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Campaign' => 'Campaign',
-            'Source' => 'Inbound Source',
-            'Total' => 'Total',
-            'Duration' => 'Minutes',
-            'HandledByRep' => 'Handled By Rep',
-            'HandledByIVR' => 'Handled By IVR',
-            'VoiceMail' => 'Voice Mail',
-            'Abandoned' => 'Abandoned Calls',
-            'AvgTalkTime' => 'Avg Talk Time',
-            'AvgHoldTime' => 'Avg Hold Time',
+            'Campaign' => trans('reports.campaign'),
+            'Source' => trans('reports.source'),
+            'Total' =>  trans('reports.totalcalls'),
+            'Duration' => trans('reports.duration'),
+            'HandledByRep' => trans('reports.handledbyrep'),
+            'HandledByIVR' =>  trans('reports.handledbyivr'),
+            'VoiceMail' =>  trans('reports.voicemail'),
+            'Abandoned' =>  trans('reports.abandoned'),
+            'AvTalkTime' =>  trans('reports.avtalktime'),
+            'AvHoldTime' =>  trans('reports.avholdtime'),
         ];
     }
 
@@ -70,16 +70,16 @@ class InboundSummary
                 Total int DEFAULT 0,
                 HandledByRep int DEFAULT 0,
                 HandledByIVR int DEFAULT 0,
-                AvgHoldTime numeric(18,2) DEFAULT 0,
-                AvgTalkTime numeric(18,2) DEFAULT 0,
+                AvHoldTime numeric(18,2) DEFAULT 0,
+                AvTalkTime numeric(18,2) DEFAULT 0,
                 Abandoned int DEFAULT 0,
                 VoiceMail int DEFAULT 0,
                 Duration  int DEFAULT 0
             );
 
             CREATE TABLE #Avgs(
-                GAvgHoldTime numeric(18,2) DEFAULT 0,
-                GAvgTalkTime numeric(18,2) DEFAULT 0
+                GAvHoldTime numeric(18,2) DEFAULT 0,
+                GAvTalkTime numeric(18,2) DEFAULT 0
             );
             insert into #Avgs values (0,0);
 
@@ -158,7 +158,7 @@ class InboundSummary
             AND #CampaignSummary.Campaign = a.Campaign
 
             UPDATE #CampaignSummary
-            SET AvgHoldTime = a.HoldTime
+            SET AvHoldTime = a.HoldTime
             FROM (SELECT dr.Source, dr.Campaign, AVG(HoldTime) as HoldTIme
                   FROM #DialingResultsStats dr
                   WHERE dr.HoldTime > 0
@@ -167,7 +167,7 @@ class InboundSummary
             AND #CampaignSummary.Campaign = a.Campaign
 
             UPDATE #CampaignSummary
-            SET AvgTalkTime = a.TalkTime
+            SET AvTalkTime = a.TalkTime
             FROM (SELECT dr.Source, dr.Campaign, AVG(Duration) as TalkTime
                   FROM #DialingResultsStats dr
                   WHERE dr.Rep <> ''
@@ -195,13 +195,13 @@ class InboundSummary
             AND #CampaignSummary.Campaign = a.Campaign
 
             UPDATE #Avgs
-            SET GAvgHoldTime =
+            SET GAvHoldTime =
             (SELECT AVG(HoldTime)
              FROM #DialingResultsStats dr
              WHERE dr.HoldTime > 0)
 
             UPDATE #Avgs
-            SET GAvgTalkTime =
+            SET GAvTalkTime =
              (SELECT AVG(Duration)
               FROM #DialingResultsStats dr
               WHERE dr.Rep <> ''
@@ -216,10 +216,10 @@ class InboundSummary
              cs.HandledByIVR,
              cs.VoiceMail,
              cs.Abandoned,
-             cs.AvgTalkTime,
-             cs.AvgHoldTime,
-             a.GAvgTalkTime,
-             a.GAvgHoldTime
+             cs.AvTalkTime,
+             cs.AvHoldTime,
+             a.GAvTalkTime,
+             a.GAvHoldTime
             FROM #Avgs a, #CampaignSummary cs
             LEFT JOIN InboundSources s on s.InboundSource = cs.Source";
 
@@ -279,22 +279,22 @@ class InboundSummary
             $total['Abandoned'] += $rec['Abandoned'];
 
             // total avgs are one each row
-            $total['AvgTalkTime'] = $rec['GAvgTalkTime'];
-            $total['AvgHoldTime'] = $rec['GAvgHoldTime'];
+            $total['AvTalkTime'] = $rec['GAvTalkTime'];
+            $total['AvHoldTime'] = $rec['GAvHoldTime'];
 
             // remove gtot cols
-            unset($rec['GAvgTalkTime']);
-            unset($rec['GAvgHoldTime']);
+            unset($rec['GAvTalkTime']);
+            unset($rec['GAvHoldTime']);
 
             $rec['Duration'] = $this->secondsToHms($rec['Duration']);
-            $rec['AvgTalkTime'] = $this->secondsToHms($rec['AvgTalkTime']);
-            $rec['AvgHoldTime'] = $this->secondsToHms($rec['AvgHoldTime']);
+            $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+            $rec['AvHoldTime'] = $this->secondsToHms($rec['AvHoldTime']);
         }
 
         // format totals
         $total['Duration'] = $this->secondsToHms($total['Duration']);
-        $total['AvgTalkTime'] = $this->secondsToHms($total['AvgTalkTime']);
-        $total['AvgHoldTime'] = $this->secondsToHms($total['AvgHoldTime']);
+        $total['AvTalkTime'] = $this->secondsToHms($total['AvTalkTime']);
+        $total['AvHoldTime'] = $this->secondsToHms($total['AvHoldTime']);
 
         // Tack on the totals row
         $results[] = $total;

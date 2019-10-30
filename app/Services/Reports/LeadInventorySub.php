@@ -16,15 +16,15 @@ class LeadInventorySub
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Lead Inventory by Subcampaign Report';
+        $this->params['reportName'] = trans('reports.lead_inventory_sub');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
         $this->params['columns'] = [
-            'Description' => 'Result Codes',
-            'Type' => 'Type',
-            'Leads' => 'Count',
+            'Description' => trans('reports.resultcodes'),
+            'Type' => trans('reports.type'),
+            'Leads' => trans('reports.count'),
         ];
     }
 

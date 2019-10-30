@@ -15,15 +15,15 @@ class ShiftReport
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Shift Report';
+        $this->params['reportName'] = trans('reports.shift_report');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Campaign' => 'Campaign',
-            'Description' => 'Call Status',
-            'TypeName' => 'Type',
-            'Calls' => 'Total Dials',
+            'Date' => trans('reports.date'),
+            'Campaign' => trans('reports.campaign'),
+            'Description' => trans('reports.callstatus'),
+            'TypeName' => trans('reports.type'),
+            'Calls' => trans('reports.calls'),
         ];
     }
 

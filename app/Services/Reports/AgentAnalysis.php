@@ -14,30 +14,30 @@ class AgentAnalysis
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Analysis Report';
+        $this->params['reportName'] = trans('reports.agent_analysis');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['skills'] = [];
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'Hours' => 'Hours Worked',
-            'Contacts' => 'Contacts',
-            'Connects' => 'Connects',
-            'CPH' => 'CPH',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'Leads' => 'Sale/Lead/App',
-            'APH' => 'S-L-A/HR',
-            'CallBacks' => 'Call Backs',
-            'AvTalkTime' => 'Avg Talk Time',
-            'AvWaitTime' => 'Avg Wait Time',
-            'AvailTimeSec' => 'Time Avail',
-            'PausedTimeSec' => 'Time Paused',
-            'ConnectedTimeSec' => 'Talk Time',
-            'DispositionTimeSec' => 'Wrap Up Time',
-            'LoggedInTimeSec' => 'Logged In Time',
+            'Date' => trans('reports.date'),
+            'Rep' => trans('reports.rep'),
+            'Campaign' => trans('reports.campaign'),
+            'Hours' => trans('reports.hours'),
+            'Contacts' => trans('reports.contacts'),
+            'Connects' => trans('reports.connects'),
+            'CPH' => trans('reports.cph'),
+            'ConversionRate' => trans('reports.conversionrate'),
+            'ConversionFactor' => trans('reports.conversionfactor'),
+            'Leads' => trans('reports.leads'),
+            'APH' => trans('reports.aph'),
+            'CallBacks' => trans('reports.callbacks'),
+            'AvTalkTime' => trans('reports.avtalktime'),
+            'AvWaitTime' => trans('reports.avwaittime'),
+            'AvailTimeSec' => trans('reports.availtimesec'),
+            'PausedTimeSec' => trans('reports.pausedtimesec'),
+            'ConnectedTimeSec' => trans('reports.connectedtimesec'),
+            'DispositionTimeSec' => trans('reports.dispositiontimesec'),
+            'LoggedInTimeSec' => trans('reports.loggedintimesec'),
         ];
     }
 

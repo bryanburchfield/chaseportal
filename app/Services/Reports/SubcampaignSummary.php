@@ -14,28 +14,28 @@ class SubcampaignSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Subcampaign Summary Report';
+        $this->params['reportName'] = trans('reports.subcampaign_summary');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Campaign' => 'Campaign',
-            'Subcampaign' => 'Subcampaign',
-            'Total' => 'Total',
-            'Dialed' => 'Dialed',
-            'DPH' => 'Dials per Hr',
-            'Available' => 'Available',
-            'AvAttempt' => 'Attempt',
-            'ManHours' => 'Man Hours',
-            'Connects' => 'Connects',
-            'CPH' => 'Connects per Hr',
-            'Sales' => 'Sale/Lead/App',
-            'SPH' => 'S-L-A per Hr',
-            'ConnectRate' => 'Connect Rate',
-            'SaleRateValue' => 'S-L-A Rate Value',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'Cepts' => 'Operator Disconnects',
+            'Date' => trans('reports.date'),
+            'Campaign' => trans('reports.campaign'),
+            'Subcampaign' => trans('reports.subcampaign'),
+            'Total' => trans('reports.total'),
+            'Dialed' => trans('reports.dialed'),
+            'DPH' => trans('reports.dph'),
+            'Available' => trans('reports.available'),
+            'AvAttempt' => trans('reports.avattempt'),
+            'ManHours' => trans('reports.manhours'),
+            'Connects' => trans('reports.connects'),
+            'CPH' => trans('reports.cph'),
+            'Sales' => trans('reports.sales'),
+            'APH' => trans('reports.aph'),
+            'ConnectRate' => trans('reports.connectrate'),
+            'SaleRateValue' => trans('reports.saleratevalue'),
+            'ConversionRate' => trans('reports.conversionrate'),
+            'ConversionFactor' => trans('reports.conversionfactor'),
+            'Cepts' => trans('reports.cepts'),
         ];
     }
 
@@ -74,7 +74,7 @@ class SubcampaignSummary
             Connects int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
             Sales int DEFAULT 0,
-            SPH numeric(18,2) DEFAULT 0,
+            APH numeric(18,2) DEFAULT 0,
             DPH numeric(18,2) DEFAULT 0,
             ConnectRate numeric(18,2) DEFAULT 0,
             SaleRateValue numeric(18,2) DEFAULT 0,
@@ -281,7 +281,7 @@ class SubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET CPH = CAST(Connects as numeric(18,2))/ManHours,
-            SPH = CAST(Sales as numeric(18,2))/ManHours,
+            APH = CAST(Sales as numeric(18,2))/ManHours,
             DPH = CAST(Dialed as numeric(18,2))/ManHours
         WHERE ManHours > 0
 
@@ -312,7 +312,7 @@ class SubcampaignSummary
             Connects,
             CPH,
             Sales,
-            SPH,
+            APH,
             ConnectRate,
             SaleRateValue,
             ConversionRate,

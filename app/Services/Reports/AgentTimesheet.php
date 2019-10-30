@@ -15,20 +15,20 @@ class AgentTimesheet
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Timesheet';
+        $this->params['reportName'] = trans('reports.agent_timesheet');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'LogInTime' => 'LogIn Time',
-            'LogOutTime' => 'LogOut Time',
-            'ManHourSec' => 'Man Hours',
-            'PausedTimeSec' => 'Paused Time',
+            'Date' => trans('reports.date'),
+            'Rep' => trans('reports.rep'),
+            'Campaign' => trans('reports.campaign'),
+            'LogInTime' => trans('reports.logintime'),
+            'LogOutTime' => trans('reports.logouttime'),
+            'ManHourSec' => trans('reports.manhoursec'),
+            'PausedTimeSec' => trans('reports.pausedtimesec'),
         ];
     }
 

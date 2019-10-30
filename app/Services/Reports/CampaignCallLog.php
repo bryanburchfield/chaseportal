@@ -17,17 +17,17 @@ class CampaignCallLog
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Campaign Call Log';
+        $this->params['reportName'] = trans('reports.campaign_call_log');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'CallStatus' => 'Call Status',
-            'Description' => 'Description',
-            'Cnt' => 'Calls',
-            'Pct' => 'Percent',
+            'CallStatus' => trans('reports.callstatus'),
+            'Description' => trans('reports.description'),
+            'Cnt' => trans('reports.cnt'),
+            'Pct' => trans('reports.pct'),
         ];
     }
 

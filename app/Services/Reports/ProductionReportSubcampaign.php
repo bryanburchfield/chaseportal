@@ -16,7 +16,7 @@ class ProductionReportSubcampaign
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Production Report by Subcampaign';
+        $this->params['reportName'] = trans('reports.production_report_subcampaign');
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
