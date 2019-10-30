@@ -56,7 +56,9 @@
 		'total_inbound_calls'	=> 'Total de llamadas entrantes',
 		'sec_holdtime'			=> 'segundos de tiempo de espera',
 		'agent_call_times'		=>'Tiempos de llamadas del agente / recuento de llamadas',
-		'max_hold_time'		=> 'Máximo tiempo de espera'
+		'max_hold_time'		=> 'Máximo tiempo de espera',
+		'admin'				=> 'Administración',
+		'settings'			=> 'Configuraciones'
 	];
 
 
