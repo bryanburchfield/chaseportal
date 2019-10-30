@@ -11,6 +11,7 @@
 		'agent_timesheet' => 'Agent Time Sheet',
 		'campaign_usage' => 'Campaign Usage',
 		'caller_id' => 'Caller ID Tracking',
+		'callerid' => 'Caller ID',
 		'inbound_summary' => 'Inbound Summary',
 		'campaign_summary' => 'Campaign Summary',
 		'subcampaign_summary' => 'Subcampaign Summary',
@@ -28,6 +29,7 @@
 		'run_report'		=> 'Run Report',
 		'skill'				=> 'Skill',
 		'campaign'			=> 'Campaign',
+		'subcampaign'			=> 'Subcampaign',
 		'inbound_sources'	=> 'Inbound Sources',
 		'call_statuses'		=> 'Call Statuses',
 		'call_type'			=> 'Call Type'

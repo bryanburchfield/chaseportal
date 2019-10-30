@@ -29,7 +29,11 @@
 		'full_name'					=> 'Full Name',
 		'email'						=> 'Email Address',
 		'phone'						=> 'Phone',
-		'logout'					=> 'Log Out'
+		'logout'					=> 'Log Out',
+		'download_report'			=> 'Download Report',
+		'reset_sorting'				=> 'Reset Sorting',
+		'download'					=> 'Download',
+		'download_warning'			=> 'Download Warning'
 	];
 
 ?>

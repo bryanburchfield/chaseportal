@@ -29,7 +29,11 @@
 		'full_name'					=> 'Nombre completo',
 		'email'						=> 'Email',
 		'phone'						=> 'Teléfono',
-		'logout'					=> 'Cerrar Sesión'
+		'logout'					=> 'Cerrar Sesión',
+		'download_report'			=> 'Descargar informe',
+		'reset_sorting'				=> 'Restablecer ordenación',
+		'download'					=> 'Descargar',
+		'download_warning'			=> 'Descargar Advertencia'
 	];
 
 ?>

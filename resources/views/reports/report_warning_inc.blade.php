@@ -4,7 +4,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Download Warning</h4>
+				<h4 class="modal-title" id="myModalLabel">{{__('general.download_warning')}}</h4>
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-danger">
@@ -12,8 +12,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default cancel" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary dl_report">Download</button>
+				<button type="button" class="btn btn-default cancel" data-dismiss="modal">{{__('general.cancel')}}</button>
+				<button type="button" class="btn btn-primary dl_report">{{__('general.download')}}</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
