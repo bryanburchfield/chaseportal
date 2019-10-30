@@ -1,8 +1,7 @@
 @extends('layouts.master')
-@section('title', 'Tools')
+@section('title', __('tools.tools'))
 
 @section('content')
-
 
 <div class="preloader"></div>
 
@@ -18,53 +17,53 @@
 			    <div class="row">
 	                <div class="col-sm-6">
 	                    <div class="card">
-	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Edit Rule</h2>
+	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
 	                        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools/update_rule', 'class'=>'form mt20 edit_rule']) !!}
 
 	                            <div class="form-group">
-	                            	{!! Form::label('rule_name', 'Rule Name') !!}
+	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
 	                            	{!! Form::text('rule_name', $lead_rule['rule_name'], ['class'=>'form-control rule_name', 'required'=>true]) !!}
 	                            </div>
-								
+
 	                            <div class="form-group">
-            						{!! Form::label('source_campaign', 'Campaign') !!}
+            						{!! Form::label('source_campaign',  __('tools.campaign')) !!}
             						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
             					</div>
 
 	                            <div class="form-group">
-            						{!! Form::label('source_subcampaign', 'Sub Campaign') !!}
+            						{!! Form::label('source_subcampaign',  __('tools.subcampaign')) !!}
             						{!! Form::select("source_subcampaign", [null=>'Select One']+ $subcampaigns, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
-            						{!! Form::label('filter_type', 'Filter Type') !!}
+            						{!! Form::label('filter_type', __('tools.filter_type')) !!}
             						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
             					</div>
-								
+
 								<div class="form-group">
-									{!! Form::label('filter_value', 'Days to Filter By') !!}
+									{!! Form::label('filter_value', __('tools.days_to_filter')) !!}
 									{!! Form::text('filter_value', $lead_rule['filter_value'], ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
 								</div>
-								
+
 								<div class="form-group">
-            						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
+            						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
             						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
             					</div>
 
             					<div class="form-group">
-            						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
+            						{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
             						{!! Form::select("destination_subcampaign",  [null=>'Select One'] + $destination_subcampaigns, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
             					</div>
 
             					<div class="form-group">
-            						{!! Form::label('description', 'Description') !!}
+            						{!! Form::label('description', __('tools.description')) !!}
             						{!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
-								
-								{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0'] ) !!}
-								
+
+								{!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
+
     							@if($errors->any())
                                     <div class="alert alert-danger mt20">
                                         @foreach($errors->all() as $e)
