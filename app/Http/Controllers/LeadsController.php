@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddLeadFilterRule;
 use App\LeadRule;
 use App\Mail\LeadDumpMail;
-use App\Services\LeadMoveService;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use App\Traits\TimeTraits;
@@ -21,26 +20,6 @@ class LeadsController extends Controller
     use TimeTraits;
 
     protected $db;
-
-    public function storeLead(Request $request)
-    {
-        if (
-            $request->missing('lead') ||
-            $request->missing('source') ||
-            $request->missing('destination') ||
-            $request->missing('token')
-        ) {
-            abort(403, 'Missing parameters');
-        }
-
-        if ($request->token !== config('services.leadmove.token')) {
-            abort(403, 'Invalid token');
-        }
-
-        $leadmover = new LeadMoveService();
-
-        $leadmover->storeLead($request);
-    }
 
     public function rules()
     {

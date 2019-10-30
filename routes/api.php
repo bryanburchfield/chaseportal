@@ -14,4 +14,3 @@ use Illuminate\Http\Request;
 */
 
 Route::post('deploy', 'UtilController@deploy');
-Route::get('leadmove.php', 'LeadsController@storeLead');

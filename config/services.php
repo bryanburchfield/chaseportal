@@ -51,8 +51,4 @@ return [
         'q' => env('PIAPI_q'),
     ],
 
-    'leadmove' => [
-        'token' => env('LEADMOVE_TOKEN'),
-    ],
-
 ];
