@@ -16,9 +16,14 @@ class Localization
      */
     public function handle($request, Closure $next)
     {
-        if (session()->has('locale')) {
-            App::setLocale(session()->get('locale'));
+        $locales = config('localization.locales');
+
+        if (!session()->has('locale')) {
+            session()->put('locale', $request->getPreferredLanguage($locales));
         }
+
+        App::setLocale(session()->get('locale'));
+
         return $next($request);
     }
 }
