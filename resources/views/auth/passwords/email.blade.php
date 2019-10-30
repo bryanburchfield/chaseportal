@@ -1,23 +1,23 @@
 @extends('layouts.master')
-@section('title', 'Password Reset')
+@section('title', __('general.reset_pw'))
 
 @section('content')
 
     @include('shared.defaultHeader')
-    
+
     <div class="container-fluid hero_bg">
         <div class="container">  
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3 ">
                     <div class="form-holder">
-                        
-                        <h4>Reset Account Password</h4>
+
+                        <h4>{{__('general.reset_pw')}}</h4>
 
                         {!! Form::open(['method' => 'POST', 'route'=> 'password.email', 'class' => 'form']) !!}
                             {{-- @csrf --}}
 
                             <div class="form-group">
-                                {!! Form::label('email', 'Email Address') !!}
+                                {!! Form::label('email', __('general.email')) !!}
 
                                 <div class="input-group">
                                     {!! Form::email('email', null, ['class'=> 'form-control ', 'value'=> '{{ old("email") }}', 'required'=>true]) !!}
@@ -40,8 +40,8 @@
                                     {{ session('status') }}
                                 </div>
                             @endif
-                            
-                            {!! Form::submit('Send Password Reset Link', ['class'=>'btn btn-primary btn-lg']) !!}
+
+                            {!! Form::submit(__('general.send_pw'), ['class'=>'btn btn-primary btn-lg']) !!}
                         {!! Form::close() !!}
                     </div>
                 </div>

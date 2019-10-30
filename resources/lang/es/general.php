@@ -29,11 +29,16 @@
 		'full_name'					=> 'Nombre completo',
 		'email'						=> 'Email',
 		'phone'						=> 'Teléfono',
+		'password'					=> 'Contraseña',
+		'confirm_password'			=> 'Confirmar contraseña',
+		'login'						=> 'Iniciar sesión',
+		'remember_me'				=> 'Recuérdame',
 		'logout'					=> 'Cerrar Sesión',
 		'download_report'			=> 'Descargar informe',
 		'reset_sorting'				=> 'Restablecer ordenación',
 		'download'					=> 'Descargar',
-		'download_warning'			=> 'Descargar Advertencia'
+		'download_warning'			=> 'Descargar Advertencia',
+		'forgot_pw'					=> '¿Olvidaste tu contraseña?',
+		'reset_pw'					=> 'RESTABLECER CONTRASEÑA DE CUENTA',
+		'send_pw'					=> 'Enviar enlace de restablecimiento de contraseña'
 	];
-
-?>

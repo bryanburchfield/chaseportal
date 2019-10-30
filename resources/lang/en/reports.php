@@ -35,4 +35,3 @@
 		'call_type'			=> 'Call Type'
 	];
 
-?>

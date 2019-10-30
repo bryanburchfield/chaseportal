@@ -29,11 +29,16 @@
 		'full_name'					=> 'Full Name',
 		'email'						=> 'Email Address',
 		'phone'						=> 'Phone',
+		'password'					=> 'Password',
+		'confirm_password'			=> 'Confirm Password',
+		'login'						=> 'Login',
+		'remember_me'				=> 'Remember Me',
 		'logout'					=> 'Log Out',
 		'download_report'			=> 'Download Report',
 		'reset_sorting'				=> 'Reset Sorting',
 		'download'					=> 'Download',
-		'download_warning'			=> 'Download Warning'
+		'download_warning'			=> 'Download Warning',
+		'forgot_pw'					=> 'Forgot Your Password',
+		'reset_pw'					=> 'RESET PASSWORD',
+		'send_pw'					=> 'Send Password Reset Link'
 	];
-
-?>
