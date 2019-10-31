@@ -126,4 +126,6 @@ return [
      'unpausedtime' => 'Tiempo de Unpausa',
      'voicemail' => 'Mensaje de Voz',
      'waittimesec' => 'Tiempo de Espera',
+
+     'auto_report_text' => 'Learn to pronounce Aquí puede activar y desactivar los informes automáticos. Los informes se envían por correo electrónico a la dirección con la que se registró y se enviarán diariamente a las 6:00 a.m.EST'
 ];

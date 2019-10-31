@@ -135,7 +135,7 @@
                <h3>{{__('tools.confirm_delete')}} <span class="rule_name"></span>?</h3>
             </div>
 	        <div class="modal-footer">
-	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('tools.cancel')}}</button>
+	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
 	            <button type="button" class="btn btn-danger delete_rule">{{__('tools.delete_rule')}}</button>
 	        </div>
 	    </div>

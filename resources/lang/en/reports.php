@@ -126,4 +126,7 @@ return [
 	'unpausedtime' => 'UnPause Time',
 	'voicemail' => 'Voice Mail',
 	'waittimesec' => 'Wait Time',
+
+	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.'
+
 ];
