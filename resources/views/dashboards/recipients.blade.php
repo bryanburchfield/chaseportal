@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 
-@section('title', 'KPI Recipients')
+@section('title', 'KPI ' . __('kpi.recipients'))
 
 @section('content')
 
@@ -17,23 +17,23 @@
                 <div class="row">
 
                     <div class="col-sm-5 col-sm-push-7 create_recips">
-                        <h2>Create Recipient</h2>
+                        <h2>{{__('kpi.create_recip')}}</h2>
 
                         {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group searchCnt">
-                                {!! Form::label('name', 'Full Name') !!}
+                                {!! Form::label('name', __('general.full_name')) !!}
                                 {!! Form::text('name', null, ['class'=>'form-control name', 'required'=> true, 'autocomplete' => 'new-password']) !!}
                                 <div class="search_results"></div>
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('email', 'Email Address') !!}
+                                {!! Form::label('email', __('general.email')) !!}
                                 {!! Form::email('email', null, ['class'=>'form-control email']) !!}
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('phone', 'Phone') !!}
+                                {!! Form::label('phone', __('general.phone')) !!}
                                 {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
                             </div>
 
@@ -43,7 +43,7 @@
                             </div>
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
-                            {!! Form::submit('Submit', ['class'=>'btn btn-primary btn-md mb0']) !!}
+                            {!! Form::submit(__('general.submit'), ['class'=>'btn btn-primary btn-md mb0']) !!}
 
                             @if($errors->any())
                                 <div class="alert alert-danger mt20">
@@ -57,10 +57,10 @@
                     </div>
 
                     <div class="col-sm-7 col-sm-pull-5 expanded_emails display recips">
-                        <h2>Recipients</h2>
+                        <h2>{{__('kpi.recipients')}}</h2>
                         
                         @if(!count($recipients))
-                            <div class="alert alert-info">No Recipients have been added yet</div>
+                            <div class="alert alert-info">{{__('kpi.no_recips')}}</div>
                         @else
                             @foreach($recipients as $recipient)
                                 <div class="user clear" id="{{ $recipient->id }}">
@@ -85,17 +85,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm Recipient Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('kpi.confirm_recipient_removal')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="fromall" name="fromall" value="1">
-               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
+               <h3>{{__('tools.confirm_delete')}} <span class="username"></span>?</h3>
             </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger remove_recip">Delete Recipient</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+            <button type="button" class="btn btn-danger remove_recip">{{__('kpi.delete_recipient')}}</button>
         </div>
     </div>
     </div>
