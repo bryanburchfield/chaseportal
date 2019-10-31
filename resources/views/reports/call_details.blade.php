@@ -93,7 +93,7 @@
 			<div class="checkbox">
                 <label>
                     {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
-                    Show only termination status
+                    {{__('reports.termination_status')}}
                 </label>
 			</div>
 

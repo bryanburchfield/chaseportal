@@ -36,6 +36,7 @@ return [
 	'skill' => 'Skill',
 	'subcampaign' => 'Subcampaign',
 	'to' => 'To',
+	'termination_status' => 'Mostrar solo el estado de terminación',
 
 	// error messages
 	'errcampaignrequired' => 'Campaign required',
