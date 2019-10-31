@@ -25,11 +25,14 @@
 		'avg'				=> 'Promedio',
 		'sales'				=> 'Ventas',
 		'calls'				=> 'Llamadas',
+		'call'				=> 'Llamada',
 		'seconds'			=> 'Segundos',
 		'count'				=> 'Contar',
 		'time'				=> 'Hora',
 		'inbound'			=> 'Entrante',
 		'outbound'			=> 'Saliente',
+		'manual'			=> 'Manual',
+		'total'				=> 'Total',
 		'top_ten_agent_call_times'=> 'Los 10 mejores tiempos de llamadas de agentes',
 		'top_ten_agent_talk_times'	=>'Los 10 mejores tiempos de conversación de los agentes',
 		'rep_avg_handletime' =>'representante promedio de tiempo de manejo',
@@ -58,7 +61,20 @@
 		'agent_call_times'		=>'Tiempos de llamadas del agente / recuento de llamadas',
 		'max_hold_time'		=> 'Máximo tiempo de espera',
 		'admin'				=> 'Administración',
-		'settings'			=> 'Configuraciones'
+		'settings'			=> 'Configuraciones',
+
+		'agent_dash'		=> 'Panel de Agentes',
+		'total_outbound'	=> 'Saliente Total',
+		'total_inbound'		=> 'Total entrante',
+		'total_talk_time'	=> 'Tiempo total de conversación',
+		'talk_time'			=> 'Tiempo de conversación',
+		'avg_handle_time'	=> 'Tiempo promedio de manejo',
+		'call_types'		=> 'Tipos de llamadas',
+		'call_status'		=> 'Estado de la llamada',
+		'paused'			=> 'Pausado',
+		'waiting'			=> 'Esperando',
+		'wrap_up'			=> 'Envolver',
+		'total_calls'		=> 'Llamadas totales'
 	];
 
 
