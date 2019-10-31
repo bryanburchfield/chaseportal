@@ -1,6 +1,6 @@
 @extends('layouts.agentdash')
 
-@section('title', 'Agent Dashboard')
+@section('title', __('widgets.agent_dash'))
 
 @section('content')
 
@@ -12,7 +12,7 @@
 
 <div class="container-fluid bg">
     <div class="container mt50">
-        
+
         <div class="container-fluid">
             <div class="col-xs-7">
                 <div class="filter_time_camp_dets">
@@ -25,53 +25,53 @@
 
             <div class="filters  col-sm-5">
                 <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span>Date</span>
-                </button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span>{{__('general.date')}}</span>
+                    </button>
 
-                <?php
-                    $selected_date_filter = $dateFilter;
-                    if (!in_array($selected_date_filter, ['today', 'yesterday', 'week', 'last_week', 'month', 'last_month'])) {
-                        $selected_date_filter = 'custom';
-                    }
-                ?>
-                <ul class="dropdown-menu date_filters">
-                    <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">Today</a></li>
-                    <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">Yesterday</a></li>
-                    <li {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">This Week</a></li>
-                    <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">Last Week</a></li>
-                    <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">This Month</a></li>
-                    <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">Last Month</a></li>
-                </ul>
-            </div>
+                    <?php
+                        $selected_date_filter = $dateFilter;
+                        if (!in_array($selected_date_filter, ['today', 'yesterday', 'week', 'last_week', 'month', 'last_month'])) {
+                            $selected_date_filter = 'custom';
+                        }
+                    ?>
+                    <ul class="dropdown-menu date_filters">
+                        <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">{{__('general.today')}}</a></li>
+                        <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a></li>
+                        <li {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">{{__('general.this_week')}}</a></li>
+                        <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">{{__('general.last_week')}}</a></li>
+                        <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">{{__('general.this_month')}}</a></li>
+                        <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">{{__('general.last_month')}}</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-		
+
         <div class="row">
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card blue" id="total_outbound">
-                    <h1 class="title">Total Outbound</h1>
+                    <h1 class="title">{{__('widgets.total_outbound')}}</h1>
                     <h4 class="data count total"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
 
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card orange" id="total_inbound">
-                    <h1 class="title">Total Inbound</h1>
+                    <h1 class="title">{{__('widgets.total_inbound')}}</h1>
                     <h4 class="data count total"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
 
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card total_talktime_card green">
-                    <h1 class="title">Total Talk Time</h1>
+                    <h1 class="title">{{__('widgets.total_talk_time')}}</h1>
                     <h4 class="data" id="total_talktime"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
 
             <div class="col-sm-3 col-xs-6">
                 <div class="card-3 card avg_handle_time_card yellow">
-                    <h1 class="title">Avg Handle Time</h1>
+                    <h1 class="title">{{__('widgets.avg_handle_time')}}</h1>
                     <h4 class="data" id="avg_handle_time"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
@@ -83,27 +83,27 @@
                     <div class="col-sm-4 pr0">
                         <table class="table table-condensed ">
                             <tr class="bdrtop_none">
-                                <th>Call Types</th>
-                                <th class="tar"># Call Status</th>
+                                <th>{{__('widgets.call_types')}}</th>
+                                <th class="tar"># {{__('widgets.call_status')}}</th>
                             </tr>
 
                             <tr>
-                                <td>Inbound</td>
+                                <td>{{__('widgets.inbound')}}</td>
                                 <td class="tar inbound_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Manual</td>
+                                <td>{{__('widgets.manual')}}</td>
                                 <td class="tar manual_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Outbound</td>
+                                <td>{{__('widgets.outbound')}}</td>
                                 <td class="tar outbound_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Total</td>
+                                <td>{{__('widgets.total')}}</td>
                                 <td class="tar total_calls"></td>
                             </tr>
                         </table>
@@ -124,32 +124,32 @@
                     <div class="col-sm-4 pr0">
                         <table class="table table-condensed ">
                             <tr class="bdrtop_none">
-                                <th>Call</th>
-                                <th class="tar">Talk Time</th>
+                                <th>{{__('widgets.call')}}</th>
+                                <th class="tar">{{__('widgets.talk_time')}}</th>
                             </tr>
 
                             <tr>
-                                <td>Call</td>
+                                <td>{{__('widgets.calls')}}</td>
                                 <td class="tar call_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Paused</td>
+                                <td>{{__('widgets.paused')}}</td>
                                 <td class="tar paused_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Waiting</td>
+                                <td>{{__('widgets.waiting')}}</td>
                                 <td class="tar waiting_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Wrap Up</td>
+                                <td>{{__('widgets.wrap_up')}}</td>
                                 <td class="tar wrapup_total"></td>
                             </tr>
 
                             <tr>
-                                <td>Total</td>
+                                <td>{{__('widgets.total')}}</td>
                                 <td class="tar total_total"></td>
                             </tr>
                         </table>
@@ -175,7 +175,7 @@
 
             <div class="col-sm-3 ">
                 <div class="card blue total_calls_card">
-                    <h1 class="title">Total Conversions</h1>
+                    <h1 class="title">{{__('widgets.total_conversions')}}</h1>
                     <h2 class="total_conversions cnt"></h2>
                 </div>
             </div>

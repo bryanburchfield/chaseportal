@@ -24,12 +24,15 @@
 		'duration'			=> 'Duration',
 		'avg'				=> 'Avg',
 		'sales'				=> 'Sales',
+		'call'				=> 'Call',
 		'calls'				=> 'Calls',
 		'seconds'			=> 'Seconds',
 		'count'				=> 'Count',
 		'time'				=> 'Time',
 		'inbound'			=> 'Inbound',
 		'outbound'			=> 'Outbound',
+		'manual'			=> 'Manual',
+		'total'				=> 'Total',
 		'top_ten_agent_call_times'=> 'Top 10 Agent Call Times',
 		'top_ten_agent_talk_times'	=>'Top 10 Agent Talk Times',
 		'rep_avg_handletime' =>'Rep Avg Handle Time',
@@ -58,7 +61,21 @@
 		'agent_call_times'		=>'Agent Call Times / Call Count',
 		'max_hold_time'		=> 'Max Hold Time',
 		'admin'				=> 'Admin',
-		'settings'			=> 'Settings'
+		'settings'			=> 'Settings',
+
+		'agent_dash'		=> 'Agent Dashboard',
+		'total_outbound'	=> 'Total Outbound',
+		'total_inbound'		=> 'Total Inbound',
+		'total_talk_time'	=> 'Total Talk Time',
+		'talk_time'			=> 'Talk Time',
+		'avg_handle_time'	=> 'Avg Handle Time',
+		'call_types'		=> 'Call Types',
+		'call_status'		=> 'Call Status',
+		'paused'			=> 'Paused',
+		'waiting'			=> 'Waiting',
+		'wrap_up'			=> 'Wrap Up',
+		'total_calls'		=> 'Total Calls'
+
 	];
 
 
