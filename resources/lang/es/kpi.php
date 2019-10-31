@@ -2,6 +2,7 @@
 
 return [
 	'kpi_notifications'			=> 'KPI Notificaciones',
+	'run_now' => 'Corre Ahora',
 
 	'abandon_rate_desc'			=> 'Porcentaje del total de llamadas entrantes que resultaron en un bloqueo del cliente',
 	'agent_occupancy_desc'		=> 'Cuenta distinta de repeticiones para el día actual',

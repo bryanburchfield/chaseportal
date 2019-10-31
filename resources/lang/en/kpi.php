@@ -2,6 +2,7 @@
 
 return [
 	'kpi_notifications'			=> 'KPI Notifications',
+	'run_now' => 'Run Now',
 
 	'interval'					=> 'Interval',
 	'recipients'				=> 'Recipients',
