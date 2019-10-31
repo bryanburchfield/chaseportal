@@ -216,7 +216,7 @@ class LeadInventory
         if (!empty($request->campaigns)) {
             $this->params['campaigns'] = $request->campaigns;
         } else {
-            $this->errors->add('campaigns.required', "Campaign required");
+            $this->errors->add('campaigns.required', trans('reports.errcampaignrequired'));
         }
 
         // Save params to session

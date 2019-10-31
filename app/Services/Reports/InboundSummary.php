@@ -316,7 +316,7 @@ class InboundSummary
         $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
@@ -358,7 +358,7 @@ class InboundSummary
         }
 
         if ($from > $to) {
-            $this->errors->add('duration', "Invalid Duration values");
+            $this->errors->add('duration', trans('reports.errduration'));
         }
 
         if (!empty($request->showonlyterm)) {

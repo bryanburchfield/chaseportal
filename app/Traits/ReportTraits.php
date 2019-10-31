@@ -179,7 +179,7 @@ trait ReportTraits
 
         if (!empty($request->databases)) {
             if (count($request->databases) == 0) {
-                $this->errors->add('databases', "Must select at least 1 Database");
+                $this->errors->add('databases', trans('reports.errdatabases'));
             }
             $this->params['databases'] = $request->databases;
         } else {
@@ -194,14 +194,14 @@ trait ReportTraits
 
         if (!empty($request->curpage)) {
             if ($request->curpage <= 0) {
-                $this->errors->add('pagenumb', "Invalid page number");
+                $this->errors->add('pagenumb', trans('reports.errpagenumb'));
             }
             $this->params['curpage'] = $request->curpage;
         }
 
         if (!empty($request->pagesize)) {
             if ($request->pagesize <= 0) {
-                $this->errors->add('pagesize', "Invalid page size");
+                $this->errors->add('pagesize', trans('reports.errpagesize'));
             }
             $this->params['pagesize'] = $request->pagesize;
         }
@@ -210,29 +210,29 @@ trait ReportTraits
     private function checkDateRangeFilters(Request $request)
     {
         if (empty($request->fromdate)) {
-            $this->errors->add('fromdate.required', "From date required");
+            $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
         } else {
             $this->params['fromdate'] = $request->fromdate;
             $from = strtotime($this->params['fromdate']);
 
             if ($from === false) {
-                $this->errors->add('fromdate.invalid', "From date not a valid date/time");
+                $this->errors->add('fromdate.invalid', trans('reports.errfromdateinvalid'));
             }
         }
 
         if (empty($request->todate)) {
-            $this->errors->add('todate.required', "To date required");
+            $this->errors->add('todate.required', trans('reports.errtodaterequired'));
         } else {
             $this->params['todate'] = $request->todate;
             $to = strtotime($this->params['todate']);
 
             if ($to === false) {
-                $this->errors->add('todate.invalid', "To date not a valid date/time");
+                $this->errors->add('todate.invalid', trans('reports.errtodateinvalid'));
             }
         }
 
         if (!empty($from) && !empty($to) && $to < $from) {
-            $this->errors->add('daterange', "To date must be after From date");
+            $this->errors->add('daterange', trans('reports.errdaterange'));
         }
     }
 
@@ -250,7 +250,7 @@ trait ReportTraits
 
         if (empty($results)) {
             $this->errors = new MessageBag();
-            $this->errors->add('results', "No results found");
+            $this->errors->add('results', trans('reports.errresults'));
             return $this->errors;
         }
 

@@ -37,6 +37,21 @@ return [
 	'subcampaign' => 'Subcampaign',
 	'to' => 'To',
 
+	// error messages
+	'errcampaignrequired' => 'Campaign required',
+	'errcampaignsrequired' => 'At least 1 Campaign required',
+	'errdatabases' => 'Must select at least 1 Database',
+	'errdaterange' => 'To date must be after From date',
+	'errduration' => 'Invalid Duration values',
+	'errfromdateinvalid' => 'From date not a valid date/time',
+	'errfromdaterequired' => 'From date required',
+	'errpagenumb' => 'Invalid page number',
+	'errpagesize' => 'Invalid page size',
+	'errrepsrequired' => 'At least 1 Rep required',
+	'errresults' => 'No results found',
+	'errtodateinvalid' => 'To date not a valid date/time',
+	'errtodaterequired' => 'To date required',
+
 	// Column headings
 	'abandoned' => 'Abandoned Calls',
 	'agent' => 'Agent Calls',

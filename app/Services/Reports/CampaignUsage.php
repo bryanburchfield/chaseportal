@@ -235,7 +235,7 @@ class CampaignUsage
         if (!empty($request->campaign)) {
             $this->params['campaign'] = $request->campaign;
         } else {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         }
 
         if (!empty($request->subcampaign)) {

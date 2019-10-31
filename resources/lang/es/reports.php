@@ -37,6 +37,21 @@ return [
      'call_type' => 'Tipo de llamada',
      'call_statuses' => 'Estados de llamadas',
 
+     // error messages
+     'errcampaignrequired' => 'Campaña requerida',
+     'errcampaignsrequired' => 'Se requiere al menos 1 campaña',
+     'errdatabases' => 'Debe seleccionar al menos 1 base de datos',
+     'errdaterange' => 'Hasta la fecha debe ser posterior a la fecha Desde',
+     'errduration' => 'Valores de duración no válidos',
+     'errfromdateinvalid' => 'Desde la fecha no es una fecha / hora válida',
+     'errfromdaterequired' => 'Desde la fecha requerida',
+     'errpagenumb' => 'Número de página inválido',
+     'errpagesize' => 'Tamaño de página no válido',
+     'errrepsrequired' => 'Se requiere al menos 1 representante',
+     'errresults' => 'No se han encontrado resultados',
+     'errtodateinvalid' => 'Hasta la fecha no es una fecha / hora válida',
+     'errtodaterequired' => 'Hasta la fecha requerida',
+
      // Column headings
      'abandoned' => 'Llamadas Abandonadas',
      'agent' => 'Llamadas de Agente',

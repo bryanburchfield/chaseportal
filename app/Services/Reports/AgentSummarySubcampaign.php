@@ -469,7 +469,7 @@ class AgentSummarySubcampaign
         $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $this->errors->add('campaigns.required', "At least 1 Campaign required");
+            $this->errors->add('campaigns.required', trans('reports.errcampaignsrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
