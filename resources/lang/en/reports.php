@@ -31,6 +31,7 @@ return [
 	'from' => 'From',
 	'inbound_sources' => 'Inbound Sources',
 	'rep' => 'Rep',
+	'reps' => 'Reps',
 	'run_report' => 'Run Report',
 	'skill' => 'Skill',
 	'subcampaign' => 'Subcampaign',

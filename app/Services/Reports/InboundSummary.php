@@ -16,22 +16,22 @@ class InboundSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.inbound_summary');
+        $this->params['reportName'] = 'reports.inbound_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Campaign' => trans('reports.campaign'),
-            'Source' => trans('reports.source'),
-            'Total' =>  trans('reports.totalcalls'),
-            'Duration' => trans('reports.duration'),
-            'HandledByRep' => trans('reports.handledbyrep'),
-            'HandledByIVR' =>  trans('reports.handledbyivr'),
-            'VoiceMail' =>  trans('reports.voicemail'),
-            'Abandoned' =>  trans('reports.abandoned'),
-            'AvTalkTime' =>  trans('reports.avtalktime'),
-            'AvHoldTime' =>  trans('reports.avholdtime'),
+            'Campaign' => 'reports.campaign',
+            'Source' => 'reports.source',
+            'Total' =>  'reports.totalcalls',
+            'Duration' => 'reports.duration',
+            'HandledByRep' => 'reports.handledbyrep',
+            'HandledByIVR' =>  'reports.handledbyivr',
+            'VoiceMail' =>  'reports.voicemail',
+            'Abandoned' =>  'reports.abandoned',
+            'AvTalkTime' =>  'reports.avtalktime',
+            'AvHoldTime' =>  'reports.avholdtime',
         ];
     }
 
@@ -50,6 +50,8 @@ class InboundSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

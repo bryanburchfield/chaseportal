@@ -14,28 +14,28 @@ class SubcampaignSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.subcampaign_summary');
+        $this->params['reportName'] = 'reports.subcampaign_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Date' => trans('reports.date'),
-            'Campaign' => trans('reports.campaign'),
-            'Subcampaign' => trans('reports.subcampaign'),
-            'Total' => trans('reports.total'),
-            'Dialed' => trans('reports.dialed'),
-            'DPH' => trans('reports.dph'),
-            'Available' => trans('reports.available'),
-            'AvAttempt' => trans('reports.avattempt'),
-            'ManHours' => trans('reports.manhours'),
-            'Connects' => trans('reports.connects'),
-            'CPH' => trans('reports.cph'),
-            'Sales' => trans('reports.sales'),
-            'APH' => trans('reports.aph'),
-            'ConnectRate' => trans('reports.connectrate'),
-            'SaleRateValue' => trans('reports.saleratevalue'),
-            'ConversionRate' => trans('reports.conversionrate'),
-            'ConversionFactor' => trans('reports.conversionfactor'),
-            'Cepts' => trans('reports.cepts'),
+            'Date' => 'reports.date',
+            'Campaign' => 'reports.campaign',
+            'Subcampaign' => 'reports.subcampaign',
+            'Total' => 'reports.total',
+            'Dialed' => 'reports.dialed',
+            'DPH' => 'reports.dph',
+            'Available' => 'reports.available',
+            'AvAttempt' => 'reports.avattempt',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'CPH' => 'reports.cph',
+            'Sales' => 'reports.sales',
+            'APH' => 'reports.aph',
+            'ConnectRate' => 'reports.connectrate',
+            'SaleRateValue' => 'reports.saleratevalue',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'Cepts' => 'reports.cepts',
         ];
     }
 
@@ -50,6 +50,8 @@ class SubcampaignSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

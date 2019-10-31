@@ -33,6 +33,23 @@ trait ReportTraits
         ];
     }
 
+    /**
+     * Set Headings
+     *
+     * translates some parameters
+     * Can't do this in __construct()
+     *
+     * @return void
+     */
+    private function setHeadings()
+    {
+        $this->params['reportName'] = trans($this->params['reportName']);
+
+        foreach ($this->params['columns'] as &$col) {
+            $col = trans($col);
+        }
+    }
+
     public function getAllInboundSources()
     {
         $sql = '';

@@ -14,24 +14,24 @@ class CampaignSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.campaign_summary');
+        $this->params['reportName'] = 'reports.campaign_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Campaign' => trans('reports.campaign'),
-            'Total' => trans('reports.totalcalls'),
-            'Dialed' => trans('reports.dialed'),
-            'DPH' => trans('reports.dph'),
-            'Available' => trans('reports.available'),
-            'AvAttempt' => trans('reports.avattempt'),
-            'ManHours' => trans('reports.manhours'),
-            'Connects' => trans('reports.connects'),
-            'CPH' => trans('reports.cph'),
-            'ConversionRate' => trans('reports.conversionrate'),
-            'ConversionFactor' => trans('reports.conversionfactor'),
-            'Leads' => trans('reports.leads'),
-            'APH' => trans('reports.aph'),
-            'DropCallsPercentage' => trans('reports.dropcallspercentage'),
+            'Campaign' => 'reports.campaign',
+            'Total' => 'reports.totalcalls',
+            'Dialed' => 'reports.dialed',
+            'DPH' => 'reports.dph',
+            'Available' => 'reports.available',
+            'AvAttempt' => 'reports.avattempt',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'CPH' => 'reports.cph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'Leads' => 'reports.leads',
+            'APH' => 'reports.aph',
+            'DropCallsPercentage' => 'reports.dropcallspercentage',
         ];
     }
 
@@ -46,6 +46,8 @@ class CampaignSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

@@ -14,16 +14,16 @@ class MissedCalls
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.missed_calls');
+        $this->params['reportName'] = 'reports.missed_calls';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Phone' => trans('reports.phone'),
-            'MissedCalls' => trans('reports.missedcalls'),
-            'FirstName' => trans('reports.firstname'),
-            'LastName' => trans('reports.lastname'),
-            'Date' => trans('reports.mostrecent'),
-            'CallStatus' => trans('reports.callstatus'),
+            'Phone' => 'reports.phone',
+            'MissedCalls' => 'reports.missedcalls',
+            'FirstName' => 'reports.firstname',
+            'LastName' => 'reports.lastname',
+            'Date' => 'reports.mostrecent',
+            'CallStatus' => 'reports.callstatus',
         ];
     }
 
@@ -38,6 +38,8 @@ class MissedCalls
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

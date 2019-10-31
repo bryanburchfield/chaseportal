@@ -16,7 +16,7 @@ class AgentSummarySubcampaign
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.agent_summary_subcampaign');
+        $this->params['reportName'] = 'reports.agent_summary_subcampaign';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
@@ -25,26 +25,26 @@ class AgentSummarySubcampaign
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Campaign' => trans('reports.campaign'),
-            'Subcampaign' => trans('reports.subcampaign'),
-            'Rep' => trans('reports.rep'),
-            'Calls' => trans('reports.calls'),
-            'Contacts' => trans('reports.contacts'),
-            'Connects' => trans('reports.connects'),
-            'Hours' => trans('reports.hours'),
-            'Leads' => trans('reports.leads'),
-            'CPH' => trans('reports.cph'),
-            'APH' => trans('reports.aph'),
-            'ConversionRate' => trans('reports.conversionrate'),
-            'ConversionFactor' => trans('reports.conversionfactor'),
-            'TalkTimeSec' => trans('reports.talktimesec'),
-            'AvTalkTime' => trans('reports.avtalktime'),
-            'PausedTimeSec' => trans('reports.pausedtimesec'),
-            'WaitTimeSec' => trans('reports.waittimesec'),
-            'AvWaitTime' => trans('reports.avwaittime'),
-            'DispositionTimeSec' => trans('reports.dispositiontimesec'),
-            'AvDispoTime' => trans('reports.avdispotime'),
-            'loggedintime' => trans('reports.loggedintime'),
+            'Campaign' => 'reports.campaign',
+            'Subcampaign' => 'reports.subcampaign',
+            'Rep' => 'reports.rep',
+            'Calls' => 'reports.calls',
+            'Contacts' => 'reports.contacts',
+            'Connects' => 'reports.connects',
+            'Hours' => 'reports.hours',
+            'Leads' => 'reports.leads',
+            'CPH' => 'reports.cph',
+            'APH' => 'reports.aph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'TalkTimeSec' => 'reports.talktimesec',
+            'AvTalkTime' => 'reports.avtalktime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'WaitTimeSec' => 'reports.waittimesec',
+            'AvWaitTime' => 'reports.avwaittime',
+            'DispositionTimeSec' => 'reports.dispositiontimesec',
+            'AvDispoTime' => 'reports.avdispotime',
+            'loggedintime' => 'reports.loggedintime',
         ];
     }
 
@@ -65,6 +65,8 @@ class AgentSummarySubcampaign
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

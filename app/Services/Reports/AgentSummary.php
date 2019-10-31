@@ -14,30 +14,30 @@ class AgentSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.agent_summary');
+        $this->params['reportName'] = 'reports.agent_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Rep' => trans('reports.rep'),
-            'Contacts' => trans('reports.contacts'),
-            'Connects' => trans('reports.connects'),
-            'Hours' => trans('reports.hours'),
-            'Leads' => trans('reports.leads'),
-            'CPH' => trans('reports.cph'),
-            'APH' => trans('reports.aph'),
-            'ConversionRate' => trans('reports.conversionrate'),
-            'ConversionFactor' => trans('reports.conversionfactor'),
-            'TalkTimeSec' => trans('reports.talktimesec'),
-            'AvTalkTime' => trans('reports.avtalktime'),
-            'PausedTimeSec' => trans('reports.pausedtimesec'),
-            'WaitTimeSec' => trans('reports.waittimesec'),
-            'AvWaitTime' => trans('reports.avwaittime'),
-            'DispositionTimeSec' => trans('reports.dispositiontimesec'),
-            'AvDispoTime' => trans('reports.avdispotime'),
-            'LoggedInTime' => trans('reports.loggedintime'),
+            'Rep' => 'reports.rep',
+            'Contacts' => 'reports.contacts',
+            'Connects' => 'reports.connects',
+            'Hours' => 'reports.hours',
+            'Leads' => 'reports.leads',
+            'CPH' => 'reports.cph',
+            'APH' => 'reports.aph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'TalkTimeSec' => 'reports.talktimesec',
+            'AvTalkTime' => 'reports.avtalktime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'WaitTimeSec' => 'reports.waittimesec',
+            'AvWaitTime' => 'reports.avwaittime',
+            'DispositionTimeSec' => 'reports.dispositiontimesec',
+            'AvDispoTime' => 'reports.avdispotime',
+            'LoggedInTime' => 'reports.loggedintime',
         ];
     }
 
@@ -54,6 +54,8 @@ class AgentSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

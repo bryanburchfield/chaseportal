@@ -17,7 +17,7 @@ class CallDetails
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.call_details');
+        $this->params['reportName'] = 'reports.call_details';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
@@ -30,14 +30,14 @@ class CallDetails
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
         $this->params['columns'] = [
-            'Rep' => trans('reports.rep'),
-            'Campaign' => trans('reports.campaign'),
-            'Phone' => trans('reports.phone'),
-            'Date' => trans('reports.date'),
-            'CallStatus' => trans('reports.callstatus'),
-            'Duration' => trans('reports.duration'),
-            'CallType' => trans('reports.calltype'),
-            'Details' => trans('reports.details'),
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'Phone' => 'reports.phone',
+            'Date' => 'reports.date',
+            'CallStatus' => 'reports.callstatus',
+            'Duration' => 'reports.duration',
+            'CallType' => 'reports.calltype',
+            'Details' => 'reports.details',
         ];
     }
 
@@ -63,6 +63,8 @@ class CallDetails
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

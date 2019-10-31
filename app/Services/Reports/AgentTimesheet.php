@@ -15,20 +15,20 @@ class AgentTimesheet
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.agent_timesheet');
+        $this->params['reportName'] = 'reports.agent_timesheet';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Date' => trans('reports.date'),
-            'Rep' => trans('reports.rep'),
-            'Campaign' => trans('reports.campaign'),
-            'LogInTime' => trans('reports.logintime'),
-            'LogOutTime' => trans('reports.logouttime'),
-            'ManHourSec' => trans('reports.manhoursec'),
-            'PausedTimeSec' => trans('reports.pausedtimesec'),
+            'Date' => 'reports.date',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'LogInTime' => 'reports.logintime',
+            'LogOutTime' => 'reports.logouttime',
+            'ManHourSec' => 'reports.manhoursec',
+            'PausedTimeSec' => 'reports.pausedtimesec',
         ];
     }
 
@@ -45,6 +45,8 @@ class AgentTimesheet
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

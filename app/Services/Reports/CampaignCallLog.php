@@ -17,17 +17,17 @@ class CampaignCallLog
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.campaign_call_log');
+        $this->params['reportName'] = 'reports.campaign_call_log';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'CallStatus' => trans('reports.callstatus'),
-            'Description' => trans('reports.description'),
-            'Cnt' => trans('reports.cnt'),
-            'Pct' => trans('reports.pct'),
+            'CallStatus' => 'reports.callstatus',
+            'Description' => 'reports.description',
+            'Cnt' => 'reports.cnt',
+            'Pct' => 'reports.pct',
         ];
     }
 
@@ -47,6 +47,8 @@ class CampaignCallLog
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

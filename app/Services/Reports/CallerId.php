@@ -14,16 +14,16 @@ class CallerId
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = trans('reports.caller_id');
+        $this->params['reportName'] = 'reports.caller_id';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['caller_id'] = '';
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'CallerId' => trans('reports.callerid'),
-            'Total' => trans('reports.totalcalls'),
-            'Agent' => trans('reports.agent'),
-            'ConnectPct' => trans('reports.connectpct'),
+            'CallerId' => 'reports.callerid',
+            'Total' => 'reports.totalcalls',
+            'Agent' => 'reports.agent',
+            'ConnectPct' => 'reports.connectpct',
         ];
     }
 
@@ -38,6 +38,8 @@ class CallerId
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
