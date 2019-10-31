@@ -17,8 +17,8 @@ class Recipient extends Model
         foreach (Kpi::orderBy('name')->get() as $kpi) {
             $list[] = [
                 'id' => $kpi->id,
-                'name' => $kpi->name,
-                'description' => $kpi->description,
+                'name' => trans($kpi->name),
+                'description' => trans($kpi->description),
                 'selected' => $this->kpiRecipients()->where('kpi_id', $kpi->id)->count(),
             ];
         }
