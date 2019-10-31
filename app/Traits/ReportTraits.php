@@ -59,7 +59,8 @@ trait ReportTraits
 
             $sql .= "$union SELECT InboundSource, Description
             FROM [$db].[dbo].[InboundSources]
-            WHERE GroupId = :groupid$i";
+            WHERE GroupId = :groupid$i
+            AND InboundSource != ''";
 
             $union = ' UNION';
         }
