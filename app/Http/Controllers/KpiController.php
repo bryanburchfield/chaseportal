@@ -298,6 +298,10 @@ class KpiController extends Controller
 
         $all_kpis = Kpi::orderBy('name', 'asc')->pluck('name', 'id')->all();
 
+        foreach ($all_kpis as $id => &$name) {
+            $name = trans($name);
+        }
+
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
