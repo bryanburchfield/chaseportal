@@ -7,7 +7,7 @@
 		'leaderboard'		=> 'Leaderboard',
 		'kpis'				=> 'KPIs',
 		'reports'			=> 'Reports',
-		'setting'			=> 'Settings',
+		'settings'			=> 'Settings',
 		'tools'				=> 'Tools',
 		'admin'				=> 'Admin'
 	];

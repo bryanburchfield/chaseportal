@@ -7,7 +7,7 @@
 		'leaderboard'		=> 'Panel de tendencia',
 		'kpis'				=> 'KPIs',
 		'reports'			=> 'Informes',
-		'setting'			=> 'Configuraciones',
+		'settings'			=> 'Configuraciones',
 		'tools'				=> 'Herramientas',
 		'admin'				=> 'Administración'
 	];
