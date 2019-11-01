@@ -1,0 +1,33 @@
+<?php
+
+	return [
+		'no_data'					=> 'Aún no hay datos',
+		'total'						=> 'Total',
+		'handled'					=> 'Manejado',
+		'voicemails'				=> 'Mensajes de voz',
+		'abandoned'					=> 'Abandonado',
+		'inbound'					=> 'Entrante',
+		'outbound'					=> 'Saliente',
+		'manual'					=> 'Manual',
+		'minutes'					=> 'Minutos',
+		'dropped'					=> 'Caído',
+		'reps'						=> 'Representantes',
+		'reload_error_msg'			=> 'Algo salió mal. Por favor recarga la página.',
+		'numb_filter_attempts'		=> 'Número de intentos de filtrado por',
+		'days_to_filter_by'			=> 'Días para filtrar por',
+		'sorted_in'					=> 'Ordenado en',
+		'ordered_by'				=> 'ordenar por',
+		'available_leads'			=> 'Leads disponibles',
+		'total_leads'				=> 'Conductores totales',
+		'total_calls'				=> 'Llamadas totales',
+		'handled_calls'				=> 'Llamadas manejadas',
+		'call_count'				=> 'Recuento de llamada',
+		'interval_updated'			=> 'Intervalo actualizado con éxito',
+		'select_all'				=> 'Seleccionar todo',
+		'unselect_all'				=> 'Deselecciona todo',
+		'undo_selection'			=> 'Deshacer selección',
+		'rep'						=> 'Rep',
+		'calls'						=> 'Llamadas',
+		'sales'						=> 'Ventas',
+		'talk_time'					=> 'Tiempo de conversación'
+	];

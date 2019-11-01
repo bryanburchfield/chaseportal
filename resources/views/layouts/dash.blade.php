@@ -55,7 +55,7 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
-
+    <script src="/messages.js"></script> 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
     

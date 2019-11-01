@@ -50,6 +50,8 @@
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
 
+    <script src="/messages.js"></script> 
+
     @isset($jsfile)
     @foreach($jsfile as $js)
     <script src="/js/{{ $js }}" type="text/javascript"></script>

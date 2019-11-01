@@ -40,5 +40,5 @@
 		'download_warning'			=> 'Descargar Advertencia',
 		'forgot_pw'					=> '¿Olvidaste tu contraseña?',
 		'reset_pw'					=> 'RESTABLECER CONTRASEÑA DE CUENTA',
-		'send_pw'					=> 'Enviar enlace de restablecimiento de contraseña'
+		'send_pw'					=> 'Enviar enlace de restablecimiento de contraseña',
 	];

@@ -40,5 +40,5 @@
 		'download_warning'			=> 'Download Warning',
 		'forgot_pw'					=> 'Forgot Your Password',
 		'reset_pw'					=> 'RESET PASSWORD',
-		'send_pw'					=> 'Send Password Reset Link'
+		'send_pw'					=> 'Send Password Reset Link',
 	];

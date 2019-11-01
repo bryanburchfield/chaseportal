@@ -9,6 +9,7 @@
     <title>@yield('title')</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="es.tools.tools" >
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">        
@@ -64,7 +65,7 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
-
+    <script src="/messages.js"></script> 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
     

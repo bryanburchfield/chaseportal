@@ -81,6 +81,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script> 
+    <script src="/messages.js"></script> 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
 
