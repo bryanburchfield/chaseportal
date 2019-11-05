@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang=en-us>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <!--[if IE 7]>         <html class="ie7"> <![endif]-->
 <!--[if IE 8]>         <html class="ie8"> <![endif]--> 
 <!--[if IE]>           <html class="ie"> <![endif]--> 
@@ -55,7 +55,7 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
-
+    <script src="/messages.js"></script> 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
     

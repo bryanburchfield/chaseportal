@@ -14,24 +14,24 @@ class CampaignSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Campaign Summary Report';
+        $this->params['reportName'] = 'reports.campaign_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Campaign' => 'Campaign',
-            'Total' => 'Total',
-            'Dialed' => 'Dialed',
-            'DPH' => 'Dials per Hr',
-            'Available' => 'Available',
-            'AvAttempt' => 'Avg Attempts',
-            'ManHours' => 'Man Hours',
-            'Connects' => 'Connects',
-            'CPH' => 'Connects per Hr',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'Leads' => 'Sale/Lead/App',
-            'SPH' => 'S-L-A/HR',
-            'DropCallsPercentage' => 'Drop Rate (Connected Calls)',
+            'Campaign' => 'reports.campaign',
+            'Total' => 'reports.totalcalls',
+            'Dialed' => 'reports.dialed',
+            'DPH' => 'reports.dph',
+            'Available' => 'reports.available',
+            'AvAttempt' => 'reports.avattempt',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'CPH' => 'reports.cph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'Leads' => 'reports.leads',
+            'APH' => 'reports.aph',
+            'DropCallsPercentage' => 'reports.dropcallspercentage',
         ];
     }
 
@@ -46,6 +46,8 @@ class CampaignSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -69,7 +71,7 @@ class CampaignSummary
         ConversionRate numeric(18,2) DEFAULT 0,
         ConversionFactor numeric(18,2) DEFAULT 0,
         Sales int DEFAULT 0,
-        SPH numeric(18,2) DEFAULT 0,
+        APH numeric(18,2) DEFAULT 0,
         DropCallsPercentage numeric(18,2) DEFAULT 0,
         Dropped numeric(18,2) DEFAULT 0,
     );
@@ -230,7 +232,7 @@ class CampaignSummary
 
     UPDATE #CampaignSummary
     SET CPH = Connects/ManHours,
-        SPH = Sales/ManHours,
+        APH = Sales/ManHours,
         DPH = Dialed/ManHours
     WHERE ManHours > 0;
 
@@ -259,7 +261,7 @@ class CampaignSummary
         ConversionRate,
         ConversionFactor,
         Sales,
-        SPH,
+        APH,
         DropCallsPercentage,
         totRows = COUNT(*) OVER()
     FROM #CampaignSummary";

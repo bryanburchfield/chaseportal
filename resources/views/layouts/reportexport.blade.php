@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang=en-us>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <!--[if IE 7]>         <html class="ie7"> <![endif]-->
 <!--[if IE 8]>         <html class="ie8"> <![endif]-->
 <!--[if IE]>           <html class="ie"> <![endif]-->

@@ -213,12 +213,15 @@ trait DashTraits
         $fromDate = $this->utcToLocal($fromDate, $tz);
         $toDate = $this->utcToLocal($toDate, $tz)->modify('-1 second');
 
+        $month = trans('general.' . strtolower($fromDate->format('F'))) .
+            ' ' . $fromDate->format('Y');
+
         $cnt = count((array) $this->campaign);
 
         if (empty($this->campaign)) {
             $campaign = "All Campaigns";
         } elseif ($cnt > 1) {
-            $campaign = "$cnt Campaigns Selected";
+            $campaign = $cnt . ' ' . trans('general.campaigns_selected');
         } else {
             $campaign = $this->campaign[0];
         }
@@ -226,28 +229,26 @@ trait DashTraits
         switch ($this->dateFilter) {
             case 'today':
                 $today = $fromDate->format('n/j/y');
-                $details = "Today | $today";
+                $details = trans('general.today') . " | $today";
                 break;
             case 'yesterday':
                 $yesterday = $fromDate->format('n/j/y');
-                $details = "Yesterday | $yesterday";
+                $details = trans('general.yesterday') . " | $yesterday";
                 break;
             case 'week':
                 $monday = $fromDate->format('n/j/y');
                 $sunday = $toDate->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (This Week)';
+                $details = $monday . ' - ' . $sunday . ' (' . trans('general.this_week') . ')';
                 break;
             case 'last_week':
                 $monday = $fromDate->format('n/j/y');
                 $sunday = $toDate->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (Last Week)';
+                $details = $monday . ' - ' . $sunday . ' (' . trans('general.last_week') . ')';
                 break;
             case 'month':
-                $month = $fromDate->format('F Y');
                 $details = "$month (MTD)";
                 break;
             case 'last_month':
-                $month = $fromDate->format('F Y');
                 $details = $month;
                 break;
             default:

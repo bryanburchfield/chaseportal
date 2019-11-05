@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\LeadRule;
@@ -10,6 +11,7 @@ use App\Dialer;
 use App\LeadMove;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -50,7 +52,7 @@ class LeadMoveService
         $this->today = date('Y-m-d');
     }
 
-    public static function runMove()
+    public static function runFilter()
     {
         $leadmover = new LeadMoveService();
 
@@ -65,7 +67,7 @@ class LeadMoveService
         }
 
         // And this does the actual moves
-        $leadmover->moveLeads();
+        $leadmover->filterLeads();
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -106,7 +108,7 @@ class LeadMoveService
         }
     }
 
-    private function moveLeads()
+    private function filterLeads()
     {
         // cursor thru the log and do the moves
         // this way if a single lead matches multiple rules
@@ -124,14 +126,14 @@ class LeadMoveService
 
             $api = $this->initApi($lead_move->reporting_db);
 
-            if ($this->moveLead($api, $lead_move)) {
+            if ($this->filterLead($api, $lead_move)) {
                 $lead_move->succeeded = true;
                 $lead_move->save();
             }
         }
     }
 
-    private function moveLead($api, $lead_move)
+    private function filterLead($api, $lead_move)
     {
         echo "Moving Lead: " . $lead_move->lead_id .
             " for group " . $lead_move->group_id .

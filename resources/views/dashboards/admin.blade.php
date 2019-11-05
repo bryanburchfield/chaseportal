@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Admin')
+@section('title', __('widgets.admin'))
 
 @section('content')
 <div class="preloader"></div>
@@ -81,14 +81,10 @@
 
 											<div class="panel-group" id="add_accordion" role="tablist" aria-multiselectable="true">
 
-											    @php
-
-											    	$db=1;
-											    	for($i=1; $i<=25;$i++){
-											    		if($db <10){
-											    			$db='0'. $db;
-											    		}
-											    @endphp
+												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
+													@php
+													$db = sprintf("%02d", $dialer->dialer_numb);
+													@endphp
 
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="add_heading{{$db}}">
@@ -133,11 +129,7 @@
 												        </div>
 												    </div>
 
-											    @php
-
-											    	$db++;
-											    	}
-											    @endphp
+											    @endforeach
 											</div>
 				    					</div>
 				    				</div>
@@ -177,9 +169,9 @@
         										{!! Form::label('additional_dbs', 'Database 2') !!}
         										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
         									</div>
-        									
+
         									{!! Form::hidden('id', null, ['id'=>'user_id']) !!}
-											
+
         									{!! Form::submit('Update User', ['class'=>'btn btn-primary mb0'] ) !!}
 
         									<br><br>
@@ -202,14 +194,10 @@
 
 											<div class="panel-group" id="edit_accordion" role="tablist" aria-multiselectable="true">
 
-											    @php
-
-											    	$db=1;
-											    	for($i=1; $i<=25;$i++){
-											    		if($db <10){
-											    			$db='0'. $db;
-											    		}
-											    @endphp
+												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
+													@php
+													$db = sprintf("%02d", $dialer->dialer_numb);
+													@endphp
 
 												    <div class="panel panel-default">
 												        <div class="panel-heading" role="tab" id="edit_heading{{$db}}">
@@ -233,7 +221,7 @@
 
 												            		<tbody>
 												            	@foreach($users as $user)
-												            		@php 
+												            		@php
 												            			$user_db = substr($user['db'], -2);
 												            		@endphp
 
@@ -253,11 +241,7 @@
 												        </div>
 												    </div>
 
-											    @php
-
-											    	$db++;
-											    	}
-											    @endphp
+											    @endforeach
 											</div>
 				    					</div>
 				    				</div>
@@ -384,8 +368,8 @@
                 <input type="hidden" class="app_token" name="app_token" value="">
                 <h3 class="mb10"><span class="username mb20"></span></h3>
             	<p>Double click a link below to copy.</p><br>
-            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/Brandon</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/Brandon</a>
+            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/(#Rep#)</a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/admindashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/adminoutbounddashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>

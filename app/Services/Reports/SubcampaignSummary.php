@@ -14,28 +14,28 @@ class SubcampaignSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Subcampaign Summary Report';
+        $this->params['reportName'] = 'reports.subcampaign_summary';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Campaign' => 'Campaign',
-            'Subcampaign' => 'Subcampaign',
-            'Total' => 'Total',
-            'Dialed' => 'Dialed',
-            'DPH' => 'Dials per Hr',
-            'Available' => 'Available',
-            'AvAttempt' => 'Attempt',
-            'ManHours' => 'Man Hours',
-            'Connects' => 'Connects',
-            'CPH' => 'Connects per Hr',
-            'Sales' => 'Sale/Lead/App',
-            'SPH' => 'S-L-A per Hr',
-            'ConnectRate' => 'Connect Rate',
-            'SaleRateValue' => 'S-L-A Rate Value',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'Cepts' => 'Operator Disconnects',
+            'Date' => 'reports.date',
+            'Campaign' => 'reports.campaign',
+            'Subcampaign' => 'reports.subcampaign',
+            'Total' => 'reports.total',
+            'Dialed' => 'reports.dialed',
+            'DPH' => 'reports.dph',
+            'Available' => 'reports.available',
+            'AvAttempt' => 'reports.avattempt',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'CPH' => 'reports.cph',
+            'Sales' => 'reports.sales',
+            'APH' => 'reports.aph',
+            'ConnectRate' => 'reports.connectrate',
+            'SaleRateValue' => 'reports.saleratevalue',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'Cepts' => 'reports.cepts',
         ];
     }
 
@@ -50,6 +50,8 @@ class SubcampaignSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -74,7 +76,7 @@ class SubcampaignSummary
             Connects int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
             Sales int DEFAULT 0,
-            SPH numeric(18,2) DEFAULT 0,
+            APH numeric(18,2) DEFAULT 0,
             DPH numeric(18,2) DEFAULT 0,
             ConnectRate numeric(18,2) DEFAULT 0,
             SaleRateValue numeric(18,2) DEFAULT 0,
@@ -281,7 +283,7 @@ class SubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET CPH = CAST(Connects as numeric(18,2))/ManHours,
-            SPH = CAST(Sales as numeric(18,2))/ManHours,
+            APH = CAST(Sales as numeric(18,2))/ManHours,
             DPH = CAST(Dialed as numeric(18,2))/ManHours
         WHERE ManHours > 0
 
@@ -312,7 +314,7 @@ class SubcampaignSummary
             Connects,
             CPH,
             Sales,
-            SPH,
+            APH,
             ConnectRate,
             SaleRateValue,
             ConversionRate,

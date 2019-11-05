@@ -2,6 +2,7 @@
 // Admin Dashboard: all urls start with /admindashboard/
 Route::prefix('admindashboard')->group(function () {
     // Allow app_token login via /admindashboard/api/{token}
+    Route::get('/', 'AdminDashController@apiLogin');
     Route::get('api/{token}', 'AdminDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

@@ -15,15 +15,15 @@ class ShiftReport
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Shift Report';
+        $this->params['reportName'] = 'reports.shift_report';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Campaign' => 'Campaign',
-            'Description' => 'Call Status',
-            'TypeName' => 'Type',
-            'Calls' => 'Total Dials',
+            'Date' => 'reports.date',
+            'Campaign' => 'reports.campaign',
+            'Description' => 'reports.callstatus',
+            'TypeName' => 'reports.type',
+            'Calls' => 'reports.calls',
         ];
     }
 
@@ -38,6 +38,8 @@ class ShiftReport
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

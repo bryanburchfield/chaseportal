@@ -2,6 +2,7 @@
 // Trend Dashboard: all urls start with /trenddashboard/
 Route::prefix('trenddashboard')->group(function () {
     // Allow app_token login via /trenddashboard/api/{token}
+    Route::get('/', 'TrendDashController@apiLogin');
     Route::get('api/{token}', 'TrendDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

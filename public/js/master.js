@@ -367,9 +367,9 @@ var Master = {
     change_filter_label:function(){
 
         if($(this).val() == 'lead_attempts'){
-            $(this).parent().next().find('label').html('Number of Attempts to Filter by');
+            $(this).parent().next().find('label').html(Lang.get('js_msgs.numb_filter_attempts'));
         }else{
-            $(this).parent().next().find('label').html('Days to Filter By');
+            $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
     },
 
@@ -1379,7 +1379,7 @@ var Master = {
 
 					// show sort order and reset button if sorting is active
 					if(this.th_sort){
-						$('.reset_sorting h3').html('Sorted in <span class="sort_direction">'+sort_direction+'</span> order by <span class="sorted_by">' + this.th_sort+'</span>');
+						$('.reset_sorting h3').html(Lang.get('js_msgs.sorted_in')+ ' <span class="sort_direction">'+sort_direction+'</span> '+Lang.get('js_msgs.sorted_in')+' <span class="sorted_by">' + this.th_sort+'</span>');
 						$('.reset_sorting').show();
 					}
 				}
@@ -1467,20 +1467,20 @@ var Master = {
 					$('.cdr_table').hide();
 					$('<div class="alert alert-danger">No records found</div>').insertAfter('.report_filters.card')
 				}
-				
+
 				$('.preloader').fadeOut('slow');
 			}
-		})		
+		});
 	},
 
 	campaign_usage:function(response){
-		
+
 		$('.hidetilloaded').show();
 		var chartColors = Master.chartColors;
-		
+
 		var xaxis_labels=[];
 		for(var i=0; i<response.extras.callable.length;i++){
-			xaxis_labels.push(i);	
+			xaxis_labels.push(i);
 		}
 
 		// return false;
@@ -1503,7 +1503,7 @@ var Master = {
 		var leads_by_attempt_options={
 		    responsive: true,
 		    maintainAspectRatio:false,
-		    legend: {  
+		    legend: {
 		        position: 'bottom',
 		        labels: {
 		            boxWidth: 12
@@ -1540,7 +1540,7 @@ var Master = {
 
 		var response_length = response.extras.subcampaigns.length;
 		var chart_colors_array= Master.return_chart_colors(response_length, chartColors);
-		
+
 		var subcampaigns=[];
 		var subcampaigns_cnt=[];
 		for(var i=0; i<response.extras.subcampaigns.length;i++){
@@ -1560,9 +1560,9 @@ var Master = {
 		        }],
 		        elements: {
 		                center: {
-		                color: '#203047', 
-		                fontStyle: 'Segoeui', 
-		                sidePadding: 15 
+		                color: '#203047',
+		                fontStyle: 'Segoeui',
+		                sidePadding: 15
 		            }
 		        },
 		        title: {
@@ -1597,7 +1597,7 @@ var Master = {
 		        options: subcampaigns_options
 		    });
 		}else{
-            $('#subcampaigns').empty();                    
+            $('#subcampaigns').empty();
             $('<p class="no_data">No data yet</p>').insertBefore('#subcampaigns');
         }
 
@@ -1627,9 +1627,9 @@ var Master = {
 		        }],
 		        elements: {
 		                center: {
-		                color: '#203047', 
-		                fontStyle: 'Segoeui', 
-		                sidePadding: 15 
+		                color: '#203047',
+		                fontStyle: 'Segoeui',
+		                sidePadding: 15
 		            }
 		        },
 		        title: {
@@ -1664,10 +1664,10 @@ var Master = {
 		        options: call_stats_options
 		    });
 		}else{
-            $('#call_stats').empty();                    
+            $('#call_stats').empty();
             $('<p class="no_data">No data yet</p>').insertBefore('#call_stats');
         }
-		
+
 	},
 
 	campaign_call_log:function(response){
@@ -1678,31 +1678,31 @@ var Master = {
 
 		var xaxis_labels=[];
 		for(var i=0; i<response.extras.calldetails.length;i++){
-			xaxis_labels.push(response.extras.calldetails[i].Time);	
+			xaxis_labels.push(response.extras.calldetails[i].Time);
 		}
 
 	    var handled_calls=[];
 	    for(var i=0; i<response.extras.calldetails.length;i++){
-			handled_calls.push(response.extras.calldetails[i].HandledCalls);	
+			handled_calls.push(response.extras.calldetails[i].HandledCalls);
 		}
 
 		var total_calls=[];
 	    for(var i=0; i<response.extras.calldetails.length;i++){
-			total_calls.push(response.extras.calldetails[i].TotCalls);	
+			total_calls.push(response.extras.calldetails[i].TotCalls);
 		}
 
 	    var call_volume_data = {
 
 	        labels: xaxis_labels,
 	        datasets: [{
-	            label: 'Handled Calls ',
+	            label: Lang.get('js_msgs.handled_calls'),
 	            borderColor: chartColors.green,
 	            backgroundColor: 'rgba(51,160,155,0.6)',
 	            fill: true,
 	            data:handled_calls,
 	            yAxisID: 'y-axis-1'
 	        },{
-	            label: 'Total Calls',
+	            label: Lang.get('js_msgs.total_calls'),
 	            borderColor: chartColors.orange,
 	            backgroundColor: chartColors.orange,
 	            fill: false,
@@ -1770,12 +1770,12 @@ var Master = {
 		    }],
 		    elements: {
 		            center: {
-		            color: '#203047', 
-		            fontStyle: 'Segoeui', 
-		            sidePadding: 15 
+		            color: '#203047',
+		            fontStyle: 'Segoeui',
+		            sidePadding: 15
 		        }
 		    },
-		   
+
 		    labels: ['Agent Calls', 'System Calls']
 		};
 
@@ -1810,7 +1810,7 @@ var Master = {
 		// call status count
 		////////////////////////////////////////////////////////
 		var callstatus=[];
-		var callstatus_label=[];		
+		var callstatus_label=[];
 		var response_length = response.extras.stats.length
 		var chart_colors_array= Master.return_chart_colors(response_length, chartColors);
 
@@ -1827,12 +1827,12 @@ var Master = {
 		    }],
 		    elements: {
 		            center: {
-		            color: '#203047', 
-		            fontStyle: 'Segoeui', 
-		            sidePadding: 15 
+		            color: '#203047',
+		            fontStyle: 'Segoeui',
+		            sidePadding: 15
 		        }
 		    },
-		   
+
 		    labels: callstatus_label
 		};
 
@@ -1865,12 +1865,12 @@ var Master = {
 	},
 
 	lead_inventory:function(response){
-		$('.total_leads').html('<b>Available Leads: '+response.extras.AvailableLeads+'</b>');
-		$('.available_leads').html('<b>Total Leads: '+response.extras.TotalLeads+'</b>');
+		$('.total_leads').html('<b>'+Lang.get('js_msgs.available_leads')+': '+response.extras.AvailableLeads+'</b>');
+		$('.available_leads').html('<b>'+Lang.get('js_msgs.total_leads')+': '+response.extras.TotalLeads+'</b>');
 	},
 
     caller_id:function(response){
-        
+
         var chartColors = Master.chartColors;
 
         var caller_id_data = {
@@ -1884,7 +1884,7 @@ var Master = {
                   {
                     label: "System Calls",
                     backgroundColor: chartColors.orange,
-                    fillOpacity: .5, 
+                    fillOpacity: .5,
                     data: response.extras.system
                   }
                 ]
@@ -1895,14 +1895,14 @@ var Master = {
         var caller_id_options={
             responsive: true,
             maintainAspectRatio:false,
-            legend: {  
+            legend: {
                 position: 'bottom',
                 labels: {
                     boxWidth: 12
-                } 
+                }
             },
             scales: {
-                
+
                 yAxes: [
                     {
                         stacked:true,
@@ -1911,7 +1911,7 @@ var Master = {
                         scalePositionLeft: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Call Count'
+                            labelString: Lang.get('js_msgs.call_count')
                         },
                         ticks: {
                                 // display: false
@@ -1923,7 +1923,6 @@ var Master = {
             tooltips: {
                 enabled: true,
                 mode: 'label',
-               
             }
         }
 
@@ -1954,13 +1953,13 @@ var Master = {
 		    $('input[name=Rate_B]').val( 100 - val );
 		}else{
 		    $('input[name=Rate_A]').val( 100 - val );
-		} 
+		}
 	},
 
 	/// keep alive and refresh data
 	check_reload:function(){
 
-	    if (typeof Dashboard !== 'undefined') {	        
+	    if (typeof Dashboard !== 'undefined') {
 
 	        $(document.body).on('mousemove keypress', function(e){
 	            Dashboard.time = new Date().getTime();
@@ -1984,7 +1983,6 @@ $(document).ready(function(){
 
     if($('#campaign_select').val()){Master.get_subcampaigns($(this), $('#campaign_select').val(), 'campaign_select');}
     if($('#destination_subcampaign').val()){Master.get_subcampaigns($(this), $('#destination_subcampaign').val(), 'destination_subcampaign');}
-    
 
 	$('.stop-propagation').on('click', function (e) {
 	    e.stopPropagation();
@@ -2009,6 +2007,5 @@ $(document).ready(function(){
 	    window.location.hash = this.hash;
 		$('html,body').scrollTop($('body').scrollTop());
 	});
-
 
 });

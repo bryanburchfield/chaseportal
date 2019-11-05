@@ -16,7 +16,7 @@ class ProductionReport
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Production Report';
+        $this->params['reportName'] = 'reports.production_report';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
@@ -41,6 +41,8 @@ class ProductionReport
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

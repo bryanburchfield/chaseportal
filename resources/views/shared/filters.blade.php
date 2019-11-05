@@ -13,11 +13,11 @@
                 <div class="input-group-btn">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span>Interaction</span>
+                            <span>{{__('general.interaction')}}</span>
                         </button>
 
                         <ul class="dropdown-menu filter_campaign stop-propagation">
-                            <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+                            <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
 
                             @foreach($campaign_list as $campaign)
                                 <div class="checkbox">
@@ -34,14 +34,14 @@
 
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span>Date</span>
+                            <span>{{__('general.date')}}</span>
                         </button>
                         <ul class="dropdown-menu date_filters">
-                            <li {!! ($dateFilter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">Today</a></li>
-                            <li {!! ($dateFilter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">Yesterday</a></li>
-                            <li {!! ($dateFilter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">This Week</a></li>
-                            <li {!! ($dateFilter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">This Month</a></li>
-                            <li {!! ($dateFilter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">Custom</a></li>
+                            <li {!! ($dateFilter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">{{__('general.today')}}</a></li>
+                            <li {!! ($dateFilter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a></li>
+                            <li {!! ($dateFilter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">{{__('general.this_week')}}</a></li>
+                            <li {!! ($dateFilter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">{{__('general.this_month')}}</a></li>
+                            <li {!! ($dateFilter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a></li>
                         </ul>
                     </div>
                 </div>

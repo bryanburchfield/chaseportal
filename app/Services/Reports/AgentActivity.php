@@ -16,16 +16,16 @@ class AgentActivity
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Activity Report';
+        $this->params['reportName'] = 'reports.agent_activity';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = '';
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'Event' => 'Event',
-            'Date' => 'Date',
-            'Details' => 'Details',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'Event' => 'reports.event',
+            'Date' => 'reports.date',
+            'Details' => 'reports.details',
         ];
     }
 
@@ -41,6 +41,8 @@ class AgentActivity
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

@@ -72,4 +72,13 @@ class LoginController extends Controller
             $request->filled('remember')
         );
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if (!empty($user->language)) {
+            if (in_array($user->language, config('localization.locales'))) {
+                session()->put('locale', $user->language);
+            }
+        }
+    }
 }
