@@ -23,23 +23,6 @@ class KpiController extends Controller
 {
     use TimeTraits;
 
-    public function index()
-    {
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
-        $jsfile[] = "kpidash.js";
-        $cssfile[] = "kpidash.css";
-
-        $data = [
-            'jsfile' => $jsfile,
-            'cssfile' => $cssfile,
-            'curdash' => 'kpidash',
-            'user' => Auth::user(),
-        ];
-        return view('kpidash')->with($data);
-    }
-
     /**
      * Opt-out of KPI mailings/texts
      * This is triggered from an optout link in the emails

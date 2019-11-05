@@ -50,6 +50,7 @@ class MasterDashController extends Controller
             'page' => $page,
             'dashbody' => $dashbody,
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
+            'user' => Auth::user(),
             'db_list' => $db_list
         ];
 
