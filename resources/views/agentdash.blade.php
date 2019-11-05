@@ -41,6 +41,17 @@
                         <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">{{__('general.last_month')}}</a></li>
                     </ul>
                 </div>
+
+                <li class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span><i class="fas fa-globe-americas"></i> Language</span>
+                    </button>
+
+                    <ul class="dropdown-menu lang_select stop-propagation">
+                        <li><a class="dropdown-item" href="{{url('lang/en')}}">English</a></li>
+                        <li><a class="dropdown-item" href="{{url('lang/es')}}"> Español</a></li>
+                    </ul>
+                </li>
             </div>
         </div>
 

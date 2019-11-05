@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-4">
         <div class="filter_time_camp_dets">
             <p>
                 <span class="selected_datetime"></span> |
@@ -7,7 +7,7 @@
             </p>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-8">
         <div class="filters">
             <div class="input-group">
                 <div class="input-group-btn">
@@ -32,6 +32,7 @@
                         </ul>
                     </div>
 
+
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span>{{__('general.date')}}</span>
@@ -44,6 +45,17 @@
                             <li {!! ($dateFilter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a></li>
                         </ul>
                     </div>
+
+                    <li class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span><i class="fas fa-globe-americas"></i> Language</span>
+                        </button>
+
+                        <ul class="dropdown-menu lang_select stop-propagation">
+                            <li><a class="dropdown-item" href="{{url('lang/en')}}">English</a></li>
+                            <li><a class="dropdown-item" href="{{url('lang/es')}}"> Español</a></li>
+                        </ul>
+                    </li>
                 </div>
             </div>
         </div>
