@@ -35,6 +35,7 @@ class KpiController extends Controller
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
             'curdash' => 'kpidash',
+            'user' => Auth::user(),
         ];
         return view('kpidash')->with($data);
     }

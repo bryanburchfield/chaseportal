@@ -2255,6 +2255,20 @@ p.name i {
   max-width: 25px;
 }
 
+.divider {
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.settings label {
+  font-size: 15px;
+}
+
+.settings .update_lang_btn {
+  margin-left: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

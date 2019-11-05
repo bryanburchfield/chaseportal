@@ -22,6 +22,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
+        Route::post('settings/update_lang_display', 'MasterDashController@updateLangDisplay');
 
         // Tools (lead filters for now)
         Route::get('tools', 'LeadsController@rules');

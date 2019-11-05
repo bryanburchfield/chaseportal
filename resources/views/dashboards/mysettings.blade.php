@@ -65,10 +65,18 @@
 
 						</div>
 
-						<div class="col-sm-6">
+						<div class="col-sm-6 settings">
 							<a class="link" href="{{url('dashboards/automatedreports')}}"><i class="fas fa-external-link-alt"></i> Automated Report Settings</a>
 							<a class="link" href="{{url('dashboards/kpi')}}"><i class="fas fa-external-link-alt"></i> KPI Settings</a>
 							<a class="link" href="{{url('dashboards/kpi/recipients')}}"><i class="fas fa-external-link-alt"></i> Recipient Settings</a>
+
+							<div class="divider"></div>
+
+							<form action="{{url('/dashboards/settings/update_lang_display')}}" method="POST" class="form hide_lang">
+								@csrf
+								<label class="checkbox-inline"><input type="checkbox" value="{{$user->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{$user->language_displayed ? 'checked' : ''}}>Display Language Menu in navbar</label>
+								<input type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn" value="Update">
+							</form>
 						</div>
 					</div>
 			    </div>

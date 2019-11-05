@@ -31,6 +31,7 @@ class User extends Authenticatable
         'group_id',
         'additional_dbs',
         'app_token',
+        'language_displayed'
     ];
 
     /**

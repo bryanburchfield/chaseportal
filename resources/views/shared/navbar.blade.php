@@ -13,7 +13,7 @@
             <div class="input-group">
 
                 <div class="input-group-btn">
-                    
+
                     {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                         @csrf
                         <div class="btn-group">
@@ -31,20 +31,20 @@
                         @include('dashboards.recipientsnav')
                     @endif
 
-                    <li class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span>Language</span>
-                        </button>
+                    @if($user['language_displayed'])
+                        <li class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span><i class="fas fa-globe-americas"></i> Language</span>
+                            </button>
 
-                        <ul class="dropdown-menu lang_select stop-propagation">
-                            <li><a class="dropdown-item" href="{{url('lang/en')}}"><img src="{{asset('img/usflag.png')}}"> English</a></li>
-                            <li><a class="dropdown-item" href="{{url('lang/es')}}"><img src="{{asset('img/spanishflag.png')}}"> Spanish</a></li>
-                        </ul>
-                    </li>
+                            <ul class="dropdown-menu lang_select stop-propagation">
+                                <li><a class="dropdown-item" href="{{url('lang/en')}}">English</a></li>
+                                <li><a class="dropdown-item" href="{{url('lang/es')}}"> Español</a></li>
+                            </ul>
+                        </li>
+                    @endif
                 </div>
             </div>
-
-
 
         </div>
 
