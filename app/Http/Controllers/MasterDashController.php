@@ -172,6 +172,6 @@ class MasterDashController extends Controller
         $display_lang = (int) $request->lang_displayed;
         User::where('id', $user->id)->update(array('language_displayed' => $display_lang));
 
-        return redirect('dashboards/settings');
+        return redirect()->back();
     }
 }
