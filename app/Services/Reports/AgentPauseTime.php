@@ -15,22 +15,22 @@ class AgentPauseTime
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Pause Time Report';
+        $this->params['reportName'] = 'reports.agent_pause_time';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'LogInTime' => 'LogIn Time',
-            'LogOutTime' => 'LogOut Time',
-            'PausedTime' => 'Pause Time',
-            'UnPausedTime' => 'UnPause Time',
-            'PausedTimeSec' => 'Time Paused',
-            'BreakCode' => 'Break Code',
-            'TotPausedSec' => 'Total Paused',
-            'TotManHours' => 'Total Man Hours',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'LogInTime' => 'reports.logintime',
+            'LogOutTime' => 'reports.logouttime',
+            'PausedTime' => 'reports.pausedtime',
+            'UnPausedTime' => 'reports.unpausedtime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'BreakCode' => 'reports.breakcode',
+            'TotPausedSec' => 'reports.totpausedsec',
+            'TotManHours' => 'reports.totmanhours',
         ];
     }
 
@@ -47,6 +47,8 @@ class AgentPauseTime
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         $tz =  Auth::user()->tz;

@@ -3,6 +3,9 @@
 // Anything in the /public/raw directory will get processed outside the framework
 Route::redirect('/raw', '/raw');
 
+// Language setter
+Route::get('lang/{locale}', 'LocalizationController@lang');
+
 // Redirect root to /dashboards
 Route::redirect('/', '/dashboards');
 

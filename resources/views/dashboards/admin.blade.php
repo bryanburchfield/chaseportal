@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Admin')
+@section('title', __('widgets.admin'))
 
 @section('content')
 <div class="preloader"></div>

@@ -17,15 +17,15 @@ class CampaignUsage
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Campaign Usage Report';
+        $this->params['reportName'] = 'reports.campaign_usage';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
         $this->params['columns'] = [
-            'Stat' => 'Status',
-            'Attempt' => 'Attempt',
-            'Tries' => 'Count',
+            'Stat' => 'reports.stat',
+            'Attempt' => 'reports.attempt',
+            'Tries' => 'reports.tries',
         ];
     }
 
@@ -46,6 +46,8 @@ class CampaignUsage
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         $bind = [];
 
         $sql = "SET NOCOUNT ON;
@@ -233,7 +235,7 @@ class CampaignUsage
         if (!empty($request->campaign)) {
             $this->params['campaign'] = $request->campaign;
         } else {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         }
 
         if (!empty($request->subcampaign)) {

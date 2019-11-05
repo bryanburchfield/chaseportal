@@ -17,7 +17,7 @@ class CallDetails
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Call Details Report';
+        $this->params['reportName'] = 'reports.call_details';
         $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
         $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
@@ -30,14 +30,14 @@ class CallDetails
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'Phone' => 'Phone',
-            'Date' => 'Date',
-            'CallStatus' => 'Call Status',
-            'Duration' => 'Duration',
-            'CallType' => 'Call Type',
-            'Details' => 'Call Details',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'Phone' => 'reports.phone',
+            'Date' => 'reports.date',
+            'CallStatus' => 'reports.callstatus',
+            'Duration' => 'reports.duration',
+            'CallType' => 'reports.calltype',
+            'Details' => 'reports.details',
         ];
     }
 
@@ -63,6 +63,8 @@ class CallDetails
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -251,7 +253,7 @@ class CallDetails
         $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
@@ -293,7 +295,7 @@ class CallDetails
         }
 
         if ($from > $to) {
-            $this->errors->add('duration', "Invalid Duration values");
+            $this->errors->add('duration', trans('reports.errduration'));
         }
 
         if (!empty($request->showonlyterm)) {

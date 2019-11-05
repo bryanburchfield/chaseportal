@@ -4,7 +4,7 @@
            <button type="button" id="sidebarCollapse" class="btn">
                <i class="fas fa-align-left"></i>
            </button>
-           
+
            <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo">
        </div>
 
@@ -12,11 +12,11 @@
             <div class="input-group">
 
                 <div class="input-group-btn">
-                    
+
                     {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                         @csrf
                         <div class="btn-group">
-                        {!! Form::submit('Log Out',['class'=>'btn logout_btn']) !!}
+                        {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
                         </div>
                     {!! Form::close() !!}
 
