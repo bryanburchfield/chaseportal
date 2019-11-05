@@ -169,7 +169,7 @@ class MasterDashController extends Controller
     public function updateLangDisplay(Request $request)
     {
         $user = Auth::user();
-        $display_lang = $request->lang_displayed;
+        $display_lang = (int) $request->lang_displayed;
         User::where('id', $user->id)->update(array('language_displayed' => $display_lang));
 
         return redirect('dashboards/settings');
