@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateLangDisplayedToNullableUsersTable extends Migration
+class UpdateLangDisplayedToBooleanUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UpdateLangDisplayedToNullableUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('language_displayed')->nullable()->change();
+            $table->boolean('language_displayed')->default(1)->nullable()->change();
         });
     }
 
