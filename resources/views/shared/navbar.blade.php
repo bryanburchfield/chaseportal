@@ -31,7 +31,7 @@
                         @include('dashboards.recipientsnav')
                     @endif
 
-                    @if($user['language_displayed'])
+                    @if(Auth::user()->language_displayed)
                         <li class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span><i class="fas fa-globe-americas"></i> Language</span>

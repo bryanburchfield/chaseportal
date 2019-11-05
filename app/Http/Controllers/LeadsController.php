@@ -35,7 +35,6 @@ class LeadsController extends Controller
         ];
 
         $data = [
-            'user' => Auth::user(),
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'lead_rules' => $lead_rules,

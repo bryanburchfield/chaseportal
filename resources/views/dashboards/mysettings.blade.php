@@ -23,12 +23,12 @@
 
 								<div class="form-group">
 									{!! Form::label('name', 'Name') !!}
-									{!! Form::text('name', $user->name, ['class'=>'form-control name', 'required'=>true]) !!}
+									{!! Form::text('name', Auth::user()->name, ['class'=>'form-control name', 'required'=>true]) !!}
 								</div>
 
 								<div class="form-group">
 									{!! Form::label('email', 'Email') !!}
-									{!! Form::email('email', $user->email, ['class'=>'form-control email', 'required'=>true]) !!}
+									{!! Form::email('email', Auth::user()->email, ['class'=>'form-control email', 'required'=>true]) !!}
 								</div>
 
 								<div class="form-group">
@@ -74,7 +74,7 @@
 
 							<form action="{{url('/dashboards/settings/update_lang_display')}}" method="POST" class="form hide_lang">
 								@csrf
-								<label class="checkbox-inline"><input type="checkbox" value="{{$user->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{$user->language_displayed ? 'checked' : ''}}>Display Language Menu in navbar</label>
+								<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{Auth::user()->language_displayed ? 'checked' : ''}}>Display Language Menu in navbar</label>
 								<input type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn" value="Update">
 							</form>
 						</div>
