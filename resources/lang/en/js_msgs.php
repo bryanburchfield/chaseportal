@@ -1,0 +1,33 @@
+<?php
+
+	return [
+		'no_data'					=> 'No Data Yet',
+		'total'						=> 'Total',
+		'handled'					=> 'Handled',
+		'voicemails'				=> 'Voicemails',
+		'abandoned'					=> 'Abandoned',
+		'inbound'					=> 'Inbound',
+		'outbound'					=> 'Outbound',
+		'manual'					=> 'Manual',
+		'minutes'					=> 'Minutes',
+		'dropped'					=> 'Dropped',
+		'reps'						=> 'Reps',
+		'reload_error_msg'			=> 'Something went wrong. Please reload the page.',
+		'numb_filter_attempts'		=> 'Number of Attempts to Filter by',
+		'days_to_filter_by'			=> 'Days to Filter By',
+		'sorted_in'					=> 'Sorted in',
+		'ordered_by'				=> 'order by',
+		'available_leads'			=> 'Available Leads',
+		'total_leads'				=> 'Total Leads',
+		'total_calls'				=> 'Total Calls',
+		'handled_calls'				=> 'Handled Calls',
+		'call_count'				=> 'Call Count',
+		'interval_updated'			=> 'Interval successfully updated',
+		'select_all'				=> 'Select All',
+		'unselect_all'				=> 'Unselect All',
+		'undo_selection'			=> 'Undo Selection',
+		'rep'						=> 'Rep',
+		'calls'						=> 'Calls',
+		'sales'						=> 'Sales',
+		'talk_time'					=> 'Talk Time'
+	];
