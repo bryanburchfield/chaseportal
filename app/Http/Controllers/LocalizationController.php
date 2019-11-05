@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,9 +14,11 @@ class LocalizationController extends Controller
             session()->put('locale', $locale);
 
             if (Auth::check()) {
-                $user = Auth::user();
-                $user->language = $locale;
-                $user->save();
+                if (!session()->has('isApi') || session('isApi') != 1) {
+                    $user = Auth::user();
+                    $user->language = $locale;
+                    $user->save();
+                }
             }
         }
         return redirect()->back();
