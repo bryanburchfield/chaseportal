@@ -236,7 +236,7 @@ class LeaderDashController extends Controller
 
         $repsales = [];
         $tots = [
-            'Rep' => 'ROOM TOTAL',
+            'Rep' => trans('general.room_total'),
             'CallCount' => 0,
             'TalkSecs' => 0,
             'Sales' => 0,

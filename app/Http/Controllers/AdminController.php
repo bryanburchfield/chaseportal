@@ -29,7 +29,7 @@ class AdminController extends Controller
         $groupId = Auth::user()->group_id;
         $this->setDb();
 
-        $timezone_array = ['' => 'Select One'];
+        $timezone_array = ['' => trans('general.select_one')];
 
         // Get US timezones first
         $timezones = System::all()
@@ -109,7 +109,7 @@ class AdminController extends Controller
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
-        $dbs = ['' => 'Select One'];
+        $dbs = ['' => trans('general.select_one')];
 
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;

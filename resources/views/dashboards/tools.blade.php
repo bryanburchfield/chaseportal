@@ -35,17 +35,17 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_campaign', __('tools.campaign')) !!}
-            						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+            						{!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
             					</div>
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::select("source_subcampaign", [null=>__('general.select_one')], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('filter_type', __('tools.filter_type')) !!}
-            						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+            						{!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
             					</div>
 
 								<div class="form-group">
@@ -55,12 +55,12 @@
 
 								<div class="form-group">
             						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
-            						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+            						{!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
+            						{!! Form::select("destination_subcampaign",  [null=>__('general.select_one')], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
             					</div>
 
             					<div class="form-group">

@@ -38,7 +38,7 @@ class CampaignUsage
         ];
 
         $filters['campaign'] =
-            ['' => 'Select One'] +
+            ['' => trans('general.select_one')] +
             $filters['campaign'];
 
         return $filters;

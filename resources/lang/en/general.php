@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'all_campaigns'				=> 'All Campaigns',
 	'april'						=> 'April',
 	'august'					=> 'August',
 	'auto_reports'				=> 'Automated Reports',
@@ -43,7 +44,9 @@ return [
 	'report_settings'			=> 'Report Settings',
 	'reset_pw'					=> 'RESET PASSWORD',
 	'reset_sorting'				=> 'Reset Sorting',
+	'room_total'				=> 'ROOM TOTAL',
 	'save'						=> 'Save',
+	'select_one'				=> 'Select One',
 	'select_report'				=> 'Select a Report',
 	'send_pw'					=> 'Send Password Reset Link',
 	'september'					=> 'September',

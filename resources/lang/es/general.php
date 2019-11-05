@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'all_campaigns'				=> 'Todas las campañas',
 	'april'						=> 'abril',
 	'august'					=> 'agosto',
 	'auto_reports'				=> 'Reportes automatizados',
@@ -43,7 +44,9 @@ return [
 	'report_settings'			=> 'Configuración de informes',
 	'reset_pw'					=> 'RESTABLECER CONTRASEÑA DE CUENTA',
 	'reset_sorting'				=> 'Restablecer ordenación',
+	'room_total'				=> 'TOTAL DE OFICINA',
 	'save'						=> 'Salvar',
+	'select_one'				=> 'Seleccione uno',
 	'select_report'				=> 'Seleccione un informe',
 	'send_pw'					=> 'Enviar enlace de restablecimiento de contraseña',
 	'september'					=> 'septiembre',

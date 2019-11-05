@@ -219,7 +219,7 @@ trait DashTraits
         $cnt = count((array) $this->campaign);
 
         if (empty($this->campaign)) {
-            $campaign = "All Campaigns";
+            $campaign = trans('general.all_campaigns');
         } elseif ($cnt > 1) {
             $campaign = $cnt . ' ' . trans('general.campaigns_selected');
         } else {
@@ -481,7 +481,7 @@ trait DashTraits
         $camparray = [];
 
         $camparray[] = [
-            'name' => 'All Campaigns',
+            'name' => trans('general.all_campaigns'),
             'value' => '',
             'selected' => empty($selected) ? 1 : 0,
         ];
