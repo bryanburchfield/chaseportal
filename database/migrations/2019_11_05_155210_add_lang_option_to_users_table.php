@@ -14,7 +14,7 @@ class AddLangOptionToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('language_displayed')->default(1);
+            $table->boolean('language_displayed')->nullable()->default(1);
         });
     }
 
