@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span>{{__('general.database')}}</span>
             </button>
-            
+
             <ul class="dropdown-menu db_select stop-propagation">
                 @foreach ($db_list as $db)
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
@@ -73,3 +73,5 @@
         <li {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a></li>
     </ul>
 </div>
+
+
