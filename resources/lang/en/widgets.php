@@ -39,6 +39,7 @@
 		'max_handle_time'	=> 'Max Handle Time',
 		'chart_avg_based'	=> 'The chart average is based on the max handle time.',
 		'top_ten_dispos'	=> 'Top 10 Dispositions',
+		'top_ten_agent_dispos'	=> 'Top 10 Agent Dispositions',
 		'agent_call_status' => 'Agent Call Status',
 		'service_level'		=> 'Service Level',
 		'change_answered_time' => 'Change Answered Time',
