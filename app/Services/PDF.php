@@ -28,6 +28,7 @@ class PDF extends Fpdf
 
         // find max len of each col
         foreach ($header as $k => $v) {
+            $v = iconv('UTF-8', 'iso-8859-1', $v);
             $w = $this->GetStringWidth($v);
 
             if (!isset($colwidth[$k])) {
@@ -39,6 +40,7 @@ class PDF extends Fpdf
         }
         foreach ($data as $row) {
             foreach ($row as $k => $v) {
+                $v = iconv('UTF-8', 'iso-8859-1', $v);
                 $w = $this->GetStringWidth($v);
                 if ($w > $colwidth[$k]) {
                     $colwidth[$k] = $w;
@@ -63,7 +65,7 @@ class PDF extends Fpdf
 
         // Header
         for ($i = 0; $i < count($header); $i++) {
-            $this->CellFitScale($colwidth[$i], 7, $header[$i], 1, 0, 'C', true);
+            $this->CellFitScale($colwidth[$i], 7, iconv('UTF-8', 'iso-8859-1', $header[$i]), 1, 0, 'C', true);
         }
         $this->Ln();
 
@@ -75,7 +77,7 @@ class PDF extends Fpdf
         $fill = false;
         foreach ($data as $row) {
             foreach ($row as $k => $col) {
-                $this->CellFitScale($colwidth[$k], 6, trim($col), 'LR', 0, 'L', $fill);
+                $this->CellFitScale($colwidth[$k], 6, iconv('UTF-8', 'iso-8859-1', trim($col)), 'LR', 0, 'L', $fill);
             }
             $this->Ln();
             $fill = !$fill;
