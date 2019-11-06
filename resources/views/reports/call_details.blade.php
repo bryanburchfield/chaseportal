@@ -73,11 +73,11 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('durationfrom', 'Duration ( seconds )') !!}
+						{!! Form::label('durationfrom', __('reports.duration_secs')) !!}
 						<div class="input-group">
-							{!! Form::text('durationfrom', null, ['class'=>'form-control', 'placeholder'=>'Start']) !!}
+							{!! Form::text('durationfrom', null, ['class'=>'form-control', 'placeholder'=>__('reports.start')]) !!}
 						    <span class="input-group-addon">-</span>
-						    {!! Form::text('durationto', null, ['class'=>'form-control', 'placeholder'=>'End']) !!}
+						    {!! Form::text('durationto', null, ['class'=>'form-control', 'placeholder'=>__('reports.end')]) !!}
 						</div>
 					</div>
 				</div>

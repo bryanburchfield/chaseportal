@@ -37,6 +37,8 @@ return [
      'call_type' => 'Tipo de llamada',
      'call_statuses' => 'Estados de llamadas',
      'termination_status' => 'Mostrar solo el estado de terminación',
+     'duration_secs'     => 'Duración (segundos)',
+
 
      // error messages
      'errcampaignrequired' => 'Campaña requerida',

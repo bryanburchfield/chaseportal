@@ -124,33 +124,33 @@ var Dashboard = {
                 if(response.call_volume.total != null){
                     total_calls_int=response.call_volume.total;
                 }
-                $('.call_volume_details p.total').html('Total Calls: '+Master.formatNumber(total_calls_int));
+                $('.call_volume_details p.total').html(Lang.get('js_msgs.total_calls')+': '+Master.formatNumber(total_calls_int));
                 var call_volume_inbound = {
 
                     labels: response.call_volume.inbound_time_labels,
                     datasets: [{
-                        label: 'Total',
+                        label: Lang.get('js_msgs.total'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.total_inbound_calls,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Handled',
+                        label: Lang.get('js_msgs.handled'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response.call_volume.inbound_handled,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Voicemails',
+                        label: Lang.get('js_msgs.voicemails'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
                         data: response.call_volume.inbound_voicemails,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Abandoned',
+                        label: Lang.get('js_msgs.abandoned'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -263,13 +263,13 @@ var Dashboard = {
             success:function(response){
 
                 if( response.call_details.datetime != undefined){
-                    $('h2.avg_ht').html('Avg Handle Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
-                    $('h2.avg_tt').html('Avg Talk Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
+                    $('h2.avg_ht').html(Lang.get('js_msgs.avg_handle_time')+': '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
+                    $('h2.avg_tt').html(Lang.get('js_msgs.avg_talk_time')+': '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
                     
                     var avg_handle_time_data  = {
                         labels: response.call_details.datetime,
                         datasets: [{
-                            label: 'Avg Handle Time',
+                            label: Lang.get('js_msgs.avg_handle_time'),
                             borderColor: chartColors.green,
                             backgroundColor: 'rgba(51,160,155,0.6)',
                             fill: true,
@@ -292,7 +292,7 @@ var Dashboard = {
                                 id: 'y-axis-1',
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -337,21 +337,21 @@ var Dashboard = {
                     var call_details_data = {
                         labels: response.call_details.datetime,
                         datasets: [{
-                            label: 'Talk Time',
+                            label: Lang.get('js_msgs.talk_time'),
                             borderColor: chartColors.green,
                             backgroundColor: chartColors.green,
                             fill: false,
                             data: response.call_details.calls,
                             yAxisID: 'y-axis-1',
                         },{
-                            label: 'Hold Time',
+                            label: Lang.get('js_msgs.hold_time'),
                             borderColor: chartColors.blue,
                             backgroundColor: chartColors.blue,
                             fill: false,
                             data: response.call_details.hold_time,
                             yAxisID: 'y-axis-1',
                         },{
-                            label: 'After Call Work',
+                            label:  Lang.get('js_msgs.after_call_work'),
                             borderColor: chartColors.orange,
                             backgroundColor: chartColors.orange,
                             fill: false,
@@ -373,7 +373,7 @@ var Dashboard = {
                                 id: 'y-axis-1',
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -442,7 +442,7 @@ var Dashboard = {
                         labels: response.call_details.datetime,
                         datasets: [
                           {
-                            label: "Longest Hold Time (minutes)",
+                            label: Lang.get('js_msgs.longest_hold_time'),
                             backgroundColor: chartColors.green,
                             data: response.call_details.max_hold
                           }
@@ -463,7 +463,7 @@ var Dashboard = {
                             yAxes: [{
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -521,8 +521,8 @@ var Dashboard = {
             success:function(response){
 
                 if( response.agent_calltime.avg_ct != undefined){
-                    $('h2.avg_ct').html('Avg Rep Time: '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
-                    $('h2.avg_cc').html('Avg Call Count: '+response.agent_calltime.avg_cc +' ');
+                    $('h2.avg_ct').html(Lang.get('js_msgs.avg_rep_time')+': '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
+                    $('h2.avg_cc').html(Lang.get('js_msgs.avg_call_count')+': '+response.agent_calltime.avg_cc +' ');
                 }
 
                 var agent_talktime_data = {
@@ -530,13 +530,13 @@ var Dashboard = {
                         datasets: [
                           {
                             yAxisID: 'A',
-                            label: "Call Time (minutes)",
+                            label: Lang.get('js_msgs.call_time'),
                             backgroundColor: chartColors.green,
                             data: response.agent_calltime.duration
                           },
                           {
                             yAxisID: 'B',
-                            label: "Call Count",
+                            label: Lang.get('js_msgs.call_count'),
                             backgroundColor: chartColors.orange,
                             fillOpacity: .5, 
                             data: response.agent_calltime.total_calls
@@ -564,7 +564,7 @@ var Dashboard = {
                                 scalePositionLeft: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString: Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -584,7 +584,7 @@ var Dashboard = {
                                 scalePositionLeft: false,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Call Count'
+                                    labelString: Lang.get('js_msgs.call_count')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -651,12 +651,12 @@ var Dashboard = {
                     baseline.push(answer_secs);
                 }
 
-                $('h2.avg_sl').html('Avg Service Level: '+response.service_level.avg + '%');
+                $('h2.avg_sl').html(Lang.get('js_msgs.avg_service_level')+': '+response.service_level.avg + '%');
                 var service_level_data = {
 
                     labels: response.service_level.time,
                     datasets: [{
-                        label: 'Service Level ',
+                        label: Lang.get('js_msgs.service_level'),
                         borderColor: chartColors.orange,
                         backgroundColor: 'rgb(228,154,49, 0.55)',
                         fill: true,
@@ -664,7 +664,7 @@ var Dashboard = {
                         yAxisID: 'y-axis-1'
                     },{
                         type: 'line',
-                        label: 'Call Answered by Time',
+                        label: Lang.get('js_msgs.call_answered'),
                         data: baseline,
                         backgroundColor: 'rgba(238,238,238)'
 

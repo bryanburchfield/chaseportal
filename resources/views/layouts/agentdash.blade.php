@@ -35,7 +35,7 @@
 
     @yield('content')
 
-
+    <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" type="text/javascript"></script>
@@ -50,7 +50,6 @@
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
 
-    <script src="/messages.js"></script> 
 
     @isset($jsfile)
     @foreach($jsfile as $js)

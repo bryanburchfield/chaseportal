@@ -1,6 +1,10 @@
 <?php
 
 	return [
+		'avg_call_count'			=> 'Conteo promedio de llamadas',
+		'avg_handle_time'			=> 'Tiempo promedio de manejo',
+		'avg_talk_time'				=> 'Tiempo promedio de conversación',
+		'avg_rep_time'				=> 'Tiempo promedio de representación',
 		'no_data'					=> 'Aún no hay datos',
 		'total'						=> 'Total',
 		'handled'					=> 'Manejado',
@@ -22,6 +26,7 @@
 		'total_calls'				=> 'Llamadas totales',
 		'handled_calls'				=> 'Llamadas manejadas',
 		'call_count'				=> 'Recuento de llamada',
+		'call_time'					=> 'Tiempo de llamada (minutos)',
 		'interval_updated'			=> 'Intervalo actualizado con éxito',
 		'select_all'				=> 'Seleccionar todo',
 		'unselect_all'				=> 'Deselecciona todo',
@@ -29,5 +34,22 @@
 		'rep'						=> 'Rep',
 		'calls'						=> 'Llamadas',
 		'sales'						=> 'Ventas',
-		'talk_time'					=> 'Tiempo de conversación'
+		'talk_time'					=> 'Tiempo de conversación',
+		'total_calls'				=> 'Llamadas Totales',
+		'hold_time'					=> 'Hora de espera',
+		'after_call_work'			=> 'Después de llamar al trabajo',
+		'longest_hold_time'			=> 'Mayor tiempo de retención (minutos)',
+		'service_level'				=> 'Nivel de servicio',
+		'avg_service_level'			=> 'Nivel de servicio promedio',
+		'call_answered'				=> 'Llamada respondida por tiempo',
+		'start'   					=> 'Comienzo',
+	    'end'    					=> 'Fin',
+	    'all_selected' 				=> 'Todos seleccionados',
+	    'select_campaign'   		=> 'Seleccionar Campaña',
+	    'select_report'     		=> 'Seleccionar informe',
+	    'select_rep'   				=> 'Seleccionar representante',
+	    'select_inbound_source'		=> 'Seleccionar fuente de entrada',
+    	'select_call_status'     	=> 'Seleccionar estado de llamada',
+    	'select_all'				=> 'Seleccionar todo',
+    	'none_selected'				=> 'Ninguna seleccionada'
 	];

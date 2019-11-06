@@ -3,7 +3,7 @@
 	return [
 		'admin_inbound'		=> 'Administrador Entrante',
 		'admin_outbound'	=> 'Administrador Saliente',
-		'trend_dashboard'	=> 'Trend Dashboard',
+		'trend_dashboard'	=> 'Tendencia Dashboard',
 		'leaderboard'		=> 'Panel de tendencia',
 		'kpis'				=> 'KPIs',
 		'reports'			=> 'Informes',

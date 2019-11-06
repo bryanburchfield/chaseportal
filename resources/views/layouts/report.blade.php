@@ -68,7 +68,8 @@
         </div>
     </div>
     @include('shared.reportmodal')
-
+    
+    <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" type="text/javascript"></script>
@@ -78,10 +79,9 @@
     <script src="/js/moment.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/datetimepicker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
+    <script src="/js/multiselect_lib.js">"></script> 
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script> 
-    <script src="/messages.js"></script> 
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
 

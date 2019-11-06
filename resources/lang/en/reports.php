@@ -36,7 +36,11 @@ return [
 	'skill' => 'Skill',
 	'subcampaign' => 'Subcampaign',
 	'to' => 'To',
-	'termination_status' => 'Mostrar solo el estado de terminación',
+	'termination_status' => 'Show only termination status',
+	'duration_secs'	=> 'Duration ( seconds )',
+	'start'   => 'Comienzo',
+	'end'     => 'Fin',
+
 
 	// error messages
 	'errcampaignrequired' => 'Campaign required',
