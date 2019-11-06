@@ -2,8 +2,6 @@
 
 return [
 	'all_campaigns'				=> 'All Campaigns',
-	'april'						=> 'April',
-	'august'					=> 'August',
 	'auto_reports'				=> 'Automated Reports',
 	'auto_report_settings'		=> 'Automated Reports Settings',
 	'campaigns_selected'		=> 'Campaigns Selected',
@@ -16,33 +14,37 @@ return [
 	'display_language'			=> 'Display Language Menu in navbar',
 	'database'					=> 'Database',
 	'date'						=> 'Date',
-	'december'					=> 'December',
 	'download'					=> 'Download',
 	'download_report'			=> 'Download Report',
 	'download_warning'			=> 'Download Warning',
 	'edit_recip'				=> 'Edit Recipient',
 	'email'						=> 'Email Address',
 	'end_date'					=> 'End Date',
-	'february'					=> 'February',
 	'first'						=> 'First',
 	'forgot_pw'					=> 'Forgot Your Password',
 	'full_name'					=> 'Full Name',
 	'interaction'				=> 'Interaction',
+<<<<<<< HEAD
 	'january'					=> 'January',
 	'july'						=> 'July',
 	'june'						=> 'June',
 	'kpi_settings'				=> 'KPI Settings',
+=======
+>>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'last'						=> 'Last',
 	'last_month'				=> 'Last Month',
 	'last_week'					=> 'Last Week',
 	'login'						=> 'Login',
 	'logout'					=> 'Log Out',
+<<<<<<< HEAD
 	'march'						=> 'March',
 	'may'						=> 'May',
 	'my_settings'				=> 'My Settings',
 	'new_password'				=> 'New Password',
 	'november'					=> 'November',
 	'october'					=> 'October',
+=======
+>>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'password'					=> 'Password',
 	'phone'						=> 'Phone',
 	'recipients'				=> 'Recipients',
@@ -56,7 +58,6 @@ return [
 	'select_one'				=> 'Select One',
 	'select_report'				=> 'Select a Report',
 	'send_pw'					=> 'Send Password Reset Link',
-	'september'					=> 'September',
 	'start_date'				=> 'Start Date',
 	'submit'					=> 'Submit',
 	'this_month'				=> 'This Month',

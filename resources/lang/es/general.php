@@ -2,8 +2,6 @@
 
 return [
 	'all_campaigns'				=> 'Todas las campañas',
-	'april'						=> 'abril',
-	'august'					=> 'agosto',
 	'auto_reports'				=> 'Reportes automatizados',
 	'auto_report_settings'		=> 'Configuración de informes automatizados',
 	'campaigns_selected'		=> 'Campañas seleccionadas',
@@ -16,33 +14,37 @@ return [
 	'display_language'			=> 'Mostrar menú de idioma en la barra de navegación',
 	'database'					=> 'Base de datos',
 	'date'						=> 'Fecha',
-	'december'					=> 'diciembre',
 	'download'					=> 'Descargar',
 	'download_report'			=> 'Descargar informe',
 	'download_warning'			=> 'Descargar Advertencia',
 	'edit_recip'				=> 'Editar destinatario',
 	'email'						=> 'Email',
 	'end_date'					=> 'Fecha final',
-	'february'					=> 'febrero',
 	'first'						=> 'Primera',
 	'forgot_pw'					=> '¿Olvidaste tu contraseña?',
 	'full_name'					=> 'Nombre completo',
 	'interaction'				=> 'Interacción',
+<<<<<<< HEAD
 	'january'					=> 'enero',
 	'july'						=> 'julio',
 	'june'						=> 'junio',
 	'kpi_settings'				=> 'KPI Configuraciones',
+=======
+>>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'last'						=> 'Último',
 	'last_month'				=> 'El mes pasado',
 	'last_week'					=> 'La semana pasada',
 	'login'						=> 'Iniciar sesión',
 	'logout'					=> 'Cerrar Sesión',
+<<<<<<< HEAD
 	'march'						=> 'marzo',
 	'may'						=> 'mayo',
 	'my_settings'				=> 'Mi Configuración',
 	'new_password'				=> 'Nueva Contraseña',
 	'november'					=> 'noviembre',
 	'october'					=> 'octubre',
+=======
+>>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'password'					=> 'Contraseña',
 	'phone'						=> 'Teléfono',
 	'recipients'				=> 'Destinatarios',
@@ -56,7 +58,6 @@ return [
 	'select_one'				=> 'Seleccione uno',
 	'select_report'				=> 'Seleccione un informe',
 	'send_pw'					=> 'Enviar enlace de restablecimiento de contraseña',
-	'september'					=> 'septiembre',
 	'start_date'				=> 'Fecha de inicio',
 	'submit'					=> 'Enviar',
 	'this_month'				=> 'Este mes',

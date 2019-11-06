@@ -213,8 +213,7 @@ trait DashTraits
         $fromDate = $this->utcToLocal($fromDate, $tz);
         $toDate = $this->utcToLocal($toDate, $tz)->modify('-1 second');
 
-        $month = trans('general.' . strtolower($fromDate->format('F'))) .
-            ' ' . $fromDate->format('Y');
+        $month = $fromDate->monthName . ' ' . $fromDate->format('Y');
 
         $cnt = count((array) $this->campaign);
 
@@ -228,21 +227,19 @@ trait DashTraits
 
         switch ($this->dateFilter) {
             case 'today':
-                $today = $fromDate->format('n/j/y');
-                $details = trans('general.today') . " | $today";
+                $details = trans('general.today') . ' | ' . $fromDate->isoFormat('L');
                 break;
             case 'yesterday':
-                $yesterday = $fromDate->format('n/j/y');
-                $details = trans('general.yesterday') . " | $yesterday";
+                $details = trans('general.yesterday') . ' | ' . $fromDate->isoFormat('L');
                 break;
             case 'week':
-                $monday = $fromDate->format('n/j/y');
-                $sunday = $toDate->format('n/j/y');
+                $monday = $fromDate->isoFormat('L');
+                $sunday = $toDate->isoFormat('L');
                 $details = $monday . ' - ' . $sunday . ' (' . trans('general.this_week') . ')';
                 break;
             case 'last_week':
-                $monday = $fromDate->format('n/j/y');
-                $sunday = $toDate->format('n/j/y');
+                $monday = $fromDate->isoFormat('L');
+                $sunday = $toDate->isoFormat('L');
                 $details = $monday . ' - ' . $sunday . ' (' . trans('general.last_week') . ')';
                 break;
             case 'month':
@@ -252,8 +249,8 @@ trait DashTraits
                 $details = $month;
                 break;
             default:
-                $start = $fromDate->format('n/j/y');
-                $end = $toDate->format('n/j/y');
+                $start = $fromDate->isoFormat('L');
+                $end = $toDate->isoFormat('L');
                 $details = $start . ' - ' . $end;
         }
 

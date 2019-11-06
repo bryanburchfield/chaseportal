@@ -7,7 +7,7 @@
     <div class="container mt50">
         <div class="row">
             <div class="col-sm-12">
-                <h2>You have been unsubscribed</h2>
+            <h2>{{ __('kpi.unsubscribed') }}</h2>
             </div>
         </div>
     </div>
