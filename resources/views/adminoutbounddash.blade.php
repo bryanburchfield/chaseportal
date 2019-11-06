@@ -256,12 +256,22 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-3 card_table_prt ">
-                    <div class="card card-3b">
-                        <h1 class="title">Top 10 Dispositions</h1>
+                <div class="col-sm-3 set_hgt2 card_table_prt ">
+                    <div class="card flipping_card card-3b">
+                        <div class="front p20">
+                            <h1 class="title">Top 10 Dispositions</h1>
+                            <div class="flip_card_btn"></div>
+                            <div class="inbound inandout mb0">
+                                <canvas id="dispositions_graph"></canvas>
+                            </div>
+                        </div>
 
-                        <div class="inbound inandout mb0">
-                            <canvas id="dispositions_graph"></canvas>
+                        <div class="back">
+                            <h1 class="title">Top 10 Agent Dispositions</h1>
+                            <div class="flip_card_btn"></div>
+                            <div class="inbound inandout mb0">
+                                <canvas id="agent_dispositions_graph"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

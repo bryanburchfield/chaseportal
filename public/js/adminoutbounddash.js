@@ -723,12 +723,59 @@ var Dashboard = {
             data:{dateFilter:datefilter},
             success:function(response){
 
-                $('#agent_call_status, #dispositions_graph').parent().find('.no_data').remove();
+                $('#agent_call_status, #dispositions_graph, #agent_dispositions_graph').parent().find('.no_data').remove();
 
+                //// TOP 10 AGENT DISPOS
                 if(window.dispositions_chart != undefined){
                     window.dispositions_chart.destroy();
                 }
-                
+
+                var response_length = response.top10_rep_dispos.dispositions.length;
+                var chart_colors_array2= Master.return_chart_colors_hash(response.top10_rep_dispos.dispositions);
+
+                var agent_dispositions_data = {
+                    datasets: [{
+                        data: response.top10_rep_dispos.counts,
+                        backgroundColor: chart_colors_array2,
+                        label: 'Dataset 1'
+                    }],
+                    elements: {
+                            center: {
+                            color: '#203047', 
+                            fontStyle: 'Segoeui', 
+                            sidePadding: 15 
+                        }
+                    },
+                    labels: response.top10_rep_dispos.dispositions
+                };
+
+                var agent_dispositions_options={
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled:true,
+                    }
+                }
+
+                var ctx = document.getElementById('agent_dispositions_graph').getContext('2d');
+
+                window.agent_dispositions_chart = new Chart(ctx,{
+                    type: 'doughnut',
+                    data: agent_dispositions_data,
+                    options: agent_dispositions_options
+                });
+
+                if(!response.top10_rep_dispos.dispositions.length){
+                    $('<p class="no_data">No Data Yet</p>').insertBefore('#agent_dispositions_graph');
+                }
+
+                //// TOP 10 DISPOS
+                if(window.dispositions_chart != undefined){
+                    window.dispositions_chart.destroy();
+                }
+
                 var response_length = response.top10_dispos.dispositions.length;
                 var chart_colors_array2= Master.return_chart_colors_hash(response.top10_dispos.dispositions);
 
@@ -740,9 +787,9 @@ var Dashboard = {
                     }],
                     elements: {
                             center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
+                            color: '#203047',
+                            fontStyle: 'Segoeui',
+                            sidePadding: 15
                         }
                     },
                     labels: response.top10_dispos.dispositions
@@ -767,7 +814,7 @@ var Dashboard = {
                 });
 
                 if(!response.top10_dispos.dispositions.length){
-                    $('<p class="no_data">No data yet</p>').insertBefore('#dispositions_graph');
+                    $('<p class="no_data">No Data Yet</p>').insertBefore('#dispositions_graph');
                 }
 
                 const dispos_obj = response.agent_call_status.dispositions
@@ -851,7 +898,7 @@ var Dashboard = {
                 });
 
                 if(!response.agent_call_status.reps.length){
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
+                    $('<p class="no_data">No Data Yet</p>').insertBefore('#agent_call_status');
                 }
             }
         });
