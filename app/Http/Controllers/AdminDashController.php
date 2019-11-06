@@ -885,6 +885,7 @@ class AdminDashController extends Controller
         $reps = array_column($result[0], 'Rep');
         $dispos = array_column($result[1], 'CallStatus');
         $stats = $result[2];
+        $top10sys = $result[3];
 
         $dispositions = [];
         // load up our disposition array with 0's for each rep
@@ -920,12 +921,17 @@ class AdminDashController extends Controller
                 'reps' => $reps,
                 'dispositions' => $dispositions,
             ],
-            'top10_dispos' => [
+            'top10_rep_dispos' => [
                 'dispositions' => array_keys($dispos),
                 'counts' => array_values($dispos),
             ],
+            'top10_dispos' => [
+                'dispositions' => array_column($top10sys, 'CallStatus'),
+                'counts' => array_column($top10sys, 'Total'),
+            ],
         ];
     }
+
 
     private function getAgentCallStatus()
     {
@@ -955,7 +961,6 @@ class AdminDashController extends Controller
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND DR.Duration > 0
-            AND DR.Rep != ''
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
@@ -972,6 +977,7 @@ class AdminDashController extends Controller
         SELECT TOP 10 Rep, 'Total' = SUM([Count])
         INTO #reps
         FROM #temp
+        WHERE Rep != ''
         GROUP BY Rep ORDER BY [Total] DESC
 
         SELECT DISTINCT CallStatus
@@ -985,7 +991,11 @@ class AdminDashController extends Controller
 
         SELECT Rep, CallStatus, [Count]
         FROM #temp
-        WHERE Rep IN (SELECT Rep FROM #reps)";
+        WHERE Rep IN (SELECT Rep FROM #reps)
+
+        SELECT TOP 10 CallStatus, 'Total' = SUM([Count])
+        FROM #temp
+        GROUP BY CallStatus ORDER BY [Total] DESC";
 
         return $this->runMultiSql($sql, $bind);
     }
