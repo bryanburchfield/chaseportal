@@ -39,6 +39,7 @@
 		'max_handle_time'	=> 'Máximo tiempo de manejo',
 		'chart_avg_based'	=> 'El promedio del gráfico se basa en el tiempo máximo de manejo.',
 		'top_ten_dispos'	=> 'Las 10 mejores disposiciones',
+		'top_ten_agent_dispos'	=> 'Las 10 mejores disposiciones de agentes',
 		'agent_call_status' => 'Estado de la llamada del agente',
 		'service_level'		=> 'Nivel de servicio',
 		'change_answered_time' => 'Cambiar tiempo de respuesta',
