@@ -2,8 +2,8 @@
 
 return [
 	'all_campaigns'				=> 'Todas las campañas',
-	'auto_reports'				=> 'Reportes automatizados',
 	'auto_report_settings'		=> 'Configuración de informes automatizados',
+	'auto_reports'				=> 'Reportes automatizados',
 	'campaigns_selected'		=> 'Campañas seleccionadas',
 	'cancel'					=> 'Cancelar',
 	'close'						=> 'Cerrar',
@@ -11,9 +11,9 @@ return [
 	'current_password'			=> 'Contraseña Actual',
 	'custom'					=> 'Personalizada',
 	'custom_date_filter'		=> 'Filtro de fecha personalizado',
-	'display_language'			=> 'Mostrar menú de idioma en la barra de navegación',
 	'database'					=> 'Base de datos',
 	'date'						=> 'Fecha',
+	'display_language'			=> 'Mostrar menú de idioma en la barra de navegación',
 	'download'					=> 'Descargar',
 	'download_report'			=> 'Descargar informe',
 	'download_warning'			=> 'Descargar Advertencia',
@@ -24,31 +24,18 @@ return [
 	'forgot_pw'					=> '¿Olvidaste tu contraseña?',
 	'full_name'					=> 'Nombre completo',
 	'interaction'				=> 'Interacción',
-<<<<<<< HEAD
-	'january'					=> 'enero',
-	'july'						=> 'julio',
-	'june'						=> 'junio',
 	'kpi_settings'				=> 'KPI Configuraciones',
-=======
->>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'last'						=> 'Último',
 	'last_month'				=> 'El mes pasado',
 	'last_week'					=> 'La semana pasada',
 	'login'						=> 'Iniciar sesión',
 	'logout'					=> 'Cerrar Sesión',
-<<<<<<< HEAD
-	'march'						=> 'marzo',
-	'may'						=> 'mayo',
 	'my_settings'				=> 'Mi Configuración',
 	'new_password'				=> 'Nueva Contraseña',
-	'november'					=> 'noviembre',
-	'october'					=> 'octubre',
-=======
->>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'password'					=> 'Contraseña',
 	'phone'						=> 'Teléfono',
-	'recipients'				=> 'Destinatarios',
 	'recipient_settings'		=> 'Configuraciones de destinatario',
+	'recipients'				=> 'Destinatarios',
 	'remember_me'				=> 'Recuérdame',
 	'report_settings'			=> 'Configuración de informes',
 	'reset_pw'					=> 'RESTABLECER CONTRASEÑA DE CUENTA',

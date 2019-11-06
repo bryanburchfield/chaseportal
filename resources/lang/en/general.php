@@ -2,8 +2,8 @@
 
 return [
 	'all_campaigns'				=> 'All Campaigns',
-	'auto_reports'				=> 'Automated Reports',
 	'auto_report_settings'		=> 'Automated Reports Settings',
+	'auto_reports'				=> 'Automated Reports',
 	'campaigns_selected'		=> 'Campaigns Selected',
 	'cancel'					=> 'Cancel',
 	'close'						=> 'Close',
@@ -11,9 +11,9 @@ return [
 	'current_password'			=> 'Current Password',
 	'custom'					=> 'Custom',
 	'custom_date_filter'		=> 'Custom Date Filter',
-	'display_language'			=> 'Display Language Menu in navbar',
 	'database'					=> 'Database',
 	'date'						=> 'Date',
+	'display_language'			=> 'Display Language Menu in navbar',
 	'download'					=> 'Download',
 	'download_report'			=> 'Download Report',
 	'download_warning'			=> 'Download Warning',
@@ -24,31 +24,18 @@ return [
 	'forgot_pw'					=> 'Forgot Your Password',
 	'full_name'					=> 'Full Name',
 	'interaction'				=> 'Interaction',
-<<<<<<< HEAD
-	'january'					=> 'January',
-	'july'						=> 'July',
-	'june'						=> 'June',
 	'kpi_settings'				=> 'KPI Settings',
-=======
->>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'last'						=> 'Last',
 	'last_month'				=> 'Last Month',
 	'last_week'					=> 'Last Week',
 	'login'						=> 'Login',
 	'logout'					=> 'Log Out',
-<<<<<<< HEAD
-	'march'						=> 'March',
-	'may'						=> 'May',
 	'my_settings'				=> 'My Settings',
 	'new_password'				=> 'New Password',
-	'november'					=> 'November',
-	'october'					=> 'October',
-=======
->>>>>>> e0a4f8495bef6ea37ce28ca4b298b31fd0baa608
 	'password'					=> 'Password',
 	'phone'						=> 'Phone',
-	'recipients'				=> 'Recipients',
 	'recipient_settings'		=> 'Recipient Settings',
+	'recipients'				=> 'Recipients',
 	'remember_me'				=> 'Remember Me',
 	'report_settings'			=> 'Report Settings',
 	'reset_pw'					=> 'RESET PASSWORD',
