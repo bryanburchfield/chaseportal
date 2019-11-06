@@ -995,6 +995,7 @@ class AdminDashController extends Controller
 
         SELECT TOP 10 CallStatus, 'Total' = SUM([Count])
         FROM #temp
+        WHERE CallStatus != ''
         GROUP BY CallStatus ORDER BY [Total] DESC";
 
         return $this->runMultiSql($sql, $bind);
