@@ -73,67 +73,7 @@
 
         								{!! Form::close() !!}
         							</div>
-
-				    				<div class="col-sm-6 pr0 mbmt50 mbp0">
-				    					<h2 class="page_heading mb0">All Users</h2>
-
-				    					<div class="users">
-
-											<div class="panel-group" id="add_accordion" role="tablist" aria-multiselectable="true">
-
-												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
-													@php
-													$db = sprintf("%02d", $dialer->dialer_numb);
-													@endphp
-
-												    <div class="panel panel-default">
-												        <div class="panel-heading" role="tab" id="add_heading{{$db}}">
-												            <h4 class="panel-title">
-												                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#add_accordion" href="#add_dialer{{$db}}" aria-expanded="false" aria-controls="add_dialer{{$db}}">
-												                Dialer {{$db}}
-												                </a>
-												            </h4>
-												        </div>
-												        <div id="add_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="add_heading{{$db}}">
-												            <div class="panel-body">
-
-												            	<table class="table table-responsive table-striped">
-												            		<thead>
-												            			<tr>
-												            				<th>User</th>
-												            				<th>Links</th>
-												            				<th>Edit</th>
-												            				<th>Delete</th>
-												            			</tr>
-												            		</thead>
-
-												            		<tbody>
-												            	@foreach($users as $user)
-												            		@php
-												            			$user_db = substr($user['db'], -2);
-												            		@endphp
-												            		@if($user_db == $db)
-
-												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
-												            			<td>{{$user->group_id}} - {{$user->name}}</td>
-												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
-												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
-												            		@endif
-
-												            	@endforeach
-
-													            	</tbody>
-													            </table>
-												            </div>
-												        </div>
-												    </div>
-
-											    @endforeach
-											</div>
-				    					</div>
-				    				</div>
-
+									@include('shared.dblist', ['mode' => 'add'])
 								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
@@ -186,65 +126,7 @@
 
         								{!! Form::close() !!}
 			         				</div>
-
-			         				<div class="col-sm-6 mbp0 pr0">
-				    					<h2 class="page_heading mb0">All Users</h2>
-
-				    					<div class="users">
-
-											<div class="panel-group" id="edit_accordion" role="tablist" aria-multiselectable="true">
-
-												@foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
-													@php
-													$db = sprintf("%02d", $dialer->dialer_numb);
-													@endphp
-
-												    <div class="panel panel-default">
-												        <div class="panel-heading" role="tab" id="edit_heading{{$db}}">
-												            <h4 class="panel-title">
-												                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#edit_accordion" href="#edit_dialer{{$db}}" aria-expanded="false" aria-controls="edit_dialer{{$db}}">
-												                Dialer {{$db}}
-												                </a>
-												            </h4>
-												        </div>
-												        <div id="edit_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="edit_heading{{$db}}">
-												            <div class="panel-body">
-												            	<table class="table table-responsive table-striped">
-												            		<thead>
-												            			<tr>
-												            				<th>User</th>
-												            				<th>Links</th>
-												            				<th>Edit</th>
-												            				<th>Delete</th>
-												            			</tr>
-												            		</thead>
-
-												            		<tbody>
-												            	@foreach($users as $user)
-												            		@php
-												            			$user_db = substr($user['db'], -2);
-												            		@endphp
-
-												            		@if($user_db == $db)
-												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
-												            			<td>{{$user->group_id}} - {{$user->name}}</td>
-												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
-												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
-												            		@endif
-
-												            	@endforeach
-
-													            	</tbody>
-													            </table>
-												            </div>
-												        </div>
-												    </div>
-
-											    @endforeach
-											</div>
-				    					</div>
-				    				</div>
+									@include('shared.dblist', ['mode' => 'edit'])
 								</div>
 
 					        	<div class="tab-pane" id="cdr_lookup">
