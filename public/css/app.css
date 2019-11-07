@@ -2383,6 +2383,10 @@ MEDIAQUERIES
     padding: 0;
   }
 
+  .mbpb0 {
+    padding-bottom: 0 !important;
+  }
+
   .tab-pane .mbp0 {
     padding-left: 0;
     padding-right: 0;

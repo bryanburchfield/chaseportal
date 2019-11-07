@@ -232,7 +232,7 @@
         </div>
 
         <div class="col-sm-3 set_hgt ">
-            <div class="card card-3b ">
+            <div class="card card-3b mbpb0">
                 <h1 class="title">Service Level</h1>
                 <!-- three dot menu -->
                 <div class="card_dropdown mv_left">
@@ -287,7 +287,7 @@
         </div>
 
         <div class="col-sm-3 set_hgt card_table_prt">
-            <div class="card flipping_card card-3b">
+            <div class="card flipping_card card-3b mbpb0">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">REP AVG HANDLE TIME</h1>

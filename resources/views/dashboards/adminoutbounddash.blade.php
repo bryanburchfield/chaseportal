@@ -24,7 +24,7 @@
             </div><!-- end card -->
         </div><!-- end column -->
 
-        <div class="col-sm-3  card_table_prt">
+        <div class="col-sm-3 card_table_prt">
             <div class="card set_hgt2 flipping_card card-3b" id="total_contacts_card">
                 <div class="front p20">
                     <div class="flip_card_btn"></div>
@@ -161,7 +161,7 @@
         </div><!-- end column -->
 
         <div class="col-sm-9 card_table_prt ">
-            <div class="card flipping_card card-3b mt70_mb set_hgt">
+            <div class="card flipping_card card-3b set_hgt">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Top 10 Calls by Campaign</h1>
@@ -193,7 +193,7 @@
     <div class="row">
 
         <div class="col-sm-3 card_table_prt ">
-            <div class="card flipping_card card-3b mt70_mb ">
+            <div class="card flipping_card card-3b ">
 
                 <div class="front ">
                     <div class="card_table2">
@@ -255,7 +255,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-3 set_hgt2 card_table_prt ">
+        <div class="col-sm-3 set_hgt2  set_hgt3 card_table_prt ">
             <div class="card flipping_card card-3b">
                 <div class="front p20">
                     <h1 class="title">Top 10 Dispositions</h1>
