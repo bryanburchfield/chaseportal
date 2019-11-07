@@ -950,6 +950,10 @@ $(document).ready(function(){
         });
     }
 
+    if ($(window).width() < 768) {
+        $('.set_hgt, .set_hgt3').css({'min-height':'100%','max-height': '100%'});
+    }
+
     $('.enddate').datepicker({maxDate: '0'});
     $('.startdate').datepicker({maxDate: '0'});
 
