@@ -695,22 +695,24 @@ class AdminOutboundDashController extends Controller
 
         $result = $this->getAvgWaitTime();
 
-        $summ = [];
-        $reps = [];
-        $avgs = [];
+        // set up to calc min/max/avg the hard way
+        $min = null;
+        $max = null;
+        $totcalls = 0;
+        $totwaiting = 0;
+
         $table = [];
 
         foreach ($result as $rec) {
-            if (!isset($summ[$rec['Rep']])) {
-                $summ[$rec['Rep']]['Rep'] = $rec['Rep'];
-                $summ[$rec['Rep']]['Duration'] = 0;
-                $summ[$rec['Rep']]['Cnt'] = 0;
-                $summ[$rec['Rep']]['Avg'] = 0;
-            }
+            $totcalls += $rec['Cnt'];
+            $totwaiting += $rec['Duration'];
 
-            $summ[$rec['Rep']]['Duration'] += $rec['Duration'];
-            $summ[$rec['Rep']]['Cnt'] += $rec['Cnt'];
-            $summ[$rec['Rep']]['Avg'] = round($summ[$rec['Rep']]['Duration'] / $summ[$rec['Rep']]['Cnt']);
+            if ($min == null || $min > $rec['Min']) {
+                $min = $rec['Min'];
+            }
+            if ($max == null || $max < $rec['Max']) {
+                $max = $rec['Max'];
+            }
 
             $table[] = [
                 'Rep' => $rec['Rep'],
@@ -719,10 +721,7 @@ class AdminOutboundDashController extends Controller
             ];
         }
 
-        // sort summ aray by avg desc
-        usort($summ, function ($a, $b) {
-            return $b['Avg'] <=> $a['Avg'];
-        });
+        $avg = ($totcalls == 0) ? null : $totwaiting / $totcalls;
 
         // sort table by avg desc
         usort($table, function ($a, $b) {
@@ -730,30 +729,20 @@ class AdminOutboundDashController extends Controller
         });
 
         // remove any with zero avgs
-        foreach ($summ as $i => $rec) {
-            if ($rec['Avg'] == 0) {
-                unset($summ[$i]);
-            }
-        }
         foreach ($table as $i => $rec) {
             if ($rec['Avg'] == 0) {
                 unset($table[$i]);
             }
         }
 
-        // take top 10 from each
-        $summ = array_slice($summ, 0, 10);
+        // take top 10
         $table = array_slice($table, 0, 10);
-
-        foreach ($summ as $rec) {
-            $reps[] = $rec['Rep'];
-            $avgs[] = $rec['Avg'];
-        }
 
         return [
             'Table' => $table,
-            'Reps' => $reps,
-            'Avgs' => $avgs,
+            'Min' => $min,
+            'Max' => $max,
+            'Avg' => $avg,
         ];
     }
 
@@ -770,14 +759,19 @@ class AdminOutboundDashController extends Controller
 
         $bind = [];
 
-        $sql = 'SELECT Rep, Campaign, SUM(Duration) as Duration, SUM(Cnt) as Cnt FROM (';
+        $sql = 'SELECT Rep, Campaign,
+        SUM(Duration) as Duration,
+        MIN(Duration) as [Min],
+        MAX(Duration) as [Max],
+        COUNT(*) as Cnt
+        FROM (';
         $union = '';
         foreach ($this->databases as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $startDate;
             $bind['todate' . $i] = $endDate;
 
-            $sql .= " $union SELECT Rep, Campaign, SUM(Duration) as Duration, COUNT(AA.id) as Cnt
+            $sql .= " $union SELECT Rep, Campaign, Duration
                 FROM [$db].[dbo].[AgentActivity] AA
                 WHERE [Action] = 'Waiting'
                 AND AA.Duration > 0
@@ -788,9 +782,6 @@ class AdminOutboundDashController extends Controller
             list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
             $sql .= " $where";
             $bind = array_merge($bind, $extrabind);
-
-            $sql .= "
-                GROUP BY AA.Rep, AA.Campaign";
 
             $union = 'UNION ALL';
         }
