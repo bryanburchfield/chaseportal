@@ -17,72 +17,71 @@
 
         <div class="row">
 
-                <div class="col-sm-3 col-xs-12">
-                    <div class="card-3 card" id="calls_offered">
+            <div class="col-sm-3 col-xs-12">
+                <div class="card-3 card" id="calls_offered">
 
-                        <div class="trend_indicator">
-                            <div class="trend_arrow"></div>
-                            <span></span>
-                        </div>
-                        <h1 class="title">Calls Offered</h1>
-                        <h4 class="data total mt30"></h4>
+                    <div class="trend_indicator">
+                        <div class="trend_arrow"></div>
+                        <span></span>
+                    </div>
+                    <h1 class="title">Calls Offered</h1>
+                    <h4 class="data total mt30"></h4>
 
-                    </div><!-- end card -->
-                </div><!-- end column -->
+                </div><!-- end card -->
+            </div><!-- end column -->
 
-                <div class="col-sm-3 col-xs-12">
-                    <div class="card-3 card" id="calls_answered">
+            <div class="col-sm-3 col-xs-12">
+                <div class="card-3 card" id="calls_answered">
 
-                        <div class="trend_indicator">
-                            <div class="trend_arrow"></div>
-                            <span></span>
-                        </div>
+                    <div class="trend_indicator">
+                        <div class="trend_arrow"></div>
+                        <span></span>
+                    </div>
 
-                        <h1 class="title">Calls Answered</h1>
-                        <h4 class="data total mt30"></h4>
+                    <h1 class="title">Calls Answered</h1>
+                    <h4 class="data total mt30"></h4>
 
-                    </div><!-- end card -->
-                </div><!-- end column -->
+                </div><!-- end card -->
+            </div><!-- end column -->
 
-                <div class="col-sm-3 col-xs-12">
-                    <div class="card-3 card" id="missed_calls">
+            <div class="col-sm-3 col-xs-12">
+                <div class="card-3 card" id="missed_calls">
 
-                        <div class="trend_indicator">
-                            <div class="trend_arrow"></div>
-                            <span></span>
-                        </div>
+                    <div class="trend_indicator">
+                        <div class="trend_arrow"></div>
+                        <span></span>
+                    </div>
 
-                        <h1 class="title">Missed Calls</h1>
-                        <h4 class="data total"></h4>
-                        
-                        <div class="divider"></div>
-                        
-                        <div class="inbound">
-                            <p class="data abandoned"></p>
-                            <p class="type">Abandoned</p>
-                        </div>
+                    <h1 class="title">Missed Calls</h1>
+                    <h4 class="data total"></h4>
 
-                        <div class="outbound">
-                            <p class="data voicemails"></p>
-                            <p class="type">Voicemails</p>
-                        </div>
+                    <div class="divider"></div>
 
-                    </div><!-- end card -->
-                </div><!-- end column -->
+                    <div class="inbound">
+                        <p class="data abandoned"></p>
+                        <p class="type">Abandoned</p>
+                    </div>
+
+                    <div class="outbound">
+                        <p class="data voicemails"></p>
+                        <p class="type">Voicemails</p>
+                    </div>
+
+                </div><!-- end card -->
+            </div><!-- end column -->
 
 
-                <div class="col-sm-3 col-xs-12">
-                    <div class="card-3 card total_sales">
+            <div class="col-sm-3 col-xs-12">
+                <div class="card-3 card total_sales">
 
-                        <div class="trend_indicator">
-                            <div class="trend_arrow"></div>
-                            <span></span>
-                        </div>
-                        <h1 class="title">Total Conversions</h1>
-                        <h4 class="data mt30" id="total_sales"></h4>
-                    </div><!-- end card -->
-                </div><!-- end column -->
-                    
+                    <div class="trend_indicator">
+                        <div class="trend_arrow"></div>
+                        <span></span>
+                    </div>
+                    <h1 class="title">Total Conversions</h1>
+                    <h4 class="data mt30" id="total_sales"></h4>
+                </div><!-- end card -->
+            </div><!-- end column -->
         </div>
 
         <div class="row">
@@ -140,7 +139,6 @@
 
             <div class="col-sm-3 col-xs-12">
 
-
                 <div class="card-3 card avg_handle_time_card">
                     <div class="trend_indicator">
                         <div class="trend_arrow"></div>
@@ -183,7 +181,6 @@
                     </div>
                 </div><!-- end card -->
             </div><!-- end column -->
-            
         </div>
 
         <div class="row">
@@ -226,7 +223,6 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
                     </div>
 
                     <div class="back">
@@ -240,7 +236,7 @@
             </div>
 
             <div class="col-sm-3 set_hgt ">
-                <div class="card card-3b mt70_mb">
+                <div class="card card-3b mbpb0">
                     <h1 class="title">Service Level</h1>
                     <!-- three dot menu -->
                     <div class="card_dropdown mv_left">
@@ -266,7 +262,7 @@
             </div>
 
             <div class="col-sm-3 get_hgt card_table_prt ">
-                <div class="card flipping_card card-3b mt120_mb">
+                <div class="card flipping_card card-3b ">
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">Top 10 Agent Call Times</h1>
@@ -282,7 +278,6 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
                     </div>
 
                     <div class="back">
@@ -296,7 +291,7 @@
             </div>
 
             <div class="col-sm-3 set_hgt card_table_prt">
-                <div class="card flipping_card card-3b">
+                <div class="card flipping_card card-3b mbpb0">
                     <div class="front ">
                         <div class="card_table">
                             <h1 class="title">REP AVG HANDLE TIME</h1>
@@ -312,7 +307,6 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        
                     </div>
 
                     <div class="back">
@@ -327,24 +321,24 @@
 
         <div class="row">
             <div class="col-sm-3 set_hgt card_table_prt ">
-            <div class="card flipping_card card-3b">
-                <div class="front p20">
-                    <h1 class="title">Top 10 Dispositions</h1>
-                    <div class="flip_card_btn"></div>
-                    <div class="inbound inandout mb0">
-                        <canvas id="dispositions_graph"></canvas>
+                <div class="card flipping_card card-3b">
+                    <div class="front p20 mbp35">
+                        <h1 class="title">Top 10 Dispositions</h1>
+                        <div class="flip_card_btn"></div>
+                        <div class="inbound inandout mb0">
+                            <canvas id="dispositions_graph"></canvas>
+                        </div>
                     </div>
-                </div>
 
-                <div class="back">
-                    <h1 class="title">Top 10 Agent Dispositions</h1>
-                    <div class="flip_card_btn"></div>
-                    <div class="inbound inandout mb0">
-                        <canvas id="agent_dispositions_graph"></canvas>
+                    <div class="back">
+                        <h1 class="title">Top 10 Agent Dispositions</h1>
+                        <div class="flip_card_btn"></div>
+                        <div class="inbound inandout mb0">
+                            <canvas id="agent_dispositions_graph"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
             <div class="col-sm-9">
                 <div class="card card-12">

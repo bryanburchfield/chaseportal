@@ -257,7 +257,7 @@
     <div class="row">
         <div class="col-sm-3 set_hgt2  set_hgt3 card_table_prt ">
             <div class="card flipping_card card-3b">
-                <div class="front p20">
+                <div class="front p20 mbp35">
                     <h1 class="title">Top 10 Dispositions</h1>
                     <div class="flip_card_btn"></div>
                     <div class="inbound inandout mb0">
