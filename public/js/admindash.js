@@ -982,6 +982,10 @@ $(document).ready(function(){
         });
     }
 
+    if ($(window).width() < 768) {
+            $('.set_hgt').css({'min-height':'100%','max-height': '100%'});
+        }
+
     function resizeCardTableDivs(){
         var height_dt = $('.get_hgt').outerHeight();
         $('.set_hgt').css({'min-height':height_dt});

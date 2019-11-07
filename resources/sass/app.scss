@@ -2133,6 +2133,14 @@ MEDIAQUERIES
 @media handheld, only screen and (max-width:768px) {
     .mbmt50{margin-top: 50px;}
     .mbp0{padding: 0;}
+    .mbp35{padding-left: 35px;padding-right: 35px;}
+    .mbpb0{padding-bottom: 0 !important;}
+
+    a.kpi_trigger, .opt h4 {
+        font-size: 15px;
+    }
+
+    .opt.pl0{padding-left: 0;}
 
     .tab-pane .mbp0 {
         padding-left: 0;
@@ -2148,7 +2156,7 @@ MEDIAQUERIES
     }
 
     canvas#service_level {
-        margin-bottom: 30px;
+        // margin-bottom: 30px;
     }
 
     .col-sm-3.report_download {
