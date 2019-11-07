@@ -115,8 +115,6 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $users = User::all()->sortBy('id');
-
         $page['menuitem'] = 'admin';
         $page['type'] = 'page';
         $data = [
@@ -124,7 +122,6 @@ class AdminController extends Controller
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
             'dbs' => $dbs,
-            'users' => $users,
             'jsfile' => [],
         ];
 

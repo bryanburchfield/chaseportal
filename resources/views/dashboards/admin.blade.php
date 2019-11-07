@@ -26,12 +26,12 @@
 							<div class="tab-content">
 								<div class="tab-pane active mt30" id="new_user">
 									@include('shared.clientform', ['mode' => 'add'])
-									@include('shared.dblist', ['mode' => 'add'])
+									@include('shared.dialerlist', ['mode' => 'add'])
 								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
 									@include('shared.clientform', ['mode' => 'edit'])
-									@include('shared.dblist', ['mode' => 'edit'])
+									@include('shared.dialerlist', ['mode' => 'edit'])
 								</div>
 
 					        	<div class="tab-pane" id="cdr_lookup">

@@ -1,11 +1,11 @@
 <div class="col-sm-6 pr0 mbmt50 mbp0">
-    <h2 class="page_heading mb0">All Clients</h2>
+<h2 class="page_heading mb0">All Clients ({{ App\User::count() }} total)</h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
         @foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
             $db = sprintf("%02d", $dialer->dialer_numb);
-            $clients = $dialer->clientCount();
+            $clients = $dialer->users(true)->count();
             @endphp
 
             <div class="panel panel-default">
@@ -31,17 +31,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
-                                @php
-                                    $user_db = substr($user['db'], -2);
-                                @endphp
-                                @if($user_db == $db)
-                                    <tr id="user{{$user->id}}" data-id="{{$user->id}}">
-                                    <td>{{$user->group_id}} - {{$user->name}}</td>
-                                    <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
-                                    <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-                                    <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
-                                @endif
+                            @foreach($dialer->users(true) as $user)
+                                <tr id="user{{$user->id}}" data-id="{{$user->id}}">
+                                <td>{{$user->group_id}} - {{$user->name}}</td>
+                                <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
+                                <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+                                <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
                             @endforeach
                             </tbody>
                         </table>
