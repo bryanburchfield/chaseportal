@@ -19,7 +19,7 @@
                 <div class="trend_indicator">
                     <div class="trend_arrow"></div>
                     <span></span>
-                </div>               
+                </div>
                 <h1 class="title">Calls Offered</h1>
                 <h4 class="data total mt30"></h4>
 
@@ -33,7 +33,7 @@
                     <div class="trend_arrow"></div>
                     <span></span>
                 </div>
-               
+
                 <h1 class="title">Calls Answered</h1>
                 <h4 class="data total mt30"></h4>
 
@@ -50,9 +50,9 @@
 
                 <h1 class="title">Missed Calls</h1>
                 <h4 class="data total"></h4>
-                
+
                 <div class="divider"></div>
-                
+
                 <div class="inbound">
                     <p class="data abandoned"></p>
                     <p class="type">Abandoned</p>
@@ -78,7 +78,6 @@
                 <h4 class="data mt30" id="total_sales"></h4>
             </div><!-- end card -->
         </div><!-- end column -->
-            
     </div>
 
     <div class="row">
@@ -136,7 +135,6 @@
 
         <div class="col-sm-3 col-xs-12">
 
-
             <div class="card-3 card avg_handle_time_card">
                 <div class="trend_indicator">
                     <div class="trend_arrow"></div>
@@ -179,7 +177,6 @@
                 </div>
             </div><!-- end card -->
         </div><!-- end column -->
-        
     </div>
 
     <div class="row">
@@ -222,7 +219,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    
                 </div>
 
                 <div class="back">
@@ -236,7 +232,7 @@
         </div>
 
         <div class="col-sm-3 set_hgt ">
-            <div class="card card-3b mt70_mb">
+            <div class="card card-3b ">
                 <h1 class="title">Service Level</h1>
                 <!-- three dot menu -->
                 <div class="card_dropdown mv_left">
@@ -262,7 +258,7 @@
         </div>
 
         <div class="col-sm-3 get_hgt card_table_prt ">
-            <div class="card flipping_card card-3b mt120_mb">
+            <div class="card flipping_card card-3b ">
                 <div class="front ">
                     <div class="card_table">
                         <h1 class="title">Top 10 Agent Call Times</h1>
@@ -278,7 +274,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    
                 </div>
 
                 <div class="back">
@@ -308,7 +303,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    
                 </div>
 
                 <div class="back">
