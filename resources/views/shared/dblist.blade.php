@@ -1,5 +1,5 @@
 <div class="col-sm-6 pr0 mbmt50 mbp0">
-    <h2 class="page_heading mb0">All Users</h2>
+    <h2 class="page_heading mb0">All Clients</h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
         @foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
@@ -24,7 +24,7 @@
                         <table class="table table-responsive table-striped">
                             <thead>
                                 <tr>
-                                    <th>User</th>
+                                    <th>Client</th>
                                     <th>Links</th>
                                     <th>Edit</th>
                                     <th>Delete</th>

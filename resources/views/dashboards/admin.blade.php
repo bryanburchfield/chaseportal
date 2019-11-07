@@ -18,114 +18,19 @@
 					<div class="col-sm-12">
 						<div class="mt20">
 							<ul class="nav nav-tabs">
-								<li class="active"><a  href="#new_user" data-toggle="tab">Add Users</a></li>
-								<li><a href="#edit_user" data-toggle="tab">Edit Users</a></li>
+								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
+								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
 							</ul>
 
 							<div class="tab-content">
 								<div class="tab-pane active mt30" id="new_user">
-					        		<div class="col-sm-6 mb0 card">
-        								<h2 class="page_heading">New User</h2>
-
-        								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_user', 'class'=>'form add_user']) !!}
-        									<div class="form-group">
-        										{!! Form::label('group_id', 'Group ID') !!}
-        										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('name', 'Name') !!}
-        										{!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('email', 'Email') !!}
-        										{!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('tz', 'Timezone') !!}
-        										{!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('db', 'Database') !!}
-        										{!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('additional_dbs', 'Database 2') !!}
-        										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
-        									</div>
-
-        									{!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
-
-        									<br><br>
-
-        									@if($errors->any())
-        		                                <div class="alert alert-danger">
-        		                                    @foreach($errors->all() as $e)
-        		                                        {{ $e }}
-        		                                    @endforeach
-        		                                </div>
-        									@endif
-
-        								{!! Form::close() !!}
-        							</div>
+									@include('shared.clientform', ['mode' => 'add'])
 									@include('shared.dblist', ['mode' => 'add'])
 								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
-					         		<div class="col-sm-6 card">
-			         					<h2 class="page_heading">Edit User</h2>
-			         					{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_user', 'class'=>'form edit_user']) !!}
-        									<div class="form-group">
-        										{!! Form::label('group_id', 'Group ID') !!}
-        										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('name', 'Name') !!}
-        										{!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('email', 'Email') !!}
-        										{!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('tz', 'Timezone') !!}
-        										{!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('db', 'Database') !!}
-        										{!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
-        									</div>
-
-        									<div class="form-group">
-        										{!! Form::label('additional_dbs', 'Database 2') !!}
-        										{!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
-        									</div>
-
-        									{!! Form::hidden('id', null, ['id'=>'user_id']) !!}
-
-        									{!! Form::submit('Update User', ['class'=>'btn btn-primary mb0'] ) !!}
-
-        									<br><br>
-
-        									@if($errors->any())
-        		                                <div class="alert alert-danger">
-        		                                    @foreach($errors->all() as $e)
-        		                                        {{ $e }}
-        		                                    @endforeach
-        		                                </div>
-        									@endif
-
-        								{!! Form::close() !!}
-			         				</div>
+									@include('shared.clientform', ['mode' => 'edit'])
 									@include('shared.dblist', ['mode' => 'edit'])
 								</div>
 
@@ -221,7 +126,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm Recipient Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">Confirm Client Removal</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
@@ -230,7 +135,7 @@
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+            <button type="button" class="btn btn-danger remove_recip">Delete Client</button>
         </div>
     </div>
     </div>
@@ -242,7 +147,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">User Links</h4>
+                <h4 class="modal-title" id="myModalLabel">Client Links</h4>
             </div>
             <div class="modal-body user_links_modal">
                 <input type="hidden" class="user_id" name="user_id" value="">
