@@ -193,7 +193,7 @@
     <div class="row">
 
         <div class="col-sm-3 card_table_prt ">
-            <div class="card flipping_card card-3b pb0">
+            <div class="card flipping_card card-3b pb0 ">
 
                 <div class="front ">
                     <div class="card_table2">

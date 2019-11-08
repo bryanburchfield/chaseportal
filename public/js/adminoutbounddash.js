@@ -367,6 +367,8 @@ var Dashboard = {
                 ////    AVG WAIT TIME GRAPH
                 ///////////////////////////////////////////////////////////
 
+                $('#avg_wait_time_graph').parent().parent().parent().removeClass('set_hgt');
+
                 function drawNeedle(radius, radianAngle) {
                     var canvas = document.getElementById("avg_wait_time_graph");
                     var ctx = canvas.getContext('2d');
@@ -416,7 +418,7 @@ var Dashboard = {
                 if(max && avg){
                     avg_wait = 180 / (max - min) * avg + 180;
                 }else{
-                    avg_wait = 180;
+                    $('#avg_wait_time_graph').parent().parent().parent().addClass('set_hgt');
                 }
 
                 var avg_wait_time_options = {
