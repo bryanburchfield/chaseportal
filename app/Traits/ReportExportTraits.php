@@ -105,24 +105,27 @@ trait ReportExportTraits
 
     public function emailReport($request)
     {
+        $tz = Auth::user()->iana_tz;
         $reportName = trans($this->params['reportName']);
 
-        // default date range if report reqs it and not already set
+        // default date range if report requires it
         if (isset($this->params['fromdate'])) {
-            $request->request->add(['fromdate' => date("m/d/Y", strtotime('-1 day'))]);
-            $request->request->add(['todate' => date("m/d/Y")]);
+            $fromdate = Carbon::parse('midnight yesterday', $tz)->tz('UTC');
+            $todate = Carbon::parse('midnight today', $tz)->tz('UTC');
+            $request->request->add(['fromdate' => $fromdate]);
+            $request->request->add(['todate' => $todate]);
         }
 
         $pdf = $this->pdfExport($request);
 
         if (isset($this->params['fromdate'])) {
             $daterange = trans('reports.from') . ': ' .
-                Carbon::parse($this->params['fromdate'])->tz(Auth::user()->iana_tz)->isoFormat('lll') . ' ' .
+                $fromdate->tz($tz)->isoFormat('lll') . ' ' .
                 trans('reports.to') . ' ' .
-                Carbon::parse($this->params['todate'])->tz(Auth::user()->iana_tz)->isoFormat('lll') . "\n";
+                $todate->tz($tz)->isoFormat('lll') . "\n";
         } else {
             $daterange = trans('reports.as_of') . ': ' .
-                Carbon::parse()->tz(Auth::user()->iana_tz)->isoFormat('lll') . "\n";
+                Carbon::parse()->tz($tz)->isoFormat('lll') . "\n";
         }
 
         // store pdf to temp file
