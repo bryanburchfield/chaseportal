@@ -193,11 +193,11 @@
     <div class="row">
 
         <div class="col-sm-3 card_table_prt ">
-            <div class="card flipping_card card-3b ">
+            <div class="card flipping_card card-3b pb0">
 
                 <div class="front ">
                     <div class="card_table2">
-                        <h1 class="title">Avg Wait Time</h1>
+                        <h1 class="title mb15">Avg Wait Time</h1>
                         <div class="flip_card_btn"></div>
                         <table class="table table-condensed table-striped" id="avg_wait_time">
                             <thead>
@@ -218,6 +218,8 @@
                     <div class="inbound inandout mb0">
                         <canvas id="avg_wait_time_graph"></canvas>
                     </div>
+                    <p class="avg_wait_time_min"></p>
+                    <p class="avg_wait_time_max"></p>
                 </div>
             </div><!-- end card -->
         </div><!-- end column -->

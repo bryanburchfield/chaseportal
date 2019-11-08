@@ -2251,6 +2251,20 @@ p.name i {
   color: #d9534f;
 }
 
+.avg_wait_time_min,
+.avg_wait_time_max {
+  position: absolute;
+  bottom: 45px;
+}
+
+.avg_wait_time_max {
+  right: 6%;
+}
+
+.card.flipping_card .title.mb15 {
+  margin-bottom: 15px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

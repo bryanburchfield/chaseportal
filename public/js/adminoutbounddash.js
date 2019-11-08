@@ -347,11 +347,12 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
+                console.log(response);
 
                 $('#avg_wait_time_graph, #avg_wait_time').parent().find('.no_data').remove();
 
                 $('#avg_wait_time tbody').empty();
-                if(response.Avgs.length){
+                if(response.Table.length){
                     var trs;
                     for (var i = 0; i < response.Table.length; i++) {
                         if(response.Table[i].Rep != ''){
@@ -367,45 +368,82 @@ var Dashboard = {
                 ////    AVG WAIT TIME GRAPH
                 ///////////////////////////////////////////////////////////
 
-                if(window.avg_wait_time_chart != undefined){
-                    window.avg_wait_time_chart.destroy();
+                function drawNeedle(radius, radianAngle) {
+                    var canvas = document.getElementById("avg_wait_time_graph");
+                    var ctx = canvas.getContext('2d');
+                    var cw = canvas.offsetWidth;
+                    var ch = canvas.offsetHeight;
+                    var cx = cw / 2;
+                    var cy = ch - (ch / 4);
+
+                    ctx.translate(cx, cy);
+                    ctx.rotate(radianAngle);
+                    ctx.beginPath();
+                    ctx.moveTo(0, -5);
+                    ctx.lineTo(radius, 0);
+                    ctx.lineTo(0, 5);
+                    ctx.fillStyle = 'rgba(225,91,35)';
+                    ctx.fill();
+                    ctx.rotate(-radianAngle);
+                    ctx.translate(-cx, -cy);
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+                    ctx.fill();
                 }
 
-                var response_length = response.Reps.length;
-                var chart_colors_array= Master.return_chart_colors_hash(response.Reps);
+                $('.avg_wait_time_min').html(Master.convertSecsToHrsMinsSecs(Math.round(response.Min)));
+                $('.avg_wait_time_max').html(Master.convertSecsToHrsMinsSecs(Math.round(response.Max)));
+
+                let avg_wait_time=0;
+                if(response.Avg){
+                    avg_wait_time = Master.convertSecsToHrsMinsSecs(Math.round(response.Avg));
+                }
 
                 var avg_wait_time_data = {
                     datasets: [{
-                        data: response.Avgs,
-                        backgroundColor: chart_colors_array
-                    }],
-                    elements: {
-                            center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
-                        }
-                    },
-                    labels: response.Reps
-                };
+                        data: [Math.round(response.Avg), Math.round(response.Max)],
+                        backgroundColor: [
+                            Dashboard.chartColors.green,
+                            Dashboard.chartColors.grey,
+                        ],
+
+                    }]
+                }
+                console.log(Math.round(response.Max) +' - '+ Math.round(response.Avg));
                 
+                var x = -180 / (Math.round(response.Max) - Math.round(response.Min)) * Math.round(response.Avg);
                 var avg_wait_time_options={
                     responsive: true,
                     legend: {
                         display: false
                     },
                     tooltips: {
-                        enabled: true,
-                        mode: 'single',
-                        callbacks: {
-                            label: function(tooltipItem, data) { 
-                                return ' '+ data['labels'][tooltipItem['index']] + ' ' + Master.convertSecsToHrsMinsSecs(data['datasets'][0]['data'][tooltipItem['index']]);
-                            }
+                        enabled:false,
+                    },
+                    elements: {
+                            center: {
+                            text: avg_wait_time,
+                            color: '#203047', 
+                            fontStyle: 'Arial', 
+                            sidePadding: 15 
                         }
-                    }
-                }
+                    },
+                    animation: {
+                        onComplete: function () {
+                            drawNeedle(150, x);
+                        }
+                    },
 
+                    circumference: Math.PI,
+                    rotation : Math.PI,
+                    cutoutPercentage : 70, // precent
+                }
+                
                 var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
+
+                if(window.avg_wait_time_chart != undefined){
+                    window.avg_wait_time_chart.destroy();
+                }
 
                 window.avg_wait_time_chart = new Chart(ctx,{
                     type: 'doughnut',
