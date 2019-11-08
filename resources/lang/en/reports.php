@@ -1,6 +1,11 @@
 <?php
 
 return [
+	// Email text
+	'report' => 'Report',
+	'unsubscribe' => 'If you do not wish to receive e-mail messages from Chase Data Corp, please visit the Automated Reports page to change your settings.',
+	'settings' => 'Settings',
+
 	// Report names
 	'agent_activity' => 'Agent Activity',
 	'agent_analysis' => 'Agent Analysis',
@@ -24,6 +29,7 @@ return [
 	'subcampaign_summary' => 'Subcampaign Summary',
 
 	// Filter fields
+	'as_of' => 'As of',
 	'callerid' => 'Caller ID',
 	'call_statuses' => 'Call Statuses',
 	'call_type' => 'Call Type',

@@ -7,6 +7,7 @@ use App\Services\PDF;
 use App\Exports\ReportExport;
 use App\Mail\ReportMail;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 trait ReportExportTraits
@@ -104,7 +105,7 @@ trait ReportExportTraits
 
     public function emailReport($request)
     {
-        $reportName = $this->params['reportName'];
+        $reportName = trans($this->params['reportName']);
 
         // default date range if report reqs it and not already set
         if (isset($this->params['fromdate'])) {
@@ -115,11 +116,13 @@ trait ReportExportTraits
         $pdf = $this->pdfExport($request);
 
         if (isset($this->params['fromdate'])) {
-            $daterange = "Date Range: " . date('m/d/Y g:i:s A', strtotime($this->params['fromdate'])) .
-                " to " . date('m/d/Y g:i:s A', strtotime($this->params['todate'])) . "\n";
+            $daterange = trans('reports.from') . ': ' .
+                Carbon::parse($this->params['fromdate'])->tz(Auth::user()->iana_tz)->isoFormat('lll') . ' ' .
+                trans('reports.to') . ' ' .
+                Carbon::parse($this->params['todate'])->tz(Auth::user()->iana_tz)->isoFormat('lll') . "\n";
         } else {
-            $now = Carbon::parse()->tz(Auth::user()->iana_tz)->toDayDateTimeString();
-            $daterange = "As of: $now\n";
+            $daterange = trans('reports.as_of') . ': ' .
+                Carbon::parse()->tz(Auth::user()->iana_tz)->isoFormat('lll') . "\n";
         }
 
         // store pdf to temp file

@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 
@@ -168,8 +169,16 @@ class ReportController extends Controller
     {
         // authenticate as user
         $user = User::where('id', '=', $automatedReport->user_id)->first();
+        if (!$user) {
+            return;
+        }
+
         Auth::logout();
         Auth::login($user);
+
+        if (in_array($user->language, config('localization.locales'))) {
+            App::setLocale($user->language);
+        }
 
         // create report controller object
         $request = new Request();

@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width"> 
+    <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="x-apple-disable-message-reformatting">
     <title>Report - Chase Data Corp</title>
@@ -259,7 +259,7 @@ table{
     color: rgba(255,255,255,.8);
 }
 .heading-section-white h2{
-    font-family: 
+    font-family:
     line-height: 1;
     padding-bottom: 0;
 }
@@ -286,7 +286,7 @@ table{
     background: rgba(0,0,0,.03);
 }
 .text-services{
-    padding: 10px 10px 0; 
+    padding: 10px 10px 0;
     text-align: center;
 }
 .text-services h3{
@@ -476,14 +476,14 @@ tr.bg_blue{
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2 style="color:#ffffff;"><span>Report</span> <br>{{ $data['reportName'] }}</h2>
+                                        <h2 style="color:#ffffff;"><span>{{__('reports.report')}}</span> <br>{{ $data['reportName'] }}</h2>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr><!-- end tr -->
-                
+
                 <tr>
                     <td class="bg_white">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -502,21 +502,21 @@ tr.bg_blue{
                                                     </tr>
                                                 </table>
 
-                                                <p>If you do not wish to receive e-mail messages from Chase Data Corp, please visit the Automated Reports page to change your settings.</p>
+                                            <p>{{__('reports.unsubscribe')}}</p>
                                                 <a style='text-align:center;font-family: Arial, sans-serif;text-decoration:none; font-weight:600;'
-                                                    href="{{ $data['settings'] }}">Settings</a>
+                                                    href="{{ $data['settings'] }}">{{__('reports.settings')}}</a>
                                             </td>
                                         </tr><!-- end: tr -->
                                     </table>
                                 </td>
                             </tr><!-- end:tr -->
-                            
+
                         </table>
                     </td>
                 </tr><!-- end:tr -->
             </table>
-        
-            <!-- Begin footer-->    
+
+            <!-- Begin footer-->
             <table class="mauto" align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
                 <tr>
                     <td class="p20">
@@ -574,7 +574,7 @@ tr.bg_blue{
                         </table>
                     </td>
                 </tr>
-            </table><!-- End footer-->  
+            </table><!-- End footer-->
         </div>
 </center>
 </body>
