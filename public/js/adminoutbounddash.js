@@ -347,7 +347,6 @@ var Dashboard = {
             dataType: 'json',
             data:{campaign:campaign, datefilter:datefilter},
             success:function(response){
-                console.log(response);
 
                 $('#avg_wait_time_graph, #avg_wait_time').parent().find('.no_data').remove();
 
@@ -401,22 +400,23 @@ var Dashboard = {
 
                 var avg_wait_time_data = {
                     datasets: [{
-                        data: [Math.round(response.Avg), Math.round(response.Max)],
+                        data: [Math.round(response.Avg)],
                         backgroundColor: [
                             Dashboard.chartColors.green,
-                            Dashboard.chartColors.grey,
                         ],
 
                     }]
                 }
-                console.log(Math.round(response.Max) +' - '+ Math.round(response.Avg));
-                
-                var x = -180 / (Math.round(response.Max) - Math.round(response.Min)) * Math.round(response.Avg);
+                console.log('Max: '+Math.round(response.Max) +' - Avg: '+ Math.round(response.Avg));
+
+                var x = -180 / (Math.floor(response.Max) - Math.floor(response.Min)) * Math.floor(response.Avg);
+                console.log('X: '+ x);
                 var avg_wait_time_options={
                     responsive: true,
                     legend: {
                         display: false
                     },
+                    events: [],
                     tooltips: {
                         enabled:false,
                     },
