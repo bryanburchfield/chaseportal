@@ -786,7 +786,7 @@ class AdminOutboundDashController extends Controller
                 AND AA.Date < :todate$i
                 AND AA.GroupId = :groupid$i";
 
-            list($where, $extrabind) = $this->campaignClause('DR', $i, $campaign);
+            list($where, $extrabind) = $this->campaignClause('AA', $i, $campaign);
             $sql .= " $where";
             $bind = array_merge($bind, $extrabind);
 
