@@ -348,7 +348,7 @@ var Dashboard = {
             data: { campaign: campaign, datefilter: datefilter },
             success: function (response) {
 
-                $('#avg_wait_time_graph, #avg_wait_time').parent().find('.no_data').remove();
+                $('#avg_wait_time, #avg_wait_time_graph').parent().find('.no_data').remove();
 
                 $('#avg_wait_time tbody').empty();
                 if (response.Table.length) {
@@ -393,24 +393,32 @@ var Dashboard = {
                 $('.avg_wait_time_min').html(Master.convertSecsToHrsMinsSecs(Math.round(response.Min)));
                 $('.avg_wait_time_max').html(Master.convertSecsToHrsMinsSecs(Math.round(response.Max)));
 
-                let avg_wait_time = 0;
-                if (response.Avg) {
-                    avg_wait_time = Master.convertSecsToHrsMinsSecs(Math.round(response.Avg));
+                let avg_wait_time_frmt = 0;
+                let min = !null ? Math.round(response.Min) : 0 ;
+                let max = !null ? Math.round(response.Max) : 0 ;
+                let avg = !null ? Math.round(response.Avg) : 0 ;
+                let avg_wait=0;
+
+                if (avg) {
+                    avg_wait_time_frmt = Master.convertSecsToHrsMinsSecs(avg);
                 }
 
                 var avg_wait_time_data = {
                     datasets: [{
-                        data: [Math.round(response.Avg)],
+                        data: [avg],
                         backgroundColor: [
                             Dashboard.chartColors.green,
                         ],
 
                     }]
                 }
-                console.log('Max: ' + Math.round(response.Max) + ' - Avg: ' + Math.round(response.Avg));
 
-                var x = 180 / (Math.floor(response.Max) - Math.floor(response.Min)) * Math.floor(response.Avg) + 180;
-                console.log('X: ' + x);
+                if(max && avg){
+                    avg_wait = 180 / (max - min) * avg + 180;
+                }else{
+                    avg_wait = 180;
+                }
+
                 var avg_wait_time_options = {
                     responsive: true,
                     legend: {
@@ -422,7 +430,7 @@ var Dashboard = {
                     },
                     elements: {
                         center: {
-                            text: avg_wait_time,
+                            text: avg_wait_time_frmt,
                             color: '#203047',
                             fontStyle: 'Arial',
                             sidePadding: 15
@@ -430,13 +438,13 @@ var Dashboard = {
                     },
                     animation: {
                         onComplete: function () {
-                            drawNeedle(150, x);
+                            drawNeedle(150, avg_wait);
                         }
                     },
 
                     circumference: Math.PI,
                     rotation: Math.PI,
-                    cutoutPercentage: 70, // precent
+                    cutoutPercentage: 70,
                 }
 
                 var ctx = document.getElementById('avg_wait_time_graph').getContext('2d');
@@ -445,11 +453,13 @@ var Dashboard = {
                     window.avg_wait_time_chart.destroy();
                 }
 
-                window.avg_wait_time_chart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: avg_wait_time_data,
-                    options: avg_wait_time_options
-                });
+                if(avg_wait && avg){
+                    window.avg_wait_time_chart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: avg_wait_time_data,
+                        options: avg_wait_time_options
+                    });
+                }
 
                 Dashboard.resizeCardTableDivs();
             }, error: function (jqXHR, textStatus, errorThrown) {
