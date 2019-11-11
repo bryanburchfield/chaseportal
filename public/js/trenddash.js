@@ -99,7 +99,7 @@ var Dashboard = {
 
         var activeBtn = $('.callvolume_inorout').find("[data-type='" + this.inorout + "']");
         $(activeBtn).siblings().addClass('btn-default');
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -117,6 +117,8 @@ var Dashboard = {
             },
             success:function(response){
 
+                $('#call_volume_inbound, #call_volume_outbound').parent().find('.no_data').remove();
+
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
@@ -125,6 +127,15 @@ var Dashboard = {
                     total_calls_int=response.call_volume.total;
                 }
                 $('.call_volume_details p.total').html('Total Calls: '+Master.formatNumber(total_calls_int));
+
+                if(!Master.has_data(response.call_volume.total_inbound_calls) && !Master.has_data(response.call_volume.inbound_handled) && !Master.has_data(response.call_volume.inbound_voicemails) && !Master.has_data(response.call_volume.inbound_abandoned)){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_inbound');
+                }
+
+                if(!Master.has_data(response.call_volume.total_outbound_calls) && !Master.has_data(response.call_volume.outbound_handled) && !Master.has_data(response.call_volume.outbound_dropped) ){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_outbound');
+                }
+
                 var call_volume_inbound = {
 
                     labels: response.call_volume.inbound_time_labels,
@@ -225,7 +236,7 @@ var Dashboard = {
                     data: call_volume_inbound,
                     options: call_volume_options
                 });
-                
+
                 // call volume outbound line graph
                 var ctx = document.getElementById('call_volume_outbound').getContext('2d');
                 if(window.call_volume_outbound_chart != undefined){
@@ -239,8 +250,7 @@ var Dashboard = {
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume_inbound');
                 Dashboard.display_error(div, textStatus, errorThrown);
-                
-            } 
+            }
         });
     },
 
@@ -262,10 +272,12 @@ var Dashboard = {
             },
             success:function(response){
 
+                $('#avg_handle_time').parent().find('.no_data').remove();
+
                 if( response.call_details.datetime != undefined){
                     $('h2.avg_ht').html('Avg Handle Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
                     $('h2.avg_tt').html('Avg Talk Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
-                    
+
                     var avg_handle_time_data  = {
                         labels: response.call_details.datetime,
                         datasets: [{
@@ -277,6 +289,11 @@ var Dashboard = {
                             yAxisID: 'y-axis-1',
                         }]
                     };
+
+                    if(!Master.has_data(response.call_details.avg_handle_time)){
+                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#avg_handle_time');
+                    }
+
                     var show_decimal= Master.ylabel_format(response.call_details.avg_handle_time);
 
                     var avg_handle_time_options={
@@ -313,8 +330,6 @@ var Dashboard = {
                                 gridLines: {
                                     drawOnChartArea: false, // only want the grid lines for one axis to show up
                                 },
-
-                                
                             }],
                         },
                         legend: {
@@ -359,6 +374,12 @@ var Dashboard = {
                             yAxisID: 'y-axis-1',
                         }]
                     };
+
+                    $('#call_details').parent().find('.no_data').remove();
+
+                    if(!Master.has_data(response.call_details.calls) && !Master.has_data(response.call_details.hold_time) && !Master.has_data(response.call_details.wrapup_time)){
+                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_details');
+                    }
 
                     var show_decimal2= Master.ylabel_format(response.call_details.wrapup_time);
                     var call_details_options={
@@ -488,6 +509,12 @@ var Dashboard = {
                         }
                     }
 
+                    $('#max_hold_time').parent().find('.no_data').remove();
+
+                    if(!Master.has_data(response.call_details.max_hold)){
+                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#max_hold_time');
+                    }
+
                     var ctx = document.getElementById('max_hold_time').getContext('2d');
 
                     if(window.max_hold_time_chart != undefined){
@@ -519,6 +546,11 @@ var Dashboard = {
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
+                $('#rep_talktime').parent().find('.no_data').remove();
+
+                if(!response.agent_calltime.rep.length){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#rep_talktime');
+                }
 
                 if( response.agent_calltime.avg_ct != undefined){
                     $('h2.avg_ct').html('Avg Rep Time: '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
@@ -618,12 +650,11 @@ var Dashboard = {
                     data: agent_talktime_data,
                     options: agent_talktime_options
                 });
-                
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#rep_talktime');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
-        });        
+        });
     },
 
     service_level:function(datefilter, chartColors, answer_secs=20){
@@ -643,12 +674,17 @@ var Dashboard = {
                 answer_secs:answer_secs
             },
             success:function(response){
-               
+
+                $('#service_level').parent().find('.no_data').remove();
                 $('.answer_secs').html(answer_secs);
                 var baseline_cnt = response.service_level.handled_calls.length;
                 var baseline=[];
                 for (var i = 0; i < baseline_cnt; i++) {
                     baseline.push(answer_secs);
+                }
+
+                if(!Master.has_data(response.service_level.servicelevel)){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#service_level');
                 }
 
                 $('h2.avg_sl').html('Avg Service Level: '+response.service_level.avg + '%');
