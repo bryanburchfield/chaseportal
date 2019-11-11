@@ -25,6 +25,7 @@ class CallDetails
         $this->params['calltype'] = '';
         $this->params['phone'] = '';
         $this->params['callerids'] = [];
+        $this->params['callerid'] = '';
         $this->params['callstatuses'] = [];
         $this->params['durationfrom'] = '';
         $this->params['durationto'] = '';
@@ -131,6 +132,10 @@ class CallDetails
             $where .= " AND S.SourceName IS NOT NULL";
             $sql .= "
             INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT(:callerids, '!#!');";
+        }
+        if (!empty($this->params['callerid']) && $this->params['callerid'] != '*') {
+            $bind['callerid'] = $this->params['callerid'];
+            $where .= " AND DR.CallerId = :callerid";
         }
         if (!empty($this->params['durationfrom'])) {
             $where .= " AND DR.Duration >= " . $this->params['durationfrom'];
@@ -272,6 +277,10 @@ class CallDetails
 
         if (!empty($request->callerids)) {
             $this->params['callerids'] = $request->callerids;
+        }
+
+        if (!empty($request->callerid)) {
+            $this->params['callerid'] = $request->callerid;
         }
 
         if (!empty($request->callstatuses)) {

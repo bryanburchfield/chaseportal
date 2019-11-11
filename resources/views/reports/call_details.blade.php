@@ -7,7 +7,7 @@
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
 			<div class="row">
-				
+
 				@include('shared.report_db_menu')
 
 				<div class="col-sm-4">
@@ -42,12 +42,18 @@
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
-			
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
 						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('callerid', __('reports.callerid')) !!}
+						{!! Form::tel('callerid', null, ['class'=>'form-control', 'required' => false]) !!}					</div>
 				</div>
 
 				<div class="col-sm-4">
@@ -63,7 +69,7 @@
 						{!! Form::select("call_statuses[]", $filters['call_statuses'], null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 					</div>
 				</div>
-			
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('call_type', __('reports.call_type')) !!}
