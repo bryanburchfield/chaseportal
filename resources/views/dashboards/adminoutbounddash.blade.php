@@ -197,7 +197,7 @@
 
                 <div class="front ">
                     <div class="card_table2">
-                        <h1 class="title mb15">Avg Wait Time</h1>
+                        <h1 class="title mb15">Average Wait Time</h1>
                         <div class="flip_card_btn"></div>
                         <table class="table table-condensed table-striped" id="avg_wait_time">
                             <thead>
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="back">
-                    <h1 class="title">Avg Wait Time</h1>
+                    <h1 class="title">Average Wait Time</h1>
                     <div class="flip_card_btn"></div>
                     <div class="inbound inandout mb0">
                         <canvas id="avg_wait_time_graph"></canvas>
