@@ -118,7 +118,9 @@ var Dashboard = {
                 dateFilter:datefilter
             },
             success:function(response){
-                
+
+                $('#call_volume_inbound, #call_duration').parent().find('.no_data').remove();
+
                 ///////////////// CALLS ANSWERED CARD
                 Master.trend_percentage( $('#calls_answered'), response.call_volume.calls_answered.pct_change, response.call_volume.calls_answered.pct_sign, response.call_volume.calls_answered.ntc );
                 Master.add_bg_rounded_class($('#calls_answered .total'), response.call_volume.calls_answered.count, 4);
@@ -169,6 +171,10 @@ var Dashboard = {
                     $('#avg_talk_time .outbound .highest').html(Master.convertSecsToHrsMinsSecs(response.call_volume.calls_answered.max));
                 }else{
                     $('#avg_talk_time .outbound .highest').html('00:00:00');
+                }
+
+                if(!Master.has_data(response.call_volume.call_volume.total_calls) && !Master.has_data(response.call_volume.call_volume.voicemails) && !Master.has_data(response.call_volume.call_volume.abandoned) && !Master.has_data(response.call_volume.call_volume.handled )){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_inbound');
                 }
 
                 var call_volume_inbound = {
@@ -243,7 +249,11 @@ var Dashboard = {
                     data: call_volume_inbound,
                     options: call_volume_options
                 });
-                
+
+                if(!Master.has_data(response.call_volume.call_duration.duration) ){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_duration');
+                }
+
                 ///////////////// CALL DURATION GRAPH
                 var call_duration = {
                     labels: response.call_volume.call_duration.time_labels,
@@ -373,7 +383,7 @@ var Dashboard = {
 
                 }else{
                                       
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph');
                 }
 
                 // $('#agent_calltime').parent().find('.no_data').remove();
@@ -580,7 +590,7 @@ var Dashboard = {
                 });
 
                 if(!response.top10_rep_dispos.dispositions.length){
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_dispositions_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_dispositions_graph');
                 }
 
                 //// TOP 10  DISPOS
@@ -626,7 +636,7 @@ var Dashboard = {
                 });
 
                 if(!response.top10_dispos.dispositions.length){
-                    $('<p class="no_data">No data yet</p>').insertBefore('#dispositions_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#dispositions_graph');
                 }
 
                 const dispos_obj = response.agent_call_status.dispositions
@@ -709,7 +719,7 @@ var Dashboard = {
                 });
 
                 if(!response.agent_call_status.reps.length){
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_status');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_call_status');
                 }
             }
         });
@@ -840,10 +850,9 @@ var Dashboard = {
 
                 Master.flip_card(response.avg_handletime.length, '#rep_avg_handletime');
                 $('#rep_avg_handletime tbody').empty();
-                $('#rep_avg_handletime, #rep_avg_handletime_graph').parent().find('.no_data').remove();
+                $('#rep_avg_handletime').parent().find('.no_data').remove();
 
                 if(response.avg_handletime.length){
-                        
                     var trs;
                     for (var i = 0; i < response.table.length; i++) {
                         if(response.table[i].Rep != ''){
@@ -854,9 +863,8 @@ var Dashboard = {
                     $('#rep_avg_handletime tbody').append(trs);
 
                 }else{
-                    $('<p class="no_data">No data yet</p>').insertBefore('#rep_avg_handletime, #rep_avg_handletime_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#rep_avg_handletime');
                 }
-
 
                 ////////////////////////////////////////////////////////////
                 ////    REP AVG HANDLE TIME GRAPH
@@ -884,21 +892,21 @@ var Dashboard = {
                     elements: {
                             center: {
                             text: response.total_avg_handle_time+'%',
-                            color: '#203047', 
-                            fontStyle: 'Arial', 
-                            sidePadding: 15 
+                            color: '#203047',
+                            fontStyle: 'Arial',
+                            sidePadding: 15
                         }
                     },
                     animation: {
                         animateScale: true,
                         animateRotate: true
                     },
-                    
+
                     circumference: Math.PI,
                     rotation : Math.PI,
                     cutoutPercentage : 70, // precent
                 }
-                
+
                 var ctx = document.getElementById('rep_avg_handletime_graph').getContext('2d');
 
                 ctx.fillText('0%' ,1,1);

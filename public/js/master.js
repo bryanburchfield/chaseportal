@@ -136,9 +136,19 @@ var Master = {
         }
     },
 
+    // check if array has data, if not print no data msg
+    has_data:function(array){
+        for(var i=0; i<array.length;i++){
+            if(array[i] !=0){
+                return true;
+                break;
+            }
+        }
+    },
+
     ylabel_format:function(data){
         var show_decimal=false;
-        
+
         for(var i=0;i<data.length;i++){
             if(data[i] > 300){
                 show_decimal=false;

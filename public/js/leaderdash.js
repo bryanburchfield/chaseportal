@@ -67,12 +67,11 @@ var Dashboard = {
 
     init:function(){
         $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.call_details(this.datefilter, this.chartColors), this.sales_per_campaign(this.datefilter, this.chartColors, this.chartColors2)).done(function(){
-            
+
             $('.preloader').fadeOut('slow');
             Master.check_reload();
             Dashboard.resizeDivs();
         });
-        
 
         Dashboard.eventHandlers();
     },
@@ -103,7 +102,7 @@ var Dashboard = {
 
     refresh:function(datefilter, campaign, inorout){
         $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.call_details(this.datefilter, this.chartColors), this.sales_per_campaign(this.datefilter, this.chartColors, this.chartColors2)).done(function(){
-            
+
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -148,7 +147,7 @@ var Dashboard = {
                     $('#agent_sales_per_hour tbody').append(agent_sales_trs);
                 }else{
                     $('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody').empty();
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody');
                 }
 
                 if(window.rep_avg_handletime_chart != undefined){
@@ -338,8 +337,8 @@ var Dashboard = {
                 for(var i=0;i<response.Campaign.length;i++){
                     sales_camp_arr.push({Campaign:response.Campaign[i], Sales:response.Sales[i]});
                 }
-                
-                $('#sales_per_campaign, #sales_per_campaign_graph').parent().find('.no_data').remove();               
+
+                $('#sales_per_campaign, #sales_per_campaign_graph').parent().find('.no_data').remove();
 
                 $('#sales_per_campaign tbody').empty();
                 var spc_trs;
@@ -348,12 +347,12 @@ var Dashboard = {
                 }
 
                 $('#sales_per_campaign tbody').append(spc_trs);
-                
+
                 if(response.Campaign.length){
                     $('#sales_per_campaign_graph, #sales_per_campaign').show();
                 }else{
-                    $('#sales_per_campaign tbody').empty();                    
-                    $('<p class="no_data">No data yet</p>').insertBefore('#sales_per_campaign_graph, #sales_per_campaign');
+                    $('#sales_per_campaign tbody').empty();
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#sales_per_campaign_graph, #sales_per_campaign');
                 }
 
                  if(window.sales_per_campaign_chart != undefined){
@@ -371,9 +370,9 @@ var Dashboard = {
                      }],
                      elements: {
                              center: {
-                             color: '#203047', 
-                             fontStyle: 'Segoeui', 
-                             sidePadding: 15 
+                             color: '#203047',
+                             fontStyle: 'Segoeui',
+                             sidePadding: 15
                          }
                      },
                      labels: response.Campaign

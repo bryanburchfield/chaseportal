@@ -92,7 +92,7 @@ class AdminDashController extends Controller
             'total_calls' => [],
             'voicemails' => [],
             'abandoned' => [],
-            'answered' => [],
+            'handled' => [],
         ];
         $call_duration = [
             'time_labels' => [],
@@ -119,7 +119,7 @@ class AdminDashController extends Controller
             array_push($call_volume['total_calls'], $r['Count']);
             array_push($call_volume['voicemails'], $r['Voicemails']);
             array_push($call_volume['abandoned'], $r['Abandoned Calls']);
-            array_push($call_volume['answered'], $r['Answered Calls']);
+            array_push($call_volume['handled'], $r['Answered Calls']);
 
             $calls_offered['count'] += $r['Count'];
 

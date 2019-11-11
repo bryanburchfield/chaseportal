@@ -113,8 +113,14 @@ var Dashboard = {
             },
             success: function (response) {
 
+                $('#call_volume_outbound, #call_duration').parent().find('.no_data').remove();
+
                 /////// TOTAL DURATION
                 $('#total_contacts_card').find('.total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_duration.duration));
+
+                if(!Master.has_data(response.call_volume.call_volume.total_calls) && !Master.has_data(response.call_volume.call_volume.handled) && !Master.has_data(response.call_volume.call_volume.dropped)){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_outbound');
+                }
 
                 ////// CALL VOLUME
                 var call_volume_outbound = {
@@ -181,6 +187,10 @@ var Dashboard = {
                     data: call_volume_outbound,
                     options: call_volume_options
                 });
+
+                if(!Master.has_data(response.call_volume.call_duration.duration)){
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_duration');
+                }
 
                 ////// CALL DURATION
                 var call_duration = {
@@ -321,7 +331,7 @@ var Dashboard = {
                     }
                     $('#sales_per_hour_per_rep tbody').append(trs);
                 } else {
-                    $('<p class="no_data mt20">No data yet</p>').insertBefore('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph');
                 }
 
 
@@ -360,7 +370,7 @@ var Dashboard = {
                     }
                     $('#avg_wait_time tbody').append(trs);
                 } else {
-                    $('<p class="no_data">No data yet</p>').insertBefore('#avg_wait_time');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#avg_wait_time');
                 }
 
                 ////////////////////////////////////////////////////////////
@@ -497,7 +507,7 @@ var Dashboard = {
                     }
                     $('#calls_by_campaign tbody').append(trs);
                 } else {
-                    $('<p class="no_data">No data yet</p>').insertBefore('#calls_by_campaign, #calls_by_campaign_graph');
+                    $('<div class="alert alert-info no_data top45">No data yet</div>').insertBefore('#calls_by_campaign, #calls_by_campaign_graph');
                 }
 
                 if (window.calls_by_campaign_chart != undefined) {
@@ -586,7 +596,7 @@ var Dashboard = {
                     }
                     $('#agent_call_count tbody').append(trs);
                 } else {
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_call_count_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_call_count, #agent_call_count_graph');
                 }
 
                 if (response.talk_time_table.length) {
@@ -599,7 +609,7 @@ var Dashboard = {
                     }
                     $('#agent_talk_time tbody').append(trs);
                 } else {
-                    $('<p class="no_data">No data yet</p>').insertBefore('#agent_call_count, #agent_talk_time, #agent_call_count_graph, #agent_talk_time_graph');
+                    $('<div class="alert alert-info no_data top45">No data yet</div>').insertBefore('#agent_talk_time, #agent_talk_time_graph');
                 }
 
                 ////////////////////////////////////////////////////////////
@@ -813,7 +823,7 @@ var Dashboard = {
                 });
 
                 if (!response.top10_rep_dispos.dispositions.length) {
-                    $('<p class="no_data">No Data Yet</p>').insertBefore('#agent_dispositions_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_dispositions_graph');
                 }
 
                 //// TOP 10 DISPOS
@@ -859,7 +869,7 @@ var Dashboard = {
                 });
 
                 if (!response.top10_dispos.dispositions.length) {
-                    $('<p class="no_data">No Data Yet</p>').insertBefore('#dispositions_graph');
+                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#dispositions_graph');
                 }
 
                 const dispos_obj = response.agent_call_status.dispositions
@@ -943,7 +953,7 @@ var Dashboard = {
                 });
 
                 if (!response.agent_call_status.reps.length) {
-                    $('<p class="no_data">No Data Yet</p>').insertBefore('#agent_call_status');
+                    $('<div class="alert alert-info no_data top45">No data yet</div>').insertBefore('#agent_call_status');
                 }
             }
         });
