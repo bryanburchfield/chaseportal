@@ -11,7 +11,6 @@ class Kpi extends Model
 {
     protected $fillable = [
         'name',
-        'description',
         'query',
     ];
 
@@ -27,7 +26,7 @@ class Kpi extends Model
 
     public static function getKpis()
     {
-        $kpis = self::select('kpis.id', 'kpis.name', 'kpis.description', 'KG.active', 'KG.interval')
+        $kpis = self::select('kpis.id', 'kpis.name', 'KG.active', 'KG.interval')
             ->leftJoin('kpi_groups as KG', function ($join) {
                 $join->on('kpis.id', '=', 'KG.kpi_id')
                     ->where('KG.group_id', '=', Auth::user()->group_id);

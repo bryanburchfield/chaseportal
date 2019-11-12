@@ -284,7 +284,7 @@ class KpiController extends Controller
         $all_kpis = Kpi::orderBy('name', 'asc')->pluck('name', 'id')->all();
 
         foreach ($all_kpis as $id => &$name) {
-            $name = trans($name);
+            $name = trans('kpi.' . $name);
         }
 
         $data = [
@@ -412,7 +412,7 @@ class KpiController extends Controller
      */
     private function getSms($kpi_name, $results)
     {
-        $sms = ' -== ' . trans($kpi_name) . ' ==-' . PHP_EOL . PHP_EOL;
+        $sms = ' -== ' . trans('kpi.' . $kpi_name) . ' ==-' . PHP_EOL . PHP_EOL;
 
         if (empty($results)) {
             $sms .= trans('kpi.no_data');
