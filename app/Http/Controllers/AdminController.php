@@ -206,6 +206,13 @@ class AdminController extends Controller
         return $return;
     }
 
+    public function editMyself(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->update($request->all());
+        $return['success'] = $user;
+    }
+
     public function cdrLookup(Request $request)
     {
         $tz = Auth::user()->iana_tz;

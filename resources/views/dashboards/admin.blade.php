@@ -21,6 +21,7 @@
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Users</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Users</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
+								<li><a href="#edit_myself" data-toggle="tab">Edit Myself</a></li>
 							</ul>
 
 							<div class="tab-content">
@@ -337,6 +338,109 @@
 			        		                </tbody>
 			        		            </table>
 			        		        </div>
+								</div>
+
+								<div class="tab-pane mt30" id="edit_myself">
+					        		<div class="col-sm-6 mb0 card">
+        								<h2 class="page_heading">Edit Myself</h2>
+
+        								{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_myself', 'class'=>'form edit_myself']) !!}
+        									<div class="form-group">
+        										{!! Form::label('group_id', 'Group ID') !!}
+        										{!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
+        									</div>
+
+
+        									<div class="form-group">
+        										{!! Form::label('db', 'Database') !!}
+        										{!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+        									</div>
+
+											{!! Form::hidden('id', null, ['class'=>'user_id']) !!}
+
+        									{!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
+
+        									<br><br>
+
+        									@if($errors->any())
+        		                                <div class="alert alert-danger">
+        		                                    @foreach($errors->all() as $e)
+        		                                        {{ $e }}
+        		                                    @endforeach
+        		                                </div>
+        									@endif
+
+        								{!! Form::close() !!}
+        							</div>
+
+				    				<div class="col-sm-6 pr0 mbmt50 mbp0">
+				    					<h2 class="page_heading mb0">All Users</h2>
+
+				    					<div class="users">
+
+											<div class="panel-group" id="add_accordion" role="tablist" aria-multiselectable="true">
+
+											    @php
+
+											    	$db=1;
+											    	for($i=1; $i<=25;$i++){
+											    		if($db <10){
+											    			$db='0'. $db;
+											    		}
+											    @endphp
+
+												    <div class="panel panel-default">
+												        <div class="panel-heading" role="tab" id="add_heading{{$db}}">
+												            <h4 class="panel-title">
+												                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#add_accordion" href="#add_dialer{{$db}}" aria-expanded="false" aria-controls="add_dialer{{$db}}">
+												                Dialer {{$db}}
+												                </a>
+												            </h4>
+												        </div>
+												        <div id="add_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="add_heading{{$db}}">
+												            <div class="panel-body">
+
+												            	<table class="table table-responsive table-striped">
+												            		<thead>
+												            			<tr>
+												            				<th>User</th>
+												            				<th>Links</th>
+												            				<th>Edit</th>
+												            				<th>Delete</th>
+												            			</tr>
+												            		</thead>
+
+												            		<tbody>
+												            	@foreach($users as $user)
+												            		@php
+												            			$user_db = substr($user['db'], -2);
+												            		@endphp
+												            		@if($user_db == $db)
+
+												            			<tr id="user{{$user->id}}" data-id="{{$user->id}}">
+												            			<td>{{$user->group_id}} - {{$user->name}}</td>
+												            			<td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
+												            			<td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+												            			<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="glyphicon glyphicon-remove-sign"></i></a></td>
+												            		@endif
+
+												            	@endforeach
+
+													            	</tbody>
+													            </table>
+												            </div>
+												        </div>
+												    </div>
+
+											    @php
+
+											    	$db++;
+											    	}
+											    @endphp
+											</div>
+				    					</div>
+				    				</div>
+
 								</div>
 							</div>
 						</div>
