@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -17,7 +18,7 @@ trait ReportTraits
     use SqlServerTraits;
     use TimeTraits;
 
-    private function initilaizeParams()
+    private function initilaizeParams($hasdates = true)
     {
         $this->params = [
             'report' => Str::snake((new \ReflectionClass($this))->getShortName()),
@@ -31,6 +32,13 @@ trait ReportTraits
             'databases' => [],
             'columns' => [],
         ];
+
+        if ($hasdates) {
+            $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
+            $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+            // $this->params['fromdate'] = Carbon::parse('today 09:00')->toDateTimeString();
+            // $this->params['todate'] = Carbon::parse('today 20:00')->toDateTimeString();
+        }
     }
 
     /**

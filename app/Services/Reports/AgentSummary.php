@@ -15,8 +15,6 @@ class AgentSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.agent_summary';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
