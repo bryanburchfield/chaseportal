@@ -1111,12 +1111,12 @@ var Master = {
             success:function(response){
 
                 if(response.errors){
-                    $('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
+                    $('form.edit_myself').append('<div class="alert alert-danger">'+response.errors+'</div>');
                     $('.alert-danger').show();
                 }else{
-                    $('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
+                    $('form.edit_myself').append('<div class="alert alert-success">User successfully updated</div>');
                     $('.alert-success').show();
-                    $('form.edit_user').trigger("reset");
+                    $('form.edit_myself').trigger("reset");
                     setTimeout(function(){
                         window.location.href = "/dashboards/admin";
                     }, 3500);

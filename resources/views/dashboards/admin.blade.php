@@ -93,8 +93,9 @@
 												@php
 
 												$db=1;
-												for($i=1; $i<=25;$i++){ if($db <10){ $db='0' . $db; } @endphp <div
-													class="panel panel-default">
+												for($i=1; $i<=25;$i++){ if($db <10){ $db='0' . $db; }
+												@endphp
+												<div class="panel panel-default">
 													<div class="panel-heading" role="tab" id="add_heading{{$db}}">
 														<h4 class="panel-title">
 															<a class="collapsed" role="button" data-toggle="collapse"
@@ -236,8 +237,9 @@
 											@php
 
 											$db=1;
-											for($i=1; $i<=25;$i++){ if($db <10){ $db='0' . $db; } @endphp <div
-												class="panel panel-default">
+											for($i=1; $i<=25;$i++){ if($db <10){ $db='0' . $db; } 
+											@endphp 
+										<div class="panel panel-default">
 												<div class="panel-heading" role="tab" id="edit_heading{{$db}}">
 													<h4 class="panel-title">
 														<a class="collapsed" role="button" data-toggle="collapse"
@@ -375,7 +377,7 @@
 											<th>Campaign</th>
 											<th>Date</th>
 											<th>Duration</th>
-											<th>Group ID</th>Auth::user()->group_id
+											<th>Group ID</th>
 											<th>Lead ID</th>
 											<th>Phone</th>
 											<th>Rep</th>
@@ -426,96 +428,14 @@
 
 								{!! Form::close() !!}
 							</div>
-
-							<div class="col-sm-6 pr0 mbmt50 mbp0">
-								<h2 class="page_heading mb0">All Users</h2>
-
-								<div class="users">
-
-									<div class="panel-group" id="add_accordion" role="tablist"
-										aria-multiselectable="true">
-
-										@php
-
-										$db=1;
-										for($i=1; $i<=25;$i++){ if($db <10){ $db='0' . $db; } @endphp <div
-											class="panel panel-default">
-											<div class="panel-heading" role="tab" id="add_heading{{$db}}">
-												<h4 class="panel-title">
-													<a class="collapsed" role="button" data-toggle="collapse"
-														data-parent="#add_accordion" href="#add_dialer{{$db}}"
-														aria-expanded="false" aria-controls="add_dialer{{$db}}">
-														Dialer {{$db}}
-													</a>
-												</h4>
-											</div>
-											<div id="add_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel"
-												aria-labelledby="add_heading{{$db}}">
-												<div class="panel-body">
-
-													<table class="table table-responsive table-striped">
-														<thead>
-															<tr>
-																<th>User</th>
-																<th>Links</th>
-																<th>Edit</th>
-																<th>Delete</th>
-															</tr>
-														</thead>
-
-														<tbody>
-															@foreach($users as $user)
-															@php
-															$user_db = substr($user['db'], -2);
-															@endphp
-															@if($user_db == $db)
-
-															<tr id="user{{$user->id}}" data-id="{{$user->id}}">
-																<td>{{$user->group_id}} - {{$user->name}}</td>
-																<td><a data-toggle="modal" data-target="#userLinksModal"
-																		class="user_links" href="#"
-																		data-name="{{$user->name}}"
-																		data-user="{{$user->id}}"
-																		data-token="{{$user->app_token}}"><i
-																			class="fas fa-link"></i></a></td>
-																<td><a data-dialer="{{$db}}" href="{{$user->id}}"
-																		class="edit_user"><i
-																			class="fas fa-user-edit"></i></a></td>
-																<td><a data-toggle="modal"
-																		data-target="#deleteUserModal"
-																		class="remove_user" href="#"
-																		data-name="{{$user->name}}"
-																		data-user="{{$user->id}}"><i
-																			class="glyphicon glyphicon-remove-sign"></i></a>
-																</td>
-																@endif
-
-																@endforeach
-
-														</tbody>
-													</table>
-												</div>
-											</div>
-									</div>
-
-									@php
-
-									$db++;
-									}
-									@endphp
-								</div>
-							</div>
 						</div>
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</div>
-</div>
-</div>
+
 
 @include('shared.reportmodal')
 
