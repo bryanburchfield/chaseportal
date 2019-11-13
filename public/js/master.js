@@ -40,7 +40,6 @@ var Master = {
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
 		$('.edit_user').on('submit', this.edit_user);
-        $('.edit_myself').on('submit', this.edit_myself);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.users table tbody, .rules_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
@@ -1081,49 +1080,8 @@ var Master = {
 					}, 3500);
 				}
 			}
-		});
+		});	
 	},
-
-    edit_myself:function(e){
-        e.preventDefault();
-        var form = $('form.edit_myself');
-        var group_id = form.find('.group_id').val(),
-            user_id = form.find('.user_id').val(),
-            db = form.find('#db').val()
-        ;
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: 'admin/edit_myself',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                id:user_id,
-                group_id:group_id,
-                db:db,
-            },
-
-            success:function(response){
-
-                if(response.errors){
-                    $('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
-                    $('.alert-danger').show();
-                }else{
-                    $('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
-                    $('.alert-success').show();
-                    $('form.edit_user').trigger("reset");
-                    setTimeout(function(){
-                        window.location.href = "/dashboards/admin";
-                    }, 3500);
-                }
-            }
-        }); 
-    },
 
 	populate_user_edit:function(e){
 		e.preventDefault();
