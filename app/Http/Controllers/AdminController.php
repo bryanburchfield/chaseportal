@@ -7,6 +7,7 @@ use App\User;
 use App\AutomatedReport;
 use App\System;
 use App\Traits\TimeTraits;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -208,9 +209,14 @@ class AdminController extends Controller
 
     public function editMyself(Request $request)
     {
-        $user = User::findOrFail($request->id);
-        $user->update($request->all());
-        $return['success'] = $user;
+        try {
+            $user = Auth::user();
+            $user->update($request->all());
+        } catch (Exception $e) {
+            return ['success' => 0];
+        }
+
+        return ['success' => 1];
     }
 
     public function cdrLookup(Request $request)
