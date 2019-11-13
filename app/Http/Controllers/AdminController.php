@@ -213,7 +213,7 @@ class AdminController extends Controller
             $user = Auth::user();
             $user->update($request->all());
         } catch (Exception $e) {
-            return ['success' => 0];
+            return ['errors' => ['Update Failed']];
         }
 
         return ['success' => 1];
