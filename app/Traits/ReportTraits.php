@@ -2,10 +2,12 @@
 
 namespace App\Traits;
 
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -18,10 +20,12 @@ trait ReportTraits
     use SqlServerTraits;
     use TimeTraits;
 
-    private function initilaizeParams($hasdates = true)
+    private function initilaizeParams()
     {
         $this->params = [
             'report' => Str::snake((new \ReflectionClass($this))->getShortName()),
+            'fromdate' => '',
+            'todate' => '',
             'curpage' => 1,
             'pagesize' => 50,
             'totrows' => 0,
@@ -32,13 +36,12 @@ trait ReportTraits
             'databases' => [],
             'columns' => [],
         ];
+    }
 
-        if ($hasdates) {
-            $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-            $this->params['todate'] = date("m/d/Y 8:00 \P\M");
-            // $this->params['fromdate'] = Carbon::parse('today 09:00')->toDateTimeString();
-            // $this->params['todate'] = Carbon::parse('today 20:00')->toDateTimeString();
-        }
+    public function setDates()
+    {
+        $this->params['fromdate'] = Carbon::parse('today 09:00')->isoFormat('L LT');
+        $this->params['todate'] = Carbon::parse('today 20:00')->isoFormat('L LT');
     }
 
     /**
@@ -49,7 +52,7 @@ trait ReportTraits
      *
      * @return void
      */
-    private function setHeadings()
+    private function setHeadings($hasdates = true)
     {
         $this->params['reportName'] = trans($this->params['reportName']);
 
@@ -196,6 +199,7 @@ trait ReportTraits
         }
 
         if (!empty($request->th_sort)) {
+            $this->setHeadings();
             $col = array_search($request->th_sort, $this->params['columns']);
             $dir = $request->sort_direction ?? 'asc';
             $this->params['orderby'] = [$col => $dir];
@@ -221,10 +225,10 @@ trait ReportTraits
         if (empty($request->fromdate)) {
             $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
         } else {
-            $this->params['fromdate'] = $request->fromdate;
-            $from = strtotime($this->params['fromdate']);
-
-            if ($from === false) {
+            try {
+                $from = Carbon::createFromIsoFormat('L LT', $request->fromdate, null, App::getLocale());
+            } catch (Exception $e) {
+                $from = false;
                 $this->errors->add('fromdate.invalid', trans('reports.errfromdateinvalid'));
             }
         }
@@ -232,16 +236,19 @@ trait ReportTraits
         if (empty($request->todate)) {
             $this->errors->add('todate.required', trans('reports.errtodaterequired'));
         } else {
-            $this->params['todate'] = $request->todate;
-            $to = strtotime($this->params['todate']);
-
-            if ($to === false) {
+            try {
+                $to = Carbon::createFromIsoFormat('L LT', $request->todate, null, App::getLocale());
+            } catch (Exception $e) {
+                $to = false;
                 $this->errors->add('todate.invalid', trans('reports.errtodateinvalid'));
             }
         }
 
-        if (!empty($from) && !empty($to) && $to < $from) {
+        if ($from === false || $to === false || $to < $from) {
             $this->errors->add('daterange', trans('reports.errdaterange'));
+        } else {
+            $this->params['fromdate'] = $from->toDateTimeString();
+            $this->params['todate'] = $to->toDateTimeString();
         }
     }
 

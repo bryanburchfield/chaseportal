@@ -25,26 +25,14 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
+        $this->reportservice->report->setDates();
+
         $results = [];
         // Push old input to form
         $request->flash();
 
         return $this->returnView($results);
     }
-
-    // public function runReport(Request $request)
-    // {
-    //     $results = $this->reportservice->getResults($request);
-
-    //     // check for errors
-    //     if (is_object($results)) {
-    //         return $this->returnView([], $results);
-    //     }
-    //     // Push old input to form
-    //     $request->flash();
-
-    //     return $this->returnView($results);
-    // }
 
     public function exportReport(Request $request)
     {

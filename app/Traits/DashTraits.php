@@ -300,8 +300,9 @@ trait DashTraits
                 break;
 
             default:  // custom range - add 1 day to ending date
-                $fromDate = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
-                $toDate = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
+                list($fromDate, $toDate) = explode(' ', $dateFilter);
+                $fromDate = $this->stringToUtc($fromDate, $tz, true);
+                $toDate = $this->stringToUtc($toDate, $tz, true)->modify('+1 day');
         }
 
         return [$fromDate, $toDate];
@@ -360,10 +361,11 @@ trait DashTraits
                 break;
 
             default:  // custom range
-                // same number of previous days
-                $date1 = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
-                $date2 = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
+                list($date1, $date2) = explode(' ', $dateFilter);
+                $date1 = $this->stringToUtc($date1, $tz, true);
+                $date2 = $this->stringToUtc($date2, $tz, true)->modify('+1 day');
 
+                // same number of previous days
                 $days = $date2->diffInDays($date1);
 
                 $fromDate = (clone $date1)->modify('-' . $days . ' days');
