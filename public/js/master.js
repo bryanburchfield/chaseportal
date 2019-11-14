@@ -915,9 +915,9 @@ var Master = {
 					$("#campaign_select").multiselect('refresh');
 
 					$('#'+ report+ ' #campaign_select')
-						.multiselect({nonSelectedText: 'Select Campaign',})
+						.multiselect({nonSelectedText: Lang.get('js_msgs.select_campaign'),})
 						.multiselect('selectAll', false)
-				    	.multiselect('updateButtonText');				
+				    	.multiselect('updateButtonText');
 				}
 			});			
 		}
@@ -932,11 +932,11 @@ var Master = {
 			$('#report_dl_warning').modal('toggle');
 			$('.dl_alert.alert').removeClass('alert-danger');
 			$('.dl_alert.alert').addClass('alert-warning');
-			$('.dl_alert.alert p').text('This is a large dataset. It may be faster to download multiple smaller reports.');
+			$('.dl_alert.alert p').text(Lang.get('js_msgs.dl_warning'));
 		}else if(tot_rows >= 2000){
 			$('.dl_alert.alert').removeClass('alert-warning');
 			$('.dl_alert.alert').addClass('alert-danger');
-			$('.dl_alert.alert p').text('Report is too large to download. Please run smaller reports or choose a different format');
+			$('.dl_alert.alert p').text(Lang.get('js_msgs.large_dl_warning'));
 			$('.report_dl_warning .modal-footer button').hide();
 			$('#report_dl_warning').modal('toggle');
 		}else{

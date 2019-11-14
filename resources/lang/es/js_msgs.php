@@ -56,5 +56,7 @@
 		'waiting'					=> 'Esperando',
 		'wrapup'					=> 'Envolver',
 		'actions_by_day'			=> 'Acciones por día',
-		'call_status_by_type'		=> 'Estado de la llamada por tipo'
+		'call_status_by_type'		=> 'Estado de la llamada por tipo',
+		'dl_warning'				=> 'Este es un gran conjunto de datos. Puede ser más rápido descargar varios informes más pequeños.',
+		'large_dl_warning'			=> 'El informe es demasiado grande para descargar. Ejecute informes más pequeños o elija un formato diferente'
 	];

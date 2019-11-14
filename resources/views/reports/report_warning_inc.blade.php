@@ -7,7 +7,7 @@
 				<h4 class="modal-title" id="myModalLabel">{{__('general.download_warning')}}</h4>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-danger">
+				<div class="alert dl_alert alert-danger">
 					<p></p>
 				</div>
 			</div>
