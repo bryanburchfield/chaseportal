@@ -112,26 +112,26 @@ var Dashboard = {
                 $('.total_calls').html(response.call_volume.tot_total);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
-                
+
                 var call_volume = {
 
                     labels: response.call_volume.time,
                     datasets: [{
-                        label: 'Inbound',
+                        label: Lang.get('js_msgs.inbound'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
                         data: response.call_volume.inbound,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Outbound',
+                        label: Lang.get('js_msgs.outbound'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.outbound,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Manual',
+                        label: Lang.get('js_msgs.manual'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
@@ -170,7 +170,7 @@ var Dashboard = {
                     },
                     title: {
                         display: true,
-                        text: 'Total Calls'
+                        text: Lang.get('js_msgs.total_calls')
                     }
                 }
 
@@ -184,12 +184,12 @@ var Dashboard = {
                     data: call_volume,
                     options: call_volume_options
                 });
-                
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume');
                 Dashboard.display_error(div, textStatus, errorThrown);
-                
-            } 
+
+            }
         });
     },
 
@@ -244,21 +244,21 @@ var Dashboard = {
                 var rep_performance = {
                     labels: response.rep_performance.time,
                     datasets: [{
-                        label: 'Calls',
+                        label: Lang.get('js_msgs.calls'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.rep_performance.calls,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Paused',
+                        label: Lang.get('js_msgs.paused'),
                         borderColor: chartColors.red,
                         backgroundColor: chartColors.red,
                         fill: false,
                         data: response.rep_performance.paused,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Waiting',
+                        label: Lang.get('js_msgs.waiting'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -266,7 +266,7 @@ var Dashboard = {
                         yAxisID: 'y-axis-1',
                     },
                     {
-                        label: 'Wrapup',
+                        label: Lang.get('js_msgs.wrapup'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
@@ -306,7 +306,7 @@ var Dashboard = {
                     },
                     title: {
                         display: true,
-                        text: 'Actions by Day'
+                        text: Lang.get('js_msgs.actions_by_day')
                     }
                 }
 
@@ -325,7 +325,7 @@ var Dashboard = {
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#rep_performance');
                 Dashboard.display_error(div, textStatus, errorThrown);
-            } 
+            }
         });
     },
 
@@ -357,7 +357,7 @@ var Dashboard = {
                     chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
                     j++;
                 }
-                
+
                 var call_status_count = {
                   labels: response['call_status_count']['labels'],
                         datasets: [
@@ -375,7 +375,7 @@ var Dashboard = {
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: 'Call Status by Type'
+                        text: Lang.get('js_msgs.call_status_by_type')
                     },
                     scales: {
                         yAxes: [{

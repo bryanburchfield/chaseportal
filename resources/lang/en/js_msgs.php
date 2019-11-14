@@ -51,5 +51,10 @@
 		'select_inbound_source' 	=> 'Select Inbound Source',
 		'select_call_status'		=> 'Select Call Status',
 		'select_all'				=> 'Select All',
-		'none_selected'				=> 'None Selected'
+		'none_selected'				=> 'None Selected',
+		'paused'					=> 'Paused',
+		'waiting'					=> 'Waiting',
+		'wrapup'					=> 'Wrapup',
+		'actions_by_day'			=> 'Actions by Day',
+		'call_status_by_type'		=> 'Call Status by Type'
 	];

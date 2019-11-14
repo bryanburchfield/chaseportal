@@ -51,5 +51,10 @@
 	    'select_inbound_source'		=> 'Seleccionar fuente de entrada',
     	'select_call_status'     	=> 'Seleccionar estado de llamada',
     	'select_all'				=> 'Seleccionar todo',
-    	'none_selected'				=> 'Ninguna seleccionada'
+    	'none_selected'				=> 'Ninguna seleccionada',
+    	'paused'					=> 'Pausado',
+		'waiting'					=> 'Esperando',
+		'wrapup'					=> 'Envolver',
+		'actions_by_day'			=> 'Acciones por día',
+		'call_status_by_type'		=> 'Estado de la llamada por tipo'
 	];
