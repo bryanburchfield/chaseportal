@@ -10,14 +10,14 @@
                 <div class="form-group">
                 <!-- Date Picker -->
                     <div class="input-group date " id="startDate">
-                        <input type='text' class="form-control datepicker startdate" name="startdate" placeholder="{{__('general.start_date')}}" />
+                        <input type='text' class="form-control datepicker_only startdate" name="startdate" placeholder="{{__('general.start_date')}}" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
                 <!-- Time Picker -->
                     <div class="input-group date" id="endDate">
-                            <input type='text' class="form-control datepicker enddate" name="enddate" placeholder="{{__('general.end_date')}}" />
+                            <input type='text' class="form-control datepicker_only enddate" name="enddate" placeholder="{{__('general.end_date')}}" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
