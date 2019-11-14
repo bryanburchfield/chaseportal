@@ -1,14 +1,14 @@
 <?php 
 
 	return [
-		'admin_inbound'		=> 'Administrador Entrante',
-		'admin_outbound'	=> 'Administrador Saliente',
-		'trend_dashboard'	=> 'Tendencia Dashboard',
-		'leaderboard'		=> 'Panel de tendencia',
+		'admin_inbound'		=> 'Administración Entrante',
+		'admin_outbound'	=> 'Administración Saliente',
+		'trend_dashboard'	=> 'Panel de Tendencias',
+		'leaderboard'		=> 'Tabla de Posiciones',
 		'kpis'				=> 'KPIs',
 		'reports'			=> 'Informes',
-		'settings'			=> 'Configuraciones',
+		'settings'			=> 'Ajustes',
 		'tools'				=> 'Herramientas',
-		'admin'				=> 'Administración'
+		'admin'				=> 'Configuración'
 	];
 ?>
