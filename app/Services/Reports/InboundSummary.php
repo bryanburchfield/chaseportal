@@ -17,8 +17,6 @@ class InboundSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.inbound_summary';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [

@@ -17,8 +17,6 @@ class AgentActivity
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.agent_activity';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
         $this->params['reps'] = '';
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
