@@ -992,10 +992,6 @@ $(document).ready(function(){
         $('.set_hgt').css({'max-height':height_dt});
     }
 
-    $('.enddate').datepicker({maxDate: '0'});
-    $('.startdate').datepicker({maxDate: '0'});    
-
-
 });
 
 

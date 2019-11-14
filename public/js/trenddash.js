@@ -796,9 +796,6 @@ $(document).ready(function(){
         });
     });
 
-    $('.enddate').datepicker({maxDate: '0'});
-    $('.startdate').datepicker({maxDate: '0'});
-    
 });
 
 

@@ -519,8 +519,6 @@ $(document).ready(function(){
         }
     });
 
-    $('.enddate').datepicker({maxDate: '0'});
-    
 });
 
 
