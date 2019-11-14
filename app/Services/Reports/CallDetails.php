@@ -18,6 +18,8 @@ class CallDetails
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.call_details';
+        $this->params['fromdate'] = '';
+        $this->params['todate'] = '';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['calltype'] = '';
@@ -236,7 +238,7 @@ class CallDetails
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y h:i:s A');
+                $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;

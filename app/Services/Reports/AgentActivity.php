@@ -128,7 +128,7 @@ class AgentActivity
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y h:i:s A');
+                $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
                 $this->rowclass[] = 'agentcalllog_' . Str::snake($rec['Event']);
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);

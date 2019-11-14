@@ -212,7 +212,7 @@ class ShiftReport
     private function processResults($results)
     {
         foreach ($results as &$rec) {
-            $rec['Date'] = Carbon::parse(($rec['Date']))->format('m/d/Y');
+            $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
         }
         return $results;
     }

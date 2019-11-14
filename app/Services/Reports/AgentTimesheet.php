@@ -193,8 +193,8 @@ class AgentTimesheet
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
 
             $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
             $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
         }

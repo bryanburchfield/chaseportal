@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class SubcampaignSummary
 {
@@ -351,7 +352,7 @@ class SubcampaignSummary
                 $rec['Available'] .= '%';
                 $rec['ConnectRate'] .= '%';
                 $rec['ConversionRate'] .= '%';
-                $rec['Date'] = date('m/d/Y', strtotime($rec['Date']));
+                $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;

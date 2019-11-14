@@ -224,10 +224,10 @@ class AgentPauseTime
 
         // format fields
         foreach ($results as &$rec) {
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
-            $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->format('m/d/Y h:i:s A');
-            $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->format('m/d/Y h:i:s A');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->isoFormat('L LT');
+            $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->isoFormat('L LT');
 
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
             $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);
