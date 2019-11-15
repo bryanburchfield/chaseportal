@@ -456,7 +456,6 @@ var Dashboard = {
 
                 if(window.calls_by_campaign_chart != undefined){
                     window.calls_by_campaign_chart.destroy();
-                    
                 }
 
                 var response_length = response.Counts.length;
@@ -468,13 +467,13 @@ var Dashboard = {
                         backgroundColor: chart_colors_array
                     }],
 
-                    // elements: {
-                    //         center: {
-                    //         color: '#203047',
-                    //         fontStyle: 'Segoeui',
-                    //         sidePadding: 15
-                    //     }
-                    // },
+                    elements: {
+                            center: {
+                            color: '#203047',
+                            fontStyle: 'Segoeui',
+                            sidePadding: 15
+                        }
+                    },
                     labels: response.Campaigns
                 };
 
@@ -486,7 +485,7 @@ var Dashboard = {
                     },
                     tooltips: {
                         enabled:true,
-                    }
+                    },
                 }
 
                 var ctx = document.getElementById('calls_by_campaign_graph').getContext('2d');
