@@ -43,7 +43,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/datetimepicker.js"></script>
-    <script src="/js/multiselect_lib.js">"></script> 
+    <script src="/js/multiselect_lib.js"></script> 
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
 

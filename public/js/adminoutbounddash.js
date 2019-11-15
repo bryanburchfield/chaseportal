@@ -437,9 +437,6 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                var p =  $('#calls_by_campaign_graph').parent();
-                $(p).empty();
-                $(p).append('<canvas id="calls_by_campaign_graph"></canvas>');
 
                 Master.flip_card(response.Table.length, '#calls_by_campaign');
                 $('#calls_by_campaign, #calls_by_campaign_graph').parent().find('.no_data').remove();
@@ -458,27 +455,26 @@ var Dashboard = {
                 }
 
                 if(window.calls_by_campaign_chart != undefined){
-                //     window.calls_by_campaign_chart.clear();
                     window.calls_by_campaign_chart.destroy();
                     
                 }
 
                 var response_length = response.Counts.length;
                 var chart_colors_array= Master.return_chart_colors_hash(response.Campaigns);
-                if(calls_by_campaign_data){calls_by_campaign_data={};}
+
                 var calls_by_campaign_data = {
                     datasets: [{
                         data: response.Counts,
                         backgroundColor: chart_colors_array
                     }],
 
-                    elements: {
-                            center: {
-                            color: '#203047',
-                            fontStyle: 'Segoeui',
-                            sidePadding: 15
-                        }
-                    },
+                    // elements: {
+                    //         center: {
+                    //         color: '#203047',
+                    //         fontStyle: 'Segoeui',
+                    //         sidePadding: 15
+                    //     }
+                    // },
                     labels: response.Campaigns
                 };
 
@@ -760,6 +756,10 @@ var Dashboard = {
                     tooltips: {
                         enabled:true,
                     }
+                }
+
+                if(window.agent_dispositions_chart != undefined){
+                    window.agent_dispositions_chart.destroy();
                 }
 
                 var ctx = document.getElementById('agent_dispositions_graph').getContext('2d');
