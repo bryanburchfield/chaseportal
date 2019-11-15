@@ -456,7 +456,7 @@ class AdminOutboundDashController extends Controller
 
         $sql .= ") tmp
 		GROUP BY Campaign
-		ORDER BY SUM(Cnt) DESC";
+		ORDER BY SUM(Cnt) DESC, Campaign";
 
         $result = $this->runSql($sql, $bind);
 
