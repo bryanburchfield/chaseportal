@@ -732,7 +732,7 @@ var Dashboard = {
             dataType: 'json',
             data: { datefilter: datefilter },
             success: function (response) {
-
+                
                 $('.filter_time_camp_dets p .selected_campaign').html(response.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.details[1]);
 
