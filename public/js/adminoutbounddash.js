@@ -740,13 +740,14 @@ var Dashboard = {
                 Master.add_bg_rounded_class($('#total_contacts'), response.total_contacts.total, 4);
 
                 var total_contacts = parseInt(response.total_contacts.total);
-                if (total_contacts == 0) {
-                    var contact_rate = 0;
-                } else {
-                    var contact_rate = response.total_dials.total / total_contacts;
-                }
+                // if (total_contacts == 0) {
+                //     var contact_rate = 0;
+                // } else {
+                //     var contact_rate = response.total_dials.total / total_contacts;
+                // }
 
-                contact_rate = contact_rate.toFixed(2);
+                var contact_rate = response.contact_rate.rate.toFixed(2);
+                contact_rate=contact_rate*100;
                 $('#contact_rate').html(contact_rate + '%');
 
                 Master.trend_percentage($('#total_contacts_card'), response.total_contacts.pct_change, response.total_contacts.pct_sign, response.total_contacts.ntc);
