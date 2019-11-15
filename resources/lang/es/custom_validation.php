@@ -2,9 +2,9 @@
 
 return [
 
-    'source_campaign_invalid' => 'Origen Campaña es inválido.',
-    'source_subcampaign_invalid' => 'Origen Subcampaña es inválido.',
-    'destination_campaign_invalid' => 'Destino Campaña es inválido.',
-    'destination_subcampaign_invalid' => 'Destino Subcampaña es inválido.',
-    'same_source_destination' => 'La campaña / subcampaña de origen y destino debe ser diferente.',
+    'source_campaign_invalid' => 'La Campaña Fuente es inválida.',
+    'source_subcampaign_invalid' => 'La Subcampaña Fuente es inválida.',
+    'destination_campaign_invalid' => 'La Campañade Destino es inválida.',
+    'destination_subcampaign_invalid' => 'La Subcampaña de Destino es inválida.',
+    'same_source_destination' => 'Las Campañas / Subcampañas Fuente y de Destino deben ser diferentes.',
 ];

@@ -919,7 +919,7 @@ var Master = {
 						.multiselect('selectAll', false)
 				    	.multiselect('updateButtonText');
 				}
-			});			
+			});
 		}
 	},
 
