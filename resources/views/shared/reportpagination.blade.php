@@ -47,8 +47,8 @@
         <li {!! $nextpageclass !!}><a href="#" data-paglink="{{ $lastpage }}">{{__('general.last')}}</a></li>
     </ul>
     <div class="pag_dets">
-        <p>PAGE: <input type="number" min="1" max="{{ $lastpage }}" name="curpage" data-prevval="{{ $curpage }}" class="sm-input form-control pag_input curpage" value="{{ $curpage }}"> OF {{ $lastpage }}
-            (Page size: <input type="number" name="pagesize" class="sm-input form-control pag_input pagesize" data-prevval="{{ $pagesize }}" value="{{ $pagesize }}"> Total rows: {{ $totrows }})
+        <p>{{__('general.page')}}: <input type="number" min="1" max="{{ $lastpage }}" name="curpage" data-prevval="{{ $curpage }}" class="sm-input form-control pag_input curpage" value="{{ $curpage }}"> {{__('general.of')}} {{ $lastpage }}
+            ({{__('general.page_size')}}: <input type="number" name="pagesize" class="sm-input form-control pag_input pagesize" data-prevval="{{ $pagesize }}" value="{{ $pagesize }}"> {{__('general.total_rows')}}: {{ $totrows }})
         </p>
         <input type="hidden" name="totrows" class="sm-input form-control pag_input totrows" data-prevval="{{ $totrows }}" value="{{ $totrows }}">
     </div>

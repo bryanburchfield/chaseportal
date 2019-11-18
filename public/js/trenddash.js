@@ -162,21 +162,21 @@ var Dashboard = {
                 var call_volume_outbound = {
                     labels: response.call_volume.outbound_time_labels,
                     datasets: [{
-                        label: 'Total',
+                        label: Lang.get('js_msgs.total'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.total_outbound_calls,
                         yAxisID: 'y-axis-1',
                     }, {
-                        label: 'Handled',
+                        label: Lang.get('js_msgs.handled'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response.call_volume.outbound_handled,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Dropped',
+                        label: Lang.get('js_msgs.dropped'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,

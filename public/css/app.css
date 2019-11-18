@@ -2269,6 +2269,10 @@ p.name i {
   margin-left: 10px;
 }
 
+.kpi_list div.checkbox:nth-of-type(2) {
+  clear: both;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
