@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class MissedCalls
 {
@@ -135,7 +136,7 @@ class MissedCalls
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = UtcToLocal($rec['Date'], $tz = Auth::user()->iana_tz)->format('Y-m-d H:i:s');
+                $rec['Date'] = Carbon::parse($rec['Date'])->tz(Auth::user()->ianaTz)->format('m/d/Y h:i:s A');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
