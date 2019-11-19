@@ -732,7 +732,7 @@ var Dashboard = {
             dataType: 'json',
             data: { datefilter: datefilter },
             success: function (response) {
-                
+
                 $('.filter_time_camp_dets p .selected_campaign').html(response.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.details[1]);
 
@@ -740,14 +740,10 @@ var Dashboard = {
                 Master.add_bg_rounded_class($('#total_contacts'), response.total_contacts.total, 4);
 
                 var total_contacts = parseInt(response.total_contacts.total);
-                // if (total_contacts == 0) {
-                //     var contact_rate = 0;
-                // } else {
-                //     var contact_rate = response.total_dials.total / total_contacts;
-                // }
 
-                var contact_rate = response.contact_rate.rate.toFixed(2);
+                var contact_rate = response.contact_rate.rate;
                 contact_rate=contact_rate*100;
+                contact_rate = Math.round(contact_rate);
                 $('#contact_rate').html(contact_rate + '%');
 
                 Master.trend_percentage($('#total_contacts_card'), response.total_contacts.pct_change, response.total_contacts.pct_sign, response.total_contacts.ntc);
