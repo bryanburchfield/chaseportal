@@ -38,8 +38,9 @@ class Kpi extends Model
         foreach ($kpis as &$k) {
             $k->{'recipients'} =
                 KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
-                ->where('kpi_recipients.kpi_id', $k->id)
                 ->join('recipients as R', 'kpi_recipients.recipient_id', '=', 'R.id')
+                ->where('kpi_recipients.kpi_id', $k->id)
+                ->where('R.group_id', Auth::user()->group_id)
                 ->orderby('R.name')
                 ->get();
         }
