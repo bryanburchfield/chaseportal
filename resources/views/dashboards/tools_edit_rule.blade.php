@@ -32,7 +32,7 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign',  __('tools.subcampaign')) !!}
-            						{!! Form::select("source_subcampaign", [null=>__('general.select_one')]+ $subcampaigns, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
+            						{!! Form::text("source_subcampaign", $lead_rule['source_subcampaign'], ["class" => "form-control"]) !!}
             					</div>
 
             					<div class="form-group">
@@ -52,7 +52,7 @@
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-            						{!! Form::select("destination_subcampaign",  [null=>__('general.select_one')] + $destination_subcampaigns, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
+            						{!! Form::text("destination_subcampaign", $lead_rule['destination_subcampaign'], ["class" => "form-control"]) !!}
             					</div>
 
             					<div class="form-group">
