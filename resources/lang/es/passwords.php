@@ -12,10 +12,10 @@ return [
     |
     */
 
-    'password'  => 'Las contraseñas deben coincidir y contener al menos 8 caracteres',
-    'reset'     => '¡Tu contraseña ha sido restablecida!',
-    'sent'      => '¡Te hemos enviado por correo el enlace para restablecer tu contraseña!',
-    'token'     => 'El token de recuperación de contraseña es inválido.',
-    'user'      => 'No podemos encontrar ningún usuario con ese correo electrónico.',
-    'throttled' => 'Por favor espera antes de intentar de nuevo.',
+    'password'  => 'Las contraseñas deben ser de por lo menos 8 caractéres y corresponder a la confirmación',
+    'reset'     => '¡Su contraseña ha sido restablecida!',
+    'sent'      => '¡Le hemos enviado por email su enlace de restablecimiento de contraseña!',
+    'token'     => 'Este token de restablecimiento de contraseña es inválido.',
+    'user'      => 'No podemos encontrar ningún usuario con esa dirección de email.',
+    'throttled' => 'Por favor espere antes de intentar de nuevo.',
 ];

@@ -53,11 +53,11 @@
     	'select_all'				=> 'Seleccionar Todo',
     	'none_selected'				=> 'Nada Seleccionado',
     	
-    	'paused'					=> 'Pausado',
+    	'paused'					=> 'Pausada',
 		'waiting'					=> 'Esperando',
-		'wrapup'					=> 'Envolver',
-		'actions_by_day'			=> 'Acciones por día',
-		'call_status_by_type'		=> 'Estado de la llamada por tipo',
-		'dl_warning'				=> 'Este es un gran conjunto de datos. Puede ser más rápido descargar varios informes más pequeños.',
-		'large_dl_warning'			=> 'El informe es demasiado grande para descargar. Ejecute informes más pequeños o elija un formato diferente'
+		'wrapup'					=> 'Finalizando',
+		'actions_by_day'			=> 'Acciones por Día',
+		'call_status_by_type'		=> 'Disposiciones de Llamadas por Tipo',
+		'dl_warning'				=> 'Este es un conjunto de datos grande. Podría ser más rápido descargar múltiples informes pequeños.',
+		'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente'
 	];
