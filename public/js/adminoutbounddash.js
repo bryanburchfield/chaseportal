@@ -742,7 +742,6 @@ var Dashboard = {
                 var total_contacts = parseInt(response.total_contacts.total);
 
                 var contact_rate = response.contact_rate.rate;
-                contact_rate=contact_rate*100;
                 contact_rate = Math.round(contact_rate);
                 $('#contact_rate').html(contact_rate + '%');
 
