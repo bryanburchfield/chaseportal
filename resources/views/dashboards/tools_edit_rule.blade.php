@@ -25,7 +25,7 @@
 	                            	{!! Form::label('rule_name', 'Rule Name') !!}
 	                            	{!! Form::text('rule_name', $lead_rule['rule_name'], ['class'=>'form-control rule_name', 'required'=>true]) !!}
 	                            </div>
-								
+
 	                            <div class="form-group">
             						{!! Form::label('source_campaign', 'Campaign') !!}
             						{!! Form::select("source_campaign", [null=>'Select One'] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
@@ -33,19 +33,19 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', 'Sub Campaign') !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One']+ $subcampaigns, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'update_subcampaign_select']) !!}
+            						{!! Form::text("source_subcampaign", $lead_rule['source_subcampaign'], ["class" => "form-control"]) !!}
             					</div>
 
             					<div class="form-group">
             						{!! Form::label('filter_type', 'Filter Type') !!}
             						{!! Form::select("filter_type", array(null=>'Select One', 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
             					</div>
-								
+
 								<div class="form-group">
 									{!! Form::label('filter_value', 'Days to Filter By') !!}
 									{!! Form::text('filter_value', $lead_rule['filter_value'], ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
 								</div>
-								
+
 								<div class="form-group">
             						{!! Form::label('destination_campaign', 'What would you like the destination Campaign of the lead to be after it meets criteria?') !!}
             						{!! Form::select("destination_campaign", [null=>'Select One'] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
@@ -53,7 +53,7 @@
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'] + $destination_subcampaigns, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'update_destination_subcampaign']) !!}
+            						{!! Form::text("destination_subcampaign", $lead_rule['destination_subcampaign'], ["class" => "form-control"]) !!}
             					</div>
 
             					<div class="form-group">
@@ -62,9 +62,9 @@
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
-								
+
 								{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0'] ) !!}
-								
+
     							@if($errors->any())
                                     <div class="alert alert-danger mt20">
                                         @foreach($errors->all() as $e)

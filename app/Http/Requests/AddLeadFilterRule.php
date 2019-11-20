@@ -54,15 +54,7 @@ class AddLeadFilterRule extends FormRequest
                     }
                 },
             ],
-            'source_subcampaign' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    $campaign = request('source_campaign');
-                    if (!in_array($value, array_values($this->getAllSubcampaigns($campaign)))) {
-                        $fail('Source subcampaign is invalid.');
-                    }
-                },
-            ],
+            'source_subcampaign' => 'nullable',
             'filter_type' => [
                 'required',
                 Rule::in(['lead_age', 'lead_attempts', 'days_called']),
@@ -75,15 +67,7 @@ class AddLeadFilterRule extends FormRequest
                     }
                 },
             ],
-            'destination_subcampaign' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    $campaign = request('destination_campaign');
-                    if (!in_array($value, array_values($this->getAllSubcampaigns($campaign)))) {
-                        $fail('Destination subcampaign is invalid.');
-                    }
-                },
-            ],
+            'destination_subcampaign' => 'nullable',
             'description' => 'nullable',
         ];
     }

@@ -40,7 +40,7 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', 'Sub Campaigns') !!}
-            						{!! Form::select("source_subcampaign", [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
             					</div>
 
             					<div class="form-group">
@@ -60,7 +60,7 @@
 
             					<div class="form-group">
             						{!! Form::label('destination_subcampaign', 'What would you like the destination Subcampaign  of the lead to be after it meets criteria?') !!}
-            						{!! Form::select("destination_subcampaign",  [null=>'Select One'], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
+            						{!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
             					</div>
 
             					<div class="form-group">
@@ -98,7 +98,7 @@
 			                        @endif
 
 									<tbody>
-																	
+
 			                            @foreach($lead_rules as $lr)
 											<tr data-ruleid="{{$lr->id}}">
 												<td>{{$lr->rule_name}}</td>
@@ -110,7 +110,7 @@
 												<td>{{$lr->destination_subcampaign}}</td>
 												<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
 												<td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
-			                            @endforeach	                            
+			                            @endforeach
 									</tbody>
 		                        </table>
 							</div>
