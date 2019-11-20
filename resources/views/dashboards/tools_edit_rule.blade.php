@@ -62,7 +62,7 @@
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
-
+								<a href="{{ url('/dashboards/tools/') }}" class="btn btn-default mb0">Cancel</a>
 								{!! Form::submit('Save Changes', ['class'=>'btn btn-primary mb0'] ) !!}
 
     							@if($errors->any())
