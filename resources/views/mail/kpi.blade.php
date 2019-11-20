@@ -476,7 +476,7 @@ tr.bg_blue{
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2 style="color:#ffffff;"><span>KPI</span> <br>{{ __($data['kpi_name']) }}</h2>
+                                        <h2 style="color:#ffffff;"><span>KPI</span> <br>{{ __('kpi.' . $data['kpi_name']) }}</h2>
                                     </div>
                                 </td>
                             </tr>
