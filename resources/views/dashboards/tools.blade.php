@@ -130,7 +130,7 @@
         		                </div>
 				            </div>
 
-				            <div class="tab-pane active mt30" id="move_history">
+				            <div class="tab-pane mt30" id="move_history">
 				            	<div class="col-sm-12 nopad">
 				            		<div class="card">
 				            			<h2 class="page_heading"><i class="fa fa-history"></i> Lead Move History</h2>
