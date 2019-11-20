@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddLeadFilterRule;
+use App\LeadMove;
+use App\LeadMoveDetail;
 use App\LeadRule;
 use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
@@ -29,6 +31,7 @@ class LeadsController extends Controller
             ->get();
 
         $campaigns = $this->getAllCampaigns();
+        $history = $this->getHistory();
 
         $page = [
             'menuitem' => 'tools',
@@ -41,6 +44,7 @@ class LeadsController extends Controller
             'group_id' => Auth::user()->group_id,
             'lead_rules' => $lead_rules,
             'campaigns' => $campaigns,
+            'history' => $history,
         ];
 
         return view('dashboards.tools')->with($data);
@@ -59,9 +63,6 @@ class LeadsController extends Controller
 
         $campaigns = $this->getAllCampaigns();
 
-        $subcampaigns = $this->getAllSubcampaigns($lr['source_campaign']);
-        $destination_subcampaigns = $this->getAllSubcampaigns($lr['destination_campaign']);
-
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
@@ -70,8 +71,6 @@ class LeadsController extends Controller
             'lead_rule' => $lr,
             'page' => $page,
             'campaigns' => $campaigns,
-            'subcampaigns' => $subcampaigns,
-            'destination_subcampaigns' => $destination_subcampaigns
         ];
 
         return view('dashboards.tools_edit_rule')->with($data);
@@ -109,6 +108,36 @@ class LeadsController extends Controller
         $lr = $this->getRule($request->id);
 
         return $lr->delete();
+    }
+
+    public function getHistory()
+    {
+        $table = [];
+
+        $lead_moves = LeadMove::where('lead_moves.created_at', '>', Carbon::parse('30 days ago'))
+            ->join('lead_rules', 'lead_moves.lead_rule_id', '=', 'lead_rules.id')
+            ->where('lead_rules.group_id', Auth::user()->group_id)
+            ->select(
+                'lead_moves.*',
+                'lead_rules.rule_name'
+            )
+            ->OrderBy('lead_moves.id', 'desc')
+            ->get();
+
+        foreach ($lead_moves as $lead_move) {
+            $count = LeadMoveDetail::where('lead_move_id', $lead_move->id)->where('succeeded', true)->count();
+            if ($count) {
+                $table[] = [
+                    'lead_move_id' => $lead_move->id,
+                    'date' => $this->utcToLocal($lead_move->created_at, Auth::user()->iana_tz)->isoFormat('L LT'),
+                    'rule_name' => $lead_move->rule_name,
+                    'leads_moved' => $count,
+                    'reversed' => $lead_move->reversed,
+                ];
+            }
+        }
+
+        return $table;
     }
 
     public function getCampaigns(Request $request)
