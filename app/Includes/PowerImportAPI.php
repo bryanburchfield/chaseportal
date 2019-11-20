@@ -105,6 +105,8 @@ class PowerImportAPI
 
     private function SetErrorAndExit($msg)
     {
+        dump($msg);
+
         $this->response = "";
         $this->error = $msg;
         return false;
@@ -120,20 +122,22 @@ class PowerImportAPI
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0');
 
-        $body   = curl_exec($ch);
+        $body = curl_exec($ch);
 
         $errnum = curl_errno($ch);
         $errmsg = curl_error($ch);
 
-        $info   = curl_getinfo($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
+
+        if ($errnum != 0) {
+            $this->response = "";
+            return $this->SetErrorAndExit("CURL error[" . $errnum . "]: " . $errmsg);
+        }
 
         if ($info["http_code"] != "200") {
             $errnum = $info["http_code"];
             $errmsg = $body;
-        }
-
-        if ($errnum != 0) {
             $this->response = "";
             return $this->SetErrorAndExit("CURL error[" . $errnum . "]: " . $errmsg);
         }

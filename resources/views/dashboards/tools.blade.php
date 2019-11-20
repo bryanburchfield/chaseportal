@@ -40,7 +40,7 @@
 
 	                            <div class="form-group">
             						{!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-            						{!! Form::select("source_subcampaign", [null=>__('general.select_one')], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+            						{!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
             					</div>
 
             					<div class="form-group">
@@ -59,8 +59,8 @@
             					</div>
 
             					<div class="form-group">
-            						{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-            						{!! Form::select("destination_subcampaign",  [null=>__('general.select_one')], null, ["class" => "form-control", 'id'=> 'destination_subcampaign']) !!}
+									{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
+									{!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
             					</div>
 
             					<div class="form-group">

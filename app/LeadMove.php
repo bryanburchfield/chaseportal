@@ -6,23 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeadMove extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
+        'batch_id',
         'lead_rule_id',
-        'reporting_db',
-        'lead_id',
-        'run_date',
-        'succeeded',
+        'reversed',
     ];
 
     public function leadRule()
     {
         return $this->belongsTo('App\LeadRule');
+    }
+
+    public function leadMoveDetails()
+    {
+        return $this->hasMany('App\LeadMoveDetail');
     }
 }
