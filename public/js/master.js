@@ -1,5 +1,3 @@
-// var colorHash = new ColorHash();
-
 var Master = {
 
 	chartColors : {
@@ -21,6 +19,8 @@ var Master = {
 	pdf_dl_link:'',
 	first_search:true,
 	active_camp_search:'',
+    tick_color:'#aaa',
+    gridline_color:'#1A2738',
 	dataTable:$('#dataTable').DataTable({
         responsive: true,
     }),
@@ -50,7 +50,9 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select, .add_rule #campaign_select, #update_campaign_select, #update_destination_campaign, #destination_campaign').on('change', this.get_subcampaigns); 
+        // add selectors below to listener below that when they want to autopopulate lead move subcamps again
+        //.add_rule #campaign_select, #update_campaign_select, #update_destination_campaign, #destination_campaign
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns);
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -339,41 +341,41 @@ var Master = {
         });
     },
 
-    populate_leadrule_modal:function(){
-        $('#editRulesModal').find('.alert').remove();
+    // populate_leadrule_modal:function(){
+    //     $('#editRulesModal').find('.alert').remove();
 
-        var id = $(this).parent().parent().data('ruleid');
+    //     var id = $(this).parent().parent().data('ruleid');
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         }
+    //     });
 
-        $.ajax({
-            url: 'tools/get_lead_rule',
-            type: 'POST',
-            dataType: 'json',
-            data: {id:id},
-            success:function(response){
+    //     $.ajax({
+    //         url: 'tools/get_lead_rule',
+    //         type: 'POST',
+    //         dataType: 'json',
+    //         data: {id:id},
+    //         success:function(response){
 
-                Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
-                Master.get_subcampaigns($(this), response.destination_campaign, 'update_destination_campaign');
+    //             Master.get_subcampaigns($(this), response.source_campaign, 'update_campaign_select');
+    //             Master.get_subcampaigns($(this), response.destination_campaign, 'update_destination_campaign');
 
-                $('#editRulesModal').find('.rule_name').val(response.rule_name);
-                $('#editRulesModal #update_campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
+    //             $('#editRulesModal').find('.rule_name').val(response.rule_name);
+    //             $('#editRulesModal #update_campaign_select option[value="'+response.source_campaign+'"]').attr('selected','selected');
                 
-                $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('defaultSelected','selected');
+    //             $('#editRulesModal #update_subcampaign_select option[value="'+response.source_subcampaign+'"]').attr('defaultSelected','selected');
 
-                $('#editRulesModal #update_filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
-                $('#editRulesModal').find('.filter_value').val(response.filter_value);
-                $('#editRulesModal #update_destination_campaign option[value="'+response.destination_campaign+'"]').attr('selected','selected');
-                $('#editRulesModal #update_destination_subcampaign option[value="'+response.destination_subcampaign+'"]').attr('selected','selected');
-                $('#editRulesModal #update_subcampaign_select').val(response.source_subcampaign)
-                $('#editRulesModal').find('#lead_rule_id').val(id);
-            }
-        });
-    },
+    //             $('#editRulesModal #update_filter_type option[value="'+response.filter_type+'"]').attr('selected','selected');
+    //             $('#editRulesModal').find('.filter_value').val(response.filter_value);
+    //             $('#editRulesModal #update_destination_campaign option[value="'+response.destination_campaign+'"]').attr('selected','selected');
+    //             $('#editRulesModal #update_destination_subcampaign option[value="'+response.destination_subcampaign+'"]').attr('selected','selected');
+    //             $('#editRulesModal #update_subcampaign_select').val(response.source_subcampaign)
+    //             $('#editRulesModal').find('#lead_rule_id').val(id);
+    //         }
+    //     });
+    // },
 
     change_filter_label:function(){
 
