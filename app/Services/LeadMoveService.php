@@ -9,9 +9,10 @@ use App\LeadRule;
 use App\User;
 use App\Dialer;
 use App\LeadMove;
+use App\LeadMoveDetail;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
-use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LeadMoveService
@@ -31,18 +32,21 @@ class LeadMoveService
     {
         $leadmover = new LeadMoveService();
 
-        $rules = LeadRule::where('active', 1)
+        $lead_rules = LeadRule::where('active', 1)
             ->orderBy('group_id')
             ->orderBy('rule_name', 'desc')
             ->get();
 
+        $batch = [];
         // This inserts them into the log table first
-        foreach ($rules as $rule) {
-            $leadmover->runRule($rule);
+        foreach ($lead_rules as $lead_rule) {
+            $batch[] = $leadmover->runRule($lead_rule);
         }
 
         // And this does the actual moves
-        $leadmover->filterLeads();
+        foreach ($batch as $lead_move_id) {
+            $leadmover->filterLeads($lead_move_id);
+        }
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -58,68 +62,77 @@ class LeadMoveService
 
         // make sure we actually logged someone in
         if (Auth::check()) {
+            // create the batch record
+            $lead_move = LeadMove::create([
+                'lead_rule_id' => $lead_rule->id,
+            ]);
+
             foreach (Auth::user()->getDatabaseList() as $db) {
-                $this->pullLeads($db, $lead_rule);
+                $this->pullLeads($lead_move->id, $db, $lead_rule);
             }
+            return $lead_move->id;
         }
+        return 0;
     }
 
-    private function pullLeads($db, $lead_rule)
+    private function pullLeads($lead_move_id, $db, $lead_rule)
     {
         echo "running rule " . $lead_rule->id . "\n";
 
         // find all leads that match the rule
         // insert/update them in the log
+        // this way if a single lead matches multiple rules
+        // we don't try to move it more than once
         foreach ($this->getLeads($db, $lead_rule) as $lead) {
-            DB::table('lead_moves')
+            DB::table('lead_move_details')
                 ->updateOrInsert(
                     [
                         'reporting_db' => $db,
                         'lead_id' => $lead['id'],
-                        'run_date' => $this->today,
+                        'succeeded' => null,
                     ],
-                    ['lead_rule_id' => $lead_rule->id, 'succeeded' => false]
+                    [
+                        'lead_move_id' => $lead_move_id,
+                        'created_at' =>  Carbon::now(),
+                    ]
                 );
         }
     }
 
-    private function filterLeads()
+    private function filterLeads($lead_move_id)
     {
         // cursor thru the log and do the moves
-        // this way if a single lead matches multiple rules
-        // we don't try to move it more than once
-        foreach (LeadMove::where('run_date', $this->today)
-            ->where('succeeded', false)
+        foreach (LeadMoveDetail::where('lead_move_id', $lead_move_id)
+            ->where('succeeded', null)
+            ->join('lead_moves', 'lead_moves.id', '=', 'lead_move_details.lead_move_id')
             ->join('lead_rules', 'lead_rules.id', '=', 'lead_moves.lead_rule_id')
             ->select(
-                'lead_moves.*',
+                'lead_move_details.*',
                 'lead_rules.group_id',
                 'lead_rules.destination_campaign',
                 'lead_rules.destination_subcampaign'
             )
-            ->get() as $lead_move) {
+            ->get() as $detail) {
 
-            $api = $this->initApi($lead_move->reporting_db);
+            $api = $this->initApi($detail->reporting_db);
 
-            if ($this->filterLead($api, $lead_move)) {
-                $lead_move->succeeded = true;
-                $lead_move->save();
-            }
+            $detail->succeeded = $this->filterLead($api, $detail);
+            $detail->save();
         }
     }
 
-    private function filterLead($api, $lead_move)
+    private function filterLead($api, $detail)
     {
-        echo "Moving Lead: " . $lead_move->lead_id .
-            " for group " . $lead_move->group_id .
-            " to " . $lead_move->destination_campaign .
-            "/" . $lead_move->destination_subcampaign .
+        echo "Moving Lead: " . $detail->lead_id .
+            " for group " . $detail->group_id .
+            " to " . $detail->destination_campaign .
+            "/" . $detail->destination_subcampaign .
             "\n";
 
-        $data['Campaign'] = $lead_move->destination_campaign;
-        $data['Subcampaign'] = $lead_move->destination_subcampaign;
+        $data['Campaign'] = $detail->destination_campaign;
+        $data['Subcampaign'] = $detail->destination_subcampaign;
 
-        $result = $api->UpdateDataByLeadId($data, $lead_move->group_id, '', '', $lead_move->lead_id);
+        $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
 
         if ($result === false) {
             return false;
