@@ -28,7 +28,7 @@
 		'call'				=> 'Llamada',
 		'seconds'			=> 'Segundos',
 		'count'				=> 'Recuento',
-		'time'				=> 'Hora',
+		'time'				=> 'Tiempo',
 		'inbound'			=> 'Entrante',
 		'outbound'			=> 'Saliente',
 		'manual'			=> 'Manual',

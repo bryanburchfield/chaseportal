@@ -45,6 +45,7 @@ return [
 	'reset_sorting'				=> 'Restablecer Ordenación',
 	'room_total'				=> 'TOTAL DE SALA',
 	'save'						=> 'Guardar',
+	'search'					=> 'Buscar',
 	'select_one'				=> 'Seleccione Uno',
 	'select_report'				=> 'Seleccione un Informe',
 	'send_pw'					=> 'Enviar Enlace para Restablecimiento de Contraseña',

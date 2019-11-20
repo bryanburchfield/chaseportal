@@ -45,6 +45,7 @@ return [
 	'reset_sorting'				=> 'Reset Sorting',
 	'room_total'				=> 'ROOM TOTAL',
 	'save'						=> 'Save',
+	'search'					=> 'Search',
 	'select_one'				=> 'Select One',
 	'select_report'				=> 'Select a Report',
 	'send_pw'					=> 'Send Password Reset Link',
