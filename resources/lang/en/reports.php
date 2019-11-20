@@ -136,6 +136,7 @@ return [
 	'voicemail'           => 'Voice Mail',
 	'waittimesec'         => 'Wait Time',
 
-	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.'
+	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.',
+	'call_vol_per_int'		=> 'Call Volume Per 15 Min Interval'
 
 ];

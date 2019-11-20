@@ -120,7 +120,7 @@ return [
      'mostrecent'          => 'Más Reciente',
      'pausedtime'          => 'Duración de Receso',
      'pausedtimesec'       => 'Duración de Receso',
-     'pct'                 => 'Por ciento',
+     'pct'                 => 'Porcentaje',
      'phone'               => 'Teléfono',
      'resultcodes'         => 'Códigos de Resultados',
      'saleratevalue'       => 'Tasa de Valor V-P-C',
@@ -139,5 +139,7 @@ return [
      'voicemail'           => 'Mensaje de Voz',
      'waittimesec'         => 'Tiempo Esperando',
 
-     'auto_report_text' => 'Aquí puede alternar entre habilitar y deshabilitar informes automáticos. Los informes se envían al correo electrónico con el que se registró y serán enviados diariamente a las 6:00am EST'
+     'auto_report_text' => 'Aquí puede alternar entre habilitar y deshabilitar informes automáticos. Los informes se envían al correo electrónico con el que se registró y serán enviados diariamente a las 6:00am EST',
+
+     'call_vol_per_int'       => 'Volumen de Llamadas en Intervalos de 15 Minutos'
 ];

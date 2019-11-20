@@ -76,7 +76,7 @@
 <div class="col-sm-7 nopadright">
 	<div class="col-sm-12 nopad">
 		<div class="card card-6 hidetilloaded" >
-			<h1 class="title fw600">Call Volume Per 15 Min Interval</h1>
+			<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
 			<div class="inbound inandout" style="min-height:300px;">
 				<canvas id="call_volume"></canvas>
 			</div>

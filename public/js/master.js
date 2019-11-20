@@ -1790,7 +1790,7 @@ var Master = {
 		        fontColor:'#203047',
 		        fontSize:16,
 		        display: true,
-		        text: 'Agent vs System Calls'
+		        text: Lang.get('js_msgs.agent_system_calls')
 		    },
 		}
 
@@ -1847,7 +1847,7 @@ var Master = {
 		        fontColor:'#203047',
 		        fontSize:16,
 		        display: true,
-		        text: 'Call Status Count'
+		        text: Lang.get('js_msgs.call_status_count')
 		    },
 		}
 
