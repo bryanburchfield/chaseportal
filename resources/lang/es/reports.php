@@ -65,7 +65,7 @@ return [
      // Column headings
      'abandoned'           => 'Llamadas Abandonadas',
      'agent'               => 'Llamadas de Agentes',
-     'aph'                 => 'S-L-A/Hora',
+     'aph'                 => 'V-P-C/Hora',
 //    Sales Lead and Appointment is better translated to 'Cliente Potencial y Cita' or 'Venta Potencial y Cita, so one of the following could be considered:
 //   'aph'                 => 'V-P-C/Hora',
 //   'aph'                 => 'C-P-C/Hora',

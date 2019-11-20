@@ -25,7 +25,7 @@ return [
 	'full_name'					=> 'Nombre completo',
 	'interaction'				=> 'Interacción',
 	'kpi_settings'				=> 'Configuración de KPIs',
-	'last'						=> 'Último',
+	'last'						=> 'Última',
 	'last_month'				=> 'Mes Pasado',
 	'last_week'					=> 'Semana Pasada',
 	'login'						=> 'Iniciar Sesión',

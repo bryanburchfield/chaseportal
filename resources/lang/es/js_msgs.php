@@ -4,7 +4,7 @@
 		'avg_call_count'			=> 'Recuento de Llamadas Promedio',
 		'avg_handle_time'			=> 'Tiempo Promedio de Manejo',
 		'avg_talk_time'				=> 'Tiempo Promedio de Conversación',
-		'avg_rep_time'				=> 'Tiempo Promedio del Agente',
+		'avg_rep_time'				=> 'Tiempo Promedio por Agente',
 		'no_data'					=> 'Aún Sin Datos',
 		'total'						=> 'Total',
 		'handled'					=> 'Manejada',
