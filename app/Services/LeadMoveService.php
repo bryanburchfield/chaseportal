@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\LeadRule;
@@ -28,6 +27,13 @@ class LeadMoveService
         $this->today = date('Y-m-d');
     }
 
+    /**
+     * Run Filter
+     *
+     * This is executed from schedule to perform lead moves
+     *
+     * @return void
+     */
     public static function runFilter()
     {
         $leadmover = new LeadMoveService();
@@ -47,6 +53,34 @@ class LeadMoveService
         foreach ($batch as $lead_move_id) {
             $leadmover->filterLeads($lead_move_id);
         }
+    }
+
+    /**
+     * Reverse Move
+     *
+     * This is executed from job queue to reverse a move
+     *
+     * @param LeadMove $lead_move
+     * @return void
+     */
+    public static function reverseMove(LeadMove $lead_move)
+    {
+        $lead_rule = LeadRule::find($lead_move->lead_rule_id);
+        $lead_move_details = LeadMoveDetail::where('lead_move_id', $lead_move->id)->get();
+
+        foreach ($lead_move_details as $lead_move_detail) {
+            $detail = [
+                'reporting_db' => $lead_move_detail->reporting_db,
+                'lead_id' => $lead_move_detail->lead_id,
+                'group_id' => $lead_rule->group_id,
+                'destination_campaign' => $lead_rule->source_campaign,
+                'destination_subcampaign' => $lead_rule->source_subcampaign,
+            ];
+            $this->filterLead($detail);
+        }
+
+        $lead_move->reversed = true;
+        $lead_move->save();
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -102,7 +136,7 @@ class LeadMoveService
     private function filterLeads($lead_move_id)
     {
         // cursor thru the log and do the moves
-        foreach (LeadMoveDetail::where('lead_move_id', $lead_move_id)
+        $details = LeadMoveDetail::where('lead_move_id', $lead_move_id)
             ->where('succeeded', null)
             ->join('lead_moves', 'lead_moves.id', '=', 'lead_move_details.lead_move_id')
             ->join('lead_rules', 'lead_rules.id', '=', 'lead_moves.lead_rule_id')
@@ -112,16 +146,15 @@ class LeadMoveService
                 'lead_rules.destination_campaign',
                 'lead_rules.destination_subcampaign'
             )
-            ->get() as $detail) {
+            ->get();
 
-            $api = $this->initApi($detail->reporting_db);
-
-            $detail->succeeded = $this->filterLead($api, $detail);
+        foreach ($details as $detail) {
+            $detail->succeeded = $this->filterLead($detail);
             $detail->save();
         }
     }
 
-    private function filterLead($api, $detail)
+    private function filterLead($detail)
     {
         echo "Moving Lead: " . $detail->lead_id .
             " for group " . $detail->group_id .
@@ -132,6 +165,7 @@ class LeadMoveService
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;
 
+        $api = $this->initApi($detail->reporting_db);
         $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
 
         if ($result === false) {
