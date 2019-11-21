@@ -33,6 +33,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
         Route::post('tools/get_campaigns', 'LeadsController@getCampaigns');
         Route::post('tools/get_subcampaigns', 'LeadsController@getSubcampaigns');
+        Route::post('tools/reverse_move', 'LeadsController@reverseMove');
         // Route::post('tools/get_lead_rule', 'LeadsController@getLeadRule');
 
         // Reports
