@@ -2282,6 +2282,19 @@ p.name i {
   margin-bottom: 15px;
 }
 
+.rules_table tbody tr td .btn {
+  max-width: 120px;
+  font-weight: 600;
+}
+
+.btn-default.disable {
+  background: #ddd;
+}
+
+.btn-default.disable:hover {
+  background: #ddd !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

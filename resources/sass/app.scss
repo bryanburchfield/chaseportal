@@ -2014,6 +2014,20 @@ p.name i{margin-right: 5px;}
 .avg_wait_time_max{right: 6%;}
 .card.flipping_card .title.mb15{margin-bottom: 15px;}
 
+
+.rules_table tbody tr td .btn{
+    max-width: 120px;
+    font-weight: 600;
+}
+
+.btn-default.disable{
+    background: #ddd;
+
+    &:hover{
+        background: #ddd !important;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

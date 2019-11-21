@@ -147,7 +147,15 @@
 					                            	</tr>
 					                            </thead>
 												<tbody>
-
+													@foreach($history as $key => $value)
+														<tr>
+															<td>{{$value['date']}}</td>
+															<td>{{$value['lead_move_id']}}</td>
+															<td>{{$value['rule_name']}}</td>
+															<td>{{$value['leads_moved']}}</td>
+															<td><a role="button" href="#" {{$value['reversed'] ? '' : 'disabled="disabled"'}} data-leadid="{{$value['lead_move_id'] }}" class="btn btn-sm {{$value['reversed'] ? 'btn-danger reverse_lead_move' : 'btn-default disable'}}"><i class="fa fa-history"></i> Undo Move</a></td>
+														</tr>
+													@endforeach
 						                        </tbody>
 					                        </table>
 										</div>
@@ -177,6 +185,26 @@
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 	            <button type="button" class="btn btn-danger delete_rule">Delete Rule</button>
+	        </div>
+	    </div>
+    </div>
+</div>
+
+<!-- Reverse Lead Move Modal -->
+<div class="modal fade" id="reverseLeadMoveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Reverse Lead Move</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="lead_move_id" name="lead_move_id" value="">
+               <h3>Are you sure you want to undo this lead move?</h3>
+            </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	            <button type="button" class="btn btn-danger confirm_reverse_lead_move">Undo Move</button>
 	        </div>
 	    </div>
     </div>

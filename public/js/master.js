@@ -74,7 +74,14 @@ var Master = {
         $('.add_rule #filter_type, .edit_rule #update_filter_type').on('change', this.change_filter_label);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
+        $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
+        $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
+        $('.btn.disable').on('click', this.preventDefault);
 	},
+
+    preventDefault:function(e){
+        e.preventDefault();
+    },
 
     return_chart_colors_hash:function(reps){
 
@@ -388,7 +395,7 @@ var Master = {
 
     save_leadrule_update:function(e){
         e.preventDefault();
-            
+
         var rule_name = $('.update_rule #rule_name').val(),
             source_campaign = $('.update_rule #update_campaign_select').val(),
             source_subcampaign = $('.update_rule #update_subcampaign_select').val(),
@@ -462,7 +469,6 @@ var Master = {
             type: 'POST',
             dataType: 'json',
             data: {
-                
                 id:lead_rule_id
             },
 
@@ -471,6 +477,34 @@ var Master = {
             },
             error :function( data ) {
                 window.location.href = 'tools';
+            }
+        });
+    },
+
+    reverse_lead_move_modal:function(e){
+        e.preventDefault();
+        var lead_move_id = $(this).data('leadid');
+        $('#reverseLeadMoveModal').find('.lead_move_id').val(lead_move_id);
+        $('#reverseLeadMoveModal').modal('show');
+    },
+
+    reverse_lead_move:function(){
+        var lead_move_id = $('#reverseLeadMoveModal').find('.lead_move_id').val();
+                console.log(lead_move_id);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/dashboards/tools/reverse_move',
+            type: 'POST',
+            dataType: 'json',
+            data: {lead_move_id: lead_move_id},
+            success:function(response){
+                console.log(response);
             }
         });
     },
