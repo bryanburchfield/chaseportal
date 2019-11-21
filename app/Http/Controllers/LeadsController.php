@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddLeadFilterRule;
+use App\Jobs\ReverseLeadMove;
 use App\LeadMove;
 use App\LeadMoveDetail;
 use App\LeadRule;
@@ -138,6 +139,26 @@ class LeadsController extends Controller
         }
 
         return $table;
+    }
+
+    public function reverseMove(Request $request)
+    {
+        // Make sure we haven't already reversed it
+        $lead_move = LeadMove::find($request->lead_move_id);
+        if (!$lead_move || $lead_move->reversed) {
+            return ['error' => true];
+        }
+
+        // Make sure the user is allowed to reverse it
+        $lead_rule = LeadRule::find($lead_move->lead_rule_id);
+        if (!$lead_rule || $lead_rule->group_id != Auth::user()->group_id) {
+            return ['error' => true];
+        }
+
+        // Dispatch job to run the reverse in the background
+        ReverseLeadMove::dispatch($lead_move);
+
+        return ['success' => true];
     }
 
     public function getCampaigns(Request $request)
