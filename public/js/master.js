@@ -505,17 +505,21 @@ var Master = {
             }
         });
 
+        console.log('Modal button clicked');
         $.ajax({
             url: '/dashboards/tools/reverse_move',
             type: 'POST',
             dataType: 'json',
             data: {lead_move_id: lead_move_id},
             success:function(response){
+                console.log('ajax success called');
                 console.log(response);
                 $('#reverseLeadMoveModal').find('.modal-footer').find('.alert').remove();
                 if(response.error){
+                    console.log('Show errors');
                     $('#reverseLeadMoveModal').find('.modal-footer').append('<div class="alert alert-danger mt20 text-center">'+response.error+'</div>');
                 }else{
+                    console.log('Refresh');
                     var hash = window.location.hash;
                     localStorage.setItem('activeTab', hash);
                     window.location = '/dashboards/tools';
