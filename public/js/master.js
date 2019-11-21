@@ -490,7 +490,6 @@ var Master = {
 
     reverse_lead_move:function(){
         var lead_move_id = $('#reverseLeadMoveModal').find('.lead_move_id').val();
-                console.log(lead_move_id);
 
         $.ajaxSetup({
             headers: {

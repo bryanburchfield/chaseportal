@@ -153,7 +153,7 @@
 															<td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
-															<td><a role="button" href="#" {{$value['reversed'] ? '' : 'disabled="disabled"'}} data-leadid="{{$value['lead_move_id'] }}" class="btn btn-sm {{$value['reversed'] ? 'btn-danger reverse_lead_move' : 'btn-default disable'}}"><i class="fa fa-history"></i> Undo Move</a></td>
+															<td><a role="button" href="#" {{$value['reversed'] ? 'disabled="disabled"' : ''}} data-leadid="{{$value['lead_move_id'] }}" class="btn btn-sm {{$value['reversed'] ? 'btn-default disable' : 'btn-danger reverse_lead_move'}}"><i class="fa fa-history"></i> Undo Move</a></td>
 														</tr>
 													@endforeach
 						                        </tbody>
