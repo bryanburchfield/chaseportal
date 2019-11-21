@@ -506,7 +506,7 @@ var Master = {
             dataType: 'json',
             data: {lead_move_id: lead_move_id},
             success:function(response){
-
+                $('#reverseLeadMoveModal').find('.modal-footer').find('.alert').remove();
                 if(response.error){
                     $('#reverseLeadMoveModal').find('.modal-footer').append('<div class="alert alert-danger mt20 text-center">'+response.error+'</div>');
                 }else{
