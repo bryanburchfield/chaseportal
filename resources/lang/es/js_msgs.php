@@ -59,5 +59,7 @@
 		'actions_by_day'			=> 'Acciones por Día',
 		'call_status_by_type'		=> 'Disposiciones de Llamadas por Tipo',
 		'dl_warning'				=> 'Este es un conjunto de datos grande. Podría ser más rápido descargar múltiples informes pequeños.',
-		'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente'
+		'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente',
+		'call_status_count'			=> 'Recuento de Disposiciones',
+		'agent_system_calls'		=> 'Llamadas de Agentes vs del Sistema'
 	];

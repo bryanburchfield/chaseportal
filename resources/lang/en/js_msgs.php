@@ -58,5 +58,7 @@
 		'actions_by_day'			=> 'Actions by Day',
 		'call_status_by_type'		=> 'Call Status by Type',
 		'dl_warning'				=> 'This is a large dataset. It may be faster to download multiple smaller reports.',
-		'large_dl_warning'			=> 'Report is too large to download. Please run smaller reports or choose a different format'
+		'large_dl_warning'			=> 'Report is too large to download. Please run smaller reports or choose a different format',
+		'call_status_count'			=> 'Call Status Count',
+		'agent_system_calls'		=> 'Agent vs System Calls'
 	];
