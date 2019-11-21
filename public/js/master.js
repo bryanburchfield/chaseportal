@@ -21,6 +21,7 @@ var Master = {
 	active_camp_search:'',
     tick_color:'#aaa',
     gridline_color:'#1A2738',
+    activeTab : localStorage.getItem('activeTab'),
 	dataTable:$('#dataTable').DataTable({
         responsive: true,
     }),
@@ -35,7 +36,9 @@ var Master = {
 	}),
 
 	init:function(){
-
+        if(Master.activeTab){
+            $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
+        }
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
@@ -503,7 +506,14 @@ var Master = {
             dataType: 'json',
             data: {lead_move_id: lead_move_id},
             success:function(response){
-                console.log(response);
+
+                if(response.error){
+                    $('#reverseLeadMoveModal').find('.modal-footer').append('<div class="alert alert-danger mt20 text-center">'+response.error+'</div>');
+                }else{
+                    var hash = window.location.hash;
+                    localStorage.setItem('activeTab', hash);
+                    window.location = '/dashboards/tools';
+                }
             }
         });
     },

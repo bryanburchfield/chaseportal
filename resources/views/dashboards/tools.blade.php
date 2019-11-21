@@ -200,7 +200,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" class="lead_move_id" name="lead_move_id" value="">
-               <h3>Are you sure you want to undo this lead move?</h3>
+            	<h3>Are you sure you want to undo this lead move?</h3>
             </div>
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
