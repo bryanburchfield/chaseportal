@@ -20,7 +20,10 @@ class ProductionReport
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
-        $this->params['columns'] = [];
+        $this->params['columns'] = [
+            'Rep' => 'reports.rep',
+            'ManHours' => 'reports.manhours',
+        ];
     }
 
     public function getFilters()
