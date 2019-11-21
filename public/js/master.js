@@ -80,7 +80,12 @@ var Master = {
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
         $('.btn.disable').on('click', this.preventDefault);
+        $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
 	},
+
+    hide_modal_error:function(){
+        $(this).find('.modal-footer .alert').remove();
+    },
 
     preventDefault:function(e){
         e.preventDefault();
