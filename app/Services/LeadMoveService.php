@@ -12,6 +12,7 @@ use App\LeadMoveDetail;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class LeadMoveService
@@ -78,9 +79,6 @@ class LeadMoveService
             ];
             $this->filterLead($detail);
         }
-
-        $lead_move->reversed = true;
-        $lead_move->save();
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -165,11 +163,14 @@ class LeadMoveService
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;
 
-        $api = $this->initApi($detail->reporting_db);
-        $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
+        // Only do the move if in production
+        if (App::environment('production')) {
+            $api = $this->initApi($detail->reporting_db);
+            $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
 
-        if ($result === false) {
-            return false;
+            if ($result === false) {
+                return false;
+            }
         }
 
         return true;

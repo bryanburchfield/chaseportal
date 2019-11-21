@@ -14,6 +14,7 @@ use App\Traits\TimeTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -143,17 +144,25 @@ class LeadsController extends Controller
 
     public function reverseMove(Request $request)
     {
+        Log::debug($request);
+        // dump($request);
+        return ['error' => true];
+
         // Make sure we haven't already reversed it
         $lead_move = LeadMove::find($request->lead_move_id);
         if (!$lead_move || $lead_move->reversed) {
-            return ['error' => true];
+            return ['error' => 'Already reversed'];
         }
 
         // Make sure the user is allowed to reverse it
         $lead_rule = LeadRule::find($lead_move->lead_rule_id);
         if (!$lead_rule || $lead_rule->group_id != Auth::user()->group_id) {
-            return ['error' => true];
+            return ['error' => 'Not Authorized'];
         }
+
+        // Set the record to reversed
+        $lead_move->reversed = true;
+        $lead_move->save();
 
         // Dispatch job to run the reverse in the background
         ReverseLeadMove::dispatch($lead_move);
