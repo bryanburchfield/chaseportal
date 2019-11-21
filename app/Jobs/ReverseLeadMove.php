@@ -33,6 +33,7 @@ class ReverseLeadMove implements ShouldQueue
      */
     public function handle()
     {
-        LeadMoveService::reverseMove($this->lead_move);
+        $service = new LeadMoveService();
+        $service->reverseMove($this->lead_move);
     }
 }

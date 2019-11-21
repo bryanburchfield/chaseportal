@@ -64,19 +64,20 @@ class LeadMoveService
      * @param LeadMove $lead_move
      * @return void
      */
-    public static function reverseMove(LeadMove $lead_move)
+    public function reverseMove(LeadMove $lead_move)
     {
         $lead_rule = LeadRule::find($lead_move->lead_rule_id);
         $lead_move_details = LeadMoveDetail::where('lead_move_id', $lead_move->id)->get();
 
         foreach ($lead_move_details as $lead_move_detail) {
-            $detail = [
-                'reporting_db' => $lead_move_detail->reporting_db,
-                'lead_id' => $lead_move_detail->lead_id,
-                'group_id' => $lead_rule->group_id,
-                'destination_campaign' => $lead_rule->source_campaign,
-                'destination_subcampaign' => $lead_rule->source_subcampaign,
-            ];
+
+            $detail = new \stdClass();
+            $detail->reporting_db = $lead_move_detail->reporting_db;
+            $detail->lead_id = $lead_move_detail->lead_id;
+            $detail->group_id = $lead_rule->group_id;
+            $detail->destination_campaign = $lead_rule->source_campaign;
+            $detail->destination_subcampaign = $lead_rule->source_subcampaign;
+
             $this->filterLead($detail);
         }
     }
@@ -154,11 +155,12 @@ class LeadMoveService
 
     private function filterLead($detail)
     {
-        echo "Moving Lead: " . $detail->lead_id .
+        $msg = "Moving Lead: " . $detail->lead_id .
             " for group " . $detail->group_id .
             " to " . $detail->destination_campaign .
             "/" . $detail->destination_subcampaign .
             "\n";
+        echo $msg;
 
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;

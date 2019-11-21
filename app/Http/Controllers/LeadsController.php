@@ -143,8 +143,6 @@ class LeadsController extends Controller
 
     public function reverseMove(Request $request)
     {
-        return ['error' => true];
-
         // Make sure we haven't already reversed it
         $lead_move = LeadMove::find($request->lead_move_id);
         if (!$lead_move || $lead_move->reversed) {
