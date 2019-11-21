@@ -14,7 +14,6 @@ use App\Traits\TimeTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -144,8 +143,6 @@ class LeadsController extends Controller
 
     public function reverseMove(Request $request)
     {
-        Log::debug($request);
-        // dump($request);
         return ['error' => true];
 
         // Make sure we haven't already reversed it
