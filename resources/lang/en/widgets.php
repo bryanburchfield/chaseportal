@@ -75,4 +75,3 @@ return [
 	'waiting'			=> 'Waiting',
 	'wrap_up'			=> 'Wrap Up',
 ];
-?>
