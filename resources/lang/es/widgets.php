@@ -17,7 +17,6 @@
 		'call_duration_minutes'=>'Duración de Llamadas en Minutos',
 		'top_ten_agent_call_counts'	=>'Los 10 Mejores Recuentos de Llamadas por Agente',
 		'avg_hold_time'		=> 'Tiempo de Espera Promedio',
-		'avg_handle_time'	=> 'Tiempo Medio Operativo',
 		'avg_handle_descr'		=> '(Tiempo Total de Conversación + Tiempo Total de Espera + Tiempo Administrativo Posterior) / Número Total de Llamadas Atendidas',
 		'rep' 				=> 'Agente',
 		'campaign'			=> 'Campaña',

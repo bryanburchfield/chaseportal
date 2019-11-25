@@ -17,7 +17,6 @@
 		'call_duration_minutes'=>'Call Duration in Minutes',
 		'top_ten_agent_call_counts'	=>'Top 10 Agent Call Counts',
 		'avg_hold_time'		=> 'Average Hold Time',
-		'avg_handle_time'	=> 'Average Handle Time',
 		'avg_handle_descr'		=> 'Talk Time + Hold Time + After Call Work / Total Calls',
 		'rep' 				=> 'Rep',
 		'campaign'			=> 'Campaign',
