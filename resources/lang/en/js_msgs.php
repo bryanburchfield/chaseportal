@@ -5,6 +5,9 @@
 		'avg_handle_time'			=> 'Avg Handle Time',
 		'avg_rep_time'				=> 'Avg Rep Time',
 		'avg_talk_time'				=> 'Avg Talk Time',
+		'agent_calls'				=> 'Agent Calls',
+		'callable'					=> 'Callable',
+		'non_callable'				=> 'Non Callable',
 		'no_data'					=> 'No Data Yet',
 		'total'						=> 'Total',
 		'handled'					=> 'Handled',
@@ -60,5 +63,9 @@
 		'dl_warning'				=> 'This is a large dataset. It may be faster to download multiple smaller reports.',
 		'large_dl_warning'			=> 'Report is too large to download. Please run smaller reports or choose a different format',
 		'call_status_count'			=> 'Call Status Count',
-		'agent_system_calls'		=> 'Agent vs System Calls'
+		'agent_system_calls'		=> 'Agent vs System Calls',
+		'search'					=> 'Search',
+		'system_calls'				=> 'System Calls',
+		'callable_leads_by_sub'		=> 'Callable Leads by SubCampaign',
+		'non_callable_by_disp'		=> 'Non-Callable Leads by Disposition'
 	];

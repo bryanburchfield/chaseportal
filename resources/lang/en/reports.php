@@ -76,7 +76,6 @@ return [
 	'avwaittime'          => 'Avg Wait Time',
 	'breakcode'           => 'Break Code',
 	'callbacks'           => 'Call Backs',
-	'callerid'            => 'Caller ID',
 	'calls'               => 'Calls',
 	'calls'               => 'Total Dials',
 	'callstatus'          => 'Call Status',
@@ -138,6 +137,8 @@ return [
 
 	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.',
 	'call_vol_per_int'		=> 'Call Volume Per 15 Min Interval',
-	'download'               => 'Download'
+	'download'               => 'Download',
+	'calls_by_caller_ID'	=> 'Calls by Caller ID',
+	'count_of_leads_by_attempt' => 'Count of Leads by Attempt'
 
 ];

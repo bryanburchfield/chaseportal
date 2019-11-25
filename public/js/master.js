@@ -1488,12 +1488,12 @@ var Master = {
 		  labels: xaxis_labels,
 		        datasets: [
 		          {
-		            label: "Callable",
+		            label: Lang.get('js_msgs.callable'),
 		            backgroundColor: chartColors.green,
 		            data: response.extras.callable
 		          },
 		          {
-		            label: "NonCallable",
+		            label: Lang.get('js_msgs.non_callable'),
 		            backgroundColor: chartColors.orange,
 		            data: response.extras.noncallable
 		          }
@@ -1569,7 +1569,7 @@ var Master = {
 		            fontColor:'#203047',
 		            fontSize:16,
 		            display: true,
-		            text: 'CALLABLE LEADS BY SUBCAMPAIGN'
+		            text: Lang.get('js_msgs.callable_leads_by_sub')
 		        },
 		        labels: subcampaigns
 		    };
@@ -1585,7 +1585,7 @@ var Master = {
 		            fontColor:'#203047',
 		            fontSize:16,
 		            display: true,
-		            text: 'CALLABLE LEADS BY SUBCAMPAIGN'
+		            text: Lang.get('js_msgs.callable_leads_by_sub')
 		        },
 		    }
 
@@ -1598,7 +1598,7 @@ var Master = {
 		    });
 		}else{
             $('#subcampaigns').empty();
-            $('<p class="no_data">No data yet</p>').insertBefore('#subcampaigns');
+            $('<p class="no_data">'+Lang.get('js_msgs.no_data')+'</p>').insertBefore('#subcampaigns');
         }
 
 		if(window.call_stats_chart != undefined){
@@ -1636,7 +1636,7 @@ var Master = {
 		            fontColor:'#203047',
 		            fontSize:16,
 		            display: true,
-		            text: 'NON-CALLABLE LEADS BY DISPOSITION'
+		            text: Lang.get('js_msgs.non_callable_by_disp')
 		        },
 		        labels: call_stats
 		    };
@@ -1652,7 +1652,7 @@ var Master = {
 		            fontColor:'#203047',
 		            fontSize:16,
 		            display: true,
-		            text: 'NON-CALLABLE LEADS BY DISPOSITION'
+		            text: Lang.get('js_msgs.non_callable_by_disp')
 		        },
 		    }
 
@@ -1665,7 +1665,7 @@ var Master = {
 		    });
 		}else{
             $('#call_stats').empty();
-            $('<p class="no_data">No data yet</p>').insertBefore('#call_stats');
+            $('<p class="no_data">'+Lang.get('js_msgs.no_data')+'</p>').insertBefore('#call_stats');
         }
 
 	},
@@ -1776,7 +1776,7 @@ var Master = {
 		        }
 		    },
 
-		    labels: ['Agent Calls', 'System Calls']
+		    labels: [Lang.get('js_msgs.agent_calls'), Lang.get('js_msgs.system_calls')]
 		};
 
 		var agent_system_calls_options={
@@ -1877,12 +1877,12 @@ var Master = {
           labels: response.extras.callerid,
                 datasets: [
                   {
-                    label: "Agent Calls",
+                    label: Lang.get('js_msgs.agent_calls'),
                     backgroundColor: chartColors.green,
                     data: response.extras.agent
                   },
                   {
-                    label: "System Calls",
+                    label: Lang.get('js_msgs.system_calls'),
                     backgroundColor: chartColors.orange,
                     fillOpacity: .5,
                     data: response.extras.system

@@ -48,7 +48,7 @@
 <div class="col-sm-7 nopadright">
 	<div class="col-sm-12 nopad">
 		<div class="card card-6 hidetilloaded" >
-			<h1 class="title fw600">Count of Leads by Attempt</h1>
+			<h1 class="title fw600">{{__('reports.count_of_leads_by_attempt')}}</h1>
 			<div class="inbound inandout" style="min-height:300px;">
 				<canvas id="leads_by_attempt"></canvas>
 			</div>

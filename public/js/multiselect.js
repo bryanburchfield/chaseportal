@@ -5,7 +5,8 @@
 		includeSelectAllOption: true,
 		enableFiltering: true,
 		enableCaseInsensitiveFiltering: true,
-		buttonWidth:'100%'
+		buttonWidth:'100%',
+		filterPlaceholder: Lang.get('js_msgs.search')
 	});
 
 	// preselect all campaigns

@@ -32,7 +32,7 @@ return [
      'as_of'              => 'A partir de',
      'call_statuses'      => 'Disposiciones',
      'call_type'          => 'Tipo de llamada',
-     'callerid'           => 'Caller ID',
+     'callerid'           => 'Identificador de Llamadas',
      'campaign'           => 'Campaña',
      'duration_secs'      => 'Duración (segundos)',
      'end'                => 'Final',
@@ -79,7 +79,6 @@ return [
      'avwaittime'          => 'Tiempo Promedio Esperando',
      'breakcode'           => 'Código de Receso',
      'callbacks'           => 'Llamadas de Vuelta',
-     'callerid'            => 'Caller ID',
      'calls'               => 'Llamadas',
      'calls'               => 'Total de Llamadas',
      'callstatus'          => 'Disposición',
@@ -142,5 +141,7 @@ return [
      'auto_report_text' => 'Aquí puede alternar entre habilitar y deshabilitar informes automáticos. Los informes se envían al correo electrónico con el que se registró y serán enviados diariamente a las 6:00am EST',
 
      'call_vol_per_int'       => 'Volumen de Llamadas en Intervalos de 15 Minutos',
-     'download'               => 'Descargar'
+     'download'               => 'Descargar',
+     'calls_by_caller_ID'     => 'Llamadas por identificador de llamadas',
+     'count_of_leads_by_attempt' => 'Conteo de Leads por Intento'
 ];

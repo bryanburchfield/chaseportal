@@ -5,6 +5,9 @@
 		'avg_handle_time'			=> 'Tiempo Promedio de Manejo',
 		'avg_talk_time'				=> 'Tiempo Promedio de Conversación',
 		'avg_rep_time'				=> 'Tiempo Promedio por Agente',
+		'agent_calls'				=> 'Llamadas de Agente',
+		'callable'					=> 'Invocable',
+		'non_callable'				=> 'No Invocable',
 		'no_data'					=> 'Aún Sin Datos',
 		'total'						=> 'Total',
 		'handled'					=> 'Manejada',
@@ -61,5 +64,9 @@
 		'dl_warning'				=> 'Este es un conjunto de datos grande. Podría ser más rápido descargar múltiples informes pequeños.',
 		'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente',
 		'call_status_count'			=> 'Recuento de Disposiciones',
-		'agent_system_calls'		=> 'Llamadas de Agentes vs del Sistema'
+		'agent_system_calls'		=> 'Llamadas de Agentes vs del Sistema',
+		'search'					=> 'Buscar',
+		'system_calls'				=> 'Llamadas al Sistema',
+		'callable_leads_by_sub'		=> 'Leads Invocables por SubCampaign',
+		'non_callable_by_disp'		=> 'Conductores no Invocables por Disposición'
 	];
