@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 
-@section('title', 'Leaderboard Dashboard')
+@section('title', __('general.leaderboard_dashboard'))
 
 @section('content')
 

@@ -1,6 +1,8 @@
 <?php
 
 return [
+	'admin_dashboard'			=> 'Admin Dashboard',
+	'adminoutbound_dashboard'	=> 'Adminoutbound Dashboard',
 	'all_campaigns'				=> 'All Campaigns',
 	'auto_report_settings'		=> 'Automated Reports Settings',
 	'auto_reports'				=> 'Automated Reports',
@@ -11,6 +13,7 @@ return [
 	'current_password'			=> 'Current Password',
 	'custom'					=> 'Custom',
 	'custom_date_filter'		=> 'Custom Date Filter',
+	'dashboard'					=> 'Dashboard',
 	'database'					=> 'Database',
 	'date'						=> 'Date',
 	'display_language'			=> 'Display Language Menu in navbar',
@@ -28,8 +31,10 @@ return [
 	'last'						=> 'Last',
 	'last_month'				=> 'Last Month',
 	'last_week'					=> 'Last Week',
+	'leaderboard_dashboard'		=> 'Leaderboard Dashboard',
 	'login'						=> 'Login',
 	'logout'					=> 'Log Out',
+	'master_dashboard'			=> 'Master Dashboard',
 	'my_settings'				=> 'My Settings',
 	'new_password'				=> 'New Password',
 	'of'						=> 'OF',
@@ -40,6 +45,7 @@ return [
 	'recipient_settings'		=> 'Recipient Settings',
 	'recipients'				=> 'Recipients',
 	'remember_me'				=> 'Remember Me',
+	'reports'					=> 'Reports',
 	'report_settings'			=> 'Report Settings',
 	'reset_pw'					=> 'RESET PASSWORD',
 	'reset_sorting'				=> 'Reset Sorting',
@@ -55,6 +61,7 @@ return [
 	'this_week'					=> 'This Week',
 	'today'						=> 'Today',
 	'total_rows'				=> 'Total Rows',
+	'trend_dashboard'			=> 'Trend Dashboard',
 	'update'					=> 'Update',
 	'view_report'				=> 'View Report',
 	'yesterday'					=> 'Yesterday',

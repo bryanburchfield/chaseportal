@@ -1,5 +1,5 @@
 @extends('layouts.report')
-@section('title', 'Report')
+@section('title', __('general.reports'))
 
 @section('content')
 	<h3 class="heading">{{__('reports.inbound_summary')}}</h3>

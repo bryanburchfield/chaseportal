@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 
-@section('title', 'KPI Dashboard')
+@section('title', 'KPI '.__('general.dashboard'))
 @section('content')
 
 <div class="container-fluid bg">

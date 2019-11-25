@@ -1,6 +1,8 @@
 <?php
 
 return [
+	'admin_dashboard'			=> 'Panel de Administración',
+	'adminoutbound_dashboard'	=> 'Panel de Salida de Administrador',
 	'all_campaigns'				=> 'Todas las Campañas',
 	'auto_report_settings'		=> 'Configuración de Informes Automatizados',
 	'auto_reports'				=> 'Reportes Automatizados',
@@ -11,6 +13,7 @@ return [
 	'current_password'			=> 'Contraseña Actual',
 	'custom'					=> 'Personalizada',
 	'custom_date_filter'		=> 'Filtro de Fecha Personalizado',
+	'dashboard'					=> 'Tablero',
 	'database'					=> 'Base de Datos',
 	'date'						=> 'Fecha',
 	'display_language'			=> 'Mostrar Menú de Idioma en la Barra de Navegación',
@@ -28,8 +31,10 @@ return [
 	'last'						=> 'Última',
 	'last_month'				=> 'Mes Pasado',
 	'last_week'					=> 'Semana Pasada',
+	'leaderboard_dashboard'		=> 'Tablero de Mando',
 	'login'						=> 'Iniciar Sesión',
 	'logout'					=> 'Cerrar Sesión',
+	'master_dashboard'			=> 'Tablero Maestro',
 	'my_settings'				=> 'Mi Configuración',
 	'new_password'				=> 'Nueva Contraseña',
 	'of'						=> 'de',
@@ -40,6 +45,7 @@ return [
 	'recipient_settings'		=> 'Configuración de Destinatario',
 	'recipients'				=> 'Destinatarios',
 	'remember_me'				=> 'Recordarme',
+	'reports'					=> 'Informes',
 	'report_settings'			=> 'Configuración de Informes',
 	'reset_pw'					=> 'RESTABLECER CONTRASEÑA',
 	'reset_sorting'				=> 'Restablecer Ordenación',
@@ -55,6 +61,7 @@ return [
 	'this_week'					=> 'Esta Semana',
 	'today'						=> 'Hoy',
 	'total_rows'				=> 'Filas Totales',
+	'trend_dashboard'			=> 'Panel de Tendencia',
 	'update'					=> 'Actualizar',
 	'view_report'				=> 'Ver Informe',
 	'yesterday'					=> 'Ayer',
