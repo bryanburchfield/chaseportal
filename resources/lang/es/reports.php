@@ -3,8 +3,8 @@
 return [
      // Email text
      'report'      => 'Informe',
-     'unsubscribe' => 'Si no desea recibir mensajes por email de Chase Data Corp, visite la página Informes Automatizados para cambiar su configuración.',
      'settings'    => 'Ajustes',
+     'unsubscribe' => 'Si no desea recibir mensajes por email de Chase Data Corp, visite la página Informes Automatizados para cambiar su configuración.',
 
      // Report names
      'agent_activity'                => 'Actividad de Agentes',
@@ -63,12 +63,10 @@ return [
      'errtodaterequired'    => 'La fecha final es requerida',
 
      // Column headings
+     //    Sales Lead and Appointment is better translated to 'Cliente Potencial y Cita' or 'Venta Potencial y Cita, so one of the following could be considered:
      'abandoned'           => 'Llamadas Abandonadas',
      'agent'               => 'Llamadas de Agentes',
      'aph'                 => 'V-P-C/Hora',
-//    Sales Lead and Appointment is better translated to 'Cliente Potencial y Cita' or 'Venta Potencial y Cita, so one of the following could be considered:
-//   'aph'                 => 'V-P-C/Hora',
-//   'aph'                 => 'C-P-C/Hora',
      'attempt'             => 'Intentos',
      'available'           => 'Disponible',
      'availtimesec'        => 'Tiempo Disponible',
@@ -139,9 +137,8 @@ return [
      'waittimesec'         => 'Tiempo Esperando',
 
      'auto_report_text' => 'Aquí puede alternar entre habilitar y deshabilitar informes automáticos. Los informes se envían al correo electrónico con el que se registró y serán enviados diariamente a las 6:00am EST',
-
      'call_vol_per_int'       => 'Volumen de Llamadas en Intervalos de 15 Minutos',
-     'download'               => 'Descargar',
      'calls_by_caller_ID'     => 'Llamadas por identificador de llamadas',
-     'count_of_leads_by_attempt' => 'Conteo de Leads por Intento'
+     'count_of_leads_by_attempt' => 'Conteo de Leads por Intento',
+     'download'               => 'Descargar',
 ];

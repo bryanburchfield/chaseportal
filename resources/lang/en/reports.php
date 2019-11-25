@@ -3,8 +3,8 @@
 return [
 	// Email text
 	'report'      => 'Report',
-	'unsubscribe' => 'If you do not wish to receive e-mail messages from Chase Data Corp, please visit the Automated Reports page to change your settings.',
 	'settings'    => 'Settings',
+	'unsubscribe' => 'If you do not wish to receive e-mail messages from Chase Data Corp, please visit the Automated Reports page to change your settings.',
 
 	// Report names
 	'agent_activity'                => 'Agent Activity',
@@ -137,8 +137,7 @@ return [
 
 	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.',
 	'call_vol_per_int'		=> 'Call Volume Per 15 Min Interval',
-	'download'               => 'Download',
 	'calls_by_caller_ID'	=> 'Calls by Caller ID',
-	'count_of_leads_by_attempt' => 'Count of Leads by Attempt'
-
+	'count_of_leads_by_attempt' => 'Count of Leads by Attempt',
+	'download'               => 'Download'
 ];

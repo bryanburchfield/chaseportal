@@ -1,14 +1,13 @@
-<?php 
+<?php
 
-	return [
-		'admin_inbound'		=> 'Admin Inbound',
-		'admin_outbound'	=> 'Admin Outbound',
-		'trend_dashboard'	=> 'Trend Dashboard',
-		'leaderboard'		=> 'Leaderboard',
-		'kpis'				=> 'KPIs',
-		'reports'			=> 'Reports',
-		'settings'			=> 'Settings',
-		'tools'				=> 'Tools',
-		'admin'				=> 'Admin'
-	];
-?>
+return [
+	'admin'				=> 'Admin',
+	'admin_inbound'		=> 'Admin Inbound',
+	'admin_outbound'	=> 'Admin Outbound',
+	'kpis'				=> 'KPIs',
+	'leaderboard'		=> 'Leaderboard',
+	'reports'			=> 'Reports',
+	'settings'			=> 'Settings',
+	'tools'				=> 'Tools',
+	'trend_dashboard'	=> 'Trend Dashboard',
+];
