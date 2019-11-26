@@ -2,7 +2,7 @@
 <h2 class="page_heading mb0">All Clients ({{ App\Models\User::count() }} total)</h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
-        @foreach (App\Dialer::orderBy('dialer_numb')->get() as $dialer)
+        @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
             $db = sprintf("%02d", $dialer->dialer_numb);
             $clients = $dialer->users(true)->count();
