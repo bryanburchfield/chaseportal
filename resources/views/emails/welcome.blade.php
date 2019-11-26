@@ -2,9 +2,9 @@
 $rss = new DOMDocument();
 $rss->load('https://blog.chasedatacorp.com/rss.xml');
 $list = array();
-    
+
 foreach ($rss->getElementsByTagName('item') as $node) {
-$item = array ( 
+$item = array (
 'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
 'descript' => $node->getElementsByTagName('description')->item(0)->nodeValue,
 'link' => $node->getElementsByTagName('link')->item(0)->nodeValue,
@@ -14,7 +14,7 @@ $item = array (
 array_push($list, $item);
 }
 
-$numberofresults = 4;    
+$numberofresults = 4;
 
 ?>
 
@@ -22,7 +22,7 @@ $numberofresults = 4;
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width"> 
+    <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="x-apple-disable-message-reformatting">
     <title>Welcome  - Chase Data Corp</title>
@@ -201,7 +201,7 @@ table{
 }
 .navigation li{
     list-style: none;
-    display: inline-block;;
+    display: inline-block;
     margin-left: 5px;
     font-size: 12px;
     font-weight: 700;
@@ -285,7 +285,7 @@ table{
     color: rgba(255,255,255,.8);
 }
 .heading-section-white h2{
-    font-family: 
+    font-family:
     line-height: 1;
     padding-bottom: 0;
 }
@@ -312,7 +312,7 @@ table{
     background: rgba(0,0,0,.03);
 }
 .text-services{
-    padding: 10px 10px 0; 
+    padding: 10px 10px 0;
     text-align: center;
 }
 .text-services h3{
@@ -510,7 +510,7 @@ tr.bg_blue{
                     </table>
                 </td>
             </tr><!-- end tr -->
-            
+
             <tr>
                 <td class="bg_dark email-section" style="text-align:center;">
                     <div class="heading-section heading-section-white">
@@ -581,7 +581,7 @@ tr.bg_blue{
                                 </table>
                             </td>
                         </tr><!-- end:tr -->
-                        
+
                         <tr><td width="95%" style="background-color:#ccc; border:1px solid #ccc;"></td></tr>
 
                         <tr>
@@ -595,9 +595,9 @@ tr.bg_blue{
 
                                         for($i=0; $i<$numberofresults; $i++) {
 
-                                            if($i == 0 || $i == 2){ 
-                                                    echo "<tr>";  
-                                            } 
+                                            if($i == 0 || $i == 2){
+                                                    echo "<tr>";
+                                            }
 
                                             $title = substr($list[$i]['title'],0,55).'...';
                                             $link = $list[$i]['link'];
@@ -631,8 +631,8 @@ tr.bg_blue{
             </tr><!-- end:tr -->
             <!-- 1 Column Text + Button : END -->
         </table>
-    
-        <!-- Begin footer-->    
+
+        <!-- Begin footer-->
             <table class="mauto" align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
                 <tr>
                     <td class="p20">
@@ -690,7 +690,7 @@ tr.bg_blue{
                         </table>
                     </td>
                 </tr>
-            </table><!-- End footer-->    
+            </table><!-- End footer-->
     </div>
 </center>
 </body>

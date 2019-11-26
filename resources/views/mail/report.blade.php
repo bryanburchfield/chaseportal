@@ -176,7 +176,7 @@ table{
 }
 .navigation li{
     list-style: none;
-    display: inline-block;;
+    display: inline-block;
     margin-left: 5px;
     font-size: 12px;
     font-weight: 700;

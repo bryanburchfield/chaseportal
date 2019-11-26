@@ -867,7 +867,7 @@ class AdminDashController extends Controller
         $sql .= ") tmp GROUP BY Rep, Campaign;
 
         SELECT * FROM #temp
-        ORDER BY Rep, Campaign;;
+        ORDER BY Rep, Campaign;
 
         SELECT Rep, SUM(Count) as Count, SUM(Duration) as Duration
         FROM #temp

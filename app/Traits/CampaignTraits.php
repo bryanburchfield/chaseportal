@@ -78,7 +78,7 @@ trait CampaignTraits
         $union = '';
         foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
             $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['campaign' . $i] = $campaign;;
+            $bind['campaign' . $i] = $campaign;
 
             $sql .=  "$union SELECT DISTINCT Subcampaign
             FROM [$db].[dbo].[Leads]
