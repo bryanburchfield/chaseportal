@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Schedulable;
@@ -11,6 +11,6 @@ class KpiGroup extends Model
 
     public function kpi()
     {
-        return $this->belongsTo('App\Kpi');
+        return $this->belongsTo('App\Models\Kpi');
     }
 }

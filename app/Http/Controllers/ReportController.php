@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\AutomatedReport;
-use App\User;
+use App\Models\AutomatedReport;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;

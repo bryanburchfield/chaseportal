@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +23,6 @@ class LeadRule extends Model
 
     public function leadMoves()
     {
-        return $this->hasMany('App\LeadMove');
+        return $this->hasMany('App\Models\LeadMove');
     }
 }

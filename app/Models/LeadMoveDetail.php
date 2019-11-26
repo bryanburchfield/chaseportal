@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +17,6 @@ class LeadMoveDetail extends Model
 
     public function leadMove()
     {
-        return $this->belongsTo('App\LeadMove');
+        return $this->belongsTo('App\Models\LeadMove');
     }
 }

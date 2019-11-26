@@ -1,11 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
-use App\Dialer;
 use App\Notifications\ChaseResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
 use App\Traits\TimeTraits;

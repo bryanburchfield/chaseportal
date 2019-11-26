@@ -7,7 +7,7 @@ use \App\Traits\DashTraits;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use App\User;
+use App\Models\User;
 
 class MasterDashController extends Controller
 {

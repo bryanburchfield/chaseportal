@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,7 +8,7 @@ class Recipient extends Model
 {
     public function kpiRecipients()
     {
-        return $this->hasMany('App\KpiRecipient');
+        return $this->hasMany('App\Models\KpiRecipient');
     }
 
     public function kpiList()

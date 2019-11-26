@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\LeadMove;
+use App\Models\LeadMove;
 use App\Services\LeadMoveService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

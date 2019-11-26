@@ -6,7 +6,7 @@
             <h2>{{__('kpi.kpi_notifications')}}</h2>
         </div>
 
-        @foreach(\App\Kpi::getKpis() as $kpi)
+        @foreach(\App\Models\Kpi::getKpis() as $kpi)
 
         <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">
             <a href="#" class="kpi_trigger"> {{  __('kpi.' . $kpi->name) }}</a>

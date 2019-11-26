@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InboundSource extends Model
+class System extends Model
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
-    protected $table = 'InboundSources';
+    protected $table = 'sys.time_zone_info';
 }

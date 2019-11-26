@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Kpi;
-use App\KpiGroup;
-use App\KpiRecipient;
-use App\Recipient;
-use App\User;
+use App\Models\Kpi;
+use App\Models\KpiGroup;
+use App\Models\KpiRecipient;
+use App\Models\Recipient;
+use App\Models\User;
 use App\Mail\KpiMail;
 use App\Traits\TimeTraits;
 use App\Http\Requests\AddRecipient;

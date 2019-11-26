@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\AutomatedReport;
-use App\Dialer;
-use App\System;
+use App\Models\User;
+use App\Models\AutomatedReport;
+use App\Models\Dialer;
+use App\Models\System;
 use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Facades\Auth;

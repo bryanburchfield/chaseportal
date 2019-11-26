@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dispo extends Model
+class DialingResult extends Model
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
-    protected $table = 'Dispos';
+    protected $table = 'DialingResults';
 }

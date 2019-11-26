@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddLeadFilterRule;
 use App\Jobs\ReverseLeadMove;
-use App\LeadMove;
-use App\LeadMoveDetail;
-use App\LeadRule;
+use App\Models\LeadMove;
+use App\Models\LeadMoveDetail;
+use App\Models\LeadRule;
 use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;

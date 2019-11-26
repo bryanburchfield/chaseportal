@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class System extends Model
+class Dispo extends Model
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
-    protected $table = 'sys.time_zone_info';
+    protected $table = 'Dispos';
 }

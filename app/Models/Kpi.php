@@ -1,11 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\KpiRecipient;
 
 class Kpi extends Model
 {
@@ -16,12 +15,12 @@ class Kpi extends Model
 
     public function kpiGroups()
     {
-        return $this->hasMany('App\KpiGroup');
+        return $this->hasMany('App\Models\KpiGroup');
     }
 
     public function kpiRecipients()
     {
-        return $this->hasMany('App\KpiRecipient');
+        return $this->hasMany('App\Models\KpiRecipient');
     }
 
     public static function getKpis()
