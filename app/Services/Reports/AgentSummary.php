@@ -14,30 +14,28 @@ class AgentSummary
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Summary Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.agent_summary';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Contacts' => 'Contacts',
-            'Connects' => 'Connects',
-            'Hours' => 'Hours Worked',
-            'Leads' => 'Sale/Lead/App',
-            'CPH' => 'Connects per hr',
-            'APH' => 'S-L-A/HR',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'TalkTimeSec' => 'Talk Time',
-            'AvTalkTime' => 'Avg Talk Time',
-            'PausedTimeSec' => 'Break Time',
-            'WaitTimeSec' => 'Wait Time',
-            'AvWaitTime' => 'Avg Wait Time',
-            'DispositionTimeSec' => 'Wrap Up Time',
-            'AvDispoTime' => 'Avg Wrap Up Time',
-            'ConnectedTimeSec' => 'Logged In Time',
+            'Rep' => 'reports.rep',
+            'Contacts' => 'reports.contacts',
+            'Connects' => 'reports.connects',
+            'Hours' => 'reports.hours',
+            'Leads' => 'reports.leads',
+            'CPH' => 'reports.cph',
+            'APH' => 'reports.aph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'TalkTimeSec' => 'reports.talktimesec',
+            'AvTalkTime' => 'reports.avtalktime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'WaitTimeSec' => 'reports.waittimesec',
+            'AvWaitTime' => 'reports.avwaittime',
+            'DispositionTimeSec' => 'reports.dispositiontimesec',
+            'AvDispoTime' => 'reports.avdispotime',
+            'LoggedInTime' => 'reports.loggedintime',
         ];
     }
 
@@ -54,6 +52,8 @@ class AgentSummary
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -93,7 +93,7 @@ class AgentSummary
             DispositionTimeSec int DEFAULT 0,
             DispositionTimeCount int DEFAULT 0,
             AvDispoTime numeric(18,2) DEFAULT 0,
-            ConnectedTimeSec int DEFAULT 0
+            LoggedInTime int DEFAULT 0
             );
 
         INSERT #AgentSummary(Rep)
@@ -254,7 +254,7 @@ class AgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ConnectedTimeSec = a.Hours
+        SET LoggedInTime = a.Hours
         FROM (SELECT aa.Rep, SUM(Duration) as Hours
               FROM #AgentSummaryDuration aa
               GROUP BY aa.Rep) a
@@ -321,7 +321,7 @@ class AgentSummary
         $total['WaitTimeCount'] = 0;
         $total['DispositionTimeSec'] = 0;
         $total['DispositionTimeCount'] = 0;
-        $total['ConnectedTimeSec'] = 0;
+        $total['LoggedInTime'] = 0;
         $total['Contacts'] = 0;
         $total['Connects'] = 0;
         $total['Hours'] = 0;
@@ -335,7 +335,7 @@ class AgentSummary
             $total['WaitTimeCount'] += $rec['WaitTimeCount'];
             $total['DispositionTimeSec'] += $rec['DispositionTimeSec'];
             $total['DispositionTimeCount'] += $rec['DispositionTimeCount'];
-            $total['ConnectedTimeSec'] += $rec['ConnectedTimeSec'];
+            $total['LoggedInTime'] += $rec['LoggedInTime'];
             $total['Contacts'] += $rec['Contacts'];
             $total['Connects'] += $rec['Connects'];
             $total['Hours'] += $rec['Hours'];
@@ -353,7 +353,7 @@ class AgentSummary
             $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
             $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
             $rec['AvDispoTime'] = $this->secondsToHms($rec['AvDispoTime']);
-            $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
+            $rec['LoggedInTime'] = $this->secondsToHms($rec['LoggedInTime']);
 
             $rec['ConversionRate'] .= '%';
             $rec['ConversionFactor'] .= '%';
@@ -382,7 +382,7 @@ class AgentSummary
         $total['AvWaitTime'] = $this->secondsToHms($total['AvWaitTime']);
         $total['DispositionTimeSec'] = $this->secondsToHms($total['DispositionTimeSec']);
         $total['AvDispoTime'] = $this->secondsToHms($total['AvDispoTime']);
-        $total['ConnectedTimeSec'] = $this->secondsToHms($total['ConnectedTimeSec']);
+        $total['LoggedInTime'] = $this->secondsToHms($total['LoggedInTime']);
 
         // Tack on the totals row
         $results[] = $total;
@@ -402,7 +402,7 @@ class AgentSummary
         $this->checkDateRangeFilters($request);
 
         if (empty($request->reps)) {
-            $this->errors->add('reps.required', "At least 1 Rep required");
+            $this->errors->add('reps.required', trans('reports.errrepsrequired'));
         } else {
             $this->params['reps'] = $request->reps;
         }

@@ -1,8 +1,8 @@
 @extends('layouts.report')
-@section('title', 'Report')
+@section('title', __('general.reports'))
 
 @section('content')
-	<h3 class="heading">Inbound Summary</h3>
+	<h3 class="heading">{{__('reports.inbound_summary')}}</h3>
 
 	<div class="report_filters card col-sm-12">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
@@ -13,7 +13,7 @@
 				
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('fromdate', 'From') !!}
+						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
 							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker fromdate', 'required' => true]) !!}
 							<span class="input-group-addon">
@@ -26,7 +26,7 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('todate', 'To') !!}
+						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
 							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker todate', 'required' => true]) !!}
 							<span class="input-group-addon">
@@ -39,7 +39,7 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('campaigns', 'Campaign') !!}
+						{!! Form::label('campaigns', __('reports.campaign')) !!}
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 			<div class="alert alert-danger report_errors"></div>
 
 			{!! Form::hidden('report', $report, ['id'=>'report']) !!}
-			{!! Form::submit('Run Report', ['class'=>'btn btn-primary mb0']) !!}
+			{!! Form::submit(__('reports.run_report'), ['class'=>'btn btn-primary mb0']) !!}
 
 		{!! Form::close() !!}
 	</div><!-- end report_filters -->

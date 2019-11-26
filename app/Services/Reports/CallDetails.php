@@ -17,27 +17,28 @@ class CallDetails
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Call Details Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.call_details';
+        $this->params['fromdate'] = '';
+        $this->params['todate'] = '';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['calltype'] = '';
         $this->params['phone'] = '';
         $this->params['callerids'] = [];
+        $this->params['callerid'] = '';
         $this->params['callstatuses'] = [];
         $this->params['durationfrom'] = '';
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'Phone' => 'Phone',
-            'Date' => 'Date',
-            'CallStatus' => 'Call Status',
-            'Duration' => 'Duration',
-            'CallType' => 'Call Type',
-            'Details' => 'Call Details',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'Phone' => 'reports.phone',
+            'Date' => 'reports.date',
+            'CallStatus' => 'reports.callstatus',
+            'Duration' => 'reports.duration',
+            'CallType' => 'reports.calltype',
+            'Details' => 'reports.details',
         ];
     }
 
@@ -63,6 +64,8 @@ class CallDetails
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -129,6 +132,10 @@ class CallDetails
             $where .= " AND S.SourceName IS NOT NULL";
             $sql .= "
             INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT(:callerids, '!#!');";
+        }
+        if (!empty($this->params['callerid']) && $this->params['callerid'] != '*') {
+            $bind['callerid'] = $this->params['callerid'];
+            $where .= " AND DR.CallerId = :callerid";
         }
         if (!empty($this->params['durationfrom'])) {
             $where .= " AND DR.Duration >= " . $this->params['durationfrom'];
@@ -231,7 +238,7 @@ class CallDetails
 
             foreach ($results as &$rec) {
                 array_pop($rec);
-                $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y h:i:s A');
+                $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
@@ -251,7 +258,7 @@ class CallDetails
         $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
@@ -270,6 +277,10 @@ class CallDetails
 
         if (!empty($request->callerids)) {
             $this->params['callerids'] = $request->callerids;
+        }
+
+        if (!empty($request->callerid)) {
+            $this->params['callerid'] = $request->callerid;
         }
 
         if (!empty($request->callstatuses)) {
@@ -293,7 +304,7 @@ class CallDetails
         }
 
         if ($from > $to) {
-            $this->errors->add('duration', "Invalid Duration values");
+            $this->errors->add('duration', trans('reports.errduration'));
         }
 
         if (!empty($request->showonlyterm)) {

@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 trait CampaignTraits
@@ -98,7 +99,7 @@ trait CampaignTraits
     private function makeCarbon($datetime)
     {
         if (!is_a($datetime, 'Illuminate\Support\Carbon')) {
-            $datetime = new Carbon($datetime);
+            $datetime = Carbon::createFromIsoFormat('L LT', $datetime, null, App::getLocale());
         }
         return $datetime;
     }

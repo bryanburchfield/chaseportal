@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 trait TimeTraits
@@ -67,5 +68,13 @@ trait TimeTraits
         $seconds = $secs % 60;
 
         return sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
+    }
+
+    public function stringToUtc($datestring, $tz, $dateonly = false)
+    {
+        if ($dateonly) {
+            return Carbon::createFromIsoFormat('L', $datestring, $tz, App::getLocale())->modify('midnight')->tz('UTC');
+        }
+        return Carbon::createFromIsoFormat('L LT', $datestring, $tz, App::getLocale())->tz('UTC');
     }
 }

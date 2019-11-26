@@ -11,7 +11,11 @@ class dump_leads extends Command
     /**
      * The name and signature of the console command.
      *
+<<<<<<< HEAD
      *      * Run from command line (ideally cron)
+=======
+     * Run from command line (ideally cron)
+>>>>>>> beta
      * php artisan command:dump_leads {group_id} {timezone} {database}
      * eg: php artisan command:dump_leads 224347 America/New_York PowerV2_Reporting_Dialer-17
      *
@@ -33,6 +37,10 @@ class dump_leads extends Command
      *        ],
      *   ]
      *
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> beta
      * @var string
      */
     protected $signature = 'command:dump_leads

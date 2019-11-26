@@ -2,42 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Kpi;
+use App\KpiGroup;
+use App\KpiRecipient;
+use App\Recipient;
+use App\User;
+use App\Mail\KpiMail;
+use App\Traits\TimeTraits;
 use App\Http\Requests\AddRecipient;
 use App\Http\Requests\EditRecipient;
-use App\Mail\KpiMail;
 use Illuminate\Http\Request;
-use App\Kpi;
-use App\Recipient;
-use App\KpiRecipient;
-use App\KpiGroup;
-use App\Traits\TimeTraits;
-use App\User;
 use Illuminate\Support\Carbon;
-use Twilio\Rest\Client as Twilio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use \Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Twilio\Rest\Client as Twilio;
 
 class KpiController extends Controller
 {
     use TimeTraits;
-
-    public function index()
-    {
-        $db = Auth::user()->db;
-        config(['database.connections.sqlsrv.database' => $db]);
-
-        $jsfile[] = "kpidash.js";
-        $cssfile[] = "kpidash.css";
-
-        $data = [
-            'jsfile' => $jsfile,
-            'cssfile' => $cssfile,
-            'curdash' => 'kpidash',
-        ];
-        return view('kpidash')->with($data);
-    }
 
     /**
      * Opt-out of KPI mailings/texts
@@ -298,6 +283,10 @@ class KpiController extends Controller
 
         $all_kpis = Kpi::orderBy('name', 'asc')->pluck('name', 'id')->all();
 
+        foreach ($all_kpis as $id => &$name) {
+            $name = trans('kpi.' . $name);
+        }
+
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
@@ -395,7 +384,7 @@ class KpiController extends Controller
                 $message = [
                     'to' => $recipient->email,
                     'subject' => "Chase Data KPI",
-                    'current' => Carbon::parse()->tz($tz)->toDayDateTimeString(),
+                    'current' => Carbon::parse()->tz($tz)->isoFormat('LLLL'),
                     'url' => url('/') . '/',
                     'optouturl' => Url::signedRoute('kpi.optout', ['recipient_id' => $recipient->recipient_id]),
                     'kpi_name' => $kpi_name,
@@ -423,10 +412,10 @@ class KpiController extends Controller
      */
     private function getSms($kpi_name, $results)
     {
-        $sms = ' -== ' . $kpi_name . ' ==-' . PHP_EOL . PHP_EOL;
+        $sms = ' -== ' . trans('kpi.' . $kpi_name) . ' ==-' . PHP_EOL . PHP_EOL;
 
         if (empty($results)) {
-            $sms .= 'No Data to Report' . PHP_EOL . PHP_EOL;
+            $sms .= trans('kpi.no_data');
             return $sms;
         }
 
@@ -436,7 +425,7 @@ class KpiController extends Controller
                 if ($i == 0 && ($k == 'Campaign' || $k == 'Agent')) {
                     $sms .= "$v - ";
                 } else {
-                    $sms .= "$k: $v ";
+                    $sms .= trans('kpi.' . Str::snake($k)) . ": $v ";
                 }
                 $i++;
             }
@@ -491,7 +480,11 @@ class KpiController extends Controller
      */
     private function getHeaders($results)
     {
-        return empty($results) ? [] : array_keys((array) $results[0]);
+        $headers = empty($results) ? [] : array_keys((array) $results[0]);
+
+        return array_map(function ($a) {
+            return trans('kpi.' . Str::snake($a));
+        }, $headers);
     }
 
     /**

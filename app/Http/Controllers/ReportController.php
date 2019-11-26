@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,26 +25,14 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
+        $this->reportservice->report->setDates();
+
         $results = [];
         // Push old input to form
         $request->flash();
 
         return $this->returnView($results);
     }
-
-    // public function runReport(Request $request)
-    // {
-    //     $results = $this->reportservice->getResults($request);
-
-    //     // check for errors
-    //     if (is_object($results)) {
-    //         return $this->returnView([], $results);
-    //     }
-    //     // Push old input to form
-    //     $request->flash();
-
-    //     return $this->returnView($results);
-    // }
 
     public function exportReport(Request $request)
     {
@@ -168,8 +157,16 @@ class ReportController extends Controller
     {
         // authenticate as user
         $user = User::where('id', '=', $automatedReport->user_id)->first();
+        if (!$user) {
+            return;
+        }
+
         Auth::logout();
         Auth::login($user);
+
+        if (in_array($user->language, config('localization.locales'))) {
+            App::setLocale($user->language);
+        }
 
         // create report controller object
         $request = new Request();

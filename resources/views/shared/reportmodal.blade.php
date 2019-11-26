@@ -5,7 +5,7 @@
             <div class="modal-header">
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="reportModalLabel">Select a Report</h4>
+                <h4 class="modal-title" id="reportModalLabel">{{__('general.select_report')}}</h4>
             </div>
 
             {!! Form::open(['method'=>'POST', 'action'=> 'MasterDashController@showReport' ]) !!}
@@ -14,26 +14,26 @@
                 @php
 
                 $reports = [
-                    'call_details' => 'Call Details',
-                    'agent_analysis' => 'Agent Analysis',
-                    'agent_summary' => 'Agent Summary',
-                    'agent_summary_campaign' => 'Agent Summary By Camp',
-                    'agent_summary_subcampaign' => 'Agent Summary By Sub',
-                    'agent_pause_time' => 'Agent Pause Time',
-                    'agent_activity' => 'Agent Activity',
-                    'agent_timesheet' => 'Agent Time Sheet',
-                    'campaign_usage' => 'Campaign Usage',
-                    'caller_id' => 'Caller ID Tracking',
-                    'inbound_summary' => 'Inbound Summary',
-                    'campaign_summary' => 'Campaign Summary',
-                    'subcampaign_summary' => 'Subcampaign Summary',
-                    'campaign_call_log' => 'Campaign Call Log',
-                    'missed_calls' =>  'Missed Calls',
-                    'shift_report' => 'Shift Report',
-                    'production_report' => 'Production Report',
-                    'production_report_subcampaign' => 'Production By Sub',
-                    'lead_inventory' => 'Lead Inventory',
-                    'lead_inventory_sub' => 'Lead Inventory By Sub'
+                    'call_details' => __('reports.call_details'),
+                    'agent_analysis' =>  __('reports.agent_analysis'),
+                    'agent_summary' =>  __('reports.agent_summary'),
+                    'agent_summary_campaign' =>  __('reports.agent_summary_campaign'),
+                    'agent_summary_subcampaign' =>  __('reports.agent_summary_subcampaign'),
+                    'agent_pause_time' =>  __('reports.agent_pause_time'),
+                    'agent_activity' =>  __('reports.agent_activity'),
+                    'agent_timesheet' =>  __('reports.agent_timesheet'),
+                    'campaign_usage' =>  __('reports.campaign_usage'),
+                    'caller_id' =>  __('reports.caller_id'),
+                    'inbound_summary' =>  __('reports.inbound_summary'),
+                    'campaign_summary' =>  __('reports.campaign_summary'),
+                    'subcampaign_summary' =>  __('reports.subcampaign_summary'),
+                    'campaign_call_log' => __('reports.campaign_call_log'),
+                    'missed_calls' =>   __('reports.missed_calls'),
+                    'shift_report' =>  __('reports.shift_report'),
+                    'production_report' =>  __('reports.production_report'),
+                    'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
+                    'lead_inventory' =>  __('reports.lead_inventory'),
+                    'lead_inventory_sub' =>  __('reports.lead_inventory_sub')
                 ];
 
                 asort($reports);
@@ -54,11 +54,11 @@
             <div class="modal-footer">
                 {{-- @csrf --}}
                 {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
-                <button type="button" class="btn btn-default mr10" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default mr10" data-dismiss="modal">{{__('general.close')}}</button>
                 <a href="#" class="mb0 btn_flgrgt" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
-                    <span><i class="fa fa-cog"></i> Automated Reports</span>
+                    <span><i class="fa fa-cog"></i> {{__('general.auto_reports')}}</span>
                 </a>
-                <a href="#" class="view_report_btn btn-primary btn">View Report</a>
+                <a href="#" class="view_report_btn btn-primary btn">{{__('general.view_report')}}</a>
             </div>
             {!! Form::close() !!}
 

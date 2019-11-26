@@ -16,13 +16,14 @@ class ProductionReport
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Production Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.production_report';
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
-        $this->params['columns'] = [];
+        $this->params['columns'] = [
+            'Rep' => 'reports.rep',
+            'ManHours' => 'reports.manhours',
+        ];
     }
 
     public function getFilters()
@@ -41,6 +42,8 @@ class ProductionReport
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -362,7 +365,17 @@ class ProductionReport
 
         // Columns are variable, so set them now
         $this->params['columns'] = [];
+        $total = [];
+
         foreach ($results[0] as $k => $v) {
+            switch ($k) {
+                case 'Rep':
+                    $k = trans('reports.rep');
+                    break;
+                case 'ManHours':
+                    $k = trans('reports.manhours');
+                    break;
+            }
             $this->params['columns'][] = $k;
         }
 
@@ -374,11 +387,12 @@ class ProductionReport
         foreach ($this->params['columns'] as $k) {
             $total[$k] = 0;
         }
-        $total['Rep'] = 'Total:';
+        $total[trans('reports.rep')] = trans('reports.total') . ':';
 
         foreach ($results as &$rec) {
             foreach ($rec as $k => $v) {
                 if ($k != 'Rep') {
+                    $k = ($k == 'ManHours') ? trans('reports.manhours') : $k;
                     $total[$k] += $v;
                 }
             }

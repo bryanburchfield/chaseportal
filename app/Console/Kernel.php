@@ -46,9 +46,9 @@ class Kernel extends ConsoleKernel
             ->timezone('America/New_York')
             ->runInBackground();
 
-        // Run Lead Moves
+        // Run Lead Filters
         $schedule->call(function () {
-            LeadMoveService::runMove();
+            LeadMoveService::runFilter();
         })
             ->dailyAt('6:30')
             ->runInBackground()

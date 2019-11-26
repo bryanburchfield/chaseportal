@@ -16,9 +16,7 @@ class ProductionReportSubcampaign
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Production Report by Subcampaign';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.production_report_subcampaign';
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
@@ -41,6 +39,8 @@ class ProductionReportSubcampaign
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings

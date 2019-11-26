@@ -136,21 +136,21 @@ var Dashboard = {
 
                     labels: response['call_volume']['time'],
                     datasets: [{
-                        label: 'Inbound',
+                        label: Lang.get('js_msgs.inbound'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
                         data: response['call_volume']['inbound'],
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Outbound',
+                        label: Lang.get('js_msgs.outbound'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response['call_volume']['outbound'],
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Manual',
+                        label: Lang.get('js_msgs.manual'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
@@ -190,7 +190,7 @@ var Dashboard = {
                     },
                     title: {
                         display: true,
-                        text: 'Total Calls'
+                        text: Lang.get('js_msgs.total_calls')
                     }
                 }
 
@@ -247,21 +247,21 @@ var Dashboard = {
                 var rep_performance = {
                     labels: response['rep_performance']['time'],
                     datasets: [{
-                        label: 'Calls',
+                        label: Lang.get('js_msgs.calls'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response['rep_performance']['calls'],
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Paused',
+                        label: Lang.get('js_msgs.paused'),
                         borderColor: chartColors.red,
                         backgroundColor: chartColors.red,
                         fill: false,
                         data: response['rep_performance']['paused'],
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Waiting',
+                        label: Lang.get('js_msgs.waiting'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -269,7 +269,7 @@ var Dashboard = {
                         yAxisID: 'y-axis-1',
                     },
                     {
-                        label: 'Wrapup',
+                        label: Lang.get('js_msgs.wrapup'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
@@ -309,7 +309,7 @@ var Dashboard = {
                     },
                     title: {
                         display: true,
-                        text: 'Actions by Day'
+                        text: Lang.get('js_msgs.actions_by_day')
                     }
                 }
 
@@ -378,7 +378,7 @@ var Dashboard = {
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: 'Call Status by Type'
+                        text: Lang.get('js_msgs.call_status_by_type')
                     },
                     scales: {
                         yAxes: [{
@@ -517,8 +517,6 @@ $(document).ready(function(){
         }
     });
 
-    $('.enddate').datepicker({maxDate: '0'});
-    
 });
 
 

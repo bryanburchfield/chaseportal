@@ -136,7 +136,7 @@ GROUP BY ROLLUP(Campaign)",
                     'description' => 'Total amount of agent time divided by total amount of handled calls',
                     'query' => "SELECT 'Agent' = ISNULL(Rep, 'Total'),
 'Calls' = COUNT(id),
-'Call-Time' = CAST(DATEADD(SECOND, SUM(CASE WHEN Action IN ('InboundCall','Call','ManualCall') THEN Duration ELSE 0 END), 0) AS TIME(0)),
+'Call Time' = CAST(DATEADD(SECOND, SUM(CASE WHEN Action IN ('InboundCall','Call','ManualCall') THEN Duration ELSE 0 END), 0) AS TIME(0)),
 'Disposition' = CAST(DATEADD(SECOND, SUM(CASE WHEN Action IN ('Disposition') THEN Duration ELSE 0 END), 0) AS TIME(0)),
 'Average Handle Time' = CAST(DATEADD(SECOND, (SUM(Duration) / COUNT(Rep)), 0) AS TIME (0))
 FROM AgentActivity

@@ -213,46 +213,44 @@ trait DashTraits
         $fromDate = $this->utcToLocal($fromDate, $tz);
         $toDate = $this->utcToLocal($toDate, $tz)->modify('-1 second');
 
+        $month = $fromDate->monthName . ' ' . $fromDate->format('Y');
+
         $cnt = count((array) $this->campaign);
 
         if (empty($this->campaign)) {
-            $campaign = "All Campaigns";
+            $campaign = trans('general.all_campaigns');
         } elseif ($cnt > 1) {
-            $campaign = "$cnt Campaigns Selected";
+            $campaign = $cnt . ' ' . trans('general.campaigns_selected');
         } else {
             $campaign = $this->campaign[0];
         }
 
         switch ($this->dateFilter) {
             case 'today':
-                $today = $fromDate->format('n/j/y');
-                $details = "Today | $today";
+                $details = trans('general.today') . ' | ' . $fromDate->isoFormat('L');
                 break;
             case 'yesterday':
-                $yesterday = $fromDate->format('n/j/y');
-                $details = "Yesterday | $yesterday";
+                $details = trans('general.yesterday') . ' | ' . $fromDate->isoFormat('L');
                 break;
             case 'week':
-                $monday = $fromDate->format('n/j/y');
-                $sunday = $toDate->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (This Week)';
+                $monday = $fromDate->isoFormat('L');
+                $sunday = $toDate->isoFormat('L');
+                $details = $monday . ' - ' . $sunday . ' (' . trans('general.this_week') . ')';
                 break;
             case 'last_week':
-                $monday = $fromDate->format('n/j/y');
-                $sunday = $toDate->format('n/j/y');
-                $details = $monday . ' - ' . $sunday . ' (Last Week)';
+                $monday = $fromDate->isoFormat('L');
+                $sunday = $toDate->isoFormat('L');
+                $details = $monday . ' - ' . $sunday . ' (' . trans('general.last_week') . ')';
                 break;
             case 'month':
-                $month = $fromDate->format('F Y');
                 $details = "$month (MTD)";
                 break;
             case 'last_month':
-                $month = $fromDate->format('F Y');
                 $details = $month;
                 break;
             default:
-                $start = $fromDate->format('n/j/y');
-                $end = $toDate->format('n/j/y');
+                $start = $fromDate->isoFormat('L');
+                $end = $toDate->isoFormat('L');
                 $details = $start . ' - ' . $end;
         }
 
@@ -302,8 +300,9 @@ trait DashTraits
                 break;
 
             default:  // custom range - add 1 day to ending date
-                $fromDate = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
-                $toDate = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
+                list($fromDate, $toDate) = explode(' ', $dateFilter);
+                $fromDate = $this->stringToUtc($fromDate, $tz, true);
+                $toDate = $this->stringToUtc($toDate, $tz, true)->modify('+1 day');
         }
 
         return [$fromDate, $toDate];
@@ -362,10 +361,11 @@ trait DashTraits
                 break;
 
             default:  // custom range
-                // same number of previous days
-                $date1 = Carbon::parse(substr($dateFilter, 0, 10), $tz)->tz('UTC');
-                $date2 = Carbon::parse(substr($dateFilter, 11), $tz)->modify('+1 day')->tz('UTC');
+                list($date1, $date2) = explode(' ', $dateFilter);
+                $date1 = $this->stringToUtc($date1, $tz, true);
+                $date2 = $this->stringToUtc($date2, $tz, true)->modify('+1 day');
 
+                // same number of previous days
                 $days = $date2->diffInDays($date1);
 
                 $fromDate = (clone $date1)->modify('-' . $days . ' days');
@@ -480,7 +480,7 @@ trait DashTraits
         $camparray = [];
 
         $camparray[] = [
-            'name' => 'All Campaigns',
+            'name' => trans('general.all_campaigns'),
             'value' => '',
             'selected' => empty($selected) ? 1 : 0,
         ];

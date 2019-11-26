@@ -81,7 +81,7 @@ var Dashboard = {
     },
 
     display_error:function(div, textStatus, errorThrown){
-        $(div).parent().append('<p class="ajax_error alert alert-danger">Something went wrong. Please reolad the page.</p>');
+        $(div).parent().append('<p class="ajax_error alert alert-danger">'+Lang.get('js_msgs.reload_error_msg')+'</p>');
     },
 
     return_chart_colors:function(response_length, chartColors){
@@ -129,14 +129,13 @@ var Dashboard = {
                 $('.salesleaderboardtable, #agent_sales_per_hour, #agent_sales_per_hour_graph').parent().find('.no_data').remove();                
                 $('.salesleaderboardtable tbody, #agent_sales_per_hour tbody').empty();
 
-                var leaderboard_trs='<tr class="lowpad"><th>Rep</th><th># Calls</th><th>Talk Time</th><th># Sales</th></tr>';
+                var leaderboard_trs='<tr class="lowpad"><th>'+Lang.get('js_msgs.rep')+'</th><th># '+Lang.get('js_msgs.calls')+'</th><th>'+Lang.get('js_msgs.talk_time')+'</th><th># '+Lang.get('js_msgs.sales')+'</th></tr>';
                 for (var i=0; i < response.call_details.leaders.length; i++) {
                     leaderboard_trs+= '<tr class="results"><td>'+response.call_details.leaders[i].Rep+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].CallCount)+'</td><td>'+response.call_details.leaders[i].TalkSecs+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].Sales)+'</td></tr>';
                 }
 
                 $('.salesleaderboardtable tbody').append(leaderboard_trs);
 
-               
                 if(response.call_details.repsales.length){
                     var agent_sales_trs;
 
@@ -147,7 +146,7 @@ var Dashboard = {
                     $('#agent_sales_per_hour tbody').append(agent_sales_trs);
                 }else{
                     $('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody').empty();
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#agent_sales_per_hour_graph, #agent_sales_per_hour tbody');
                 }
 
                 if(window.rep_avg_handletime_chart != undefined){
@@ -165,9 +164,9 @@ var Dashboard = {
                     }],
                     elements: {
                             center: {
-                            color: '#203047', 
-                            fontStyle: 'Segoeui', 
-                            sidePadding: 15 
+                            color: '#203047',
+                            fontStyle: 'Segoeui',
+                            sidePadding: 15
                         }
                     },
                     labels: response.Rep
@@ -202,7 +201,7 @@ var Dashboard = {
         var activeBtn = $('.callvolume_inorout').find("[data-type='" + this.inorout + "']");
         activeBtn.addClass('btn-primary');
         $(activeBtn).siblings().addClass('btn-default');
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -219,7 +218,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                
+
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
@@ -235,21 +234,21 @@ var Dashboard = {
 
                     labels: response.call_volume.time_labels,
                     datasets: [{
-                        label: 'Inbound',
+                        label: Lang.get('js_msgs.inbound'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.inbound,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Outbound',
+                        label: Lang.get('js_msgs.outbound'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
                         data: response.call_volume.outbound,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Manual',
+                        label: Lang.get('js_msgs.manual'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
@@ -289,7 +288,6 @@ var Dashboard = {
                     tooltips: {
                         enabled:true,
                         mode: 'single'
-                        
                     }
                 }
 
@@ -303,13 +301,11 @@ var Dashboard = {
                     data: call_volume_data,
                     options: call_volume_options
                 });
-                
-              
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume_inbound');
                 Dashboard.display_error(div, textStatus, errorThrown);
-                
-            } 
+            }
         });
     },
 
@@ -352,7 +348,7 @@ var Dashboard = {
                     $('#sales_per_campaign_graph, #sales_per_campaign').show();
                 }else{
                     $('#sales_per_campaign tbody').empty();
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#sales_per_campaign_graph, #sales_per_campaign');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#sales_per_campaign_graph, #sales_per_campaign');
                 }
 
                  if(window.sales_per_campaign_chart != undefined){
@@ -396,14 +392,12 @@ var Dashboard = {
                      options: sales_per_campaign_options
                  });
 
-                
-                
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#sales_per_campaign_graph');
                 Dashboard.display_error(div, textStatus, errorThrown);
-            } 
+            }
         });
-    },  
+    },
 
     call_volume_type: function(){
         Dashboard.inorout = $(this).data('type');
@@ -463,14 +457,12 @@ $(document).ready(function(){
     });
 
     Dashboard.init();
-        
     $(window).on('resize', function(){
         if ($(window).width() > 1010) {
         Dashboard.resizeDivs();
         }
     });
 
-    
     $('.count').each(function () {
         $(this).prop('Counter',0).animate({
             Counter: $(this).text()
@@ -483,9 +475,6 @@ $(document).ready(function(){
         });
     });
 
-    $('.enddate').datepicker({maxDate: '0'});
-    $('.startdate').datepicker({maxDate: '0'});
-    
 });
 
 

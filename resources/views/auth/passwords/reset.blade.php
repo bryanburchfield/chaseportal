@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="form-holder">
-                        <h4>Reset Password</h4>
+                        <h4>{{__('general.reset_pw')}}</h4>
 
                         <div class="card-body">
                             <form method="POST" action="{{ route('password.update') }}">
@@ -18,17 +18,17 @@
                                 <input type="hidden" name="token" value="{{ $token }}">
 
                                 <div class="form-group">
-                                    <label for="email">Email Address</label>
+                                    <label for="email">{{__('general.email')}}</label>
                                     <input id="email" type="email" class="form-control" name="email" value="{{ $email ?? old('email') }}" readonly autofocus>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password">Password</label>
+                                    <label for="password">{{__('general.password')}}</label>
                                     <input id="password" type="password" class="form-control" name="password" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password-confirm">Confirm Password</label>
+                                    <label for="password-confirm">{{__('general.confirm_password')}}</label>
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                                 </div>
 
@@ -41,7 +41,7 @@
                                 @endif
 
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
+                                    {{ __('general.reset_pw') }}
                                 </button>
                             </form>
                         </div>

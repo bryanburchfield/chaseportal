@@ -15,20 +15,18 @@ class AgentTimesheet
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Timesheet';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.agent_timesheet';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Date' => 'Date',
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'LogInTime' => 'LogIn Time',
-            'LogOutTime' => 'LogOut Time',
-            'ManHourSec' => 'Man Hours',
-            'PausedTimeSec' => 'Paused Time',
+            'Date' => 'reports.date',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'LogInTime' => 'reports.logintime',
+            'LogOutTime' => 'reports.logouttime',
+            'ManHourSec' => 'reports.manhoursec',
+            'PausedTimeSec' => 'reports.pausedtimesec',
         ];
     }
 
@@ -45,6 +43,8 @@ class AgentTimesheet
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -193,8 +193,8 @@ class AgentTimesheet
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
 
             $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
             $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
         }
@@ -221,7 +221,7 @@ class AgentTimesheet
         $this->checkDateRangeFilters($request);
 
         if (empty($request->reps)) {
-            $this->errors->add('reps.required', "At least 1 Rep required");
+            $this->errors->add('reps.required', trans('reports.errrepsrequired'));
         } else {
             $this->params['reps'] = $request->reps;
         }

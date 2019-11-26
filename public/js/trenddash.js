@@ -68,11 +68,11 @@ var Dashboard = {
 
     init:function(){
         $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.get_avg_handle_time(this.datefilter, this.chartColors), this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2), this.service_level(this.datefilter, this.chartColors), this.call_volume_type()).done(function(){
-            
+
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
-                
+
         Dashboard.eventHandlers();
     },
 
@@ -89,7 +89,7 @@ var Dashboard = {
 
     refresh:function(datefilter, campaign, inorout){
         $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors), this.get_avg_handle_time(this.datefilter, this.chartColors), this.agent_calltime(this.datefilter, this.chartColors, this.chartColors2), this.service_level(this.datefilter, this.chartColors), this.call_volume_type()).done(function(){
-            
+
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -126,42 +126,43 @@ var Dashboard = {
                 if(response.call_volume.total != null){
                     total_calls_int=response.call_volume.total;
                 }
-                $('.call_volume_details p.total').html('Total Calls: '+Master.formatNumber(total_calls_int));
+
+                 $('.call_volume_details p.total').html(Lang.get('js_msgs.total_calls')+': '+Master.formatNumber(total_calls_int));
 
                 if(!Master.has_data(response.call_volume.total_inbound_calls) && !Master.has_data(response.call_volume.inbound_handled) && !Master.has_data(response.call_volume.inbound_voicemails) && !Master.has_data(response.call_volume.inbound_abandoned)){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_inbound');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#call_volume_inbound');
                 }
 
                 if(!Master.has_data(response.call_volume.total_outbound_calls) && !Master.has_data(response.call_volume.outbound_handled) && !Master.has_data(response.call_volume.outbound_dropped) ){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_outbound');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#call_volume_outbound');
                 }
 
                 var call_volume_inbound = {
 
                     labels: response.call_volume.inbound_time_labels,
                     datasets: [{
-                        label: 'Total',
+                        label: Lang.get('js_msgs.total'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.total_inbound_calls,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Handled',
+                        label: Lang.get('js_msgs.handled'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response.call_volume.inbound_handled,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Voicemails',
+                        label: Lang.get('js_msgs.voicemails'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
                         data: response.call_volume.inbound_voicemails,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Abandoned',
+                        label: Lang.get('js_msgs.abandoned'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -173,21 +174,21 @@ var Dashboard = {
                 var call_volume_outbound = {
                     labels: response.call_volume.outbound_time_labels,
                     datasets: [{
-                        label: 'Total',
+                        label: Lang.get('js_msgs.total'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.total_outbound_calls,
                         yAxisID: 'y-axis-1',
                     }, {
-                        label: 'Handled',
+                        label: Lang.get('js_msgs.handled'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response.call_volume.outbound_handled,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Dropped',
+                        label: Lang.get('js_msgs.dropped'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -275,13 +276,14 @@ var Dashboard = {
                 $('#avg_handle_time').parent().find('.no_data').remove();
 
                 if( response.call_details.datetime != undefined){
-                    $('h2.avg_ht').html('Avg Handle Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
-                    $('h2.avg_tt').html('Avg Talk Time: '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
+
+                    $('h2.avg_ht').html(Lang.get('js_msgs.avg_handle_time')+': '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_ht));
+                    $('h2.avg_tt').html(Lang.get('js_msgs.avg_talk_time')+': '+Master.convertSecsToHrsMinsSecs(response.call_details.avg_call_time));
 
                     var avg_handle_time_data  = {
                         labels: response.call_details.datetime,
                         datasets: [{
-                            label: 'Avg Handle Time',
+                            label: Lang.get('js_msgs.avg_handle_time'),
                             borderColor: chartColors.green,
                             backgroundColor: 'rgba(51,160,155,0.6)',
                             fill: true,
@@ -291,7 +293,7 @@ var Dashboard = {
                     };
 
                     if(!Master.has_data(response.call_details.avg_handle_time)){
-                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#avg_handle_time');
+                        $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#avg_handle_time');
                     }
 
                     var show_decimal= Master.ylabel_format(response.call_details.avg_handle_time);
@@ -309,7 +311,7 @@ var Dashboard = {
                                 id: 'y-axis-1',
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -352,21 +354,21 @@ var Dashboard = {
                     var call_details_data = {
                         labels: response.call_details.datetime,
                         datasets: [{
-                            label: 'Talk Time',
+                            label: Lang.get('js_msgs.talk_time'),
                             borderColor: chartColors.green,
                             backgroundColor: chartColors.green,
                             fill: false,
                             data: response.call_details.calls,
                             yAxisID: 'y-axis-1',
                         },{
-                            label: 'Hold Time',
+                            label: Lang.get('js_msgs.hold_time'),
                             borderColor: chartColors.blue,
                             backgroundColor: chartColors.blue,
                             fill: false,
                             data: response.call_details.hold_time,
                             yAxisID: 'y-axis-1',
                         },{
-                            label: 'After Call Work',
+                            label:  Lang.get('js_msgs.after_call_work'),
                             borderColor: chartColors.orange,
                             backgroundColor: chartColors.orange,
                             fill: false,
@@ -378,7 +380,7 @@ var Dashboard = {
                     $('#call_details').parent().find('.no_data').remove();
 
                     if(!Master.has_data(response.call_details.calls) && !Master.has_data(response.call_details.hold_time) && !Master.has_data(response.call_details.wrapup_time)){
-                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_details');
+                        $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#call_details');
                     }
 
                     var show_decimal2= Master.ylabel_format(response.call_details.wrapup_time);
@@ -394,7 +396,7 @@ var Dashboard = {
                                 id: 'y-axis-1',
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -416,7 +418,6 @@ var Dashboard = {
                                     drawOnChartArea: false, // only want the grid lines for one axis to show up
                                 },
 
-                                
                             }],
                         },
                         legend: {
@@ -463,7 +464,7 @@ var Dashboard = {
                         labels: response.call_details.datetime,
                         datasets: [
                           {
-                            label: "Longest Hold Time (minutes)",
+                            label: Lang.get('js_msgs.longest_hold_time'),
                             backgroundColor: chartColors.green,
                             data: response.call_details.max_hold
                           }
@@ -484,7 +485,7 @@ var Dashboard = {
                             yAxes: [{
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -512,7 +513,7 @@ var Dashboard = {
                     $('#max_hold_time').parent().find('.no_data').remove();
 
                     if(!Master.has_data(response.call_details.max_hold)){
-                        $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#max_hold_time');
+                        $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#max_hold_time');
                     }
 
                     var ctx = document.getElementById('max_hold_time').getContext('2d');
@@ -549,12 +550,12 @@ var Dashboard = {
                 $('#rep_talktime').parent().find('.no_data').remove();
 
                 if(!response.agent_calltime.rep.length){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#rep_talktime');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#rep_talktime');
                 }
 
                 if( response.agent_calltime.avg_ct != undefined){
-                    $('h2.avg_ct').html('Avg Rep Time: '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
-                    $('h2.avg_cc').html('Avg Call Count: '+response.agent_calltime.avg_cc +' ');
+                    $('h2.avg_ct').html(Lang.get('js_msgs.avg_rep_time')+': '+Master.convertSecsToHrsMinsSecs(response.agent_calltime.avg_ct));
+                    $('h2.avg_cc').html(Lang.get('js_msgs.avg_call_count')+': '+response.agent_calltime.avg_cc +' ');
                 }
 
                 var agent_talktime_data = {
@@ -562,13 +563,13 @@ var Dashboard = {
                         datasets: [
                           {
                             yAxisID: 'A',
-                            label: "Call Time (minutes)",
+                            label: Lang.get('js_msgs.call_time'),
                             backgroundColor: chartColors.green,
                             data: response.agent_calltime.duration
                           },
                           {
                             yAxisID: 'B',
-                            label: "Call Count",
+                            label: Lang.get('js_msgs.call_count'),
                             backgroundColor: chartColors.orange,
                             fillOpacity: .5, 
                             data: response.agent_calltime.total_calls
@@ -596,7 +597,7 @@ var Dashboard = {
                                 scalePositionLeft: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Minutes'
+                                    labelString: Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -616,7 +617,7 @@ var Dashboard = {
                                 scalePositionLeft: false,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Call Count'
+                                    labelString: Lang.get('js_msgs.call_count')
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -684,15 +685,16 @@ var Dashboard = {
                 }
 
                 if(!Master.has_data(response.service_level.servicelevel)){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#service_level');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#service_level');
                 }
 
-                $('h2.avg_sl').html('Avg Service Level: '+response.service_level.avg + '%');
+                $('h2.avg_sl').html(Lang.get('js_msgs.avg_service_level')+': '+response.service_level.avg + '%');
+
                 var service_level_data = {
 
                     labels: response.service_level.time,
                     datasets: [{
-                        label: 'Service Level ',
+                        label: Lang.get('js_msgs.service_level'),
                         borderColor: chartColors.orange,
                         backgroundColor: 'rgb(228,154,49, 0.55)',
                         fill: true,
@@ -700,7 +702,7 @@ var Dashboard = {
                         yAxisID: 'y-axis-1'
                     },{
                         type: 'line',
-                        label: 'Call Answered by Time',
+                        label: Lang.get('js_msgs.call_answered'),
                         data: baseline,
                         backgroundColor: 'rgba(238,238,238)'
 
@@ -832,9 +834,6 @@ $(document).ready(function(){
         });
     });
 
-    $('.enddate').datepicker({maxDate: '0'});
-    $('.startdate').datepicker({maxDate: '0'});
-    
 });
 
 

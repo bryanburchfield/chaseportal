@@ -61,7 +61,7 @@ var Dashboard = {
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
-                
+
         Dashboard.eventHandlers();
     },
 
@@ -71,7 +71,7 @@ var Dashboard = {
 
     display_error:function(div, textStatus, errorThrown){
         $(div).parent().find('.ajax_error').remove();
-        $(div).parent().append('<p class="ajax_error alert alert-danger">Something went wrong. Please reload the page.</p>');
+        $(div).parent().append('<p class="ajax_error alert alert-danger">'+Lang.get('js_msgs.reload_error_msg')+'</p>');
     },
 
     return_chart_colors:function(response_length, chartColors){
@@ -93,7 +93,7 @@ var Dashboard = {
     refresh:function(datefilter){
 
         $.when(this.rep_avg_handletime(this.datefilter, this.chartColors), this.get_call_volume(this.datefilter, this.chartColors), this.agent_call_count(this.datefilter, this.chartColors), this.average_hold_time(this.datefilter), this.abandon_rate(this.datefilter), this.total_sales(this.datefilter), this.service_level(this.datefilter), this.agent_call_status(this.datefilter)).done(function(){
-            
+
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
@@ -129,7 +129,7 @@ var Dashboard = {
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
                 ///////////////// AVG HANDLE TIME CARD
-                $('#avg_handle_time').html(Master.convertSecsToHrsMinsSecs(response.call_volume.calls_answered.average));                
+                $('#avg_handle_time').html(Master.convertSecsToHrsMinsSecs(response.call_volume.calls_answered.average));
                 if(response.call_volume.calls_answered.min){
                     $('.avg_handle_time_card .inbound .lowest').html(Master.convertSecsToHrsMinsSecs(response.call_volume.calls_answered.min));
                 }else{
@@ -174,35 +174,35 @@ var Dashboard = {
                 }
 
                 if(!Master.has_data(response.call_volume.call_volume.total_calls) && !Master.has_data(response.call_volume.call_volume.voicemails) && !Master.has_data(response.call_volume.call_volume.abandoned) && !Master.has_data(response.call_volume.call_volume.handled )){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_volume_inbound');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#call_volume_inbound');
                 }
 
                 var call_volume_inbound = {
 
                     labels: response.call_volume.call_volume.time_labels,
                     datasets: [{
-                        label: 'Total',
+                        label: Lang.get('js_msgs.total'),
                         borderColor: chartColors.green,
                         backgroundColor: chartColors.green,
                         fill: false,
                         data: response.call_volume.call_volume.total_calls,
                         yAxisID: 'y-axis-1',
                     },{
-                        label: 'Handled',
+                        label: Lang.get('js_msgs.handled'),
                         borderColor: chartColors.blue,
                         backgroundColor: chartColors.blue,
                         fill: false,
                         data: response.call_volume.call_volume.handled,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Voicemails',
+                        label: Lang.get('js_msgs.voicemails'),
                         borderColor: chartColors.grey,
                         backgroundColor: chartColors.grey,
                         fill: false,
                         data: response.call_volume.call_volume.voicemails,
                         yAxisID: 'y-axis-1'
                     },{
-                        label: 'Abandoned',
+                        label: Lang.get('js_msgs.abandoned'),
                         borderColor: chartColors.orange,
                         backgroundColor: chartColors.orange,
                         fill: false,
@@ -251,14 +251,14 @@ var Dashboard = {
                 });
 
                 if(!Master.has_data(response.call_volume.call_duration.duration) ){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#call_duration');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#call_duration');
                 }
 
                 ///////////////// CALL DURATION GRAPH
                 var call_duration = {
                     labels: response.call_volume.call_duration.time_labels,
                     datasets: [{
-                        label: 'Inbound',
+                        label: Lang.get('js_msgs.inbound'),
                         borderColor: chartColors.green,
                         backgroundColor:'rgb(51,160,155, 0.55)',
                         fill: true,
@@ -281,7 +281,7 @@ var Dashboard = {
                             id: 'y-axis-1',
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Minutes'
+                                labelString: Lang.get('js_msgs.minutes')
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -382,11 +382,9 @@ var Dashboard = {
                     $('#agent_calltime tbody').append(calltime_trs);
 
                 }else{
-                                      
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph');
-                }
 
-                // $('#agent_calltime').parent().find('.no_data').remove();
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#agent_call_count, #agent_calltime, #agent_call_count_graph, #agent_calltime_graph');
+                }
 
                 ////////////////////////////////////////////////////////////
                 ////    AGENT CALL COUNT GRAPH
@@ -395,7 +393,7 @@ var Dashboard = {
                 if(window.agent_call_count_chart != undefined){
                     window.agent_call_count_chart.destroy();
                 }
-                
+
                 var response_length = response.call_count_counts.length;
                 var chart_colors_array= Master.return_chart_colors_hash(response.call_count_reps);
 
@@ -590,7 +588,7 @@ var Dashboard = {
                 });
 
                 if(!response.top10_rep_dispos.dispositions.length){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_dispositions_graph');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#agent_dispositions_graph');
                 }
 
                 //// TOP 10  DISPOS
@@ -636,7 +634,7 @@ var Dashboard = {
                 });
 
                 if(!response.top10_dispos.dispositions.length){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#dispositions_graph');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#dispositions_graph');
                 }
 
                 const dispos_obj = response.agent_call_status.dispositions
@@ -719,7 +717,7 @@ var Dashboard = {
                 });
 
                 if(!response.agent_call_status.reps.length){
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#agent_call_status');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#agent_call_status');
                 }
             }
         });
@@ -863,7 +861,7 @@ var Dashboard = {
                     $('#rep_avg_handletime tbody').append(trs);
 
                 }else{
-                    $('<div class="alert alert-info no_data">No data yet</div>').insertBefore('#rep_avg_handletime');
+                    $('<div class="alert alert-info no_data">'+Lang.get('js_msgs.no_data')+'</div>').insertBefore('#rep_avg_handletime');
                 }
 
                 ////////////////////////////////////////////////////////////
@@ -994,6 +992,7 @@ $(document).ready(function(){
         $('.set_hgt').css({'min-height':'100%','max-height': '100%'});
     }
 
+
     function resizeCardTableDivs(){
         var height_dt = $('.get_hgt').outerHeight();
         $('.set_hgt').css({'min-height':height_dt});
@@ -1001,8 +1000,7 @@ $(document).ready(function(){
     }
 
     $('.enddate').datepicker({maxDate: '0'});
-    $('.startdate').datepicker({maxDate: '0'});    
-
+    $('.startdate').datepicker({maxDate: '0'}); 
 
 });
 

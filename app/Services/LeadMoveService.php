@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\LeadRule;
@@ -12,7 +13,7 @@ use App\LeadMoveDetail;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
+
 use Illuminate\Support\Facades\DB;
 
 class LeadMoveService
@@ -35,6 +36,7 @@ class LeadMoveService
      *
      * @return void
      */
+
     public static function runFilter()
     {
         $leadmover = new LeadMoveService();
@@ -80,6 +82,7 @@ class LeadMoveService
 
             $this->filterLead($detail);
         }
+
     }
 
     public function runRule(LeadRule $lead_rule)
@@ -135,7 +138,7 @@ class LeadMoveService
     private function filterLeads($lead_move_id)
     {
         // cursor thru the log and do the moves
-        $details = LeadMoveDetail::where('lead_move_id', $lead_move_id)
+        foreach (LeadMoveDetail::where('lead_move_id', $lead_move_id)
             ->where('succeeded', null)
             ->join('lead_moves', 'lead_moves.id', '=', 'lead_move_details.lead_move_id')
             ->join('lead_rules', 'lead_rules.id', '=', 'lead_moves.lead_rule_id')
@@ -145,36 +148,26 @@ class LeadMoveService
                 'lead_rules.destination_campaign',
                 'lead_rules.destination_subcampaign'
             )
-            ->get();
-
-        foreach ($details as $detail) {
-            $detail->succeeded = $this->filterLead($detail);
+            ->get() as $detail) {
+            $api = $this->initApi($detail->reporting_db);
+            $detail->succeeded = $this->filterLead($api, $detail);
             $detail->save();
         }
     }
 
-    private function filterLead($detail)
+    private function filterLead($api, $detail)
     {
-        $msg = "Moving Lead: " . $detail->lead_id .
+        echo "Moving Lead: " . $detail->lead_id .
             " for group " . $detail->group_id .
             " to " . $detail->destination_campaign .
             "/" . $detail->destination_subcampaign .
             "\n";
-        echo $msg;
-
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;
-
-        // Only do the move if in production
-        if (App::environment('production')) {
-            $api = $this->initApi($detail->reporting_db);
-            $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
-
-            if ($result === false) {
-                return false;
-            }
+        $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
+        if ($result === false) {
+            return false;
         }
-
         return true;
     }
 

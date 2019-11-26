@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang=en-us>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <!--[if IE 7]>         <html class="ie7"> <![endif]-->
 <!--[if IE 8]>         <html class="ie8"> <![endif]--> 
 <!--[if IE]>           <html class="ie"> <![endif]--> 
@@ -13,11 +13,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet" type="text/css"/>
-   {{--  @isset($cssfile)
-    @foreach($cssfile as $css)
-    <link href="/css/{{ $css }}" rel="stylesheet" type="text/css"/>
-    @endforeach
-    @endisset --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="/css/jquery-ui.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
@@ -35,7 +31,7 @@
 
     @yield('content')
 
-
+    <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" type="text/javascript"></script>
@@ -43,10 +39,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
-    <script src="/js/moment.js"></script> 
+    <script src="/js/moment.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/datetimepicker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
+    <script src="/js/multiselect_lib.js"></script> 
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
     <script src="/js/gauge.js"></script>
@@ -56,7 +53,7 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
-
+    
     <script src="/js/master.js"></script> 
     <script src="/js/nav.js"></script> 
     

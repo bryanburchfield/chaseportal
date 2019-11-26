@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Carbon;
 
 class AdminDashController extends Controller
 {
@@ -110,9 +111,9 @@ class AdminDashController extends Controller
 
         foreach ($result[0] as $r) {
             if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('H:mm');
             } else {
-                $datetime = date("D n/j/y", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('ddd l');
             }
 
             array_push($call_volume['time_labels'], $datetime);
@@ -171,9 +172,9 @@ class AdminDashController extends Controller
 
         foreach ($result[1] as $r) {
             if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('H:mm');
             } else {
-                $datetime = date("D n/j/y", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('ddd l');
             }
 
             array_push($call_duration['time_labels'], $datetime);

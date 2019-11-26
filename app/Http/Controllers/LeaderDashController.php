@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Carbon;
 
 class LeaderDashController extends Controller
 {
@@ -56,9 +57,9 @@ class LeaderDashController extends Controller
             $tot_outbound += $r['Manual'];
 
             if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('H:mm');
             } else {
-                $datetime = date("D n/j/y", strtotime($r['Time']));
+                $datetime = Carbon::parse($r['Time'])->isoFormat('ddd l');
             }
 
             array_push($time_labels, $datetime);
@@ -236,7 +237,7 @@ class LeaderDashController extends Controller
 
         $repsales = [];
         $tots = [
-            'Rep' => 'ROOM TOTAL',
+            'Rep' => trans('general.room_total'),
             'CallCount' => 0,
             'TalkSecs' => 0,
             'Sales' => 0,

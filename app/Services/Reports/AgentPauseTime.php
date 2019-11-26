@@ -15,22 +15,20 @@ class AgentPauseTime
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Pause Time Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.agent_pause_time';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['columns'] = [
-            'Rep' => 'Rep',
-            'Campaign' => 'Campaign',
-            'LogInTime' => 'LogIn Time',
-            'LogOutTime' => 'LogOut Time',
-            'PausedTime' => 'Pause Time',
-            'UnPausedTime' => 'UnPause Time',
-            'PausedTimeSec' => 'Time Paused',
-            'BreakCode' => 'Break Code',
-            'TotPausedSec' => 'Total Paused',
-            'TotManHours' => 'Total Man Hours',
+            'Rep' => 'reports.rep',
+            'Campaign' => 'reports.campaign',
+            'LogInTime' => 'reports.logintime',
+            'LogOutTime' => 'reports.logouttime',
+            'PausedTime' => 'reports.pausedtime',
+            'UnPausedTime' => 'reports.unpausedtime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'BreakCode' => 'reports.breakcode',
+            'TotPausedSec' => 'reports.totpausedsec',
+            'TotManHours' => 'reports.totmanhours',
         ];
     }
 
@@ -47,6 +45,8 @@ class AgentPauseTime
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         $tz =  Auth::user()->tz;
@@ -224,10 +224,10 @@ class AgentPauseTime
 
         // format fields
         foreach ($results as &$rec) {
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->format('m/d/Y h:i:s A');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->format('m/d/Y h:i:s A');
-            $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->format('m/d/Y h:i:s A');
-            $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->format('m/d/Y h:i:s A');
+            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->isoFormat('L LT');
+            $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->isoFormat('L LT');
 
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
             $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);

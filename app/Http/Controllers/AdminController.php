@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\AutomatedReport;
+use App\Dialer;
 use App\System;
 use App\Traits\TimeTraits;
 use Exception;
@@ -29,95 +30,95 @@ class AdminController extends Controller
         $groupId = Auth::user()->group_id;
         $this->setDb();
 
-        $timezone_array = ['' => 'Select One'];
+        $timezone_array = ['' => trans('general.select_one')];
 
         // Get US timezones first
-        $timezones = System::all()
-            ->whereIn(
-                'name',
-                [
-                    'Eastern Standard Time',
-                    'Central Standard Time',
-                    'Mountain Standard Time',
-                    'Pacific Standard Time',
-                    'Alaskan Standard Time',
-                    'Hawaiian Standard Time',
-                ]
-            )
-            ->sortBy('current_utc_offset')->toArray();
+        $timezones = System::whereIn(
+            'name',
+            [
+                'Eastern Standard Time',
+                'Central Standard Time',
+                'Mountain Standard Time',
+                'Pacific Standard Time',
+                'Alaskan Standard Time',
+                'Hawaiian Standard Time',
+            ]
+        )
+            ->orderBy('current_utc_offset')
+            ->get()
+            ->toArray();
 
         foreach ($timezones as $tz) {
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
         // Now UTC for the UK
-        $timezones = System::all()
-            ->whereIn(
-                'name',
-                [
-                    'Greenwich Standard Time',
-                ]
-            )
-            ->sortBy('current_utc_offset')->toArray();
+        $timezones = System::whereIn(
+            'name',
+            [
+                'Greenwich Standard Time',
+            ]
+        )
+            ->orderBy('current_utc_offset')
+            ->get()
+            ->toArray();
 
         foreach ($timezones as $tz) {
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
         // And Australia
-        $timezones = System::all()
-            ->whereIn(
-                'name',
-                [
-                    'W. Australia Standard Time',
-                    'Aus Central W. Standard Time',
-                    'AUS Central Standard Time',
-                    'E. Australia Standard Time',
-                    'Cen. Australia Standard Time',
-                    'AUS Eastern Standard Time',
-                ]
-            )
-            ->sortBy('current_utc_offset')->toArray();
+        $timezones = System::whereIn(
+            'name',
+            [
+                'W. Australia Standard Time',
+                'Aus Central W. Standard Time',
+                'AUS Central Standard Time',
+                'E. Australia Standard Time',
+                'Cen. Australia Standard Time',
+                'AUS Eastern Standard Time',
+            ]
+        )
+            ->orderBy('current_utc_offset')
+            ->get()
+            ->toArray();
 
         foreach ($timezones as $tz) {
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
         // And then the rest
-        $timezones = System::all()
-            ->whereNotIn(
-                'name',
-                [
-                    'Eastern Standard Time',
-                    'Central Standard Time',
-                    'Mountain Standard Time',
-                    'Pacific Standard Time',
-                    'Alaskan Standard Time',
-                    'Hawaiian Standard Time',
-                    'Greenwich Standard Time',
-                    'W. Australia Standard Time',
-                    'Aus Central W. Standard Time',
-                    'AUS Central Standard Time',
-                    'E. Australia Standard Time',
-                    'Cen. Australia Standard Time',
-                    'AUS Eastern Standard Time',
-                ]
-            )
-            ->sortBy('current_utc_offset')->toArray();
+        $timezones = System::whereNotIn(
+            'name',
+            [
+                'Eastern Standard Time',
+                'Central Standard Time',
+                'Mountain Standard Time',
+                'Pacific Standard Time',
+                'Alaskan Standard Time',
+                'Hawaiian Standard Time',
+                'Greenwich Standard Time',
+                'W. Australia Standard Time',
+                'Aus Central W. Standard Time',
+                'AUS Central Standard Time',
+                'E. Australia Standard Time',
+                'Cen. Australia Standard Time',
+                'AUS Eastern Standard Time',
+            ]
+        )
+            ->orderBy('current_utc_offset')
+            ->get()
+            ->toArray();
 
         foreach ($timezones as $tz) {
             $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
         }
 
-        $dbs = ['' => 'Select One'];
-        for ($i = 1; $i <= 25; $i++) {
-            if ($i == 13) {
-                continue;
-            }  // there is no db 13
-            $dbs['PowerV2_Reporting_Dialer-' . sprintf("%02d", $i)] = 'PowerV2_Reporting_Dialer-' . sprintf("%02d", $i);
-        }
+        $dbs = ['' => trans('general.select_one')];
 
-        $users = User::all()->sortBy('id');
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
 
         $page['menuitem'] = 'admin';
         $page['type'] = 'page';
@@ -126,7 +127,6 @@ class AdminController extends Controller
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
             'dbs' => $dbs,
-            'users' => $users,
             'jsfile' => [],
         ];
 
@@ -266,14 +266,10 @@ class AdminController extends Controller
 		FROM (";
 
         $union = '';
-        for ($db = 1; $db <= 25; $db++) {
-            if ($db == 13) {
-                continue;
-            }
-
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $sql .= " $union
-			SELECT $db as [Server], $fields
-			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $db) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
+            SELECT " . $dialer->dialer_numb . " as [Server], $fields
+			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
 
             $union = "UNION";
         }

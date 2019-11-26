@@ -23,6 +23,7 @@ class ReportMail extends Mailable implements ShouldQueue
     {
         return $this
             ->view('mail.report')
+            ->subject($this->data['subject'])
             ->attach(
                 $this->data['pdf'],
                 [

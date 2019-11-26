@@ -16,35 +16,33 @@ class AgentSummarySubcampaign
     {
         $this->initilaizeParams();
 
-        $this->params['reportName'] = 'Agent Summary by Subcampaign Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.agent_summary_subcampaign';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['campaigns'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Campaign' => 'Campaign',
-            'Subcampaign' => 'Subcampaign',
-            'Rep' => 'Rep',
-            'Calls' => 'Calls',
-            'Contacts' => 'Contacts',
-            'Connects' => 'Connects',
-            'Hours' => 'Hours Worked',
-            'Leads' => 'Sale/Lead/App',
-            'CPH' => 'Connects per hr',
-            'APH' => 'S-L-A/HR',
-            'ConversionRate' => 'Conversion Rate',
-            'ConversionFactor' => 'Conversion Factor',
-            'TalkTimeSec' => 'Talk Time',
-            'AvTalkTime' => 'Avg Talk Time',
-            'PausedTimeSec' => 'Break Time',
-            'WaitTimeSec' => 'Wait Time',
-            'AvWaitTime' => 'Avg Wait Time',
-            'DispositionTimeSec' => 'Wrap Up Time',
-            'AvDispoTime' => 'Avg Wrap Up Time',
-            'ConnectedTimeSec' => 'Logged In Time',
+            'Campaign' => 'reports.campaign',
+            'Subcampaign' => 'reports.subcampaign',
+            'Rep' => 'reports.rep',
+            'Calls' => 'reports.calls',
+            'Contacts' => 'reports.contacts',
+            'Connects' => 'reports.connects',
+            'Hours' => 'reports.hours',
+            'Leads' => 'reports.leads',
+            'CPH' => 'reports.cph',
+            'APH' => 'reports.aph',
+            'ConversionRate' => 'reports.conversionrate',
+            'ConversionFactor' => 'reports.conversionfactor',
+            'TalkTimeSec' => 'reports.talktimesec',
+            'AvTalkTime' => 'reports.avtalktime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'WaitTimeSec' => 'reports.waittimesec',
+            'AvWaitTime' => 'reports.avwaittime',
+            'DispositionTimeSec' => 'reports.dispositiontimesec',
+            'AvDispoTime' => 'reports.avdispotime',
+            'loggedintime' => 'reports.loggedintime',
         ];
     }
 
@@ -65,6 +63,8 @@ class AgentSummarySubcampaign
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -110,7 +110,7 @@ class AgentSummarySubcampaign
             DispositionTimeSec int DEFAULT 0,
             DispositionTimeCount int DEFAULT 0,
             AvDispoTime numeric(18,2) DEFAULT 0,
-            ConnectedTimeSec int DEFAULT 0
+            loggedintime int DEFAULT 0
             );
 
         CREATE TABLE #SelectedRep(Rep varchar(50) Primary Key);
@@ -246,7 +246,7 @@ class AgentSummarySubcampaign
         WHERE aa.Action = 'Disposition'
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
 
-        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, ConnectedTimeSec)
+        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, loggedintime)
         SELECT aa.Campaign, aa.Subcampaign, aa.Rep, SUM(Duration)
         FROM #AgentSummaryDuration aa
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
@@ -271,7 +271,7 @@ class AgentSummarySubcampaign
         SUM(DispositionTimeSec) AS DispositionTimeSec,
         SUM(DispositionTimeCount) AS DispositionTimeCount,
         SUM(AvDispoTime) AS AvDispoTime,
-        SUM(ConnectedTimeSec) AS ConnectedTimeSec
+        SUM(loggedintime) AS loggedintime
         INTO #Final
         FROM #AgentSummary
         GROUP BY Campaign, Subcampaign, Rep
@@ -322,7 +322,7 @@ class AgentSummarySubcampaign
          AvWaitTime,
          DispositionTimeSec,
          AvDispoTime,
-         ConnectedTimeSec,
+         loggedintime,
          TalkTimeCount,
          WaitTimeCount,
          DispositionTimeCount
@@ -384,7 +384,7 @@ class AgentSummarySubcampaign
         $total['AvWaitTime'] = 0;
         $total['DispositionTimeSec'] = 0;
         $total['AvDispoTime'] = 0;
-        $total['ConnectedTimeSec'] = 0;
+        $total['loggedintime'] = 0;
 
         $total['TalkTimeCount'] = 0;
         $total['WaitTimeCount'] = 0;
@@ -400,7 +400,7 @@ class AgentSummarySubcampaign
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
             $total['WaitTimeSec'] += $rec['WaitTimeSec'];
             $total['DispositionTimeSec'] += $rec['DispositionTimeSec'];
-            $total['ConnectedTimeSec'] += $rec['ConnectedTimeSec'];
+            $total['loggedintime'] += $rec['loggedintime'];
 
             $total['TalkTimeCount'] += $rec['TalkTimeCount'];
             $total['WaitTimeCount'] += $rec['WaitTimeCount'];
@@ -418,7 +418,7 @@ class AgentSummarySubcampaign
             $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
             $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
             $rec['AvDispoTime'] = $this->secondsToHms($rec['AvDispoTime']);
-            $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
+            $rec['loggedintime'] = $this->secondsToHms($rec['loggedintime']);
 
             $rec['ConversionRate'] .= '%';
             $rec['ConversionFactor'] .= '%';
@@ -447,7 +447,7 @@ class AgentSummarySubcampaign
         $total['AvWaitTime'] = $this->secondsToHms($total['AvWaitTime']);
         $total['DispositionTimeSec'] = $this->secondsToHms($total['DispositionTimeSec']);
         $total['AvDispoTime'] = $this->secondsToHms($total['AvDispoTime']);
-        $total['ConnectedTimeSec'] = $this->secondsToHms($total['ConnectedTimeSec']);
+        $total['loggedintime'] = $this->secondsToHms($total['loggedintime']);
 
         // Tack on the totals row
         $results[] = $total;
@@ -467,7 +467,7 @@ class AgentSummarySubcampaign
         $this->checkDateRangeFilters($request);
 
         if (empty($request->campaigns)) {
-            $this->errors->add('campaigns.required', "At least 1 Campaign required");
+            $this->errors->add('campaigns.required', trans('reports.errcampaignsrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }

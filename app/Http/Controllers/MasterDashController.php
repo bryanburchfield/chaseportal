@@ -7,6 +7,7 @@ use \App\Traits\DashTraits;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\User;
 
 class MasterDashController extends Controller
 {
@@ -116,7 +117,6 @@ class MasterDashController extends Controller
         ];
 
         $data = [
-            'user' => Auth::user(),
             'page' => $page,
             'success' => $success,
         ];
@@ -164,5 +164,14 @@ class MasterDashController extends Controller
         $success[] = $user->update($update);
 
         return $this->showSettings($success);
+    }
+
+    public function updateLangDisplay(Request $request)
+    {
+        $user = Auth::user();
+        $display_lang = (int) $request->lang_displayed;
+        User::where('id', $user->id)->update(array('language_displayed' => $display_lang));
+
+        return redirect()->back();
     }
 }

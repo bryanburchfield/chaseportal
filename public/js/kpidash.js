@@ -1,7 +1,7 @@
 var KPI = {
-    
+
     org_kpis : [],
-    
+
     init:function(){
         $('.opt a.kpi_trigger').on('click', this.toggle_kpi_info);
         $('.switch input').on('click', this.toggle_kpi);
@@ -30,7 +30,7 @@ var KPI = {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             });
-                    
+
             $.ajax({
                 'async': false,
                 url: '/kpi/ajax_search',
@@ -48,7 +48,6 @@ var KPI = {
                     }
 
                     for(var i=0; i< response.search_recip.length;i++){
-                        
                         $(el).next('.search_results').append('<h5 class="search_result_item"  data-toggle="modal" data-target="#editRecipModal" data-recip="'+response.search_recip[i]['id']+'" data-name="'+response.search_recip[i]['name']+'" data-phone="'+response.search_recip[i].phone+'" data-email="'+response.search_recip[i].email+'">'+response.search_recip[i]['name']+'</h5>');
                     }
                 }
@@ -56,7 +55,6 @@ var KPI = {
         }else{
             $(el).next('.search_results').css({'display' : 'none'});
         }
-        
     },
 
     fire_kpi:function(e){
@@ -85,7 +83,7 @@ var KPI = {
                 $t.removeClass('glyphicon-refresh');
                 $t.addClass('glyphicon-flash');
             }
-        });   
+        });
     },
 
     adjust_interval:function(e){
@@ -113,18 +111,18 @@ var KPI = {
             success:function(response){
 
                 if(response.adjust_interval == true){
-                    $('<div class="mt12 mt20 alert alert-success">Interval successfully updated.</div>').insertAfter('form.adjust_interval .btn');
-                    setTimeout(function(){ 
+                    $('<div class="mt12 mt20 alert alert-success">'+Lang.get('js_msgs.interval_updated')+'</div>').insertAfter('form.adjust_interval .btn');
+                    setTimeout(function(){
                         $('.alert').remove();
                     }, 4500);
                 }else{
-                    $('<div class="mt12 mt20 alert-danger">Something went wrong. Please try again later.</div>').insertAfter('form.adjust_interval .btn');
-                    setTimeout(function(){ 
+                    $('<div class="mt12 mt20 alert-danger">'+Lang.get('js_msgs.reload_error_msg')+'</div>').insertAfter('form.adjust_interval .btn');
+                    setTimeout(function(){
                         $('.alert').remove();
                     }, 4500);
                 }
             }
-        });     
+        });
     },
 
     toggle_kpi:function(){
@@ -197,7 +195,7 @@ var KPI = {
 
         $('.search_results').empty().hide();
         e.preventDefault();
-        var id=$(this).data('recip');    
+        var id=$(this).data('recip');
         KPI.edit_recipient(id);
     },
 
@@ -226,7 +224,7 @@ var KPI = {
                 $('#editRecipModal .modal-body form .kpi_list').empty();
                 $('#editRecipModal .modal-body form .user_id').val(id);
 
-                var kpi_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>Select All</b></label></div><a href="#" class=" undoselection_btn"> Undo Selection</a>';
+                var kpi_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
                 var selected;
 
                 for(var i=0; i<response.kpi_list.length;i++){
@@ -296,7 +294,7 @@ var KPI = {
                     $.each(errors, function (key, value) {
 
                         if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {                       
+                            $.each(value, function (key, value) {
                             $('#editRecipModal form .alert').show().append(value+"<br/>");
 
                             });
@@ -306,7 +304,7 @@ var KPI = {
                     });
                 }else{
                     window.location.href = from_page;
-                }    
+                }
             }
         });
     },
@@ -322,15 +320,15 @@ var KPI = {
                 }
             }
         });
-        $(".kpi_list").find('div.checkbox.select_all b').text('Select All');
+        $(".kpi_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.select_all'));
     },
 
     toggle_all_kpis:function(){
         if($(this).prop("checked")){
-            $(".kpi_list").find('div.checkbox.select_all b').text('Unselect All');
+            $(".kpi_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.unselect_all'));
             $(this).parent().parent().siblings().find('label input').prop( "checked", true );
         }else{
-            $(".kpi_list").find('div.checkbox.select_all b').text('Select All');
+            $(".kpi_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.select_all'));
             $(this).parent().parent().siblings().find('label input').prop( "checked", false );
         }
     },
@@ -377,7 +375,6 @@ var KPI = {
                 },
                 success:function(response){
                     $('div#'+id).remove();
-                    
                     $('#deleteRecipModal').modal('toggle');
                 }
             });

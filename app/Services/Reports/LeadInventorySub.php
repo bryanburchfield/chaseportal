@@ -14,17 +14,15 @@ class LeadInventorySub
 
     public function __construct()
     {
-        $this->initilaizeParams();
+        $this->initilaizeParams(false);
 
-        $this->params['reportName'] = 'Lead Inventory by Subcampaign Report';
-        $this->params['fromdate'] = date("m/d/Y 9:00 \A\M");
-        $this->params['todate'] = date("m/d/Y 8:00 \P\M");
+        $this->params['reportName'] = 'reports.lead_inventory_sub';
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
         $this->params['columns'] = [
-            'Description' => 'Result Codes',
-            'Type' => 'Type',
-            'Leads' => 'Count',
+            'Description' => 'reports.resultcodes',
+            'Type' => 'reports.type',
+            'Leads' => 'reports.count',
         ];
     }
 
@@ -37,7 +35,7 @@ class LeadInventorySub
         ];
 
         $filters['campaign'] =
-            ['' => 'Select One'] +
+            ['' => trans('general.select_one')] +
             $filters['campaign'];
 
         return $filters;
@@ -45,6 +43,8 @@ class LeadInventorySub
 
     private function executeReport($all = false)
     {
+        $this->setHeadings();
+
         $bind['group_id'] = Auth::user()->group_id;
 
         $sql = "SET NOCOUNT ON;
@@ -217,7 +217,7 @@ class LeadInventorySub
         if (!empty($request->campaign)) {
             $this->params['campaign'] = $request->campaign;
         } else {
-            $this->errors->add('campaign.required', "Campaign required");
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         }
 
         if (!empty($request->subcampaign)) {
