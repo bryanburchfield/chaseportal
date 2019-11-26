@@ -14,10 +14,6 @@ class UpdateDialersTable extends Migration
     public function up()
     {
         Schema::dropIfExists('dialers');
-<<<<<<< HEAD
-=======
-
->>>>>>> beta
         Schema::create('dialers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->smallInteger('dialer_numb');
@@ -25,10 +21,6 @@ class UpdateDialersTable extends Migration
             $table->string('dialer_fqdn', 50);
             $table->string('reporting_db', 50);
         });
-<<<<<<< HEAD
-=======
-
->>>>>>> beta
         DB::table('dialers')->insert(
             array(
                 [
@@ -184,11 +176,8 @@ class UpdateDialersTable extends Migration
             )
         );
     }
-<<<<<<< HEAD
-=======
 
 
->>>>>>> beta
     /**
      * Reverse the migrations.
      *
