@@ -10,7 +10,33 @@
 			<div class="row">
 
 				@include('shared.report_db_menu')
-				
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('fromdate', __('reports.from')) !!}
+						<div class="input-group date">
+							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true]) !!}
+							<span class="input-group-addon">
+			                    <span class="glyphicon glyphicon-calendar">
+			                    </span>
+			                </span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('todate',  __('reports.to')) !!}
+						<div class="input-group date">
+							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true]) !!}
+							<span class="input-group-addon">
+			                    <span class="glyphicon glyphicon-calendar">
+			                    </span>
+			                </span>
+						</div>
+					</div>
+				</div>
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}

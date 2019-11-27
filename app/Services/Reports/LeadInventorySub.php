@@ -45,6 +45,12 @@ class LeadInventorySub
     {
         $this->setHeadings();
 
+        list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
         $bind['group_id'] = Auth::user()->group_id;
 
         $sql = "SET NOCOUNT ON;
@@ -73,6 +79,8 @@ class LeadInventorySub
             $bind['group_id' . $i] = Auth::user()->group_id;
             $bind['campaign' . $i] = $this->params['campaign'];
             $bind['subcampaign' . $i] = $this->params['subcampaign'];
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
                 CASE IsNull(dr.CallStatus, '')
@@ -107,6 +115,8 @@ class LeadInventorySub
                 count(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
             WHERE dr.GroupId = :group_id$i
+            AND dr.Date >= :startdate$i
+            AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
             AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
@@ -213,6 +223,9 @@ class LeadInventorySub
 
         // Check page filters
         $this->checkPageFilters($request);
+
+        // Check report filters
+        $this->checkDateRangeFilters($request);
 
         if (!empty($request->campaign)) {
             $this->params['campaign'] = $request->campaign;

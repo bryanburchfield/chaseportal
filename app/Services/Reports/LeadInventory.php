@@ -39,6 +39,12 @@ class LeadInventory
     {
         $this->setHeadings();
 
+        list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
         if (!empty($this->params['campaigns'])) {
             $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
         }
@@ -73,6 +79,8 @@ class LeadInventory
         $union = '';
         foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
             CASE IsNull(dr.CallStatus, '')
@@ -109,6 +117,8 @@ class LeadInventory
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
             INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign
             WHERE dr.GroupId = :group_id$i
+            AND dr.Date >= :startdate$i
+            AND dr.Date < :enddate$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
             GROUP BY dr.CallStatus, dr.WasDialed, dr.GroupId";
 
@@ -210,6 +220,9 @@ class LeadInventory
 
         // Check page filters
         $this->checkPageFilters($request);
+
+        // Check report filters
+        $this->checkDateRangeFilters($request);
 
         if (!empty($request->campaigns)) {
             $this->params['campaigns'] = $request->campaigns;
