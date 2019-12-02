@@ -118,6 +118,11 @@ trait ReportExportTraits
 
         $pdf = $this->pdfExport($request);
 
+        // Bail if there's no report to be sent
+        if (empty($pdf)) {
+            return;
+        }
+
         if (isset($this->params['fromdate'])) {
             $daterange = trans('reports.from') . ': ' .
                 $fromdate->tz($tz)->isoFormat('lll') . ' ' .
