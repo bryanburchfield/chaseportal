@@ -40,8 +40,13 @@ trait ReportTraits
 
     public function setDates()
     {
-        $this->params['fromdate'] = Carbon::parse('today 09:00')->isoFormat('L LT');
-        $this->params['todate'] = Carbon::parse('today 20:00')->isoFormat('L LT');
+        if ($this->params['datesOptional']) {
+            $this->params['fromdate'] = '';
+            $this->params['todate'] = '';
+        } else {
+            $this->params['fromdate'] = Carbon::parse('today 09:00')->isoFormat('L LT');
+            $this->params['todate'] = Carbon::parse('today 20:00')->isoFormat('L LT');
+        }
     }
 
     /**
@@ -177,6 +182,10 @@ trait ReportTraits
 
     private function dateRange($start, $end)
     {
+        if ($start == '' || $end == '') {
+            return [null, null];
+        }
+
         $tz = Auth::user()->iana_tz;
 
         $fromDate = $this->localToUtc($start, $tz);
@@ -222,8 +231,13 @@ trait ReportTraits
 
     private function checkDateRangeFilters(Request $request)
     {
+        $from = null;
+        $to = null;
+
         if (empty($request->fromdate)) {
-            $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
+            if (!$this->params['datesOptional']) {
+                $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
+            }
         } else {
             try {
                 $from = Carbon::createFromIsoFormat('L LT', $request->fromdate, null, App::getLocale());
@@ -234,7 +248,9 @@ trait ReportTraits
         }
 
         if (empty($request->todate)) {
-            $this->errors->add('todate.required', trans('reports.errtodaterequired'));
+            if (!$this->params['datesOptional']) {
+                $this->errors->add('todate.required', trans('reports.errtodaterequired'));
+            }
         } else {
             try {
                 $to = Carbon::createFromIsoFormat('L LT', $request->todate, null, App::getLocale());
@@ -244,9 +260,11 @@ trait ReportTraits
             }
         }
 
-        if ($from === false || $to === false || $to < $from) {
+        if (gettype($from) !== gettype($to)) {
             $this->errors->add('daterange', trans('reports.errdaterange'));
-        } else {
+        } elseif ($to < $from) {
+            $this->errors->add('daterange', trans('reports.errdaterange'));
+        } elseif (gettype($from) == 'object') {
             $this->params['fromdate'] = $from->toDateTimeString();
             $this->params['todate'] = $to->toDateTimeString();
         }

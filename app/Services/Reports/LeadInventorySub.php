@@ -17,6 +17,7 @@ class LeadInventorySub
         $this->initilaizeParams(false);
 
         $this->params['reportName'] = 'reports.lead_inventory_sub';
+        $this->params['datesOptional'] = true;
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
         $this->params['columns'] = [
@@ -45,11 +46,16 @@ class LeadInventorySub
     {
         $this->setHeadings();
 
-        list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
+        if (empty($this->params['fromdate']) || empty($this->params['todate'])) {
+            $startDate = '1900-01-01 00:00:00';
+            $endDate = date('Y-m-d H:i:s');
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
+            // convert to datetime strings
+            $startDate = $fromDate->format('Y-m-d H:i:s');
+            $endDate = $toDate->format('Y-m-d H:i:s');
+        }
 
         $bind['group_id'] = Auth::user()->group_id;
 

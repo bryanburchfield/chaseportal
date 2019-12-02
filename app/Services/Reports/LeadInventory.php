@@ -17,6 +17,7 @@ class LeadInventory
         $this->initilaizeParams(false);
 
         $this->params['reportName'] = 'reports.lead_inventory';
+        $this->params['datesOptional'] = true;
         $this->params['campaigns'] = [];
         $this->params['columns'] = [
             'Description' => 'reports.resultcodes',
@@ -39,11 +40,16 @@ class LeadInventory
     {
         $this->setHeadings();
 
-        list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
+        if (empty($this->params['fromdate']) || empty($this->params['todate'])) {
+            $startDate = '1900-01-01 00:00:00';
+            $endDate = date('Y-m-d H:i:s');
+        } else {
+            list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
-        // convert to datetime strings
-        $startDate = $fromDate->format('Y-m-d H:i:s');
-        $endDate = $toDate->format('Y-m-d H:i:s');
+            // convert to datetime strings
+            $startDate = $fromDate->format('Y-m-d H:i:s');
+            $endDate = $toDate->format('Y-m-d H:i:s');
+        }
 
         if (!empty($this->params['campaigns'])) {
             $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
