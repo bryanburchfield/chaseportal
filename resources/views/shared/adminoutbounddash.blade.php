@@ -195,6 +195,8 @@
                 <div class="inbound inandout mb0">
                     <canvas id="avg_wait_time_graph"></canvas>
                 </div>
+                <p class="avg_wait_time_min"></p>
+                <p class="avg_wait_time_max"></p>
             </div>
         </div><!-- end card -->
     </div><!-- end column -->
