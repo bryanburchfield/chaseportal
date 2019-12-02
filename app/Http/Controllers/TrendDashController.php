@@ -477,7 +477,8 @@ class TrendDashController extends Controller
 			'HoldTime' = CASE WHEN HoldTime <= 0 THEN 0 ELSE HoldTime END
 			FROM [$db].[dbo].[DialingResults] DR
 			WHERE DR.CallType = 1
-			AND DR.Rep != ''
+            AND DR.Rep != ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND DR.CallStatus IS NOT NULL
 			AND DR.CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
 			AND DR.GroupId = :groupid$i
@@ -636,7 +637,8 @@ class TrendDashController extends Controller
 			WHERE DR.CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
 			AND DR.CallType NOT IN ('7','8')
 			AND DR.HandleTime != 0
-			AND DR.Duration != 0
+            AND DR.Duration != 0
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND DR.GroupId = :groupid$i
 			AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i";

@@ -306,6 +306,7 @@ class AdminOutboundDashController extends Controller
                 'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
             AND DR.Duration <> 0
             AND DR.Rep <> ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i";
@@ -424,7 +425,8 @@ class AdminOutboundDashController extends Controller
 				AND (Campaign = DR.Campaign OR Campaign = '')
 				ORDER BY [Description] Desc) DI
 			WHERE DR.GroupId = :groupid1_$i
-			AND DR.Rep != ''
+            AND DR.Rep != ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND DR.Date >= :fromdate1_$i
             AND DR.Date < :todate1_$i";
 
@@ -439,7 +441,8 @@ class AdminOutboundDashController extends Controller
 			'Cnt' = COUNT(DR.CallStatus)
 			FROM [$db].[dbo].[DialingResults] DR
 			WHERE DR.GroupId = :groupid2_$i
-			AND DR.Rep = ''
+            AND DR.Rep = ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED')
 			AND DR.Date >= :fromdate2_$i
             AND DR.Date < :todate2_$i";
@@ -645,6 +648,7 @@ class AdminOutboundDashController extends Controller
                 ORDER BY [Description] Desc) DI
             WHERE DR.GroupId = :groupid$i
             AND DR.Rep != ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.CallType NOT IN (1,7,8,11)
             AND Duration > 0
             AND DR.CallStatus NOT IN (
@@ -1016,6 +1020,7 @@ class AdminOutboundDashController extends Controller
             WHERE DR.CallType NOT IN (1,7,8,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND DR.Duration > 0
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";

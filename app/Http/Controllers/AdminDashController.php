@@ -851,6 +851,7 @@ class AdminDashController extends Controller
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
@@ -962,6 +963,7 @@ class AdminDashController extends Controller
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND DR.Duration > 0
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";
@@ -1161,6 +1163,7 @@ class AdminDashController extends Controller
             AND CallStatus NOT IN('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','CR_HANGUP','Inbound Voicemail')
             AND HoldTime >= 0
             AND Duration > 0
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
             AND DR.GroupId = :groupid$i ";

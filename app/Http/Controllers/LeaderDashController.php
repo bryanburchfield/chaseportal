@@ -210,7 +210,8 @@ class LeaderDashController extends Controller
 				AND (Campaign = DR.Campaign OR Campaign = '')
 				ORDER BY [Description] Desc) DI
 			WHERE DR.GroupId = :groupid$i
-			AND DR.Rep != ''
+            AND DR.Rep != ''
+            AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND DR.CallStatus NOT IN (
 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
