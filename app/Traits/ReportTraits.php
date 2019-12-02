@@ -40,7 +40,7 @@ trait ReportTraits
 
     public function setDates()
     {
-        if ($this->params['datesOptional']) {
+        if (!empty($this->params['datesOptional'])) {
             $this->params['fromdate'] = '';
             $this->params['todate'] = '';
         } else {
