@@ -150,6 +150,8 @@ trait ReportExportTraits
             'settings' => url('/dashboards/automatedreports'),
         ];
         $this->sendEmail($message);
+
+        unlink($filename);
     }
 
     private function sendEmail($message)
