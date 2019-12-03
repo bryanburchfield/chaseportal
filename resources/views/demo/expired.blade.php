@@ -1,0 +1,1 @@
+Sorry, your demo account expired {{ $expiration->diffForHumans() }}.
