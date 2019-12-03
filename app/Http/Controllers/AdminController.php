@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AutomatedReport;
 use App\Models\Dialer;
+use App\Models\Recipient;
 use App\Models\System;
 use App\Traits\TimeTraits;
 use Exception;
@@ -172,6 +173,17 @@ class AdminController extends Controller
 
         // delete automated reports
         AutomatedReport::where('user_id', $user->id)->delete();
+
+        // delete recipients if demo user
+        if (Auth::user()->isType('demo')) {
+            $kpicontroller = new KpiController();
+            $kpireq = new Request(['id' => 0]);
+
+            foreach (Recipient::where('user_id', $user->id)->get() as $recipient) {
+                $kpireq->replace(['id' => $recipient->id]);
+                $kpicontroller->removeRecipient($kpireq);
+            }
+        }
 
         // delete user
         $user->delete();
