@@ -67,7 +67,11 @@
 				            </div>
 
 				            <div class="tab-pane mt30" id="add_rule">
-        		                <div class="col-sm-12 nopad">
+                                <div class="col-sm-6">
+                                    <div id="diagram"></div>
+                                </div>
+
+        		                <div class="col-sm-6 nopad">
         		                    <div class="card">
         		                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
             	                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
