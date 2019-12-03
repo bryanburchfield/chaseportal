@@ -176,19 +176,24 @@ class AdminController extends Controller
 
         // delete recipients if demo user
         if (Auth::user()->isType('demo')) {
-            $kpicontroller = new KpiController();
-            $kpireq = new Request(['id' => 0]);
-
-            foreach (Recipient::where('user_id', $user->id)->get() as $recipient) {
-                $kpireq->replace(['id' => $recipient->id]);
-                $kpicontroller->removeRecipient($kpireq);
-            }
+            $this->deleteRecipients($user->id);
         }
 
         // delete user
         $user->delete();
 
         return ['status' => 'user deleted'];
+    }
+
+    public function deleteRecipients($user_id)
+    {
+        $kpicontroller = new KpiController();
+        $kpireq = new Request(['id' => 0]);
+
+        foreach (Recipient::where('user_id', $user_id)->get() as $recipient) {
+            $kpireq->replace(['id' => $recipient->id]);
+            $kpicontroller->removeRecipient($kpireq);
+        }
     }
 
     public function getUser(Request $request)
