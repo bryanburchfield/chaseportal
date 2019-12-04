@@ -10,6 +10,7 @@ use App\Models\Recipient;
 use App\Models\System;
 use App\Traits\TimeTraits;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -134,26 +135,19 @@ class AdminController extends Controller
         return view('dashboards.admin')->with($data);
     }
 
-    public function token_exists($hash)
-    {
-        return User::where('app_token', $hash)->exists();
-    }
-
     public function addUser(Request $request)
     {
-        do {
-            $hash = md5(uniqid());
-        } while ($this->token_exists($hash));
-
-        /// check if name or email exists
+        // check if name or email exists
         $existing_user = User::where('name', $request->name)
             ->orWhere('email', $request->email)
             ->first();
 
         if (!$existing_user) {
+            $app_token = $this->generateToken();
+
             $input = $request->all();
             $input['password'] = Hash::make(uniqid());
-            $newuser = User::create(array_merge($input, ['app_token' => $hash]));
+            $newuser = User::create(array_merge($input, ['app_token' => $app_token]));
 
             $newuser->sendWelcomeEmail($newuser);
 
@@ -165,6 +159,77 @@ class AdminController extends Controller
         }
 
         return $return;
+    }
+
+    public function addDemoUser(Request $request)
+    {
+        // check name exists
+        $existing_user = User::where('name', $request->name)->first();
+
+        if (!$existing_user) {
+            // If no email given, generate a random one
+            if (!$request->has('email')) {
+                $request->request->add(['email' => $this->generateEmail()]);
+            }
+
+            $app_token = $this->generateToken();
+
+            // Calculate expiration date
+            $expiration = Carbon::addDays($request->expiration);
+            $request->request->remove('expiration');
+
+            $input = $request->except([
+                'user_type',
+                'group_id',
+                'db',
+                'tz',
+                'app_token',
+                'expiration',
+                'password',
+            ]);
+
+            $newuser = User::create(
+                array_merge($input, [
+                    'user_type' => 'demo',
+                    'group_id' => '777',
+                    'db' => 'PowerV2_Reporting_Dialer-17',
+                    'tz' => 'Eastern Standard Time',
+                    'app_token' => $app_token,
+                    'expiration' => $expiration->toDateTimeString(),
+                    'password' => Hash::make($app_token),
+                ])
+            );
+
+            $newuser->sendWelcomeDemoEmail($newuser);
+
+            $return['success'] = $newuser;
+        } else {
+            $return['errors'] = 'Name or email already in use by "' .
+                $existing_user->name . '" in ' .
+                $existing_user->db;
+        }
+
+        return $return;
+    }
+
+    private function generateToken()
+    {
+        do {
+            $hash = md5(uniqid());
+        } while ($this->token_exists($hash));
+
+        return $hash;
+    }
+
+    private function generateEmail()
+    {
+        // TODO
+        return 'blah@blah.com';
+    }
+
+    private function token_exists($hash)
+    {
+        return User::where('app_token', $hash)->exists();
     }
 
     public function deleteUser(Request $request)
@@ -316,33 +381,5 @@ class AdminController extends Controller
             'columns' => $field_array,
             'search_result' => $results,
         ];
-    }
-
-    public function addDemoUser(Request $request)
-    {
-        /// check if demo user exists
-        $existing_user = User::where('name', $request->name)
-            ->orWhere('email', $request->email)
-            ->orWhere('phone', $request->phone)
-            ->first();
-
-        if (!$existing_user) {
-            $input = $request->all();
-            $input['user_type'] = 'demo';
-            $input['group_id'] = '777';
-            $input['db'] = 'PowerV2_Reporting_Dialer-17';
-            $input['tz'] = 'Eastern Standard Time';
-            // $newuser = User::create(array_merge($input, ['app_token' => $hash]));
-
-            // $newuser->sendWelcomeEmail($newuser);
-
-            $return['success'] = $newuser;
-        } else {
-            $return['errors'] = 'Name, phone or email already in use by "' .
-                $existing_user->name . '" in ' .
-                $existing_user->db;
-        }
-
-        return $return;
     }
 }

@@ -30,7 +30,9 @@ class User extends Authenticatable
         'group_id',
         'additional_dbs',
         'app_token',
-        'language_displayed'
+        'language_displayed',
+        'phone',
+        'expiration',
     ];
 
     /**
@@ -111,5 +113,10 @@ class User extends Authenticatable
         $token = Password::broker()->createToken($user);
 
         $this->notify(new WelcomeNotification($user, $token));
+    }
+
+    public function sendWelcomeDemoEmail($user)
+    {
+        $this->notify(new WelcomeDemoNotification($user));
     }
 }
