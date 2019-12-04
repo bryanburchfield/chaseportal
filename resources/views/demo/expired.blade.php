@@ -1,1 +1,1 @@
-Sorry, your demo account expired {{ $expiration->diffForHumans() }}.
+Sorry, your demo account expired {{ $expiration->longRelativeToNowDiffForHumans(2) }}.
