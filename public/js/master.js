@@ -42,8 +42,7 @@ var Master = {
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
-        $('.add_user #phone').on('focusout', this.format_phone);
-        $('.add_user #user_type').on('change', this.check_new_user_type);
+        $('.demo_user #phone').on('focusout', this.format_phone);
 		$('.edit_user').on('submit', this.edit_user);
         $('.edit_myself').on('submit', this.edit_myself);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
@@ -1039,15 +1038,6 @@ var Master = {
             text = text.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, "$1-$2-$3");
             return text;
         });
-    },
-
-    //// check if user being added is a demo type
-    check_new_user_type:function(){
-        if($(this).val() == 'demo'){
-            $('.demo_user_expiration').css({'display':'block'});
-        }else{
-            $('.demo_user_expiration').css({'display':'none'});
-        }
     },
 
 	// add global user
@@ -2131,6 +2121,6 @@ $(document).ready(function(){
 		$('html,body').scrollTop($('body').scrollTop());
 	});
 
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
 
 });

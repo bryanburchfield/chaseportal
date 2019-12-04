@@ -57,6 +57,7 @@ Route::prefix('dashboards')->group(function () {
         Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::get('admin/', 'AdminController@index');
             Route::post('admin/add_user', 'AdminController@addUser');
+            Route::post('admin/demo_user', 'AdminController@addDemoUser');
             Route::post('admin/delete_user', 'AdminController@deleteUser');
             Route::post('admin/get_user', 'AdminController@getUser');
             Route::post('admin/update_user', 'AdminController@updateUser');

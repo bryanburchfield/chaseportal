@@ -1337,7 +1337,8 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_rule .form-control,
 .edit_rule button.multiselect,
 .update_rule .form-control,
-.edit_myself select {
+.edit_myself select,
+.demo_user select {
   background: #eee !important;
 }
 
@@ -2315,10 +2316,6 @@ p.name i {
 
 .kpi_list div.checkbox:nth-of-type(2) {
   clear: both;
-}
-
-.demo_user_expiration {
-  display: none;
 }
 
 /* ---------------------------------------------------

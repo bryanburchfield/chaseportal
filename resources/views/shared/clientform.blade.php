@@ -4,16 +4,6 @@
         {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
 
             <div class="form-group">
-                {!! Form::label('user_type', 'User Type') !!}
-                {!! Form::select("user_type", ['' => 'Select One', 'client' => 'Client', 'demo' => 'Demo'], null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
-            </div>
-
-            <div class="form-group demo_user_expiration">
-                <label for="expiration" data-toggle="tooltip" data-placement="right" title="Select the length of the demo user's trial">Expiration <i class="fas fa-info-circle"></i></label>
-                {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', 'required'=>true]) !!}
-            </div>
-
-            <div class="form-group">
                 {!! Form::label('group_id', 'Group ID') !!}
                 {!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
             </div>

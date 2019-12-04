@@ -317,4 +317,32 @@ class AdminController extends Controller
             'search_result' => $results,
         ];
     }
+
+    public function addDemoUser(Request $request)
+    {
+        /// check if demo user exists
+        $existing_user = User::where('name', $request->name)
+            ->orWhere('email', $request->email)
+            ->orWhere('phone', $request->phone)
+            ->first();
+
+        if (!$existing_user) {
+            $input = $request->all();
+            $input['user_type'] = 'demo';
+            $input['group_id'] = '777';
+            $input['db'] = 'PowerV2_Reporting_Dialer-17';
+            $input['tz'] = 'Eastern Standard Time';
+            // $newuser = User::create(array_merge($input, ['app_token' => $hash]));
+
+            // $newuser->sendWelcomeEmail($newuser);
+
+            $return['success'] = $newuser;
+        } else {
+            $return['errors'] = 'Name, phone or email already in use by "' .
+                $existing_user->name . '" in ' .
+                $existing_user->db;
+        }
+
+        return $return;
+    }
 }

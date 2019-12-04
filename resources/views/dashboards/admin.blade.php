@@ -20,6 +20,7 @@
 							<ul class="nav nav-tabs">
 
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
+								<li><a href="#demo_user" data-toggle="tab">Add Demo User</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
 								<li><a href="#edit_myself" data-toggle="tab">Edit Myself</a></li>
@@ -29,6 +30,45 @@
 								<div class="tab-pane active mt30" id="new_user">
 									@include('shared.clientform', ['mode' => 'add'])
 									@include('shared.dialerlist', ['mode' => 'add'])
+								</div>
+
+								<div class="tab-pane mt30" id="demo_user">
+									<div class="col-sm-6 mb0 card">
+									    <h2 class="page_heading">Add Demo User</h2>
+										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/demo_user', 'class'=>'form demo_user']) !!}
+											<div class="form-group">
+											    {!! Form::label('name', 'Name') !!}
+											    {!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
+											</div>
+
+											<div class="form-group">
+											    {!! Form::label('email', 'Email') !!}
+											    {!! Form::email('email', null, ['class'=>'form-control email']) !!}
+											</div>
+
+											<div class="form-group">
+											    {!! Form::label('phone', 'Phone') !!}
+											    {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
+											</div>
+
+											<div class="form-group demo_user_expiration">
+											    <label for="expiration" data-toggle="tooltip" data-placement="right" title="Select the length of the demo user's trial">Expiration <i class="fas fa-info-circle"></i></label>
+											    {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', 'required'=>true]) !!}
+											</div>
+										    {!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
+
+										    <br><br>
+
+										    @if($errors->any())
+										        <div class="alert alert-danger">
+										            @foreach($errors->all() as $e)
+										                {{ $e }}
+										            @endforeach
+										        </div>
+										    @endif
+
+										{!! Form::close() !!}
+									</div>
 								</div>
 
 								<div class="tab-pane mt30" id="edit_user">
