@@ -175,7 +175,7 @@ class AdminController extends Controller
             }
 
             // Calculate expiration date
-            $expiration = Carbon::addDays($request->expiration);
+            $expiration = Carbon::now()->addDays($request->expiration);
             $request->request->remove('expiration');
 
             $newuser = User::create(

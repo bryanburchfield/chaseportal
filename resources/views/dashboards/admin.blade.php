@@ -35,7 +35,7 @@
 								<div class="tab-pane mt30" id="demo_user">
 									<div class="col-sm-6 mb0 card">
 									    <h2 class="page_heading">Add Demo User</h2>
-										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/add_demo_user', 'class'=>'form demo_user']) !!}
+										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/admin/add_demo_user', 'class'=>'form demo_user']) !!}
 											<div class="form-group">
 											    {!! Form::label('name', 'Name') !!}
 											    {!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}

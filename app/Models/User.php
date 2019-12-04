@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use App\Notifications\ChaseResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
+use App\Notifications\WelcomeDemoNotification;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\Password;
 
