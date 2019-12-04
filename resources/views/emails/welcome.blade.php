@@ -502,7 +502,7 @@ tr.bg_blue{
                         <tr>
                             <td>
                                 <div class="text" style="text-align: center;">
-                                    <h2 style="color:#ffffff;"><span>Explore!</span><br> ChaseData’s New Dashboard Portal</h2>
+                                    <h2 style="color:#ffffff;"><span>Explore!</span><br> ChaseData’s Dashboard Portal</h2>
                                     <a href="{{$data['link']}}" class="btn btn-primary mt15">Go to Portal</a>
                                 </div>
                             </td>
@@ -514,7 +514,7 @@ tr.bg_blue{
             <tr>
                 <td class="bg_dark email-section" style="text-align:center;">
                     <div class="heading-section heading-section-white">
-                        <p>ChaseData’s new Dashboard Portal combines self-service discovery and data visualization through interactive performance and KPI dashboards delivering an all-in-one solution that rapidly promotes insight across your call center. Your visual dashboards portal is engineered to simplify analysis — reducing the time to consume information from hours to seconds. Harness call center-wide metrics so you can gain unprecedented insight into your call center environment.</p>
+                        <p>ChaseData’s Dashboard Portal combines self-service discovery and data visualization through interactive performance and KPI dashboards delivering an all-in-one solution that rapidly promotes insight across your call center. Your visual dashboards portal is engineered to simplify analysis — reducing the time to consume information from hours to seconds. Harness call center-wide metrics so you can gain unprecedented insight into your call center environment.</p>
                     </div>
                 </td>
             </tr><!-- end: tr -->
