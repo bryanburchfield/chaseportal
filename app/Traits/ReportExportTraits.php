@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Services\PDF;
 use App\Exports\ReportExport;
 use App\Mail\ReportMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -44,7 +45,7 @@ trait ReportExportTraits
         }
     }
 
-    public function htmlExport($request)
+    public function htmlExport(Request $request)
     {
         ini_set('max_execution_time', 600);
 

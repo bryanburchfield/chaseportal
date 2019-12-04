@@ -8,6 +8,7 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -234,26 +235,34 @@ trait ReportTraits
         $from = null;
         $to = null;
 
-        if (empty($request->fromdate)) {
+        if (empty($request->input('fromdate'))) {
             if (!$this->params['datesOptional']) {
                 $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
             }
         } else {
             try {
-                $from = Carbon::createFromIsoFormat('L LT', $request->fromdate, null, App::getLocale());
+                if ($request->export) {
+                    $from = Carbon::parse($request->input('fromdate'));
+                } else {
+                    $from = Carbon::createFromIsoFormat('L LT', $request->input('fromdate'), null, App::getLocale());
+                }
             } catch (Exception $e) {
                 $from = false;
                 $this->errors->add('fromdate.invalid', trans('reports.errfromdateinvalid'));
             }
         }
 
-        if (empty($request->todate)) {
+        if (empty($request->input('todate'))) {
             if (!$this->params['datesOptional']) {
                 $this->errors->add('todate.required', trans('reports.errtodaterequired'));
             }
         } else {
             try {
-                $to = Carbon::createFromIsoFormat('L LT', $request->todate, null, App::getLocale());
+                if ($request->export) {
+                    $to = Carbon::parse($request->input('todate'));
+                } else {
+                    $to = Carbon::createFromIsoFormat('L LT', $request->input('todate'), null, App::getLocale());
+                }
             } catch (Exception $e) {
                 $to = false;
                 $this->errors->add('todate.invalid', trans('reports.errtodateinvalid'));
@@ -351,16 +360,16 @@ trait ReportTraits
         }
     }
 
-    private function getSessionParams($request)
+    private function getSessionParams(Request $request)
     {
         // if we're not doing report export, return
         if (empty($request->export)) {
             return $request;
         }
 
-        $newrequest = $request;
+        $newrequest = $request->duplicate();
 
-        $report = join('', array_slice(explode('\\', get_class($this)), -1));
+        $report = (new \ReflectionClass($this))->getShortName();
 
         foreach ($this->params as $k => $v) {
             if (
@@ -376,11 +385,10 @@ trait ReportTraits
                 $param = $report . "_params['$k']";
                 if ($request->session()->has($param)) {
                     $v = $request->session()->get($param);
-                    $newrequest->request->add([$k => $v]);
+                    $newrequest->merge([$k => $v]);
                 }
             }
         }
-
         return $newrequest;
     }
 }
