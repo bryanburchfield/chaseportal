@@ -167,29 +167,19 @@ class AdminController extends Controller
         $existing_user = User::where('name', $request->name)->first();
 
         if (!$existing_user) {
-            // If no email given, generate a random one
-            if (!$request->has('email')) {
-                $request->request->add(['email' => $this->generateEmail()]);
-            }
-
             $app_token = $this->generateToken();
+
+            // If no email given, create one
+            if (!$request->filled('email')) {
+                $request->request->add(['email' => 'demo_' . $app_token . '@chasedatacorp.com']);
+            }
 
             // Calculate expiration date
             $expiration = Carbon::addDays($request->expiration);
             $request->request->remove('expiration');
 
-            $input = $request->except([
-                'user_type',
-                'group_id',
-                'db',
-                'tz',
-                'app_token',
-                'expiration',
-                'password',
-            ]);
-
             $newuser = User::create(
-                array_merge($input, [
+                array_merge($request->all(), [
                     'user_type' => 'demo',
                     'group_id' => '777',
                     'db' => 'PowerV2_Reporting_Dialer-17',
@@ -204,7 +194,7 @@ class AdminController extends Controller
 
             $return['success'] = $newuser;
         } else {
-            $return['errors'] = 'Name or email already in use by "' .
+            $return['errors'] = 'Name already in use by "' .
                 $existing_user->name . '" in ' .
                 $existing_user->db;
         }
@@ -219,12 +209,6 @@ class AdminController extends Controller
         } while ($this->token_exists($hash));
 
         return $hash;
-    }
-
-    private function generateEmail()
-    {
-        // TODO
-        return 'blah@blah.com';
     }
 
     private function token_exists($hash)
