@@ -2317,6 +2317,31 @@ p.name i {
   clear: both;
 }
 
+.flowchart {
+  margin-top: 60px;
+}
+
+.flowchart_element {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  background: #203047;
+  display: table;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.flowchart_element span {
+  display: table-cell;
+  vertical-align: middle;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 18px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

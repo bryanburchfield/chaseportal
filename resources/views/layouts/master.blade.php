@@ -54,9 +54,6 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
-    <script src="/js/raphael-min.js"></script>
-    <script src="/js/flowchart.min.js"></script>
-    <script src="/js/leadflow.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)

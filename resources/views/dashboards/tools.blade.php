@@ -67,67 +67,100 @@
 				            </div>
 
 				            <div class="tab-pane mt30" id="add_rule">
-                                <div class="col-sm-6">
-                                    <div id="diagram"></div>
+
+                                <div class="row">
+                                    <div class="col-sm-7 col-sm-offset-5">
+                                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
+                                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
+
+                                        <div class="card">
+                                            <div class="form-group">
+                                                {!! Form::label('rule_name', __('tools.rule_name')) !!}
+                                                {!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-        		                <div class="col-sm-6 nopad">
-        		                    <div class="card">
-        		                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
-            	                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="flowchart_element when"><span>When</span></div>
+                                    </div>
 
-                							@if($errors->any())
-                                                <div class="alert alert-danger mt20">
-                                                    @foreach($errors->all() as $e)
-                                                        <li>{{ $e }}</li>
-                                                    @endforeach
-                                                </div>
-                							@endif
+                                    <div class="col-sm-7">
+                                        <div class="card" id="when">
+                                            <div class="form-group">
+                                                {!! Form::label('source_campaign', __('tools.campaign')) !!}
+                                                {!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                                            </div>
 
-            	                            <div class="form-group">
-            	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
-            	                            	{!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
-            	                            </div>
+                                            <div class="form-group">
+                                                {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
+                                                {!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-            	                            <div class="form-group">
-                        						{!! Form::label('source_campaign', __('tools.campaign')) !!}
-                        						{!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
-                        					</div>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="flowchart_element when"><span>Condition</span></div>
+                                    </div>
 
-            	                            <div class="form-group">
-                        						{!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                        						{!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
-                        					</div>
+                                    <div class="col-sm-7">
+                                        <div class="card" id="condition">
+                                            <div class="form-group">
+                                                {!! Form::label('filter_type', __('tools.filter_type')) !!}
+                                                {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+                                            </div>
 
-                        					<div class="form-group">
-                        						{!! Form::label('filter_type', __('tools.filter_type')) !!}
-                        						{!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
-                        					</div>
+                                            <div class="form-group">
+                                                {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
+                                                {!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-            								<div class="form-group">
-            									{!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-            									{!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
-            								</div>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="flowchart_element when"><span>Action Taken</span></div>
+                                    </div>
 
-            								<div class="form-group">
-                        						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
-                        						{!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
-                        					</div>
+                                    <div class="col-sm-7">
+                                        <div class="card" id="action">
+                                            <div class="form-group">
+                                                {!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
+                                                {!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+                                            </div>
 
-                        					<div class="form-group">
-            									{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-            									{!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
-                        					</div>
+                                            <div class="form-group">
+                                                {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
+                                                {!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        					<div class="form-group">
-                        						{!! Form::label('description', __('tools.description')) !!}
-                        						{!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
-                        					</div>
+                                <div class="col-sm-7 col-sm-offset-5">
+                                    <div class="card">
+                                        <div class="form-group">
+                                            {!! Form::label('description', __('tools.description')) !!}
+                                            {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
+                                        </div>
 
-            								{!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
-            	                        {!! Form::close() !!}
-        		                    </div>
-        		                </div>
+                                        {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
+
+                                        @if($errors->any())
+                                            <div class="alert alert-danger mt20">
+                                                @foreach($errors->all() as $e)
+                                                    <li>{{ $e }}</li>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                {!! Form::close() !!}
+                                </div>
 				            </div>
 
 				            <div class="tab-pane mt30" id="move_history">
