@@ -42,6 +42,8 @@ class WelcomeDemoNotification extends Notification
     public function toMail($notifiable)
     {
         $data = [
+            'name' => $this->user->name,
+            'expiration' => $this->user->expiration,
             'link' => url("/demo/" . $this->user->app_token),
             'url' => url('/') . '/',
         ];

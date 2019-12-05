@@ -224,7 +224,7 @@ class AdminController extends Controller
         AutomatedReport::where('user_id', $user->id)->delete();
 
         // delete recipients if demo user
-        if (Auth::user()->isType('demo')) {
+        if ($user->isType('demo')) {
             $this->deleteRecipients($user->id);
         }
 
