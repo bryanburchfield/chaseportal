@@ -35,7 +35,7 @@ class Kpi extends Model
 
         foreach ($kpis as &$k) {
             $k->{'recipients'} =
-                KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone')
+                KpiRecipient::select('kpi_recipients.id', 'kpi_recipients.recipient_id', 'R.name', 'R.email', 'R.phone', 'R.user_id')
                 ->join('recipients as R', function ($join) {
                     $join->on('R.id', '=', 'kpi_recipients.recipient_id')
                         ->on('R.group_id', '=', DB::raw(Auth::user()->group_id));

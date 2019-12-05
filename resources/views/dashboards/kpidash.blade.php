@@ -45,26 +45,24 @@
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
                         <div class="expanded_emails clear">
 
-                            @if(!count($kpi->recipients))
-                                <div class="alert alert-info"> {{__('kpi.no_recips')}}</div>
-                            @else
-                                @foreach($kpi->recipients as $r)
-
-                                <div class="user clear" id="{{ $r->id }}">
-                                    <p class="name"><span class="name">{{ $r->name }}</span>
-                                        @if($r->email)
-                                        <i class="fas fa-envelope"></i>
-                                        @endif
-                                        @if($r->phone)
-                                        <i class="fas fa-sms"></i>
-                                        @endif
-                                    </p>
-
+                        @forelse($kpi->recipients as $r)
+                            <div class="user clear" id="{{ $r->id }}">
+                                <p class="name"><span class="name">{{ $r->name }}</span>
+                                    @if($r->email)
+                                    <i class="fas fa-envelope"></i>
+                                    @endif
+                                    @if($r->phone)
+                                    <i class="fas fa-sms"></i>
+                                    @endif
+                                </p>
+                                @if(!Auth::user()->isType('demo') || $r->user_id == Auth::user()->id)
                                     <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
                                     <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
-                                </div>
-                                @endforeach
-                            @endif
+                                @endif
+                            </div>
+                        @empty
+                            <div class="alert alert-info"> {{__('kpi.no_recips')}}</div>
+                        @endforelse
                         </div>
                     </div>
                 </div><!-- end options row -->

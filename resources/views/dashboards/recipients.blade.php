@@ -58,20 +58,25 @@
 
                     <div class="col-sm-7 col-sm-pull-5 expanded_emails display recips">
                         <h2>{{__('kpi.recipients')}}</h2>
-                        
-                        @if(!count($recipients))
-                            <div class="alert alert-info">{{__('kpi.no_recips')}}</div>
-                        @else
-                            @foreach($recipients as $recipient)
-                                <div class="user clear" id="{{ $recipient->id }}">
-                                    <p class="name">{{ $recipient->name }}</p>
-                                    <p class="email">{{ $recipient->email }}</p>
-                                    <p class="phone">{{ $recipient->phone }}</p>
+
+                        @forelse($recipients as $recipient)
+                            <div class="user clear" id="{{ $recipient->id }}">
+                                @if(Auth::user()->isType('demo') && $recipient->user_id != Auth::user()->id)
+                                    @php
+                                    $recipient->email = preg_replace('/^.\K|.(?=.*@)|@.\K|\..*(*SKIP)(*F)|.(?=.*\.)/im', '*', $recipient->email);
+                                    @endphp
+                                @endif
+                                <p class="name">{{ $recipient->name }}</p>
+                                <p class="email">{{ $recipient->email }}</p>
+                                <p class="phone">{{ $recipient->phone }}</p>
+                                @if(!Auth::user()->isType('demo') || $recipient->user_id == Auth::user()->id)
                                     <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
                                     <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
-                                </div>
-                            @endforeach
-                        @endif
+                                @endif
+                            </div>
+                        @empty
+                            <div class="alert alert-info">{{__('kpi.no_recips')}}</div>
+                        @endforelse
                     </div>
                 </div>
             </div>
