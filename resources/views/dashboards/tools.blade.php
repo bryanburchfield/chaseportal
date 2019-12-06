@@ -69,7 +69,7 @@
 				            <div class="tab-pane mt30" id="add_rule">
 
                                 <div class="row">
-                                    <div class="col-sm-7 col-sm-offset-5">
+                                    <div class="col-sm-7 col-sm-offset-5 pl0">
                                         <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
                                         {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
 
@@ -83,11 +83,12 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-5 pr0">
                                         <div class="flowchart_element when"><span>When</span></div>
+                                        <div class="vertical-line"></div>
                                     </div>
 
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-7 pl0">
                                         <div class="card" id="when">
                                             <div class="form-group">
                                                 {!! Form::label('source_campaign', __('tools.campaign')) !!}
@@ -103,11 +104,12 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="flowchart_element when"><span>Condition</span></div>
+                                    <div class="col-sm-5 pr0">
+                                        <div class="flowchart_element condition mt35"><span>Condition</span></div>
+                                        <div class="vertical-line"></div>
                                     </div>
 
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-7 pl0">
                                         <div class="card" id="condition">
                                             <div class="form-group">
                                                 {!! Form::label('filter_type', __('tools.filter_type')) !!}
@@ -123,11 +125,11 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="flowchart_element when"><span>Action Taken</span></div>
+                                    <div class="col-sm-5 pr0">
+                                        <div class="flowchart_element action"><span>Action Taken</span></div>
                                     </div>
 
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-7 pl0">
                                         <div class="card" id="action">
                                             <div class="form-group">
                                                 {!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
@@ -142,24 +144,26 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-7 col-sm-offset-5">
-                                    <div class="card">
-                                        <div class="form-group">
-                                            {!! Form::label('description', __('tools.description')) !!}
-                                            {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
-                                        </div>
-
-                                        {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
-
-                                        @if($errors->any())
-                                            <div class="alert alert-danger mt20">
-                                                @foreach($errors->all() as $e)
-                                                    <li>{{ $e }}</li>
-                                                @endforeach
+                                <div class="row">
+                                    <div class="col-sm-7 col-sm-offset-5 pl0">
+                                        <div class="card">
+                                            <div class="form-group">
+                                                {!! Form::label('description', __('tools.description')) !!}
+                                                {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
                                             </div>
-                                        @endif
+
+                                            {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
+
+                                            @if($errors->any())
+                                                <div class="alert alert-danger mt20">
+                                                    @foreach($errors->all() as $e)
+                                                        <li>{{ $e }}</li>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                    {!! Form::close() !!}
                                     </div>
-                                {!! Form::close() !!}
                                 </div>
 				            </div>
 

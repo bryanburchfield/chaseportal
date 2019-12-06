@@ -2322,14 +2322,43 @@ p.name i {
 }
 
 .flowchart_element {
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   border-radius: 100px;
   background: #203047;
   display: table;
   margin: 0 auto;
   margin-top: 20px;
-  margin-bottom: 50px;
+  z-index: 2;
+  padding: 10px;
+}
+
+.flowchart_element.condition {
+  width: 200px;
+  height: 110px;
+  border-radius: 0;
+}
+
+.flowchart_element.action {
+  width: 220px;
+  height: 120px;
+  border-radius: 25px;
+}
+
+.flowchart_element.mt35 {
+  margin-top: 35px;
+}
+
+.flowchart_element:after {
+  background: #203047;
+  min-height: 2px;
+  width: 35%;
+  position: absolute;
+  right: 0%;
+  top: 55%;
+  display: inline-block;
+  content: "";
+  z-index: 1;
 }
 
 .flowchart_element span {
@@ -2340,6 +2369,16 @@ p.name i {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 18px;
+}
+
+div.vertical-line {
+  width: 2px;
+  background-color: #203047;
+  height: 130px;
+  position: absolute;
+  margin: 0 auto;
+  left: 51.5%;
+  display: block;
 }
 
 /* ---------------------------------------------------
@@ -2466,6 +2505,33 @@ MEDIAQUERIES
 }
 
 @media handheld, only screen and (max-width: 768px) {
+  .flowchart_element {
+    width: 120px;
+    height: 120px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+
+  .flowchart_element.condition {
+    width: 180px;
+    height: 75px;
+    border-radius: 0;
+  }
+
+  .flowchart_element.action {
+    width: 200px;
+    height: 85px;
+    border-radius: 25px;
+  }
+
+  .flowchart_element:after {
+    content: none;
+  }
+
+  .flowchart_element.mt35 {
+    margin-top: 0;
+  }
+
   .mbmt50 {
     margin-top: 50px;
   }

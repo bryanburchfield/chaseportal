@@ -2053,14 +2053,41 @@ p.name i{margin-right: 5px;}
 }
 
 .flowchart_element{
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     @include border-radius(100px);
     background: $blue;
     display: table;
     margin: 0 auto;
     margin-top: 20px;
-    margin-bottom: 50px;
+    z-index: 2;
+    padding: 10px;
+
+    &.condition{
+        width: 200px;
+        height: 110px;
+        @include border-radius(0);
+    }
+
+     &.action{
+        width: 220px;
+        height: 120px;
+        @include border-radius(25px);
+    }
+
+    &.mt35{margin-top: 35px;}
+
+    &:after{
+        background: $blue;
+        min-height: 2px;
+        width: 35%;
+        position: absolute;
+        right: 0%;
+        top: 55%;
+        display: inline-block;
+        content: "";
+        z-index: 1;
+    }
 
     span{
         display: table-cell;
@@ -2071,6 +2098,16 @@ p.name i{margin-right: 5px;}
         font-weight: 600;
         font-size: 18px;
     }
+}
+
+div.vertical-line{
+    width: 2px;
+    background-color: $blue;
+    height: 130px;
+    position: absolute;
+    margin: 0 auto;
+    left: 51.5%;
+    display: block;
 }
 
 
@@ -2195,6 +2232,36 @@ MEDIAQUERIES
 }
 
 @media handheld, only screen and (max-width:768px) {
+
+    .flowchart_element{
+
+        width: 120px;
+        height: 120px;
+
+        &.condition{
+            width: 180px;
+            height: 75px;
+            @include border-radius(0);
+        }
+
+         &.action{
+            width: 200px;
+            height: 85px;
+            @include border-radius(25px);
+        }
+
+        margin-top: 0px;
+        margin-bottom: 20px;
+
+        &:after{
+            content: none;
+        }
+
+        &.mt35{margin-top: 0;}
+
+      
+    }
+
     .mbmt50{margin-top: 50px;}
     .mbp0{padding: 0;}
     .mbp35{padding-left: 35px;padding-right: 35px;}
