@@ -2352,7 +2352,7 @@ p.name i {
 .flowchart_element:after {
   background: #203047;
   min-height: 2px;
-  width: 35%;
+  width: 45%;
   position: absolute;
   right: 0%;
   top: 55%;
@@ -2369,6 +2369,8 @@ p.name i {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 18px;
+  position: relative;
+  z-index: 999;
 }
 
 div.vertical-line {
