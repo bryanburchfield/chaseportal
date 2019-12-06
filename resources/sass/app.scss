@@ -2080,7 +2080,7 @@ p.name i{margin-right: 5px;}
     &:after{
         background: $blue;
         min-height: 2px;
-        width: 35%;
+        width: 45%;
         position: absolute;
         right: 0%;
         top: 55%;
@@ -2097,6 +2097,8 @@ p.name i{margin-right: 5px;}
         text-transform: uppercase;
         font-weight: 600;
         font-size: 18px;
+        position: relative;
+        z-index: 999;
     }
 }
 
