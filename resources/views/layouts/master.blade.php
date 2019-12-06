@@ -12,7 +12,7 @@
     <meta name="es.tools.tools" >
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">        
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
@@ -54,7 +54,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
-    
+
     @isset($jsfile)
     @foreach($jsfile as $js)
     <script src="/js/{{ $js }}" type="text/javascript"></script>
