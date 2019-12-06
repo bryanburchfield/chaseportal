@@ -1219,7 +1219,8 @@ p.descrip.top14 {
 .rm_rptble_class table th,
 .uploader_table th,
 .cdr_results_table th,
-.rules_table th {
+.rules_table th,
+.demo_user_table th {
   background: #203047;
   border-top: 0;
   color: #fff;

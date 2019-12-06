@@ -130,6 +130,7 @@ class AdminController extends Controller
             'group_id' => $groupId,
             'dbs' => $dbs,
             'jsfile' => [],
+            'demo_users' => User::where('user_type','demo')->get()
         ];
 
         return view('dashboards.admin')->with($data);
@@ -192,7 +193,7 @@ class AdminController extends Controller
 
             $newuser->sendWelcomeDemoEmail($newuser);
 
-            $return['success'] = $newuser;
+            return redirect('/dashboards/admin#demo_user');
         } else {
             $return['errors'] = 'Name already in use by "' .
                 $existing_user->name . '" in ' .

@@ -3,7 +3,8 @@
 
 @section('content')
 <div class="preloader"></div>
-
+<?php
+?>
 <div class="wrapper">
 
 	@include('shared.sidenav')
@@ -20,7 +21,7 @@
 							<ul class="nav nav-tabs">
 
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
-								<li><a href="#demo_user" data-toggle="tab">Add Demo User</a></li>
+								<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
 								<li><a href="#edit_myself" data-toggle="tab">Edit Myself</a></li>
@@ -33,7 +34,7 @@
 								</div>
 
 								<div class="tab-pane mt30" id="demo_user">
-									<div class="col-sm-6 mb0 card">
+									<div class="col-sm-5 mb0 card">
 									    <h2 class="page_heading">Add Demo User</h2>
 										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/admin/add_demo_user', 'class'=>'form demo_user']) !!}
 											<div class="form-group">
@@ -68,6 +69,34 @@
 										    @endif
 
 										{!! Form::close() !!}
+									</div>
+
+									<div class="col-sm-7 mb0">
+										<table class="table demo_user_table">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Phone</th>
+													<th>Link</th>
+													<th>Expires</th>
+													<th>Edit</th>
+													<th>Delete</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												@foreach($demo_users as $user)
+													<tr>
+														<td>{{$user->name}}</td>
+														<td>{{$user->phone}}</td>
+														<td>{{$user->app_token}}</td>
+														<td>{{date('m-d-Y',strtotime($user->expiration))}}</td>
+														<td><a class="edit_rules" href="" data-name="" data-user="{{$user->id}}"><i class="fas fa-edit"></i></a></td>
+														<td><a data-toggle="modal" data-target="#demoUserModal" class="remove_user" href="#" data-name="" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+													</tr>
+												@endforeach
+											</tbody>
+										</table>
 									</div>
 								</div>
 
@@ -208,6 +237,26 @@
 
 
 @include('shared.reportmodal')
+
+<!-- Manage Demo User Modal -->
+<div class="modal fade" id="demoUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Manage Demo User</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="demouser_id" name="demouser_id" value="">
+
+            </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+	            <button type="button" class="btn btn-danger delete_rule">{{__('general.update')}}</button>
+	        </div>
+	    </div>
+    </div>
+</div>
 
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
