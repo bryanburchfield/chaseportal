@@ -223,27 +223,6 @@
     </div>
 </div>
 
-<!-- DELETE Demo User Modal -->
-<div class="modal fade" id="deleteDemoUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Delete Demo User</h4>
-            </div>
-            <div class="modal-body">
-            	<h3>Are you sure you want to delete <span class="username"></span>?</h3>
-                <input type="hidden" class="demouser_id" name="demouser_id" value="">
-                <input type="hidden" class="demouser_name" name="demouser_name" value="">
-            </div>
-	        <div class="modal-footer">
-	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
-	            <button type="button" class="btn btn-danger">{{__('tools.delete')}}</button>
-	        </div>
-	    </div>
-    </div>
-</div>
-
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
