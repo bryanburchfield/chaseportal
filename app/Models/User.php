@@ -55,6 +55,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'expires_in',
+    ];
+
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);
@@ -62,6 +71,10 @@ class User extends Authenticatable
 
     public function getExpiresInAttribute()
     {
+        if ($this->user_type !== 'demo') {
+            return null;
+        }
+
         $expiration = Carbon::parse($this->expiration);
 
         return $expiration->longRelativeToNowDiffForHumans(2);
