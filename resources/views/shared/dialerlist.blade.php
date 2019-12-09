@@ -31,6 +31,7 @@
                                     <th>Delete</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                             @foreach($users as $user)
                                 <tr id="user{{$user->id}}" data-id="{{$user->id}}">

@@ -49,7 +49,7 @@ var Master = {
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
         $('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
-		$('.users table tbody, .rules_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
+		$('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
         $('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
 		$('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
@@ -1129,17 +1129,16 @@ var Master = {
 
             success:function(response){
                 console.log(response);
-                // if(response.errors){
-                //     $('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
-                //     $('.alert-danger').show();
-                // }else{
-                //     $('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
-                //     $('.alert-success').show();
-                //     $('form.edit_user').trigger("reset");
-                //     setTimeout(function(){
-                //         window.location.href = "/dashboards/admin";
-                //     }, 3500);
-                // }
+                if(response.errors){
+                    $('form.edit_demo_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
+                    $('.alert-danger').show();
+                }else{
+                    $('form.edit_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+                    $('.alert-success').show();
+                    setTimeout(function(){
+                        window.location.href = "/dashboards/admin";
+                    }, 3500);
+                }
             }
         });
     },
@@ -1259,8 +1258,7 @@ var Master = {
                 $(modal).find('.email').val(response.email);
                 $(modal).find('.phone').val(response.phone);
                 var demo_expiration = $('.edit_demo_user').find('.name').parent();
-                $('<div class="alert alert-info mb20">Demo expires in '+response.expires+'</div>').insertBefore(demo_expiration);
-                console.log(response);
+                $('<div class="alert alert-info mb20">Demo expires in '+response.expires_in+'</div>').insertBefore(demo_expiration);
             }
         });
     },
@@ -1306,6 +1304,8 @@ var Master = {
 	pass_user_removemodal:function(){
 		var id = $(this).data('user');
 		var name = $(this).data('name');
+        
+        console.log(id+ '' +name);
 
 		$('#deleteUserModal .user_id, #deleteRuleModal .rule_id').val(id);
 		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
@@ -1357,8 +1357,8 @@ var Master = {
 			success:function(response){
 
 				$('.users table tbody tr#user'+id).remove();
-				$('#deleteUserModal').modal('toggle');
-
+                $('.demo_user_table tbody tr#user'+id).remove();
+                $('#deleteUserModal').modal('toggle');
 			}
 		});
 	},
@@ -1377,7 +1377,6 @@ var Master = {
         }, 3500);
 
 		var $temp = $("<input>");
-        console.log($temp);
 	    $(this).parent().append($temp);
 	    $temp.val($(this).text()).select();
 	    document.execCommand("copy");

@@ -55,13 +55,13 @@
 
 											<tbody>
 												@foreach($demo_users as $user)
-													<tr>
+													<tr id="user{{$user->id}}" data-id="{{$user->id}}">
 														<td>{{$user->name}}</td>
 														<td>{{$user->phone}}</td>
 														<td><a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/demo/{{$user->app_token}}<span class="url_token"></span></a></td>
 														<td>{{date('m-d-Y',strtotime($user->expiration))}}</td>
 														<td><a class="demo_user_modal_link edit_demo_user" href="#" data-toggle="modal" data-target="#demoUserModal" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fas fa-user-edit"></i></a></td>
-														<td><a class="demo_user_modal_link remove_user" data-toggle="modal" data-target="#deleteDemoUserModal" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+														<td><a class="demo_user_modal_link remove_user" data-toggle="modal" data-target="#deleteUserModal" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
 													</tr>
 												@endforeach
 											</tbody>
