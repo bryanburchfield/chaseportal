@@ -77,13 +77,13 @@ class MasterDashController extends Controller
 
         // See if they're expired
         if ($expiration < Carbon::now()) {
-            return view('demo.expired', ['expiration' => $expiration]);
+            return view('demo.expired', ['user' => $user]);
         }
 
         // Login that user
         Auth::loginUsingId($user->id);
 
-        return view('demo.welcome', ['expiration' => $expiration]);
+        return view('demo.welcome', ['user' => $user]);
     }
 
     public function adminDashboard(Request $request)

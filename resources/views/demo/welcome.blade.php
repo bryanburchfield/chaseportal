@@ -1,6 +1,6 @@
 <h1>Welcome to the demo! </h1>
     <p>
-    Your demo account will expire {{ $expiration->longRelativeToNowDiffForHumans(2) }}.
+    Your demo account will expire {{ $user->expires_in }}.
     </p>
 
     <p>
