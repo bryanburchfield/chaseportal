@@ -9,6 +9,7 @@ use App\Notifications\ChaseResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
 use App\Notifications\WelcomeDemoNotification;
 use App\Traits\TimeTraits;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Password;
 
 class User extends Authenticatable
@@ -57,6 +58,13 @@ class User extends Authenticatable
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);
+    }
+
+    public function getExpiresInAttribute()
+    {
+        $expiration = Carbon::parse($this->expiration);
+
+        return $expiration->longRelativeToNowDiffForHumans(2);
     }
 
     public function isType($type)
