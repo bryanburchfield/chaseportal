@@ -1,4 +1,4 @@
-{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/admin/' . $mode . '_demo_user', 'class'=>'form demo_user '. $mode .'_demo_user' ]) !!}
+{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form demo_user '. $mode .'_demo_user' ]) !!}
 
 	<div class="form-group">
 	    {!! Form::label('name', 'Name') !!}

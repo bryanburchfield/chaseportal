@@ -1255,9 +1255,9 @@ var Master = {
             success:function(response){
                 var modal = $('.edit_demo_user');
                 $(modal).find('.alert').remove();
-                $(modal).find('.name').val(response.user.name);
-                $(modal).find('.email').val(response.user.email);
-                $(modal).find('.phone').val(response.user.phone);
+                $(modal).find('.name').val(response.name);
+                $(modal).find('.email').val(response.email);
+                $(modal).find('.phone').val(response.phone);
                 var demo_expiration = $('.edit_demo_user').find('.name').parent();
                 $('<div class="alert alert-info mb20">Demo expires in '+response.expires+'</div>').insertBefore(demo_expiration);
                 console.log(response);
