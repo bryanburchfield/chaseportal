@@ -9,11 +9,18 @@ class Dialer extends Model
     public function users($include_additional = false)
     {
         if ($include_additional) {
-            $users =  User::where('db', $this->reporting_db)
-                ->orWhere('additional_dbs', $this->reporting_db)
+            $users =  User::where(
+                function ($query) {
+                    $query->where('db', $this->reporting_db)
+                        ->orWhere('additional_dbs', $this->reporting_db);
+                }
+            )
+                ->where('user_type', '!=', 'demo')
                 ->get();
         } else {
-            $users = User::where('db', $this->reporting_db)->get();
+            $users = User::where('db', $this->reporting_db)
+                ->where('user_type', '!=', 'demo')
+                ->get();
         }
 
         return $users;
