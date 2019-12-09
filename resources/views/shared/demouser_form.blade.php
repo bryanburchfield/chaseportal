@@ -17,7 +17,7 @@
 
 	<div class="form-group demo_user_expiration">
 	    <label for="expiration" data-toggle="tooltip" data-placement="right" title="Select the length of the demo user's trial">{{$mode == 'edit' ? 'Extend Demo' : 'Expiration'}} <i class="fas fa-info-circle"></i></label>
-	    {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', 'required'=>true]) !!}
+	    {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', ($mode == 'add' ? 'required' : '')]) !!}
 	</div>
     {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create'), ['class'=>'btn btn-primary mb0'] ) !!}
 

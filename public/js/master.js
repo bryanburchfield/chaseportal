@@ -1103,7 +1103,7 @@ var Master = {
         var form = $('form.edit_demo_user');
         var name = form.find('.name').val(),
             email = form.find('.email').val(),
-            phone = form.find('phone').val(),
+            phone = form.find('.phone').val(),
             expiration = form.find('#expiration').val()
         ;
 
@@ -1128,18 +1128,18 @@ var Master = {
             },
 
             success:function(response){
-
-                if(response.errors){
-                    $('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
-                    $('.alert-danger').show();
-                }else{
-                    $('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
-                    $('.alert-success').show();
-                    $('form.edit_user').trigger("reset");
-                    setTimeout(function(){
-                        window.location.href = "/dashboards/admin";
-                    }, 3500);
-                }
+                console.log(response);
+                // if(response.errors){
+                //     $('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
+                //     $('.alert-danger').show();
+                // }else{
+                //     $('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
+                //     $('.alert-success').show();
+                //     $('form.edit_user').trigger("reset");
+                //     setTimeout(function(){
+                //         window.location.href = "/dashboards/admin";
+                //     }, 3500);
+                // }
             }
         });
     },
