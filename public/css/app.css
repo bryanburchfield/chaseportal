@@ -2419,6 +2419,30 @@ MEDIAQUERIES
   }
 }
 
+@media handheld, only screen and (max-width: 1300px) {
+  .flowchart_element {
+    border: 1px solid red;
+    width: 120px;
+    height: 120px;
+  }
+
+  .flowchart_element.condition {
+    width: 180px;
+    height: 75px;
+    border-radius: 0;
+  }
+
+  .flowchart_element.action {
+    width: 200px;
+    height: 85px;
+    border-radius: 25px;
+  }
+
+  div.vertical-line {
+    height: 150px;
+  }
+}
+
 @media handheld, only screen and (max-width: 1200px) {
   .total_calls_in p.total,
   .total_calls_out p.total {

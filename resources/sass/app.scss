@@ -2144,6 +2144,39 @@ MEDIAQUERIES
 
 }
 
+@media handheld, only screen and (max-width: 1300px){
+    .flowchart_element{
+
+        border:1px solid red;
+
+        width: 120px;
+        height: 120px;
+
+        &.condition{
+            width: 180px;
+            height: 75px;
+            @include border-radius(0);
+        }
+
+         &.action{
+            width: 200px;
+            height: 85px;
+            @include border-radius(25px);
+        }
+
+        // margin-top: 0px;
+        // margin-bottom: 20px;
+
+        // &:after{
+        //     content: none;
+        // }
+
+        // &.mt35{margin-top: 0;}
+    }
+
+    div.vertical-line{height: 150px;}
+}
+
 @media handheld, only screen and (max-width:1200px) {
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
@@ -2260,8 +2293,6 @@ MEDIAQUERIES
         }
 
         &.mt35{margin-top: 0;}
-
-      
     }
 
     .mbmt50{margin-top: 50px;}
