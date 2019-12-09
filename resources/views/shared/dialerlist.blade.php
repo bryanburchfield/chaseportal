@@ -5,7 +5,8 @@
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
             $db = sprintf("%02d", $dialer->dialer_numb);
-            $clients = $dialer->users(true)->count();
+            $users = $dialer->users(true);
+            $clients = $users->count();
             @endphp
 
             <div class="panel panel-default">
@@ -31,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($dialer->users(true) as $user)
+                            @foreach($users as $user)
                                 <tr id="user{{$user->id}}" data-id="{{$user->id}}">
                                 <td>{{$user->group_id}} - {{$user->name}}</td>
                                 <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>

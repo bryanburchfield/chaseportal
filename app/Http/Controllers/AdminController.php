@@ -272,6 +272,7 @@ class AdminController extends Controller
                 $expiration = Carbon::now()->addDays($request->expiration);
                 $request->merge(['expiration' => $expiration]);
             }
+
             $user->update($request->all());
             $return['success'] = $user;
         }
