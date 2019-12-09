@@ -130,7 +130,7 @@ class AdminController extends Controller
             'group_id' => $groupId,
             'dbs' => $dbs,
             'jsfile' => [],
-            'demo_users' => User::where('user_type','demo')->get()
+            'demo_users' => User::where('user_type', 'demo')->get()
         ];
 
         return view('dashboards.admin')->with($data);
@@ -267,6 +267,11 @@ class AdminController extends Controller
                 $existing_user->db;
         } else {
             $user = User::findOrFail($request->id);
+
+            if ($request->has('expiration')) {
+                $expiration = Carbon::now()->addDays($request->expiration);
+                $request->merge(['expiration' => $expiration]);
+            }
             $user->update($request->all());
             $return['success'] = $user;
         }
