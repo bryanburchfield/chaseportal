@@ -1339,7 +1339,8 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_rule button.multiselect,
 .update_rule .form-control,
 .edit_myself select,
-.demo_user select {
+.demo_user select,
+.demo_user .form-control {
   background: #eee !important;
 }
 
@@ -1816,7 +1817,8 @@ a.edit_recip_glyph {
   margin-right: 10px;
 }
 
-.users a.remove_user i {
+.users a.remove_user i,
+.demo_user_modal_link.remove_user i {
   position: relative;
   top: 2px;
   color: #E15B23;

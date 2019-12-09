@@ -248,7 +248,29 @@ class AdminController extends Controller
 
     public function getUser(Request $request)
     {
-        return User::findOrFail($request->id);
+        $user = User::findOrFail($request->id);
+
+        /// if editing demo user
+        if($request->mode == 'edit'){
+
+            $datestr=$user->expiration;
+            $date=strtotime($datestr);
+
+            /// calculate difference
+            $diff=$date-time();
+            $days=floor($diff/(60*60*24));
+            $hours=round(($diff-$days*60*60*24)/(60*60));
+
+            /// demo expires
+            $expiration_date = $days .' days '. $hours.' hours';
+
+            return [
+                'user' => $user,
+                'expires' => $expiration_date
+            ];
+        }
+
+        return $user;
     }
 
     public function updateUser(Request $request)

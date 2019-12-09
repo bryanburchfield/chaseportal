@@ -4,6 +4,7 @@
 @section('content')
 <div class="preloader"></div>
 <?php
+
 ?>
 <div class="wrapper">
 
@@ -35,44 +36,12 @@
 
 								<div class="tab-pane mt30" id="demo_user">
 									<div class="col-sm-5 mb0 card">
-									    <h2 class="page_heading">Add Demo User</h2>
-										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/admin/add_demo_user', 'class'=>'form demo_user']) !!}
-											<div class="form-group">
-											    {!! Form::label('name', 'Name') !!}
-											    {!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
-											</div>
-
-											<div class="form-group">
-											    {!! Form::label('email', 'Email') !!}
-											    {!! Form::email('email', null, ['class'=>'form-control email']) !!}
-											</div>
-
-											<div class="form-group">
-											    {!! Form::label('phone', 'Phone') !!}
-											    {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
-											</div>
-
-											<div class="form-group demo_user_expiration">
-											    <label for="expiration" data-toggle="tooltip" data-placement="right" title="Select the length of the demo user's trial">Expiration <i class="fas fa-info-circle"></i></label>
-											    {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', 'required'=>true]) !!}
-											</div>
-										    {!! Form::submit('Create User', ['class'=>'btn btn-primary mb0'] ) !!}
-
-										    <br><br>
-
-										    @if($errors->any())
-										        <div class="alert alert-danger">
-										            @foreach($errors->all() as $e)
-										                {{ $e }}
-										            @endforeach
-										        </div>
-										    @endif
-
-										{!! Form::close() !!}
+										<h2 class="page_heading">Add Demo User</h2>
+									    @include('shared.demouser_form', ['mode' => 'add'])
 									</div>
 
 									<div class="col-sm-7 mb0">
-										<table class="table demo_user_table">
+										<table class="table demo_user_table table-responsive table-striped">
 											<thead>
 												<tr>
 													<th>Name</th>
@@ -89,10 +58,10 @@
 													<tr>
 														<td>{{$user->name}}</td>
 														<td>{{$user->phone}}</td>
-														<td>{{$user->app_token}}</td>
+														<td><a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/demo/{{$user->app_token}}<span class="url_token"></span></a></td>
 														<td>{{date('m-d-Y',strtotime($user->expiration))}}</td>
-														<td><a class="edit_rules" href="" data-name="" data-user="{{$user->id}}"><i class="fas fa-edit"></i></a></td>
-														<td><a data-toggle="modal" data-target="#demoUserModal" class="remove_user" href="#" data-name="" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+														<td><a class="demo_user_modal_link edit_demo_user" href="#" data-toggle="modal" data-target="#demoUserModal" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fas fa-user-edit"></i></a></td>
+														<td><a class="demo_user_modal_link remove_user" data-toggle="modal" data-target="#deleteDemoUserModal" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
 													</tr>
 												@endforeach
 											</tbody>
@@ -235,24 +204,41 @@
 	</div>
 </div>
 
-
 @include('shared.reportmodal')
 
-<!-- Manage Demo User Modal -->
+<!-- EDIT Demo User Modal -->
 <div class="modal fade" id="demoUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Manage Demo User</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Demo User</h4>
             </div>
             <div class="modal-body">
+            	@include('shared.demouser_form', ['mode' => 'edit'])
                 <input type="hidden" class="demouser_id" name="demouser_id" value="">
+				<input type="hidden" class="demouser_name" name="demouser_name" value="">
+            </div>
+	    </div>
+    </div>
+</div>
 
+<!-- DELETE Demo User Modal -->
+<div class="modal fade" id="deleteDemoUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete Demo User</h4>
+            </div>
+            <div class="modal-body">
+            	<h3>Are you sure you want to delete <span class="username"></span>?</h3>
+                <input type="hidden" class="demouser_id" name="demouser_id" value="">
+                <input type="hidden" class="demouser_name" name="demouser_name" value="">
             </div>
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
-	            <button type="button" class="btn btn-danger delete_rule">{{__('general.update')}}</button>
+	            <button type="button" class="btn btn-danger">{{__('tools.delete')}}</button>
 	        </div>
 	    </div>
     </div>

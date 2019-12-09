@@ -1173,7 +1173,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .demo_user select{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control{
     background: #eee !important;
 }
 
@@ -1600,7 +1600,7 @@ a.edit_recip_glyph{right:35px;color:#33A09B;}
     margin-right: 10px;
 }
 
-.users a.remove_user i {
+.users a.remove_user i, .demo_user_modal_link.remove_user i {
     position: relative;
     top: 2px;
     color: $orange;
