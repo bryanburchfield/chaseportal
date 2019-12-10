@@ -2421,7 +2421,6 @@ MEDIAQUERIES
 
 @media handheld, only screen and (max-width: 1300px) {
   .flowchart_element {
-    border: 1px solid red;
     width: 120px;
     height: 120px;
   }
@@ -2429,13 +2428,11 @@ MEDIAQUERIES
   .flowchart_element.condition {
     width: 180px;
     height: 75px;
-    border-radius: 0;
   }
 
   .flowchart_element.action {
     width: 200px;
-    height: 85px;
-    border-radius: 25px;
+    height: 75px;
   }
 
   div.vertical-line {
@@ -2447,6 +2444,27 @@ MEDIAQUERIES
   .total_calls_in p.total,
   .total_calls_out p.total {
     font-size: 45px;
+  }
+}
+
+@media handheld, only screen and (max-width: 1070px) {
+  .flowchart_element {
+    width: 120px;
+    height: 120px;
+  }
+
+  .flowchart_element span {
+    font-size: 15px;
+  }
+
+  .flowchart_element.condition {
+    width: 80%;
+    height: 75px;
+  }
+
+  .flowchart_element.action {
+    width: 80%;
+    height: 75px;
   }
 }
 
@@ -2527,6 +2545,10 @@ MEDIAQUERIES
 
   .nopadright {
     padding-right: 0;
+  }
+
+  .pl0 {
+    padding-left: 0;
   }
 }
 
