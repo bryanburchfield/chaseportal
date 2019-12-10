@@ -407,16 +407,23 @@ h1.fw600 {
 .btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: #e49831;
-    border: 1px solid #f2ad4d;
+    background-color: $orange;
+    border: 1px solid darken($orange, 5%);
     color: #fff;
     font-weight: 600;
 
     &:hover {
-        background-color: #d38826;
+        background-color: darken($orange, 5%);
     }
-
 }
+
+.input-group-addon{
+    border: none;
+    @include blue_grad(#203047, #090d14);
+    color: #eee;
+}
+
+.input-group-addon:last-child{border-left:1px solid lighten($blue, 5%);}
 
 div.container-fluid.bg {
     background: darken(#151C2D, 4%);
@@ -1199,8 +1206,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select{
-    background: #eee !important;
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control{
+    background: darken($blue, 2%) !important;
+    border: none;
+    color: #aaa;
 }
 
 .nav-tabs {
