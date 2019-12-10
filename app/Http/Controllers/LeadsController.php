@@ -107,7 +107,11 @@ class LeadsController extends Controller
     {
         $lr = $this->getRule($request->id);
 
-        return $lr->delete();
+        if ($lr->delete()) {
+            return ['status' => 'success'];
+        } else {
+            return ['status' => 'failed'];
+        }
     }
 
     public function getHistory()
