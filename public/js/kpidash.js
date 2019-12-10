@@ -286,25 +286,21 @@ var KPI = {
                 kpi_list:kpi_list
             },
             success:function(response){
-
+                window.location.href = from_page;
             },
             error :function( data ) {
-                if( data.status === 422 ) {
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
 
-                        if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                            $('#editRecipModal form .alert').show().append(value+"<br/>");
-
-                            });
-                        }else{
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
                         $('#editRecipModal form .alert').show().append(value+"<br/>");
-                        }
-                    });
-                }else{
-                    window.location.href = from_page;
-                }
+
+                        });
+                    }else{
+                    $('#editRecipModal form .alert').show().append(value+"<br/>");
+                    }
+                });
             }
         });
     },
