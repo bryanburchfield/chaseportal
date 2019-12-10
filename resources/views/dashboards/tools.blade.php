@@ -70,15 +70,7 @@
         		                <div class="col-sm-12 nopad">
         		                    <div class="card">
         		                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
-            	                        {!! Form::open(['method'=>'POST', 'url'=>'dashboards/tools', 'class'=>'form mt20 add_rule']) !!}
-
-                							@if($errors->any())
-                                                <div class="alert alert-danger mt20">
-                                                    @foreach($errors->all() as $e)
-                                                        <li>{{ $e }}</li>
-                                                    @endforeach
-                                                </div>
-                							@endif
+            	                        {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_rule']) !!}
 
             	                            <div class="form-group">
             	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
@@ -119,6 +111,8 @@
                         						{!! Form::label('description', __('tools.description')) !!}
                         						{!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
                         					</div>
+
+                                            <div class="alert alert-danger"></div>
 
             								{!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
             	                        {!! Form::close() !!}

@@ -53,8 +53,6 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-        // add selectors below to listener below that when they want to autopopulate lead move subcamps again
-        //.add_rule #campaign_select, #update_campaign_select, #update_destination_campaign, #destination_campaign
 		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns);
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
@@ -81,6 +79,7 @@ var Master = {
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
         $('.btn.disable').on('click', this.preventDefault);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
+        $('.add_rule').on('submit', this.create_leadrule);
 	},
 
     hide_modal_error:function(){
@@ -399,6 +398,69 @@ var Master = {
         }else{
             $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
+    },
+
+    create_leadrule:function(e){
+        e.preventDefault();
+
+        // var form_data = $('.add_rule').serialize();
+        // console.log(form_data);
+
+        var rule_name = $('#rule_name').val(),
+            source_campaign = $('#campaign_select').val(),
+            source_subcampaign = $('#source_subcampaign').val(),
+            filter_type = $('#filter_type').val(),
+            filter_value = $('#filter_value').val(),
+            destination_campaign = $('#destination_campaign').val(),
+            destination_subcampaign = $('#destination_subcampaign').val(),
+            description = $('#description').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'tools',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                rule_name:rule_name,
+                source_campaign:source_campaign,
+                source_subcampaign:source_subcampaign,
+                filter_type:filter_type,
+                filter_value:filter_value,
+                destination_campaign:destination_campaign,
+                destination_subcampaign:destination_subcampaign,
+                description:description
+            },
+
+            success:function(response){
+                window.location.href = 'tools';
+            },
+            error :function( data ) {
+                $('.add_rule .alert').empty();
+                $('.add_rule .alert').hide();
+
+                if( data.status === 422 ) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_rule .alert').show().append('<li>'+value+'</li>');
+                            });
+                        }else{
+                            $('.add_rule .alert').show().append('<li>'+value+'</li>');
+                        }
+                    });
+
+                    $('.add_rule .alert li').first().remove();
+                }
+            }
+        });
     },
 
     save_leadrule_update:function(e){
