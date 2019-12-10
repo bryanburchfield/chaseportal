@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddDemoUser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AutomatedReport;
@@ -162,45 +163,34 @@ class AdminController extends Controller
         return $return;
     }
 
-    public function addDemoUser(Request $request)
+    public function addDemoUser(AddDemoUser $request)
     {
-        // check name exists
-        $existing_user = User::where('name', $request->name)->first();
+        $app_token = $this->generateToken();
 
-        if (!$existing_user) {
-            $app_token = $this->generateToken();
-
-            // If no email given, create one
-            if (!$request->filled('email')) {
-                $request->request->add(['email' => 'demo_' . $app_token . '@chasedatacorp.com']);
-            }
-
-            // Calculate expiration date
-            $expiration = Carbon::now()->addDays($request->expiration);
-            $request->request->remove('expiration');
-
-            $newuser = User::create(
-                array_merge($request->all(), [
-                    'user_type' => 'demo',
-                    'group_id' => '777',
-                    'db' => 'PowerV2_Reporting_Dialer-07',
-                    'tz' => 'Eastern Standard Time',
-                    'app_token' => $app_token,
-                    'expiration' => $expiration->toDateTimeString(),
-                    'password' => Hash::make($app_token),
-                ])
-            );
-
-            $newuser->sendWelcomeDemoEmail($newuser);
-
-            return redirect('/dashboards/admin#demo_user');
-        } else {
-            $return['errors'] = 'Name already in use by "' .
-                $existing_user->name . '" in ' .
-                $existing_user->db;
+        // If no email given, create one
+        if (!$request->filled('email')) {
+            $request->request->add(['email' => 'demo_' . $app_token . '@chasedatacorp.com']);
         }
 
-        return $return;
+        // Calculate expiration date
+        $expiration = Carbon::now()->addDays($request->expiration);
+        $request->request->remove('expiration');
+
+        $newuser = User::create(
+            array_merge($request->all(), [
+                'user_type' => 'demo',
+                'group_id' => '777',
+                'db' => 'PowerV2_Reporting_Dialer-07',
+                'tz' => 'Eastern Standard Time',
+                'app_token' => $app_token,
+                'expiration' => $expiration->toDateTimeString(),
+                'password' => Hash::make($app_token),
+            ])
+        );
+
+        $newuser->sendWelcomeDemoEmail($newuser);
+
+        return ['status' => 'success'];
     }
 
     private function generateToken()
