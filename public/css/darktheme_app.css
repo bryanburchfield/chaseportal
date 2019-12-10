@@ -531,10 +531,27 @@ h1.fw600 {
   border-left: 1px solid #283c59;
 }
 
+.bootstrap-datetimepicker-widget {
+  background: #203047;
+  border: 1px solid #283c59;
+  color: #fff;
+}
+
+.bootstrap-datetimepicker-widget .datepicker:hover {
+  background: #203047;
+}
+
+.datepicker-days table tbody tr td:hover {
+  color: lime green;
+}
+
+td.day.old:hover {
+  color: blue;
+}
+
 div.container-fluid.bg {
   background: #0f131f;
   border-top: 1px solid #030508;
-  min-height: 500px;
   min-height: 500px;
 }
 
@@ -1106,7 +1123,7 @@ ul.dropdown-menu.filter_campaign {
   /* Old browsers */
   /* FF3.6-15 */
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
   /* IE6-9 */
@@ -1293,14 +1310,46 @@ p.descrip.top14 {
 .uploader_table th,
 .cdr_results_table th,
 .rules_table th {
-  background: #203047;
+  background: #33A09B;
   border-top: 0;
   color: #fff;
   padding: 10px !important;
 }
 
+.reports_table tbody tr:hover {
+  background: #23354e;
+  color: #fff;
+}
+
+.table > thead > tr > th {
+  border-bottom: 1px solid #203047;
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  border-top: 1px solid #203047;
+}
+
 #reports_modal .modal-body {
   overflow: auto;
+}
+
+.modal-body {
+  background: #0f131f;
+  color: #aaa;
+}
+
+.modal-header {
+  border-bottom: 1px solid #23354e;
+}
+
+.modal-footer {
+  background: #0c0f18;
+  border-top: 1px solid #23354e;
 }
 
 #reports_modal .alert-danger {
@@ -1440,7 +1489,7 @@ h3.heading {
   font-weight: 600;
   font-size: 24px;
   margin-bottom: 20px;
-  color: #203047;
+  color: #aaa;
 }
 
 .input-group-btn:last-child > .btn,
@@ -1563,6 +1612,45 @@ a.sort-by span.desc {
   font-weight: 600;
 }
 
+.pagination > li > a {
+  background-color: white;
+  color: #203047;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover {
+  color: #203047;
+  background-color: #eee;
+  border-color: #ddd;
+}
+
+.pagination > .active > a {
+  color: white;
+  background-color: #203047;
+  border: solid 1px #203047;
+}
+
+.pagination > .active:not(.disabled) > a {
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
+  background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
+  border: 1px solid #203047;
+  color: white;
+}
+
+.pagination > .active > a:hover {
+  background-color: #30486a;
+  border: solid 1px #30486a;
+}
+
 .pag_report_errors,
 .report_errors {
   display: none;
@@ -1618,7 +1706,7 @@ span.selected_campaign {
 .reports_table tr:nth-of-type(odd),
 .cdr_results_table tr:nth-of-type(odd),
 .rules_table tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+  background-color: #101824;
 }
 
 .agent_call_log .reports_table tr:nth-of-type(odd) {
