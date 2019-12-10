@@ -97,10 +97,10 @@ class LeadsController extends Controller
 
         if ($lr->isDirty()) {
             $lr->delete();
-            return $this->createRule($request);
+            $this->createRule($request);
         }
 
-        return ['status' => 'success'];
+        return redirect('dashboards/tools');
     }
 
     public function deleteRule(Request $request)
