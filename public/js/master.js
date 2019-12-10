@@ -1161,7 +1161,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'admin/update_user',
+            url: 'admin/update_demo_user ',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -1173,16 +1173,27 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
-                if(response.errors){
-                    $('form.edit_demo_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
-                    $('.alert-danger').show();
-                }else{
-                    $('form.edit_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
-                    $('.alert-success').show();
-                    setTimeout(function(){
-                        window.location.href = "/dashboards/admin";
-                    }, 3500);
+                $('form.edit_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+                $('.alert-success').show();
+                setTimeout(function(){
+                    window.location.href = "/dashboards/admin";
+                }, 3500);
+            },error :function( data ) {
+                $('form.edit_demo_user .alert').empty();
+
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {                       
+                                $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
+                            });
+                        }else{
+                            $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
+                        }
+                    });
+
+                    $('form.edit_demo_user .alert li').first().remove();
                 }
             }
         });
