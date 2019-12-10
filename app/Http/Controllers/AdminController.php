@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddDemoUser;
+use App\Http\Requests\DemoUser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AutomatedReport;
@@ -163,7 +163,7 @@ class AdminController extends Controller
         return $return;
     }
 
-    public function addDemoUser(AddDemoUser $request)
+    public function addDemoUser(DemoUser $request)
     {
         $app_token = $this->generateToken();
 
@@ -258,16 +258,25 @@ class AdminController extends Controller
         } else {
             $user = User::findOrFail($request->id);
 
-            if ($request->has('expiration')) {
-                $expiration = Carbon::now()->addDays($request->expiration);
-                $request->merge(['expiration' => $expiration]);
-            }
-
             $user->update($request->all());
             $return['success'] = $user;
         }
 
         return $return;
+    }
+
+    public function updateDemoUser(DemoUser $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        if ($request->has('expiration')) {
+            $expiration = Carbon::now()->addDays($request->expiration);
+            $request->merge(['expiration' => $expiration]);
+        }
+
+        $user->update($request->all());
+
+        return ['status' => 'success'];
     }
 
     public function editMyself(Request $request)

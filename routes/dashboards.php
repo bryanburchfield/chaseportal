@@ -61,6 +61,7 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/delete_user', 'AdminController@deleteUser');
             Route::post('admin/get_user', 'AdminController@getUser');
             Route::post('admin/update_user', 'AdminController@updateUser');
+            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
             Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
             Route::post('admin/edit_myself', 'AdminController@editMyself');
         });

@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddDemoUser extends FormRequest
+class DemoUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +25,21 @@ class AddDemoUser extends FormRequest
      */
     public function rules()
     {
+        if (!empty($this->id)) {
+            $user = User::find($this->id);
+        } else {
+            $user = new User();
+        }
+
         return [
-            'name' => 'required||unique:users,name',
-            'email' => 'nullable|email|unique:users,email',
+            'name' => [
+                'required',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'email' => [
+                'nullable',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'phone' => 'required',
             'expiration' => 'required|integer',
         ];
