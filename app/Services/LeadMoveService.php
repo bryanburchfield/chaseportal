@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\Models\LeadRule;
@@ -80,9 +79,10 @@ class LeadMoveService
             $detail->destination_campaign = $lead_rule->source_campaign;
             $detail->destination_subcampaign = $lead_rule->source_subcampaign;
 
-            $this->filterLead($detail);
-        }
+            $api = $this->initApi($detail->reporting_db);
 
+            $this->filterLead($api, $detail);
+        }
     }
 
     public function runRule(LeadRule $lead_rule)
