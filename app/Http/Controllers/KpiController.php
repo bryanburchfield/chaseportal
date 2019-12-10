@@ -112,8 +112,7 @@ class KpiController extends Controller
             }
         }
 
-        // returning anything seems to hang the js ?
-        // return ['status' => 1];
+        return ['status' => 'success'];
     }
 
     /**
