@@ -498,6 +498,7 @@ var Master = {
             },
 
             success:function(response){
+                window.location.href = 'tools';
             },
             error :function( data ) {
                 $('#editRulesModal form .alert').empty();
@@ -516,9 +517,7 @@ var Master = {
                     });
 
                     $('#editRulesModal form .alert li').first().remove();
-                }else{
-                    window.location.href = 'tools';
-                }    
+                }
             }
         });
     },
