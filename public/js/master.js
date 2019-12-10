@@ -42,9 +42,9 @@ var Master = {
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
-        $('.demo_user #phone').on('focusout', this.format_phone);
 		$('.edit_user').on('submit', this.edit_user);
         $('.edit_demo_user').on('submit', this.edit_demo_user);
+        $('.add_demo_user').on('submit', this.add_demo_user);
         $('.edit_myself').on('submit', this.edit_myself);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
         $('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
@@ -1036,12 +1036,12 @@ var Master = {
 	},
 
     // format phone number on admin add user form
-    format_phone:function(){
-        $(this).val(function(i, text) {
-            text = text.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, "$1-$2-$3");
-            return text;
-        });
-    },
+    // format_phone:function(){
+    //     $(this).val(function(i, text) {
+    //         text = text.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, "$1-$2-$3");
+    //         return text;
+    //     });
+    // },
 
 	// add global user
 	add_user:function(e){
@@ -1095,6 +1095,51 @@ var Master = {
 			}
 		});	
 	},
+
+    add_demo_user:function(e){
+        e.preventDefault();
+        var form = $('form.add_demo_user');
+        var name = form.find('.name').val(),
+            email = form.find('.email').val(),
+            phone = form.find('.phone').val(),
+            expiration = form.find('#expiration').val()
+        ;
+
+        $('form.add_demo_user .alert').remove();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'admin/add_demo_user',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id:form.parent().find('.demouser_id').val(),
+                name: name,
+                email:email,
+                phone:phone,
+                expiration:expiration
+            },
+
+            success:function(response){
+                console.log(response);
+                if(response.errors){
+                    $('form.add_demo_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
+                    $('.alert-danger').show();
+                }else{
+                    $('form.add_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+                    $('.alert-success').show();
+                    setTimeout(function(){
+                        window.location.href = "/dashboards/admin";
+                    }, 3500);
+                }
+            }
+        });
+    },
 
     // edit demo user
     edit_demo_user:function(e){
@@ -1375,6 +1420,7 @@ var Master = {
 		setTimeout(function () {
             $('.tooltip').fadeOut('slow');
         }, 3500);
+        console.log('ran');
 
 		var $temp = $("<input>");
 	    $(this).parent().append($temp);
@@ -2212,6 +2258,6 @@ $(document).ready(function(){
 		$('html,body').scrollTop($('body').scrollTop());
 	});
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip({trigger: "click"});
 
 });
