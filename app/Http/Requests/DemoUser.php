@@ -31,6 +31,7 @@ class DemoUser extends FormRequest
             $user = new User();
         }
 
+        // expiration only required on add
         return [
             'name' => [
                 'required',
@@ -41,7 +42,11 @@ class DemoUser extends FormRequest
                 Rule::unique('users')->ignore($user->id),
             ],
             'phone' => 'required',
-            'expiration' => 'required|integer',
+            'expiration' => [
+                Rule::requiredIf(empty($this->id)),
+                'nullable',
+                'integer',
+            ],
         ];
     }
 }
