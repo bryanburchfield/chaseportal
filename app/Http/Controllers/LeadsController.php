@@ -84,7 +84,7 @@ class LeadsController extends Controller
         $lr->active = true;
         $lr->save();
 
-        return redirect('dashboards/tools');
+        return ['status' => 'success'];
     }
 
     public function updateRule(AddLeadFilterRule $request)
@@ -97,7 +97,7 @@ class LeadsController extends Controller
 
         if ($lr->isDirty()) {
             $lr->delete();
-            return $this->createRule($request);
+            $this->createRule($request);
         }
 
         return redirect('dashboards/tools');
@@ -107,7 +107,11 @@ class LeadsController extends Controller
     {
         $lr = $this->getRule($request->id);
 
-        return $lr->delete();
+        if ($lr->delete()) {
+            return ['status' => 'success'];
+        } else {
+            return ['status' => 'failed'];
+        }
     }
 
     public function getHistory()
