@@ -18,7 +18,7 @@
 	                <div class="col-sm-6">
 	                    <div class="card">
 	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
-	                        {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 edit_rule']) !!}
+	                        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools/update_rule', 'class'=>'form mt20 edit_rule']) !!}
 
 	                            <div class="form-group">
 	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
