@@ -403,9 +403,6 @@ var Master = {
     create_leadrule:function(e){
         e.preventDefault();
 
-        // var form_data = $('.add_rule').serialize();
-        // console.log(form_data);
-
         var rule_name = $('#rule_name').val(),
             source_campaign = $('#campaign_select').val(),
             source_subcampaign = $('#source_subcampaign').val(),
@@ -444,83 +441,81 @@ var Master = {
                 $('.add_rule .alert').empty();
                 $('.add_rule .alert').hide();
 
-                if( data.status === 422 ) {
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
 
-                        if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                                $('.add_rule .alert').show().append('<li>'+value+'</li>');
-                            });
-                        }else{
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
                             $('.add_rule .alert').show().append('<li>'+value+'</li>');
-                        }
-                    });
+                        });
+                    }else{
+                        $('.add_rule .alert').show().append('<li>'+value+'</li>');
+                    }
+                });
 
-                    $('.add_rule .alert li').first().remove();
-                }
+                $('.add_rule .alert li').first().remove();
             }
         });
     },
 
-    save_leadrule_update:function(e){
-        e.preventDefault();
+    // save_leadrule_update:function(e){
+    //     e.preventDefault();
 
-        var rule_name = $('.update_rule #rule_name').val(),
-            source_campaign = $('.update_rule #update_campaign_select').val(),
-            source_subcampaign = $('.update_rule #update_subcampaign_select').val(),
-            filter_type = $('.update_rule #update_filter_type').val(),
-            filter_value = $('.update_rule #update_filter_value').val(),
-            update_destination_campaign = $('.update_rule #update_destination_campaign').val(),
-            update_destination_subcampaign = $('.update_rule #update_destination_subcampaign').val(),
-            lead_rule_id = $('.update_rule #lead_rule_id').val()
-        ;
+    //     var rule_name = $('.update_rule #rule_name').val(),
+    //         source_campaign = $('.update_rule #update_campaign_select').val(),
+    //         source_subcampaign = $('.update_rule #update_subcampaign_select').val(),
+    //         filter_type = $('.update_rule #update_filter_type').val(),
+    //         filter_value = $('.update_rule #update_filter_value').val(),
+    //         update_destination_campaign = $('.update_rule #update_destination_campaign').val(),
+    //         update_destination_subcampaign = $('.update_rule #update_destination_subcampaign').val(),
+    //         lead_rule_id = $('.update_rule #lead_rule_id').val()
+    //     ;
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         }
+    //     });
 
-        $.ajax({
-            url: 'tools/update_rule',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                rule_name:rule_name,
-                source_campaign:source_campaign,
-                source_subcampaign:source_subcampaign,
-                filter_type:filter_type,
-                filter_value:filter_value,
-                destination_campaign:update_destination_campaign,
-                destination_subcampaign:update_destination_subcampaign,
-                id:lead_rule_id
-            },
+    //     $.ajax({
+    //         url: 'tools/update_rule',
+    //         type: 'POST',
+    //         dataType: 'json',
+    //         data: {
+    //             rule_name:rule_name,
+    //             source_campaign:source_campaign,
+    //             source_subcampaign:source_subcampaign,
+    //             filter_type:filter_type,
+    //             filter_value:filter_value,
+    //             destination_campaign:update_destination_campaign,
+    //             destination_subcampaign:update_destination_subcampaign,
+    //             id:lead_rule_id
+    //         },
 
-            success:function(response){
-                window.location.href = 'tools';
-            },
-            error :function( data ) {
-                $('#editRulesModal form .alert').empty();
+    //         success:function(response){
+    //             window.location.href = 'tools';
+    //         },
+    //         error :function( data ) {
+    //             $('#editRulesModal form .alert').empty();
 
-                if( data.status === 422 ) {
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+    //             if( data.status === 422 ) {
+    //                 var errors = $.parseJSON(data.responseText);
+    //                 $.each(errors, function (key, value) {
 
-                        if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {                       
-                                $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
-                            });
-                        }else{
-                            $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
-                        }
-                    });
+    //                     if($.isPlainObject(value)) {
+    //                         $.each(value, function (key, value) {                       
+    //                             $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
+    //                         });
+    //                     }else{
+    //                         $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
+    //                     }
+    //                 });
 
-                    $('#editRulesModal form .alert li').first().remove();
-                }
-            }
-        });
-    },
+    //                 $('#editRulesModal form .alert li').first().remove();
+    //             }
+    //         }
+    //     });
+    // },
 
     delete_rule:function(e){
         e.preventDefault();
