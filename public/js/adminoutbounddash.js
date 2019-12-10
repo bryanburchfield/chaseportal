@@ -8,7 +8,7 @@ Chart.pluginService.register({
             var centerConfig = chart.config.options.elements.center;
             var fontStyle = centerConfig.fontStyle || 'Arial';
             var txt = centerConfig.text;
-            var color = '#203047';
+            var color = Master.tick_color;
             var sidePadding = centerConfig.sidePadding || 20;
             var sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
             //Start with a base font of 30px
@@ -156,7 +156,21 @@ var Dashboard = {
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                              color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [{
+                            gridLines: {
+                              color: Master.gridline_color,
+                            },
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
                             type: 'linear',
                             display: true,
                             position: 'left',
@@ -174,7 +188,8 @@ var Dashboard = {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     }
                 }
@@ -215,12 +230,21 @@ var Dashboard = {
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [{
                             type: 'linear',
                             display: true,
                             position: 'left',
                             id: 'y-axis-1',
                             ticks: {
+                                fontColor: Master.tick_color,
                                 beginAtZero: true,
                                 callback: function (value, index, values) {
                                     if (show_decimal) {
@@ -231,6 +255,7 @@ var Dashboard = {
                                 }
                             },
                             scaleLabel: {
+                                fontColor: Master.tick_color,
                                 display: true,
                                 labelString: Lang.get('js_msgs.minutes')
                             },
@@ -247,7 +272,8 @@ var Dashboard = {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     },
 
@@ -535,6 +561,24 @@ var Dashboard = {
                 };
 
                 var calls_by_campaign_options = {
+                    scales:{
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     legend: {
@@ -681,6 +725,24 @@ var Dashboard = {
                 };
 
                 var agent_talk_time_options = {
+                    scales:{
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     legend: {
@@ -903,13 +965,15 @@ var Dashboard = {
                         // display:false,
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     },
                     scales: {
                         xAxes: [{
                             stacked: true,
                             ticks: {
+                                fontColor: Master.tick_color,
                                 beginAtZero: true,
                                 userCallback: function (label, index, labels) {
                                     if (Math.floor(label) === label) {
@@ -920,12 +984,19 @@ var Dashboard = {
                         }],
                         yAxes: [
                             {
+                                ticks: {
+                                    fontColor: Master.tick_color,
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                                 stacked: true,
                                 position: 'left',
                                 scalePositionLeft: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: Lang.get('js_msgs.reps')
+                                    labelString: Lang.get('js_msgs.reps'),
+                                    fontColor: Master.tick_color
                                 }
                             }
                         ]
