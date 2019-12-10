@@ -183,7 +183,7 @@ class AdminController extends Controller
                 array_merge($request->all(), [
                     'user_type' => 'demo',
                     'group_id' => '777',
-                    'db' => 'PowerV2_Reporting_Dialer-17',
+                    'db' => 'PowerV2_Reporting_Dialer-07',
                     'tz' => 'Eastern Standard Time',
                     'app_token' => $app_token,
                     'expiration' => $expiration->toDateTimeString(),
