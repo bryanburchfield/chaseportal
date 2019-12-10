@@ -1178,23 +1178,24 @@ var Master = {
                 setTimeout(function(){
                     window.location.href = "/dashboards/admin";
                 }, 3500);
-            },error :function( data ) {
+            },
+            error :function( data ) {
                 $('form.edit_demo_user .alert').empty();
 
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
 
-                        if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {                       
-                                $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
-                            });
-                        }else{
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {                       
                             $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
-                        }
-                    });
+                        });
+                    }else{
+                        $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
+                    }
+                });
 
-                    $('form.edit_demo_user .alert li').first().remove();
-                }
+                $('form.edit_demo_user .alert li').first().remove();
+                
             }
         });
     },
