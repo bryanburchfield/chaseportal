@@ -456,6 +456,7 @@ var Master = {
                             $('#editRulesModal form .alert').show().append('<li>'+value+'</li>');
                         }
                     });
+                    console.log(errors)
 
                     $('#editRulesModal form .alert li').first().remove();
                 }else{
@@ -1105,7 +1106,6 @@ var Master = {
             expiration = form.find('#expiration').val()
         ;
 
-        $('form.add_demo_user .alert').remove();
 
         $.ajaxSetup({
             headers: {
@@ -1127,15 +1127,28 @@ var Master = {
 
             success:function(response){
                 console.log(response);
-                if(response.errors){
-                    $('form.add_demo_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
-                    $('.alert-danger').show();
-                }else{
-                    $('form.add_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
-                    $('.alert-success').show();
-                    setTimeout(function(){
-                        window.location.href = "/dashboards/admin";
-                    }, 3500);
+                $('form.add_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+                $('.alert-success').show();
+                setTimeout(function(){
+                    window.location.href = "/dashboards/admin";
+                }, 3500);
+            },error :function( data ) {
+                $('form.add_demo_user .alert').empty();
+
+                if( data.status === 422 ) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {                       
+                                $('form.add_demo_user .alert').show().append('<li>'+value+'</li>');
+                            });
+                        }else{
+                            $('form.add_demo_user .alert').show().append('<li>'+value+'</li>');
+                        }
+                    });
+
+                    $('form.add_demo_user .alert li').first().remove();
                 }
             }
         });
@@ -1151,8 +1164,6 @@ var Master = {
             phone = form.find('.phone').val(),
             expiration = form.find('#expiration').val()
         ;
-
-        $('form.edit_demo_user .alert').remove();
 
         $.ajaxSetup({
             headers: {
@@ -1180,22 +1191,21 @@ var Master = {
                 }, 3500);
             },
             error :function( data ) {
-                $('form.edit_demo_user .alert').empty();
+                $('form.edit_demo_user .alert-danger').empty();
 
                 var errors = $.parseJSON(data.responseText);
                 $.each(errors, function (key, value) {
 
                     if($.isPlainObject(value)) {
                         $.each(value, function (key, value) {                       
-                            $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
+                            $('form.edit_demo_user .alert-danger').show().append('<li>'+value+'</li>');
                         });
                     }else{
-                        $('form.edit_demo_user .alert').show().append('<li>'+value+'</li>');
+                        $('form.edit_demo_user .alert-danger').show().append('<li>'+value+'</li>');
                     }
                 });
 
-                $('form.edit_demo_user .alert li').first().remove();
-                
+                $('form.edit_demo_user .alert-danger li').first().remove();
             }
         });
     },
@@ -1310,7 +1320,6 @@ var Master = {
             data: {id: user_id, mode:'edit'},
             success:function(response){
                 var modal = $('.edit_demo_user');
-                $(modal).find('.alert').remove();
                 $(modal).find('.name').val(response.name);
                 $(modal).find('.email').val(response.email);
                 $(modal).find('.phone').val(response.phone);
