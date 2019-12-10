@@ -22,7 +22,7 @@
 							<ul class="nav nav-tabs">
 
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
-								<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
+								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
 								<li><a href="#edit_myself" data-toggle="tab">Edit Myself</a></li>
@@ -36,7 +36,7 @@
 
 								<div class="tab-pane mt30" id="demo_user">
 									<div class="col-sm-5 mb0 card">
-										<h2 class="page_heading">Add Demo User</h2>
+										<h2 class="page_heading">Add Demo Client</h2>
 									    @include('shared.demouser_form', ['mode' => 'add'])
 									</div>
 
@@ -212,7 +212,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit Demo User</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Demo Client</h4>
             </div>
             <div class="modal-body">
             	@include('shared.demouser_form', ['mode' => 'edit'])
