@@ -1366,6 +1366,7 @@ input[type=number]::-webkit-outer-spin-button {
 .bootstrap-datetimepicker-widget td.second:hover {
   background: #fff !important;
   cursor: pointer;
+  color: #203047;
 }
 
 .bootstrap-datetimepicker-widget td span:hover {
@@ -1394,6 +1395,10 @@ input[type=number]::-webkit-outer-spin-button {
 .update_rule .form-control,
 .edit_myself select {
   background: #eee !important;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #23354e;
 }
 
 .create_recips .btn-group ul .checkbox {
@@ -1730,13 +1735,13 @@ h2 {
   font-size: 26px;
   margin-bottom: 40px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  color: #203047;
+  border-bottom: 1px solid #1b293c;
+  color: #aaa;
 }
 
 .opt {
   margin-bottom: 20px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid #1b293c;
   padding-bottom: 15px;
   overflow: auto;
 }
@@ -1747,7 +1752,7 @@ h2 {
   display: inline-block;
   font-size: 17px;
   font-weight: 600;
-  color: #595C63;
+  color: #aaa;
   text-decoration: none;
 }
 
@@ -2164,6 +2169,18 @@ a[aria-expanded=true] {
   color: #fff;
 }
 
+.panel-default {
+  border: none;
+}
+
+.panel-default > .panel-heading {
+  border: 1px solid #101824;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #23354e;
+}
+
 .db_select a.dropdown-toggle {
   float: right;
 }
@@ -2221,9 +2238,15 @@ a[aria-expanded=true] {
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-  background: #fff;
-  color: #203047;
+  background: #23354e;
+  color: #fff;
   font-weight: 600;
+  border: 1px solid #23354e;
+}
+
+.nav-tabs > li > a:hover {
+  background: #334d71;
+  border: 1px solid #334d71;
 }
 
 .cdr_table {
