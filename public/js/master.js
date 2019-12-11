@@ -456,7 +456,6 @@ var Master = {
 							$('#editRulesModal form .alert').show().append('<li>' + value + '</li>');
 						}
 					});
-					console.log(errors)
 
 					$('#editRulesModal form .alert li').first().remove();
 				} else {
@@ -1102,10 +1101,7 @@ var Master = {
                     }
                 });
 
-                console.log(errors);
-
                 $('form.add_user .alert li').first().remove();
-                
             }
 		});
 	},
@@ -1139,7 +1135,7 @@ var Master = {
 			},
 
 			success: function (response) {
-				console.log(response);
+
 				$('<div class="alert alert-success">User successfully updated</div>').insertBefore('form.add_demo_user .btn-primary').parent();
 				$('.alert-success').show();
 				setTimeout(function () {
@@ -1280,9 +1276,7 @@ var Master = {
                         $('form.edit_user .alert').show().append('<li>' + value + '</li>');
                     }
                 });
-                console.log(errors);
                 $('form.edit_user .alert li').first().remove();
-                
             }
 		});
 	},
@@ -1396,8 +1390,6 @@ var Master = {
 		var id = $(this).data('user');
 		var name = $(this).data('name');
 
-		console.log(id + '' + name);
-
 		$('#deleteUserModal .user_id, #deleteRuleModal .rule_id').val(id);
 		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
 		$('#deleteUserModal .username, #deleteRuleModal .rule_name').html(name);
@@ -1466,7 +1458,6 @@ var Master = {
 		setTimeout(function () {
 			$('.tooltip').fadeOut('slow');
 		}, 3500);
-		console.log('ran');
 
 		var $temp = $("<input>");
 		$(this).parent().append($temp);

@@ -44,7 +44,7 @@
 
             {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' Client', ['class'=>'btn btn-primary mb0'] ) !!}
 
-            <div class="alert alert-danger"></div>
+            <div class="alert alert-danger mt20"></div>
 
         {!! Form::close() !!}
     </div>
