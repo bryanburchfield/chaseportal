@@ -44,15 +44,7 @@
 
             {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' Client', ['class'=>'btn btn-primary mb0'] ) !!}
 
-            <br><br>
-
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    @foreach($errors->all() as $e)
-                        {{ $e }}
-                    @endforeach
-                </div>
-            @endif
+            <div class="alert alert-danger"></div>
 
         {!! Form::close() !!}
     </div>

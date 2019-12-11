@@ -1081,19 +1081,32 @@ var Master = {
 
 			success: function (response) {
 
-				if (response.errors) {
+				$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
+                setTimeout(function () {
+                    $('.alert').remove();
+                    $('form.add_user').trigger("reset");
+                    window.location.href = "/dashboards/admin";
+                }, 3500);
+			}, error: function (data) {
+                $('form.add_user .alert').empty();
 
-					$('form.add_user').append('<div class="alert alert-danger">' + response.errors + '</div>');
-					$('.alert-danger').show();
-				} else {
-					$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
-					setTimeout(function () {
-						$('.alert').remove();
-						$('form.add_user').trigger("reset");
-						window.location.href = "/dashboards/admin";
-					}, 3500);
-				}
-			}
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if ($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                        });
+                    } else {
+                        $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                    }
+                });
+
+                console.log(errors);
+
+                $('form.add_user .alert li').first().remove();
+                
+            }
 		});
 	},
 
@@ -1147,8 +1160,6 @@ var Master = {
 							$('form.add_demo_user .alert').show().append('<li>' + value + '</li>');
 						}
 					});
-
-                    console.log(errors)
 
 					$('form.add_demo_user .alert li').first().remove();
 				}
@@ -1249,18 +1260,30 @@ var Master = {
 
 			success: function (response) {
 
-				if (response.errors) {
-					$('form.edit_user').append('<div class="alert alert-danger">' + response.errors + '</div>');
-					$('.alert-danger').show();
-				} else {
-					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
-					$('.alert-success').show();
-					$('form.edit_user').trigger("reset");
-					setTimeout(function () {
-						window.location.href = "/dashboards/admin";
-					}, 3500);
-				}
-			}
+				$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
+                $('.alert-success').show();
+                $('form.edit_user').trigger("reset");
+                setTimeout(function () {
+                    window.location.href = "/dashboards/admin";
+                }, 3500);
+			}, error: function (data) {
+                $('form.edit_user .alert').empty();
+
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if ($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('form.edit_user .alert').show().append('<li>' + value + '</li>');
+                        });
+                    } else {
+                        $('form.edit_user .alert').show().append('<li>' + value + '</li>');
+                    }
+                });
+                console.log(errors);
+                $('form.edit_user .alert li').first().remove();
+                
+            }
 		});
 	},
 
