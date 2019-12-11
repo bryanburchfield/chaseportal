@@ -93,7 +93,7 @@ h6 {
   z-index: 9999;
   background-image: url("/img/loader2.gif");
   background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.88);
+  background-color: #fff;
   background-position: center;
 }
 
@@ -182,6 +182,7 @@ input.btn.logout_btn {
   color: #fff;
   font-weight: 600;
   transition: all, ease, 0.3s;
+  border: none;
 }
 
 input.logout_btn:hover {
@@ -731,7 +732,9 @@ input[type=file] {
 }
 
 .card input {
-  background: #eee;
+  background: #1d2b40;
+  color: #aaa;
+  border: none;
 }
 
 .card .card_table,
@@ -1231,7 +1234,7 @@ p.ajax_error {
 .card-3 .divider {
   margin-top: 10px;
   margin-bottom: 10px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #23354e;
 }
 
 p.descrip {
@@ -1812,14 +1815,6 @@ label.switch > span:after {
   position: absolute;
 }
 
-label.switch > input[type=checkbox]:focus ~ span {
-  box-shadow: 0 0 0 2px #43b556;
-}
-
-label.switch > input[type=checkbox]:checked:focus ~ span {
-  box-shadow: 0 0 0 2px #eee;
-}
-
 label.switch > span {
   border-radius: 60px;
 }
@@ -1828,7 +1823,7 @@ label.switch > span:before {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background-color: #cecece;
+  background-color: #203047;
   border-radius: 60px;
   transition: opacity 0.2s ease-out 0.1s, -webkit-transform 0.2s ease-out 0.1s;
   transition: opacity 0.2s ease-out 0.1s, transform 0.2s ease-out 0.1s;
@@ -1893,11 +1888,15 @@ h2 {
 }
 
 .opt a.active_kpi {
-  color: #E15B23;
+  color: #33A09B;
+}
+
+.opt a.active_kpi:hover {
+  color: #33A09B;
 }
 
 .opt a:hover {
-  color: #E15B23;
+  color: #33A09B;
 }
 
 .opt .switch {
@@ -1913,7 +1912,7 @@ h2 {
 
 .opt .options a,
 .opt .options h4 {
-  color: #203047;
+  color: #aaa;
   font-size: 14px;
   margin-bottom: 0px;
 }
@@ -1945,7 +1944,7 @@ h4.expand_dets {
 
 .expanded_options .user:nth-child(even),
 .expanded_emails .user:nth-child(even) {
-  background: #ddd;
+  background: #203047;
 }
 
 .expanded_options .user.clear,
@@ -2042,10 +2041,14 @@ a.run_kpi.btn {
   border: none;
   display: block;
   text-align: left;
-  border-bottom: 1px solid #ddd;
   padding-top: 7px;
   padding-bottom: 7px;
   font-size: 12px;
+}
+
+a.run_kpi.btn:hover {
+  background: #283c59;
+  border: none !important;
 }
 
 .glyphicon.glyphicon-refresh {
@@ -2150,7 +2153,7 @@ a.run_kpi.btn {
 }
 
 #settingsForm input.form-control {
-  background: #eee;
+  background: #203047;
 }
 
 .card.leader_table_div {
@@ -2461,11 +2464,18 @@ h4.panel-title a {
 }
 
 #editRecipModal input.form-control {
-  background: #eee;
+  background: #203047;
+  border: none;
+  color: #aaa;
 }
 
 #editRecipModal .alert {
   display: none;
+}
+
+#editRecipModal .btn.btn-warning {
+  background: #E15B23;
+  border: none;
 }
 
 p.name span.name {
@@ -2516,11 +2526,12 @@ p.name i {
 }
 
 .btn-default.disable {
-  background: #ddd;
+  background: #203047;
+  color: #aaa;
 }
 
 .btn-default.disable:hover {
-  background: #ddd !important;
+  background: #203047 !important;
 }
 
 .lang_select li a img {
@@ -2528,7 +2539,7 @@ p.name i {
 }
 
 .divider {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #23354e;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -2618,6 +2629,13 @@ div.vertical-line {
 .table > thead > tr > th {
   background: #33A09B;
   color: #fff;
+}
+
+.btn-default.active,
+.btn-default:active,
+.open > .dropdown-toggle.btn-default {
+  border: none;
+  color: #aaa;
 }
 
 /* ---------------------------------------------------
@@ -2906,7 +2924,7 @@ MEDIAQUERIES
 }
 
 .link {
-  color: #203047;
+  color: #aaa;
   font-weight: 600;
   font-size: 16px;
   display: block;
@@ -2914,7 +2932,7 @@ MEDIAQUERIES
 }
 
 .link:hover {
-  color: #E15B23;
+  color: #33A09B;
 }
 
 /*@media handheld, only screen and (max-width: 668px){

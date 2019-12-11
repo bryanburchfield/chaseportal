@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 9999;
     background-image: url('/img/loader2.gif');
     background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.88);
+    background-color: #fff;
     background-position: center;
 }
 
@@ -148,6 +148,7 @@ input.btn.logout_btn {
     color: #fff;
     font-weight: 600;
     @include transition(all, ease, 0.3s);
+    border:none;
 }
 
 input.logout_btn:hover {
@@ -587,7 +588,7 @@ input[type='file'] {
         table {font-size: 12px;}
     }
 
-    input {background: #eee;}
+    input {background: darken($blue, 2%);color:#aaa;border:none;}
 
     .card_table, .card_table2 {
         width: 100%;
@@ -1040,7 +1041,7 @@ p.ajax_error {
 .card-3 .divider {
     margin-top: 10px;
     margin-bottom: 10px;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid lighten($blue, 2%);
 }
 
 p.descrip {
@@ -1536,11 +1537,11 @@ label.switch > span:before, label.switch > span:after {
 }
 
 label.switch > input[type="checkbox"]:focus ~ span {
-    box-shadow: 0 0 0 2px #43b556;
+    // box-shadow: 0 0 0 2px #43b556;
 }
 
 label.switch > input[type="checkbox"]:checked:focus ~ span {
-    box-shadow: 0 0 0 2px #eee;
+    // box-shadow: 0 0 0 2px #eee;
 }
 
 label.switch > span {
@@ -1551,7 +1552,7 @@ label.switch > span:before {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-color: #cecece;
+    background-color: $blue;
     border-radius: 60px;
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
@@ -1605,11 +1606,15 @@ h2 {
 }
 
 .opt a.active_kpi {
-    color: $orange;
+    color: $green;
+
+    &:hover{
+        color:$green;
+    }
 }
 
 .opt a:hover {
-    color: $orange;
+    color: $green;
 }
 
 .opt .switch {
@@ -1624,7 +1629,7 @@ h2 {
 }
 
 .opt .options a, .opt .options h4 {
-    color: $blue;
+    color: #aaa;
     font-size: 14px;
     margin-bottom: 0px;
 }
@@ -1650,7 +1655,7 @@ a.expand_dets, h4.expand_dets {
 }
 
 .expanded_options .user:nth-child(even), .expanded_emails .user:nth-child(even) {
-    background: #ddd;
+    background: $blue;
 }
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
@@ -1742,10 +1747,14 @@ a.run_kpi.btn {
     border: none;
     display: block;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 12px;
+
+    &:hover{
+        background: lighten($blue, 5%);
+        border:none !important;
+    }
 }
 
 .glyphicon.glyphicon-refresh {
@@ -1835,7 +1844,7 @@ a.run_kpi.btn {
 }
 
 #settingsForm input.form-control {
-    background: #eee;
+    background: $blue;
 }
 
 .card.leader_table_div {
@@ -2116,8 +2125,9 @@ h4.panel-title a{
     top:9px;
 }
 
-#editRecipModal input.form-control{background: #eee;}
+#editRecipModal input.form-control{background: $blue;border:none;color:#aaa;}
 #editRecipModal .alert{display: none;}
+#editRecipModal .btn.btn-warning{background: $orange;border:none;}
 
 p.name span.name{width: 150px;}
 p.name i{margin-right: 5px;}
@@ -2153,16 +2163,16 @@ p.name i{margin-right: 5px;}
 }
 
 .btn-default.disable{
-    background: #ddd;
-
+    background: $blue;
+    color:#aaa;
     &:hover{
-        background: #ddd !important;
+        background: $blue !important;
     }
 }
 .lang_select li a img{max-width: 25px;}
 
 .divider{
-    border-top: 1px solid #ddd;
+    border-top: 1px solid lighten($blue, 2%);
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -2250,6 +2260,15 @@ div.vertical-line{
 .table>thead>tr>th{
     background: $green;
     color: #fff;
+}
+
+// .dropdown-menu{
+//     background: $blue;
+// }
+
+.btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default{
+    border:none;
+    color:#aaa;
 }
 
 
@@ -2516,14 +2535,14 @@ MEDIAQUERIES
 }
 
 .link{
-    color: $blue;
+    color: #aaa;
     font-weight: 600;
     font-size: 16px;
     display: block;
     margin-bottom: 10px;
 
     &:hover{
-        color: $orange;
+        color: $green;
     }
 }
 
