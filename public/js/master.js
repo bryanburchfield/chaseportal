@@ -1148,6 +1148,8 @@ var Master = {
 						}
 					});
 
+                    console.log(errors)
+
 					$('form.add_demo_user .alert li').first().remove();
 				}
 			}

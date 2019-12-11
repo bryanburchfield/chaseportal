@@ -2052,7 +2052,7 @@ p.name i{margin-right: 5px;}
     clear: both;
 }
 
-.welcome_box{
+.form-holder.welcome_box{
     padding: 30px 20px;
     text-align: center;
     overflow: auto;
@@ -2066,9 +2066,8 @@ p.name i{margin-right: 5px;}
     p{font-size: 15px;}
 
     .demo_expiration{
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 600;
-        color:$blue;
         margin-bottom: 20px;
     }
 
@@ -2079,7 +2078,6 @@ p.name i{margin-right: 5px;}
         width: 80%;
 
         a{
-            
             font-size: 15px;
             font-weight: 600;
             float: left;
@@ -2308,6 +2306,21 @@ img.text_logo{
 
 }*/
 @media handheld, only screen and (max-width:556px) {
+    
+    .form-holder.welcome_box h1{font-size: 30px;}
+    .form-holder.welcome_box .demo_expiration{font-size: 13px;}
+    .form-holder.welcome_box .btn_holder{
+        width: 100%;
+        a{
+            float: none;
+            clear:both;
+            font-size: 14px;
+            display: block;
+            margin:0 auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
     .card h4.data.bg_rounded {
         padding-top: 32px;
     }
