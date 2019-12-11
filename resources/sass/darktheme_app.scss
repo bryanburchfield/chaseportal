@@ -59,9 +59,9 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    background-image: url('/img/loader2.gif');
+    background-image: url('https://loading.io/asset/324552');
     background-repeat: no-repeat;
-    background-color: #fff;
+    background-color: darken(rgba(32,48,71, 0.8), 10%);
     background-position: center;
 }
 
@@ -405,11 +405,11 @@ h1.fw600 {
     font-weight: 600 !important;
 }
 
-.btn.btn-primary {
+.btn.btn-primary, input.btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: $orange;
-    border: 1px solid darken($orange, 5%);
+    background-color: $orange !important;
+    border: none;
     color: #fff;
     font-weight: 600;
 
@@ -504,13 +504,40 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li:nth-child(even) {
-    background-color: #ececec;
+    background: $blue !important;
 }
 
+.dropdown-menu > .active > a{
+    background: $green !important;
+    &:hover{background:$green !important;}
+}
 .dropdown-menu li:hover {
     background-color: #e4e4e4;
 }
 
+.dropdown-menu{
+    background: $blue;
+
+    .campaign_search{
+        background: darken($blue, 10%);
+    }
+}
+
+ul.dropdown-menu.filter_campaign .checkbox{
+    border-bottom: 1px solid lighten($blue,10%) !important;
+}
+
+.filters .btn.btn-primary.select_campaign{border:none !important;}
+.filter_campaign .checkbox{margin: 0;}
+ul.dropdown-menu.filter_campaign .checkbox{padding: 10px;}
+
+input.form-control.campaign_search{color:#aaa;}
+
+.filters .btn.btn-primary.select_database, .filters .btn.btn-primary.select_campaign{border:none; }
+
+.dropdown-menu li:nth-child(odd), ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd){
+    background: darken($blue, 10%) !important;
+}
 
 .filters {
     margin-bottom: 10px;
@@ -580,6 +607,11 @@ input[type='file'] {
     color: #aaaaaa;
 
     &.card_table, &.card_table2 {
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
         width: 100%;
         height: 100%;
         overflow-y: scroll;
@@ -595,7 +627,11 @@ input[type='file'] {
         height: 100%;
         overflow-y: scroll;
         padding: 20px 10px;
-        background: darken($blue,10%);
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
     }
 
     .front, .back {
@@ -640,7 +676,11 @@ input[type='file'] {
     }
 
     &.flipping_card{
-        background: darken($blue,10%);
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
         overflow: hidden;
         padding: 1px;
 
@@ -855,6 +895,7 @@ p.total {
     padding: 12px 0;
     margin-bottom: 20px;
     @include blue_grad(#203047, #090d14);
+    border-bottom: 1px solid #23354e;
     color: #fff;
     text-align: center;
     font-weight: 600;
@@ -1934,7 +1975,7 @@ a.run_kpi.btn {
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    background: $blue;
+    @include blue_grad(#203047, #090d14);
 }
 
 .card_dropdown-content a {
@@ -2269,6 +2310,40 @@ div.vertical-line{
 .btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default{
     border:none;
     color:#aaa;
+}
+
+.form-holder a.btn.btn-link{
+    color: $green;
+}
+
+.multiselect-container.dropdown-menu{
+    background: $blue;
+    color: #aaa !important;
+}
+
+.dropdown-menu li:nth-child(even){
+    background: darken($blue, 10%);
+    color: #aaa !important;
+}
+
+.dropdown-menu li{
+    a{
+        color: #aaa;
+    }
+
+    &:hover{
+        background: lighten($blue, 10%);
+        color: #aaa !important;
+    }
+}
+
+ .report_filters form input.multiselect-search{
+    background: darken($blue, 10%) !important;
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+    background: lighten($blue, 5%);
+    color: #aaa !important;
 }
 
 

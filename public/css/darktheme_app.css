@@ -91,9 +91,9 @@ h6 {
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background-image: url("/img/loader2.gif");
+  background-image: url("https://loading.io/asset/324552");
   background-repeat: no-repeat;
-  background-color: #fff;
+  background-color: rgba(16, 24, 36, 0.8);
   background-position: center;
 }
 
@@ -501,16 +501,18 @@ h1.fw600 {
   font-weight: 600 !important;
 }
 
-.btn.btn-primary {
+.btn.btn-primary,
+input.btn.btn-primary {
   position: relative;
   margin-bottom: 30px;
-  background-color: #E15B23;
-  border: 1px solid #ce511c;
+  background-color: #E15B23 !important;
+  border: none;
   color: #fff;
   font-weight: 600;
 }
 
-.btn.btn-primary:hover {
+.btn.btn-primary:hover,
+input.btn.btn-primary:hover {
   background-color: #ce511c;
 }
 
@@ -635,11 +637,57 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li:nth-child(even) {
-  background-color: #ececec;
+  background: #203047 !important;
+}
+
+.dropdown-menu > .active > a {
+  background: #33A09B !important;
+}
+
+.dropdown-menu > .active > a:hover {
+  background: #33A09B !important;
 }
 
 .dropdown-menu li:hover {
   background-color: #e4e4e4;
+}
+
+.dropdown-menu {
+  background: #203047;
+}
+
+.dropdown-menu .campaign_search {
+  background: #101824;
+}
+
+ul.dropdown-menu.filter_campaign .checkbox {
+  border-bottom: 1px solid #30486a !important;
+}
+
+.filters .btn.btn-primary.select_campaign {
+  border: none !important;
+}
+
+.filter_campaign .checkbox {
+  margin: 0;
+}
+
+ul.dropdown-menu.filter_campaign .checkbox {
+  padding: 10px;
+}
+
+input.form-control.campaign_search {
+  color: #aaa;
+}
+
+.filters .btn.btn-primary.select_database,
+.filters .btn.btn-primary.select_campaign {
+  border: none;
+}
+
+.dropdown-menu li:nth-child(odd),
+ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
+  background: #101824 !important;
 }
 
 .filters {
@@ -720,6 +768,14 @@ input[type=file] {
 
 .card.card_table,
 .card.card_table2 {
+  background: #101824;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#101824", endColorstr="#090d14",GradientType=0 );
+  /* IE6-9 */
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -744,6 +800,13 @@ input[type=file] {
   overflow-y: scroll;
   padding: 20px 10px;
   background: #101824;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#101824", endColorstr="#090d14",GradientType=0 );
+  /* IE6-9 */
 }
 
 .card .front,
@@ -793,6 +856,13 @@ input[type=file] {
 
 .card.flipping_card {
   background: #101824;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#101824", endColorstr="#090d14",GradientType=0 );
+  /* IE6-9 */
   overflow: hidden;
   padding: 1px;
 }
@@ -1023,6 +1093,7 @@ p.total {
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
   /* IE6-9 */
+  border-bottom: 1px solid #23354e;
   color: #fff;
   text-align: center;
   font-weight: 600;
@@ -2245,7 +2316,15 @@ a.run_kpi.btn:hover {
   font-size: 16px;
   font-weight: 700;
   color: #fff;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
   background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
 }
 
 .card_dropdown-content a {
@@ -2636,6 +2715,39 @@ div.vertical-line {
 .open > .dropdown-toggle.btn-default {
   border: none;
   color: #aaa;
+}
+
+.form-holder a.btn.btn-link {
+  color: #33A09B;
+}
+
+.multiselect-container.dropdown-menu {
+  background: #203047;
+  color: #aaa !important;
+}
+
+.dropdown-menu li:nth-child(even) {
+  background: #101824;
+  color: #aaa !important;
+}
+
+.dropdown-menu li a {
+  color: #aaa;
+}
+
+.dropdown-menu li:hover {
+  background: #30486a;
+  color: #aaa !important;
+}
+
+.report_filters form input.multiselect-search {
+  background: #101824 !important;
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+  background: #283c59;
+  color: #aaa !important;
 }
 
 /* ---------------------------------------------------
