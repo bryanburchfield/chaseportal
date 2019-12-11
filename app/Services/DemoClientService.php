@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Log;
 
 class DemoClientService
 {
+    /**
+     * Expire Demos
+     * 
+     * Called from cron.  Finds all expired demo users
+     * and deletes their KPI recipients and automated reports
+     * 
+     * @return void 
+     * @throws mixed 
+     */
     public static function expireDemos()
     {
         $controller = new AdminController();

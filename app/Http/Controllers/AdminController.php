@@ -15,11 +15,18 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Integer;
 
 class AdminController extends Controller
 {
     use TimeTraits;
 
+/**
+ * Set DB
+ *  
+ * @param string|null $db 
+ * @return void 
+ */
     private function setDb($db = null)
     {
         if (empty($db)) {
@@ -28,6 +35,12 @@ class AdminController extends Controller
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
+    /**
+     * Index
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
     public function index(Request $request)
     {
         $groupId = Auth::user()->group_id;
@@ -137,6 +150,12 @@ class AdminController extends Controller
         return view('dashboards.admin')->with($data);
     }
 
+    /**
+     * Add User
+     * 
+     * @param Request $request 
+     * @return array 
+     */
     public function addUser(Request $request)
     {
         // check if name or email exists
@@ -163,6 +182,13 @@ class AdminController extends Controller
         return $return;
     }
 
+    /**
+     * Add Demo User (ajax)
+     * 
+     * @param DemoUser $request 
+     * @return array
+     * @throws mixed 
+     */
     public function addDemoUser(DemoUser $request)
     {
         $app_token = $this->generateToken();
@@ -193,6 +219,13 @@ class AdminController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Generate Token
+     * 
+     * Creates unique app_token for user
+     * 
+     * @return string 
+     */
     private function generateToken()
     {
         do {
@@ -202,11 +235,26 @@ class AdminController extends Controller
         return $hash;
     }
 
+    /**
+     * Token Exists
+     * 
+     * Check if app_token exists in users table
+     * 
+     * @param string $hash 
+     * @return App\Models\User 
+     */
     private function token_exists($hash)
     {
         return User::where('app_token', $hash)->exists();
     }
 
+    /**
+     * Delete User (ajax)
+     * 
+     * @param Request $request 
+     * @param bool $keep 
+     * @return array
+     */
     public function deleteUser(Request $request, $keep = false)
     {
         $user = User::findOrFail($request->id);
@@ -227,6 +275,12 @@ class AdminController extends Controller
         return ['status' => 'user deleted'];
     }
 
+/**
+ * Delete Recipients
+ * 
+ * @param Integer $user_id 
+ * @return void 
+ */
     public function deleteRecipients($user_id)
     {
         $kpicontroller = new KpiController();
@@ -238,11 +292,23 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * Get User
+     * 
+     * @param Request $request 
+     * @return App\Models\User 
+     */
     public function getUser(Request $request)
     {
         return User::findOrFail($request->id);
     }
 
+    /**
+     * Update User
+     * 
+     * @param Request $request 
+     * @return array 
+     */
     public function updateUser(Request $request)
     {
         /// check if name or email is used by another user
@@ -267,6 +333,12 @@ class AdminController extends Controller
         return $return;
     }
 
+    /**
+     * Update Demo User (ajax)
+     * 
+     * @param DemoUser $request 
+     * @return array
+     */
     public function updateDemoUser(DemoUser $request)
     {
         $user = User::findOrFail($request->id);
@@ -281,6 +353,12 @@ class AdminController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Edit Myself
+     * 
+     * @param Request $request 
+     * @return array
+     */
     public function editMyself(Request $request)
     {
         try {
@@ -293,6 +371,13 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
+    /**
+     * CDR Lookup
+     * 
+     * @param Request $request 
+     * @return array 
+     * @throws mixed 
+     */
     public function cdrLookup(Request $request)
     {
         $tz = Auth::user()->iana_tz;
