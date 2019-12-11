@@ -994,9 +994,16 @@ p.total {
 }
 
 .form-holder {
-  border: 1px solid #ccc;
   border-radius: 5px;
-  background: #eee;
+  background: #152130;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #152130 1%, #090d14 52%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#152130", endColorstr="#090d14",GradientType=0 );
+  /* IE6-9 */
+  border-top: 1px solid #23354e;
   margin-top: 17%;
 }
 
@@ -1004,7 +1011,15 @@ p.total {
   border-radius: 5px 5px 0 0;
   padding: 12px 0;
   margin-bottom: 20px;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
   background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
   color: #fff;
   text-align: center;
   font-weight: 600;
@@ -1017,11 +1032,22 @@ p.total {
 }
 
 .form-holder form input {
-  background: #fff;
+  background: #1d2b40 !important;
+  border: none;
+  color: #aaa;
 }
 
 .form-holder .input-group-addon:last-child {
-  background: #fff;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
+  background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
+  color: #eee;
 }
 
 .form-holder .btn {
@@ -1128,7 +1154,6 @@ ul.dropdown-menu.filter_campaign {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
   /* IE6-9 */
   color: #fff;
-  margin-bottom: 20px;
 }
 
 .modal-footer {
@@ -2249,7 +2274,16 @@ a.run_kpi.btn {
 .input-group .form-control:not(:first-child):not(:last-child),
 .input-group-addon:not(:first-child):not(:last-child),
 .input-group-btn:not(:first-child):not(:last-child) {
-  background: #fff !important;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
+  background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
+  color: #eee;
   border-radius: 0;
 }
 
@@ -2286,6 +2320,11 @@ a[aria-expanded=true] {
 
 .panel-default > .panel-heading {
   border: 1px solid #101824;
+}
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  background: #101824;
+  border-top: 1px solid #30486a;
 }
 
 .nav-tabs {
@@ -2378,7 +2417,7 @@ h4.panel-title a {
 }
 
 .user_links_modal a:nth-of-type(odd) {
-  background-color: #e6e6e6;
+  background: #203047;
 }
 
 .user_links_modal a {
@@ -2389,7 +2428,7 @@ h4.panel-title a {
 }
 
 .user_links_modal h3 span {
-  color: #111;
+  color: #aaa;
 }
 
 .multi_db {
@@ -2514,7 +2553,7 @@ p.name i {
   width: 160px;
   height: 160px;
   border-radius: 100px;
-  background: #203047;
+  background: #33A09B;
   display: table;
   margin: 0 auto;
   margin-top: 20px;
@@ -2539,7 +2578,7 @@ p.name i {
 }
 
 .flowchart_element:after {
-  background: #203047;
+  background: #33A09B;
   min-height: 2px;
   width: 45%;
   position: absolute;
@@ -2564,7 +2603,7 @@ p.name i {
 
 div.vertical-line {
   width: 2px;
-  background-color: #203047;
+  background-color: #33A09B;
   height: 130px;
   position: absolute;
   margin: 0 auto;
@@ -2573,7 +2612,12 @@ div.vertical-line {
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background: #203047;
+  background: #182435;
+}
+
+.table > thead > tr > th {
+  background: #33A09B;
+  color: #fff;
 }
 
 /* ---------------------------------------------------
