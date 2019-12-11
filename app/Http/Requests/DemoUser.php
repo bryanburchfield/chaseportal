@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\UniqueEmail;
+use App\Rules\UniqueName;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,11 +37,11 @@ class DemoUser extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('users')->ignore($user->id),
+                new UniqueName($user),
             ],
             'email' => [
                 'nullable',
-                Rule::unique('users')->ignore($user->id),
+                new UniqueEmail($user),
             ],
             'phone' => 'required',
             'expiration' => [
