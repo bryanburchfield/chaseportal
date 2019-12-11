@@ -1059,8 +1059,6 @@ var Master = {
 
 		var dialer = db.slice(-2);
 
-		$('form.add_user .alert').remove();
-
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1238,8 +1236,6 @@ var Master = {
 			db = form.find('#db').val(),
 			additional_dbs = form.find('#additional_dbs').val()
 			;
-
-		$('form.edit_user .alert').remove();
 
 		$.ajaxSetup({
 			headers: {
