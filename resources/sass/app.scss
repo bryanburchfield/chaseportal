@@ -2052,6 +2052,53 @@ p.name i{margin-right: 5px;}
     clear: both;
 }
 
+.welcome_box{
+    padding: 30px 20px;
+    text-align: center;
+    overflow: auto;
+
+    h1{
+        font-size: 40px;
+        font-weight: 300;
+        margin-bottom: 40px;
+    }
+
+    p{font-size: 15px;}
+
+    .demo_expiration{
+        font-size: 20px;
+        font-weight: 600;
+        color:$blue;
+        margin-bottom: 20px;
+    }
+
+    .btn_holder{
+        display: block;
+        margin:0 auto;
+        clear: both;
+        width: 80%;
+
+        a{
+            
+            font-size: 15px;
+            font-weight: 600;
+            float: left;
+            width: 47%;
+            margin-left: 2%;
+        }
+    }
+
+    &.expired{
+        min-height: 150px;
+
+
+        div.alert{
+            font-size: 16px;
+            margin-top: 30px;
+        }
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

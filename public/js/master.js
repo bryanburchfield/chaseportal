@@ -1106,7 +1106,7 @@ var Master = {
 			expiration = form.find('#expiration').val()
 			;
 
-
+        $('.alert-danger').hide();
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1127,7 +1127,7 @@ var Master = {
 
 			success: function (response) {
 				console.log(response);
-				$('form.add_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+				$('<div class="alert alert-success">User successfully updated</div>').insertBefore('form.add_demo_user .btn-primary').parent();
 				$('.alert-success').show();
 				setTimeout(function () {
 					window.location.href = "/dashboards/admin";

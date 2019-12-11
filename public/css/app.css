@@ -2327,6 +2327,53 @@ p.name i {
   clear: both;
 }
 
+.welcome_box {
+  padding: 30px 20px;
+  text-align: center;
+  overflow: auto;
+}
+
+.welcome_box h1 {
+  font-size: 40px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.welcome_box p {
+  font-size: 15px;
+}
+
+.welcome_box .demo_expiration {
+  font-size: 20px;
+  font-weight: 600;
+  color: #203047;
+  margin-bottom: 20px;
+}
+
+.welcome_box .btn_holder {
+  display: block;
+  margin: 0 auto;
+  clear: both;
+  width: 80%;
+}
+
+.welcome_box .btn_holder a {
+  font-size: 15px;
+  font-weight: 600;
+  float: left;
+  width: 47%;
+  margin-left: 2%;
+}
+
+.welcome_box.expired {
+  min-height: 150px;
+}
+
+.welcome_box.expired div.alert {
+  font-size: 16px;
+  margin-top: 30px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
