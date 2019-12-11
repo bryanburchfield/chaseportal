@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
 use App\Rules\UniqueEmail;
 use App\Rules\UniqueName;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class DemoUser extends FormRequest
+
+class StandardUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,6 +27,7 @@ class DemoUser extends FormRequest
      */
     public function rules()
     {
+        // Check if we're adding or editing
         if (!empty($this->id)) {
             $user = User::find($this->id);
         } else {
@@ -35,6 +36,7 @@ class DemoUser extends FormRequest
 
         // expiration only required on add
         return [
+            'group_id' => 'required|integer',
             'name' => [
                 'required',
                 new UniqueName($user),
@@ -44,11 +46,8 @@ class DemoUser extends FormRequest
                 new UniqueEmail($user),
             ],
             'phone' => 'required',
-            'expiration' => [
-                Rule::requiredIf(empty($this->id)),
-                'nullable',
-                'integer',
-            ],
+            'tz' => 'required',
+            'db' => 'required',
         ];
     }
 }
