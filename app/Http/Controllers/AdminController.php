@@ -207,7 +207,7 @@ class AdminController extends Controller
         return User::where('app_token', $hash)->exists();
     }
 
-    public function deleteUser(Request $request)
+    public function deleteUser(Request $request, $keep = false)
     {
         $user = User::findOrFail($request->id);
 
@@ -220,7 +220,9 @@ class AdminController extends Controller
         }
 
         // delete user
-        $user->delete();
+        if (!$keep) {
+            $user->delete();
+        }
 
         return ['status' => 'user deleted'];
     }
