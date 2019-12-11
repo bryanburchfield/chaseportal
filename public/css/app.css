@@ -2384,6 +2384,52 @@ div.vertical-line {
   display: block;
 }
 
+.form-holder.welcome_box {
+  padding: 30px 20px;
+  text-align: center;
+  overflow: auto;
+}
+
+.form-holder.welcome_box h1 {
+  font-size: 40px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.form-holder.welcome_box p {
+  font-size: 15px;
+}
+
+.form-holder.welcome_box .demo_expiration {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form-holder.welcome_box .btn_holder {
+  display: block;
+  margin: 0 auto;
+  clear: both;
+  width: 80%;
+}
+
+.form-holder.welcome_box .btn_holder a {
+  font-size: 15px;
+  font-weight: 600;
+  float: left;
+  width: 47%;
+  margin-left: 2%;
+}
+
+.form-holder.welcome_box.expired {
+  min-height: 150px;
+}
+
+.form-holder.welcome_box.expired div.alert {
+  font-size: 16px;
+  margin-top: 30px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -2689,6 +2735,28 @@ img.text_logo{
 }*/
 
 @media handheld, only screen and (max-width: 556px) {
+  .form-holder.welcome_box h1 {
+    font-size: 30px;
+  }
+
+  .form-holder.welcome_box .demo_expiration {
+    font-size: 13px;
+  }
+
+  .form-holder.welcome_box .btn_holder {
+    width: 100%;
+  }
+
+  .form-holder.welcome_box .btn_holder a {
+    float: none;
+    clear: both;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   .card h4.data.bg_rounded {
     padding-top: 32px;
   }
