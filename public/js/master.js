@@ -1078,8 +1078,10 @@ var Master = {
 				$('<div class="alert alert-success">User successfully updated</div>').insertBefore('form.add_demo_user .btn-primary').parent();
 				$('.alert-success').show();
 				setTimeout(function () {
-					window.location.href = "/dashboards/admin";
-				}, 3500);
+                    $('.alert-success').hide();
+                    $('form.add_demo_user').trigger("reset");
+					window.location.href = "/dashboards/admin#demo_user";
+				}, 2500);
 			}, error: function (data) {
 				$('form.add_demo_user .alert').empty();
 
