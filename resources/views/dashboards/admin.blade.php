@@ -35,12 +35,12 @@
 								</div>
 
 								<div class="tab-pane mt30" id="demo_user">
-									<div class="col-sm-5 mb0 card">
+									<div class="col-sm-4 mb0 card">
 										<h2 class="page_heading">Add Demo Client</h2>
 									    @include('shared.demouser_form', ['mode' => 'add'])
 									</div>
 
-									<div class="col-sm-7 mb0">
+									<div class="col-sm-8 mb0">
 										<table class="table demo_user_table table-responsive table-striped">
 											<thead>
 												<tr>
