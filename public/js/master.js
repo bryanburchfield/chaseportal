@@ -1277,12 +1277,14 @@ var Master = {
 			dataType: 'json',
 			data: { id: user_id, mode: 'edit' },
 			success: function (response) {
+
 				var modal = $('.edit_demo_user');
+                $('form.demo_user .alert.alert-info').remove();
 				$(modal).find('.name').val(response.name);
 				$(modal).find('.email').val(response.email);
 				$(modal).find('.phone').val(response.phone);
 				var demo_expiration = $('.edit_demo_user').find('.name').parent();
-				$('<div class="alert alert-info mb20">Demo expires in ' + response.expires_in + '</div>').insertBefore(demo_expiration);
+				$('<div class="alert alert-info mb20">Demo expires ' + response.expires_in + '</div>').insertBefore(demo_expiration);
 			}
 		});
 	},
