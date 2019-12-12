@@ -7,13 +7,13 @@
 
 	<form action="{{url('/dashboards/settings/update_lang_display')}}" method="POST" class="form hide_lang">
 		@csrf
-		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{Auth::user()->language_displayed ? 'checked' : ''}}>{{__('general.display_language')}}</label>
+		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{Auth::user()->language_displayed ? 'checked' : ''}}> {{__('general.display_language')}}</label>
 		<input type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn" value="{{__('general.update')}}">
 	</form>
 
 	<form action="{{url('/dashboards/settings/update_theme')}}" method="POST" class="form toggle_theme">
 		@csrf
-		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->theme == 'dark' ? '1' : '0'}}" name="theme[]" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}>Enable Dark Theme</label>
+		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->theme == 'dark' ? '1' : '0'}}" name="theme[]" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> Enable Dark Theme</label>
 		<input type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn" value="{{__('general.update')}}">
 	</form>
 </div>

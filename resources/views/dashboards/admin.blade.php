@@ -124,7 +124,7 @@
 									<div class="col-sm-6 mb0 card">
 										<h2 class="page_heading">Edit Myself</h2>
 
-										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_myself', 'class'=>'form
+										{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form
 										edit_myself']) !!}
 										<div class="form-group">
 											{!! Form::label('group_id', 'Group ID') !!}

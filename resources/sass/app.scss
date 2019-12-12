@@ -2159,7 +2159,8 @@ div.vertical-line{
 
 .settings{
     form{
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+
         .btn{
             margin: 0;
             margin-left: 10px;
@@ -2169,6 +2170,11 @@ div.vertical-line{
             }
         }
     }
+}
+
+.hide_lang input[type="checkbox"], .toggle_theme input[type="checkbox"]{
+    width: 15px;
+    height: 15px;
 }
 
 

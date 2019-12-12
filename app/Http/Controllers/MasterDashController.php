@@ -181,7 +181,6 @@ class MasterDashController extends Controller
         $theme = (int) $request->theme;
         $theme = ($theme ? 'dark' : 'light');
         User::where('id', $user->id)->update(array('theme' => $theme));
-
-        return redirect()->back();
+        return redirect('/dashboards/admin#settings');
     }
 }

@@ -33,7 +33,8 @@
     <![endif]-->
 </head>
 <body>
-    
+    <input type="hidden" class="theme" value="{{Auth::user()->theme}}">
+
     <div class="preloader"></div>
 
     <div class="wrapper">
