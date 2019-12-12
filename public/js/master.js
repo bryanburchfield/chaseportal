@@ -1151,6 +1151,7 @@ var Master = {
 
 	// edit global user
 	edit_user:function(e){
+
 		e.preventDefault();
 		var form = $('form.edit_user');
 		var group_id = form.find('.group_id').val(),
@@ -1190,6 +1191,7 @@ var Master = {
 					$('form.edit_user').append('<div class="alert alert-danger">'+response.errors+'</div>');
 					$('.alert-danger').show();
 				}else{
+                    $('.alert-success').remove();
 					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
 					$('.alert-success').show();
 					$('form.edit_user').trigger("reset");
@@ -1231,9 +1233,10 @@ var Master = {
                     $('form.edit_myself').append('<div class="alert alert-danger">'+response.errors+'</div>');
                     $('.alert-danger').show();
                 }else{
+                    console.log(response);
+                    $('.alert-success').remove();
                     $('form.edit_myself').append('<div class="alert alert-success">User successfully updated</div>');
                     $('.alert-success').show();
-                    $('form.edit_myself').trigger("reset");
                     setTimeout(function(){
                         $('.alert-success').hide();
                         window.location.href = "/dashboards/admin#settings";
