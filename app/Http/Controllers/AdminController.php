@@ -317,9 +317,11 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($request->id);
 
-        if ($request->has('expiration')) {
+        if ($request->filled('expiration')) {
             $expiration = Carbon::now()->addDays($request->expiration);
             $request->merge(['expiration' => $expiration]);
+        } elseif ($request->has('expiration')) {
+            $request->request->remove('expiration');
         }
 
         $user->update($request->all());
