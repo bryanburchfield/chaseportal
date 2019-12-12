@@ -5,8 +5,11 @@
                <i class="fas fa-align-left"></i>
            </button>
 
-           {{-- <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo"> --}}
-           <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo">
+           @if(Auth::user()->theme == 'dark')
+               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo">
+           @else
+               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo">
+           @endif
        </div>
 
         <div class="filters col-xs-7 col-sm-6">

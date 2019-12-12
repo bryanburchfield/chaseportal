@@ -65,19 +65,7 @@
 
 						</div>
 
-						<div class="col-sm-6 settings">
-							<a class="link" href="{{url('dashboards/automatedreports')}}"><i class="fas fa-external-link-alt"></i> {{__('general.auto_report_settings')}}</a>
-							<a class="link" href="{{url('dashboards/kpi')}}"><i class="fas fa-external-link-alt"></i> {{__('general.kpi_settings')}}</a>
-							<a class="link" href="{{url('dashboards/kpi/recipients')}}"><i class="fas fa-external-link-alt"></i> {{__('general.recipient_settings')}}</a>
-
-							<div class="divider"></div>
-
-							<form action="{{url('/dashboards/settings/update_lang_display')}}" method="POST" class="form hide_lang">
-								@csrf
-								<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{Auth::user()->language_displayed ? 'checked' : ''}}>{{__('general.display_language')}}</label>
-								<input type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn" value="{{__('general.update')}}">
-							</form>
-						</div>
+						@include('shared.settings')
 					</div>
 			    </div>
 			</div>

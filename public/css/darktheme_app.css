@@ -572,7 +572,15 @@ div.container-fluid.bg {
 }
 
 .navbar-default {
-  background: #fff;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
+  background: #203047;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="$color1", endColorstr="$color2",GradientType=0 );
+  /* IE6-9 */
   box-shadow: 0 1px 2px #28426d;
   -moz-box-shadow: 0 1px 2px #28426d;
   -webkit-box-shadow: 0 1px 2px #28426d;
@@ -740,6 +748,7 @@ ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
 .navbar-header.home .navbar-brand img {
   margin: 0 auto;
   display: block;
+  margin-top: 10px;
 }
 
 input[type=file] {
@@ -2794,6 +2803,19 @@ div.vertical-line {
 .form-holder.welcome_box.expired div.alert {
   font-size: 16px;
   margin-top: 30px;
+}
+
+.settings form {
+  margin-bottom: 20px;
+}
+
+.settings form .btn {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.settings form .btn:hover {
+  background: #ce511c;
 }
 
 /* ---------------------------------------------------

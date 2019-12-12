@@ -456,7 +456,7 @@ div.container-fluid.bg {
 }
 
 .navbar-default {
-    background: #fff;
+    @include blue_grad(#203047, #090d14);
     box-shadow: 0 1px 2px #28426d;
     -moz-box-shadow: 0 1px 2px #28426d;
     -webkit-box-shadow: 0 1px 2px #28426d;
@@ -583,6 +583,7 @@ input.form-control.campaign_search{color:#aaa;}
 .navbar-header.home .navbar-brand img {
     margin: 0 auto;
     display: block;
+    margin-top: 10px;
 }
 
 input[type='file'] {
@@ -2387,6 +2388,20 @@ div.vertical-line{
         div.alert{
             font-size: 16px;
             margin-top: 30px;
+        }
+    }
+}
+
+.settings{
+    form{
+        margin-bottom: 20px;
+        .btn{
+            margin: 0;
+            margin-left: 10px;
+
+            &:hover{
+                background: darken($orange, 5%);
+            }
         }
     }
 }
