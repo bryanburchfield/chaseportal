@@ -2,6 +2,7 @@
         <h2 class="page_heading">{{ ($mode == 'edit') ? 'Edit' : 'New' }} Client</h2>
 
         {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
+
             <div class="form-group">
                 {!! Form::label('group_id', 'Group ID') !!}
                 {!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
@@ -15,6 +16,11 @@
             <div class="form-group">
                 {!! Form::label('email', 'Email') !!}
                 {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('phone', 'Phone') !!}
+                {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
@@ -38,15 +44,7 @@
 
             {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' Client', ['class'=>'btn btn-primary mb0'] ) !!}
 
-            <br><br>
-
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    @foreach($errors->all() as $e)
-                        {{ $e }}
-                    @endforeach
-                </div>
-            @endif
+            <div class="alert alert-danger mt20"></div>
 
         {!! Form::close() !!}
     </div>

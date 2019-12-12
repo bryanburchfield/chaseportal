@@ -451,8 +451,14 @@ div.container-fluid.hero_bg .form-holder {
 }
 
 .edit_user .alert,
-.add_rule_error.alert {
+.form.add_user .alert,
+.form.add_demo_user .alert,
+.edit_demo_user .alert-danger {
   display: none;
+}
+
+#demoUserModal .modal-body {
+  overflow: auto;
 }
 
 .mb_logo {
@@ -1220,7 +1226,8 @@ p.descrip.top14 {
 .rm_rptble_class table th,
 .uploader_table th,
 .cdr_results_table th,
-.rules_table th {
+.rules_table th,
+.demo_user_table th {
   background: #203047;
   border-top: 0;
   color: #fff;
@@ -1338,7 +1345,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_rule .form-control,
 .edit_rule button.multiselect,
 .update_rule .form-control,
-.edit_myself select {
+.edit_myself select,
+.demo_user select,
+.demo_user .form-control {
   background: #eee !important;
 }
 
@@ -1815,7 +1824,8 @@ a.edit_recip_glyph {
   margin-right: 10px;
 }
 
-.users a.remove_user i {
+.users a.remove_user i,
+.demo_user_modal_link.remove_user i {
   position: relative;
   top: 2px;
   color: #E15B23;
@@ -2384,6 +2394,52 @@ div.vertical-line {
   display: block;
 }
 
+.form-holder.welcome_box {
+  padding: 30px 20px;
+  text-align: center;
+  overflow: auto;
+}
+
+.form-holder.welcome_box h1 {
+  font-size: 40px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.form-holder.welcome_box p {
+  font-size: 15px;
+}
+
+.form-holder.welcome_box .demo_expiration {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form-holder.welcome_box .btn_holder {
+  display: block;
+  margin: 0 auto;
+  clear: both;
+  width: 80%;
+}
+
+.form-holder.welcome_box .btn_holder a {
+  font-size: 15px;
+  font-weight: 600;
+  float: left;
+  width: 47%;
+  margin-left: 2%;
+}
+
+.form-holder.welcome_box.expired {
+  min-height: 150px;
+}
+
+.form-holder.welcome_box.expired div.alert {
+  font-size: 16px;
+  margin-top: 30px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -2689,6 +2745,28 @@ img.text_logo{
 }*/
 
 @media handheld, only screen and (max-width: 556px) {
+  .form-holder.welcome_box h1 {
+    font-size: 30px;
+  }
+
+  .form-holder.welcome_box .demo_expiration {
+    font-size: 13px;
+  }
+
+  .form-holder.welcome_box .btn_holder {
+    width: 100%;
+  }
+
+  .form-holder.welcome_box .btn_holder a {
+    float: none;
+    clear: both;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   .card h4.data.bg_rounded {
     padding-top: 32px;
   }

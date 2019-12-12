@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 
 class MasterDashController extends Controller
 {
@@ -54,6 +55,35 @@ class MasterDashController extends Controller
         ];
 
         return view('masterdash')->with($data);
+    }
+
+    public function demoLogin(Request $request)
+    {
+        $token = $request->token;
+
+        // find first user record with that token
+        $user = User::where('app_token', $token)->first();
+
+        if ($user === null) {
+            abort(403, 'Invalid token');
+        }
+
+        // Check that they're a demo user
+        if (!$user->isType('demo')) {
+            return redirect('/');
+        }
+
+        $expiration = Carbon::parse($user->expiration);
+
+        // See if they're expired
+        if ($expiration < Carbon::now()) {
+            return view('demo.expired', ['user' => $user]);
+        }
+
+        // Login that user
+        Auth::loginUsingId($user->id);
+
+        return view('demo.welcome', ['user' => $user]);
     }
 
     public function adminDashboard(Request $request)

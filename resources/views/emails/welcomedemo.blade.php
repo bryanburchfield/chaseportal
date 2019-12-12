@@ -502,7 +502,8 @@ tr.bg_blue{
                         <tr>
                             <td>
                                 <div class="text" style="text-align: center;">
-                                    <h2 style="color:#ffffff;"><span>Explore!</span><br> ChaseData’s Dashboard Portal</h2>
+                                    <h2 style="color:#ffffff;"><span>Explore!</span><br> ChaseData’s Portal Demo</h2>
+                                    <p style="color:#ffffff;">Your demo account will expire on {{$data['expiration']}}</p>
                                     <a href="{{$data['link']}}" class="btn btn-primary mt15">Go to Portal</a>
                                 </div>
                             </td>

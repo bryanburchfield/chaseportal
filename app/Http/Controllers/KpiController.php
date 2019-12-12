@@ -163,6 +163,7 @@ class KpiController extends Controller
         $recipient->email = $request->email;
         $recipient->name = $request->name;
         $recipient->phone = $this->formatPhone($request->phone);
+        $recipient->user_id = Auth::user()->id;
         $recipient->save();
 
         if (!empty($request->kpi_list)) {

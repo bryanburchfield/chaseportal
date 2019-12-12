@@ -7,7 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use App\Notifications\ChaseResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
+use App\Notifications\WelcomeDemoNotification;
 use App\Traits\TimeTraits;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Password;
 
 class User extends Authenticatable
@@ -30,7 +32,9 @@ class User extends Authenticatable
         'group_id',
         'additional_dbs',
         'app_token',
-        'language_displayed'
+        'language_displayed',
+        'phone',
+        'expiration',
     ];
 
     /**
@@ -51,9 +55,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'expires_in',
+    ];
+
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);
+    }
+
+    public function getExpiresInAttribute()
+    {
+        if ($this->user_type !== 'demo') {
+            return null;
+        }
+
+        $expiration = Carbon::parse($this->expiration);
+
+        return $expiration->longRelativeToNowDiffForHumans(2);
     }
 
     public function isType($type)
@@ -111,5 +135,10 @@ class User extends Authenticatable
         $token = Password::broker()->createToken($user);
 
         $this->notify(new WelcomeNotification($user, $token));
+    }
+
+    public function sendWelcomeDemoEmail($user)
+    {
+        $this->notify(new WelcomeDemoNotification($user));
     }
 }

@@ -1,3 +1,10 @@
+@php
+if (Auth::user()->isType('demo')) {
+	$demo = true;
+} else {
+	$demo = false;
+}
+@endphp
 @extends('layouts.master')
 @section('title', __('tools.tools'))
 
@@ -40,9 +47,11 @@
             		                            	    <th>{{__('tools.filter_type')}}</th>
             		                            	    <th>{{__('tools.filter_value')}}</th>
             		                            	    <th>{{__('tools.destination_campaign')}}</th>
-            		                            	    <th>{{__('tools.destination_subcampaign')}}</th>
+														<th>{{__('tools.destination_subcampaign')}}</th>
+														@if(!$demo)
             		                            	    <th>{{__('tools.edit')}}</th>
-            		                            	    <th>{{__('tools.delete')}}</th>
+														<th>{{__('tools.delete')}}</th>
+														@endif
             		                            	</tr>
             		                            </thead>
             		                        @endif
@@ -56,10 +65,12 @@
             											<td>{{$lr->filter_type}}</td>
             											<td>{{$lr->filter_value}}</td>
             											<td>{{$lr->destination_campaign}}</td>
-            											<td>{{$lr->destination_subcampaign}}</td>
+														<td>{{$lr->destination_subcampaign}}</td>
+														@if(!$demo)
             											<td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
             											<td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
-            		                            @endforeach
+														@endif
+														@endforeach
             								</tbody>
             	                        </table>
             						</div>
@@ -183,7 +194,11 @@
 															<td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
+															@if($demo)
+															<td><a role="button" href="#" disabled="disabled" class="btn btn-sm btn-default disable"><i class="fa fa-history"></i> {{__('tools.undo_move')}}</a></td>
+															@else
 															<td><a role="button" href="#" {{$value['reversed'] ? 'disabled="disabled"' : ''}} data-leadid="{{$value['lead_move_id'] }}" class="btn btn-sm {{$value['reversed'] ? 'btn-default disable' : 'btn-danger reverse_lead_move'}}"><i class="fa fa-history"></i> {{__('tools.undo_move')}}</a></td>
+															@endif
 														</tr>
 													@endforeach
 						                        </tbody>

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DemoUser;
+use App\Http\Requests\StandardUser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AutomatedReport;
 use App\Models\Dialer;
+use App\Models\Recipient;
 use App\Models\System;
 use App\Traits\TimeTraits;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +21,12 @@ class AdminController extends Controller
 {
     use TimeTraits;
 
+    /**
+     * Set DB
+     *  
+     * @param string|null $db 
+     * @return void 
+     */
     private function setDb($db = null)
     {
         if (empty($db)) {
@@ -25,6 +35,12 @@ class AdminController extends Controller
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
+    /**
+     * Index
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
     public function index(Request $request)
     {
         $groupId = Auth::user()->group_id;
@@ -128,85 +144,195 @@ class AdminController extends Controller
             'group_id' => $groupId,
             'dbs' => $dbs,
             'jsfile' => [],
+            'demo_users' => User::where('user_type', 'demo')->get()
         ];
 
         return view('dashboards.admin')->with($data);
     }
 
-    public function token_exists($hash)
+    /**
+     * Add User
+     * 
+     * @param Request $request 
+     * @return array 
+     */
+    public function addUser(StandardUser $request)
     {
-        return User::where('app_token', $hash)->exists();
+        $input = $request->all();
+        $input['password'] = Hash::make(uniqid());
+        $input['app_token'] = $this->generateToken();
+
+        $newuser = User::create($input);
+
+        $newuser->sendWelcomeEmail($newuser);
+
+        return ['success' => $newuser];
     }
 
-    public function addUser(Request $request)
+    /**
+     * Add Demo User (ajax)
+     * 
+     * @param DemoUser $request 
+     * @return array
+     * @throws mixed 
+     */
+    public function addDemoUser(DemoUser $request)
+    {
+        $app_token = $this->generateToken();
+
+        // If no email given, create one
+        if (!$request->filled('email')) {
+            $request->request->add(['email' => 'demo_' . $app_token . '@chasedatacorp.com']);
+        }
+
+        // Calculate expiration date
+        $expiration = Carbon::now()->addDays($request->expiration);
+        $request->request->remove('expiration');
+
+        $newuser = User::create(
+            array_merge($request->all(), [
+                'user_type' => 'demo',
+                'group_id' => '777',
+                'db' => 'PowerV2_Reporting_Dialer-07',
+                'tz' => 'Eastern Standard Time',
+                'app_token' => $app_token,
+                'expiration' => $expiration->toDateTimeString(),
+                'password' => Hash::make($app_token),
+            ])
+        );
+
+        // send welcome email unless demo_xxxxx@chasedatacorp.com
+        if ($newuser->email != 'demo_' . $app_token . '@chasedatacorp.com') {
+            $newuser->sendWelcomeDemoEmail($newuser);
+        }
+
+        return ['status' => 'success'];
+    }
+
+    /**
+     * Generate Token
+     * 
+     * Creates unique app_token for user
+     * 
+     * @return string 
+     */
+    private function generateToken()
     {
         do {
             $hash = md5(uniqid());
         } while ($this->token_exists($hash));
 
-        /// check if name or email exists
-        $existing_user = User::where('name', $request->name)
-            ->orWhere('email', $request->email)
-            ->first();
-
-        if (!$existing_user) {
-            $input = $request->all();
-            $input['password'] = Hash::make(uniqid());
-            $newuser = User::create(array_merge($input, ['app_token' => $hash]));
-
-            $newuser->sendWelcomeEmail($newuser);
-
-            $return['success'] = $newuser;
-        } else {
-            $return['errors'] = 'Name or email already in use by "' .
-                $existing_user->name . '" in ' .
-                $existing_user->db;
-        }
-
-        return $return;
+        return $hash;
     }
 
-    public function deleteUser(Request $request)
+    /**
+     * Token Exists
+     * 
+     * Check if app_token exists in users table
+     * 
+     * @param string $hash 
+     * @return App\Models\User 
+     */
+    private function token_exists($hash)
+    {
+        return User::where('app_token', $hash)->exists();
+    }
+
+    /**
+     * Delete User (ajax)
+     * 
+     * @param Request $request 
+     * @param bool $keep 
+     * @return array
+     */
+    public function deleteUser(Request $request, $keep = false)
     {
         $user = User::findOrFail($request->id);
 
         // delete automated reports
         AutomatedReport::where('user_id', $user->id)->delete();
 
+        // delete recipients if demo user
+        if ($user->isType('demo')) {
+            $this->deleteRecipients($user->id);
+        }
+
         // delete user
-        $user->delete();
+        if (!$keep) {
+            $user->delete();
+        }
 
         return ['status' => 'user deleted'];
     }
 
+    /**
+     * Delete Recipients
+     * 
+     * @param Integer $user_id 
+     * @return void 
+     */
+    public function deleteRecipients($user_id)
+    {
+        $kpicontroller = new KpiController();
+        $kpireq = new Request(['id' => 0]);
+
+        foreach (Recipient::where('user_id', $user_id)->get() as $recipient) {
+            $kpireq->replace(['id' => $recipient->id]);
+            $kpicontroller->removeRecipient($kpireq);
+        }
+    }
+
+    /**
+     * Get User
+     * 
+     * @param Request $request 
+     * @return App\Models\User 
+     */
     public function getUser(Request $request)
     {
         return User::findOrFail($request->id);
     }
 
-    public function updateUser(Request $request)
+    /**
+     * Update User
+     * 
+     * @param Request $request 
+     * @return array 
+     */
+    public function updateUser(StandardUser $request)
     {
-        /// check if name or email is used by another user
-        $existing_user = User::where('id', '!=', $request->id)
-            ->where(function ($query) use ($request) {
-                $query->where('name', $request->name)
-                    ->orWhere('email', $request->email);
-            })
-            ->first();
+        $user = User::findOrFail($request->id);
+        $user->update($request->all());
 
-        if ($existing_user) {
-            $return['errors'] = 'Name or email already in use by "' .
-                $existing_user->name . '" in ' .
-                $existing_user->db;
-        } else {
-            $user = User::findOrFail($request->id);
-            $user->update($request->all());
-            $return['success'] = $user;
-        }
-
-        return $return;
+        return ['success' => $user];
     }
 
+    /**
+     * Update Demo User (ajax)
+     * 
+     * @param DemoUser $request 
+     * @return array
+     */
+    public function updateDemoUser(DemoUser $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        if ($request->has('expiration')) {
+            $expiration = Carbon::now()->addDays($request->expiration);
+            $request->merge(['expiration' => $expiration]);
+        }
+
+        $user->update($request->all());
+
+        return ['status' => 'success'];
+    }
+
+    /**
+     * Edit Myself
+     * 
+     * @param Request $request 
+     * @return array
+     */
     public function editMyself(Request $request)
     {
         try {
@@ -219,6 +345,13 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
+    /**
+     * CDR Lookup
+     * 
+     * @param Request $request 
+     * @return array 
+     * @throws mixed 
+     */
     public function cdrLookup(Request $request)
     {
         $tz = Auth::user()->iana_tz;
