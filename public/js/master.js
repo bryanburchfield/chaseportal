@@ -1112,7 +1112,7 @@ var Master = {
 			phone = form.find('.phone').val(),
 			expiration = form.find('#expiration').val()
 			;
-
+            console.log(expiration);
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1132,11 +1132,12 @@ var Master = {
 			},
 
 			success: function (response) {
-				$('form.edit_demo_user').append('<div class="alert alert-success">User successfully updated</div>');
+				$('form.edit_demo_user').append('<div class="alert alert-success oauto mt20">User successfully updated</div>');
 				$('.alert-success').show();
 				setTimeout(function () {
-					window.location.href = "/dashboards/admin";
-				}, 3500);
+                    $('#demoUserModal').modal('hide');
+					window.location.href = "/dashboards/admin#demo_user";
+				}, 2500);
 			},
 			error: function (data) {
 				$('form.edit_demo_user .alert-danger').empty();

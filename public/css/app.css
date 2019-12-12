@@ -457,8 +457,20 @@ div.container-fluid.hero_bg .form-holder {
   display: none;
 }
 
+.edit_demo_user .alert-success {
+  clear: both;
+}
+
 #demoUserModal .modal-body {
   overflow: auto;
+}
+
+.oauto {
+  overflow: auto;
+}
+
+.demo_user .btn.btn-primary {
+  margin-bottom: 20px !important;
 }
 
 .mb_logo {

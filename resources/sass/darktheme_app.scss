@@ -11,9 +11,9 @@ applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abb
 $blue: #203047;
 $orange: #E15B23;
 $green: #33A09B;
-/////////
 
-@mixin blue_grad($color1, $color2){
+
+@mixin blue_grad_ltr($color1, $color2){
     background: $color1;
     background: -moz-linear-gradient(left, $color1 0%, $color2 100%);
     background: -webkit-linear-gradient(left, $color1 0%, $color2 100%);
@@ -21,13 +21,24 @@ $green: #33A09B;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=1); 
 }
 
+//  #203047, #090d14
+@mixin blue_grad($color1, $color2){
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
+background: rgb(32,48,71); /* Old browsers */
+background: -moz-linear-gradient(top,  $color1 0%, $color2 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  $color1 0%,$color2 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  $color1 0%,$color2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 ); /* IE6-9 */
+
+}
+
 body, html {
     height: 100%;
 }
 
 body {
-    background: #efefef;
-    color: #595C63;
+    background: darken(#151C2D, 4%);
+    color: #aaa;
     font-size: 13px;
     font-family: 'Helvetica', 'Arial', sans-serif;
     padding-bottom: 50px;
@@ -48,14 +59,14 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    background-image: url('/img/loader2.gif');
+    background-image: url('https://loading.io/asset/324552');
     background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.88);
+    background-color: darken(rgba(32,48,71, 0.8), 10%);
     background-position: center;
 }
 
 .container-fluid.bg.dashboard.p20 {
-    border-top: 1px solid #fff;
+    // border-top: 1px solid #fff;
 }
 
 .mt10 {
@@ -137,6 +148,7 @@ input.btn.logout_btn {
     color: #fff;
     font-weight: 600;
     @include transition(all, ease, 0.3s);
+    border:none;
 }
 
 input.logout_btn:hover {
@@ -156,7 +168,7 @@ input.logout_btn:hover {
     padding: 13px 20px 0;
     background: #fff;
     border: none;
-    border-bottom: 1px solid #abbdd8;
+    border-bottom: 1px solid lighten($blue,2%);
     border-radius: 0;
     margin-bottom: 40px;
 }
@@ -175,6 +187,22 @@ input.logout_btn:hover {
 
 i, span {
     display: inline-block;
+}
+
+.btn-default{
+    @include blue_grad(#203047, #090d14);
+    border: 1px solid darken(#23354e,10%);
+    color: #eee;
+
+    &:hover, &:active, &:focus{
+        color: #eee !important;
+        @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%));
+        border: 1px solid darken(#23354e,10%) !important;
+    }
+}
+
+.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
+    @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%));
 }
 
 /* ---------------------------------------------------
@@ -196,23 +224,24 @@ i, span {
     max-width: 250px;
     color: #fff;
     background: #263854; /* Old browsers */
-    background: -moz-linear-gradient(left,  #263854 0%, #171f33 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=1 ); /* IE6-9 */
+    background: -moz-linear-gradient(left,  darken(#263854,5%) 0%, darken(#171f33, 5%)100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  darken(#263854,5%) 0%,darken(#171f33, 5%)100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  darken(#263854,5%) 0%,darken(#171f33, 5%)100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(#263854,5%)', endColorstr='darken(#171f33, 5%)',GradientType=1 ); /* IE6-9 */
     @include transition(all, ease, 0.3s);
-    
+    border-right: 1px solid darken(#23354e,10%);
+
     ul.components {
         padding: 20px 0;
     }
 
     ul li {
-        &:first-of-type {border-top: 1px solid #111d2d;}
+        &:first-of-type {border-top: 1px solid darken(#111d2d, 5%);}
         &:last-of-type a {border-bottom: none;}
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad(#1c273d, #263854);
+            @include blue_grad_ltr(darken(#1c273d,5%), darken(#263854,5%));
 
             &>a i {
                 color:#ddd;
@@ -224,22 +253,18 @@ i, span {
             padding: 10px;
             font-size: 1.3em;
             display: block;
-            border-top: 1px solid #254556;
-            border-bottom: 1px solid #111d2d;
+            border-top: 1px solid darken(#254556, 5%);
+            border-bottom: 1px solid darken(#111d2d, 5%);
 
             &:hover {
                 color: #fff;
-                background: #1c273d; /* Old browsers */
-                background: -moz-linear-gradient(left, #1c273d 0%, #263854 98%); /* FF3.6-15 */
-                background: -webkit-linear-gradient(left, #1c273d 0%, #263854 98%); /* Chrome10-25,Safari5.1-6 */
-                background: linear-gradient(to right, #1c273d 0%, #263854 98%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c273d', endColorstr='#263854', GradientType=1); /* IE6-9 */
+                @include blue_grad_ltr(darken(#1c273d,5%), darken(#263854,5%));
             }
-            
+
             i {margin-right: 10px;}
         }
     }
-    
+
     .sidebar-header {
         padding: 20px;
         strong {
@@ -252,13 +277,12 @@ i, span {
         min-width: 80px;
         max-width: 80px;
         text-align: center;
-        
-        
+
         .sidebar-header h3, .CTAs{display: none;}
         .sidebar-header strong {display: block;}
 
         ul li a {
-            padding: 20px 3px;
+            padding: 20px 10px;
             text-align: center;
             font-size: 0.85em;
 
@@ -368,19 +392,8 @@ div.container-fluid.hero_bg .form-holder {
     margin: 20px;
 }
 
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger {
+.edit_user .alert, .add_rule_error.alert {
     display: none;
-}
-
-.edit_demo_user .alert-success{clear: both;}
-
-#demoUserModal .modal-body{
-    overflow: auto;
-}
-
-.oauto{overflow: auto;}
-.demo_user .btn.btn-primary{
-    margin-bottom: 20px !important;
 }
 
 .mb_logo {
@@ -392,26 +405,40 @@ h1.fw600 {
     font-weight: 600 !important;
 }
 
-.btn.btn-primary {
+.btn.btn-primary, input.btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: #e49831;
-    border: 1px solid #f2ad4d;
+    background-color: $orange !important;
+    border: none;
     color: #fff;
     font-weight: 600;
 
     &:hover {
-        background-color: #d38826;
+        background-color: darken($orange, 5%);
     }
-
 }
 
+.input-group-addon{
+    border: none;
+    @include blue_grad(#203047, #090d14);
+    color: #eee;
+}
+
+.input-group-addon:last-child{border-left:1px solid lighten($blue, 5%);}
+
+.bootstrap-datetimepicker-widget{
+    background: $blue;
+    border: 1px solid lighten($blue, 5%);
+    color: #fff;
+}
+
+.bootstrap-datetimepicker-widget .datepicker:hover{ background: $blue;}
+.datepicker-days table tbody tr td:hover{color: lime green;}
+td.day.old:hover{color:blue;}
+
 div.container-fluid.bg {
-    background: #c9d2d6; /* Old browsers */
-    background: -moz-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #c9d2d6 0%, #efefef 7%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9d2d6', endColorstr='#efefef', GradientType=0); /* IE6-9 */
+    background: darken(#151C2D, 4%);
+    border-top: 1px solid darken(#111d2d,10%);
     min-height: 500px;
 }
 
@@ -429,7 +456,7 @@ div.container-fluid.bg {
 }
 
 .navbar-default {
-    background: #fff;
+    @include blue_grad(#203047, #090d14);
     box-shadow: 0 1px 2px #28426d;
     -moz-box-shadow: 0 1px 2px #28426d;
     -webkit-box-shadow: 0 1px 2px #28426d;
@@ -447,11 +474,12 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
+    background: #101824; /* Old browsers */
+    background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+
 }
 
 .navbar-header.home {
@@ -476,13 +504,40 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li:nth-child(even) {
-    background-color: #ececec;
+    background: $blue !important;
 }
 
+.dropdown-menu > .active > a{
+    background: $green !important;
+    &:hover{background:$green !important;}
+}
 .dropdown-menu li:hover {
     background-color: #e4e4e4;
 }
 
+.dropdown-menu{
+    background: $blue;
+
+    .campaign_search{
+        background: darken($blue, 10%);
+    }
+}
+
+ul.dropdown-menu.filter_campaign .checkbox{
+    border-bottom: 1px solid lighten($blue,10%) !important;
+}
+
+.filters .btn.btn-primary.select_campaign{border:none !important;}
+.filter_campaign .checkbox{margin: 0;}
+ul.dropdown-menu.filter_campaign .checkbox{padding: 10px;}
+
+input.form-control.campaign_search{color:#aaa;}
+
+.filters .btn.btn-primary.select_database, .filters .btn.btn-primary.select_campaign{border:none; }
+
+.dropdown-menu li:nth-child(odd), ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd){
+    background: darken($blue, 10%) !important;
+}
 
 .filters {
     margin-bottom: 10px;
@@ -528,6 +583,7 @@ div.container-fluid.bg {
 .navbar-header.home .navbar-brand img {
     margin: 0 auto;
     display: block;
+    margin-top: 10px;
 }
 
 input[type='file'] {
@@ -537,22 +593,26 @@ input[type='file'] {
 }
 
 .card {
-    background: #fff;
-    -moz-box-shadow: 0 2px 3px #ccd6dd;
-    -webkit-box-shadow: 0 2px 3px #ccd6dd;
-    box-shadow: 0 2px 3px #ccd6dd;
-    border-top: 3px solid #acb4c1;
+    background: #152130; /* Old browsers */
+    background: -moz-linear-gradient(top,  #152130 1%, #090d14 52%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #152130 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #152130 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#152130', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+    border-top: 1px solid #23354e;
+    -moz-box-shadow: 0 2px 3px darken($blue, 20%);
+    -webkit-box-shadow: 0 2px 3px darken($blue, 20%);
+    box-shadow: 0 2px 3px darken($blue, 20%);
     padding: 20px;  /*overflow: auto;*/
     margin-bottom: 30px;
     transition: 0.3s;
-
-    &:hover {
-        -moz-box-shadow: 0 3px 5px #b5c3cc;
-        -webkit-box-shadow: 0 3px 5px #b5c3cc;
-        box-shadow: 0 3px 5px #b5c3cc;
-    }
+    color: #aaaaaa;
 
     &.card_table, &.card_table2 {
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
         width: 100%;
         height: 100%;
         overflow-y: scroll;
@@ -561,19 +621,27 @@ input[type='file'] {
         table {font-size: 12px;}
     }
 
-    input {background: #eee;}
+    input {background: darken($blue, 2%);color:#aaa;border:none;}
 
     .card_table, .card_table2 {
         width: 100%;
         height: 100%;
         overflow-y: scroll;
         padding: 20px 10px;
-        background: #fff;
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
     }
 
     .front, .back {
         overflow: none;
-        background: #fff;
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
     }
 
     .back {
@@ -587,14 +655,14 @@ input[type='file'] {
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 10px;
-        color: $blue;
+        color: #a0a0a0;
         letter-spacing: -.015em;
     }
 
     h4.data {
         text-align: center;
         font-size: 45px;
-        color: $blue;
+        color: #a0a0a0;
 
         &.bg_rounded {
             background: $green;
@@ -609,7 +677,11 @@ input[type='file'] {
     }
 
     &.flipping_card{
-        background: #fff;
+        background: #101824; /* Old browsers */
+        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
         overflow: hidden;
         padding: 1px;
 
@@ -805,11 +877,15 @@ p.total {
 }
 
 .form-holder {
-    border: 1px solid #ccc;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background: #eee;
+    background: #152130; /* Old browsers */
+    background: -moz-linear-gradient(top,  #152130 1%, #090d14 52%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #152130 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #152130 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#152130', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+    border-top: 1px solid #23354e;
     margin-top: 17%;
 }
 
@@ -819,7 +895,8 @@ p.total {
     border-radius: 5px 5px 0 0;
     padding: 12px 0;
     margin-bottom: 20px;
-    background: $blue;
+    @include blue_grad(#203047, #090d14);
+    border-bottom: 1px solid #23354e;
     color: #fff;
     text-align: center;
     font-weight: 600;
@@ -832,11 +909,14 @@ p.total {
 }
 
 .form-holder form input {
-    background: #fff;
+    background: darken($blue, 2%) !important;
+    border: none;
+    color: #aaa;
 }
 
 .form-holder .input-group-addon:last-child {
-    background: #fff;
+    @include blue_grad(#203047, #090d14);
+    color: #eee;
 }
 
 .form-holder .btn {
@@ -926,9 +1006,8 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#263854, #171f33);
+    @include blue_grad(#203047, #090d14);
     color: #fff;
-    margin-bottom: 20px;
 }
 
 .modal-footer {
@@ -1004,7 +1083,7 @@ p.ajax_error {
 .card-3 .divider {
     margin-top: 10px;
     margin-bottom: 10px;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid lighten($blue, 2%);
 }
 
 p.descrip {
@@ -1090,16 +1169,37 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th {
-    background: $blue;
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th {
+    background: #33A09B;
     border-top: 0;
     color: #fff;
     padding: 10px !important;
 }
 
+.reports_table tbody tr:hover{
+    background: #23354e;
+    color: #fff;
+}
+
+.table>thead>tr>th{border-bottom: 1px solid $blue;}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    border-top: 1px solid $blue;
+}
+
 #reports_modal .modal-body {
     overflow: auto;
 }
+
+.modal-body {
+    background: #0f131f;
+    color: #aaa;
+}
+
+.modal-header{
+    border-bottom: 1px solid #23354e;
+}
+
+.modal-footer{background:darken( #0f131f,2%);border-top: 1px solid #23354e;}
 
 #reports_modal .alert-danger {
     font-weight: 600;
@@ -1170,6 +1270,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .bootstrap-datetimepicker-widget td.day:hover, .bootstrap-datetimepicker-widget td.hour:hover, .bootstrap-datetimepicker-widget td.minute:hover, .bootstrap-datetimepicker-widget td.second:hover {
     background: #fff !important;
     cursor: pointer;
+    color:$blue;
 }
 
 .bootstrap-datetimepicker-widget td span:hover {
@@ -1184,8 +1285,14 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control{
-    background: #eee !important;
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control{
+    background: darken($blue, 2%) !important;
+    border: none;
+    color: #aaa;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #23354e;
 }
 
 .create_recips .btn-group ul .checkbox{
@@ -1204,7 +1311,7 @@ h3.heading {
     font-weight: 600;
     font-size: 24px;
     margin-bottom: 20px;
-    color: $blue;
+    color: #aaa;
 }
 
 .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
@@ -1313,6 +1420,40 @@ a.sort-by span.desc {
     font-weight: 600;
 }
 
+.pagination > li > a
+{
+    background-color: white;
+    color: $blue;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: $blue;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: $blue;
+    border: solid 1px $blue;
+}
+.pagination > .active:not(.disabled ) > a{
+    @include blue_grad(#203047, #090d14);
+    border: 1px solid $blue;
+    color: white;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: lighten($blue,10%);
+    border: solid 1px lighten($blue,10%);
+}
+
 .pag_report_errors, .report_errors {
     display: none;
 }
@@ -1349,7 +1490,7 @@ div.table-responsive .alert {
 .filter_time_camp_dets p {
     text-align: left;
     font-size: 18px;
-    color: #444;
+    color: #ddd;
     margin-top: 10px;
 }
 
@@ -1363,8 +1504,9 @@ span.selected_campaign {
 }
 
 .reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
+    background-color: darken($blue, 10%);
 }
+
 
 .agent_call_log .reports_table tr:nth-of-type(odd) {
     background-color: none;
@@ -1437,11 +1579,11 @@ label.switch > span:before, label.switch > span:after {
 }
 
 label.switch > input[type="checkbox"]:focus ~ span {
-    box-shadow: 0 0 0 2px #43b556;
+    // box-shadow: 0 0 0 2px #43b556;
 }
 
 label.switch > input[type="checkbox"]:checked:focus ~ span {
-    box-shadow: 0 0 0 2px #eee;
+    // box-shadow: 0 0 0 2px #eee;
 }
 
 label.switch > span {
@@ -1452,7 +1594,7 @@ label.switch > span:before {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-color: #cecece;
+    background-color: $blue;
     border-radius: 60px;
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
@@ -1485,13 +1627,13 @@ h2 {
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    color: $blue;
+    border-bottom: 1px solid darken(#23354e,5%);
+    color: #aaa;
 }
 
 .opt {
     margin-bottom: 20px;
-    border-bottom: 1px solid darken(#ddd,2%);
+    border-bottom: 1px solid darken(#23354e,5%);
     padding-bottom: 15px;
     overflow: auto;
 }
@@ -1501,16 +1643,20 @@ h2 {
     display: inline-block;
     font-size: 17px;
     font-weight: 600;
-    color: #595C63;
+    color: #aaa;
     text-decoration: none;
 }
 
 .opt a.active_kpi {
-    color: $orange;
+    color: $green;
+
+    &:hover{
+        color:$green;
+    }
 }
 
 .opt a:hover {
-    color: $orange;
+    color: $green;
 }
 
 .opt .switch {
@@ -1525,7 +1671,7 @@ h2 {
 }
 
 .opt .options a, .opt .options h4 {
-    color: $blue;
+    color: #aaa;
     font-size: 14px;
     margin-bottom: 0px;
 }
@@ -1551,7 +1697,7 @@ a.expand_dets, h4.expand_dets {
 }
 
 .expanded_options .user:nth-child(even), .expanded_emails .user:nth-child(even) {
-    background: #ddd;
+    background: $blue;
 }
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
@@ -1611,7 +1757,7 @@ a.edit_recip_glyph{right:35px;color:#33A09B;}
     margin-right: 10px;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i {
+.users a.remove_user i {
     position: relative;
     top: 2px;
     color: $orange;
@@ -1643,10 +1789,14 @@ a.run_kpi.btn {
     border: none;
     display: block;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 12px;
+
+    &:hover{
+        background: lighten($blue, 5%);
+        border:none !important;
+    }
 }
 
 .glyphicon.glyphicon-refresh {
@@ -1736,7 +1886,7 @@ a.run_kpi.btn {
 }
 
 #settingsForm input.form-control {
-    background: #eee;
+    background: $blue;
 }
 
 .card.leader_table_div {
@@ -1826,7 +1976,7 @@ a.run_kpi.btn {
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    background: $blue;
+    @include blue_grad(#203047, #090d14);
 }
 
 .card_dropdown-content a {
@@ -1855,7 +2005,8 @@ a.run_kpi.btn {
 }
 
 .input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {
-    background: #fff !important;
+    @include blue_grad(#203047, #090d14);
+    color: #eee;
     border-radius: 0;
 }
 
@@ -1880,6 +2031,20 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
     color:#fff;
+}
+
+.panel-default{border: none;}
+.panel-default>.panel-heading{
+    border: 1px solid darken($blue, 10%);
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body{
+    background: darken($blue, 10%);
+    border-top: 1px solid lighten($blue, 10%);
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #23354e;
 }
 
 .db_select a.dropdown-toggle {
@@ -1937,9 +2102,15 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    background: #fff;
-    color: $blue;
+    background: #23354e;
+    color: #fff;
     font-weight: 600;
+    border: 1px solid #23354e;
+}
+
+.nav-tabs > li > a:hover{
+    background: lighten(#23354e, 10%);
+    border: 1px solid lighten(#23354e, 10%);
 }
 
 .cdr_table {
@@ -1960,7 +2131,7 @@ h4.panel-title a{
 }
 
 .user_links_modal a:nth-of-type(odd) {
-    background-color: #e6e6e6;
+    background: $blue;
 }
 
 .user_links_modal a {
@@ -1970,7 +2141,7 @@ h4.panel-title a{
     clear: both;
 }
 
-.user_links_modal h3 span{color: #111;}
+.user_links_modal h3 span{color: #aaa;}
 
 .multi_db{display: none;}
 
@@ -1996,8 +2167,9 @@ h4.panel-title a{
     top:9px;
 }
 
-#editRecipModal input.form-control{background: #eee;}
+#editRecipModal input.form-control{background: $blue;border:none;color:#aaa;}
 #editRecipModal .alert{display: none;}
+#editRecipModal .btn.btn-warning{background: $orange;border:none;}
 
 p.name span.name{width: 150px;}
 p.name i{margin-right: 5px;}
@@ -2033,16 +2205,16 @@ p.name i{margin-right: 5px;}
 }
 
 .btn-default.disable{
-    background: #ddd;
-
+    background: $blue;
+    color:#aaa;
     &:hover{
-        background: #ddd !important;
+        background: $blue !important;
     }
 }
 .lang_select li a img{max-width: 25px;}
 
 .divider{
-    border-top: 1px solid #ddd;
+    border-top: 1px solid lighten($blue, 2%);
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -2067,7 +2239,7 @@ p.name i{margin-right: 5px;}
     width: 160px;
     height: 160px;
     @include border-radius(100px);
-    background: $blue;
+    background: $green;
     display: table;
     margin: 0 auto;
     margin-top: 20px;
@@ -2089,7 +2261,7 @@ p.name i{margin-right: 5px;}
     &.mt35{margin-top: 35px;}
 
     &:after{
-        background: $blue;
+        background: $green;
         min-height: 2px;
         width: 45%;
         position: absolute;
@@ -2115,12 +2287,64 @@ p.name i{margin-right: 5px;}
 
 div.vertical-line{
     width: 2px;
-    background-color: $blue;
+    background-color: $green;
     height: 130px;
     position: absolute;
     margin: 0 auto;
     left: 51.5%;
     display: block;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd){
+    background: darken($blue, 5%);
+}
+
+.table>thead>tr>th{
+    background: $green;
+    color: #fff;
+}
+
+// .dropdown-menu{
+//     background: $blue;
+// }
+
+.btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default{
+    border:none;
+    color:#aaa;
+}
+
+.form-holder a.btn.btn-link{
+    color: $green;
+}
+
+.multiselect-container.dropdown-menu{
+    background: $blue;
+    color: #aaa !important;
+}
+
+.dropdown-menu li:nth-child(even){
+    background: darken($blue, 10%);
+    color: #aaa !important;
+}
+
+.dropdown-menu li{
+    a{
+        color: #aaa;
+    }
+
+    &:hover{
+        background: lighten($blue, 10%);
+        color: #aaa !important;
+    }
+}
+
+ .report_filters form input.multiselect-search{
+    background: darken($blue, 10%) !important;
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+    background: lighten($blue, 5%);
+    color: #aaa !important;
 }
 
 .form-holder.welcome_box{
@@ -2167,6 +2391,29 @@ div.vertical-line{
         }
     }
 }
+
+.settings{
+    form{
+        margin-bottom: 10px;
+
+        .btn{
+            margin: 0;
+            margin-left: 10px;
+
+            &:hover{
+                background: darken($orange, 5%);
+            }
+        }
+    }
+}
+
+.hide_lang input[type="checkbox"], .toggle_theme input[type="checkbox"]{
+    width: 15px;
+    height: 15px;
+}
+
+.demo_user_table_holder{overflow-x:auto;}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
@@ -2430,14 +2677,14 @@ MEDIAQUERIES
 }
 
 .link{
-    color: $blue;
+    color: #aaa;
     font-weight: 600;
     font-size: 16px;
     display: block;
     margin-bottom: 10px;
 
     &:hover{
-        color: $orange;
+        color: $green;
     }
 }
 
@@ -2448,7 +2695,7 @@ img.text_logo{
 
 }*/
 @media handheld, only screen and (max-width:556px) {
-    
+
     .form-holder.welcome_box h1{font-size: 30px;}
     .form-holder.welcome_box .demo_expiration{font-size: 13px;}
     .form-holder.welcome_box .btn_holder{
@@ -2463,6 +2710,7 @@ img.text_logo{
             margin-bottom: 10px;
         }
     }
+    
     .card h4.data.bg_rounded {
         padding-top: 32px;
     }
