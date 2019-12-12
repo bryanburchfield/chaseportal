@@ -16,7 +16,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Integer;
 
 class AdminController extends Controller
 {
@@ -202,7 +201,10 @@ class AdminController extends Controller
             ])
         );
 
-        $newuser->sendWelcomeDemoEmail($newuser);
+        // send welcome email unless demo_xxxxx@chasedatacorp.com
+        if ($newuser->email != 'demo_' . $app_token . '@chasedatacorp.com') {
+            $newuser->sendWelcomeDemoEmail($newuser);
+        }
 
         return ['status' => 'success'];
     }
