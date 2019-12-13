@@ -1307,6 +1307,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
+.add_user .alert-danger{display: none;}
+
 h3.heading {
     font-weight: 600;
     font-size: 24px;
@@ -2421,6 +2423,23 @@ div.vertical-line{
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{
     margin-bottom: 20px !important;
+}
+
+.add_demo_user, .edit_demo_user{
+    
+    input.form-control{
+        background: $blue;
+        border:none;
+        color:#aaa;
+    }
+
+    select{
+        background: $blue;
+        border:1px solid $blue;
+        color:#aaa;
+    }
+
+    .alert-danger{display: none;}
 }
 
 

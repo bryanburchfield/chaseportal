@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'actiontaken'				=> 'Action Taken',
 	'admin_dashboard'			=> 'Admin Dashboard',
 	'adminoutbound_dashboard'	=> 'Adminoutbound Dashboard',
 	'all_campaigns'				=> 'All Campaigns',
@@ -9,6 +10,7 @@ return [
 	'campaigns_selected'		=> 'Campaigns Selected',
 	'cancel'					=> 'Cancel',
 	'close'						=> 'Close',
+	'condition'					=> 'Condition',
 	'confirm_password'			=> 'Confirm Password',
 	'current_password'			=> 'Current Password',
 	'custom'					=> 'Custom',
@@ -64,5 +66,6 @@ return [
 	'trend_dashboard'			=> 'Trend Dashboard',
 	'update'					=> 'Update',
 	'view_report'				=> 'View Report',
+	'when'						=> 'When',
 	'yesterday'					=> 'Yesterday',
 ];

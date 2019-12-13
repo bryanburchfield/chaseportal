@@ -1593,6 +1593,10 @@ input[type=number]::-webkit-outer-spin-button {
   height: 40px;
 }
 
+.add_user .alert-danger {
+  display: none;
+}
+
 h3.heading {
   font-weight: 600;
   font-size: 24px;
@@ -2844,6 +2848,25 @@ div.vertical-line {
 
 .demo_user .btn.btn-primary {
   margin-bottom: 20px !important;
+}
+
+.add_demo_user input.form-control,
+.edit_demo_user input.form-control {
+  background: #203047;
+  border: none;
+  color: #aaa;
+}
+
+.add_demo_user select,
+.edit_demo_user select {
+  background: #203047;
+  border: 1px solid #203047;
+  color: #aaa;
+}
+
+.add_demo_user .alert-danger,
+.edit_demo_user .alert-danger {
+  display: none;
 }
 
 /* ---------------------------------------------------

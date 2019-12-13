@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'actiontaken'				=> 'Acción Tomada',
 	'admin_dashboard'			=> 'Panel de Administración',
 	'adminoutbound_dashboard'	=> 'Panel de Salida de Administrador',
 	'all_campaigns'				=> 'Todas las Campañas',
@@ -9,6 +10,7 @@ return [
 	'campaigns_selected'		=> 'Campañas Seleccionadas',
 	'cancel'					=> 'Cancelar',
 	'close'						=> 'Cerrar',
+	'condition'					=> 'Condición',
 	'confirm_password'			=> 'Confirmar Contraseña',
 	'current_password'			=> 'Contraseña Actual',
 	'custom'					=> 'Personalizada',
@@ -64,5 +66,6 @@ return [
 	'trend_dashboard'			=> 'Panel de Tendencia',
 	'update'					=> 'Actualizar',
 	'view_report'				=> 'Ver Informe',
+	'when'						=> 'Cuando',
 	'yesterday'					=> 'Ayer',
 ];

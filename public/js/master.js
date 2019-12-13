@@ -1146,7 +1146,9 @@ var Master = {
 			success: function (response) {
 				$('form.edit_demo_user').append('<div class="alert alert-success oauto mt20">User successfully updated</div>');
 				$('.alert-success').show();
+                $('.alert-danger').hide();
 				setTimeout(function () {
+                    $('.alert-success').remove();
                     $('#demoUserModal').modal('hide');
 					window.location.href = "/dashboards/admin#demo_user";
 				}, 2500);
@@ -1208,11 +1210,14 @@ var Master = {
 
 			success: function (response) {
 
-				$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
+				$('form.edit_user').append('<div class="alert alert-success mt20">User successfully updated</div>');
                 $('.alert-success').show();
-                $('form.edit_user').trigger("reset");
+                $('.alert-danger').hide();
+
                 setTimeout(function () {
-                    window.location.href = "/dashboards/admin";
+                    $('.alert-success').hide();
+                    $('form.edit_user').trigger("reset");
+                    window.location.reload();
                 }, 3500);
 			}, error: function (data) {
                 $('form.edit_user .alert').empty();
