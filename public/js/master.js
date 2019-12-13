@@ -402,22 +402,22 @@ var Master = {
                 window.location.href = 'tools';
             },
             error :function( data ) {
-                $('.add_rule .alert').empty();
-                $('.add_rule .alert').hide();
+                $('.add_rule_error.alert').empty();
+                $('.add_rule_error.alert').hide();
 
                 var errors = $.parseJSON(data.responseText);
                 $.each(errors, function (key, value) {
 
                     if($.isPlainObject(value)) {
                         $.each(value, function (key, value) {
-                            $('.add_rule .alert').show().append('<li>'+value+'</li>');
+                            $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
                         });
                     }else{
-                        $('.add_rule .alert').show().append('<li>'+value+'</li>');
+                        $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
                     }
                 });
 
-                $('.add_rule .alert li').first().remove();
+                $('.add_rule_error.alert li').first().remove();
             }
         });
     },

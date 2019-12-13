@@ -453,7 +453,8 @@ div.container-fluid.hero_bg .form-holder {
 .edit_user .alert,
 .form.add_user .alert,
 .form.add_demo_user .alert,
-.edit_demo_user .alert-danger {
+.edit_demo_user .alert-danger,
+.add_rule_error.alert-danger {
   display: none;
 }
 

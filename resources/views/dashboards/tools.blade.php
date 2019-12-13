@@ -165,8 +165,8 @@ if (Auth::user()->isType('demo')) {
                                                 </div>
 
                                                 {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
+                                                <div class="alert alert-danger add_rule_error mt20"></div>
                                             </div>
-                                            <div class="alert alert-danger add_rule_error"></div>
                                         {!! Form::close() !!}
                                         </div>
                                     </div>
