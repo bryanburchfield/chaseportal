@@ -68,11 +68,15 @@ class LeadsController extends Controller
      */
     public function viewRule(Request $request)
     {
-        return LeadRule::withTrashed()
+        $lr = LeadRule::withTrashed()
             ->where('id', $request->id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail()
             ->toArray();
+
+        $lr['created_at'] = Carbon::parse($lr['created_at'])->isoFormat('L LT');
+
+        return $lr->toArray();
     }
 
     public function editLeadRule(Request $request)
