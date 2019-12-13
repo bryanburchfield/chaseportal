@@ -1300,6 +1300,8 @@ var Master = {
             success: function (response) {
                 console.log(response);
                 var modal = $('#leadDetailsModal');
+                modal.find('.modal-body').empty();
+
                 var leadrule_details = '<p class="lead_info"><span class="leadrule_property">Created:</span> <span class="leadrule_value">'+response.created_at+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">Rule Name:</span> <span class="leadrule_value">'+response.rule_name+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">Source Campaign:</span> <span class="leadrule_value">'+response.source_campaign+'</span></p>';
@@ -1308,7 +1310,7 @@ var Master = {
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">Destination SubCampaign:</span> <span class="leadrule_value">'+response.destination_subcampaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">Filter Type:</span> <span class="leadrule_value">'+response.filter_type+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">Filter Value:</span> <span class="leadrule_value">'+response.filter_value+'</span></p>';
-                leadrule_details += '<p class="lead_info"><span class="leadrule_property">ID:</span> <span class="leadrule_value">'+response.id+'</span></p>';
+                
                 modal.find('.modal-body').append(leadrule_details);
             }
         });

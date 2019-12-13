@@ -182,7 +182,6 @@ if (Auth::user()->isType('demo')) {
 					                        <table class="table rules_table mt20">
 					                  			<thead>
 					                            	<tr>
-                                                        <th>ID</th>
 					                            	    <th>{{__('tools.date')}}</th>
 					                            	    <th>{{__('tools.rule_name')}}</th>
 					                            	    <th>{{__('tools.leads_moved')}}</th>
@@ -193,11 +192,10 @@ if (Auth::user()->isType('demo')) {
 												<tbody>
 													@foreach($history as $key => $value)
 														<tr>
-                                                            <td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['date']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
-                                                            <td><a data-toggle="modal" data-target="#leadDetailsModal" class="lead_details" href="#" data-name="{{$value['rule_name']}}" data-leadid="{{$value['lead_move_id']}}"><i class="fa fa-external-link-alt"></i></a></td>
+                                                            <td><a data-toggle="modal" data-target="#leadDetailsModal" class="lead_details" href="#" data-name="{{$value['rule_name']}}" data-leadid="{{$value['lead_rule_id']}}"><i class="fa fa-external-link-alt"></i></a></td>
 															@if($demo)
 															<td><a role="button" href="#" disabled="disabled" class="btn btn-sm btn-default disable"><i class="fa fa-history"></i> {{__('tools.undo_move')}}</a></td>
 															@else
