@@ -875,13 +875,6 @@ var Dashboard = {
                     tooltips: {
                         enabled: true,
                     },
-                    scales: {
-                        yAxes: [{
-                            gridLines: {
-                                color: Master.gridline_color,
-                            },
-                        }]
-                    }
                 }
 
                 // if(window.agent_dispositions_chart != undefined){
