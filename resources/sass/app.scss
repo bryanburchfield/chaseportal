@@ -2168,6 +2168,28 @@ div.vertical-line{
     }
 }
 
+.settings{
+    form{
+        margin-bottom: 10px;
+
+        .btn{
+            margin: 0;
+            margin-left: 10px;
+
+            &:hover{
+                background: darken($orange, 5%);
+            }
+        }
+    }
+}
+
+.hide_lang input[type="checkbox"], .toggle_theme input[type="checkbox"]{
+    width: 15px;
+    height: 15px;
+}
+
+.demo_user_table_holder{overflow-x:auto;}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

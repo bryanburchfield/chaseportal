@@ -1114,7 +1114,7 @@ var Master = {
 			phone = form.find('.phone').val(),
 			expiration = form.find('#expiration').val()
 			;
-            console.log(expiration);
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

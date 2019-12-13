@@ -2452,6 +2452,29 @@ div.vertical-line {
   margin-top: 30px;
 }
 
+.settings form {
+  margin-bottom: 10px;
+}
+
+.settings form .btn {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.settings form .btn:hover {
+  background: #ce511c;
+}
+
+.hide_lang input[type=checkbox],
+.toggle_theme input[type=checkbox] {
+  width: 15px;
+  height: 15px;
+}
+
+.demo_user_table_holder {
+  overflow-x: auto;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
