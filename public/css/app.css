@@ -2510,6 +2510,27 @@ div.vertical-line {
   overflow-x: auto;
 }
 
+.modal-body h3.leaddetail_name {
+  color: #203047;
+  font-weight: 600;
+  font-size: 25px;
+  margin-bottom: 25px !important;
+}
+
+.lead_info {
+  padding: 5px;
+}
+
+.lead_info:nth-child(even) {
+  background: #eee;
+}
+
+.lead_info .leadrule_property {
+  width: 150px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
