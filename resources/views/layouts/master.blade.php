@@ -39,7 +39,7 @@
     <![endif]-->
 </head>
 <body>
-    <input type="hidden" class="theme" value="{{Auth::user()->theme}}">
+    <input type="hidden" class="theme" value="{{(Auth::check()) ? Auth::user()->theme : ''}}">
 
     @yield('content')
     <script src="/messages.js"></script> 
