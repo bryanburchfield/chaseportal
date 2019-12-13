@@ -71,7 +71,8 @@ class LeadsController extends Controller
             ->firstOrFail()
             ->toArray();
 
-        $lr['created_at'] = Carbon::parse($lr['created_at'])->isoFormat('L LT');
+        $tz = Auth::user()->iana_tz;
+        $lr['created_at'] = Carbon::parse($lr['created_at'])->tz($tz)->isoFormat('L LT');
 
         if (!empty($lr['deleted_at'])) {
             $lr['deleted_at'] = Carbon::parse($lr['deleted_at'])->isoFormat('L LT');
@@ -167,13 +168,14 @@ class LeadsController extends Controller
             ->OrderBy('lead_moves.id', 'desc')
             ->get();
 
+        $tz = Auth::user()->iana_tz;
         foreach ($lead_moves as $lead_move) {
             $count = LeadMoveDetail::where('lead_move_id', $lead_move->id)->where('succeeded', true)->count();
             if ($count) {
                 $table[] = [
                     'lead_move_id' => $lead_move->id,
                     'lead_rule_id' => $lead_move->lead_rule_id,
-                    'date' => $this->utcToLocal($lead_move->created_at, Auth::user()->iana_tz)->isoFormat('L LT'),
+                    'date' => Carbon::parse($lead_move->created_at)->tz($tz)->isoFormat('L LT'),
                     'rule_name' => $lead_move->rule_name,
                     'leads_moved' => $count,
                     'reversed' => $lead_move->reversed,
