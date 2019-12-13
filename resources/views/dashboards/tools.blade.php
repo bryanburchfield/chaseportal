@@ -182,6 +182,7 @@ if (Auth::user()->isType('demo')) {
 					                        <table class="table rules_table mt20">
 					                  			<thead>
 					                            	<tr>
+                                                        <th>ID</th>
 					                            	    <th>{{__('tools.date')}}</th>
 					                            	    <th>{{__('tools.rule_name')}}</th>
 					                            	    <th>{{__('tools.leads_moved')}}</th>
@@ -192,6 +193,7 @@ if (Auth::user()->isType('demo')) {
 												<tbody>
 													@foreach($history as $key => $value)
 														<tr>
+                                                            <td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['date']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
