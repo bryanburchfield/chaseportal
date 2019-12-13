@@ -28,7 +28,17 @@ $numberofresults = 4;
     <title>Welcome  - Chase Data Corp</title>
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" rel="stylesheet">
-
+    <style>
+        a.btn.btn-primary{
+            border-radius: 5px;
+            background: #e49831;
+            color: #ffffff;
+            text-align:center;
+            display: block;
+            height: 200px;
+            width: 40px;
+        }
+    </style>
     <style>
         html,
 body {
@@ -146,10 +156,14 @@ img.g-img + div {
     padding: 5px 15px;
     display: inline-block;
 }
-.btn.btn-primary{
+a.btn.btn-primary{
     border-radius: 5px;
     background: #e49831;
     color: #ffffff;
+    text-align:center;
+    display: block;
+    height: 200px;
+    width: 40px;
 }
 .btn.btn-white{
     border-radius: 5px;
