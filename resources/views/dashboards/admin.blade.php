@@ -22,8 +22,8 @@
 							<ul class="nav nav-tabs">
 
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
-								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
+								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
 								<li><a href="#settings" data-toggle="tab">My Settings</a></li>
 							</ul>
