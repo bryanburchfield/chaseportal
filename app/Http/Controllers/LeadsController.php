@@ -11,6 +11,7 @@ use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use App\Traits\TimeTraits;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,23 @@ class LeadsController extends Controller
             ->firstOrFail();
     }
 
+    /**
+     * View Rule (ajax)
+     * 
+     * @param Request $request 
+     * @return array 
+     * @throws mixed 
+     * @throws ModelNotFoundException 
+     */
+    public function viewRule(Request $request)
+    {
+        return LeadRule::withTrashed()
+            ->where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail()
+            ->toArray();
+    }
+
     public function editLeadRule(Request $request)
     {
         $lr = $this->getRule($request->id);
@@ -82,6 +100,22 @@ class LeadsController extends Controller
         $lr->fill($request->all());
         $lr->group_id = Auth::user()->group_id;
         $lr->active = true;
+        $lr->save();
+
+        return ['status' => 'success'];
+    }
+
+    /**
+     * Toggle Rule (ajax)
+     * 
+     * @param Request $request 
+     * @return array 
+     */
+    public function toggleRule(Request $request)
+    {
+        $lr = $this->getRule($request->id);
+
+        $lr->active = !$lr->active;
         $lr->save();
 
         return ['status' => 'success'];
