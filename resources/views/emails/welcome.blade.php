@@ -503,7 +503,7 @@ tr.bg_blue{
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td width="100%" class="logo" style="text-align: center;">
-                                <h1><a href="#"><img src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
+                                <h1><a href="https://www.chasedatacorp.com/"><img src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
                             </td>
                         </tr>
                     </table>
