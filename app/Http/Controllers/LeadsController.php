@@ -76,7 +76,7 @@ class LeadsController extends Controller
 
         $lr['created_at'] = Carbon::parse($lr['created_at'])->isoFormat('L LT');
 
-        return $lr->toArray();
+        return $lr;
     }
 
     public function editLeadRule(Request $request)
