@@ -1422,7 +1422,7 @@ a.sort-by span.desc {
 
 .pagination > li > a
 {
-    background-color: white;
+    background-color: #ccc;
     color: $blue;
 }
 
@@ -1464,7 +1464,9 @@ a.sort-by span.desc {
 
 .pag_dets input {
     text-align: center;
-    background: #fff;
+    background: $blue;
+    border:none;
+    color:lighten(#aaa,10%);
 }
 
 .form-group .btn-group button {
@@ -1555,7 +1557,7 @@ label.switch {
     width: 50px;
     height: calc(50px / 2);
     border-radius: 60px;
-    background-color: #4ed164;
+    background-color: $green;
     display: inline-block;
     position: relative;
     cursor: pointer;
@@ -1579,7 +1581,7 @@ label.switch > span:before, label.switch > span:after {
 }
 
 label.switch > input[type="checkbox"]:focus ~ span {
-    // box-shadow: 0 0 0 2px #43b556;
+    // box-shadow: 0 0 0 2px $green;
 }
 
 label.switch > input[type="checkbox"]:checked:focus ~ span {
@@ -1783,7 +1785,7 @@ a.fpass {
 a.run_kpi.btn {
     position: relative;
     bottom: 0px;
-    background: $blue;
+    background: $orange;
     color: #fff;
     clear: both;
     border: none;
@@ -1794,7 +1796,7 @@ a.run_kpi.btn {
     font-size: 12px;
 
     &:hover{
-        background: lighten($blue, 5%);
+        background: darken($orange, 5%);
         border:none !important;
     }
 }
@@ -2410,6 +2412,17 @@ div.vertical-line{
 .hide_lang input[type="checkbox"], .toggle_theme input[type="checkbox"]{
     width: 15px;
     height: 15px;
+}
+
+edit_demo_user .alert-success{clear: both;}
+
+#demoUserModal .modal-body{
+    overflow: auto;
+}
+
+.oauto{overflow: auto;}
+.demo_user .btn.btn-primary{
+    margin-bottom: 20px !important;
 }
 
 

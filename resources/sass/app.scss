@@ -2166,7 +2166,7 @@ div.vertical-line{
             margin-left: 10px;
 
             &:hover{
-                background: darken($orange, 5%);
+                background-color: #d38826;
             }
         }
     }
@@ -2175,6 +2175,17 @@ div.vertical-line{
 .hide_lang input[type="checkbox"], .toggle_theme input[type="checkbox"]{
     width: 15px;
     height: 15px;
+}
+
+edit_demo_user .alert-success{clear: both;}
+
+#demoUserModal .modal-body{
+    overflow: auto;
+}
+
+.oauto{overflow: auto;}
+.demo_user .btn.btn-primary{
+    margin-bottom: 20px !important;
 }
 
 

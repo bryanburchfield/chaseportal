@@ -1721,7 +1721,7 @@ a.sort-by span.desc {
 }
 
 .pagination > li > a {
-  background-color: white;
+  background-color: #ccc;
   color: #203047;
 }
 
@@ -1772,7 +1772,9 @@ fieldset[disabled] .form-control {
 
 .pag_dets input {
   text-align: center;
-  background: #fff;
+  background: #203047;
+  border: none;
+  color: #c4c4c4;
 }
 
 .form-group .btn-group button {
@@ -1870,7 +1872,7 @@ label.switch {
   width: 50px;
   height: calc(50px / 2);
   border-radius: 60px;
-  background-color: #4ed164;
+  background-color: #33A09B;
   display: inline-block;
   position: relative;
   cursor: pointer;
@@ -2115,7 +2117,7 @@ a.fpass {
 a.run_kpi.btn {
   position: relative;
   bottom: 0px;
-  background: #203047;
+  background: #E15B23;
   color: #fff;
   clear: both;
   border: none;
@@ -2127,7 +2129,7 @@ a.run_kpi.btn {
 }
 
 a.run_kpi.btn:hover {
-  background: #283c59;
+  background: #ce511c;
   border: none !important;
 }
 
@@ -2822,6 +2824,22 @@ div.vertical-line {
 .toggle_theme input[type=checkbox] {
   width: 15px;
   height: 15px;
+}
+
+edit_demo_user .alert-success {
+  clear: both;
+}
+
+#demoUserModal .modal-body {
+  overflow: auto;
+}
+
+.oauto {
+  overflow: auto;
+}
+
+.demo_user .btn.btn-primary {
+  margin-bottom: 20px !important;
 }
 
 /* ---------------------------------------------------

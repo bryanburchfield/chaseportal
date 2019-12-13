@@ -536,6 +536,9 @@ var Dashboard = {
                                 },
                             }],
                             yAxes: [{
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                                 scaleLabel: {
                                     fontColor: Master.tick_color,
                                     display: true,
@@ -654,7 +657,11 @@ var Dashboard = {
                             },
                         }],
                         yAxes: [
+
                             {
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                                 id:'A',
                                 type: 'linear',
                                 position:'left',
@@ -690,6 +697,7 @@ var Dashboard = {
                                     beginAtZero: true,
                                 }
                             }
+
                         ]
                     },
                     tooltips: {

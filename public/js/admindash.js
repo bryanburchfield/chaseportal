@@ -715,7 +715,10 @@ var Dashboard = {
                                         return label;
                                     }
                                 },
-                            }
+                            },
+                            gridLines: {
+                                    color: Master.gridline_color,
+                                },
                          }],
                         yAxes: [
                             {

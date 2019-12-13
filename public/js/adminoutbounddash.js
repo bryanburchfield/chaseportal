@@ -239,6 +239,9 @@ var Dashboard = {
                             },
                         }],
                         yAxes: [{
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
                             type: 'linear',
                             display: true,
                             position: 'left',
@@ -871,6 +874,13 @@ var Dashboard = {
                     },
                     tooltips: {
                         enabled: true,
+                    },
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }]
                     }
                 }
 
@@ -922,7 +932,8 @@ var Dashboard = {
                     },
                     tooltips: {
                         enabled: true,
-                    }
+                    },
+
                 }
 
                 var ctx = document.getElementById('dispositions_graph').getContext('2d');
@@ -980,7 +991,10 @@ var Dashboard = {
                                         return label;
                                     }
                                 },
-                            }
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
                         }],
                         yAxes: [
                             {
