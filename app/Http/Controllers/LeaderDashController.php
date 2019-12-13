@@ -352,4 +352,5 @@ class LeaderDashController extends Controller
             'Sales' => array_column($result, 'Sales'),
         ];
     }
+
 }

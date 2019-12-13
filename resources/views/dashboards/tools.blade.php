@@ -183,9 +183,9 @@ if (Auth::user()->isType('demo')) {
 					                  			<thead>
 					                            	<tr>
 					                            	    <th>{{__('tools.date')}}</th>
-					                            	    <th>{{__('tools.rule_id')}}</th>
 					                            	    <th>{{__('tools.rule_name')}}</th>
 					                            	    <th>{{__('tools.leads_moved')}}</th>
+                                                        <th>View Details</th>
 					                            	    <th>{{__('tools.undo_move')}}</th>
 					                            	</tr>
 					                            </thead>
@@ -193,9 +193,9 @@ if (Auth::user()->isType('demo')) {
 													@foreach($history as $key => $value)
 														<tr>
 															<td>{{$value['date']}}</td>
-															<td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
+                                                            <td><a data-toggle="modal" data-target="#leadDetailsModal" class="lead_details" href="#" data-name="{{$value['rule_name']}}" data-leadid="{{$value['lead_move_id']}}"><i class="fa fa-external-link-alt"></i></a></td>
 															@if($demo)
 															<td><a role="button" href="#" disabled="disabled" class="btn btn-sm btn-default disable"><i class="fa fa-history"></i> {{__('tools.undo_move')}}</a></td>
 															@else
@@ -215,6 +215,24 @@ if (Auth::user()->isType('demo')) {
 			</div>
 		</div>
 	</div>
+
+<!-- Lead Details Modal -->
+<div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Lead Details</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="rule_id" name="rule_id" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

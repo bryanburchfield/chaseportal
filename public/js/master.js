@@ -58,6 +58,7 @@ var Master = {
 		$('.edit_myself').on('submit', this.edit_myself);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
+        $('.lead_details').on('click', this.get_leadrule_details);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
@@ -1279,6 +1280,37 @@ var Master = {
 			}
 		});
 	},
+
+    get_leadrule_details:function(e){
+        e.preventDefault();
+        var leadid = $(this).data('leadid');
+        console.log(leadid);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'tools/view_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: { id: leadid },
+            success: function (response) {
+                console.log(response);
+                var modal = $('#leadDetailsModal');
+                var leadrule_details = '<p><span class="leadrule_property">Rule Name:</span> <span class="leadrule_value">'+response.rule_name+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Source Campaign:</span> <span class="leadrule_value">'+response.source_campaign+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Source SubCampaign:</span> <span class="leadrule_value">'+response.source_subcampaign+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Destination Campaign:</span> <span class="leadrule_value">'+response.destination_campaign+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Destination SubCampaign:</span> <span class="leadrule_value">'+response.destination_subcampaign+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Filter Type:</span> <span class="leadrule_value">'+response.filter_type+'</span></p>';
+                leadrule_details += '<p><span class="leadrule_property">Filter Value:</span> <span class="leadrule_value">'+response.filter_value+'</span></p>';
+                modal.find('.modal-body').append(leadrule_details);
+            }
+        });
+    },
 
 	populate_demo_user_editmodal: function (e) {
 		e.preventDefault();
