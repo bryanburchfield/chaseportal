@@ -32,9 +32,6 @@ class LeadsController extends Controller
             ->OrderBy('rule_name')
             ->get();
 
-        $campaigns = $this->getAllCampaigns();
-        $history = $this->getHistory();
-
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
@@ -44,8 +41,8 @@ class LeadsController extends Controller
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'lead_rules' => $lead_rules,
-            'campaigns' => $campaigns,
-            'history' => $history,
+            'campaigns' => $this->getAllCampaigns(),
+            'history' => $this->getHistory(),
         ];
 
         return view('dashboards.tools')->with($data);
@@ -75,6 +72,10 @@ class LeadsController extends Controller
             ->toArray();
 
         $lr['created_at'] = Carbon::parse($lr['created_at'])->isoFormat('L LT');
+
+        if (!empty($lr['deleted_at'])) {
+            $lr['deleted_at'] = Carbon::parse($lr['deleted_at'])->isoFormat('L LT');
+        }
 
         return $lr;
     }
