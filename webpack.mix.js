@@ -12,7 +12,8 @@ const mix = require('laravel-mix');
  */
 
 // mix.js('resources/js/master.js', 'public/js')
- mix.sass('resources/sass/app.scss', 'public/css/app.css');
+mix.sass('resources/sass/app.scss', 'public/css/app.css');
+mix.sass('resources/sass/darktheme_app.scss', 'public/css/darktheme_app.css');
 
 // mix.scripts([
 //     'resources/js/moment.js',

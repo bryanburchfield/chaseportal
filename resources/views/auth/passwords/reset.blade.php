@@ -40,7 +40,7 @@
                                     </div>
                                 @endif
 
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     {{ __('general.reset_pw') }}
                                 </button>
                             </form>

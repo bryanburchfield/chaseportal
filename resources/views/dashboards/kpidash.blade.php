@@ -96,4 +96,4 @@
 </div>
 
 
-@include('shared.editrecipmodal');
+@include('shared.editrecipmodal')

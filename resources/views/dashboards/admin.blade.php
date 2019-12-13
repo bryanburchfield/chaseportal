@@ -25,7 +25,7 @@
 								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
-								<li><a href="#edit_myself" data-toggle="tab">Edit Myself</a></li>
+								<li><a href="#settings" data-toggle="tab">My Settings</a></li>
 							</ul>
 
 							<div class="tab-content">
@@ -160,11 +160,11 @@
 									</div>
 								</div>
 
-								<div class="tab-pane mt30" id="edit_myself">
+								<div class="tab-pane mt30" id="settings">
 									<div class="col-sm-6 mb0 card">
 										<h2 class="page_heading">Edit Myself</h2>
 
-										{!! Form::open(['method'=>'POST', 'url'=>'/dashboards/edit_myself', 'class'=>'form
+										{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form
 										edit_myself']) !!}
 										<div class="form-group">
 											{!! Form::label('group_id', 'Group ID') !!}
@@ -196,6 +196,8 @@
 
 										{!! Form::close() !!}
 									</div>
+
+									@include('shared.settings')
 								</div>
 							</div>
 						</div>

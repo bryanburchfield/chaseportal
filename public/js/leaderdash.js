@@ -263,7 +263,21 @@ var Dashboard = {
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
                             type: 'linear',
                             display: true,
                             position: 'left',
@@ -282,7 +296,8 @@ var Dashboard = {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     },
                     tooltips: {

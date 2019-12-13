@@ -8,7 +8,7 @@ Chart.pluginService.register({
       var centerConfig = chart.config.options.elements.center;
       var fontStyle = centerConfig.fontStyle || 'Arial';
       var txt = centerConfig.text;
-      var color =  '#203047';
+      var color = Master.tick_color;
       var sidePadding = centerConfig.sidePadding || 20;
       var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
       //Start with a base font of 30px
@@ -203,7 +203,21 @@ var Dashboard = {
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
                             type: 'linear',
                             display: true,
                             position: 'left',
@@ -218,11 +232,13 @@ var Dashboard = {
                                 drawOnChartArea: false, // only want the grid lines for one axis to show up
                             },
                         }],
+
                     },
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     }
                 }
@@ -304,16 +320,26 @@ var Dashboard = {
                         hoverMode: 'index',
                         stacked: false,
                         scales: {
+                            xAxes: [{
+                                ticks: {
+                                    fontColor: Master.tick_color,
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
+                            }],
                             yAxes: [{
                                 type: 'linear',
                                 display: true,
                                 position: 'left',
                                 id: 'y-axis-1',
                                 scaleLabel: {
+                                    fontColor: Master.tick_color,
                                     display: true,
                                     labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
+                                    fontColor: Master.tick_color,
                                     beginAtZero: true,
                                     callback: function(value, index, values) {
                                         if(show_decimal){
@@ -322,7 +348,10 @@ var Dashboard = {
                                             return Math.round(parseInt(value) / 60);
                                         }
                                     }
-                                }
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                             }, {
                                 type: 'linear',
                                 display: false,
@@ -337,7 +366,8 @@ var Dashboard = {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                boxWidth: 12
+                                boxWidth: 12,
+                                fontColor: Master.tick_color,
                             }
                         },
                         tooltips: {
@@ -389,16 +419,26 @@ var Dashboard = {
                         hoverMode: 'index',
                         stacked: false,
                         scales: {
+                            xAxes: [{
+                                ticks: {
+                                    fontColor: Master.tick_color,
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
+                            }],
                             yAxes: [{
                                 type: 'linear',
                                 display: true,
                                 position: 'left',
                                 id: 'y-axis-1',
                                 scaleLabel: {
+                                    fontColor: Master.tick_color,
                                     display: true,
                                     labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
+                                    fontColor: Master.tick_color,
                                     beginAtZero: true,
                                     callback: function(value, index, values) {
                                         if(show_decimal2){
@@ -407,7 +447,10 @@ var Dashboard = {
                                             return Math.round(parseInt(value) / 60);
                                         }
                                     }
-                                }
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                             }, {
                                 type: 'linear',
                                 display: false,
@@ -423,7 +466,8 @@ var Dashboard = {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                boxWidth: 12
+                                boxWidth: 12,
+                                fontColor: Master.tick_color,
                             }
                         },
                         tooltips: {
@@ -479,15 +523,29 @@ var Dashboard = {
                         legend: {  
                             position: 'bottom',
                             labels: {
-                                boxWidth: 12
+                                boxWidth: 12,
+                                fontColor: Master.tick_color,
                             } },
                         scales: {
+                            xAxes: [{
+                                ticks: {
+                                    fontColor: Master.tick_color,
+                                },
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
+                            }],
                             yAxes: [{
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                                 scaleLabel: {
+                                    fontColor: Master.tick_color,
                                     display: true,
                                     labelString:  Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
+                                    fontColor: Master.tick_color,
                                     beginAtZero: true,
                                     callback: function(value, index, values) {
                                         if(show_decimal){
@@ -585,17 +643,31 @@ var Dashboard = {
                     legend: {  
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         } 
                     },
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [
+
                             {
+                                gridLines: {
+                                    color: Master.gridline_color,
+                                },
                                 id:'A',
                                 type: 'linear',
                                 position:'left',
                                 scalePositionLeft: true,
                                 scaleLabel: {
+                                    fontColor: Master.tick_color,
                                     display: true,
                                     labelString: Lang.get('js_msgs.minutes')
                                 },
@@ -616,13 +688,16 @@ var Dashboard = {
                                 position:'right',
                                 scalePositionLeft: false,
                                 scaleLabel: {
+                                    fontColor: Master.tick_color,
                                     display: true,
                                     labelString: Lang.get('js_msgs.call_count')
                                 },
                                 ticks: {
+                                    fontColor: Master.tick_color,
                                     beginAtZero: true,
                                 }
                             }
+
                         ]
                     },
                     tooltips: {
@@ -715,7 +790,21 @@ var Dashboard = {
                     hoverMode: 'index',
                     stacked: false,
                     scales: {
+                        xAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                        }],
                         yAxes: [{
+                            ticks: {
+                                fontColor: Master.tick_color,
+                            },
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
                             type: 'linear',
                             display: true,
                             position: 'left',
@@ -734,7 +823,8 @@ var Dashboard = {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12
+                            boxWidth: 12,
+                            fontColor: Master.tick_color,
                         }
                     }
                 }

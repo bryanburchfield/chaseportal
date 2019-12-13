@@ -35,10 +35,20 @@ var Master = {
 		]
 	}),
 
-	init: function () {
-		if (Master.activeTab) {
-			$('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
-		}
+	init:function(){
+
+        if($('.theme').val() == 'dark'){
+            Master.tick_color='#aaa';
+            Master.gridline_color='#1A2738';
+        }else{
+            Master.tick_color='#777';
+            Master.gridline_color='#e0e0e0';
+        }
+
+        if(Master.activeTab){
+            $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
+        }
+
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
 		$('.add_user').on('submit', this.add_user);
@@ -301,7 +311,7 @@ var Master = {
     },
 
     get_subcampaigns:function(e, campaign=0, source=0){
-        
+        console.log('get_subcampaigns ran');
         if(!campaign){
             // e.preventDefault();
             $(this).find('option:selected').each(function() {
@@ -1162,7 +1172,7 @@ var Master = {
 	},
 
 	// edit global user
-	edit_user: function (e) {
+	edit_user:function(e){
 		e.preventDefault();
 		var form = $('form.edit_user');
 		var group_id = form.find('.group_id').val(),
@@ -1252,12 +1262,13 @@ var Master = {
 				if (response.errors) {
 					$('form.edit_myself').append('<div class="alert alert-danger">' + response.errors + '</div>');
 					$('.alert-danger').show();
-				} else {
-					$('form.edit_myself').append('<div class="alert alert-success">User successfully updated</div>');
+				}else{
+                    $('.alert-success').remove();
+					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
 					$('.alert-success').show();
-					$('form.edit_myself').trigger("reset");
-					setTimeout(function () {
-						window.location.href = "/dashboards/admin";
+					$('form.edit_user').trigger("reset");
+					setTimeout(function(){
+						window.location.href = "dashboards/admin#edit_user";
 					}, 3500);
 				}
 			}
