@@ -172,6 +172,7 @@ class LeadsController extends Controller
             if ($count) {
                 $table[] = [
                     'lead_move_id' => $lead_move->id,
+                    'lead_rule_id' => $lead_move->lead_rule_id,
                     'date' => $this->utcToLocal($lead_move->created_at, Auth::user()->iana_tz)->isoFormat('L LT'),
                     'rule_name' => $lead_move->rule_name,
                     'leads_moved' => $count,
