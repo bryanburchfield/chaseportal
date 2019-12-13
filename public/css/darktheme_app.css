@@ -2869,6 +2869,28 @@ div.vertical-line {
   display: none;
 }
 
+.modal-body h3.leaddetail_name {
+  color: #eee;
+  font-weight: 600;
+  font-size: 25px;
+  margin-bottom: 25px !important;
+}
+
+.lead_info {
+  font-size: 14px;
+  padding: 5px 8px;
+}
+
+.lead_info:nth-child(even) {
+  background: #151f2f;
+}
+
+.lead_info .leadrule_property {
+  width: 200px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

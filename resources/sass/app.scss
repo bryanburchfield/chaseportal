@@ -2229,14 +2229,15 @@ div.vertical-line{
 }
 
 .lead_info{
-    padding: 5px;
+    font-size: 14px;
+    padding: 5px 8px;
 
     &:nth-child(even){
         background: #eee;
     }
 
     .leadrule_property{
-        width: 150px;
+        width: 200px;
         font-weight: 600;
         margin-right: 10px;
     }
