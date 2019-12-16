@@ -11,12 +11,16 @@ use App\Mail\LeadDumpMail;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use App\Traits\TimeTraits;
+use Exception;
+use Illuminate\Database\Eloquent\JsonEncodingException;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 
 class LeadsController extends Controller
 {
@@ -25,7 +29,13 @@ class LeadsController extends Controller
     use TimeTraits;
 
     protected $db;
-
+    /**
+     * Rules index
+     * 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     * @throws InvalidArgumentException 
+     * @throws Exception 
+     */
     public function rules()
     {
         $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)
@@ -48,6 +58,12 @@ class LeadsController extends Controller
         return view('dashboards.tools')->with($data);
     }
 
+    /**
+     * Get Rule
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
     private function getRule($id)
     {
         return LeadRule::where('id', $id)
@@ -59,9 +75,10 @@ class LeadsController extends Controller
      * View Rule (ajax)
      * 
      * @param Request $request 
-     * @return array 
-     * @throws mixed 
+     * @return array[]
+     * @throws InvalidArgumentException 
      * @throws ModelNotFoundException 
+     * @throws Exception 
      */
     public function viewRule(Request $request)
     {
@@ -88,6 +105,13 @@ class LeadsController extends Controller
         return $lr;
     }
 
+    /**
+     * Edit Lead Rule
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     * @throws InvalidArgumentException 
+     */
     public function editLeadRule(Request $request)
     {
         $lr = $this->getRule($request->id);
@@ -107,6 +131,14 @@ class LeadsController extends Controller
         return view('dashboards.tools_edit_rule')->with($data);
     }
 
+    /**
+     * Create Rule
+     * 
+     * @param AddLeadFilterRule $request 
+     * @return array[]
+     * @throws JsonEncodingException 
+     * @throws MassAssignmentException 
+     */
     public function createRule(AddLeadFilterRule $request)
     {
         $lr = new LeadRule();
@@ -122,7 +154,7 @@ class LeadsController extends Controller
      * Toggle Rule (ajax)
      * 
      * @param Request $request 
-     * @return array 
+     * @return array[]
      */
     public function toggleRule(Request $request)
     {
@@ -134,6 +166,14 @@ class LeadsController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update Rule
+     * 
+     * @param AddLeadFilterRule $request 
+     * @return Illuminate\Routing\Redirector|Illuminate\Http\RedirectResponse 
+     * @throws JsonEncodingException 
+     * @throws MassAssignmentException 
+     */
     public function updateRule(AddLeadFilterRule $request)
     {
         // We don't actually update a rule, we'll (soft) delete
@@ -150,6 +190,12 @@ class LeadsController extends Controller
         return redirect('dashboards/tools');
     }
 
+    /**
+     * Delete Rule (ajax)
+     * 
+     * @param Request $request 
+     * @return array[]
+     */
     public function deleteRule(Request $request)
     {
         $lr = $this->getRule($request->id);
@@ -161,6 +207,12 @@ class LeadsController extends Controller
         }
     }
 
+    /**
+     * Get History (ajax)
+     * @return array[]
+     * @throws Exception 
+     * @throws InvalidArgumentException 
+     */
     public function getHistory()
     {
         $table = [];
@@ -193,6 +245,12 @@ class LeadsController extends Controller
         return $table;
     }
 
+    /**
+     * Reverse Move (ajax)
+     * 
+     * @param Request $request 
+     * @return array[]
+     */
     public function reverseMove(Request $request)
     {
         // Make sure we haven't already reversed it
@@ -217,6 +275,13 @@ class LeadsController extends Controller
         return ['success' => true];
     }
 
+    /**
+     * Get Campaigns
+     * 
+     * @param Request $request 
+     * @return array[] 
+     * @throws InvalidArgumentException 
+     */
     public function getCampaigns(Request $request)
     {
         $fromDate = $request->fromdate;
@@ -343,6 +408,15 @@ class LeadsController extends Controller
         echo "Emailed to $email\n";
     }
 
+    /**
+     * Get Leads
+     * 
+     * @param Request $request 
+     * @param mixed $columns 
+     * @return Generator<int, mixed>|Generator<int, array> 
+     * @throws Exception 
+     * @throws InvalidArgumentException 
+     */
     public function getLeads(Request $request, $columns)
     {
         $this->db = $request->db;
