@@ -29,13 +29,12 @@ Route::prefix('dashboards')->group(function () {
         Route::get('tools', 'LeadsController@rules');
         Route::post('tools', 'LeadsController@createRule');
         Route::get('tools/edit_rule/{id}', 'LeadsController@editLeadRule');
-        Route::post('tools/update_rule', 'LeadsController@updateRule');
-
-        // Ajax
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
         Route::post('tools/get_campaigns', 'LeadsController@getCampaigns');
         Route::post('tools/reverse_move', 'LeadsController@reverseMove');
-        // Route::post('tools/get_lead_rule', 'LeadsController@getLeadRule');
+        Route::post('tools/toggle_rule', 'LeadsController@toggleRule');
+        Route::post('tools/update_rule', 'LeadsController@updateRule');
+        Route::post('tools/view_rule', 'LeadsController@viewRule');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

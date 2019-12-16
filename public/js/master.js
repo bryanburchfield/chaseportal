@@ -58,6 +58,7 @@ var Master = {
 		$('.edit_myself').on('submit', this.edit_myself);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
+        $('.lead_details').on('click', this.get_leadrule_details);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
@@ -94,6 +95,7 @@ var Master = {
         $('.btn.disable').on('click', this.preventDefault);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('.add_rule').on('submit', this.create_leadrule);
+        $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
 	},
 
     hide_modal_error:function(){
@@ -362,6 +364,38 @@ var Master = {
         } else {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
+    },
+
+    toggle_leadrule:function(){
+        var checked;
+        var ruleid = $(this).parent().parent().parent().data('ruleid');
+
+        if($(this).is(':checked')){
+            $(this).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(this).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'tools/toggle_rule',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:ruleid
+
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
     },
 
     create_leadrule:function(e){
@@ -1279,6 +1313,46 @@ var Master = {
 			}
 		});
 	},
+
+    get_leadrule_details:function(e){
+        e.preventDefault();
+        var leadid = $(this).data('leadid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'tools/view_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: { id: leadid },
+            success: function (response) {
+
+                var modal = $('#leadDetailsModal');
+                modal.find('.modal-body').empty();
+                var leadrule_details;
+
+                leadrule_details = '<h3 class="leaddetail_name">'+response.rule_name+'</h3>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.created')+':</span> <span class="leadrule_value">'+response.created_at+'</span></p>';
+
+                if(response.deleted_at){
+                    leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.deleted')+':</span> <span class="leadrule_value">'+response.deleted_at+'</span></p>';
+                }
+                
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_campaign')+':</span> <span class="leadrule_value">'+response.source_campaign+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_subcampaign')+':</span> <span class="leadrule_value">'+response.source_subcampaign+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_campaign')+':</span> <span class="leadrule_value">'+response.destination_campaign+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_subcampaign')+':</span> <span class="leadrule_value">'+response.destination_subcampaign+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.filter_type')+':</span> <span class="leadrule_value">'+response.filter_type+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.filter_value')+':</span> <span class="leadrule_value">'+response.filter_value+'</span></p>';
+
+                modal.find('.modal-body').append(leadrule_details);
+            }
+        });
+    },
 
 	populate_demo_user_editmodal: function (e) {
 		e.preventDefault();

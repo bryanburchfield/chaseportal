@@ -2221,6 +2221,29 @@ div.vertical-line{
 
 .demo_user_table_holder{overflow-x:auto;}
 
+.modal-body h3.leaddetail_name{
+    color:$blue;
+    font-weight: 600;
+    font-size: 25px;
+    margin-bottom: 25px !important;
+}
+
+.lead_info{
+    font-size: 14px;
+    padding: 5px 8px;
+
+    &:nth-child(even){
+        background: #eee;
+    }
+
+    .leadrule_property{
+        width: 200px;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+}
+
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

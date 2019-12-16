@@ -41,6 +41,7 @@ if (Auth::user()->isType('demo')) {
             								@else
             		                            <thead>
             		                            	<tr>
+                                                        <th>{{__('tools.active')}}</th>
             		                            	    <th>{{__('tools.name')}}</th>
             		                            	    <th>{{__('tools.campaign')}}</th>
             		                            	    <th>{{__('tools.subcampaign')}}</th>
@@ -59,6 +60,12 @@ if (Auth::user()->isType('demo')) {
             								<tbody>
             		                            @foreach($lead_rules as $lr)
             										<tr data-ruleid="{{$lr->id}}">
+                                                        <td>
+                                                            <label class="switch leadrule_switch">
+                                                                <input type="checkbox" {{ ($lr->active) ? 'checked' : '' }} name="leadrule_input">
+                                                                <span></span>
+                                                            </label>
+                                                        </td>
             											<td>{{$lr->rule_name}}</td>
             											<td>{{$lr->source_campaign}}</td>
             											<td>{{$lr->source_subcampaign}}</td>
@@ -123,9 +130,10 @@ if (Auth::user()->isType('demo')) {
 
                                         <div class="col-sm-9 pl0">
                                             <div class="card" id="condition">
+
                                                 <div class="form-group">
                                                     {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                                    {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+                                                    {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
                                                 </div>
 
                                                 <div class="form-group">
@@ -183,9 +191,9 @@ if (Auth::user()->isType('demo')) {
 					                  			<thead>
 					                            	<tr>
 					                            	    <th>{{__('tools.date')}}</th>
-					                            	    <th>{{__('tools.rule_id')}}</th>
 					                            	    <th>{{__('tools.rule_name')}}</th>
 					                            	    <th>{{__('tools.leads_moved')}}</th>
+                                                        <th>{{__('tools.view_details')}}</th>
 					                            	    <th>{{__('tools.undo_move')}}</th>
 					                            	</tr>
 					                            </thead>
@@ -193,9 +201,9 @@ if (Auth::user()->isType('demo')) {
 													@foreach($history as $key => $value)
 														<tr>
 															<td>{{$value['date']}}</td>
-															<td>{{$value['lead_move_id']}}</td>
 															<td>{{$value['rule_name']}}</td>
 															<td>{{$value['leads_moved']}}</td>
+                                                            <td><a data-toggle="modal" data-target="#leadDetailsModal" class="lead_details" href="#" data-name="{{$value['rule_name']}}" data-leadid="{{$value['lead_rule_id']}}"><i class="fa fa-external-link-alt"></i></a></td>
 															@if($demo)
 															<td><a role="button" href="#" disabled="disabled" class="btn btn-sm btn-default disable"><i class="fa fa-history"></i> {{__('tools.undo_move')}}</a></td>
 															@else
@@ -215,6 +223,24 @@ if (Auth::user()->isType('demo')) {
 			</div>
 		</div>
 	</div>
+
+<!-- Lead Details Modal -->
+<div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.rule_details')}}</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="rule_id" name="rule_id" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Delete Recipient Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
