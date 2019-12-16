@@ -28,6 +28,7 @@ return [
 	'name'			=> 'Name',
 	'no_rules'		=> 'No Rules have been added yet',
 	'reverse_lead_move' => 'Reverse Lead Move',
+	'rule_details'	=> 'Rule Details',
 	'rule_id'		=> 'Rule ID',
 	'rule_name'		=> 'Rule Name',
 	'rules'			=> 'Rules',

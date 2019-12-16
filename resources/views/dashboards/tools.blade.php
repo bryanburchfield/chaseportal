@@ -229,13 +229,13 @@ if (Auth::user()->isType('demo')) {
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.lead_details')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.rule_details')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="rule_id" name="rule_id" value="">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.close')}}</button>
             </div>
         </div>
     </div>

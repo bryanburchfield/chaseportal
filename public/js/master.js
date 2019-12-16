@@ -1317,7 +1317,6 @@ var Master = {
     get_leadrule_details:function(e){
         e.preventDefault();
         var leadid = $(this).data('leadid');
-        console.log(leadid);
 
         $.ajaxSetup({
             headers: {
@@ -1331,7 +1330,7 @@ var Master = {
             dataType: 'json',
             data: { id: leadid },
             success: function (response) {
-                console.log(response);
+
                 var modal = $('#leadDetailsModal');
                 modal.find('.modal-body').empty();
                 var leadrule_details;

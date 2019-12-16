@@ -28,6 +28,7 @@ return [
 	'name'			=> 'Nombre',
 	'no_rules'		=> 'No se ha agregado ninguna regla aún',
 	'reverse_lead_move' => 'Movimiento de Avance Inverso',
+	'rule_details'	=> 'Detalles de la Regla',
 	'rule_id'		=> 'Regla ID',
 	'rule_name'		=> 'Nombre de la Regla',
 	'rules'			=> 'Reglas',
