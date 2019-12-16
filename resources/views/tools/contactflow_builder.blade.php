@@ -24,8 +24,8 @@ if (Auth::user()->isType('demo')) {
 			    <div class="row">
 			    	<div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#contactflow_builder" data-toggle="tab">Contact Flow Builder</a></li>
-                            <li><a href="#dnc_importer" data-toggle="tab">DNC Importer</a></li>
+                            <li class="active"><a href="#contactflow_builder">Contact Flow Builder</a></li>
+                            <li><a href="{{url('/dashboards/tools/dnc_importer')}}">DNC Importer</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -227,10 +227,6 @@ if (Auth::user()->isType('demo')) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="tab-pane mt30" id="dnc_importer">
-                                <h2 class="bbnone">DNC Importer</h2>
                             </div>
                         </div>
 	            	</div>
