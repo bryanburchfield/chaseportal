@@ -6,9 +6,11 @@ var Admin = {
 		$('.edit_user').on('submit', this.edit_user);
 		$('.add_demo_user').on('submit', this.add_demo_user);
 		$('.edit_demo_user').on('submit', this.edit_demo_user);
+		$('.edit_myself').on('submit', this.edit_myself);
 		$('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
+		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 	},
 
 	// add global user
@@ -48,7 +50,7 @@ var Admin = {
 
 			success: function (response) {
 
-				$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
+				$('form.add_user').append('<div class="alert alert-success mt20">User successfully added</div>');
                 setTimeout(function () {
                     $('.alert').remove();
                     $('form.add_user').trigger("reset");
@@ -332,6 +334,75 @@ var Admin = {
 		$(modal).find('.demouser_id').val(id);
 		$(modal).find('.demouser_name').val(name);
 		$(modal).find('span.username').html(name);
+	},
+
+	// remove global/demo users
+	remove_user: function (e) {
+		e.preventDefault();
+		var id = $('#deleteUserModal .user_id').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/delete_user',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: id
+			},
+			success: function (response) {
+
+				$('.users table tbody tr#user' + id).remove();
+				$('.demo_user_table tbody tr#user' + id).remove();
+				$('#deleteUserModal').modal('toggle');
+			}
+		});
+	},
+
+	edit_myself: function (e) {
+		e.preventDefault();
+		var form = $('form.edit_myself');
+		var group_id = form.find('.group_id').val(),
+			user_id = form.find('.user_id').val(),
+			db = form.find('#db').val()
+			;
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/edit_myself',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: user_id,
+				group_id: group_id,
+				db: db,
+			},
+
+			success: function (response) {
+
+				if (response.errors) {
+					$('form.edit_myself').append('<div class="alert alert-danger">' + response.errors + '</div>');
+					$('.alert-danger').show();
+				}else{
+                    $('.alert-success').remove();
+					$('form.edit_myself').append('<div class="alert alert-success">User successfully updated</div>');
+					$('.alert-success').show();
+					setTimeout(function(){
+						$('.alert-success').hide();
+						window.location.href = "/dashboards/admin#settings";
+					}, 3500);
+				}
+			}
+		});
 	},
 }
 

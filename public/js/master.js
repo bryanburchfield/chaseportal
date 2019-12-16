@@ -51,17 +51,8 @@ var Master = {
 
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
-		// $('.add_user').on('submit', this.add_user);
-		// $('.edit_user').on('submit', this.edit_user);
-		// $('.edit_demo_user').on('submit', this.edit_demo_user);
-		// $('.add_demo_user').on('submit', this.add_demo_user);
-		$('.edit_myself').on('submit', this.edit_myself);
-		// $('.users').on('click', 'a.edit_user', this.populate_user_edit);
-		// $('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
         $('.lead_details').on('click', this.get_leadrule_details);
-		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
-		// $('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
 		$('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
 		$('.pag').on('click', '.pagination li a', this.click_pag_btn);
@@ -88,12 +79,14 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.add_rule #filter_type, .edit_rule #update_filter_type').on('change', this.change_filter_label);
+
+        $('.btn.disable').on('click', this.preventDefault);
+        $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
+
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
-        $('.btn.disable').on('click', this.preventDefault);
-        $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('.add_rule').on('submit', this.create_leadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
 	},
@@ -1026,48 +1019,6 @@ var Master = {
 		return chart_colors_array;
 	},
 
-	edit_myself: function (e) {
-		e.preventDefault();
-		var form = $('form.edit_myself');
-		var group_id = form.find('.group_id').val(),
-			user_id = form.find('.user_id').val(),
-			db = form.find('#db').val()
-			;
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-			}
-		});
-
-		$.ajax({
-			url: 'admin/edit_myself',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				id: user_id,
-				group_id: group_id,
-				db: db,
-			},
-
-			success: function (response) {
-
-				if (response.errors) {
-					$('form.edit_myself').append('<div class="alert alert-danger">' + response.errors + '</div>');
-					$('.alert-danger').show();
-				}else{
-                    $('.alert-success').remove();
-					$('form.edit_user').append('<div class="alert alert-success">User successfully updated</div>');
-					$('.alert-success').show();
-					$('form.edit_user').trigger("reset");
-					setTimeout(function(){
-						window.location.href = "dashboards/admin#edit_user";
-					}, 3500);
-				}
-			}
-		});
-	},
-
     get_leadrule_details:function(e){
         e.preventDefault();
         var leadid = $(this).data('leadid');
@@ -1108,7 +1059,7 @@ var Master = {
         });
     },
 
-	/// Delete user and delete lead rule modals
+	/// Delete user / dmeo users and delete lead rule modals
 	pass_user_removemodal: function () {
 		var id = $(this).data('user');
 		var name = $(this).data('name');
@@ -1129,33 +1080,6 @@ var Master = {
 		$('#userLinksModal .app_token').val(app_token);
 		$('a.getAppToken span.url_token').text(app_token);
 		$('#userLinksModal .username').html(id + ' ' + name);
-	},
-
-	// remove global user
-	remove_user: function (e) {
-		e.preventDefault();
-		var id = $('#deleteUserModal .user_id').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-			}
-		});
-
-		$.ajax({
-			url: 'admin/delete_user',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				id: id
-			},
-			success: function (response) {
-
-				$('.users table tbody tr#user' + id).remove();
-				$('.demo_user_table tbody tr#user' + id).remove();
-				$('#deleteUserModal').modal('toggle');
-			}
-		});
 	},
 
 	copy_link: function (e) {
