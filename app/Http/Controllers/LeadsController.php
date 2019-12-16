@@ -42,6 +42,11 @@ class LeadsController extends Controller
             ->OrderBy('rule_name')
             ->get();
 
+        // Translaste filter type
+        foreach ($lead_rules as &$lead_rule) {
+            $lead_rule->filter_type = trans('tools.' . $lead_rule->filter_type);
+        }
+
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
