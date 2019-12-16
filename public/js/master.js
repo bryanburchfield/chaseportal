@@ -423,7 +423,7 @@ var Master = {
             },
 
             success:function(response){
-                window.location.href = 'tools';
+                window.location.href = 'contactflow_builder';
             },
             error :function( data ) {
                 $('.add_rule_error.alert').empty();
@@ -466,10 +466,10 @@ var Master = {
 			},
 
 			success: function (response) {
-				window.location.href = 'tools';
+				window.location.href = 'contactflow_builder';
 			},
 			error: function (data) {
-				window.location.href = 'tools';
+				window.location.href = 'contactflow_builder';
 			}
 		});
 	},
@@ -504,7 +504,7 @@ var Master = {
 				} else {
 					var hash = window.location.hash;
 					localStorage.setItem('activeTab', hash);
-					window.location = '/dashboards/tools';
+					window.location = '/dashboards/contactflow_builder';
 				}
 			}
 		});
