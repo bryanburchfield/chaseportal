@@ -60,7 +60,7 @@ class LeadsController extends Controller
             'history' => $this->getHistory(),
         ];
 
-        return view('dashboards.tools')->with($data);
+        return view('tools.contactflow_builder')->with($data);
     }
 
     /**

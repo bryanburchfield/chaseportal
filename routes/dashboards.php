@@ -25,7 +25,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('settings/update_theme', 'MasterDashController@updateTheme');
 
         // Tools (lead filters for now)
-        Route::get('tools', 'LeadsController@rules');
+        Route::get('tools/contactflow_builder', 'LeadsController@rules');
         Route::post('tools', 'LeadsController@createRule');
         Route::get('tools/edit_rule/{id}', 'LeadsController@editLeadRule');
         Route::post('tools/delete_rule', 'LeadsController@deleteRule');
