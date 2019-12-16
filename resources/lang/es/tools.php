@@ -20,7 +20,8 @@ return [
 	'edit_rule'		=> 'Revisar Regla',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
-	'leads_moved'	=> '# de Conductores Movidos',
+	'lead_details'	=> 'Detalles de Plomo',
+	'leads_moved'	=> '# De Conductores Movidos',
 	'lead_move_history'	=> 'Historia de movimiento principal',
 	'lead_rules'	=> 'Reglas de Plomo',
 	'move_history'	=> 'Mover Historia',
@@ -33,5 +34,6 @@ return [
 	'save_changes'	=> 'Guardar Cambios',
 	'subcampaign'       => 'Sub-campaña',
 	'tools'			=> 'Herramientas',
-	'undo_move'		=> 'Deshacer movimiento'
+	'undo_move'		=> 'Deshacer movimiento',
+	'view_details'	=> 'Ver Detalles'
 ];

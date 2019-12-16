@@ -20,6 +20,7 @@ return [
 	'edit_rule'		=> 'Edit Rule',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'lead_details'	=> 'Lead Details',
 	'leads_moved'	=> '# of Leads Moved',
 	'lead_move_history'	=> 'Lead Move History',
 	'lead_rules'	=> 'Lead Rules',
@@ -33,5 +34,6 @@ return [
 	'save_changes'	=> 'Save Changes',
 	'subcampaign'	=> 'Subcampaign',
 	'tools'			=> 'Tools',
-	'undo_move'		=> 'Undo Move'
+	'undo_move'		=> 'Undo Move',
+	'view_details'	=> 'View Details'
 ];

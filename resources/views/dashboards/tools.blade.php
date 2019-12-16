@@ -192,7 +192,7 @@ if (Auth::user()->isType('demo')) {
 					                            	    <th>{{__('tools.date')}}</th>
 					                            	    <th>{{__('tools.rule_name')}}</th>
 					                            	    <th>{{__('tools.leads_moved')}}</th>
-                                                        <th>View Details</th>
+                                                        <th>{{__('tools.view_details')}}</th>
 					                            	    <th>{{__('tools.undo_move')}}</th>
 					                            	</tr>
 					                            </thead>
@@ -229,7 +229,7 @@ if (Auth::user()->isType('demo')) {
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Lead Details</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.lead_details')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="rule_id" name="rule_id" value="">
