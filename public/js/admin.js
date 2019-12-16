@@ -1,0 +1,340 @@
+var Admin = {
+
+	init:function(){
+		///// event handlers
+		$('.add_user').on('submit', this.add_user);
+		$('.edit_user').on('submit', this.edit_user);
+		$('.add_demo_user').on('submit', this.add_demo_user);
+		$('.edit_demo_user').on('submit', this.edit_demo_user);
+		$('a.edit_demo_user').on('click', this.populate_demo_user_editmodal);
+		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
+		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
+	},
+
+	// add global user
+	add_user: function (e) {
+		e.preventDefault();
+
+		var group_id = $('.group_id').val(),
+			name = $('.name').val(),
+			email = $('.email').val(),
+            phone = $('#phone').val(),
+			tz = $('#tz').val(),
+			db = $('#db').val(),
+			additional_dbs = $('#additional_dbs').val()
+			;
+
+		var dialer = db.slice(-2);
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/add_user',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				group_id: group_id,
+				name: name,
+				email: email,
+                phone:phone,
+				tz: tz,
+				db: db,
+				additional_dbs: additional_dbs
+			},
+
+			success: function (response) {
+
+				$('form.add_user').append('<div class="alert alert-success">User successfully added</div>');
+                setTimeout(function () {
+                    $('.alert').remove();
+                    $('form.add_user').trigger("reset");
+                    window.location.href = "/dashboards/admin";
+                }, 3500);
+			}, error: function (data) {
+                $('form.add_user .alert').empty();
+
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if ($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                        });
+                    } else {
+                        $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                    }
+                });
+
+                $('form.add_user .alert li').first().remove();
+            }
+		});
+	},
+
+	// edit global user
+	edit_user:function(e){
+		e.preventDefault();
+		var form = $('form.edit_user');
+		var group_id = form.find('.group_id').val(),
+			user_id = form.find('#user_id').val(),
+			name = form.find('.name').val(),
+			email = form.find('.email').val(),
+            phone = form.find('#phone').val(),
+			tz = form.find('#tz').val(),
+			db = form.find('#db').val(),
+			additional_dbs = form.find('#additional_dbs').val()
+			;
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/update_user',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: user_id,
+				group_id: group_id,
+				name: name,
+				email: email,
+                phone:phone,
+				tz: tz,
+				db: db,
+				additional_dbs: additional_dbs
+			},
+
+			success: function (response) {
+
+				$('form.edit_user').append('<div class="alert alert-success mt20">User successfully updated</div>');
+                $('.alert-success').show();
+                $('.alert-danger').hide();
+
+                setTimeout(function () {
+                    $('.alert-success').hide();
+                    $('form.edit_user').trigger("reset");
+                    window.location.reload();
+                }, 3500);
+			}, error: function (data) {
+                $('form.edit_user .alert').empty();
+
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if ($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('form.edit_user .alert').show().append('<li>' + value + '</li>');
+                        });
+                    } else {
+                        $('form.edit_user .alert').show().append('<li>' + value + '</li>');
+                    }
+                });
+                $('form.edit_user .alert li').first().remove();
+            }
+		});
+	},
+
+	// add demo user
+	add_demo_user: function (e) {
+		e.preventDefault();
+		var form = $('form.add_demo_user');
+		var name = form.find('.name').val(),
+			email = form.find('.email').val(),
+			phone = form.find('.phone').val(),
+			expiration = form.find('#expiration').val()
+			;
+
+        $('.alert-danger').hide();
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/add_demo_user',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: form.parent().find('.demouser_id').val(),
+				name: name,
+				email: email,
+				phone: phone,
+				expiration: expiration
+			},
+
+			success: function (response) {
+
+				$('<div class="alert alert-success">User successfully updated</div>').insertBefore('form.add_demo_user .btn-primary').parent();
+				$('.alert-success').show();
+				setTimeout(function () {
+                    $('.alert-success').hide();
+                    $('form.add_demo_user').trigger("reset");
+					window.location.href = "/dashboards/admin#demo_user";
+				}, 2500);
+			}, error: function (data) {
+				$('form.add_demo_user .alert').empty();
+
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('form.add_demo_user .alert').show().append('<li>' + value + '</li>');
+							});
+						} else {
+							$('form.add_demo_user .alert').show().append('<li>' + value + '</li>');
+						}
+					});
+
+					$('form.add_demo_user .alert li').first().remove();
+				}
+			}
+		});
+	},
+
+	// edit demo user
+	edit_demo_user: function (e) {
+		e.preventDefault();
+
+		var form = $('form.edit_demo_user');
+		var name = form.find('.name').val(),
+			email = form.find('.email').val(),
+			phone = form.find('.phone').val(),
+			expiration = form.find('#expiration').val()
+			;
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/update_demo_user ',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: form.parent().find('.demouser_id').val(),
+				name: name,
+				email: email,
+				phone: phone,
+				expiration: expiration
+			},
+
+			success: function (response) {
+				$('form.edit_demo_user').append('<div class="alert alert-success oauto mt20">User successfully updated</div>');
+				$('.alert-success').show();
+                $('.alert-danger').hide();
+				setTimeout(function () {
+                    $('.alert-success').remove();
+                    $('#demoUserModal').modal('hide');
+					window.location.href = "/dashboards/admin#demo_user";
+				}, 2500);
+			},
+			error: function (data) {
+				$('form.edit_demo_user .alert-danger').empty();
+
+				var errors = $.parseJSON(data.responseText);
+				$.each(errors, function (key, value) {
+
+					if ($.isPlainObject(value)) {
+						$.each(value, function (key, value) {
+							$('form.edit_demo_user .alert-danger').show().append('<li>' + value + '</li>');
+						});
+					} else {
+						$('form.edit_demo_user .alert-danger').show().append('<li>' + value + '</li>');
+					}
+				});
+
+				$('form.edit_demo_user .alert-danger li').first().remove();
+			}
+		});
+	},
+
+	populate_demo_user_editmodal: function (e) {
+		e.preventDefault();
+		var user_id = $(this).data('user');
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/get_user',
+			type: 'POST',
+			dataType: 'json',
+			data: { id: user_id, mode: 'edit' },
+			success: function (response) {
+
+				var modal = $('.edit_demo_user');
+                $('form.demo_user .alert.alert-info').remove();
+				$(modal).find('.name').val(response.name);
+				$(modal).find('.email').val(response.email);
+				$(modal).find('.phone').val(response.phone);
+				var demo_expiration = $('.edit_demo_user').find('.name').parent();
+				$('<div class="alert alert-info mb20">Demo expires ' + response.expires_in + '</div>').insertBefore(demo_expiration);
+			}
+		});
+	},
+
+	populate_user_edit: function (e) {
+
+		e.preventDefault();
+		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
+		var user_id = $(this).attr('href');
+		var dialer = $(this).data('dialer');
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/get_user',
+			type: 'POST',
+			dataType: 'json',
+			data: { id: user_id },
+			success: function (response) {
+				$('html,body').scrollTop($('body').scrollTop());
+
+				$('#edit_dialer' + dialer).addClass('in');
+				$('#edit_dialer' + dialer).attr('aria-expanded', true);
+				$('#edit_heading' + dialer + ' h4 a').attr('aria-expanded', true);
+				var form = $('form.edit_user');
+				form.find('.group_id').val(response.group_id);
+				form.find('.name').val(response.name);
+				form.find('.email').val(response.email);
+				form.find('#tz').val(response.tz);
+				form.find('#user_type').val(response.user_type);
+				form.find('#db').val(response.db);
+				form.find('#additional_dbs').val(response.additional_dbs);
+				form.find('#user_id').val(response.id);
+			}
+		});
+	},
+
+	// pass user id to edit/delete demo user modals
+	pass_user_demo_modals: function (e) {
+		e.preventDefault();
+		var id = $(this).data('user');
+		var name = $(this).data('name');
+		var modal = $(this).data('target');
+		$(modal).find('.demouser_id').val(id);
+		$(modal).find('.demouser_name').val(name);
+		$(modal).find('span.username').html(name);
+	},
+}
+
+$(document).ready(function(){
+	Admin.init();
+});

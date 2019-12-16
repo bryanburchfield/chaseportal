@@ -71,7 +71,8 @@
     @endforeach
     @endisset
     
-    <script src="/js/master.js"></script> 
+    <script src="/js/master.js"></script>
+    <script src="/js/admin.js"></script> 
     <script src="/js/nav.js"></script> 
     
     @isset($page)
