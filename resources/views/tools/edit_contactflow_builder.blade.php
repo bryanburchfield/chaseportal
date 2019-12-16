@@ -18,7 +18,7 @@
 	                <div class="col-sm-6">
 	                    <div class="card">
 	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
-	                        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/tools/update_rule', 'class'=>'form mt20 edit_rule']) !!}
+	                        {!! Form::open(['method'=>'POST', 'url'=>'/tools/contactflow_builder/update_rule', 'class'=>'form mt20 edit_rule']) !!}
 
 	                            <div class="form-group">
 	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
@@ -63,7 +63,7 @@
             					</div>
 
             					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
-								<a href="{{ url('/dashboards/tools/') }}" class="btn btn-default mb0">{{__('general.cancel')}}</a>
+								<a href="{{ url('/tools/contactflow_builder') }}" class="btn btn-default mb0">{{__('general.cancel')}}</a>
 
 								{!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
 

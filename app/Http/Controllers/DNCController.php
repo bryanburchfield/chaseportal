@@ -8,13 +8,12 @@ class DNCController extends Controller
 {
     public function index()
     {
-
-    	$page['menuitem'] = 'tools';
+        $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
         ];
 
-    	return view('tools.dnc_importer')->with($data);
+        return view('tools.dnc_importer')->with($data);
     }
 }

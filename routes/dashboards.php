@@ -3,8 +3,6 @@
 Route::prefix('dashboards')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-    // ajax targets
-
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
         Route::redirect('/', 'dashboards/admindashboard');
@@ -23,18 +21,6 @@ Route::prefix('dashboards')->group(function () {
         Route::post('settings', 'MasterDashController@updateUserSettings');
         Route::post('settings/update_lang_display', 'MasterDashController@updateLangDisplay');
         Route::post('settings/update_theme', 'MasterDashController@updateTheme');
-
-        // Tools (lead filters for now)
-        Route::get('tools/contactflow_builder', 'LeadsController@rules');
-        Route::post('tools', 'LeadsController@createRule');
-        Route::get('tools/edit_rule/{id}', 'LeadsController@editLeadRule');
-        Route::post('tools/delete_rule', 'LeadsController@deleteRule');
-        Route::post('tools/get_campaigns', 'LeadsController@getCampaigns');
-        Route::post('tools/reverse_move', 'LeadsController@reverseMove');
-        Route::post('tools/toggle_rule', 'LeadsController@toggleRule');
-        Route::post('tools/update_rule', 'LeadsController@updateRule');
-        Route::post('tools/view_rule', 'LeadsController@viewRule');
-        Route::get('tools/dnc_importer', 'DNCController@index');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

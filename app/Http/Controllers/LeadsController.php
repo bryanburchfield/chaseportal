@@ -192,7 +192,7 @@ class LeadsController extends Controller
             $this->createRule($request);
         }
 
-        return redirect('dashboards/tools');
+        return redirect('/tools/contactflow_builder/');
     }
 
     /**

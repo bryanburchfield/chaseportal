@@ -24,8 +24,8 @@ if (Auth::user()->isType('demo')) {
 			    <div class="row">
 			    	<div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="{{url('/dashboards/tools/contactflow_builder')}}">Contact Flow Builder</a></li>
-                            <li><a href="{{url('/dashboards/tools/dnc_importer')}}">DNC Importer</a></li>
+                            <li class="active"><a href="{{url('/tools/contactflow_builder')}}">Contact Flow Builder</a></li>
+                            <li><a href="{{url('/tools/dnc_importer')}}">DNC Importer</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -83,7 +83,7 @@ if (Auth::user()->isType('demo')) {
                                                                 <td>{{$lr->destination_campaign}}</td>
                                                                 <td>{{$lr->destination_subcampaign}}</td>
                                                                 @if(!$demo)
-                                                                <td><a class="edit_rules" href="{{ url('/dashboards/tools/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="edit_rules" href="{{ url('/tools/contactflow_builder/edit_rule/'.$lr->id) }}" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a data-toggle="modal" data-target="#deleteRuleModal" class="remove_user" href="#" data-name="{{$lr->rule_name}}" data-user="{{$lr->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 @endif
                                                                 @endforeach
