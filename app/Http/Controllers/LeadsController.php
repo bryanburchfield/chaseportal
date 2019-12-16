@@ -36,7 +36,7 @@ class LeadsController extends Controller
      * @throws InvalidArgumentException 
      * @throws Exception 
      */
-    public function rules()
+    public function index()
     {
         $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)
             ->OrderBy('rule_name')

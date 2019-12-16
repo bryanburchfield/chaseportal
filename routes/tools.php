@@ -8,7 +8,7 @@ Route::prefix('tools')->group(function () {
         Route::redirect('/', 'tools/contactflow_builder');
 
         // Contact Flow (leads)
-        Route::get('contactflow_builder/', 'LeadsController@rules');
+        Route::get('contactflow_builder/', 'LeadsController@index');
         Route::get('contactflow_builder/edit_rule/{id}', 'LeadsController@editLeadRule');
         Route::post('contactflow_builder/', 'LeadsController@createRule');
         Route::post('contactflow_builder/delete_rule', 'LeadsController@deleteRule');
