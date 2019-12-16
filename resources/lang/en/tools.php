@@ -8,6 +8,7 @@ return [
 	'confirm_delete' => 'Are you sure you want to delete',
 	'confirm_lead_move'	=> 'Are you sure you want to undo this lead move?',
 	'date'			=> 'Date',
+	'days_called'   => 'Days Called',
 	'days_to_filter'	=> 'Days to Filter By',
 	'delete'		=> 'Delete',
 	'delete_rule'	=> 'Delete Rule',
@@ -20,10 +21,12 @@ return [
 	'edit_rule'		=> 'Edit Rule',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'lead_age'      => 'Age',
+	'lead_attempts' => 'Attempts',
 	'lead_details'	=> 'Lead Details',
-	'leads_moved'	=> '# of Leads Moved',
 	'lead_move_history'	=> 'Lead Move History',
 	'lead_rules'	=> 'Lead Rules',
+	'leads_moved'	=> '# of Leads Moved',
 	'move_history'	=> 'Move History',
 	'name'			=> 'Name',
 	'no_rules'		=> 'No Rules have been added yet',
@@ -36,5 +39,5 @@ return [
 	'subcampaign'	=> 'Subcampaign',
 	'tools'			=> 'Tools',
 	'undo_move'		=> 'Undo Move',
-	'view_details'	=> 'View Details'
+	'view_details'	=> 'View Details',
 ];

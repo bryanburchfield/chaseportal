@@ -8,6 +8,7 @@ return [
 	'confirm_delete' => '¿Está seguro que quiere eliminarla?',
 	'confirm_lead_move'	=> '¿Seguro que quieres deshacer este movimiento principal?',
 	'date'			=> 'Fecha',
+	'days_called'   => 'Días llamados',
 	'days_to_filter'	=> 'Días para Filtrar',
 	'delete'		=> 'Eliminar',
 	'delete_rule'	=> 'Eliminar Regla',
@@ -20,10 +21,12 @@ return [
 	'edit_rule'		=> 'Revisar Regla',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
+	'lead_age'      => 'Años',
+	'lead_attempts' => 'Intentos',
 	'lead_details'	=> 'Detalles de Plomo',
-	'leads_moved'	=> '# De Conductores Movidos',
 	'lead_move_history'	=> 'Historia de movimiento principal',
 	'lead_rules'	=> 'Reglas de Plomo',
+	'leads_moved'	=> '# De Conductores Movidos',
 	'move_history'	=> 'Mover Historia',
 	'name'			=> 'Nombre',
 	'no_rules'		=> 'No se ha agregado ninguna regla aún',
@@ -36,5 +39,5 @@ return [
 	'subcampaign'       => 'Sub-campaña',
 	'tools'			=> 'Herramientas',
 	'undo_move'		=> 'Deshacer movimiento',
-	'view_details'	=> 'Ver Detalles'
+	'view_details'	=> 'Ver Detalles',
 ];

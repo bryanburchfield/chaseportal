@@ -83,6 +83,8 @@ class LeadsController extends Controller
             $item = strval($item);
         });
 
+        $lr['filter_type'] = trans('tools.' . $lr['filter_type']);
+
         return $lr;
     }
 
