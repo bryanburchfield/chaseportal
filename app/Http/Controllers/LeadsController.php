@@ -133,7 +133,7 @@ class LeadsController extends Controller
             'campaigns' => $campaigns,
         ];
 
-        return view('dashboards.tools_edit_rule')->with($data);
+        return view('tools.edit_contactflow_builder')->with($data);
     }
 
     /**

@@ -408,7 +408,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'tools',
+            url: '/tools/contactflow_builder',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -456,9 +456,10 @@ var Master = {
 		});
 
 		var lead_rule_id = $('.rule_id').val();
+        console.log(lead_rule_id);
 
 		$.ajax({
-			url: '/dashboards/tools/delete_rule',
+			url: '/tools/contactflow_builder/delete_rule',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -466,10 +467,12 @@ var Master = {
 			},
 
 			success: function (response) {
-				window.location.href = 'contactflow_builder';
+                return false;
+				window.location.href = '/tools/contactflow_builder';
 			},
 			error: function (data) {
-				window.location.href = 'contactflow_builder';
+                return false;
+				window.location.href = '/tools/contactflow_builder';
 			}
 		});
 	},
@@ -491,7 +494,7 @@ var Master = {
 		});
 
 		$.ajax({
-			url: '/dashboards/tools/reverse_move',
+			url: '/tools/contactflow_builder/reverse_move',
 			type: 'POST',
 			dataType: 'json',
 			data: { lead_move_id: lead_move_id },
@@ -504,7 +507,7 @@ var Master = {
 				} else {
 					var hash = window.location.hash;
 					localStorage.setItem('activeTab', hash);
-					window.location = '/dashboards/contactflow_builder';
+					window.location = '/tools/contactflow_builder';
 				}
 			}
 		});
@@ -1027,7 +1030,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'tools/view_rule',
+            url: 'tools/contactflow_builder/view_rule',
             type: 'POST',
             dataType: 'json',
             data: { id: leadid },
