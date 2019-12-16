@@ -51,7 +51,6 @@ var Master = {
 
 		$('.pag').clone().insertAfter('div.table-responsive');
 		$('.view_report_btn').on('click', this.view_report);
-        $('.lead_details').on('click', this.get_leadrule_details);
 		$('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
 		$('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
 		$('form.report_filter_form').on('submit', this.submit_report_filter_form);
@@ -72,23 +71,22 @@ var Master = {
 		$('.campaign_search').on('keyup', this.search_campaigns);
 		$('.select_database').on('click', this.select_database);
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
-		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 		$('a.getAppToken').on('click', this.copy_link);
 		$('.select_campaign').on('click', this.filter_campaign);
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.add_rule #filter_type, .edit_rule #update_filter_type').on('change', this.change_filter_label);
-
         $('.btn.disable').on('click', this.preventDefault);
-        $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
-
+        /// lead rule handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
         $('.add_rule').on('submit', this.create_leadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
+        $('.lead_details').on('click', this.get_leadrule_details);
+        $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
 	},
 
     hide_modal_error:function(){
@@ -306,7 +304,6 @@ var Master = {
     },
 
     get_subcampaigns:function(e, campaign=0, source=0){
-        console.log('get_subcampaigns ran');
         if(!campaign){
             // e.preventDefault();
             $(this).find('option:selected').each(function() {
@@ -1046,7 +1043,7 @@ var Master = {
                 if(response.deleted_at){
                     leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.deleted')+':</span> <span class="leadrule_value">'+response.deleted_at+'</span></p>';
                 }
-                
+
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_campaign')+':</span> <span class="leadrule_value">'+response.source_campaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_subcampaign')+':</span> <span class="leadrule_value">'+response.source_subcampaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_campaign')+':</span> <span class="leadrule_value">'+response.destination_campaign+'</span></p>';
@@ -1063,7 +1060,6 @@ var Master = {
 	pass_user_removemodal: function () {
 		var id = $(this).data('user');
 		var name = $(this).data('name');
-
 		$('#deleteUserModal .user_id, #deleteRuleModal .rule_id').val(id);
 		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
 		$('#deleteUserModal .username, #deleteRuleModal .rule_name').html(name);
@@ -1325,76 +1321,6 @@ var Master = {
 			}
 		}); /// end ajax
 	}, /// end update_report function
-
-	cdr_lookup: function (e) {
-		e.preventDefault();
-		$('.preloader').show();
-		var phone = $('#phone').val(),
-			fromdate = $('.fromdate').val(),
-			todate = $('.todate').val(),
-			search_type = $("input[name='search_type']:checked").val()
-			;
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-			}
-		});
-
-		$.ajax({
-			url: 'admin/cdr_lookup',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				phone: phone,
-				fromdate: fromdate,
-				todate: todate,
-				search_type: search_type
-			},
-			success: function (response) {
-
-				$('.report_filters.card').parent().find('.alert').remove();
-				$('.cdr_results_table tbody').empty();
-
-				if ($('#sidebar').hasClass('active')) {
-					$('#sidebar').removeClass('active');
-				}
-
-				if (response.search_result.length) {
-
-					$('.cdr_table').show();
-
-					var _data = response.search_result;
-					var trs = [];
-					var array_keys = [], array_values = [];
-					for (i = 0; i < _data.length; i++) {
-						array_keys = [];
-						array_values = [];
-						for (var key in _data[i]) {
-							array_keys.push(key);
-							array_values.push(_data[i][key]);
-						}
-						trs.push(array_values);
-					}
-
-					var ths = "";
-					for (var i = 0; i < array_keys.length; i++) {
-						ths += "<th>" + array_keys[i] + "</th>";
-					}
-					$('#cdr_dataTable thead').html(ths);
-					Master.cdr_dataTable.clear();
-					Master.cdr_dataTable.rows.add(trs);
-					Master.cdr_dataTable.draw();
-
-				} else {
-					$('.cdr_table').hide();
-					$('<div class="alert alert-danger">No records found</div>').insertAfter('.report_filters.card')
-				}
-
-				$('.preloader').fadeOut('slow');
-			}
-		});
-	},
 
 	campaign_usage: function (response) {
 

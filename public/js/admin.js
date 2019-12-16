@@ -11,6 +11,7 @@ var Admin = {
 		$('.users').on('click', 'a.edit_user', this.populate_user_edit);
 		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
+		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 	},
 
 	// add global user
@@ -355,7 +356,7 @@ var Admin = {
 				id: id
 			},
 			success: function (response) {
-
+				// either traverse up to number of clients and update or simply redirect back
 				$('.users table tbody tr#user' + id).remove();
 				$('.demo_user_table tbody tr#user' + id).remove();
 				$('#deleteUserModal').modal('toggle');
@@ -401,6 +402,76 @@ var Admin = {
 						window.location.href = "/dashboards/admin#settings";
 					}, 3500);
 				}
+			}
+		});
+	},
+
+	cdr_lookup: function (e) {
+		e.preventDefault();
+		$('.preloader').show();
+		var phone = $('#phone').val(),
+			fromdate = $('.fromdate').val(),
+			todate = $('.todate').val(),
+			search_type = $("input[name='search_type']:checked").val()
+			;
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'admin/cdr_lookup',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				phone: phone,
+				fromdate: fromdate,
+				todate: todate,
+				search_type: search_type
+			},
+			success: function (response) {
+
+				$('.report_filters.card').parent().find('.alert').remove();
+				$('.cdr_results_table tbody').empty();
+
+				if ($('#sidebar').hasClass('active')) {
+					$('#sidebar').removeClass('active');
+				}
+
+				if (response.search_result.length) {
+
+					$('.cdr_table').show();
+
+					var _data = response.search_result;
+					var trs = [];
+					var array_keys = [], array_values = [];
+					for (i = 0; i < _data.length; i++) {
+						array_keys = [];
+						array_values = [];
+						for (var key in _data[i]) {
+							array_keys.push(key);
+							array_values.push(_data[i][key]);
+						}
+						trs.push(array_values);
+					}
+
+					var ths = "";
+					for (var i = 0; i < array_keys.length; i++) {
+						ths += "<th>" + array_keys[i] + "</th>";
+					}
+					$('#cdr_dataTable thead').html(ths);
+					Master.cdr_dataTable.clear();
+					Master.cdr_dataTable.rows.add(trs);
+					Master.cdr_dataTable.draw();
+
+				} else {
+					$('.cdr_table').hide();
+					$('<div class="alert alert-danger">No records found</div>').insertAfter('.report_filters.card')
+				}
+
+				$('.preloader').fadeOut('slow');
 			}
 		});
 	},
