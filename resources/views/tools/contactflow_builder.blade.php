@@ -24,7 +24,7 @@ if (Auth::user()->isType('demo')) {
 			    <div class="row">
 			    	<div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#contactflow_builder">Contact Flow Builder</a></li>
+                            <li class="active"><a href="{{url('/dashboards/tools/contactflow_builder')}}">Contact Flow Builder</a></li>
                             <li><a href="{{url('/dashboards/tools/dnc_importer')}}">DNC Importer</a></li>
                         </ul>
 

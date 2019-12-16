@@ -18,7 +18,6 @@ Route::prefix('dashboards')->group(function () {
         Route::post('/kpi/recipients', 'KpiController@addRecipient');
         Route::get('/kpi/optout', 'KpiController@optOut')->name('kpi.optout')->middleware('signed');
 
-
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
@@ -35,6 +34,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('tools/toggle_rule', 'LeadsController@toggleRule');
         Route::post('tools/update_rule', 'LeadsController@updateRule');
         Route::post('tools/view_rule', 'LeadsController@viewRule');
+        Route::get('tools/dnc_importer', 'DNCController@index');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
