@@ -41,6 +41,7 @@ if (Auth::user()->isType('demo')) {
             								@else
             		                            <thead>
             		                            	<tr>
+                                                        <th>{{__('tools.active')}}</th>
             		                            	    <th>{{__('tools.name')}}</th>
             		                            	    <th>{{__('tools.campaign')}}</th>
             		                            	    <th>{{__('tools.subcampaign')}}</th>
@@ -59,6 +60,12 @@ if (Auth::user()->isType('demo')) {
             								<tbody>
             		                            @foreach($lead_rules as $lr)
             										<tr data-ruleid="{{$lr->id}}">
+                                                        <td>
+                                                            <label class="switch leadrule_switch">
+                                                                <input type="checkbox" {{ ($lr->active) ? 'checked' : '' }} name="leadrule_input">
+                                                                <span></span>
+                                                            </label>
+                                                        </td>
             											<td>{{$lr->rule_name}}</td>
             											<td>{{$lr->source_campaign}}</td>
             											<td>{{$lr->source_subcampaign}}</td>

@@ -95,6 +95,7 @@ var Master = {
         $('.btn.disable').on('click', this.preventDefault);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('.add_rule').on('submit', this.create_leadrule);
+        $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
 	},
 
     hide_modal_error:function(){
@@ -363,6 +364,38 @@ var Master = {
         } else {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
+    },
+
+    toggle_leadrule:function(){
+        var checked;
+        var ruleid = $(this).parent().parent().parent().data('ruleid');
+
+        if($(this).is(':checked')){
+            $(this).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(this).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'tools/toggle_rule',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:ruleid
+
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
     },
 
     create_leadrule:function(e){

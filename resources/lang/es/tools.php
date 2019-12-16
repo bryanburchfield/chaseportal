@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'active'		=> 'Activo',
 	'add_new_rule'	=> 'Agregar Regla Nueva',
 	'add_rule'		=> 'Agregar Regla',
 	'campaign'          => 'Campaña',
