@@ -130,9 +130,10 @@ if (Auth::user()->isType('demo')) {
 
                                         <div class="col-sm-9 pl0">
                                             <div class="card" id="condition">
+
                                                 <div class="form-group">
                                                     {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                                    {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => 'Lead Age', 'lead_attempts' => '# of Attempts on Lead', 'days_called' => 'Distinct Days Leads are Called'), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+                                                    {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.numb_lead_attempts'), 'days_called' => __('tools.distinct_days')), null, ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
                                                 </div>
 
                                                 <div class="form-group">
