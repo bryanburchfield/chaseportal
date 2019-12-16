@@ -1030,7 +1030,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'tools/contactflow_builder/view_rule',
+            url: '/tools/contactflow_builder/view_rule',
             type: 'POST',
             dataType: 'json',
             data: { id: leadid },
