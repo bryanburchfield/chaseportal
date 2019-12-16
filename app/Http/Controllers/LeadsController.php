@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -77,6 +78,11 @@ class LeadsController extends Controller
         if (!empty($lr['deleted_at'])) {
             $lr['deleted_at'] = Carbon::parse($lr['deleted_at'])->isoFormat('L LT');
         }
+
+        // Converts NULL to ''
+        array_walk_recursive($lr, function (&$item) {
+            $item = strval($item);
+        });
 
         return $lr;
     }
