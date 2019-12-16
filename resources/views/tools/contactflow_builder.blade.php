@@ -23,11 +23,7 @@ if (Auth::user()->isType('demo')) {
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="{{url('/tools/contactflow_builder')}}">Contact Flow Builder</a></li>
-                            <li><a href="{{url('/tools/dnc_importer')}}">DNC Importer</a></li>
-                        </ul>
-
+                    @include('tools.shared.topnav', ['toolpage' => 'rules'])
                         <div class="tab-content">
                             <div class="tab-pane active mt30" id="contactflow_builder">
                                 <h2 class="bbnone">Contact Flow Builder</h2>
