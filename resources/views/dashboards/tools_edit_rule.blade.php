@@ -38,7 +38,7 @@
 
             					<div class="form-group">
             						{!! Form::label('filter_type', __('tools.filter_type')) !!}
-            						{!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.numb_lead_attempts'), 'days_called' => __('tools.distinct_days')), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
+            						{!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
             					</div>
 
 								<div class="form-group">
