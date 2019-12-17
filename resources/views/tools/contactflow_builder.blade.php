@@ -74,8 +74,16 @@ if (Auth::user()->isType('demo')) {
                                                                 <td>{{$lr->rule_name}}</td>
                                                                 <td>{{$lr->source_campaign}}</td>
                                                                 <td>{{$lr->source_subcampaign}}</td>
-                                                                <td>{{$lr->filter_type}}</td>
-                                                                <td>{{$lr->filter_value}}</td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->type}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->value}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
                                                                 <td>{{$lr->destination_campaign}}</td>
                                                                 <td>{{$lr->destination_subcampaign}}</td>
                                                                 @if(!$demo)
@@ -233,7 +241,7 @@ if (Auth::user()->isType('demo')) {
 		</div>
 	</div>
 
-<!-- Lead Details Modal -->
+<!-- Rule Details Modal -->
 <div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -251,7 +259,7 @@ if (Auth::user()->isType('demo')) {
     </div>
 </div>
 
-<!-- Delete Recipient Modal -->
+<!-- Delete Rule Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

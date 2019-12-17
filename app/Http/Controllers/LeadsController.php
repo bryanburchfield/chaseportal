@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -44,7 +45,9 @@ class LeadsController extends Controller
 
         // Translaste filter type
         foreach ($lead_rules as &$lead_rule) {
-            $lead_rule->filter_type = trans('tools.' . $lead_rule->filter_type);
+            foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
+                $lead_rule_filter->type = trans('tools.' . $lead_rule_filter->type);
+            }
         }
 
         $page = [
@@ -90,8 +93,13 @@ class LeadsController extends Controller
         $lead_rule = LeadRule::withTrashed()
             ->where('id', $request->id)
             ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail()
-            ->toArray();
+            ->firstOrFail();
+
+        foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
+            $lead_rule_filter->type = trans('tools.' . $lead_rule_filter->type);
+        }
+
+        $lead_rule = $lead_rule->toArray();
 
         $tz = Auth::user()->iana_tz;
         $lead_rule['created_at'] = Carbon::parse($lead_rule['created_at'])->tz($tz)->isoFormat('L LT');
@@ -104,8 +112,6 @@ class LeadsController extends Controller
         array_walk_recursive($lead_rule, function (&$item) {
             $item = strval($item);
         });
-
-        $lead_rule['filter_type'] = trans('tools.' . $lead_rule['filter_type']);
 
         return $lead_rule;
     }
@@ -144,8 +150,11 @@ class LeadsController extends Controller
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    public function createRule(AddLeadFilterRule $request)
+    // public function createRule(AddLeadFilterRule $request)
+    public function createRule(Request $request)
     {
+        Log::debug($request->all());
+        die();
         $lead_rule = new LeadRule();
         $lead_rule->fill($request->all());
         $lead_rule->group_id = Auth::user()->group_id;

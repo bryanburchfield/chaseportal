@@ -18,15 +18,15 @@ class CreateLeadRuleFiltersTable extends Migration
         Schema::create('lead_rule_filters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('lead_rule_id');
-            $table->string('filter_type');
-            $table->integer('filter_value');
+            $table->string('type');
+            $table->integer('value');
         });
 
         foreach (LeadRule::withTrashed()->get() as $lead_rule) {
             LeadRuleFilter::create([
                 'lead_rule_id' => $lead_rule->id,
-                'filter_type' => $lead_rule->filter_type,
-                'filter_value' => $lead_rule->filter_value,
+                'type' => $lead_rule->filter_type,
+                'value' => $lead_rule->filter_value,
             ]);
         }
 

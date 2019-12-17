@@ -10,8 +10,8 @@ class LeadRuleFilter extends Model
 
     protected $fillable = [
         'lead_rule_id',
-        'filter_type',
-        'filter_value',
+        'type',
+        'value',
     ];
 
     public function leadRule()
