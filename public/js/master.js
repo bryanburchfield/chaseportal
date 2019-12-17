@@ -21,6 +21,7 @@ var Master = {
 	active_camp_search: '',
 	tick_color: '#aaa',
 	gridline_color: '#1A2738',
+    leadrule_filters: $('.lead_rule_filter_type option').length -1,
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
@@ -36,7 +37,7 @@ var Master = {
 	}),
 
 	init:function(){
-
+         console.log(Master.leadrule_filters);
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
             Master.gridline_color='#1A2738';
@@ -76,8 +77,8 @@ var Master = {
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
-        $('.add_rule #filter_type, .edit_rule #update_filter_type').on('change', this.change_filter_label);
         $('.btn.disable').on('click', this.preventDefault);
+
         /// lead rule handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
@@ -87,6 +88,9 @@ var Master = {
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
+        $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
+        $('.edit_rule #update_filter_type').on('change', this.change_filter_label);
+        $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
 	},
 
     hide_modal_error:function(){
@@ -348,12 +352,24 @@ var Master = {
     },
 
     change_filter_label: function () {
-
+        console.log($(this).val());
         if ($(this).val() == 'lead_attempts') {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.numb_filter_attempts'));
         } else {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
+    },
+
+    add_leadrule_filter:function(e){
+        e.preventDefault();
+
+        Master.leadrule_filters = Master.leadrule_filters -1;
+        var new_filter = $(this).parent().parent().parent().clone();
+        console.log($(this).length);
+        console.log(new_filter);
+        $(new_filter).insertAfter('.leadfilter_row').last();
+        $(new_filter).find('.flowchart_element span').text('AND');
+        $(this).remove();
     },
 
     toggle_leadrule:function(){
@@ -394,8 +410,8 @@ var Master = {
         var rule_name = $('#rule_name').val(),
             source_campaign = $('#campaign_select').val(),
             source_subcampaign = $('#source_subcampaign').val(),
-            filter_type = $('#filter_type').val(),
-            filter_value = $('#filter_value').val(),
+            filter_type = $('.lead_rule_filter_type').val(),
+            filter_value = $('.lead_rule_filter_value').val(),
             destination_campaign = $('#destination_campaign').val(),
             destination_subcampaign = $('#destination_subcampaign').val(),
             description = $('#description').val()

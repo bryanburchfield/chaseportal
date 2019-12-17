@@ -127,7 +127,7 @@ if (Auth::user()->isType('demo')) {
                                                 </div>
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row leadfilter_row">
                                                 <div class="col-sm-3 pr0">
                                                     <div class="flowchart_element condition mt35"><span>{{__('general.when')}}</span></div>
                                                     <div class="vertical-line"></div>
@@ -138,13 +138,15 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group">
                                                             {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                                            {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+                                                            {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control lead_rule_filter_type", 'required'=>true]) !!}
                                                         </div>
 
                                                         <div class="form-group">
                                                             {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-                                                            {!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
+                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'required'=>true, 'id'=>'']) !!}
                                                         </div>
+
+                                                        <a href="#" class="btn add_leadrule_filter"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
                                                     </div>
                                                 </div>
                                             </div>

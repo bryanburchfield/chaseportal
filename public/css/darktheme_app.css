@@ -2895,6 +2895,21 @@ div.vertical-line {
   border-bottom: none;
 }
 
+.add_leadrule_filter {
+  color: #E15B23;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.add_leadrule_filter:hover {
+  color: #33A09B;
+}
+
+.add_leadrule_filter:focus {
+  color: #E15B23;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

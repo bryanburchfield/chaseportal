@@ -2467,6 +2467,16 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
+.add_leadrule_filter{
+    color: $orange;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &:hover{color: $green;}
+    &:focus{color: $orange;}
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
