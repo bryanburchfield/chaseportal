@@ -19,6 +19,6 @@ Route::prefix('tools')->group(function () {
         Route::post('contactflow_builder/view_rule', 'LeadsController@viewRule');
 
         // DNC Import
-        Route::get('dnc_importer/', 'DNCController@index');
+        Route::get('dnc_importer/', 'DncController@index');
     });
 });

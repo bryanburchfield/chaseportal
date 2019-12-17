@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DNCController extends Controller
+class DncController extends Controller
 {
     public function index()
     {
