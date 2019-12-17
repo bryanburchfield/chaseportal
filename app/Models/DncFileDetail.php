@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DncFileDetail extends Model
 {
     protected $fillable = [
-        'dnc_id',
+        'dnc_file_id',
         'phone',
         'processed_at',
         'succeeded',

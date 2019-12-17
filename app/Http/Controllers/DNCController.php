@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DncFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DncController extends Controller
 {
@@ -12,8 +15,38 @@ class DncController extends Controller
         $page['type'] = 'page';
         $data = [
             'page' => $page,
+            'files' => $this->getFiles(),
         ];
 
         return view('tools.dnc_importer')->with($data);
+    }
+
+    private function getFiles()
+    {
+        $tz = Auth::user()->ianaTz;
+
+        $files = DncFile::select('id', 'description', 'uploaded_at', 'processed_at')
+            ->orderBy('uploaded_at', 'desc')
+            ->get();
+
+        foreach ($files as $file) {
+            // get details
+            $file->recs = $file->dncFileDetails->count();
+            $file->errors = $file->dncFileDetails->where('succeeded', false)->count();
+
+            // format dates
+            $file->uploaded_at = Carbon::parse($file->uploaded_at)
+                ->tz($tz)
+                ->toDateTimeString();
+            if (!empty($file->processed_at)) {
+                $file->processed_at = Carbon::parse($file->processed_at)
+                    ->tz($tz)
+                    ->toDateTimeString();
+            } else {
+                $file->processed_at = '';
+            }
+        }
+
+        return $files->toArray();
     }
 }

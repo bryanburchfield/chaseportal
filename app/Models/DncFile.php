@@ -14,6 +14,10 @@ class DncFile extends Model
         'processed_at',
     ];
 
+    protected $hidden = [
+        'dncFileDetails',
+    ];
+
     public function dncFileDetails()
     {
         return $this->hasMany('App\Models\DncFileDetail');
