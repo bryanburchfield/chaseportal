@@ -87,27 +87,27 @@ class LeadsController extends Controller
      */
     public function viewRule(Request $request)
     {
-        $lr = LeadRule::withTrashed()
+        $lead_rule = LeadRule::withTrashed()
             ->where('id', $request->id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail()
             ->toArray();
 
         $tz = Auth::user()->iana_tz;
-        $lr['created_at'] = Carbon::parse($lr['created_at'])->tz($tz)->isoFormat('L LT');
+        $lead_rule['created_at'] = Carbon::parse($lead_rule['created_at'])->tz($tz)->isoFormat('L LT');
 
-        if (!empty($lr['deleted_at'])) {
-            $lr['deleted_at'] = Carbon::parse($lr['deleted_at'])->isoFormat('L LT');
+        if (!empty($lead_rule['deleted_at'])) {
+            $lead_rule['deleted_at'] = Carbon::parse($lead_rule['deleted_at'])->isoFormat('L LT');
         }
 
         // Converts NULL to ''
-        array_walk_recursive($lr, function (&$item) {
+        array_walk_recursive($lead_rule, function (&$item) {
             $item = strval($item);
         });
 
-        $lr['filter_type'] = trans('tools.' . $lr['filter_type']);
+        $lead_rule['filter_type'] = trans('tools.' . $lead_rule['filter_type']);
 
-        return $lr;
+        return $lead_rule;
     }
 
     /**
@@ -119,7 +119,7 @@ class LeadsController extends Controller
      */
     public function editLeadRule(Request $request)
     {
-        $lr = $this->getRule($request->id);
+        $lead_rule = $this->getRule($request->id);
 
         $campaigns = $this->getAllCampaigns();
 
@@ -128,7 +128,7 @@ class LeadsController extends Controller
             'type' => 'other',
         ];
         $data = [
-            'lead_rule' => $lr,
+            'lead_rule' => $lead_rule,
             'page' => $page,
             'campaigns' => $campaigns,
         ];
@@ -146,11 +146,11 @@ class LeadsController extends Controller
      */
     public function createRule(AddLeadFilterRule $request)
     {
-        $lr = new LeadRule();
-        $lr->fill($request->all());
-        $lr->group_id = Auth::user()->group_id;
-        $lr->active = true;
-        $lr->save();
+        $lead_rule = new LeadRule();
+        $lead_rule->fill($request->all());
+        $lead_rule->group_id = Auth::user()->group_id;
+        $lead_rule->active = true;
+        $lead_rule->save();
 
         return ['status' => 'success'];
     }
@@ -163,10 +163,10 @@ class LeadsController extends Controller
      */
     public function toggleRule(Request $request)
     {
-        $lr = $this->getRule($request->id);
+        $lead_rule = $this->getRule($request->id);
 
-        $lr->active = !$lr->active;
-        $lr->save();
+        $lead_rule->active = !$lead_rule->active;
+        $lead_rule->save();
 
         return ['status' => 'success'];
     }
@@ -183,12 +183,12 @@ class LeadsController extends Controller
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
-        $lr = $this->getRule($request->id);
+        $lead_rule = $this->getRule($request->id);
 
-        $lr->fill($request->all());
+        $lead_rule->fill($request->all());
 
-        if ($lr->isDirty()) {
-            $lr->delete();
+        if ($lead_rule->isDirty()) {
+            $lead_rule->delete();
             $this->createRule($request);
         }
 
@@ -203,9 +203,9 @@ class LeadsController extends Controller
      */
     public function deleteRule(Request $request)
     {
-        $lr = $this->getRule($request->id);
+        $lead_rule = $this->getRule($request->id);
 
-        if ($lr->delete()) {
+        if ($lead_rule->delete()) {
             return ['status' => 'success'];
         } else {
             return ['status' => 'failed'];
