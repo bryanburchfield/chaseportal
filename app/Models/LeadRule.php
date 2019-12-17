@@ -13,8 +13,6 @@ class LeadRule extends Model
         'rule_name',
         'source_campaign',
         'source_subcampaign',
-        'filter_type',
-        'filter_value',
         'destination_campaign',
         'destination_subcampaign',
         'description',
@@ -24,5 +22,10 @@ class LeadRule extends Model
     public function leadMoves()
     {
         return $this->hasMany('App\Models\LeadMove');
+    }
+
+    public function leadRuleFilters()
+    {
+        return $this->hasMany('App\Models\LeadRuleFilter');
     }
 }
