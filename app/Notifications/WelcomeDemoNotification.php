@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Carbon;
 
 class WelcomeDemoNotification extends Notification
 {
@@ -41,9 +42,12 @@ class WelcomeDemoNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $tz = $this->user->iana_tz;
+        $expiration = Carbon::parse($this->user->expiration)->tz($tz)->toDayDateTimeString();
+
         $data = [
             'name' => $this->user->name,
-            'expiration' => $this->user->expiration,
+            'expiration' => $expiration,
             'link' => url("/demo/" . $this->user->app_token),
             'url' => url('/') . '/',
         ];
