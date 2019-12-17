@@ -362,14 +362,22 @@ var Master = {
 
     add_leadrule_filter:function(e){
         e.preventDefault();
+        
 
-        Master.leadrule_filters = Master.leadrule_filters -1;
-        var new_filter = $(this).parent().parent().parent().clone();
-        console.log($(this).length);
-        console.log(new_filter);
-        $(new_filter).insertAfter('.leadfilter_row').last();
-        $(new_filter).find('.flowchart_element span').text('AND');
-        $(this).remove();
+        console.log(Master.leadrule_filters);
+
+        if(Master.leadrule_filters>1){
+
+            Master.leadrule_filters = Master.leadrule_filters -1;
+            var new_filter = $(this).parent().parent().parent().clone();
+            $(new_filter).insertAfter('.leadfilter_row:last');
+            $(new_filter).find('.flowchart_element span').text('AND');
+            if(Master.leadrule_filters == 1){
+                $(new_filter).find('a').remove();
+            }
+            $(this).remove();
+        }
+
     },
 
     toggle_leadrule:function(){
