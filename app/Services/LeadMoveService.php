@@ -202,7 +202,21 @@ class LeadMoveService
             $bind['subcampaign'] = $lead_rule->source_subcampaign;
         }
 
-        return $this->runSql($sql, $bind);
+        $leads = $this->runSql($sql, $bind);
+
+        // if source & dest camps are the same, filter out any where subcamp already matches
+        if ($lead_rule->source_campaign === $lead_rule->destination_campaign) {
+            $newleads = [];
+
+            foreach ($leads as $lead) {
+                if ($lead['Subcampaign'] != $lead_rule->destination_subcampaign) {
+                    $newleads[] = $lead;
+                }
+            }
+            $leads = $newleads;
+        }
+
+        return $leads;
     }
 
     private function sqlAge($lead_rule)
