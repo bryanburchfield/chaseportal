@@ -24,6 +24,7 @@ if (Auth::user()->isType('demo')) {
 			    <div class="row">
 			    	<div class="col-sm-12">
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
+
 						<div class="tab-pane mt30" id="dnc_importer">
                             <h2 class="bbnone">Upload a DNC File</h2>
                             File must be in CSV format.
