@@ -49,4 +49,31 @@ class DncController extends Controller
 
         return $files->toArray();
     }
+
+    public function uploadIndex()
+    {
+        $page['menuitem'] = 'tools';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'files' => $this->getFiles(),
+        ];
+
+        return view('tools.dnc_upload')->with($data);
+    }
+
+    public function uploadFile(Request $request)
+    {
+        return $request->all();
+    }
+
+    public function deleteFile(Request $request)
+    {
+        return $request->all();
+    }
+
+    public function processFile(Request $request)
+    {
+        return $request->all();
+    }
 }

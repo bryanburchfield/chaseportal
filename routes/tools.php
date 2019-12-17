@@ -20,5 +20,9 @@ Route::prefix('tools')->group(function () {
 
         // DNC Import
         Route::get('dnc_importer/', 'DncController@index');
+        Route::get('dnc_importer/upload', 'DncController@uploadIndex');
+        Route::post('dnc_importer/delete_file', 'DncController@deleteFile');
+        Route::post('dnc_importer/process_file', 'DncController@processFile');
+        Route::post('dnc_importer/upload_file', 'DncController@uploadFile');
     });
 });
