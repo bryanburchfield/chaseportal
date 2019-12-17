@@ -37,7 +37,6 @@ var Master = {
 	}),
 
 	init:function(){
-         console.log(Master.leadrule_filters);
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
             Master.gridline_color='#1A2738';
@@ -352,7 +351,7 @@ var Master = {
     },
 
     change_filter_label: function () {
-        console.log($(this).val());
+
         if ($(this).val() == 'lead_attempts') {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.numb_filter_attempts'));
         } else {
@@ -362,22 +361,24 @@ var Master = {
 
     add_leadrule_filter:function(e){
         e.preventDefault();
-        
+        console.log();
+        var filtertype = $(this).prev().prev().find('select').val();
 
-        console.log(Master.leadrule_filters);
+        if(filtertype){
+            if(Master.leadrule_filters>1){
+                Master.leadrule_filters = Master.leadrule_filters -1;
+                var new_filter = $(this).parent().parent().parent().clone();
+                $(new_filter).insertAfter('.leadfilter_row:last');
+                $(new_filter).find('.flowchart_element span').text('AND');
 
-        if(Master.leadrule_filters>1){
-
-            Master.leadrule_filters = Master.leadrule_filters -1;
-            var new_filter = $(this).parent().parent().parent().clone();
-            $(new_filter).insertAfter('.leadfilter_row:last');
-            $(new_filter).find('.flowchart_element span').text('AND');
-            if(Master.leadrule_filters == 1){
-                $(new_filter).find('a').remove();
+                if(Master.leadrule_filters == 1){
+                    $(new_filter).find('a').remove();
+                }
+                $(this).remove();
             }
-            $(this).remove();
+        }else{
+            alert('Please select a filter before adding a new one');
         }
-
     },
 
     toggle_leadrule:function(){
@@ -520,7 +521,7 @@ var Master = {
 			dataType: 'json',
 			data: { lead_move_id: lead_move_id },
 			success: function (response) {
-                console.log(response);
+
 				$('#reverseLeadMoveModal').find('.modal-footer').find('.alert').remove();
 				if (response.error) {
 
