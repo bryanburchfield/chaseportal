@@ -239,7 +239,7 @@ if (Auth::user()->isType('demo')) {
 		</div>
 	</div>
 
-<!-- Lead Details Modal -->
+<!-- Rule Details Modal -->
 <div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -257,7 +257,7 @@ if (Auth::user()->isType('demo')) {
     </div>
 </div>
 
-<!-- Delete Recipient Modal -->
+<!-- Delete Rule Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
