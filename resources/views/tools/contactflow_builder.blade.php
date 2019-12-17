@@ -258,7 +258,7 @@ if (Auth::user()->isType('demo')) {
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_rule')}}</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" class="rule_id" name="rule_id" value="">
+                <input type="hidden" class="lead_rule_id" name="lead_rule_id" value="">
                 <input type="hidden" class="name" name="name" value="">
                <h3>{{__('tools.confirm_delete')}} <span class="rule_name"></span>?</h3>
             </div>

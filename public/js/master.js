@@ -449,14 +449,13 @@ var Master = {
 	delete_rule: function (e) {
 		e.preventDefault();
 
+        var lead_rule_id = $('.lead_rule_id').val();
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			}
 		});
-
-		var lead_rule_id = $('.rule_id').val();
-        console.log(lead_rule_id);
 
 		$.ajax({
 			url: '/tools/contactflow_builder/delete_rule',
@@ -467,11 +466,9 @@ var Master = {
 			},
 
 			success: function (response) {
-                return false;
 				window.location.href = '/tools/contactflow_builder';
 			},
 			error: function (data) {
-                return false;
 				window.location.href = '/tools/contactflow_builder';
 			}
 		});
@@ -1063,7 +1060,8 @@ var Master = {
 	pass_user_removemodal: function () {
 		var id = $(this).data('user');
 		var name = $(this).data('name');
-		$('#deleteUserModal .user_id, #deleteRuleModal .rule_id').val(id);
+
+		$('#deleteUserModal .user_id, #deleteRuleModal .lead_rule_id').val(id);
 		$('#deleteUserModal .name, #deleteRuleModal .name').val(name);
 		$('#deleteUserModal .username, #deleteRuleModal .rule_name').html(name);
 	},
