@@ -321,7 +321,7 @@ var Master = {
         });
 
         $.ajax({
-            url: '/dashboards/tools/get_subcampaigns' ,
+            url: '/dashboards/reports/get_subcampaigns' ,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -496,7 +496,7 @@ var Master = {
 			dataType: 'json',
 			data: { lead_move_id: lead_move_id },
 			success: function (response) {
-
+                console.log(response);
 				$('#reverseLeadMoveModal').find('.modal-footer').find('.alert').remove();
 				if (response.error) {
 
