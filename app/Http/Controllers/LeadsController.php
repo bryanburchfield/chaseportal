@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -144,8 +145,11 @@ class LeadsController extends Controller
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    public function createRule(AddLeadFilterRule $request)
+    // public function createRule(AddLeadFilterRule $request)
+    public function createRule(Request $request)
     {
+        Log::debug($request->all());
+        die();
         $lead_rule = new LeadRule();
         $lead_rule->fill($request->all());
         $lead_rule->group_id = Auth::user()->group_id;
