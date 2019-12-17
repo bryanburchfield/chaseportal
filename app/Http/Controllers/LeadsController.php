@@ -45,7 +45,9 @@ class LeadsController extends Controller
 
         // Translaste filter type
         foreach ($lead_rules as &$lead_rule) {
-            $lead_rule->filter_type = trans('tools.' . $lead_rule->filter_type);
+            foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
+                $lead_rule_filter->type = trans('tools.' . $lead_rule_filter->type);
+            }
         }
 
         $page = [

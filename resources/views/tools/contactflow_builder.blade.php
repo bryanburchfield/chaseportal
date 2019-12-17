@@ -74,8 +74,16 @@ if (Auth::user()->isType('demo')) {
                                                                 <td>{{$lr->rule_name}}</td>
                                                                 <td>{{$lr->source_campaign}}</td>
                                                                 <td>{{$lr->source_subcampaign}}</td>
-                                                                <td>{{$lr->filter_type}}</td>
-                                                                <td>{{$lr->filter_value}}</td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->type}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->value}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
                                                                 <td>{{$lr->destination_campaign}}</td>
                                                                 <td>{{$lr->destination_subcampaign}}</td>
                                                                 @if(!$demo)
