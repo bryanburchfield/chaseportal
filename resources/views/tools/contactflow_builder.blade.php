@@ -108,7 +108,7 @@ if (Auth::user()->isType('demo')) {
 
                                             <div class="row">
                                                 <div class="col-sm-3 pr0">
-                                                    <div class="flowchart_element when"><span>{{__('general.when')}}</span></div>
+                                                    <div class="flowchart_element when"><span>{{__('general.where')}}</span></div>
                                                     <div class="vertical-line"></div>
                                                 </div>
 
@@ -129,7 +129,7 @@ if (Auth::user()->isType('demo')) {
 
                                             <div class="row">
                                                 <div class="col-sm-3 pr0">
-                                                    <div class="flowchart_element condition mt35"><span>{{__('general.condition')}}</span></div>
+                                                    <div class="flowchart_element condition mt35"><span>{{__('general.when')}}</span></div>
                                                     <div class="vertical-line"></div>
                                                 </div>
 

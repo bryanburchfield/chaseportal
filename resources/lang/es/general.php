@@ -67,5 +67,6 @@ return [
 	'update'					=> 'Actualizar',
 	'view_report'				=> 'Ver Informe',
 	'when'						=> 'Cuando',
+	'where'						=> 'Dónde',
 	'yesterday'					=> 'Ayer',
 ];
