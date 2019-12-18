@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DbLeadmove;
 use Illuminate\Support\Facades\Auth;
 use App\Includes\PowerImportAPI;
 use App\Models\LeadRule;
