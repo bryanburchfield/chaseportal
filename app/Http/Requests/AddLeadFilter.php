@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 
-class AddLeadFilterRule extends FormRequest
+class AddLeadFilter extends FormRequest
 {
     use CampaignTraits;
     use SqlServerTraits;
