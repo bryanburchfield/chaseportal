@@ -2564,6 +2564,11 @@ a.remove_filter {
   color: #d9534f;
   float: right;
   font-size: 15px;
+  display: none;
+}
+
+.leadfilter_row .card {
+  overflow: auto;
 }
 
 /* ---------------------------------------------------

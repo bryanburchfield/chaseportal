@@ -419,12 +419,13 @@ var Master = {
                 $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                 $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
                 $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                $(new_filter).find('.remove_filter').show();
                 if(Master.leadrule_filters == 1){
-                    $(new_filter).find('a').remove();
+                    $(new_filter).find('a.add_leadrule_filter').hide();
                 }
                 $(this).prev().prev().find('select').attr('disabled', true);
                 $(this).prev().find('input').attr('disabled', true);
-                $(this).remove();
+                $(this).hide();
             }
         }else{
             Master.flowchart_vline_height = $(this).parent().parent().parent().find('.vertical-line').height();
@@ -433,16 +434,20 @@ var Master = {
         }
     },
 
-    // remove_leadrule_filter:function(e){
-    //     e.preventDefault();
-    //     $(this).parent().parent().parent().remove();
-    //     $(this).parent().parent().parent().prev().find()
-    //     Master.leadrule_filters = Master.leadrule_filters -1;
+    remove_leadrule_filter:function(e){
+        e.preventDefault();
+        //// rebuild previous filter row before deleting
+        var removed_filter = $(this).parent().parent().parent();
+        removed_filter.prev().find('.col-sm-9 input').removeAttr('disabled');
+        removed_filter.prev().find('select').removeAttr('disabled');
+        removed_filter.prev().find('a.add_leadrule_filter').show();
 
-    //     if($('.lead_rule_filter_type option').length == 1){
-
-    //     }
-    // },
+        //// remove element last
+        removed_filter.remove();
+        Master.leadrule_filters = Master.leadrule_filters +1;
+        if($('.lead_rule_filter_type option').length == 1){
+        }
+    },
 
     toggle_new_subcampaign:function(e){
         e.preventDefault();
