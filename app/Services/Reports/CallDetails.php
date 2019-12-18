@@ -56,7 +56,8 @@ class CallDetails
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
-        // Add 'all' to list of call types
+        // Remove SMS and add 'all' to list of call types
+        unset($filters['call_types']['TextMessage']);
         $filters['call_types'] = array_merge(['' => 'All'], $filters['call_types']);
 
         return $filters;
@@ -185,7 +186,6 @@ class CallDetails
                     WHEN DR.CallType = 4 THEN 'Conference'
                     WHEN DR.CallType = 5 THEN 'Progressive'
                     WHEN DR.CallType = 6 THEN 'Transferred'
-                    WHEN DR.CallType = 7 THEN 'TextMessage'
                     WHEN DR.CallType >= 10 THEN 'Transferred'
                     ELSE 'Unknown'
                 END as CallType,
@@ -198,6 +198,7 @@ class CallDetails
             WHERE DR.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND DR.Date <= :enddate$i
+            AND DR.CallType != 7
             $where";
 
             $union = 'UNION ALL';
