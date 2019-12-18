@@ -21,6 +21,7 @@ return [
 	'edit_rule'		=> 'Edit Rule',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'invalid_filter' => 'Filter(s) missing or invalid',
 	'lead_age'      => 'Lead Age',
 	'lead_attempts' => '# of Attempts on Lead',
 	'lead_details'	=> 'Lead Details',

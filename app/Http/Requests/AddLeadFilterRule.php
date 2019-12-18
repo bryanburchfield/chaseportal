@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidRuleFilters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -21,6 +22,18 @@ class AddLeadFilterRule extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // $this->merge([
+        //     'field' => 'value',
+        // ]);
     }
 
     /**
@@ -56,9 +69,9 @@ class AddLeadFilterRule extends FormRequest
                 },
             ],
             'source_subcampaign' => 'nullable',
-            'filter_type' => [
+            'filters' => [
                 'required',
-                Rule::in(['lead_age', 'lead_attempts', 'days_called']),
+                new ValidRuleFilters(),
             ],
             'destination_campaign' => [
                 'required',
