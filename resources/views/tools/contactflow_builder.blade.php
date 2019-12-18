@@ -134,10 +134,10 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group new_source_subcampaign_group">
                                                             {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::text('source_subcampaign', null, ['class'=>'form-control new_source_subcampaign']) !!}
+                                                            {!! Form::text('source_subcampaign', null, ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
                                                         </div>
 
-                                                        <a href="#" class="btn add_new_subcampaign"><i class="fas fa-plus-circle"></i> Add New Subcampaign</a>
+                                                        <a href="#" class="btn add_new_subcampaign">Add New Subcampaign</a>
                                                     </div>
                                                 </div>
                                             </div>

@@ -405,7 +405,11 @@ var Master = {
                 Master.leadrule_filters = Master.leadrule_filters -1;
                 var new_filter = $(this).parent().parent().parent().clone();
                 $(new_filter).insertAfter('.leadfilter_row:last');
+                var i = $('.leadfilter_row').length;
+                $(new_filter).find('.lead_rule_filter_value').val('');
                 $(new_filter).find('.flowchart_element span').text('AND');
+                $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
+                $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
                 $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
                 if(Master.leadrule_filters == 1){
                     $(new_filter).find('a').remove();
@@ -422,7 +426,7 @@ var Master = {
     toggle_new_subcampaign:function(e){
         e.preventDefault();
 
-        $('.source_subcampaign, .new_source_subcampaign').val('');
+        $('.source_subcampaign').val('');
 
         if(!$(this).hasClass('undo_new_subcampaign')){
             $('.source_subcampaign').parent().hide();
@@ -472,13 +476,21 @@ var Master = {
 
         var rule_name = $('#rule_name').val(),
             source_campaign = $('#campaign_select').val(),
-            source_subcampaign = $('#source_subcampaign').val(),
-            filter_type = $('.lead_rule_filter_type').val(),
-            filter_value = $('.lead_rule_filter_value').val(),
             destination_campaign = $('#destination_campaign').val(),
             destination_subcampaign = $('#destination_subcampaign').val(),
             description = $('#description').val()
         ;
+
+        var filters=[];
+        $('.lead_rule_filter_type').each(function(){
+            filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+        });
+
+        if($('#source_subcampaign').val() !=''){
+            source_subcampaign=$('#source_subcampaign').val();
+        }else{
+            source_subcampaign=$('#new_source_subcampaign').val();
+        }
 
         $.ajaxSetup({
             headers: {
@@ -494,11 +506,10 @@ var Master = {
                 rule_name:rule_name,
                 source_campaign:source_campaign,
                 source_subcampaign:source_subcampaign,
-                filter_type:filter_type,
-                filter_value:filter_value,
                 destination_campaign:destination_campaign,
                 destination_subcampaign:destination_subcampaign,
-                description:description
+                description:description,
+                filters:filters
             },
 
             success:function(response){
