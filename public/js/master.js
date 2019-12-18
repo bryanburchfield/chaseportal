@@ -77,6 +77,7 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
+        $('#when .form-group #campaign_select').on('change', this.get_leadrule_subcampaigns);
 
         /// lead rule handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
@@ -350,6 +351,42 @@ var Master = {
         });
     },
 
+    get_leadrule_subcampaigns:function(){
+        var campaign = $(this).val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: 'contactflow_builder/get_subcampaigns' ,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                campaign: campaign,
+            },
+
+            success:function(response){
+                console.log(response);
+
+                // var subcampaigns='<option value=""> Select One</option>';
+                // for(var i=0; i<response.subcampaigns.length;i++){
+                //     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                // }
+
+                // if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
+                //     $('#'+source).parent().next().find('select').empty();
+                //     $('#'+source).parent().next().find('select').append(subcampaigns);
+                // }else{
+                //     $('#subcampaign_select').empty();
+                //     $('#subcampaign_select').append(subcampaigns);
+                // }
+            }
+        });
+    },
+
     change_filter_label: function () {
 
         if ($(this).val() == 'lead_attempts') {
@@ -361,23 +398,33 @@ var Master = {
 
     add_leadrule_filter:function(e){
         e.preventDefault();
-        console.log();
-        var filtertype = $(this).prev().prev().find('select').val();
+        $('.alert.filter_error').hide();
+        var selected_filter = $(this).prev().prev().find('select').val();
+        var line_hgt;
+        console.log(line_hgt);
+        if(selected_filter){
+            console.log(line_hgt);
+            $(this).parent().parent().parent().find('.vertical-line').height(line_hgt);
+            console.log('Backto normal: ' + $(this).parent().parent().parent().find('.vertical-line').height());
 
-        if(filtertype){
             if(Master.leadrule_filters>1){
                 Master.leadrule_filters = Master.leadrule_filters -1;
                 var new_filter = $(this).parent().parent().parent().clone();
                 $(new_filter).insertAfter('.leadfilter_row:last');
                 $(new_filter).find('.flowchart_element span').text('AND');
-
+                $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
                 if(Master.leadrule_filters == 1){
                     $(new_filter).find('a').remove();
                 }
                 $(this).remove();
             }
         }else{
-            alert('Please select a filter before adding a new one');
+            console.log('Errored: ' +$(this).parent().parent().parent().find('.vertical-line').height());
+            line_hgt = $(this).parent().parent().parent().find('.vertical-line').height();
+            $(this).parent().find('.alert').show();
+
+            $(this).parent().parent().parent().find('.vertical-line').height(line_hgt + 180);
+            
         }
     },
 

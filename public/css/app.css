@@ -454,7 +454,8 @@ div.container-fluid.hero_bg .form-holder {
 .form.add_user .alert,
 .form.add_demo_user .alert,
 .edit_demo_user .alert-danger,
-.add_rule_error.alert-danger {
+.add_rule_error.alert-danger,
+.filter_error.alert {
   display: none;
 }
 
@@ -2400,7 +2401,7 @@ p.name i {
 div.vertical-line {
   width: 2px;
   background-color: #203047;
-  height: 130px;
+  height: 145px;
   position: absolute;
   margin: 0 auto;
   left: 51.5%;

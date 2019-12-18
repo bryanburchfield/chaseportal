@@ -155,6 +155,8 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <a href="#" class="btn add_leadrule_filter"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
+
+                                                        <div class="alert alert-danger filter_error mt20">Please select a filter before adding another one</div>
                                                     </div>
                                                 </div>
                                             </div>
