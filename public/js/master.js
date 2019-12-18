@@ -371,7 +371,6 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
 
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
@@ -481,7 +480,7 @@ var Master = {
             description = $('#description').val()
         ;
 
-        var filters=[];
+        var filters={};
         $('.lead_rule_filter_type').each(function(){
             filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
         });
@@ -520,6 +519,7 @@ var Master = {
             },
 
             success:function(response){
+                console.log(response);
                 window.location.href = 'contactflow_builder';
             },
             // error :function( data ) {
