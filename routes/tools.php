@@ -13,6 +13,7 @@ Route::prefix('tools')->group(function () {
         Route::post('contactflow_builder/', 'LeadsController@createRule');
         Route::post('contactflow_builder/delete_rule', 'LeadsController@deleteRule');
         Route::post('contactflow_builder/get_campaigns', 'LeadsController@getCampaigns');
+        Route::post('contactflow_builder/get_subcampaigns', 'LeadsController@getSubcampaigns');
         Route::post('contactflow_builder/reverse_move', 'LeadsController@reverseMove');
         Route::post('contactflow_builder/toggle_rule', 'LeadsController@toggleRule');
         Route::post('contactflow_builder/update_rule', 'LeadsController@updateRule');

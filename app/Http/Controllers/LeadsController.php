@@ -306,6 +306,13 @@ class LeadsController extends Controller
         return ['campaigns' => array_values($results)];
     }
 
+    public function getSubcampaigns(Request $request)
+    {
+        $results = $this->getAllSubcampaigns($request->campaign);
+
+        return ['campaigns' => array_values($results)];
+    }
+
     /**
      * Lead Dump
      * pull a file and dump to an ftp server
