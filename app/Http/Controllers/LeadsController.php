@@ -310,7 +310,7 @@ class LeadsController extends Controller
     {
         $results = $this->getAllSubcampaigns($request->campaign);
 
-        return ['campaigns' => array_values($results)];
+        return ['subcampaigns' => array_values($results)];
     }
 
     /**
