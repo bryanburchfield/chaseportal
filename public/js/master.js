@@ -22,6 +22,7 @@ var Master = {
 	tick_color: '#aaa',
 	gridline_color: '#1A2738',
     leadrule_filters: $('.lead_rule_filter_type option').length -1,
+    flowchart_vline_height:$('.add_leadrule_filter').parent().parent().parent().find('.vertical-line').height,
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
@@ -395,12 +396,9 @@ var Master = {
         e.preventDefault();
         $('.alert.filter_error').hide();
         var selected_filter = $(this).prev().prev().find('select').val();
-        var line_hgt;
-        console.log(line_hgt);
+
         if(selected_filter){
-            console.log(line_hgt);
-            $(this).parent().parent().parent().find('.vertical-line').height(line_hgt);
-            console.log('Backto normal: ' + $(this).parent().parent().parent().find('.vertical-line').height());
+            $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
 
             if(Master.leadrule_filters>1){
                 Master.leadrule_filters = Master.leadrule_filters -1;
@@ -414,12 +412,9 @@ var Master = {
                 $(this).remove();
             }
         }else{
-            console.log('Errored: ' +$(this).parent().parent().parent().find('.vertical-line').height());
-            line_hgt = $(this).parent().parent().parent().find('.vertical-line').height();
+            Master.flowchart_vline_height = $(this).parent().parent().parent().find('.vertical-line').height();
             $(this).parent().find('.alert').show();
-
-            $(this).parent().parent().parent().find('.vertical-line').height(line_hgt + 180);
-            
+            $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height + 180);
         }
     },
 
