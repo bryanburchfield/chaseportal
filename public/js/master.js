@@ -78,9 +78,9 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
-        $('#when .form-group #campaign_select').on('change', this.get_leadrule_subcampaigns);
 
         /// lead rule handlers
+        $('#when .form-group #campaign_select, #action #destination_campaign').on('change', this.get_leadrule_subcampaigns);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
@@ -92,6 +92,7 @@ var Master = {
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
         $('.edit_rule #update_filter_type').on('change', this.change_filter_label);
         $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
+        $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
         $('.add_new_subcampaign').on('click', this.toggle_new_subcampaign);
 	},
 
@@ -354,7 +355,9 @@ var Master = {
     },
 
     get_leadrule_subcampaigns:function(){
+
         var campaign = $(this).val();
+        var selector = $(this).attr('id');
 
         $.ajaxSetup({
             headers: {
@@ -377,8 +380,13 @@ var Master = {
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
                 }
 
-                $('#source_subcampaign').empty();
-                $('#source_subcampaign').append(subcampaigns);
+                if(selector == 'campaign_select'){
+                    $('#source_subcampaign').empty();
+                    $('#source_subcampaign').append(subcampaigns);
+                }else{
+                    $('#destination_subcampaign').empty();
+                    $('#destination_subcampaign').append(subcampaigns);
+                }
             }
         });
     },
@@ -396,8 +404,9 @@ var Master = {
         e.preventDefault();
         $('.alert.filter_error').hide();
         var selected_filter = $(this).prev().prev().find('select').val();
+        var selected_value = $(this).prev().find('input').val();
 
-        if(selected_filter){
+        if(selected_filter && selected_value){
             $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
 
             if(Master.leadrule_filters>1){
@@ -413,6 +422,8 @@ var Master = {
                 if(Master.leadrule_filters == 1){
                     $(new_filter).find('a').remove();
                 }
+                $(this).prev().prev().find('select').attr('disabled', true);
+                $(this).prev().find('input').attr('disabled', true);
                 $(this).remove();
             }
         }else{
@@ -422,20 +433,46 @@ var Master = {
         }
     },
 
+    // remove_leadrule_filter:function(e){
+    //     e.preventDefault();
+    //     $(this).parent().parent().parent().remove();
+    //     $(this).parent().parent().parent().prev().find()
+    //     Master.leadrule_filters = Master.leadrule_filters -1;
+
+    //     if($('.lead_rule_filter_type option').length == 1){
+
+    //     }
+    // },
+
     toggle_new_subcampaign:function(e){
         e.preventDefault();
 
-        $('.source_subcampaign').val('');
+        if($(this).parent().attr('id') == 'action'){
+            $('.destination_subcampaign').val('');
 
-        if(!$(this).hasClass('undo_new_subcampaign')){
-            $('.source_subcampaign').parent().hide();
-            $('.new_source_subcampaign_group').show().find('input').focus();
-            $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
+            if(!$(this).hasClass('undo_new_subcampaign')){
+                $('.destination_subcampaign').parent().hide();
+                $('.new_destination_subcampaign_group').show().find('input').focus();
+                $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
+            }else{
+                $('.destination_subcampaign').parent().show();
+                $('.new_destination_subcampaign_group').hide();
+                $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
+            }
         }else{
-            $('.source_subcampaign').parent().show();
-            $('.new_source_subcampaign_group').hide();
-            $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
+            $('.source_subcampaign').val('');
+
+            if(!$(this).hasClass('undo_new_subcampaign')){
+                $('.source_subcampaign').parent().hide();
+                $('.new_source_subcampaign_group').show().find('input').focus();
+                $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
+            }else{
+                $('.source_subcampaign').parent().show();
+                $('.new_source_subcampaign_group').hide();
+                $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
+            }
         }
+        
     },
 
     toggle_leadrule:function(){
@@ -496,13 +533,6 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        console.log(rule_name);
-        console.log(source_campaign);
-        console.log(source_subcampaign);
-        console.log(destination_campaign);
-        console.log(destination_subcampaign);
-        console.log(description);
-        console.log(filters);
 
         $.ajax({
             url: '/tools/contactflow_builder',
@@ -522,24 +552,24 @@ var Master = {
                 console.log(response);
                 window.location.href = 'contactflow_builder';
             },
-            // error :function( data ) {
-            //     $('.add_rule_error.alert').empty();
-            //     $('.add_rule_error.alert').hide();
+            error :function( data ) {
+                $('.add_rule_error.alert').empty();
+                $('.add_rule_error.alert').hide();
 
-            //     var errors = $.parseJSON(data.responseText);
-            //     $.each(errors, function (key, value) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
 
-            //         if($.isPlainObject(value)) {
-            //             $.each(value, function (key, value) {
-            //                 $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-            //             });
-            //         }else{
-            //             $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-            //         }
-            //     });
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                        });
+                    }else{
+                        $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                    }
+                });
 
-            //     $('.add_rule_error.alert li').first().remove();
-            // }
+                $('.add_rule_error.alert li').first().remove();
+            }
         });
     },
 

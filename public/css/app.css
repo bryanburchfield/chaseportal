@@ -456,7 +456,8 @@ div.container-fluid.hero_bg .form-holder {
 .edit_demo_user .alert-danger,
 .add_rule_error.alert-danger,
 .filter_error.alert,
-.new_source_subcampaign_group {
+.new_source_subcampaign_group,
+.new_destination_subcampaign_group {
   display: none;
 }
 
@@ -2542,7 +2543,7 @@ div.vertical-line {
 .add_leadrule_filter,
 .add_new_subcampaign,
 .undo_new_subcampaign {
-  color: #E15B23;
+  color: #33A09B;
   font-size: 15px;
   font-weight: 600;
 }
@@ -2550,13 +2551,19 @@ div.vertical-line {
 .add_leadrule_filter:hover,
 .add_new_subcampaign:hover,
 .undo_new_subcampaign:hover {
-  color: #33A09B;
+  color: #277976;
 }
 
 .add_leadrule_filter:focus,
 .add_new_subcampaign:focus,
 .undo_new_subcampaign:focus {
-  color: #E15B23;
+  color: #277976;
+}
+
+a.remove_filter {
+  color: #d9534f;
+  float: right;
+  font-size: 15px;
 }
 
 /* ---------------------------------------------------

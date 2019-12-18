@@ -137,7 +137,7 @@ if (Auth::user()->isType('demo')) {
                                                             {!! Form::text('source_subcampaign', null, ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
                                                         </div>
 
-                                                        <a href="#" class="btn add_new_subcampaign">Add New Subcampaign</a>
+                                                        <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,9 +161,11 @@ if (Auth::user()->isType('demo')) {
                                                             {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'required'=>true, 'id'=>'']) !!}
                                                         </div>
 
-                                                        <a href="#" class="btn add_leadrule_filter"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
+                                                        <a href="#" class="add_leadrule_filter"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
 
-                                                        <div class="alert alert-danger filter_error mt20">Please select a filter before adding another one</div>
+                                                        <div class="alert alert-danger filter_error mt20">Please select a filter and value before adding another one</div>
+
+                                                        <a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,8 +184,15 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group">
                                                             {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-                                                            {!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
+                                                            {!! Form::select("destination_subcampaign", [null=>__('general.select_one')] , null, ["class" => "form-control destination_subcampaign"]) !!}
                                                         </div>
+
+                                                        <div class="form-group new_destination_subcampaign_group">
+                                                            {!! Form::label('destination_subcampaign', __('tools.subcampaign')) !!}
+                                                            {!! Form::text('destination_subcampaign', null, ['class'=>'form-control destination_subcampaign', 'id'=>'new_destination_subcampaign']) !!}
+                                                        </div>
+
+                                                        <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
                                                     </div>
                                                 </div>
                                             </div>
