@@ -24,16 +24,9 @@ class AddLeadFilter extends FormRequest
         return true;
     }
 
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
+    protected function failedValidation($instance)
     {
-        // $this->merge([
-        //     'field' => 'value',
-        // ]);
+        parent::failedValidation($instance);
     }
 
     /**

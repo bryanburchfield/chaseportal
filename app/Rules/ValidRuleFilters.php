@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 
 class ValidRuleFilters implements Rule
@@ -32,6 +31,11 @@ class ValidRuleFilters implements Rule
         foreach ($filters as $type => $val) {
             if (!in_array($type, $this->filter_types)) {
                 return false;
+            }
+            if (is_numeric($val)) {
+                $val = (int) $val;
+            } else {
+                $val = null;
             }
             if (!is_int($val) || $val <= 0) {
                 return false;
