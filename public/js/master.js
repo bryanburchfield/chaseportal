@@ -487,9 +487,9 @@ var Master = {
         });
 
         if($('#source_subcampaign').val() !=''){
-            source_subcampaign=$('#source_subcampaign').val();
+            var source_subcampaign=$('#source_subcampaign').val();
         }else{
-            source_subcampaign=$('#new_source_subcampaign').val();
+            var source_subcampaign=$('#new_source_subcampaign').val();
         }
 
         $.ajaxSetup({
@@ -497,6 +497,13 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+        console.log(rule_name);
+        console.log(source_campaign);
+        console.log(source_subcampaign);
+        console.log(destination_campaign);
+        console.log(destination_subcampaign);
+        console.log(description);
+        console.log(filters);
 
         $.ajax({
             url: '/tools/contactflow_builder',
@@ -515,24 +522,24 @@ var Master = {
             success:function(response){
                 window.location.href = 'contactflow_builder';
             },
-            error :function( data ) {
-                $('.add_rule_error.alert').empty();
-                $('.add_rule_error.alert').hide();
+            // error :function( data ) {
+            //     $('.add_rule_error.alert').empty();
+            //     $('.add_rule_error.alert').hide();
 
-                var errors = $.parseJSON(data.responseText);
-                $.each(errors, function (key, value) {
+            //     var errors = $.parseJSON(data.responseText);
+            //     $.each(errors, function (key, value) {
 
-                    if($.isPlainObject(value)) {
-                        $.each(value, function (key, value) {
-                            $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                        });
-                    }else{
-                        $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                    }
-                });
+            //         if($.isPlainObject(value)) {
+            //             $.each(value, function (key, value) {
+            //                 $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+            //             });
+            //         }else{
+            //             $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+            //         }
+            //     });
 
-                $('.add_rule_error.alert li').first().remove();
-            }
+            //     $('.add_rule_error.alert li').first().remove();
+            // }
         });
     },
 
