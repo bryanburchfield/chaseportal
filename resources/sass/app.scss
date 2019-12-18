@@ -368,7 +368,7 @@ div.container-fluid.hero_bg .form-holder {
     margin: 20px;
 }
 
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert {
+.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group {
     display: none;
 }
 
@@ -2245,11 +2245,10 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
     color: $orange;
     font-size: 15px;
     font-weight: 600;
-    text-transform: uppercase;
 
     &:hover{color: $green;}
     &:focus{color: $orange;}

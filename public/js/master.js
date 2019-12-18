@@ -92,6 +92,7 @@ var Master = {
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
         $('.edit_rule #update_filter_type').on('change', this.change_filter_label);
         $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
+        $('.add_new_subcampaign').on('click', this.toggle_new_subcampaign);
 	},
 
     hide_modal_error:function(){
@@ -415,6 +416,24 @@ var Master = {
             Master.flowchart_vline_height = $(this).parent().parent().parent().find('.vertical-line').height();
             $(this).parent().find('.alert').show();
             $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height + 180);
+        }
+    },
+
+    toggle_new_subcampaign:function(e){
+        e.preventDefault();
+
+        if(!$(this).hasClass('undo_new_subcampaign')){
+            $('.source_subcampaign').parent().hide();
+            $('.new_source_subcampaign_group').show();
+            $('.new_source_subcampaign_group input').focus();
+            $(this).addClass('undo_new_subcampaign');
+            $(this).text('Select Existing Subcampaign');
+        }else{
+            $('.source_subcampaign').val('');
+            $('.source_subcampaign').parent().show();
+            $('.new_source_subcampaign_group').hide();
+            $(this).removeClass('undo_new_subcampaign');
+            $(this).text('Add New Subcampaign');
         }
     },
 
