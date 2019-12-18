@@ -422,18 +422,16 @@ var Master = {
     toggle_new_subcampaign:function(e){
         e.preventDefault();
 
+        $('.source_subcampaign, .new_source_subcampaign').val('');
+
         if(!$(this).hasClass('undo_new_subcampaign')){
             $('.source_subcampaign').parent().hide();
-            $('.new_source_subcampaign_group').show();
-            $('.new_source_subcampaign_group input').focus();
-            $(this).addClass('undo_new_subcampaign');
-            $(this).text('Select Existing Subcampaign');
+            $('.new_source_subcampaign_group').show().find('input').focus();
+            $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
         }else{
-            $('.source_subcampaign').val('');
             $('.source_subcampaign').parent().show();
             $('.new_source_subcampaign_group').hide();
-            $(this).removeClass('undo_new_subcampaign');
-            $(this).text('Add New Subcampaign');
+            $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
         }
     },
 
