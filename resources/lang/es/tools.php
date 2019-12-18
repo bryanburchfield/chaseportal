@@ -21,6 +21,7 @@ return [
 	'edit_rule'		=> 'Revisar Regla',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
+	'invalid_filter' => 'Filtros faltantes o inválidos',
 	'lead_age'      => 'Edad de Plomo',
 	'lead_attempts' => '# de Intentos de Plomo',
 	'lead_details'	=> 'Detalles de Plomo',

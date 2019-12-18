@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddLeadFilterRule;
+use App\Http\Requests\AddLeadFilter;
 use App\Jobs\ReverseLeadMove;
 use App\Models\LeadMove;
 use App\Models\LeadMoveDetail;
 use App\Models\LeadRule;
 use App\Mail\LeadDumpMail;
+use App\Models\LeadRuleFilter;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use App\Traits\TimeTraits;
@@ -18,7 +19,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -145,21 +145,26 @@ class LeadsController extends Controller
     /**
      * Create Rule
      * 
-     * @param AddLeadFilterRule $request 
+     * @param AddLeadFilter $request 
      * @return array[]
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    // public function createRule(AddLeadFilterRule $request)
-    public function createRule(Request $request)
+    public function createRule(AddLeadFilter $request)
     {
-        Log::debug($request->all());
-        die();
         $lead_rule = new LeadRule();
         $lead_rule->fill($request->all());
         $lead_rule->group_id = Auth::user()->group_id;
         $lead_rule->active = true;
         $lead_rule->save();
+
+        foreach ($request->filters as $type => $val) {
+            LeadRuleFilter::create([
+                'lead_rule_id' => $lead_rule->id,
+                'type' => $type,
+                'value' => $val,
+            ]);
+        }
 
         return ['status' => 'success'];
     }
@@ -183,12 +188,12 @@ class LeadsController extends Controller
     /**
      * Update Rule
      * 
-     * @param AddLeadFilterRule $request 
+     * @param AddLeadFilter $request 
      * @return Illuminate\Routing\Redirector|Illuminate\Http\RedirectResponse 
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    public function updateRule(AddLeadFilterRule $request)
+    public function updateRule(AddLeadFilter $request)
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
@@ -290,7 +295,7 @@ class LeadsController extends Controller
     }
 
     /**
-     * Get Campaigns
+     * Get Campaigns (ajax)
      * 
      * @param Request $request 
      * @return array[] 
@@ -306,6 +311,12 @@ class LeadsController extends Controller
         return ['campaigns' => array_values($results)];
     }
 
+    /**
+     * Get Subcampaigns (ajax)
+     * 
+     * @param Request $request 
+     * @return array[] 
+     */
     public function getSubcampaigns(Request $request)
     {
         $results = $this->getAllSubcampaigns($request->campaign);
