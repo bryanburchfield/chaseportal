@@ -424,7 +424,6 @@ var Master = {
                     $(new_filter).find('a.add_leadrule_filter').hide();
                 }
                 $(this).prev().prev().find('select').attr('disabled', true);
-                $(this).prev().find('input').attr('disabled', true);
                 $(this).hide();
             }
         }else{
@@ -438,7 +437,6 @@ var Master = {
         e.preventDefault();
         //// rebuild previous filter row before deleting
         var removed_filter = $(this).parent().parent().parent();
-        removed_filter.prev().find('.col-sm-9 input').removeAttr('disabled');
         removed_filter.prev().find('select').removeAttr('disabled');
         removed_filter.prev().find('a.add_leadrule_filter').show();
 
