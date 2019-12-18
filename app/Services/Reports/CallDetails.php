@@ -148,7 +148,7 @@ class CallDetails
         }
         if (!empty($this->params['phone']) && $this->params['phone'] != '*') {
             $bind['phone'] = $this->params['phone'];
-            $where .= " AND DR.Phone LIKE '1' + :phone + '%')";
+            $where .= " AND DR.Phone LIKE '1' + :phone + '%'";
         }
         if ($unanswered) {
             $where .= " AND DR.LeadSessionId IS NULL OR (IsNull(DR.Rep, '') = '' AND IsNull(DR.CallStatus, '') = '')";
