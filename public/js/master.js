@@ -371,18 +371,13 @@ var Master = {
             success:function(response){
                 console.log(response);
 
-                // var subcampaigns='<option value=""> Select One</option>';
-                // for(var i=0; i<response.subcampaigns.length;i++){
-                //     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-                // }
+                var subcampaigns='<option value=""> Select One</option>';
+                for(var i=0; i<response.subcampaigns.length;i++){
+                    subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                }
 
-                // if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
-                //     $('#'+source).parent().next().find('select').empty();
-                //     $('#'+source).parent().next().find('select').append(subcampaigns);
-                // }else{
-                //     $('#subcampaign_select').empty();
-                //     $('#subcampaign_select').append(subcampaigns);
-                // }
+                $('#source_subcampaign').empty();
+                $('#source_subcampaign').append(subcampaigns);
             }
         });
     },

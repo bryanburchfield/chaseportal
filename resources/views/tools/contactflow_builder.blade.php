@@ -129,7 +129,7 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group">
                                                             {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
+                                                            {!! Form::select("source_subcampaign", [null=>__('general.select_one')] , null, ["class" => "form-control source_subcampaign", 'required'=>true]) !!}
                                                         </div>
                                                     </div>
                                                 </div>
