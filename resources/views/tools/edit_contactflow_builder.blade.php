@@ -4,7 +4,10 @@
 @section('content')
 
 <div class="preloader"></div>
-
+<?php
+	//dd($lead_rule->LeadRuleFilters);
+echo count($lead_rule->LeadRuleFilters);
+?>
 <div class="wrapper">
 
 	@include('shared.sidenav')
@@ -36,15 +39,22 @@
             						{!! Form::text("source_subcampaign", $lead_rule['source_subcampaign'], ["class" => "form-control"]) !!}
             					</div>
 
-            					<div class="form-group">
-            						{!! Form::label('filter_type', __('tools.filter_type')) !!}
-            						{!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), $lead_rule['filter_type'], ["class" => "form-control", 'id'=> 'update_filter_type', 'required'=>true]) !!}
-            					</div>
+								@foreach($lead_rule->LeadRuleFilters as $lr)
+	            					<div class="form-group">
+	            						<label>{{__('tools.filter_type')}}</label>
+										<select name="filter_type" class="form-control update_filter_type">
+											<option value="">{{__('general.select_one')}}</option>
+											<option {{$lr->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
+											<option {{ $lr->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
+											<option {{ $lr->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
+										</select>
+	            					</div>
 
-								<div class="form-group">
-									{!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-									{!! Form::text('filter_value', $lead_rule['filter_value'], ['class'=>'form-control filter_value', 'required'=>true, 'id'=> 'update_filter_value']) !!}
-								</div>
+									<div class="form-group">
+										<label>{{ __('tools.days_to_filter')}}</label>
+										<input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$lr->value}}">
+									</div>
+								@endforeach
 
 								<div class="form-group">
             						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}

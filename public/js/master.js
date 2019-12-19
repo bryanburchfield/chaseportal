@@ -90,7 +90,7 @@ var Master = {
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
-        $('.edit_rule #update_filter_type').on('change', this.change_filter_label);
+        $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
         $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
         $('.add_new_subcampaign').on('click', this.toggle_new_subcampaign);
 	},
@@ -1975,5 +1975,14 @@ $(document).ready(function () {
 	});
 
 	$('[data-toggle="tooltip"]').tooltip({ trigger: "click" });
+
+    /// load correct labels for edit leadrule form
+    $('.edit_rule .update_filter_type').each(function(){
+        if ($(this).val() == 'lead_attempts') {
+            $(this).parent().next().find('label').html(Lang.get('js_msgs.numb_filter_attempts'));
+        } else {
+            $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
+        }
+    });
 
 });
