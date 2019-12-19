@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 
-class AddLeadFilter extends FormRequest
+class LeadFilter extends FormRequest
 {
     use CampaignTraits;
     use SqlServerTraits;
@@ -64,7 +64,7 @@ class AddLeadFilter extends FormRequest
             'source_subcampaign' => 'nullable',
             'filters' => [
                 'required',
-                new ValidRuleFilters(),
+                new ValidRuleFilters()
             ],
             'destination_campaign' => [
                 'required',

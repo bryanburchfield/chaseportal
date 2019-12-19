@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddLeadFilter;
+use App\Http\Requests\LeadFilter;
 use App\Jobs\ReverseLeadMove;
 use App\Models\LeadMove;
 use App\Models\LeadMoveDetail;
@@ -145,12 +145,12 @@ class LeadsController extends Controller
     /**
      * Create Rule
      * 
-     * @param AddLeadFilter $request 
+     * @param LeadFilter $request 
      * @return array[]
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    public function createRule(AddLeadFilter $request)
+    public function createRule(LeadFilter $request)
     {
         $lead_rule = new LeadRule();
         $lead_rule->fill($request->all());
@@ -188,12 +188,12 @@ class LeadsController extends Controller
     /**
      * Update Rule
      * 
-     * @param AddLeadFilter $request 
+     * @param LeadFilter $request 
      * @return Illuminate\Routing\Redirector|Illuminate\Http\RedirectResponse 
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
      */
-    public function updateRule(AddLeadFilter $request)
+    public function updateRule(LeadFilter $request)
     {
         // We don't actually update a rule, we'll (soft) delete
         // and insert a new one
