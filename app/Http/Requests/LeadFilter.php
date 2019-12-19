@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DuplicateFilters;
 use App\Rules\ValidRuleFilters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 
-class AddLeadFilter extends FormRequest
+class LeadFilter extends FormRequest
 {
     use CampaignTraits;
     use SqlServerTraits;
@@ -64,7 +65,7 @@ class AddLeadFilter extends FormRequest
             'source_subcampaign' => 'nullable',
             'filters' => [
                 'required',
-                new ValidRuleFilters(),
+                new ValidRuleFilters()
             ],
             'destination_campaign' => [
                 'required',
