@@ -173,7 +173,7 @@ class LeadMoveService
 
     private function getLeads($db, $lead_rule)
     {
-        $sql = "SELECT id FROM [$db].[dbo].[Leads]
+        $sql = "SELECT id, Subcampaign FROM [$db].[dbo].[Leads]
         WHERE GroupId = :group_id
         AND Campaign = :campaign ";
 
