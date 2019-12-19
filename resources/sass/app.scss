@@ -2263,6 +2263,17 @@ a.remove_filter{
 
 .leadfilter_row .card{overflow: auto;}
 
+.btn.btn-reset{
+    background: #ccc;
+    color:#333;
+    margin-right: 10px;
+
+    &:hover{
+        color: #333 !important;
+        background:  darken(#ccc, 5%);
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

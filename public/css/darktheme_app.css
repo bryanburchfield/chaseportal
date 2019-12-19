@@ -2932,6 +2932,17 @@ a.remove_filter {
   overflow: auto;
 }
 
+.btn.btn-reset {
+  background: #ccc;
+  color: #333;
+  margin-right: 10px;
+}
+
+.btn.btn-reset:hover {
+  color: #333 !important;
+  background: #bfbfbf;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
