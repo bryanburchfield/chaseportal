@@ -1981,9 +1981,9 @@ $(document).ready(function () {
 	}
 
 	var hash = window.location.hash;
-	hash && $('ul.nav-tabs a[href="' + hash + '"]').tab('show');
+	hash && $('ul.nav-tabs.tabs a[href="' + hash + '"]').tab('show');
 
-	$('.nav-tabs a').click(function (e) {
+	$('.nav-tabs.tabs a').click(function (e) {
 		$(this).tab('show');
 		window.location.hash = this.hash;
 		$('html,body').scrollTop($('body').scrollTop());

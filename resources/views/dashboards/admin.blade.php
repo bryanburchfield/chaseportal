@@ -19,7 +19,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="mt20">
-							<ul class="nav nav-tabs">
+							<ul class="nav nav-tabs tabs">
 
 								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
