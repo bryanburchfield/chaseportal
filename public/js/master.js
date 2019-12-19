@@ -21,7 +21,8 @@ var Master = {
 	active_camp_search: '',
 	tick_color: '#aaa',
 	gridline_color: '#1A2738',
-    leadrule_filters: $('.lead_rule_filter_type option').length -1,
+    leadrule_filters: '',
+    numb_leadrule_filters: $('.lead_rule_filter_type option').length -1,
     flowchart_vline_height:$('.add_leadrule_filter').parent().parent().parent().find('.vertical-line').height,
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
@@ -38,6 +39,8 @@ var Master = {
 	}),
 
 	init:function(){
+
+        Master.leadrule_filters = Master.get_leadrule_filters();
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
             Master.gridline_color='#1A2738';
@@ -400,6 +403,40 @@ var Master = {
         }
     },
 
+    get_leadrule_filters:function(){
+
+        var filters = [];
+
+        $('.lead_rule_filter_type option').each(function(){
+            var option = [];
+
+            if($(this).val() !=''){
+                option.push($(this).val());
+                option.push($(this).text());
+                option.push(0);
+                filters.push(option);
+            }
+        });
+
+        return filters;
+    },
+
+    update_leadrule_filters:function(filter, used){
+        var menu='<option value="" selected="selected">Select One</option>';
+        for(var i=0;i<Master.leadrule_filters.length;i++){
+            if(Master.leadrule_filters[i][0] == filter){
+                Master.leadrule_filters[i][2] = used;
+            }
+
+            if(!Master.leadrule_filters[i][2]){
+                menu +='<option value="'+Master.leadrule_filters[i][0]+'">'+Master.leadrule_filters[i][1]+'</option>';
+            }
+        }
+        console.log(Master.leadrule_filters);
+        console.log(menu);
+        return menu;
+    },
+
     add_leadrule_filter:function(e){
         e.preventDefault();
         $('.alert.filter_error').hide();
@@ -409,8 +446,8 @@ var Master = {
         if(selected_filter && selected_value){
             $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
 
-            if(Master.leadrule_filters>1){
-                Master.leadrule_filters = Master.leadrule_filters -1;
+            if(Master.numb_leadrule_filters>1){
+                Master.numb_leadrule_filters = Master.numb_leadrule_filters -1;
                 var new_filter = $(this).parent().parent().parent().clone();
                 $(new_filter).insertAfter('.leadfilter_row:last');
                 var i = $('.leadfilter_row').length;
@@ -418,9 +455,11 @@ var Master = {
                 $(new_filter).find('.flowchart_element span').text('AND');
                 $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                 $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
-                $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+
+                $(new_filter).find('select.lead_rule_filter_type').empty().append(Master.update_leadrule_filters(selected_filter, 1));
+
                 $(new_filter).find('.remove_filter').show();
-                if(Master.leadrule_filters == 1){
+                if(Master.numb_leadrule_filters == 1){
                     $(new_filter).find('a.add_leadrule_filter').hide();
                 }
                 $(this).prev().prev().find('select').attr('disabled', true);
@@ -440,11 +479,11 @@ var Master = {
         removed_filter.prev().find('select').removeAttr('disabled');
         removed_filter.prev().find('a.add_leadrule_filter').show();
 
+        console.log($(this).parent().find('.form-control.lead_rule_filter_type').val());
+        Master.update_leadrule_filters($(this).parent().find('.form-control.lead_rule_filter_type').val(), 0);
         //// remove element last
         removed_filter.remove();
-        Master.leadrule_filters = Master.leadrule_filters +1;
-        if($('.lead_rule_filter_type option').length == 1){
-        }
+        Master.numb_leadrule_filters = Master.numb_leadrule_filters +1;
     },
 
     toggle_new_subcampaign:function(e){
