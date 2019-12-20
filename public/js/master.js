@@ -89,6 +89,7 @@ var Master = {
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
         $('.add_rule').on('submit', this.create_leadrule);
+        $('.edit_rule').on('submit', this.updteleadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
@@ -420,12 +421,13 @@ var Master = {
                 if($('.lead_rule_filter_type').first().find('option').length -1 != $('.leadfilter_row').length ){
 
                     Master.leadrule_filters = Master.leadrule_filters -1;
+                    // only add delete rule btn to edit form
                     if($(this).parent().parent().parent().attr('id') == 'add_rule'){
                         if($('.leadfilter_row').length==1){
                             var add_delete_btn = true;
                         }
                     }
-                    
+
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
                     var i = $('.leadfilter_row').length;
@@ -595,6 +597,74 @@ var Master = {
                 });
 
                 $('.add_rule_error.alert li').first().remove();
+            }
+        });
+    },
+
+    updteleadrule:function(e){
+        e.preventDefault();
+
+        var rule_id = $('.rule_id').val(),
+            rule_name = $('#rule_name').val(),
+            source_campaign = $('#campaign_select').val(),
+            destination_campaign = $('#destination_campaign').val(),
+            destination_subcampaign = $('#destination_subcampaign').val(),
+            description = $('#description').val()
+        ;
+
+        var filters={};
+        $('.lead_rule_filter_type').each(function(){
+            filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+        });
+
+        if($('#source_subcampaign').val() !=''){
+            var source_subcampaign=$('#source_subcampaign').val();
+        }else{
+            var source_subcampaign=$('#new_source_subcampaign').val();
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/contactflow_builder/update_rule',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id:rule_id,
+                rule_name:rule_name,
+                source_campaign:source_campaign,
+                source_subcampaign:source_subcampaign,
+                destination_campaign:destination_campaign,
+                destination_subcampaign:destination_subcampaign,
+                description:description,
+                filters:filters
+            },
+
+            success:function(response){
+                console.log(response);
+                window.location.href = 'contactflow_builder';
+            },
+            error :function( data ) {
+                $('.edit_rule_error.alert').empty();
+                $('.edit_rule_error.alert').hide();
+
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                            $('.edit_rule_error.alert').show().append('<li>'+value+'</li>');
+                        });
+                    }else{
+                        $('.edit_rule_error.alert').show().append('<li>'+value+'</li>');
+                    }
+                });
+
+                $('.edit_rule_error.alert li').first().remove();
             }
         });
     },
