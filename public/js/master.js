@@ -433,7 +433,7 @@ var Master = {
                     $(new_filter).find('.flowchart_element span').text('AND');
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
-                    $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                    // $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
                     if(add_delete_btn && Master.leadrule_filters_used!=Master.leadrule_filters){
                         $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>');
                     }
@@ -457,21 +457,21 @@ var Master = {
         e.preventDefault();
 
         Master.leadrule_filters_used=Master.leadrule_filters_used-1;
-        if(Master.leadrule_filters_used != Master.leadrule_filters){
-            if($(this).parent().parent().parent().prev().find('.card .remove_filter').length){
-                $('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>').insertBefore($(this).parent().parent().parent().prev().find('.card .remove_filter'));
-            }else {
-                $(this).parent().parent().parent().prev().find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>');
-            }
-        }
 
         $(this).parent().parent().parent().remove();
         $('.update_filter_type').each(function(){
             $(this).attr('disabled', true);
         });
+        //// disable all but last filter selects
         $('.update_filter_type').last().attr('disabled', false);
 
-        console.log(Master.leadrule_filters_used +' '+ Master.leadrule_filters);
+        $('.leadfilter_row').find('.card').each(function(){
+            $(this).find('.add_leadrule_filter');
+        });
+        // remove add new filter buttons from all cards, add to last one
+        if(Master.leadrule_filters_used != Master.leadrule_filters){
+            $('.leadfilter_row:last').find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>');
+        }
     },
 
     toggle_new_subcampaign:function(e){
