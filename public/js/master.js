@@ -83,6 +83,7 @@ var Master = {
 
         /// lead rule handlers
         $('#when .form-group #campaign_select, #action #destination_campaign').on('change', this.get_leadrule_subcampaigns);
+        $('#when .form-group #update_campaign_select, #action #update_destination_campaign').on('change', this.get_leadrule_subcampaigns);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.delete_rule').on('click', this.delete_rule);
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
@@ -369,7 +370,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'contactflow_builder/get_subcampaigns' ,
+            url: '/tools/contactflow_builder/get_subcampaigns' ,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -383,7 +384,7 @@ var Master = {
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
                 }
 
-                if(selector == 'campaign_select'){
+                if(selector == 'campaign_select' || selector == 'update_campaign_select'){
                     $('#source_subcampaign').empty();
                     $('#source_subcampaign').append(subcampaigns);
                 }else{

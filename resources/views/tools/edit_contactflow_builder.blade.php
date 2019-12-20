@@ -5,7 +5,7 @@
 
 <div class="preloader"></div>
 <?php
-	//dd($lead_rule->LeadRuleFilters);
+	//dd($lead_rule);
 ?>
 <div class="wrapper">
 
