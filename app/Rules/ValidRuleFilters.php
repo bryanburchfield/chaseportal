@@ -21,14 +21,7 @@ class ValidRuleFilters implements Rule
      */
     public function passes($attribute, $value)
     {
-        $filters = (array) $value;
-
-        // make sure we have some filters
-        if (count($filters) == 0) {
-            return false;
-        }
-
-        foreach ($filters as $type => $val) {
+        foreach ($value as $type => $val) {
             if (!in_array($type, $this->filter_types)) {
                 return false;
             }

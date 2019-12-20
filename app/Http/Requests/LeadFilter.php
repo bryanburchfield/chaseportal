@@ -24,9 +24,25 @@ class LeadFilter extends FormRequest
         return true;
     }
 
-    protected function failedValidation($instance)
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
     {
-        parent::failedValidation($instance);
+        // strip out any filters with null or blank values
+        if ($this->has('filters')) {
+            if (is_array($this->filters)) {
+                $filters = [];
+                foreach ($this->filters as $key => $val) {
+                    if (trim($val) !== '') {
+                        $filters[$key] = $val;
+                    }
+                }
+                $this->merge(['filters' => $filters]);
+            }
+        }
     }
 
     /**
@@ -64,7 +80,9 @@ class LeadFilter extends FormRequest
             'source_subcampaign' => 'nullable',
             'filters' => [
                 'required',
-                new ValidRuleFilters()
+                'array',
+                'min:1',
+                new ValidRuleFilters(),
             ],
             'destination_campaign' => [
                 'required',
@@ -93,5 +111,19 @@ class LeadFilter extends FormRequest
                 }
             }
         });
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'filters.required' => trans('tools.filters_required'),
+            'filters.array' => trans('tools.filters_required'),
+            'filters.min' => trans('tools.filters_required'),
+        ];
     }
 }
