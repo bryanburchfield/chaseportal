@@ -6,7 +6,6 @@
 <div class="preloader"></div>
 <?php
 	//dd($lead_rule->LeadRuleFilters);
-echo count($lead_rule->LeadRuleFilters);
 ?>
 <div class="wrapper">
 
@@ -16,79 +15,133 @@ echo count($lead_rule->LeadRuleFilters);
 		@include('shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt50 tools">
+			<div class="container mt50 tools ">
 			    <div class="row">
-	                <div class="col-sm-6">
-	                    <div class="card">
-	                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
-	                        {!! Form::open(['method'=>'POST', 'url'=>'/tools/contactflow_builder/update_rule', 'class'=>'form mt20 edit_rule']) !!}
+			        <div class="col-sm-9 col-sm-offset-3 pl0">
+			            <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
+			            {!! Form::open(['method'=>'POST', 'url'=>'/tools/contactflow_builder/update_rule', 'class'=>'form mt20 edit_rule']) !!}
 
-	                            <div class="form-group">
-	                            	{!! Form::label('rule_name', __('tools.rule_name')) !!}
-	                            	{!! Form::text('rule_name', $lead_rule['rule_name'], ['class'=>'form-control rule_name', 'required'=>true]) !!}
-	                            </div>
+			            <div class="card">
+			                <div class="form-group">
+			                    {!! Form::label('rule_name', __('tools.rule_name')) !!}
+			                    {!! Form::text('rule_name', $lead_rule['rule_name'], ['class'=>'form-control rule_name', 'required'=>true]) !!}
+			                </div>
+			            </div>
+			        </div>
+			    </div>
 
-	                            <div class="form-group">
-            						{!! Form::label('source_campaign',  __('tools.campaign')) !!}
-            						{!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
+			    <div class="row">
+			        <div class="col-sm-3 pr0">
+			            <div class="flowchart_element when"><span>{{__('general.where')}}</span></div>
+			            <div class="vertical-line"></div>
+			        </div>
+
+			        <div class="col-sm-9 pl0">
+			            <div class="card" id="when">
+			                <div class="form-group">
+        						{!! Form::label('source_campaign',  __('tools.campaign')) !!}
+        						{!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
+        					</div>
+
+			                <div class="form-group">
+			                    {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
+			                    {!! Form::select("source_subcampaign", [null=>__('general.select_one')] , $lead_rule['source_subcampaign'], ["class" => "form-control source_subcampaign"]) !!}
+			                </div>
+
+			                <div class="form-group new_source_subcampaign_group">
+			                    {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
+			                    {!! Form::text('source_subcampaign', null, ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
+			                </div>
+
+			                <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
+			            </div>
+			        </div>
+			    </div>
+
+				@foreach($lead_rule->LeadRuleFilters as $key => $value)
+
+				    <div class="row leadfilter_row">
+				        <div class="col-sm-3 pr0">
+				            <div class="flowchart_element condition mt35"><span>@if($key){{__('general.and')}}@else{{__('general.when')}}@endif</span></div>
+				            <div class="vertical-line"></div>
+				        </div>
+
+				        <div class="col-sm-9 pl0">
+				            <div class="card" id="condition">
+
+				                <div class="form-group">
+            						<label>{{__('tools.filter_type')}}</label>
+									<select name="filter_type" class="form-control update_filter_type lead_rule_filter_type">
+										<option value="">{{__('general.select_one')}}</option>
+										<option {{$value->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
+										<option {{ $value->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
+										<option {{ $value->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
+									</select>
             					</div>
-
-	                            <div class="form-group">
-
-            						{!! Form::label('source_subcampaign',  __('tools.subcampaign')) !!}
-            						{!! Form::text("source_subcampaign", $lead_rule['source_subcampaign'], ["class" => "form-control"]) !!}
-            					</div>
-
-								@foreach($lead_rule->LeadRuleFilters as $lr)
-	            					<div class="form-group">
-	            						<label>{{__('tools.filter_type')}}</label>
-										<select name="filter_type" class="form-control update_filter_type">
-											<option value="">{{__('general.select_one')}}</option>
-											<option {{$lr->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
-											<option {{ $lr->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
-											<option {{ $lr->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
-										</select>
-	            					</div>
-
-									<div class="form-group">
-										<label>{{ __('tools.days_to_filter')}}</label>
-										<input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$lr->value}}">
-									</div>
-								@endforeach
 
 								<div class="form-group">
-            						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
-            						{!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
-            					</div>
+									<label>{{ __('tools.days_to_filter')}}</label>
+									<input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$value->value}}">
+								</div>
 
-            					<div class="form-group">
+								{{-- Need to get count of available filters --}}
+								@if($key == count($lead_rule->LeadRuleFilters) -1)
+				                	<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
+								@endif
 
-            						{!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-            						{!! Form::text("destination_subcampaign", $lead_rule['destination_subcampaign'], ["class" => "form-control"]) !!}
-            					</div>
+								@if($key)
+									<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>
+								@endif
 
-            					<div class="form-group">
-            						{!! Form::label('description', __('tools.description')) !!}
-            						{!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
-            					</div>
+				                <div class="alert alert-danger filter_error mt20">Please select a filter and value before adding another one</div>
 
-            					{!! Form::hidden('id', $lead_rule['id'], ['id'=>'id']) !!}
-								<a href="{{ url('/tools/contactflow_builder') }}" class="btn btn-default mb0">{{__('general.cancel')}}</a>
+				            </div>
+				        </div>
+				    </div>
+				@endforeach
 
-								{!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
+			    <div class="row">
+			        <div class="col-sm-3 pr0">
+			            <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
+			        </div>
 
-    							@if($errors->any())
-                                    <div class="alert alert-danger mt20">
-                                        @foreach($errors->all() as $e)
-                                            <li>{{ $e }}</li>
-                                        @endforeach
-                                    </div>
-    							@endif
-	                        {!! Form::close() !!}
-	                    </div>
-	                </div>
+			        <div class="col-sm-9 pl0">
+			            <div class="card" id="action">
+			                <div class="form-group">
+        						{!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
+        						{!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
+        					</div>
 
-	            </div>
+			                <div class="form-group">
+			                    {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
+			                    {!! Form::select("destination_subcampaign", [null=>__('general.select_one')] , $lead_rule['destination_subcampaign'], ["class" => "form-control destination_subcampaign"]) !!}
+			                </div>
+
+			                <div class="form-group new_destination_subcampaign_group">
+			                    {!! Form::label('destination_subcampaign', __('tools.subcampaign')) !!}
+			                    {!! Form::text('destination_subcampaign', null, ['class'=>'form-control destination_subcampaign', 'id'=>'new_destination_subcampaign']) !!}
+			                </div>
+
+			                <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
+			            </div>
+			        </div>
+			    </div>
+
+			    <div class="row">
+			        <div class="col-sm-9 col-sm-offset-3 pl0">
+			            <div class="card">
+			                <div class="form-group">
+			                    {!! Form::label('description', __('tools.description')) !!}
+			                    {!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
+			                </div>
+
+			                <a href="{{url('/tools/contactflow_builder#add_rule')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
+			                {!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
+			                <div class="alert alert-danger add_rule_error mt20"></div>
+			            </div>
+			        {!! Form::close() !!}
+			        </div>
+			    </div>
 			</div>
 		</div>
 	</div>

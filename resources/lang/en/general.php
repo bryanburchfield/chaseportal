@@ -5,6 +5,7 @@ return [
 	'admin_dashboard'			=> 'Admin Dashboard',
 	'adminoutbound_dashboard'	=> 'Adminoutbound Dashboard',
 	'all_campaigns'				=> 'All Campaigns',
+	'and'						=> 'And',
 	'auto_report_settings'		=> 'Automated Reports Settings',
 	'auto_reports'				=> 'Automated Reports',
 	'campaigns_selected'		=> 'Campaigns Selected',
