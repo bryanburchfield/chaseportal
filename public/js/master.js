@@ -417,12 +417,14 @@ var Master = {
                 $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
 
                 if(Master.leadrule_filters != Master.leadrule_filters_used ){
-                    // only add delete rule btn to edit form
-                    // if($(this).parent().parent().parent().attr('id') == 'add_rule'){
-                        // if(Master.leadrule_filters_used==Master.leadrule_filters){
-                        //     var add_delete_btn = true;
+                    // only add delete rule btn to edit form -check if only one condition is present
+                    if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
+                        // if(Master.leadrule_filters_used==1){
+                            var add_delete_btn = true;
                         // }
-                    // }
+                    }
+
+                    console.log($(this).parent().parent().parent().parent().parent());
                     Master.leadrule_filters_used=Master.leadrule_filters_used+1;
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
@@ -432,14 +434,15 @@ var Master = {
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
                     $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
-                     if(Master.leadrule_filters_used!=Master.leadrule_filters){
+                    if(add_delete_btn && Master.leadrule_filters_used!=Master.leadrule_filters){
                         $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>');
                     }
 
                     if(Master.leadrule_filters == Master.leadrule_filters_used){
-                        $(new_filter).find('a.add_leadrule_filter').hide();
+                        $(new_filter).find('a.add_leadrule_filter').remove();
                     }
-                    $(this).prev().prev().find('select').attr('disabled', true);
+
+                    $(this).parent().find('select').attr('disabled', true);
                     $(this).hide();
                 }
             }else{
@@ -457,12 +460,17 @@ var Master = {
         if(Master.leadrule_filters_used != Master.leadrule_filters){
             if($(this).parent().parent().parent().prev().find('.card .remove_filter').length){
                 $('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>').insertBefore($(this).parent().parent().parent().prev().find('.card .remove_filter'));
-            }else{
+            }else {
                 $(this).parent().parent().parent().prev().find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>');
             }
         }
 
         $(this).parent().parent().parent().remove();
+        $('.update_filter_type').each(function(){
+            $(this).attr('disabled', true);
+        });
+        $('.update_filter_type').last().attr('disabled', false);
+
         console.log(Master.leadrule_filters_used +' '+ Master.leadrule_filters);
     },
 
