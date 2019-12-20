@@ -135,8 +135,8 @@ class LeadsController extends Controller
         ];
         $data = [
             'lead_rule' => $lead_rule,
-            'source_subcampaign_list' => array_values($this->getAllSubcampaigns($lead_rule->source_campaign)),
-            'destination_subcampaign_list' => array_values($this->getAllSubcampaigns($lead_rule->destination_campaign)),
+            'source_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->source_campaign),
+            'destination_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->destination_campaign),
             'page' => $page,
             'campaigns' => $campaigns,
         ];
