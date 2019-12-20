@@ -466,7 +466,7 @@ var Master = {
         $('.update_filter_type').last().attr('disabled', false);
 
         $('.leadfilter_row').find('.card').each(function(){
-            $(this).find('.add_leadrule_filter');
+            $(this).find('.add_leadrule_filter').remove();
         });
         // remove add new filter buttons from all cards, add to last one
         if(Master.leadrule_filters_used != Master.leadrule_filters){
