@@ -5,7 +5,7 @@
 
 <div class="preloader"></div>
 <?php
-	dd($lead_rule);
+	//dd($lead_rule->source_subcampaign_list);
 ?>
 <div class="wrapper">
 
