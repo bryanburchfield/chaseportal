@@ -20,7 +20,7 @@
 			        <div class="col-sm-9 col-sm-offset-3 pl0">
 			            <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
 			            {!! Form::open(['method'=>'POST', 'url'=>'/tools/contactflow_builder/update_rule', 'class'=>'form mt20 edit_rule']) !!}
-
+							<input type="hidden" value="{{$lead_rule->id}}" name="id">
 			            <div class="card">
 			                <div class="form-group">
 			                    {!! Form::label('rule_name', __('tools.rule_name')) !!}
@@ -44,13 +44,16 @@
         					</div>
 
 			                <div class="form-group">
-			                    {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-			                    {!! Form::select("source_subcampaign", [null=>__('general.select_one')] , $lead_rule['source_subcampaign'], ["class" => "form-control source_subcampaign"]) !!}
+			                    <label>{{__('tools.subcampaign')}}</label>
+			                    <select name="source_subcampaign" class="form-control source_subcampaign">
+    			                	<option value="">{{__('general.select_one')}}</option>
+    			                	<option selected value="{{$lead_rule['source_subcampaign']}}"> {{$lead_rule['source_subcampaign']}}</option>
+    			                </select>
 			                </div>
 
 			                <div class="form-group new_source_subcampaign_group">
 			                    {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-			                    {!! Form::text('source_subcampaign', null, ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
+			                    {!! Form::text('source_subcampaign', $lead_rule['source_subcampaign'], ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
 			                </div>
 
 			                <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
@@ -113,8 +116,11 @@
         					</div>
 
 			                <div class="form-group">
-			                    {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-			                    {!! Form::select("destination_subcampaign", [null=>__('general.select_one')] , $lead_rule['destination_subcampaign'], ["class" => "form-control destination_subcampaign"]) !!}
+			                    <label>{{__('tools.destination_subcampaign_ques')}}</label>
+			                    <select name="destination_subcampaign" class="form-control destination_subcampaign">
+    			                	<option value="">{{__('general.select_one')}}</option>
+    			                	<option selected value="{{$lead_rule['destination_subcampaign']}}"> {{$lead_rule['destination_subcampaign']}}</option>
+    			                </select>
 			                </div>
 
 			                <div class="form-group new_destination_subcampaign_group">
