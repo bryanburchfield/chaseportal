@@ -408,6 +408,7 @@ var Master = {
         e.preventDefault();
         console.log($('.lead_rule_filter_type').first().find('option').length -1);
         console.log($('.leadfilter_row').length );
+
         if($('.leadfilter_row').length <= $('.lead_rule_filter_type').first().find('option').length -1){
             $('.alert.filter_error').hide();
             var selected_filter = $(this).parent().find('select').val();
@@ -419,9 +420,12 @@ var Master = {
                 if($('.lead_rule_filter_type').first().find('option').length -1 != $('.leadfilter_row').length ){
 
                     Master.leadrule_filters = Master.leadrule_filters -1;
-                    if($('.leadfilter_row').length==1){
-                        var add_delete_btn = true;
+                    if($(this).parent().parent().parent().attr('id') == 'add_rule'){
+                        if($('.leadfilter_row').length==1){
+                            var add_delete_btn = true;
+                        }
                     }
+                    
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
                     var i = $('.leadfilter_row').length;
