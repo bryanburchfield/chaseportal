@@ -29,7 +29,11 @@ if (Auth::user()->isType('demo')) {
                             <h2 class="bbnone">Upload a DNC File</h2>
                             File must be in CSV format.
                             <p>
-                                [Form goes here]
+<form enctype="multipart/form-data" method="post">
+	@csrf
+	<input name="myfile" type="file" />
+	<input type="submit" value="submit" />
+</form>
                             </p>
 						</div>
 					</div>
