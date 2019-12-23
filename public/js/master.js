@@ -2105,18 +2105,18 @@ $(document).ready(function () {
         $('a.add_leadrule_filter ').remove();
     }
 
-    if(!$('#source_subcampaign').hasClass('insubcamp_menu')){
-        $('#source_subcampaign').parent().hide();
-        $('.new_source_subcampaign_group').show();
-        $('.new_source_subcampaign_group').next().addClass('undo_new_subcampaign');
-        $('.new_source_subcampaign_group').next().text('Select Existing Subcampaign');
+    if(!$('.edit_rule #source_subcampaign').hasClass('insubcamp_menu')){
+        $('.edit_rule #source_subcampaign').parent().hide();
+        $('.edit_rule .new_source_subcampaign_group').show();
+        $('.edit_rule .new_source_subcampaign_group').next().addClass('undo_new_subcampaign');
+        $('.edit_rule .new_source_subcampaign_group').next().text('Select Existing Subcampaign');
 
     }
 
-    if(!$('#destination_subcampaign').hasClass('insubcamp_menu')){
-        $('#destination_subcampaign').parent().hide();
-        $('.new_destination_subcampaign_group').show();
-        $('.new_destination_subcampaign_group').next().addClass('undo_new_subcampaign');
-        $('.new_destination_subcampaign_group').next().text('Select Existing Subcampaign');
+    if(!$('.edit_rule #destination_subcampaign').hasClass('insubcamp_menu')){
+        $('.edit_rule #destination_subcampaign').parent().hide();
+        $('.edit_rule .new_destination_subcampaign_group').show();
+        $('.edit_rule .new_destination_subcampaign_group').next().addClass('undo_new_subcampaign');
+        $('.edit_rule .new_destination_subcampaign_group').next().text('Select Existing Subcampaign');
     }
 });
