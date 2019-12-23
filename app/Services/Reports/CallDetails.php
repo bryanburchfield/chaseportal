@@ -34,6 +34,8 @@ class CallDetails
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
             'Phone' => 'reports.phone',
+            'LastName' => 'reports.lastname',
+            'FirstName' => 'reports.firstname',
             'Date' => 'reports.date',
             'CallStatus' => 'reports.callstatus',
             'Duration' => 'reports.duration',
@@ -172,6 +174,8 @@ class CallDetails
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Phone,
+                L.LastName,
+                L.FirstName,
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 CASE DR.LeadId
                     WHEN -1 THEN '_MANUAL_CALL_'
@@ -191,6 +195,7 @@ class CallDetails
                 END as CallType,
                 DR.Details
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
+            LEFT JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
