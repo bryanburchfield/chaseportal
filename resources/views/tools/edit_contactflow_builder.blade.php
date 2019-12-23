@@ -52,7 +52,7 @@
 							@endphp
         					<div class="form-group">
         						{!! Form::label('source_subcampaign',  __('tools.subcampaign')) !!}
-        						{!! Form::select("source_subcampaign", [null=>__('general.select_one')] + $source_subcampaign_list, $lead_rule['source_subcampaign'], ["class" => "form-control source_subcampaign $insubcamp_menu", 'id'=> 'source_subcampaign', 'required'=>true]) !!}
+        						{!! Form::select("source_subcampaign", [null=>__('general.select_one')] + $source_subcampaign_list, $lead_rule['source_subcampaign'], ["class" => "form-control source_subcampaign $insubcamp_menu", 'id'=> 'source_subcampaign']) !!}
         					</div>
 
 			                <div class="form-group new_source_subcampaign_group ">
@@ -129,7 +129,7 @@
 
         					<div class="form-group">
         						{!! Form::label('destination_campaign', __('tools.destination_subcampaign_ques')) !!}
-        						{!! Form::select("destination_subcampaign", [null=>__('general.select_one')] +$destination_subcampaign_list, $lead_rule['destination_subcampaign'], ["class" => "form-control destination_subcampaign $insubcamp_menu", 'id'=> 'destination_subcampaign', 'required'=>true]) !!}
+        						{!! Form::select("destination_subcampaign", [null=>__('general.select_one')] +$destination_subcampaign_list, $lead_rule['destination_subcampaign'], ["class" => "form-control destination_subcampaign $insubcamp_menu", 'id'=> 'destination_subcampaign']) !!}
         					</div>
 
 
