@@ -490,7 +490,7 @@ var Master = {
                 $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
             }
         }else{
-            $('.source_subcampaign').val('');
+            // $('.source_subcampaign').val('');
 
             if(!$(this).hasClass('undo_new_subcampaign')){
                 $('.source_subcampaign').parent().hide();
@@ -2094,11 +2094,24 @@ $(document).ready(function () {
             $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
         }
     });
-console.log(Master.leadrule_filters_used +' '+ Master.leadrule_filters);
+
     // remove add filter button if max filters in use
     if(Master.leadrule_filters_used == Master.leadrule_filters){
         $('a.add_leadrule_filter ').remove();
-        // Master.leadrule_filters_used=Master.leadrule_filters_used+1;
     }
 
+    if(!$('#source_subcampaign').hasClass('insubcamp_menu')){
+        $('#source_subcampaign').parent().hide();
+        $('.new_source_subcampaign_group').show();
+        $('.new_source_subcampaign_group').next().addClass('undo_new_subcampaign');
+        $('.new_source_subcampaign_group').next().text('Select Existing Subcampaign');
+
+    }
+
+    if(!$('#destination_subcampaign').hasClass('insubcamp_menu')){
+        $('#destination_subcampaign').parent().hide();
+        $('.new_destination_subcampaign_group').show();
+        $('.new_destination_subcampaign_group').next().addClass('undo_new_subcampaign');
+        $('.new_destination_subcampaign_group').next().text('Select Existing Subcampaign');
+    }
 });

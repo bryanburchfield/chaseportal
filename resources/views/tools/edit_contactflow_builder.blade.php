@@ -43,12 +43,19 @@
         						{!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, $lead_rule['source_campaign'], ["class" => "form-control", 'id'=> 'update_campaign_select', 'required'=>true]) !!}
         					</div>
 
+							@php
+								if(!in_array($lead_rule['source_subcampaign'], $source_subcampaign_list)){
+									$insubcamp_menu='';
+								}else{
+									$insubcamp_menu='insubcamp_menu';
+								}
+							@endphp
         					<div class="form-group">
         						{!! Form::label('source_subcampaign',  __('tools.subcampaign')) !!}
-        						{!! Form::select("source_subcampaign", [null=>__('general.select_one')] + $source_subcampaign_list, $lead_rule['source_subcampaign'], ["class" => "form-control", 'id'=> 'source_subcampaign', 'required'=>true]) !!}
+        						{!! Form::select("source_subcampaign", [null=>__('general.select_one')] + $source_subcampaign_list, $lead_rule['source_subcampaign'], ["class" => "form-control source_subcampaign $insubcamp_menu", 'id'=> 'source_subcampaign', 'required'=>true]) !!}
         					</div>
 
-			                <div class="form-group new_source_subcampaign_group">
+			                <div class="form-group new_source_subcampaign_group ">
 			                    {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
 			                    {!! Form::text('source_subcampaign', $lead_rule['source_subcampaign'], ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
 			                </div>
@@ -112,15 +119,23 @@
         						{!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, $lead_rule['destination_campaign'], ["class" => "form-control", 'id'=> 'update_destination_campaign', 'required'=>true]) !!}
         					</div>
 
+							@php
+								if(!in_array($lead_rule['destination_subcampaign'], $destination_subcampaign_list)){
+									$insubcamp_menu='';
+								}else{
+									$insubcamp_menu='insubcamp_menu';
+								}
+							@endphp
+
         					<div class="form-group">
         						{!! Form::label('destination_campaign', __('tools.destination_subcampaign_ques')) !!}
-        						{!! Form::select("destination_subcampaign", [null=>__('general.select_one')] +$destination_subcampaign_list, $lead_rule['destination_subcampaign'], ["class" => "form-control", 'id'=> 'destination_subcampaign', 'required'=>true]) !!}
+        						{!! Form::select("destination_subcampaign", [null=>__('general.select_one')] +$destination_subcampaign_list, $lead_rule['destination_subcampaign'], ["class" => "form-control destination_subcampaign $insubcamp_menu", 'id'=> 'destination_subcampaign', 'required'=>true]) !!}
         					</div>
 
 
 			                <div class="form-group new_destination_subcampaign_group">
 			                    {!! Form::label('destination_subcampaign', __('tools.subcampaign')) !!}
-			                    {!! Form::text('destination_subcampaign', null, ['class'=>'form-control destination_subcampaign', 'id'=>'new_destination_subcampaign']) !!}
+			                    {!! Form::text('destination_subcampaign', $lead_rule['destination_subcampaign'], ['class'=>'form-control destination_subcampaign', 'id'=>'new_destination_subcampaign']) !!}
 			                </div>
 
 			                <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
