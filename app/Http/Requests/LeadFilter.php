@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
+use Illuminate\Support\Facades\Log;
 
 class LeadFilter extends FormRequest
 {
@@ -25,11 +26,11 @@ class LeadFilter extends FormRequest
         return true;
     }
 
-    // protected function failedValidation($validator)
-    // {
-    //     Log::debug($validator->errors());
-    //     parent::failedValidation($validator);
-    // }
+    protected function failedValidation($validator)
+    {
+        Log::debug($validator->errors());
+        parent::failedValidation($validator);
+    }
 
     /**
      * Prepare the data for validation.
@@ -38,6 +39,8 @@ class LeadFilter extends FormRequest
      */
     protected function prepareForValidation()
     {
+        Log::debug($this->all());
+
         // if id not passed (adding), insert id=0
         // otherwise, check that rule belongs to user's group_id, 404 if not
         if ($this->has('id')) {
