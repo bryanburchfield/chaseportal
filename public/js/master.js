@@ -482,7 +482,7 @@ var Master = {
 
             if(!$(this).hasClass('undo_new_subcampaign')){
                 $('.destination_subcampaign').parent().hide();
-                // $('.new_destination_subcampaign_group').show().find('input').focus();
+                $('.new_destination_subcampaign_group').show();
                 $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
             }else{
                 $('.destination_subcampaign').parent().show();
@@ -494,7 +494,7 @@ var Master = {
 
             if(!$(this).hasClass('undo_new_subcampaign')){
                 $('.source_subcampaign').parent().hide();
-                // $('.new_source_subcampaign_group').show().find('input').focus();
+                $('.new_source_subcampaign_group').show();
                 $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
             }else{
                 $('.source_subcampaign').parent().show();
