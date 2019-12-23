@@ -128,16 +128,11 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <div class="form-group">
-                                                            {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::select("source_subcampaign", [null=>__('general.select_one')] , null, ["class" => "form-control source_subcampaign"]) !!}
+                                                            <label for="subcamps">{{__('tools.subcampaign')}}</label>
+                                                            <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" />
+                                                            <datalist id="subcamps"></datalist>
                                                         </div>
 
-                                                        <div class="form-group new_source_subcampaign_group">
-                                                            {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::text('source_subcampaign', null, ['class'=>'form-control source_subcampaign', 'id'=>'new_source_subcampaign']) !!}
-                                                        </div>
-
-                                                        <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,16 +177,11 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <div class="form-group">
-                                                            {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-                                                            {!! Form::select("destination_subcampaign", [null=>__('general.select_one')] , null, ["class" => "form-control destination_subcampaign"]) !!}
+                                                            <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
+                                                            <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
+                                                            <datalist id="destination_subcampaign"></datalist>
                                                         </div>
 
-                                                        <div class="form-group new_destination_subcampaign_group">
-                                                            {!! Form::label('destination_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::text('destination_subcampaign', null, ['class'=>'form-control destination_subcampaign', 'id'=>'new_destination_subcampaign']) !!}
-                                                        </div>
-
-                                                        <a href="#" class=" add_new_subcampaign">Add New Subcampaign</a>
                                                     </div>
                                                 </div>
                                             </div>

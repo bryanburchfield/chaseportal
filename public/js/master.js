@@ -96,8 +96,6 @@ var Master = {
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
         $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
-        $('.add_new_subcampaign').on('click', this.toggle_new_subcampaign);
-
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
 	},
 
@@ -386,8 +384,8 @@ var Master = {
                 }
 
                 if(selector == 'campaign_select' || selector == 'update_campaign_select'){
-                    $('#source_subcampaign').empty();
-                    $('#source_subcampaign').append(subcampaigns);
+                    $('#subcamps').empty();
+                    $('#subcamps').append(subcampaigns);
                 }else{
                     $('#destination_subcampaign').empty();
                     $('#destination_subcampaign').append(subcampaigns);
@@ -474,37 +472,6 @@ var Master = {
         }
     },
 
-    toggle_new_subcampaign:function(e){
-        e.preventDefault();
-
-        if($(this).parent().attr('id') == 'action'){
-            $('.destination_subcampaign').val('');
-
-            if(!$(this).hasClass('undo_new_subcampaign')){
-                $('.destination_subcampaign').parent().hide();
-                $('.new_destination_subcampaign_group').show();
-                $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
-            }else{
-                $('.destination_subcampaign').parent().show();
-                $('.new_destination_subcampaign_group').hide();
-                $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
-            }
-        }else{
-            // $('.source_subcampaign').val('');
-
-            if(!$(this).hasClass('undo_new_subcampaign')){
-                $('.source_subcampaign').parent().hide();
-                $('.new_source_subcampaign_group').show();
-                $(this).addClass('undo_new_subcampaign').text('Select Existing Subcampaign');
-            }else{
-                $('.source_subcampaign').parent().show();
-                $('.new_source_subcampaign_group').hide();
-                $(this).removeClass('undo_new_subcampaign').text('Add New Subcampaign');
-            }
-        }
-        
-    },
-
     toggle_leadrule:function(){
         var checked;
         var ruleid = $(this).parent().parent().parent().data('ruleid');
@@ -542,8 +509,9 @@ var Master = {
 
         var rule_name = $('#rule_name').val(),
             source_campaign = $('#campaign_select').val(),
+            source_subcampaign=$('.source_subcampaign').val(),
             destination_campaign = $('#destination_campaign').val(),
-            destination_subcampaign = $('#destination_subcampaign').val(),
+            destination_subcampaign = $('.destination_subcampaign').val(),
             description = $('#description').val()
         ;
 
@@ -551,12 +519,6 @@ var Master = {
         $('.lead_rule_filter_type').each(function(){
             filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
         });
-
-        if($('#source_subcampaign').val() !=''){
-            var source_subcampaign=$('#source_subcampaign').val();
-        }else{
-            var source_subcampaign=$('#new_source_subcampaign').val();
-        }
 
         $.ajaxSetup({
             headers: {
@@ -609,7 +571,9 @@ var Master = {
         var rule_id = $('.rule_id').val(),
             rule_name = $('#rule_name').val(),
             source_campaign = $('#update_campaign_select').val(),
-            destination_campaign = $('#update_destination_campaign').val(),
+            source_subcampaign=$('.source_subcampaign').val();
+            destination_campaign = $('update_destination_campaign').val(),
+            destination_subcampaign=$('.destination_subcampaign').val();
             description = $('#description').val()
         ;
 
@@ -617,20 +581,6 @@ var Master = {
         $('.lead_rule_filter_type').each(function(){
             filters[$(this).val()] = $(this).parent().next('div').find('input.filter_value').val();
         });
-
-        if($('#source_subcampaign').val() !=''){
-            var source_subcampaign=$('#source_subcampaign').val();
-        }else{
-            var source_subcampaign=$('#new_source_subcampaign').val();
-        }
-
-        if($('#destination_subcampaign').val() !=''){
-            var destination_subcampaign=$('#destination_subcampaign').val();
-        }else{
-            var destination_subcampaign=$('#new_destination_subcampaign').val();
-        }
-
-        console.log(filters);
 
         $.ajaxSetup({
             headers: {
