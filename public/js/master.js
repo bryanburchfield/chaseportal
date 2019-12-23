@@ -2119,4 +2119,13 @@ $(document).ready(function () {
         $('.edit_rule .new_destination_subcampaign_group').next().addClass('undo_new_subcampaign');
         $('.edit_rule .new_destination_subcampaign_group').next().text('Select Existing Subcampaign');
     }
+
+    var x=2;
+    $('.edit_ruleparent .leadfilter_row').each(function(i){
+        if(i){
+            $(this).find('.lead_rule_filter_type').attr('id', 'update_filter_type'+x).attr('name', 'filter_type'+x);
+            $(this).find('#update_filter_value').attr('id', 'update_filter_value'+x).attr('name', 'filter_value'+x);
+            x++;
+        }
+    });
 });
