@@ -615,7 +615,7 @@ var Master = {
 
         var filters={};
         $('.lead_rule_filter_type').each(function(){
-            filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+            filters[$(this).val()] = $(this).parent().next('div').find('input.filter_value').val();
         });
 
         if($('#source_subcampaign').val() !=''){
@@ -629,6 +629,8 @@ var Master = {
         }else{
             var destination_subcampaign=$('#new_destination_subcampaign').val();
         }
+
+        console.log(filters);
 
         $.ajaxSetup({
             headers: {
