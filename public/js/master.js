@@ -608,9 +608,8 @@ var Master = {
 
         var rule_id = $('.rule_id').val(),
             rule_name = $('#rule_name').val(),
-            source_campaign = $('#campaign_select').val(),
-            destination_campaign = $('#destination_campaign').val(),
-            destination_subcampaign = $('#destination_subcampaign').val(),
+            source_campaign = $('#update_campaign_select').val(),
+            destination_campaign = $('#update_destination_campaign').val(),
             description = $('#description').val()
         ;
 
@@ -623,6 +622,12 @@ var Master = {
             var source_subcampaign=$('#source_subcampaign').val();
         }else{
             var source_subcampaign=$('#new_source_subcampaign').val();
+        }
+
+        if($('#destination_subcampaign').val() !=''){
+            var destination_subcampaign=$('#destination_subcampaign').val();
+        }else{
+            var destination_subcampaign=$('#new_destination_subcampaign').val();
         }
 
         $.ajaxSetup({
