@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\LeadRule;
 use App\Rules\ValidRuleFilters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,12 @@ class LeadFilter extends FormRequest
         return true;
     }
 
+    // protected function failedValidation($validator)
+    // {
+    //     Log::debug($validator->errors());
+    //     parent::failedValidation($validator);
+    // }
+
     /**
      * Prepare the data for validation.
      *
@@ -31,6 +38,16 @@ class LeadFilter extends FormRequest
      */
     protected function prepareForValidation()
     {
+        // if id not passed (adding), insert id=0
+        // otherwise, check that rule belongs to user's group_id, 404 if not
+        if ($this->has('id')) {
+            $lead_rule = LeadRule::where('id', $this->id)
+                ->where('group_id', Auth::user()->group_id)
+                ->firstOrFail();
+        } else {
+            $this->merge(['id' => 0]);
+        }
+
         // strip out any filters with null or blank values
         if ($this->has('filters')) {
             if (is_array($this->filters)) {
@@ -53,10 +70,7 @@ class LeadFilter extends FormRequest
     public function rules()
     {
         $group_id = Auth::user()->group_id;
-
-        // This validation is used for both add and update, so get the
-        // id of the rule being edited, or set to 0 for an add
-        $id = request('id', 0);
+        $id = $this->id;
 
         return [
             'rule_name' => [
