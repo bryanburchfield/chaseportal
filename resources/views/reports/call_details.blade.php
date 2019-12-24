@@ -105,7 +105,7 @@
 
 			<div class="checkbox">
                 <label>
-                    {!! Form::checkbox('showonlyterm', null, false, ['id'=>'showonlyterm']) !!}
+                    {!! Form::checkbox('showonlyterm', null, $filters['showonlyterm'], ['id'=>'showonlyterm']) !!}
                     {{__('reports.termination_status')}}
                 </label>
 			</div>
