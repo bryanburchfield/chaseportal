@@ -14,6 +14,8 @@ class DncFileDetail extends Model
         'error',
     ];
 
+    public $timestamps = false;
+
     public function dncFile()
     {
         return $this->belongsTo('App\Models\DncFile');

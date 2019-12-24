@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DncImport;
 use App\Models\DncFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DncController extends Controller
 {
@@ -56,7 +58,6 @@ class DncController extends Controller
         $page['type'] = 'page';
         $data = [
             'page' => $page,
-            'files' => $this->getFiles(),
         ];
 
         return view('tools.dnc_upload')->with($data);
@@ -64,7 +65,9 @@ class DncController extends Controller
 
     public function uploadFile(Request $request)
     {
-        return $request->all();
+        Excel::import(new DncImport(99), $request->file('myfile'));
+
+        return $request->file('myfile');
     }
 
     public function deleteFile(Request $request)
