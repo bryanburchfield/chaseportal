@@ -72,6 +72,13 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
+						{!! Form::label('is_callable', __('reports.is_callable')) !!}
+						{!! Form::select("is_callable", $filters['is_callable'], null, ["class" => "form-control", 'id'=> 'is_callable']) !!}
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
 						{!! Form::label('call_type', __('reports.call_type')) !!}
 						{!! Form::select("call_type", $filters['call_types'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 					</div>

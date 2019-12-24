@@ -22,6 +22,7 @@ class CallDetails
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
+        $this->params['is_callable'] = '';
         $this->params['calltype'] = '';
         $this->params['phone'] = '';
         $this->params['callerids'] = [];
@@ -38,6 +39,7 @@ class CallDetails
             'FirstName' => 'reports.firstname',
             'Date' => 'reports.date',
             'CallStatus' => 'reports.callstatus',
+            'IsCallable' => 'reports.is_callable',
             'Duration' => 'reports.duration',
             'CallType' => 'reports.calltype',
             'Details' => 'reports.details',
@@ -55,6 +57,11 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
+            'is_callable' => [
+                '' => '',
+                'Y' => trans('general.yes'),
+                'N' => trans('general.no'),
+            ],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -170,6 +177,14 @@ class CallDetails
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
+            $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
+                FROM [$db].[dbo].[Dispos] D
+                WHERE D.Disposition = DR.CallStatus
+                AND (GroupId = DR.GroupId OR IsSystem=1)
+                AND (Campaign = DR.Campaign OR Campaign = '')
+                ORDER BY [Description] Desc
+                ), 0)";
+
             $sql .= " $union SELECT
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
@@ -181,6 +196,7 @@ class CallDetails
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')
                 END as CallStatus,
+                $is_callable_sql as IsCallable,
                 DR.Duration,
                 CASE
                     WHEN DR.CallType= -1 THEN ''
@@ -205,6 +221,12 @@ class CallDetails
             AND DR.Date <= :enddate$i
             AND DR.CallType != 7
             $where";
+
+            // sql server goofyness
+            if (!empty($this->params['is_callable'])) {
+                $bind['is_callable' . $i] = $this->params['is_callable'] == 'Y' ? 1 : 0;
+                $sql .= " AND $is_callable_sql = :is_callable$i";
+            }
 
             $union = 'UNION ALL';
         }
@@ -271,6 +293,10 @@ class CallDetails
 
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->is_callable)) {
+            $this->params['is_callable'] = $request->is_callable;
         }
 
         if (!empty($request->calltype)) {

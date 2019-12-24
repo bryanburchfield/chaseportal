@@ -38,6 +38,7 @@ return [
      'end'                => 'Final',
      'from'               => 'Desde',
      'inbound_sources'    => 'Fuentes de Entrada',
+     'is_callable'        => 'Es invocable',
      'rep'                => 'Agente',
      'reps'               => 'Agentes',
      'run_report'         => 'Generar Informe',
