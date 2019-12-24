@@ -26,7 +26,7 @@ class CallDetails
         $this->params['phone'] = '';
         $this->params['callerids'] = [];
         $this->params['callerid'] = '';
-        $this->params['callstatuses'] = [];
+        $this->params['call_statuses'] = [];
         $this->params['durationfrom'] = '';
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
@@ -120,13 +120,13 @@ class CallDetails
             $sql .= "
             INSERT INTO #SelectedRep SELECT DISTINCT [value] from dbo.SPLIT(:reps, '!#!');";
         }
-        if (!empty($this->params['callstatuses']) && $this->params['callstatuses'] != '*') {
-            $callstatuses = str_replace("'", "''", implode('!#!', $this->params['callstatuses']));
-            $bind['callstatuses'] = $callstatuses;
+        if (!empty($this->params['call_statuses']) && $this->params['call_statuses'] != '*') {
+            $call_statuses = str_replace("'", "''", implode('!#!', $this->params['call_statuses']));
+            $bind['call_statuses'] = $call_statuses;
 
             $where .= " AND CS.CallStatusName IS NOT NULL";
             $sql .= "
-            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT(:callstatuses, '!#!');";
+            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT(:call_statuses, '!#!');";
         }
         if (!empty($this->params['callerids']) && $this->params['callerids'] != '*') {
             $callerids = str_replace("'", "''", implode('!#!', $this->params['callerids']));
@@ -195,7 +195,7 @@ class CallDetails
                 END as CallType,
                 DR.Details
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
-            LEFT JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
+            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
@@ -289,8 +289,8 @@ class CallDetails
             $this->params['callerid'] = $request->callerid;
         }
 
-        if (!empty($request->callstatuses)) {
-            $this->params['callstatuses'] = $request->callstatuses;
+        if (!empty($request->call_statuses)) {
+            $this->params['call_statuses'] = $request->call_statuses;
         }
 
         if (empty($request->durationfrom)) {
