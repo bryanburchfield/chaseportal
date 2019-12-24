@@ -22,11 +22,12 @@ class CallDetails
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
+        $this->params['is_callable'] = '';
         $this->params['calltype'] = '';
         $this->params['phone'] = '';
         $this->params['callerids'] = [];
         $this->params['callerid'] = '';
-        $this->params['callstatuses'] = [];
+        $this->params['call_statuses'] = [];
         $this->params['durationfrom'] = '';
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
@@ -38,6 +39,7 @@ class CallDetails
             'FirstName' => 'reports.firstname',
             'Date' => 'reports.date',
             'CallStatus' => 'reports.callstatus',
+            'IsCallable' => 'reports.is_callable',
             'Duration' => 'reports.duration',
             'CallType' => 'reports.calltype',
             'Details' => 'reports.details',
@@ -55,6 +57,11 @@ class CallDetails
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
+            'is_callable' => [
+                '' => '',
+                'Y' => trans('general.yes'),
+                'N' => trans('general.no'),
+            ],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -120,13 +127,13 @@ class CallDetails
             $sql .= "
             INSERT INTO #SelectedRep SELECT DISTINCT [value] from dbo.SPLIT(:reps, '!#!');";
         }
-        if (!empty($this->params['callstatuses']) && $this->params['callstatuses'] != '*') {
-            $callstatuses = str_replace("'", "''", implode('!#!', $this->params['callstatuses']));
-            $bind['callstatuses'] = $callstatuses;
+        if (!empty($this->params['call_statuses']) && $this->params['call_statuses'] != '*') {
+            $call_statuses = str_replace("'", "''", implode('!#!', $this->params['call_statuses']));
+            $bind['call_statuses'] = $call_statuses;
 
             $where .= " AND CS.CallStatusName IS NOT NULL";
             $sql .= "
-            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT(:callstatuses, '!#!');";
+            INSERT INTO #SelectedCallStatus SELECT DISTINCT [value] from dbo.SPLIT(:call_statuses, '!#!');";
         }
         if (!empty($this->params['callerids']) && $this->params['callerids'] != '*') {
             $callerids = str_replace("'", "''", implode('!#!', $this->params['callerids']));
@@ -170,6 +177,14 @@ class CallDetails
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
+            $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
+                FROM [$db].[dbo].[Dispos] D
+                WHERE D.Disposition = DR.CallStatus
+                AND (GroupId = DR.GroupId OR IsSystem=1)
+                AND (Campaign = DR.Campaign OR Campaign = '')
+                ORDER BY [Description] Desc
+                ), 0)";
+
             $sql .= " $union SELECT
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
@@ -181,6 +196,7 @@ class CallDetails
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')
                 END as CallStatus,
+                $is_callable_sql as IsCallable,
                 DR.Duration,
                 CASE
                     WHEN DR.CallType= -1 THEN ''
@@ -195,7 +211,7 @@ class CallDetails
                 END as CallType,
                 DR.Details
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
-            LEFT JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
+            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
@@ -205,6 +221,12 @@ class CallDetails
             AND DR.Date <= :enddate$i
             AND DR.CallType != 7
             $where";
+
+            // sql server goofyness
+            if (!empty($this->params['is_callable'])) {
+                $bind['is_callable' . $i] = $this->params['is_callable'] == 'Y' ? 1 : 0;
+                $sql .= " AND $is_callable_sql = :is_callable$i";
+            }
 
             $union = 'UNION ALL';
         }
@@ -273,6 +295,10 @@ class CallDetails
             $this->params['reps'] = $request->reps;
         }
 
+        if (!empty($request->is_callable)) {
+            $this->params['is_callable'] = $request->is_callable;
+        }
+
         if (!empty($request->calltype)) {
             $this->params['calltype'] = $request->calltype;
         }
@@ -289,8 +315,8 @@ class CallDetails
             $this->params['callerid'] = $request->callerid;
         }
 
-        if (!empty($request->callstatuses)) {
-            $this->params['callstatuses'] = $request->callstatuses;
+        if (!empty($request->call_statuses)) {
+            $this->params['call_statuses'] = $request->call_statuses;
         }
 
         if (empty($request->durationfrom)) {

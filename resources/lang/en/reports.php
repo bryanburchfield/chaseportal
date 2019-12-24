@@ -38,6 +38,7 @@ return [
 	'end'                => 'End',
 	'from'               => 'From',
 	'inbound_sources'    => 'Inbound Sources',
+	'is_callable'        => 'Is Callable',
 	'rep'                => 'Rep',
 	'reps'               => 'Reps',
 	'run_report'         => 'Run Report',
