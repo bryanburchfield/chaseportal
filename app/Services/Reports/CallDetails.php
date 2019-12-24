@@ -35,6 +35,7 @@ class CallDetails
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
             'Phone' => 'reports.phone',
+            'CallerId' => 'reports.callerid',
             'LastName' => 'reports.lastname',
             'FirstName' => 'reports.firstname',
             'Date' => 'reports.date',
@@ -63,6 +64,7 @@ class CallDetails
                 'N' => trans('general.no'),
             ],
             'db_list' => Auth::user()->getDatabaseArray(),
+            'showonlyterm' => 1,
         ];
 
         // Remove SMS and add 'all' to list of call types
@@ -189,6 +191,7 @@ class CallDetails
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Phone,
+                DR.CallerId,
                 L.LastName,
                 L.FirstName,
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
