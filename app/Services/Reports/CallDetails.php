@@ -238,7 +238,7 @@ class CallDetails
         SELECT *, totRows = COUNT(*) OVER()
         FROM #BigTable";
 
-        if (!empty($this->params['calltype'])) {
+        if (strlen($this->params['calltype']) !== 0) {
             $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
         }
 
@@ -302,8 +302,8 @@ class CallDetails
             $this->params['is_callable'] = $request->is_callable;
         }
 
-        if (!empty($request->calltype)) {
-            $this->params['calltype'] = $request->calltype;
+        if (!empty($request->call_type)) {
+            $this->params['calltype'] = $request->call_type;
         }
 
         if (!empty($request->phone)) {
