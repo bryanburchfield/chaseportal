@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\DncImportHeader;
 use App\Imports\DncImportNoHeader;
 use App\Models\DncFile;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -67,11 +68,16 @@ class DncController extends Controller
 
     public function uploadFile(Request $request)
     {
-        $headings = (new HeadingRowImport())->toArray($request->file('myfile'));
+        try {
+            $headings = (new HeadingRowImport())->toArray($request->file('myfile'));
+        } catch (\Exception $e) {
+            $headings = null;
+        }
 
         if (isset($headings[0][0][1])) {
             $headings = $headings[0][0];
-            dd($headings);
+            // need to figure out column
+            $column = '?';
         } elseif (isset($headings[0][0][0])) {
             if ($request->has_headers) {
                 $column = $headings[0][0][0];
@@ -79,8 +85,10 @@ class DncController extends Controller
                 $column = 0;
             }
         } else {
-            dd('error in file');
+            return back()->withErrors(['file' => ['Error in file.']]);
         }
+
+        dd($column);
 
         // insert dnc_file record
         $dnc_file_id = 99;

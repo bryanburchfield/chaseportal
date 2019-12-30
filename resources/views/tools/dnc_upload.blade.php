@@ -36,7 +36,14 @@ if (Auth::user()->isType('demo')) {
 	<br>
 	<input type="submit" value="submit" />
 </form>
-                            </p>
+							</p>
+							@if($errors->any())
+								<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+								</ul>
+							@endif
 						</div>
 					</div>
 				</div>
