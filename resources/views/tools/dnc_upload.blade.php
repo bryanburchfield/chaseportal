@@ -32,6 +32,8 @@ if (Auth::user()->isType('demo')) {
 <form enctype="multipart/form-data" method="post">
 	@csrf
 	<input name="myfile" type="file" />
+	Has Headers: <input name="has_headers" type="checkbox" />
+	<br>
 	<input type="submit" value="submit" />
 </form>
                             </p>

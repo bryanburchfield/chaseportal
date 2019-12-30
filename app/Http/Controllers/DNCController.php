@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\DncImport;
+use App\Imports\DncImportHeader;
+use App\Imports\DncImportNoHeader;
 use App\Models\DncFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class DncController extends Controller
 {
@@ -65,7 +67,32 @@ class DncController extends Controller
 
     public function uploadFile(Request $request)
     {
-        Excel::import(new DncImport(99), $request->file('myfile'));
+        $headings = (new HeadingRowImport())->toArray($request->file('myfile'));
+
+        if (isset($headings[0][0][1])) {
+            $headings = $headings[0][0];
+            dd($headings);
+        } elseif (isset($headings[0][0][0])) {
+            if ($request->has_headers) {
+                $column = $headings[0][0][0];
+            } else {
+                $column = 0;
+            }
+        } else {
+            dd('error in file');
+        }
+
+        // insert dnc_file record
+        $dnc_file_id = 99;
+
+        // load file
+        if ($request->has_headers) {
+            Excel::import(new DncImportHeader($dnc_file_id, $column), $request->file('myfile'));
+        } else {
+            Excel::import(new DncImportNoHeader($dnc_file_id, $column), $request->file('myfile'));
+        }
+
+        // roll it all back if errors
 
         return $request->file('myfile');
     }
