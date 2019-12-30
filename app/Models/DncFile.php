@@ -11,7 +11,10 @@ class DncFile extends Model
         'user_id',
         'description',
         'uploaded_at',
+        'process_started_at',
         'processed_at',
+        'reverse_started_at',
+        'reversed_at',
     ];
 
     protected $hidden = [

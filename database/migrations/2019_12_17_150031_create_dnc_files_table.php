@@ -19,7 +19,10 @@ class CreateDncFilesTable extends Migration
             $table->bigInteger('user_id');
             $table->string('description')->nullable();
             $table->timestamp('uploaded_at');
+            $table->timestamp('process_started_at')->nullable();
             $table->timestamp('processed_at')->nullable();
+            $table->timestamp('reverse_started_at')->nullable();
+            $table->timestamp('reversed_at')->nullable();
             $table->timestamps();
         });
     }

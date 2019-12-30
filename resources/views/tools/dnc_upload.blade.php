@@ -27,14 +27,19 @@ if (Auth::user()->isType('demo')) {
 
 						<div class="tab-pane mt30" id="dnc_importer">
                             <h2 class="bbnone">Upload a DNC File</h2>
-                            File must be in CSV format.
+							File must be in CSV, XLS, or XLSX format.<br>
+							If file has headers, there must be a 'Phone' column.  If file doesn't have
+							headers, the phone has to be the first column.
                             <p>
 <form enctype="multipart/form-data" method="post">
 	@csrf
 	<input name="myfile" type="file" />
+	<br>
+	Description: <input name="description" type="text" />
+	<br>
 	Has Headers: <input name="has_headers" type="checkbox" />
 	<br>
-	<input type="submit" value="submit" />
+	<input type="submit" value="Submit" />
 </form>
 							</p>
 							@if($errors->any())

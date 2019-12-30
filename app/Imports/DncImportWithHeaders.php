@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class DncImportHeader extends DncImport implements WithHeadingRow
+class DncImportWithHeaders extends DncImport implements WithHeadingRow
 {
     //
 }

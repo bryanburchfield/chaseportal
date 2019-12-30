@@ -26,6 +26,12 @@ if (Auth::user()->isType('demo')) {
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
 
 						<div class="tab-pane mt30" id="dnc_importer">
+							@if ($message = Session::get('flash'))
+							<div class="alert alert-info alert-block">
+								<button type="button" class="close" data-dismiss="alert">×</button>	
+								<strong>{{ $message }}</strong>
+							</div>
+							@endif
 							<h2 class="bbnone">Do Not Call Files</h2>
 							@if (count($files))
 							<div class="table-responsive">
@@ -38,7 +44,7 @@ if (Auth::user()->isType('demo')) {
 											<th>Records</th>
 											<th>Errors</th>
 											<th>Processed</th>
-											<th>Delete</th>
+											<th>Reversed</th>
 										</tr>
 									</thead>
 
@@ -51,15 +57,23 @@ if (Auth::user()->isType('demo')) {
 												<td>{{$file['recs']}}</td>
 												<td>{{$file['errors']}}</td>
 												<td>
-													@if (empty($file['processed_at']))
-													[PROCESS BUTTON]
+													@if (empty($file['process_started_at']))
+														[PROCESS BUTTON]
+													@elseif (empty($file['processed_at']))
+														In Process
 													@else
-													{{$file['processed_at']}}
+														{{$file['processed_at']}}
 													@endif
 												</td>
 												<td>
-													@if (empty($file['processed_at']))
+													@if (empty($file['process_started_at']))
 														[DELETE BUTTON]
+													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
+														[REVERSE BUTTON]
+													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
+														In Process
+													@else
+														{{$file['reversed_at']}}
 													@endif
 												</td>
 											</tr>
