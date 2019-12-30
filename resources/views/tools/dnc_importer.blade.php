@@ -28,13 +28,16 @@ if (Auth::user()->isType('demo')) {
 						<div class="tab-pane mt30" id="dnc_importer">
 							@if ($message = Session::get('flash'))
 							<div class="alert alert-info alert-block">
-								<button type="button" class="close" data-dismiss="alert">×</button>	
+								<button type="button" class="close" aria-label="Close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>	
 								<strong>{{ $message }}</strong>
 							</div>
 							@endif
 							<h2 class="bbnone">Do Not Call Files</h2>
+							<a href="/tools/dnc_importer/upload">Upload a New File</a>
 							@if (count($files))
 							<div class="table-responsive">
+								<form enctype="multipart/form-data" method="post">
+								@csrf
                                	<table class="table rules_table mt20">
 									<thead>
 										<tr>
@@ -58,7 +61,7 @@ if (Auth::user()->isType('demo')) {
 												<td>{{$file['errors']}}</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														[PROCESS BUTTON]
+														<button name="action" value="process:{{$file['id']}}">Process</button>
 													@elseif (empty($file['processed_at']))
 														In Process
 													@else
@@ -67,9 +70,9 @@ if (Auth::user()->isType('demo')) {
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														[DELETE BUTTON]
+														<button name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')">Delete</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														[REVERSE BUTTON]
+														<button name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')">Reverse</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														In Process
 													@else
@@ -79,13 +82,11 @@ if (Auth::user()->isType('demo')) {
 											</tr>
 										@endforeach
 									</tbody>
-									@else
-									No files have been uploaded yet
 									@endif
 								</table>
+								</form>
 							</div>
 						</div>
-						<a href="/tools/dnc_importer/upload">Upload a File</a>
 					</div>
 				</div>
 			</div>

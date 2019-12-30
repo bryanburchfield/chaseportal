@@ -43,17 +43,20 @@ class DncController extends Controller
         foreach ($files as $file) {
             // get details
             $file->recs = $file->dncFileDetails->count();
-            $file->errors = $file->dncFileDetails->where('succeeded', "!=", null)->where('succeeded', false)->count();
+            $file->errors = $file->dncFileDetails
+                ->where('succeeded', "!=", null)
+                ->where('succeeded', false)
+                ->count();
 
             // format dates
             $file->uploaded_at = Carbon::parse($file->uploaded_at)
                 ->tz($tz)
-                ->toDateTimeString();
+                ->isoFormat('L LT');
 
             if (!empty($file->processed_at)) {
                 $file->processed_at = Carbon::parse($file->processed_at)
                     ->tz($tz)
-                    ->toDateTimeString();
+                    ->isoFormat('L LT');
             } else {
                 $file->processed_at = '';
             }
@@ -61,7 +64,7 @@ class DncController extends Controller
             if (!empty($file->reversed_at)) {
                 $file->reversed_at = Carbon::parse($file->reversed_at)
                     ->tz($tz)
-                    ->toDateTimeString();
+                    ->isoFormat('L LT');
             } else {
                 $file->reversed_at = '';
             }
@@ -107,18 +110,71 @@ class DncController extends Controller
 
         Excel::import($importer, $request->file('myfile'));
 
-        $request->session()->flash('flash', 'Uploaded ' . $importer->getCount() . ' records.');
+        session()->flash('flash', 'Uploaded ' . $importer->getCount() . ' records.');
 
         return redirect()->action('DncController@index');
     }
 
-    public function deleteFile(Request $request)
+    public function handleAction(Request $request)
     {
-        return $request->all();
+        list($action, $id) = explode(':', $request->action);
+
+        switch ($action) {
+            case 'delete':
+                $this->deleteFile($id);
+                break;
+            case 'process':
+                $this->processFile($id);
+                break;
+            case 'reverse':
+                $this->reverseFile($id);
+                break;
+            default:
+                abort(404);
+        }
+
+        return redirect()->action('DncController@index');
     }
 
-    public function processFile(Request $request)
+    private function deleteFile($id)
     {
-        return $request->all();
+        $dnc_file = DncFile::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->whereNull('process_started_at')
+            ->firstOrFail();
+
+        $dnc_file->delete();
+
+        session()->flash('flash', 'Deleted file #' . $id);
+    }
+
+    private function processFile($id)
+    {
+        $dnc_file = DncFile::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->whereNull('process_started_at')
+            ->firstOrFail();
+
+        $dnc_file->process_started_at = now();
+        $dnc_file->save();
+
+
+
+        session()->flash('flash', 'Processing file #' . $id);
+    }
+    private function reverseFile($id)
+    {
+        $dnc_file = DncFile::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->whereNotNull('processed_at')
+            ->whereNull('reverse_started_at')
+            ->firstOrFail();
+
+        $dnc_file->reverse_started_at = now();
+        $dnc_file->save();
+
+
+
+        session()->flash('flash', 'Reversing file #' . $id);
     }
 }
