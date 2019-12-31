@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Imports\DncImportWithHeaders;
 use App\Imports\DncImportNoHeaders;
+use App\Jobs\ProcessDncFile;
+use App\Jobs\ReverseDncFile;
 use App\Models\DncFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -158,7 +160,8 @@ class DncController extends Controller
         $dnc_file->process_started_at = now();
         $dnc_file->save();
 
-
+        // Dispatch job to run in the background
+        ProcessDncFile::dispatch($dnc_file, Auth::user()->id);
 
         session()->flash('flash', 'Processing file #' . $id);
     }
@@ -173,7 +176,8 @@ class DncController extends Controller
         $dnc_file->reverse_started_at = now();
         $dnc_file->save();
 
-
+        // Dispatch job to run in the background
+        ReverseDncFile::dispatch($dnc_file, Auth::user()->id);
 
         session()->flash('flash', 'Reversing file #' . $id);
     }
