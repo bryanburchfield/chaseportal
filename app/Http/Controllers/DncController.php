@@ -10,6 +10,7 @@ use App\Models\DncFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DncController extends Controller
@@ -96,6 +97,10 @@ class DncController extends Controller
             $column = 0;
         }
 
+        // We have no control over what files the user throws at us
+        // so wrap this in a transaction in case it craps out
+        DB::beginTransaction();
+
         // insert dnc_file record
         $dnc_file = DncFile::create([
             'group_id' => Auth::user()->group_id,
@@ -115,7 +120,22 @@ class DncController extends Controller
 
         Excel::import($importer, $request->file('myfile'));
 
-        session()->flash('flash', 'Uploaded ' . $importer->getCount() . ' records.');
+        // Commit all the inserts
+        DB::commit();
+
+        $dnc_file->refresh();
+
+        $tot_recs = $dnc_file->dncFileDetails->count();
+
+        if (
+            $tot_recs == 0 ||
+            $tot_recs == $dnc_file->errorRecs()->count()
+        ) {
+            $dnc_file->delete();
+            session()->flash('flash', 'ERROR: No valid phone numbers could be found in that file');
+        } else {
+            session()->flash('flash', 'Uploaded ' . $tot_recs . ' records.');
+        }
 
         return redirect()->action('DncController@index');
     }

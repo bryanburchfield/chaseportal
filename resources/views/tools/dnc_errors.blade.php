@@ -19,7 +19,11 @@
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
 
 						<div class="tab-pane mt30" id="dnc_importer">
-							<h2 class="bbnone">Errors in file: ({{$file->id}}) {{$file->description}}</h2>
+							<h2 class="bbnone">Errors in file
+								#{{$file->id}}:
+								[{{$file->filename}}]
+								{{$file->description}}
+							</h2>
 							<form action="{{ action("DncController@index") }}" method="get">
 							<input type="submit" value="Back" />
 							@if (count($file->errorRecs()))

@@ -26,7 +26,7 @@
                             <p>
 <form enctype="multipart/form-data" method="post">
 	@csrf
-	<input name="myfile" type="file" />
+	<input name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
 	<br>
 	Description: <input name="description" type="text" />
 	<br>

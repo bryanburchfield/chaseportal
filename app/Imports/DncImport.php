@@ -21,6 +21,10 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
 
     public function model(array $row)
     {
+        if (!array_key_exists($this->column, $row)) {
+            return;
+        }
+
         $this->rows++;
 
         $record = [];
@@ -55,10 +59,5 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
     public function batchSize(): int
     {
         return 500;
-    }
-
-    public function getcount()
-    {
-        return $this->rows;
     }
 }

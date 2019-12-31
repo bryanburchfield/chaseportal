@@ -35,7 +35,7 @@
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>FileName</th>
+											<th>File Name</th>
 											<th>Uploaded</th>
 											<th>Description</th>
 											<th>Records</th>

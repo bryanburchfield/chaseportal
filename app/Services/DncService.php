@@ -54,7 +54,8 @@ class DncService
             " for group " . $this->group_id .
             "\n";
 
-        $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+        // $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+        $result = $this->testingResult();
 
         echo "Done\n";
 
@@ -80,7 +81,8 @@ class DncService
             " for group " . $this->group_id .
             "\n";
 
-        $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+        // $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+        $result = $this->testingResult();
 
         echo "Done\n";
 
@@ -93,5 +95,11 @@ class DncService
             $dnc_file_detail->succeeded = true;
             $dnc_file_detail->error = null;
         }
+    }
+
+    // delete this function after testing is done
+    private function testingResult()
+    {
+        return rand(0, 1) == 0 ? false : true;
     }
 }
