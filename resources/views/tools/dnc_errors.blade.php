@@ -27,7 +27,7 @@
 									<table class="table rules_table mt20">
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th>Line#</th>
 											<th>Phone</th>
 											<th>Error</th>
 										</tr>
@@ -35,7 +35,7 @@
 									<tbody>
 									@foreach ($file->errorRecs() as $error_rec)
 									<tr>
-										<td>{{$error_rec['id']}}</td>
+										<td>{{$error_rec['line']}}</td>
 										<td>{{$error_rec['phone']}}</td>
 										<td>{{$error_rec['error']}}</td>
 									</tr>

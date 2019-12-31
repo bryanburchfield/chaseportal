@@ -11,7 +11,7 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
 {
     protected $dnc_file_id;
     protected $column;
-    private $rows = 0;
+    protected $rows = 0;
 
     public function __construct($dnc_file_id, $column)
     {
@@ -25,6 +25,7 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
 
         $record = [];
         $record['dnc_file_id'] = $this->dnc_file_id;
+        $record['line'] = $this->rows + $this->header_adjustment;
 
         // strip non-digits from phone number
         $record['phone'] = preg_replace("/[^0-9]/", '', $row[$this->column]);

@@ -32,6 +32,7 @@ class DncController extends Controller
 
         $files = DncFile::select(
             'id',
+            'filename',
             'description',
             'uploaded_at',
             'process_started_at',
@@ -99,6 +100,7 @@ class DncController extends Controller
         $dnc_file = DncFile::create([
             'group_id' => Auth::user()->group_id,
             'user_id' => Auth::user()->id,
+            'filename' => $request->file('myfile')->getClientOriginalName(),
             'description' => $request->description,
             'uploaded_at' => now(),
             'processed_at' => null,

@@ -17,6 +17,7 @@ class CreateDncFilesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('group_id');
             $table->bigInteger('user_id');
+            $table->string('filename');
             $table->string('description')->nullable();
             $table->timestamp('uploaded_at');
             $table->timestamp('process_started_at')->nullable();

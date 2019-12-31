@@ -16,6 +16,7 @@ class CreateDncFileDetailsTable extends Migration
         Schema::create('dnc_file_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dnc_file_id');
+            $table->integer('line');
             $table->string('phone', 20);
             $table->timestamp('processed_at')->nullable();
             $table->boolean('succeeded')->nullable();

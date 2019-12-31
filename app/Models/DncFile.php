@@ -9,6 +9,7 @@ class DncFile extends Model
     protected $fillable = [
         'group_id',
         'user_id',
+        'filename',
         'description',
         'uploaded_at',
         'process_started_at',

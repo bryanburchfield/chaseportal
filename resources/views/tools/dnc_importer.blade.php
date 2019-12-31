@@ -35,6 +35,7 @@
 									<thead>
 										<tr>
 											<th>ID</th>
+											<th>FileName</th>
 											<th>Uploaded</th>
 											<th>Description</th>
 											<th>Records</th>
@@ -48,6 +49,7 @@
 										@foreach ($files as $file)
 											<tr>
 												<td>{{$file['id']}}</td>
+												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['recs']}}</td>

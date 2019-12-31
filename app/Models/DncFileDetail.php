@@ -8,6 +8,7 @@ class DncFileDetail extends Model
 {
     protected $fillable = [
         'dnc_file_id',
+        'line',
         'phone',
         'processed_at',
         'succeeded',
