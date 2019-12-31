@@ -85,6 +85,10 @@ class DncController extends Controller
 
     public function uploadFile(Request $request)
     {
+        if ($request->has('cancel')) {
+            return redirect()->action('DncController@index');
+        }
+
         if ($request->has_headers) {
             $column = 'phone';
         } else {
@@ -133,6 +137,22 @@ class DncController extends Controller
         }
 
         return redirect()->action('DncController@index');
+    }
+
+    public function showErrors(Request $request)
+    {
+        $dnc_file = DncFile::where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+
+        $page['menuitem'] = 'tools';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'file' => $dnc_file,
+        ];
+
+        return view('tools.dnc_errors')->with($data);
     }
 
     private function deleteFile($id)

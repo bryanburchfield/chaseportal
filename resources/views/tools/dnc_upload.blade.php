@@ -1,10 +1,3 @@
-@php
-if (Auth::user()->isType('demo')) {
-	$demo = true;
-} else {
-	$demo = false;
-}
-@endphp
 @extends('layouts.master')
 @section('title', __('tools.tools'))
 
@@ -40,6 +33,7 @@ if (Auth::user()->isType('demo')) {
 	Has Headers: <input name="has_headers" type="checkbox" />
 	<br>
 	<input type="submit" value="Submit" />
+	<input type="submit" name="cancel" value="Cancel" />
 </form>
 							</p>
 							@if($errors->any())

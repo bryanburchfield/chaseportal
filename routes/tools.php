@@ -21,6 +21,7 @@ Route::prefix('tools')->group(function () {
         // DNC Import
         Route::get('dnc_importer/', 'DncController@index');
         Route::get('dnc_importer/upload', 'DncController@uploadIndex');
+        Route::get('dnc_importer/errors/{id}', 'DncController@showErrors');
         Route::post('dnc_importer/', 'DncController@handleAction');
         Route::post('dnc_importer/delete_file', 'DncController@deleteFile');
         Route::post('dnc_importer/upload', 'DncController@uploadFile');

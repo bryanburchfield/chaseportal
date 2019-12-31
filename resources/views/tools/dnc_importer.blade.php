@@ -1,10 +1,3 @@
-@php
-if (Auth::user()->isType('demo')) {
-	$demo = true;
-} else {
-	$demo = false;
-}
-@endphp
 @extends('layouts.master')
 @section('title', __('tools.tools'))
 
@@ -58,7 +51,11 @@ if (Auth::user()->isType('demo')) {
 												<td>{{$file['uploaded_at']}}</td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['recs']}}</td>
-												<td>{{$file['errors']}}</td>
+												@if ($file['errors'] > 0)
+													<td><a href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+												@else
+													<td>{{$file['errors']}}</td>
+												@endif
 												<td>
 													@if (empty($file['process_started_at']))
 														<button name="action" value="process:{{$file['id']}}">Process</button>
@@ -82,10 +79,10 @@ if (Auth::user()->isType('demo')) {
 											</tr>
 										@endforeach
 									</tbody>
-									@endif
 								</table>
 								</form>
 							</div>
+							@endif
 						</div>
 					</div>
 				</div>
