@@ -25,4 +25,12 @@ class DncFile extends Model
     {
         return $this->hasMany('App\Models\DncFileDetail');
     }
+
+    public function errorRecs()
+    {
+        return DncFileDetail::where('dnc_file_id', $this->id)
+            ->whereNotNull('succeeded')
+            ->where('succeeded', false)
+            ->get();
+    }
 }

@@ -45,10 +45,7 @@ class DncController extends Controller
         foreach ($files as $file) {
             // get details
             $file->recs = $file->dncFileDetails->count();
-            $file->errors = $file->dncFileDetails
-                ->where('succeeded', "!=", null)
-                ->where('succeeded', false)
-                ->count();
+            $file->errors = $file->errorRecs()->count();
 
             // format dates
             $file->uploaded_at = Carbon::parse($file->uploaded_at)

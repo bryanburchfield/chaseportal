@@ -25,7 +25,6 @@ class DncService
     {
         foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
             $this->insertDnc($dnc_file_detail);
-            $dnc_file_detail->processed_at = now();
             $dnc_file_detail->save();
         }
 
@@ -37,7 +36,6 @@ class DncService
     {
         foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
             $this->reverseDnc($dnc_file_detail);
-            $dnc_file_detail->processed_at = now();
             $dnc_file_detail->save();
         }
 
@@ -47,12 +45,20 @@ class DncService
 
     private function insertDnc($dnc_file_detail)
     {
-        // $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+        // No need to insert if it failed on load
+        if ($dnc_file_detail->succeeded === 0) {
+            return;
+        }
 
-        $result = true;
         echo "Inserting DNC: " . $dnc_file_detail->phone .
             " for group " . $this->group_id .
             "\n";
+
+        $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+
+        echo "Done\n";
+
+        $dnc_file_detail->processed_at = now();
 
         if ($result === false) {
             $dnc_file_detail->succeeded = false;
@@ -65,12 +71,20 @@ class DncService
 
     private function reverseDnc($dnc_file_detail)
     {
-        // $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+        // No need to reverse if it failed original insert
+        if ($dnc_file_detail->succeeded !== 1) {
+            return;
+        }
 
-        $result = true;
         echo "Reversing DNC: " . $dnc_file_detail->phone .
             " for group " . $this->group_id .
             "\n";
+
+        $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+
+        echo "Done\n";
+
+        $dnc_file_detail->processed_at = now();
 
         if ($result === false) {
             $dnc_file_detail->succeeded = false;
