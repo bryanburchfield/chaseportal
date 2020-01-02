@@ -8,6 +8,7 @@ use App\Jobs\ProcessDncFile;
 use App\Jobs\ReverseDncFile;
 use App\Models\DncFile;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class DncController extends Controller
         $page['type'] = 'page';
         $data = [
             'page' => $page,
-            'files' => $this->getFiles(),
+            'files' => $this->paginateCollection($this->getFiles()),
         ];
 
         return view('tools.dnc_importer')->with($data);
@@ -71,7 +72,24 @@ class DncController extends Controller
             }
         }
 
-        return $files->toArray();
+        return $files;
+    }
+
+    private function paginateCollection($collection, $perPage = 50)
+    {
+        // Get current page form url e.x. &page=1
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        // Slice the collection to get the items to display in current page
+        $currentPageItems = $collection->slice(($currentPage * $perPage) - $perPage, $perPage)->all();
+
+        // Create our paginator and pass it to the view
+        $paginatedItems = new LengthAwarePaginator($currentPageItems, count($collection), $perPage);
+
+        // set url path for generted links
+        $paginatedItems->setPath(request()->url());
+
+        return $paginatedItems;
     }
 
     public function uploadIndex()
