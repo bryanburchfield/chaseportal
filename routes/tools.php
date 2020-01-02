@@ -8,23 +8,28 @@ Route::prefix('tools')->group(function () {
         Route::redirect('/', 'tools/contactflow_builder');
 
         // Contact Flow (leads)
-        Route::get('contactflow_builder/', 'LeadsController@index');
-        Route::get('contactflow_builder/edit_rule/{id}', 'LeadsController@editLeadRule');
-        Route::post('contactflow_builder/', 'LeadsController@createRule');
-        Route::post('contactflow_builder/delete_rule', 'LeadsController@deleteRule');
-        Route::post('contactflow_builder/get_campaigns', 'LeadsController@getCampaigns');
-        Route::post('contactflow_builder/reverse_move', 'LeadsController@reverseMove');
-        Route::post('contactflow_builder/toggle_rule', 'LeadsController@toggleRule');
-        Route::post('contactflow_builder/update_rule', 'LeadsController@updateRule');
-        Route::post('contactflow_builder/view_rule', 'LeadsController@viewRule');
+        Route::prefix('contactflow_builder')->group(function () {
+            Route::get('/', 'LeadsController@index');
+            Route::get('/edit_rule/{id}', 'LeadsController@editLeadRule');
+            Route::post('/', 'LeadsController@createRule');
+            Route::post('/delete_rule', 'LeadsController@deleteRule');
+            Route::post('/get_campaigns', 'LeadsController@getCampaigns');
+            Route::post('/reverse_move', 'LeadsController@reverseMove');
+            Route::post('/toggle_rule', 'LeadsController@toggleRule');
+            Route::post('/update_rule', 'LeadsController@updateRule');
+            Route::post('/view_rule', 'LeadsController@viewRule');
+        });
 
         // DNC Import
-        Route::get('dnc_importer/', 'DncController@index');
-        Route::get('dnc_importer/upload', 'DncController@uploadIndex');
-        Route::get('dnc_importer/errors/{id}', 'DncController@showErrors');
-        Route::post('dnc_importer/', 'DncController@handleAction');
-        Route::post('dnc_importer/delete_file', 'DncController@deleteFile');
-        Route::post('dnc_importer/upload', 'DncController@uploadFile');
-        Route::post('dnc_importer/process_file', 'DncController@processFile');
+        Route::prefix('dnc_importer')->group(function () {
+            Route::get('/', 'DncController@index');
+            Route::get('/upload', 'DncController@uploadIndex');
+            Route::get('/errors/{id}', 'DncController@showErrors');
+            Route::get('/file/{id}', 'DncController@showRecords');
+            Route::post('/', 'DncController@handleAction');
+            Route::post('/delete_file', 'DncController@deleteFile');
+            Route::post('/upload', 'DncController@uploadFile');
+            Route::post('/process_file', 'DncController@processFile');
+        });
     });
 });

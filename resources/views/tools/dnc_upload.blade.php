@@ -21,8 +21,8 @@
 						<div class="tab-pane mt30" id="dnc_importer">
                             <h2 class="bbnone">Upload a DNC File</h2>
 							File must be in CSV, XLS, or XLSX format.<br>
-							If file has headers, there must be a 'Phone' column.  If file doesn't have
-							headers, the phone has to be the first column.
+							If the file has a header row, there must be a 'Phone' column.  If the file doesn't
+							have a header row, the phone numbers must be in the first column.
                             <p>
 <form enctype="multipart/form-data" method="post">
 	@csrf

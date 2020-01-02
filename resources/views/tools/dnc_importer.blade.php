@@ -35,9 +35,9 @@
 									<thead>
 										<tr>
 											<th>ID</th>
+											<th>Description</th>
 											<th>File Name</th>
 											<th>Uploaded</th>
-											<th>Description</th>
 											<th>Records</th>
 											<th>Errors</th>
 											<th>Processed</th>
@@ -49,9 +49,10 @@
 										@foreach ($files as $file)
 											<tr>
 												<td>{{$file['id']}}</td>
+												<td><a href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}">{{$file['id']}}</a></td>
+												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>
-												<td>{{$file['description']}}</td>
 												<td>{{$file['recs']}}</td>
 												@if ($file['errors'] > 0)
 													<td><a href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>

@@ -19,15 +19,15 @@
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
 
 						<div class="tab-pane mt30" id="dnc_importer">
-							<h2 class="bbnone">Errors in file
+							<h2 class="bbnone">File
 								#{{$file->id}}:
 								[{{$file->filename}}]
 								{{$file->description}}
 							</h2>
 							<form action="{{ action("DncController@index") }}" method="get">
 							<input type="submit" value="Back" />
-							{{ $error_recs->links() }}
-							@if (count($error_recs))
+							@if (count($all_recs))
+								{{ $all_recs->links() }}
 								<div class="table-responsive">
 									<table class="table rules_table mt20">
 									<thead>
@@ -38,17 +38,17 @@
 										</tr>
 									</thead>
 									<tbody>
-									@foreach ($error_recs as $error_rec)
+									@foreach ($all_recs as $record)
 									<tr>
-										<td>{{$error_rec['line']}}</td>
-										<td>{{$error_rec['phone']}}</td>
-										<td>{{$error_rec['error']}}</td>
+										<td>{{$record['line']}}</td>
+										<td>{{$record['phone']}}</td>
+										<td>{{$record['error']}}</td>
 									</tr>
 									@endforeach
 									</tbody>
 									</table>
 								</div>
-								{{ $error_recs->links() }}
+								{{ $all_recs->links() }}
 								<input type="submit" value="Back" />
 							@endif
 							</form>

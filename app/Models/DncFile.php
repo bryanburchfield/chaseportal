@@ -31,7 +31,6 @@ class DncFile extends Model
     {
         return DncFileDetail::where('dnc_file_id', $this->id)
             ->whereNotNull('succeeded')
-            ->where('succeeded', false)
-            ->get();
+            ->where('succeeded', false);
     }
 }
