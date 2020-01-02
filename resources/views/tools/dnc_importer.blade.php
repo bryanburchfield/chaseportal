@@ -35,12 +35,12 @@
                                	<table class="table rules_table mt20">
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th class="text-center">ID</th>
 											<th>Description</th>
 											<th>File Name</th>
 											<th>Uploaded</th>
-											<th>Records</th>
-											<th>Errors</th>
+											<th class="text-center">Records</th>
+											<th class="text-center">Errors</th>
 											<th>Processed</th>
 											<th>Reversed</th>
 										</tr>
@@ -49,19 +49,19 @@
 									<tbody>
 										@foreach ($files as $file)
 											<tr>
-												<td><a href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}">{{$file['id']}}</a></td>
+												<td><a class="btn btn-link" href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}">{{$file['id']}}</a></td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>
-												<td>{{$file['recs']}}</td>
+												<td class="text-center">{{$file['recs']}}</td>
 												@if ($file['errors'] > 0)
-													<td><a href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+													<td><a class="btn btn-link text-center" href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
 												@else
 													<td>{{$file['errors']}}</td>
 												@endif
 												<td>
 													@if (empty($file['process_started_at']))
-														<button name="action" value="process:{{$file['id']}}">Process</button>
+														<button class="btn btn-success" name="action" value="process:{{$file['id']}}">Process</button>
 													@elseif (empty($file['processed_at']))
 														In Process
 													@else
@@ -70,9 +70,9 @@
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														<button name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')">Delete</button>
+														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')">Delete</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														<button name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')">Reverse</button>
+														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')">Reverse</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														In Process
 													@else

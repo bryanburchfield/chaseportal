@@ -30,7 +30,7 @@
 	<br>
 	Description: <input name="description" type="text" />
 	<br>
-	Has Headers: <input name="has_headers" type="checkbox" />
+	Has Header Row: <input name="has_headers" type="checkbox" />
 	<br>
 	<input type="submit" value="Submit" />
 	<input type="submit" name="cancel" value="Cancel" />
