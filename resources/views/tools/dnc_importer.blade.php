@@ -48,7 +48,6 @@
 									<tbody>
 										@foreach ($files as $file)
 											<tr>
-												<td>{{$file['id']}}</td>
 												<td><a href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}">{{$file['id']}}</a></td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>

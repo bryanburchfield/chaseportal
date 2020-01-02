@@ -26,8 +26,8 @@
 							</h2>
 							<form action="{{ action("DncController@index") }}" method="get">
 							<input type="submit" value="Back" />
-							@if (count($all_recs))
-								{{ $all_recs->links() }}
+							@if (count($records))
+								{{ $records->links() }}
 								<div class="table-responsive">
 									<table class="table rules_table mt20">
 									<thead>
@@ -38,7 +38,7 @@
 										</tr>
 									</thead>
 									<tbody>
-									@foreach ($all_recs as $record)
+									@foreach ($records as $record)
 									<tr>
 										<td>{{$record['line']}}</td>
 										<td>{{$record['phone']}}</td>
@@ -48,7 +48,7 @@
 									</tbody>
 									</table>
 								</div>
-								{{ $all_recs->links() }}
+								{{ $records->links() }}
 								<input type="submit" value="Back" />
 							@endif
 							</form>

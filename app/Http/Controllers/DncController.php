@@ -167,17 +167,15 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $error_recs = $dnc_file->errorRecs()->paginate(50);
-
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
             'file' => $dnc_file,
-            'error_recs' => $error_recs,
+            'records' => $dnc_file->errorRecs()->paginate(50),
         ];
 
-        return view('tools.dnc_errors')->with($data);
+        return view('tools.dnc_records')->with($data);
     }
 
     public function showRecords(Request $request)
@@ -186,14 +184,12 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $all_recs = $dnc_file->dncFileDetails()->paginate(50);
-
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
             'file' => $dnc_file,
-            'all_recs' => $all_recs,
+            'records' => $dnc_file->dncFileDetails()->paginate(50),
         ];
 
         return view('tools.dnc_records')->with($data);
