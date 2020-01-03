@@ -40,4 +40,10 @@ return [
 	'tools'			=> 'Herramientas',
 	'undo_move'		=> 'Deshacer movimiento',
 	'view_details'	=> 'Ver Detalles',
+
+	'no_valid_phones' => 'ERROR: no se encontraron números de teléfono válidos en ese archivo',
+	'uploaded_records' => 'Subido :count registro|Subido :count registros',
+	'delete_file_numb' => 'Archivo eliminado #',
+	'processing_file_numb' => 'Procesando archivo #',
+	'reversing_file_numb' => 'Invertir archivo #',
 ];

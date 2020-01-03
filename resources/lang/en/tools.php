@@ -40,4 +40,10 @@ return [
 	'tools'			=> 'Tools',
 	'undo_move'		=> 'Undo Move',
 	'view_details'	=> 'View Details',
+
+	'no_valid_phones' => 'ERROR: No valid phone numbers could be found in that file',
+	'uploaded_records' => 'Uploaded :count record|Uploaded :count records',
+	'delete_file_numb' => 'Deleted file #',
+	'processing_file_numb' => 'Processing file #',
+	'reversing_file_numb' => 'Reversing file #',
 ];

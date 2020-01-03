@@ -57,7 +57,7 @@
 												@if ($file['errors'] > 0)
 													<td><a class="btn btn-link text-center" href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
 												@else
-													<td>{{$file['errors']}}</td>
+													<td class="text-center">{{$file['errors']}}</td>
 												@endif
 												<td>
 													@if (empty($file['process_started_at']))

@@ -186,9 +186,9 @@ class DncController extends Controller
             $tot_recs == $dnc_file->errorRecs()->count()
         ) {
             $dnc_file->delete();
-            session()->flash('flash', 'ERROR: No valid phone numbers could be found in that file');
+            session()->flash('flash', trans('tools.no_valid_phones'));
         } else {
-            session()->flash('flash', 'Uploaded ' . $tot_recs . ' records.');
+            session()->flash('flash', trans_choice('tools.uploaded_records', $tot_recs));
         }
 
         return redirect()->action('DncController@index');
@@ -285,7 +285,7 @@ class DncController extends Controller
 
         $dnc_file->delete();
 
-        session()->flash('flash', 'Deleted file #' . $id);
+        session()->flash('flash', trans('tools.delete_file_numb') . $id);
     }
 
     /**
@@ -307,7 +307,7 @@ class DncController extends Controller
         // Dispatch job to run in the background
         ProcessDncFile::dispatch($dnc_file, Auth::user()->id);
 
-        session()->flash('flash', 'Processing file #' . $id);
+        session()->flash('flash', trans('tools.processing_file_numb') . $id);
     }
 
     /**
@@ -330,6 +330,6 @@ class DncController extends Controller
         // Dispatch job to run in the background
         ReverseDncFile::dispatch($dnc_file, Auth::user()->id);
 
-        session()->flash('flash', 'Reversing file #' . $id);
+        session()->flash('flash', trans('tools.reversing_file_numb') . $id);
     }
 }
