@@ -27,6 +27,11 @@ class DncFile extends Model
         return $this->hasMany('App\Models\DncFileDetail');
     }
 
+    /**
+     * Return collection of error records
+     * 
+     * @return mixed 
+     */
     public function errorRecs()
     {
         return DncFileDetail::where('dnc_file_id', $this->id)

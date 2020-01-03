@@ -13,12 +13,19 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
     protected $column;
     protected $rows = 0;
 
+
     public function __construct($dnc_file_id, $column)
     {
         $this->dnc_file_id = $dnc_file_id;
         $this->column = $column;
     }
 
+    /**
+     * Create model from imported row
+     * 
+     * @param array $row 
+     * @return App\Models\DncFileDetail 
+     */
     public function model(array $row)
     {
         if (!array_key_exists($this->column, $row)) {
@@ -51,11 +58,21 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
         return new DncFileDetail($record);
     }
 
+    /**
+     * Set chunk size for reading from file
+     * 
+     * @return int 
+     */
     public function chunkSize(): int
     {
         return 500;
     }
 
+    /**
+     * Set batch size for inserting into db
+     * 
+     * @return int 
+     */
     public function batchSize(): int
     {
         return 500;

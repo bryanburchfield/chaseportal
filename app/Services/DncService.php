@@ -21,6 +21,12 @@ class DncService
         $this->api = new PowerImportAPI('http://' . $dialer->dialer_fqdn . '/PowerStudio/WebAPI');
     }
 
+    /**
+     * Process a DNC File
+     * 
+     * @param DncFile $dnc_file 
+     * @return void 
+     */
     public function processFile(DncFile $dnc_file)
     {
         foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
@@ -32,6 +38,12 @@ class DncService
         $dnc_file->save();
     }
 
+    /**
+     * Reverse a DNC File
+     * 
+     * @param DncFile $dnc_file 
+     * @return void 
+     */
     public function reverseFile(DncFile $dnc_file)
     {
         foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
@@ -43,6 +55,12 @@ class DncService
         $dnc_file->save();
     }
 
+    /**
+     * Insert a DNC record into SQL Server db
+     * 
+     * @param mixed $dnc_file_detail 
+     * @return void 
+     */
     private function insertDnc($dnc_file_detail)
     {
         // No need to insert if it failed on load
@@ -70,6 +88,12 @@ class DncService
         }
     }
 
+    /**
+     * Delete a DNC record from SQL Server db
+     * 
+     * @param mixed $dnc_file_detail 
+     * @return void 
+     */
     private function reverseDnc($dnc_file_detail)
     {
         // No need to reverse if it failed original insert

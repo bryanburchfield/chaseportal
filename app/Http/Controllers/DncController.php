@@ -7,15 +7,25 @@ use App\Imports\DncImportNoHeaders;
 use App\Jobs\ProcessDncFile;
 use App\Jobs\ReverseDncFile;
 use App\Models\DncFile;
+use Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DncController extends Controller
 {
+    /**
+     * Index
+     * 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     * @throws Exception 
+     */
     public function index()
     {
         $page['menuitem'] = 'tools';
@@ -28,6 +38,12 @@ class DncController extends Controller
         return view('tools.dnc_importer')->with($data);
     }
 
+    /**
+     * Get Files
+     * 
+     * @return mixed 
+     * @throws Exception 
+     */
     private function getFiles()
     {
         $tz = Auth::user()->ianaTz;
@@ -75,6 +91,13 @@ class DncController extends Controller
         return $files;
     }
 
+    /**
+     * Paginate Collection
+     * 
+     * @param mixed $collection 
+     * @param int $perPage 
+     * @return Illuminate\Pagination\LengthAwarePaginator 
+     */
     private function paginateCollection($collection, $perPage = 50)
     {
         // Get current page form url e.x. &page=1
@@ -92,6 +115,11 @@ class DncController extends Controller
         return $paginatedItems;
     }
 
+    /**
+     * Display form to upload a file
+     * 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
     public function uploadIndex()
     {
         $page['menuitem'] = 'tools';
@@ -103,6 +131,14 @@ class DncController extends Controller
         return view('tools.dnc_upload')->with($data);
     }
 
+    /**
+     * Handle upload file form submission
+     * 
+     * @param Request $request 
+     * @return Illuminate\Http\RedirectResponse 
+     * @throws InvalidArgumentException 
+     * @throws UrlGenerationException 
+     */
     public function uploadFile(Request $request)
     {
         if ($request->has('cancel')) {
@@ -158,6 +194,15 @@ class DncController extends Controller
         return redirect()->action('DncController@index');
     }
 
+    /**
+     * Handle actions from DNC files listing
+     * 
+     * @param Request $request 
+     * @return Illuminate\Http\RedirectResponse 
+     * @throws HttpResponseException 
+     * @throws InvalidArgumentException 
+     * @throws UrlGenerationException 
+     */
     public function handleAction(Request $request)
     {
         list($action, $id) = explode(':', $request->action);
@@ -179,6 +224,12 @@ class DncController extends Controller
         return redirect()->action('DncController@index');
     }
 
+    /**
+     * Show Errors in DNC file
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
     public function showErrors(Request $request)
     {
         $dnc_file = DncFile::where('id', $request->id)
@@ -196,6 +247,12 @@ class DncController extends Controller
         return view('tools.dnc_records')->with($data);
     }
 
+    /**
+     * Show all records in DNC file
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
     public function showRecords(Request $request)
     {
         $dnc_file = DncFile::where('id', $request->id)
@@ -213,6 +270,12 @@ class DncController extends Controller
         return view('tools.dnc_records')->with($data);
     }
 
+    /**
+     * Delete a file if not processed
+     * 
+     * @param mixed $id 
+     * @return void 
+     */
     private function deleteFile($id)
     {
         $dnc_file = DncFile::where('id', $id)
@@ -225,6 +288,12 @@ class DncController extends Controller
         session()->flash('flash', 'Deleted file #' . $id);
     }
 
+    /**
+     * Process DNC File
+     * 
+     * @param mixed $id 
+     * @return void 
+     */
     private function processFile($id)
     {
         $dnc_file = DncFile::where('id', $id)
@@ -240,6 +309,13 @@ class DncController extends Controller
 
         session()->flash('flash', 'Processing file #' . $id);
     }
+
+    /**
+     * Reverse a processed DNC file
+     * 
+     * @param mixed $id 
+     * @return void 
+     */
     private function reverseFile($id)
     {
         $dnc_file = DncFile::where('id', $id)
