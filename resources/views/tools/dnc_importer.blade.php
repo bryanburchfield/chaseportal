@@ -26,7 +26,7 @@
 							</div>
 							@endif
 							<h2 class="bbnone">Do Not Call Files</h2>
-							<a href="/tools/dnc_importer/upload">Upload a New File</a>
+							<a class="btn btn-link" href="/tools/dnc_importer/upload">Upload a New File</a>
 							@if (count($files))
 							{{ $files->links() }}
 							<div class="table-responsive">

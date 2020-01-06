@@ -100,7 +100,7 @@ class DncController extends Controller
      */
     private function paginateCollection($collection, $perPage = 50)
     {
-        // Get current page form url e.x. &page=1
+        // Get current page from url e.x. &page=1
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
         // Slice the collection to get the items to display in current page
