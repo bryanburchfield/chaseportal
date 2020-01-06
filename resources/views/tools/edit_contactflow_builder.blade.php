@@ -114,7 +114,7 @@
 
 			                <div class="form-group">
 			                    <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
-			                    <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
+			                    <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" value="{{$lead_rule->destination_subcampaign}}"/>
 			                    <datalist id="destination_subcampaign">
 			                    	@foreach($destination_subcampaign_list as $subcamp)
 										<option value="{{$subcamp}}">{{$subcamp}}</option>
