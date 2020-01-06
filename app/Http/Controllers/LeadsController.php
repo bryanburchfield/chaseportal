@@ -206,7 +206,35 @@ class LeadsController extends Controller
 
         $lead_rule->fill($request->all());
 
+        // If they hit submit without changing anything, don't bother
+        $is_dirty = false;
+
+        // See if they changed the lead_rule record
         if ($lead_rule->isDirty()) {
+            $is_dirty = true;
+        } else {
+            // Loop thru new filters to see if they are already in the db
+            $filter_count = 0;
+            foreach ($request->filters as $type => $val) {
+                $filter_count++;
+                $lead_rule_filter = LeadRuleFilter::where('lead_rule_id', $lead_rule->id)
+                    ->where('type', $type)
+                    ->where('value', $val)
+                    ->first();
+
+                if (!$lead_rule_filter) {
+                    $is_dirty = true;
+                    break;
+                }
+            }
+
+            // finally, check number of new filters against existing
+            if ($filter_count != $lead_rule->leadRuleFilters->count()) {
+                $is_dirty = true;
+            }
+        }
+
+        if ($is_dirty) {
             $lead_rule->delete();
             $this->createRule($request);
         }
