@@ -211,7 +211,7 @@ class LeadsController extends Controller
             $this->createRule($request);
         }
 
-        return redirect()->action('LeadsController@index');
+        return ['status' => 'success'];
     }
 
     /**
