@@ -384,11 +384,11 @@ var Master = {
                 }
 
                 if(selector == 'campaign_select' || selector == 'update_campaign_select'){
-                    $('#subcamps').find('select').empty();
-                    $('#subcamps').find('select').append(subcampaigns);
+                    $('#subcamps').empty();
+                    $('#subcamps').append(subcampaigns);
                 }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
-                    $('#destination_subcampaign').find('select').empty();
-                    $('#destination_subcampaign').find('select').append(subcampaigns);
+                    $('#destination_subcampaign').empty();
+                    $('#destination_subcampaign').append(subcampaigns);
                 }
             }
         });
