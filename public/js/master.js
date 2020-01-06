@@ -89,7 +89,7 @@ var Master = {
         $('.reverse_lead_move').on('click', this.reverse_lead_move_modal);
         $('.confirm_reverse_lead_move').on('click', this.reverse_lead_move);
         $('.add_rule').on('submit', this.create_leadrule);
-        $('.edit_rule').on('submit', this.updteleadrule);
+        $('.edit_rule').on('submit', this.updateleadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
@@ -565,7 +565,7 @@ var Master = {
         });
     },
 
-    updteleadrule:function(e){
+    updateleadrule:function(e){
         e.preventDefault();
 
         var rule_id = $('.rule_id').val(),
@@ -604,8 +604,7 @@ var Master = {
             },
 
             success:function(response){
-
-                window.location.href = 'contactflow_builder';
+                window.location.href = '/tools/contactflow_builder';
             },
             error :function( data ) {
                 $('.edit_rule_error.alert').empty();
