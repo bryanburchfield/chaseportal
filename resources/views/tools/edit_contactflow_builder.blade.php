@@ -49,7 +49,7 @@
 			                    <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" value="{{$lead_rule->source_subcampaign}}" />
 
 		                    	<datalist id="subcamps">
-		                    		<select>
+		                    		<select class="form-control">
 				                    	@foreach($source_subcampaign_list as $subcamp)
 											<option value="{{$subcamp}}">{{$subcamp}}</option>
 				                    	@endforeach
@@ -118,7 +118,7 @@
 			                    <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
 			                    <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" value="{{$lead_rule->destination_subcampaign}}"/>
 			                    <datalist id="destination_subcampaign">
-			                    	<select>
+			                    	<select class="form-control">
 				                    	@foreach($destination_subcampaign_list as $subcamp)
 											<option value="{{$subcamp}}">{{$subcamp}}</option>
 				                    	@endforeach
