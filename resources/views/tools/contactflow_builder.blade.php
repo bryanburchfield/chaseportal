@@ -28,7 +28,7 @@ if (Auth::user()->isType('demo')) {
                             <div class="tab-pane active mt30" id="contactflow_builder">
                                 <h2 class="bbnone">Contact Flow Builder</h2>
 
-                                <ul class="nav nav-tabs tabs">
+                                <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#lead_rules" data-toggle="tab">{{__('tools.lead_rules')}}</a></li>
                                     <li><a href="#add_rule" data-toggle="tab">{{__('tools.add_new_rule')}}</a></li>
                                     <li><a href="#move_history" data-toggle="tab">{{__('tools.move_history')}}</a></li>

@@ -15,8 +15,16 @@
 	<div id="content">
 		@include('shared.navbar')
 
-		<div class="container-fluid bg dashboard p20">
-			<div class="container mt50 tools edit_ruleparent">
+		<div class="container-fluid bg dashboard p20 ">
+			<div class="container-full mt50 tools">
+				<div class="row">
+					<div class="col-sm-12">
+						@include('tools.shared.topnav', ['toolpage' => 'editrules'])
+					</div>
+				</div>
+			</div>
+
+			<div class="container tools edit_ruleparent mt50">
 			    <div class="row">
 			        <div class="col-sm-9 col-sm-offset-3 pl0">
 			            <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
