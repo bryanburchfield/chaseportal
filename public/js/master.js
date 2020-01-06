@@ -39,7 +39,7 @@ var Master = {
 	}),
 
 	init:function(){
-        console.log(Master.leadrule_filters_used +' '+ Master.leadrule_filters);
+
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
             Master.gridline_color='#1A2738';
@@ -405,7 +405,7 @@ var Master = {
 
     add_leadrule_filter:function(e){
         e.preventDefault();
-        console.log(Master.leadrule_filters_used +' '+ Master.leadrule_filters);
+
         if(Master.leadrule_filters_used < Master.leadrule_filters){
             $('.alert.filter_error').hide();
             var selected_filter = $(this).parent().find('select').val();
@@ -422,7 +422,7 @@ var Master = {
                         // }
                     }
 
-                    console.log($(this).parent().parent().parent().parent().parent());
+
                     Master.leadrule_filters_used=Master.leadrule_filters_used+1;
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
@@ -541,7 +541,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+
                 window.location.href = 'contactflow_builder';
             },
             error :function( data ) {
@@ -572,7 +572,7 @@ var Master = {
             rule_name = $('#rule_name').val(),
             source_campaign = $('#update_campaign_select').val(),
             source_subcampaign=$('.source_subcampaign').val();
-            destination_campaign = $('update_destination_campaign').val(),
+            destination_campaign = $('#update_destination_campaign').val(),
             destination_subcampaign=$('.destination_subcampaign').val();
             description = $('#description').val()
         ;
@@ -604,7 +604,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+
                 window.location.href = 'contactflow_builder';
             },
             error :function( data ) {
