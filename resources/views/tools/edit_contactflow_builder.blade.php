@@ -133,7 +133,7 @@
 			                    {!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
 			                </div>
 
-			                <a href="{{url('/tools/contactflow_builder#add_rule')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
+			                <a href="{{url('/tools/contactflow_builder')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
 			                {!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
 			                <div class="alert alert-danger edit_rule_error mt20"></div>
 			            </div>
