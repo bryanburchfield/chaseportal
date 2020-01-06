@@ -20,13 +20,15 @@
 
 						<div class="tab-pane mt30" id="dnc_importer">
 							@if ($message = Session::get('flash'))
-							<div class="alert alert-info alert-block">
-								<button type="button" class="close" aria-label="Close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>	
-								<strong>{{ $message }}</strong>
-							</div>
+								<div class="alert alert-info alert-block">
+									<button type="button" class="close" aria-label="Close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+									<strong>{{ $message }}</strong>
+								</div>
 							@endif
+
 							<h2 class="bbnone">Do Not Call Files</h2>
-							<a class="btn btn-link" href="/tools/dnc_importer/upload">Upload a New File</a>
+							<a class="btn btn-primary" href="/tools/dnc_importer/upload">Upload a New File</a>
+
 							@if (count($files))
 							{{ $files->links() }}
 							<div class="table-responsive">

@@ -2895,6 +2895,17 @@ div.vertical-line {
   border-bottom: none;
 }
 
+.btn.btn-cancel {
+  background: #ddd;
+  color: #666;
+  transition: all, ease, 0.3s;
+}
+
+.btn.btn-cancel:hover {
+  color: #444 !important;
+  background: #c4c4c4;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

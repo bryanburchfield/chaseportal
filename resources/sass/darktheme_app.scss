@@ -2453,7 +2453,6 @@ div.vertical-line{
     font-size: 14px;
     padding: 5px 8px;
 
-
     &:nth-child(even){
         background:lighten( #101824,3%);
     }
@@ -2466,6 +2465,23 @@ div.vertical-line{
 }
 
 .bbnone{border-bottom: none;}
+
+.btn.btn-cancel{
+    background: #ddd;
+    color: #666;
+    @include transition(all, ease, 0.3s);
+
+    &:hover{
+        color:#444 !important;
+        background: darken(#ddd,10%);
+    }
+}
+
+// .btn.btn-primary{
+//     &:hover{
+//         background: red;
+//     }
+// }
 
 /* ---------------------------------------------------
 MEDIAQUERIES

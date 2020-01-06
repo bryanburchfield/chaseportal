@@ -20,28 +20,37 @@
 
 						<div class="tab-pane mt30" id="dnc_importer">
                             <h2 class="bbnone">Upload a DNC File</h2>
-							File must be in CSV, XLS, or XLSX format.<br>
-							If the file has a header row, there must be a 'Phone' column.  If the file doesn't
-							have a header row, the phone numbers must be in the first column.
-                            <p>
-<form enctype="multipart/form-data" method="post">
-	@csrf
-	<input name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
-	<br>
-	Description: <input name="description" type="text" />
-	<br>
-	Has Header Row: <input name="has_headers" type="checkbox" />
-	<br>
-	<input type="submit" value="Submit" />
-	<input type="submit" name="cancel" value="Cancel" />
-</form>
-							</p>
+							<p>File must be in CSV, XLS, or XLSX format.</p>
+							<p>If the file has a header row, there must be a 'Phone' column.</p>
+							<p>If the file doesn't have a header row, the phone numbers must be in the first column.</p>
+
+							<div class="col-sm-4 p0">
+								<form enctype="multipart/form-data" method="post">
+									@csrf
+									<input class="btn btn-info" name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
+									<br>
+									<div class="form-group">
+										<label>Description</label>
+										<input name="description" type="text" class="form-control" />
+									</div>
+
+									<div class="checkbox">
+										<label><input type="checkbox" name="has_headers">Has Header Row:</label>
+									</div>
+
+									<input class="btn btn-default btn-cancel mr10" type="submit" name="cancel" value="Cancel" />
+									<input class="btn btn-primary mb0" type="submit" value="Submit" />
+								</form>
+							</div>
+
 							@if($errors->any())
-								<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-								</ul>
+								<div class="alert alert-danger">
+									<ul>
+										@foreach ($errors->all() as $error)
+											<li>{{ $error }}</li>
+										@endforeach
+									</ul>
+								</div>
 							@endif
 						</div>
 					</div>
