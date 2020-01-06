@@ -367,8 +367,7 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        alert(campaign);
-        console.log(campaign);
+
         $.ajax({
             url: '/tools/contactflow_builder/get_subcampaigns' ,
             type: 'POST',
