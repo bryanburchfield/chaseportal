@@ -72,9 +72,10 @@
     @endisset
     
     <script src="/js/master.js"></script>
-    <script src="/js/admin.js"></script> 
-    <script src="/js/nav.js"></script> 
-    
+    <script src="/js/admin.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/datalist.polyfill.min.js"></script>
+
     @isset($page)
         @if($page['type'] !='dash')
                 <script>
