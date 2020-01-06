@@ -488,7 +488,14 @@ div.container-fluid.hero_bg .form-holder {
 }
 
 .edit_user .alert,
-.add_rule_error.alert {
+.form.add_user .alert,
+.form.add_demo_user .alert,
+.edit_demo_user .alert-danger,
+.add_rule_error.alert-danger,
+.filter_error.alert,
+.new_source_subcampaign_group,
+.new_destination_subcampaign_group,
+.edit_rule_error.alert {
   display: none;
 }
 
@@ -2709,7 +2716,7 @@ p.name i {
 div.vertical-line {
   width: 2px;
   background-color: #33A09B;
-  height: 130px;
+  height: 145px;
   position: absolute;
   margin: 0 auto;
   left: 51.5%;
@@ -2893,6 +2900,47 @@ div.vertical-line {
 
 .bbnone {
   border-bottom: none;
+}
+
+.add_leadrule_filter,
+.add_new_subcampaign,
+.undo_new_subcampaign {
+  color: #33A09B;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.add_leadrule_filter:hover,
+.add_new_subcampaign:hover,
+.undo_new_subcampaign:hover {
+  color: #277976;
+}
+
+.add_leadrule_filter:focus,
+.add_new_subcampaign:focus,
+.undo_new_subcampaign:focus {
+  color: #277976;
+}
+
+a.remove_filter {
+  color: #d9534f;
+  float: right;
+  font-size: 15px;
+}
+
+.leadfilter_row .card {
+  overflow: auto;
+}
+
+.btn.btn-reset {
+  background: #ccc;
+  color: #333;
+  margin-right: 10px;
+}
+
+.btn.btn-reset:hover {
+  color: #333 !important;
+  background: #bfbfbf;
 }
 
 /* ---------------------------------------------------

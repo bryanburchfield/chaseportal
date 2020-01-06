@@ -175,30 +175,35 @@ class LeadMoveService
     {
         $sql = "SELECT id, Subcampaign FROM [$db].[dbo].[Leads]
         WHERE GroupId = :group_id
-        AND Campaign = :campaign ";
-
-        switch ($lead_rule->filter_type) {
-            case 'lead_attempts':
-                $sql .= "AND Attempt >= :param";
-                break;
-            case 'lead_age':
-                $sql .= $this->sqlAge($lead_rule);
-                break;
-            case 'days_called':
-                $sql .= $this->sqlDay($lead_rule, $db);
-                break;
-            default:
-                return [];
-        }
-
-        $bind = [
-            'group_id' => Auth::user()->group_id,
-            'param' => $lead_rule->filter_value,
-            'campaign' => $lead_rule->source_campaign,
-        ];
+        AND Campaign = :campaign";
 
         if (!empty($lead_rule->source_subcampaign)) {
+            $sql .= " AND Subcampaign = :subcampaign";
             $bind['subcampaign'] = $lead_rule->source_subcampaign;
+        }
+
+        $i = 0;
+        foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
+            $i++;
+            switch ($lead_rule_filter->type) {
+                case 'lead_attempts':
+                    $sql .= " AND Attempt >= :param$i";
+                    break;
+                case 'lead_age':
+                    $sql .= $this->sqlAge($i);
+                    break;
+                case 'days_called':
+                    $sql .= $this->sqlDay($i, $db);
+                    break;
+                default:  // error!
+                    return [];
+            }
+
+            $bind = [
+                'group_id' => Auth::user()->group_id,
+                'param$i' => $lead_rule_filter->value,
+                'campaign' => $lead_rule->source_campaign,
+            ];
         }
 
         $leads = $this->runSql($sql, $bind);
@@ -218,20 +223,20 @@ class LeadMoveService
         return $leads;
     }
 
-    private function sqlAge($lead_rule)
+    private function sqlAge($i)
     {
         $date = $this->localToUtc(date('Y-m-d'), Auth::user()->iana_tz)
             ->format('Y-m-d H:i:s');
 
-        return "AND '$date' - Date > :param";
+        return " AND '$date' - Date > :param$i";
     }
 
-    private function sqlDay($lead_rule, $db)
+    private function sqlDay($i, $db)
     {
-        return "AND (SELECT COUNT(DISTINCT CONVERT(date, Date))
+        return " AND (SELECT COUNT(DISTINCT CONVERT(date, Date))
             FROM [$db].[dbo].[DialingResults]
             WHERE GroupId = Leads.GroupId
-            AND LeadId = Leads.Id) > :param";
+            AND LeadId = Leads.Id) > :param$i";
     }
 
     private function initApi($db)

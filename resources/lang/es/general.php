@@ -5,6 +5,7 @@ return [
 	'admin_dashboard'			=> 'Panel de Administración',
 	'adminoutbound_dashboard'	=> 'Panel de Salida de Administrador',
 	'all_campaigns'				=> 'Todas las Campañas',
+	'and'						=> 'Y',
 	'auto_report_settings'		=> 'Configuración de Informes Automatizados',
 	'auto_reports'				=> 'Reportes Automatizados',
 	'campaigns_selected'		=> 'Campañas Seleccionadas',

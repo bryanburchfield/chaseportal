@@ -28,7 +28,7 @@ if (Auth::user()->isType('demo')) {
                             <div class="tab-pane active mt30" id="contactflow_builder">
                                 <h2 class="bbnone">Contact Flow Builder</h2>
 
-                                <ul class="nav nav-tabs">
+                                <ul class="nav nav-tabs tabs">
                                     <li class="active"><a href="#lead_rules" data-toggle="tab">{{__('tools.lead_rules')}}</a></li>
                                     <li><a href="#add_rule" data-toggle="tab">{{__('tools.add_new_rule')}}</a></li>
                                     <li><a href="#move_history" data-toggle="tab">{{__('tools.move_history')}}</a></li>
@@ -74,8 +74,16 @@ if (Auth::user()->isType('demo')) {
                                                                 <td>{{$lr->rule_name}}</td>
                                                                 <td>{{$lr->source_campaign}}</td>
                                                                 <td>{{$lr->source_subcampaign}}</td>
-                                                                <td>{{$lr->filter_type}}</td>
-                                                                <td>{{$lr->filter_value}}</td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->type}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
+                                                                <td>
+                                                                @foreach ($lr->leadRuleFilters as $lrf)
+                                                                    {{$lrf->value}}@if (!$loop->last) <br> @endif
+                                                                @endforeach
+                                                                </td>
                                                                 <td>{{$lr->destination_campaign}}</td>
                                                                 <td>{{$lr->destination_subcampaign}}</td>
                                                                 @if(!$demo)
@@ -120,14 +128,16 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <div class="form-group">
-                                                            {!! Form::label('source_subcampaign', __('tools.subcampaign')) !!}
-                                                            {!! Form::text("source_subcampaign", null, ["class" => "form-control source_subcampaign"]) !!}
+                                                            <label for="subcamps">{{__('tools.subcampaign')}}</label>
+                                                            <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" />
+                                                            <datalist id="subcamps"></datalist>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row leadfilter_row">
                                                 <div class="col-sm-3 pr0">
                                                     <div class="flowchart_element condition mt35"><span>{{__('general.when')}}</span></div>
                                                     <div class="vertical-line"></div>
@@ -138,13 +148,18 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group">
                                                             {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                                            {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control", 'id'=> 'filter_type', 'required'=>true]) !!}
+                                                            {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control lead_rule_filter_type", 'required'=>true]) !!}
                                                         </div>
 
                                                         <div class="form-group">
                                                             {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-                                                            {!! Form::text('filter_value', null, ['class'=>'form-control filter_value', 'required'=>true]) !!}
+                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'required'=>true, 'id'=>'']) !!}
                                                         </div>
+
+                                                        <a href="#" class="add_leadrule_filter"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
+
+                                                        <div class="alert alert-danger filter_error mt20">Please select a filter and value before adding another one</div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -162,9 +177,11 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <div class="form-group">
-                                                            {!! Form::label('destination_subcampaign', __('tools.destination_subcampaign_ques')) !!}
-                                                            {!! Form::text("destination_subcampaign", null, ["class" => "form-control destination_subcampaign"]) !!}
+                                                            <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
+                                                            <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
+                                                            <datalist id="destination_subcampaign"></datalist>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -177,6 +194,7 @@ if (Auth::user()->isType('demo')) {
                                                             {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
                                                         </div>
 
+                                                        <a href="{{url('/tools/contactflow_builder#add_rule')}}" class="btn btn-default btn-reset">Start Over</a>
                                                         {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
                                                         <div class="alert alert-danger add_rule_error mt20"></div>
                                                     </div>
@@ -231,7 +249,7 @@ if (Auth::user()->isType('demo')) {
 		</div>
 	</div>
 
-<!-- Lead Details Modal -->
+<!-- Rule Details Modal -->
 <div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -249,7 +267,7 @@ if (Auth::user()->isType('demo')) {
     </div>
 </div>
 
-<!-- Delete Recipient Modal -->
+<!-- Delete Rule Modal -->
 <div class="modal fade" id="deleteRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

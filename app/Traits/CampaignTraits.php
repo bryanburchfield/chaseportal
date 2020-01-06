@@ -63,7 +63,7 @@ trait CampaignTraits
 
         $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
 
-        ksort($results, SORT_NATURAL);
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $results;
     }
@@ -89,9 +89,10 @@ trait CampaignTraits
 
             $union = ' UNION';
         }
-        $sql .= " ORDER BY Subcampaign";
 
         $results = resultsToList($this->runSql($sql, $bind));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $results;
     }

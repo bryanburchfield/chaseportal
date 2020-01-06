@@ -368,7 +368,7 @@ div.container-fluid.hero_bg .form-holder {
     margin: 20px;
 }
 
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger {
+.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert {
     display: none;
 }
 
@@ -2116,7 +2116,7 @@ p.name i{margin-right: 5px;}
 div.vertical-line{
     width: 2px;
     background-color: $blue;
-    height: 130px;
+    height: 145px;
     position: absolute;
     margin: 0 auto;
     left: 51.5%;
@@ -2244,6 +2244,34 @@ div.vertical-line{
 }
 
 .bbnone{border-bottom: none;}
+
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+    color: $green;
+    font-size: 15px;
+    font-weight: 600;
+
+    &:hover{color: darken($green,10%);}
+    &:focus{color: darken($green,10%);}
+}
+
+a.remove_filter{
+    color: #d9534f;
+    float: right;
+    font-size: 15px;
+}
+
+.leadfilter_row .card{overflow: auto;}
+
+.btn.btn-reset{
+    background: #ccc;
+    color:#333;
+    margin-right: 10px;
+
+    &:hover{
+        color: #333 !important;
+        background:  darken(#ccc, 5%);
+    }
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
