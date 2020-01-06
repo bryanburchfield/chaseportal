@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -188,12 +189,14 @@ class LeadsController extends Controller
     }
 
     /**
-     * Update Rule
+     * Update the rule in db
      * 
      * @param LeadFilter $request 
-     * @return Illuminate\Routing\Redirector|Illuminate\Http\RedirectResponse 
+     * @return Illuminate\Http\RedirectResponse 
      * @throws JsonEncodingException 
      * @throws MassAssignmentException 
+     * @throws InvalidArgumentException 
+     * @throws UrlGenerationException 
      */
     public function updateRule(LeadFilter $request)
     {
@@ -208,7 +211,7 @@ class LeadsController extends Controller
             $this->createRule($request);
         }
 
-        return redirect('/tools/contactflow_builder/');
+        return redirect()->action('LeadsController@index');
     }
 
     /**
