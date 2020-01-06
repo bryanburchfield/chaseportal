@@ -5,6 +5,7 @@
 
 <div class="preloader"></div>
 <?php
+	//dd($lead_rule);
 	//dd($source_subcampaign_list);
 ?>
 <div class="wrapper">
@@ -45,8 +46,13 @@
 
 			                <div class="form-group">
 			                    <label for="subcamps">{{__('tools.subcampaign')}}</label>
-			                    <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" />
-			                    <datalist id="subcamps"></datalist>
+			                    <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" value="{{$lead_rule->source_subcampaign}}" />
+
+		                    	<datalist id="subcamps">
+			                    	@foreach($source_subcampaign_list as $subcamp)
+										<option value="{{$subcamp}}">{{$subcamp}}</option>
+			                    	@endforeach
+		                    	</datalist>
 			                </div>
 			            </div>
 			        </div>
@@ -109,7 +115,11 @@
 			                <div class="form-group">
 			                    <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
 			                    <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
-			                    <datalist id="destination_subcampaign"></datalist>
+			                    <datalist id="destination_subcampaign">
+			                    	@foreach($destination_subcampaign_list as $subcamp)
+										<option value="{{$subcamp}}">{{$subcamp}}</option>
+			                    	@endforeach
+			                    </datalist>
 			                </div>
 			            </div>
 			        </div>

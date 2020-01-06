@@ -386,7 +386,7 @@ var Master = {
                 if(selector == 'campaign_select' || selector == 'update_campaign_select'){
                     $('#subcamps').empty();
                     $('#subcamps').append(subcampaigns);
-                }else{
+                }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
                     $('#destination_subcampaign').empty();
                     $('#destination_subcampaign').append(subcampaigns);
                 }
@@ -2080,4 +2080,5 @@ $(document).ready(function () {
             x++;
         }
     });
+
 });
