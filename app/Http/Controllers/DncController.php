@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DncFile as RequestsDncFile;
 use App\Imports\DncImportWithHeaders;
 use App\Imports\DncImportNoHeaders;
 use App\Jobs\ProcessDncFile;
@@ -139,7 +140,7 @@ class DncController extends Controller
      * @throws InvalidArgumentException 
      * @throws UrlGenerationException 
      */
-    public function uploadFile(Request $request)
+    public function uploadFile(RequestsDncFile $request)
     {
         if ($request->has('cancel')) {
             return redirect()->action('DncController@index');
@@ -159,7 +160,7 @@ class DncController extends Controller
         $dnc_file = DncFile::create([
             'group_id' => Auth::user()->group_id,
             'user_id' => Auth::user()->id,
-            'filename' => $request->file('myfile')->getClientOriginalName(),
+            'filename' => $request->file('dncfile')->getClientOriginalName(),
             'description' => $request->description,
             'uploaded_at' => now(),
             'processed_at' => null,
@@ -172,7 +173,7 @@ class DncController extends Controller
             $importer = new DncImportNoHeaders($dnc_file->id, $column);
         }
 
-        Excel::import($importer, $request->file('myfile'));
+        Excel::import($importer, $request->file('dncfile'));
 
         // Commit all the inserts
         DB::commit();
