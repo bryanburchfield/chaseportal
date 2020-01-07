@@ -65,6 +65,7 @@ return [
 	'view'			=> 'View',
 	'view_details'	=> 'View Details',
 
+	'invalid_phone' => 'Invalid phone number',
 	'no_valid_phones' => 'ERROR: No valid phone numbers could be found in that file',
 	'uploaded_records' => 'Uploaded :count record|Uploaded :count records',
 	'uploaded'		=> 'Uploaded',

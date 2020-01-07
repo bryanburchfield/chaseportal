@@ -49,7 +49,7 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
         // Vary basic validation
         if (strlen($record['phone']) !== 10) {
             $record['succeeded'] = false;
-            $record['error'] = 'Invalid phone number';
+            $record['error'] = trans('tools.invalid_phone');
         } else {
             $record['succeeded'] = null;
             $record['error'] = null;
