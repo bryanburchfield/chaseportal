@@ -1831,7 +1831,6 @@ var Master = {
 
     populate_dnc_modal:function(){
         var id = $(this).data('id');
-        console.log(id);
         $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:'+id);
     }
 }
