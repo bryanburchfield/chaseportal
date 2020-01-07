@@ -64,7 +64,7 @@ return [
 	'dnc_instruc2'	=> 'Review the contents to ensure it has the number of records you were expecting, and view any errors.',
 	'dnc_instruc3'	=> 'At this point, you will either Delete the file (so that you can correct and re-upload it) or Process the file.',
 	'dnc_instruc4'	=> 'Processing inserts the DNC records into the server. This will run in the background and may take some time to complete.',
-	'dnc_instruc5'	=> 'After the file has been processed, you can still choose to reverse it, which will delete the DNC records from the server. This also runs in the background and may take some time.'
+	'dnc_instruc5'	=> 'After the file has been processed, you can still choose to reverse it, which will delete the DNC records from the server. This also runs in the background and may take some time.',
 
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process'
