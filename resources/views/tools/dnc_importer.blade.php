@@ -85,7 +85,8 @@
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+														<a class="btn btn-danger delete_dnc" data-toggle="modal" data-target="#deleteDNCModal" href="#" data-id="{{$file['id']}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a>
+
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
 														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> {{__('tools.reverse')}}</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
@@ -108,6 +109,29 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Delete DNC Modal -->
+<div class="modal fade" id="deleteDNCModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirm DNC File Removal</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
+               <h3>Are you sure you want to delete <span class="id"></span>?</h3>
+            </div>
+	        <div class="modal-footer">
+	            <form enctype="multipart/form-data" method="post">
+					@csrf
+	            	<button class="btn btn-danger" name="action" value=""><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+	            </form>
+	        </div>
+	    </div>
+    </div>
 </div>
 
 @include('shared.reportmodal')

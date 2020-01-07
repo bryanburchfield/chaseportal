@@ -87,6 +87,7 @@ var Master = {
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
+        $('.delete_dnc').on('click', this.populate_dnc_modal);
 	},
 
     hide_modal_error:function(){
@@ -1826,7 +1827,13 @@ var Master = {
 			}
 			setTimeout(reload, 5000);
 		}
-	}
+	},
+
+    populate_dnc_modal:function(){
+        var id = $(this).data('id');
+        console.log(id);
+        $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:'+id);
+    }
 }
 
 $(document).ready(function () {
