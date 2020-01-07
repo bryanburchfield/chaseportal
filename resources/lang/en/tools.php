@@ -6,7 +6,7 @@ return [
 	'add_rule'		=> 'Add Rule',
 	'back'			=> 'Back',
 	'campaign'		=> 'Campaign',
-	'confirm_delete' => 'Are you sure you want to delete',
+	'confirm_delete' => 'Are you sure you want to delete?',
 	'confirm_lead_move'	=> 'Are you sure you want to undo this lead move?',
 	'confirm_dnc_removal' => 'Confirm DNC File Removal',
 	'contact_flowbuilder'	=> 'Contact Flow Builder',

@@ -120,7 +120,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.confirm_dnc_removal')}}</h4>
             </div>
             <div class="modal-body">
-               <h3>{{__('tools.confirm_delete')}}?</h3>
+               <h3>{{__('tools.confirm_delete')}}</h3>
             </div>
 	        <div class="modal-footer">
 	            <form enctype="multipart/form-data" method="post">
