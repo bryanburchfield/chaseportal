@@ -25,7 +25,7 @@ class DncFile extends FormRequest
     {
         return [
             'dncfile' => [
-                'required',
+                'required_without:cancel',
                 'mimes:txt,csv,xls,xlsx,ods,slk',
             ],
             'has_headers' => 'nullable',
