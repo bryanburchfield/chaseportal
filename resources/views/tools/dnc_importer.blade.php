@@ -146,7 +146,7 @@
 	        <div class="modal-footer">
 	            <form enctype="multipart/form-data" method="post">
 					@csrf
-	            	<button class="btn btn-danger" name="action" value=""><i class="fa fa-trash-alt"></i> {{__('general.submit')}}</button>
+	            	<button class="btn btn-danger" name="action" value=""><i class="fa fa-trash-alt"></i> {{__('tools.reverse')}}</button>
 	            </form>
 	        </div>
 	    </div>
