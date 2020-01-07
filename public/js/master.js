@@ -88,6 +88,7 @@ var Master = {
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
+        $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
 	},
 
     hide_modal_error:function(){
@@ -1833,6 +1834,13 @@ var Master = {
         var id = $(this).data('id');
         $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:'+id);
     }
+
+    populate_dnc_reversemodal:function(){
+        var id = $(this).data('id');
+        $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
+    }
+
+    
 }
 
 $(document).ready(function () {

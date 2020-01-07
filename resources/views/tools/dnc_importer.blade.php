@@ -89,6 +89,7 @@
 
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
 														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> {{__('tools.reverse')}}</button>
+														<a class="btn btn-danger reverse_dnc" data-toggle="modal" data-target="#reverseDNCModal" href="#" data-id="{{$file['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														{{__('tools.in_process')}}
 													@else
@@ -126,6 +127,27 @@
 	            <form enctype="multipart/form-data" method="post">
 					@csrf
 	            	<button class="btn btn-danger" name="action" value=""><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+	            </form>
+	        </div>
+	    </div>
+    </div>
+</div>
+
+<!-- Reverse DNC Modal -->
+<div class="modal fade" id="reverseDNCModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.confirm_dnc_reversal')}}</h4>
+            </div>
+            <div class="modal-body">
+               <h3>{{__('tools.confirm_reversal')}}</h3>
+            </div>
+	        <div class="modal-footer">
+	            <form enctype="multipart/form-data" method="post">
+					@csrf
+	            	<button class="btn btn-danger" name="action" value=""><i class="fa fa-trash-alt"></i> {{__('general.submit')}}</button>
 	            </form>
 	        </div>
 	    </div>
