@@ -88,7 +88,6 @@
 														<a class="btn btn-danger delete_dnc" data-toggle="modal" data-target="#deleteDNCModal" href="#" data-id="{{$file['id']}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a>
 
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> {{__('tools.reverse')}}</button>
 														<a class="btn btn-danger reverse_dnc" data-toggle="modal" data-target="#reverseDNCModal" href="#" data-id="{{$file['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														{{__('tools.in_process')}}
