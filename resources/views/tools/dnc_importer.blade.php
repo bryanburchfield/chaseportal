@@ -34,7 +34,7 @@
 								<ul>
 								<li>Upload a file to the portal.  This only stages the file without inserting the DNC numbers into the server.</li>
 								<li>Review the contents to ensure it has the number of records you were expecting, and view any errors.</li>
-								<li>At this point, you will either delete the file (so that you can correct and re-upload it) or Process the file.<br />
+								<li>At this point, you will either Delete the file (so that you can correct and re-upload it) or Process the file.<br />
 								Processing inserts the DNC records into the server.  This will run in the background and may take some time to complete.</li>
 								<li>After the file has been processed, you can still choose to reverse it, which will delete the DNC records from the server.  This also runs in the background and may take some time.</li>
 								</ul>
