@@ -26,6 +26,7 @@ return [
 	'file_name'		=> 'File Name',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'has_header'	=> 'Has Header Row',
 	'instructions'	=> 'Instructions',
 	'lead_age'      => 'Lead Age',
 	'lead_attempts' => '# of Attempts on Lead',
@@ -35,6 +36,7 @@ return [
 	'leads_moved'	=> '# of Leads Moved',
 	'move_history'	=> 'Move History',
 	'name'			=> 'Name',
+	'no_file'		=> 'No File Chosen',
 	'no_rules'		=> 'No Rules have been added yet',
 	'processed'		=> 'Processed',
 	'records'		=> 'Records',
@@ -49,7 +51,9 @@ return [
 	'subcampaign'	=> 'Subcampaign',
 	'tools'			=> 'Tools',
 	'undo_move'		=> 'Undo Move',
+	'upload_a_file'	=> 'Upload a File',
 	'upload_new_file' => 'Upload a New File',
+	'upload_dnc_file' => 'Upload a DNC File',
 	'view'			=> 'View',
 	'view_details'	=> 'View Details',
 
@@ -65,6 +69,10 @@ return [
 	'dnc_instruc3'	=> 'At this point, you will either Delete the file (so that you can correct and re-upload it) or Process the file.',
 	'dnc_instruc4'	=> 'Processing inserts the DNC records into the server. This will run in the background and may take some time to complete.',
 	'dnc_instruc5'	=> 'After the file has been processed, you can still choose to reverse it, which will delete the DNC records from the server. This also runs in the background and may take some time.',
+
+	'dnc_upload1'	=> 'File must be in CSV, XLS, or XLSX format.',
+	'dnc_upload2'	=> "If the file has a header row, there must be a 'Phone' column.",
+	'dnc_upload3'	=> "If the file doesn't have a header row, the phone numbers must be in the first column.",
 
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process'

@@ -26,6 +26,7 @@ return [
 	'file_name'		=> 'Nombre del Archivo',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
+	'has_header'	=> 'Tiene fila de Encabezado',
 	'instructions'	=> 'Instrucciones',
 	'lead_age'      => 'Edad de Plomo',
 	'lead_attempts' => '# de Intentos de Plomo',
@@ -35,6 +36,7 @@ return [
 	'leads_moved'	=> '# De Conductores Movidos',
 	'move_history'	=> 'Mover Historia',
 	'name'			=> 'Nombre',
+	'no_file'		=> 'Ningún Archivo Elegido',
 	'no_rules'		=> 'No se ha agregado ninguna regla aún',
 	'processed'		=> 'Procesada',
 	'records'		=> 'Registros',
@@ -49,7 +51,9 @@ return [
 	'subcampaign'       => 'Sub-campaña',
 	'tools'			=> 'Herramientas',
 	'undo_move'		=> 'Deshacer movimiento',
-	'upload_new_file' => 'Sube un nuevo archivo',
+	'upload_a_file' => 'Sube un Archivo',
+	'upload_new_file' => 'Sube un nuevo Archivo',
+	'upload_dnc_file' => 'Subir un archivo DNC',
 	'view'			=> 'Ver',
 	'view_details'	=> 'Ver Detalles',
 
@@ -65,6 +69,10 @@ return [
 	'dnc_instruc3'	=> 'En este punto, eliminará el archivo (para poder corregirlo y volver a cargarlo) o Procesar el archivo.',
 	'dnc_instruc4'	=> 'El procesamiento inserta los registros DNC en el servidor. Esto se ejecutará en segundo plano y puede tardar un tiempo en completarse.',
 	'dnc_instruc5'	=> 'Una vez procesado el archivo, aún puede optar por revertirlo, lo que eliminará los registros DNC del servidor. Esto también se ejecuta en segundo plano y puede llevar algo de tiempo.',
+
+	'dnc_upload1'	=> 'El archivo debe estar en formato CSV, XLS o XLSX.',
+	'dnc_upload2'	=> "Si el archivo tiene una fila de encabezado, debe haber una columna 'Teléfono'.",
+	'dnc_upload3'	=> "Si el archivo no tiene una fila de encabezado, los números de teléfono deben estar en la primera columna.",
 
 	'process'	=> 'Proceso',
 	'in_process'	=> 'En proceso'

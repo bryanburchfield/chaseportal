@@ -19,11 +19,11 @@
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
 
 						<div class="tab-pane mt30" id="dnc_importer">
-                            <h2 class="bbnone mb20">Upload a DNC File</h2>
+                            <h2 class="bbnone mb20">{{__('tools.upload_dnc_file')}}</h2>
                             <ul class="pl10 paditem5">
-								<li>File must be in CSV, XLS, or XLSX format.</li>
-								<li>If the file has a header row, there must be a 'Phone' column.</li>
-								<li>If the file doesn't have a header row, the phone numbers must be in the first column.</li>
+								<li>{{__('tools.dnc_upload1')}}</li>
+								<li>{{__('tools.dnc_upload2')}}</li>
+								<li>{{__('tools.dnc_upload3')}}</li>
 							</ul>
 
 							<div class="col-sm-4 p0">
@@ -31,33 +31,22 @@
 									@csrf
 
 									<label class="btn btn-info btn-file mb20">
-									    Upload a File <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
+									    {{__('tools.upload_a_file')}} <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
 									</label>
 
-									<p class="filename">No File Chosen</p>
-									
-									{{-- <div class="input-group">
-						                <label class="input-group-btn">
-						                    <span class="btn btn-primary">
-						                        Browse&hellip; <input type="file" style="display: none;" multiple>
-						                    </span>
-						                </label>
-						                <input type="text" class="form-control" readonly>
-						            </div>
-						            <span class="help-block">
-						            </span> --}}
+									<p class="filename">{{__('tools.no_file')}}</p>
 
 									<div class="checkbox cb">
-										<label><input type="checkbox" name="has_headers"><b>Has Header Row:</b></label>
+										<label><input type="checkbox" name="has_headers"><b>{{__('tools.has_header')}}:</b></label>
 									</div>
 
 									<div class="form-group upload_desc">
-										<label>Description</label>
+										<label>{{__('tools.description')}}</label>
 										<input name="description" type="text" class="form-control" />
 									</div>
 
-									<input class="btn btn-default btn-cancel mr10" type="submit" name="cancel" value="Cancel" />
-									<input class="btn btn-primary mb0" type="submit" value="Submit" />
+									<input class="btn btn-default btn-cancel mr10" type="submit" name="cancel" value="{{__('general.cancel')}}" />
+									<input class="btn btn-primary mb0" type="submit" value="{{__('general.submit')}}" />
 								</form>
 
 								@if($errors->any())
