@@ -26,17 +26,17 @@
 								</div>
 							@endif
 
-							<h2 class="bbnone">Do Not Call Files</h2>
-							<a class="btn btn-primary" href="/tools/dnc_importer/upload">Upload a New File</a>
+							<h2 class="bbnone">{{__('tools.dnc_files')}}</h2>
+							<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
 
 							<div class="card instructions">
-								<h3 class="mb20"><b>Instructions</b></h3>
-								<ul>
-								<li>Upload a file to the portal.  This only stages the file without inserting the DNC numbers into the server.</li>
-								<li>Review the contents to ensure it has the number of records you were expecting, and view any errors.</li>
-								<li>At this point, you will either Delete the file (so that you can correct and re-upload it) or Process the file.<br />
-								Processing inserts the DNC records into the server.  This will run in the background and may take some time to complete.</li>
-								<li>After the file has been processed, you can still choose to reverse it, which will delete the DNC records from the server.  This also runs in the background and may take some time.</li>
+								<h3 class="mb20"><b>{{__('tools.instructions')}}</b></h3>
+								<ul class="pl10">
+									<li>{{__('tools.dnc_instruc1')}}</li>
+									<li>{{__('tools.dnc_instruc2')}}</li>
+									<li>{{__('tools.dnc_instruc3')}}</li>
+									<li>{{__('tools.dnc_instruc4')}}</li>
+									<li>{{__('tools.dnc_instruc5')}}</li>
 								</ul>
 								</div>
 
@@ -48,15 +48,15 @@
                                	<table class="table rules_table mt20">
 									<thead>
 										<tr>
-											<th class="text-center">View</th>
+											<th class="text-center">{{__('tools.view')}}</th>
 											<th class="text-center">ID</th>
-											<th>Description</th>
-											<th>File Name</th>
-											<th>Uploaded</th>
-											<th class="text-center">Records</th>
-											<th class="text-center">Errors</th>
-											<th>Processed</th>
-											<th>Reversed</th>
+											<th>{{__('tools.description')}}</th>
+											<th>{{__('tools.file_name')}}</th>
+											<th>{{__('tools.uploaded')}}</th>
+											<th class="text-center">{{__('tools.records')}}</th>
+											<th class="text-center">{{__('tools.errors')}}</th>
+											<th>{{__('tools.processed')}}</th>
+											<th>{{__('tools.reversed')}}</th>
 										</tr>
 									</thead>
 
@@ -76,20 +76,20 @@
 												@endif
 												<td>
 													@if (empty($file['process_started_at']))
-														<button class="btn btn-success" name="action" value="process:{{$file['id']}}">Process</button>
+														<button class="btn btn-success" name="action" value="process:{{$file['id']}}">{{__('tools.process')}}</button>
 													@elseif (empty($file['processed_at']))
-														In Process
+														{{__('tools.in_process')}}
 													@else
 														{{$file['processed_at']}}
 													@endif
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-alt"></i> Delete</button>
+														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> Reverse</button>
+														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> {{__('tools.reverse')}}</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
-														In Process
+														{{__('tools.in_process')}}
 													@else
 														{{$file['reversed_at']}}
 													@endif
