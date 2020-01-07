@@ -8,6 +8,7 @@ return [
 	'campaign'          => 'Campaña',
 	'confirm_delete' => '¿Está seguro que quiere eliminarla?',
 	'confirm_lead_move'	=> '¿Seguro que quieres deshacer este movimiento principal?',
+	'confirm_dnc_removal' => 'Confirme la eliminación del archivo DNC',
 	'contact_flowbuilder'	=> 'Flujo de Contacto Constructor',
 	'date'			=> 'Fecha',
 	'days_called'   => 'Se llaman días distintos',

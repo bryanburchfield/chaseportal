@@ -117,10 +117,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm DNC File Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.confirm_dnc_removal')}}</h4>
             </div>
             <div class="modal-body">
-               <h3>Are you sure you want to delete <span class="id"></span>?</h3>
+               <h3>{{__('tools.confirm_delete')}}?</h3>
             </div>
 	        <div class="modal-footer">
 	            <form enctype="multipart/form-data" method="post">
