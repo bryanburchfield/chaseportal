@@ -57,7 +57,7 @@
 												<td>{{$file['uploaded_at']}}</td>
 												<td class="text-center">{{$file['recs']}}</td>
 												@if ($file['errors'] > 0)
-													<td><a class="btn btn-link text-center" href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+													<td><a class="btn btn-link danger text-center" href="{{ action("DncController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
 												@else
 													<td class="text-center">{{$file['errors']}}</td>
 												@endif

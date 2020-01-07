@@ -2477,11 +2477,13 @@ div.vertical-line{
     }
 }
 
-// .btn.btn-primary{
-//     &:hover{
-//         background: red;
-//     }
-// }
+.btn-link.danger{
+    color:#d9534f;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    vertical-align: middle;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
