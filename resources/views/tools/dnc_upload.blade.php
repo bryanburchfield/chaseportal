@@ -31,7 +31,7 @@
 									@csrf
 
 									<label class="btn btn-info btn-file mb20">
-									    Upload a File <input type="file" name="myfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
+									    Upload a File <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
 									</label>
 
 									<div class="checkbox">
