@@ -2960,6 +2960,22 @@ div.vertical-line {
   background: #203047 !important;
 }
 
+.btn-info.btn-file {
+  float: left;
+  margin-right: 10px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.cb {
+  clear: both;
+}
+
+p.filename {
+  float: left;
+  margin-top: 7px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

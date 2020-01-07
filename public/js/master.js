@@ -1862,3 +1862,13 @@ $(document).ready(function () {
 	$('[data-toggle="tooltip"]').tooltip({ trigger: "click" });
 
 });
+
+// populate dnc file upload name in input
+$(document).on('change', ':file', function() {
+    var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+    $(this).trigger('fileselect', [label]);
+  });
+
+$(':file').on('fileselect', function(event, label) {
+    $('.filename').text(label);
+});

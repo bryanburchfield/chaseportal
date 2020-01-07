@@ -31,14 +31,23 @@
 									@csrf
 
 									<label class="btn btn-info btn-file mb20">
-<<<<<<< HEAD
-									    Upload a File <input type="file" name="myfile" accept=".csv,.xls,.xlsx,.ods,.slk" >
-=======
 									    Upload a File <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
->>>>>>> 65dede1d1db9574519bc667001a592008521640b
 									</label>
 
-									<div class="checkbox">
+									<p class="filename">No File Chosen</p>
+									
+									{{-- <div class="input-group">
+						                <label class="input-group-btn">
+						                    <span class="btn btn-primary">
+						                        Browse&hellip; <input type="file" style="display: none;" multiple>
+						                    </span>
+						                </label>
+						                <input type="text" class="form-control" readonly>
+						            </div>
+						            <span class="help-block">
+						            </span> --}}
+
+									<div class="checkbox cb">
 										<label><input type="checkbox" name="has_headers"><b>Has Header Row:</b></label>
 									</div>
 
@@ -50,17 +59,17 @@
 									<input class="btn btn-default btn-cancel mr10" type="submit" name="cancel" value="Cancel" />
 									<input class="btn btn-primary mb0" type="submit" value="Submit" />
 								</form>
-							</div>
 
-							@if($errors->any())
-								<div class="alert alert-danger">
-									<ul>
-										@foreach ($errors->all() as $error)
-											<li>{{ $error }}</li>
-										@endforeach
-									</ul>
-								</div>
-							@endif
+								@if($errors->any())
+									<div class="alert alert-danger mt20">
+										<ul>
+											@foreach ($errors->all() as $error)
+												<li>{{ $error }}</li>
+											@endforeach
+										</ul>
+									</div>
+								@endif
+							</div>
 						</div>
 					</div>
 				</div>

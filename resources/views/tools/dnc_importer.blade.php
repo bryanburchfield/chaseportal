@@ -29,6 +29,16 @@
 							<h2 class="bbnone">Do Not Call Files</h2>
 							<a class="btn btn-primary" href="/tools/dnc_importer/upload">Upload a New File</a>
 
+							<div class="card instructions">
+								<h3 class="mb20"><b>Instructions</b></h3>
+								<p>you upload a file to the portal</p>
+								<p>you can then look at it to see how many recs, errors, etc.</p>
+								<p>you can then decide it's too fkd up, delete it, fix the errors and reupload it (edited)</p>
+								<p>once you're satisfied, you process it, which actually inserts the dnc recs into the live server</p>
+								<p>then you can still reverse it if you don't like it</p>
+								<p>but that goes to the live server and deletes the DNC recs</p>
+							</div>
+
 							@if (count($files))
 							{{ $files->links() }}
 							<div class="table-responsive">
@@ -38,6 +48,7 @@
 									<thead>
 										<tr>
 											<th class="text-center">ID</th>
+											<th class="text-center">View</th>
 											<th>Description</th>
 											<th>File Name</th>
 											<th>Uploaded</th>
@@ -51,7 +62,8 @@
 									<tbody>
 										@foreach ($files as $file)
 											<tr>
-												<td><a class="btn btn-link" href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}">{{$file['id']}}</a></td>
+												<td class="text-center">{{$file['id']}}</td>
+												<td><a class="btn btn-link" href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}"><i class="far fa-eye"></i></a></td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>
@@ -72,9 +84,9 @@
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')">Delete</button>
+														<button class="btn btn-danger" name="action" value="delete:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-alt"></i> Delete</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')">Reverse</button>
+														<button class="btn btn-danger" name="action" value="reverse:{{$file['id']}}" onclick="return confirm('Are you sure?')"><i class="fas fa-history"></i> Reverse</button>
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														In Process
 													@else
