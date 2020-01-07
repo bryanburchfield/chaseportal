@@ -20,15 +20,20 @@
 
 						<div class="tab-pane mt30" id="dnc_importer">
                             <h2 class="bbnone">Upload a DNC File</h2>
-							<p>File must be in CSV, XLS, or XLSX format.</p>
-							<p>If the file has a header row, there must be a 'Phone' column.</p>
-							<p>If the file doesn't have a header row, the phone numbers must be in the first column.</p>
+                            <ul class="pl10">
+								<li>File must be in CSV, XLS, or XLSX format.</li>
+								<li>If the file has a header row, there must be a 'Phone' column.</li>
+								<li>If the file doesn't have a header row, the phone numbers must be in the first column.</li>
+							</ul>
 
 							<div class="col-sm-4 p0">
 								<form enctype="multipart/form-data" method="post">
 									@csrf
-									<input class="btn btn-info" name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
-									<br>
+
+									<div class="form-group mt10">
+										<input class="btn btn-info" name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
+									</div>
+
 									<div class="form-group">
 										<label>Description</label>
 										<input name="description" type="text" class="form-control" />

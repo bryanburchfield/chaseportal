@@ -25,7 +25,8 @@
 								{{$file->description}}
 							</h2>
 							<form action="{{ action("DncController@index") }}" method="get">
-							<input type="submit" value="Back" />
+							<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-warning">Back</a>
+
 							@if (count($records))
 								{{ $records->links() }}
 								<div class="table-responsive">
@@ -49,7 +50,7 @@
 									</table>
 								</div>
 								{{ $records->links() }}
-								<input type="submit" value="Back" />
+								<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-warning">Back</a>
 							@endif
 							</form>
 						</div>
