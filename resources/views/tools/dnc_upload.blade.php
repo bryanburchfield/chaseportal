@@ -19,8 +19,8 @@
 						@include('tools.shared.topnav', ['toolpage' => 'dnc'])
 
 						<div class="tab-pane mt30" id="dnc_importer">
-                            <h2 class="bbnone">Upload a DNC File</h2>
-                            <ul class="pl10">
+                            <h2 class="bbnone mb20">Upload a DNC File</h2>
+                            <ul class="pl10 paditem5">
 								<li>File must be in CSV, XLS, or XLSX format.</li>
 								<li>If the file has a header row, there must be a 'Phone' column.</li>
 								<li>If the file doesn't have a header row, the phone numbers must be in the first column.</li>
@@ -30,17 +30,17 @@
 								<form enctype="multipart/form-data" method="post">
 									@csrf
 
-									<div class="form-group mt10">
-										<input class="btn btn-info" name="myfile" type="file" accept=".csv,.xls,.xlsx,.ods,.slk" />
-									</div>
-
-									<div class="form-group">
-										<label>Description</label>
-										<input name="description" type="text" class="form-control" />
-									</div>
+									<label class="btn btn-info btn-file mb20">
+									    Upload a File <input type="file" name="myfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
+									</label>
 
 									<div class="checkbox">
-										<label><input type="checkbox" name="has_headers">Has Header Row:</label>
+										<label><input type="checkbox" name="has_headers"><b>Has Header Row:</b></label>
+									</div>
+
+									<div class="form-group upload_desc">
+										<label>Description</label>
+										<input name="description" type="text" class="form-control" />
 									</div>
 
 									<input class="btn btn-default btn-cancel mr10" type="submit" name="cancel" value="Cancel" />

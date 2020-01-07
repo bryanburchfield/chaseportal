@@ -24,6 +24,7 @@
 								[{{$file->filename}}]
 								{{$file->description}}
 							</h2>
+
 							<form action="{{ action("DncController@index") }}" method="get">
 							<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-warning">Back</a>
 
