@@ -47,8 +47,8 @@
                                	<table class="table rules_table mt20">
 									<thead>
 										<tr>
-											<th class="text-center">ID</th>
 											<th class="text-center">View</th>
+											<th class="text-center">ID</th>
 											<th>Description</th>
 											<th>File Name</th>
 											<th>Uploaded</th>
@@ -62,8 +62,8 @@
 									<tbody>
 										@foreach ($files as $file)
 											<tr>
-												<td class="text-center">{{$file['id']}}</td>
 												<td><a class="btn btn-link" href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}"><i class="far fa-eye"></i></a></td>
+												<td class="text-center">{{$file['id']}}</td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>
