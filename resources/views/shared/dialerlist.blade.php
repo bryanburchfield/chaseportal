@@ -22,7 +22,7 @@
                 </div>
                 <div id="{{$mode}}_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{$mode}}_heading{{$db}}">
                     <div class="panel-body">
-                        <table class="table table-responsive table-striped">
+                        <table class="table table-responsive table-striped nobdr">
                             <thead>
                                 <tr>
                                     <th>Client</th>
