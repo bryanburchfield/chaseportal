@@ -2024,9 +2024,7 @@ var Master = {
     toggle_instructions:function(e){
 
         if(e){
-            if(e.type == 'click'){
-                e.preventDefault();
-            }
+            e.preventDefault();
         }
 
         that = $('a.toggle_instruc');
