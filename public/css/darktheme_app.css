@@ -3039,6 +3039,11 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
+.dialerlist_icon {
+  float: right;
+  color: #33A09B;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -3217,7 +3222,7 @@ MEDIAQUERIES
     width: 120px;
     height: 120px;
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .flowchart_element.condition {

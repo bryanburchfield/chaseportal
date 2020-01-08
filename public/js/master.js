@@ -80,6 +80,7 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
+        $('.users .panel-heading .panel-title a').on('click', this.toggle_dialerlist);
 
         /// tool handlers
         $('#when .form-group #campaign_select, #action #destination_campaign').on('change', this.get_leadrule_subcampaigns);
@@ -282,6 +283,16 @@ var Master = {
 
             }
         });
+    },
+
+    toggle_dialerlist:function(){
+        if($(this).hasClass('collapsed')){
+            $(this).find('i').remove();
+            $(this).append('<i class="fas fa-angle-down dialerlist_icon"></i>');
+        }else{
+            $(this).find('i').remove();
+            $(this).append('<i class="fas fa-angle-up dialerlist_icon"></i>');
+        }
     },
 
     // check/uncheck campaigns based on whats being clicked
@@ -501,7 +512,6 @@ var Master = {
 
             },
             success:function(response){
-                console.log(response);
             }
         });
     },

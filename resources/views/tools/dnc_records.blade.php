@@ -30,7 +30,7 @@
 
 							@if (count($records))
 								{{ $records->links() }}
-								<div class="table-responsive">
+								<div class="table-responsive nobdr">
 									<table class="table rules_table mt20">
 									<thead>
 										<tr>

@@ -2571,6 +2571,11 @@ a.toggle_instruc {
     color: #d9534f;
 }
 
+.dialerlist_icon{
+    float: right;
+    color: $green;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -2754,7 +2759,7 @@ MEDIAQUERIES
         }
 
         margin-top: 0px;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
 
         &:after{
             content: none;

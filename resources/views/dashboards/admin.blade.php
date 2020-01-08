@@ -41,7 +41,7 @@
 									</div>
 
 									<div class="col-sm-7 mb0">
-										<div class="table-responsive demo_user_table_holder">
+										<div class="table-responsive demo_user_table_holder nobdr">
 											<table class="table demo_user_table table-striped">
 												<thead>
 													<tr>

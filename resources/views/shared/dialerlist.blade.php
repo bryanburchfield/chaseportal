@@ -14,9 +14,11 @@
                     <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
                         Dialer {{$db}}
+
                         @if($clients)
                             ({{ $clients }} client{{ $clients > 1 ? 's' : '' }})
                         @endif
+                        <i class="fas fa-angle-up dialerlist_icon"></i>
                         </a>
                     </h4>
                 </div>
