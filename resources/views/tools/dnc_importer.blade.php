@@ -46,7 +46,7 @@
 
 							@if (count($files))
 							{{ $files->links() }}
-							<div class="table-responsive">
+							<div class="table-responsive nobdr">
 								<form enctype="multipart/form-data" method="post">
 								@csrf
                                	<table class="table dnc_table mt20">

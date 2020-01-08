@@ -493,7 +493,7 @@ var Master = {
         });
 
         $.ajax({
-            url:'tools/toggle_rule',
+            url:'toggle_rule',
             type:'POST',
             data:{
                 checked:checked,

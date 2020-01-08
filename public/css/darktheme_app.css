@@ -3209,7 +3209,7 @@ MEDIAQUERIES
 }
 
 @media handheld, only screen and (max-width: 768px) {
-  .table-responsive.rules_table_cnt {
+  .table-responsive.nobdr {
     border: none !important;
   }
 

@@ -38,7 +38,7 @@ if (Auth::user()->isType('demo')) {
                                     <div class="tab-pane active mt30" id="lead_rules">
                                         <div class="col-sm-12 nopad">
                                             <h2 class="page_heading"><i class="fa fa-cog"></i> {{__('tools.rules')}}</h2>
-                                            <div class="table-responsive rules_table_cnt">
+                                            <div class="table-responsive nobdr">
                                                 <table class="table rules_table mt20">
 
                                                     @if(!count($lead_rules))
@@ -101,7 +101,7 @@ if (Auth::user()->isType('demo')) {
 
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-sm-9 col-sm-offset-3 pl0">
+                                                <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                                                     <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
                                                     {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_rule']) !!}
 
@@ -120,7 +120,7 @@ if (Auth::user()->isType('demo')) {
                                                     <div class="vertical-line"></div>
                                                 </div>
 
-                                                <div class="col-sm-9 pl0">
+                                                <div class="col-sm-9 pl0 mbp0">
                                                     <div class="card" id="when">
                                                         <div class="form-group">
                                                             {!! Form::label('source_campaign', __('tools.campaign')) !!}
@@ -143,7 +143,7 @@ if (Auth::user()->isType('demo')) {
                                                     <div class="vertical-line"></div>
                                                 </div>
 
-                                                <div class="col-sm-9 pl0">
+                                                <div class="col-sm-9 pl0 mbp0">
                                                     <div class="card" id="condition">
 
                                                         <div class="form-group">
@@ -169,7 +169,7 @@ if (Auth::user()->isType('demo')) {
                                                     <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
                                                 </div>
 
-                                                <div class="col-sm-9 pl0">
+                                                <div class="col-sm-9 pl0 mbp0">
                                                     <div class="card" id="action">
                                                         <div class="form-group">
                                                             {!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
@@ -187,7 +187,7 @@ if (Auth::user()->isType('demo')) {
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-sm-9 col-sm-offset-3 pl0">
+                                                <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                                                     <div class="card">
                                                         <div class="form-group">
                                                             {!! Form::label('description', __('tools.description')) !!}
