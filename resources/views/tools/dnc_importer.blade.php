@@ -30,6 +30,7 @@
 							<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
 
 							<div class="card instructions">
+								<a href="#" class="close_instruc"><i class="fas fa-times-circle"></i></a>
 								<h3 class="mb20"><b>{{__('tools.instructions')}}</b></h3>
 								<ul class="pl10 paditem5">
 									<li>{{__('tools.dnc_instruc1')}}</li>

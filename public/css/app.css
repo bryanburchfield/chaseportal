@@ -2656,6 +2656,14 @@ p.filename {
   margin-top: 7px;
 }
 
+a.close_instruc {
+  float: right;
+  color: #d9534f;
+  font-size: 18px;
+  position: relative;
+  bottom: 5px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

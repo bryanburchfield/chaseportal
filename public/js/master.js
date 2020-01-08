@@ -99,6 +99,7 @@ var Master = {
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
+        $('.close_instruc').on('click', this.close_instructions);
 	},
 
     hide_modal_error:function(){
@@ -2019,6 +2020,11 @@ var Master = {
     populate_dnc_reversemodal:function(){
         var id = $(this).data('id');
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
+    },
+
+    close_instructions:function(e){
+        e.preventDefault();
+        $(this).parent().hide();
     }
 }
 
