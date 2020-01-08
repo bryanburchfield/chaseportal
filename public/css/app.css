@@ -2840,6 +2840,10 @@ MEDIAQUERIES
 }
 
 @media handheld, only screen and (max-width: 768px) {
+  .table-responsive.rules_table_cnt {
+    border: none !important;
+  }
+
   .flowchart_element {
     width: 120px;
     height: 120px;

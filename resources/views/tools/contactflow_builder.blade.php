@@ -38,7 +38,7 @@ if (Auth::user()->isType('demo')) {
                                     <div class="tab-pane active mt30" id="lead_rules">
                                         <div class="col-sm-12 nopad">
                                             <h2 class="page_heading"><i class="fa fa-cog"></i> {{__('tools.rules')}}</h2>
-                                            <div class="table-responsive">
+                                            <div class="table-responsive rules_table_cnt">
                                                 <table class="table rules_table mt20">
 
                                                     @if(!count($lead_rules))

@@ -161,7 +161,7 @@
 								</div>
 
 								<div class="tab-pane mt30" id="settings">
-									<div class="col-sm-6 mb0 card">
+									<div class="col-sm-6 mb20 card">
 										<h2 class="page_heading">Edit Myself</h2>
 
 										{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form
