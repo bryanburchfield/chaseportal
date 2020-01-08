@@ -93,15 +93,12 @@ var Master = {
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
-<<<<<<< HEAD
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
         $('body').on('click', '.add_leadrule_filter', this.add_leadrule_filter);
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
-=======
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
->>>>>>> dnc_importer
 	},
 
     hide_modal_error:function(){
