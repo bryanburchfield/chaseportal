@@ -498,7 +498,7 @@ var Master = {
 			dataType: 'json',
 			data: { lead_move_id: lead_move_id },
 			success: function (response) {
-                console.log(response);
+
 				$('#reverseLeadMoveModal').find('.modal-footer').find('.alert').remove();
 				if (response.error) {
 

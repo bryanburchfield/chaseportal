@@ -31,7 +31,7 @@
 
 							<div class="card instructions">
 								<h3 class="mb20"><b>{{__('tools.instructions')}}</b></h3>
-								<ul class="pl10">
+								<ul class="pl10 paditem5">
 									<li>{{__('tools.dnc_instruc1')}}</li>
 									<li>{{__('tools.dnc_instruc2')}}</li>
 									<li>{{__('tools.dnc_instruc3')}}</li>
