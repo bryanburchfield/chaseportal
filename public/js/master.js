@@ -493,7 +493,7 @@ var Master = {
         });
 
         $.ajax({
-            url:'toggle_rule',
+            url:'/tools/contactflow_builder/toggle_rule',
             type:'POST',
             data:{
                 checked:checked,
