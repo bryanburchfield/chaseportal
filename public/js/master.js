@@ -1833,14 +1833,12 @@ var Master = {
     populate_dnc_modal:function(){
         var id = $(this).data('id');
         $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:'+id);
-    }
+    },
 
     populate_dnc_reversemodal:function(){
         var id = $(this).data('id');
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
     }
-
-    
 }
 
 $(document).ready(function () {
