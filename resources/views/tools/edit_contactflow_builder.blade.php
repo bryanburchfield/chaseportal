@@ -94,11 +94,11 @@
 
 								{{-- Need to get count of available filters --}}
 								@if($key == count($lead_rule->LeadRuleFilters) -1)
-				                	<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>
+				                	<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
 								@endif
 
 								@if($key)
-									<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>
+									<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
 								@endif
 
 				                <div class="alert alert-danger filter_error mt20">Please select a filter and value before adding another one</div>

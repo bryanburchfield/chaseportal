@@ -1248,7 +1248,8 @@ p.descrip.top14 {
 .uploader_table th,
 .cdr_results_table th,
 .rules_table th,
-.demo_user_table th {
+.demo_user_table th,
+.dnc_table th {
   background: #203047;
   border-top: 0;
   color: #fff;
@@ -1565,7 +1566,8 @@ span.selected_campaign {
 
 .reports_table tr:nth-of-type(odd),
 .cdr_results_table tr:nth-of-type(odd),
-.rules_table tr:nth-of-type(odd) {
+.rules_table tr:nth-of-type(odd),
+.dnc_table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -2956,7 +2958,7 @@ MEDIAQUERIES
 .link {
   color: #203047;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   display: block;
   margin-bottom: 10px;
 }

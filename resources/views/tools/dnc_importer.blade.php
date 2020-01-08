@@ -49,7 +49,7 @@
 							<div class="table-responsive">
 								<form enctype="multipart/form-data" method="post">
 								@csrf
-                               	<table class="table rules_table mt20">
+                               	<table class="table dnc_table mt20">
 									<thead>
 										<tr>
 											<th class="text-center">{{__('tools.view')}}</th>

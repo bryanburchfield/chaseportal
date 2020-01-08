@@ -1089,7 +1089,7 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th {
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th {
     background: $blue;
     border-top: 0;
     color: #fff;
@@ -1361,7 +1361,7 @@ span.selected_campaign {
     font-weight: 600;
 }
 
-.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd) {
+.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
@@ -2606,7 +2606,7 @@ MEDIAQUERIES
 .link{
     color: $blue;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
     display: block;
     margin-bottom: 10px;
 

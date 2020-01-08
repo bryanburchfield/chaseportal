@@ -425,18 +425,17 @@ var Master = {
                         // }
                     }
 
-
                     Master.leadrule_filters_used=Master.leadrule_filters_used+1;
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
                     var i = Master.leadrule_filters_used;
                     $(new_filter).find('.lead_rule_filter_value').val('');
-                    $(new_filter).find('.flowchart_element span').text('AND');
+                    $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
                     // $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
                     if(add_delete_btn && Master.leadrule_filters_used!=Master.leadrule_filters){
-                        $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> Remove Filter</a>');
+                        $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
                     }
 
                     if(Master.leadrule_filters == Master.leadrule_filters_used){
@@ -471,7 +470,7 @@ var Master = {
         });
         // remove add new filter buttons from all cards, add to last one
         if(Master.leadrule_filters_used != Master.leadrule_filters){
-            $('.leadfilter_row:last').find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> Add Another Filter</a>');
+            $('.leadfilter_row:last').find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> '+Lang.get('js_msgs.add_filter')+'</a>');
         }
     },
 
@@ -2023,23 +2022,33 @@ var Master = {
     },
 
     toggle_instructions:function(e){
-        e.preventDefault();
 
-        if($(this).hasClass('collapsed')){
-            $(this).removeClass('collapsed');
-            $(this).empty().append('<i class="fas fa-angle-up"></i>');
-        }else{
-            $(this).addClass('collapsed');
-            $(this).empty().append('<i class="fas fa-angle-down"></i>');
+        if(e){
+            if(e.type == 'click'){
+                e.preventDefault();
+            }
         }
 
-        $(this).parent().find('.instuc_div').slideToggle();
-    }
+        that = $('a.toggle_instruc');
+        if(that.hasClass('collapsed')){
+            that.removeClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-up"></i>');
+        }else{
+            that.addClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-down"></i>');
+        }
+
+        that.parent().find('.instuc_div').slideToggle();
+    },
 }
 
 $(document).ready(function () {
 
     Master.init();
+
+    if($('.dnc_table tbody tr').length){
+        Master.toggle_instructions();
+    }
 
 	$('.stop-propagation').on('click', function (e) {
 		e.stopPropagation();
