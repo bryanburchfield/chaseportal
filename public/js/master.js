@@ -81,7 +81,7 @@ var Master = {
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
 
-        /// lead rule handlers
+        /// tool handlers
         $('#when .form-group #campaign_select, #action #destination_campaign').on('change', this.get_leadrule_subcampaigns);
         $('#when .form-group #update_campaign_select, #action #update_destination_campaign').on('change', this.get_leadrule_subcampaigns);
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
@@ -99,7 +99,7 @@ var Master = {
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
-        $('.close_instruc').on('click', this.close_instructions);
+        $('.toggle_instruc').on('click', this.toggle_instructions);
 	},
 
     hide_modal_error:function(){
@@ -2022,17 +2022,24 @@ var Master = {
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
     },
 
-    close_instructions:function(e){
+    toggle_instructions:function(e){
         e.preventDefault();
-        $(this).parent().hide();
+
+        if($(this).hasClass('collapsed')){
+            $(this).removeClass('collapsed');
+            $(this).empty().append('<i class="fas fa-angle-up"></i>');
+        }else{
+            $(this).addClass('collapsed');
+            $(this).empty().append('<i class="fas fa-angle-down"></i>');
+        }
+
+        $(this).parent().find('.instuc_div').slideToggle();
     }
 }
 
 $(document).ready(function () {
-	Master.init();
 
-	// if ($('#campaign_select').val()) { Master.get_subcampaigns($(this), $('#campaign_select').val(), 'campaign_select'); }
-	// if ($('#destination_subcampaign').val()) { Master.get_subcampaigns($(this), $('#destination_subcampaign').val(), 'destination_subcampaign'); }
+    Master.init();
 
 	$('.stop-propagation').on('click', function (e) {
 		e.stopPropagation();

@@ -53,7 +53,7 @@
 									<div class="alert alert-danger mt20">
 										<ul>
 											@foreach ($errors->all() as $error)
-												<li>{{ $error }}</li>
+												<p>{{ $error }}</p>
 											@endforeach
 										</ul>
 									</div>

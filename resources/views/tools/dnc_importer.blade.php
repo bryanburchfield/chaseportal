@@ -26,20 +26,23 @@
 								</div>
 							@endif
 
-							<h2 class="bbnone">{{__('tools.dnc_files')}}</h2>
-							<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
+							<h2 class="bbnone mb20">{{__('tools.dnc_files')}}</h2>
 
 							<div class="card instructions">
-								<a href="#" class="close_instruc"><i class="fas fa-times-circle"></i></a>
-								<h3 class="mb20"><b>{{__('tools.instructions')}}</b></h3>
-								<ul class="pl10 paditem5">
-									<li>{{__('tools.dnc_instruc1')}}</li>
-									<li>{{__('tools.dnc_instruc2')}}</li>
-									<li>{{__('tools.dnc_instruc3')}}</li>
-									<li>{{__('tools.dnc_instruc4')}}</li>
-									<li>{{__('tools.dnc_instruc5')}}</li>
-								</ul>
+								<a href="#" class="toggle_instruc"><i class="fas fa-angle-up"></i></a>
+								<h3><b>{{__('tools.instructions')}}</b></h3>
+								<div class="mt20 instuc_div">
+									<ul class="pl10 paditem5">
+										<li>{{__('tools.dnc_instruc1')}}</li>
+										<li>{{__('tools.dnc_instruc2')}}</li>
+										<li>{{__('tools.dnc_instruc3')}}</li>
+										<li>{{__('tools.dnc_instruc4')}}</li>
+										<li>{{__('tools.dnc_instruc5')}}</li>
+									</ul>
 								</div>
+							</div>
+
+							<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
 
 							@if (count($files))
 							{{ $files->links() }}

@@ -2330,12 +2330,16 @@ p.filename {
     margin-top: 7px;
 }
 
-a.close_instruc {
+a.toggle_instruc {
     float: right;
-    color: #d9534f;
+    color: #33A09B;
     font-size: 18px;
     position: relative;
     bottom: 5px;
+}
+
+.alert-info.alert-block button.close{
+    color: #d9534f;
 }
 
 /* ---------------------------------------------------
