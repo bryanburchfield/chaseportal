@@ -51,11 +51,9 @@
 
 								@if($errors->any())
 									<div class="alert alert-danger mt20">
-										<ul>
-											@foreach ($errors->all() as $error)
-												<p>{{ $error }}</p>
-											@endforeach
-										</ul>
+										@foreach ($errors->all() as $error)
+											<p>{{ $error }}</p>
+										@endforeach
 									</div>
 								@endif
 							</div>
