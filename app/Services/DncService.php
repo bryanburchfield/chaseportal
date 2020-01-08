@@ -6,6 +6,7 @@ use App\Includes\PowerImportAPI;
 use App\Models\Dialer;
 use App\Models\DncFile;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 
 class DncService
 {
@@ -68,7 +69,12 @@ class DncService
             return;
         }
 
-        $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+        // Don't submit if local (testing)
+        if (App::environment('local')) {
+            $result = true;
+        } else {
+            $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
+        }
 
         $dnc_file_detail->processed_at = now();
 
@@ -94,7 +100,12 @@ class DncService
             return;
         }
 
-        $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+        // Don't submit if local (testing)
+        if (App::environment('local')) {
+            $result = true;
+        } else {
+            $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+        }
 
         $dnc_file_detail->processed_at = now();
 
