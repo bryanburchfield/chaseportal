@@ -26,7 +26,7 @@ if (Auth::user()->isType('demo')) {
                     @include('tools.shared.topnav', ['toolpage' => 'rules'])
                         <div class="tab-content">
                             <div class="tab-pane active mt30" id="contactflow_builder">
-                                <h2 class="bbnone">Contact Flow Builder</h2>
+                                <h2 class="bbnone">{{__('tools.contact_flowbuilder')}}</h2>
 
                                 <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#lead_rules" data-toggle="tab">{{__('tools.lead_rules')}}</a></li>

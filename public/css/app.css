@@ -141,6 +141,10 @@ h6 {
   padding: 20px;
 }
 
+.pl10 {
+  padding-left: 10px;
+}
+
 .pb20 {
   padding-bottom: 20px;
 }
@@ -2580,6 +2584,76 @@ a.remove_filter {
 .btn.btn-reset:hover {
   color: #333 !important;
   background: #bfbfbf;
+}
+
+.btn-link.danger {
+  color: #d9534f;
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  vertical-align: middle;
+}
+
+.paditem5 {
+  margin-bottom: 20px;
+}
+
+.paditem5 li {
+  padding: 5px 0;
+}
+
+.upload_btn input {
+  color: #333;
+}
+
+.upload_btn input:hover {
+  color: #203047;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.upload_desc input.form-control {
+  background: #fff !important;
+}
+
+.btn-info.btn-file {
+  float: left;
+  margin-right: 10px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.cb {
+  clear: both;
+}
+
+p.filename {
+  float: left;
+  margin-top: 7px;
 }
 
 /* ---------------------------------------------------

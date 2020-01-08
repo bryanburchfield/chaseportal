@@ -136,7 +136,11 @@ return [
         ],
         'filter_rule' => [
             'same_source_destination' => 'Source and Destination campaign/subcampaign must be different.',
-        ]
+        ],
+        'dncfile' => [
+            'required_without' => 'Please select a file to upload',
+            'mimes' => 'Invalid file type',
+        ],
     ],
 
     /*
