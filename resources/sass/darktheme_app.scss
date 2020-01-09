@@ -2130,8 +2130,8 @@ div#cdr_dataTable_paginate {
 
 h4.panel-title a{
   display: block;
-  width: 98%;
-  float: left;
+  width: 100%;
+  // float: left;
 }
 
 .user_links_modal a:nth-of-type(odd) {
@@ -2584,7 +2584,6 @@ a.toggle_instruc {
     font-weight: 500;
     position: relative;
     top: 3px;
-    right: -10px;
 }
 .panel-title a.collapsed:after {
     content: "\e113";
