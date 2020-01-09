@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-       <div class="col-xs-5 col-sm-6 brand pl0">
+       <div class="col-xs-2 col-sm-6 brand pl0">
            <button type="button" id="sidebarCollapse" class="btn">
                <i class="fas fa-align-left"></i>
            </button>
@@ -12,7 +12,7 @@
            @endif
        </div>
 
-        <div class="filters col-xs-7 col-sm-6">
+        <div class="filters col-xs-10 col-sm-6">
 
             <div class="input-group">
 
