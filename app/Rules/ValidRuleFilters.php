@@ -30,7 +30,7 @@ class ValidRuleFilters implements Rule
             } else {
                 $val = null;
             }
-            if (!is_int($val) || $val <= 0) {
+            if (!is_int($val) || $val < 0) {
                 return false;
             }
         }

@@ -94,7 +94,7 @@ class LeadFilter extends FormRequest
             'filters' => [
                 'required',
                 'array',
-                'min:1',
+                'min:0',
                 new ValidRuleFilters(),
             ],
             'destination_campaign' => [
