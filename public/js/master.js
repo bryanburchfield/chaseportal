@@ -420,9 +420,7 @@ var Master = {
                 if(Master.leadrule_filters != Master.leadrule_filters_used ){
                     // only add delete rule btn to edit form -check if only one condition is present
                     if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
-                        // if(Master.leadrule_filters_used==1){
-                            var add_delete_btn = true;
-                        // }
+                        var add_delete_btn = true;
                     }
 
                     Master.leadrule_filters_used=Master.leadrule_filters_used+1;
@@ -433,7 +431,11 @@ var Master = {
                     $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
-                    // $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                    /// only update filter menu for create rule form
+                    if(!$(this).hasClass('edit_addrule')){
+                        $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                    }
+
                     if(add_delete_btn && Master.leadrule_filters_used!=Master.leadrule_filters){
                         $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
                     }
@@ -503,6 +505,16 @@ var Master = {
             success:function(response){
             }
         });
+    },
+
+    get_leadrule_filter_menu:function(){
+        var filters = [];
+        $('.lead_rule_filter_type option').each(function(){
+            if($(this).val() != ''){
+                filters.push($(this).val());
+            }
+        });
+        return filters;
     },
 
     create_leadrule:function(e){

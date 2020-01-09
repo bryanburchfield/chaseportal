@@ -18,7 +18,6 @@
                         @if($clients)
                             ({{ $clients }} client{{ $clients > 1 ? 's' : '' }})
                         @endif
-                        {{-- <i class="fas fa-angle-up dialerlist_icon"></i> --}}
                         </a>
                     </h4>
                 </div>
