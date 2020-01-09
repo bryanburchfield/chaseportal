@@ -2115,6 +2115,11 @@ a.edit_recip_glyph {
   color: #E15B23;
 }
 
+.users td a.remove_user {
+  float: none;
+  margin-left: 10px;
+}
+
 div.alert-danger p {
   font-weight: 600;
 }
@@ -2423,6 +2428,7 @@ a[aria-expanded=true] {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#263854", endColorstr="#171f33",GradientType=0 );
   /* IE6-9 */
   color: #fff;
+  height: 40px;
 }
 
 .panel-default {
@@ -2524,7 +2530,8 @@ div#cdr_dataTable_paginate {
 
 h4.panel-title a {
   display: block;
-  width: 100%;
+  width: 98%;
+  float: left;
 }
 
 .user_links_modal a:nth-of-type(odd) {
@@ -3039,9 +3046,22 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
-.dialerlist_icon {
+.panel-title a:after {
+  font-family: "Glyphicons Halflings";
+  content: "\E114";
   float: right;
   color: #33A09B;
+  font-size: 12px;
+  font-weight: 500;
+  position: relative;
+  top: 3px;
+  right: -10px;
+}
+
+.panel-title a.collapsed:after {
+  content: "\E113";
+  position: relative;
+  top: 3px;
 }
 
 /* ---------------------------------------------------
