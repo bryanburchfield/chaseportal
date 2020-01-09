@@ -209,7 +209,7 @@ if (Auth::user()->isType('demo')) {
                                             <div class="card">
                                                 <h2 class="page_heading"><i class="fa fa-history"></i> {{__('tools.lead_move_history')}}</h2>
 
-                                                <div class="table-responsive">
+                                                <div class="table-responsive nobdr">
                                                     <table class="table rules_table mt20">
                                                         <thead>
                                                             <tr>
