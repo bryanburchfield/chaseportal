@@ -2128,11 +2128,11 @@ a[aria-expanded=true] {
   right: 5px;
 }
 
-.trend_indicator.up {
+.trend_indicator.positive {
   color: #5cb85c;
 }
 
-.trend_indicator.down {
+.trend_indicator.negative {
   color: #d9534f;
 }
 
@@ -2151,11 +2151,19 @@ a[aria-expanded=true] {
   font-weight: 600;
 }
 
-.arrow_up {
+.arrow_up.positive {
   border-bottom: 6px solid #5cb85c;
 }
 
-.arrow_down {
+.arrow_up.negative {
+  border-bottom: 6px solid #d9534f;
+}
+
+.arrow_down.positive {
+  border-top: 6px solid #5cb85c;
+}
+
+.arrow_down.negative {
   border-top: 6px solid #d9534f;
 }
 
