@@ -193,7 +193,8 @@ if (Auth::user()->isType('demo')) {
                                                             {!! Form::label('description', __('tools.description')) !!}
                                                             {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
                                                         </div>
-                                                        
+
+                                                        <a href="#" onclick="location.href='/tools/contactflow_builder';" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
                                                         {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
                                                         <div class="alert alert-danger add_rule_error mt20"></div>
                                                     </div>
