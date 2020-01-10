@@ -80,6 +80,7 @@ var Master = {
 		$('.submit_date_filter').on('click', this.custom_date_filter);
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
+        $('.add_btn_loader').on('click', this.add_btn_loader);
 
         /// tool handlers
         $('#when .form-group #campaign_select, #action #destination_campaign').on('change', this.get_leadrule_subcampaigns);
@@ -212,6 +213,10 @@ var Master = {
         } else {
             selector.find('.trend_indicator').hide();
         }
+    },
+
+    add_btn_loader:function(){
+        $(this).prepend('<i class="fa fa-spinner fa-spin mr10"></i>');
     },
 
     filter_date: function () {

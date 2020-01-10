@@ -2209,7 +2209,7 @@ div.vertical-line{
             margin-left: 10px;
 
             &:hover{
-                background: darken($orange, 5%);
+                background: darken(#e49831, 5%);
             }
         }
     }
@@ -2419,7 +2419,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
     }
-
 }
 
 @media handheld, only screen and (max-width:1070px) {
@@ -2448,7 +2447,6 @@ MEDIAQUERIES
         clear: both;
         display: block;
     }
-
 }
 
 @media handheld, only screen and (min-width:991px) {

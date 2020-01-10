@@ -182,7 +182,7 @@
 
 										{!! Form::hidden('id', null, ['class'=>'user_id']) !!}
 
-										{!! Form::submit('Update User', ['class'=>'btn btn-primary mb0'] ) !!}
+										<button type="submit" class="btn btn-primary mt30 add_btn_loader">{{__('general.update')}}</button>
 
 										<br><br>
 
