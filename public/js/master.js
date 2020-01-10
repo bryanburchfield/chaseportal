@@ -424,9 +424,9 @@ var Master = {
 
                 if(Master.leadrule_filters != Master.leadrule_filters_used ){
                     // only add delete rule btn to edit form -check if only one condition is present
-                    if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
-                        var add_delete_btn = true;
-                    }
+                    // if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
+                    //     var add_delete_btn = true;
+                    // }
 
                     Master.leadrule_filters_used=Master.leadrule_filters_used+1;
                     var new_filter = $(this).parent().parent().parent().clone();
@@ -437,11 +437,11 @@ var Master = {
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
                     /// only update filter menu for create rule form
-                    if(!$(this).hasClass('edit_addrule')){
-                        $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
-                    }
+                    // if(!$(this).hasClass('edit_addrule')){
+                    //     $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                    // }
 
-                    if(add_delete_btn && Master.leadrule_filters_used!=Master.leadrule_filters){
+                    if(Master.leadrule_filters_used!=Master.leadrule_filters){
                         $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
                     }
 
@@ -449,7 +449,7 @@ var Master = {
                         $(new_filter).find('a.add_leadrule_filter').remove();
                     }
 
-                    $(this).parent().find('select').attr('disabled', true);
+                    // $(this).parent().find('select').attr('disabled', true);
                     $(this).hide();
                 }
             }else{
