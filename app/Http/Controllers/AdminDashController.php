@@ -58,6 +58,7 @@ class AdminDashController extends Controller
             'count' => 0,
             'pct_change' => 0,
             'pct_sign' => 0,
+            'higher_is_better' => 1,
             'ntc' => 0,
         ];
         $calls_answered = [
@@ -68,6 +69,7 @@ class AdminDashController extends Controller
             'max' => null,
             'pct_change' => 0,
             'pct_sign' => 0,
+            'higher_is_better' => 1,
             'ntc' => 0,
         ];
         $calls_missed = [
@@ -76,6 +78,7 @@ class AdminDashController extends Controller
             'voicemail' => 0,
             'pct_change' => 0,
             'pct_sign' => 0,
+            'higher_is_better' => 0,
             'ntc' => 0,
         ];
         $talk_time = [
@@ -86,6 +89,7 @@ class AdminDashController extends Controller
             'max' => null,
             'pct_change' => 0,
             'pct_sign' => 0,
+            'higher_is_better' => 1,
             'ntc' => 0,
         ];
         $call_volume = [
@@ -497,6 +501,7 @@ class AdminDashController extends Controller
             'total_hold_time' => $total_hold_time,
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 0,
             'ntc' => $ntc,
         ]];
     }
@@ -595,6 +600,7 @@ class AdminDashController extends Controller
                 'abandon_rate' => $abandon_pct,
                 'pct_change' => $pctdiff,
                 'pct_sign' => $pctsign,
+                'higher_is_better' => 0,
                 'ntc' => $ntc,
             ],
         ];
@@ -690,6 +696,7 @@ class AdminDashController extends Controller
             'sales' => $total_sales,
             'pct_change' => $pct_change,
             'pct_sign' => $pct_sign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ]];
     }
