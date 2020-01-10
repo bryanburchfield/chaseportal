@@ -42,7 +42,7 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
         $record['phone'] = preg_replace("/[^0-9]/", '', $row[$this->column]);
 
         // Vary basic validation
-        if (strlen($record['phone']) < 10) {
+        if (strlen($record['phone']) < 7) {
             $record['succeeded'] = false;
             $record['error'] = trans('tools.invalid_phone');
         } else {
