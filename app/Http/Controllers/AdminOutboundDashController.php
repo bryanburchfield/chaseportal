@@ -67,6 +67,7 @@ class AdminOutboundDashController extends Controller
             'duration' => 0,
             'pct_change' => 0,
             'pct_sign' => 0,
+            'higher_is_better' => 1,
             'ntc' => 0,
         ];
 
@@ -564,6 +565,7 @@ class AdminOutboundDashController extends Controller
             'conversion_rate' => $tots['Contacts'] > 0 ? round($tots['Sales'] / $tots['Contacts'] * 100, 2) : 0,
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ];
 
@@ -584,6 +586,7 @@ class AdminOutboundDashController extends Controller
             'total' => $tots['PerHour'],
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ];
 
@@ -826,6 +829,7 @@ class AdminOutboundDashController extends Controller
             'total' => $total_calls['Total'],
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ];
 
@@ -844,6 +848,7 @@ class AdminOutboundDashController extends Controller
             'total' => $total_calls['Contacts'],
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ];
 
@@ -865,6 +870,7 @@ class AdminOutboundDashController extends Controller
             'rate' => $rate,
             'pct_change' => $pctdiff,
             'pct_sign' => $pctsign,
+            'higher_is_better' => 1,
             'ntc' => $ntc,
         ];
 
