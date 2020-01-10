@@ -389,7 +389,7 @@ var Admin = {
 			},
 
 			success: function (response) {
-
+				$('.form.edit_myself .btn.add_btn_loader').find('i').remove();
 				if (response.errors) {
 					$('form.edit_myself').append('<div class="alert alert-danger">' + response.errors + '</div>');
 					$('.alert-danger').show();
