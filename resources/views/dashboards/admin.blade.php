@@ -190,68 +190,199 @@
 									</div>
 
 									<div class="row">
-										<div class="col-sm-6 mb20">
-											<div class="card webhook_fields">
-												<h3 class="mb20">Field Names</h3>
-												<p data-field="first_name">First Name</p>
-												<p data-field="last_name">Last Name</p>
-												<p data-field="address">Address</p>
-												<p data-field="city">City</p>
-												<p data-field="state">State</p>
-												<p data-field="zip">Zip Code</p>
-												<p data-field="notes">Notes</p>
-												<p data-field="campaign">Campaign</p>
-												<p data-field="subcampaign">SubCampaign</p>
-												<p data-field="client_id">Client ID</p>
-
-												<a href="#" class="btn btn-primary add_custom_field">Add Custom Field</a>
-											</div>
-										</div>
-
-										<div class="col-sm-6 mb20">
-											<div class="card">
-												<h3 class="mb20">Values</h3>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="First Name">
+										<div class="col-sm-12 card webhook_fields">
+											<div class="row">
+												<div class="col-sm-6">
+													<h3 class="mb20">Field Names</h3>
 												</div>
 
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Lasst Name">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Address">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="City">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="State">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Zip Code">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Notes">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Campaign">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="SubCampaign">
-												</div>
-
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Client ID">
+												<div class="col-sm-6">
+													<h3 class="mb20">Values</h3>
 												</div>
 											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="first_name">First Name</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="First Name">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="last_name">Last Name</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Last Name">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="address">Address</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Address">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="city">City</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="City">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="state">State</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="State">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="zip_code">Zip Code</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Zip Code">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="notes">Notes</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Notes">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="campaign">Campaign</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Campaign">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="subcampaign">Subcampaign</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Subcampaign">
+													</div>
+												</div>
+											</div>
+
+											<div class="field">
+												<div class="col-sm-5">
+													<p data-field="client_id">Client ID</p>
+												</div>
+
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+													<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+												</div>
+
+												<div class="col-sm-6">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="Client ID">
+													</div>
+												</div>
+											</div>
+
+											<form action="#" method="post" class="form-inline add_custom_field">
+												<div class="form-group">
+													<label>Name </label>
+													<input type="text" class="form-control" class="custom_field_name" placeholder="Field Name">
+												</div>
+												<div class="form-group">
+													<label>Value </label>
+													<input type="text" class="form-control" class="custom_field_value" placeholder="Field Value">
+												</div>
+												<input type="submit" class="btn btn-primary mt10" value="Add Custom Field">
+											</form>
+											
 										</div>
 									</div>
 								</div>
