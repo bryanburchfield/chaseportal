@@ -1373,7 +1373,9 @@ input[type=number]::-webkit-outer-spin-button {
 .update_rule .form-control,
 .edit_myself select,
 .demo_user select,
-.demo_user .form-control {
+.demo_user .form-control,
+#webhook_generator .form-control,
+#webhook_generator select {
   background: #eee !important;
 }
 

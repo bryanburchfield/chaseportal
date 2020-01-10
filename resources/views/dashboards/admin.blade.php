@@ -25,6 +25,7 @@
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
+								<li><a href="#webhook_generator" data-toggle="tab">Webhook Generator</a></li>
 								<li><a href="#settings" data-toggle="tab">My Settings</a></li>
 							</ul>
 
@@ -157,6 +158,101 @@
 
 											</tbody>
 										</table>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="webhook_generator">
+									<div class="col-sm-12">
+										<div class="row">
+											<div class="col-sm-6 mt30 mb20 pl0">
+												<h2 class="page_heading">Webhook Generator</h2>
+												<div class="form-group">
+													<label>Group ID</label>
+													<input type="text" class="form-control" name="group_id" id="group_id">
+												</div>
+
+												<div class="form-group">
+													<label>Dialer #</label>
+													<input type="text" class="form-control" name="dialer_number" id="dialer_number">
+												</div>
+
+												<div class="form-group">
+													<label>Table</label>
+													<select name="client_table" id="client_table" class="form-control"></select>
+												</div>
+
+												<div class="form-group">
+													<label>Posting URL</label>
+													<input type="text" class="form-control" name="posting_url" id="posting_url">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-6 mb20">
+											<div class="card webhook_fields">
+												<h3 class="mb20">Field Names</h3>
+												<p data-field="first_name">First Name</p>
+												<p data-field="last_name">Last Name</p>
+												<p data-field="address">Address</p>
+												<p data-field="city">City</p>
+												<p data-field="state">State</p>
+												<p data-field="zip">Zip Code</p>
+												<p data-field="notes">Notes</p>
+												<p data-field="campaign">Campaign</p>
+												<p data-field="subcampaign">SubCampaign</p>
+												<p data-field="client_id">Client ID</p>
+
+												<a href="#" class="btn btn-primary add_custom_field">Add Custom Field</a>
+											</div>
+										</div>
+
+										<div class="col-sm-6 mb20">
+											<div class="card">
+												<h3 class="mb20">Values</h3>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="First Name">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Lasst Name">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Address">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="City">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="State">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Zip Code">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Notes">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Campaign">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="SubCampaign">
+												</div>
+
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="Client ID">
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 
