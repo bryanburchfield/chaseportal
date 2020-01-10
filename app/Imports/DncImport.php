@@ -41,13 +41,8 @@ abstract class DncImport implements ToModel, WithChunkReading, WithBatchInserts
         // strip non-digits from phone number
         $record['phone'] = preg_replace("/[^0-9]/", '', $row[$this->column]);
 
-        // if it's 11 digits and begins with a 1, strip the 1
-        if (strlen($record['phone']) == 11 && substr($record['phone'], 0, 1) == '1') {
-            $record['phone'] = substr($record['phone'], 1);
-        }
-
         // Vary basic validation
-        if (strlen($record['phone']) !== 10) {
+        if (strlen($record['phone']) < 10) {
             $record['succeeded'] = false;
             $record['error'] = trans('tools.invalid_phone');
         } else {
