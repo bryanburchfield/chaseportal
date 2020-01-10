@@ -76,7 +76,7 @@ class AdminDashController extends Controller
             'avg_duration_change' => [
                 'pct_change' => 0,
                 'pct_sign' => 0,
-                'higher_is_better' => 1,
+                'higher_is_better' => 0,
                 'ntc' => 0,
             ],
         ];
