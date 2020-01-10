@@ -67,10 +67,18 @@ class AdminDashController extends Controller
             'average' => 0,
             'min' => null,
             'max' => null,
-            'pct_change' => 0,
-            'pct_sign' => 0,
-            'higher_is_better' => 1,
-            'ntc' => 0,
+            'count_change' => [
+                'pct_change' => 0,
+                'pct_sign' => 0,
+                'higher_is_better' => 1,
+                'ntc' => 0,
+            ],
+            'avg_duration_change' => [
+                'pct_change' => 0,
+                'pct_sign' => 0,
+                'higher_is_better' => 1,
+                'ntc' => 0,
+            ],
         ];
         $calls_missed = [
             'count' => 0,
@@ -89,7 +97,7 @@ class AdminDashController extends Controller
             'max' => null,
             'pct_change' => 0,
             'pct_sign' => 0,
-            'higher_is_better' => 1,
+            'higher_is_better' => 0,
             'ntc' => 0,
         ];
         $call_volume = [
@@ -225,15 +233,26 @@ class AdminDashController extends Controller
             $calls_missed['ntc'] = 0;
         }
 
-        if ($prev_answer_average == 0) {
-            $calls_answered['pct_change'] = null;
-            $calls_answered['pct_sign'] = null;
-            $calls_answered['ntc'] = 1;  // nothing to compare
+        if ($prev_answer_count == 0) {
+            $calls_answered['count_change']['pct_change'] = null;
+            $calls_answered['count_change']['pct_sign'] = null;
+            $calls_answered['count_change']['ntc'] = 1;  // nothing to compare
         } else {
-            $calls_answered['pct_change'] = ($calls_answered['average'] - $prev_answer_average) / $prev_answer_average * 100;
-            $calls_answered['pct_sign'] = $calls_answered['pct_change'] < 0 ? 0 : 1;
-            $calls_answered['pct_change'] = round(abs($calls_answered['pct_change']));
-            $calls_answered['ntc'] = 0;
+            $calls_answered['count_change']['pct_change'] = ($calls_answered['count'] - $prev_answer_count) / $prev_answer_count * 100;
+            $calls_answered['count_change']['pct_sign'] = $calls_answered['count_change']['pct_change'] < 0 ? 0 : 1;
+            $calls_answered['count_change']['pct_change'] = round(abs($calls_answered['count_change']['pct_change']));
+            $calls_answered['count_change']['ntc'] = 0;
+        }
+
+        if ($prev_answer_average == 0) {
+            $calls_answered['avg_duration_change']['pct_change'] = null;
+            $calls_answered['avg_duration_change']['pct_sign'] = null;
+            $calls_answered['avg_duration_change']['ntc'] = 1;  // nothing to compare
+        } else {
+            $calls_answered['avg_duration_change']['pct_change'] = ($calls_answered['average'] - $prev_answer_average) / $prev_answer_average * 100;
+            $calls_answered['avg_duration_change']['pct_sign'] = $calls_answered['avg_duration_change']['pct_change'] < 0 ? 0 : 1;
+            $calls_answered['avg_duration_change']['pct_change'] = round(abs($calls_answered['avg_duration_change']['pct_change']));
+            $calls_answered['avg_duration_change']['ntc'] = 0;
         }
 
         if ($prev_talk_average == 0) {
