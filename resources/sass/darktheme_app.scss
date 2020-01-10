@@ -2616,6 +2616,14 @@ a.toggle_instruc {
         display: inline-block;
         margin-top: 10px;
         margin-right: 10px;
+
+        &.remove_field{
+            color:tomato;
+        }
+
+        &.use_default_value{
+            color: $green;
+        }
     }
 }
 

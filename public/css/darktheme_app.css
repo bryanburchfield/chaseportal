@@ -3097,6 +3097,14 @@ a.toggle_instruc {
   margin-right: 10px;
 }
 
+.webhook_fields a.remove_field {
+  color: tomato;
+}
+
+.webhook_fields a.use_default_value {
+  color: #33A09B;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -2712,6 +2712,35 @@ a.toggle_instruc {
   top: 3px;
 }
 
+.webhook_fields .field {
+  border-bottom: 1px solid #1b293c;
+  margin-bottom: 10px;
+  overflow: auto;
+}
+
+.webhook_fields h3 {
+  font-weight: 600;
+}
+
+.webhook_fields p {
+  font-size: 16px;
+  padding-top: 10px;
+}
+
+.webhook_fields a {
+  display: inline-block;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.webhook_fields a.remove_field {
+  color: tomato;
+}
+
+.webhook_fields a.use_default_value {
+  color: #33A09B;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
