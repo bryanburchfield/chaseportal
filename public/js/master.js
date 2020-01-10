@@ -524,7 +524,7 @@ var Master = {
 
     create_leadrule:function(e){
         e.preventDefault();
-
+        $('#add_rule').find('.add_rule_error').empty().hide();
         var rule_name = $('#rule_name').val(),
             source_campaign = $('#campaign_select').val(),
             source_subcampaign=$('.source_subcampaign').val(),
@@ -534,8 +534,14 @@ var Master = {
         ;
 
         var filters={};
+        var duplicate_filters = false;
         $('.lead_rule_filter_type').each(function(){
-            filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+            if(!filters.hasOwnProperty($(this).val())){
+                filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+            }else{
+                $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
+                duplicate_filters=true;
+            }
         });
 
         $.ajaxSetup({
@@ -544,43 +550,45 @@ var Master = {
             }
         });
 
-        $.ajax({
-            url: '/tools/contactflow_builder',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                rule_name:rule_name,
-                source_campaign:source_campaign,
-                source_subcampaign:source_subcampaign,
-                destination_campaign:destination_campaign,
-                destination_subcampaign:destination_subcampaign,
-                description:description,
-                filters:filters
-            },
+        if(!duplicate_filters){
+            $.ajax({
+                url: '/tools/contactflow_builder',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    rule_name:rule_name,
+                    source_campaign:source_campaign,
+                    source_subcampaign:source_subcampaign,
+                    destination_campaign:destination_campaign,
+                    destination_subcampaign:destination_subcampaign,
+                    description:description,
+                    filters:filters
+                },
 
-            success:function(response){
+                success:function(response){
 
-                window.location.href = 'contactflow_builder';
-            },
-            error :function( data ) {
-                $('.add_rule_error.alert').empty();
-                $('.add_rule_error.alert').hide();
+                    window.location.href = 'contactflow_builder';
+                },
+                error :function( data ) {
+                    $('.add_rule_error.alert').empty();
+                    $('.add_rule_error.alert').hide();
 
-                var errors = $.parseJSON(data.responseText);
-                $.each(errors, function (key, value) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
 
-                    if($.isPlainObject(value)) {
-                        $.each(value, function (key, value) {
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                            });
+                        }else{
                             $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                        });
-                    }else{
-                        $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                    }
-                });
+                        }
+                    });
 
-                $('.add_rule_error.alert li').first().remove();
-            }
-        });
+                    $('.add_rule_error.alert li').first().remove();
+                }
+            });
+        }
     },
 
     updateleadrule:function(e){
