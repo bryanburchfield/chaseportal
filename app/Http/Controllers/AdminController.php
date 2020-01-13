@@ -444,7 +444,7 @@ class AdminController extends Controller
         $user = User::where('group_id', $request->group_id)->first();
 
         if (!$user) {
-            return ['error' => 'invalid group_id'];
+            return response()->json('Client not found', 404);
         }
 
         $union = '';
