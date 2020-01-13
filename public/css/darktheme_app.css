@@ -1590,7 +1590,7 @@ input[type=number]::-webkit-outer-spin-button {
 .add_user input.form-control,
 .edit_user input.form-control,
 .edit_myself input.form-control,
-#webhook_generator .form-control,
+#webhook_generator input.form-control,
 #webhook_generator select {
   background: #1d2b40 !important;
   border: none;
@@ -3083,6 +3083,10 @@ a.toggle_instruc {
   overflow: auto;
 }
 
+.webhook_fields .field p.active {
+  color: #33A09B;
+}
+
 .webhook_fields h3 {
   font-weight: 600;
 }
@@ -3108,6 +3112,25 @@ a.toggle_instruc {
 
 .webhook_fields .btn.h35 {
   height: 35px;
+}
+
+.webhook_fields form {
+  padding: 20px;
+  border: 1px solid #1b293c;
+}
+
+.webhook_fields button.btn.generate_url {
+  background: #33A09B !important;
+  float: right;
+}
+
+.final_url_cnt textarea.url.form-control {
+  color: #33A09B;
+  border-radius: 5px;
+  background: #000001 !important;
+  border: 1px solid #1b293c;
+  min-height: 100px;
+  padding: 12px;
 }
 
 /* ---------------------------------------------------

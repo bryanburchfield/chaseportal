@@ -4,7 +4,7 @@
 @section('content')
 <div class="preloader"></div>
 <?php
-
+	//dd($default_lead_fields);
 ?>
 <div class="wrapper">
 
@@ -162,8 +162,8 @@
 								</div>
 
 								<div class="tab-pane" id="webhook_generator">
-									<div class="col-sm-12">
-										<div class="row">
+									<div class="row">
+										<div class="col-sm-12">
 											<div class="col-sm-6 mt30 mb20 ">
 												<h2 class="page_heading">Webhook Generator</h2>
 												<div class="form-group">
@@ -204,178 +204,29 @@
 													</div>
 												</div>
 
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="FirstName">FirstName</p>
-													</div>
+												@foreach($default_lead_fields as $val)
+													<div class="field">
+														<div class="col-sm-4">
+															<p class="field_name" data-field="{{$val}}">{{$val}}</p>
+														</div>
 
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
+														<div class="col-sm-3">
+															<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+															<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														</div>
 
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="FirstName" placeholder="First Name">
+														<div class="col-sm-5">
+															<div class="form-group">
+																<input type="text" class="form-control" name="{{$val}}" placeholder="{{$val}}">
+															</div>
 														</div>
 													</div>
-												</div>
+												@endforeach
+											</div>
 
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="LastName">LastName</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="LastName" placeholder="Last Name">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="Address">Address</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="Address" placeholder="Address">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="City">City</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="City" placeholder="City">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="State">State</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="State" placeholder="State">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="ZipCode">Zip Code</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="ZipCode" placeholder="Zip Code">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="Notes">Notes</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="Notes" placeholder="Notes">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="Campaign">Campaign</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="Campaign" placeholder="Campaign">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="Subcampaign">Subcampaign</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="Subcampaign" placeholder="Subcampaign">
-														</div>
-													</div>
-												</div>
-
-												<div class="field">
-													<div class="col-sm-4">
-														<p data-field="ClientId">Client ID</p>
-													</div>
-
-													<div class="col-sm-3">
-														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
-													</div>
-
-													<div class="col-sm-5">
-														<div class="form-group">
-															<input type="text" class="form-control" name="ClientId" placeholder="Client ID">
-														</div>
-													</div>
-												</div>
-
+											<div class="col-sm-7">
 												<form action="#" method="post" class="form-inline add_custom_field">
-													<h3 class="mt20">Add Custom Field</h3>
+													<h3>Add Custom Field</h3>
 													<div class="form-group mr10">
 														<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
 													</div>
@@ -385,6 +236,14 @@
 													<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
 												</form>
 											</div>
+
+											<div class="col-sm-5">
+												<div class="final_url_cnt">
+													<textarea cols="30" rows="10" class="url form-control"></textarea>
+												</div>
+												<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
+											</div>
+
 										</div>
 									</div>
 								</div>

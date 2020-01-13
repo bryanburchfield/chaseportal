@@ -19,6 +19,8 @@ var Admin = {
         $('#webhook_generator #db').on('change', this.get_client_tables);
         $('#client_table').on('change', this.get_table_fields);
         $('.use_system_macro').on('click', this.toggle_system_macro);
+        $('body').on('focusin', '.field .form-control', this.highlight_custom_field);
+        $('.generate_url').on('click', this.generate_url);
 	},
 
 	// add global user
@@ -493,7 +495,6 @@ var Admin = {
 
 	    var custom_field_name = $('.custom_field_name').val();
 	    var custom_field_value = $('.custom_field_value').val();
-	    // var new_field_row = '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a><label class="checkbox-inline"><input type="checkbox" value="">Use System Macro</label></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
 
 	    var new_field_row = '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
 
@@ -503,6 +504,7 @@ var Admin = {
 
 	get_client_tables:function(){
 
+		$('.alert-danger').hide();
 	    var database  = $(this).val();
 	    var group_id = $(this).parent().parent().find('#group_id').val();
 
@@ -518,38 +520,25 @@ var Admin = {
 	        dataType: 'json',
 	        data: { group_id : group_id,database:database},
 	        success: function (response) {
-	            console.log(response);
-	            var tables;
-	            for(var i=0; i< response.tables.length; i++){
-	            	tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].Description+' - '+response.tables[i].TableName+'</option>';
+
+	            if(response.tables.length){
+	            	var tables;
+	            	for(var i=0; i< response.tables.length; i++){
+	            		tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].TableName+' - '+response.tables[i].Description+'</option>';
+	            	}
+
+	            	$('#client_table').append(tables);
+	            }else{
+	            	$('.alert-danger').text('No Tables Found').show();
 	            }
 
-	            $('#client_table').append(tables);
-
-	        }, error: function (data) {
-
-                var errors = $.parseJSON(data.responseText);
-                $.each(errors, function (key, value) {
-
-                    if ($.isPlainObject(value)) {
-                        $.each(value, function (key, value) {
-                        	console.log(value);
-                            $('form.add_user .alert').show().append('<li>' + value + '</li>');
-                        });
-                    } else {
-                        $('form.add_user .alert').show().append('<li>' + value + '</li>');
-                    }
-                });
-
-                $('form.add_user .alert li').first().remove();
-            }
+	        }
 	    });
 	},
 
 	get_table_fields:function(){
 		var table_name = $(this).val();
 		var database  = $(this).parent().parent().find('#db').val();
-		console.log(table_name+' '+ database);
 
 		$.ajaxSetup({
 	        headers: {
@@ -564,6 +553,18 @@ var Admin = {
 	        data: { table_name: table_name, database:database },
 	        success: function (response) {
 	            console.log(response);
+
+	            if(response.fields.length){
+
+	            	var new_field_row='';
+
+	            	for(var i=0; i<response.fields.length;i++){
+	            		console.log(response.fields[i]);
+	            		new_field_row += '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+response.fields[i]+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div></div>';
+	            	}
+	            	// console.log(new_field_row);
+	            	$(new_field_row).insertAfter('.field:last');
+	            }
 	        }
 	    });
 	},
@@ -577,6 +578,21 @@ var Admin = {
 		}else{
 			$(this).parent().parent().next().find('input').val('');
 		}
+	},
+
+	highlight_custom_field:function(){
+		$('p').removeClass('active');
+		$(this).parent().parent().parent().find('p').addClass('active');
+	},
+
+	generate_url:function(){
+		var posting_url = $('#posting_url').val();
+		console.log(posting_url);
+		var final_url = $('.final_url_cnt .url').text(posting_url);
+
+		$('.fields').each(function(){
+
+		});
 	}
 }
 
