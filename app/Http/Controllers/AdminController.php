@@ -440,4 +440,9 @@ class AdminController extends Controller
     {
         /// $request->groupid
     }
+
+    public function getTableFields(Request $request)
+    {
+        /// $request->table
+    }
 }

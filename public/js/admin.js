@@ -17,6 +17,8 @@ var Admin = {
         $('body').on('click', '.remove_field', this.remove_field);
         $('.add_custom_field').on('submit', this.add_custom_field);
         $('#webhook_generator #group_id').on('focusout', this.get_client_tables);
+        $('#client_table').on('change', this.get_table_fields);
+        $('.use_system_macro').on('click', this.toggle_system_macro);
 	},
 
 	// add global user
@@ -517,6 +519,33 @@ var Admin = {
 	            Master.set_campaigns(response);
 	        }
 	    });
+	},
+
+	get_table_fields:function(){
+		var table = $(this).val();
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/dashboards/admin/get_table_fields',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: { table: table },
+	        success: function (response) {
+	            Master.set_campaigns(response);
+	        }
+	    });
+	}
+
+	toggle_system_macro:function(){
+		if($(this).is(':checked')){
+			alert('checked');
+		}else{
+			alert('NOT checked');
+		}
 	}
 }
 
