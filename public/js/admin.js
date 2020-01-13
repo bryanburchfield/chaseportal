@@ -516,15 +516,16 @@ var Admin = {
 	        url: 'admin/get_client_tables',
 	        type: 'POST',
 	        dataType: 'json',
-	        data: { group_id : group_id,database:database  },
+	        data: { group_id : group_id,database:database},
 	        success: function (response) {
 	            console.log(response);
 	            var tables;
 	            for(var i=0; i< response.tables.length; i++){
-	            	tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].Description+'</option>';
+	            	tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].Description+' - '+response.tables[i].TableName+'</option>';
 	            }
-	            $('.client_table').append(tables);
-	            console.log(tables);
+
+	            $('#client_table').append(tables);
+
 	        }, error: function (data) {
 
                 var errors = $.parseJSON(data.responseText);
@@ -547,6 +548,9 @@ var Admin = {
 
 	get_table_fields:function(){
 		var table_name = $(this).val();
+		var database  = $(this).parent().parent().find('#db').val();
+		console.log(table_name+' '+ database);
+
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -557,7 +561,7 @@ var Admin = {
 	        url: 'admin/get_table_fields',
 	        type: 'POST',
 	        dataType: 'json',
-	        data: { table_name: table_name },
+	        data: { table_name: table_name, database:database },
 	        success: function (response) {
 	            console.log(response);
 	        }
