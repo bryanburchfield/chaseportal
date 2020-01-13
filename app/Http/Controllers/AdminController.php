@@ -441,7 +441,11 @@ class AdminController extends Controller
 
     public function getClientTables(Request $request)
     {
-        $user = User::where('group_id', $request->group_id)->firstOrFail();
+        $user = User::where('group_id', $request->group_id)->first();
+
+        if (!$user) {
+            return ['error' => 'invalid group_id'];
+        }
 
         $union = '';
         $bind = [];
