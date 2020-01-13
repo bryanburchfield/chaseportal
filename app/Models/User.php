@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function getExpiresInAttribute()
     {
-        if ($this->user_type !== 'demo') {
+        if ($this->user_type !== 'demo' && $this->user_type !== 'expired') {
             return null;
         }
 

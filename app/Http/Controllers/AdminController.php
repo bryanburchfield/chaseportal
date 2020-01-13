@@ -144,7 +144,7 @@ class AdminController extends Controller
             'group_id' => $groupId,
             'dbs' => $dbs,
             'jsfile' => [],
-            'demo_users' => User::where('user_type', 'demo')->get()
+            'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
         ];
 
         return view('dashboards.admin')->with($data);
@@ -319,7 +319,10 @@ class AdminController extends Controller
 
         if ($request->filled('expiration')) {
             $expiration = Carbon::now()->addDays($request->expiration);
-            $request->merge(['expiration' => $expiration]);
+            $request->merge([
+                'expiration' => $expiration,
+                'user_type' => 'demo'  // in case they were 'expired'
+            ]);
         } elseif ($request->has('expiration')) {
             $request->request->remove('expiration');
         }

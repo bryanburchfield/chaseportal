@@ -15,11 +15,11 @@ class Dialer extends Model
                         ->orWhere('additional_dbs', $this->reporting_db);
                 }
             )
-                ->where('user_type', '!=', 'demo')
+                ->whereNotIn('user_type', ['demo', 'expired'])
                 ->get();
         } else {
             $users = User::where('db', $this->reporting_db)
-                ->where('user_type', '!=', 'demo')
+                ->whereNotIn('user_type', ['demo', 'expired'])
                 ->get();
         }
 

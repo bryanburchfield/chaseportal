@@ -68,15 +68,15 @@ class MasterDashController extends Controller
             abort(403, 'Invalid token');
         }
 
-        // Check that they're a demo user
-        if (!$user->isType('demo')) {
+        // Check that they're a demo or expired demo user
+        if (!($user->isType('demo') || $user->isType('expired'))) {
             return redirect('/');
         }
 
         $expiration = Carbon::parse($user->expiration);
 
         // See if they're expired
-        if ($expiration < Carbon::now()) {
+        if ($expiration < Carbon::now() || $user->isType('expired')) {
             return view('demo.expired', ['user' => $user]);
         }
 
@@ -212,9 +212,9 @@ class MasterDashController extends Controller
         $theme = ($theme ? 'dark' : 'light');
         User::where('id', $user->id)->update(array('theme' => $theme));
 
-        if($user->user_type == 'admin'){
+        if ($user->user_type == 'admin') {
             return redirect('/dashboards/admin#settings');
-        }else{
+        } else {
             return redirect()->back();
         }
     }
