@@ -204,7 +204,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="first_name">FirstName</p>
+														<p data-field="FirstName">FirstName</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -222,7 +222,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="last_name">LastName</p>
+														<p data-field="LastName">LastName</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -240,7 +240,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="address">Address</p>
+														<p data-field="Address">Address</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -258,7 +258,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="city">City</p>
+														<p data-field="City">City</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -276,7 +276,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="state">State</p>
+														<p data-field="State">State</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -294,7 +294,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="zip_code">Zip Code</p>
+														<p data-field="ZipCode">Zip Code</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -312,7 +312,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="notes">Notes</p>
+														<p data-field="Notes">Notes</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -330,7 +330,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="campaign">Campaign</p>
+														<p data-field="Campaign">Campaign</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -348,7 +348,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="subcampaign">Subcampaign</p>
+														<p data-field="Subcampaign">Subcampaign</p>
 													</div>
 
 													<div class="col-sm-3">
@@ -366,7 +366,7 @@
 
 												<div class="field">
 													<div class="col-sm-4">
-														<p data-field="client_id">Client ID</p>
+														<p data-field="ClientId">Client ID</p>
 													</div>
 
 													<div class="col-sm-3">

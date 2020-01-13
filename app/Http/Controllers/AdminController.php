@@ -435,4 +435,9 @@ class AdminController extends Controller
             'search_result' => $results,
         ];
     }
+
+    public function getClientTables(Request $request)
+    {
+        /// $request->groupid
+    }
 }

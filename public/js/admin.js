@@ -12,6 +12,11 @@ var Admin = {
 		$('.demo_user_modal_link').on('click', this.pass_user_demo_modals);
 		$('#deleteUserModal .remove_recip').on('click', this.remove_user);
 		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
+
+		// webhook handlers
+        $('body').on('click', '.remove_field', this.remove_field);
+        $('.add_custom_field').on('submit', this.add_custom_field);
+        $('#webhook_generator #group_id').on('focusout', this.get_client_tables);
 	},
 
 	// add global user
@@ -475,6 +480,44 @@ var Admin = {
 			}
 		});
 	},
+
+	remove_field:function(e){
+	    e.preventDefault();
+	    $(this).parent().parent().remove();
+	},
+
+	add_custom_field:function(e){
+	    e.preventDefault();
+
+	    var custom_field_name = $('.custom_field_name').val();
+	    var custom_field_value = $('.custom_field_value').val();
+	    // var new_field_row = '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a><label class="checkbox-inline"><input type="checkbox" value="">Use System Macro</label></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
+
+	    var new_field_row = '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
+
+	    $(new_field_row).insertAfter('.field:last');
+	    $(this).trigger("reset");
+	},
+
+	get_client_tables:function(){
+	    var groupid = $(this).val();
+
+	    $.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/dashboards/admin/get_client_tables',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: { groupid: groupid },
+	        success: function (response) {
+	            Master.set_campaigns(response);
+	        }
+	    });
+	}
 }
 
 $(document).ready(function(){
