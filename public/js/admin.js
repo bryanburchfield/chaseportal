@@ -16,7 +16,7 @@ var Admin = {
 		// webhook handlers
         $('body').on('click', '.remove_field', this.remove_field);
         $('.add_custom_field').on('submit', this.add_custom_field);
-        $('#webhook_generator #group_id').on('focusout', this.get_client_tables);
+        $('#webhook_generator #db').on('change', this.get_client_tables);
         $('#client_table').on('change', this.get_table_fields);
         $('.use_system_macro').on('click', this.toggle_system_macro);
 	},
@@ -502,8 +502,10 @@ var Admin = {
 	},
 
 	get_client_tables:function(){
-	    var group_id  = $(this).val();
-	    console.log(group_id);
+
+	    var database  = $(this).val();
+	    var group_id = $(this).parent().parent().find('#group_id').val();
+
 	    $.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -514,10 +516,32 @@ var Admin = {
 	        url: 'admin/get_client_tables',
 	        type: 'POST',
 	        dataType: 'json',
-	        data: { group_id : group_id  },
+	        data: { group_id : group_id,database:database  },
 	        success: function (response) {
 	            console.log(response);
-	        }
+	            var tables;
+	            for(var i=0; i< response.tables.length; i++){
+	            	tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].Description+'</option>';
+	            }
+	            $('.client_table').append(tables);
+	            console.log(tables);
+	        }, error: function (data) {
+
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+
+                    if ($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
+                        	console.log(value);
+                            $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                        });
+                    } else {
+                        $('form.add_user .alert').show().append('<li>' + value + '</li>');
+                    }
+                });
+
+                $('form.add_user .alert li').first().remove();
+            }
 	    });
 	},
 

@@ -185,6 +185,8 @@
 													<label>Posting URL</label>
 													<input type="text" class="form-control" name="posting_url" id="posting_url">
 												</div>
+
+												<div class="alert alert-danger"></div>
 											</div>
 										</div>
 									</div>

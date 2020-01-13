@@ -503,7 +503,8 @@ div.container-fluid.hero_bg .form-holder {
 .filter_error.alert,
 .new_source_subcampaign_group,
 .new_destination_subcampaign_group,
-.edit_rule_error.alert {
+.edit_rule_error.alert,
+#webhook_generator .alert-danger {
   display: none;
 }
 
