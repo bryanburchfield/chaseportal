@@ -441,31 +441,16 @@ class AdminController extends Controller
 
     public function getClientTables(Request $request)
     {
-        $user = User::where('group_id', $request->group_id)->first();
+        $bind = [
+            'groupid' => $request->group_id,
+        ];
 
-        if (!$user) {
-            return response()->json('Client not found', 404);
-        }
+        $sql = "SELECT TableName, Description
+            FROM [AdvancedTables]
+            WHERE GroupId = :groupid
+            ORDER BY TableName";
 
-        $union = '';
-        $bind = [];
-        foreach ($user->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = $request->group_id;
-
-            $sql = "$union SELECT TableName, Description
-            FROM [$db].[dbo].[AdvancedTables]
-            WHERE GroupId = :groupid$i";
-
-            $union = 'UNION';
-        }
-        $sql .= " ORDER BY TableName";
-
-        Log::debug($sql);
-        Log::debug($bind);
-
-        $result = $this->runSql($sql, $bind);
-
-        Log::info($result);
+        $result = $this->runSql($sql, $bind, $request->database);
 
         return ['tables' => $result];
     }
@@ -473,8 +458,24 @@ class AdminController extends Controller
     public function getTableFields(Request $request)
     {
         /// $request->table
+        Log::info($request->all());
 
         $result = [];
         return ['fields' => $result];
+    }
+
+    private function defaultLeadFields()
+    {
+        return [
+            'ClientId',
+            'FirstName',
+            'LastName',
+            'PrimaryPhone',
+            'Address',
+            'City',
+            'State',
+            'ZipCode',
+            'Notes',
+        ];
     }
 }
