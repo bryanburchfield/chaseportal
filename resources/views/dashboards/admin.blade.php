@@ -172,9 +172,9 @@
 												</div>
 
 												<div class="form-group">
-													<label>Dialer #</label>
-													<input type="text" class="form-control" name="dialer_number" id="dialer_number">
-												</div>
+									                {!! Form::label('db', 'Database') !!}
+									                {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+									            </div>
 
 												<div class="form-group">
 													<label>Table</label>
@@ -193,198 +193,206 @@
 										<div class="col-sm-12 webhook_fields">
 											<div class="card">
 												<div class="row">
-													<div class="col-sm-6">
+													<div class="col-sm-7">
 														<h3 class="mb20">Field Names</h3>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<h3 class="mb20">Values</h3>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
-														<p data-field="first_name">First Name</p>
+													<div class="col-sm-4">
+														<p data-field="first_name">FirstName</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="First Name">
+															<input type="text" class="form-control" name="FirstName" placeholder="First Name">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
-														<p data-field="last_name">Last Name</p>
+													<div class="col-sm-4">
+														<p data-field="last_name">LastName</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Last Name">
+															<input type="text" class="form-control" name="LastName" placeholder="Last Name">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="address">Address</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Address">
+															<input type="text" class="form-control" name="Address" placeholder="Address">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="city">City</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="City">
+															<input type="text" class="form-control" name="City" placeholder="City">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="state">State</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="State">
+															<input type="text" class="form-control" name="State" placeholder="State">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="zip_code">Zip Code</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Zip Code">
+															<input type="text" class="form-control" name="ZipCode" placeholder="Zip Code">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="notes">Notes</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Notes">
+															<input type="text" class="form-control" name="Notes" placeholder="Notes">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="campaign">Campaign</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Campaign">
+															<input type="text" class="form-control" name="Campaign" placeholder="Campaign">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="subcampaign">Subcampaign</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Subcampaign">
+															<input type="text" class="form-control" name="Subcampaign" placeholder="Subcampaign">
 														</div>
 													</div>
 												</div>
 
 												<div class="field">
-													<div class="col-sm-5">
+													<div class="col-sm-4">
 														<p data-field="client_id">Client ID</p>
 													</div>
 
-													<div class="col-sm-1">
+													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<a href="#" class="use_default_value"><i class="fas fa-edit"></i></a>
+														<label class="checkbox-inline">
+														<input type="checkbox" value="">Use System Macro</label>
 													</div>
 
-													<div class="col-sm-6">
+													<div class="col-sm-5">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Client ID">
+															<input type="text" class="form-control" name="ClientId" placeholder="Client ID">
 														</div>
 													</div>
 												</div>
 
 												<form action="#" method="post" class="form-inline add_custom_field">
-													<div class="form-group">
-														<label>Name </label>
-														<input type="text" class="form-control" class="custom_field_name" placeholder="Field Name">
+													<h3 class="mt20">Add Custom Field</h3>
+													<div class="form-group mr10">
+														<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
 													</div>
-													<div class="form-group">
-														<label>Value </label>
-														<input type="text" class="form-control" class="custom_field_value" placeholder="Field Value">
+													<div class="form-group mr10">
+														<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
 													</div>
-													<input type="submit" class="btn btn-primary mt10" value="Add Custom Field">
+													<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
 												</form>
 											</div>
-											
 										</div>
 									</div>
 								</div>
