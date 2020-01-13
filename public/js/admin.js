@@ -502,7 +502,7 @@ var Admin = {
 	},
 
 	get_client_tables:function(){
-	    var groupid = $(this).val();
+	    var group_id  = $(this).val();
 
 	    $.ajaxSetup({
 	        headers: {
@@ -514,7 +514,7 @@ var Admin = {
 	        url: '/dashboards/admin/get_client_tables',
 	        type: 'POST',
 	        dataType: 'json',
-	        data: { groupid: groupid },
+	        data: { group_id : group_id  },
 	        success: function (response) {
 	            Master.set_campaigns(response);
 	        }
@@ -522,7 +522,7 @@ var Admin = {
 	},
 
 	get_table_fields:function(){
-		var table = $(this).val();
+		var table_name = $(this).val();
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -533,18 +533,21 @@ var Admin = {
 	        url: '/dashboards/admin/get_table_fields',
 	        type: 'POST',
 	        dataType: 'json',
-	        data: { table: table },
+	        data: { table_name: table_name },
 	        success: function (response) {
 	            Master.set_campaigns(response);
 	        }
 	    });
-	}
+	},
 
 	toggle_system_macro:function(){
+
+		var system_value = $(this).parent().parent().prev().find('p').data('field');
+
 		if($(this).is(':checked')){
-			alert('checked');
+			$(this).parent().parent().next().find('input').val(system_value);
 		}else{
-			alert('NOT checked');
+			$(this).parent().parent().next().find('input').val('');
 		}
 	}
 }

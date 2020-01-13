@@ -209,8 +209,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -227,8 +226,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -245,8 +243,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -263,8 +260,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -281,8 +277,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -299,8 +294,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -317,8 +311,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -335,8 +328,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -353,8 +345,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
@@ -371,8 +362,7 @@
 
 													<div class="col-sm-3">
 														<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-														<label class="checkbox-inline">
-														<input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 													</div>
 
 													<div class="col-sm-5">
