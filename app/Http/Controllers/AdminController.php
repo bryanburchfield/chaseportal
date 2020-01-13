@@ -484,6 +484,8 @@ class AdminController extends Controller
             'State',
             'ZipCode',
             'Notes',
+            'Campaign',
+            'Subcampaign',
         ];
     }
 }
