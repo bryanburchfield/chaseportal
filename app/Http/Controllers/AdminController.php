@@ -10,16 +10,19 @@ use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
 use App\Models\System;
+use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
     use TimeTraits;
+    use SqlServerTraits;
 
     /**
      * Set DB
@@ -438,11 +441,36 @@ class AdminController extends Controller
 
     public function getClientTables(Request $request)
     {
-        /// $request->groupid
+        $user = User::where('group_id', $request->group_id)->firstOrFail();
+
+        $union = '';
+        $bind = [];
+        foreach ($user->getDatabaseList() as $i => $db) {
+            $bind['groupid' . $i] = $request->group_id;
+
+            $sql = "$union SELECT TableName, Description
+            FROM [$db].[dbo].[AdvancedTables]
+            WHERE GroupId = :groupid$i";
+
+            $union = 'UNION';
+        }
+        $sql .= " ORDER BY TableName";
+
+        Log::debug($sql);
+        Log::debug($bind);
+
+        $result = $this->runSql($sql, $bind);
+
+        Log::info($result);
+
+        return ['tables' => $result];
     }
 
     public function getTableFields(Request $request)
     {
         /// $request->table
+
+        $result = [];
+        return ['fields' => $result];
     }
 }
