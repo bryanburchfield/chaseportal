@@ -9,12 +9,14 @@ trait SqlServerTraits
 {
     protected $db;
 
-    private function runSql($sql, $bind)
+    private function runSql($sql, $bind, $db = null)
     {
-        if (Auth::check()) {
-            $db = Auth::user()->db;
-        } else {
-            $db = $this->db;
+        if ($db === null) {
+            if (Auth::check()) {
+                $db = Auth::user()->db;
+            } else {
+                $db = $this->db;
+            }
         }
         config(['database.connections.sqlsrv.database' => $db]);
 
