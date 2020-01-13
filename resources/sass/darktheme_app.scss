@@ -2604,6 +2604,11 @@ a.toggle_instruc {
         overflow: auto;
 
         p.active{color:$green;}
+
+        .fa-times-circle{
+            font-size: 16px;
+            color: #d9534f;
+        }
     }
 
     h3{
@@ -2653,6 +2658,10 @@ a.toggle_instruc {
 
         &:hover{cursor:pointer;}
     }
+}
+
+.field.field_removed{
+    background: #ddd;
 }
 
 /* ---------------------------------------------------

@@ -487,7 +487,8 @@ var Admin = {
 
 	remove_field:function(e){
 	    e.preventDefault();
-	    $(this).parent().parent().remove();
+	    // $(this).parent().parent().remove();
+	    $(this).parent().parent().addClass('field_removed');
 	},
 
 	add_custom_field:function(e){

@@ -2723,6 +2723,10 @@ a.toggle_instruc {
   color: #33A09B;
 }
 
+.webhook_fields .field .fa-times-circle {
+  font-size: 16px;
+}
+
 .webhook_fields h3 {
   font-weight: 600;
 }

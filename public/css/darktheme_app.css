@@ -3087,6 +3087,11 @@ a.toggle_instruc {
   color: #33A09B;
 }
 
+.webhook_fields .field .fa-times-circle {
+  font-size: 16px;
+  color: #d9534f;
+}
+
 .webhook_fields h3 {
   font-weight: 600;
 }
@@ -3135,6 +3140,10 @@ a.toggle_instruc {
 
 .final_url_cnt textarea.url.form-control:hover {
   cursor: pointer;
+}
+
+.field.field_removed {
+  background: #ddd;
 }
 
 /* ---------------------------------------------------
