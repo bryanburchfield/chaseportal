@@ -3133,6 +3133,10 @@ a.toggle_instruc {
   padding: 12px;
 }
 
+.final_url_cnt textarea.url.form-control:hover {
+  cursor: pointer;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

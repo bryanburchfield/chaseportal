@@ -586,7 +586,7 @@ var Admin = {
 
 		$('.field').each(function(index){
 			var field_name = $(this).find('p.field_name').text();
-			var field_value = $(this).find('.form-control').val()
+			var field_value = $(this).find('.form-control').val();
 			if(!index){
 				final_url+= field_name+'='+field_value;
 			}else{
