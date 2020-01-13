@@ -17,7 +17,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -457,11 +456,20 @@ class AdminController extends Controller
 
     public function getTableFields(Request $request)
     {
-        /// $request->table
-        Log::info($request->all());
+        $bind = [
+            'table_name' => 'ADVANCED_' . $request->table_name,
+        ];
 
-        $result = [];
-        return ['fields' => $result];
+        $sql = "SELECT COLUMN_NAME
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_NAME = :table_name
+                ORDER BY ORDINAL_POSITION";
+
+        $result = resultsToList($this->runSql($sql, $bind, $request->database));
+
+        unset($result['LeadId']);
+
+        return ['fields' => array_values($this->defaultLeadFields() + $result)];
     }
 
     private function defaultLeadFields()
