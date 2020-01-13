@@ -503,7 +503,7 @@ var Admin = {
 
 	get_client_tables:function(){
 	    var group_id  = $(this).val();
-
+	    console.log(group_id);
 	    $.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -511,12 +511,12 @@ var Admin = {
 	    });
 
 	    $.ajax({
-	        url: '/dashboards/admin/get_client_tables',
+	        url: 'admin/get_client_tables',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: { group_id : group_id  },
 	        success: function (response) {
-	            Master.set_campaigns(response);
+	            console.log(response);
 	        }
 	    });
 	},
@@ -530,12 +530,12 @@ var Admin = {
 	    });
 
 	    $.ajax({
-	        url: '/dashboards/admin/get_table_fields',
+	        url: 'admin/get_table_fields',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: { table_name: table_name },
 	        success: function (response) {
-	            Master.set_campaigns(response);
+	            console.log(response);
 	        }
 	    });
 	},
