@@ -496,7 +496,7 @@ var Admin = {
 	    var custom_field_name = $('.custom_field_name').val();
 	    var custom_field_value = $('.custom_field_value').val();
 
-	    var new_field_row = '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
+	    var new_field_row = '<div class="field"><div class="col-sm-4"><p class="field_name" data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
 
 	    $(new_field_row).insertAfter('.field:last');
 	    $(this).trigger("reset");
@@ -520,7 +520,7 @@ var Admin = {
 	        dataType: 'json',
 	        data: { group_id : group_id,database:database},
 	        success: function (response) {
-
+	        	$('#client_table').empty();
 	            if(response.tables.length){
 	            	var tables;
 	            	for(var i=0; i< response.tables.length; i++){
@@ -552,17 +552,12 @@ var Admin = {
 	        dataType: 'json',
 	        data: { table_name: table_name, database:database },
 	        success: function (response) {
-	            console.log(response);
 
 	            if(response.fields.length){
-
 	            	var new_field_row='';
-
 	            	for(var i=0; i<response.fields.length;i++){
-	            		console.log(response.fields[i]);
-	            		new_field_row += '<div class="field"><div class="col-sm-4"><p data-field="client_id">'+response.fields[i]+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div></div>';
+	            		new_field_row += '<div class="field"><div class="col-sm-4"><p class="field_name" data-field="client_id">'+response.fields[i]+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div></div>';
 	            	}
-	            	// console.log(new_field_row);
 	            	$(new_field_row).insertAfter('.field:last');
 	            }
 	        }
@@ -587,12 +582,19 @@ var Admin = {
 
 	generate_url:function(){
 		var posting_url = $('#posting_url').val();
-		console.log(posting_url);
-		var final_url = $('.final_url_cnt .url').text(posting_url);
+		var final_url = posting_url+"?";
 
-		$('.fields').each(function(){
-
+		$('.field').each(function(index){
+			var field_name = $(this).find('p.field_name').text();
+			var field_value = $(this).find('.form-control').val()
+			if(!index){
+				final_url+= field_name+'='+field_value;
+			}else{
+				final_url+='&'+field_name+'='+field_value;
+			}
 		});
+
+		$('.final_url_cnt .url').text(final_url)
 	}
 }
 
