@@ -20,9 +20,10 @@ var Admin = {
         $('#webhook_generator #db').on('change', this.get_client_tables);
         $('#client_table').on('change', this.get_table_fields);
         $('body').on('click', '.use_system_macro', this.toggle_system_macro);
-        $('body').on('focusin', '.field .form-control', this.highlight_custom_field);
+        $('body').on('focusin', '.field .form-group .form-control', this.highlight_custom_field);
         $('.generate_url').on('click', this.generate_url);
         $('.checkall_system_macro').on('click', this.toggleall_system_macro);
+        $('.field_name').on('dblclick', this.edit_field_name);
 	},
 
 	// add global user
@@ -612,6 +613,26 @@ var Admin = {
 		$('.field .use_system_macro').each(function(){
 			Admin.toggle_system_macro($(this));
 		});
+	},
+
+	edit_field_name:function(){
+
+		var edit_input = $('<input class="form-control" name="temp" type="text" />');
+		var elem = $(this);
+
+        elem.hide();
+        elem.after(edit_input);
+        edit_input.focus();
+
+        edit_input.blur(function() {
+
+            if($(this).val() != '') {
+                elem.text($(this).val());
+            }
+
+            $(this).remove();
+            elem.show();
+        });
 	},
 
 	highlight_custom_field:function(){
