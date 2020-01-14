@@ -2791,9 +2791,13 @@ a.toggle_instruc {
 }
 
 .webhook_fields button.btn.generate_url {
-  background: #33A09B !important;
+  background: #33A09B;
   border: 1px solid #33A09B;
   float: right;
+}
+
+.webhook_fields button.btn.generate_url:hover {
+  background: #2d8d88;
 }
 
 #webhook_generator input.form-control,

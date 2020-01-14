@@ -2439,9 +2439,13 @@ a.toggle_instruc {
     }
 
     button.btn.generate_url{
-        background: $green !important;
+        background: $green ;
         border:1px solid $green;
         float: right;
+
+        &:hover{
+            background: darken($green,5%);
+        }
     }
 }
 

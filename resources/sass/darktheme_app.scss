@@ -2651,8 +2651,12 @@ a.toggle_instruc {
     .btn.h35{height: 35px;}
 
     button.btn.generate_url{
-        background: $green !important;
+        background: $green;
         float: right;
+
+        &:hover{
+            background: darken($green,5%);
+        }
     }
 }
 
