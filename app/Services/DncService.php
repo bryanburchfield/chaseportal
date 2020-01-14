@@ -67,7 +67,7 @@ class DncService
             return;
         }
 
-        $this->executeapi('InsertDncNumber', $dnc_file_detail);
+        $this->executeApi('InsertDncNumber', $dnc_file_detail);
     }
 
     /**
@@ -83,7 +83,7 @@ class DncService
             return;
         }
 
-        $this->executeapi('DeleteDncNumber', $dnc_file_detail);
+        $this->executeApi('DeleteDncNumber', $dnc_file_detail);
     }
 
     /**
@@ -93,7 +93,7 @@ class DncService
      * @param mixed $dnc_file_detail 
      * @return void 
      */
-    private function executeapi($function, $dnc_file_detail)
+    private function executeApi($function, $dnc_file_detail)
     {
         // Don't submit if local (testing)
         if (App::environment('local')) {
