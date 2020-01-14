@@ -245,7 +245,7 @@
 
 											<div class="col-sm-5">
 												<div class="final_url_cnt">
-													<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="9" class="url form-control"></textarea>
+													<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
 												</div>
 												<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
 											</div>

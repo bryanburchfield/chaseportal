@@ -1379,7 +1379,7 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_myself select,
 .demo_user select,
 .demo_user .form-control,
-#webhook_generator .form-control,
+#webhook_generator input.form-control,
 #webhook_generator select {
   background: #eee !important;
 }
@@ -2760,7 +2760,6 @@ a.toggle_instruc {
   border-bottom: 1px solid #ddd;
   font-weight: 600;
   padding-bottom: 5px;
-  margin-bottom: 30px;
 }
 
 .webhook_fields p {
@@ -2805,8 +2804,8 @@ a.toggle_instruc {
 #webhook_generator form.add_custom_field {
   padding: 20px;
   border-radius: 5px;
-  background: #f0f5f7 !important;
-  border: 1px solid #dbe4e8;
+  background: #e0e0e0 !important;
+  border: 1px solid #d5d5d5;
 }
 
 #webhook_generator form.add_custom_field div.form-group input.form-control {
@@ -2816,8 +2815,8 @@ a.toggle_instruc {
 .final_url_cnt textarea.url.form-control {
   color: #203047;
   border-radius: 5px;
-  background: #f0f5f7 !important;
-  border: 1px solid #dbe4e8;
+  background: #e0e0e0 !important;
+  border: 1px solid #d5d5d5;
   min-height: 100px;
   padding: 12px;
 }
