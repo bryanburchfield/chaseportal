@@ -10,6 +10,7 @@ use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
 use App\Models\System;
+use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     use TimeTraits;
+    use SqlServerTraits;
 
     /**
      * Set DB
@@ -142,6 +144,7 @@ class AdminController extends Controller
             'page' => $page,
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
+            'default_lead_fields' => $this->defaultLeadFields(),
             'dbs' => $dbs,
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
@@ -436,6 +439,57 @@ class AdminController extends Controller
         return [
             'columns' => $field_array,
             'search_result' => $results,
+        ];
+    }
+
+    public function getClientTables(Request $request)
+    {
+        $bind = [
+            'groupid' => $request->group_id,
+        ];
+
+        $sql = "SELECT TableName, Description
+            FROM [AdvancedTables]
+            WHERE GroupId = :groupid
+            ORDER BY TableName";
+
+        $result = $this->runSql($sql, $bind, $request->database);
+
+        return ['tables' => $result];
+    }
+
+    public function getTableFields(Request $request)
+    {
+        $bind = [
+            'table_name' => 'ADVANCED_' . $request->table_name,
+        ];
+
+        $sql = "SELECT COLUMN_NAME
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_NAME = :table_name
+                ORDER BY ORDINAL_POSITION";
+
+        $result = resultsToList($this->runSql($sql, $bind, $request->database));
+
+        unset($result['LeadId']);
+
+        return ['fields' => array_values($result)];
+    }
+
+    private function defaultLeadFields()
+    {
+        return [
+            'ClientId',
+            'FirstName',
+            'LastName',
+            'PrimaryPhone',
+            'Address',
+            'City',
+            'State',
+            'ZipCode',
+            'Notes',
+            'Campaign',
+            'Subcampaign',
         ];
     }
 }

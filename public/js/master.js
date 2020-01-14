@@ -74,7 +74,7 @@ var Master = {
 		$('.campaign_search').on('keyup', this.search_campaigns);
 		$('.select_database').on('click', this.select_database);
 		$('.reports .switch input').on('click', this.toggle_automated_reports);
-		$('a.getAppToken').on('click', this.copy_link);
+		$('a.getAppToken, textarea.url').on('click', this.copy_link);
 		$('.select_campaign').on('click', this.filter_campaign);
 		$('.date_filters li a').on('click', this.filter_date);
 		$('.submit_date_filter').on('click', this.custom_date_filter);
@@ -2061,7 +2061,8 @@ var Master = {
         }
 
         that.parent().find('.instuc_div').slideToggle();
-    },
+    }
+
 }
 
 $(document).ready(function () {

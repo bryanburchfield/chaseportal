@@ -82,6 +82,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px;
 }
 
+.mb30 {
+    margin-bottom: 30px;
+}
+
 .mb42 {
     margin-bottom: 42px;
 }
@@ -366,7 +370,7 @@ div.container-fluid.hero_bg .form-holder {
     margin: 20px;
 }
 
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert {
+.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert, #webhook_generator .alert-danger {
     display: none;
 }
 
@@ -1182,7 +1186,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select{
     background: #eee !important;
 }
 
@@ -2372,6 +2376,107 @@ a.toggle_instruc {
     position: relative;
     top: 3px;
 }
+
+.webhook_fields{
+    .field{
+        input.form-control, select{background: #eee !important;height: 40px;};
+        &:nth-child(even){
+            background: lighten(#EDF3F5, 1%);
+        }
+        border-bottom: 1px solid darken(#E1E9EC, 2%);
+        padding-top: 15px;
+        overflow: auto;
+
+         p.active{color:$green;}
+
+        .fa-times-circle{
+            font-size: 16px;
+            color: #d9534f;
+        }
+
+        .fa-undo-alt{
+            font-size: 18px;
+            color:$green;
+        }
+
+        &.field_removed{
+            background: darken(#ddd, 6%);
+        }
+    }
+
+    label{float: right;margin-top: 10px;}
+
+    h3{
+        border-bottom: 1px solid #ddd ;
+        font-weight: 600;
+        padding-bottom: 5px;
+    }
+
+    p{
+        font-size: 16px;
+        padding-top: 10px;
+    }
+
+    a{
+        display: inline-block;
+        margin-top: 10px;
+        margin-right: 10px;
+
+        &.remove_field{
+            color:tomato;
+        }
+
+        &.use_default_value{
+            color: $green;
+        }
+    }
+
+    .btn.h35{height: 35px;}
+
+    form{
+        padding: 20px;
+        border:1px solid #1b293c;
+    }
+
+    button.btn.generate_url{
+        background: $green ;
+        border:1px solid $green;
+        float: right;
+
+        &:hover{
+            background: darken($green,5%);
+        }
+    }
+}
+
+#webhook_generator{
+    input.form-control, select{height: 40px;}
+
+    form.add_custom_field{
+        padding: 20px;
+        border-radius: 5px;
+        background: lighten(#ddd, 1%) !important;
+        border: 1px solid darken(#ddd, 3%);
+
+        div.form-group input.form-control {
+            background: #eee !important;
+        }
+    }
+}
+
+.final_url_cnt{
+    textarea.url.form-control{
+        color: $blue;
+        @include border-radius(5px);
+        background: lighten(#ddd, 1%) !important;
+        border: 1px solid darken(#ddd, 3%);
+        min-height: 100px;
+        padding: 12px;
+
+        &:hover{cursor:pointer;}
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

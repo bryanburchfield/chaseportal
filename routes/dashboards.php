@@ -49,6 +49,8 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
             Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
             Route::post('admin/edit_myself', 'AdminController@editMyself');
+            Route::post('admin/get_client_tables', 'AdminController@getClientTables');
+            Route::post('admin/get_table_fields', 'AdminController@getTableFields');
         });
     });
 });

@@ -4,7 +4,7 @@
 @section('content')
 <div class="preloader"></div>
 <?php
-
+	//dd($default_lead_fields);
 ?>
 <div class="wrapper">
 
@@ -25,6 +25,7 @@
 								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
 								<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
 								<li><a href="#cdr_lookup" data-toggle="tab">CDR Lookup</a></li>
+								<li><a href="#webhook_generator" data-toggle="tab">Webhook Generator</a></li>
 								<li><a href="#settings" data-toggle="tab">My Settings</a></li>
 							</ul>
 
@@ -81,7 +82,7 @@
 									@include('shared.dialerlist', ['mode' => 'edit'])
 								</div>
 
-								<div class="tab-pane" id="cdr_lookup">
+								<div class="tab-pane mt30" id="cdr_lookup">
 									<div class="report_filters card col-sm-12">
 										<h2 class="page_heading">CDR Lookup</h2>
 										<form action="#" method="POST" class="form cdr_lookup_form" name="cdr_lookup_form"
@@ -162,6 +163,99 @@
 
 											</tbody>
 										</table>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="webhook_generator">
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="col-sm-6 mt30 mb20 card">
+												<h2 class="page_heading">Webhook Generator</h2>
+												<div class="form-group">
+													<label>Group ID</label>
+													<input type="text" class="form-control" name="group_id" id="group_id">
+												</div>
+
+												<div class="form-group">
+									                {!! Form::label('db', 'Database') !!}
+									                {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+									            </div>
+
+												<div class="form-group">
+													<label>Table</label>
+													<select name="client_table" id="client_table" class="form-control"></select>
+												</div>
+
+												<div class="form-group">
+													<label>Posting URL</label>
+													<input type="text" class="form-control" name="posting_url" id="posting_url">
+												</div>
+
+												<div class="alert alert-danger"></div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-12 webhook_fields">
+											<div class="card">
+												<div class="row">
+													<div class="col-sm-5">
+														<h3 class="mb30">Field Names</h3>
+													</div>
+
+													<div class="col-sm-5">
+														<h3 class="mb30">Values</h3>
+													</div>
+
+													<div class="col-sm-2">
+														<label class="checkbox-inline"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
+													</div>
+												</div>
+
+												@foreach($default_lead_fields as $val)
+													<div class="field">
+														<div class="col-sm-1">
+															<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+														</div>
+														<div class="col-sm-4">
+															<p class="field_name" data-field="{{$val}}">{{$val}}</p>
+														</div>
+
+														<div class="col-sm-5">
+															<div class="form-group">
+																<input type="text" class="form-control" name="{{$val}}" placeholder="{{$val}}">
+															</div>
+														</div>
+
+														<div class="col-sm-2">
+															<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+														</div>
+													</div>
+												@endforeach
+											</div>
+
+											<div class="col-sm-7">
+												<form action="#" method="post" class="form-inline add_custom_field">
+													<h3>Add Custom Field</h3>
+													<div class="form-group mr10">
+														<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
+													</div>
+													<div class="form-group mr10">
+														<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
+													</div>
+													<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
+												</form>
+											</div>
+
+											<div class="col-sm-5">
+												<div class="final_url_cnt">
+													<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
+												</div>
+												<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
+											</div>
+
+										</div>
 									</div>
 								</div>
 
