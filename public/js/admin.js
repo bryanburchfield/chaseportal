@@ -623,7 +623,8 @@ var Admin = {
 		var posting_url = $('#posting_url').val();
 		var final_url = posting_url+"?";
 
-		$('.field').each(function(index){
+		var i=0;
+		$('.field').each(function(){
 			if(!$(this).hasClass('field_removed')){
 				var field_name = $(this).find('p.field_name').text();
 				var field_value = $(this).find('.form-control').val();
@@ -632,11 +633,13 @@ var Admin = {
 				field_name=field_name.replace(/ /g,"%20");
 				field_value=field_value.replace(/ /g,"%20");
 
-				if(!index){
+				if(!i){
 					final_url+= field_name+'='+field_value;
 				}else{
 					final_url+='&'+field_name+'='+field_value;
 				}
+
+				i++;
 			}
 		});
 
