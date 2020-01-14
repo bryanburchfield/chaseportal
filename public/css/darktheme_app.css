@@ -121,6 +121,10 @@ h6 {
   margin-bottom: 20px;
 }
 
+.mb30 {
+  margin-bottom: 30px;
+}
+
 .mb42 {
   margin-bottom: 42px;
 }
@@ -1594,7 +1598,7 @@ input[type=number]::-webkit-outer-spin-button {
 #webhook_generator select {
   background: #1d2b40 !important;
   border: none;
-  color: #aaa;
+  color: #b7b7b7;
 }
 
 .nav-tabs {
@@ -3079,7 +3083,7 @@ a.toggle_instruc {
 
 .webhook_fields .field {
   border-bottom: 1px solid #1b293c;
-  margin-bottom: 10px;
+  padding-top: 15px;
   overflow: auto;
 }
 
@@ -3092,8 +3096,20 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
+.webhook_fields .field .fa-undo-alt {
+  font-size: 18px;
+  color: #33A09B;
+}
+
+.webhook_fields label {
+  float: right;
+  margin-top: 10px;
+}
+
 .webhook_fields h3 {
+  border-bottom: 1px solid #1b293c;
   font-weight: 600;
+  padding-bottom: 5px;
 }
 
 .webhook_fields p {
@@ -3119,14 +3135,29 @@ a.toggle_instruc {
   height: 35px;
 }
 
-.webhook_fields form {
-  padding: 20px;
-  border: 1px solid #1b293c;
-}
-
 .webhook_fields button.btn.generate_url {
   background: #33A09B !important;
   float: right;
+}
+
+#webhook_generator input.form-control,
+#webhook_generator select {
+  height: 40px;
+}
+
+#webhook_generator input.form-control.disabled {
+  background: #bbb !important;
+}
+
+#webhook_generator form.add_custom_field {
+  padding: 20px;
+  border-radius: 5px;
+  background: #000001 !important;
+  border: 1px solid #1b293c;
+}
+
+#webhook_generator form.add_custom_field div.form-group input.form-control {
+  background: #131d2b !important;
 }
 
 .final_url_cnt textarea.url.form-control {

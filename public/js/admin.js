@@ -15,12 +15,14 @@ var Admin = {
 
 		// webhook handlers
         $('body').on('click', '.remove_field', this.remove_field);
+        $('body').on('click', '.undo_remove_field', this.undo_remove_field);
         $('.add_custom_field').on('submit', this.add_custom_field);
         $('#webhook_generator #db').on('change', this.get_client_tables);
         $('#client_table').on('change', this.get_table_fields);
-        $('.use_system_macro').on('click', this.toggle_system_macro);
+        $('body').on('click', '.use_system_macro', this.toggle_system_macro);
         $('body').on('focusin', '.field .form-control', this.highlight_custom_field);
         $('.generate_url').on('click', this.generate_url);
+        $('.checkall_system_macro').on('click', this.toggleall_system_macro);
 	},
 
 	// add global user
@@ -487,8 +489,26 @@ var Admin = {
 
 	remove_field:function(e){
 	    e.preventDefault();
-	    // $(this).parent().parent().remove();
+	    $(this).find('i').remove();
+	    $(this).append('<i class="fas fa-undo-alt"></i>');
+	    $(this).removeClass('remove_field');
+	    $(this).addClass('undo_remove_field');
+	    $(this).parent().parent().find('p.field_name').removeClass('active');
 	    $(this).parent().parent().addClass('field_removed');
+	    $(this).parent().parent().find('input.form-control').addClass('disabled');
+	    $(this).parent().parent().find('input.form-control, input.use_system_macro').attr('disabled', true);
+	},
+
+	undo_remove_field:function(e){
+		e.preventDefault();
+		$(this).find('i').remove();
+		$(this).append('<i class="fas fa-times-circle"></i>');
+		$(this).removeClass('undo_remove_field');
+	    $(this).addClass('remove_field');
+	    $(this).parent().parent().removeClass('field_removed');
+	    $(this).parent().parent().find('input.form-control').removeClass('disabled');
+	    $(this).parent().parent().find('input.form-control, input.use_system_macro').attr('disabled', false);
+
 	},
 
 	add_custom_field:function(e){
@@ -497,7 +517,7 @@ var Admin = {
 	    var custom_field_name = $('.custom_field_name').val();
 	    var custom_field_value = $('.custom_field_value').val();
 
-	    var new_field_row = '<div class="field"><div class="col-sm-4"><p class="field_name" data-field="client_id">'+custom_field_name+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div></div>';
+	    var new_field_row = '<div class="field"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="'+custom_field_name+'">'+custom_field_name+'</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+custom_field_name+'" value="'+custom_field_value+'"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
 
 	    $(new_field_row).insertAfter('.field:last');
 	    $(this).trigger("reset");
@@ -523,7 +543,7 @@ var Admin = {
 	        success: function (response) {
 	        	$('#client_table').empty();
 	            if(response.tables.length){
-	            	var tables;
+	            	var tables='<option value="">Select One</option>';
 	            	for(var i=0; i< response.tables.length; i++){
 	            		tables +='<option value="'+response.tables[i].TableName+'">'+response.tables[i].TableName+' - '+response.tables[i].Description+'</option>';
 	            	}
@@ -532,7 +552,6 @@ var Admin = {
 	            }else{
 	            	$('.alert-danger').text('No Tables Found').show();
 	            }
-
 	        }
 	    });
 	},
@@ -557,7 +576,7 @@ var Admin = {
 	            if(response.fields.length){
 	            	var new_field_row='';
 	            	for(var i=0; i<response.fields.length;i++){
-	            		new_field_row += '<div class="field"><div class="col-sm-4"><p class="field_name" data-field="client_id">'+response.fields[i]+'</p></div><div class="col-sm-3"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div></div>';
+	            		new_field_row += '<div class="field"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="'+response.fields[i]+'">'+response.fields[i]+'</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
 	            	}
 	            	$(new_field_row).insertAfter('.field:last');
 	            }
@@ -565,15 +584,34 @@ var Admin = {
 	    });
 	},
 
-	toggle_system_macro:function(){
+	toggle_system_macro:function(el){
+		if(el.type == 'click'){el = $(this);}
 
-		var system_value = $(this).parent().parent().prev().find('p').data('field');
+		var system_value = el.parent().parent().prev().prev().find('p').data('field');
 
-		if($(this).is(':checked')){
-			$(this).parent().parent().next().find('input').val(system_value);
+		if(el.is(':checked')){
+			el.parent().parent().prev().find('input.form-control').val('(#'+system_value+'#)');
 		}else{
-			$(this).parent().parent().next().find('input').val('');
+			el.parent().parent().prev().find('input.form-control').val('');
 		}
+	},
+
+	toggleall_system_macro:function(){
+		if($(this).prop("checked") == true){
+			$(this).parent().find('span').text('Uncheck All Macros');
+			$('.use_system_macro').each(function(){
+				$(this).prop( "checked", true );
+			});
+		}else{
+			$(this).parent().find('span').text('Check All Macros');
+			$('.use_system_macro').each(function(){
+				$(this).prop( "checked", false );
+			});
+		}
+
+		$('.field .use_system_macro').each(function(){
+			Admin.toggle_system_macro($(this));
+		});
 	},
 
 	highlight_custom_field:function(){
@@ -586,12 +624,19 @@ var Admin = {
 		var final_url = posting_url+"?";
 
 		$('.field').each(function(index){
-			var field_name = $(this).find('p.field_name').text();
-			var field_value = $(this).find('.form-control').val();
-			if(!index){
-				final_url+= field_name+'='+field_value;
-			}else{
-				final_url+='&'+field_name+'='+field_value;
+			if(!$(this).hasClass('field_removed')){
+				var field_name = $(this).find('p.field_name').text();
+				var field_value = $(this).find('.form-control').val();
+				field_name=field_name.trim();
+				field_value=field_value.trim();
+				field_name=field_name.replace(/ /g,"%20");
+				field_value=field_value.replace(/ /g,"%20");
+
+				if(!index){
+					final_url+= field_name+'='+field_value;
+				}else{
+					final_url+='&'+field_name+'='+field_value;
+				}
 			}
 		});
 

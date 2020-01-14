@@ -82,6 +82,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px;
 }
 
+.mb30 {
+    margin-bottom: 30px;
+}
+
 .mb42 {
     margin-bottom: 42px;
 }
@@ -1182,7 +1186,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator .form-control, #webhook_generator select{
     background: #eee !important;
 }
 
@@ -2375,20 +2379,38 @@ a.toggle_instruc {
 
 .webhook_fields{
     .field{
-        border-bottom: 1px solid #1b293c;
-        margin-bottom: 10px;
+        input.form-control, select{background: #eee !important;height: 40px;};
+        &:nth-child(even){
+            background: lighten(#EDF3F5, 1%);
+        }
+        border-bottom: 1px solid darken(#E1E9EC, 2%);
+        padding-top: 15px;
         overflow: auto;
 
          p.active{color:$green;}
 
         .fa-times-circle{
             font-size: 16px;
-            color: ##d9534f;
+            color: #d9534f;
+        }
+
+        .fa-undo-alt{
+            font-size: 18px;
+            color:$green;
+        }
+
+        &.field_removed{
+            background: darken(#ddd, 6%);
         }
     }
 
+    label{float: right;margin-top: 10px;}
+
     h3{
+        border-bottom: 1px solid #ddd ;
         font-weight: 600;
+        padding-bottom: 5px;
+        margin-bottom: 30px;
     }
 
     p{
@@ -2419,22 +2441,39 @@ a.toggle_instruc {
 
     button.btn.generate_url{
         background: $green !important;
+        border:1px solid $green;
         float: right;
+    }
+}
+
+#webhook_generator{
+    input.form-control, select{height: 40px;}
+
+    form.add_custom_field{
+        padding: 20px;
+        border-radius: 5px;
+        background: lighten(#EDF3F5, 1%) !important;
+        border: 1px solid darken(#E1E9EC, 2%);
+
+        div.form-group input.form-control {
+            background: #eee !important;
+        }
     }
 }
 
 .final_url_cnt{
     textarea.url.form-control{
-        color: $green;
+        color: $blue;
         @include border-radius(5px);
-        background: darken($blue, 20%) !important;
-        border: 1px solid #1b293c;
+        background: lighten(#EDF3F5, 1%) !important;
+        border: 1px solid darken(#E1E9EC, 2%);
         min-height: 100px;
         padding: 12px;
 
         &:hover{cursor:pointer;}
     }
 }
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
