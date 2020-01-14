@@ -30,10 +30,9 @@ class DncService
      */
     public function processFile(DncFile $dnc_file)
     {
-        foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
+        $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
             $this->insertDnc($dnc_file_detail);
-            $dnc_file_detail->save();
-        }
+        });
 
         $dnc_file->processed_at = now();
         $dnc_file->save();
@@ -47,10 +46,9 @@ class DncService
      */
     public function reverseFile(DncFile $dnc_file)
     {
-        foreach ($dnc_file->dncFileDetails as $dnc_file_detail) {
+        $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
             $this->reverseDnc($dnc_file_detail);
-            $dnc_file_detail->save();
-        }
+        });
 
         $dnc_file->reversed_at = now();
         $dnc_file->save();
@@ -69,22 +67,7 @@ class DncService
             return;
         }
 
-        // Don't submit if local (testing)
-        if (App::environment('local')) {
-            $result = true;
-        } else {
-            $result = $this->api->InsertDncNumber($this->group_id, $dnc_file_detail->phone);
-        }
-
-        $dnc_file_detail->processed_at = now();
-
-        if ($result === false) {
-            $dnc_file_detail->succeeded = false;
-            $dnc_file_detail->error = $this->api->GetLastError();
-        } else {
-            $dnc_file_detail->succeeded = true;
-            $dnc_file_detail->error = null;
-        }
+        $this->executeapi('InsertDncNumber', $dnc_file_detail);
     }
 
     /**
@@ -100,11 +83,23 @@ class DncService
             return;
         }
 
+        $this->executeapi('DeleteDncNumber', $dnc_file_detail);
+    }
+
+    /**
+     * Execute API
+     * 
+     * @param mixed $function 
+     * @param mixed $dnc_file_detail 
+     * @return void 
+     */
+    private function executeapi($function, $dnc_file_detail)
+    {
         // Don't submit if local (testing)
         if (App::environment('local')) {
             $result = true;
         } else {
-            $result = $this->api->DeleteDncNumber($this->group_id, $dnc_file_detail->phone);
+            $result = $this->api->$function($this->group_id, $dnc_file_detail->phone);
         }
 
         $dnc_file_detail->processed_at = now();
@@ -116,5 +111,6 @@ class DncService
             $dnc_file_detail->succeeded = true;
             $dnc_file_detail->error = null;
         }
+        $dnc_file_detail->save();
     }
 }
