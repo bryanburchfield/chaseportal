@@ -92,6 +92,14 @@ class CallDetails
     {
         $this->setHeadings();
 
+        if(!empth($this->params['custom_table'])) {
+            $advanced_table = 'ADVANCED_' . $this->params['custom_table'];
+            $extra_cols = $this->getExtraCols()
+        } else {
+            $advanced_table = '';
+            $extra_cols = '';
+        }
+
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -228,7 +236,14 @@ class CallDetails
                 END as CallType,
                 DR.Details
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
-            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
+            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId";
+
+            if(!(empty($advanced_table))) {
+                $sql .= "
+                LEFT OUTER JOIN [$db].[dbo].[$advanced_table] A ON A.LeadId = L.IdGuid";
+            }
+
+            $sql .= "
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
