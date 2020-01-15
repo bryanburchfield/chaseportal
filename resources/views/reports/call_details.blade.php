@@ -105,7 +105,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('custom_table', __('reports.custom_table')) !!}
-						{!! Form::select("custom_table", $filters['custom_table'], null, ["class" => "form-control", 'id'=> 'custom_table']) !!}
+						{!! Form::select("custom_table", $filters['custom_table'], null, ["class" => "form-control", 'id'=> 'custom_table', 'required' => false]) !!}
 					</div>
 				</div>
 			</div>
