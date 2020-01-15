@@ -23,7 +23,7 @@ var Admin = {
         $('body').on('focusin', '.field .form-group .form-control', this.highlight_custom_field);
         $('.generate_url').on('click', this.generate_url);
         $('.checkall_system_macro').on('click', this.toggleall_system_macro);
-        $('.field_name').on('dblclick', this.edit_field_name);
+        $('body').on('dblclick', '.field_name', this.edit_field_name);
 	},
 
 	// add global user
