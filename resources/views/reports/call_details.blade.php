@@ -101,6 +101,13 @@
 						{!! Form::tel('phone', null, ['class'=>'form-control', 'required' => false]) !!}
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('tablename', __('reports.tablename')) !!}
+						{!! Form::select("tablename", $filters['custom_table'], null, ["class" => "form-control", 'id'=> 'tablename']) !!}
+					</div>
+				</div>
 			</div>
 
 			<div class="checkbox">

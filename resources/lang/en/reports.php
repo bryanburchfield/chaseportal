@@ -19,6 +19,7 @@ return [
 	'campaign_call_log'             => 'Campaign Call Log',
 	'campaign_summary'              => 'Campaign Summary',
 	'campaign_usage'                => 'Campaign Usage',
+	'detailed_call_details'         => 'Call Details w/ Lead Data',
 	'inbound_summary'               => 'Inbound Summary',
 	'lead_inventory'                => 'Lead Inventory',
 	'lead_inventory_sub'            => 'Lead Inventory By Sub',
