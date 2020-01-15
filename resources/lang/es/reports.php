@@ -47,6 +47,7 @@ return [
      'start'              => 'Comienzo',
      'subcampaign'        => 'Sub-campaña',
      'termination_status' => 'Mostrar solo la disposición final',
+     'tablename'          => 'Nombre de la Tabla',
      'to'                 => 'Hasta',
 
      // error messages

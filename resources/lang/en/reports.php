@@ -47,6 +47,7 @@ return [
 	'start'              => 'Start',
 	'subcampaign'        => 'Subcampaign',
 	'termination_status' => 'Show only termination status',
+	'tablename'			 => 'Table Name',
 	'to'                 => 'To',
 
 	// error messages
