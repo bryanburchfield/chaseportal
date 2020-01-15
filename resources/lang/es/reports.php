@@ -35,6 +35,7 @@ return [
      'call_type'          => 'Tipo de llamada',
      'callerid'           => 'Identificador de Llamadas',
      'campaign'           => 'Campaña',
+     'custom_table'       => 'Mesa Personalizada',
      'duration_secs'      => 'Duración (segundos)',
      'end'                => 'Final',
      'from'               => 'Desde',

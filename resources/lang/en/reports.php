@@ -35,6 +35,7 @@ return [
 	'call_type'          => 'Call Type',
 	'callerid'           => 'Caller ID',
 	'campaign'           => 'Campaign',
+	'custom_table'		 => 'Custom Table',
 	'duration_secs'      => 'Duration ( seconds )',
 	'end'                => 'End',
 	'from'               => 'From',
@@ -47,7 +48,6 @@ return [
 	'start'              => 'Start',
 	'subcampaign'        => 'Subcampaign',
 	'termination_status' => 'Show only termination status',
-	'tablename'			 => 'Table Name',
 	'to'                 => 'To',
 
 	// error messages
