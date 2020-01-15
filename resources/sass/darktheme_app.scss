@@ -1362,7 +1362,7 @@ h3.heading {
 }
 
 .reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover {
-    background: #2f4c72;
+    background: darken($green, 6%);
 }
 
 .reports_table th > span, .uploader_table th > span {
