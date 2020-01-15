@@ -13,6 +13,9 @@ class CallDetails
     use ReportTraits;
     use CampaignTraits;
 
+    private $advanced_table;
+    private $extra_cols;
+
     public function __construct()
     {
         $this->initilaizeParams();
@@ -101,22 +104,25 @@ class CallDetails
         return array_values(resultsToList($results));
     }
 
+    private function configCustomTable()
+    {
+        $this->advanced_table = '';
+        $this->extra_cols = '';
+
+        if (!empty($this->params['custom_table'])) {
+            $this->advanced_table = 'ADVANCED_' . $this->params['custom_table'];
+            $extra_col_array = $this->getExtraCols($this->advanced_table);
+
+            foreach ($extra_col_array as $col) {
+                $this->params['columns'][$col] = $col;
+                $this->extra_cols .= ', A.[' . $col . ']';
+            }
+        }
+    }
+
     private function executeReport($all = false)
     {
         $this->setHeadings();
-
-        $advanced_table = '';
-        $extra_cols = '';
-
-        if (!empty($this->params['custom_table'])) {
-            $advanced_table = 'ADVANCED_' . $this->params['custom_table'];
-            $extra_col_array = $this->getExtraCols($advanced_table);
-
-            foreach ($extra_col_array as $col) {
-                $this->params['columns'][] = $col;
-                $extra_cols .= ', A.[' . $col . ']';
-            }
-        }
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
@@ -253,13 +259,13 @@ class CallDetails
                     ELSE 'Unknown'
                 END as CallType,
                 DR.Details
-                $extra_cols
+                $this->extra_cols
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
             LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId";
 
-            if (!(empty($advanced_table))) {
+            if (!(empty($this->advanced_table))) {
                 $sql .= "
-                LEFT OUTER JOIN [$db].[dbo].[$advanced_table] A ON A.LeadId = L.IdGuid";
+                LEFT OUTER JOIN [$db].[dbo].[$this->advanced_table] A ON A.LeadId = L.IdGuid";
             }
 
             $sql .= "
@@ -330,6 +336,13 @@ class CallDetails
     {
         // Get vals from session if not set (for exports)
         $request = $this->getSessionParams($request);
+
+        // Get custom table first, so we can set cols, so sorting will work in checkPageFilters()
+        if (!empty($request->custom_table)) {
+            $this->params['custom_table'] = $request->custom_table;
+        }
+        $this->configCustomTable();
+
         // Check page filters
         $this->checkPageFilters($request);
 
@@ -340,10 +353,6 @@ class CallDetails
             $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
-        }
-
-        if (!empty($request->custom_table)) {
-            $this->params['custom_table'] = $request->custom_table;
         }
 
         if (!empty($request->reps)) {

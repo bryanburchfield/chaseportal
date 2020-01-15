@@ -8,7 +8,6 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -207,7 +206,6 @@ trait ReportTraits
         } else {
             $this->params['databases'] = Auth::user()->getDatabaseList();
         }
-
         if (!empty($request->th_sort)) {
             $this->setHeadings();
             $col = array_search($request->th_sort, $this->params['columns']);
