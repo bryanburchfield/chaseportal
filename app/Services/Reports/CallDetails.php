@@ -13,6 +13,9 @@ class CallDetails
     use ReportTraits;
     use CampaignTraits;
 
+    private $advanced_table;
+    private $extra_cols;
+
     public function __construct()
     {
         $this->initilaizeParams();
@@ -21,6 +24,7 @@ class CallDetails
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
+        $this->params['custom_table'] = '';
         $this->params['reps'] = [];
         $this->params['is_callable'] = '';
         $this->params['calltype'] = '';
@@ -54,6 +58,7 @@ class CallDetails
                 $this->params['fromdate'],
                 $this->params['todate']
             ),
+            'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
@@ -72,6 +77,47 @@ class CallDetails
         $filters['call_types'] = array_merge(['' => 'All'], $filters['call_types']);
 
         return $filters;
+    }
+
+    private function getAllCustomTables()
+    {
+        $sql = "SELECT TableName
+        FROM AdvancedTables
+        WHERE GroupId = :group_id
+        ORDER BY TableName";
+
+        $results = $this->runSql($sql, ['group_id' => Auth::user()->group_id]);
+
+        return resultsToList($results);
+    }
+
+    private function getExtraCols($table)
+    {
+        $sql = "SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '$table'
+            and COLUMN_NAME != 'LeadId'
+            ORDER BY ORDINAL_POSITION";
+
+        $results = $this->runSql($sql, []);
+
+        return array_values(resultsToList($results));
+    }
+
+    private function configCustomTable()
+    {
+        $this->advanced_table = '';
+        $this->extra_cols = '';
+
+        if (!empty($this->params['custom_table'])) {
+            $this->advanced_table = 'ADVANCED_' . $this->params['custom_table'];
+            $extra_col_array = $this->getExtraCols($this->advanced_table);
+
+            foreach ($extra_col_array as $col) {
+                $this->params['columns'][$col] = $col;
+                $this->extra_cols .= ', A.[' . $col . ']';
+            }
+        }
     }
 
     private function executeReport($all = false)
@@ -213,8 +259,16 @@ class CallDetails
                     ELSE 'Unknown'
                 END as CallType,
                 DR.Details
+                $this->extra_cols
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
-            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId
+            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId";
+
+            if (!(empty($this->advanced_table))) {
+                $sql .= "
+                LEFT OUTER JOIN [$db].[dbo].[$this->advanced_table] A ON A.LeadId = L.IdGuid";
+            }
+
+            $sql .= "
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
@@ -246,7 +300,7 @@ class CallDetails
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
             $sort = '';
             foreach ($this->params['orderby'] as $col => $dir) {
-                $sort .= ",$col $dir";
+                $sort .= ",[$col] $dir";
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
@@ -282,6 +336,13 @@ class CallDetails
     {
         // Get vals from session if not set (for exports)
         $request = $this->getSessionParams($request);
+
+        // Get custom table first, so we can set cols, so sorting will work in checkPageFilters()
+        if (!empty($request->custom_table)) {
+            $this->params['custom_table'] = $request->custom_table;
+        }
+        $this->configCustomTable();
+
         // Check page filters
         $this->checkPageFilters($request);
 

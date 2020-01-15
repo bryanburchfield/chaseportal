@@ -19,6 +19,7 @@ return [
      'campaign_call_log'             => 'Registros de Llamadas de Campañas',
      'campaign_summary'              => 'Resumen de Campañas',
      'campaign_usage'                => 'Utilización de Campañas',
+     'detailed_call_details'         => 'Detalles de Llamadas Con Datos de Clientes Potenciales',
      'inbound_summary'               => 'Resumen de Entrantes',
      'lead_inventory'                => 'Inventario de Contactos',
      'lead_inventory_sub'            => 'Inventario de Contactos por Sub-campaña',
@@ -34,6 +35,7 @@ return [
      'call_type'          => 'Tipo de llamada',
      'callerid'           => 'Identificador de Llamadas',
      'campaign'           => 'Campaña',
+     'custom_table'       => 'Mesa Personalizada',
      'duration_secs'      => 'Duración (segundos)',
      'end'                => 'Final',
      'from'               => 'Desde',
@@ -46,6 +48,7 @@ return [
      'start'              => 'Comienzo',
      'subcampaign'        => 'Sub-campaña',
      'termination_status' => 'Mostrar solo la disposición final',
+     'tablename'          => 'Nombre de la Tabla',
      'to'                 => 'Hasta',
 
      // error messages
