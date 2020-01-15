@@ -21,6 +21,7 @@ class CallDetails
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
+        $this->params['custom_table'] = '';
         $this->params['reps'] = [];
         $this->params['is_callable'] = '';
         $this->params['calltype'] = '';
@@ -54,6 +55,7 @@ class CallDetails
                 $this->params['fromdate'],
                 $this->params['todate']
             ),
+            'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
             'call_statuses' => $this->getAllCallStatuses(),
@@ -72,6 +74,18 @@ class CallDetails
         $filters['call_types'] = array_merge(['' => 'All'], $filters['call_types']);
 
         return $filters;
+    }
+
+    private function getAllCustomTables()
+    {
+        $sql = "SELECT id, TableName
+        FROM AdvancedTables
+        WHERE GroupId = :group_id
+        ORDER BY TableName";
+
+        $results = $this->runSql($sql, ['group_id' => Auth::user()->group_id]);
+
+        return resultsToList($results);
     }
 
     private function executeReport($all = false)
