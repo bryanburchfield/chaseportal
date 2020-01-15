@@ -78,7 +78,7 @@ class CallDetails
 
     private function getAllCustomTables()
     {
-        $sql = "SELECT id, TableName
+        $sql = "SELECT TableName
         FROM AdvancedTables
         WHERE GroupId = :group_id
         ORDER BY TableName";
