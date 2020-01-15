@@ -88,16 +88,34 @@ class CallDetails
         return resultsToList($results);
     }
 
+    private function getExtraCols($table)
+    {
+        $sql = "SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '$table'
+            and COLUMN_NAME != 'LeadId'
+            ORDER BY ORDINAL_POSITION";
+
+        $results = $this->runSql($sql, []);
+
+        return array_values(resultsToList($results));
+    }
+
     private function executeReport($all = false)
     {
         $this->setHeadings();
 
-        if(!empth($this->params['custom_table'])) {
+        $advanced_table = '';
+        $extra_cols = '';
+
+        if (!empty($this->params['custom_table'])) {
             $advanced_table = 'ADVANCED_' . $this->params['custom_table'];
-            $extra_cols = $this->getExtraCols()
-        } else {
-            $advanced_table = '';
-            $extra_cols = '';
+            $extra_col_array = $this->getExtraCols($advanced_table);
+
+            foreach ($extra_col_array as $col) {
+                $this->params['columns'][] = $col;
+                $extra_cols .= ', A.[' . $col . ']';
+            }
         }
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -235,10 +253,11 @@ class CallDetails
                     ELSE 'Unknown'
                 END as CallType,
                 DR.Details
+                $extra_cols
             FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
             LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId";
 
-            if(!(empty($advanced_table))) {
+            if (!(empty($advanced_table))) {
                 $sql .= "
                 LEFT OUTER JOIN [$db].[dbo].[$advanced_table] A ON A.LeadId = L.IdGuid";
             }
@@ -275,7 +294,7 @@ class CallDetails
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
             $sort = '';
             foreach ($this->params['orderby'] as $col => $dir) {
-                $sort .= ",$col $dir";
+                $sort .= ",[$col] $dir";
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
@@ -321,6 +340,10 @@ class CallDetails
             $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
+        }
+
+        if (!empty($request->custom_table)) {
+            $this->params['custom_table'] = $request->custom_table;
         }
 
         if (!empty($request->reps)) {
