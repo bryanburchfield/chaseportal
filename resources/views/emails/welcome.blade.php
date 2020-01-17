@@ -524,7 +524,7 @@ tr.bg_blue{
                         <tr>
                             <td>
                             <a style="color:#fff;" href="{{$data['link']}}">
-                            <div style="background:#e49831;color:#fff; display:block; width:200px; height: 40px; text-align:center;margin:0 auto;padding-top:7px;margin-bottom:30px;margin-top:20px;">Go to Portal</div></a>
+                            <div style="background:#e49831;color:#fff; display:block; width:200px; height: 40px; text-align:center;margin:0 auto;padding-top:12px;margin-bottom:30px;margin-top:20px;font-weight:600;">Go to Portal</div></a>
                             </td>
                         </tr>
                     </table>
@@ -631,7 +631,7 @@ tr.bg_blue{
                                                         <p class="meta"><span>'.$date.'</span></p>
                                                         <h3>'.$title.'</h3>
                                                         '.$description.'
-                                                        <p><a href="'.$link.'" class="btn btn-primary">Read more</a></p>
+                                                        <p><a href="'.$link.'">Read more</a></p>
                                                     </td>
                                                 </tr>
                                             </table>
