@@ -212,6 +212,8 @@ class AdminController extends Controller
         try {
             $user = Auth::user();
             $user->update($request->all());
+            Auth::logout();
+            Auth::login($user);
         } catch (Exception $e) {
             return ['errors' => ['Update Failed']];
         }
