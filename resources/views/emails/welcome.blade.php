@@ -516,7 +516,7 @@ tr.bg_blue{
                         <tr>
                             <td>
                                 <div class="text" style="text-align: center;">
-                                    <h2 style="color:#ffffff;font-size: 50px;margin-bottom: 0;line-height: 1.4;font-weight: 300;"><span>Explore!</span><br> ChaseData’s Dashboard Portal</h2>
+                                    <h2 style="color:#ffffff;font-size: 30px;margin-bottom: 0;line-height: 1.4;font-weight: 300;"><span style="font-size: 50px;font-weight:600;">Explore!</span><br> ChaseData’s Dashboard Portal</h2>
                                 </div>
                             </td>
                         </tr>
