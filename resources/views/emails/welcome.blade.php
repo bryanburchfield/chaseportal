@@ -517,8 +517,14 @@ tr.bg_blue{
                             <td>
                                 <div class="text" style="text-align: center;">
                                     <h2 style="color:#ffffff;"><span>Explore!</span><br> ChaseData’s Dashboard Portal</h2>
-                                    <a href="{{$data['link']}}" class="btn btn-primary mt15" style="background:#e15b23;color:#fff; display:block; width:200px; height: 45px; text-align:center;margin-bottom:30px;">Go to Portal</a>
                                 </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                            <a style="color:#fff;" href="{{$data['link']}}">
+                            <div style="background:#e49831;color:#fff; display:block; width:200px; height: 40px; text-align:center;margin:0 auto;padding-top:7px;margin-bottom:30px;margin-top:20px;">Go to Portal</div></a>
                             </td>
                         </tr>
                     </table>
