@@ -524,7 +524,7 @@ tr.bg_blue{
                         <tr>
                             <td>
                             <a style="color:#fff;" href="{{$data['link']}}">
-                            <div style="background:#e49831;color:#fff; display:block; width:200px; height: 40px; text-align:center;margin:0 auto;padding-top:12px;margin-bottom:30px;margin-top:15px;font-weight:600;">Go to Portal</div></a>
+                            <div style="background:#e49831;color:#fff; display:block; width:200px; height: 38px; text-align:center;margin:0 auto;padding-top:15px;margin-bottom:30px;margin-top:15px;font-weight:600;font-size:15px;">Go to Portal</div></a>
                             </td>
                         </tr>
                     </table>
