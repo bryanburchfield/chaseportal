@@ -145,4 +145,5 @@ return [
      'calls_by_caller_ID'     => 'Llamadas por identificador de llamadas',
      'count_of_leads_by_attempt' => 'Conteo de Leads por Intento',
      'download'               => 'Descargar',
+     'import_date' => 'Fecha de importación',
 ];

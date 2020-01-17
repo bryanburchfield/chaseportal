@@ -36,13 +36,15 @@ class CallDetails
         $this->params['durationto'] = '';
         $this->params['showonlyterm'] = 0;
         $this->params['columns'] = [
+            'Date' => 'reports.date',
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
             'Phone' => 'reports.phone',
+            'Attempt' => 'reports.attempt',
             'CallerId' => 'reports.callerid',
             'LastName' => 'reports.lastname',
             'FirstName' => 'reports.firstname',
-            'Date' => 'reports.date',
+            'ImportDate' => 'reports.import_date',
             'CallStatus' => 'reports.callstatus',
             'IsCallable' => 'reports.is_callable',
             'Duration' => 'reports.duration',
@@ -234,13 +236,15 @@ class CallDetails
                 ), 0)";
 
             $sql .= " $union SELECT
+                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Phone,
+                DR.Attempt,
                 DR.CallerId,
                 L.LastName,
                 L.FirstName,
-                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
+                CONVERT(datetimeoffset, L.Date) AT TIME ZONE '$tz' as ImportDate,
                 CASE DR.LeadId
                     WHEN -1 THEN '_MANUAL_CALL_'
                     ELSE IsNull(DR.CallStatus, '')
@@ -324,6 +328,10 @@ class CallDetails
             foreach ($results as &$rec) {
                 array_pop($rec);
                 $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+
+                if (!empty($rec['ImportDate'])) {
+                    $rec['ImportDate'] = Carbon::parse($rec['ImportDate'])->isoFormat('L LT');
+                }
             }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
