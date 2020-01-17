@@ -432,7 +432,7 @@ var Master = {
                     var new_filter = $(this).parent().parent().parent().clone();
                     $(new_filter).insertAfter('.leadfilter_row:last');
                     var i = Master.leadrule_filters_used;
-                    $(new_filter).find('.lead_rule_filter_value').val('');
+                    $(new_filter).find('.lead_rule_filter_value, .lead_rule_filter_type,.filter_value').val('');
                     $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
