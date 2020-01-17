@@ -142,5 +142,6 @@ return [
 	'call_vol_per_int'		=> 'Call Volume Per 15 Min Interval',
 	'calls_by_caller_ID'	=> 'Calls by Caller ID',
 	'count_of_leads_by_attempt' => 'Count of Leads by Attempt',
-	'download'               => 'Download'
+	'download'               => 'Download',
+	'import_date' => 'Import Date',
 ];
