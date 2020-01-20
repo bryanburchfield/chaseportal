@@ -19,13 +19,13 @@ class EmailDripController extends Controller
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
-            'providers' => $this->getProviders(),
-            'email_service_providers' => $this->espIndex(),
         ];
 
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
+            'providers' => $this->getProviders(),
+            'email_service_providers' => $this->espIndex(),
         ];
 
         return view('tools.email_drip.index')->with($data);
