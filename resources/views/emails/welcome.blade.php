@@ -653,8 +653,8 @@ tr.bg_blue{
         </table>
 
         <!-- Begin footer-->
-            <table class="mauto" align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;">
-                <tr>
+            <table class="mauto" align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-image: url({{ $data['url'] }}img/footer_bg.jpg); background-size: cover; height: 150px;padding-left:15px;padding-right:15px;">
+                <tr style="padding-left:15px;padding-right:15px;">
                     <td class="p20" style="padding:20px;">
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
