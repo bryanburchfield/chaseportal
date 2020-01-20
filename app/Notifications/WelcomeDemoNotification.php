@@ -52,10 +52,12 @@ class WelcomeDemoNotification extends Notification
             'url' => url('/') . '/',
         ];
 
-        return (new MailMessage)->view(
-            'emails.welcomedemo',
-            ['data' => $data]
-        );
+        return (new MailMessage)
+            ->subject('Welcome to ChaseData')
+            ->view(
+                'emails.welcomedemo',
+                ['data' => $data]
+            );
     }
 
     /**

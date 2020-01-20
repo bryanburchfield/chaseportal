@@ -48,10 +48,12 @@ class WelcomeNotification extends Notification
             'url' => url('/') . '/',
         ];
 
-        return (new MailMessage)->view(
-            'emails.welcome',
-            ['data' => $data]
-        );
+        return (new MailMessage)
+            ->subject('Welcome to ChaseData')
+            ->view(
+                'emails.welcome',
+                ['data' => $data]
+            );
     }
 
     /**
