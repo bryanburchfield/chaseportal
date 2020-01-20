@@ -33,10 +33,10 @@
                 {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
                 {!! Form::label('additional_dbs', 'Database 2') !!}
                 {!! Form::select("additional_dbs", $dbs, null, ["class" => "form-control", 'id'=> 'additional_dbs']) !!}
-            </div>
+            </div> --}}
 
             @if($mode == 'edit')
             {!! Form::hidden('id', null, ['id'=>'user_id']) !!}
