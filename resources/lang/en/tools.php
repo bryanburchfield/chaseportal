@@ -27,6 +27,7 @@ return [
 	'dnc_importer'	=> 'DNC Importer',
 	'edit'			=> 'Edit',
 	'edit_rule'		=> 'Edit Rule',
+	'email_drip_builder'	=> 'Email Drip Builder',
 	'filter_error'	=> 'Please select a filter and value before adding another one',
 	'filters_required' => 'You must enter at least one filter',
 	'filter_type'	=> 'Filter Type',

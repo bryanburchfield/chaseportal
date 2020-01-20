@@ -27,6 +27,7 @@ return [
 	'dnc_importer'	=> 'DNC Importador',
 	'edit'			=> 'Revisar',
 	'edit_rule'		=> 'Revisar Regla',
+	'email_drip_builder'	=> 'Email Goteo Constructor',
 	'filter_error'	=> 'Seleccione un filtro y un valor antes de agregar otro.',
 	'filters_required' => 'Debe ingresar al menos un filtro',
 	'filter_type'	=> 'Tipo de Filtro',

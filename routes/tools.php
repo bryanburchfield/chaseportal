@@ -33,5 +33,13 @@ Route::prefix('tools')->group(function () {
             Route::post('/upload', 'DncController@uploadFile');
             Route::post('/process_file', 'DncController@processFile');
         });
+
+        // Email Drip Builder
+        Route::prefix('email_drip')->group(function(){
+            Route::get('/' 'EmailDripController@index');
+            Route::get('/campaign/{id}' 'EmailDripController@editDrip');
+            Route::get('/templates' 'EmailDripController@showTemplates');
+            Route::post('/templates' 'EmailDripController@uploadTemplate');
+        });
     });
 });
