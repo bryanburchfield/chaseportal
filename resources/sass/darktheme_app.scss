@@ -1286,7 +1286,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider input.form-control {
     background: darken($blue, 2%) !important;
     border: none;
     color: lighten(#aaa, 5%);
@@ -2694,6 +2694,40 @@ a.toggle_instruc {
 
 .field.field_removed{
     background: #ddd;
+}
+
+[hidden] {
+  display: none !important;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.label-info{font-size: 13px;margin-left: 10px;}
+
+.btn-secondary{
+    background: #ccc;
+    color: #444;
+
+    &:hover{
+        background: #bbb;
+    }
 }
 
 /* ---------------------------------------------------

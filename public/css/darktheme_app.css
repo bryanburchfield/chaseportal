@@ -1595,7 +1595,8 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_user input.form-control,
 .edit_myself input.form-control,
 #webhook_generator input.form-control,
-#webhook_generator select {
+#webhook_generator select,
+.add_provider input.form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -3179,6 +3180,45 @@ a.toggle_instruc {
 
 .field.field_removed {
   background: #ddd;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.label-info {
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.btn-secondary {
+  background: #ccc;
+  color: #444;
+}
+
+.btn-secondary:hover {
+  background: #bbb;
 }
 
 /* ---------------------------------------------------

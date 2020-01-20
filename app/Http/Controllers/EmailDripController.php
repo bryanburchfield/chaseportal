@@ -15,9 +15,12 @@ class EmailDripController extends Controller
      */
     public function index()
     {
+
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
+            'providers' => $this->getProviders(),
+            'email_service_providers' => $this->espIndex(),
         ];
 
         $data = [
@@ -40,23 +43,10 @@ class EmailDripController extends Controller
      */
     public function espIndex()
     {
-        $email_service_providers = EmailServiceProvider::where('group_id', Auth::User()->group_id)
+        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
             ->orderby('name')
             ->get();
 
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-            'providers' => $this->getProviders(),
-            'email_service_providers' => $email_service_providers,
-        ];
-
-        $data = [
-            'page' => $page,
-            'group_id' => Auth::user()->group_id,
-        ];
-
-        return view('tools.email_drip.esp_index')->with($data);
     }
 
     public function templateIndex()

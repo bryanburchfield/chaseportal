@@ -101,6 +101,8 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
+
+        $('.upload_email_template').on('click', this.upload_email_template);
 	},
 
     hide_modal_error:function(){
@@ -2061,6 +2063,32 @@ var Master = {
         }
 
         that.parent().find('.instuc_div').slideToggle();
+    },
+
+    upload_email_template:function(e){
+        e.preventDefault();
+
+        var formData = new FormData();
+        formData.append('file', $('#email_template')[0].files[0]);
+
+        console.log(formData);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/templates',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: { formData: formData },
+            success: function (response) {
+                console.log(response);
+            }
+        });
     }
 
 }
