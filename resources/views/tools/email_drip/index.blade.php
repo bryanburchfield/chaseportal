@@ -65,6 +65,7 @@
                                         		<table class="table mt20">
                                         			<thead>
                                         				<tr>
+                                        					<th>Name</th>
                                         					<th>Provider</th>
                                         					<th>Username</th>
                                         					<th>Password</th>
@@ -73,13 +74,18 @@
 
                                         			<tbody>
 
-															@foreach($providers as $provider)
-															<tr>
-																{{-- <td>{{$provider->provider}}</td>
-																<td>{{$provider->username}}</td>
-																<td>{{$provider->password}}</td> --}}
-															</tr>
-															@endforeach
+															@if(count($email_service_providers))
+																@foreach($email_service_providers as $provider)
+																<tr>
+																	{{-- <td>{{$provider->name}}</td>
+																	<td>{{$provider->provider}}</td>
+																	<td>{{$provider->username}}</td>
+																	<td>{{$provider->password}}</td> --}}
+																</tr>
+																@endforeach
+															@else
+																<div class="alert alert-info">{{__('tools.no_providers')}}</div>
+															@endif
                                         			</tbody>
                                         		</table>
                                         	</div>
@@ -160,7 +166,17 @@
 				<form action="#" method="post" class="form add_provider">
 					<div class="form-group">
 						<label>{{__('tools.provider')}}</label>
-						<input type="text" class="form-control provider" name="provider">
+						<select name="provider" id="provider" class="form-control">
+							<option value="">Select One</option>
+							@foreach($providers as $provider)
+								<option value="{{$provider}}">{{$provider}}</option>
+							@endforeach
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>{{__('tools.provider_name')}}</label>
+						<input type="text" class="form-control provider_name" name="provider_name">
 					</div>
 
 					<div class="form-group">
