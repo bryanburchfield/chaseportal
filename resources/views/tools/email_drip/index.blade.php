@@ -73,15 +73,13 @@
 
                                         			<tbody>
 
-                                        				@if(!empty($providers))
 															@foreach($providers as $provider)
 															<tr>
-																<td>{{$provider->provider}}</td>
+																{{-- <td>{{$provider->provider}}</td>
 																<td>{{$provider->username}}</td>
-																<td>{{$provider->password}}</td>
+																<td>{{$provider->password}}</td> --}}
 															</tr>
 															@endforeach
-                                        				@endif
                                         			</tbody>
                                         		</table>
                                         	</div>
