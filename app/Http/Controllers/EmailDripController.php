@@ -19,12 +19,27 @@ class EmailDripController extends Controller
             'group_id' => Auth::user()->group_id,
         ];
 
-        return view('tools.email_drip')->with($data);
+        return view('tools.email_drip.index')->with($data);
     }
 
     public function editDrip(Request $request)
     {
         # code...
+    }
+
+    public function espIndex()
+    {
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+
+        $data = [
+            'page' => $page,
+            'group_id' => Auth::user()->group_id,
+        ];
+
+        return view('tools.email_drip.esp_index')->with($data);
     }
 
     public function templateIndex()
