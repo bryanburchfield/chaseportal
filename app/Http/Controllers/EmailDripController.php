@@ -25,7 +25,7 @@ class EmailDripController extends Controller
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'providers' => $this->getProviders(),
-            'email_service_providers' => $this->espIndex(),
+            'email_service_providers' => $this->userProviders(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -37,21 +37,15 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Email Service Providers index
+     * Providers configured for this user
      * 
-     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     * @return mixed 
      */
-    public function espIndex()
+    private function userProviders()
     {
         return EmailServiceProvider::where('group_id', Auth::User()->group_id)
             ->orderby('name')
             ->get();
-
-    }
-
-    public function templateIndex()
-    {
-        # code...
     }
 
     public function uploadTemplate(Request $request)
@@ -60,10 +54,8 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Get Providers
+     * Supported ESPs
      * 
-     * Returns a collection of supported ESPs
-     * May need to tableize this later and add other fields
      * @return string[] 
      */
     private function getProviders()
