@@ -63,6 +63,10 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    public function deleteProvider(Request $request){
+        EmailServiceProvider::findOrFail($request->id)->delete();
+    }
+
     public function testConnection(Request $request)
     {
         $class = 'App\\Interfaces\\EmailProvider\\' . $request->provider;
