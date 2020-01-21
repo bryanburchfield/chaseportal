@@ -9,6 +9,7 @@ use GuzzleHttp\RequestOptions;
 class Postmark implements EmailProvider
 {
     public $email_serivce_provider;
+    public $error_message;
 
     private $verify_ssl = true;
     private $timeout = 30;
@@ -43,7 +44,8 @@ class Postmark implements EmailProvider
         //      Subject: 'Postmark test',
         //      HtmlBody: '<html><body><strong>Hello</strong> dear Postmark user.</body></html>'}"
 
-
+        $this->error_message = 'Test failure';
+        return false;
     }
 
     function send($message)

@@ -63,6 +63,29 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    public function testConnection(Request $request)
+    {
+        $class = 'App\\Interfaces\\EmailProvider\\' . $request->provider;
+
+        if (!class_exists($class)) {
+            return [
+                'status' => 'error',
+                'message' => 'Invalid Provider',
+            ];
+        }
+
+        $provider = new $class(new EmailServiceProvider($request->all()));
+
+        if ($provider->testConnection()) {
+            return ['status' => 'success'];
+        }
+
+        return [
+            'status' => 'error',
+            'message' => $provider->error_message,
+        ];
+    }
+
     public function addTemplate(ValidEmailDripTemplate $request)
     {
         $email_drip_template = new EmailDripTemplate($request->all());
