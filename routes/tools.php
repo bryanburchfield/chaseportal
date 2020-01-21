@@ -38,6 +38,7 @@ Route::prefix('tools')->group(function () {
         Route::prefix('email_drip')->group(function () {
             Route::get('/', 'EmailDripController@index');
             Route::post('/templates', 'EmailDripController@uploadTemplate');
+            Route::post('/add_provider', 'EmailDripController@addProvider');
         });
     });
 });

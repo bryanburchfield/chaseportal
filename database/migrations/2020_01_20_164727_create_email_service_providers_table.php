@@ -19,8 +19,8 @@ class CreateEmailServiceProvidersTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('name', 50);
             $table->string('provider');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
