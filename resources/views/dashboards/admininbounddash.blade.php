@@ -10,5 +10,5 @@
         </div>
     </div>
 
-    @include('shared.admindash')
+    @include('shared.admininbounddash')
 </div>

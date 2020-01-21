@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Carbon;
 
-class AdminDashController extends Controller
+class AdminInboundDashController extends Controller
 {
     use DashTraits;
 
@@ -23,20 +23,20 @@ class AdminDashController extends Controller
 
         $campaigns = $this->campaignGroups();
 
-        $jsfile[] = "admindash.js";
-        $cssfile[] = "admindash.css";
+        $jsfile[] = "admininbounddash.js";
+        $cssfile[] = "admininbounddash.css";
 
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
             'dateFilter' => $this->dateFilter,
             'campaign_list' => $campaigns,
-            'curdash' => 'admindash',
+            'curdash' => 'admininbounddash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
 
-        return view('admindash')->with($data);
+        return view('admininbounddash')->with($data);
     }
 
     /**

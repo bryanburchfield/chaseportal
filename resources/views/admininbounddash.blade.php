@@ -13,7 +13,7 @@
 <div class="container-fluid bg">
     <div class="container mt50">
         @include('shared.filters')
-        @include('shared.admindash')
+        @include('shared.admininbounddash')
     </div>
 </div>
 

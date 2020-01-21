@@ -5,7 +5,7 @@
     </div>
 
     <ul class="list-unstyled components">
-        <li <?php echo $page['menuitem'] == 'admindash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@adminDashboard') }}"><i class="fas fa-sign-in-alt"></i>{{__('sidenav.admin_inbound')}}</a></li>
+        <li <?php echo $page['menuitem'] == 'admininbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@adminInboundDashboard') }}"><i class="fas fa-sign-in-alt"></i>{{__('sidenav.admin_inbound')}}</a></li>
         <li <?php echo $page['menuitem'] == 'adminoutbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@adminOutboundDashboard') }}"><i class="fas fa-sign-out-alt"></i>{{__('sidenav.admin_outbound')}}</a></li>
 
         @if(Auth::user()->email != 'btmarketing@chasedatacorp.com')
