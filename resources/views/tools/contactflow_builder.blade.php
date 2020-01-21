@@ -67,7 +67,11 @@ if (Auth::user()->isType('demo')) {
                                                             <tr data-ruleid="{{$lr->id}}">
                                                                 <td>
                                                                     <label class="switch leadrule_switch">
+                                                                        @if ($demo)
+                                                                        <input disabled type="checkbox" {{ ($lr->active) ? 'checked' : '' }} name="leadrule_input">
+                                                                        @else
                                                                         <input type="checkbox" {{ ($lr->active) ? 'checked' : '' }} name="leadrule_input">
+                                                                        @endif
                                                                         <span></span>
                                                                     </label>
                                                                 </td>
@@ -195,7 +199,11 @@ if (Auth::user()->isType('demo')) {
                                                         </div>
 
                                                         <a href="#" onclick="location.href='/tools/contactflow_builder';" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
+                                                        @if ($demo)
+                                                        <span class="disabled btn btn-primary mb0">{{__('tools.add_rule')}}</span>
+                                                        @else
                                                         {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
+                                                        @endif
                                                         <div class="alert alert-danger add_rule_error mt20"></div>
                                                     </div>
                                                 {!! Form::close() !!}
