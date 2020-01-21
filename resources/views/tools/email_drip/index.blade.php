@@ -68,7 +68,6 @@
                                         					<th>Name</th>
                                         					<th>Provider</th>
                                         					<th>Username</th>
-                                        					<th>Password</th>
                                         					<th>Delete</th>
                                         				</tr>
                                         			</thead>
@@ -81,7 +80,6 @@
 																	<td>{{$provider->name}}</td>
 																	<td>{{$provider->provider}}</td>
 																	<td>{{$provider->username}}</td>
-																	<td>{{$provider->password}}</td>
 																	<td><a class="provider_modal_link remove_user" data-toggle="modal" data-target="#deleteProviderModal" href="#" data-name="{{$provider->name}}" data-user="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
 																</tr>
 																@endforeach
@@ -199,6 +197,7 @@
             </div>
 
 	        <div class="modal-footer">
+	        	<a href="#" class="test_connection btn btn-warning">Test Connection</a>
 	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
 	        </div>
 	    </div>

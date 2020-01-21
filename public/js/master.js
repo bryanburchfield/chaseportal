@@ -103,6 +103,7 @@ var Master = {
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_provider .btn').on('click', this.add_provider);
+        $('.test_connection').on('click', this.test_connection);
 	},
 
     hide_modal_error:function(){
@@ -2126,6 +2127,36 @@ var Master = {
                         window.location = '/tools/email_drip';
                     }, 2500);
                 }
+            }
+        });
+    },
+
+    test_connection:function(e){
+        e.preventDefault();
+
+        var provider = $('.provider').val()
+            name = $('.name').val(),
+            username = $('.username').val(),
+            password = $('.password').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/test_connection ',
+            type: 'POST',
+            data: {
+                provider: provider,
+                name:name,
+                username:username,
+                password:password
+            },
+            success: function (response) {
+                console.log(response);
             }
         });
     }
