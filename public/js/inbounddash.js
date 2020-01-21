@@ -111,7 +111,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/call_volume',
+            url: '/inbounddashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -380,7 +380,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/agent_call_count',
+            url: '/inbounddashboard/agent_call_count',
             type: 'POST',
             dataType: 'json',
             data: { campaign: campaign, dateFilter: datefilter },
@@ -531,7 +531,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/avg_hold_time',
+            url: '/inbounddashboard/avg_hold_time',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter },
@@ -571,7 +571,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/agent_call_status',
+            url: '/inbounddashboard/agent_call_status',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter },
@@ -789,7 +789,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/service_level',
+            url: '/inbounddashboard/service_level',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter, answer_secs: answer_secs },
@@ -859,7 +859,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/abandon_rate',
+            url: '/inbounddashboard/abandon_rate',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter },
@@ -889,7 +889,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/rep_avg_handletime',
+            url: '/inbounddashboard/rep_avg_handletime',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter },
@@ -986,7 +986,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/admininbounddashboard/total_sales',
+            url: '/inbounddashboard/total_sales',
             type: 'POST',
             dataType: 'json',
             data: { dateFilter: datefilter },

@@ -364,8 +364,8 @@
             	<p>Double click a link below to copy.</p><br>
             	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/(#Rep#)</a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/admininbounddashboard/api/<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/adminoutbounddashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/inbounddashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>
 				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a>
 

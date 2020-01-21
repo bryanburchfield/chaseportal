@@ -3,7 +3,7 @@
 return [
 	'actiontaken'				=> 'Action Taken',
 	'admin_dashboard'			=> 'Admin Dashboard',
-	'adminoutbound_dashboard'	=> 'Adminoutbound Dashboard',
+	'outbound_dashboard'	=> 'Outbound Dashboard',
 	'all_campaigns'				=> 'All Campaigns',
 	'and'						=> 'And',
 	'auto_report_settings'		=> 'Automated Reports Settings',

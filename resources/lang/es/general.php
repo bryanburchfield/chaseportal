@@ -3,7 +3,7 @@
 return [
 	'actiontaken'				=> 'Acción Tomada',
 	'admin_dashboard'			=> 'Panel de Administración',
-	'adminoutbound_dashboard'	=> 'Panel de Salida de Administrador',
+	'outbound_dashboard'	=> 'Panel de Salida',
 	'all_campaigns'				=> 'Todas las Campañas',
 	'and'						=> 'Y',
 	'auto_report_settings'		=> 'Configuración de Informes Automatizados',

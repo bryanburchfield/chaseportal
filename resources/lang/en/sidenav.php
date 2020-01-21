@@ -2,8 +2,8 @@
 
 return [
 	'admin'				=> 'Admin',
-	'admin_inbound'		=> 'Admin Inbound',
-	'admin_outbound'	=> 'Admin Outbound',
+	'inbound'		=> 'Inbound Dashboard',
+	'outbound'	=> 'Outbound Dashboard',
 	'kpis'				=> 'KPIs',
 	'leaderboard'		=> 'Leaderboard',
 	'reports'			=> 'Reports',

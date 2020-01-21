@@ -2,8 +2,8 @@
 
 return [
 	'admin'				=> 'Configuración',
-	'admin_inbound'		=> 'Administración Entrante',
-	'admin_outbound'	=> 'Administración Saliente',
+	'inbound'		=> 'Panel de Entrada',
+	'outbound'	=> 'Panel de Salida',
 	'kpis'				=> 'KPIs',
 	'leaderboard'		=> 'Tabla de Posiciones',
 	'reports'			=> 'Informes',

@@ -81,7 +81,7 @@ trait DashTraits
         $this->dateFilter = session('dateFilter', 'today');
         $this->inorout = session('inorout', 'inbound');
         $this->isApi = session('isApi', 0);
-        $this->curdash = session('curdash', 'admininbounddash');
+        $this->curdash = session('curdash', 'inbounddash');
         $this->rep = session('rep', '');
 
         if (empty($this->databases)) {

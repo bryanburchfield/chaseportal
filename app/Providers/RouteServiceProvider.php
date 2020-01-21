@@ -91,11 +91,11 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/admininbounddashboard.php'));
+            ->group(base_path('routes/inbounddashboard.php'));
 
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/adminoutbounddashboard.php'));
+            ->group(base_path('routes/outbounddashboard.php'));
 
         Route::middleware('web')
             ->namespace($this->namespace)

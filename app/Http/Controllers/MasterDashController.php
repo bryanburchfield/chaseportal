@@ -23,7 +23,7 @@ class MasterDashController extends Controller
         $campaigns = $this->campaignGroups();
         $db_list = $this->getDatabaseArray();
 
-        $this->currentDash = session('currentDash', 'admininbounddash');
+        $this->currentDash = session('currentDash', 'inbounddash');
         session(['currentDash' => $this->currentDash]);
 
         $jsfile[] = $this->currentDash . ".js";
@@ -86,17 +86,17 @@ class MasterDashController extends Controller
         return view('demo.welcome', ['user' => $user]);
     }
 
-    public function adminInboundDashboard(Request $request)
+    public function inboundDashboard(Request $request)
     {
-        $request->merge(['dashboard' => 'admininbounddash']);
+        $request->merge(['dashboard' => 'inbounddash']);
         $this->setDashboard($request);
 
         return $this->index($request);
     }
 
-    public function adminOutboundDashboard(Request $request)
+    public function outboundDashboard(Request $request)
     {
-        $request->merge(['dashboard' => 'adminoutbounddash']);
+        $request->merge(['dashboard' => 'outbounddash']);
         $this->setDashboard($request);
 
         return $this->index($request);
