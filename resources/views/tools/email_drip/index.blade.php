@@ -69,6 +69,7 @@
                                         					<th>Provider</th>
                                         					<th>Username</th>
                                         					<th>Password</th>
+                                        					<th>Delete</th>
                                         				</tr>
                                         			</thead>
 
@@ -77,10 +78,11 @@
 															@if(count($email_service_providers))
 																@foreach($email_service_providers as $provider)
 																<tr>
-																	{{-- <td>{{$provider->name}}</td>
+																	<td>{{$provider->name}}</td>
 																	<td>{{$provider->provider}}</td>
 																	<td>{{$provider->username}}</td>
-																	<td>{{$provider->password}}</td> --}}
+																	<td>{{$provider->password}}</td>
+																	<td><a class="provider_modal_link remove_user" data-toggle="modal" data-target="#deleteProviderModal" href="#" data-name="{{$provider->name}}" data-user="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
 																</tr>
 																@endforeach
 															@else
@@ -166,7 +168,7 @@
 				<form action="#" method="post" class="form add_provider">
 					<div class="form-group">
 						<label>{{__('tools.provider')}}</label>
-						<select name="provider" id="provider" class="form-control">
+						<select name="provider" id="provider" class="form-control provider">
 							<option value="">Select One</option>
 							@foreach($providers as $provider)
 								<option value="{{$provider}}">{{$provider}}</option>
@@ -176,20 +178,23 @@
 
 					<div class="form-group">
 						<label>{{__('tools.provider_name')}}</label>
-						<input type="text" class="form-control provider_name" name="provider_name">
+						<input type="text" class="form-control name" name="name">
 					</div>
 
 					<div class="form-group">
 						<label>{{__('tools.username')}}</label>
-						<input type="text" class="form-control provider" name="provider">
+						<input type="text" class="form-control username" name="username">
 					</div>
 
 					<div class="form-group">
 						<label>{{__('tools.password')}}</label>
-						<input type="password" class="form-control provider" name="provider">
+						<input type="password" class="form-control password" name="password">
 					</div>
 
 					<input type="submit" class="btn btn-primary" value="{{__('general.submit')}}">
+
+					<div class="alert alert-success hidetilloaded">{{__('tools.provider_added_success')}}</div>
+					<div class="alert alert-danger hidetilloaded"></div>
 				</form>
             </div>
 
@@ -223,6 +228,26 @@
 
 					<button type="submit" class="btn btn-primary upload_email_template"><i class="fas fa-file-upload"></i> {{__('tools.upload')}}</button>
 				</form>
+            </div>
+
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+	        </div>
+	    </div>
+    </div>
+</div>
+
+<!-- Delete Provider Modal -->
+<div class="modal fade" id="deleteProviderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_provider')}}</h4>
+            </div>
+
+            <div class="modal-body">
+
             </div>
 
 	        <div class="modal-footer">

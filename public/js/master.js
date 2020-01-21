@@ -101,8 +101,8 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
-
         $('.upload_email_template').on('click', this.upload_email_template);
+        $('.add_provider .btn').on('click', this.add_provider);
 	},
 
     hide_modal_error:function(){
@@ -2089,8 +2089,46 @@ var Master = {
                 console.log(response);
             }
         });
-    }
+    },
 
+    add_provider:function(e){
+        e.preventDefault();
+
+        var provider = $('.provider').val()
+            name = $('.name').val(),
+            username = $('.username').val(),
+            password = $('.password').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_provider',
+            type: 'POST',
+            data: {
+                provider: provider,
+                name:name,
+                username:username,
+                password:password
+            },
+            success: function (response) {
+                console.log(response);
+                if(response.status == 'success'){
+                    $('.alert-success').show();
+                    setTimeout(function () {
+                        // $('.alert-success').hide();
+                        var hash = window.location.hash;
+                        localStorage.setItem('activeTab', hash);
+                        window.location = '/tools/email_drip';
+                    }, 2500);
+                }
+            }
+        });
+    }
 }
 
 $(document).ready(function () {
