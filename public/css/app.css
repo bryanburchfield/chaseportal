@@ -2829,6 +2829,11 @@ a.toggle_instruc {
   cursor: pointer;
 }
 
+td.bg-danger {
+  background: #f2dede;
+  color: #a94442;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
