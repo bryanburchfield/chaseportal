@@ -197,8 +197,14 @@
             </div>
 
 	        <div class="modal-footer">
-	        	<a href="#" class="test_connection btn btn-warning">Test Connection</a>
-	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+	        	<div class="col-sm-7">
+	        		<div class="alert alert-danger hidetilloaded connection_msg"></div>
+	        		<div class="alert alert-success hidetilloaded connection_msg"></div>
+	        	</div>
+	        	<div class="col-sm-5">
+	        		<a href="#" class="test_connection btn btn-warning">Test Connection</a>
+	            	<button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+	        	</div>
 	        </div>
 	    </div>
     </div>

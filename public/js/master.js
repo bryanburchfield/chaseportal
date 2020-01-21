@@ -2157,6 +2157,12 @@ var Master = {
             },
             success: function (response) {
                 console.log(response);
+                $('.connection_msg').hide();
+                if(response.status == 'error'){
+                    $('.connection_msg.alert-danger').text(response.message).show();
+                }else{
+                    $('.connection_msg.alert-success').text(response.message).show();
+                }
             }
         });
     }
