@@ -190,7 +190,7 @@ var Admin = {
 				setTimeout(function () {
                     $('.alert-success').hide();
                     $('form.add_demo_user').trigger("reset");
-					window.location.href = "/dashboards/admin#demo_user";
+                    location.reload();
 				}, 2500);
 			}, error: function (data) {
 				$('form.add_demo_user .alert').empty();
