@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidEmailDripTemplate;
 use App\Http\Requests\ValidEmailServiceProvider;
+use App\Models\EmailDripTemplate;
 use App\Models\EmailServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,9 +63,19 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
-    public function uploadTemplate(Request $request)
+    public function addTemplate(ValidEmailDripTemplate $request)
     {
-        # code...
+        $email_drip_template = new EmailDripTemplate($request->all());
+
+        $email_drip_template->group_id = Auth::User()->group_id;
+        $email_drip_template->user_id = Auth::User()->id;
+
+        // upload 'email_tempate' file into 'body'
+        // ?????
+
+        $email_drip_template->save();
+
+        return ['status' => 'success'];
     }
 
     /**
