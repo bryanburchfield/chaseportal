@@ -1471,6 +1471,7 @@ p.descrip.top14 {
 .modal-body {
   background: #0f131f;
   color: #aaa;
+  overflow: auto;
 }
 
 .modal-header {
@@ -1595,7 +1596,8 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_user input.form-control,
 .edit_myself input.form-control,
 #webhook_generator input.form-control,
-#webhook_generator select {
+#webhook_generator select,
+input.datepicker_only {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;

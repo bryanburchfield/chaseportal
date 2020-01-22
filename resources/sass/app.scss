@@ -1103,6 +1103,10 @@ p.descrip.top14 {
     overflow: auto;
 }
 
+.modal-body {
+    overflow:auto;
+}
+
 #reports_modal .alert-danger {
     font-weight: 600;
     text-align: center;
@@ -1186,7 +1190,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only{
     background: #eee !important;
 }
 

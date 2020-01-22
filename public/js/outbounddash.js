@@ -325,7 +325,7 @@ var Dashboard = {
             dataType: 'json',
             data: { campaign: campaign, datefilter: datefilter },
             success: function (response) {
-                console.log(response);
+
                 $('#conversion_rate').html(response.total_sales.conversion_rate + '%');
                 $('#conversion_rate').closest('.flipping_card').flip(true);
                 $('#total_sales').closest('.flipping_card').flip(true);
@@ -1093,8 +1093,8 @@ $(document).ready(function () {
         $('.set_hgt, .set_hgt3').css({ 'min-height': '100%', 'max-height': '100%' });
     }
 
-    $('.enddate').datepicker({ maxDate: '0' });
-    $('.startdate').datepicker({ maxDate: '0' });
+    // $('.enddate').datepicker({ maxDate: '0' });
+    // $('.startdate').datepicker({ maxDate: '0' });
 
 });
 

@@ -1269,6 +1269,10 @@ p.descrip.top14 {
   overflow: auto;
 }
 
+.modal-body {
+  overflow: auto;
+}
+
 #reports_modal .alert-danger {
   font-weight: 600;
   text-align: center;
@@ -1380,7 +1384,8 @@ input[type=number]::-webkit-outer-spin-button {
 .demo_user select,
 .demo_user .form-control,
 #webhook_generator input.form-control,
-#webhook_generator select {
+#webhook_generator select,
+input.datepicker_only {
   background: #eee !important;
 }
 
