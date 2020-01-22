@@ -1579,7 +1579,8 @@ span.selected_campaign {
 .reports_table tr:nth-of-type(odd),
 .cdr_results_table tr:nth-of-type(odd),
 .rules_table tr:nth-of-type(odd),
-.dnc_table tr:nth-of-type(odd) {
+.dnc_table tr:nth-of-type(odd),
+.providers_table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 

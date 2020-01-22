@@ -61,8 +61,8 @@
                                         <div class="col-sm-12 nopad">
                                         	<a href="#" class="btn btn-primary add_provider" data-toggle="modal" data-target="#addProviderModal">{{__('tools.add_provider')}}</a>
 
-                                        	<div class="table-responsive nobdr drip_campaigns">
-                                        		<table class="table mt20">
+                                        	<div class="table-responsive nobdr">
+                                        		<table class="table mt20 providers_table">
                                         			<thead>
                                         				<tr>
                                         					<th>Name</th>
