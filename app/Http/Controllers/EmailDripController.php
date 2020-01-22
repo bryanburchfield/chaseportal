@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ValidEmailDripTemplate;
-use App\Http\Requests\ValidEmailServiceProvider;
-use App\Models\EmailDripTemplate;
-use App\Models\EmailServiceProvider;
+use App\Models\SmtpServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,8 +24,7 @@ class EmailDripController extends Controller
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
-            'providers' => $this->getProviders(),
-            'email_service_providers' => $this->userProviders(),
+            'smtp_servers' => $this->getSmtpServers(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -44,72 +40,18 @@ class EmailDripController extends Controller
      * 
      * @return mixed 
      */
-    private function userProviders()
+    private function getSmtpServers()
     {
-        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
+        return SmtpServer::where('group_id', Auth::User()->group_id)
             ->orderby('name')
             ->get();
     }
 
-    public function addProvider(ValidEmailServiceProvider $request)
-    {
-        $email_service_provider = new EmailServiceProvider($request->all());
-
-        $email_service_provider->group_id = Auth::User()->group_id;
-        $email_service_provider->user_id = Auth::User()->id;
-
-        $email_service_provider->save();
-
-        return ['status' => 'success'];
-    }
-
     public function testConnection(Request $request)
     {
-        $class = 'App\\Interfaces\\EmailProvider\\' . $request->provider;
-
-        if (!class_exists($class)) {
-            return [
-                'status' => 'error',
-                'message' => 'Invalid Provider',
-            ];
-        }
-
-        $provider = new $class(new EmailServiceProvider($request->all()));
-
-        if ($provider->testConnection()) {
-            return ['status' => 'success'];
-        }
-
         return [
             'status' => 'error',
-            'message' => $provider->error_message,
-        ];
-    }
-
-    public function addTemplate(ValidEmailDripTemplate $request)
-    {
-        $email_drip_template = new EmailDripTemplate($request->all());
-
-        $email_drip_template->group_id = Auth::User()->group_id;
-        $email_drip_template->user_id = Auth::User()->id;
-
-        // upload 'email_tempate' file into 'body'
-        // ?????
-
-        $email_drip_template->save();
-
-        return ['status' => 'success'];
-    }
-
-    /**
-     * Supported ESPs
-     * 
-     * @return string[] 
-     */
-    private function getProviders()
-    {
-        return [
-            'Postmark',
+            'message' => 'Test Error Message',
         ];
     }
 }
