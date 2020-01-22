@@ -25,9 +25,10 @@ class ValidSmtpServer extends FormRequest
     {
         return [
             'name' => 'required',
+            'host' => 'required',
+            'port' => 'required|integer',
             'username' => 'required',
             'password' => 'required',
-            'port' => 'required,integer',
         ];
     }
 }
