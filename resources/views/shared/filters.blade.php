@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="filter_time_camp_dets">
             <p>
                 <span class="selected_datetime"></span> |
@@ -7,7 +7,7 @@
             </p>
         </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <div class="filters">
             <div class="input-group">
                 <div class="input-group-btn">
