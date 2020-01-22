@@ -2136,8 +2136,9 @@ var Master = {
     test_connection:function(e){
         e.preventDefault();
 
-        var provider = $('.provider').val()
+        var host = $('.host').val()
             name = $('.name').val(),
+            port = $('.port').val(),
             username = $('.username').val(),
             password = $('.password').val()
         ;
@@ -2152,8 +2153,9 @@ var Master = {
             url: '/tools/email_drip/test_connection ',
             type: 'POST',
             data: {
-                provider: provider,
+                host: host,
                 name:name,
+                port:port,
                 username:username,
                 password:password
             },
