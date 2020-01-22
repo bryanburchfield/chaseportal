@@ -18,9 +18,10 @@ class CreateSmtpServersTable extends Migration
             $table->integer('group_id');
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->string('host');
+            $table->smallInteger('port');
             $table->string('username');
             $table->string('password');
-            $table->smallInteger('port');
             $table->timestamps();
         });
     }

@@ -6,6 +6,9 @@ use App\Http\Requests\ValidSmtpServer;
 use App\Models\SmtpServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Swift_Mailer;
+use Swift_SmtpTransport;
+use Swift_TransportException;
 
 class EmailDripController extends Controller
 {
@@ -75,10 +78,18 @@ class EmailDripController extends Controller
     public function testConnection(ValidSmtpServer $request)
     {
         // see if we can connect to server
+        try {
+            $transport = (new Swift_SmtpTransport($request->host, $request->port))
+                ->setUsername($request->username)
+                ->setPassword($request->password);
 
-        return [
-            'status' => 'error',
-            'message' => 'Test Error Message',
-        ];
+            $mailer = Swift_Mailer::newInstance($transport);
+            $mailer->getTransport()->start();
+            return 'ok';
+        } catch (Swift_TransportException $e) {
+            return $e->getMessage();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

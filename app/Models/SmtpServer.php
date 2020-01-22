@@ -10,8 +10,9 @@ class SmtpServer extends Model
         'group_id',
         'user_id',
         'name',
+        'host',
+        'port',
         'username',
         'password',
-        'port',
     ];
 }
