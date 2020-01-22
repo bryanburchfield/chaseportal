@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidSmtpServer;
 use App\Models\SmtpServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,6 @@ class EmailDripController extends Controller
      */
     public function index()
     {
-
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
@@ -30,23 +30,38 @@ class EmailDripController extends Controller
         return view('tools.email_drip.index')->with($data);
     }
 
-    public function editDrip(Request $request)
+    public function addSmtpServer(ValidSmtpServer $request)
     {
-        # code...
+        $smtp_server = new SmtpServer($request->all());
+        $smtp_server->user_id = Auth::User()->id;
+        $smtp_server->group_id = Auth::User()->group_id;
+
+        $smtp_server->save();
+
+        return ['status' => 'success'];
     }
 
-    function addSmtpServer(Request $request)
+    public function deleteSmtpServer($id)
     {
-        # code...
+        $smtp_server = $this->getSmtpServer($id);
+
+        // check for campaigns
+        // ????????
+
+        $smtp_server->delete();
+
+        return ['status' => 'success'];
     }
 
-    function deleteSmtpServer(Request $request)
+    private function getSmtpServer($id)
     {
-        // check not in use first
+        return SmtpServer::where('id', $id)
+            ->where('group_id', Auth::User()->group_id)
+            ->firstOrFail();
     }
 
     /**
-     * Providers configured for this user
+     * Servers configured for this group
      * 
      * @return mixed 
      */
@@ -57,7 +72,7 @@ class EmailDripController extends Controller
             ->get();
     }
 
-    public function testConnection(Request $request)
+    public function testConnection(ValidSmtpServer $request)
     {
         // see if we can connect to server
 

@@ -38,6 +38,8 @@ Route::prefix('tools')->group(function () {
         Route::prefix('email_drip')->group(function () {
             Route::get('/', 'EmailDripController@index');
             Route::post('/test_connection', 'EmailDripController@testConnection');
+            Route::post('/add_server', 'EmailDripController@addSmtpServer');
+            Route::post('/delete_server', 'EmailDripController@deleteSmtpServer');
         });
     });
 });
