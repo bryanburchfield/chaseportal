@@ -79,9 +79,12 @@ class EmailDripController extends Controller
     public function testConnection(ValidSmtpServer $request)
     {
         Log::debug($request->all());
+        abort(422, 'Testing Error Message');
+
         // see if we can connect to server
         try {
-            $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
+            // $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
+            $transport = (new Swift_SmtpTransport($request->host, $request->port, 'ssl'))
                 ->setUsername($request->username)
                 ->setPassword($request->password);
 
@@ -92,15 +95,9 @@ class EmailDripController extends Controller
                 'message' => 'Connected Successfuly',
             ];
         } catch (Swift_TransportException $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 422);
+            abort(422, $e->getMessage());
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 422);
+            abort(422, $e->getMessage());
         }
     }
 }
