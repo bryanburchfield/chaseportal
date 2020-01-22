@@ -61,8 +61,8 @@
                                         <div class="col-sm-12 nopad">
                                         	<a href="#" class="btn btn-primary add_provider" data-toggle="modal" data-target="#addProviderModal">{{__('tools.add_provider')}}</a>
 
-                                        	<div class="table-responsive nobdr drip_campaigns">
-                                        		<table class="table mt20">
+                                        	<div class="table-responsive nobdr">
+                                        		<table class="table mt20 providers_table">
                                         			<thead>
                                         				<tr>
                                         					<th>Name</th>
@@ -80,7 +80,7 @@
 																	<td>{{$provider->name}}</td>
 																	<td>{{$provider->provider}}</td>
 																	<td>{{$provider->username}}</td>
-																	<td><a class="provider_modal_link remove_user" data-toggle="modal" data-target="#deleteProviderModal" href="#" data-name="{{$provider->name}}" data-user="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
+																	<td><a class="provider_modal_link remove_user" data-toggle="modal" data-target="#deleteProviderModal" href="#" data-name="{{$provider->name}}" data-id="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
 																</tr>
 																@endforeach
 															@else
@@ -252,11 +252,13 @@
             </div>
 
             <div class="modal-body">
-
+                <h3>{{__('tools.confirm_delete')}} <span></span></h3>
+                <input type="hidden" name="provider_id" id="provider_id" value="">
             </div>
 
 	        <div class="modal-footer">
-	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_provider">{{__('tools.delete')}}</button>
 	        </div>
 	    </div>
     </div>
