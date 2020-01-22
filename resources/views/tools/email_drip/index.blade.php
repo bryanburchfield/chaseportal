@@ -121,6 +121,7 @@
                                                         <input type="password" class="form-control password" name="password">
                                                     </div>
 
+                                                    <div class="alert alert-success hidetilloaded"></div>
                                                     <input type="submit" class="btn btn-primary" value="Add SMTP Server">
                                                 </form>
                                             </div>

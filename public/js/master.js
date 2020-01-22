@@ -2119,16 +2119,13 @@ var Master = {
                 password:password
             },
             success: function (response) {
-                console.log(response);
-                // if(response.status == 'success'){
-                //     $('.alert-success').show();
-                //     setTimeout(function () {
-                //         // $('.alert-success').hide();
-                //         var hash = window.location.hash;
-                //         localStorage.setItem('activeTab', hash);
-                //         window.location = '/tools/email_drip';
-                //     }, 2500);
-                // }
+
+                if(response.status == 'success'){
+                    $('.alert-success').show();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2500);
+                }
             }
         });
     },
@@ -2173,6 +2170,7 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
+                                console.log(value);
                                 $('.connection_msg').append('<li>'+value+'</li>');
                                 $('.connection_msg').addClass('alert-danger').show();
                             });
