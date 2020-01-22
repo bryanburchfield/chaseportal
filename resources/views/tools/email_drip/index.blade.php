@@ -58,34 +58,41 @@
 
                                     <div class="tab-pane mt30" id="smtp_servers">
                                         <div class="col-sm-6 nopad">
-                                            <form action="#" method="post" class="form add_smtp_server">
-                                                <div class="form-group">
-                                                    <label>Name</label>
-                                                    <input type="text" class="form-control name" name="name">
-                                                </div>
+                                            <div class="card">
+                                                <form action="#" method="post" class="form add_smtp_server">
+                                                    <div class="form-group">
+                                                        <label>Name</label>
+                                                        <input type="text" class="form-control name" name="name">
+                                                    </div>
 
-                                                <div class="form-group">
-                                                    <label>Host</label>
-                                                    <input type="text" class="form-control host" name="host">
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label>Host</label>
+                                                        <input type="text" class="form-control host" name="host">
+                                                    </div>
 
-                                                <div class="form-group">
-                                                    <label>Port</label>
-                                                    <input type="text" class="form-control port" name="port">
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label>Port</label>
+                                                        <input type="text" class="form-control port" name="port">
+                                                    </div>
 
-                                                <div class="form-group">
-                                                    <label>Username</label>
-                                                    <input type="text" class="form-control username" name="username">
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label>Username</label>
+                                                        <input type="text" class="form-control username" name="username">
+                                                    </div>
 
-                                                <div class="form-group">
-                                                    <label>Password</label>
-                                                    <input type="password" class="form-control password" name="password">
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label>Password</label>
+                                                        <input type="password" class="form-control password" name="password">
+                                                    </div>
 
-                                                <input type="submit" class="btn btn-primary" value="Add SMTP Server">
-                                            </form>
+                                                    <input type="submit" class="btn btn-primary" value="Add SMTP Server">
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-warning test_connection btn_flt_rgt">Test Connection</a>
+                                            <div class="alert connection_msg hidetilloaded"></div>
                                         </div>
                                     </div>
                                 </div>

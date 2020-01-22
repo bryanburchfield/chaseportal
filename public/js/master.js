@@ -103,8 +103,6 @@ var Master = {
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_smtp_server').on('submit', this.add_smtp_server);
-        $('.drip_campaigns .provider_modal_link').on('click', this.populate_delete_provider_modal);
-        $('.delete_provider').on('click', this.delete_provider);
         $('.test_connection').on('click', this.test_connection);
 	},
 
@@ -2135,40 +2133,6 @@ var Master = {
         });
     },
 
-    populate_delete_provider_modal:function(e){
-        e.preventDefault();
-        var name = $(this).data('name'),
-            id = $(this).data('id')
-        ;
-
-        $('#deleteProviderModal').find('#provider_id').val(id);
-        $('#deleteProviderModal').find('h3 span').text(name);
-    },
-
-    delete_provider:function(e){
-        e.preventDefault();
-        var id = $('#deleteProviderModal #provider_id').val();
-
-        console.log(id);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/tools/email_drip/delete_provider',
-            type: 'POST',
-            data: {
-                id: id,
-            },
-            success: function (response) {
-                console.log(response);
-                location.reload();
-            }
-        });
-    },
-
     test_connection:function(e){
         e.preventDefault();
 
@@ -2197,9 +2161,9 @@ var Master = {
                 console.log(response);
                 $('.connection_msg').hide();
                 if(response.status == 'error'){
-                    $('.connection_msg.alert-danger').text(response.message).show();
+                    $('.connection_msg').addClass('alert-danger').text(response.message).show();
                 }else{
-                    $('.connection_msg.alert-success').text(response.message).show();
+                    $('.connection_msg').addClass('alert-success').text(response.message).show();
                 }
             }
         });
