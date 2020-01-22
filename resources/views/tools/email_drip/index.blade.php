@@ -20,6 +20,7 @@
 
 			    		<div class="tab-content">
                             <div class="tab-pane active mt30">
+                                <h2 class="bbnone">{{__('tools.email_drip_builder')}}</h2>
                                 <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
                                     <li><a href="#smtp_servers" data-toggle="tab">SMTP Servers</a></li>
