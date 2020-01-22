@@ -91,8 +91,15 @@
                                         </div>
 
                                         <div class="col-sm-6">
-                                            <a href="#" class="btn btn-warning test_connection btn_flt_rgt">Test Connection</a>
-                                            <div class="alert connection_msg hidetilloaded"></div>
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <div class="alert connection_msg hidetilloaded"></div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <a href="#" class="btn btn-warning test_connection btn_flt_rgt">Test Connection</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

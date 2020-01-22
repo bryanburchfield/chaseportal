@@ -2159,11 +2159,23 @@ var Master = {
             },
             success: function (response) {
                 console.log(response);
-                $('.connection_msg').hide();
-                if(response.status == 'error'){
-                    $('.connection_msg').addClass('alert-danger').text(response.message).show();
-                }else{
-                    $('.connection_msg').addClass('alert-success').text(response.message).show();
+                $('.connection_msg').empty().hide();
+                $('.connection_msg').removeClass('alert-danger alert-success');
+                $('.connection_msg').addClass('alert-success').text(response.message).show();
+            },error: function (data) {
+
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $('.connection_msg').empty().hide();
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.connection_msg').append('<li>'+value+'</li>');
+                                $('.connection_msg').addClass('alert-danger').show();
+                            });
+                        } 
+                    });
                 }
             }
         });
