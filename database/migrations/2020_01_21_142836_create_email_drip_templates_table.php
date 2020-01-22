@@ -17,7 +17,7 @@ class CreateEmailDripTemplatesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('group_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('name', 50);
+            $table->string('name');
             $table->string('from');
             $table->string('subject');
             $table->text('body');
