@@ -23,6 +23,7 @@
                                 <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
                                     <li><a href="#smtp_servers" data-toggle="tab">SMTP Servers</a></li>
+                                    <li><a href="#add_smtp_server" data-toggle="tab">Add SMTP Server</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -57,6 +58,41 @@
                                     </div>
 
                                     <div class="tab-pane mt30" id="smtp_servers">
+                                        <div class="col-sm-12 nopad">
+                                            <div class="table-responsive nobdr smtp_servers">
+                                                <table class="table mt20">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Host</th>
+                                                            <th>Port</th>
+                                                            <th>Username</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        @if(count($smtp_servers))
+                                                            @foreach($smtp_servers as $server)
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @else
+                                                            <div class="alert alert-info">No SMTP Servers have need added</div>
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane mt30" id="add_smtp_server">
                                         <div class="col-sm-6 nopad">
                                             <div class="card">
                                                 <form action="#" method="post" class="form add_smtp_server">
