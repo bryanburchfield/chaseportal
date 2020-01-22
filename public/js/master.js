@@ -102,7 +102,7 @@ var Master = {
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
-        $('.add_provider .btn').on('click', this.add_provider);
+        $('.add_smtp_server').on('submit', this.add_smtp_server);
         $('.drip_campaigns .provider_modal_link').on('click', this.populate_delete_provider_modal);
         $('.delete_provider').on('click', this.delete_provider);
         $('.test_connection').on('click', this.test_connection);
@@ -2068,37 +2068,38 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-    upload_email_template:function(e){
+    // upload_email_template:function(e){
+    //     e.preventDefault();
+
+    //     var formData = new FormData();
+    //     formData.append('file', $('#email_template')[0].files[0]);
+
+    //     console.log(formData);
+
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         }
+    //     });
+
+    //     $.ajax({
+    //         url: '/tools/email_drip/templates',
+    //         type: 'POST',
+    //         processData: false,
+    //         contentType: false,
+    //         data: { formData: formData },
+    //         success: function (response) {
+    //             console.log(response);
+    //         }
+    //     });
+    // },
+
+    add_smtp_server:function(e){
         e.preventDefault();
 
-        var formData = new FormData();
-        formData.append('file', $('#email_template')[0].files[0]);
-
-        console.log(formData);
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/tools/email_drip/templates',
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            data: { formData: formData },
-            success: function (response) {
-                console.log(response);
-            }
-        });
-    },
-
-    add_provider:function(e){
-        e.preventDefault();
-
-        var provider = $('.provider').val()
+        var host = $('.host').val()
             name = $('.name').val(),
+            port = $('.port').val(),
             username = $('.username').val(),
             password = $('.password').val()
         ;
@@ -2110,25 +2111,26 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/add_provider',
+            url: '/tools/email_drip/add_server',
             type: 'POST',
             data: {
-                provider: provider,
+                host: host,
                 name:name,
+                port:port,
                 username:username,
                 password:password
             },
             success: function (response) {
                 console.log(response);
-                if(response.status == 'success'){
-                    $('.alert-success').show();
-                    setTimeout(function () {
-                        // $('.alert-success').hide();
-                        var hash = window.location.hash;
-                        localStorage.setItem('activeTab', hash);
-                        window.location = '/tools/email_drip';
-                    }, 2500);
-                }
+                // if(response.status == 'success'){
+                //     $('.alert-success').show();
+                //     setTimeout(function () {
+                //         // $('.alert-success').hide();
+                //         var hash = window.location.hash;
+                //         localStorage.setItem('activeTab', hash);
+                //         window.location = '/tools/email_drip';
+                //     }, 2500);
+                // }
             }
         });
     },
