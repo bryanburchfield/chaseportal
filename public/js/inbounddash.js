@@ -540,7 +540,7 @@ var Dashboard = {
             data: { dateFilter: datefilter },
             success: function (response) {
 
-                Master.trend_percentage($('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.ntc);
+                Master.trend_percentage($('.avg_hold_time_card'), response.average_hold_time.pct_change, response.average_hold_time.pct_sign, response.average_hold_time.higher_is_better, response.average_hold_time.ntc);
                 $('#avg_hold_time').html(response.average_hold_time.avg_hold_time);
 
                 if (response.average_hold_time.min_hold_time) {
@@ -868,7 +868,7 @@ var Dashboard = {
             data: { dateFilter: datefilter },
             success: function (response) {
 
-                Master.trend_percentage($('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.ntc);
+                Master.trend_percentage($('.abandon_calls_card'), response.abandon_rate.pct_change, response.abandon_rate.pct_sign, response.abandon_rate.higher_is_better, response.abandon_rate.ntc);
 
                 if (response.abandon_rate.abandon_rate == "NAN%") { response.abandon_rate.abandon_rate = '0' }
                 if (response.abandon_rate.abandon_calls == null) { response.abandon_rate.abandon_calls = '0' }
@@ -994,7 +994,7 @@ var Dashboard = {
             dataType: 'json',
             data:{dateFilter:datefilter},
             success:function(response){
-                console.log(response);
+
                 Master.trend_percentage( $('.total_sales'), response.total_sales.pct_change, response.total_sales.higher_is_better, response.total_sales.pct_sign, response.total_sales.ntc );
                 if(response.total_sales.sales=="NAN%"){response.total_sales.sales='0'}
                 Master.add_bg_rounded_class($('#total_sales'), response.total_sales.sales, 4);

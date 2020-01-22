@@ -201,7 +201,7 @@ var Master = {
             selector.find('.trend_indicator').removeClass('up down');
             selector.find('.trend_arrow').removeClass('arrow_up arrow_down');
 
-            if(change_perc == 0){selector.find('.trend_arrow').hide();}
+            // if(change_perc == 0){selector.find('.trend_arrow').hide();}
 
             // if higher is positve
             if(higher_is_better){
