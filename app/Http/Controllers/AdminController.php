@@ -43,7 +43,7 @@ class AdminController extends Controller
      * @param Request $request 
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
-    public function index(Request $request)
+    public function manageClients(Request $request)
     {
         $groupId = Auth::user()->group_id;
         $this->setDb();
@@ -138,7 +138,7 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'admin';
+        $page['menuitem'] = 'manage_clients';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
@@ -150,7 +150,7 @@ class AdminController extends Controller
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
         ];
 
-        return view('dashboards.admin')->with($data);
+        return view('admin.index')->with($data);
     }
 
     /**
@@ -355,6 +355,56 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
+    public function loadCdrLookup()
+    {
+        $page['menuitem'] = 'cdr_lookup';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+        ];
+
+        return view('admin.cdr_lookup')->with($data);
+    }
+
+    public function webhookGenerator()
+    {
+        $dbs = ['' => trans('general.select_one')];
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
+
+        $page['menuitem'] = 'webhook_generator';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'dbs'  => $dbs,
+            'jsfile' => [],
+            'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('admin.webhook_generator')->with($data);
+    }
+
+    public function settings()
+    {
+
+        $dbs = ['' => trans('general.select_one')];
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
+        $page['menuitem'] = 'settings';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'dbs'  => $dbs,
+            'jsfile' => [],
+        ];
+
+        return view('admin.settings')->with($data);
+    }
     /**
      * CDR Lookup
      * 
@@ -442,6 +492,7 @@ class AdminController extends Controller
             'columns' => $field_array,
             'search_result' => $results,
         ];
+
     }
 
     public function getClientTables(Request $request)

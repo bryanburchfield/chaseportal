@@ -101,6 +101,9 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
+
+        $('.admin_link').on('click', this.update_sidenav);
+        $('#sidebar ul').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     hide_modal_error:function(){
@@ -2074,8 +2077,17 @@ var Master = {
         }
 
         that.parent().find('.instuc_div').slideToggle();
-    }
+    },
 
+    update_sidenav:function(){
+        console.log();
+        $('#sidebar').empty();
+        if($(this).hasClass('back_to_sidenav')){
+            $('#sidebar').load('/load_sidenav');
+        }else{
+            $('#sidebar').load('admin/load_admin_nav');
+        }
+    }
 }
 
 $(document).ready(function () {

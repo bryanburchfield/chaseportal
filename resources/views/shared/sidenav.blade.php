@@ -5,6 +5,7 @@
     </div>
 
     <ul class="list-unstyled components">
+        <input type="hidden" class="page_menuitem" value="<?php echo $page['menuitem'];?>">
         <li <?php echo $page['menuitem'] == 'inbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@inboundDashboard') }}"><i class="fas fa-sign-in-alt"></i>{{__('sidenav.inbound')}}</a></li>
         <li <?php echo $page['menuitem'] == 'outbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@outboundDashboard') }}"><i class="fas fa-sign-out-alt"></i>{{__('sidenav.outbound')}}</a></li>
 
@@ -21,7 +22,7 @@
         @endif
 
         @can('accessAdmin')
-            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ action('AdminController@index') }}"><i class="fas fa-user-cog"></i>{{__('sidenav.admin')}}</a></li>
+            <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a class="admin_link" href="#"><i class="fas fa-user-cog"></i>{{__('sidenav.admin')}}</a></li>
         @endcan
 
         @cannot('accessAdmin')
