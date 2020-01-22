@@ -123,20 +123,10 @@
                                                     </div>
 
                                                     <div class="alert alert-success hidetilloaded"></div>
-                                                    <input type="submit" class="btn btn-primary" value="Add SMTP Server">
-                                                </form>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-9">
                                                     <div class="alert connection_msg hidetilloaded"></div>
-                                                </div>
-
-                                                <div class="col-sm-3">
-                                                    <a href="#" class="btn btn-warning test_connection btn_flt_rgt">Test Connection</a>
-                                                </div>
+                                                    <input type="submit" class="btn btn-primary" value="Add SMTP Server">
+                                                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

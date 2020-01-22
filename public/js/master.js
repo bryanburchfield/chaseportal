@@ -2157,14 +2157,16 @@ var Master = {
                 password:password
             },
             success: function (response) {
+                $('.test_connection').find('i').remove();
                 console.log(response);
                 $('.connection_msg').empty().hide();
                 $('.connection_msg').removeClass('alert-danger alert-success');
                 $('.connection_msg').addClass('alert-success').text(response.message).show();
             },error: function (data) {
-
+                $('.test_connection').find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
+                    console.log(errors);
                     $('.connection_msg').empty().hide();
                     $.each(errors, function (key, value) {
 
