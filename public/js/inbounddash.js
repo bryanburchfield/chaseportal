@@ -122,7 +122,8 @@ var Dashboard = {
                 $('#call_volume_inbound, #call_duration').parent().find('.no_data').remove();
 
                 ///////////////// CALLS ANSWERED CARD
-                Master.trend_percentage($('#calls_answered'), response.call_volume.calls_answered.pct_change, response.call_volume.calls_answered.pct_sign, response.call_volume.calls_answered.ntc);
+
+                Master.trend_percentage( $('#calls_answered'), response.call_volume.calls_answered.count_change.pct_change, response.call_volume.calls_answered.count_change.pct_sign, response.call_volume.calls_answered.count_change.higher_is_better, response.call_volume.calls_answered.count_change.ntc );
                 Master.add_bg_rounded_class($('#calls_answered .total'), response.call_volume.calls_answered.count, 4);
                 $('#calls_answered .total').html(Master.formatNumber(response.call_volume.calls_answered.count));
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
@@ -142,16 +143,16 @@ var Dashboard = {
                     $('.avg_handle_time_card .outbound .highest').html('00:00:00');
                 }
 
-                Master.trend_percentage($('.avg_handle_time_card'), response.call_volume.calls_answered.pct_change, response.call_volume.calls_answered.pct_sign, response.call_volume.calls_answered.ntc);
+                Master.trend_percentage( $('.avg_handle_time_card'), response.call_volume.calls_answered.avg_duration_change.pct_change, response.call_volume.calls_answered.avg_duration_change.pct_sign, response.call_volume.calls_answered.avg_duration_change.higher_is_better, response.call_volume.calls_answered.avg_duration_change.ntc );
 
                 ///////////////// TOTAL CALL PRESENTED
                 Master.add_bg_rounded_class($('#calls_offered .total'), response.call_volume.calls_offered.count, 4);
-                Master.trend_percentage($('#calls_offered'), response.call_volume.calls_offered.pct_change, response.call_volume.calls_offered.pct_sign, response.call_volume.calls_offered.ntc);
+                Master.trend_percentage( $('#calls_offered'), response.call_volume.calls_offered.pct_change, response.call_volume.calls_offered.pct_sign, response.call_volume.calls_offered.higher_is_better, response.call_volume.calls_offered.ntc );
 
                 $('#calls_offered .total').html(Master.formatNumber(response.call_volume.calls_offered.count));
 
                 ///////////////// MISSED CALLS
-                Master.trend_percentage($('#missed_calls'), response.call_volume.calls_missed.pct_change, response.call_volume.calls_missed.pct_sign, response.call_volume.calls_missed.ntc);
+                Master.trend_percentage( $('#missed_calls'), response.call_volume.calls_missed.pct_change, response.call_volume.calls_missed.pct_sign, response.call_volume.calls_missed.higher_is_better, response.call_volume.calls_missed.ntc );
                 // Master.add_bg_rounded_class($('#missed_calls .total'), response.call_volume.calls_missed.count, 4);
                 $('#missed_calls .total').html(Master.formatNumber(response.call_volume.calls_missed.count));
                 $('#missed_calls .inbound .abandoned').html(Master.formatNumber(response.call_volume.calls_missed.abandoned));
@@ -159,7 +160,9 @@ var Dashboard = {
 
 
                 ///////////////// AVG TALK TIME
-                Master.trend_percentage($('#avg_talk_time'), response.call_volume.talk_time.pct_change, response.call_volume.talk_time.pct_sign, response.call_volume.talk_time.ntc);
+
+                Master.trend_percentage( $('#avg_talk_time'), response.call_volume.talk_time.pct_change, response.call_volume.talk_time.pct_sign, response.call_volume.talk_time.higher_is_better, response.call_volume.talk_time.ntc );
+
                 $('#avg_talk_time').find('.total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.talk_time.average));
                 if (response.call_volume.calls_answered.min) {
                     $('#avg_talk_time .inbound .lowest').html(Master.convertSecsToHrsMinsSecs(response.call_volume.calls_answered.min));
@@ -989,11 +992,11 @@ var Dashboard = {
             url: '/inbounddashboard/total_sales',
             type: 'POST',
             dataType: 'json',
-            data: { dateFilter: datefilter },
-            success: function (response) {
-
-                Master.trend_percentage($('.total_sales'), response.total_sales.pct_change, response.total_sales.pct_sign, response.total_sales.ntc);
-                if (response.total_sales.sales == "NAN%") { response.total_sales.sales = '0' }
+            data:{dateFilter:datefilter},
+            success:function(response){
+                console.log(response);
+                Master.trend_percentage( $('.total_sales'), response.total_sales.pct_change, response.total_sales.higher_is_better, response.total_sales.pct_sign, response.total_sales.ntc );
+                if(response.total_sales.sales=="NAN%"){response.total_sales.sales='0'}
                 Master.add_bg_rounded_class($('#total_sales'), response.total_sales.sales, 4);
                 $('#total_sales').html(Master.formatNumber(response.total_sales.sales));
             }, error: function (jqXHR, textStatus, errorThrown) {

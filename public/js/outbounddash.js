@@ -325,13 +325,13 @@ var Dashboard = {
             dataType: 'json',
             data: { campaign: campaign, datefilter: datefilter },
             success: function (response) {
-
+                console.log(response);
                 $('#conversion_rate').html(response.total_sales.conversion_rate + '%');
                 $('#conversion_rate').closest('.flipping_card').flip(true);
                 $('#total_sales').closest('.flipping_card').flip(true);
 
-                Master.trend_percentage($('.sales_per_hour'), response.sales_per_hour.pct_change, response.sales_per_hour.pct_sign, response.sales_per_hour.ntc);
-                Master.trend_percentage($('.total_sales_card '), response.total_sales.pct_change, response.total_sales.pct_sign, response.total_sales.ntc);
+                Master.trend_percentage($('.sales_per_hour'), response.sales_per_hour.pct_change, response.sales_per_hour.pct_sign, response.sales_per_hour.higher_is_better, response.sales_per_hour.ntc);
+                Master.trend_percentage($('.total_sales_card '), response.total_sales.pct_change, response.total_sales.pct_sign, response.total_sales.higher_is_better, response.total_sales.ntc);
                 $('#sales_per_hour_per_rep tbody').empty();
                 $('#sales_per_hour_per_rep, #sales_per_hour_per_rep_graph').parent().find('.no_data').remove();
 
@@ -811,8 +811,8 @@ var Dashboard = {
                 contact_rate = Math.round(contact_rate);
                 $('#contact_rate').html(contact_rate + '%');
 
-                Master.trend_percentage($('#total_contacts_card'), response.total_contacts.pct_change, response.total_contacts.pct_sign, response.total_contacts.ntc);
-                Master.trend_percentage($('#total_calls'), response.total_dials.pct_change, response.total_dials.pct_sign, response.total_dials.ntc);
+                Master.trend_percentage($('#total_contacts_card'), response.total_contacts.pct_change, response.total_contacts.pct_sign, response.total_contacts.higher_is_better, response.total_contacts.ntc);
+                Master.trend_percentage($('#total_calls'), response.total_dials.pct_change, response.total_dials.pct_sign, response.total_dials.higher_is_better, response.total_dials.ntc);
 
                 Master.add_bg_rounded_class($('#total_calls .total'), response.total_dials.total, 4);
                 Dashboard.total_dials = response.total_dials.total;

@@ -193,7 +193,7 @@ var Master = {
         }
     },
 
-    trend_percentage: function (selector, change_perc, up_or_down, not_comparable) {
+    trend_percentage:function(selector, change_perc, up_or_down, higher_is_better, not_comparable){
         // if there is data to compare
         if (!not_comparable) {
             selector.find('.trend_indicator').show();
@@ -201,14 +201,25 @@ var Master = {
             selector.find('.trend_indicator').removeClass('up down');
             selector.find('.trend_arrow').removeClass('arrow_up arrow_down');
 
-            // if percentage is up
-            if (up_or_down) {
-                selector.find('.trend_indicator').addClass('up');
-                selector.find('.trend_arrow').addClass('arrow_up');
-
-            } else { // if percentage is down
-                selector.find('.trend_indicator').addClass('down');
-                selector.find('.trend_arrow').addClass('arrow_down');
+            // if higher is positve
+            if(higher_is_better){
+                // if percentage is up
+                if(up_or_down){
+                    selector.find('.trend_indicator').addClass('positive');
+                    selector.find('.trend_arrow').addClass('arrow_up positive');
+                }else{ // if percentage is down
+                    selector.find('.trend_indicator').addClass('negative');
+                    selector.find('.trend_arrow').addClass('arrow_down negative');
+                }
+            }else{ // if higher is negative
+                // if percentage is up
+                if(up_or_down){
+                    selector.find('.trend_indicator').addClass('negative');
+                    selector.find('.trend_arrow').addClass('arrow_up negative');
+                }else{ // if percentage is down
+                    selector.find('.trend_indicator').addClass('positive');
+                    selector.find('.trend_arrow').addClass('arrow_down positive');
+                }
             }
         } else {
             selector.find('.trend_indicator').hide();
