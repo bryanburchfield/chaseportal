@@ -32,7 +32,7 @@ class EmailDripController extends Controller
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'smtp_servers' => $this->getSmtpServers(),
-            'drip_campaigns' => $this->getDripCampaigns(),
+            'email_drip_campaigns' => $this->getDripCampaigns(),
         ];
 
         return view('tools.email_drip.index')->with($data);
