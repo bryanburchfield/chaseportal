@@ -6,6 +6,8 @@ use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidSmtpServer;
 use App\Models\EmailDripCampaign;
 use App\Models\SmtpServer;
+use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +18,9 @@ use Swift_TransportException;
 
 class EmailDripController extends Controller
 {
+    use SqlServerTraits;
+    use CampaignTraits;
+
     /**
      * Email Drip Campaign index
      * 
@@ -33,6 +38,7 @@ class EmailDripController extends Controller
             'group_id' => Auth::user()->group_id,
             'smtp_servers' => $this->getSmtpServers(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
+            'campaigns' => $this->getAllCampaigns(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -103,6 +109,11 @@ class EmailDripController extends Controller
             ->get();
     }
 
+    /**
+     * List of drip campaingns for this group
+     * 
+     * @return mixed 
+     */
     private function getDripCampaigns()
     {
         return EmailDripCampaign::where('group_id', Auth::User()->group_id)
@@ -148,5 +159,10 @@ class EmailDripController extends Controller
         $email_drip_campaign->save();
 
         return ['status' => 'success'];
+    }
+
+    private function getCampaigns()
+    {
+        return ['campaigns' => array_values($this->getAllCampaigns())];
     }
 }
