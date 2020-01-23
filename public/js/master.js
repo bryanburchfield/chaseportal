@@ -2135,13 +2135,17 @@ var Master = {
 
     update_smtp_server:function(e){
         e.preventDefault();
-        var id = $('.id').val(),
-            host = $('.host').val()
-            name = $('.name').val(),
-            port = $('.port').val(),
-            username = $('.username').val(),
-            password = $('.password').val()
+        var id = $('.edit_smtp_server .id').val(),
+            host = $('.edit_smtp_server .host').val()
+            name = $('.edit_smtp_server .name').val(),
+            port = $('.edit_smtp_server .port').val(),
+            username = $('.edit_smtp_server .username').val(),
+            password = $('.edit_smtp_server .password').val()
         ;
+
+
+        console.log(id);
+        console.log(host);
 
         $('.alert').empty().hide();
 
@@ -2164,6 +2168,20 @@ var Master = {
             },
             success: function (response) {
                 location.reload();
+            },error: function (data) {
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.edit_smtp_server .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.edit_smtp_server .alert-danger').show();
+                    });
+                }
             }
         });
     },

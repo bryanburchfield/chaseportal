@@ -1,26 +1,26 @@
 <div class="form-group">
     <label>Name</label>
-    <input type="text" class="form-control name" name="name" required>
+    <input type="text" class="form-control name" name="name" value="" required>
 </div>
 
 <div class="form-group">
     <label>Host</label>
-    <input type="text" class="form-control host" name="host" required>
+    <input type="text" class="form-control host" name="host" value="" required>
 </div>
 
 <div class="form-group">
     <label>Port</label>
-    <input type="text" class="form-control port" name="port" required>
+    <input type="text" class="form-control port" name="port" value="" required>
 </div>
 
 <div class="form-group">
     <label>Username</label>
-    <input type="text" class="form-control username" name="username" required>
+    <input type="text" class="form-control username" name="username" value="" required>
 </div>
 
 <div class="form-group">
     <label>Password</label>
-    <input type="password" class="form-control password" name="password" required>
+    <input type="password" class="form-control password" name="password" value="" required>
 </div>
 
 <div class="alert alert-success hidetilloaded"></div>
