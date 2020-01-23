@@ -2104,6 +2104,8 @@ var Master = {
             password = $('.password').val()
         ;
 
+        $('.alert').empty().hide();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2121,9 +2123,8 @@ var Master = {
                 password:password
             },
             success: function (response) {
-
                 if(response.status == 'success'){
-                    $('.alert-success').show();
+                    $('.alert-success').text('Server Successfully Added').show();
                     setTimeout(function () {
                         location.reload();
                     }, 2500);
@@ -2206,8 +2207,6 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
-        console.log(id);
 
         $.ajax({
             url: '/tools/email_drip/delete_server',
