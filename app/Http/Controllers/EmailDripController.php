@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidSmtpServer;
+use App\Models\EmailDripCampaign;
 use App\Models\SmtpServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +32,7 @@ class EmailDripController extends Controller
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'smtp_servers' => $this->getSmtpServers(),
+            'drip_campaigns' => $this->getDripCampaigns(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -64,7 +67,12 @@ class EmailDripController extends Controller
         $smtp_server = $this->findSmtpServer($request->id);
 
         // check for campaigns
-        // ????????
+        if ($smtp_server->emailDripCampaigns->count()) {
+            $error = ValidationException::withMessages([
+                'error' => ['This server is in use by one or more campaigns'],
+            ]);
+            throw $error;
+        }
 
         $smtp_server->delete();
 
@@ -91,7 +99,14 @@ class EmailDripController extends Controller
     private function getSmtpServers()
     {
         return SmtpServer::where('group_id', Auth::User()->group_id)
-            ->orderby('name')
+            ->orderBy('name')
+            ->get();
+    }
+
+    private function getDripCampaigns()
+    {
+        return EmailDripCampaign::where('group_id', Auth::User()->group_id)
+            ->orderBy('name')
             ->get();
     }
 
@@ -121,5 +136,17 @@ class EmailDripController extends Controller
             ]);
             throw $error;
         }
+    }
+
+    public function addEmailDripCampaign(ValidEmailDripCampaign $request)
+    {
+        $email_drip_campaign = new EmailDripCampaign($request->all());
+
+        $email_drip_campaign->user_id = Auth::User()->id;
+        $email_drip_campaign->group_id = Auth::User()->group_id;
+
+        $email_drip_campaign->save();
+
+        return ['status' => 'success'];
     }
 }
