@@ -109,6 +109,7 @@ var Master = {
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
+        $('#add_drip_campaigns_campaign_menu').on('change', this.get_leadrule_subcampaigns);
 	},
 
     hide_modal_error:function(){
@@ -405,6 +406,9 @@ var Master = {
                 }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
                     $('#destination_subcampaign').empty();
                     $('#destination_subcampaign').append(subcampaigns);
+                }else if(selector == 'add_drip_campaigns_campaign_menu'){
+                    $('#add_drip_campaigns_subcampaign').empty();
+                    $('#add_drip_campaigns_subcampaign').append(subcampaigns);
                 }
             }
         });
@@ -2233,11 +2237,10 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                console.log(value);
                                 $('.'+that+' .connection_msg').append('<li>'+value+'</li>');
                                 $('.'+that+' .connection_msg').addClass('alert-danger').show();
                             });
-                        } 
+                        }
                     });
                 }
             },statusCode: {
@@ -2251,13 +2254,12 @@ var Master = {
     populate_delete_modal:function(e){
         e.preventDefault();
         var id = $(this).data('id'),
-            name = $(this).data('servername')
+            name = $(this).data('servername'),
+            sel = $(this).data('target')
         ;
 
-        console.log($(this).data('id'));
-        console.log($(this).data('target'));
-        $('#deleteSmtpServerModal h3').find('span').text(name);
-        $('#deleteSmtpServerModal #id').val(id);
+        $(sel+' h3').find('span').text(name);
+        $(sel+' #id').val(id);
     },
 
     delete_smtp_server:function(e){
@@ -2310,6 +2312,22 @@ var Master = {
             },
             success: function (response) {
                 location.reload();
+            },error: function (data) {
+                if (data.status === 422) {
+                    $('.create_campaign_form .alert').empty();
+                    $('.create_campaign_form .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.create_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.create_campaign_form .alert-danger').show();
+                    });
+                }
             }
         });
     }

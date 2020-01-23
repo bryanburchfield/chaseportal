@@ -191,12 +191,19 @@
 
                     <div class="form-group">
                         <label>Campaign</label>
-                        <input type="text" class="form-control campaign" name="campaign">
+                        <select name="campaign" class="form-control campaign" id="add_drip_campaigns_campaign_menu">
+                            <option value="">Select One</option>
+                            @foreach($campaigns as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label>SubCampaign</label>
-                        <input type="text" class="form-control subcampaign" name="subcampaign">
+                        <select name="subcampaign" id="add_drip_campaigns_subcampaign" class="form-control">
+                            <option value="">Select One</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
