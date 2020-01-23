@@ -105,6 +105,7 @@ var Master = {
         $('.add_smtp_server').on('submit', this.add_smtp_server);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal').on('click', this.populate_delete_server_modal);
+        $('.delete_smtp_server').on('click', this.delete_smtp_server);
 	},
 
     hide_modal_error:function(){
@@ -2192,11 +2193,32 @@ var Master = {
             name = $(this).data('servername')
         ;
 
-        console.log(id + ' ' + name);
-
-        $('#deleteSmtpServerModal h2').find('span').text(name);
+        $('#deleteSmtpServerModal h3').find('span').text(name);
         $('#deleteSmtpServerModal #smtp_server_id').val(id);
+    },
 
+    delete_smtp_server:function(e){
+        e.preventDefault();
+        var id = $('#deleteSmtpServerModal').find('#smtp_server_id').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        console.log(id);
+
+        $.ajax({
+            url: '/tools/email_drip/delete_server',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                location.reload();
+            }
+        });
     }
 }
 
