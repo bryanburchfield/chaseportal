@@ -166,4 +166,10 @@ class EmailDripController extends Controller
     {
         return ['campaigns' => array_values($this->getAllCampaigns())];
     }
+
+    public function getTableFields(Request $request)
+    {
+        // use $request->campaign to find custom table, then find fields
+        return ['email'];
+    }
 }

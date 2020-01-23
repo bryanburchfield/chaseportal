@@ -43,6 +43,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/update_server', 'EmailDripController@updateSmtpServer');
             Route::post('/get_server', 'EmailDripController@getSmtpServer');
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
+            Route::post('/get_table_fields', 'EmailDripController@getTableFields');
         });
     });
 });
