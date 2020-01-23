@@ -38,7 +38,6 @@ class ValidEmailDripCampaign extends FormRequest
             //         ->where('group_id', Auth::User()->group_id);
             // }),
             'template_id' => 'required|integer',
-            'active' => 'required',
         ];
     }
 }
