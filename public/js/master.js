@@ -104,6 +104,7 @@ var Master = {
         $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_smtp_server').on('submit', this.add_smtp_server);
         $('.test_connection').on('click', this.test_connection);
+        $('.remove_smtp_server_modal').on('click', this.populate_delete_server_modal);
 	},
 
     hide_modal_error:function(){
@@ -2140,6 +2141,8 @@ var Master = {
             password = $('.password').val()
         ;
 
+        $('.alert').empty().hide();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2158,16 +2161,12 @@ var Master = {
             },
             success: function (response) {
                 $('.test_connection').find('i').remove();
-                console.log(response);
-                $('.connection_msg').empty().hide();
                 $('.connection_msg').removeClass('alert-danger alert-success');
                 $('.connection_msg').addClass('alert-success').text(response.message).show();
             },error: function (data) {
                 $('.test_connection').find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
-                    console.log(errors);
-                    $('.connection_msg').empty().hide();
                     $.each(errors, function (key, value) {
 
                         if ($.isPlainObject(value)) {
@@ -2181,10 +2180,23 @@ var Master = {
                 }
             },statusCode: {
                 500: function(response) {
-                  alert(response);
+                    $('.alert-danger').text('Connection Failed').show();
                 }
             }
         });
+    },
+
+    populate_delete_server_modal:function(e){
+        e.preventDefault();
+        var id = $(this).data('serverid'),
+            name = $(this).data('servername')
+        ;
+
+        console.log(id + ' ' + name);
+
+        $('#deleteSmtpServerModal h2').find('span').text(name);
+        $('#deleteSmtpServerModal #smtp_server_id').val(id);
+
     }
 }
 

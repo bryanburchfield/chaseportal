@@ -82,7 +82,7 @@
                                                                     <td>{{$server->port}}</td>
                                                                     <td>{{$server->username}}</td>
                                                                     <td><a href="#" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                    <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                    <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" date-servername="{{$server->name}}" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
                                                         @else
@@ -121,7 +121,6 @@
             </div>
 
             <div class="modal-body">
-                <input type="hidden" name="smtp_server_id" id="smtp_server_id">
             </div>
 
 	        <div class="modal-footer">
@@ -141,7 +140,8 @@
             </div>
 
             <div class="modal-body">
-
+                <h2>{{__('tools.confirm_delete')}} <span></span></h2>
+                <input type="hidden" name="smtp_server_id" id="smtp_server_id" value="">
             </div>
 
             <div class="modal-footer">

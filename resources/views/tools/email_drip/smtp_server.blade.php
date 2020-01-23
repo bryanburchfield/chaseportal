@@ -29,6 +29,7 @@
         </div>
 
         <div class="alert alert-success hidetilloaded"></div>
+        <div class="alert alert-danger hidetilloaded"></div>
         <div class="alert connection_msg hidetilloaded"></div>
         <input type="submit" class="btn btn-primary" value="Add SMTP Server">
         <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
