@@ -34,21 +34,33 @@
                                         		<table class="table mt20">
                                         			<thead>
                                         				<tr>
-                                        					<th>asdf</th>
-                                        					<th>asdf</th>
-                                        					<th>asdfasdf</th>
-                                        					<th>asdf</th>
-                                        					<th>sadfsadfds</th>
+                                                            <th>Active</th>
+                                        					<th>Name</th>
+                                                            <th>Description</th>
+                                        					<th>Campaign</th>
+                                        					<th>Sub Campaign</th>
+                                        					<th>Server ID</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
                                         				</tr>
                                         			</thead>
 
                                         			<tbody>
                                         				<tr>
+                                        					<td>
+                                                                <label class="switch leadrule_switch">
+                                                                    {{-- {{ ($lr->active) ? 'checked' : '' }} --}}
+                                                                    <input type="checkbox"  name="leadrule_input">
+                                                                    <span></span>
+                                                                </label>
+                                                            </td>
                                         					<td></td>
                                         					<td></td>
                                         					<td></td>
-                                        					<td></td>
-                                        					<td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid=""><i class="fas fa-edit"></i></a></td>
+                                                            <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-campaignname="" data-id=""><i class="fa fa-trash-alt"></i></a></td>
                                         				</tr>
                                         			</tbody>
                                         		</table>
@@ -83,7 +95,7 @@
                                                                     <td>{{$server->username}}</td>
                                                                     <?php $mode='edit';?>
                                                                     <td><a href="#" data-toggle="modal" data-target="#editServerModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                    <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-servername="{{$server->name}}" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                    <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-servername="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
                                                         @else
@@ -166,6 +178,41 @@
             </div>
 
             <div class="modal-body">
+                <form action="#" method="post" class="form create_campaign_form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control description" name="description">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Campaign</label>
+                        <input type="text" class="form-control campaign" name="campaign">
+                    </div>
+
+                    <div class="form-group">
+                        <label>SubCampaign</label>
+                        <input type="text" class="form-control subcampaign" name="subcampaign">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Server Name</label>
+                        <select name="smtp_server_id" class="form-control smtp_server_id">
+                            <option value="">Select One</option>
+                            @foreach($smtp_servers as $server)
+                                <option value="{{$server->id}}">{{$server->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="alert alert-success hidetilloaded"></div>
+                    <div class="alert alert-danger hidetilloaded"></div>
+                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10">Create Campaign</button>
+                </form>
             </div>
 
 	        <div class="modal-footer">
@@ -186,12 +233,34 @@
 
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}} <span></span></h3>
-                <input type="hidden" name="smtp_server_id" id="smtp_server_id" value="">
+                <input type="hidden" name="id" id="id" value="">
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger delete_smtp_server">{{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-danger delete_smtp_server add_btn_loader">{{__('tools.delete')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Campaign Modal -->
+<div class="modal fade" id="deleteCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+            </div>
+
+            <div class="modal-body">
+                <h3>{{__('tools.confirm_delete')}} <span></span></h3>
+                <input type="hidden" name="id" id="id" value="">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-danger delete_campaign add_btn_loader">{{__('tools.delete')}}</button>
             </div>
         </div>
     </div>

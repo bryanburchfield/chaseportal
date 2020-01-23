@@ -106,8 +106,9 @@ var Master = {
         $('.edit_server_modal').on('click', this.edit_server_modal);
         $('.edit_smtp_server').on('submit', this.update_smtp_server);
         $('.test_connection').on('click', this.test_connection);
-        $('.remove_smtp_server_modal').on('click', this.populate_delete_server_modal);
+        $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
+        $('.create_campaign_form').on('submit', this.create_email_campaign);
 	},
 
     hide_modal_error:function(){
@@ -2247,19 +2248,21 @@ var Master = {
         });
     },
 
-    populate_delete_server_modal:function(e){
+    populate_delete_modal:function(e){
         e.preventDefault();
-        var id = $(this).data('serverid'),
+        var id = $(this).data('id'),
             name = $(this).data('servername')
         ;
 
+        console.log($(this).data('id'));
+        console.log($(this).data('target'));
         $('#deleteSmtpServerModal h3').find('span').text(name);
-        $('#deleteSmtpServerModal #smtp_server_id').val(id);
+        $('#deleteSmtpServerModal #id').val(id);
     },
 
     delete_smtp_server:function(e){
         e.preventDefault();
-        var id = $('#deleteSmtpServerModal').find('#smtp_server_id').val();
+        var id = $('#deleteSmtpServerModal').find('#id').val();
 
         $.ajaxSetup({
             headers: {
@@ -2272,6 +2275,38 @@ var Master = {
             type: 'POST',
             data: {
                 id: id,
+            },
+            success: function (response) {
+                location.reload();
+            }
+        });
+    },
+
+    create_email_campaign:function(e){
+        e.preventDefault();
+
+        var name = $(this).find('.name').val(),
+            description = $(this).find('.description').val(),
+            campaign = $(this).find('.campaign').val(),
+            subcampaign = $(this).find('.subcampaign').val(),
+            smtp_server_id = $(this).find('.smtp_server_id').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_campaign',
+            type: 'POST',
+            data: {
+                name: name,
+                description: description,
+                campaign: campaign,
+                subcampaign: subcampaign,
+                smtp_server_id: smtp_server_id
             },
             success: function (response) {
                 location.reload();

@@ -1598,7 +1598,8 @@ input[type=number]::-webkit-outer-spin-button {
 #webhook_generator select,
 .add_provider .form-control,
 .add_smtp_server .form-control,
-.edit_smtp_server .form-control {
+.edit_smtp_server .form-control,
+.create_campaign_form .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -1849,7 +1850,8 @@ span.selected_campaign {
 .rules_table tr:nth-of-type(odd),
 .dnc_table tr:nth-of-type(odd),
 .providers_table tr:nth-of-type(odd),
-.smtp_servers table tr:nth-of-type(odd) {
+.smtp_servers table tr:nth-of-type(odd),
+.drip_campaigns table tr:nth-of-type(odd) {
   background-color: #101824;
 }
 
@@ -2641,7 +2643,8 @@ p.name i {
 }
 
 .remove_user i,
-.remove_smtp_server_modal i {
+.remove_smtp_server_modal i,
+.remove_campaign_modal i {
   color: #d9534f;
 }
 
