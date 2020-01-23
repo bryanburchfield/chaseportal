@@ -2126,7 +2126,9 @@ var Master = {
                 if(response.status == 'success'){
                     $('.alert-success').text('Server Successfully Added').show();
                     setTimeout(function () {
-                        location.reload();
+                        var hash = '#smtp_servers';
+                        localStorage.setItem('activeTab', hash);
+                        window.location= 'email_drip';
                     }, 2500);
                 }
             }
