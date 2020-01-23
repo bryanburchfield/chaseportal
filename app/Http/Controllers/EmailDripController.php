@@ -82,7 +82,7 @@ class EmailDripController extends Controller
         // see if we can connect to server
         try {
             // $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
-            $transport = (new Swift_SmtpTransport($request->host, $request->port, 'ssl'))
+            $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
                 ->setUsername($request->username)
                 ->setPassword($request->password);
 
