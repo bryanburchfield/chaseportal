@@ -40,6 +40,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/test_connection', 'EmailDripController@testConnection');
             Route::post('/add_server', 'EmailDripController@addSmtpServer');
             Route::post('/delete_server', 'EmailDripController@deleteSmtpServer');
+            Route::post('/update_server', 'EmailDripController@updateSmtpServer');
         });
     });
 });
