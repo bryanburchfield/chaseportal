@@ -23,7 +23,7 @@
                                 <h2 class="bbnone">{{__('tools.email_drip_builder')}}</h2>
                                 <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
-                                    <li><a href="#smtp_servers" data-toggle="tab">SMTP Servers</a></li>
+                                    <li><a href="#smtp_servers" data-toggle="tab">{{__('tools.smtp_servers')}}</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -58,18 +58,18 @@
 
                                     <div class="tab-pane mt30" id="smtp_servers">
                                         <div class="col-sm-12 nopad">
-                                            <a href="#" data-toggle="modal" data-target="#addServerModal" class="btn btn-primary add_server_modal">Add Server</a>
+                                            <a href="#" data-toggle="modal" data-target="#addServerModal" class="btn btn-primary add_server_modal">{{__('tools.add_server')}}</a>
 
                                             <div class="table-responsive nobdr smtp_servers">
                                                 <table class="table mt20">
                                                     <thead>
                                                         <tr>
-                                                            <th>Name</th>
-                                                            <th>Host</th>
-                                                            <th>Port</th>
-                                                            <th>Username</th>
-                                                            <th>Edit</th>
-                                                            <th>Delete</th>
+                                                            <th>{{__('tools.name')}}</th>
+                                                            <th>{{__('tools.host')}}</th>
+                                                            <th>{{__('tools.port')}}</th>
+                                                            <th>{{__('tools.username')}}</th>
+                                                            <th>{{__('tools.edit')}}</th>
+                                                            <th>{{__('tools.delete')}}</th>
                                                         </tr>
                                                     </thead>
 
@@ -87,7 +87,7 @@
                                                                 </tr>
                                                             @endforeach
                                                         @else
-                                                            <div class="alert alert-info">No SMTP Servers have need added</div>
+                                                            <div class="alert alert-info">{{__('tools.no_servers_added')}}</div>
                                                         @endif
                                                     </tbody>
                                                 </table>
@@ -112,14 +112,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Add SMTP Server</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_server')}}</h4>
             </div>
 
             <div class="modal-body">
                 <form action="#" method="post" class="form add_smtp_server">
                     @include('tools.email_drip.smtp_server')
-                    <input type="submit" class="btn btn-primary add_smtp_server" value="Add SMTP Server">
-                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
+                    <input type="submit" class="btn btn-primary add_smtp_server" value="{{__('tools.add_server')}}">
+                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="smtp_server_id" id="smtp_server_id" value="">
             </div>
@@ -137,15 +137,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit SMTP Server</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_server')}}</h4>
             </div>
 
             <div class="modal-body">
                 <form action="#" method="post" class="form edit_smtp_server">
                     @include('tools.email_drip.smtp_server')
                     <input type="hidden" name="id" class="id" value="">
-                    <input type="submit" class="btn btn-primary edit_smtp_server" value="Edit SMTP Server">
-                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
+                    <input type="submit" class="btn btn-primary edit_smtp_server" value="{{__('tools.save_changes')}}">
+                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
 
@@ -181,7 +181,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Delete SMTP Server</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_server')}}</h4>
             </div>
 
             <div class="modal-body">

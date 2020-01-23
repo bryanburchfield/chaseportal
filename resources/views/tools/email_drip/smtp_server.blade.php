@@ -1,25 +1,25 @@
 <div class="form-group">
-    <label>Name</label>
+    <label>{{__('tools.name')}}</label>
     <input type="text" class="form-control name" name="name" value="" required>
 </div>
 
 <div class="form-group">
-    <label>Host</label>
+    <label>{{__('tools.host')}}</label>
     <input type="text" class="form-control host" name="host" value="" required>
 </div>
 
 <div class="form-group">
-    <label>Port</label>
+    <label>{{__('tools.port')}}</label>
     <input type="text" class="form-control port" name="port" value="" required>
 </div>
 
 <div class="form-group">
-    <label>Username</label>
+    <label>{{__('tools.username')}}</label>
     <input type="text" class="form-control username" name="username" value="" required>
 </div>
 
 <div class="form-group">
-    <label>Password</label>
+    <label>{{__('tools.password')}}</label>
     <input type="password" class="form-control password" name="password" value="" required>
 </div>
 
