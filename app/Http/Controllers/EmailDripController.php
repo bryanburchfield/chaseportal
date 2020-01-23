@@ -151,6 +151,7 @@ class EmailDripController extends Controller
 
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
     {
+
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
         $email_drip_campaign->user_id = Auth::User()->id;
