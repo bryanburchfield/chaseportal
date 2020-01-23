@@ -30,7 +30,6 @@
                                     <div class="tab-pane active mt30" id="drip_campaigns">
                                         <div class="col-sm-12 nopad">
 											<a href="#" class="btn btn-primary create_new_drip" data-toggle="modal" data-target="#createCampaignModal">{{__('tools.create_campaign')}}</a>
-
                                         	<div class="table-responsive nobdr drip_campaigns">
                                         		<table class="table mt20">
                                         			<thead>
@@ -59,8 +58,7 @@
 
                                     <div class="tab-pane mt30" id="smtp_servers">
                                         <div class="col-sm-12 nopad">
-                                            <?php $mode ='add';?>
-                                            <a href="#" data-toggle="modal" data-target="#{{$mode}}ServerModal" class="btn btn-primary {{$mode}}_server_modal">Add Server</a>
+                                            <a href="#" data-toggle="modal" data-target="#addServerModal" class="btn btn-primary add_server_modal">Add Server</a>
 
                                             <div class="table-responsive nobdr smtp_servers">
                                                 <table class="table mt20">
@@ -84,7 +82,7 @@
                                                                     <td>{{$server->port}}</td>
                                                                     <td>{{$server->username}}</td>
                                                                     <?php $mode='edit';?>
-                                                                    <td><a href="#" data-toggle="modal" data-target="#{{$mode}}ServerModal" class=" {{$mode}}_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                    <td><a href="#" data-toggle="modal" data-target="#editServerModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
                                                                     <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-servername="{{$server->name}}" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
@@ -108,7 +106,55 @@
 
 @include('shared.reportmodal')
 
-@include('tools.email_drip.smtp_server', ['mode'])
+<!-- Add SMTP Server Modal -->
+<div class="modal fade" id="addServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add SMTP Server</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="#" method="post" class="form add_smtp_server">
+                    @include('tools.email_drip.smtp_server')
+                    <input type="submit" class="btn btn-primary add_smtp_server" value="Add SMTP Server">
+                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
+                </form>
+                <input type="hidden" name="smtp_server_id" id="smtp_server_id" value="">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit SMTP Server Modal -->
+<div class="modal fade" id="editServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit SMTP Server</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="#" method="post" class="form edit_smtp_server">
+                    @include('tools.email_drip.smtp_server')
+                    <input type="hidden" name="id" class="id" value="">
+                    <input type="submit" class="btn btn-primary edit_smtp_server" value="Edit SMTP Server">
+                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Create Campaign Modal -->
 <div class="modal fade" id="createCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

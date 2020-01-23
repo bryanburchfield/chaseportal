@@ -1596,7 +1596,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_myself input.form-control,
 #webhook_generator input.form-control,
 #webhook_generator select,
-.add_provider .form-control {
+.add_provider .form-control,
+.add_smtp_server .form-control,
+.edit_smtp_server .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;

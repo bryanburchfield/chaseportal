@@ -103,6 +103,8 @@ var Master = {
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_smtp_server').on('submit', this.add_smtp_server);
+        $('.edit_server_modal').on('click', this.edit_server_modal);
+        $('.edit_smtp_server').on('submit', this.update_smtp_server);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal').on('click', this.populate_delete_server_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
@@ -2068,32 +2070,6 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-    // upload_email_template:function(e){
-    //     e.preventDefault();
-
-    //     var formData = new FormData();
-    //     formData.append('file', $('#email_template')[0].files[0]);
-
-    //     console.log(formData);
-
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //         }
-    //     });
-
-    //     $.ajax({
-    //         url: '/tools/email_drip/templates',
-    //         type: 'POST',
-    //         processData: false,
-    //         contentType: false,
-    //         data: { formData: formData },
-    //         success: function (response) {
-    //             console.log(response);
-    //         }
-    //     });
-    // },
-
     add_smtp_server:function(e){
         e.preventDefault();
 
@@ -2123,14 +2099,71 @@ var Master = {
                 password:password
             },
             success: function (response) {
-                if(response.status == 'success'){
-                    $('.alert-success').text('Server Successfully Added').show();
-                    setTimeout(function () {
-                        var hash = '#smtp_servers';
-                        localStorage.setItem('activeTab', hash);
-                        window.location= 'email_drip';
-                    }, 2500);
-                }
+                location.reload();
+            }
+        });
+    },
+
+    edit_server_modal:function(e){
+        e.preventDefault();
+
+        var id = $(this).data('serverid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_server',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                console.log(response);
+                $('#editServerModal .name').val(response.name);
+                $('#editServerModal .host').val(response.host);
+                $('#editServerModal .port').val(response.port);
+                $('#editServerModal .username').val(response.username);
+                $('#editServerModal .password').val(response.password);
+                $('#editServerModal .id').val(response.id);
+            }
+        });
+    },
+
+    update_smtp_server:function(e){
+        e.preventDefault();
+        var id = $('.id').val(),
+            host = $('.host').val()
+            name = $('.name').val(),
+            port = $('.port').val(),
+            username = $('.username').val(),
+            password = $('.password').val()
+        ;
+
+        $('.alert').empty().hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/update_server',
+            type: 'POST',
+            data: {
+                id:id,
+                host: host,
+                name:name,
+                port:port,
+                username:username,
+                password:password
+            },
+            success: function (response) {
+                location.reload();
             }
         });
     },
@@ -2146,6 +2179,11 @@ var Master = {
         ;
 
         $('.alert').empty().hide();
+        if($(this).parent().hasClass('add_smtp_server')){
+            var that = 'add_smtp_server';
+        }else{
+            var that = 'edit_smtp_server';
+        }
 
         $.ajaxSetup({
             headers: {
@@ -2164,11 +2202,12 @@ var Master = {
                 password:password
             },
             success: function (response) {
-                $('.test_connection').find('i').remove();
-                $('.connection_msg').removeClass('alert-danger alert-success');
-                $('.connection_msg').addClass('alert-success').text(response.message).show();
+
+                $('.'+that+' .test_connection').find('i').remove();
+                $('.'+that+' .connection_msg').removeClass('alert-danger alert-success');
+                $('.'+that+' .connection_msg').addClass('alert-success').text(response.message).show();
             },error: function (data) {
-                $('.test_connection').find('i').remove();
+                $('.'+that+' .test_connection').find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
@@ -2176,15 +2215,15 @@ var Master = {
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
                                 console.log(value);
-                                $('.connection_msg').append('<li>'+value+'</li>');
-                                $('.connection_msg').addClass('alert-danger').show();
+                                $('.'+that+' .connection_msg').append('<li>'+value+'</li>');
+                                $('.'+that+' .connection_msg').addClass('alert-danger').show();
                             });
                         } 
                     });
                 }
             },statusCode: {
                 500: function(response) {
-                    $('.alert-danger').text('Connection Failed').show();
+                    $('.'+that+' .alert-danger').text('Connection Failed').show();
                 }
             }
         });
@@ -2230,6 +2269,10 @@ $(document).ready(function () {
     if($('.dnc_table tbody tr').length){
         Master.toggle_instructions();
     }
+
+    $('#addServerModal, #editServerModal').on('hidden.bs.modal', function () {
+        $(this).find('.alert').hide();
+    });
 
 	$('.stop-propagation').on('click', function (e) {
 		e.stopPropagation();
