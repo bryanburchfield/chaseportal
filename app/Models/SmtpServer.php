@@ -15,4 +15,9 @@ class SmtpServer extends Model
         'username',
         'password',
     ];
+
+    public function emailDripCampaigns()
+    {
+        return $this->hasMany('App\Models\EmailDripCampaign');
+    }
 }
