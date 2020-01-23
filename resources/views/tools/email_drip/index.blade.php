@@ -24,7 +24,6 @@
                                 <ul class="nav nav-tabs tabs tools_subnav">
                                     <li class="active"><a href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
                                     <li><a href="#smtp_servers" data-toggle="tab">SMTP Servers</a></li>
-                                    <li><a href="#add_smtp_server" data-toggle="tab">Add SMTP Server</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -60,6 +59,9 @@
 
                                     <div class="tab-pane mt30" id="smtp_servers">
                                         <div class="col-sm-12 nopad">
+                                            <?php $mode ='add';?>
+                                            <a href="#" data-toggle="modal" data-target="#{{$mode}}ServerModal" class="btn btn-primary {{$mode}}_server_modal">Add Server</a>
+
                                             <div class="table-responsive nobdr smtp_servers">
                                                 <table class="table mt20">
                                                     <thead>
@@ -81,7 +83,8 @@
                                                                     <td>{{$server->host}}</td>
                                                                     <td>{{$server->port}}</td>
                                                                     <td>{{$server->username}}</td>
-                                                                    <td><a href="#" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                    <?php $mode='edit';?>
+                                                                    <td><a href="#" data-toggle="modal" data-target="#{{$mode}}ServerModal" class=" {{$mode}}_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
                                                                     <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-servername="{{$server->name}}" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
@@ -91,12 +94,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane mt30" id="add_smtp_server">
-                                        <div class="col-sm-6 nopad">
-                                            @include('tools.email_drip.smtp_server', ['mode'=>'add'])
                                         </div>
                                     </div>
                                 </div>
@@ -110,6 +107,8 @@
 </div>
 
 @include('shared.reportmodal')
+
+@include('tools.email_drip.smtp_server', ['mode'])
 
 <!-- Create Campaign Modal -->
 <div class="modal fade" id="createCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
