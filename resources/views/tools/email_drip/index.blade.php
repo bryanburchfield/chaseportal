@@ -77,11 +77,12 @@
                                                         @if(count($smtp_servers))
                                                             @foreach($smtp_servers as $server)
                                                                 <tr>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
+                                                                    <td>{{$server->name}}</td>
+                                                                    <td>{{$server->host}}</td>
+                                                                    <td>{{$server->port}}</td>
+                                                                    <td>{{$server->username}}</td>
+                                                                    <td><a href="#" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                    <td><a class="remove_smtp_server_modal" data-toggle="modal" data-target="#deleteSmtpServerModal" href="#" data-serverid="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
                                                         @else
@@ -95,39 +96,7 @@
 
                                     <div class="tab-pane mt30" id="add_smtp_server">
                                         <div class="col-sm-6 nopad">
-                                            <div class="card">
-                                                <form action="#" method="post" class="form add_smtp_server">
-                                                    <div class="form-group">
-                                                        <label>Name</label>
-                                                        <input type="text" class="form-control name" name="name">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>Host</label>
-                                                        <input type="text" class="form-control host" name="host">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>Port</label>
-                                                        <input type="text" class="form-control port" name="port">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>Username</label>
-                                                        <input type="text" class="form-control username" name="username">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>Password</label>
-                                                        <input type="password" class="form-control password" name="password">
-                                                    </div>
-
-                                                    <div class="alert alert-success hidetilloaded"></div>
-                                                    <div class="alert connection_msg hidetilloaded"></div>
-                                                    <input type="submit" class="btn btn-primary" value="Add SMTP Server">
-                                                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">Test Connection</button>
-                                                </form>
-                                            </div>
+                                            @include('tools.email_drip.smtp_server', ['mode'=>'add'])
                                         </div>
                                     </div>
                                 </div>
@@ -152,13 +121,34 @@
             </div>
 
             <div class="modal-body">
-
+                <input type="hidden" name="smtp_server_id" id="smtp_server_id">
             </div>
 
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
 	        </div>
 	    </div>
+    </div>
+</div>
+
+<!-- Delete SMTP Server Modal -->
+<div class="modal fade" id="deleteSmtpServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete SMTP Server</h4>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-danger delete_smtp_server">{{__('tools.delete')}}</button>
+            </div>
+        </div>
     </div>
 </div>
 

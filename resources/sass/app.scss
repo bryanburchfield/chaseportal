@@ -1364,7 +1364,7 @@ span.selected_campaign {
     font-weight: 600;
 }
 
-.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd), .providers_table tr:nth-of-type(odd) {
+.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd), .providers_table tr:nth-of-type(odd), .smtp_servers table tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
@@ -2029,7 +2029,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;

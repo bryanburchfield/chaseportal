@@ -2179,6 +2179,10 @@ var Master = {
                         } 
                     });
                 }
+            },statusCode: {
+                500: function(response) {
+                  alert(response);
+                }
             }
         });
     }

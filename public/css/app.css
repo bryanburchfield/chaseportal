@@ -1580,7 +1580,8 @@ span.selected_campaign {
 .cdr_results_table tr:nth-of-type(odd),
 .rules_table tr:nth-of-type(odd),
 .dnc_table tr:nth-of-type(odd),
-.providers_table tr:nth-of-type(odd) {
+.providers_table tr:nth-of-type(odd),
+.smtp_servers table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -2325,7 +2326,8 @@ p.name i {
   margin-bottom: 0;
 }
 
-.remove_user i {
+.remove_user i,
+.remove_smtp_server_modal i {
   color: #d9534f;
 }
 
