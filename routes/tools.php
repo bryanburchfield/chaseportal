@@ -41,6 +41,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/add_server', 'EmailDripController@addSmtpServer');
             Route::post('/delete_server', 'EmailDripController@deleteSmtpServer');
             Route::post('/update_server', 'EmailDripController@updateSmtpServer');
+            Route::post('/get_server', 'EmailDripController@getSmtpServer');
         });
     });
 });

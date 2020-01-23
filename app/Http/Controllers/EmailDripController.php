@@ -49,7 +49,7 @@ class EmailDripController extends Controller
 
     public function updateSmtpServer(ValidSmtpServer $request)
     {
-        $smtp_server = $this->getSmtpServer($request->id);
+        $smtp_server = $this->findSmtpServer($request->id);
 
         $smtp_server->fill($request->all());
         $smtp_server->user_id = Auth::User()->id;
@@ -61,7 +61,7 @@ class EmailDripController extends Controller
 
     public function deleteSmtpServer(Request $request)
     {
-        $smtp_server = $this->getSmtpServer($request->id);
+        $smtp_server = $this->findSmtpServer($request->id);
 
         // check for campaigns
         // ????????
@@ -71,7 +71,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
-    private function getSmtpServer($id)
+    public function getSmtpServer(Request $request)
+    {
+        return $this->findSmtpServer($request->id);
+    }
+
+    private function findSmtpServer($id)
     {
         return SmtpServer::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
