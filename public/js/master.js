@@ -423,7 +423,8 @@ var Master = {
             },
 
             success: function(response) {
-                var emails;
+                $('.create_campaign_form .email').empty();
+                var emails='<option value="">Select One</option>';
                 for(var i=0;i<response.length;i++){
                     emails+='<option value="'+response[i]+'">'+response[i]+'</option>';
                 }
@@ -2326,8 +2327,10 @@ var Master = {
         var name = $(this).find('.name').val(),
             description = $(this).find('.description').val(),
             campaign = $(this).find('.campaign').val(),
-            subcampaign = $(this).find('.subcampaign').val(),
-            smtp_server_id = $(this).find('.smtp_server_id').val()
+            subcampaign = $(this).find('#add_drip_campaigns_subcampaign').val(),
+            smtp_server_id = $(this).find('.smtp_server_id').val(),
+            email_field= $(this).find('.email').val(),
+            template_id = $(this).find('.template_id').val()
         ;
 
         $.ajaxSetup({
@@ -2342,13 +2345,17 @@ var Master = {
             data: {
                 name: name,
                 description: description,
+                email_field:email_field,
                 campaign: campaign,
                 subcampaign: subcampaign,
-                smtp_server_id: smtp_server_id
+                smtp_server_id: smtp_server_id,
+                template_id:template_id
             },
             success: function (response) {
+                $('.create_campaign ').find('i').remove();
                 location.reload();
             },error: function (data) {
+                $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
                     $('.create_campaign_form .alert').empty();
                     $('.create_campaign_form .btn').find('i').remove();
