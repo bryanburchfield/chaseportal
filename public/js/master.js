@@ -412,8 +412,6 @@ var Master = {
             sel = $('.edit_campaign_form');
         }
 
-        console.log(campaign);
-
         var subcamp_response = Master.get_subcampaigns(campaign);
         var subcampaigns='<option value=""> Select One</option>';
         for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
@@ -433,13 +431,12 @@ var Master = {
             url: '/tools/email_drip/get_table_fields' ,
             type: 'POST',
             dataType: 'json',
+            async:false,
             data: {
                 campaign: campaign,
             },
 
             success: function(response) {
-                console.log(response);
-                console.log(sel);
 
                 $(sel).find('.email').empty();
                 var emails='<option value="">Select One</option>';
@@ -2502,7 +2499,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response.email_field);
+
                 Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
