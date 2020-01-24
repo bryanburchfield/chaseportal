@@ -430,9 +430,10 @@ var Master = {
             success: function(response) {
                 $('.create_campaign_form .email').empty();
                 var emails='<option value="">Select One</option>';
-                for(var i=0;i<response.length;i++){
-                    emails+='<option value="'+response[i]+'">'+response[i]+'</option>';
+                for(var index in response) {
+                    emails+='<option value="'+index+'">'+response[index]+'</option>';
                 }
+
                 $('.create_campaign_form').find('.email').append(emails);
             },
         });

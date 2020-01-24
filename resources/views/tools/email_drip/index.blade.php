@@ -202,7 +202,7 @@
 
                     <div class="form-group">
                         <label>SubCampaign</label>
-                        <select name="subcampaign" class="form-control drip_campaigns_subcampaign" required>
+                        <select name="subcampaign" class="form-control drip_campaigns_subcampaign">
                             <option value="">Select One</option>
                         </select>
                     </div>
@@ -279,7 +279,7 @@
 
                     <div class="form-group">
                         <label>SubCampaign</label>
-                        <select name="subcampaign"class="form-control drip_campaigns_subcampaign" required>
+                        <select name="subcampaign"class="form-control drip_campaigns_subcampaign">
                             <option value="">Select One</option>
                         </select>
                     </div>
