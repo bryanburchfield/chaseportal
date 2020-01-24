@@ -183,6 +183,10 @@ class EmailDripController extends Controller
     public function getTableFields(Request $request)
     {
         // use $request->campaign to find custom table, then find fields
-        return ['email'];
+        return [
+            'Some Field',
+            'Email',
+            'Some other field',
+        ];
     }
 }
