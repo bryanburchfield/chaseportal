@@ -24,7 +24,7 @@ class CreateEmailDripCampaignsTable extends Migration
             $table->string('email_field');
             $table->unsignedBigInteger('smtp_server_id');
             $table->integer('template_id');
-            $table->boolean('active');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
