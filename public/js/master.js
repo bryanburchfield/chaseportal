@@ -402,12 +402,18 @@ var Master = {
         });
     },
 
-    get_email_drip_subcampaigns:function(campaign){
+    get_email_drip_subcampaigns:function(e, campaign){
 
+        var sel;
         if(!campaign){
-            var campaign = $(this).val();
+            campaign = $(this).val();
+            sel = $('.create_campaign_form');
+        }else{
+            sel = $('.edit_campaign_form');
         }
-        
+
+        console.log(campaign);
+
         var subcamp_response = Master.get_subcampaigns(campaign);
         var subcampaigns='<option value=""> Select One</option>';
         for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
@@ -433,12 +439,8 @@ var Master = {
 
             success: function(response) {
                 console.log(response);
-                var sel;
-                if($(this).parent().parent().hasClass('create_campaign_form')){
-                    sel = '.create_campaign_form';
-                }else{
-                    sel = '.edit_campaign_form';
-                }
+                console.log(sel);
+
                 $(sel).find('.email').empty();
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
@@ -2500,18 +2502,20 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-
-                Master.get_email_drip_subcampaigns(response.campaign);
-                 $('.edit_campaign_form .id').val(response.id);
+                console.log(response.email_field);
+                Master.get_email_drip_subcampaigns(e, response.campaign);
+                $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
                 $('.edit_campaign_form .description').val(response.description);
                 $('.edit_campaign_form .drip_campaigns_campaign_menu').val(response.campaign);
                 $('.edit_campaign_form .drip_campaigns_subcampaign').append('<option value="'+response.subcampaign+'">'+response.subcampaign+'</option>');
                 $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
                 $('.edit_campaign_form .email').append('<option value="'+response.email_field+'">'+response.email_field+'</option>');
-                $('.edit_campaign_form .email').val(response.email_field);
+                // $('.edit_campaign_form .email').val(response.email_field);
+                $('.edit_campaign_form .email option[value='+response.email_field+']').attr('selected','selected');
                 $('.edit_campaign_form .template_id ').val(response.template_id);
                 $('.edit_campaign_form .smtp_server_id ').val(response.smtp_server_id);
+                return false;
             }
         });
     },
