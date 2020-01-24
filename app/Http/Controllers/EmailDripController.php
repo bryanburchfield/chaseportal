@@ -167,6 +167,19 @@ class EmailDripController extends Controller
         return ['campaigns' => array_values($this->getAllCampaigns())];
     }
 
+    /**
+     * Get Subcampaigns (ajax)
+     * 
+     * @param Request $request 
+     * @return array[] 
+     */
+    public function getSubcampaigns(Request $request)
+    {
+        $results = $this->getAllSubcampaigns($request->campaign);
+
+        return ['subcampaigns' => array_values($results)];
+    }
+
     public function getTableFields(Request $request)
     {
         // use $request->campaign to find custom table, then find fields
