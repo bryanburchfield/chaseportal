@@ -46,22 +46,23 @@
                                         			</thead>
 
                                         			<tbody>
-                                        				<tr>
-                                        					<td>
-                                                                <label class="switch leadrule_switch">
-                                                                    {{-- {{ ($lr->active) ? 'checked' : '' }} --}}
-                                                                    <input type="checkbox"  name="leadrule_input">
-                                                                    <span></span>
-                                                                </label>
-                                                            </td>
-                                        					<td></td>
-                                        					<td></td>
-                                        					<td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid=""><i class="fas fa-edit"></i></a></td>
-                                                            <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-campaignname="" data-id=""><i class="fa fa-trash-alt"></i></a></td>
-                                        				</tr>
+                                                        @foreach($email_drip_campaigns as $drip)
+                                            				<tr>
+                                            					<td>
+                                                                    <label class="switch email_campaign_switch">
+                                                                        <input type="checkbox" {{ ($drip->active) ? 'checked' : '' }} name="email_input" data-id="{{$drip->id}}">
+                                                                        <span></span>
+                                                                    </label>
+                                                                </td>
+                                            					<td>{{$drip->name}}</td>
+                                            					<td>{{$drip->description}}</td>
+                                            					<td>{{$drip->campaign}}</td>
+                                                                <td>{{$drip->subcampaign}}</td>
+                                                                <td>{{$drip->smtp_server_id}}</td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid=""><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-campaignname="" data-id=""><i class="fa fa-trash-alt"></i></a></td>
+                                            				</tr>
+                                                        @endforeach
                                         			</tbody>
                                         		</table>
                                         	</div>

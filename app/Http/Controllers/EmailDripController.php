@@ -203,4 +203,14 @@ class EmailDripController extends Controller
             35 => 'Template 35',
         ];
     }
+
+    public function toggleCampaign(Request $request)
+    {
+        $email_campaign = EmailDripCampaign::findOrFail($request->id);
+
+        $email_campaign->active = !$email_campaign->active;
+        $email_campaign->save();
+
+        return ['status' => 'success'];
+    }
 }

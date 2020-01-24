@@ -92,6 +92,7 @@ var Master = {
         $('.add_rule').on('submit', this.create_leadrule);
         $('.edit_rule').on('submit', this.updateleadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
+        $('.switch.email_campaign_switch input').on('click', this.toggle_email_campaign);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
@@ -559,6 +560,38 @@ var Master = {
 
             },
             success:function(response){
+            }
+        });
+    },
+
+    toggle_email_campaign:function(){
+        var checked;
+        var campaign_id = $(this).data('id');
+
+        if($(this).is(':checked')){
+            $(this).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(this).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/toggle_email_campaigns',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:campaign_id
+
+            },
+            success:function(response){
+                console.log(response);
             }
         });
     },
