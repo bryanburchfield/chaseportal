@@ -402,8 +402,12 @@ var Master = {
         });
     },
 
-    get_email_drip_subcampaigns:function(){
-        var campaign = $(this).val();
+    get_email_drip_subcampaigns:function(campaign){
+
+        if(!campaign){
+            var campaign = $(this).val();
+        }
+        
         var subcamp_response = Master.get_subcampaigns(campaign);
         var subcampaigns='<option value=""> Select One</option>';
         for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
@@ -428,7 +432,7 @@ var Master = {
             },
 
             success: function(response) {
-
+                console.log(response);
                 var sel;
                 if($(this).parent().parent().hasClass('create_campaign_form')){
                     sel = '.create_campaign_form';
@@ -2496,7 +2500,8 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response);
+
+                Master.get_email_drip_subcampaigns(response.campaign);
                  $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
                 $('.edit_campaign_form .description').val(response.description);
