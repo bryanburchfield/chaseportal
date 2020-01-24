@@ -186,16 +186,51 @@ class EmailDripController extends Controller
 
     public function getTableFields(Request $request)
     {
-        // use $request->campaign to find custom table, then find fields
-        return [
-            'Some Field',
-            'Email',
-            'Some other field',
+        $table_id = $this->getCustomTableId($request->campaign);
+
+        if ($table_id == -1) {
+            return [];
+        }
+
+        $sql = "SELECT FieldName, [Description]
+            FROM AdvancedTableFields
+            WHERE AdvancedTable = :table_id
+            AND FieldType = 2";
+
+        $results = resultsToList($this->runSql($sql, ['table_id' => $table_id]));
+
+        // Add field name to desc
+        foreach ($results as $field => &$description) {
+            $description = '[' . $field . '] ' . $description;
+        }
+
+        return $results;
+    }
+
+    private function getCustomTableId($campaign)
+    {
+        $sql = "SELECT AdvancedTable
+            FROM Campaigns
+            WHERE GroupId = :group_id
+            AND CampaignName = :campaign";
+
+        $bind = [
+            'group_id' => Auth::User()->group_id,
+            'campaign' => $campaign,
         ];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (!isset($results[0]['AdvancedTable'])) {
+            return -1;
+        }
+
+        return $results[0]['AdvancedTable'];
     }
 
     public function getTemplates()
     {
+
         // return defined templates for this group_id
         return [
             11 => 'Template 11',
