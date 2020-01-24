@@ -2508,8 +2508,7 @@ var Master = {
                 $('.edit_campaign_form .drip_campaigns_subcampaign').append('<option value="'+response.subcampaign+'">'+response.subcampaign+'</option>');
                 $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
                 $('.edit_campaign_form .email').append('<option value="'+response.email_field+'">'+response.email_field+'</option>');
-                // $('.edit_campaign_form .email').val(response.email_field);
-                $('.edit_campaign_form .email option[value='+response.email_field+']').attr('selected','selected');
+                $('.edit_campaign_form .email').val(response.email_field);
                 $('.edit_campaign_form .template_id ').val(response.template_id);
                 $('.edit_campaign_form .smtp_server_id ').val(response.smtp_server_id);
                 return false;
