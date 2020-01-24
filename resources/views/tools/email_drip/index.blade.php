@@ -207,6 +207,16 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Email</label>
+                        <select name="email" class="form-control email">
+                            <option value="">Select One</option>
+                           {{--  @foreach($campaigns as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach --}}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Server Name</label>
                         <select name="smtp_server_id" class="form-control smtp_server_id">
                             <option value="">Select One</option>

@@ -61,7 +61,7 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns);
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -109,7 +109,7 @@ var Master = {
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
-        $('#add_drip_campaigns_campaign_menu').on('change', this.get_leadrule_subcampaigns);
+        $('#add_drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
 	},
 
     hide_modal_error:function(){
@@ -330,9 +330,8 @@ var Master = {
         }
     },
 
-    get_subcampaigns:function(e, campaign=0, source=0){
+    get_report_subcampaigns:function(e, campaign=0, source=0){
         if(!campaign){
-            // e.preventDefault();
             $(this).find('option:selected').each(function() {
                 campaign = $(this).val();
             });
@@ -357,7 +356,7 @@ var Master = {
             },
 
             success:function(response){
-
+                console.log(response);
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -374,10 +373,40 @@ var Master = {
         });
     },
 
-    get_leadrule_subcampaigns:function(){
+    get_subcampaigns:function(campaign){
 
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            data: {
+                campaign: campaign,
+            },
+
+            success: function(response) {
+                return response;
+            },
+            error: function () {}
+        });
+    },
+
+    get_email_drip_subcampaigns:function(){
         var campaign = $(this).val();
-        var selector = $(this).attr('id');
+        var subcamp_response = Master.get_subcampaigns(campaign);
+        var subcampaigns='<option value=""> Select One</option>';
+        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
+            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
+        }
+
+        $('#add_drip_campaigns_subcampaign').empty();
+        $('#add_drip_campaigns_subcampaign').append(subcampaigns);
 
         $.ajaxSetup({
             headers: {
@@ -386,32 +415,41 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            url: '/tools/email_drip/get_table_fields' ,
             type: 'POST',
             dataType: 'json',
             data: {
                 campaign: campaign,
             },
 
-            success:function(response){
-
-                var subcampaigns='<option value=""> Select One</option>';
-                for(var i=0; i<response.subcampaigns.length;i++){
-                    subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+            success: function(response) {
+                var emails;
+                for(var i=0;i<response.length;i++){
+                    emails+='<option value="'+response[i]+'">'+response[i]+'</option>';
                 }
-
-                if(selector == 'campaign_select' || selector == 'update_campaign_select'){
-                    $('#subcamps').empty();
-                    $('#subcamps').append(subcampaigns);
-                }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
-                    $('#destination_subcampaign').empty();
-                    $('#destination_subcampaign').append(subcampaigns);
-                }else if(selector == 'add_drip_campaigns_campaign_menu'){
-                    $('#add_drip_campaigns_subcampaign').empty();
-                    $('#add_drip_campaigns_subcampaign').append(subcampaigns);
-                }
-            }
+                $('.create_campaign_form').find('.email').append(emails);
+            },
         });
+    },
+
+    get_leadrule_subcampaigns:function(){
+
+        var campaign = $(this).val();
+        var selector = $(this).attr('id');
+        var subcamp_response = Master.get_subcampaigns(campaign);
+
+        var subcampaigns='<option value=""> Select One</option>';
+        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
+            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
+        }
+
+        if(selector == 'campaign_select' || selector == 'update_campaign_select'){
+            $('#subcamps').empty();
+            $('#subcamps').append(subcampaigns);
+        }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
+            $('#destination_subcampaign').empty();
+            $('#destination_subcampaign').append(subcampaigns);
+        }
     },
 
     change_filter_label: function () {
