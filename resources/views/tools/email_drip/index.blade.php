@@ -156,7 +156,7 @@
                 <form action="#" method="post" class="form edit_smtp_server">
                     @include('tools.email_drip.smtp_server')
                     <input type="hidden" name="id" class="id" value="">
-                    <input type="submit" class="btn btn-primary edit_smtp_server" value="{{__('tools.save_changes')}}">
+                    <button type="submit" class="btn btn-primary edit_smtp_server add_btn_loader">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
@@ -181,17 +181,17 @@
                 <form action="#" method="post" class="form create_campaign_form">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control name" name="name">
+                        <input type="text" class="form-control name" name="name" required>
                     </div>
 
                     <div class="form-group">
                         <label>Description</label>
-                        <input type="text" class="form-control description" name="description">
+                        <input type="text" class="form-control description" name="description" required>
                     </div>
 
                     <div class="form-group">
                         <label>Campaign</label>
-                        <select name="campaign" class="form-control campaign" id="add_drip_campaigns_campaign_menu">
+                        <select name="campaign" class="form-control campaign" id="add_drip_campaigns_campaign_menu" required>
                             <option value="">Select One</option>
                             @foreach($campaigns as $key => $value)
                                 <option value="{{$key}}">{{$value}}</option>
@@ -201,24 +201,21 @@
 
                     <div class="form-group">
                         <label>SubCampaign</label>
-                        <select name="subcampaign" id="add_drip_campaigns_subcampaign" class="form-control">
+                        <select name="subcampaign" id="add_drip_campaigns_subcampaign" class="form-control" required>
                             <option value="">Select One</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <select name="email" class="form-control email">
+                        <select name="email" class="form-control email" required>
                             <option value="">Select One</option>
-                           {{--  @foreach($campaigns as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach --}}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Server Name</label>
-                        <select name="smtp_server_id" class="form-control smtp_server_id">
+                        <select name="smtp_server_id" class="form-control smtp_server_id" required>
                             <option value="">Select One</option>
                             @foreach($smtp_servers as $server)
                                 <option value="{{$server->id}}">{{$server->name}}</option>

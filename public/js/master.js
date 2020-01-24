@@ -2186,10 +2186,6 @@ var Master = {
             password = $('.edit_smtp_server .password').val()
         ;
 
-
-        console.log(id);
-        console.log(host);
-
         $('.alert').empty().hide();
 
         $.ajaxSetup({
@@ -2210,8 +2206,10 @@ var Master = {
                 password:password
             },
             success: function (response) {
+                $(this).find('i').remove();
                 location.reload();
             },error: function (data) {
+                $(this).find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
