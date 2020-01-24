@@ -2352,8 +2352,10 @@ var Master = {
                 template_id:template_id
             },
             success: function (response) {
+                $('.create_campaign ').find('i').remove();
                 location.reload();
             },error: function (data) {
+                $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
                     $('.create_campaign_form .alert').empty();
                     $('.create_campaign_form .btn').find('i').remove();
