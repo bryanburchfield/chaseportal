@@ -226,6 +226,7 @@ var Master = {
     },
 
     add_btn_loader:function(){
+        $(this).find('i').remove();
         $(this).prepend('<i class="fa fa-spinner fa-spin mr10"></i>');
     },
 
