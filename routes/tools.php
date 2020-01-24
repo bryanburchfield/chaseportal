@@ -8,7 +8,6 @@ Route::prefix('tools')->group(function () {
         Route::redirect('/', 'tools/contactflow_builder');
 
         // Contact Flow (leads)
-
         Route::prefix('contactflow_builder')->group(function () {
             Route::get('/', 'LeadsController@index');
             Route::get('/edit_rule/{id}', 'LeadsController@editLeadRule');
@@ -45,7 +44,6 @@ Route::prefix('tools')->group(function () {
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
             Route::post('/get_table_fields', 'EmailDripController@getTableFields');
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
-            Route::post('/get_templates', 'EmailDripController@getTemplates');
         });
     });
 });

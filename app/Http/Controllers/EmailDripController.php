@@ -39,6 +39,7 @@ class EmailDripController extends Controller
             'smtp_servers' => $this->getSmtpServers(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
             'campaigns' => $this->getAllCampaigns(),
+            'templates' => $this->getTemplates(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -193,7 +194,7 @@ class EmailDripController extends Controller
         ];
     }
 
-    public function getTemplates(Request $request)
+    public function getTemplates()
     {
         // return defined templates for this group_id
         return [
