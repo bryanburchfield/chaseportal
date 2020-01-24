@@ -23,4 +23,9 @@ class EmailDripCampaign extends Model
     {
         return $this->belongsTo('App\Models\SmtpServer');
     }
+
+    public function emailDripCampaignFilters()
+    {
+        return $this->hasMany('App\Models\EmailDripCampaignFilter');
+    }
 }

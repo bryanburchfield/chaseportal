@@ -26,6 +26,9 @@ class CreateEmailDripCampaignsTable extends Migration
             $table->integer('template_id');
             $table->boolean('active')->default(true);
             $table->timestamps();
+
+            $table->foreign('smtp_server_id')
+                ->references('id')->on('smtp_servers');
         });
     }
 
