@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Swift_TransportException;
@@ -45,6 +46,12 @@ class EmailDripController extends Controller
         return view('tools.email_drip.index')->with($data);
     }
 
+    /**
+     * Add an SMTP Server
+     * 
+     * @param ValidSmtpServer $request 
+     * @return string[] 
+     */
     public function addSmtpServer(ValidSmtpServer $request)
     {
         $smtp_server = new SmtpServer($request->all());
@@ -57,6 +64,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update an SMTP Server
+     * 
+     * @param ValidSmtpServer $request 
+     * @return string[] 
+     */
     public function updateSmtpServer(ValidSmtpServer $request)
     {
         $smtp_server = $this->findSmtpServer($request->id);
@@ -69,6 +82,13 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete an SMTP Server
+     * 
+     * @param Request $request 
+     * @return string[] 
+     * @throws ValidationException 
+     */
     public function deleteSmtpServer(Request $request)
     {
         $smtp_server = $this->findSmtpServer($request->id);
@@ -86,11 +106,23 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Return an SMTP Server (ajax)
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getSmtpServer(Request $request)
     {
         return $this->findSmtpServer($request->id);
     }
 
+    /**
+     * Find SMTP server by ID
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
     private function findSmtpServer($id)
     {
         return SmtpServer::where('id', $id)
@@ -122,6 +154,26 @@ class EmailDripController extends Controller
             ->get();
     }
 
+    /**
+     * Find an Email Drip Campaign by id
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
+    private function findEmailDripCampaign($id)
+    {
+        return EmailDripCampaign::where('id', $id)
+            ->where('group_id', Auth::User()->group_id)
+            ->firstOrFail();
+    }
+
+    /**
+     * Test SMTP server connection
+     * 
+     * @param ValidSmtpServer $request 
+     * @return string[] 
+     * @throws ValidationException 
+     */
     public function testConnection(ValidSmtpServer $request)
     {
         // see if we can connect to server
@@ -150,6 +202,12 @@ class EmailDripController extends Controller
         }
     }
 
+    /**
+     * Add an Email Drip Campaign
+     * 
+     * @param ValidEmailDripCampaign $request 
+     * @return string[] 
+     */
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
     // public function addEmailDripCampaign(Request $request)
     {
@@ -166,6 +224,7 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
 
@@ -179,6 +238,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete an Email Drip Campaign
+     * 
+     * @param Request $request 
+     * @return string[] 
+     */
     public function deleteEmailDripCampaign(Request $request)
     {
         $email_campaign = EmailDripCampaign::findOrFail($request->id);
@@ -187,6 +252,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Return all Dialer Campaigns for the group
+     * 
+     * @return array[] 
+     * @throws InvalidArgumentException 
+     */
     private function getCampaigns()
     {
         return ['campaigns' => array_values($this->getAllCampaigns())];
@@ -210,6 +281,12 @@ class EmailDripController extends Controller
         return ['subcampaigns' => array_values($results)];
     }
 
+    /**
+     * Return all string fields of the Custom Table tied to a campaign
+     * 
+     * @param Request $request 
+     * @return array|mixed 
+     */
     public function getTableFields(Request $request)
     {
         $table_id = $this->getCustomTableId($request->campaign);
@@ -233,6 +310,12 @@ class EmailDripController extends Controller
         return $results;
     }
 
+    /**
+     * Return the Custom Table ID tied to a dialer campaign
+     * 
+     * @param mixed $campaign 
+     * @return int|mixed 
+     */
     private function getCustomTableId($campaign)
     {
         $sql = "SELECT AdvancedTable
@@ -265,12 +348,18 @@ class EmailDripController extends Controller
         ];
     }
 
+    /**
+     * Toggle an Email Drip Campaign active/inactive
+     * 
+     * @param Request $request 
+     * @return string[] 
+     */
     public function toggleEmailDripCampaign(Request $request)
     {
-        $email_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
-        $email_campaign->active = !$email_campaign->active;
-        $email_campaign->save();
+        $email_drip_campaign->active = !$email_drip_campaign->active;
+        $email_drip_campaign->save();
 
         return ['status' => 'success'];
     }
