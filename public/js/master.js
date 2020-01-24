@@ -428,13 +428,20 @@ var Master = {
             },
 
             success: function(response) {
-                $('.create_campaign_form .email').empty();
+
+                var sel;
+                if($(this).parent().parent().hasClass('create_campaign_form')){
+                    sel = '.create_campaign_form';
+                }else{
+                    sel = '.edit_campaign_form';
+                }
+                $(sel).find('.email').empty();
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
                     emails+='<option value="'+index+'">'+response[index]+'</option>';
                 }
 
-                $('.create_campaign_form').find('.email').append(emails);
+                $(sel).find('.email').append(emails);
             },
         });
     },
