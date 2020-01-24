@@ -166,6 +166,14 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    public function deleteEmailDripCampaign(Request $request)
+    {
+        $email_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_campaign->delete();
+
+        return ['status' => 'success'];
+    }
+
     private function getCampaigns()
     {
         return ['campaigns' => array_values($this->getAllCampaigns())];
@@ -204,7 +212,7 @@ class EmailDripController extends Controller
         ];
     }
 
-    public function toggleCampaign(Request $request)
+    public function toggleEmailDripCampaign(Request $request)
     {
         $email_campaign = EmailDripCampaign::findOrFail($request->id);
 

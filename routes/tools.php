@@ -42,9 +42,10 @@ Route::prefix('tools')->group(function () {
             Route::post('/update_server', 'EmailDripController@updateSmtpServer');
             Route::post('/get_server', 'EmailDripController@getSmtpServer');
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
+            Route::post('/delete_campaign', 'EmailDripController@deleteEmailDripCampaign');
             Route::post('/get_table_fields', 'EmailDripController@getTableFields');
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
-            Route::post('/toggle_email_campaigns', 'EmailDripController@toggleCampaign');
+            Route::post('/toggle_email_campaigns', 'EmailDripController@toggleEmailDripCampaign');
         });
     });
 });
