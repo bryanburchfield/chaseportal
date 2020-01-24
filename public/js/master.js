@@ -2326,8 +2326,10 @@ var Master = {
         var name = $(this).find('.name').val(),
             description = $(this).find('.description').val(),
             campaign = $(this).find('.campaign').val(),
-            subcampaign = $(this).find('.subcampaign').val(),
-            smtp_server_id = $(this).find('.smtp_server_id').val()
+            subcampaign = $(this).find('#add_drip_campaigns_subcampaign').val(),
+            smtp_server_id = $(this).find('.smtp_server_id').val(),
+            email_field= $(this).find('.email').val(),
+            template_id = $(this).find('.template_id').val()
         ;
 
         $.ajaxSetup({
@@ -2342,9 +2344,11 @@ var Master = {
             data: {
                 name: name,
                 description: description,
+                email_field:email_field,
                 campaign: campaign,
                 subcampaign: subcampaign,
-                smtp_server_id: smtp_server_id
+                smtp_server_id: smtp_server_id,
+                template_id:template_id
             },
             success: function (response) {
                 location.reload();

@@ -208,8 +208,18 @@
 
                     <div class="form-group">
                         <label>Email</label>
-                        <select name="email" class="form-control email" required>
+                        <select name="email_field" class="form-control email" required>
                             <option value="">Select One</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Templates</label>
+                        <select name="template_id" class="template_id form-control">
+                            <option value="">Select One</option>
+                            @foreach($templates as $template)
+                                <option value="{{$template}}">{{$template}}</option>
+                            @endforeach
                         </select>
                     </div>
 
