@@ -111,7 +111,9 @@ var Master = {
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
         $('.delete_campaign ').on('click', this.delete_campaign);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
-        $('#add_drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
+        $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
+        $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
+        $('.edit_campaign').on('click', this.update_email_campaign);
 	},
 
     hide_modal_error:function(){
@@ -408,8 +410,8 @@ var Master = {
             subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
         }
 
-        $('#add_drip_campaigns_subcampaign').empty();
-        $('#add_drip_campaigns_subcampaign').append(subcampaigns);
+        $('.drip_campaigns_subcampaign').empty();
+        $('.drip_campaigns_subcampaign').append(subcampaigns);
 
         $.ajaxSetup({
             headers: {
@@ -585,7 +587,7 @@ var Master = {
         });
 
         $.ajax({
-            url:'/tools/email_drip/toggle_email_campaigns',
+            url:'/tools/email_drip/toggle_email_campaign',
             type:'POST',
             data:{
                 checked:checked,
@@ -2364,7 +2366,7 @@ var Master = {
         var name = $(this).find('.name').val(),
             description = $(this).find('.description').val(),
             campaign = $(this).find('.campaign').val(),
-            subcampaign = $(this).find('#add_drip_campaigns_subcampaign').val(),
+            subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
             smtp_server_id = $(this).find('.smtp_server_id').val(),
             email_field= $(this).find('.email').val(),
             template_id = $(this).find('.template_id').val()
@@ -2408,6 +2410,95 @@ var Master = {
                         $('.create_campaign_form .alert-danger').show();
                     });
                 }
+            }
+        });
+    },
+
+    update_email_campaign:function(e){
+        e.preventDefault();
+        var id = $('.edit_campaign_form').find('.id').val(),
+            name = $('.edit_campaign_form').find('.name').val(),
+            description = $('.edit_campaign_form').find('.description').val(),
+            campaign = $('.edit_campaign_form').find('.campaign').val(),
+            subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
+            smtp_server_id = $('.edit_campaign_form').find('.smtp_server_id').val(),
+            email_field= $('.edit_campaign_form').find('.email').val(),
+            template_id = $('.edit_campaign_form').find('.template_id').val()
+        ;
+        console.log(name);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/update_campaign',
+            type: 'POST',
+            data: {
+                id:id,
+                name: name,
+                description: description,
+                email_field:email_field,
+                campaign: campaign,
+                subcampaign: subcampaign,
+                smtp_server_id: smtp_server_id,
+                template_id:template_id
+            },
+            success: function (response) {
+                console.log(response);
+                $('.create_campaign ').find('i').remove();
+                location.reload();
+            },error: function (data) {
+                console.log(data);
+                $('.create_campaign ').find('i').remove();
+                if (data.status === 422) {
+                    $('.edit_campaign_form .alert').empty();
+                    $('.edit_campaign_form .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.edit_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.edit_campaign_form .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    edit_campaign_modal:function(e){
+        e.preventDefault();
+        var id = $(this).data('campaignid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_campaign',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                console.log(response);
+                 $('.edit_campaign_form .id').val(response.id);
+                $('.edit_campaign_form .name').val(response.name);
+                $('.edit_campaign_form .description').val(response.description);
+                $('.edit_campaign_form .drip_campaigns_campaign_menu').val(response.campaign);
+                $('.edit_campaign_form .drip_campaigns_subcampaign').append('<option value="'+response.subcampaign+'">'+response.subcampaign+'</option>');
+                $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
+                $('.edit_campaign_form .email').append('<option value="'+response.email_field+'">'+response.email_field+'</option>');
+                $('.edit_campaign_form .email').val(response.email_field);
+                $('.edit_campaign_form .template_id ').val(response.template_id);
+                $('.edit_campaign_form .smtp_server_id ').val(response.smtp_server_id);
             }
         });
     },

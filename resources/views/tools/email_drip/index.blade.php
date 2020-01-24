@@ -59,7 +59,7 @@
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>{{$drip->subcampaign}}</td>
                                                                 <td>{{$drip->smtp_server_id}}</td>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid=""><i class="fas fa-edit"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$drip->name}}" data-id="{{$drip->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                             				</tr>
                                                         @endforeach
@@ -192,7 +192,7 @@
 
                     <div class="form-group">
                         <label>Campaign</label>
-                        <select name="campaign" class="form-control campaign" id="add_drip_campaigns_campaign_menu" required>
+                        <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
                             <option value="">Select One</option>
                             @foreach($campaigns as $key => $value)
                                 <option value="{{$key}}">{{$value}}</option>
@@ -202,7 +202,7 @@
 
                     <div class="form-group">
                         <label>SubCampaign</label>
-                        <select name="subcampaign" id="add_drip_campaigns_subcampaign" class="form-control" required>
+                        <select name="subcampaign" class="form-control drip_campaigns_subcampaign" required>
                             <option value="">Select One</option>
                         </select>
                     </div>
@@ -246,6 +246,86 @@
     </div>
 </div>
 
+<!-- Edit Campaign Modal -->
+<div class="modal fade" id="editCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_drip_campaign')}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="#" method="post" class="form edit_campaign_form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control description" name="description" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Campaign</label>
+                        <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
+                            <option value="">Select One</option>
+                            @foreach($campaigns as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>SubCampaign</label>
+                        <select name="subcampaign"class="form-control drip_campaigns_subcampaign" required>
+                            <option value="">Select One</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <select name="email_field" class="form-control email" required>
+                            <option value="">Select One</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Templates</label>
+                        <select name="template_id" class="template_id form-control">
+                            <option value="">Select One</option>
+                            @foreach($templates as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Server Name</label>
+                        <select name="smtp_server_id" class="form-control smtp_server_id" required>
+                            <option value="">Select One</option>
+                            @foreach($smtp_servers as $server)
+                                <option value="{{$server->id}}">{{$server->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <input type="hidden" name="id" class="id">
+
+                    <div class="alert alert-success hidetilloaded"></div>
+                    <div class="alert alert-danger hidetilloaded"></div>
+                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader mt10">Save Changes</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Delete SMTP Server Modal -->
 <div class="modal fade" id="deleteSmtpServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -278,7 +358,7 @@
             </div>
 
             <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}} <span></span></h3>
+                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
                 <input type="hidden" name="id" id="id" value="">
             </div>
 
