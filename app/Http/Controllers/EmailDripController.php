@@ -122,6 +122,13 @@ class EmailDripController extends Controller
             ->get();
     }
 
+    private function findEmailDripCampaign($id)
+    {
+        return EmailDripCampaign::where('id', $id)
+            ->where('group_id', Auth::User()->group_id)
+            ->firstOrFail();
+    }
+
     public function testConnection(ValidSmtpServer $request)
     {
         // see if we can connect to server
@@ -249,10 +256,10 @@ class EmailDripController extends Controller
 
     public function toggleEmailDripCampaign(Request $request)
     {
-        $email_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
-        $email_campaign->active = !$email_campaign->active;
-        $email_campaign->save();
+        $email_drip_campaign->active = !$email_drip_campaign->active;
+        $email_drip_campaign->save();
 
         return ['status' => 'success'];
     }
