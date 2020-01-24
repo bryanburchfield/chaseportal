@@ -109,6 +109,7 @@ var Master = {
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
+        $('.delete_campaign ').on('click', this.delete_campaign);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
         $('#add_drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
 	},
@@ -2325,9 +2326,11 @@ var Master = {
     populate_delete_modal:function(e){
         e.preventDefault();
         var id = $(this).data('id'),
-            name = $(this).data('servername'),
+            name = $(this).data('name'),
             sel = $(this).data('target')
         ;
+
+        console.log(id +' '+ sel+' '+ name);
 
         $(sel+' h3').find('span').text(name);
         $(sel+' #id').val(id);
@@ -2405,6 +2408,28 @@ var Master = {
                         $('.create_campaign_form .alert-danger').show();
                     });
                 }
+            }
+        });
+    },
+
+    delete_campaign:function(e){
+        e.preventDefault();
+        var id = $('#deleteCampaignModal').find('#id').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/delete_campaign',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                location.reload();
             }
         });
     }
