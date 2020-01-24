@@ -45,6 +45,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
             Route::post('/get_table_fields', 'EmailDripController@getTableFields');
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
+            Route::post('/get_templates', 'EmailDripController@getTemplates');
         });
     });
 });

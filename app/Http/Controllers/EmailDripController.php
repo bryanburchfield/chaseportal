@@ -150,7 +150,10 @@ class EmailDripController extends Controller
     }
 
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
+    // public function addEmailDripCampaign(Request $request)
     {
+        // Log::debug($request->all());
+        // die();
 
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
@@ -187,6 +190,16 @@ class EmailDripController extends Controller
             'Some Field',
             'Email',
             'Some other field',
+        ];
+    }
+
+    public function getTemplates(Request $request)
+    {
+        // return defined templates for this group_id
+        return [
+            11 => 'Template 11',
+            15 => 'Template 15',
+            35 => 'Template 35',
         ];
     }
 }
