@@ -423,7 +423,8 @@ var Master = {
             },
 
             success: function(response) {
-                var emails;
+                $('.create_campaign_form .email').empty();
+                var emails='<option value="">Select One</option>';
                 for(var i=0;i<response.length;i++){
                     emails+='<option value="'+response[i]+'">'+response[i]+'</option>';
                 }
