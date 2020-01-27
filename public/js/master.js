@@ -2378,7 +2378,8 @@ var Master = {
             subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
             smtp_server_id = $(this).find('.smtp_server_id').val(),
             email_field= $(this).find('.email').val(),
-            template_id = $(this).find('.template_id').val()
+            template_id = $(this).find('.template_id').val(),
+            emails_per_lead = $(this).find('.emails_per_lead').val()
         ;
 
         $.ajaxSetup({
@@ -2397,11 +2398,13 @@ var Master = {
                 campaign: campaign,
                 subcampaign: subcampaign,
                 smtp_server_id: smtp_server_id,
-                template_id:template_id
+                template_id:template_id,
+                emails_per_lead:emails_per_lead
             },
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
-                location.reload();
+                $('#createCampaignModal').modal('hide');
+                $('#campaignFilterModal').modal('show');
             },error: function (data) {
                 $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
@@ -2432,9 +2435,10 @@ var Master = {
             subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
             smtp_server_id = $('.edit_campaign_form').find('.smtp_server_id').val(),
             email_field= $('.edit_campaign_form').find('.email').val(),
-            template_id = $('.edit_campaign_form').find('.template_id').val()
+            template_id = $('.edit_campaign_form').find('.template_id').val(),
+            emails_per_lead = $(this).find('.emails_per_lead').val()
         ;
-        console.log(name);
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2452,14 +2456,15 @@ var Master = {
                 campaign: campaign,
                 subcampaign: subcampaign,
                 smtp_server_id: smtp_server_id,
-                template_id:template_id
+                template_id:template_id,
+                emails_per_lead:emails_per_lead
             },
             success: function (response) {
-                console.log(response);
+
                 $('.create_campaign ').find('i').remove();
                 location.reload();
             },error: function (data) {
-                console.log(data);
+
                 $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
                     $('.edit_campaign_form .alert').empty();
@@ -2497,7 +2502,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-
+                console.log(response);
                 Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
@@ -2556,6 +2561,11 @@ $(document).ready(function () {
 	$('.filter_campaign').on('click', '.stop-propagation', function (e) {
 		e.stopPropagation();
 	});
+
+    // if filter modal is closed reload page to display new campaign
+    $('#campaignFilterModal').on('hidden.bs.modal', function () {
+        location.reload()
+    });
 
 	// Close the dropdown if the user clicks outside of it
 	window.onclick = function (event) {

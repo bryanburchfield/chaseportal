@@ -34,14 +34,14 @@
                                         		<table class="table mt20">
                                         			<thead>
                                         				<tr>
-                                                            <th>Active</th>
-                                        					<th>Name</th>
-                                                            <th>Description</th>
-                                        					<th>Campaign</th>
-                                        					<th>Sub Campaign</th>
-                                        					<th>Server ID</th>
-                                                            <th>Edit</th>
-                                                            <th>Delete</th>
+                                                            <th>{{__('tools.active')}}</th>
+                                        					<th>{{__('tools.name')}}</th>
+                                                            <th>{{__('tools.description')}}</th>
+                                        					<th>{{__('tools.campaign')}}</th>
+                                        					<th>{{__('tools.subcampaign')}}</th>
+                                        					<th>{{__('tools.server_id')}}</th>
+                                                            <th>{{__('tools.edit')}}</th>
+                                                            <th>{{__('tools.delete')}}</th>
                                         				</tr>
                                         			</thead>
 
@@ -180,62 +180,11 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form create_campaign_form">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control name" name="name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" class="form-control description" name="description" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Campaign</label>
-                        <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
-                            <option value="">Select One</option>
-                            @foreach($campaigns as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>SubCampaign</label>
-                        <select name="subcampaign" class="form-control drip_campaigns_subcampaign">
-                            <option value="">Select One</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email</label>
-                        <select name="email_field" class="form-control email" required>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Templates</label>
-                        <select name="template_id" class="template_id form-control">
-                            <option value="">Select One</option>
-                            @foreach($templates as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Server Name</label>
-                        <select name="smtp_server_id" class="form-control smtp_server_id" required>
-                            <option value="">Select One</option>
-                            @foreach($smtp_servers as $server)
-                                <option value="{{$server->id}}">{{$server->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    @include('tools.email_drip.shared.campaign_form_fields')
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10">Create Campaign</button>
+                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10">{{__('tools.create_campaign')}}</button>
                 </form>
             </div>
 
@@ -257,65 +206,12 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form edit_campaign_form">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control name" name="name" required>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" class="form-control description" name="description" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Campaign</label>
-                        <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
-                            <option value="">Select One</option>
-                            @foreach($campaigns as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>SubCampaign</label>
-                        <select name="subcampaign"class="form-control drip_campaigns_subcampaign">
-                            <option value="">Select One</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email</label>
-                        <select name="email_field" class="form-control email" required>
-                            <option value="">Select One</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Templates</label>
-                        <select name="template_id" class="template_id form-control">
-                            <option value="">Select One</option>
-                            @foreach($templates as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Server Name</label>
-                        <select name="smtp_server_id" class="form-control smtp_server_id" required>
-                            <option value="">Select One</option>
-                            @foreach($smtp_servers as $server)
-                                <option value="{{$server->id}}">{{$server->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <input type="hidden" name="id" class="id">
+                    @include('tools.email_drip.shared.campaign_form_fields')
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader mt10">Save Changes</button>
+                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader mt10">{{__('tools.save_changes')}}</button>
                 </form>
             </div>
 
@@ -354,7 +250,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_campaign')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -365,6 +261,28 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
                 <button type="button" class="btn btn-danger delete_campaign add_btn_loader">{{__('tools.delete')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Filter Modal -->
+<div class="modal fade" id="campaignFilterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.campaign_filters')}}</h4>
+            </div>
+
+            <div class="modal-body">
+    
+                <input type="hidden" name="id" id="id" value="">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-danger save_filters add_btn_loader">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>
