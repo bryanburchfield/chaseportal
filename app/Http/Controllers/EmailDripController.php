@@ -6,16 +6,13 @@ use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidSmtpServer;
 use App\Models\EmailDripCampaign;
 use App\Models\SmtpServer;
+use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use InvalidArgumentException;
-use Swift_Mailer;
-use Swift_SmtpTransport;
-use Swift_TransportException;
 
 class EmailDripController extends Controller
 {
@@ -176,30 +173,10 @@ class EmailDripController extends Controller
      */
     public function testConnection(ValidSmtpServer $request)
     {
-        // see if we can connect to server
-        try {
-            // $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
-            $transport = (new Swift_SmtpTransport($request->host, $request->port, 'tls'))
-                ->setUsername($request->username)
-                ->setPassword($request->password);
+        // Convert request class to model class
+        $email_drip_service = new EmailDripService(new SmtpServer($request->all()));
 
-            $mailer = new Swift_Mailer($transport);
-            $mailer->getTransport()->start();
-            return [
-                'status' => 'success',
-                'message' => 'Connected Successfuly',
-            ];
-        } catch (Swift_TransportException $e) {
-            $error = ValidationException::withMessages([
-                'error' => [$e->getMessage()],
-            ]);
-            throw $error;
-        } catch (\Exception $e) {
-            $error = ValidationException::withMessages([
-                'error' => [$e->getMessage()],
-            ]);
-            throw $error;
-        }
+        return $email_drip_service->testConnection();
     }
 
     /**
@@ -224,7 +201,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
-
+    /**
+     * Update Drip Campaign 
+     * 
+     * @param ValidEmailDripCampaign $request 
+     * @return string[] 
+     */
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
 
@@ -253,7 +235,7 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Return all Dialer Campaigns for the group
+     * Return list of dialer campaigns
      * 
      * @return array[] 
      * @throws InvalidArgumentException 
@@ -263,6 +245,12 @@ class EmailDripController extends Controller
         return ['campaigns' => array_values($this->getAllCampaigns())];
     }
 
+    /**
+     * Return drip campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getEmailDripCampaign(Request $request)
     {
         return EmailDripCampaign::findOrFail($request->id);
