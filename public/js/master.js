@@ -2438,8 +2438,8 @@ var Master = {
             smtp_server_id = $('.edit_campaign_form').find('.smtp_server_id').val(),
             email_field= $('.edit_campaign_form').find('.email').val(),
             template_id = $('.edit_campaign_form').find('.template_id').val(),
-            emails_per_lead = $(this).find('.emails_per_lead').val(),
-            days_between_emails = $(this).find('.days_between_emails').val()
+            emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
+            days_between_emails = $('.edit_campaign_form').find('.days_between_emails').val()
         ;
 
         $.ajaxSetup({
