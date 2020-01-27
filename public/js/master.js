@@ -2379,7 +2379,8 @@ var Master = {
             smtp_server_id = $(this).find('.smtp_server_id').val(),
             email_field= $(this).find('.email').val(),
             template_id = $(this).find('.template_id').val(),
-            emails_per_lead = $(this).find('.emails_per_lead').val()
+            emails_per_lead = $(this).find('.emails_per_lead').val(),
+            days_between_emails = $(this).find('.days_between_emails').val()
         ;
 
         $.ajaxSetup({
@@ -2399,7 +2400,8 @@ var Master = {
                 subcampaign: subcampaign,
                 smtp_server_id: smtp_server_id,
                 template_id:template_id,
-                emails_per_lead:emails_per_lead
+                emails_per_lead:emails_per_lead,
+                days_between_emails:days_between_emails
             },
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
@@ -2436,7 +2438,8 @@ var Master = {
             smtp_server_id = $('.edit_campaign_form').find('.smtp_server_id').val(),
             email_field= $('.edit_campaign_form').find('.email').val(),
             template_id = $('.edit_campaign_form').find('.template_id').val(),
-            emails_per_lead = $(this).find('.emails_per_lead').val()
+            emails_per_lead = $(this).find('.emails_per_lead').val(),
+            days_between_emails = $(this).find('.days_between_emails').val()
         ;
 
         $.ajaxSetup({
@@ -2457,7 +2460,8 @@ var Master = {
                 subcampaign: subcampaign,
                 smtp_server_id: smtp_server_id,
                 template_id:template_id,
-                emails_per_lead:emails_per_lead
+                emails_per_lead:emails_per_lead,
+                days_between_emails:days_between_emails
             },
             success: function (response) {
 
