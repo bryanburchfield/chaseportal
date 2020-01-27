@@ -56,7 +56,7 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/get_table_fields', 'AdminController@getTableFields');
             Route::get('admin/manage_clients', 'AdminController@manageClients');
             Route::get('admin/load_admin_nav', function(){
-                return view('shared.admin_sidenav');
+                return view('/shared.admin_sidenav');
             });
         });
 

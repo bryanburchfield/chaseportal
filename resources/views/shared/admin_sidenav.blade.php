@@ -5,10 +5,10 @@
     </div>
 
     <ul class="list-unstyled components">
-        <li><a class="back_to_sidenav" href="#"><i class="fas fa-arrow-circle-left"></i>Go Back</a></li>
-        <li <?php echo $page['menuitem'] == 'manage_clients' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageClients') }}"><i class="fas fa-users"></i>Manage Clients</a></li>
-        <li <?php echo $page['menuitem'] == 'cdr_lookup' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@cdrLookup') }}"><i class="fas fa-search"></i> CDR Lookup</a></li>
-        <li <?php echo $page['menuitem'] == 'webhook_generator' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@webhookGenerator') }}"><i class="fas fa-link"></i> Webhook Generator</a></li>
-        <li <?php echo $page['menuitem'] == 'settings' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a class="back_to_sidenav" href="{{url('dashboards/inbounddashboard')}}"><i class="fas fa-arrow-circle-left"></i>Go Back</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'manage_clients' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageClients') }}"><i class="fas fa-users"></i>Manage Clients</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'cdr_lookup' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@cdrLookup') }}"><i class="fas fa-search"></i> CDR Lookup</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'webhook_generator' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@webhookGenerator') }}"><i class="fas fa-link"></i> Webhook Generator</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'settings' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
     </ul>
 </nav>
