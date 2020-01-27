@@ -41,6 +41,8 @@ class ValidEmailDripCampaign extends FormRequest
                     }),
             ],
             'template_id' => 'required|integer',
+            'emails_per_lead' => 'required|integer',
+            'days_between_emails' => 'nullable|integer',
         ];
     }
 }

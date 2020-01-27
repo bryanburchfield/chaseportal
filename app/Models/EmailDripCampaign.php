@@ -17,6 +17,10 @@ class EmailDripCampaign extends Model
         'smtp_server_id',
         'template_id',
         'active',
+        'emails_per_lead',
+        'days_between_emails',
+        'last_run_from',
+        'last_run_to',
     ];
 
     public function smtpServer()
