@@ -57,4 +57,9 @@
     <input type="number" class="form-control emails_per_lead" name="emails_per_lead" min="0" max="1000">
 </div>
 
+<div class="form-group">
+    <label>{{__('tools.numb_days_between_emails')}}</label>
+    <input type="number" class="form-control days_between_emails" name="days_between_emails" min="0" max="1000">
+</div>
+
 <input type="hidden" name="id" class="id">

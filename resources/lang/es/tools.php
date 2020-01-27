@@ -66,6 +66,7 @@ return [
 	'no_rules'		=> 'No se ha agregado ninguna regla aún',
 	'no_providers'	=> 'Aún no se han creado proveedores',
 	'no_servers_added'	=> 'No es necesario agregar servidores SMTP',
+	'numb_days_between_emails'	=> 'Número de Días Entre Correos Electrónicos',
 	'numb_times_can_be_emailed'	=> 'Número de veces que se puede enviar un lead por correo electrónico',
 	'password'		=> 'Contraseña',
 	'phone'			=> 'Teléfono',

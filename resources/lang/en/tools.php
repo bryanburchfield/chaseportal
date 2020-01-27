@@ -66,6 +66,7 @@ return [
 	'no_rules'		=> 'No Rules have been added yet',
 	'no_providers'	=> 'No providers have been created yet',
 	'no_servers_added'	=> 'No SMTP Servers have need added',
+	'numb_days_between_emails'	=> '# of Days Between Emails',
 	'numb_times_can_be_emailed'	=> '# of times a lead can be emailed',
 	'password'		=> 'Password',
 	'phone'			=> 'Phone',
