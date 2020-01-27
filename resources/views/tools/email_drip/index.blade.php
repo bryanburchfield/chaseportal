@@ -40,6 +40,8 @@
                                         					<th>{{__('tools.campaign')}}</th>
                                         					<th>{{__('tools.subcampaign')}}</th>
                                         					<th>{{__('tools.server_id')}}</th>
+                                                            <th>{{__('tools.emails_per_lead')}}</th>
+                                                            <th>{{__('tools.days_between_emails')}}</th>
                                                             <th>{{__('tools.edit')}}</th>
                                                             <th>{{__('tools.delete')}}</th>
                                         				</tr>
@@ -59,6 +61,8 @@
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>{{$drip->subcampaign}}</td>
                                                                 <td>{{$drip->smtp_server_id}}</td>
+                                                                <td>{{$drip->emails_per_lead}}</td>
+                                                                <td>{{$drip->days_between_emails}}</td>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$drip->name}}" data-id="{{$drip->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                             				</tr>

@@ -2518,6 +2518,8 @@ var Master = {
                 $('.edit_campaign_form .email').val(response.email_field);
                 $('.edit_campaign_form .template_id ').val(response.template_id);
                 $('.edit_campaign_form .smtp_server_id ').val(response.smtp_server_id);
+                $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
+                $('.edit_campaign_form .days_between_emails ').val(response.days_between_emails);
                 return false;
             }
         });
