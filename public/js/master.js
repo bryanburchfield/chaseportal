@@ -2279,19 +2279,16 @@ var Master = {
     test_connection:function(e){
         e.preventDefault();
 
-        var host = $('.host').val()
-            name = $('.name').val(),
-            port = $('.port').val(),
-            username = $('.username').val(),
-            password = $('.password').val()
-        ;
-
         $('.alert').empty().hide();
-        if($(this).parent().hasClass('add_smtp_server')){
-            var that = 'add_smtp_server';
-        }else{
-            var that = 'edit_smtp_server';
-        }
+
+        var that = $(this).parent();
+
+        var host = $(that).find('.host').val()
+            name = $(that).find('.name').val(),
+            port = $(that).find('.port').val(),
+            username = $(that).find('.username').val(),
+            password = $(that).find('.password').val()
+        ;
 
         $.ajaxSetup({
             headers: {
@@ -2311,26 +2308,27 @@ var Master = {
             },
             success: function (response) {
 
-                $('.'+that+' .test_connection').find('i').remove();
-                $('.'+that+' .connection_msg').removeClass('alert-danger alert-success');
-                $('.'+that+' .connection_msg').addClass('alert-success').text(response.message).show();
+                $(that).find('.test_connection').find('i').remove();
+                $(that).find('.connection_msg').removeClass('alert-danger alert-success');
+                $(that).find('.connection_msg').addClass('alert-success').text(response.message).show();
             },error: function (data) {
-                $('.'+that+' .test_connection').find('i').remove();
+                $('.test_connection').find('i').remove();
+
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.'+that+' .connection_msg').append('<li>'+value+'</li>');
-                                $('.'+that+' .connection_msg').addClass('alert-danger').show();
+                                $(that).find('.connection_msg').append('<li>'+value+'</li>');
+                                $(that).find('.connection_msg').addClass('alert-danger').show();
                             });
                         }
                     });
                 }
             },statusCode: {
                 500: function(response) {
-                    $('.'+that+' .alert-danger').text('Connection Failed').show();
+                    $(that).find('.alert-danger').text('Connection Failed').show();
                 }
             }
         });
