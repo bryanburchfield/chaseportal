@@ -32,4 +32,9 @@ class EmailDripCampaign extends Model
     {
         return $this->hasMany('App\Models\EmailDripCampaignFilter');
     }
+
+    public function emailDripSends()
+    {
+        return $this->hasMany('App\Models\EmailDripSend');
+    }
 }
