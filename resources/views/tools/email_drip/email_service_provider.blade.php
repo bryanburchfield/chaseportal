@@ -8,7 +8,7 @@
     <select name="provider_type" class="form-control provider_type" required>
     	<option value="">Select One</option>
     	@foreach($provider_types as $provider)
-			<option value="{{$provider}}">{{strtoupper($provider)}}</option>
+			<option value="{{$provider}}">{{ucwords($provider)}}</option>
     	@endforeach
     </select>
 </div>
