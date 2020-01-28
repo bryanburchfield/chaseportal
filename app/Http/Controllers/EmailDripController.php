@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidEmailServiceProvider;
-use App\Interfaces\EmailServiceProvider\Smtp;
 use App\Models\EmailDripCampaign;
 use App\Models\EmailServiceProvider;
 use App\Models\Script;
@@ -20,6 +19,9 @@ use Illuminate\Support\Str;
 
 class EmailDripController extends Controller
 {
+    // Directory where Email Service Providers live
+    const ESP_DIR = 'Interfaces\\EmailServiceProvider';
+
     use SqlServerTraits;
     use CampaignTraits;
 
@@ -193,9 +195,6 @@ class EmailDripController extends Controller
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
     // public function addEmailDripCampaign(Request $request)
     {
-        // Log::debug($request->all());
-        // die();
-
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
         $email_drip_campaign->user_id = Auth::User()->id;
@@ -253,7 +252,7 @@ class EmailDripController extends Controller
     private function getProviderTypes()
     {
         // Look in the directory for provider interfaces
-        $models = collect(File::allFiles(app_path('Interfaces\\EmailServiceProvider')));
+        $models = collect(File::allFiles(app_path(self::ESP_DIR)));
 
         return $models->map(function ($file) {
             return Str::snake(substr($file->getFilename(), 0, -4));
@@ -371,8 +370,10 @@ class EmailDripController extends Controller
 
     public function getProperties(Request $request)
     {
-        $class = Str::studly($request->provider_type);
+        // full path the class so we don't have to import it
+        $class = 'App\\' . self::ESP_DIR . '\\' .
+            Str::studly($request->provider_type);
 
-        return $class::getProperties();
+        return $class::properties();
     }
 }
