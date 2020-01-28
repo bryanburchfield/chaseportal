@@ -38,7 +38,7 @@ class Smtp implements \App\Interfaces\EmailServiceProvider
             $mailer->getTransport()->start();
             return [
                 'status' => 'success',
-                'message' => 'Connected Successfuly',
+                'message' => trans('tools.connection_successful'),
             ];
         } catch (Swift_TransportException $e) {
             $error = ValidationException::withMessages([

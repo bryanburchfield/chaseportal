@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 class EmailDripController extends Controller
 {
     // Directory where Email Service Providers live
+    // This is in the service class too!
     const ESP_DIR = 'Interfaces\\EmailServiceProvider';
 
     use SqlServerTraits;
