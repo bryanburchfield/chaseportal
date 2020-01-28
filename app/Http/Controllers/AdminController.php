@@ -558,7 +558,7 @@ class AdminController extends Controller
         $cssfile[] = "";
 
         $page['menuitem'] = 'durationdash';
-        $page['type'] = 'page';
+        $page['type'] = 'dash';
 
         $data = [
             'page' => $page,
@@ -570,6 +570,7 @@ class AdminController extends Controller
             'curdash' => 'durationdash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
+            'has_multiple_dbs' => Auth::user()->isMultiDb(),
         ];
 
         return view('admin.durationdash')->with($data);
@@ -585,7 +586,7 @@ class AdminController extends Controller
         $cssfile[] = "";
 
         $page['menuitem'] = 'distinctagentdash';
-        $page['type'] = 'page';
+        $page['type'] = 'dash';
 
         $data = [
             'page' => $page,
@@ -597,6 +598,7 @@ class AdminController extends Controller
             'curdash' => 'distinctagentdash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
+            'has_multiple_dbs' => Auth::user()->isMultiDb(),
         ];
 
         return view('admin.distinctagentdash')->with($data);
