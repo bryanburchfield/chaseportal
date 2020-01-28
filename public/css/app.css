@@ -1385,7 +1385,8 @@ input[type=number]::-webkit-outer-spin-button {
 .add_smtp_server .form-control,
 .edit_smtp_server .form-control,
 .create_campaign_form .form-control,
-.edit_campaign_form .form-control {
+.edit_campaign_form .form-control,
+.add_email_service_provider .form-control {
   background: #eee !important;
 }
 

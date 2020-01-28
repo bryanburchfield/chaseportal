@@ -114,6 +114,7 @@ var Master = {
         $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
         $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
         $('.edit_campaign').on('click', this.update_email_campaign);
+        $('.provider_type').on('change', this.get_provider_properties);
 	},
 
     hide_modal_error:function(){
@@ -2543,6 +2544,33 @@ var Master = {
             },
             success: function (response) {
                 location.reload();
+            }
+        });
+    },
+
+    get_provider_properties:function(e){
+        var provider_type = $(this).val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_properties',
+            type: 'POST',
+            data: {
+                provider_type: provider_type,
+            },
+            success: function (response) {
+                var properties='';
+                response.forEach(function(item, index){
+                    var label = item.charAt(0).toUpperCase() + item.slice(1);
+                    properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="'+item+'" value="" required></div>';
+                });
+
+                $('.properties').append(properties);
             }
         });
     }

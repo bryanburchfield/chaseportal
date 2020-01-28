@@ -75,7 +75,7 @@
 
                                     <div class="tab-pane mt30" id="email_service_providers">
                                         <div class="col-sm-12 nopad">
-                                            <a href="#" data-toggle="modal" data-target="#addServerModal" class="btn btn-primary add_server_modal">{{__('tools.add_server')}}</a>
+                                            <a href="#" data-toggle="modal" data-target="#addProviderModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
 
                                             <div class="table-responsive nobdr email_service_providers">
                                                 <table class="table mt20">
@@ -106,7 +106,7 @@
                                                                 </tr>
                                                             @endforeach
                                                         @else
-                                                            <div class="alert alert-info">{{__('tools.no_servers_added')}}</div>
+                                                            <div class="alert alert-info">{{__('tools.no_providers_added')}}</div>
                                                         @endif
                                                     </tbody>
                                                 </table>
@@ -126,18 +126,18 @@
 @include('shared.reportmodal')
 
 <!-- Add SMTP Server Modal -->
-<div class="modal fade" id="addServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="addProviderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_server')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_provider')}}</h4>
             </div>
 
             <div class="modal-body">
                 <form action="#" method="post" class="form add_email_service_provider">
                     @include('tools.email_drip.email_service_provider')
-                    <input type="submit" class="btn btn-primary add_email_service_provider" value="{{__('tools.add_server')}}">
+                    <input type="submit" class="btn btn-primary add_email_service_provider" value="{{__('tools.add_provider')}}">
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
