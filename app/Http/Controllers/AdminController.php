@@ -23,12 +23,6 @@ class AdminController extends Controller
     use TimeTraits;
     use SqlServerTraits;
 
-    /**
-     * Set DB
-     *  
-     * @param string|null $db 
-     * @return void 
-     */
     private function setDb($db = null)
     {
         if (empty($db)) {
@@ -421,17 +415,11 @@ class AdminController extends Controller
 
         $bind = [
             'phone' => $phone,
-            'fromdate' => $fromdate,
-            'todate' => $todate,
+            'fromdate' => $fromdate->format('Y-m-d H:i:s'),
+            'todate' => $todate->format('Y-m-d H:i:s'),
         ];
 
-        $this->setDb();
-
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
+        $results = $this->runSql($sql, $bind);
 
         if (count($results)) {
             // convert array of objects to array of arrays
