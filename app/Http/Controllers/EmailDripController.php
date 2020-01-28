@@ -13,6 +13,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
@@ -39,6 +40,7 @@ class EmailDripController extends Controller
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
+            'provider_types' => $this->getProviderTypes(),
             'campaigns' => $this->getAllCampaigns(),
             'templates' => $this->getTemplates(),
         ];
@@ -246,6 +248,16 @@ class EmailDripController extends Controller
     private function getCampaigns()
     {
         return ['campaigns' => array_values($this->getAllCampaigns())];
+    }
+
+    private function getProviderTypes()
+    {
+        // Look in the directory for provider interfaces
+        $models = collect(File::allFiles(app_path('Interfaces\\EmailServiceProvider')));
+
+        return $models->map(function ($file) {
+            return Str::snake(substr($file->getFilename(), 0, -4));
+        });
     }
 
     /**
