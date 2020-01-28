@@ -48,7 +48,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/add_user',
+			url: 'add_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -67,8 +67,8 @@ var Admin = {
                 setTimeout(function () {
                     $('.alert').remove();
                     $('form.add_user').trigger("reset");
-                    window.location.href = "/dashboards/admin";
-                }, 3500);
+                    window.location.reload();
+                }, 2500);
 			}, error: function (data) {
                 $('form.add_user .alert').empty();
 
@@ -110,7 +110,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/update_user',
+			url: 'update_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -172,7 +172,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/add_demo_user',
+			url: 'add_demo_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -232,7 +232,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/update_demo_user ',
+			url: 'update_demo_user ',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -250,7 +250,7 @@ var Admin = {
 				setTimeout(function () {
                     $('.alert-success').remove();
                     $('#demoUserModal').modal('hide');
-					window.location.href = "/dashboards/admin#demo_user";
+					window.location.reload();
 				}, 2500);
 			},
 			error: function (data) {
@@ -284,7 +284,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/get_user',
+			url: 'get_user',
 			type: 'POST',
 			dataType: 'json',
 			data: { id: user_id, mode: 'edit' },
@@ -307,7 +307,7 @@ var Admin = {
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var user_id = $(this).attr('href');
 		var dialer = $(this).data('dialer');
-
+		console.log(user_id);
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -315,7 +315,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/get_user',
+			url: 'get_user',
 			type: 'POST',
 			dataType: 'json',
 			data: { id: user_id },
@@ -361,7 +361,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/delete_user',
+			url: 'delete_user',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -391,7 +391,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/edit_myself',
+			url: 'edit_myself',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -411,8 +411,8 @@ var Admin = {
 					$('.alert-success').show();
 					setTimeout(function(){
 						$('.alert-success').hide();
-						window.location.href = "/dashboards/admin#settings";
-					}, 3500);
+						window.location.reload();
+					}, 2500);
 				}
 			}
 		});
@@ -434,7 +434,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'admin/cdr_lookup',
+			url: 'cdr_lookup',
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -537,7 +537,7 @@ var Admin = {
 	    });
 
 	    $.ajax({
-	        url: 'admin/get_client_tables',
+	        url: 'get_client_tables',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: { group_id : group_id,database:database},
@@ -568,16 +568,16 @@ var Admin = {
 	    });
 
 	    $.ajax({
-	        url: 'admin/get_table_fields',
+	        url: 'get_table_fields',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: { table_name: table_name, database:database },
 	        success: function (response) {
-
+	        	$('.field_from_table').remove();
 	            if(response.fields.length){
 	            	var new_field_row='';
 	            	for(var i=0; i<response.fields.length;i++){
-	            		new_field_row += '<div class="field"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="'+response.fields[i]+'">'+response.fields[i]+'</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
+	            		new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="'+response.fields[i]+'">'+response.fields[i]+'</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="'+response.fields[i]+'" placeholder="'+response.fields[i]+'"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
 	            	}
 	            	$(new_field_row).insertAfter('.field:last');
 	            }

@@ -2080,7 +2080,6 @@ var Master = {
     },
 
     update_sidenav:function(){
-        console.log($(this).hasClass('back_to_sidenav'));
         $('#sidebar').empty();
         if($(this).hasClass('back_to_sidenav')){
             $('#sidebar').load('/load_sidenav');

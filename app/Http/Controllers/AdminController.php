@@ -17,11 +17,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use \App\Traits\DashTraits;
 
 class AdminController extends Controller
 {
     use TimeTraits;
     use SqlServerTraits;
+    use DashTraits;
 
     /**
      * Set DB
@@ -544,5 +546,59 @@ class AdminController extends Controller
             'Campaign',
             'Subcampaign',
         ];
+    }
+
+    public function durationDashboard (Request $request)
+    {
+        $this->getSession($request);
+
+        $campaigns = $this->campaignGroups();
+
+        $jsfile[] = "admin.js";
+        $cssfile[] = "";
+
+        $page['menuitem'] = 'durationdash';
+        $page['type'] = 'page';
+
+        $data = [
+            'page' => $page,
+            'isApi' => $this->isApi,
+            'campaign' => $this->campaign,
+            'dateFilter' => $this->dateFilter,
+            'inorout' => $this->inorout,
+            'campaign_list' => $campaigns,
+            'curdash' => 'durationdash',
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile,
+        ];
+
+        return view('admin.durationdash')->with($data);
+    }
+
+    public function distinctAgentDashboard (Request $request)
+    {
+        $this->getSession($request);
+
+        $campaigns = $this->campaignGroups();
+
+        $jsfile[] = "admin.js";
+        $cssfile[] = "";
+
+        $page['menuitem'] = 'distinctagentdash';
+        $page['type'] = 'page';
+
+        $data = [
+            'page' => $page,
+            'isApi' => $this->isApi,
+            'campaign' => $this->campaign,
+            'dateFilter' => $this->dateFilter,
+            'inorout' => $this->inorout,
+            'campaign_list' => $campaigns,
+            'curdash' => 'distinctagentdash',
+            'jsfile' => $jsfile,
+            'cssfile' => $cssfile,
+        ];
+
+        return view('admin.distinctagentdash')->with($data);
     }
 }

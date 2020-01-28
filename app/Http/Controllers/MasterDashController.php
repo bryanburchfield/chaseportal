@@ -213,7 +213,7 @@ class MasterDashController extends Controller
         User::where('id', $user->id)->update(array('theme' => $theme));
 
         if ($user->user_type == 'admin') {
-            return redirect('/dashboards/admin#settings');
+            return redirect('/dashboards/admin/settings');
         } else {
             return redirect()->back();
         }
