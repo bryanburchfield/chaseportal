@@ -82,6 +82,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>{{__('tools.name')}}</th>
+                                                            <th>{{__('tools.provider_type')}}</th>
                                                             <th>{{__('tools.properties')}}</th>
                                                             <th>{{__('tools.edit')}}</th>
                                                             <th>{{__('tools.delete')}}</th>
@@ -93,6 +94,7 @@
                                                             @foreach($email_service_providers as $server)
                                                                 <tr>
                                                                     <td>{{$server->name}}</td>
+                                                                    <td>{{$server->provider_type}}</td>
                                                                     <td>
                                                                         @foreach ($server->properties as $key => $value)
                                                                             {{ __('tools.' . $key) }} : {{$value}} <br/>
