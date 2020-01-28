@@ -14,7 +14,7 @@ class EmailDripCampaign extends Model
         'campaign',
         'subcampaign',
         'email_field',
-        'smtp_server_id',
+        'email_service_provider_id',
         'template_id',
         'active',
         'emails_per_lead',
@@ -23,9 +23,9 @@ class EmailDripCampaign extends Model
         'last_run_to',
     ];
 
-    public function smtpServer()
+    public function emailServiceProvider()
     {
-        return $this->belongsTo('App\Models\SmtpServer');
+        return $this->belongsTo('App\Models\EmailServiceProvider');
     }
 
     public function emailDripCampaignFilters()

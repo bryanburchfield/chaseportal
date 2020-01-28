@@ -33,9 +33,9 @@ class ValidEmailDripCampaign extends FormRequest
             'campaign' => 'required',
             'subcampaign' => 'nullable',
             'email_field' => 'required',
-            'smtp_server_id' => [
+            'email_service_provider_id' => [
                 'required',
-                Rule::exists('smtp_servers', 'id')
+                Rule::exists('email_service_providers', 'id')
                     ->where(function ($query) use ($group_id) {
                         $query->where('group_id', $group_id);
                     }),

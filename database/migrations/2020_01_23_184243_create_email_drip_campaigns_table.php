@@ -22,7 +22,7 @@ class CreateEmailDripCampaignsTable extends Migration
             $table->string('campaign');
             $table->string('subcampaign')->nullable();
             $table->string('email_field');
-            $table->unsignedBigInteger('smtp_server_id');
+            $table->unsignedBigInteger('email_service_provider_id');
             $table->integer('template_id');
             $table->boolean('active')->default(false);
             $table->smallInteger('emails_per_lead');
@@ -31,8 +31,8 @@ class CreateEmailDripCampaignsTable extends Migration
             $table->timestamp('last_run_to')->nullable();
             $table->timestamps();
 
-            $table->foreign('smtp_server_id')
-                ->references('id')->on('smtp_servers');
+            $table->foreign('email_service_provider_id')
+                ->references('id')->on('email_service_providers');
         });
     }
 

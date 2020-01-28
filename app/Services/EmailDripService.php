@@ -3,16 +3,18 @@
 namespace App\Services;
 
 use App\Interfaces\EmailServiceProvider\Smtp;
-use App\Models\SmtpServer;
+use App\Models\EmailServiceProvider;
+use Illuminate\Support\Str;
 
 class EmailDripService
 {
     private $email_service_provider;
 
-    public function __construct(SmtpServer $smtp_server)
+    public function __construct(EmailServiceProvider $email_service_provider)
     {
-        // Obviously, this will change with new ESP types
-        $this->email_service_provider = new Smtp($smtp_server);
+        $class = Str::studly($email_service_provider->provider_type);
+
+        $this->email_service_provider = new $class($email_service_provider);
     }
 
     public function testConnection()

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ValidSmtpServer extends FormRequest
+class ValidEmailServiceProvider extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,6 @@ class ValidSmtpServer extends FormRequest
     {
         return [
             'name' => 'required',
-            'host' => 'required',
-            'port' => 'required|integer',
-            'username' => 'required',
-            'password' => 'required',
         ];
     }
 }

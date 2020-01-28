@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidEmailDripCampaign;
-use App\Http\Requests\ValidSmtpServer;
+use App\Http\Requests\ValidEmailServiceProvider;
+use App\Interfaces\EmailServiceProvider\Smtp;
 use App\Models\EmailDripCampaign;
-use App\Models\SmtpServer;
+use App\Models\EmailServiceProvider;
 use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class EmailDripController extends Controller
 {
@@ -34,7 +36,7 @@ class EmailDripController extends Controller
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
-            'smtp_servers' => $this->getSmtpServers(),
+            'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
             'campaigns' => $this->getAllCampaigns(),
             'templates' => $this->getTemplates(),
@@ -46,17 +48,17 @@ class EmailDripController extends Controller
     /**
      * Add an SMTP Server
      * 
-     * @param ValidSmtpServer $request 
+     * @param ValidEmailServiceProvider $request 
      * @return string[] 
      */
-    public function addSmtpServer(ValidSmtpServer $request)
+    public function addEmailServiceProvider(ValidEmailServiceProvider $request)
     {
-        $smtp_server = new SmtpServer($request->all());
+        $email_service_provider = new EmailServiceProvider($request->all());
 
-        $smtp_server->user_id = Auth::User()->id;
-        $smtp_server->group_id = Auth::User()->group_id;
+        $email_service_provider->user_id = Auth::User()->id;
+        $email_service_provider->group_id = Auth::User()->group_id;
 
-        $smtp_server->save();
+        $email_service_provider->save();
 
         return ['status' => 'success'];
     }
@@ -64,17 +66,17 @@ class EmailDripController extends Controller
     /**
      * Update an SMTP Server
      * 
-     * @param ValidSmtpServer $request 
+     * @param ValidEmailServiceProvider $request 
      * @return string[] 
      */
-    public function updateSmtpServer(ValidSmtpServer $request)
+    public function updateEmailServiceProvider(ValidEmailServiceProvider $request)
     {
-        $smtp_server = $this->findSmtpServer($request->id);
+        $email_service_provider = $this->findEmailServiceProvider($request->id);
 
-        $smtp_server->fill($request->all());
-        $smtp_server->user_id = Auth::User()->id;
+        $email_service_provider->fill($request->all());
+        $email_service_provider->user_id = Auth::User()->id;
 
-        $smtp_server->save();
+        $email_service_provider->save();
 
         return ['status' => 'success'];
     }
@@ -86,19 +88,19 @@ class EmailDripController extends Controller
      * @return string[] 
      * @throws ValidationException 
      */
-    public function deleteSmtpServer(Request $request)
+    public function deleteEmailServiceProvider(Request $request)
     {
-        $smtp_server = $this->findSmtpServer($request->id);
+        $email_service_provider = $this->findEmailServiceProvider($request->id);
 
         // check for campaigns
-        if ($smtp_server->emailDripCampaigns->count()) {
+        if ($email_service_provider->emailDripCampaigns->count()) {
             $error = ValidationException::withMessages([
                 'error' => ['This server is in use by one or more campaigns'],
             ]);
             throw $error;
         }
 
-        $smtp_server->delete();
+        $email_service_provider->delete();
 
         return ['status' => 'success'];
     }
@@ -109,9 +111,9 @@ class EmailDripController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getSmtpServer(Request $request)
+    public function getEmailServiceProvider(Request $request)
     {
-        return $this->findSmtpServer($request->id);
+        return $this->findEmailServiceProvider($request->id);
     }
 
     /**
@@ -120,9 +122,9 @@ class EmailDripController extends Controller
      * @param mixed $id 
      * @return mixed 
      */
-    private function findSmtpServer($id)
+    private function findEmailServiceProvider($id)
     {
-        return SmtpServer::where('id', $id)
+        return EmailServiceProvider::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
             ->firstOrFail();
     }
@@ -132,9 +134,9 @@ class EmailDripController extends Controller
      * 
      * @return mixed 
      */
-    private function getSmtpServers()
+    private function getEmailServiceProviders()
     {
-        return SmtpServer::where('group_id', Auth::User()->group_id)
+        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
             ->orderBy('name')
             ->get();
     }
@@ -167,14 +169,14 @@ class EmailDripController extends Controller
     /**
      * Test SMTP server connection
      * 
-     * @param ValidSmtpServer $request 
+     * @param ValidEmailServiceProvider $request 
      * @return string[] 
      * @throws ValidationException 
      */
-    public function testConnection(ValidSmtpServer $request)
+    public function testConnection(ValidEmailServiceProvider $request)
     {
         // Convert request class to model class
-        $email_drip_service = new EmailDripService(new SmtpServer($request->all()));
+        $email_drip_service = new EmailDripService(new EmailServiceProvider($request->all()));
 
         return $email_drip_service->testConnection();
     }
@@ -350,5 +352,12 @@ class EmailDripController extends Controller
         $email_drip_campaign->save();
 
         return ['status' => 'success'];
+    }
+
+    public function getProperties(Request $request)
+    {
+        $class = Str::studly($request->provider_type);
+
+        return $class::getProperties();
     }
 }

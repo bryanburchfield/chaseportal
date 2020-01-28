@@ -44,9 +44,9 @@
 
 <div class="form-group">
     <label>{{__('tools.server_name')}}</label>
-    <select name="smtp_server_id" class="form-control smtp_server_id" required>
+    <select name="email_service_provider_id" class="form-control email_service_provider_id" required>
         <option value="">{{__('tools.select_one')}}</option>
-        @foreach($smtp_servers as $server)
+        @foreach($email_service_providers as $server)
             <option value="{{$server->id}}">{{$server->name}}</option>
         @endforeach
     </select>

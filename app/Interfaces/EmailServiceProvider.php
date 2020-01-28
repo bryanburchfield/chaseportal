@@ -9,4 +9,6 @@ interface EmailServiceProvider
     public function test();
 
     public function send($payload);
+
+    public static function properties();
 }

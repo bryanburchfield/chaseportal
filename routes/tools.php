@@ -37,16 +37,17 @@ Route::prefix('tools')->group(function () {
         Route::prefix('email_drip')->group(function () {
             Route::get('/', 'EmailDripController@index');
             Route::post('/test_connection', 'EmailDripController@testConnection');
-            Route::post('/add_server', 'EmailDripController@addSmtpServer');
-            Route::post('/delete_server', 'EmailDripController@deleteSmtpServer');
-            Route::post('/update_server', 'EmailDripController@updateSmtpServer');
-            Route::post('/get_server', 'EmailDripController@getSmtpServer');
+            Route::post('/add_esp', 'EmailDripController@addEmailServiceProvider');
+            Route::post('/delete_esp', 'EmailDripController@deleteEmailServiceProvider');
+            Route::post('/update_esp', 'EmailDripController@updateEmailServiceProvider');
+            Route::post('/get_esp', 'EmailDripController@getEmailServiceProvider');
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
             Route::post('/delete_campaign', 'EmailDripController@deleteEmailDripCampaign');
             Route::post('/update_campaign', 'EmailDripController@updateEmailDripCampaign');
             Route::post('/get_campaign', 'EmailDripController@getEmailDripCampaign');
             Route::post('/get_table_fields', 'EmailDripController@getTableFields');
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
+            Route::post('/get_properties', 'EmailDripController@getProperties');
             Route::post('/toggle_email_campaign', 'EmailDripController@toggleEmailDripCampaign');
         });
     });

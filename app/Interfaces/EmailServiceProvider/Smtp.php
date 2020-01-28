@@ -2,18 +2,17 @@
 
 namespace App\Interfaces\EmailServiceProvider;
 
-use App\Interfaces\EmailServiceProvider;
-use App\Models\SmtpServer;
+use App\Models\EmailServiceProvider;
 use Illuminate\Validation\ValidationException;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Swift_TransportException;
 
-class Smtp implements EmailServiceProvider
+class Smtp implements \App\Interfaces\EmailServiceProvider
 {
     private $smtp_server;
 
-    public function __construct(SmtpServer $smtp_server)
+    public function __construct(EmailServiceProvider $smtp_server)
     {
         $this->smtp_server = $smtp_server;
     }
@@ -27,9 +26,13 @@ class Smtp implements EmailServiceProvider
     {
         // see if we can connect to server
         try {
-            $transport = (new Swift_SmtpTransport($this->smtp_server->host, $this->smtp_server->port, 'tls'))
-                ->setUsername($this->smtp_server->username)
-                ->setPassword($this->smtp_server->password);
+            $transport = (new Swift_SmtpTransport(
+                $this->smtp_server->properties['host'],
+                $this->smtp_server->properties['port'],
+                'tls'
+            ))
+                ->setUsername($this->smtp_server->properties['username'])
+                ->setPassword($this->smtp_server->properties['password']);
 
             $mailer = new Swift_Mailer($transport);
             $mailer->getTransport()->start();
@@ -53,5 +56,15 @@ class Smtp implements EmailServiceProvider
     public function send($payload)
     {
         # code...
+    }
+
+    public static function properties()
+    {
+        return [
+            'host',
+            'port',
+            'username',
+            'password',
+        ];
     }
 }
