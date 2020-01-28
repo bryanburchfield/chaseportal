@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\System;
+use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     use TimeTraits;
+    use SqlServerTraits;
 
     private function setDb($db = null)
     {
@@ -280,17 +282,11 @@ class AdminController extends Controller
 
         $bind = [
             'phone' => $phone,
-            'fromdate' => $fromdate,
-            'todate' => $todate,
+            'fromdate' => $fromdate->format('Y-m-d H:i:s'),
+            'todate' => $todate->format('Y-m-d H:i:s'),
         ];
 
-        $this->setDb();
-
-        try {
-            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        } catch (\Exception $e) {
-            $results = [];
-        }
+        $results = $this->runSql($sql, $bind);
 
         if (count($results)) {
             // convert array of objects to array of arrays
