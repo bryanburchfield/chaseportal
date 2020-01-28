@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AgentActivity extends Model
+class Script extends Model
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
-    protected $table = 'AgentActivity';
+    protected $table = 'Scripts';
+    public $timestamps = false;
 }

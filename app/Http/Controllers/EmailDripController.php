@@ -7,6 +7,7 @@ use App\Http\Requests\ValidEmailServiceProvider;
 use App\Interfaces\EmailServiceProvider\Smtp;
 use App\Models\EmailDripCampaign;
 use App\Models\EmailServiceProvider;
+use App\Models\Script;
 use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
@@ -329,13 +330,15 @@ class EmailDripController extends Controller
 
     public function getTemplates()
     {
+        // Set sqlsrv database
+        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
 
-        // return defined templates for this group_id
-        return [
-            11 => 'Template 11',
-            15 => 'Template 15',
-            35 => 'Template 35',
-        ];
+        // Find SQL Server for templates named "email_*"
+        return Script::where('GroupId', Auth::User()->group_id)
+            ->where('Name', 'like', 'email_%')
+            ->whereNotNull('HtmlContent')
+            ->where('HtmlContent', '!=', '')
+            ->get();
     }
 
     /**
