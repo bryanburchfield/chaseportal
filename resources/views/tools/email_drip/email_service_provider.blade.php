@@ -7,7 +7,9 @@
     <label>{{__('tools.provider_type')}}</label>
     <select name="provider_type" class="form-control provider_type" required>
     	<option value="">Select One</option>
-    	<option value="smtp">SMTP</option>
+    	@foreach($provider_types as $provider)
+			<option value="{{$provider}}">{{strtoupper($provider)}}</option>
+    	@endforeach
     </select>
 </div>
 

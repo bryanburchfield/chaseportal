@@ -2557,22 +2557,25 @@ var Master = {
             }
         });
 
-        $.ajax({
-            url: '/tools/email_drip/get_properties',
-            type: 'POST',
-            data: {
-                provider_type: provider_type,
-            },
-            success: function (response) {
-                var properties='';
-                response.forEach(function(item, index){
-                    var label = item.charAt(0).toUpperCase() + item.slice(1);
-                    properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="'+item+'" value="" required></div>';
-                });
+        if(provider_type !=''){
+            $.ajax({
+                url: '/tools/email_drip/get_properties',
+                type: 'POST',
+                data: {
+                    provider_type: provider_type,
+                },
+                success: function (response) {
+                    $('.properties').empty();
+                    var properties='';
+                    response.forEach(function(item, index){
+                        var label = item.charAt(0).toUpperCase() + item.slice(1);
+                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="'+item+'" value="" required></div>';
+                    });
 
-                $('.properties').append(properties);
-            }
-        });
+                    $('.properties').append(properties);
+                }
+            });
+        }
     }
 }
 
