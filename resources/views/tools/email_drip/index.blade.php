@@ -88,7 +88,6 @@
                                                             <th>{{__('tools.delete')}}</th>
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
                                                         @if(count($email_service_providers))
                                                             @foreach($email_service_providers as $server)

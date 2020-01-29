@@ -25,6 +25,7 @@ class ValidEmailServiceProvider extends FormRequest
     {
         return [
             'name' => 'required',
+            'provider_type' => 'required',
         ];
     }
 }
