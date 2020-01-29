@@ -194,7 +194,6 @@ class EmailDripController extends Controller
      * @return string[] 
      */
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
-    // public function addEmailDripCampaign(Request $request)
     {
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
