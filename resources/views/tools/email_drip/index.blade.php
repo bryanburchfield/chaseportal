@@ -88,9 +88,25 @@
                                                             <th>{{__('tools.delete')}}</th>
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
-                                                        
+                                                        @if(count($email_service_providers))
+                                                            @foreach($email_service_providers as $server)
+                                                                <tr>
+                                                                    <td>{{$server->name}}</td>
+                                                                    <td>{{$server->provider_type}}</td>
+                                                                    <td>
+                                                                        @foreach ($server->properties as $key => $value)
+                                                                            {{ __('tools.' . $key) }} : {{$value}} <br/>
+                                                                        @endforeach
+                                                                    </td>
+                                                                    <?php $mode='edit';?>
+                                                                    <td><a href="#" data-toggle="modal" data-target="#editServerModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                    <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteEmailServiceProviderModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @else
+                                                            <div class="alert alert-info">{{__('tools.no_servers_added')}}</div>
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
