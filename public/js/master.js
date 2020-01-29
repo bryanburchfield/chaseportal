@@ -2362,7 +2362,7 @@ var Master = {
             description = $(this).find('.description').val(),
             campaign = $(this).find('.campaign').val(),
             subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
-            smtp_server_id = $(this).find('.smtp_server_id').val(),
+            email_service_provider_id = $(this).find('.email_service_provider_id').val(),
             email_field= $(this).find('.email').val(),
             template_id = $(this).find('.template_id').val(),
             emails_per_lead = $(this).find('.emails_per_lead').val(),
@@ -2384,7 +2384,7 @@ var Master = {
                 email_field:email_field,
                 campaign: campaign,
                 subcampaign: subcampaign,
-                smtp_server_id: smtp_server_id,
+                email_service_provider_id: email_service_provider_id,
                 template_id:template_id,
                 emails_per_lead:emails_per_lead,
                 days_between_emails:days_between_emails
