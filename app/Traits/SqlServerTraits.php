@@ -80,4 +80,21 @@ trait SqlServerTraits
             yield [];
         }
     }
+
+    private function defaultLeadFields()
+    {
+        return [
+            'ClientId',
+            'FirstName',
+            'LastName',
+            'PrimaryPhone',
+            'Address',
+            'City',
+            'State',
+            'ZipCode',
+            'Notes',
+            'Campaign',
+            'Subcampaign',
+        ];
+    }
 }

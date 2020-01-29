@@ -477,21 +477,4 @@ class AdminController extends Controller
 
         return ['fields' => array_values($result)];
     }
-
-    private function defaultLeadFields()
-    {
-        return [
-            'ClientId',
-            'FirstName',
-            'LastName',
-            'PrimaryPhone',
-            'Address',
-            'City',
-            'State',
-            'ZipCode',
-            'Notes',
-            'Campaign',
-            'Subcampaign',
-        ];
-    }
 }

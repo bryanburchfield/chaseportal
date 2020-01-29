@@ -312,6 +312,17 @@ class EmailDripController extends Controller
         return $results;
     }
 
+    public function getFilterFields(Request $request)
+    {
+        $fields = [];
+
+        foreach ($this->defaultLeadFields() as $field) {
+            $fields[$field] = '[' . $field . ']';
+        }
+
+        return array_merge($fields, $this->getTableFields($request));
+    }
+
     /**
      * Return the Custom Table ID tied to a dialer campaign
      * 
