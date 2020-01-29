@@ -107,8 +107,8 @@ var Master = {
         $('.edit_server_modal').on('click', this.edit_server_modal);
         $('.edit_email_service_provider').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
-        $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
-        $('.delete_smtp_server').on('click', this.delete_esp);
+        $('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
+        $('.delete_email_service_provider').on('click', this.delete_esp);
         $('.delete_campaign ').on('click', this.delete_campaign);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
         $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
@@ -2354,14 +2354,14 @@ var Master = {
 
     delete_esp:function(e){
         e.preventDefault();
-        var id = $('#deleteSmtpServerModal').find('#id').val();
+        var id = $('#deleteEmailServiceProviderModal').find('#id').val();
 
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-
+        console.log(id);
         $.ajax({
             url: '/tools/email_drip/delete_esp',
             type: 'POST',
