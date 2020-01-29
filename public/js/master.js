@@ -103,9 +103,9 @@ var Master = {
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
-        $('.add_smtp_server').on('submit', this.add_smtp_server);
+        $('.add_email_service_provider').on('submit', this.add_esp);
         $('.edit_server_modal').on('click', this.edit_server_modal);
-        $('.edit_smtp_server').on('submit', this.update_smtp_server);
+        $('.edit_smtp_server').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_smtp_server);
@@ -2163,16 +2163,19 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-    add_smtp_server:function(e){
+    add_esp:function(e){
         e.preventDefault();
 
-        var host = $('.host').val()
-            name = $('.name').val(),
-            port = $('.port').val(),
-            username = $('.username').val(),
-            password = $('.password').val()
+        var name = $(this).find('.name').val(),
+            provider_type = $(this).find('.provider_type').val()
         ;
 
+        var properties={};
+        $('.add_email_service_provider .properties').find('.form-group').each(function(){
+            properties[$(this).find('.form-control').attr('name')] = $(this).find('.form-control').val();
+        });
+
+        console.log(properties);
         $('.alert').empty().hide();
 
         $.ajaxSetup({
@@ -2182,17 +2185,31 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/add_server',
+            url: '/tools/email_drip/add_esp',
             type: 'POST',
             data: {
-                host: host,
-                name:name,
-                port:port,
-                username:username,
-                password:password
+                name: name,
+                provider_type:provider_type,
+                properties:properties
             },
             success: function (response) {
-                location.reload();
+                console.log(response);
+                // location.reload();
+            },error: function (data) {
+                // $(this).find('i').remove();
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_email_service_provider .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.add_email_service_provider .alert-danger').show();
+                    });
+                }
             }
         });
     },
@@ -2226,7 +2243,7 @@ var Master = {
         });
     },
 
-    update_smtp_server:function(e){
+    update_esp:function(e){
         e.preventDefault();
         var id = $('.edit_smtp_server .id').val(),
             host = $('.edit_smtp_server .host').val()
@@ -2245,7 +2262,7 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/update_server',
+            url: '/tools/email_drip/update_esp',
             type: 'POST',
             data: {
                 id:id,
@@ -2569,7 +2586,7 @@ var Master = {
                     var properties='';
                     response.forEach(function(item, index){
                         var label = item.charAt(0).toUpperCase() + item.slice(1);
-                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="'+item+'" value="" required></div>';
+                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
                     });
 
                     $('.properties').append(properties);
