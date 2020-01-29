@@ -2166,16 +2166,8 @@ var Master = {
     add_esp:function(e){
         e.preventDefault();
 
-        var name = $(this).find('.name').val(),
-            provider_type = $(this).find('.provider_type').val()
-        ;
+        var form_data = $(this).serialize();
 
-        var properties=[];
-        $('.add_email_service_provider .properties').find('.form-group').each(function(){
-            properties[$(this).find('.form-control').attr('name')] = $(this).find('.form-control').val();
-        });
-
-        console.log(properties);
         $('.alert').empty().hide();
 
         $.ajaxSetup({
@@ -2188,15 +2180,12 @@ var Master = {
             url: '/tools/email_drip/add_esp',
             type: 'POST',
             data: {
-                name: name,
-                provider_type:provider_type,
-                properties:properties
+                form_data: form_data,
             },
             success: function (response) {
                 console.log(response);
                 // location.reload();
             },error: function (data) {
-                console.log(data);
                 // $(this).find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
@@ -2587,7 +2576,7 @@ var Master = {
                     var properties='';
                     response.forEach(function(item, index){
                         var label = item.charAt(0).toUpperCase() + item.slice(1);
-                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="'+item+'" value="" required></div>';
+                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
                     });
 
                     $('.properties').append(properties);
