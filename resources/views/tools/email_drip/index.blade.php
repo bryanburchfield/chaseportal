@@ -162,6 +162,7 @@
                 <form action="#" method="post" class="form edit_email_service_provider">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
+                    <div class="properties"></div>
                     <button type="submit" class="btn btn-primary edit_email_service_provider add_btn_loader">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>

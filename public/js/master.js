@@ -105,7 +105,7 @@ var Master = {
         $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_email_service_provider').on('submit', this.add_esp);
         $('.edit_server_modal').on('click', this.edit_server_modal);
-        $('.edit_smtp_server').on('submit', this.update_esp);
+        $('.edit_email_service_provider').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_smtp_server').on('click', this.delete_esp);
@@ -2214,7 +2214,7 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/get_server',
+            url: '/tools/email_drip/get_esp',
             type: 'POST',
             data: {
                 id: id,
@@ -2227,19 +2227,22 @@ var Master = {
                 $('#editServerModal .username').val(response.username);
                 $('#editServerModal .password').val(response.password);
                 $('#editServerModal .id').val(response.id);
+
+                $('.properties').empty();
+                var property_inputs='';
+                response.properties.forEach(function(item, index){
+                    var label = item.charAt(0).toUpperCase() + item.slice(1);
+                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
+                });
+
+                $('#editServerModal .properties').append(property_inputs);
             }
         });
     },
 
     update_esp:function(e){
         e.preventDefault();
-        var id = $('.edit_smtp_server .id').val(),
-            host = $('.edit_smtp_server .host').val()
-            name = $('.edit_smtp_server .name').val(),
-            port = $('.edit_smtp_server .port').val(),
-            username = $('.edit_smtp_server .username').val(),
-            password = $('.edit_smtp_server .password').val()
-        ;
+        var form_data = $(this).serialize();
 
         $('.alert').empty().hide();
 
@@ -2252,14 +2255,7 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/update_esp',
             type: 'POST',
-            data: {
-                id:id,
-                host: host,
-                name:name,
-                port:port,
-                username:username,
-                password:password
-            },
+            data:form_data,
             success: function (response) {
                 $(this).find('i').remove();
                 location.reload();
@@ -2570,6 +2566,7 @@ var Master = {
                 success: function (response) {
                     $('.properties').empty();
                     var properties='';
+                    console.log(response);
                     response.forEach(function(item, index){
                         var label = item.charAt(0).toUpperCase() + item.slice(1);
                         properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
