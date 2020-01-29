@@ -108,7 +108,7 @@ var Master = {
         $('.edit_smtp_server').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_smtp_server_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
-        $('.delete_smtp_server').on('click', this.delete_smtp_server);
+        $('.delete_smtp_server').on('click', this.delete_esp);
         $('.delete_campaign ').on('click', this.delete_campaign);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
         $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
@@ -2179,13 +2179,11 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/add_esp',
             type: 'POST',
-            data: {
-                form_data: form_data,
-            },
+            data: form_data,
             success: function (response) {
-                console.log(response);
-                // location.reload();
+                location.reload();
             },error: function (data) {
+                console.log(data);
                 // $(this).find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
@@ -2349,13 +2347,11 @@ var Master = {
             sel = $(this).data('target')
         ;
 
-        console.log(id +' '+ sel+' '+ name);
-
         $(sel+' h3').find('span').text(name);
         $(sel+' #id').val(id);
     },
 
-    delete_smtp_server:function(e){
+    delete_esp:function(e){
         e.preventDefault();
         var id = $('#deleteSmtpServerModal').find('#id').val();
 
@@ -2366,7 +2362,7 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/delete_server',
+            url: '/tools/email_drip/delete_esp',
             type: 'POST',
             data: {
                 id: id,
