@@ -26,7 +26,7 @@
 </div>
 
 <div class="form-group">
-    <label>Email</label>
+    <label>{{__('tools.email_field')}}</label>
     <select name="email_field" class="form-control email" required>
         <option value="">{{__('tools.select_one')}}</option>
     </select>
@@ -36,8 +36,8 @@
     <label>{{__('tools.templates')}}</label>
     <select name="template_id" class="template_id form-control">
         <option value="">{{__('tools.select_one')}}</option>
-        @foreach($templates as $key => $value)
-            <option value="{{$key}}">{{$value}}</option>
+        @foreach($templates as $template)
+            <option value="{{$template->id}}">{{$template->Name}}</option>
         @endforeach
     </select>
 </div>
