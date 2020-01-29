@@ -103,9 +103,9 @@ var Master = {
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
         $('.upload_email_template').on('click', this.upload_email_template);
-        $('.add_email_service_provider').on('submit', this.add_esp);
+        $('.add_esp').on('submit', this.add_esp);
         $('.edit_server_modal').on('click', this.edit_server_modal);
-        $('.edit_email_service_provider').on('submit', this.update_esp);
+        $('.edit_esp').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_email_service_provider').on('click', this.delete_esp);
@@ -2191,11 +2191,11 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.add_email_service_provider .alert-danger').append('<li>'+value+'</li>');
+                                $('.add_esp .alert-danger').append('<li>'+value+'</li>');
                             });
                         }
 
-                        $('.add_email_service_provider .alert-danger').show();
+                        $('.add_esp .alert-danger').show();
                     });
                 }
             }
@@ -2221,10 +2221,10 @@ var Master = {
             },
             success: function (response) {
                 console.log(response.properties);
-                $('#editServerModal .name').val(response.name);
-                $('#editServerModal .provider_type').val(response.provider_type);
-                $('#editServerModal .id').val(response.id);
-                $('#editServerModal .properties').empty();
+                $('#editESPModal .name').val(response.name);
+                $('#editESPModal .provider_type').val(response.provider_type);
+                $('#editESPModal .id').val(response.id);
+                $('#editESPModal .properties').empty();
                 var property_inputs='';
 
                 const entries = Object.entries(response.properties)
@@ -2233,7 +2233,7 @@ var Master = {
                     property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+key+'" name="properties['+key+']" value="'+value+'" required></div>';
                 }
 
-                $('#editServerModal .properties').append(property_inputs);
+                $('#editESPModal .properties').append(property_inputs);
             }
         });
     },
@@ -2335,7 +2335,7 @@ var Master = {
 
     delete_esp:function(e){
         e.preventDefault();
-        var id = $('#deleteEmailServiceProviderModal').find('#id').val();
+        var id = $('#deleteESPModal').find('#id').val();
 
         $.ajaxSetup({
             headers: {
@@ -2573,7 +2573,7 @@ $(document).ready(function () {
         Master.toggle_instructions();
     }
 
-    $('#addServerModal, #editServerModal').on('hidden.bs.modal', function () {
+    $('#addServerModal, #editESPModal').on('hidden.bs.modal', function () {
         $(this).find('.alert').hide();
     });
 

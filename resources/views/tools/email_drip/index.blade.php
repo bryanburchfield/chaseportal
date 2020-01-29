@@ -75,7 +75,7 @@
 
                                     <div class="tab-pane mt30" id="email_service_providers">
                                         <div class="col-sm-12 nopad">
-                                            <a href="#" data-toggle="modal" data-target="#addProviderModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
+                                            <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
 
                                             <div class="table-responsive nobdr email_service_providers">
                                                 <table class="table mt20">
@@ -100,8 +100,8 @@
                                                                         @endforeach
                                                                     </td>
                                                                     <?php $mode='edit';?>
-                                                                    <td><a href="#" data-toggle="modal" data-target="#editServerModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                    <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteEmailServiceProviderModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                    <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                    <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
                                                         @else
@@ -124,8 +124,8 @@
 
 @include('shared.reportmodal')
 
-<!-- Add SMTP Server Modal -->
-<div class="modal fade" id="addProviderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Add Provider Modal -->
+<div class="modal fade" id="addESPModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -134,9 +134,9 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form add_email_service_provider">
+                <form action="#" method="post" class="form add_esp">
                     @include('tools.email_drip.email_service_provider')
-                    <input type="submit" class="btn btn-primary add_email_service_provider" value="{{__('tools.add_provider')}}">
+                    <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
@@ -149,26 +149,48 @@
     </div>
 </div>
 
-<!-- Edit SMTP Server Modal -->
-<div class="modal fade" id="editServerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Edit Provider Modal -->
+<div class="modal fade" id="editESPModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_server')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_provider')}}</h4>
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_email_service_provider">
+                <form action="#" method="post" class="form edit_esp">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_email_service_provider add_btn_loader">{{__('tools.save_changes')}}</button>
+                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Provider Modal -->
+<div class="modal fade" id="deleteESPModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_provider')}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
+                <input type="hidden" name="id" id="id" value="">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-danger delete_email_service_provider add_btn_loader">{{__('tools.delete')}}</button>
             </div>
         </div>
     </div>
@@ -222,28 +244,6 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete SMTP Server Modal -->
-<div class="modal fade" id="deleteEmailServiceProviderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_server')}}</h4>
-            </div>
-
-            <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}} <span></span></h3>
-                <input type="hidden" name="id" id="id" value="">
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger delete_email_service_provider add_btn_loader">{{__('tools.delete')}}</button>
             </div>
         </div>
     </div>
