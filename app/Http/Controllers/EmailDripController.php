@@ -59,7 +59,11 @@ class EmailDripController extends Controller
      */
     public function addEmailServiceProvider(ValidEmailServiceProvider $request)
     {
+        Log::debug($request->all());
         $email_service_provider = new EmailServiceProvider($request->all());
+        Log::info($email_service_provider);
+
+        return ['fields' => $request->all()];
 
         $email_service_provider->user_id = Auth::User()->id;
         $email_service_provider->group_id = Auth::User()->group_id;
