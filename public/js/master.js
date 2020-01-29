@@ -2220,20 +2220,25 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response);
+                console.log(response.properties);
                 $('#editServerModal .name').val(response.name);
-                $('#editServerModal .host').val(response.host);
-                $('#editServerModal .port').val(response.port);
-                $('#editServerModal .username').val(response.username);
-                $('#editServerModal .password').val(response.password);
+                $('#editServerModal .provider_type').val(response.provider_type)
+                // $('#editServerModal .host').val(response.host);
+                // $('#editServerModal .port').val(response.port);
+                // $('#editServerModal .username').val(response.username);
+                // $('#editServerModal .password').val(response.password);
                 $('#editServerModal .id').val(response.id);
 
-                $('.properties').empty();
+                $('#editServerModal .properties').empty();
                 var property_inputs='';
-                response.properties.forEach(function(item, index){
-                    var label = item.charAt(0).toUpperCase() + item.slice(1);
-                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
-                });
+
+                const entries = Object.entries(response.properties)
+                for (const [key, value] of entries) {
+                    var label = key.charAt(0).toUpperCase() + key.slice(1);
+                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+key+'" name="properties['+key+']" value="'+value+'" required></div>';
+                }
+
+                console.log(property_inputs);
 
                 $('#editServerModal .properties').append(property_inputs);
             }
