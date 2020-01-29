@@ -387,4 +387,12 @@ class EmailDripController extends Controller
 
         return $class::properties();
     }
+
+    public function updateFilters(Request $request)
+    {
+
+
+
+        return ['status' => 'success'];
+    }
 }
