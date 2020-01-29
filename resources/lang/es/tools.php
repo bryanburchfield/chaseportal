@@ -37,6 +37,7 @@ return [
 	'dnc_importer'	=> 'DNC Importador',
 	'edit'			=> 'Revisar',
 	'edit_drip_campaign'	=> 'Editar Campaña de Goteo',
+	'email_field'	=> 'Campo de Correo Electrónico',
 	'edit_provider'	=> 'Editar Proveedor',
 	'emails_per_lead'	=> 'Correos Electrónicos por Cliente Potencial',
 	'edit_rule'		=> 'Revisar Regla',

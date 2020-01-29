@@ -51,7 +51,7 @@
                                                         @foreach($email_drip_campaigns as $drip)
                                             				<tr>
                                             					<td>
-                                                                    <label class="switch email_campaign_switch">
+                                                                    <label class="switch email_campaign_switch {{$drip->emailDripCampaignFilters->isEmpty() ? 'needs_filters' : 'has_filters'}}">
                                                                         <input type="checkbox" {{ ($drip->active) ? 'checked' : '' }} name="email_input" data-id="{{$drip->id}}">
                                                                         <span></span>
                                                                     </label>
@@ -281,7 +281,7 @@
             </div>
 
             <div class="modal-body">
-    
+
                 <input type="hidden" name="id" id="id" value="">
             </div>
 

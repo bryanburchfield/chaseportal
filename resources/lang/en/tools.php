@@ -42,6 +42,7 @@ return [
 	'edit_server'	=> 'Edit SMTP Server',
 	'email_drip_builder'	=> 'Email Drip Builder',
 	'email_drip_campaigns'	=> 'Email Drip Campaigns',
+	'email_field'	=> 'Email Field',
 	'emails_per_lead'	=> 'Emails Per Lead',
 	'filter_error'	=> 'Please select a filter and value before adding another one',
 	'filters_required' => 'You must enter at least one filter',

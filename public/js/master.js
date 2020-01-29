@@ -581,35 +581,42 @@ var Master = {
     },
 
     toggle_email_campaign:function(){
-        var checked;
-        var campaign_id = $(this).data('id');
-
-        if($(this).is(':checked')){
-            $(this).attr('Checked','Checked');
-            checked=1;
+        if($(this).parent().hasClass('needs_filters')){
+            $('#campaignFilterModal .modal-body').find('.alert').remove();
+            $('#campaignFilterModal').modal('show');
+            $('#campaignFilterModal .modal-body').append('<div class="alert alert-info">Please add filters to this campaign before activating it.</div>');
+            return false;
         }else{
-            $(this).removeAttr('Checked');
-            checked=0;
+            var checked;
+            var campaign_id = $(this).data('id');
+
+            if($(this).is(':checked')){
+                $(this).attr('Checked','Checked');
+                checked=1;
+            }else{
+                $(this).removeAttr('Checked');
+                checked=0;
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url:'/tools/email_drip/toggle_email_campaign',
+                type:'POST',
+                data:{
+                    checked:checked,
+                    id:campaign_id
+
+                },
+                success:function(response){
+                    console.log(response);
+                }
+            });
         }
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url:'/tools/email_drip/toggle_email_campaign',
-            type:'POST',
-            data:{
-                checked:checked,
-                id:campaign_id
-
-            },
-            success:function(response){
-                console.log(response);
-            }
-        });
     },
 
     get_leadrule_filter_menu:function(){
