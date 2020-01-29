@@ -47,13 +47,11 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
             $this->connect();
             $sendResult = $this->send($payload);
         } catch (PostmarkException $e) {
-            echo $e->message;
             $error = ValidationException::withMessages([
                 'error' => [$e->message],
             ]);
             throw $error;
         } catch (\Exception $e) {
-            echo $e->getMessage();
             $error = ValidationException::withMessages([
                 'error' => [$e->getMessage()],
             ]);
