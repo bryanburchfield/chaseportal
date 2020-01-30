@@ -12,9 +12,7 @@
             <div class="modal-body">
 
                 @php
-
                 $reports = [
-                    'call_details' => __('reports.call_details'),
                     'agent_analysis' =>  __('reports.agent_analysis'),
                     'agent_summary' =>  __('reports.agent_summary'),
                     'agent_summary_campaign' =>  __('reports.agent_summary_campaign'),
@@ -33,8 +31,12 @@
                     'production_report' =>  __('reports.production_report'),
                     'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
                     'lead_inventory' =>  __('reports.lead_inventory'),
-                    'lead_inventory_sub' =>  __('reports.lead_inventory_sub')
+                    'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
                 ];
+
+                if(!Auth::User()->isDemo()) {
+                    $reports['call_details'] = __('reports.call_details');
+                }
 
                 asort($reports);
 

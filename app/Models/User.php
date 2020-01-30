@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function getExpiresInAttribute()
     {
-        if ($this->user_type !== 'demo' && $this->user_type !== 'expired') {
+        if (!$this->isDemo()) {
             return null;
         }
 
@@ -84,6 +84,15 @@ class User extends Authenticatable
     {
         $type = (array) $type;
         return in_array($this->user_type, $type);
+    }
+
+    public function isDemo()
+    {
+        if ($this->user_type == 'demo' || $this->user_type == 'expired') {
+            return true;
+        }
+
+        return false;
     }
 
     public function getDatabaseArray()

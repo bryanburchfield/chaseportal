@@ -42,7 +42,9 @@
 								</div>
 							</div>
 
-							<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
+							@if (!Auth::User()->isDemo())
+								<a class="btn btn-primary" href="/tools/dnc_importer/upload">{{__('tools.upload_new_file')}}</a>
+							@endif
 
 							@if (count($files))
 							{{ $files->links() }}
@@ -80,7 +82,9 @@
 												@endif
 												<td>
 													@if (empty($file['process_started_at']))
-														<button class="btn btn-success" name="action" value="process:{{$file['id']}}">{{__('tools.process')}}</button>
+														@if (!Auth::User()->isDemo())
+															<button class="btn btn-success" name="action" value="process:{{$file['id']}}">{{__('tools.process')}}</button>
+														@endif
 													@elseif (empty($file['processed_at']))
 														{{__('tools.in_process')}}
 													@else
@@ -89,10 +93,13 @@
 												</td>
 												<td>
 													@if (empty($file['process_started_at']))
-														<a class="btn btn-danger delete_dnc" data-toggle="modal" data-target="#deleteDNCModal" href="#" data-id="{{$file['id']}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a>
-
+														@if (!Auth::User()->isDemo())
+															<a class="btn btn-danger delete_dnc" data-toggle="modal" data-target="#deleteDNCModal" href="#" data-id="{{$file['id']}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a>
+														@endif
 													@elseif (!empty($file['processed_at']) && empty($file['reverse_started_at']))
-														<a class="btn btn-danger reverse_dnc" data-toggle="modal" data-target="#reverseDNCModal" href="#" data-id="{{$file['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
+														@if (!Auth::User()->isDemo())
+															<a class="btn btn-danger reverse_dnc" data-toggle="modal" data-target="#reverseDNCModal" href="#" data-id="{{$file['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
+														@endif
 													@elseif (!empty($file['processed_at']) && empty($file['reversed_at']))
 														{{__('tools.in_process')}}
 													@else

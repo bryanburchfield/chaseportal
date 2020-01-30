@@ -68,8 +68,8 @@ class MasterDashController extends Controller
             abort(403, 'Invalid token');
         }
 
-        // Check that they're a demo or expired demo user
-        if (!($user->isType('demo') || $user->isType('expired'))) {
+        // Check that they're a demo user
+        if (!$user->isDemo) {
             return redirect('/');
         }
 
