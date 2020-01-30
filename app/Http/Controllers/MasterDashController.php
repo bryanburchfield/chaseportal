@@ -69,7 +69,7 @@ class MasterDashController extends Controller
         }
 
         // Check that they're a demo user
-        if (!$user->isDemo) {
+        if (!$user->isDemo()) {
             return redirect('/');
         }
 
