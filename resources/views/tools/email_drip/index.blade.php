@@ -273,7 +273,7 @@
 
 <!-- Campaign Filter Modal -->
 <div class="modal fade" id="campaignFilterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -281,8 +281,42 @@
             </div>
 
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
+                    </div>
+                </div>
 
-                <input type="hidden" name="id" id="id" value="">
+                <div class="row hidetilloaded filter_fields_div">
+                    <div class="col-sm-4">
+                        <label>Field</label>
+                        <div class="form-group">
+                            <select class="form-control filter_fields" name="filter_fields"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 filter_operators_div">
+                        <label>Operator</label>
+                        <div class="form-group">
+                            <select class="form-control filter_operators" name="filter_operators">
+                                <option value="">Select One</option>
+                                <option value="<">Less Than</option>
+                                <option value=">">Greater Than</option>
+                                <option value="==">Equal to</option>
+                                <option value="!=">Not Equal to</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 filter_values_div">
+                        <label>Value</label>
+                        <input type="text" class="form-control filter_value" name="filter_value">
+                    </div>
+
+                    <input type="hidden" name="id" id="id" value="">
+                </div>
+
+                <div class="row filters"></div>
             </div>
 
             <div class="modal-footer">

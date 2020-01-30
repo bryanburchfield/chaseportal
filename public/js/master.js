@@ -115,6 +115,7 @@ var Master = {
         $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
         $('.edit_campaign').on('click', this.update_email_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
+        $('.add_email_campaign_filter').on('click', this.add_filter_fields);
 	},
 
     hide_modal_error:function(){
@@ -582,9 +583,12 @@ var Master = {
 
     toggle_email_campaign:function(){
         if($(this).parent().hasClass('needs_filters')){
+            console.log($(this).data('id'));
             $('#campaignFilterModal .modal-body').find('.alert').remove();
             $('#campaignFilterModal').modal('show');
-            $('#campaignFilterModal .modal-body').append('<div class="alert alert-info">Please add filters to this campaign before activating it.</div>');
+            $('#campaignFilterModal').find('#id').val($(this).data('id'));
+            Master.get_filter_fields($(this).data('id'));
+            $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
             return false;
         }else{
             var checked;
@@ -2400,6 +2404,11 @@ var Master = {
                 $('.create_campaign ').find('i').remove();
                 $('#createCampaignModal').modal('hide');
                 $('#campaignFilterModal').modal('show');
+                $('#campaignFilterModal').find('#id').val(response.email_drip_campaign_id);
+                // if filter modal is closed reload page to display new campaign
+                $('#campaignFilterModal').on('hidden.bs.modal', function () {
+                    location.reload()
+                });
             },error: function (data) {
                 $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
@@ -2499,7 +2508,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response);
+
                 Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
@@ -2569,6 +2578,43 @@ var Master = {
                 }
             });
         }
+    },
+
+    get_filter_fields:function(id){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_filter_fields',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                var filters='';
+                // $('#campaignFilterModal .modal-body').find('.filter_fields_div').remove();
+                console.log(response);
+                const filters_array = Object.entries(response)
+                console.log(filters_array);
+
+                for(var i=0;i<filters_array.length;i++){
+                    filters+='<option value="'+filters_array[i][0]+'">'+filters_array[i][1]+'</option>';
+                }
+
+                $('#campaignFilterModal .modal-body select.filter_fields').append(filters);
+                $('#campaignFilterModal .modal-body').find('.filter_fields_div').show();
+                console.log(filters);
+            }
+        });
+    },
+
+    add_filter_fields:function(e){
+        e.preventDefault();
+        $(this).parent().parent().parent().find('.filter_fields_div').last().clone().insertAfter('.filter_fields_div:last');
     }
 }
 
@@ -2591,11 +2637,6 @@ $(document).ready(function () {
 	$('.filter_campaign').on('click', '.stop-propagation', function (e) {
 		e.stopPropagation();
 	});
-
-    // if filter modal is closed reload page to display new campaign
-    $('#campaignFilterModal').on('hidden.bs.modal', function () {
-        location.reload()
-    });
 
 	// Close the dropdown if the user clicks outside of it
 	window.onclick = function (event) {
