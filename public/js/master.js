@@ -1299,11 +1299,12 @@ var Master = {
 			$('.dl_alert.alert').removeClass('alert-danger');
 			$('.dl_alert.alert').addClass('alert-warning');
 			$('.dl_alert.alert p').text(Lang.get('js_msgs.dl_warning'));
+            $('#report_dl_warning .modal-footer .dl_report').show();
 		} else if (tot_rows >= 2000) {
 			$('.dl_alert.alert').removeClass('alert-warning');
 			$('.dl_alert.alert').addClass('alert-danger');
 			$('.dl_alert.alert p').text(Lang.get('js_msgs.large_dl_warning'));
-			$('.report_dl_warning .modal-footer button').hide();
+			$('#report_dl_warning .modal-footer .dl_report').hide();
 			$('#report_dl_warning').modal('toggle');
 		} else {
 			pdf_dl_link = $('.report_dl_option.pdf').attr('href');
