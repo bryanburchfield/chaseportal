@@ -204,7 +204,7 @@ class EmailDripController extends Controller
 
         return [
             'status' => 'success',
-            'id' => $email_drip_campaign->id,
+            'email_drip_campaign_id' => $email_drip_campaign->id,
         ];
     }
 
@@ -226,7 +226,7 @@ class EmailDripController extends Controller
 
         return [
             'status' => 'success',
-            'id' => $email_drip_campaign->id,
+            'email_drip_campaign_id' => $email_drip_campaign->id,
         ];
     }
 
