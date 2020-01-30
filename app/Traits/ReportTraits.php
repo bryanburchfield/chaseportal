@@ -234,7 +234,7 @@ trait ReportTraits
         $to = null;
 
         if (empty($request->input('fromdate'))) {
-            if (!$this->params['datesOptional']) {
+            if (!empty($this->params['datesOptional'])) {
                 $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
             }
         } else {
@@ -251,7 +251,7 @@ trait ReportTraits
         }
 
         if (empty($request->input('todate'))) {
-            if (!$this->params['datesOptional']) {
+            if (!empty($this->params['datesOptional'])) {
                 $this->errors->add('todate.required', trans('reports.errtodaterequired'));
             }
         } else {

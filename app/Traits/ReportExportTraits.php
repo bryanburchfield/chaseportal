@@ -13,9 +13,15 @@ use Illuminate\Support\Facades\Mail;
 
 trait ReportExportTraits
 {
-    public function pdfExport($request)
+    private function increaseLimits()
     {
         ini_set('max_execution_time', 600);
+        ini_set('memory_limit', '512M');
+    }
+
+    public function pdfExport($request)
+    {
+        $this->increaseLimits();
 
         $this->params['pagesize'] = 29;
 
@@ -47,7 +53,7 @@ trait ReportExportTraits
 
     public function htmlExport(Request $request)
     {
-        ini_set('max_execution_time', 600);
+        $this->increaseLimits();
 
         $results = $this->getResults($request);
 
@@ -75,7 +81,7 @@ trait ReportExportTraits
 
     private function doExport($request, $format)
     {
-        ini_set('max_execution_time', 600);
+        $this->increaseLimits();
 
         $results = $this->getResults($request);
 
