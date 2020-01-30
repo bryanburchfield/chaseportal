@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidEmailServiceProvider;
 use App\Models\EmailDripCampaign;
+use App\Models\EmailDripCampaignFilter;
 use App\Models\EmailServiceProvider;
 use App\Models\Script;
 use App\Services\EmailDripService;
@@ -216,7 +217,6 @@ class EmailDripController extends Controller
      */
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
-
         $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
 
         $email_drip_campaign->fill($request->all());
@@ -392,6 +392,13 @@ class EmailDripController extends Controller
             Str::studly($request->provider_type);
 
         return $class::properties();
+    }
+
+    public function getFilters(Request $request)
+    {
+        return EmailDripCampaignFilter::where('email_drip_campaign_id', $request->email_drip_campaign_id)
+            ->where('group_id', Auth::User()->group_id)
+            ->get();
     }
 
     public function updateFilters(Request $request)
