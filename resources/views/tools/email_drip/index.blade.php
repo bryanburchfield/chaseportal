@@ -39,7 +39,7 @@
                                                             <th>{{__('tools.description')}}</th>
                                         					<th>{{__('tools.campaign')}}</th>
                                         					<th>{{__('tools.subcampaign')}}</th>
-                                        					<th>{{__('tools.server_id')}}</th>
+                                        					<th>{{__('tools.provider')}}</th>
                                                             <th>{{__('tools.emails_per_lead')}}</th>
                                                             <th>{{__('tools.days_between_emails')}}</th>
                                                             <th>{{__('tools.edit')}}</th>
@@ -60,7 +60,7 @@
                                             					<td>{{$drip->description}}</td>
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>{{$drip->subcampaign}}</td>
-                                                                <td>{{$drip->email_service_provider_id}}</td>
+                                                                <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>
                                                                 <td>{{$drip->days_between_emails}}</td>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
