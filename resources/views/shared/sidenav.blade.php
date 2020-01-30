@@ -16,9 +16,7 @@
         <li {!! $page['menuitem'] == 'kpidash' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@kpi') }}"><i class="fas fa-paper-plane"></i>{{__('sidenav.kpis')}}</a></li>
         <li {!! $page['menuitem'] == 'reports' ? 'class="active"' : ''!!} data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>{{__('sidenav.reports')}}</a></li>
 
-        @if (config('app.env') != 'production' || Auth::user()->isType('admin') || Auth::user()->group_id == 777)
             <li {!! $page['menuitem'] == 'tools' ? 'class="active"' : ''!!} ><a href="{{  Auth::user()->isType('admin') || Auth::user()->group_id == 777 ? action('LeadsController@index') : action('DncController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
-        @endif
 
         @can('accessAdmin')
             <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a href="{{ action('AdminController@index') }}"><i class="fas fa-user-cog"></i>{{__('sidenav.admin')}}</a></li>
