@@ -1194,7 +1194,7 @@ var Master = {
 	pdf_download_warning: function (e) {
 		e.preventDefault();
 		var tot_rows = parseInt($('.totrows').val());
-		$('.report_dl_warning .modal-footer button').show();
+		$('#report_dl_warning .modal-footer .dl_report').show();
 
 		if (tot_rows > 1000 && tot_rows < 2000) {
 			$('#report_dl_warning').modal('toggle');
@@ -1205,7 +1205,7 @@ var Master = {
 			$('.dl_alert.alert').removeClass('alert-warning');
 			$('.dl_alert.alert').addClass('alert-danger');
 			$('.dl_alert.alert p').text(Lang.get('js_msgs.large_dl_warning'));
-			$('.report_dl_warning .modal-footer button').hide();
+			$('#report_dl_warning .modal-footer .dl_report').hide();
 			$('#report_dl_warning').modal('toggle');
 		} else {
 			pdf_dl_link = $('.report_dl_option.pdf').attr('href');
@@ -1267,7 +1267,7 @@ var Master = {
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_campaign')+':</span> <span class="leadrule_value">'+response.source_campaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.source_subcampaign')+':</span> <span class="leadrule_value">'+response.source_subcampaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_campaign')+':</span> <span class="leadrule_value">'+response.destination_campaign+'</span></p>';
-                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_subcampaign')+':</span> <span class="leadrule_value">'+response.destination_subcampaign+'</span></p>';
+                leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.destination_subcampaign')+':</span><span class="leadrule_value">'+response.destination_subcampaign+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.filter_type')+':</span> <span class="leadrule_value">'+response.filter_type+'</span></p>';
                 leadrule_details += '<p class="lead_info"><span class="leadrule_property">'+Lang.get('js_msgs.filter_value')+':</span> <span class="leadrule_value">'+response.filter_value+'</span></p>';
 
