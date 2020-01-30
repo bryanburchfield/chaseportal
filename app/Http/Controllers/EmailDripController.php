@@ -397,6 +397,7 @@ class EmailDripController extends Controller
     public function updateFilters(Request $request)
     {
 
+        Log::debug($request->all());
 
 
         return ['status' => 'success'];
