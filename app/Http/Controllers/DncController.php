@@ -59,6 +59,7 @@ class DncController extends Controller
             'reverse_started_at',
             'reversed_at'
         )
+            ->where('group_id', Auth::User()->group_id)
             ->orderBy('id', 'desc')
             ->get();
 
