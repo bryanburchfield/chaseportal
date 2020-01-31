@@ -294,14 +294,14 @@
                         <div class="col-sm-4">
                             <label>Field</label>
                             <div class="form-group">
-                                <select class="form-control filter_fields" name="filter_fields"></select>
+                                <select class="form-control filter_fields" name="filter_fields" data-type="filter"></select>
                             </div>
                         </div>
 
                         <div class="col-sm-4 filter_operators_div">
                             <label>Operator</label>
                             <div class="form-group">
-                                <select class="form-control filter_operators" name="filter_operators">
+                                <select class="form-control filter_operators" name="filter_operators" data-type="operator">
                                     <option value="">Select One</option>
                                     <option value="<">Less Than</option>
                                     <option value=">">Greater Than</option>
@@ -313,7 +313,7 @@
 
                         <div class="col-sm-4 filter_values_div">
                             <label>Value</label>
-                            <input type="text" class="form-control filter_value" name="filter_value">
+                            <input type="text" class="form-control filter_value" name="filter_value" data-type="value">
                         </div>
                     </div>
 
@@ -325,7 +325,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger save_filters add_btn_loader">{{__('tools.save_changes')}}</button>
+                <button type="button" class="btn btn-danger save_filters">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>

@@ -2671,12 +2671,14 @@ var Master = {
         var filter=[];
         $('.filter_fields_div').each(function(){
             $(this).find('.form-control').each(function(){
-                filter.push($(this).val());
+                filter[$(this).data('type')] = $(this).val();
             });
 
             filters.push(filter);
             filter=[];
         });
+
+        console.log(filters);
 
         $.ajaxSetup({
             headers: {
