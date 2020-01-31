@@ -132,5 +132,11 @@ return [
 	'dnc_upload3'	=> "If the file doesn't have a header row, the phone numbers must be in the first column.",
 
 	'process'	=> 'Process',
-	'in_process'	=> 'In Process'
+	'in_process'	=> 'In Process',
+
+	//////////  OPERATORS
+
+	'equals'	=> 'Equals',
+	'not_equals'	=> 'Not Equals',
+
 ];
