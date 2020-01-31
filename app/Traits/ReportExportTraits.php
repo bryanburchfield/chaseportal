@@ -13,22 +13,18 @@ use Illuminate\Support\Facades\Mail;
 
 trait ReportExportTraits
 {
-    private function increaseLimits()
-    {
-        ini_set('max_execution_time', 600);
-        ini_set('memory_limit', '1G');
-    }
+    private $CSV_DELIMITER = ',';
+    private $CSV_ENCLOSURE = '"';
+    private $CSV_ESCAPE = '\\';
 
     public function pdfExport($request)
     {
-        $this->increaseLimits();
-
         $this->params['pagesize'] = 29;
 
-        $results = $this->getResults($request);
+        $results = $this->runReport($request);
 
         // check for errors
-        if (is_object($results)) {
+        if (empty($results)) {
             return null;
         }
 
@@ -53,12 +49,10 @@ trait ReportExportTraits
 
     public function htmlExport(Request $request)
     {
-        $this->increaseLimits();
-
-        $results = $this->getResults($request);
+        $results = $this->runReport($request);
 
         // check for errors
-        if (is_object($results)) {
+        if (empty($results)) {
             return null;
         }
 
@@ -71,12 +65,58 @@ trait ReportExportTraits
 
     public function csvExport($request)
     {
-        return $this->doExport($request, 'csv');
+        $results = $this->runReport($request);
+
+        // check for errors
+        if (empty($results)) {
+            return null;
+        }
+
+        $headers = array_values([$this->params['columns']]);
+
+        header("Content-type: text/csv");
+        header("Content-Disposition: attachment; filename=report.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'w');
+
+        array_walk($headers, [&$this, 'outputCsv'], $outstream);
+        array_walk($results, [&$this, 'outputCsv'], $outstream);
+
+        fclose($outstream);
+
+        die();
     }
 
     public function xlsExport($request)
     {
         return $this->doExport($request, 'xls');
+    }
+
+    private function runReport($request)
+    {
+        $this->increaseLimits();
+
+        $results = $this->getResults($request);
+
+        // check for errors
+        if (is_object($results)) {
+            return null;
+        }
+
+        return $results;
+    }
+
+    private function increaseLimits()
+    {
+        ini_set('max_execution_time', 600);
+        ini_set('memory_limit', '1G');
+    }
+
+    private function outputCsv(&$vals, $key, $filehandler)
+    {
+        fputcsv($filehandler, $vals, $this->CSV_DELIMITER, $this->CSV_ENCLOSURE, $this->CSV_ESCAPE);
     }
 
     private function doExport($request, $format)
