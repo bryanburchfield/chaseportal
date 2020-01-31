@@ -34,7 +34,7 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
         }
     }
 
-    public function test()
+    public function testConnection()
     {
         $payload = [
             'from' => $this->postmark_server->properties['default_signature'],

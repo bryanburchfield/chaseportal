@@ -22,7 +22,7 @@ class Smtp implements \App\Interfaces\EmailServiceProvider
         # code...
     }
 
-    public function test()
+    public function testConnection()
     {
         // see if we can connect to server
         try {

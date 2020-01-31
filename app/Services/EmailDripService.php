@@ -24,6 +24,6 @@ class EmailDripService
 
     public function testConnection()
     {
-        return $this->email_service_provider->test();
+        return $this->email_service_provider->testConnection();
     }
 }

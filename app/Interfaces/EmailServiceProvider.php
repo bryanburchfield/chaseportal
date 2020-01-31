@@ -6,7 +6,7 @@ interface EmailServiceProvider
 {
     public function connect();
 
-    public function test();
+    public function testConnection();
 
     public function send($payload);
 
