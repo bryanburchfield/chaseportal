@@ -330,12 +330,17 @@ class EmailDripController extends Controller
 
     public function updateFilters(Request $request)
     {
-
         Log::debug($request->all());
 
-        return ($request->all());
+        if ($request->has('filters')) {
+            foreach ($request->filters as $filter) {
+                $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
+                $email_drip_campaign_filter->email_drip_campaign_id = $request->email_drip_campaign_id;
+                $email_drip_campaign_filter->save();
+            }
+        }
 
-        // return ['status' => 'success'];
+        return ['status' => 'success'];
     }
 
     /////////////  Private functions ////////////////
