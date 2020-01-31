@@ -263,6 +263,10 @@ class EmailDripController extends Controller
             $fields[$field] = '[' . $field . ']';
         }
 
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+
+        $request->merge(['campaign' => $email_drip_campaign->campaign]);
+
         return array_merge($fields, $this->getTableFields($request));
     }
 
@@ -330,8 +334,6 @@ class EmailDripController extends Controller
 
     public function updateFilters(Request $request)
     {
-        Log::debug($request->all());
-
         if ($request->has('filters')) {
             foreach ($request->filters as $filter) {
                 $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
