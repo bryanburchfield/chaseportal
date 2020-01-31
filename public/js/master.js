@@ -2627,6 +2627,7 @@ var Master = {
             $('#campaignFilterModal .modal-body').find('.alert').remove();
             $('#campaignFilterModal').modal('show');
             $('#campaignFilterModal').find('#id').val($(this).data('id'));
+            $('.filter_fields_cnt').removeClass('hidetilloaded');
             Master.get_filter_fields($(this).data('id'));
             if($(this).parent().hasClass('email_campaign_switch')){
                 $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
@@ -2668,17 +2669,16 @@ var Master = {
         var email_drip_campaign_id = $('.filter_fields_div').find('#id').val();
 
         var filters=[];
-        var filter=[];
+        var filter={};
+
         $('.filter_fields_div').each(function(){
             $(this).find('.form-control').each(function(){
                 filter[$(this).data('type')] = $(this).val();
             });
 
             filters.push(filter);
-            filter=[];
+            filter={};
         });
-
-        console.log(filters);
 
         $.ajaxSetup({
             headers: {
@@ -2695,6 +2695,9 @@ var Master = {
             },
             success:function(response){
                 console.log(response);
+                if(response.status=='success'){
+
+                }
             }
         });
     },
