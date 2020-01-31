@@ -333,8 +333,9 @@ class EmailDripController extends Controller
 
         Log::debug($request->all());
 
+        return ($request->all());
 
-        return ['status' => 'success'];
+        // return ['status' => 'success'];
     }
 
     /////////////  Private functions ////////////////
