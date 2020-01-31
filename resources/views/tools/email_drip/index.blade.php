@@ -42,6 +42,7 @@
                                         					<th>{{__('tools.provider')}}</th>
                                                             <th>{{__('tools.emails_per_lead')}}</th>
                                                             <th>{{__('tools.days_between_emails')}}</th>
+                                                            <th>Filters</th>
                                                             <th>{{__('tools.edit')}}</th>
                                                             <th>{{__('tools.delete')}}</th>
                                         				</tr>
@@ -63,6 +64,7 @@
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>
                                                                 <td>{{$drip->days_between_emails}}</td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#campaignFilterModal" class="campaign_filter_modal {{$drip->emailDripCampaignFilters->isEmpty() ? 'needs_filters' : 'has_filters'}}"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$drip->name}}" data-id="{{$drip->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                             				</tr>
@@ -286,37 +288,39 @@
                         <a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
                     </div>
                 </div>
-
-                <div class="row hidetilloaded filter_fields_div">
-                    <div class="col-sm-4">
-                        <label>Field</label>
-                        <div class="form-group">
-                            <select class="form-control filter_fields" name="filter_fields"></select>
+                
+                <div class="filter_fields_cnt hidetilloaded">
+                    <div class="row filter_fields_div">
+                        <div class="col-sm-4">
+                            <label>Field</label>
+                            <div class="form-group">
+                                <select class="form-control filter_fields" name="filter_fields"></select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-sm-4 filter_operators_div">
-                        <label>Operator</label>
-                        <div class="form-group">
-                            <select class="form-control filter_operators" name="filter_operators">
-                                <option value="">Select One</option>
-                                <option value="<">Less Than</option>
-                                <option value=">">Greater Than</option>
-                                <option value="==">Equal to</option>
-                                <option value="!=">Not Equal to</option>
-                            </select>
+                        <div class="col-sm-4 filter_operators_div">
+                            <label>Operator</label>
+                            <div class="form-group">
+                                <select class="form-control filter_operators" name="filter_operators">
+                                    <option value="">Select One</option>
+                                    <option value="<">Less Than</option>
+                                    <option value=">">Greater Than</option>
+                                    <option value="==">Equal to</option>
+                                    <option value="!=">Not Equal to</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-sm-4 filter_values_div">
-                        <label>Value</label>
-                        <input type="text" class="form-control filter_value" name="filter_value">
+                        <div class="col-sm-4 filter_values_div">
+                            <label>Value</label>
+                            <input type="text" class="form-control filter_value" name="filter_value">
+                        </div>
                     </div>
 
                     <input type="hidden" name="id" id="id" value="">
+                    <div class="row filters"></div>
                 </div>
-
-                <div class="row filters"></div>
+                
             </div>
 
             <div class="modal-footer">

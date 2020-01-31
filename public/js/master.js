@@ -92,7 +92,7 @@ var Master = {
         $('.add_rule').on('submit', this.create_leadrule);
         $('.edit_rule').on('submit', this.updateleadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
-        $('.switch.email_campaign_switch input').on('click', this.toggle_email_campaign);
+        // $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
@@ -116,6 +116,8 @@ var Master = {
         $('.edit_campaign').on('click', this.update_email_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
         $('.add_email_campaign_filter').on('click', this.add_filter_fields);
+        $('.campaign_filter_modal i, .switch.email_campaign_switch input').on('click', this.check_campaign_filters);
+        $('.save_filters').on('click', this.update_campaign_filters);
 	},
 
     hide_modal_error:function(){
@@ -581,46 +583,85 @@ var Master = {
         });
     },
 
-    toggle_email_campaign:function(){
+    check_campaign_filters:function(e){
+        e.preventDefault();
         if($(this).parent().hasClass('needs_filters')){
-            console.log($(this).data('id'));
             $('#campaignFilterModal .modal-body').find('.alert').remove();
             $('#campaignFilterModal').modal('show');
             $('#campaignFilterModal').find('#id').val($(this).data('id'));
             Master.get_filter_fields($(this).data('id'));
-            $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
+            if($(this).parent().hasClass('email_campaign_switch')){
+                $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
+            }
             return false;
         }else{
-            var checked;
-            var campaign_id = $(this).data('id');
-
-            if($(this).is(':checked')){
-                $(this).attr('Checked','Checked');
-                checked=1;
+            if($(e.target).parent().hasClass('email_campaign_switch')){
+                Master.toggle_email_campaign(e,$(this));
             }else{
-                $(this).removeAttr('Checked');
-                checked=0;
+                Master.get_filters(e,$(this));
             }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url:'/tools/email_drip/toggle_email_campaign',
-                type:'POST',
-                data:{
-                    checked:checked,
-                    id:campaign_id
-
-                },
-                success:function(response){
-                    console.log(response);
-                }
-            });
         }
+    },
+
+    update_campaign_filters:function(e){
+        e.preventDefault();
+        console.log($(this));
+    },
+
+    get_filters :function(e, that){
+        e.preventDefault();
+        var email_drip_campaign_id = $(that).data('id');
+        console.log(that);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/get_filters',
+            type:'POST',
+            data:{
+                email_drip_campaign_id:email_drip_campaign_id,
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
+    },
+
+    toggle_email_campaign:function(e,that){
+
+        var checked;
+        var campaign_id = $(that).data('id');
+
+        if($(that).is(':checked')){
+            $(that).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(that).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/toggle_email_campaign',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:campaign_id
+
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
     },
 
     get_leadrule_filter_menu:function(){
@@ -2583,6 +2624,8 @@ var Master = {
 
     get_filter_fields:function(id){
 
+        $('#campaignFilterModal .modal-body').find('.not_saved_filter').remove();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2597,25 +2640,25 @@ var Master = {
             },
             success: function (response) {
                 var filters='';
-                // $('#campaignFilterModal .modal-body').find('.filter_fields_div').remove();
-                console.log(response);
                 const filters_array = Object.entries(response)
-                console.log(filters_array);
 
                 for(var i=0;i<filters_array.length;i++){
                     filters+='<option value="'+filters_array[i][0]+'">'+filters_array[i][1]+'</option>';
                 }
 
-                $('#campaignFilterModal .modal-body select.filter_fields').append(filters);
-                $('#campaignFilterModal .modal-body').find('.filter_fields_div').show();
-                console.log(filters);
+                $('#campaignFilterModal .modal-body .filter_fields_cnt select.filter_fields').append(filters);
+                $('#campaignFilterModal .modal-body').find('.filter_fields_cnt').show();
             }
         });
     },
 
     add_filter_fields:function(e){
         e.preventDefault();
-        $(this).parent().parent().parent().find('.filter_fields_div').last().clone().insertAfter('.filter_fields_div:last');
+        var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
+        $(new_filter_row).find('.form-control').each(function(){
+            $(this).val('');
+        });
+        $(new_filter_row).insertAfter('.filter_fields_div:last');
     }
 }
 
