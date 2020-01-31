@@ -16,7 +16,7 @@ trait ReportExportTraits
     private function increaseLimits()
     {
         ini_set('max_execution_time', 600);
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '1G');
     }
 
     public function pdfExport($request)
