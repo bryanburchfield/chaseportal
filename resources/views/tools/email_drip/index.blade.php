@@ -317,7 +317,7 @@
                         </div>
                     </div>
 
-                    <input type="hidden" name="id" id="id" value="">
+                    <input type="hidden" name="email_drip_campaign_id" id="id" value="">
                     <div class="row filters"></div>
                 </div>
                 

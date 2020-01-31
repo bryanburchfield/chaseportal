@@ -115,6 +115,7 @@ var Master = {
         $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
         $('.edit_campaign').on('click', this.update_email_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
+
         $('.add_email_campaign_filter').on('click', this.add_filter_fields);
         $('.campaign_filter_modal i, .switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
@@ -579,54 +580,6 @@ var Master = {
 
             },
             success:function(response){
-            }
-        });
-    },
-
-    check_campaign_filters:function(e){
-        e.preventDefault();
-        if($(this).parent().hasClass('needs_filters')){
-            $('#campaignFilterModal .modal-body').find('.alert').remove();
-            $('#campaignFilterModal').modal('show');
-            $('#campaignFilterModal').find('#id').val($(this).data('id'));
-            Master.get_filter_fields($(this).data('id'));
-            if($(this).parent().hasClass('email_campaign_switch')){
-                $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
-            }
-            return false;
-        }else{
-            if($(e.target).parent().hasClass('email_campaign_switch')){
-                Master.toggle_email_campaign(e,$(this));
-            }else{
-                Master.get_filters(e,$(this));
-            }
-        }
-    },
-
-    update_campaign_filters:function(e){
-        e.preventDefault();
-        console.log($(this));
-    },
-
-    get_filters :function(e, that){
-        e.preventDefault();
-        var email_drip_campaign_id = $(that).data('id');
-        console.log(that);
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url:'/tools/email_drip/get_filters',
-            type:'POST',
-            data:{
-                email_drip_campaign_id:email_drip_campaign_id,
-            },
-            success:function(response){
-                console.log(response);
             }
         });
     },
@@ -2639,7 +2592,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                var filters='';
+                var filters='<option value="">Select One</option>';
                 const filters_array = Object.entries(response)
 
                 for(var i=0;i<filters_array.length;i++){
@@ -2654,12 +2607,95 @@ var Master = {
 
     add_filter_fields:function(e){
         e.preventDefault();
-        var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
-        $(new_filter_row).find('.form-control').each(function(){
-            $(this).val('');
+        $(this).parent().parent().parent().find('.filter_fields_div:last').find('.form-control').each(function(){
+            if($(this).val() == ''){
+                alert('finish creating filter');
+                return false;
+            }else{
+                var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
+                $(new_filter_row).find('.form-control').each(function(){
+                    $(this).val('');
+                });
+                $(new_filter_row).insertAfter('.filter_fields_div:last');
+            }
         });
-        $(new_filter_row).insertAfter('.filter_fields_div:last');
-    }
+    },
+
+    check_campaign_filters:function(e){
+        e.preventDefault();
+        if($(this).parent().hasClass('needs_filters')){
+            $('#campaignFilterModal .modal-body').find('.alert').remove();
+            $('#campaignFilterModal').modal('show');
+            $('#campaignFilterModal').find('#id').val($(this).data('id'));
+            Master.get_filter_fields($(this).data('id'));
+            if($(this).parent().hasClass('email_campaign_switch')){
+                $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
+            }
+            return false;
+        }else{
+            if($(e.target).parent().hasClass('email_campaign_switch')){
+                Master.toggle_email_campaign(e,$(this));
+            }else{
+                Master.get_filters(e,$(this));
+            }
+        }
+    },
+
+    get_filters :function(e, that){
+        e.preventDefault();
+        var email_drip_campaign_id = $(that).data('id');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/get_filters',
+            type:'POST',
+            data:{
+                email_drip_campaign_id:email_drip_campaign_id,
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
+    },
+
+    update_campaign_filters:function(e){
+        e.preventDefault();
+        var email_drip_campaign_id = $('.filter_fields_div').find('#id').val();
+
+        var filters=[];
+        var filter=[];
+        $('.filter_fields_div').each(function(){
+            $(this).find('.form-control').each(function(){
+                filter.push($(this).val());
+            });
+
+            filters.push(filter);
+            filter=[];
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/update_filters',
+            type:'POST',
+            data:{
+                email_drip_campaign_id:email_drip_campaign_id,
+                filters:filters
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
+    },
 }
 
 $(document).ready(function () {
