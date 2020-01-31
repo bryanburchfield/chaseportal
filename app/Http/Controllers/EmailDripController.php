@@ -396,9 +396,11 @@ class EmailDripController extends Controller
 
     public function getFilters(Request $request)
     {
-        return EmailDripCampaignFilter::where('email_drip_campaign_id', $request->email_drip_campaign_id)
+        $email_drip_campaign = EmailDripCampaign::where('id', $request->email_drip_campaign_id)
             ->where('group_id', Auth::User()->group_id)
-            ->get();
+            ->firstOrFail();
+
+        return $email_drip_campaign->emailDripCampaignFilters;
     }
 
     public function updateFilters(Request $request)
