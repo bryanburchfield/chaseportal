@@ -12,6 +12,7 @@ use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -124,56 +125,6 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Find SMTP server by ID
-     * 
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function findEmailServiceProvider($id)
-    {
-        return EmailServiceProvider::where('id', $id)
-            ->where('group_id', Auth::User()->group_id)
-            ->firstOrFail();
-    }
-
-    /**
-     * Servers configured for this group
-     * 
-     * @return mixed 
-     */
-    private function getEmailServiceProviders()
-    {
-        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
-            ->orderBy('name')
-            ->get();
-    }
-
-    /**
-     * List of drip campaingns for this group
-     * 
-     * @return mixed 
-     */
-    private function getDripCampaigns()
-    {
-        return EmailDripCampaign::where('group_id', Auth::User()->group_id)
-            ->orderBy('name')
-            ->get();
-    }
-
-    /**
-     * Find an Email Drip Campaign by id
-     * 
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function findEmailDripCampaign($id)
-    {
-        return EmailDripCampaign::where('id', $id)
-            ->where('group_id', Auth::User()->group_id)
-            ->firstOrFail();
-    }
-
-    /**
      * Test SMTP server connection
      * 
      * @param ValidEmailServiceProvider $request 
@@ -245,27 +196,6 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Return list of dialer campaigns
-     * 
-     * @return array[] 
-     * @throws InvalidArgumentException 
-     */
-    private function getCampaigns()
-    {
-        return ['campaigns' => array_values($this->getAllCampaigns())];
-    }
-
-    private function getProviderTypes()
-    {
-        // Look in the directory for provider interfaces
-        $models = collect(File::allFiles(app_path(self::ESP_DIR)));
-
-        return $models->map(function ($file) {
-            return Str::snake(substr($file->getFilename(), 0, -4));
-        });
-    }
-
-    /**
      * Return drip campaign
      * 
      * @param Request $request 
@@ -318,6 +248,13 @@ class EmailDripController extends Controller
         return $results;
     }
 
+
+    /**
+     * Return list of merge fields
+     * 
+     * @param Request $request 
+     * @return array 
+     */
     public function getFilterFields(Request $request)
     {
         $fields = [];
@@ -330,32 +267,10 @@ class EmailDripController extends Controller
     }
 
     /**
-     * Return the Custom Table ID tied to a dialer campaign
+     * Return list of templates named 'email_*'
      * 
-     * @param mixed $campaign 
-     * @return int|mixed 
+     * @return mixed 
      */
-    private function getCustomTableId($campaign)
-    {
-        $sql = "SELECT AdvancedTable
-            FROM Campaigns
-            WHERE GroupId = :group_id
-            AND CampaignName = :campaign";
-
-        $bind = [
-            'group_id' => Auth::User()->group_id,
-            'campaign' => $campaign,
-        ];
-
-        $results = $this->runSql($sql, $bind);
-
-        if (!isset($results[0]['AdvancedTable'])) {
-            return -1;
-        }
-
-        return $results[0]['AdvancedTable'];
-    }
-
     public function getTemplates()
     {
         // Set sqlsrv database
@@ -385,6 +300,12 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Return list of custom properties for a provider type
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getProperties(Request $request)
     {
         // full path the class so we don't have to import it
@@ -394,11 +315,15 @@ class EmailDripController extends Controller
         return $class::properties();
     }
 
+    /**
+     * Return all filters for a Drip Campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getFilters(Request $request)
     {
-        $email_drip_campaign = EmailDripCampaign::where('id', $request->email_drip_campaign_id)
-            ->where('group_id', Auth::User()->group_id)
-            ->firstOrFail();
+        $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
 
         return $email_drip_campaign->emailDripCampaignFilters;
     }
@@ -410,5 +335,110 @@ class EmailDripController extends Controller
 
 
         return ['status' => 'success'];
+    }
+
+    /////////////  Private functions ////////////////
+
+    /**
+     * Find SMTP server by ID
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
+    private function findEmailServiceProvider($id)
+    {
+        return EmailServiceProvider::where('id', $id)
+            ->where('group_id', Auth::User()->group_id)
+            ->firstOrFail();
+    }
+
+    /**
+     * Find an Email Drip Campaign by id
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
+    private function findEmailDripCampaign($id)
+    {
+        return EmailDripCampaign::where('id', $id)
+            ->where('group_id', Auth::User()->group_id)
+            ->firstOrFail();
+    }
+
+    /**
+     * Servers configured for this group
+     * 
+     * @return mixed 
+     */
+    private function getEmailServiceProviders()
+    {
+        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * List of drip campaingns for this group
+     * 
+     * @return mixed 
+     */
+    private function getDripCampaigns()
+    {
+        return EmailDripCampaign::where('group_id', Auth::User()->group_id)
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * Return list of dialer campaigns
+     * 
+     * @return array[] 
+     * @throws InvalidArgumentException 
+     */
+    private function getCampaigns()
+    {
+        return ['campaigns' => array_values($this->getAllCampaigns())];
+    }
+
+    /**
+     * Return list of provider types
+     * 
+     * @return Collection 
+     */
+    private function getProviderTypes()
+    {
+        // Look in the directory for provider interfaces
+        $models = collect(File::allFiles(app_path(self::ESP_DIR)));
+
+        return $models->map(function ($file) {
+            return Str::snake(substr($file->getFilename(), 0, -4));
+        });
+    }
+
+    /**
+     * Return the Custom Table ID tied to a dialer campaign
+     * 
+     * @param mixed $campaign 
+     * @return int|mixed 
+     */
+    private function getCustomTableId($campaign)
+    {
+        $sql = "SELECT AdvancedTable
+            FROM Campaigns
+            WHERE GroupId = :group_id
+            AND CampaignName = :campaign";
+
+        $bind = [
+            'group_id' => Auth::User()->group_id,
+            'campaign' => $campaign,
+        ];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (!isset($results[0]['AdvancedTable'])) {
+            return -1;
+        }
+
+        return $results[0]['AdvancedTable'];
     }
 }
