@@ -233,21 +233,15 @@ class EmailDripController extends Controller
             return [];
         }
 
-        $sql = "SELECT FieldName, [Description]
+        $sql = "SELECT FieldName, [Type]
             FROM AdvancedTableFields
-            WHERE AdvancedTable = :table_id
-            AND FieldType = 2";
+            INNER JOIN FieldTypes ON FieldTypes.id = AdvancedTableFields.FieldType
+            WHERE AdvancedTable = :table_id";
 
         $results = resultsToList($this->runSql($sql, ['table_id' => $table_id]));
 
-        // Add field name to desc
-        foreach ($results as $field => &$description) {
-            $description = '[' . $field . '] ' . $description;
-        }
-
         return $results;
     }
-
 
     /**
      * Return list of merge fields
@@ -257,17 +251,12 @@ class EmailDripController extends Controller
      */
     public function getFilterFields(Request $request)
     {
-        $fields = [];
-
-        foreach ($this->defaultLeadFields() as $field) {
-            $fields[$field] = '[' . $field . ']';
-        }
-
         $email_drip_campaign = $this->findEmailDripCampaign($request->id);
-
         $request->merge(['campaign' => $email_drip_campaign->campaign]);
 
-        return array_merge($fields, $this->getTableFields($request));
+        return $this->defaultLeadFields() +
+            $this->getExtraLeadfields() +
+            $this->getTableFields($request);
     }
 
     /**
@@ -343,6 +332,37 @@ class EmailDripController extends Controller
         }
 
         return ['status' => 'success'];
+    }
+
+    public function getOperators()
+    {
+        $mathops = [
+            '=' => trans('tools.equals'),
+            '!=' => trans('tools.not_equals'),
+            '<' => trans('tools.less_than'),
+            '>' => trans('tools.greater_than'),
+            '<=' => trans('tools.less_than_or_equals'),
+            '>=' => trans('tools.greater_than_or_equals'),
+            'blank' => trans('tools.is_blank'),
+            'not_blank' => trans('tools.is_not_blank'),
+        ];
+
+        $dateops = [
+            'days_ago' => trans('tools.days_ago'),
+            'days_from_now' => trans('tools.days_from_now'),
+            '<_days_ago' => trans('tools.less_than_days_ago'),
+            '>_days_ago' => trans('tools.greater_than_days_ago'),
+            '<_days_from_now' => trans('tools.less_than_days_from_now'),
+            '>_days_from_now' => trans('tools.greater_than_days_from_now'),
+        ];
+
+        return [
+            'integer' => $mathops,
+            'string' => $mathops,
+            'date' => array_merge($mathops, $dateops),
+            'text' => $mathops,
+            'phone' => $mathops,
+        ];
     }
 
     /////////////  Private functions ////////////////
@@ -448,5 +468,16 @@ class EmailDripController extends Controller
         }
 
         return $results[0]['AdvancedTable'];
+    }
+
+    private function getExtraLeadfields()
+    {
+        return [
+            'CallStatus' => 'string',
+            'Date' => 'date',
+            'Attempt' => 'integer',
+            'WasDialed' => 'integer',
+            'LastUpdated' => 'date',
+        ];
     }
 }

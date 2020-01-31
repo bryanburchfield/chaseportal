@@ -84,17 +84,17 @@ trait SqlServerTraits
     private function defaultLeadFields()
     {
         return [
-            'ClientId',
-            'FirstName',
-            'LastName',
-            'PrimaryPhone',
-            'Address',
-            'City',
-            'State',
-            'ZipCode',
-            'Notes',
-            'Campaign',
-            'Subcampaign',
+            'ClientId' => 'string',
+            'FirstName' => 'string',
+            'LastName' => 'string',
+            'PrimaryPhone' => 'phone',
+            'Address' => 'string',
+            'City' => 'string',
+            'State' => 'string',
+            'ZipCode' => 'string',
+            'Notes' => 'text',
+            'Campaign' => 'string',
+            'Subcampaign' => 'string',
         ];
     }
 }
