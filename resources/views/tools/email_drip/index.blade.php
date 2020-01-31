@@ -288,7 +288,7 @@
                         <a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
                     </div>
                 </div>
-                
+
                 <div class="filter_fields_cnt hidetilloaded">
                     <div class="row filter_fields_div">
                         <div class="col-sm-4">
@@ -302,11 +302,6 @@
                             <label>Operator</label>
                             <div class="form-group">
                                 <select class="form-control filter_operators" name="filter_operators" data-type="operator">
-                                    <option value="">Select One</option>
-                                    <option value="<">Less Than</option>
-                                    <option value=">">Greater Than</option>
-                                    <option value="==">Equal to</option>
-                                    <option value="!=">Not Equal to</option>
                                 </select>
                             </div>
                         </div>
@@ -320,7 +315,6 @@
                     <input type="hidden" name="email_drip_campaign_id" id="id" value="">
                     <div class="row filters"></div>
                 </div>
-                
             </div>
 
             <div class="modal-footer">

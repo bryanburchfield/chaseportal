@@ -119,6 +119,7 @@ var Master = {
         $('.add_email_campaign_filter').on('click', this.add_filter_fields);
         $('.campaign_filter_modal i, .switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
+        $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
 	},
 
     hide_modal_error:function(){
@@ -2592,11 +2593,13 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                var filters='<option value="">Select One</option>';
-                const filters_array = Object.entries(response)
 
-                for(var i=0;i<filters_array.length;i++){
-                    filters+='<option value="'+filters_array[i][0]+'">'+filters_array[i][1]+'</option>';
+                var filters='<option value="">Select One</option>';
+                const filters_array = Object.keys(response)
+
+                const entries = Object.entries(response)
+                for (const [key, value] of entries) {
+                    filters+='<option data-type="'+value+'" value="'+key+'">'+key+'</option>';
                 }
 
                 $('#campaignFilterModal .modal-body .filter_fields_cnt select.filter_fields').append(filters);
@@ -2617,6 +2620,37 @@ var Master = {
                     $(this).val('');
                 });
                 $(new_filter_row).insertAfter('.filter_fields_div:last');
+            }
+        });
+    },
+
+    get_operators:function(){
+        var that = $(this);
+        var type = $(that).find('option:selected').data('type');
+        console.log(type);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/get_operators',
+            type:'POST',
+            data:{
+                type:type,
+            },
+            success:function(response){
+
+                $(that).parent().parent().next().find('.filter_operators').empty();
+                var operators='<option value="">Select One</option>';
+
+                for (let [key, value] of Object.entries(response[type])){
+                    operators+='<option value="'+key+'">'+value+'</option>';
+                }
+                $(that).parent().parent().next().find('.filter_operators').append(operators);
+
+                $('.filter_fields_cnt').show();
             }
         });
     },
@@ -2645,7 +2679,7 @@ var Master = {
     get_filters :function(e, that){
         e.preventDefault();
         var email_drip_campaign_id = $(that).data('id');
-
+        console.log(that+' '+email_drip_campaign_id);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2660,6 +2694,7 @@ var Master = {
             },
             success:function(response){
                 console.log(response);
+                $('.filter_fields_cnt').show();
             }
         });
     },
