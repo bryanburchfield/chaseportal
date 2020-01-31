@@ -48,6 +48,7 @@ class EmailDripController extends Controller
             'provider_types' => $this->getProviderTypes(),
             'campaigns' => $this->getAllCampaigns(),
             'templates' => $this->getTemplates(),
+            'operators' => $this->getOperators(),
         ];
 
         return view('tools.email_drip.index')->with($data);
