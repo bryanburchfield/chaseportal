@@ -294,7 +294,7 @@
                         <div class="col-sm-4">
                             <label>Field</label>
                             <div class="form-group">
-                                <select class="form-control filter_fields" name="filter_fields" data-type="filter"></select>
+                                <select class="form-control filter_fields" name="filter_fields" data-type="field"></select>
                             </div>
                         </div>
 

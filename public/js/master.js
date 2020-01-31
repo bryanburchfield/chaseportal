@@ -2666,8 +2666,8 @@ var Master = {
 
     update_campaign_filters:function(e){
         e.preventDefault();
-        var email_drip_campaign_id = $('.filter_fields_div').find('#id').val();
 
+        var email_drip_campaign_id = $('.filter_fields_div').parent().find('#id').val();
         var filters=[];
         var filter={};
 
@@ -2696,7 +2696,7 @@ var Master = {
             success:function(response){
                 console.log(response);
                 if(response.status=='success'){
-
+                    location.reload();
                 }
             }
         });
