@@ -2226,7 +2226,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response.properties);
+                console.log(response);
                 $('#editESPModal .name').val(response.name);
                 $('#editESPModal .provider_type').val(response.provider_type);
                 $('#editESPModal .id').val(response.id);
@@ -2432,7 +2432,7 @@ var Master = {
             description = $('.edit_campaign_form').find('.description').val(),
             campaign = $('.edit_campaign_form').find('.campaign').val(),
             subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
-            smtp_server_id = $('.edit_campaign_form').find('.smtp_server_id').val(),
+            email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
             email_field= $('.edit_campaign_form').find('.email').val(),
             template_id = $('.edit_campaign_form').find('.template_id').val(),
             emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
@@ -2455,7 +2455,7 @@ var Master = {
                 email_field:email_field,
                 campaign: campaign,
                 subcampaign: subcampaign,
-                smtp_server_id: smtp_server_id,
+                email_service_provider_id: email_service_provider_id,
                 template_id:template_id,
                 emails_per_lead:emails_per_lead,
                 days_between_emails:days_between_emails
@@ -2514,7 +2514,7 @@ var Master = {
                 $('.edit_campaign_form .email').append('<option value="'+response.email_field+'">'+response.email_field+'</option>');
                 $('.edit_campaign_form .email').val(response.email_field);
                 $('.edit_campaign_form .template_id ').val(response.template_id);
-                $('.edit_campaign_form .smtp_server_id ').val(response.smtp_server_id);
+                $('.edit_campaign_form .email_service_provider_id ').val(response.email_service_provider_id);
                 $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
                 $('.edit_campaign_form .days_between_emails ').val(response.days_between_emails);
                 return false;

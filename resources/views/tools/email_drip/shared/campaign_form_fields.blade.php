@@ -43,7 +43,7 @@
 </div>
 
 <div class="form-group">
-    <label>{{__('tools.server_name')}}</label>
+    <label>{{__('tools.provider')}}</label>
     <select name="email_service_provider_id" class="form-control email_service_provider_id" required>
         <option value="">{{__('tools.select_one')}}</option>
         @foreach($email_service_providers as $server)
