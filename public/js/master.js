@@ -120,6 +120,8 @@ var Master = {
         $('.campaign_filter_modal i, .switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
+
+        $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.remove_camp_filter);
 	},
 
     hide_modal_error:function(){
@@ -443,11 +445,10 @@ var Master = {
             },
 
             success: function(response) {
-
                 $(sel).find('.email').empty();
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
-                    emails+='<option value="'+index+'">'+response[index]+'</option>';
+                    emails+='<option value="'+index+'">'+index+'</option>';
                 }
 
                 $(sel).find('.email').append(emails);
@@ -2593,7 +2594,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-
+                console.log(response);
                 var filters='<option value="">Select One</option>';
                 const filters_array = Object.keys(response)
 
@@ -2612,22 +2613,29 @@ var Master = {
         e.preventDefault();
         $(this).parent().parent().parent().find('.filter_fields_div:last').find('.form-control').each(function(){
             if($(this).val() == ''){
-                alert('finish creating filter');
+                $('.alert.filter_error').show();
                 return false;
             }else{
                 var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
                 $(new_filter_row).find('.form-control').each(function(){
                     $(this).val('');
                 });
+                $(new_filter_row).find('.remove_camp_filter').show();
                 $(new_filter_row).insertAfter('.filter_fields_div:last');
             }
         });
     },
 
+    remove_camp_filter:function(e){
+        e.preventDefault();
+        $(this).parent().parent().remove();
+    },
+
     get_operators:function(){
         var that = $(this);
         var type = $(that).find('option:selected').data('type');
-        console.log(type);
+        $('.filter_error').hide();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2658,7 +2666,7 @@ var Master = {
     check_campaign_filters:function(e){
         e.preventDefault();
         if($(this).parent().hasClass('needs_filters')){
-            $('#campaignFilterModal .modal-body').find('.alert').remove();
+            $('#campaignFilterModal .modal-body').find('.alert-info').remove();
             $('#campaignFilterModal').modal('show');
             $('#campaignFilterModal').find('#id').val($(this).data('id'));
             $('.filter_fields_cnt').removeClass('hidetilloaded');
@@ -2679,7 +2687,7 @@ var Master = {
     get_filters :function(e, that){
         e.preventDefault();
         var email_drip_campaign_id = $(that).data('id');
-        console.log(that+' '+email_drip_campaign_id);
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2694,7 +2702,26 @@ var Master = {
             },
             success:function(response){
                 console.log(response);
-                $('.filter_fields_cnt').show();
+
+                
+                if(response.length){
+                    $('.filter_fields_cnt').empty().show();
+                    var filters='';
+                    Master.get_filter_fields(email_drip_campaign_id)
+                    for(var i=0;i<response.length;i++){
+
+                        filters+='<div class="row filter_fields_div"><div class="col-sm-4"><label>Field</label><div class="form-group"><select class="form-control filter_fields" name="filter_fields" data-type="field"></select></div></div><div class="col-sm-3 filter_operators_div"><label>Operator</label><div class="form-group"><select class="form-control filter_operators" name="filter_operators" data-type="operator"></select></div></div><div class="col-sm-3 filter_values_div"><label>Value</label><input type="text" class="form-control filter_value" name="filter_value" data-type="value"></div><div class="col-sm-2"><a href="#" class="remove_camp_filter"><i class="fa fa-trash-alt"></i> Remove</a></div></div>';
+                    }
+
+                    $('.filter_fields_cnt').append(filters);
+                    for(var i=0;i<response.length;i++){
+                        console.log(response[i]['field']);
+                        // $('.filter_fields_div:eq('+i+')').find('.filter_fields').val(response[i]['field']);
+                        $('.filter_fields_div:eq('+i+')').find('.filter_fields').css({'border':'1px solid red'});
+                         // $(".filter_fields_div:eq("+i+") .filter_fields").val(response[i]['field']).change();
+                        $(".filter_fields_div:eq("+i+") .filter_fields").find("option[value='"+response[i]['field']+"']").attr('selected','selected');
+                    }
+                }
             }
         });
     },

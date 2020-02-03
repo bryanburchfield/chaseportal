@@ -286,6 +286,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
+                        <div class="alert alert-danger filter_error">Finish creating current filter before adding another</div>
                     </div>
                 </div>
 
@@ -298,7 +299,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-4 filter_operators_div">
+                        <div class="col-sm-3 filter_operators_div">
                             <label>Operator</label>
                             <div class="form-group">
                                 <select class="form-control filter_operators" name="filter_operators" data-type="operator">
@@ -306,9 +307,13 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-4 filter_values_div">
+                        <div class="col-sm-3 filter_values_div">
                             <label>Value</label>
                             <input type="text" class="form-control filter_value" name="filter_value" data-type="value">
+                        </div>
+
+                        <div class="col-sm-2">
+                            <a href="#" class="remove_camp_filter hidetilloaded"><i class="fa fa-trash-alt"></i> Remove</a>
                         </div>
                     </div>
 

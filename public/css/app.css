@@ -2882,6 +2882,13 @@ a.toggle_instruc {
   background: #bbb;
 }
 
+.remove_camp_filter {
+  margin-top: 10px;
+  color: #d9534f;
+  position: relative;
+  top: 25px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
