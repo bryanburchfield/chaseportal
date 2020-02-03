@@ -32,7 +32,7 @@
 										        <div class="form-group">
 										            <select class="form-control filter_fields" name="filter_fields" data-type="field">
 										            	@foreach($filter_fields as $key => $value)
-										            		<option {{$filter->field == $key ? 'selected' : ''}} value="{{$key}}">{{$key}}</option>
+										            		<option {{$filter->field == $key ? 'selected' : ''}} data-type="{{$value}}" value="{{$key}}">{{$key}}</option>
 										            	@endforeach
 										            </select>
 										        </div>

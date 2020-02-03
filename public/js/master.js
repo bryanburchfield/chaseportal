@@ -2637,7 +2637,8 @@ var Master = {
         var that = $(this);
         var type = $(that).find('option:selected').data('type');
         $('.filter_error').hide();
-
+        console.log(that);
+        console.log(type);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2651,13 +2652,14 @@ var Master = {
                 type:type,
             },
             success:function(response){
-
+                console.log(response);
                 $(that).parent().parent().next().find('.filter_operators').empty();
                 var operators='<option value="">Select One</option>';
 
                 for (let [key, value] of Object.entries(response[type])){
                     operators+='<option value="'+key+'">'+value+'</option>';
                 }
+                console.log(operators);
                 $(that).parent().parent().next().find('.filter_operators').append(operators);
 
                 $('.filter_fields_cnt').show();
