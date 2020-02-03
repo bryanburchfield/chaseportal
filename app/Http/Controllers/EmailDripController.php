@@ -345,6 +345,8 @@ class EmailDripController extends Controller
 
     public function saveFilters(Request $request)
     {
+        Log::debug($request->all());
+
         // 404's if they spoofed the wrong campaign id
         $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
 
