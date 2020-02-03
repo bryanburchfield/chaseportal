@@ -70,6 +70,7 @@ class EmailDripController extends Controller
             'email_drip_campaign' => $email_drip_campaign,
             'operators' => $this->getOperators(),
             'filter_fields' => $this->getFilterFields($email_drip_campaign),
+            'operators' => $this->getOperators(),
         ];
 
         return view('tools.email_drip.update_filters')->with($data);
