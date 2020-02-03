@@ -177,6 +177,11 @@ class LeadMoveService
         WHERE GroupId = :group_id
         AND Campaign = :campaign";
 
+        $bind = [
+            'group_id' => Auth::user()->group_id,
+            'campaign' => $lead_rule->source_campaign,
+        ];
+
         if (!empty($lead_rule->source_subcampaign)) {
             $sql .= " AND Subcampaign = :subcampaign";
             $bind['subcampaign'] = $lead_rule->source_subcampaign;
@@ -199,11 +204,7 @@ class LeadMoveService
                     return [];
             }
 
-            $bind = [
-                'group_id' => Auth::user()->group_id,
-                'param$i' => $lead_rule_filter->value,
-                'campaign' => $lead_rule->source_campaign,
-            ];
+            $bind['param$i'] = $lead_rule_filter->value;
         }
 
         $leads = $this->runSql($sql, $bind);
