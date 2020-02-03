@@ -64,7 +64,7 @@
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>
                                                                 <td>{{$drip->days_between_emails}}</td>
-                                                                <td><a href="{{url('/tools/email_drip/update_filters/'.$drip->id)}}" class="campaign_filter_modal"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td>
+                                                                <td><a href="{{url('/tools/email_drip/update_filters/'.$drip->id)}}" class="campaign_filter_modal {{$drip->emailDripCampaignFilters->isEmpty() ? 'needs_filters' : 'has_filters'}}"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$drip->name}}" data-id="{{$drip->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                             				</tr>
@@ -268,63 +268,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
                 <button type="button" class="btn btn-danger delete_campaign add_btn_loader">{{__('tools.delete')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Campaign Filter Modal -->
-<div class="modal fade" id="campaignFilterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.campaign_filters')}}</h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
-                        <div class="alert alert-danger filter_error">Finish creating current filter before adding another</div>
-                    </div>
-                </div>
-
-                <div class="filter_fields_cnt hidetilloaded">
-                    <div class="row filter_fields_div">
-                        <div class="col-sm-4">
-                            <label>Field</label>
-                            <div class="form-group">
-                                <select class="form-control filter_fields" name="filter_fields" data-type="field"></select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3 filter_operators_div">
-                            <label>Operator</label>
-                            <div class="form-group">
-                                <select class="form-control filter_operators" name="filter_operators" data-type="operator">
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3 filter_values_div">
-                            <label>Value</label>
-                            <input type="text" class="form-control filter_value" name="filter_value" data-type="value">
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a href="#" class="remove_camp_filter hidetilloaded"><i class="fa fa-trash-alt"></i> Remove</a>
-                        </div>
-                    </div>
-
-                    <input type="hidden" name="email_drip_campaign_id" id="id" value="">
-                    <div class="row filters"></div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger save_filters">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>
