@@ -117,11 +117,12 @@ var Master = {
         $('.provider_type').on('change', this.get_provider_properties);
 
         $('.add_email_campaign_filter').on('click', this.add_filter_fields);
-        $('.campaign_filter_modal i, .switch.email_campaign_switch input').on('click', this.check_campaign_filters);
+        $('.campaign_filter_modal i').on('click', this.check_campaign_filters);
+        $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
-
         $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.remove_camp_filter);
+        $('.camp_filters_link').on('click', this.goto_camp_filters);
 	},
 
     hide_modal_error:function(){
@@ -586,19 +587,21 @@ var Master = {
         });
     },
 
-    toggle_email_campaign:function(e,that){
+    toggle_email_campaign:function(e,campaign_id){
 
         var checked;
-        var campaign_id = $(that).data('id');
+        // var campaign_id = $(campaign_id).data('id');
 
-        if($(that).is(':checked')){
-            $(that).attr('Checked','Checked');
+        if($(campaign_id).is(':checked')){
+            $(campaign_id).attr('Checked','Checked');
             checked=1;
         }else{
-            $(that).removeAttr('Checked');
+            $(campaign_id).removeAttr('Checked');
             checked=0;
         }
 
+        console.log(campaign_id);
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2631,6 +2634,12 @@ var Master = {
         $(this).parent().parent().remove();
     },
 
+    goto_camp_filters:function(e){
+        e.preventDefault();
+        var id = $(this).next('.camp_id').val();
+        window.location.href = '/tools/email_drip/update_filters/'+id;
+    },
+
     get_operators:function(){
         var that = $(this);
         var type = $(that).find('option:selected').data('type');
@@ -2664,23 +2673,13 @@ var Master = {
     },
 
     check_campaign_filters:function(e){
-        e.preventDefault();
+        var campaign_id = $(this).data('id');
         if($(this).parent().hasClass('needs_filters')){
-            $('#campaignFilterModal .modal-body').find('.alert-info').remove();
-            $('#campaignFilterModal').modal('show');
-            $('#campaignFilterModal').find('#id').val($(this).data('id'));
-            $('.filter_fields_cnt').removeClass('hidetilloaded');
-            Master.get_filter_fields($(this).data('id'));
-            if($(this).parent().hasClass('email_campaign_switch')){
-                $('#campaignFilterModal .modal-body').append('<div class="mt20 alert alert-info">Please add filters to this campaign before activating it.</div>');
-            }
+            $('#errorModal').modal('show');
+            $('#errorModal .modal-body .camp_id').val(campaign_id);
             return false;
         }else{
-            if($(e.target).parent().hasClass('email_campaign_switch')){
-                Master.toggle_email_campaign(e,$(this));
-            }else{
-                Master.get_filters(e,$(this));
-            }
+            Master.toggle_email_campaign(e, campaign_id);
         }
     },
 

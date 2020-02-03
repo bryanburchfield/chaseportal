@@ -71,7 +71,7 @@ class EmailDripController extends Controller
             'operators' => $this->getOperators(),
         ];
 
-        return view('tools.update_filters')->with($data);
+        return view('tools.email_drip.update_filters')->with($data);
     }
 
     /**
