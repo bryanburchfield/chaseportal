@@ -349,6 +349,8 @@ class EmailDripController extends Controller
         $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
 
         if ($request->has('filters')) {
+            $email_drip_campaign->emailDripCampaignFilters()->delete();
+
             foreach ($request->filters as $filter) {
                 $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
                 $email_drip_campaign_filter->email_drip_campaign_id = $email_drip_campaign->id;
