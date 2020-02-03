@@ -2,7 +2,9 @@
 @section('title', __('tools.tools'))
 
 @section('content')
-
+<?php
+	dd($email_drip_campaign);
+?>
 <div class="preloader"></div>
 
 <div class="wrapper">
@@ -16,6 +18,7 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
+			    		
 			    	</div>
 			    </div>
 			</div>
