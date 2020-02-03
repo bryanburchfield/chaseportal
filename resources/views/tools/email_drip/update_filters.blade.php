@@ -51,7 +51,7 @@
 
 										    <div class="col-sm-3 filter_values_div">
 										        <label>Value</label>
-										        <input type="text" class="form-control filter_value" name="filter_value[]" data-type="value" value="{{$filter->value}}">
+										        <input type="text" class="form-control filter_value" name="filter_values[]" data-type="value" value="{{$filter->value}}">
 										    </div>
 
 										    <div class="col-sm-2">
@@ -82,7 +82,7 @@
 
 									    <div class="col-sm-3 filter_values_div">
 									        <label>Value</label>
-									        <input type="text" class="form-control filter_value" name="filter_value[]" data-type="value" value="">
+									        <input type="text" class="form-control filter_value" name="filter_values[]" data-type="value" value="">
 									    </div>
 
 									    <div class="col-sm-2">
