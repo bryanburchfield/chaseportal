@@ -117,7 +117,6 @@ var Master = {
         $('.provider_type').on('change', this.get_provider_properties);
 
         $('.add_email_campaign_filter').on('click', this.add_filter_fields);
-        $('.campaign_filter_modal i').on('click', this.check_campaign_filters);
         $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
@@ -2402,13 +2401,7 @@ var Master = {
             },
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
-                $('#createCampaignModal').modal('hide');
-                $('#campaignFilterModal').modal('show');
-                $('#campaignFilterModal').find('#id').val(response.email_drip_campaign_id);
-                // if filter modal is closed reload page to display new campaign
-                $('#campaignFilterModal').on('hidden.bs.modal', function () {
-                    location.reload()
-                });
+                window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
             },error: function (data) {
                 $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
