@@ -21,6 +21,7 @@
 			    	<div class="col-sm-12">
 			    		<h2>Manage Filters - {{$email_drip_campaign->name}}</h2>
 					    <form action="{{action('EmailDripController@saveFilters')}}" method="post" class="form">
+					    	@csrf
 					    	<a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
 					    	<div class="filter_fields_cnt">
 					    	    @if(count($email_drip_campaign->emailDripCampaignFilters))
@@ -40,9 +41,11 @@
 										    <div class="col-sm-3 filter_operators_div">
 										        <label>Operator</label>
 										        <div class="form-group">
-										        	@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
-														<option  value="{{$key}}">{{$value}}</option>
-										        	@endforeach
+										        	<select class="form-control filter_operators" name="filter_operators" data-type="operator">
+											        	@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
+															<option {{ $filter->operator == $key ? 'selected' : ''}} value="{{$key}}">{{$value}}</option>
+											        	@endforeach
+										        	</select>
 										        </div>
 										    </div>
 
@@ -90,7 +93,8 @@
 
 					    	    <div class="row filters"></div>
 					    	</div>
-
+							
+							<input type="hidden" name="email_drip_campaign_id" value="{{$email_drip_campaign->id}}">
 					    	<input type="submit" class="btn btn-primary" value="Save Filters">
 					    </form>
 			    	</div>

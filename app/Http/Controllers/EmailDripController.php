@@ -356,7 +356,7 @@ class EmailDripController extends Controller
             }
         }
 
-        return ['status' => 'success'];
+        return $this->index();
     }
 
     public function getOperators()
