@@ -40,7 +40,7 @@
 										    <div class="col-sm-3 filter_operators_div">
 										        <label>Operator</label>
 										        <div class="form-group">
-										        	@foreach ($operators[$fieldtype] as $key => $value)
+										        	@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
 														<option  value="{{$key}}">{{$value}}</option>
 										        	@endforeach
 										        </div>
