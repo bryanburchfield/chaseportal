@@ -2607,11 +2607,15 @@ var Master = {
 
     add_filter_fields:function(e){
         e.preventDefault();
-        $(this).parent().parent().parent().find('.filter_fields_div:last').find('.form-control').each(function(){
+
+        $('.filter_fields_div:last').find('.form-control').each(function(){
             if($(this).val() == ''){
+                console.log('if');
+                console.log($(this).val());
                 $('.alert.filter_error').show();
                 return false;
             }else{
+                console.log('else');
                 var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
                 $(new_filter_row).find('.form-control').each(function(){
                     $(this).val('');
@@ -2637,8 +2641,7 @@ var Master = {
         var that = $(this);
         var type = $(that).find('option:selected').data('type');
         $('.filter_error').hide();
-        console.log(that);
-        console.log(type);
+        console.log(that+' '+type);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2652,14 +2655,12 @@ var Master = {
                 type:type,
             },
             success:function(response){
-                console.log(response);
                 $(that).parent().parent().next().find('.filter_operators').empty();
                 var operators='<option value="">Select One</option>';
 
                 for (let [key, value] of Object.entries(response[type])){
                     operators+='<option value="'+key+'">'+value+'</option>';
                 }
-                console.log(operators);
                 $(that).parent().parent().next().find('.filter_operators').append(operators);
 
                 $('.filter_fields_cnt').show();
