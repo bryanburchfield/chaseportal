@@ -30,7 +30,7 @@
 										    <div class="col-sm-4">
 										        <label>Field</label>
 										        <div class="form-group">
-										            <select class="form-control filter_fields" name="filter_fields" data-type="field">
+										            <select class="form-control filter_fields" name="filter_fields[]" data-type="field">
 										            	@foreach($filter_fields as $key => $value)
 										            		<option {{$filter->field == $key ? 'selected' : ''}} data-type="{{$value}}" value="{{$key}}">{{$key}}</option>
 										            	@endforeach
@@ -41,7 +41,7 @@
 										    <div class="col-sm-3 filter_operators_div">
 										        <label>Operator</label>
 										        <div class="form-group">
-										        	<select class="form-control filter_operators" name="filter_operators" data-type="operator">
+										        	<select class="form-control filter_operators" name="filter_operators[]" data-type="operator">
 											        	@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
 															<option {{ $filter->operator == $key ? 'selected' : ''}} value="{{$key}}">{{$value}}</option>
 											        	@endforeach
@@ -51,7 +51,7 @@
 
 										    <div class="col-sm-3 filter_values_div">
 										        <label>Value</label>
-										        <input type="text" class="form-control filter_value" name="filter_value" data-type="value" value="{{$filter->value}}">
+										        <input type="text" class="form-control filter_value" name="filter_value[]" data-type="value" value="{{$filter->value}}">
 										    </div>
 
 										    <div class="col-sm-2">
@@ -64,7 +64,7 @@
 									    <div class="col-sm-4">
 									        <label>Field</label>
 									        <div class="form-group">
-									            <select class="form-control filter_fields" name="filter_fields" data-type="field">
+									            <select class="form-control filter_fields" name="filter_fields[]" data-type="field">
 									            	@foreach($filter_fields as $key => $value)
 									            		<option data-type="{{$value}}" value="{{$key}}">{{$key}}</option>
 									            	@endforeach
@@ -75,14 +75,14 @@
 									    <div class="col-sm-3 filter_operators_div">
 									        <label>Operator</label>
 									        <div class="form-group">
-									            <select class="form-control filter_operators" name="filter_operators" data-type="operator">
+									            <select class="form-control filter_operators" name="filter_operators[]" data-type="operator">
 									            </select>
 									        </div>
 									    </div>
 
 									    <div class="col-sm-3 filter_values_div">
 									        <label>Value</label>
-									        <input type="text" class="form-control filter_value" name="filter_value" data-type="value" value="">
+									        <input type="text" class="form-control filter_value" name="filter_value[]" data-type="value" value="">
 									    </div>
 
 									    <div class="col-sm-2">
