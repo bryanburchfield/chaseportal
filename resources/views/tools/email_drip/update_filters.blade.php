@@ -93,7 +93,7 @@
 
 					    	    <div class="row filters"></div>
 					    	</div>
-							
+							<div class="alert alert-danger filter_error">Incomplete filter values. Please complete this filter before adding another one.</div>
 							<input type="hidden" name="email_drip_campaign_id" value="{{$email_drip_campaign->id}}">
 					    	<input type="submit" class="btn btn-primary" value="Save Filters">
 					    </form>

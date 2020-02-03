@@ -2610,12 +2610,9 @@ var Master = {
 
         $('.filter_fields_div:last').find('.form-control').each(function(){
             if($(this).val() == ''){
-                console.log('if');
-                console.log($(this).val());
                 $('.alert.filter_error').show();
                 return false;
             }else{
-                console.log('else');
                 var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
                 $(new_filter_row).find('.form-control').each(function(){
                     $(this).val('');
