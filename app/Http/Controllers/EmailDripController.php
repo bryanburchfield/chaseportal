@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidEmailDripCampaign;
 use App\Http\Requests\ValidEmailServiceProvider;
+use App\Models\AdvancedTable;
 use App\Models\EmailDripCampaign;
 use App\Models\EmailDripCampaignFilter;
 use App\Models\EmailServiceProvider;
@@ -52,6 +53,25 @@ class EmailDripController extends Controller
         ];
 
         return view('tools.email_drip.index')->with($data);
+    }
+
+    public function updateFilters(Request $request)
+    {
+        $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+
+        $data = [
+            'page' => $page,
+            'group_id' => Auth::user()->group_id,
+            'email_drip_campaign' => $email_drip_campaign,
+            'operators' => $this->getOperators(),
+        ];
+
+        return view('tools.update_filters')->with($data);
     }
 
     /**
@@ -322,12 +342,15 @@ class EmailDripController extends Controller
         return $email_drip_campaign->emailDripCampaignFilters;
     }
 
-    public function updateFilters(Request $request)
+    public function saveFilters(Request $request)
     {
+        // 404's if they spoofed the wrong campaign id
+        $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
+
         if ($request->has('filters')) {
             foreach ($request->filters as $filter) {
                 $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
-                $email_drip_campaign_filter->email_drip_campaign_id = $request->email_drip_campaign_id;
+                $email_drip_campaign_filter->email_drip_campaign_id = $email_drip_campaign->id;
                 $email_drip_campaign_filter->save();
             }
         }
@@ -364,6 +387,44 @@ class EmailDripController extends Controller
             'text' => $mathops,
             'phone' => $mathops,
         ];
+    }
+
+    /**
+     * Return the Custom Table ID tied to a dialer campaign
+     * 
+     * @param mixed $campaign 
+     * @return int|mixed 
+     */
+    public function getCustomTableId($campaign)
+    {
+        $sql = "SELECT AdvancedTable
+            FROM Campaigns
+            WHERE GroupId = :group_id
+            AND CampaignName = :campaign";
+
+        $bind = [
+            'group_id' => Auth::User()->group_id,
+            'campaign' => $campaign,
+        ];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (!isset($results[0]['AdvancedTable'])) {
+            return -1;
+        }
+
+        return $results[0]['AdvancedTable'];
+    }
+
+    public function getCustomTableName($table_id)
+    {
+        if ($table_id == -1) {
+            return null;
+        }
+
+        $advanced_table = AdvancedTable::find($table_id);
+
+        return $advanced_table->TableName;
     }
 
     /////////////  Private functions ////////////////
@@ -442,33 +503,6 @@ class EmailDripController extends Controller
         return $models->map(function ($file) {
             return Str::snake(substr($file->getFilename(), 0, -4));
         });
-    }
-
-    /**
-     * Return the Custom Table ID tied to a dialer campaign
-     * 
-     * @param mixed $campaign 
-     * @return int|mixed 
-     */
-    private function getCustomTableId($campaign)
-    {
-        $sql = "SELECT AdvancedTable
-            FROM Campaigns
-            WHERE GroupId = :group_id
-            AND CampaignName = :campaign";
-
-        $bind = [
-            'group_id' => Auth::User()->group_id,
-            'campaign' => $campaign,
-        ];
-
-        $results = $this->runSql($sql, $bind);
-
-        if (!isset($results[0]['AdvancedTable'])) {
-            return -1;
-        }
-
-        return $results[0]['AdvancedTable'];
     }
 
     private function getExtraLeadfields()

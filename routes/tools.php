@@ -36,6 +36,7 @@ Route::prefix('tools')->group(function () {
         // Email Drip Builder
         Route::prefix('email_drip')->group(function () {
             Route::get('/', 'EmailDripController@index');
+            Route::get('/update_filters/{email_drip_campaign_id}', 'EmailDripController@updateFilters');
             Route::post('/test_connection', 'EmailDripController@testConnection');
             Route::post('/add_esp', 'EmailDripController@addEmailServiceProvider');
             Route::post('/delete_esp', 'EmailDripController@deleteEmailServiceProvider');
@@ -52,7 +53,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/get_filter_fields', 'EmailDripController@getFilterFields');
             Route::post('/get_filters', 'EmailDripController@getFilters');
             Route::post('/get_operators', 'EmailDripController@getOperators');
-            Route::post('/update_filters', 'EmailDripController@updateFilters');
+            Route::post('/update_filters', 'EmailDripController@saveFilters');
         });
     });
 });
