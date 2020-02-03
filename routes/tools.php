@@ -50,7 +50,6 @@ Route::prefix('tools')->group(function () {
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
             Route::post('/get_properties', 'EmailDripController@getProperties');
             Route::post('/toggle_email_campaign', 'EmailDripController@toggleEmailDripCampaign');
-            Route::post('/get_filter_fields', 'EmailDripController@getFilterFields');
             Route::post('/get_filters', 'EmailDripController@getFilters');
             Route::post('/get_operators', 'EmailDripController@getOperators');
             Route::post('/update_filters', 'EmailDripController@saveFilters');

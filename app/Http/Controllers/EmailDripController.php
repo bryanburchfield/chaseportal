@@ -69,6 +69,7 @@ class EmailDripController extends Controller
             'group_id' => Auth::user()->group_id,
             'email_drip_campaign' => $email_drip_campaign,
             'operators' => $this->getOperators(),
+            'filter_fields' => $this->getFilterFields($email_drip_campaign),
         ];
 
         return view('tools.email_drip.update_filters')->with($data);
@@ -270,10 +271,9 @@ class EmailDripController extends Controller
      * @param Request $request 
      * @return array 
      */
-    public function getFilterFields(Request $request)
+    private function getFilterFields(EmailDripCampaign $email_drip_campaign)
     {
-        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
-        $request->merge(['campaign' => $email_drip_campaign->campaign]);
+        $request = new Request(['campaign' => $email_drip_campaign->campaign]);
 
         return $this->defaultLeadFields() +
             $this->getExtraLeadfields() +
