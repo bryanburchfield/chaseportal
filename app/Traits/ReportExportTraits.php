@@ -40,8 +40,7 @@ trait ReportExportTraits
         }
 
         if (empty($request->email)) {
-            $pdf->Output();
-            exit;
+            return $pdf->Output();
         } else {
             return $pdf->Output('S');
         }
@@ -71,22 +70,13 @@ trait ReportExportTraits
         if (empty($results)) {
             return null;
         }
+        array_unshift($results, array_values($this->params['columns']));
 
-        $headers = array_values([$this->params['columns']]);
-
-        header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=report.csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        $outstream = fopen("php://output", 'w');
-
-        array_walk($headers, [&$this, 'outputCsv'], $outstream);
-        array_walk($results, [&$this, 'outputCsv'], $outstream);
-
-        fclose($outstream);
-
-        die();
+        return response()->streamDownload(function () use ($results) {
+            $outstream = fopen("php://output", 'w');
+            array_walk($results, [&$this, 'outputCsv'], $outstream);
+            fclose($outstream);
+        }, 'report.csv');
     }
 
     public function xlsExport($request)
@@ -121,12 +111,10 @@ trait ReportExportTraits
 
     private function doExport($request, $format)
     {
-        $this->increaseLimits();
-
-        $results = $this->getResults($request);
+        $results = $this->runReport($request);
 
         // check for errors
-        if (is_object($results)) {
+        if (empty($results)) {
             return null;
         }
 
