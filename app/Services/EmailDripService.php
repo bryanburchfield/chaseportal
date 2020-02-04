@@ -202,7 +202,7 @@ class EmailDripService
 
         $table_fields = array_keys($email_drip_controller->getTableFields($request));
 
-        // Specail case for CallStatus
+        // Special case for CallStatus
         if ($filter->field == 'CallStatus') {
             $where = 'DR.CallStatus ' . $compare;
         } elseif (in_array($filter->field, $table_fields)) {
