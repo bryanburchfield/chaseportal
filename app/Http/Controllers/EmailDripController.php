@@ -271,7 +271,7 @@ class EmailDripController extends Controller
      * @param Request $request 
      * @return array 
      */
-    private function getFilterFields(EmailDripCampaign $email_drip_campaign)
+    public function getFilterFields(EmailDripCampaign $email_drip_campaign)
     {
         $request = new Request(['campaign' => $email_drip_campaign->campaign]);
 

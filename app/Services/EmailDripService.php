@@ -7,6 +7,7 @@ use App\Models\EmailDripCampaign;
 use App\Models\EmailDripCampaignFilter;
 use App\Models\EmailDripSend;
 use App\Models\EmailServiceProvider;
+use App\Models\Script;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
@@ -151,13 +152,7 @@ class EmailDripService
 
             // if we're under the limit and outside the re-send window, send an email
             if ($count < $email_drip_campaign->emails_per_lead && $days_ago >= $email_drip_campaign->days_between_emails) {
-                // Insert a sent record
-                EmailDripSend::create([
-                    'email_drip_campaign_id' => $email_drip_campaign->id,
-                    'lead_id' => $rec['lead_id'],
-                ]);
-
-                $this->emailLead($email_drip_campaign, $rec);
+                $this->emailLead($email_drip_controller, $email_drip_campaign, $rec);
             }
         }
     }
@@ -219,11 +214,24 @@ class EmailDripService
         return $where;
     }
 
-    private function emailLead(EmailDripCampaign $email_drip_campaign, $rec)
+    private function emailLead(EmailDripController $email_drip_controller, EmailDripCampaign $email_drip_campaign, $rec)
     {
         // load body from template
+        $body = Script::find($email_drip_campaign->template_id);
+
+        if (!$body) {
+            return;
+        }
+
+        $body = $body->HtmlContent;
+
+        // get list of mergable fields
+        $fields = array_keys($email_drip_controller->getFilterFields($email_drip_campaign));
+
         // do merge
-        $body = '';
+        foreach ($fields as $field) {
+            $body = str_replace('(#' . $field . '#)', htmlentities($rec[$field]), $body);
+        }
 
         $payload = [
             'from' => $email_drip_campaign->from,
@@ -233,5 +241,11 @@ class EmailDripService
         ];
 
         $this->email_service_provider->send($payload);
+
+        // Insert a sent record
+        EmailDripSend::create([
+            'email_drip_campaign_id' => $email_drip_campaign->id,
+            'lead_id' => $rec['lead_id'],
+        ]);
     }
 }
