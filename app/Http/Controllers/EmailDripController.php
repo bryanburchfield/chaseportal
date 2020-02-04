@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
@@ -345,12 +344,8 @@ class EmailDripController extends Controller
 
     public function saveFilters(Request $request)
     {
-        Log::debug($request->all());
-
         // 404's if they spoofed the wrong campaign id
         $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
-
-        Log::debug($email_drip_campaign);
 
         if ($request->has('filter_fields')) {
             $email_drip_campaign->emailDripCampaignFilters()->delete();
@@ -361,9 +356,6 @@ class EmailDripController extends Controller
                 $filter['field'] = $field;
                 $filter['operator'] = $request->filter_operators[$i];
                 $filter['value'] = $request->filter_values[$i];
-
-                Log::debug($filter);
-
 
                 $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
                 $email_drip_campaign_filter->email_drip_campaign_id = $email_drip_campaign->id;

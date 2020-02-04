@@ -32,6 +32,8 @@ class ValidEmailDripCampaign extends FormRequest
             'description' => 'required',
             'campaign' => 'required',
             'subcampaign' => 'nullable',
+            'subject' => 'required',
+            'from' => 'required',
             'email_field' => 'required',
             'email_service_provider_id' => [
                 'required',

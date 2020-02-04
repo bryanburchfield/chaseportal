@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailDripSend extends Model
 {
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'email_drip_campaign_id',

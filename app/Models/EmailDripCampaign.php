@@ -13,6 +13,8 @@ class EmailDripCampaign extends Model
         'description',
         'campaign',
         'subcampaign',
+        'subject',
+        'from',
         'email_field',
         'email_service_provider_id',
         'template_id',

@@ -5,14 +5,19 @@ namespace App\Services;
 use App\Http\Controllers\EmailDripController;
 use App\Models\EmailDripCampaign;
 use App\Models\EmailDripCampaignFilter;
+use App\Models\EmailDripSend;
 use App\Models\EmailServiceProvider;
 use App\Models\User;
+use App\Traits\SqlServerTraits;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class EmailDripService
 {
+    use SqlServerTraits;
+
     // Directory where Email Service Providers live
     // This is in the controller class too!
     const ESP_DIR = 'Interfaces\\EmailServiceProvider';
@@ -78,6 +83,9 @@ class EmailDripService
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
+        // We need to pass a request object later
+        $request = new Request(['campaign' => $email_drip_campaign->campaign]);
+
         $email_drip_controller = new EmailDripController();
 
         // find custom table
@@ -86,16 +94,21 @@ class EmailDripService
 
         // Build WHERE clause from filters
         $where = '';
-        foreach ($email_drip_campaign->emailDripCampaignFilters as $filter) {
-            $where .= ' AND ' . $this->buildQuery($filter);
-        }
-
-        // query leads, outer join custom table
+        $dr_where = '';
         $bind = [
             'group_id' => Auth::user()->group_id,
             'campaign' => $email_drip_campaign->campaign,
         ];
 
+        foreach ($email_drip_campaign->emailDripCampaignFilters as $filter) {
+            if ($filter->field == 'CallStatus') {
+                $dr_where .= ' AND ' . $this->buildQuery($email_drip_controller, $request, $filter, $bind);
+            } else {
+                $where .= ' AND ' . $this->buildQuery($email_drip_controller, $request, $filter, $bind);
+            }
+        }
+
+        // query leads, outer join custom table
         $sql = "SELECT L.id AS lead_id, * FROM [$db].[dbo].[Leads] L";
 
         if (!empty($table_name)) {
@@ -112,17 +125,47 @@ class EmailDripService
 
         $sql .= ' ' . $where . "
             AND L.id IN (
-            SELECT LeadId FROM [$db].[dbo].[DialingResults]
-            WHERE Date > '$email_drip_campaign->last_run_from'
-            AND Date <= '$email_drip_campaign->last_run_to'
+            SELECT LeadId FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.Date > '$email_drip_campaign->last_run_from'
+            AND DR.Date <= '$email_drip_campaign->last_run_to'
+            $dr_where
             )";
 
-        echo "$sql\n";
+        $results = $this->runSql($sql, $bind);
+
+        foreach ($results as $rec) {
+            // Find the count and last time we emailed this lead for this campaign
+            $sends = EmailDripSend::where('email_drip_campaign_id', $email_drip_campaign->id)
+                ->where('lead_id', $rec['lead_id'])
+                ->orderBy('emailed_at')
+                ->get();
+
+            $count = $sends->count();
+
+            if ($count) {
+                $last_sent = Carbon::parse($sends->last()->emailed_at);
+                $days_ago = $last_sent->diffInDays();
+            } else {
+                $days_ago = 30000;  // stupid big number
+            }
+
+            // if we're under the limit and outside the re-send window, send an email
+            if ($count < $email_drip_campaign->emails_per_lead && $days_ago >= $email_drip_campaign->days_between_emails) {
+                // Insert a sent record
+                EmailDripSend::create([
+                    'email_drip_campaign_id' => $email_drip_campaign->id,
+                    'lead_id' => $rec['lead_id'],
+                ]);
+
+                $this->emailLead($email_drip_campaign, $rec);
+            }
+        }
     }
 
-    private function buildQuery(EmailDripCampaignFilter $filter)
+    private function buildQuery($email_drip_controller, Request $request, EmailDripCampaignFilter $filter, &$bind)
     {
         $today = Carbon::parse('midnight today', Auth::user()->iana_tz)->tz('UTC');
+        $i = count($bind);
 
         switch ($filter->operator) {
             case 'blank':
@@ -158,11 +201,37 @@ class EmailDripService
                 $compare = '>= \'' . $from . '\'';
                 break;
             default:
-                $compare = $filter->operator . ' \'' . $filter->value . '\'';
+                $compare = $filter->operator . ' :bind' . $i;
+                $bind['bind' . $i] = $filter->value;
         }
 
-        $where = '[' . $filter->field . '] ' . $compare;
+        $table_fields = array_keys($email_drip_controller->getTableFields($request));
+
+        // Specail case for CallStatus
+        if ($filter->field == 'CallStatus') {
+            $where = 'DR.CallStatus ' . $compare;
+        } elseif (in_array($filter->field, $table_fields)) {
+            $where = 'A.[' . $filter->field . '] ' . $compare;
+        } else {
+            $where = 'L.[' . $filter->field . '] ' . $compare;
+        }
 
         return $where;
+    }
+
+    private function emailLead(EmailDripCampaign $email_drip_campaign, $rec)
+    {
+        // load body from template
+        // do merge
+        $body = '';
+
+        $payload = [
+            'from' => $email_drip_campaign->from,
+            'to' => $rec[$email_drip_campaign->email_field],
+            'subject' => $email_drip_campaign->subject,
+            'body' => $body,
+        ];
+
+        $this->email_service_provider->send($payload);
     }
 }

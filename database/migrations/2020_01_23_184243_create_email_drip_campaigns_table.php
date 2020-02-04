@@ -21,6 +21,8 @@ class CreateEmailDripCampaignsTable extends Migration
             $table->string('description')->nullable();
             $table->string('campaign');
             $table->string('subcampaign')->nullable();
+            $table->string('subject');
+            $table->string('from');
             $table->string('email_field');
             $table->unsignedBigInteger('email_service_provider_id');
             $table->integer('template_id');
