@@ -64,17 +64,34 @@ trait ReportExportTraits
 
     public function csvExport($request)
     {
+        // Retrieve results in chunks
+        $request->request->remove('all');
+        $this->params['pagesize'] = 2000;
+
         $results = $this->runReport($request);
 
         // check for errors
         if (empty($results)) {
             return null;
         }
+
         array_unshift($results, array_values($this->params['columns']));
 
-        return response()->streamDownload(function () use ($results) {
+        $totpages = $this->params['totpages'];
+
+        return response()->streamDownload(function () use ($totpages, $results, $request) {
             $outstream = fopen("php://output", 'w');
+
             array_walk($results, [&$this, 'outputCsv'], $outstream);
+
+            $curpage = 2;
+            while ($curpage <= $totpages) {
+                $this->params['curpage'] = $curpage;
+                $results = $this->runReport($request);
+                array_walk($results, [&$this, 'outputCsv'], $outstream);
+                $curpage++;
+            }
+
             fclose($outstream);
         }, 'report.csv');
     }
