@@ -239,8 +239,8 @@ class AgentPauseTime
 
     private function processInput(Request $request)
     {
-        // Save params to session
-        $this->saveSessionParams();
+        // Get vals from session if not set (for exports)
+        $request = $this->getSessionParams($request);
 
         // Check page filters
         $this->checkPageFilters($request);
