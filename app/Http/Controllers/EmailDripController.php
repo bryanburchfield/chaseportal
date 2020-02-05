@@ -367,27 +367,97 @@ class EmailDripController extends Controller
         return redirect()->action('EmailDripController@index');
     }
 
-    public function getOperators()
+    public function getOperators($simple = true)
     {
-        $mathops = [
-            '=' => trans('tools.equals'),
-            '!=' => trans('tools.not_equals'),
-            '<' => trans('tools.less_than'),
-            '>' => trans('tools.greater_than'),
-            '<=' => trans('tools.less_than_or_equals'),
-            '>=' => trans('tools.greater_than_or_equals'),
-            'blank' => trans('tools.is_blank'),
-            'not_blank' => trans('tools.is_not_blank'),
+        $mathops_detail = [
+            '=' => [
+                'description' => trans('tools.equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '!=' => [
+                'description' => trans('tools.not_equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '<' => [
+                'description' => trans('tools.less_than'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '>' => [
+                'description' => trans('tools.greater_than'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '<=' => [
+                'description' => trans('tools.less_than_or_equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '>=' => [
+                'description' => trans('tools.greater_than_or_equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            'blank' => [
+                'description' => trans('tools.is_blank'),
+                'allow_nulls' => true,
+                'value_type' => null,
+            ],
+            'not_blank' => [
+                'description' => trans('tools.is_not_blank'),
+                'allow_nulls' => true,
+                'value_type' => null,
+            ],
         ];
 
-        $dateops = [
-            'days_ago' => trans('tools.days_ago'),
-            'days_from_now' => trans('tools.days_from_now'),
-            '<_days_ago' => trans('tools.less_than_days_ago'),
-            '>_days_ago' => trans('tools.greater_than_days_ago'),
-            '<_days_from_now' => trans('tools.less_than_days_from_now'),
-            '>_days_from_now' => trans('tools.greater_than_days_from_now'),
+        $dateops_detail = [
+            'days_ago' => [
+                'description' => trans('tools.days_ago'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
+            'days_from_now' => [
+                'description' => trans('tools.days_from_now'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
+            '<_days_ago' => [
+                'description' => trans('tools.less_than_days_ago'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
+            '>_days_ago' => [
+                'description' => trans('tools.greater_than_days_ago'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
+            '<_days_from_now' => [
+                'description' => trans('tools.less_than_days_from_now'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
+            '>_days_from_now' => [
+                'description' => trans('tools.greater_than_days_from_now'),
+                'allow_nulls' => false,
+                'value_type' => 'integer',
+            ],
         ];
+
+        if ($simple) {
+            $mathops = [];
+            $dateops = [];
+            foreach ($mathops_detail as $key => $array) {
+                $mathops[$key] = $array['description'];
+            }
+            foreach ($dateops_detail as $key => $array) {
+                $dateops[$key] = $array['description'];
+            }
+        } else {
+            $mathops = $mathops_detail;
+            $dateops = $dateops_detail;
+        }
 
         return [
             'integer' => $mathops,
