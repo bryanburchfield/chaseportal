@@ -140,5 +140,16 @@ return [
 
 	'equals'	=> 'Equals',
 	'not_equals'	=> 'Not Equals',
-
+	'less_than'		=> 'Less Than',
+	'greater_than'	=> 'Greater Than',
+	'less_than_or_equals'	=> 'Less than or Equals',
+	'greater_than_or_equals'	=> 'Greater than or Equals',
+	'is_blank'	=> 'Is Blank',
+	'is_not_blank'	=> 'Is Not Blank',
+	'days_ago'		=> 'Days Ago',
+	'days_from_now'	=> 'Days From Now',
+	'less_than_days_ago'	=> 'Less than Days Ago',
+	'greater_than_days_ago'	=> 'Greater than Days Ago',
+	'less_than_days_from_now'	=> 'Less than Days From Now',
+	'greater_than_days_from_now'	=> 'Greater than Days From Now',
 ];

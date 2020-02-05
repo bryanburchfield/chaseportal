@@ -7,8 +7,8 @@
     <label>{{__('tools.provider_type')}}</label>
     <select name="provider_type" class="form-control provider_type" required>
     	<option value="">Select One</option>
-    	@foreach($provider_types as $provider)
-			<option value="{{$provider}}">{{ucwords($provider)}}</option>
+    	@foreach($provider_types as $key => $value)
+			<option value="{{$key}}">{{$value}}</option>
     	@endforeach
     </select>
 </div>
