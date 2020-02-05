@@ -232,19 +232,21 @@ class EmailDripService
         }
 
         $body = $body->HtmlContent;
+        $subject = $email_drip_campaign->subject;
 
         // get list of mergable fields
         $fields = array_keys($email_drip_controller->getFilterFields($email_drip_campaign));
 
         // do merge
         foreach ($fields as $field) {
-            $body = str_replace('(#' . $field . '#)', htmlentities($rec[$field]), $body);
+            $body = str_ireplace('(#' . $field . '#)', htmlspecialchars($rec[$field]), $body);
+            $subject = str_ireplace('(#' . $field . '#)', $rec[$field], $subject);
         }
 
         $payload = [
             'from' => $email_drip_campaign->from,
             'to' => $rec[$email_drip_campaign->email_field],
-            'subject' => $email_drip_campaign->subject,
+            'subject' => $subject,
             'body' => $body,
         ];
 
