@@ -122,6 +122,7 @@ var Master = {
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.remove_camp_filter);
         $('.camp_filters_link').on('click', this.goto_camp_filters);
+        $('.cancel_modal_form').on('click', this.cancel_modal_form);
 	},
 
     hide_modal_error:function(){
@@ -2764,6 +2765,11 @@ var Master = {
                 }
             }
         });
+    },
+
+    cancel_modal_form:function(e){
+        e.preventDefault();
+        $(this).parent().parent().find('.form')[0].reset()
     },
 }
 

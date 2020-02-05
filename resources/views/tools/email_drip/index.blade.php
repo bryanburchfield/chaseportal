@@ -223,6 +223,7 @@
 
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-default cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
 	        </div>
 	    </div>
     </div>
