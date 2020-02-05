@@ -95,4 +95,9 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
             'default_signature',
         ];
     }
+
+    public static function description()
+    {
+        return 'PostMark';
+    }
 }

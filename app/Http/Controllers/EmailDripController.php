@@ -509,9 +509,20 @@ class EmailDripController extends Controller
         // Look in the directory for provider interfaces
         $models = collect(File::allFiles(app_path(self::ESP_DIR)));
 
-        return $models->map(function ($file) {
-            return Str::snake(substr($file->getFilename(), 0, -4));
+        // This is a goofy way to create an array
+        $collection = $models->map(function ($file) {
+            $provider_type = Str::snake(substr($file->getFilename(), 0, -4));
+            $class = 'App\\' . self::ESP_DIR . '\\' .
+                Str::studly($provider_type);
+            return [$provider_type => $class::description()];
         });
+
+        $provider_types = [];
+        foreach ($collection as $item) {
+            $provider_types[key($item)] = $item[key($item)];
+        }
+
+        return $provider_types;
     }
 
     private function getExtraLeadfields()

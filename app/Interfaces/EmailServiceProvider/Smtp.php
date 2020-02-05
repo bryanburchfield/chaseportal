@@ -94,4 +94,9 @@ class Smtp implements \App\Interfaces\EmailServiceProvider
             'password',
         ];
     }
+
+    public static function description()
+    {
+        return 'SMTP Server';
+    }
 }

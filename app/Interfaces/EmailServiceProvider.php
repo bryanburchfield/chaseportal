@@ -11,4 +11,6 @@ interface EmailServiceProvider
     public function send($payload);
 
     public static function properties();
+
+    public static function description();
 }
