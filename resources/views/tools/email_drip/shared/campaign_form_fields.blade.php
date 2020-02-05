@@ -9,6 +9,16 @@
 </div>
 
 <div class="form-group">
+    <label>{{__('tools.subject')}}</label>
+    <input type="text" class="form-control subject" name="subject" required>
+</div>
+
+<div class="form-group">
+    <label>{{__('tools.from')}}</label>
+    <input type="text" class="form-control from" name="from" required>
+</div>
+
+<div class="form-group">
     <label>{{__('tools.campaign')}}</label>
     <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
         <option value="">{{__('tools.select_one')}}</option>

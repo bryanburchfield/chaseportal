@@ -2370,6 +2370,8 @@ var Master = {
 
         var name = $(this).find('.name').val(),
             description = $(this).find('.description').val(),
+            subject = $(this).find('.subject').val(),
+            from = $(this).find('.from').val(),
             campaign = $(this).find('.campaign').val(),
             subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
             email_service_provider_id = $(this).find('.email_service_provider_id').val(),
@@ -2392,6 +2394,8 @@ var Master = {
                 name: name,
                 description: description,
                 email_field:email_field,
+                from:from,
+                subject:subject,
                 campaign: campaign,
                 subcampaign: subcampaign,
                 email_service_provider_id: email_service_provider_id,
@@ -2428,6 +2432,8 @@ var Master = {
         var id = $('.edit_campaign_form').find('.id').val(),
             name = $('.edit_campaign_form').find('.name').val(),
             description = $('.edit_campaign_form').find('.description').val(),
+            from = $('.edit_campaign_form').find('.from').val(),
+            subject = $('.edit_campaign_form').find('.subject').val(),
             campaign = $('.edit_campaign_form').find('.campaign').val(),
             subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
             email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
@@ -2450,6 +2456,8 @@ var Master = {
                 id:id,
                 name: name,
                 description: description,
+                from:from,
+                subject:subject,
                 email_field:email_field,
                 campaign: campaign,
                 subcampaign: subcampaign,
@@ -2505,6 +2513,8 @@ var Master = {
                 Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
+                $('.edit_campaign_form .from').val(response.from);
+                $('.edit_campaign_form .subject').val(response.subject);
                 $('.edit_campaign_form .description').val(response.description);
                 $('.edit_campaign_form .drip_campaigns_campaign_menu').val(response.campaign);
                 $('.edit_campaign_form .drip_campaigns_subcampaign').append('<option value="'+response.subcampaign+'">'+response.subcampaign+'</option>');

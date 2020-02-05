@@ -37,6 +37,8 @@
                                                             <th>{{__('tools.active')}}</th>
                                         					<th>{{__('tools.name')}}</th>
                                                             <th>{{__('tools.description')}}</th>
+                                                            <th>{{__('tools.subject')}}</th>
+                                                            <th>{{__('tools.from')}}</th>
                                         					<th>{{__('tools.campaign')}}</th>
                                         					<th>{{__('tools.subcampaign')}}</th>
                                         					<th>{{__('tools.provider')}}</th>
@@ -59,6 +61,8 @@
                                                                 </td>
                                             					<td>{{$drip->name}}</td>
                                             					<td>{{$drip->description}}</td>
+                                                                <td>{{$drip->subject}}</td>
+                                                                <td>{{$drip->from}}</td>
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>{{$drip->subcampaign}}</td>
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
