@@ -602,6 +602,13 @@ class EmailDripController extends Controller
         ];
     }
 
+    public function deleteFilter(Request $request)
+    {
+        $campaign_filter = EmailDripCampaignFilter::findOrFail($request->id);
+        $campaign_filter->delete();
+        return ['status' => 'success'];
+    }
+
     public function validateFilter(Request $request)
     {
         Log::debug($request->all());
