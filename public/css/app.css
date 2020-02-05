@@ -2341,7 +2341,8 @@ p.name i {
 
 .remove_user i,
 .remove_smtp_server_modal i,
-.remove_campaign_modal i {
+.remove_campaign_modal i,
+.remove_email_service_provider_modal i {
   color: #d9534f;
 }
 

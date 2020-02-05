@@ -370,7 +370,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log(response);
+
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -453,8 +453,7 @@ var Master = {
             },
 
             success: function(response) {
-                console.log(sel);
-                
+
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
                     emails+='<option value="'+index+'">'+index+'</option>';
@@ -608,8 +607,6 @@ var Master = {
             checked=0;
         }
 
-        console.log(campaign_id);
-        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2202,8 +2199,6 @@ var Master = {
             success: function (response) {
                 location.reload();
             },error: function (data) {
-                console.log(data);
-                // $(this).find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
@@ -2239,7 +2234,7 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response);
+
                 $('#editESPModal .name').val(response.name);
                 $('#editESPModal .provider_type').val(response.provider_type);
                 $('#editESPModal .id').val(response.id);
@@ -2519,7 +2514,6 @@ var Master = {
             },
             success: function (response) {
 
-                console.log(response);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
                 $('.edit_campaign_form .from').val(response.from);
@@ -2609,7 +2603,6 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                console.log(response);
                 var filters='<option value="">Select One</option>';
                 const filters_array = Object.keys(response)
 
@@ -2657,7 +2650,7 @@ var Master = {
         var that = $(this);
         var type = $(that).find('option:selected').data('type');
         $('.filter_error').hide();
-        console.log(that+' '+type);
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2726,10 +2719,7 @@ var Master = {
 
                     $('.filter_fields_cnt').append(filters);
                     for(var i=0;i<response.length;i++){
-                        console.log(response[i]['field']);
-                        // $('.filter_fields_div:eq('+i+')').find('.filter_fields').val(response[i]['field']);
                         $('.filter_fields_div:eq('+i+')').find('.filter_fields').css({'border':'1px solid red'});
-                         // $(".filter_fields_div:eq("+i+") .filter_fields").val(response[i]['field']).change();
                         $(".filter_fields_div:eq("+i+") .filter_fields").find("option[value='"+response[i]['field']+"']").attr('selected','selected');
                     }
                 }
