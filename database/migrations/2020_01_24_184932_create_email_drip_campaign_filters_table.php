@@ -18,7 +18,7 @@ class CreateEmailDripCampaignFiltersTable extends Migration
             $table->unsignedBigInteger('email_drip_campaign_id');
             $table->string('field');
             $table->string('operator', 20);
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->timestamps();
 
             $table->foreign('email_drip_campaign_id')
