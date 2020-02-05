@@ -22,7 +22,7 @@
 			    		<h2>Manage Filters - {{$email_drip_campaign->name}}</h2>
 					    <form action="{{action('EmailDripController@saveFilters')}}" method="post" class="form">
 					    	@csrf
-					    	<a href="#" class="mt20 btn btn-primary add_email_campaign_filter"><i class="fas fa-plus-circle"></i> Add</a>
+
 					    	<div class="filter_fields_cnt">
 					    	    @if(count($email_drip_campaign->emailDripCampaignFilters))
 									@foreach($email_drip_campaign->emailDripCampaignFilters as $filter)
@@ -96,7 +96,9 @@
 							<div class="alert alert-danger filter_error">Incomplete filter values. Please complete this filter before adding another one.</div>
 							<input type="hidden" name="email_drip_campaign_id" value="{{$email_drip_campaign->id}}">
 							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 btn_flt_lft mr10">Cancel</a>
+							<a href="#" class="btn btn-info add_email_campaign_filter mt0 btn_flt_lft mr10"><i class="fas fa-plus-circle"></i> Add</a>
 					    	<input type="submit" class="btn btn-primary" value="Save Filters">
+
 					    </form>
 			    	</div>
 			    </div>
