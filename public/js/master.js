@@ -436,7 +436,7 @@ var Master = {
         $('.drip_campaigns_subcampaign').empty();
         $('.drip_campaigns_subcampaign').append(subcampaigns);
         $(sel).find('.email').empty();
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -447,7 +447,7 @@ var Master = {
             url: '/tools/email_drip/get_table_fields' ,
             type: 'POST',
             dataType: 'json',
-            async:true,
+            async:false,
             data: {
                 campaign: campaign,
             },
