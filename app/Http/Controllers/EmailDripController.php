@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
@@ -363,7 +364,7 @@ class EmailDripController extends Controller
             }
         }
 
-        return $this->index();
+        return redirect()->action('EmailDripController@index');
     }
 
     public function getOperators()
@@ -533,6 +534,8 @@ class EmailDripController extends Controller
 
     public function validateFilter(Request $request)
     {
+        Log::debug($request->all());
+
         return 'test';
     }
 }
