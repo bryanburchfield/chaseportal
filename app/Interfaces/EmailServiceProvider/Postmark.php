@@ -98,6 +98,6 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
 
     public static function description()
     {
-        return 'PostMark';
+        return 'Postmark';
     }
 }

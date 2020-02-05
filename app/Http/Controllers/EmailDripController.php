@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
@@ -507,20 +506,16 @@ class EmailDripController extends Controller
     private function getProviderTypes()
     {
         // Look in the directory for provider interfaces
-        $models = collect(File::allFiles(app_path(self::ESP_DIR)));
+        $files = collect(File::allFiles(app_path(self::ESP_DIR)));
 
-        // This is a goofy way to create an array
-        $collection = $models->map(function ($file) {
+        $provider_types = [];
+
+        foreach ($files as $file) {
             $provider_type = Str::snake(substr($file->getFilename(), 0, -4));
             $class = 'App\\' . self::ESP_DIR . '\\' .
                 Str::studly($provider_type);
-            return [$provider_type => $class::description()];
-        });
-
-        $provider_types = [];
-        foreach ($collection as $item) {
-            $provider_types[key($item)] = $item[key($item)];
-        }
+            $provider_types[$provider_type] = $class::description();
+        };
 
         return $provider_types;
     }
