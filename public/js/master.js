@@ -117,6 +117,7 @@ var Master = {
         $('.provider_type').on('change', this.get_provider_properties);
 
         $('.add_email_campaign_filter').on('click', this.validate_filters);
+        $('.filter_fields_div:not(.not_saved_filter) .form-control').on('change', this.validate_filters);
         $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
@@ -2619,6 +2620,11 @@ var Master = {
 
     validate_filters:function(e){
         e.preventDefault();
+
+        if(!$(this).parent().hasClass('not_saved_filter')){
+            /// need to check for last filter. If previous filter was changed here
+        }
+
         var filters = [];
         var email_drip_campaign_id = $('#email_drip_campaign_id').val();
 
@@ -2640,14 +2646,14 @@ var Master = {
                 filters: filters,
             },
             success: function (response) {
-                if(response.status == 'success'){
+                // if(response.status == 'success'){
                     var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
                     $(new_filter_row).find('.form-control').each(function(){
                         $(this).val('');
                     });
                     $(new_filter_row).find('.remove_camp_filter').show();
                     $(new_filter_row).insertAfter('.filter_fields_div:last');
-                }
+                // }
             }
         });
 

@@ -531,7 +531,7 @@ class EmailDripController extends Controller
         ];
     }
 
-    public function validateFilters(Request $request)
+    public function validateFilter(Request $request)
     {
         return 'test';
     }
