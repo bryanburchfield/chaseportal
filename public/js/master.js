@@ -412,10 +412,6 @@ var Master = {
     },
 
     get_email_drip_subcampaigns:function(e, campaign){
-        // console.log(e);
-        // console.log(e.target);
-        // console.log(e.type);
-        // console.log(e.selector);
 
         var sel;
         if(e.type=='click'){
@@ -429,10 +425,7 @@ var Master = {
                 campaign = $(this).val();
                 sel = $('.create_campaign_form');
             }
-            
         }
-
-        console.log(campaign);
 
         var subcamp_response = Master.get_subcampaigns(campaign);
         var subcampaigns='<option value=""> Select One</option>';
@@ -442,7 +435,8 @@ var Master = {
 
         $('.drip_campaigns_subcampaign').empty();
         $('.drip_campaigns_subcampaign').append(subcampaigns);
-
+        $(sel).find('.email').empty();
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -460,7 +454,7 @@ var Master = {
 
             success: function(response) {
                 console.log(sel);
-                $(sel).find('.email').empty();
+                
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
                     emails+='<option value="'+index+'">'+index+'</option>';
@@ -2525,22 +2519,21 @@ var Master = {
             },
             success: function (response) {
 
+                console.log(response);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
                 $('.edit_campaign_form .from').val(response.from);
                 $('.edit_campaign_form .subject').val(response.subject);
                 $('.edit_campaign_form .description').val(response.description);
                 $('.edit_campaign_form .drip_campaigns_campaign_menu').val(response.campaign);
-                $('.edit_campaign_form .drip_campaigns_subcampaign').append('<option value="'+response.subcampaign+'">'+response.subcampaign+'</option>');
+                Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
-                $('.edit_campaign_form .email').append('<option value="'+response.email_field+'">'+response.email_field+'</option>');
                 $('.edit_campaign_form .email').val(response.email_field);
+                $(".edit_campaign_form .email option[value='"+response.email_field+"']").attr("selected", true);
                 $('.edit_campaign_form .template_id ').val(response.template_id);
                 $('.edit_campaign_form .email_service_provider_id ').val(response.email_service_provider_id);
                 $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
                 $('.edit_campaign_form .days_between_emails ').val(response.days_between_emails);
-
-                Master.get_email_drip_subcampaigns(e, response.campaign);
                 return false;
             }
         });
