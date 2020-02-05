@@ -97,6 +97,13 @@
 					    	</div>
 							<div class="alert alert-danger filter_error">Incomplete filter values. Please complete this filter before adding another one.</div>
 							<input type="hidden" name="email_drip_campaign_id" id="email_drip_campaign_id" value="{{$email_drip_campaign->id}}">
+							@if($errors->any())
+								<div class="alert alert-danger mt20">
+									@foreach ($errors->all() as $error)
+										<p>{{ $error }}</p>
+									@endforeach
+								</div>
+							@endif
 							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 btn_flt_lft mr10">Cancel</a>
 							<a href="#" class="btn btn-info add_email_campaign_filter mt0 btn_flt_lft mr10"><i class="fas fa-plus-circle"></i> Add</a>
 					    	<input type="submit" class="btn btn-primary" value="Save Filters">

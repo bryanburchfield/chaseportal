@@ -348,8 +348,20 @@ class EmailDripController extends Controller
         $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
 
         if ($request->has('filter_fields')) {
+
+            // validate them all before doing any db stuff
+            foreach ($request->filter_fields as $i => $field) {
+                $operator = $request->filter_operators[$i];
+                $value = $request->filter_values[$i];
+
+                // this will throw an exception if anything fails validation
+                $this->performValidateFilter($email_drip_campaign, $field, $operator, $value);
+            }
+
+            // All good!  Delete existing filters
             $email_drip_campaign->emailDripCampaignFilters()->delete();
 
+            // Insert each filter
             foreach ($request->filter_fields as $i => $field) {
 
                 $filter = [];
