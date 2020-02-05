@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
@@ -126,7 +125,7 @@ class EmailDripController extends Controller
         // check for campaigns
         if ($email_service_provider->emailDripCampaigns->count()) {
             $error = ValidationException::withMessages([
-                'error' => ['This server is in use by one or more campaigns'],
+                'error' => [trans('tools.provider_in_use')],
             ]);
             throw $error;
         }
@@ -367,7 +366,7 @@ class EmailDripController extends Controller
         return redirect()->action('EmailDripController@index');
     }
 
-    public function getOperators($simple = true)
+    public function getOperators($detail = false)
     {
         $mathops_detail = [
             '=' => [
@@ -445,7 +444,11 @@ class EmailDripController extends Controller
             ],
         ];
 
-        if ($simple) {
+        // there's a better way to do this
+        if ($detail) {
+            $mathops = $mathops_detail;
+            $dateops = $dateops_detail;
+        } else {
             $mathops = [];
             $dateops = [];
             foreach ($mathops_detail as $key => $array) {
@@ -454,9 +457,6 @@ class EmailDripController extends Controller
             foreach ($dateops_detail as $key => $array) {
                 $dateops[$key] = $array['description'];
             }
-        } else {
-            $mathops = $mathops_detail;
-            $dateops = $dateops_detail;
         }
 
         return [
@@ -504,6 +504,21 @@ class EmailDripController extends Controller
         $advanced_table = AdvancedTable::find($table_id);
 
         return $advanced_table->TableName;
+    }
+
+    public function deleteFilter(Request $request)
+    {
+        $campaign_filter = EmailDripCampaignFilter::findOrFail($request->id);
+        $campaign_filter->delete();
+        return ['status' => 'success'];
+    }
+
+    public function validateFilter(Request $request)
+    {
+        $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
+        list($field, $operator, $value) = $request->filters;
+
+        return $this->performValidateFilter($email_drip_campaign, $field, $operator, $value);
     }
 
     /////////////  Private functions ////////////////
@@ -602,17 +617,49 @@ class EmailDripController extends Controller
         ];
     }
 
-    public function deleteFilter(Request $request)
+    private function performValidateFilter(EmailDripCampaign $email_drip_campaign, $field, $operator, $value)
     {
-        $campaign_filter = EmailDripCampaignFilter::findOrFail($request->id);
-        $campaign_filter->delete();
+        $fields = $this->getFilterFields($email_drip_campaign);
+        $operators = $this->getOperators(true);
+
+        // check the field is valid
+        if (!in_array($field, array_keys($fields))) {
+            $error = ValidationException::withMessages([
+                'error' => [trans('tools.invalid_field')],
+            ]);
+            throw $error;
+        }
+
+        // find operators for that type
+        $operators = $operators[$fields[$field]];
+
+        // see that it's valid
+        if (!in_array($operator, array_keys($operators))) {
+            $error = ValidationException::withMessages([
+                'error' => [trans('tools.invalid_operator')],
+            ]);
+            throw $error;
+        }
+
+        // get details of operator
+        $operator = $operators[$operator];
+
+        // check if value is empty when not allowed to be
+        if (!$operator['allow_nulls'] && empty($value)) {
+            $error = ValidationException::withMessages([
+                'error' => [trans('tools.value_required')],
+            ]);
+            throw $error;
+        }
+
+        // check if value is integer
+        if ($operator['value_type'] == 'integer' && !is_numeric($value)) {
+            $error = ValidationException::withMessages([
+                'error' => [trans('tools.value_must_be_numeric')],
+            ]);
+            throw $error;
+        }
+
         return ['status' => 'success'];
-    }
-
-    public function validateFilter(Request $request)
-    {
-        Log::debug($request->all());
-
-        return 'test';
     }
 }
