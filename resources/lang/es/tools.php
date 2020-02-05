@@ -134,5 +134,17 @@ return [
 	'dnc_upload3'	=> "Si el archivo no tiene una fila de encabezado, los números de teléfono deben estar en la primera columna.",
 
 	'process'	=> 'Proceso',
-	'in_process'	=> 'En proceso'
+	'in_process'	=> 'En proceso',
+	'less_than'		=> 'Menos Que',
+	'greater_than'	=> 'Mas Grande Que',
+	'less_than_or_equals'	=> 'Menor O Igual Que',
+	'greater_than_or_equals'	=> 'Mayor O Igual Que',
+	'is_blank'	=> 'Está En Blanco',
+	'is_not_blank'	=> 'No Está En Blanco',
+	'days_ago'		=> 'Hace Días',
+	'days_from_now'	=> 'Días a Partir De Ahora',
+	'less_than_days_ago'	=> 'Hace Menos De Días',
+	'greater_than_days_ago'	=> 'Hace Más De Días',
+	'less_than_days_from_now'	=> 'Menos De Días a Partir De Ahora',
+	'greater_than_days_from_now'	=> 'Mayor Que Días a Partir De Ahora',
 ];
