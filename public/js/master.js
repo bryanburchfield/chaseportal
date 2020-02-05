@@ -2620,6 +2620,7 @@ var Master = {
     validate_filters:function(e){
         e.preventDefault();
         var filters = [];
+        var email_drip_campaign_id = $('#email_drip_campaign_id').val();
 
         $('.filter_fields_div:last').find('.form-control').each(function(index){
             filters.push($(this).val());
@@ -2632,9 +2633,10 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/validate_filters',
+            url: '/tools/email_drip/validate_filter',
             type: 'POST',
             data: {
+                email_drip_campaign_id:email_drip_campaign_id,
                 filters: filters,
             },
             success: function (response) {

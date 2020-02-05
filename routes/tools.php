@@ -53,7 +53,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/get_filters', 'EmailDripController@getFilters');
             Route::post('/get_operators', 'EmailDripController@getOperators');
             Route::post('/update_filters', 'EmailDripController@saveFilters');
-            Route::post('/validate_filters', 'EmailDripController@validateFilters');
+            Route::post('/validate_filter', 'EmailDripController@validateFilter');
         });
     });
 });
