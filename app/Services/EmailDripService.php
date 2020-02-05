@@ -135,6 +135,14 @@ class EmailDripService
         $results = $this->runSql($sql, $bind);
 
         foreach ($results as $rec) {
+            // If email field is blank, bail now
+            if (
+                $rec[$email_drip_campaign->email_field] == 'NULL' ||
+                empty($rec[$email_drip_campaign->email_field])
+            ) {
+                continue;
+            }
+
             // Find the count and last time we emailed this lead for this campaign
             $sends = EmailDripSend::where('email_drip_campaign_id', $email_drip_campaign->id)
                 ->where('lead_id', $rec['lead_id'])
@@ -240,7 +248,7 @@ class EmailDripService
             'body' => $body,
         ];
 
-        $this->email_service_provider->send($payload);
+        $result = $this->email_service_provider->send($payload);
 
         // Insert a sent record
         EmailDripSend::create([

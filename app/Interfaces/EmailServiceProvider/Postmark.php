@@ -11,6 +11,7 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
 {
     private $postmark_server;
     private $client;
+    private $connected = 0;
 
     public function __construct(EmailServiceProvider $postmark_server)
     {
@@ -19,6 +20,10 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
 
     public function connect()
     {
+        if ($this->connected) {
+            return;
+        }
+
         try {
             $this->client = new PostmarkClient($this->postmark_server->properties['api_token']);
         } catch (PostmarkException $e) {
@@ -32,6 +37,8 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
             ]);
             throw $error;
         }
+
+        $this->connected = 1;
     }
 
     public function testConnection()
@@ -44,7 +51,6 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
         ];
 
         try {
-            $this->connect();
             $sendResult = $this->send($payload);
         } catch (PostmarkException $e) {
             $error = ValidationException::withMessages([
@@ -66,12 +72,20 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
 
     public function send($payload)
     {
-        return $this->client->sendEmail(
-            $payload['from'],
-            $payload['to'],
-            $payload['subject'],
-            $payload['body']
-        );
+        try {
+            $this->connect();
+
+            return $this->client->sendEmail(
+                $payload['from'],
+                $payload['to'],
+                $payload['subject'],
+                $payload['body']
+            );
+        } catch (PostmarkException $e) {
+            return $e->message;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public static function properties()
