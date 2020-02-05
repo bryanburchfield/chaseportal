@@ -89,7 +89,6 @@
                                                         <tr>
                                                             <th>{{__('tools.name')}}</th>
                                                             <th>{{__('tools.provider_type')}}</th>
-                                                            <th>{{__('tools.properties')}}</th>
                                                             <th>{{__('tools.edit')}}</th>
                                                             <th>{{__('tools.delete')}}</th>
                                                         </tr>
@@ -100,11 +99,6 @@
                                                                 <tr>
                                                                     <td>{{$server->name}}</td>
                                                                     <td>{{$server->provider_type}}</td>
-                                                                    <td>
-                                                                        @foreach ($server->properties as $key => $value)
-                                                                            {{ __('tools.' . $key) }} : {{$value}} <br/>
-                                                                        @endforeach
-                                                                    </td>
                                                                     <?php $mode='edit';?>
                                                                     <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
                                                                     <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
