@@ -412,14 +412,27 @@ var Master = {
     },
 
     get_email_drip_subcampaigns:function(e, campaign){
+        // console.log(e);
+        // console.log(e.target);
+        // console.log(e.type);
+        // console.log(e.selector);
 
         var sel;
-        if(!campaign){
-            campaign = $(this).val();
-            sel = $('.create_campaign_form');
-        }else{
+        if(e.type=='click'){
             sel = $('.edit_campaign_form');
+            campaign = $('.edit_campaign_form').find('.drip_campaigns_campaign_menu').val();
+        }else{
+            if($(e.target).parent().parent().hasClass('edit_campaign_form')){
+                sel = $('.edit_campaign_form');
+                campaign = $(this).val();
+            }else{
+                campaign = $(this).val();
+                sel = $('.create_campaign_form');
+            }
+            
         }
+
+        console.log(campaign);
 
         var subcamp_response = Master.get_subcampaigns(campaign);
         var subcampaigns='<option value=""> Select One</option>';
@@ -440,12 +453,13 @@ var Master = {
             url: '/tools/email_drip/get_table_fields' ,
             type: 'POST',
             dataType: 'json',
-            async:false,
+            async:true,
             data: {
                 campaign: campaign,
             },
 
             success: function(response) {
+                console.log(sel);
                 $(sel).find('.email').empty();
                 var emails='<option value="">Select One</option>';
                 for(var index in response) {
@@ -2511,7 +2525,6 @@ var Master = {
             },
             success: function (response) {
 
-                Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .id').val(response.id);
                 $('.edit_campaign_form .name').val(response.name);
                 $('.edit_campaign_form .from').val(response.from);
@@ -2526,6 +2539,8 @@ var Master = {
                 $('.edit_campaign_form .email_service_provider_id ').val(response.email_service_provider_id);
                 $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
                 $('.edit_campaign_form .days_between_emails ').val(response.days_between_emails);
+
+                Master.get_email_drip_subcampaigns(e, response.campaign);
                 return false;
             }
         });
