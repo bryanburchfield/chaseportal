@@ -2620,8 +2620,8 @@ var Master = {
     add_filter_fields:function(e){
         e.preventDefault();
 
-        $('.filter_fields_div:last').find('.form-control').each(function(){
-            if($(this).val() == ''){
+        $('.filter_fields_div:last').find('.form-control').each(function(index){
+            if($(this).val() == '' && ( $(this).parent().prev().find('.filter_operators').val() != 'blank' && $(this).parent().prev().find('.filter_operators').val() != 'not_blank' )){
                 $('.alert.filter_error').show();
                 return false;
             }else{
