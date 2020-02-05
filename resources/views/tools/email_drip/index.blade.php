@@ -222,7 +222,7 @@
             </div>
 
 	        <div class="modal-footer">
-                <button type="button" class="btn btn-default cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
 	        </div>
 	    </div>
     </div>
@@ -249,7 +249,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
             </div>
         </div>
     </div>
