@@ -116,7 +116,7 @@ var Master = {
         $('.edit_campaign').on('click', this.update_email_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
 
-        $('.add_email_campaign_filter').on('click', this.add_filter_fields);
+        $('.add_email_campaign_filter').on('click', this.validate_filters);
         $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
@@ -2617,22 +2617,38 @@ var Master = {
         });
     },
 
-    add_filter_fields:function(e){
+    validate_filters:function(e){
         e.preventDefault();
+        var filters = [];
 
         $('.filter_fields_div:last').find('.form-control').each(function(index){
-            if($(this).val() == '' && ( $(this).parent().prev().find('.filter_operators').val() != 'blank' && $(this).parent().prev().find('.filter_operators').val() != 'not_blank' )){
-                $('.alert.filter_error').show();
-                return false;
-            }else{
-                var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
-                $(new_filter_row).find('.form-control').each(function(){
-                    $(this).val('');
-                });
-                $(new_filter_row).find('.remove_camp_filter').show();
-                $(new_filter_row).insertAfter('.filter_fields_div:last');
+            filters.push($(this).val());
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
+        $.ajax({
+            url: '/tools/email_drip/validate_filters',
+            type: 'POST',
+            data: {
+                filters: filters,
+            },
+            success: function (response) {
+                if(response.status == 'success'){
+                    var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_saved_filter');
+                    $(new_filter_row).find('.form-control').each(function(){
+                        $(this).val('');
+                    });
+                    $(new_filter_row).find('.remove_camp_filter').show();
+                    $(new_filter_row).insertAfter('.filter_fields_div:last');
+                }
+            }
+        });
+
     },
 
     remove_camp_filter:function(e){

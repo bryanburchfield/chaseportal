@@ -530,4 +530,9 @@ class EmailDripController extends Controller
             'LastUpdated' => 'date',
         ];
     }
+
+    public function validateFilters(Request $request)
+    {
+        return 'test';
+    }
 }
