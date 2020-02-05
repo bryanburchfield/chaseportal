@@ -79,15 +79,9 @@ class Smtp implements \App\Interfaces\EmailServiceProvider
             // Send the message
             return $this->mailer->send($message);
         } catch (Swift_TransportException $e) {
-            $error = ValidationException::withMessages([
-                'error' => [$e->getMessage()],
-            ]);
-            throw $error;
+            return $e->getMessage();
         } catch (\Exception $e) {
-            $error = ValidationException::withMessages([
-                'error' => [$e->getMessage()],
-            ]);
-            throw $error;
+            return $e->getMessage();
         }
     }
 
