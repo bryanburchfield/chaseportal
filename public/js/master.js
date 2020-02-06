@@ -2626,7 +2626,7 @@ var Master = {
         var ready_to_validate=false;
 
         // filter value changed ! in last row
-        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change' && $('.filter_fields_div').length >1){
+        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change' && $('.filter_fields_div').length > 1){
             $(this).parent().parent().parent().find('.form-control').each(function(){
                 filters.push($(this).val());
             });
@@ -2635,16 +2635,20 @@ var Master = {
                 ready_to_validate=true;
             }
         }else if( e.type == 'click'){ // add filter was clicked
-            $('.filter_fields_div').each(function(){
-                $(this).removeClass('not_validated_filter');
-            });
+            if($('.filter_fields_div').length == 1 && $('.filter_fields_div').is(":hidden")){
+                $('.filter_fields_div').show();
+            }else{
+                $('.filter_fields_div').each(function(){
+                    $(this).removeClass('not_validated_filter');
+                });
 
-            var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_validated_filter');
+                var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_validated_filter');
 
-            $('.filter_fields_div:last').find('.form-control').each(function(){
-                filters.push($(this).val());
-            });
-            ready_to_validate=true;
+                $('.filter_fields_div:last').find('.form-control').each(function(){
+                    filters.push($(this).val());
+                });
+                ready_to_validate=true;
+            }
         }
 
         $.ajaxSetup({
@@ -2688,12 +2692,19 @@ var Master = {
 
     delete_camp_filter:function(e){
         e.preventDefault();
-        
+
         var id = $(this).parent().parent().data('filterid');
         var that = $(this);
 
         if(!id){
-            $(this).parent().parent().remove();
+            if($('.filter_fields_div').length == 1){
+                $(this).parent().parent().find('.form-control').each(function(){
+                    $(this).val('');
+                });
+                $(this).parent().parent().hide();
+            }else{
+                $(this).parent().parent().remove();
+            }
         }else{
             $.ajaxSetup({
                 headers: {
@@ -2779,9 +2790,7 @@ var Master = {
                 email_drip_campaign_id:email_drip_campaign_id,
             },
             success:function(response){
-                console.log(response);
 
-                
                 if(response.length){
                     $('.filter_fields_cnt').empty().show();
                     var filters='';
@@ -2832,7 +2841,6 @@ var Master = {
                 filters:filters
             },
             success:function(response){
-                console.log(response);
                 if(response.status=='success'){
                     window.location.href = '/tools/email_drip/';
                 }
