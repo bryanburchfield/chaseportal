@@ -2826,7 +2826,7 @@ var Master = {
             success:function(response){
                 console.log(response);
                 if(response.status=='success'){
-                    location.reload();
+                    window.location.href = '/tools/email_drip/';
                 }
             }
         });

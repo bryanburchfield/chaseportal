@@ -143,7 +143,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
             </div>
         </div>
     </div>
@@ -168,7 +168,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
             </div>
         </div>
     </div>
@@ -189,8 +189,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger delete_email_service_provider add_btn_loader">{{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_email_service_provider add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
             </div>
         </div>
     </div>
@@ -216,7 +216,7 @@
             </div>
 
 	        <div class="modal-footer">
-                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
 	        </div>
 	    </div>
     </div>
@@ -238,12 +238,12 @@
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader mt10 mb0">{{__('tools.save_changes')}}</button>
+                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader mt10 mb0"><i class="fas fa-save"></i> {{__('tools.save_changes')}}</button>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
             </div>
         </div>
     </div>
@@ -264,8 +264,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
-                <button type="button" class="btn btn-danger delete_campaign add_btn_loader">{{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_campaign add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
             </div>
         </div>
     </div>

@@ -104,10 +104,10 @@
 									@endforeach
 								</div>
 							@endif
-							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 btn_flt_lft mr10">Cancel</a>
+							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 btn_flt_lft mr10"><i class="fas fa-ban"></i> {{__('general.cancel')}}</a>
 							<a href="#" class="btn btn-info add_email_campaign_filter mt0 btn_flt_lft mr10"><i class="fas fa-plus-circle"></i> Add</a>
-					    	<input type="submit" class="btn btn-primary" value="Save Filters">
 
+							<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Filters</button>
 					    </form>
 			    	</div>
 			    </div>
