@@ -330,6 +330,7 @@ var Admin = {
 				form.find('.group_id').val(response.group_id);
 				form.find('.name').val(response.name);
 				form.find('.email').val(response.email);
+				form.find('.phone').val(response.phone);
 				form.find('#tz').val(response.tz);
 				form.find('#user_type').val(response.user_type);
 				form.find('#db').val(response.db);
