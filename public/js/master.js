@@ -2674,7 +2674,6 @@ var Master = {
 
                             if ($.isPlainObject(value)) {
                                 $.each(value, function (key, value) {
-                                    console.log(value);
                                     $('.filter_error').append('<li>'+value+'</li>');
                                 });
                             }
@@ -2685,7 +2684,6 @@ var Master = {
                 }
             });
         }
-
     },
 
     delete_camp_filter:function(e){
@@ -2694,22 +2692,26 @@ var Master = {
         var id = $(this).parent().parent().data('filterid');
         var that = $(this);
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+        if(!id){
+            $(this).parent().parent().remove();
+        }else{
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-        $.ajax({
-            url: '/tools/email_drip/delete_filter',
-            type: 'POST',
-            data: {
-                id:id,
-            },
-            success: function (response) {
-                $(that).parent().parent().remove();
-            }
-        });
+            $.ajax({
+                url: '/tools/email_drip/delete_filter',
+                type: 'POST',
+                data: {
+                    id:id,
+                },
+                success: function (response) {
+                    $(that).parent().parent().remove();
+                }
+            });
+        }
     },
 
     goto_camp_filters:function(e){
