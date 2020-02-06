@@ -26,7 +26,7 @@
 					    	@csrf
 
 					    	<div class="filter_fields_cnt">
-					    	    @if(count($email_drip_campaign->emailDripCampaignFilters))
+					    	    @if($email_drip_campaign->emailDripCampaignFilters->count())
 									@foreach($email_drip_campaign->emailDripCampaignFilters as $filter)
 										<div class="row filter_fields_div" data-filterid="{{$filter->id}}">
 										    <div class="col-sm-4">
