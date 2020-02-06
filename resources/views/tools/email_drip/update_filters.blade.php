@@ -62,7 +62,7 @@
 										</div>
 									@endforeach
 								@else
-									<div class="row filter_fields_div" data-filterid="{{$filter->id}}">
+									<div class="row filter_fields_div">
 									    <div class="col-sm-4">
 									        <label>Field</label>
 									        <div class="form-group">
