@@ -350,14 +350,15 @@ class EmailDripController extends Controller
         if ($request->has('filters')) {
 
             // validate them all before doing any db stuff
-            foreach ($request->filters as $array) {
+            foreach ($request->filters as $i => $array) {
 
                 // this will throw an exception if anything fails validation
                 $this->performValidateFilter(
                     $email_drip_campaign,
                     $array['field'],
                     $array['operator'],
-                    $array['value']
+                    $array['value'],
+                    $i + 1
                 );
             }
 
@@ -632,15 +633,21 @@ class EmailDripController extends Controller
         ];
     }
 
-    private function performValidateFilter(EmailDripCampaign $email_drip_campaign, $field, $operator, $value)
+    private function performValidateFilter(EmailDripCampaign $email_drip_campaign, $field, $operator, $value, $line = 0)
     {
         $fields = $this->getFilterFields($email_drip_campaign);
         $operators = $this->getOperators(true);
 
+        if ($line) {
+            $line_numb = ' ' . trans('tools.on_line') . ' ' . $line;
+        } else {
+            $line_numb = '';
+        }
+
         // check the field is valid
         if (!in_array($field, array_keys($fields))) {
             $error = ValidationException::withMessages([
-                'error' => [trans('tools.invalid_field')],
+                'error' => [trans('tools.invalid_field') . $line_numb],
             ]);
             throw $error;
         }
@@ -651,7 +658,7 @@ class EmailDripController extends Controller
         // see that it's valid
         if (!in_array($operator, array_keys($operators))) {
             $error = ValidationException::withMessages([
-                'error' => [trans('tools.invalid_operator')],
+                'error' => [trans('tools.invalid_operator') . $line_numb],
             ]);
             throw $error;
         }
@@ -662,7 +669,7 @@ class EmailDripController extends Controller
         // check if value is empty when not allowed to be
         if (!$operator['allow_nulls'] && empty($value)) {
             $error = ValidationException::withMessages([
-                'error' => [trans('tools.value_required')],
+                'error' => [trans('tools.value_required') . $line_numb],
             ]);
             throw $error;
         }
@@ -670,7 +677,7 @@ class EmailDripController extends Controller
         // check if value is integer
         if ($operator['value_type'] == 'integer' && !is_numeric($value)) {
             $error = ValidationException::withMessages([
-                'error' => [trans('tools.value_must_be_numeric')],
+                'error' => [trans('tools.value_must_be_numeric') . $line_numb],
             ]);
             throw $error;
         }

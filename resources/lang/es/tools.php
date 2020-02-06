@@ -15,7 +15,7 @@ return [
 	'confirm_dnc_removal' => 'Confirme la eliminación del archivo DNC',
 	'confirm_dnc_reversal' => 'Confirmar reversión de archivo DNC',
 	'confirm_reversal'	=> '¿Está seguro de que desea eliminar estos números de la lista DNC?',
-	'connection_successful'=> 'Conexión Exitosa',
+	'connection_successful' => 'Conexión Exitosa',
 	'contact_flowbuilder'	=> 'Flujo de Contacto Constructor',
 	'create_campaign'	=> 'Crear Campaña',
 	'create_drip_campaign'	=> 'Crear Campaña de Goteo',
@@ -151,4 +151,5 @@ return [
 	'invalid_operator'	=> 'Operador Invalido',
 	'value_required'	=> 'Valor Requerido',
 	'value_must_be_numeric'	=> 'El Valor Debe Ser Numérico',
+	'on_line' => 'en linea',
 ];

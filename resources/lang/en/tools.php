@@ -15,7 +15,7 @@ return [
 	'confirm_dnc_removal' => 'Confirm DNC File Removal',
 	'confirm_dnc_reversal' => 'Confirm DNC File Reversal',
 	'confirm_reversal'	=> 'Are you sure you want to remove these numbers from the DNC list?',
-	'connection_successful'=> 'Connection Successful',
+	'connection_successful' => 'Connection Successful',
 	'contact_flowbuilder'	=> 'Contact Flow Builder',
 	'create_campaign'	=> 'Create Campaign',
 	'create_drip_campaign'	=> 'Create Drip Campaign',
@@ -156,4 +156,5 @@ return [
 	'invalid_operator'	=> 'Invalid Operator',
 	'value_required'	=> 'Value Required',
 	'value_must_be_numeric'	=> 'Value Must Be Numeric',
+	'on_line' => 'on line',
 ];
