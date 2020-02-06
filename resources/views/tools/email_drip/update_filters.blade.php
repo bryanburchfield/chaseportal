@@ -45,9 +45,13 @@
 										        <label>Operator</label>
 										        <div class="form-group">
 										        	<select class="form-control filter_operators" name="filter_operators[]" data-type="operator">
-											        	@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
-															<option {{ $filter->operator == $key ? 'selected' : ''}} value="{{$key}}">{{$value}}</option>
-											        	@endforeach
+														@if (isset($filter_fields[$filter->field]))
+															@foreach ($operators[$filter_fields[$filter->field]] as $key => $value)
+																<option {{ $filter->operator == $key ? 'selected' : ''}} value="{{$key}}">{{$value}}</option>
+															@endforeach
+														@else
+															<option value=""></option>
+														@endif
 										        	</select>
 										        </div>
 										    </div>

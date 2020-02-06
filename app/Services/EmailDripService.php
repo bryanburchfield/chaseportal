@@ -41,8 +41,6 @@ class EmailDripService
 
     public static function runDrips()
     {
-        $now = (new Carbon)->toDateTimeString();
-
         $email_drip_campaigns = EmailDripCampaign::where('active', 1)
             ->has('emailDripCampaignFilters')
             ->orderBy('group_id')
@@ -50,11 +48,6 @@ class EmailDripService
             ->get();
 
         foreach ($email_drip_campaigns as $email_drip_campaign) {
-            // update run times 
-            $email_drip_campaign->last_run_from = empty($email_drip_campaign->last_run_to) ? $now : $email_drip_campaign->last_run_to;
-            $email_drip_campaign->last_run_to = $now;
-            $email_drip_campaign->save();
-
             $email_service_provider = EmailServiceProvider::find($email_drip_campaign->email_service_provider_id);
 
             if ($email_service_provider) {
@@ -80,6 +73,12 @@ class EmailDripService
         if (!Auth::check()) {
             return;
         }
+
+        // update run times 
+        $now = (new Carbon)->toDateTimeString();
+        $email_drip_campaign->last_run_from = empty($email_drip_campaign->last_run_to) ? $now : $email_drip_campaign->last_run_to;
+        $email_drip_campaign->last_run_to = $now;
+        $email_drip_campaign->save();
 
         // Set SqlSrv database
         $db = Auth::user()->db;
