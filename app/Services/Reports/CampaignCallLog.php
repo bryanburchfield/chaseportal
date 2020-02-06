@@ -18,6 +18,7 @@ class CampaignCallLog
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.campaign_call_log';
+        $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['reps'] = [];
         $this->params['hasTotals'] = true;

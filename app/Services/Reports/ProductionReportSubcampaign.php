@@ -17,6 +17,7 @@ class ProductionReportSubcampaign
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.production_report_subcampaign';
+        $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;

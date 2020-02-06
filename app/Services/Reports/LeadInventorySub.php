@@ -44,6 +44,32 @@ class LeadInventorySub
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+            $results = [];
+        } else {
+            $this->params['totrows'] = $results[0]['totRows'];
+            $this->extras['TotalLeads'] = $results[0]['TotalLeads'];
+            $this->extras['AvailableLeads'] = $results[0]['AvailableLeads'];
+
+            foreach ($results as &$rec) {
+                $rec = $this->processRow($rec);
+            }
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+        }
+
+        return $results;
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
 
         if (empty($this->params['fromdate']) || empty($this->params['todate'])) {
@@ -198,28 +224,16 @@ class LeadInventorySub
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
+        return [$sql, $bind];
+    }
 
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-            $results = [];
-        } else {
-            $this->params['totrows'] = $results[0]['totRows'];
-            $this->extras['TotalLeads'] = $results[0]['TotalLeads'];
-            $this->extras['AvailableLeads'] = $results[0]['AvailableLeads'];
+    public function processRow($rec)
+    {
+        array_pop($rec);
+        array_pop($rec);
+        array_pop($rec);
 
-            foreach ($results as &$rec) {
-                array_pop($rec);
-                array_pop($rec);
-                array_pop($rec);
-            }
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-        }
-
-        return $results;
+        return $rec;
     }
 
     private function processInput(Request $request)

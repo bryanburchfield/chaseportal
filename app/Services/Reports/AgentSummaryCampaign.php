@@ -59,6 +59,26 @@ class AgentSummaryCampaign
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+        } else {
+            $this->params['totrows'] = count($results);
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
+        }
+
+        return $this->getPage($results);
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -308,20 +328,7 @@ class AgentSummaryCampaign
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
-
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-        } else {
-            $this->params['totrows'] = count($results);
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
-        }
-
-        return $this->getPage($results);
+        return [$sql, $bind];
     }
 
     private function processResults($results)
@@ -359,22 +366,7 @@ class AgentSummaryCampaign
             $total['Hours'] += $rec['Hours'];
             $total['Leads'] += $rec['Leads'];
 
-            // remove count cols
-            unset($rec['TalkTimeCount']);
-            unset($rec['WaitTimeCount']);
-            unset($rec['DispositionTimeCount']);
-
-            $rec['TalkTimeSec'] = $this->secondsToHms($rec['TalkTimeSec']);
-            $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
-            $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
-            $rec['WaitTimeSec'] = $this->secondsToHms($rec['WaitTimeSec']);
-            $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
-            $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
-            $rec['AvDispoTime'] = $this->secondsToHms($rec['AvDispoTime']);
-            $rec['LoggedInTime'] = $this->secondsToHms($rec['LoggedInTime']);
-
-            $rec['ConversionRate'] .= '%';
-            $rec['ConversionFactor'] .= '%';
+            $rec = $this->processRow($rec);
         }
 
         // calc total avgs
@@ -406,6 +398,28 @@ class AgentSummaryCampaign
         $results[] = $total;
 
         return $results;
+    }
+
+    public function processRow($rec)
+    {
+        // remove count cols
+        unset($rec['TalkTimeCount']);
+        unset($rec['WaitTimeCount']);
+        unset($rec['DispositionTimeCount']);
+
+        $rec['TalkTimeSec'] = $this->secondsToHms($rec['TalkTimeSec']);
+        $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+        $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+        $rec['WaitTimeSec'] = $this->secondsToHms($rec['WaitTimeSec']);
+        $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
+        $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+        $rec['AvDispoTime'] = $this->secondsToHms($rec['AvDispoTime']);
+        $rec['LoggedInTime'] = $this->secondsToHms($rec['LoggedInTime']);
+
+        $rec['ConversionRate'] .= '%';
+        $rec['ConversionFactor'] .= '%';
+
+        return $rec;
     }
 
     private function processInput(Request $request)

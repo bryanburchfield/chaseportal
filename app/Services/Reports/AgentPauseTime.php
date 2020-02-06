@@ -16,6 +16,7 @@ class AgentPauseTime
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.agent_pause_time';
+        $this->params['nostreaming'] = 1;
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['columns'] = [

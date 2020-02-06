@@ -18,6 +18,7 @@ class CampaignUsage
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.campaign_usage';
+        $this->params['nostreaming'] = 1;
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
         $this->params['columns'] = [

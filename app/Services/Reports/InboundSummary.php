@@ -48,7 +48,28 @@ class InboundSummary
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+        } else {
+            $this->params['totrows'] = count($results);
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
+        }
+
+        return $this->getPage($results);
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
+
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
@@ -239,20 +260,7 @@ class InboundSummary
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
-
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-        } else {
-            $this->params['totrows'] = count($results);
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
-        }
-
-        return $this->getPage($results);
+        return [$sql, $bind];
     }
 
     private function processResults($results)
@@ -282,13 +290,7 @@ class InboundSummary
             $total['AvTalkTime'] = $rec['GAvTalkTime'];
             $total['AvHoldTime'] = $rec['GAvHoldTime'];
 
-            // remove gtot cols
-            unset($rec['GAvTalkTime']);
-            unset($rec['GAvHoldTime']);
-
-            $rec['Duration'] = $this->secondsToHms($rec['Duration']);
-            $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
-            $rec['AvHoldTime'] = $this->secondsToHms($rec['AvHoldTime']);
+            $rec = $this->processRow($rec);
         }
 
         // format totals
@@ -300,6 +302,19 @@ class InboundSummary
         $results[] = $total;
 
         return $results;
+    }
+
+    public function processRow($rec)
+    {
+        // remove gtot cols
+        unset($rec['GAvTalkTime']);
+        unset($rec['GAvHoldTime']);
+
+        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
+        $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+        $rec['AvHoldTime'] = $this->secondsToHms($rec['AvHoldTime']);
+
+        return $rec;
     }
 
     private function processInput(Request $request)

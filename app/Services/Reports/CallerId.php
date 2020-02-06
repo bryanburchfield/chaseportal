@@ -36,7 +36,32 @@ class CallerId
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+            $results = [];
+        } else {
+            $this->params['totrows'] = count($results);
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+            $results = $this->processResults($results);
+        }
+
+        $page = $this->getPage($results, $all);
+        $this->createExtras($page);
+
+        return $page;
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
+
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
@@ -94,24 +119,7 @@ class CallerId
             $sql .= ' ORDER BY [Total] DESC';
         }
 
-        $results = $this->runSql($sql, $bind);
-
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-            $results = [];
-        } else {
-            $this->params['totrows'] = count($results);
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
-        }
-
-        $page = $this->getPage($results, $all);
-        $this->createExtras($page);
-
-        return $page;
+        return [$sql, $bind];
     }
 
     private function processResults($results)
@@ -127,7 +135,7 @@ class CallerId
         $total['ConnectPct'] = 0;
 
         foreach ($results as &$rec) {
-            $rec['ConnectPct'] = number_format($rec['ConnectPct'] / 100, 2);
+            $rec = $this->processRow($rec);
             $total['Total'] += $rec['Total'];
             $total['Agent'] += $rec['Agent'];
         }
@@ -139,6 +147,13 @@ class CallerId
         $results[] = $total;
 
         return $results;
+    }
+
+    public function processRow($rec)
+    {
+        $rec['ConnectPct'] = number_format($rec['ConnectPct'] / 100, 2);
+
+        return $rec;
     }
 
     private function processInput(Request $request)
