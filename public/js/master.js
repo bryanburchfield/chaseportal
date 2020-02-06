@@ -2794,6 +2794,7 @@ var Master = {
     update_filters:function(e){
         e.preventDefault();
 
+        $('.update_filters .alert.filter_error').empty().hide();
         var email_drip_campaign_id = $(this).find('#email_drip_campaign_id').val();
         var filters=[];
         var filter={};
@@ -2806,9 +2807,6 @@ var Master = {
             filters.push(filter);
             filter={};
         });
-
-        console.log(filters);
-        console.log(email_drip_campaign_id);
 
         $.ajaxSetup({
             headers: {
@@ -2827,6 +2825,20 @@ var Master = {
                 console.log(response);
                 if(response.status=='success'){
                     window.location.href = '/tools/email_drip/';
+                }
+            },error: function (data) {
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                               $('.update_filters .alert.filter_error').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.update_filters .alert.filter_error').show();
+                    });
                 }
             }
         });

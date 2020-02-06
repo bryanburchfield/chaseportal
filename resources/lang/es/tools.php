@@ -147,4 +147,8 @@ return [
 	'greater_than_days_ago'	=> 'Hace Más De Días',
 	'less_than_days_from_now'	=> 'Menos De Días a Partir De Ahora',
 	'greater_than_days_from_now'	=> 'Mayor Que Días a Partir De Ahora',
+	'invalid_field'	=> 'Campo Inválido',
+	'invalid_operator'	=> 'Operador Invalido',
+	'value_required'	=> 'Valor Requerido',
+	'value_must_be_numeric'	=> 'El Valor Debe Ser Numérico',
 ];

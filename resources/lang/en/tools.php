@@ -152,4 +152,8 @@ return [
 	'greater_than_days_ago'	=> 'Greater than Days Ago',
 	'less_than_days_from_now'	=> 'Less than Days From Now',
 	'greater_than_days_from_now'	=> 'Greater than Days From Now',
+	'invalid_field'	=> 'Invalid Field',
+	'invalid_operator'	=> 'Invalid Operator',
+	'value_required'	=> 'Value Required',
+	'value_must_be_numeric'	=> 'Value Must Be Numeric',
 ];
