@@ -118,8 +118,8 @@ var Master = {
 
         $('.add_email_campaign_filter').on('click', this.validate_filter);
         $('.filter_fields_div .form-control').on('change', this.validate_filter);
+        $('.update_filters').on('submit', this.update_filters);
         $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
-        $('.save_filters').on('click', this.update_campaign_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.delete_camp_filter);
         $('.camp_filters_link').on('click', this.goto_camp_filters);
@@ -2791,10 +2791,10 @@ var Master = {
         });
     },
 
-    update_campaign_filters:function(e){
+    update_filters:function(e){
         e.preventDefault();
 
-        var email_drip_campaign_id = $('.filter_fields_div').parent().find('#id').val();
+        var email_drip_campaign_id = $(this).find('#email_drip_campaign_id').val();
         var filters=[];
         var filter={};
 
@@ -2806,6 +2806,9 @@ var Master = {
             filters.push(filter);
             filter={};
         });
+
+        console.log(filters);
+        console.log(email_drip_campaign_id);
 
         $.ajaxSetup({
             headers: {

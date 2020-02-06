@@ -22,7 +22,7 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
 			    		<h2>Manage Filters - {{$email_drip_campaign->name}}</h2>
-					    <form action="{{action('EmailDripController@saveFilters')}}" method="post" class="form">
+					    <form action="#" method="post" class="form update_filters">
 					    	@csrf
 
 					    	<div class="filter_fields_cnt">
