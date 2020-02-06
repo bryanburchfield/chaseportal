@@ -375,7 +375,7 @@ class EmailDripController extends Controller
             }
         }
 
-        return redirect()->action('EmailDripController@index');
+        return ['status' => 'success'];
     }
 
     public function getOperators($detail = false)
