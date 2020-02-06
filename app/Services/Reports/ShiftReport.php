@@ -36,6 +36,29 @@ class ShiftReport
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+        } else {
+            $this->params['totrows'] = $results[0]['totRows'];
+
+            foreach ($results as &$rec) {
+                array_pop($rec);
+            }
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+        }
+
+        return $this->processResults($results);
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -190,31 +213,22 @@ class ShiftReport
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
-
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-        } else {
-            $this->params['totrows'] = $results[0]['totRows'];
-
-            foreach ($results as &$rec) {
-                array_pop($rec);
-            }
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-        }
-
-        return $this->processResults($results);
+        return [$sql, $bind];
     }
 
     private function processResults($results)
     {
         foreach ($results as &$rec) {
-            $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
+            $rec = $this->processRow($rec);
         }
         return $results;
+    }
+
+    public function processRow($rec)
+    {
+        $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
+
+        return $rec;
     }
 
     private function processInput(Request $request)

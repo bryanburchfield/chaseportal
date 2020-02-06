@@ -17,6 +17,7 @@ class ProductionReport
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.production_report';
+        $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;

@@ -16,6 +16,7 @@ class AgentTimesheet
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.agent_timesheet';
+        $this->params['nostreaming'] = 1;
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;

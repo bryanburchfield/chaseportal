@@ -298,6 +298,19 @@ trait ReportTraits
         return $results;
     }
 
+    public function getSql(Request $request)
+    {
+        $this->processInput($request);
+
+        if ($this->errors->isNotEmpty()) {
+            return ['', []];
+        }
+
+        $all = empty($request->all) ? false : true;
+
+        return $this->makeQuery($all);
+    }
+
     private function getPage($results, $all = false)
     {
         if ($all) {
