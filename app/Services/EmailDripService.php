@@ -44,6 +44,7 @@ class EmailDripService
         $now = (new Carbon)->toDateTimeString();
 
         $email_drip_campaigns = EmailDripCampaign::where('active', 1)
+            ->has('emailDripCampaignFilters')
             ->orderBy('group_id')
             ->orderBy('email_service_provider_id')
             ->get();
