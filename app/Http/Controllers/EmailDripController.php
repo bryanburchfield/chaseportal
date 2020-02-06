@@ -347,27 +347,30 @@ class EmailDripController extends Controller
         // 404's if they spoofed the wrong campaign id
         $email_drip_campaign = $this->findEmailDripCampaign($request->email_drip_campaign_id);
 
-        if ($request->has('filter_fields')) {
+        if ($request->has('filters')) {
 
             // validate them all before doing any db stuff
-            foreach ($request->filter_fields as $i => $field) {
-                $operator = $request->filter_operators[$i];
-                $value = $request->filter_values[$i];
+            foreach ($request->filters as $array) {
 
                 // this will throw an exception if anything fails validation
-                $this->performValidateFilter($email_drip_campaign, $field, $operator, $value);
+                $this->performValidateFilter(
+                    $email_drip_campaign,
+                    $array['field'],
+                    $array['operator'],
+                    $array['value']
+                );
             }
 
             // All good!  Delete existing filters
             $email_drip_campaign->emailDripCampaignFilters()->delete();
 
             // Insert each filter
-            foreach ($request->filter_fields as $i => $field) {
+            foreach ($request->filters as $array) {
 
                 $filter = [];
-                $filter['field'] = $field;
-                $filter['operator'] = $request->filter_operators[$i];
-                $filter['value'] = $request->filter_values[$i];
+                $filter['field'] = $array['field'];
+                $filter['operator'] = $array['operator'];
+                $filter['value'] = $array['value'];
 
                 $email_drip_campaign_filter = new EmailDripCampaignFilter($filter);
                 $email_drip_campaign_filter->email_drip_campaign_id = $email_drip_campaign->id;
