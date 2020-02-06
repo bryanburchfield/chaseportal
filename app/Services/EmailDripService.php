@@ -248,6 +248,7 @@ class EmailDripService
             'to' => $rec[$email_drip_campaign->email_field],
             'subject' => $subject,
             'body' => $body,
+            'tag' => $email_drip_campaign->name,
         ];
 
         $result = $this->email_service_provider->send($payload);

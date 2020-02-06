@@ -75,12 +75,16 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
         try {
             $this->connect();
 
-            return $this->client->sendEmail(
-                $payload['from'],
-                $payload['to'],
-                $payload['subject'],
-                $payload['body']
-            );
+            $message = [
+                'To' => $payload['to'],
+                'From' => $payload['from'],
+                'TrackOpens' => true,
+                'Subject' => $payload['subject'],
+                'HtmlBody' => $payload['body'],
+                'Tag' => $payload['tag'],
+            ];
+
+            return $this->client->sendEmailBatch([$message]);
         } catch (PostmarkException $e) {
             return $e->message;
         } catch (\Exception $e) {
