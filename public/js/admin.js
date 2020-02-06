@@ -24,6 +24,7 @@ var Admin = {
         $('.generate_url').on('click', this.generate_url);
         $('.checkall_system_macro').on('click', this.toggleall_system_macro);
         $('body').on('dblclick', '.field_name', this.edit_field_name);
+        $('body').on('keyup', '.field .webhook_field_value', this.uncheck_macro);
 	},
 
 	// add global user
@@ -651,8 +652,10 @@ var Admin = {
 				var field_value = $(this).find('.form-control').val();
 				field_name=field_name.trim();
 				field_value=field_value.trim();
+				if(!$(this).find('.use_system_macro').is(':checked')){
+					field_value=field_value.replace(/ /g,"%20");
+				}
 				field_name=field_name.replace(/ /g,"%20");
-				field_value=field_value.replace(/ /g,"%20");
 
 				if(!i){
 					final_url+= field_name+'='+field_value;
@@ -665,6 +668,13 @@ var Admin = {
 		});
 
 		$('.final_url_cnt .url').text(final_url)
+	},
+
+	uncheck_macro:function(e){
+		e.preventDefault();
+		if($(this).parent().parent().parent().find('.use_system_macro').is(":checked")){
+			$(this).parent().parent().parent().find('.use_system_macro').prop('checked', false);
+		}
 	}
 }
 
