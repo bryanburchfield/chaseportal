@@ -361,10 +361,12 @@ class EmailDripController extends Controller
                     $i + 1
                 );
             }
+        }
 
-            // All good!  Delete existing filters
-            $email_drip_campaign->emailDripCampaignFilters()->delete();
+        // All good!  Delete existing filters
+        $email_drip_campaign->emailDripCampaignFilters()->delete();
 
+        if ($request->has('filters')) {
             // Insert each filter
             foreach ($request->filters as $array) {
 
