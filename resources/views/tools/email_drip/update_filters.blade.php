@@ -33,6 +33,7 @@
 										        <label>Field</label>
 										        <div class="form-group">
 										            <select class="form-control filter_fields" name="filter_fields[]" data-type="field">
+										            	<option value="">Select One</option>
 										            	@foreach($filter_fields as $key => $value)
 										            		<option {{$filter->field == $key ? 'selected' : ''}} data-type="{{$value}}" value="{{$key}}">{{$key}}</option>
 										            	@endforeach
@@ -62,11 +63,12 @@
 										</div>
 									@endforeach
 								@else
-									<div class="row filter_fields_div">
+									<div class="row filter_fields_div not_validated_filter">
 									    <div class="col-sm-4">
 									        <label>Field</label>
 									        <div class="form-group">
 									            <select class="form-control filter_fields" name="filter_fields[]" data-type="field">
+									            	<option value="">Select One</option>
 									            	@foreach($filter_fields as $key => $value)
 									            		<option data-type="{{$value}}" value="{{$key}}">{{$key}}</option>
 									            	@endforeach

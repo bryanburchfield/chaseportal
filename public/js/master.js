@@ -2623,13 +2623,18 @@ var Master = {
         $('.filter_error').empty().hide();
         var filters = [];
         var email_drip_campaign_id = $('#email_drip_campaign_id').val();
+        var ready_to_validate=false;
 
         // filter value changed ! in last row
-        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change'){
+        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change' && $('.filter_fields_div').length >1){
             $(this).parent().parent().parent().find('.form-control').each(function(){
                 filters.push($(this).val());
             });
-        }else{ // add filter was clicked
+
+            if(filters.length >=2){
+                ready_to_validate=true;
+            }
+        }else if( e.type == 'click'){ // add filter was clicked
             $('.filter_fields_div').each(function(){
                 $(this).removeClass('not_validated_filter');
             });
@@ -2639,6 +2644,7 @@ var Master = {
             $('.filter_fields_div:last').find('.form-control').each(function(){
                 filters.push($(this).val());
             });
+            ready_to_validate=true;
         }
 
         $.ajaxSetup({
@@ -2647,36 +2653,38 @@ var Master = {
             }
         });
 
-        $.ajax({
-            url: '/tools/email_drip/validate_filter',
-            type: 'POST',
-            data: {
-                email_drip_campaign_id:email_drip_campaign_id,
-                filters: filters,
-            },
-            success: function (response) {
-                $(new_filter_row).find('.form-control').each(function(){
-                    $(this).val('');
-                });
-                $(new_filter_row).find('.remove_camp_filter').show();
-                $(new_filter_row).insertAfter('.filter_fields_div:last');
-            },error: function (data) {
-                if (data.status === 422) {
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
-
-                        if ($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                                console.log(value);
-                                $('.filter_error').append('<li>'+value+'</li>');
-                            });
-                        }
-
-                        $('.filter_error').show();
+        if(ready_to_validate){
+            $.ajax({
+                url: '/tools/email_drip/validate_filter',
+                type: 'POST',
+                data: {
+                    email_drip_campaign_id:email_drip_campaign_id,
+                    filters: filters,
+                },
+                success: function (response) {
+                    $(new_filter_row).find('.form-control').each(function(){
+                        $(this).val('');
                     });
+                    $(new_filter_row).find('.remove_camp_filter').show();
+                    $(new_filter_row).insertAfter('.filter_fields_div:last');
+                },error: function (data) {
+                    if (data.status === 422) {
+                        var errors = $.parseJSON(data.responseText);
+                        $.each(errors, function (key, value) {
+
+                            if ($.isPlainObject(value)) {
+                                $.each(value, function (key, value) {
+                                    console.log(value);
+                                    $('.filter_error').append('<li>'+value+'</li>');
+                                });
+                            }
+
+                            $('.filter_error').show();
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
 
     },
 
