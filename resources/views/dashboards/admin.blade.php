@@ -224,7 +224,7 @@
 
 														<div class="col-sm-5">
 															<div class="form-group">
-																<input type="text" class="form-control" name="{{$val}}" placeholder="{{$val}}">
+																<input type="text" class="form-control webhook_field_value" name="{{$val}}" placeholder="{{$val}}">
 															</div>
 														</div>
 
