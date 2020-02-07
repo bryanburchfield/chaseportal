@@ -125,7 +125,7 @@ class SubcampaignSummary
             dr.CallStatus as CallStatus,
             IsNull((SELECT TOP 1 [Type]
               FROM [$db].[dbo].[Dispos]
-              WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR IsDefault=1) AND (Campaign=dr.Campaign OR IsDefault=1) ORDER BY [Description] Desc), 0) as [Type],
+              WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR IsDefault=1) AND (Campaign=dr.Campaign OR IsDefault=1) ORDER BY [id]), 0) as [Type],
             count(dr.CallStatus) as [Count]
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
             WHERE dr.GroupId = :group_id$i

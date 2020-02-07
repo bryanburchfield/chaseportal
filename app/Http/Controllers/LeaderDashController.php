@@ -208,7 +208,7 @@ class LeaderDashController extends Controller
 				WHERE Disposition = DR.CallStatus
 				AND (GroupId = DR.GroupId OR IsSystem=1)
 				AND (Campaign = DR.Campaign OR Campaign = '')
-				ORDER BY [Description] Desc) DI
+				ORDER BY [id]) DI
 			WHERE DR.GroupId = :groupid$i
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
@@ -318,7 +318,7 @@ class LeaderDashController extends Controller
                 WHERE Disposition = DR.CallStatus
                 AND (GroupId = DR.GroupId OR IsSystem=1)
                 AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [Description] Desc) DI
+                ORDER BY [id]) DI
             WHERE DR.GroupId = :groupid$i
             AND DR.CallType NOT IN (7,8)
             AND DR.Campaign != ''
@@ -352,5 +352,4 @@ class LeaderDashController extends Controller
             'Sales' => array_column($result, 'Sales'),
         ];
     }
-
 }

@@ -177,6 +177,10 @@ class CallDetails
         $answered = 0;
         $unanswered = 0;
 
+        $bind['group_id'] =  Auth::user()->group_id;
+        $bind['startdate'] = $startDate;
+        $bind['enddate'] = $endDate;
+
         // create temp tables for joins
         $sql = "SET NOCOUNT ON;
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
@@ -257,23 +261,18 @@ class CallDetails
             $where .= " AND (IsNull(DR.CallStatus, '') NOT IN ('Inbound', 'Inbound Voicemail') AND IsNull(DR.Rep, '') <> '')";
         }
 
-        $sql .= " SELECT * INTO #BigTable FROM (";
 
-        $union = '';
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id' . $i] =  Auth::user()->group_id;
-            $bind['startdate' . $i] = $startDate;
-            $bind['enddate' . $i] = $endDate;
 
-            $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
-                FROM [$db].[dbo].[Dispos] D
+
+        $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
+                FROM [Dispos] D
                 WHERE D.Disposition = DR.CallStatus
                 AND (GroupId = DR.GroupId OR IsSystem=1)
                 AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [Description] Desc
+                ORDER BY [id] Desc
                 ), 0)";
 
-            $sql .= " $union SELECT
+        $sql .= " SELECT
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
@@ -302,37 +301,33 @@ class CallDetails
                 END as CallType,
                 DR.Details
                 $this->extra_cols
-            FROM [$db].[dbo].[DialingResults] DR WITH(NOLOCK)
-            LEFT OUTER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId";
+                , totRows = COUNT(*) OVER()
+            FROM [DialingResults] DR WITH(NOLOCK)
+            LEFT OUTER JOIN [Leads] L ON L.id = DR.LeadId";
 
-            if (!(empty($this->advanced_table))) {
-                $sql .= "
-                LEFT OUTER JOIN [$db].[dbo].[$this->advanced_table] A ON A.LeadId = L.IdGuid";
-            }
-
+        if (!(empty($this->advanced_table))) {
             $sql .= "
+                LEFT OUTER JOIN [$this->advanced_table] A ON A.LeadId = L.IdGuid";
+        }
+
+        $sql .= "
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
             LEFT JOIN #SelectedSource S on S.SourceName = DR.CallerId
-            WHERE DR.GroupId = :group_id$i
-            AND dr.Date >= :startdate$i
-            AND DR.Date <= :enddate$i
+            WHERE DR.GroupId = :group_id
+            AND dr.Date >= :startdate
+            AND DR.Date <= :enddate
             AND DR.CallType != 7
             $where";
 
-            // sql server goofyness
-            if (!empty($this->params['is_callable'])) {
-                $bind['is_callable' . $i] = $this->params['is_callable'] == 'Y' ? 1 : 0;
-                $sql .= " AND $is_callable_sql = :is_callable$i";
-            }
-
-            $union = 'UNION ALL';
+        // sql server goofyness
+        if (!empty($this->params['is_callable'])) {
+            $bind['is_callable'] = $this->params['is_callable'] == 'Y' ? 1 : 0;
+            $sql .= " AND $is_callable_sql = :is_callable";
         }
 
-        $sql .= ") tmp;
-        SELECT *, totRows = COUNT(*) OVER()
-        FROM #BigTable";
+
 
         if (strlen($this->params['calltype']) !== 0) {
             $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";

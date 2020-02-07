@@ -190,7 +190,7 @@ class AgentAnalysis
                         WHERE Disposition=r.CallStatus
                         AND (GroupId=r.GroupId OR IsSystem=1)
                         AND (Campaign=r.Campaign OR Campaign='')
-                        ORDER BY [Description] Desc) d
+                        ORDER BY [id]) d
             WHERE r.GroupId = :group_id2$i
             AND r.Date >= :startdate2$i
             AND r.Date < :enddate2$i
