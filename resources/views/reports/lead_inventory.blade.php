@@ -66,5 +66,5 @@
 @section('extras')
 	<h4 class="total_leads mb15 mt30"></h4>
 	<h4 class="available_leads mb15"></h4>
-	<h4 class="callable_leads mb15"></h4>
+
 @endsection

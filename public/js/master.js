@@ -1938,7 +1938,6 @@ var Master = {
 	lead_inventory: function (response) {
 		$('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
 		$('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
-        $('.callable_leads').html('<b>' + Lang.get('js_msgs.callable_leads') + ': ' + response.extras.CallableLeads + '</b>');
 	},
 
 	caller_id: function (response) {
