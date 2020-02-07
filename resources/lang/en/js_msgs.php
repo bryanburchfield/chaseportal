@@ -21,6 +21,7 @@ return [
 	'call_status_count'			=> 'Call Status Count',
 	'call_time'					=> 'Call Time (minutes)',
 	'callable'					=> 'Callable',
+	'callable_leads'			=> 'Callable Leads',
 	'callable_leads_by_sub'		=> 'Callable Leads by SubCampaign',
 	'calls'						=> 'Calls',
 	'created'					=> 'Created',
