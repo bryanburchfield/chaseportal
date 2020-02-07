@@ -16,7 +16,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true]) !!}
+							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true, 'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
-							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true]) !!}
+							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true, 'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
