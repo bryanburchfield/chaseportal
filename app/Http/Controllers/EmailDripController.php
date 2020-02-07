@@ -292,7 +292,7 @@ class EmailDripController extends Controller
 
         // Find SQL Server for templates named "email_*"
         return Script::where('GroupId', Auth::User()->group_id)
-            ->where('Name', 'like', 'email_%')
+            ->where('Name', 'like', 'email[_]%')
             ->whereNotNull('HtmlContent')
             ->where('HtmlContent', '!=', '')
             ->get();
