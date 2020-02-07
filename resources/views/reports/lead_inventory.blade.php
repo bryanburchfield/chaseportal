@@ -15,7 +15,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => false]) !!}
+							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => false, 'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -28,7 +28,7 @@
 					<div class="form-group">
 						{!! Form::label('todate',  __('reports.to')) !!}
 						<div class="input-group date">
-							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => false]) !!}
+							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => false,  'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -64,6 +64,7 @@
 @endsection
 
 @section('extras')
-	<h4 class="total_leads"></h4><br>
-	<h4 class="available_leads"></h4>
+	<h4 class="total_leads mb15 mt30"></h4>
+	<h4 class="available_leads mb15"></h4>
+	<h4 class="callable_leads mb15"></h4>
 @endsection

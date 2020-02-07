@@ -21,6 +21,7 @@ return [
 	'call_status_count'			=> 'Recuento de Disposiciones',
 	'call_time'					=> 'Duración de la Llamada (minutos)',
 	'callable'					=> 'Invocable',
+	'callable_leads'			=> 'Cables Invocables',
 	'callable_leads_by_sub'		=> 'Leads Invocables por SubCampaign',
 	'calls'						=> 'Llamadas',
 	'created'					=> 'Creado',

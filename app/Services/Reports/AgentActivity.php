@@ -22,6 +22,7 @@ class AgentActivity
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
             'Event' => 'reports.event',
+            'Duration' => 'reports.duration',
             'Date' => 'reports.date',
             'Details' => 'reports.details',
         ];
@@ -64,6 +65,7 @@ class AgentActivity
     {
         array_pop($rec);
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
         $this->rowclass[] = 'agentcalllog_' . Str::snake($rec['Event']);
 
         return $rec;
@@ -128,6 +130,7 @@ class AgentActivity
     SELECT Rep,
     Campaign,
     [Action] as Event,
+    Duration,
     Date,
     Details,
     totRows = COUNT(*) OVER()

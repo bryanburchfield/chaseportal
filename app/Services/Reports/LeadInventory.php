@@ -51,6 +51,7 @@ class LeadInventory
             $this->params['totrows'] = $results[0]['totRows'];
             $this->extras['TotalLeads'] = $results[0]['TotalLeads'];
             $this->extras['AvailableLeads'] = $results[0]['AvailableLeads'];
+            $this->extras['CallableLeads'] = $results[0]['IsCallable'];
 
             foreach ($results as &$rec) {
                 $rec = $this->processRow($rec);
@@ -201,6 +202,7 @@ class LeadInventory
             SUM(Leads) as Leads,
             TotalLeads,
             AvailableLeads,
+            IsCallable,
             totRows = COUNT(*) OVER()
         FROM #ShiftReport
         GROUP BY [Description], [Type], TotalLeads, AvailableLeads, IsCallable";
@@ -226,6 +228,7 @@ class LeadInventory
 
     public function processRow($rec)
     {
+        array_pop($rec);
         array_pop($rec);
         array_pop($rec);
         array_pop($rec);
