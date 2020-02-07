@@ -424,7 +424,7 @@ class OutboundDashController extends Controller
 				WHERE Disposition = DR.CallStatus
 				AND (GroupId = DR.GroupId OR IsSystem=1)
 				AND (Campaign = DR.Campaign OR Campaign = '')
-				ORDER BY [Description] Desc) DI
+				ORDER BY [id]) DI
 			WHERE DR.GroupId = :groupid1_$i
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
@@ -648,7 +648,7 @@ class OutboundDashController extends Controller
                 WHERE Disposition = DR.CallStatus
                 AND (GroupId = DR.GroupId OR IsSystem=1)
                 AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [Description] Desc) DI
+                ORDER BY [id]) DI
             WHERE DR.GroupId = :groupid$i
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
@@ -923,7 +923,7 @@ class OutboundDashController extends Controller
             WHERE Disposition=DR.CallStatus
             AND (GroupId=DR.GroupId OR IsSystem=1)
             AND (Campaign=DR.Campaign OR Campaign='')
-            ORDER BY [Description] Desc), 0) as [Type]
+            ORDER BY [id]), 0) as [Type]
             FROM [$db].[dbo].[DialingResults] DR
             WHERE DR.CallType NOT IN (1,7,8,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','TRANSFERRED','PARKED','Inbound')

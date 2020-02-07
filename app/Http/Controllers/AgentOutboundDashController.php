@@ -282,7 +282,7 @@ class AgentOutboundDashController extends Controller
                     WHERE Disposition = DR.CallStatus
                     AND (GroupId = DR.GroupId OR IsSystem=1)
                     AND (Campaign = DR.Campaign OR Campaign = '')
-                    ORDER BY [Description] Desc) DI
+                    ORDER BY [id]) DI
                 WHERE DR.GroupId = :groupid$i
                 AND DR.Rep = :rep$i
                 AND DR.Date >= :fromdate$i
