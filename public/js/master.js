@@ -2351,7 +2351,7 @@ var Master = {
     delete_esp:function(e){
         e.preventDefault();
         var id = $('#deleteESPModal').find('#id').val();
-
+        $('#deleteESPModal .alert-danger').hide();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2366,6 +2366,21 @@ var Master = {
             },
             success: function (response) {
                 location.reload();
+            },error: function (data) {
+                $('#deleteESPModal .btn').find('i').remove();
+                if (data.status === 422) {
+                    $('#deleteESPModal .alert-danger').empty();
+                    // $('#deleteESPModal .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('#deleteESPModal .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+                        $('#deleteESPModal .alert-danger').show();
+                    });
+                }
             }
         });
     },
@@ -2876,7 +2891,7 @@ $(document).ready(function () {
         Master.toggle_instructions();
     }
 
-    $('#addServerModal, #editESPModal').on('hidden.bs.modal', function () {
+    $('#addServerModal, #editESPModal, #deleteESPModal').on('hidden.bs.modal', function () {
         $(this).find('.alert').hide();
     });
 

@@ -152,4 +152,5 @@ return [
 	'value_required'	=> 'Valor Requerido',
 	'value_must_be_numeric'	=> 'El Valor Debe Ser Numérico',
 	'on_line' => 'en linea',
+	'provider_in_use'	=> 'Proveedor En Uso',
 ];

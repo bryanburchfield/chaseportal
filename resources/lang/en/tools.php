@@ -157,4 +157,5 @@ return [
 	'value_required'	=> 'Value Required',
 	'value_must_be_numeric'	=> 'Value Must Be Numeric',
 	'on_line' => 'on line',
+	'provider_in_use'	=> 'Provider In Use',
 ];
