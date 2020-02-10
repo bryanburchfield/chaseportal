@@ -308,7 +308,15 @@ class EmailDripController extends Controller
     {
         $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
+        // Toggle active
         $email_drip_campaign->active = !$email_drip_campaign->active;
+
+        // If activating, reset run dates
+        if ($email_drip_campaign->active == 1) {
+            $email_drip_campaign->last_run_from = now();
+            $email_drip_campaign->last_run_to = $email_drip_campaign->last_run_from;
+        }
+
         $email_drip_campaign->save();
 
         return ['status' => 'success'];
