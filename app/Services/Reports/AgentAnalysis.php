@@ -51,6 +51,29 @@ class AgentAnalysis
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+        } else {
+            $this->params['totrows'] = $results[0]['totRows'];
+
+            foreach ($results as &$rec) {
+                $rec = $this->processRow($rec);
+            }
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+        }
+
+        return $results;
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -167,7 +190,7 @@ class AgentAnalysis
                         WHERE Disposition=r.CallStatus
                         AND (GroupId=r.GroupId OR IsSystem=1)
                         AND (Campaign=r.Campaign OR Campaign='')
-                        ORDER BY [Description] Desc) d
+                        ORDER BY [id]) d
             WHERE r.GroupId = :group_id2$i
             AND r.Date >= :startdate2$i
             AND r.Date < :enddate2$i
@@ -347,31 +370,22 @@ class AgentAnalysis
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
+        return [$sql, $bind];
+    }
 
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-        } else {
-            $this->params['totrows'] = $results[0]['totRows'];
+    public function processRow($rec)
+    {
+        array_pop($rec);
+        $rec['Date'] = date('m/d/Y', strtotime($rec['Date']));
+        $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
+        $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
+        $rec['AvailTimeSec'] = $this->secondsToHms($rec['AvailTimeSec']);
+        $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+        $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
+        $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+        $rec['LoggedInTimeSec'] = $this->secondsToHms($rec['LoggedInTimeSec']);
 
-            foreach ($results as &$rec) {
-                array_pop($rec);
-                $rec['Date'] = date('m/d/Y', strtotime($rec['Date']));
-                $rec['AvTalkTime'] = $this->secondsToHms($rec['AvTalkTime']);
-                $rec['AvWaitTime'] = $this->secondsToHms($rec['AvWaitTime']);
-                $rec['AvailTimeSec'] = $this->secondsToHms($rec['AvailTimeSec']);
-                $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
-                $rec['ConnectedTimeSec'] = $this->secondsToHms($rec['ConnectedTimeSec']);
-                $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
-                $rec['LoggedInTimeSec'] = $this->secondsToHms($rec['LoggedInTimeSec']);
-            }
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-        }
-
-        return $results;
+        return $rec;
     }
 
     private function processInput(Request $request)

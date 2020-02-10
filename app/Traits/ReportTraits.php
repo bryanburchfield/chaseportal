@@ -40,12 +40,12 @@ trait ReportTraits
 
     public function setDates()
     {
-        if (!empty($this->params['datesOptional'])) {
-            $this->params['fromdate'] = '';
-            $this->params['todate'] = '';
-        } else {
+        if (empty($this->params['datesOptional'])) {
             $this->params['fromdate'] = Carbon::parse('today 09:00')->isoFormat('L LT');
             $this->params['todate'] = Carbon::parse('today 20:00')->isoFormat('L LT');
+        } else {
+            $this->params['fromdate'] = '';
+            $this->params['todate'] = '';
         }
     }
 
@@ -234,7 +234,7 @@ trait ReportTraits
         $to = null;
 
         if (empty($request->input('fromdate'))) {
-            if (!empty($this->params['datesOptional'])) {
+            if (empty($this->params['datesOptional'])) {
                 $this->errors->add('fromdate.required', trans('reports.errfromdaterequired'));
             }
         } else {
@@ -251,7 +251,7 @@ trait ReportTraits
         }
 
         if (empty($request->input('todate'))) {
-            if (!empty($this->params['datesOptional'])) {
+            if (empty($this->params['datesOptional'])) {
                 $this->errors->add('todate.required', trans('reports.errtodaterequired'));
             }
         } else {
@@ -296,6 +296,19 @@ trait ReportTraits
         }
 
         return $results;
+    }
+
+    public function getSql(Request $request)
+    {
+        $this->processInput($request);
+
+        if ($this->errors->isNotEmpty()) {
+            return ['', []];
+        }
+
+        $all = empty($request->all) ? false : true;
+
+        return $this->makeQuery($all);
     }
 
     private function getPage($results, $all = false)

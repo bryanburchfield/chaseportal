@@ -11,14 +11,7 @@ trait SqlServerTraits
 
     private function runSql($sql, $bind, $db = null)
     {
-        if ($db === null) {
-            if (Auth::check()) {
-                $db = Auth::user()->db;
-            } else {
-                $db = $this->db;
-            }
-        }
-        config(['database.connections.sqlsrv.database' => $db]);
+        $this->setSqlServer();
 
         try {
             $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
@@ -32,6 +25,18 @@ trait SqlServerTraits
         }
 
         return $results;
+    }
+
+    public function setSqlServer($db = null)
+    {
+        if ($db === null) {
+            if (Auth::check()) {
+                $db = Auth::user()->db;
+            } else {
+                $db = $this->db;
+            }
+        }
+        config(['database.connections.sqlsrv.database' => $db]);
     }
 
     private function runMultiSql($sql, $bind)

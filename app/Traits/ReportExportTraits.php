@@ -9,6 +9,8 @@ use App\Mail\ReportMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 trait ReportExportTraits
@@ -64,32 +66,32 @@ trait ReportExportTraits
 
     public function csvExport($request)
     {
-        // Retrieve results in chunks
-        $request->request->remove('all');
-        $this->params['pagesize'] = 2000;
-
-        $results = $this->runReport($request);
-
-        // check for errors
-        if (empty($results)) {
-            return null;
+        // Check if the report is streamable
+        if (isset($this->params['nostreaming'])) {
+            return $this->doExport($request, 'csv');
         }
 
-        array_unshift($results, array_values($this->params['columns']));
+        $this->increaseLimits();
 
-        $totpages = $this->params['totpages'];
+        list($sql, $bind) = $this->getSql($request);
 
-        return response()->streamDownload(function () use ($totpages, $results, $request) {
+        $this->setSqlServer();
+
+        return response()->streamDownload(function () use ($sql, $bind) {
             $outstream = fopen("php://output", 'w');
 
-            array_walk($results, [&$this, 'outputCsv'], $outstream);
+            $headers = [$this->params['columns']];
 
-            $curpage = 2;
-            while ($curpage <= $totpages) {
-                $this->params['curpage'] = $curpage;
-                $results = $this->runReport($request);
-                array_walk($results, [&$this, 'outputCsv'], $outstream);
-                $curpage++;
+            array_walk($headers, [&$this, 'outputCsv'], $outstream);
+
+            $pdo = DB::connection('sqlsrv')->getPdo();
+            $sth = $pdo->prepare($sql);
+            $sth->execute($bind);
+
+            while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
+                $row = $this->processRow($row);
+                $row = [$row];
+                array_walk($row, [&$this, 'outputCsv'], $outstream);
             }
 
             fclose($outstream);

@@ -1532,7 +1532,7 @@ var Master = {
 					Master.campaign_call_log(response);
 				}
 
-				if (response.params.report == 'lead_inventory') {
+				if (response.params.report == 'lead_inventory' || response.params.report == 'lead_inventory_sub') {
 					Master.lead_inventory(response);
 				}
 
@@ -1936,8 +1936,8 @@ var Master = {
 	},
 
 	lead_inventory: function (response) {
-		$('.total_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads + '</b>');
-		$('.available_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
+		$('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
+		$('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
 	},
 
 	caller_id: function (response) {

@@ -44,6 +44,29 @@ class CampaignSummary
 
     private function executeReport($all = false)
     {
+        list($sql, $bind) = $this->makeQuery($all);
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $this->params['totrows'] = 0;
+            $this->params['totpages'] = 1;
+            $this->params['curpage'] = 1;
+        } else {
+            $this->params['totrows'] = $results[0]['totRows'];
+
+            foreach ($results as &$rec) {
+                $rec = $this->processRow($rec);
+            }
+            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
+            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+        }
+
+        return $results;
+    }
+
+    public function makeQuery($all)
+    {
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -87,7 +110,7 @@ class CampaignSummary
             $sql .= " $union SELECT
         dr.Campaign as Campaign,
         dr.CallStatus as CallStatus,
-        IsNull((SELECT TOP 1 [Type]	FROM [$db].[dbo].Dispos WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [Description] Desc), 0) as [Type],
+        IsNull((SELECT TOP 1 [Type]	FROM [$db].[dbo].Dispos WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
         count(dr.CallStatus) as [Count]
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
         WHERE dr.GroupId = :group_id$i
@@ -280,26 +303,17 @@ class CampaignSummary
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        $results = $this->runSql($sql, $bind);
+        return [$sql, $bind];
+    }
 
-        if (empty($results)) {
-            $this->params['totrows'] = 0;
-            $this->params['totpages'] = 1;
-            $this->params['curpage'] = 1;
-        } else {
-            $this->params['totrows'] = $results[0]['totRows'];
+    public function processRow($rec)
+    {
+        array_pop($rec);
+        $rec['Available'] .= '%';
+        $rec['ConversionRate'] .= '%';
+        $rec['DropCallsPercentage'] .= '%';
 
-            foreach ($results as &$rec) {
-                array_pop($rec);
-                $rec['Available'] .= '%';
-                $rec['ConversionRate'] .= '%';
-                $rec['DropCallsPercentage'] .= '%';
-            }
-            $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
-            $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-        }
-
-        return $results;
+        return $rec;
     }
 
     private function processInput(Request $request)

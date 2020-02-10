@@ -17,6 +17,7 @@ class ProductionReportSubcampaign
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.production_report_subcampaign';
+        $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
@@ -199,7 +200,7 @@ class ProductionReportSubcampaign
                             FROM [$db].[dbo].[Dispos]
                             WHERE Disposition=r.CallStatus
                             AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
-                            ORDER BY [Description] Desc) d";
+                            ORDER BY [id]) d";
 
             if (!empty($campaigns)) {
                 $sql .= "
