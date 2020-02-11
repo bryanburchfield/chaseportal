@@ -23,7 +23,7 @@ class EmailDripController extends Controller
 {
     // Directory where Email Service Providers live
     // This is in the service class too!
-    const ESP_DIR = 'Interfaces\\EmailServiceProvider';
+    const ESP_DIR = 'Interfaces/EmailServiceProvider';
 
     use SqlServerTraits;
     use CampaignTraits;
@@ -331,7 +331,7 @@ class EmailDripController extends Controller
     public function getProperties(Request $request)
     {
         // full path the class so we don't have to import it
-        $class = 'App\\' . self::ESP_DIR . '\\' .
+        $class = 'App\\' . str_replace('/', '\\', self::ESP_DIR) . '\\' .
             Str::studly($request->provider_type);
 
         return $class::properties();
@@ -624,7 +624,7 @@ class EmailDripController extends Controller
 
         foreach ($files as $file) {
             $provider_type = Str::snake(substr($file->getFilename(), 0, -4));
-            $class = 'App\\' . self::ESP_DIR . '\\' .
+            $class = 'App\\' . str_replace('/', '\\', self::ESP_DIR) . '\\' .
                 Str::studly($provider_type);
             $provider_types[$provider_type] = $class::description();
         };
