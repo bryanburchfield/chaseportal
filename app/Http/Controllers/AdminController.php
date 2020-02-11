@@ -21,8 +21,6 @@ use \App\Traits\DashTraits;
 
 class AdminController extends Controller
 {
-    use TimeTraits;
-    use SqlServerTraits;
     use DashTraits;
 
     /**
@@ -494,7 +492,6 @@ class AdminController extends Controller
             'columns' => $field_array,
             'search_result' => $results,
         ];
-
     }
 
     public function getClientTables(Request $request)
@@ -548,7 +545,7 @@ class AdminController extends Controller
         ];
     }
 
-    public function durationDashboard (Request $request)
+    public function durationDashboard(Request $request)
     {
         $this->getSession($request);
 
@@ -576,7 +573,7 @@ class AdminController extends Controller
         return view('admin.durationdash')->with($data);
     }
 
-    public function distinctAgentDashboard (Request $request)
+    public function distinctAgentDashboard(Request $request)
     {
         $this->getSession($request);
 
