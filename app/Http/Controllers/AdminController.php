@@ -10,8 +10,6 @@ use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
 use App\Models\System;
-use App\Traits\SqlServerTraits;
-use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
