@@ -10,6 +10,8 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/outbounddashboard', 'MasterDashController@outboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
+        Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
+        Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
 
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
@@ -57,12 +59,12 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/manage_clients', 'AdminController@manageClients');
             Route::get('admin/duration_dashboard', 'AdminController@durationDashboard');
             Route::get('admin/distinct_agent_dashboard', 'AdminController@distinctAgentDashboard');
-            Route::get('admin/load_admin_nav', function(){
+            Route::get('admin/load_admin_nav', function () {
                 return view('/shared.admin_sidenav');
             });
         });
 
-        Route::get('load_sidenav', function(){
+        Route::get('load_sidenav', function () {
             return redirect()->back();
         });
     });

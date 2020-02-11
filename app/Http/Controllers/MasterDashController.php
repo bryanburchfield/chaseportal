@@ -86,6 +86,22 @@ class MasterDashController extends Controller
         return view('demo.welcome', ['user' => $user]);
     }
 
+    public function adminDistinctAgentDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'admindistinctagentdash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function adminDurationDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'admindurationdash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
     public function inboundDashboard(Request $request)
     {
         $request->merge(['dashboard' => 'inbounddash']);
