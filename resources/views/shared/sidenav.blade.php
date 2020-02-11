@@ -21,11 +21,11 @@
             <li {!! $page['menuitem'] == 'tools' ? 'class="active"' : ''!!} ><a href="{{ action('LeadsController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
         @endif
 
-        @can('accessAdmin')
+        @can('accessSuperAdmin')
             <li {!! $page['menuitem'] == 'admin' ? 'class="active"' : ''!!}><a class="admin_link" href="#"><i class="fas fa-user-cog"></i>{{__('sidenav.admin')}}</a></li>
         @endcan
 
-        @cannot('accessAdmin')
+        @cannot('accessSuperAdmin')
             <li {!! $page['menuitem'] == 'settings' ? 'class="active"' : ''!!}><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-user-cog"></i>{{__('sidenav.settings')}}</a></li>
         @endcannot
     </ul>

@@ -45,7 +45,7 @@ Route::prefix('dashboards')->group(function () {
 
         // Admin only
         // prefix('admin') isn't working for some reason
-        Route::group(['middleware' => 'can:accessAdmin'], function () {
+        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
             // Route::get('admin/', 'AdminController@index');
             Route::post('admin/add_user', 'AdminController@addUser');
             Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
