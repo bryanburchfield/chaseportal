@@ -2084,7 +2084,7 @@ var Master = {
         if($(this).hasClass('back_to_sidenav')){
             $('#sidebar').load('/load_sidenav');
         }else{
-            $('#sidebar').load('admin/load_admin_nav');
+            $('#sidebar').load('/dashboards/admin/load_admin_nav');
         }
     }
 }
