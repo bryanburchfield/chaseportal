@@ -102,27 +102,27 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
-        $('.upload_email_template').on('click', this.upload_email_template);
+        // $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_esp').on('submit', this.add_esp);
         $('.edit_server_modal').on('click', this.edit_server_modal);
         $('.edit_esp').on('submit', this.update_esp);
         $('.test_connection').on('click', this.test_connection);
         $('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
         $('.delete_email_service_provider').on('click', this.delete_esp);
-        $('.delete_campaign ').on('click', this.delete_campaign);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
         $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
         $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
         $('.edit_campaign').on('click', this.update_email_campaign);
+        $('.delete_campaign ').on('click', this.delete_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
 
         $('.add_email_campaign_filter').on('click', this.validate_filter);
         $('.filter_fields_div .form-control').on('change', this.validate_filter);
         $('.update_filters').on('submit', this.update_filters);
         $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
-        $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.delete_camp_filter);
         $('.camp_filters_link').on('click', this.goto_camp_filters);
+        $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.cancel_modal_form').on('click', this.cancel_modal_form);
 	},
 
