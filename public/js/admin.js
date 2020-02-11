@@ -1,6 +1,13 @@
 var Admin = {
 
 	init:function(){
+
+		/// dashboard widgets
+		$.when(this.connect_rate(this.datefilter), this.system_call_rate(this.datefilter), this.total_minutes(this.datefilter), this.total_calls(this.datefilter), this.callstatus_by_minutes(this.datefilter)).done(function () {
+		    $('.preloader').fadeOut('slow');
+		    Master.check_reload();
+		});
+
 		///// event handlers
 		$('.add_user').on('submit', this.add_user);
 		$('.edit_user').on('submit', this.edit_user);
@@ -25,6 +32,111 @@ var Admin = {
         $('.checkall_system_macro').on('click', this.toggleall_system_macro);
         $('body').on('dblclick', '.field_name', this.edit_field_name);
         $('.preloader').fadeOut('slow');
+	},
+
+	connect_rate:function(datefilter){
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'connect_rate',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	},
+
+	system_call_rate:function(datefilter){
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'system_call_rate',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	},
+
+	total_minutes:function(datefilter){
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'total_minutes',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	},
+
+	total_calls:function(datefilter){
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'total_calls',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	},
+
+	callstatus_by_minutes:function(datefilter){
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: 'callstatus_by_minutes',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
 	},
 
 	// add global user
