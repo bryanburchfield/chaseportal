@@ -245,7 +245,13 @@ class EmailDripService
 
         $payload = [
             'from' => $email_drip_campaign->from,
-            'to' => $rec[$email_drip_campaign->email_field],
+            // 'to' => $rec[$email_drip_campaign->email_field],
+
+
+            // REMOVE AFTER TESTING
+            'to' => 'g.sandoval@chasedatacorp.com',
+
+
             'subject' => $subject,
             'body' => $body,
             'tag' => $email_drip_campaign->name,
