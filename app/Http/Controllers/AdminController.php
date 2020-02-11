@@ -138,7 +138,7 @@ class AdminController extends Controller
             'page' => $page,
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
-            'default_lead_fields' => $this->defaultLeadFields(),
+            'default_lead_fields' => array_keys($this->defaultLeadFields()),
             'dbs' => $dbs,
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
@@ -464,22 +464,5 @@ class AdminController extends Controller
         unset($result['LeadId']);
 
         return ['fields' => array_values($result)];
-    }
-
-    private function defaultLeadFields()
-    {
-        return [
-            'ClientId',
-            'FirstName',
-            'LastName',
-            'PrimaryPhone',
-            'Address',
-            'City',
-            'State',
-            'ZipCode',
-            'Notes',
-            'Campaign',
-            'Subcampaign',
-        ];
     }
 }

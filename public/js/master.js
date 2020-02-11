@@ -61,7 +61,7 @@ var Master = {
 		$('body').on('click', '.reports_table thead th a span', this.sort_table);
 		$('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
 		$('.reset_sorting_btn').on('click', this.reset_table_sorting);
-		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_subcampaigns);
+		$('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
 		$('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
 		$('#report_dl_warning .dl_report').on('click', this.pdf_download2);
 		$('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
@@ -92,6 +92,7 @@ var Master = {
         $('.add_rule').on('submit', this.create_leadrule);
         $('.edit_rule').on('submit', this.updateleadrule);
         $('.switch.leadrule_switch input').on('click', this.toggle_leadrule);
+        // $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
         $('.lead_details').on('click', this.get_leadrule_details);
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
@@ -101,6 +102,28 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
+        // $('.upload_email_template').on('click', this.upload_email_template);
+        $('.add_esp').on('submit', this.add_esp);
+        $('.edit_server_modal').on('click', this.edit_server_modal);
+        $('.edit_esp').on('submit', this.update_esp);
+        $('.test_connection').on('click', this.test_connection);
+        $('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
+        $('.delete_email_service_provider').on('click', this.delete_esp);
+        $('.create_campaign_form').on('submit', this.create_email_campaign);
+        $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
+        $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
+        $('.edit_campaign').on('click', this.update_email_campaign);
+        $('.delete_campaign ').on('click', this.delete_campaign);
+        $('.provider_type').on('change', this.get_provider_properties);
+
+        $('.add_email_campaign_filter').on('click', this.validate_filter);
+        $('.filter_fields_div .form-control').on('change', this.validate_filter);
+        $('.update_filters').on('submit', this.update_filters);
+        $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
+        $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.delete_camp_filter);
+        $('.camp_filters_link').on('click', this.goto_camp_filters);
+        $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
+        $('.cancel_modal_form').on('click', this.cancel_modal_form);
 	},
 
     hide_modal_error:function(){
@@ -229,6 +252,7 @@ var Master = {
     },
 
     add_btn_loader:function(){
+        $(this).find('i').remove();
         $(this).prepend('<i class="fa fa-spinner fa-spin mr10"></i>');
     },
 
@@ -334,9 +358,8 @@ var Master = {
         }
     },
 
-    get_subcampaigns:function(e, campaign=0, source=0){
+    get_report_subcampaigns:function(e, campaign=0, source=0){
         if(!campaign){
-            // e.preventDefault();
             $(this).find('option:selected').each(function() {
                 campaign = $(this).val();
             });
@@ -378,10 +401,55 @@ var Master = {
         });
     },
 
-    get_leadrule_subcampaigns:function(){
+    get_subcampaigns:function(campaign){
 
-        var campaign = $(this).val();
-        var selector = $(this).attr('id');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            data: {
+                campaign: campaign,
+            },
+
+            success: function(response) {
+                return response;
+            },
+            error: function () {}
+        });
+    },
+
+    get_email_drip_subcampaigns:function(e, campaign){
+
+        var sel;
+        if(e.type=='click'){
+            sel = $('.edit_campaign_form');
+            campaign = $('.edit_campaign_form').find('.drip_campaigns_campaign_menu').val();
+        }else{
+            if($(e.target).parent().parent().hasClass('edit_campaign_form')){
+                sel = $('.edit_campaign_form');
+                campaign = $(this).val();
+            }else{
+                campaign = $(this).val();
+                sel = $('.create_campaign_form');
+            }
+        }
+
+        var subcamp_response = Master.get_subcampaigns(campaign);
+        var subcampaigns='<option value=""> Select One</option>';
+        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
+            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
+        }
+
+        $('.drip_campaigns_subcampaign').empty();
+        $('.drip_campaigns_subcampaign').append(subcampaigns);
+        $(sel).find('.email').empty();
 
         $.ajaxSetup({
             headers: {
@@ -390,29 +458,44 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            url: '/tools/email_drip/get_table_fields' ,
             type: 'POST',
             dataType: 'json',
+            async:false,
             data: {
                 campaign: campaign,
             },
 
-            success:function(response){
+            success: function(response) {
 
-                var subcampaigns='<option value=""> Select One</option>';
-                for(var i=0; i<response.subcampaigns.length;i++){
-                    subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                var emails='<option value="">Select One</option>';
+                for(var index in response) {
+                    emails+='<option value="'+index+'">'+index+'</option>';
                 }
 
-                if(selector == 'campaign_select' || selector == 'update_campaign_select'){
-                    $('#subcamps').empty();
-                    $('#subcamps').append(subcampaigns);
-                }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
-                    $('#destination_subcampaign').empty();
-                    $('#destination_subcampaign').append(subcampaigns);
-                }
-            }
+                $(sel).find('.email').append(emails);
+            },
         });
+    },
+
+    get_leadrule_subcampaigns:function(){
+
+        var campaign = $(this).val();
+        var selector = $(this).attr('id');
+        var subcamp_response = Master.get_subcampaigns(campaign);
+
+        var subcampaigns='<option value=""> Select One</option>';
+        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
+            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
+        }
+
+        if(selector == 'campaign_select' || selector == 'update_campaign_select'){
+            $('#subcamps').empty();
+            $('#subcamps').append(subcampaigns);
+        }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
+            $('#destination_subcampaign').empty();
+            $('#destination_subcampaign').append(subcampaigns);
+        }
     },
 
     change_filter_label: function () {
@@ -521,6 +604,39 @@ var Master = {
 
             },
             success:function(response){
+            }
+        });
+    },
+
+    toggle_email_campaign:function(e,campaign_id){
+
+        var checked;
+        // var campaign_id = $(campaign_id).data('id');
+
+        if($(campaign_id).is(':checked')){
+            $(campaign_id).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(campaign_id).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/toggle_email_campaign',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:campaign_id
+
+            },
+            success:function(response){
+                console.log(response);
             }
         });
     },
@@ -1201,6 +1317,7 @@ var Master = {
 			$('.dl_alert.alert').removeClass('alert-danger');
 			$('.dl_alert.alert').addClass('alert-warning');
 			$('.dl_alert.alert p').text(Lang.get('js_msgs.dl_warning'));
+            $('#report_dl_warning .modal-footer .dl_report').show();
 		} else if (tot_rows >= 2000) {
 			$('.dl_alert.alert').removeClass('alert-warning');
 			$('.dl_alert.alert').addClass('alert-danger');
@@ -2074,8 +2191,709 @@ var Master = {
         }
 
         that.parent().find('.instuc_div').slideToggle();
-    }
+    },
 
+    add_esp:function(e){
+        e.preventDefault();
+
+        var form_data = $(this).serialize();
+
+        $('.alert').empty().hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_esp',
+            type: 'POST',
+            data: form_data,
+            success: function (response) {
+                location.reload();
+            },error: function (data) {
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_esp .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.add_esp .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    edit_server_modal:function(e){
+        e.preventDefault();
+
+        var id = $(this).data('serverid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_esp',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+
+                $('#editESPModal .name').val(response.name);
+                $('#editESPModal .provider_type').val(response.provider_type);
+                $('#editESPModal .id').val(response.id);
+                $('#editESPModal .properties').empty();
+                var property_inputs='';
+
+                const entries = Object.entries(response.properties)
+                for (const [key, value] of entries) {
+                    var label = key.charAt(0).toUpperCase() + key.slice(1);
+                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+key+'" name="properties['+key+']" value="'+value+'" required></div>';
+                }
+
+                $('#editESPModal .properties').append(property_inputs);
+            }
+        });
+    },
+
+    update_esp:function(e){
+        e.preventDefault();
+        var form_data = $(this).serialize();
+
+        $('.alert').empty().hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/update_esp',
+            type: 'POST',
+            data:form_data,
+            success: function (response) {
+                $(this).find('i').remove();
+                location.reload();
+            },error: function (data) {
+                $(this).find('i').remove();
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.edit_smtp_server .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.edit_smtp_server .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    test_connection:function(e){
+        e.preventDefault();
+
+        $('.alert').empty().hide();
+
+        var that = $(this).parent();
+        var form_data = $(that).serialize();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/test_connection ',
+            type: 'POST',
+            data: form_data,
+            success: function (response) {
+
+                $(that).find('.test_connection').find('i').remove();
+                $(that).find('.connection_msg').removeClass('alert-danger alert-success');
+                $(that).find('.connection_msg').addClass('alert-success').text(response.message).show();
+            },error: function (data) {
+                $('.test_connection').find('i').remove();
+
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $(that).find('.connection_msg').append('<li>'+value+'</li>');
+                                $(that).find('.connection_msg').addClass('alert-danger').show();
+                            });
+                        }
+                    });
+                }
+            },statusCode: {
+                500: function(response) {
+                    $(that).find('.alert-danger').text('Connection Failed').show();
+                }
+            }
+        });
+    },
+
+    populate_delete_modal:function(e){
+        e.preventDefault();
+        var id = $(this).data('id'),
+            name = $(this).data('name'),
+            sel = $(this).data('target')
+        ;
+
+        $(sel+' h3').find('span').text(name);
+        $(sel+' #id').val(id);
+    },
+
+    delete_esp:function(e){
+        e.preventDefault();
+        var id = $('#deleteESPModal').find('#id').val();
+        $('#deleteESPModal .alert-danger').hide();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/delete_esp',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                location.reload();
+            },error: function (data) {
+                $('#deleteESPModal .btn').find('i').remove();
+                if (data.status === 422) {
+                    $('#deleteESPModal .alert-danger').empty();
+                    // $('#deleteESPModal .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('#deleteESPModal .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+                        $('#deleteESPModal .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    create_email_campaign:function(e){
+        e.preventDefault();
+
+        var name = $(this).find('.name').val(),
+            description = $(this).find('.description').val(),
+            subject = $(this).find('.subject').val(),
+            from = $(this).find('.from').val(),
+            campaign = $(this).find('.campaign').val(),
+            subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
+            email_service_provider_id = $(this).find('.email_service_provider_id').val(),
+            email_field= $(this).find('.email').val(),
+            template_id = $(this).find('.template_id').val(),
+            emails_per_lead = $(this).find('.emails_per_lead').val(),
+            days_between_emails = $(this).find('.days_between_emails').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_campaign',
+            type: 'POST',
+            data: {
+                name: name,
+                description: description,
+                email_field:email_field,
+                from:from,
+                subject:subject,
+                campaign: campaign,
+                subcampaign: subcampaign,
+                email_service_provider_id: email_service_provider_id,
+                template_id:template_id,
+                emails_per_lead:emails_per_lead,
+                days_between_emails:days_between_emails
+            },
+            success: function (response) {
+                $('.create_campaign ').find('i').remove();
+                window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
+            },error: function (data) {
+                $('.create_campaign ').find('i').remove();
+                if (data.status === 422) {
+                    $('.create_campaign_form .alert').empty();
+                    $('.create_campaign_form .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.create_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.create_campaign_form .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    update_email_campaign:function(e){
+        e.preventDefault();
+        var id = $('.edit_campaign_form').find('.id').val(),
+            name = $('.edit_campaign_form').find('.name').val(),
+            description = $('.edit_campaign_form').find('.description').val(),
+            from = $('.edit_campaign_form').find('.from').val(),
+            subject = $('.edit_campaign_form').find('.subject').val(),
+            campaign = $('.edit_campaign_form').find('.campaign').val(),
+            subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
+            email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
+            email_field= $('.edit_campaign_form').find('.email').val(),
+            template_id = $('.edit_campaign_form').find('.template_id').val(),
+            emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
+            days_between_emails = $('.edit_campaign_form').find('.days_between_emails').val()
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/update_campaign',
+            type: 'POST',
+            data: {
+                id:id,
+                name: name,
+                description: description,
+                from:from,
+                subject:subject,
+                email_field:email_field,
+                campaign: campaign,
+                subcampaign: subcampaign,
+                email_service_provider_id: email_service_provider_id,
+                template_id:template_id,
+                emails_per_lead:emails_per_lead,
+                days_between_emails:days_between_emails
+            },
+            success: function (response) {
+
+                $('.create_campaign ').find('i').remove();
+                location.reload();
+            },error: function (data) {
+
+                $('.create_campaign ').find('i').remove();
+                if (data.status === 422) {
+                    $('.edit_campaign_form .alert').empty();
+                    $('.edit_campaign_form .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.edit_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.edit_campaign_form .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    edit_campaign_modal:function(e){
+        e.preventDefault();
+        var id = $(this).data('campaignid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_campaign',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+
+                $('.edit_campaign_form .id').val(response.id);
+                $('.edit_campaign_form .name').val(response.name);
+                $('.edit_campaign_form .from').val(response.from);
+                $('.edit_campaign_form .subject').val(response.subject);
+                $('.edit_campaign_form .description').val(response.description);
+                $('.edit_campaign_form .drip_campaigns_campaign_menu').val(response.campaign);
+                Master.get_email_drip_subcampaigns(e, response.campaign);
+                $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
+                $('.edit_campaign_form .email').val(response.email_field);
+                $(".edit_campaign_form .email option[value='"+response.email_field+"']").attr("selected", true);
+                $('.edit_campaign_form .template_id ').val(response.template_id);
+                $('.edit_campaign_form .email_service_provider_id ').val(response.email_service_provider_id);
+                $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
+                $('.edit_campaign_form .days_between_emails ').val(response.days_between_emails);
+                return false;
+            }
+        });
+    },
+
+    delete_campaign:function(e){
+        e.preventDefault();
+        var id = $('#deleteCampaignModal').find('#id').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/delete_campaign',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                location.reload();
+            }
+        });
+    },
+
+    get_provider_properties:function(e){
+        var provider_type = $(this).val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        if(provider_type !=''){
+            $.ajax({
+                url: '/tools/email_drip/get_properties',
+                type: 'POST',
+                data: {
+                    provider_type: provider_type,
+                },
+                success: function (response) {
+                    $('.properties').empty();
+                    var properties='';
+
+                    response.forEach(function(item, index){
+                        var label = item.charAt(0).toUpperCase() + item.slice(1);
+                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
+                    });
+
+                    $('.properties').append(properties);
+                }
+            });
+        }
+    },
+
+    get_filter_fields:function(id){
+
+        $('#campaignFilterModal .modal-body').find('.not_validated_filter').remove();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_filter_fields',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                var filters='<option value="">Select One</option>';
+                const filters_array = Object.keys(response)
+
+                const entries = Object.entries(response)
+                for (const [key, value] of entries) {
+                    filters+='<option data-type="'+value+'" value="'+key+'">'+key+'</option>';
+                }
+
+                $('#campaignFilterModal .modal-body .filter_fields_cnt select.filter_fields').append(filters);
+                $('#campaignFilterModal .modal-body').find('.filter_fields_cnt').show();
+            }
+        });
+    },
+
+    validate_filter:function(e){
+        e.preventDefault();
+        $('.filter_error').empty().hide();
+        var filters = [];
+        var email_drip_campaign_id = $('#email_drip_campaign_id').val();
+        var ready_to_validate=false;
+
+        // filter value changed ! in last row
+        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change' && $('.filter_fields_div').length > 1){
+            $(this).parent().parent().parent().find('.form-control').each(function(){
+                filters.push($(this).val());
+            });
+
+            if(filters.length >=2){
+                ready_to_validate=true;
+            }
+        }else if( e.type == 'click'){ // add filter was clicked
+            if($('.filter_fields_div').length == 1 && $('.filter_fields_div').is(":hidden")){
+                $('.filter_fields_div').show();
+            }else{
+                $('.filter_fields_div').each(function(){
+                    $(this).removeClass('not_validated_filter');
+                });
+
+                var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_validated_filter');
+
+                $('.filter_fields_div:last').find('.form-control').each(function(){
+                    filters.push($(this).val());
+                });
+                ready_to_validate=true;
+            }
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        if(ready_to_validate){
+            $.ajax({
+                url: '/tools/email_drip/validate_filter',
+                type: 'POST',
+                data: {
+                    email_drip_campaign_id:email_drip_campaign_id,
+                    filters: filters,
+                },
+                success: function (response) {
+                    $(new_filter_row).find('.form-control').each(function(){
+                        $(this).val('');
+                    });
+                    $(new_filter_row).find('.remove_camp_filter').show();
+                    $(new_filter_row).insertAfter('.filter_fields_div:last');
+                },error: function (data) {
+                    if (data.status === 422) {
+                        var errors = $.parseJSON(data.responseText);
+                        $.each(errors, function (key, value) {
+
+                            if ($.isPlainObject(value)) {
+                                $.each(value, function (key, value) {
+                                    $('.filter_error').append('<li>'+value+'</li>');
+                                });
+                            }
+
+                            $('.filter_error').show();
+                        });
+                    }
+                }
+            });
+        }
+    },
+
+    delete_camp_filter:function(e){
+        e.preventDefault();
+
+        var id = $(this).parent().parent().data('filterid');
+        var that = $(this);
+
+        if(!id){
+            if($('.filter_fields_div').length == 1){
+                $(this).parent().parent().find('.form-control').each(function(){
+                    $(this).val('');
+                });
+                $(this).parent().parent().hide();
+            }else{
+                $(this).parent().parent().remove();
+            }
+        }else{
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/tools/email_drip/delete_filter',
+                type: 'POST',
+                data: {
+                    id:id,
+                },
+                success: function (response) {
+                    $(that).parent().parent().remove();
+                }
+            });
+        }
+    },
+
+    goto_camp_filters:function(e){
+        e.preventDefault();
+        var id = $(this).next('.camp_id').val();
+        window.location.href = '/tools/email_drip/update_filters/'+id;
+    },
+
+    get_operators:function(){
+        var that = $(this);
+        var type = $(that).find('option:selected').data('type');
+        $('.filter_error').hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/get_operators',
+            type:'POST',
+            data:{
+                type:type,
+            },
+            success:function(response){
+                $(that).parent().parent().next().find('.filter_operators').empty();
+                var operators='<option value="">Select One</option>';
+
+                for (let [key, value] of Object.entries(response[type])){
+                    operators+='<option value="'+key+'">'+value+'</option>';
+                }
+                $(that).parent().parent().next().find('.filter_operators').append(operators);
+
+                $('.filter_fields_cnt').show();
+            }
+        });
+    },
+
+    check_campaign_filters:function(e){
+        var campaign_id = $(this).data('id');
+        if($(this).parent().hasClass('needs_filters')){
+            $('#errorModal').modal('show');
+            $('#errorModal .modal-body .camp_id').val(campaign_id);
+            return false;
+        }else{
+            Master.toggle_email_campaign(e, campaign_id);
+        }
+    },
+
+    get_filters :function(e, that){
+        e.preventDefault();
+        var email_drip_campaign_id = $(that).data('id');
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/get_filters',
+            type:'POST',
+            data:{
+                email_drip_campaign_id:email_drip_campaign_id,
+            },
+            success:function(response){
+
+                if(response.length){
+                    $('.filter_fields_cnt').empty().show();
+                    var filters='';
+                    Master.get_filter_fields(email_drip_campaign_id)
+                    for(var i=0;i<response.length;i++){
+
+                        filters+='<div class="row filter_fields_div"><div class="col-sm-4"><label>Field</label><div class="form-group"><select class="form-control filter_fields" name="filter_fields" data-type="field"></select></div></div><div class="col-sm-3 filter_operators_div"><label>Operator</label><div class="form-group"><select class="form-control filter_operators" name="filter_operators" data-type="operator"></select></div></div><div class="col-sm-3 filter_values_div"><label>Value</label><input type="text" class="form-control filter_value" name="filter_value" data-type="value"></div><div class="col-sm-2"><a href="#" class="remove_camp_filter"><i class="fa fa-trash-alt"></i> Remove</a></div></div>';
+                    }
+
+                    $('.filter_fields_cnt').append(filters);
+                    for(var i=0;i<response.length;i++){
+                        $('.filter_fields_div:eq('+i+')').find('.filter_fields').css({'border':'1px solid red'});
+                        $(".filter_fields_div:eq("+i+") .filter_fields").find("option[value='"+response[i]['field']+"']").attr('selected','selected');
+                    }
+                }
+            }
+        });
+    },
+
+    update_filters:function(e){
+        e.preventDefault();
+
+        $('.update_filters .alert.filter_error').empty().hide();
+        var email_drip_campaign_id = $(this).find('#email_drip_campaign_id').val();
+        var filters=[];
+        var filter={};
+
+        $('.filter_fields_div').each(function(){
+            $(this).find('.form-control').each(function(){
+                filter[$(this).data('type')] = $(this).val();
+            });
+
+            filters.push(filter);
+            filter={};
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/update_filters',
+            type:'POST',
+            data:{
+                email_drip_campaign_id:email_drip_campaign_id,
+                filters:filters
+            },
+            success:function(response){
+                if(response.status=='success'){
+                    window.location.href = '/tools/email_drip/';
+                }
+            },error: function (data) {
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                               $('.update_filters .alert.filter_error').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.update_filters .alert.filter_error').show();
+                    });
+                }
+            }
+        });
+    },
+
+    cancel_modal_form:function(e){
+        e.preventDefault();
+        $(this).parent().parent().find('.form')[0].reset()
+    },
 }
 
 $(document).ready(function () {
@@ -2085,6 +2903,10 @@ $(document).ready(function () {
     if($('.dnc_table tbody tr').length){
         Master.toggle_instructions();
     }
+
+    $('#addServerModal, #editESPModal, #deleteESPModal').on('hidden.bs.modal', function () {
+        $(this).find('.alert').hide();
+    });
 
 	$('.stop-propagation').on('click', function (e) {
 		e.stopPropagation();

@@ -384,7 +384,7 @@ div.container-fluid.hero_bg .form-holder {
 
 .edit_demo_user .alert-success{clear: both;}
 
-#demoUserModal .modal-body{
+#demoUserModal .modal-body, #campaignFilterModal .modal-body{
     overflow: auto;
 }
 
@@ -1087,6 +1087,10 @@ div#dataTable_filter label {
     float: right;
 }
 
+.btn_flt_lft {
+    float: left;
+}
+
 h2.card_title {
     text-transform: uppercase;
     font-size: 16px;
@@ -1198,7 +1202,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control, .edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control {
     background: #eee !important;
 }
 
@@ -1376,7 +1380,7 @@ span.selected_campaign {
     font-weight: 600;
 }
 
-.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd) {
+.reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd), .providers_table tr:nth-of-type(odd), .smtp_servers table tr:nth-of-type(odd), .drip_campaigns table tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
@@ -2041,7 +2045,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i, .remove_email_service_provider_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;
@@ -2494,6 +2498,46 @@ td.bg-danger{
     color:#a94442;
 }
 
+[hidden] {
+  display: none !important;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.label-info{font-size: 13px;margin-left: 10px;}
+
+.btn-secondary{
+    background: #ccc;
+    color: #444;
+
+    &:hover{
+        background: #bbb;
+    }
+}
+
+.remove_camp_filter {
+    margin-top: 10px;
+    color:#d9534f;
+    position: relative;
+    top:25px;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

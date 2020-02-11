@@ -3,4 +3,5 @@
     <li @if ($toolpage == 'rules') class="active" @endif><a href="{{url('/tools/contactflow_builder')}}">{{__('tools.contact_flowbuilder')}}</a></li>
     @endif
     <li @if ($toolpage == 'dnc') class="active" @endif><a href="{{url('/tools/dnc_importer')}}">{{__('tools.dnc_importer')}}</a></li>
+    <li @if ($toolpage == 'email_drip') class="active" @endif><a href="{{action('EmailDripController@index')}}">{{__('tools.email_drip_builder')}}</a></li>
 </ul>
