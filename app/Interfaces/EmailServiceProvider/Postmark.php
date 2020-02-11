@@ -43,15 +43,16 @@ class Postmark implements \App\Interfaces\EmailServiceProvider
 
     public function testConnection()
     {
-        $payload = [
-            'from' => $this->postmark_server->properties['default_signature'],
-            'to' => "test@example.com",
-            'subject' => "Testing",
-            'body' => "Just testing Postmark API.",
-        ];
-
+        // Don't call send() since that catches exceptions
         try {
-            $sendResult = $this->send($payload);
+            $this->connect();
+
+            $sendResult = $this->client->sendEmail(
+                $this->postmark_server->properties['default_signature'],
+                'test@example.com',
+                'Testing',
+                'Just testing Postmark API.'
+            );
         } catch (PostmarkException $e) {
             $error = ValidationException::withMessages([
                 'error' => [$e->message],
