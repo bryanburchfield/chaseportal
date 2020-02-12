@@ -50,11 +50,19 @@ class AdminDurationDashController extends Controller
         $dates = [];
         $total_calls = 0;
         $total_minutes = 0;
+        $connect_pct = 0;
+        $system_pct = 0;
+
 
         // Loop thru results, buuld return vals
         foreach ($results as $rec) {
             $total_calls += $rec['cnt'];
             $total_minutes += $rec['secs'];
+
+            // We'll convert this to pct later
+            if (substr($rec['CallStatus'], 0, 3) == 'CR_') {
+                $system_pct += $rec['cnt'];
+            }
 
             if (!isset($campaigns[$rec['Campaign']])) {
                 $campaigns[$rec['Campaign']]['Minutes'] = 0;
@@ -81,6 +89,11 @@ class AdminDurationDashController extends Controller
             $dates[$date]['Minutes'] += $rec['secs'];
             $dates[$date]['Count'] += $rec['cnt'];
         }
+
+        // Calculate percents
+        $connect_pct = $total_calls - $system_pct;
+        $connect_pct = number_format($connect_pct / $total_calls * 100, 2) . '%';
+        $system_pct = number_format($system_pct / $total_calls * 100, 2) . '%';
 
         // Sort
         ksort($campaigns);
@@ -112,6 +125,8 @@ class AdminDurationDashController extends Controller
             'dates' => $dates,
             'total_calls' => $total_calls,
             'total_minutes' => $total_minutes,
+            'connect_pct' => $connect_pct,
+            'system_pct' => $system_pct,
             'details' => $details,
         ]];
     }
