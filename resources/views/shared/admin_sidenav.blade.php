@@ -6,8 +6,8 @@
 
     <ul class="list-unstyled components">
         <li><a class="back_to_sidenav" href="{{url('dashboards/inbounddashboard')}}"><i class="fas fa-arrow-circle-left"></i>Go Back</a></li>
-        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'durationdash' ? 'class="active"' : ''; ?>><a href="{{action('AdminController@durationDashboard')}}"><i class="fas fa-user-clock"></i>Duration Dashboard</a></li>
-        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'distinctagentdash' ? 'class="active"' : ''; ?>><a href="{{action('AdminController@distinctAgentDashboard')}}"><i class="fas fa-user-check"></i>Distinct Agent</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindurationdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDurationDashboard')}}"><i class="fas fa-user-clock"></i>Duration Dashboard</a></li>
+        <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindistinctagentdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDistinctAgentDashboard')}}"><i class="fas fa-user-check"></i>Distinct Agent</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'manage_clients' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageClients') }}"><i class="fas fa-users"></i>Manage Clients</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'cdr_lookup' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@cdrLookup') }}"><i class="fas fa-search"></i> CDR Lookup</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'webhook_generator' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@webhookGenerator') }}"><i class="fas fa-link"></i> Webhook Generator</a></li>
