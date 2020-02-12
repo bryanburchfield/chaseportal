@@ -106,18 +106,18 @@ class AdminDurationDashController extends Controller
         // Convert secs to mins
         unset($rec);
         foreach ($campaigns as &$rec) {
-            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = round($rec['Minutes'] / 60, 2);
         }
         unset($rec);
         foreach ($callstatuses as &$rec) {
-            $rec['Minutes'] = (int) round($rec['Minutes'] / 60, 0);
+            $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         }
         unset($rec);
         foreach ($dates as &$rec) {
-            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         }
 
-        $total_minutes = (int) round($total_minutes / 60, 0);
+        $total_minutes = round($total_minutes / 60, 0);
 
         return ['call_volume' => [
             'campaigns' => $campaigns,
