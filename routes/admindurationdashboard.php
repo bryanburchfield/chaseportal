@@ -12,6 +12,7 @@ Route::prefix('admindurationdashboard')->group(function () {
 
             // ajax targets
             Route::post('update_filters', 'AdminDurationDashController@updateFilters');
+            Route::post('call_volume', 'AdminDurationDashController@callVolume');
         });
     });
 });
