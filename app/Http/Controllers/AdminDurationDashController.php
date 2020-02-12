@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Traits\DashTraits;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AdminDurationDashController extends Controller
@@ -37,29 +38,75 @@ class AdminDurationDashController extends Controller
     {
         $this->getSession($request);
 
+        $tz = Auth::user()->ianaTz;
+
         $details = $this->filterDetails();
 
         $results = $this->getCallVolume();
 
-        $campaign_table = [];
+        // Initialize return vars
+        $campaigns = [];
+        $callstatuses = [];
+        $dates = [];
+        $total_calls = 0;
+        $total_minutes = 0;
 
+        // Loop thru results, buuld return vals
         foreach ($results as $rec) {
-            if (!isset($campaign_table[$rec['Campaign']])) {
-                $campaign_table[$rec['Campaign']]['Count'] = 0;
-                $campaign_table[$rec['Campaign']]['Minutes'] = 0;
+            if (!isset($campaigns[$rec['Campaign']])) {
+                $campaigns[$rec['Campaign']]['Minutes'] = 0;
+                $campaigns[$rec['Campaign']]['Count'] = 0;
             }
-            $campaign_table[$rec['Campaign']]['Count'] += $rec['cnt'];
-            $campaign_table[$rec['Campaign']]['Minutes'] += $rec['secs'];
+            $campaigns[$rec['Campaign']]['Minutes'] += $rec['secs'];
+            $campaigns[$rec['Campaign']]['Count'] += $rec['cnt'];
+
+            if (!isset($callstatuses[$rec['CallStatus']])) {
+                $callstatuses[$rec['CallStatus']]['Minutes'] = 0;
+                $callstatuses[$rec['CallStatus']]['Count'] = 0;
+            }
+            $callstatuses[$rec['CallStatus']]['Minutes'] += $rec['secs'];
+            $callstatuses[$rec['CallStatus']]['Count'] += $rec['cnt'];
+
+            $date = Carbon::parse($rec['Date'])
+                ->tz($tz)
+                ->isoFormat('MMM DD');
+
+            if (!isset($dates[$date])) {
+                $dates[$date]['Minutes'] = 0;
+                $dates[$date]['Count'] = 0;
+            }
+            $dates[$date]['Minutes'] += $rec['secs'];
+            $dates[$date]['Count'] += $rec['cnt'];
         }
 
-        unset($rec);
+        // Sort
+        ksort($campaigns);
+        ksort($dates);
 
-        foreach ($campaign_table as &$rec) {
+        uasort($callstatuses, function ($a, $b) {
+            return $b['Minutes'] <=> $a['Minutes'];
+        });
+
+        // Convert secs to mins
+        unset($rec);
+        foreach ($campaigns as &$rec) {
+            $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
+        }
+        unset($rec);
+        foreach ($callstatuses as &$rec) {
+            $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
+        }
+        unset($rec);
+        foreach ($dates as &$rec) {
             $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
         }
 
         return ['call_volume' => [
-            'campaign_table' => $campaign_table,
+            'campaigns' => $campaigns,
+            'callstatuses' => $callstatuses,
+            'dates' => $dates,
+            'total_calls' => $total_calls,
+            'total_minutes' => $total_minutes,
             'details' => $details,
         ]];
     }
@@ -78,15 +125,14 @@ class AdminDurationDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $sql = "SELECT Campaign, COUNT(*) cnt, SUM(Duration) secs
+        $sql = "SELECT Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
             FROM DialingResults DR
             WHERE GroupId = :groupid
             AND Date >= :fromdate
             AND Date < :todate
             AND CallType NOT IN (7,8)
             AND CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY Campaign
-            ORDER BY Campaign";
+            GROUP BY Date, Campaign, CallStatus";
 
         $bind = [
             'groupid' => Auth::user()->group_id,
