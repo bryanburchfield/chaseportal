@@ -110,7 +110,7 @@ class AdminDurationDashController extends Controller
         }
         unset($rec);
         foreach ($callstatuses as &$rec) {
-            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 0);
         }
         unset($rec);
         foreach ($dates as &$rec) {
