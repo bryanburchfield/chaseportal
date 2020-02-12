@@ -92,8 +92,8 @@ class AdminDurationDashController extends Controller
 
         // Calculate percents
         $connect_pct = $total_calls - $system_pct;
-        $connect_pct = number_format($connect_pct / $total_calls * 100, 2) . '%';
-        $system_pct = number_format($system_pct / $total_calls * 100, 2) . '%';
+        $connect_pct = round($connect_pct / $total_calls * 100, 2) . '%';
+        $system_pct = round($system_pct / $total_calls * 100, 2) . '%';
 
         // Sort
         ksort($campaigns);
@@ -106,18 +106,18 @@ class AdminDurationDashController extends Controller
         // Convert secs to mins
         unset($rec);
         foreach ($campaigns as &$rec) {
-            $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
         }
         unset($rec);
         foreach ($callstatuses as &$rec) {
-            $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
         }
         unset($rec);
         foreach ($dates as &$rec) {
-            $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
+            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 2);
         }
 
-        $total_minutes = number_format($total_minutes / 60, 0);
+        $total_minutes = (int) round($total_minutes / 60, 0);
 
         return ['call_volume' => [
             'campaigns' => $campaigns,
