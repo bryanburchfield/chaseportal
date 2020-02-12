@@ -12,6 +12,7 @@ Route::prefix('admindistinctagentdashboard')->group(function () {
 
             // ajax targets
             Route::post('update_filters', 'AdminDistinctAgentDashController@updateFilters');
+            Route::post('call_volume', 'AdminDistinctAgentDashController@callVolume');
         });
     });
 });

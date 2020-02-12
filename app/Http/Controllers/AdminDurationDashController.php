@@ -110,7 +110,7 @@ class AdminDurationDashController extends Controller
         }
         unset($rec);
         foreach ($callstatuses as &$rec) {
-            $rec['Minutes'] = (float) round($rec['Minutes'] / 60, 0);
+            $rec['Minutes'] = (int) round($rec['Minutes'] / 60, 0);
         }
         unset($rec);
         foreach ($dates as &$rec) {
@@ -133,9 +133,6 @@ class AdminDurationDashController extends Controller
 
     private function getCallVolume()
     {
-
-        // and CallStatus like 'CR[_]%'   almost but not quite
-
         $campaign = $this->campaign;
         $dateFilter = $this->dateFilter;
 
