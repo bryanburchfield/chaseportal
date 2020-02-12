@@ -1,26 +1,18 @@
 @extends('layouts.dash')
-@section('title', __('widgets.admin'))
+
+@section('title', __('general.admin_duration'))
 
 @section('content')
-<div class="preloader"></div>
 
+<div class="preloader"></div>
 <input type="hidden" value="{{ $dateFilter }}" id="datefilter" name="datefilter">
-@include('shared.navbar')
+
+@includeWhen(!$isApi, 'shared.navbar')
 
 <div class="container-fluid bg">
     <div class="container mt50">
-			<div class="row">
-			    <div class="col-sm-12">
-			        <div class="filter_time_camp_dets">
-			            <p>
-			                <span class="selected_datetime"></span> |
-			                <span class="selected_campaign"></span>
-			            </p>
-			        </div>
-			    </div>
-			</div>
-
-			<div class="row">
+        @include('shared.filters')
+        <div class="row">
 			    <div class="col-sm-3 col-xs-12">
 			        <div class="card-3 card" id="connect">
 
@@ -82,9 +74,9 @@
 				    </div><!-- end card -->
 				</div><!-- end column -->
 			</div>
-		</div>
-	</div>
+    </div>
+</div>
 
 @include('shared.datepicker')
-@include('shared.reportmodal')
+
 @endsection
