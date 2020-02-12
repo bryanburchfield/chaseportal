@@ -53,6 +53,9 @@ class AdminDurationDashController extends Controller
 
         // Loop thru results, buuld return vals
         foreach ($results as $rec) {
+            $total_calls += $rec['cnt'];
+            $total_minutes += $rec['secs'];
+
             if (!isset($campaigns[$rec['Campaign']])) {
                 $campaigns[$rec['Campaign']]['Minutes'] = 0;
                 $campaigns[$rec['Campaign']]['Count'] = 0;
@@ -100,6 +103,8 @@ class AdminDurationDashController extends Controller
         foreach ($dates as &$rec) {
             $rec['Minutes'] = number_format($rec['Minutes'] / 60, 2);
         }
+
+        $total_minutes = number_format($total_minutes / 60, 0);
 
         return ['call_volume' => [
             'campaigns' => $campaigns,
