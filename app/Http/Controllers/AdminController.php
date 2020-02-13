@@ -43,7 +43,7 @@ class AdminController extends Controller
      * @param Request $request 
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
-    public function manageClients(Request $request)
+    public function manageUsers(Request $request)
     {
         $groupId = Auth::user()->group_id;
         $this->setDb();
@@ -138,7 +138,7 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'manage_clients';
+        $page['menuitem'] = 'manage_users';
         $page['type'] = 'page';
         $data = [
             'page' => $page,

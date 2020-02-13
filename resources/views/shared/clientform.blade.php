@@ -1,5 +1,5 @@
     <div class="col-sm-6 mb0 card">
-        <h2 class="page_heading">{{ ($mode == 'edit') ? 'Edit' : 'New' }} Client</h2>
+        <h2 class="page_heading">{{ ($mode == 'edit') ? 'Edit' : 'New' }} User</h2>
 
         {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
 
@@ -52,7 +52,7 @@
                 {!! Form::hidden('id', null, ['id'=>'user_id']) !!}
             @endif
 
-            {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' Client', ['class'=>'btn btn-primary mb0'] ) !!}
+            {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' User', ['class'=>'btn btn-primary mb0'] ) !!}
 
             <div class="alert alert-danger mt20"></div>
 

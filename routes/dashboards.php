@@ -54,7 +54,7 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
             Route::post('admin/get_client_tables', 'AdminController@getClientTables');
             Route::post('admin/get_table_fields', 'AdminController@getTableFields');
-            Route::get('admin/manage_clients', 'AdminController@manageClients');
+            Route::get('admin/manage_users', 'AdminController@manageUsers');
             Route::get('admin/duration_dashboard', 'AdminController@durationDashboard');
             Route::get('admin/distinct_agent_dashboard', 'AdminController@distinctAgentDashboard');
             Route::get('admin/load_admin_nav', function () {

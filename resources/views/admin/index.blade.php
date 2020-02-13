@@ -21,10 +21,10 @@
 						<div class="mt20">
 							<ul class="nav nav-tabs tabs">
 
-								<li class="active"><a  href="#new_user" data-toggle="tab">Add Clients</a></li>
-								<li><a href="#edit_user" data-toggle="tab">Edit Clients</a></li>
+								<li class="active"><a  href="#new_user" data-toggle="tab">Add Users</a></li>
+								<li><a href="#edit_user" data-toggle="tab">Edit Users</a></li>
 								@can('accessSuperAdmin')
-									<li><a href="#demo_user" data-toggle="tab">Demo Clients</a></li>
+									<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
 								@endcan
 							</ul>
 
@@ -37,7 +37,7 @@
 								@can('accessSuperAdmin')
 									<div class="tab-pane mt30" id="demo_user">
 										<div class="col-sm-5 mb0 card">
-											<h2 class="page_heading">Add Demo Client</h2>
+											<h2 class="page_heading">Add Demo User</h2>
 											@include('shared.demouser_form', ['mode' => 'add'])
 										</div>
 
@@ -100,7 +100,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Edit Demo Client</h4>
+					<h4 class="modal-title" id="myModalLabel">Edit Demo User</h4>
 				</div>
 				<div class="modal-body">
 					@include('shared.demouser_form', ['mode' => 'edit'])
@@ -118,7 +118,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm Client Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">Confirm User Removal</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
@@ -127,7 +127,7 @@
             </div>
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	            <button type="button" class="btn btn-danger remove_recip">Delete Client</button>
+	            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
 	        </div>
 	    </div>
     </div>
@@ -140,7 +140,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Client Links</h4>
+                <h4 class="modal-title" id="myModalLabel">User Links</h4>
             </div>
             <div class="modal-body user_links_modal">
                 <input type="hidden" class="user_id" name="user_id" value="">
