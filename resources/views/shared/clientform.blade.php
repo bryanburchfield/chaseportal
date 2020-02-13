@@ -10,7 +10,7 @@
             </div>
             @endcan
             @cannot('accessSuperAdmin')
-                {!! Form::hidden('group_id', null, ['group_id'=>Auth::User()->group_id]) !!}
+                {!! Form::hidden('group_id', Auth::User()->group_id, ['group_id'=>Auth::User()->group_id]) !!}
             @endcannot
 
             <div class="form-group">
