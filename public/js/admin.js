@@ -46,9 +46,7 @@ var Admin = {
 			url: 'add_user',
 			type: 'POST',
 			dataType: 'json',
-			data: {
-				form_data:form_data
-			},
+			data: form_data:form_data,
 
 			success: function (response) {
 
