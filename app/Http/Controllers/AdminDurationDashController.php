@@ -67,11 +67,11 @@ class AdminDurationDashController extends Controller
             }
 
             if (!isset($campaigns[$rec['Campaign']])) {
-                $campaigns[$rec['Campaign']]['Camnpaign'] = $rec['Campaign'];
-                $campaigns[$rec['Campaign']]['Minutes'] = 0;
+                $campaigns[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
+                $campaigns[$rec['Campaign']]['Seconds'] = 0;
                 $campaigns[$rec['Campaign']]['Count'] = 0;
             }
-            $campaigns[$rec['Campaign']]['Minutes'] += $rec['secs'];
+            $campaigns[$rec['Campaign']]['Seconds'] += $rec['secs'];
             $campaigns[$rec['Campaign']]['Count'] += $rec['cnt'];
 
             if (!isset($callstatuses[$rec['CallStatus']])) {
@@ -101,18 +101,25 @@ class AdminDurationDashController extends Controller
         // Sort
         ksort($campaigns);
         ksort($dates);
-
         uasort($callstatuses, function ($a, $b) {
             return $b['Minutes'] <=> $a['Minutes'];
         });
 
         // Convert secs to mins
-        foreach ($campaigns as &$rec) {
-            $rec['Minutes'] = round($rec['Minutes'] / 60, 2);
-        }
         foreach ($callstatuses as &$rec) {
             $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         }
+
+        // Convert camp array to numeric index
+        $ret_camps = [];
+        $i = 0;
+        foreach ($campaigns as $rec) {
+            $ret_camps[$i]['Campaign'] = $rec['Campaign'];
+            $ret_camps[$i]['Count'] = $rec['Count'];
+            $ret_camps[$i]['Seconds'] = $rec['Seconds'];
+            $i++;
+        }
+        $campaigns = $ret_camps;
 
         return ['call_volume' => [
             'campaigns' => $campaigns,
