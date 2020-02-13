@@ -125,7 +125,7 @@ var Dashboard = {
             },
             success:function(response){
                 Master.flip_card(response.call_details.repsales.length, '#agent_sales_per_hour');
-                console.log(response);
+
                 $('.salesleaderboardtable, #agent_sales_per_hour, #agent_sales_per_hour_graph').parent().find('.no_data').remove();                
                 $('.salesleaderboardtable tbody, #agent_sales_per_hour tbody').empty();
 

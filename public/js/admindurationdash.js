@@ -275,27 +275,16 @@ var Dashboard = {
 
 
                 ///// CALLS BY CAMPAIGN TABLE
-
                 $('#calls_by_campaign tbody').empty();
-                
+
                 var calls_by_campaign_trs='';
-                // for (var i=0; i < response.call_volume.campaigns.length; i++) {
-                //     calls_by_campaign_trs+= '<tr class="results"><td>'+response.call_details.leaders[i].Rep+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].CallCount)+'</td><td>'+response.call_details.leaders[i].TalkSecs+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].Sales)+'</td></tr>';
-                // }
+                if(response.call_volume.campaigns.length){
+	                for (var i=0; i < response.call_volume.campaigns.length; i++) {
+	                    calls_by_campaign_trs+= '<tr class="results"><td>'+response.call_volume.campaigns[i].Campaign+'</td><td>'+Master.formatNumber(response.call_volume.campaigns[i].Count)+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.call_volume.campaigns[i].Seconds)+'</td></tr>';
+	                }
 
-				const campaigns_obj = response.call_volume.campaigns
-                const campaigns_obj_keys = Object.getOwnPropertyNames(campaigns_obj);
-                var chart_colors_array = Master.return_chart_colors_hash(campaigns_obj_keys);
-
-				let campaigns = [];
-
-				if (campaigns_obj_keys.length) {
-				    for (let i = 0; i < campaigns_obj_keys.length; i++) {
-				        campaigns.push(Object.values(campaigns_obj)[i]['Minutes']);
-				    }
-				}
-
-				console.log(campaigns_obj_keys);
+	                calls_by_campaign_trs+= '<tr class="results"><td><b>Total</b></td><td><b>'+Master.formatNumber(response.call_volume.total_calls)+'</b></td><td><b>'+Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds)+'</b></td></tr>';
+	            }
 
                 $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
 			}

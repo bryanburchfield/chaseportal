@@ -32,7 +32,7 @@
 	                <div class="trend_arrow"></div>
 	                <span></span>
 	            </div>
-	            <h1 class="title">{{__('widgets.system_call')}}%</h1>
+	            <h1 class="title">{{__('widgets.system_calls')}}%</h1>
 	            <h4 class="data total mt30"></h4>
 
 	        </div><!-- end card -->
@@ -74,15 +74,15 @@
 		</div><!-- end column -->
 
 		<div class="col-sm-9">
-		    <div class="card card-3b mbo">
+		    <div class="card card-3b mbo" style="height: 330px">
                 <div class="card_table">
-                    <h1 class="title">Calls by Campaign</h1>
+                    <h1 class="title">{{__('widgets.calls_by_campaign')}}</h1>
                     <table class="table table-condensed table-striped" id="calls_by_campaign">
                         <thead>
                             <tr>
-                                <th>Campaign</th>
-                                <th>Total Calls</th>
-                                <th>Minutes</th>
+                                <th>{{__('widgets.campaign')}}</th>
+                                <th>{{__('widgets.total_calls')}}</th>
+                                <th>HH:MM:SS</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
