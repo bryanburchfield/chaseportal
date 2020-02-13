@@ -74,6 +74,26 @@
 		</div><!-- end column -->
 
 		<div class="col-sm-9">
+		    <div class="card card-3b mbo">
+                <div class="card_table">
+                    <h1 class="title">Calls by Campaign</h1>
+                    <table class="table table-condensed table-striped" id="calls_by_campaign">
+                        <thead>
+                            <tr>
+                                <th>Campaign</th>
+                                <th>Total Calls</th>
+                                <th>Minutes</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+		</div><!-- end column -->
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
 		    <div class="card-3 card blue" id="calls_minutes_per_day">
 		        <h1 class="title">{{__('widgets.calls_minutes_per_day')}}</h1>
 		        <div style="height: 300px">

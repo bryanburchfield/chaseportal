@@ -163,7 +163,6 @@ var Dashboard = {
 
 				if (calls_minutes_per_day_obj_keys.length) {
 				    for (let i = 0; i < calls_minutes_per_day_obj_keys.length; i++) {
-				    	console.log(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
 				        call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
 				        call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
 				    }
@@ -220,17 +219,13 @@ var Dashboard = {
                                 scaleLabel: {
                                     fontColor: Master.tick_color,
                                     display: true,
-                                    labelString: 'HH:MM:SS'
+                                    labelString: Lang.get('js_msgs.minutes')
                                 },
                                 ticks: {
                                     beginAtZero: true,
-                                    // callback: function(value, index, values) {
-                                    //     if(show_decimal){
-                                    //         return Math.round((parseInt(value) /60) * 10) / 10;
-                                    //     }else{
-                                    //         return Math.round(parseInt(value) / 60);
-                                    //     }
-                                    // }
+                                    callback: function(value, index, values) {
+                                       return Math.round(parseInt(value) / 60);
+                                    }
                                 }
                             },
                             {
@@ -269,7 +264,7 @@ var Dashboard = {
                 if (window.calls_minutes_per_day_chart != undefined) {
                     window.calls_minutes_per_day_chart.destroy();
                 }
-                
+
                 var ctx = document.getElementById('calls_minutes_per_day_graph').getContext('2d');
 
                 window.calls_minutes_per_day_chart = new Chart(ctx, {
@@ -277,6 +272,32 @@ var Dashboard = {
                     data: calls_minutes_per_day_data,
                     options: calls_minutes_per_day_options
                 });
+
+
+                ///// CALLS BY CAMPAIGN TABLE
+
+                $('#calls_by_campaign tbody').empty();
+                
+                var calls_by_campaign_trs='';
+                // for (var i=0; i < response.call_volume.campaigns.length; i++) {
+                //     calls_by_campaign_trs+= '<tr class="results"><td>'+response.call_details.leaders[i].Rep+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].CallCount)+'</td><td>'+response.call_details.leaders[i].TalkSecs+'</td><td>'+Master.formatNumber(response.call_details.leaders[i].Sales)+'</td></tr>';
+                // }
+
+				const campaigns_obj = response.call_volume.campaigns
+                const campaigns_obj_keys = Object.getOwnPropertyNames(campaigns_obj);
+                var chart_colors_array = Master.return_chart_colors_hash(campaigns_obj_keys);
+
+				let campaigns = [];
+
+				if (campaigns_obj_keys.length) {
+				    for (let i = 0; i < campaigns_obj_keys.length; i++) {
+				        campaigns.push(Object.values(campaigns_obj)[i]['Minutes']);
+				    }
+				}
+
+				console.log(campaigns_obj_keys);
+
+                $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
 			}
 		});
 	},
