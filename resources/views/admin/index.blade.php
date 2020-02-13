@@ -112,7 +112,7 @@
 	</div>
 @endcan
 
-<!-- Delete Recipient Modal -->
+<!-- Delete User Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

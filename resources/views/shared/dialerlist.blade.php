@@ -1,12 +1,28 @@
+@php
+    // Really shouldn't put logic inside blades...
+    if(Auth::User()->isType('superadmin')) {
+        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->count();
+        $tot_client_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->distinct('group_id')->count();
+    } else {
+        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])
+        ->where('group_id', Auth::User()->group_id)
+        ->count();
+    }
+    @endphp
 <div class="col-sm-6 pr0 mbmt50 mbp0">
-<h2 class="page_heading mb0">All Clients ({{ App\Models\User::count() }} total)</h2>
+<h2 class="page_heading mb0">
+    @can('accessSuperAdmin')
+        All Clients ({{ $tot_client_count }})
+    @endcan
+    All Users ({{ $tot_user_count }})
+</h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
-            $db = sprintf("%02d", $dialer->dialer_numb);
-            $users = $dialer->users(true);
-            $clients = $users->count();
+                $db = sprintf("%02d", $dialer->dialer_numb);
+                $users = $dialer->users(true);
+                $client_count = $dialer->group_count(true);
             @endphp
 
             <div class="panel panel-default">
@@ -15,8 +31,13 @@
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
                         Dialer {{$db}}
 
-                        @if($clients)
-                            ({{ $clients }} client{{ $clients > 1 ? 's' : '' }})
+                        @if($users->count())
+                            (
+                            @can('accessSuperAdmin')
+                                Clients: {{ $client_count }},
+                            @endcan
+                            Users: {{ $users->count() }}
+                            )
                         @endif
                         </a>
                     </h4>
