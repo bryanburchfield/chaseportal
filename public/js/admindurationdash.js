@@ -256,7 +256,11 @@ var Dashboard = {
                         mode: 'single',
                         callbacks: {
                             label: function (tooltipItems, data) {
-                                return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
+                                if (tooltipItems.datasetIndex === 0) {
+                                    return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
+                                }else{
+                                    return tooltipItems.yLabel;
+                                }
                             }
                         }
                     }
