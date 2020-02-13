@@ -99,7 +99,7 @@ class AdminDurationDashController extends Controller
         $system_pct = round($system_pct / $total_calls * 100, 2) . '%';
 
         // Sort
-        ksort($campaigns);
+        ksort($campaigns, SORT_NATURAL | SORT_FLAG_CASE);
         ksort($dates);
         uasort($callstatuses, function ($a, $b) {
             return $b['Minutes'] <=> $a['Minutes'];
