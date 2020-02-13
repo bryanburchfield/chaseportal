@@ -67,6 +67,7 @@ class AdminDurationDashController extends Controller
             }
 
             if (!isset($campaigns[$rec['Campaign']])) {
+                $campaigns[$rec['Campaign']]['Camnpaign'] = $rec['Campaign'];
                 $campaigns[$rec['Campaign']]['Minutes'] = 0;
                 $campaigns[$rec['Campaign']]['Count'] = 0;
             }
