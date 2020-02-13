@@ -25,7 +25,7 @@
 
             <div class="form-group">
                 {!! Form::label('user_type', 'User Type') !!}
-                {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
+                {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">

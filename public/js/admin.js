@@ -102,7 +102,7 @@ var Admin = {
 					$('.alert-success').hide();
 					$('form.edit_user').trigger("reset");
 					window.location.reload();
-				}, 3500);
+				}, 2500);
 			}, error: function (data) {
 				$('form.edit_user .alert').empty();
 
@@ -275,7 +275,7 @@ var Admin = {
 		$('ul.nav-tabs a[href="#edit_user"]').tab('show');
 		var user_id = $(this).attr('href');
 		var dialer = $(this).data('dialer');
-		console.log(user_id);
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -298,6 +298,8 @@ var Admin = {
 				form.find('.name').val(response.name);
 				form.find('.email').val(response.email);
 				form.find('#tz').val(response.tz);
+				form.find('#phone').val(response.phone);
+				form.find('#user_type').val(response.user_type);
 				form.find('#user_type').val(response.user_type);
 				form.find('#db').val(response.db);
 				form.find('#additional_dbs').val(response.additional_dbs);
