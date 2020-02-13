@@ -3,10 +3,15 @@
 
         {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
 
+            @can('accessSuperAdmin')
             <div class="form-group">
                 {!! Form::label('group_id', 'Group ID') !!}
                 {!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
             </div>
+            @endcan
+            @cannot('accessSuperAdmin')
+                {!! Form::hidden('group_id', null, ['group_id'=>Auth::User()->group_id]) !!}
+            @endcannot
 
             <div class="form-group">
                 {!! Form::label('name', 'Name') !!}
@@ -44,7 +49,7 @@
             </div> --}}
 
             @if($mode == 'edit')
-            {!! Form::hidden('id', null, ['id'=>'user_id']) !!}
+                {!! Form::hidden('id', null, ['id'=>'user_id']) !!}
             @endif
 
             {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' Client', ['class'=>'btn btn-primary mb0'] ) !!}
