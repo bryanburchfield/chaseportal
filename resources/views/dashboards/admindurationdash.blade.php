@@ -32,7 +32,7 @@
 	                <div class="trend_arrow"></div>
 	                <span></span>
 	            </div>
-	            <h1 class="title">{{__('widgets.system_calls')}}%</h1>
+	            <h1 class="title">{{__('widgets.system_calls')}} %</h1>
 	            <h4 class="data total mt30"></h4>
 
 	        </div><!-- end card -->
@@ -82,7 +82,7 @@
                             <tr>
                                 <th>{{__('widgets.campaign')}}</th>
                                 <th>{{__('widgets.total_calls')}}</th>
-                                <th>HH:MM:SS</th>
+                                <th>{{__('widgets.duration')}}</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

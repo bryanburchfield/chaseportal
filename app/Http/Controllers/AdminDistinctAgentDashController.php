@@ -6,7 +6,6 @@ use App\Traits\DashTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AdminDistinctAgentDashController extends Controller
 {
