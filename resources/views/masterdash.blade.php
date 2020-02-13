@@ -10,12 +10,8 @@
 <input type="hidden" value="{{ $inorout }}" id="inorout" name="inorout">
 
 <div class="wrapper">
-    @if (isset($page['menu']))
-        @if ($page['menu'] == 'admin')
-            @include('shared.admin_sidenav')
-        @else
-            @include('shared.sidenav')
-        @endif
+    @if (isset($page['menu']) && $page['menu'] == 'admin')
+        @include('shared.admin_sidenav')
     @else
         @include('shared.sidenav')
     @endif
