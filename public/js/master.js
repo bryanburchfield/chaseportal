@@ -103,7 +103,7 @@ var Master = {
         $('.toggle_instruc').on('click', this.toggle_instructions);
 
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
-         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     hide_modal_error:function(){
@@ -2083,10 +2083,8 @@ var Master = {
         e.preventDefault();
         $('#sidebar').empty();
         if($(this).hasClass('back_to_sidenav')){
-            console.log('load og nav');
             $('#sidebar').load('/dashboards/admin/load_sidenav');
         }else{
-            console.log('load admin nav');
             $('#sidebar').load('/dashboards/admin/load_admin_nav');
         }
     }
