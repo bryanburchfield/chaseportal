@@ -101,7 +101,6 @@ var Dashboard = {
 				    window.minutes_by_callstatus_chart.destroy();
 				}
 
-				var response_length = response.call_volume.callstatuses.length;
 				const callstatuses_obj = response.call_volume.callstatuses
                 const callstatuses_obj_keys = Object.getOwnPropertyNames(callstatuses_obj);
                 var chart_colors_array = Master.return_chart_colors_hash(callstatuses_obj_keys);
