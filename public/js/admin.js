@@ -34,8 +34,6 @@ var Admin = {
 
 		var form_data = $(this).serialize();
 
-		// var dialer = db.slice(-2);
-
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -80,15 +78,7 @@ var Admin = {
 	edit_user: function (e) {
 		e.preventDefault();
 		var form = $('form.edit_user');
-		var group_id = form.find('.group_id').val(),
-			user_id = form.find('#user_id').val(),
-			name = form.find('.name').val(),
-			email = form.find('.email').val(),
-			phone = form.find('#phone').val(),
-			tz = form.find('#tz').val(),
-			db = form.find('#db').val(),
-			additional_dbs = form.find('#additional_dbs').val()
-			;
+		var form_data = $(this).serialize();
 
 		$.ajaxSetup({
 			headers: {
@@ -100,16 +90,7 @@ var Admin = {
 			url: 'update_user',
 			type: 'POST',
 			dataType: 'json',
-			data: {
-				id: user_id,
-				group_id: group_id,
-				name: name,
-				email: email,
-				phone: phone,
-				tz: tz,
-				db: db,
-				additional_dbs: additional_dbs
-			},
+			data: form_data,
 
 			success: function (response) {
 
