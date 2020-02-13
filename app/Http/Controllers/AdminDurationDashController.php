@@ -11,6 +11,8 @@ class AdminDurationDashController extends Controller
 {
     use DashTraits;
 
+    // https://powerbi.chasedatacorp.com/PowerBiEmbedded/Home/EmbedReport?workspaceid=5072828d-6001-4717-91e2-d154cb48159d&reportid=991adf03-e2a7-4167-9bb9-3ffffb6a240e
+
     public function index(Request $request)
     {
         $this->getSession($request);
@@ -104,18 +106,15 @@ class AdminDurationDashController extends Controller
         });
 
         // Convert secs to mins
-        unset($rec);
         foreach ($campaigns as &$rec) {
             $rec['Minutes'] = round($rec['Minutes'] / 60, 2);
         }
-        unset($rec);
         foreach ($callstatuses as &$rec) {
             $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         }
-        unset($rec);
-        foreach ($dates as &$rec) {
-            $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
-        }
+        // foreach ($dates as &$rec) {
+        //     $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
+        // }
 
         $total_minutes = round($total_minutes / 60, 0);
 
