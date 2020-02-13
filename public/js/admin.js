@@ -47,7 +47,7 @@ var Admin = {
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				form_data
+				form_data:form_data
 			},
 
 			success: function (response) {
