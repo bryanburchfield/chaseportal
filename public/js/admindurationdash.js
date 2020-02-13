@@ -90,7 +90,7 @@ var Dashboard = {
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 				$('#connect .total').html(response.call_volume.connect_pct);
 				$('#system_call .total').html(response.call_volume.system_pct);
-				$('#total_minutes .total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_minutes));
+				$('#total_minutes .total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds));
 				$('#total_calls .total').html(response.call_volume.total_calls);
 
 				////////////////////////////////////////////////////////////
@@ -165,8 +165,8 @@ var Dashboard = {
 
 				if (calls_minutes_per_day_obj_keys.length) {
 				    for (let i = 0; i < calls_minutes_per_day_obj_keys.length; i++) {
-				    	console.log(Object.values(calls_minutes_per_day_obj)[i]['Minutes']);
-				        call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Minutes']);
+				    	console.log(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
+				        call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
 				        call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
 				    }
 				}
@@ -225,7 +225,7 @@ var Dashboard = {
                                 scaleLabel: {
                                     fontColor: Master.tick_color,
                                     display: true,
-                                    labelString: Lang.get('js_msgs.minutes')
+                                    labelString: 'HH:MM:SS'
                                 },
                                 ticks: {
                                     beginAtZero: true,
@@ -260,12 +260,8 @@ var Dashboard = {
                         enabled: true,
                         mode: 'single',
                         callbacks: {
-                            label: function(tooltipItems, data) { 
-                                if (tooltipItems.datasetIndex === 0) {
-                                    return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
-                                }else{
-                                    return tooltipItems.yLabel;
-                                }
+                            label: function (tooltipItems, data) {
+                                return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
                             }
                         }
                     }
