@@ -25,7 +25,7 @@
             <li <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'admin' ? 'class="active"' : ''?>><a class="admin_link" href="#"><i class="fas fa-user-cog"></i>{{__('sidenav.admin')}}</a></li>
         @endcan
 
-        @cannot('accessSuperAdmin')
+        @cannot('accessAdmin')
             <li <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-user-cog"></i>{{__('sidenav.settings')}}</a></li>
         @endcannot
     </ul>
