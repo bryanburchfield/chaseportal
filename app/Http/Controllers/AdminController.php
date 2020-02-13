@@ -146,11 +146,26 @@ class AdminController extends Controller
             'group_id' => $groupId,
             'default_lead_fields' => $this->defaultLeadFields(),
             'dbs' => $dbs,
+            'user_types' => $this->userTypes(),
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
         ];
 
         return view('admin.index')->with($data);
+    }
+
+    public function userTypes()
+    {
+        // Build user type selection
+        $user_types = [
+            'client',
+            'admin',
+        ];
+        if (Auth::User()->isType('superadmin')) {
+            $user_types[] = 'superadmin';
+        }
+
+        return $user_types;
     }
 
     /**

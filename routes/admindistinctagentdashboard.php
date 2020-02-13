@@ -1,7 +1,7 @@
 <?php
 // Trend Dashboard: all urls start with /admindistinctagentdashboard/
 Route::prefix('admindistinctagentdashboard')->group(function () {
-    Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+    Route::group(['middleware' => 'can:accessAdmin'], function () {
         // Allow app_token login via /admindistinctagentdashboard/api/{token}
         Route::get('/', 'AdminDistinctAgentDashController@apiLogin');
         Route::get('api/{token}', 'AdminDistinctAgentDashController@apiLogin');

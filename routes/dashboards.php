@@ -45,19 +45,13 @@ Route::prefix('dashboards')->group(function () {
 
         // Admin only
         // prefix('admin') isn't working for some reason
-        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
-            // Route::get('admin/', 'AdminController@index');
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::post('admin/add_user', 'AdminController@addUser');
-            Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
             Route::post('admin/delete_user', 'AdminController@deleteUser');
             Route::post('admin/get_user', 'AdminController@getUser');
             Route::post('admin/update_user', 'AdminController@updateUser');
-            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
             Route::get('admin/cdr_lookup', 'AdminController@loadCdrLookup');
             Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
-            Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
-            Route::get('admin/settings', 'AdminController@settings');
-            Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::post('admin/get_client_tables', 'AdminController@getClientTables');
             Route::post('admin/get_table_fields', 'AdminController@getTableFields');
             Route::get('admin/manage_clients', 'AdminController@manageClients');
@@ -71,8 +65,16 @@ Route::prefix('dashboards')->group(function () {
             });
         });
 
-        // Route::get('load_sidenav', function () {
-            // return view('/shared.sidenav');
-        // });
+        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+            Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
+            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
+            Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
+            Route::post('admin/edit_myself', 'AdminController@editMyself');
+            Route::get('admin/settings', 'AdminController@settings');
+        });
+
+        Route::get('load_sidenav', function () {
+            return redirect()->back();
+        });
     });
 });

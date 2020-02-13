@@ -38,6 +38,8 @@ class MasterDashController extends Controller
             $page['type'] = 'kpi_page';
         }
 
+        $page['menu'] = $this->pageMenu($this->currentDash);
+
         $dashbody = 'dashboards.' . $this->currentDash;
 
         $data = [
@@ -55,6 +57,16 @@ class MasterDashController extends Controller
         ];
 
         return view('masterdash')->with($data);
+    }
+
+    private function pageMenu($page)
+    {
+        $pagemenus = [
+            'admindurationdash' => 'admin',
+            'admindistinctagentdash' => 'admin',
+        ];
+
+        return (isset($pagemenus[$page])) ? $pagemenus[$page] : 'base';
     }
 
     public function demoLogin(Request $request)

@@ -19,6 +19,11 @@
             </div>
 
             <div class="form-group">
+                {!! Form::label('user_type', 'User Type') !!}
+                {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
+            </div>
+
+            <div class="form-group">
                 {!! Form::label('phone', 'Phone') !!}
                 {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
             </div>
