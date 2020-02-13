@@ -32,16 +32,9 @@ var Admin = {
 	add_user: function (e) {
 		e.preventDefault();
 
-		var group_id = $('.group_id').val(),
-			name = $('.name').val(),
-			email = $('.email').val(),
-            phone = $('#phone').val(),
-			tz = $('#tz').val(),
-			db = $('#db').val(),
-			additional_dbs = $('#additional_dbs').val()
-			;
+		var form_data = $(this).serialize();
 
-		var dialer = db.slice(-2);
+		// var dialer = db.slice(-2);
 
 		$.ajaxSetup({
 			headers: {
@@ -54,13 +47,7 @@ var Admin = {
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				group_id: group_id,
-				name: name,
-				email: email,
-                phone:phone,
-				tz: tz,
-				db: db,
-				additional_dbs: additional_dbs
+				form_data
 			},
 
 			success: function (response) {
