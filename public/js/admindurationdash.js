@@ -141,6 +141,10 @@ var Dashboard = {
 
 				var ctx = document.getElementById('callstatus_by_minutes_graph').getContext('2d');
 
+				if (window.minutes_by_callstatus_chart != undefined) {
+                    window.minutes_by_callstatus_chart.destroy();
+                }
+
 				window.minutes_by_callstatus_chart = new Chart(ctx, {
 				    type: 'doughnut',
 				    data: callstatus_by_minutes_data,
@@ -151,15 +155,9 @@ var Dashboard = {
 				////    CALLS & MINUTES PER DAY BAR GRAPH
 				///////////////////////////////////////////////////////////
 
-				if (window.calls_minutes_per_day_chart != undefined) {
-				    window.calls_minutes_per_day_chart.destroy();
-				}
-
 				const calls_minutes_per_day_obj = response.call_volume.dates
                 const calls_minutes_per_day_obj_keys = Object.getOwnPropertyNames(calls_minutes_per_day_obj);
                 var chart_colors_array = Master.return_chart_colors_hash(calls_minutes_per_day_obj_keys);
-                console.log(calls_minutes_per_day_obj_keys.length);
-
 				let call_minutes = [];
 				let call_count = [];
 
@@ -170,9 +168,6 @@ var Dashboard = {
 				        call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
 				    }
 				}
-
-				console.log(call_minutes);
-				console.log(call_count);
 
 				var calls_minutes_per_day_data = {
                  	labels: calls_minutes_per_day_obj_keys,
@@ -267,9 +262,13 @@ var Dashboard = {
                     }
                 }
 
+                if (window.calls_minutes_per_day_chart != undefined) {
+                    window.calls_minutes_per_day_chart.destroy();
+                }
+                
                 var ctx = document.getElementById('calls_minutes_per_day_graph').getContext('2d');
 
-                window.rep_talktime_chart = new Chart(ctx, {
+                window.calls_minutes_per_day_chart = new Chart(ctx, {
                     type: 'bar',
                     data: calls_minutes_per_day_data,
                     options: calls_minutes_per_day_options
