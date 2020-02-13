@@ -51,7 +51,7 @@ class AdminDurationDashController extends Controller
         $callstatuses = [];
         $dates = [];
         $total_calls = 0;
-        $total_minutes = 0;
+        $total_seconds = 0;
         $connect_pct = 0;
         $system_pct = 0;
 
@@ -59,7 +59,7 @@ class AdminDurationDashController extends Controller
         // Loop thru results, buuld return vals
         foreach ($results as $rec) {
             $total_calls += $rec['cnt'];
-            $total_minutes += $rec['secs'];
+            $total_seconds += $rec['secs'];
 
             // We'll convert this to pct later
             if (substr($rec['CallStatus'], 0, 3) == 'CR_') {
@@ -116,14 +116,12 @@ class AdminDurationDashController extends Controller
         //     $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         // }
 
-        $total_minutes = round($total_minutes / 60, 0);
-
         return ['call_volume' => [
             'campaigns' => $campaigns,
             'callstatuses' => $callstatuses,
             'dates' => $dates,
             'total_calls' => $total_calls,
-            'total_minutes' => $total_minutes,
+            'total_seconds' => $total_seconds,
             'connect_pct' => $connect_pct,
             'system_pct' => $system_pct,
             'details' => $details,
