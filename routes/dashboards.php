@@ -72,9 +72,5 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::get('admin/settings', 'AdminController@settings');
         });
-
-        Route::get('load_sidenav', function () {
-            return redirect()->back();
-        });
     });
 });
