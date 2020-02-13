@@ -85,10 +85,10 @@ class AdminDurationDashController extends Controller
                 ->isoFormat('MMM DD');
 
             if (!isset($dates[$date])) {
-                $dates[$date]['Minutes'] = 0;
+                $dates[$date]['Seconds'] = 0;
                 $dates[$date]['Count'] = 0;
             }
-            $dates[$date]['Minutes'] += $rec['secs'];
+            $dates[$date]['Seconds'] += $rec['secs'];
             $dates[$date]['Count'] += $rec['cnt'];
         }
 
@@ -112,9 +112,6 @@ class AdminDurationDashController extends Controller
         foreach ($callstatuses as &$rec) {
             $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
         }
-        // foreach ($dates as &$rec) {
-        //     $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
-        // }
 
         return ['call_volume' => [
             'campaigns' => $campaigns,
