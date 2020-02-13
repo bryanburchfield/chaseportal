@@ -66,10 +66,13 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/load_admin_nav', function () {
                 return view('/shared.admin_sidenav');
             });
+            Route::get('admin/load_sidenav', function () {
+                return view('/shared.sidenav');
+            });
         });
 
-        Route::get('load_sidenav', function () {
-            return redirect()->back();
-        });
+        // Route::get('load_sidenav', function () {
+            // return view('/shared.sidenav');
+        // });
     });
 });

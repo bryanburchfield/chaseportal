@@ -5,7 +5,7 @@
     </div>
 
     <ul class="list-unstyled components">
-        <li><a class="back_to_sidenav" href="{{url('dashboards/inbounddashboard')}}"><i class="fas fa-arrow-circle-left"></i>Go Back</a></li>
+        <li><a class="back_to_sidenav" href="#"><i class="fas fa-arrow-circle-left"></i>Go Back</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindurationdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDurationDashboard')}}"><i class="fas fa-user-clock"></i>Duration Dashboard</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindistinctagentdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDistinctAgentDashboard')}}"><i class="fas fa-user-check"></i>Distinct Agent</a></li>
         <li <?php echo !empty($page['menuitem']) && $page['menuitem']== 'manage_clients' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageClients') }}"><i class="fas fa-users"></i>Manage Clients</a></li>

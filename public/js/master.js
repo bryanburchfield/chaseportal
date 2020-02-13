@@ -102,8 +102,8 @@ var Master = {
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
 
-        $('.admin_link').on('click', this.update_sidenav);
-        $('#sidebar ul').on('click', '.back_to_sidenav', this.update_sidenav);
+        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
+         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     hide_modal_error:function(){
@@ -2079,11 +2079,14 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-    update_sidenav:function(){
+    update_sidenav:function(e){
+        e.preventDefault();
         $('#sidebar').empty();
         if($(this).hasClass('back_to_sidenav')){
-            $('#sidebar').load('/load_sidenav');
+            console.log('load og nav');
+            $('#sidebar').load('/dashboards/admin/load_sidenav');
         }else{
+            console.log('load admin nav');
             $('#sidebar').load('/dashboards/admin/load_admin_nav');
         }
     }

@@ -58,13 +58,252 @@ var Dashboard = {
 
 	init:function(){
 
-		/// dashboard widgets
-		// $.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
-		//     $('.preloader').fadeOut('slow');
-		//     Master.check_reload();
-		// });
+		// dashboard widgets
+		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
+		    $('.preloader').fadeOut('slow');
+		    Master.check_reload();
+		});
+	},
+
+	call_volume:function(datefilter, chartColors){
+		var campaign = $('.filter_campaign li ').text();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/admindistinctagentdashboard/call_volume',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				datefilter:datefilter,
+				campaign: campaign
+			},
+
+			success: function (response) {
+				console.log(response);
+
+				// $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
+    //             $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
+				// $('#connect .total').html(response.call_volume.connect_pct);
+				// $('#system_call .total').html(response.call_volume.system_pct);
+				// $('#total_minutes .total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds));
+				// $('#total_calls .total').html(response.call_volume.total_calls);
+
+				////////////////////////////////////////////////////////////
+				////    MINUTES BY CALLSTATUS DOUGNUT GRAPH
+				///////////////////////////////////////////////////////////
+
+				// if (window.minutes_by_callstatus_chart != undefined) {
+				//     window.minutes_by_callstatus_chart.destroy();
+				// }
+
+				// var response_length = response.call_volume.callstatuses.length;
+				// const callstatuses_obj = response.call_volume.callstatuses
+    //             const callstatuses_obj_keys = Object.getOwnPropertyNames(callstatuses_obj);
+    //             var chart_colors_array = Master.return_chart_colors_hash(callstatuses_obj_keys);
+
+				// let callstatuses = [];
+
+				// if (callstatuses_obj_keys.length) {
+				//     for (let i = 0; i < callstatuses_obj_keys.length; i++) {
+				//         callstatuses.push(Object.values(callstatuses_obj)[i]['Minutes']);
+				//     }
+				// }
+
+				// var callstatus_by_minutes_data = {
+				// 	datasets: [{
+				// 		data:callstatuses,
+				// 		backgroundColor: chart_colors_array,
+				// 	}],
+				//     labels: callstatuses_obj_keys,
+				//     elements: {
+				//         center: {
+				//             color: '#203047',
+				//             fontStyle: 'Segoeui',
+				//             sidePadding: 15
+				//         }
+				//     },
+				// };
+
+				// var callstatus_by_minutes_options = {
+				//     responsive: true,
+				//     legend: {
+				//         display: false
+				//     },
+				//     tooltips: {
+				//         enabled: true,
+				//     }
+				// }
+
+				// var ctx = document.getElementById('callstatus_by_minutes_graph').getContext('2d');
+
+				// if (window.minutes_by_callstatus_chart != undefined) {
+    //                 window.minutes_by_callstatus_chart.destroy();
+    //             }
+
+				// window.minutes_by_callstatus_chart = new Chart(ctx, {
+				//     type: 'doughnut',
+				//     data: callstatus_by_minutes_data,
+				//     options: callstatus_by_minutes_options
+				// });
+
+				// ////////////////////////////////////////////////////////////
+				// ////    CALLS & MINUTES PER DAY BAR GRAPH
+				// ///////////////////////////////////////////////////////////
+
+				// const calls_minutes_per_day_obj = response.call_volume.dates
+    //             const calls_minutes_per_day_obj_keys = Object.getOwnPropertyNames(calls_minutes_per_day_obj);
+    //             var chart_colors_array = Master.return_chart_colors_hash(calls_minutes_per_day_obj_keys);
+				// let call_minutes = [];
+				// let call_count = [];
+
+				// if (calls_minutes_per_day_obj_keys.length) {
+				//     for (let i = 0; i < calls_minutes_per_day_obj_keys.length; i++) {
+				//         call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
+				//         call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
+				//     }
+				// }
+
+				// var calls_minutes_per_day_data = {
+    //              	labels: calls_minutes_per_day_obj_keys,
+    //                 datasets: [
+    //                   {
+    //                     yAxisID: 'A',
+    //                     label: Lang.get('js_msgs.call_time'),
+    //                     backgroundColor: chartColors.green,
+    //                     data: call_minutes
+    //                   },
+    //                   {
+    //                     yAxisID: 'B',
+    //                     label: Lang.get('js_msgs.call_count'),
+    //                     backgroundColor: chartColors.orange,
+    //                     fillOpacity: .5, 
+    //                     data: call_count
+    //                   }
+    //                 ]
+    //             };
+
+    //             var calls_minutes_per_day_options={
+    //                 responsive: true,
+    //                 maintainAspectRatio:false,
+    //                 legend: {  
+    //                     position: 'bottom',
+    //                     labels: {
+    //                         boxWidth: 12,
+    //                         fontColor: Master.tick_color,
+    //                     } 
+    //                 },
+    //                 scales: {
+    //                     xAxes: [{
+    //                         ticks: {
+    //                             fontColor: Master.tick_color,
+    //                         },
+    //                         gridLines: {
+    //                             color: Master.gridline_color,
+    //                         },
+    //                     }],
+    //                     yAxes: [
+
+    //                         {
+    //                             gridLines: {
+    //                                 color: Master.gridline_color,
+    //                             },
+    //                             id:'A',
+    //                             type: 'linear',
+    //                             position:'left',
+    //                             scalePositionLeft: true,
+    //                             scaleLabel: {
+    //                                 fontColor: Master.tick_color,
+    //                                 display: true,
+    //                                 labelString: Lang.get('js_msgs.minutes')
+    //                             },
+    //                             ticks: {
+    //                                 beginAtZero: true,
+    //                                 callback: function(value, index, values) {
+    //                                    return Math.round(parseInt(value) / 60);
+    //                                 }
+    //                             }
+    //                         },
+    //                         {
+    //                             id:'B',
+    //                             type: 'linear',
+    //                             position:'right',
+    //                             scalePositionLeft: false,
+    //                             scaleLabel: {
+    //                                 fontColor: Master.tick_color,
+    //                                 display: true,
+    //                                 labelString: Lang.get('js_msgs.call_count')
+    //                             },
+    //                             ticks: {
+    //                                 fontColor: Master.tick_color,
+    //                                 beginAtZero: true,
+    //                             }
+    //                         }
+
+    //                     ]
+    //                 },
+    //                 tooltips: {
+    //                     enabled: true,
+    //                     mode: 'single',
+    //                     callbacks: {
+    //                         label: function (tooltipItems, data) {
+    //                             if (tooltipItems.datasetIndex === 0) {
+    //                                 return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
+    //                             }else{
+    //                                 return tooltipItems.yLabel;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+    //             if (window.calls_minutes_per_day_chart != undefined) {
+    //                 window.calls_minutes_per_day_chart.destroy();
+    //             }
+
+    //             var ctx = document.getElementById('calls_minutes_per_day_graph').getContext('2d');
+
+    //             window.calls_minutes_per_day_chart = new Chart(ctx, {
+    //                 type: 'bar',
+    //                 data: calls_minutes_per_day_data,
+    //                 options: calls_minutes_per_day_options
+    //             });
+
+
+    //             ///// CALLS BY CAMPAIGN TABLE
+    //             $('#calls_by_campaign tbody').empty();
+
+    //             var calls_by_campaign_trs='';
+    //             if(response.call_volume.campaigns.length){
+	   //              for (var i=0; i < response.call_volume.campaigns.length; i++) {
+	   //                  calls_by_campaign_trs+= '<tr class="results"><td>'+response.call_volume.campaigns[i].Campaign+'</td><td>'+Master.formatNumber(response.call_volume.campaigns[i].Count)+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.call_volume.campaigns[i].Seconds)+'</td></tr>';
+	   //              }
+
+	   //              calls_by_campaign_trs+= '<tr class="results"><td><b>Total</b></td><td><b>'+Master.formatNumber(response.call_volume.total_calls)+'</b></td><td><b>'+Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds)+'</b></td></tr>';
+	   //          }
+
+    //             $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
+			}
+		});
+	},
+
+	refresh: function (datefilter, campaign) {
+
+	    $.when(
+	        this.call_volume(datefilter, this.chartColors),
+	        ).done(function () {
+	            $('.preloader').fadeOut('slow');
+	            // Dashboard.resizeCardTableDivs();
+	            Master.check_reload();
+	        });
+
 	},
 }
+
 $(document).ready(function(){
 	Dashboard.init();
 });
