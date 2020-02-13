@@ -30,7 +30,7 @@ class StandardUser extends FormRequest
     {
         $admincontroller = new AdminController;
 
-        $valid_user_types = $admincontroller->userTypes();
+        $valid_user_types = array_keys($admincontroller->userTypes());
 
         // Check if we're adding or editing
         if (!empty($this->id)) {

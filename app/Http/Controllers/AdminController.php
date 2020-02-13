@@ -158,11 +158,11 @@ class AdminController extends Controller
     {
         // Build user type selection
         $user_types = [
-            'client',
-            'admin',
+            'client' => 'Client',
+            'admin' => 'Admin',
         ];
         if (Auth::User()->isType('superadmin')) {
-            $user_types[] = 'superadmin';
+            $user_types += ['superadmin' => 'SuperAdmin'];
         }
 
         return $user_types;
