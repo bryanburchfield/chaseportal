@@ -169,8 +169,6 @@
             color: #f5564e;
         }
 
-        table {}
-
         /*LOGO*/
 
         .logo h1 {
@@ -221,8 +219,6 @@
             opacity: .3;
         }
 
-        .hero .icon {}
-
         .hero .icon a {
             display: block;
             width: 60px;
@@ -248,7 +244,6 @@
         }
 
         /*HEADING SECTION*/
-        .heading-section {}
 
         .heading-section h2 {
             color: #000000;
@@ -285,8 +280,7 @@
         }
 
         .heading-section-white h2 {
-            font-family:
-                line-height: 1;
+            line-height: 1;
             padding-bottom: 0;
         }
 
@@ -306,8 +300,6 @@
         .icon {
             text-align: center;
         }
-
-        .icon img {}
 
         /*SERVICES*/
         .services {
@@ -538,7 +530,7 @@
 
 </head>
 
-<body class="m0 p0" width="100%" style="!important; mso-line-height-rule: exactly;">
+<body class="m0 p0" width="100%" style="mso-line-height-rule: exactly;">
     <center style="width: 100%;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
             &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
@@ -554,17 +546,18 @@
                                 <td width="100%" class="logo" style="text-align: center;">
                                     <h1><a href="#"><img src="{{ $data['url'] }}img/emaillogo.png" style="max-width:200px;" border="0" alt="" /></a></h1>
                                 </td>
+                            </tr>
                         </table>
                     </td>
                 </tr><!-- end tr -->
                 <tr>
-                    <td valign="middle" class="hero bg_white h220" style="background-image: url({{ $data['url'] }}img/emailbg_1.jpg); background-size: cover; ">
+                    <td valign="middle" class="hero bg_white h220" style="background-image: url({{ $data['url'] }}img/emailbg_1.jpg); background-size: cover;">
                         <div class="overlay"></div>
                         <table>
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span></h2>
+                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>{{ $data['date'] }}</h2>
                                     </div>
                                 </td>
                             </tr>
