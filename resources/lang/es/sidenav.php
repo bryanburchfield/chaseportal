@@ -10,4 +10,8 @@ return [
 	'settings'			=> 'Ajustes',
 	'tools'				=> 'Herramientas',
 	'trend_dashboard'	=> 'Panel de Tendencias',
+	'duration_dashboard' => 'Panel de Duración',
+	'distinct_agent' => 'Agente Distinto',
+	'manage_users' => 'Administrar Usuarios',
+	'cdr_lookup' => 'Búsqueda de CDR',
 ];
