@@ -1,11 +1,11 @@
     <div class="col-sm-6 mb0 card">
-        <h2 class="page_heading">{{ ($mode == 'edit') ? 'Edit' : 'New' }} User</h2>
+        <h2 class="page_heading">{{ ($mode == 'edit') ? __('users.edit') : __('users.new') }} {{__('users.user')}}</h2>
 
         {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
 
             @can('accessSuperAdmin')
             <div class="form-group">
-                {!! Form::label('group_id', 'Group ID') !!}
+                {!! Form::label('group_id', __('users.group_id')) !!}
                 {!! Form::text('group_id', null, ['class'=>'form-control group_id', 'required'=>true]) !!}
             </div>
             @endcan
@@ -14,32 +14,32 @@
             @endcannot
 
             <div class="form-group">
-                {!! Form::label('name', 'Name') !!}
+                {!! Form::label('name', __('users.name')) !!}
                 {!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('email', 'Email') !!}
+                {!! Form::label('email', __('users.email')) !!}
                 {!! Form::email('email', null, ['class'=>'form-control email', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('user_type', 'User Type') !!}
+                {!! Form::label('user_type', __('users.user_type')) !!}
                 {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('phone', 'Phone') !!}
+                {!! Form::label('phone', __('users.phone')) !!}
                 {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('tz', 'Timezone') !!}
+                {!! Form::label('tz', __('users.timezone')) !!}
                 {!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('db', 'Database') !!}
+                {!! Form::label('db', __('users.database')) !!}
                 {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
             </div>
 
@@ -52,7 +52,7 @@
                 {!! Form::hidden('id', null, ['id'=>'user_id']) !!}
             @endif
 
-            {!! Form::submit(($mode == 'edit' ? 'Update' : 'Create') . ' User', ['class'=>'btn btn-primary mb0'] ) !!}
+            {!! Form::submit(($mode == 'edit' ? __('users.update') : __('users.create')) . ' User', ['class'=>'btn btn-primary mb0'] ) !!}
 
             <div class="alert alert-danger mt20"></div>
 

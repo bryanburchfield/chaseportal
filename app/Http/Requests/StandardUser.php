@@ -47,7 +47,7 @@ class StandardUser extends FormRequest
                 function ($attribute, $value, $fail) {
                     if (!Auth::User()->isType('superadmin')) {
                         if ($value != Auth::User()->group_id) {
-                            $fail('Group ID must be ' . Auth::User()->group_id);
+                            $fail(trans('custom_validation.group_must_be') . ' ' . Auth::User()->group_id);
                         }
                     }
                 },
@@ -64,7 +64,7 @@ class StandardUser extends FormRequest
                 'required',
                 function ($attribute, $value, $fail) use ($valid_user_types) {
                     if (!in_array($value, $valid_user_types)) {
-                        $fail('Invalid User Type');
+                        $fail(trans('custom_validation.invalid_user_type'));
                     }
                 },
             ],

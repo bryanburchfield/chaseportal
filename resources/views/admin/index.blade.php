@@ -3,9 +3,6 @@
 
 @section('content')
 <div class="preloader"></div>
-<?php
-	//dd($default_lead_fields);
-?>
 <div class="wrapper">
 
 	@include('shared.admin_sidenav')
@@ -21,8 +18,8 @@
 						<div class="mt20">
 							<ul class="nav nav-tabs tabs">
 
-								<li class="active"><a  href="#new_user" data-toggle="tab">Add Users</a></li>
-								<li><a href="#edit_user" data-toggle="tab">Edit Users</a></li>
+								<li class="active"><a  href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
+								<li><a href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
 								@can('accessSuperAdmin')
 									<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
 								@endcan
@@ -118,16 +115,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Confirm User Removal</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('users.confirm_delete_user')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
                 <input type="hidden" class="name" name="name" value="">
-               <h3>Are you sure you want to delete <span class="username"></span>?</h3>
+               <h3>{{__('users.are_you_sure')}} <span class="username"></span>?</h3>
             </div>
 	        <div class="modal-footer">
-	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	            <button type="button" class="btn btn-danger remove_recip">Delete User</button>
+	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('users.cancel')}}</button>
+	            <button type="button" class="btn btn-danger remove_recip">{{__('users.delete_user')}}</button>
 	        </div>
 	    </div>
     </div>
@@ -147,13 +144,13 @@
                 <input type="hidden" class="name" name="name" value="">
                 <input type="hidden" class="app_token" name="app_token" value="">
                 <h3 class="mb10"><span class="username mb20"></span></h3>
-            	<p>Double click a link below to copy.</p><br>
-            	<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/(#Rep#)</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/inbounddashboard/api/<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>
-				<a data-toggle="tooltip"  title="Link Copied!" href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a>
+            	<p>{{__('users.double_click')}}.</p><br>
+            	<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentdashboard/api/<span class="url_token"></span>/(#Rep#)</a>
+				<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a>
+				<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/inbounddashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a>
+				<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a>
 
             </div>
 	        <div class="modal-footer">
