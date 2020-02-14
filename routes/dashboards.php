@@ -57,11 +57,11 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/manage_users', 'AdminController@manageUsers');
             Route::get('admin/duration_dashboard', 'AdminController@durationDashboard');
             Route::get('admin/distinct_agent_dashboard', 'AdminController@distinctAgentDashboard');
-            Route::get('admin/load_admin_nav', function () {
-                return view('/shared.admin_sidenav');
+            Route::post('admin/load_admin_nav', function () {
+                return view('shared.admin_sidenav');
             });
-            Route::get('admin/load_sidenav', function () {
-                return view('/shared.sidenav');
+            Route::post('admin/load_sidenav', function () {
+                return view('shared.sidenav');
             });
         });
 

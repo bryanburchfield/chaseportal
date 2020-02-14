@@ -2635,16 +2635,7 @@ MEDIAQUERIES
 }
 
 @media (min-width:768px) {
-    .nopadleft {
-        padding-left: 0;
-    }
-
-    .nopadright {
-        padding-right: 0;
-    }
-
     .pl0{padding-left: 0;}
-
 }
 
 @media handheld, only screen and (max-width:768px) {
@@ -2710,11 +2701,11 @@ MEDIAQUERIES
     }
 
     .nopadleft {
-        padding: 0;
+        padding-left: 0;
     }
 
     .nopadright {
-        padding: 0;
+        padding-right: 0;
     }
 
     .col-xs-3.brand {

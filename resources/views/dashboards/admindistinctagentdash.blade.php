@@ -11,8 +11,9 @@
         </div>
     </div>
 
-    	<div class="col-sm-3">
-    	    <div class="col-sm-12">
+	<div class="row">
+    	<div class="col-sm-3 pl0 nopadright">
+    	    <div class="col-sm-12 nopad">
     	    	<div class="card-3 card" id="distinct_agent_count">
     	    	    <div class="trend_indicator">
     	    	        <div class="trend_arrow"></div>
@@ -23,7 +24,7 @@
     	    	</div><!-- end card -->
     	    </div><!-- end column -->
 
-    	    <div class="col-sm-12">
+    	    <div class="col-sm-12 nopad">
     	        <div class="card-3 card" id="avg_reps">
     	            <div class="trend_indicator">
     	                <div class="trend_arrow"></div>
@@ -34,7 +35,7 @@
     	        </div><!-- end card -->
     	    </div><!-- end column -->
 
-        	<div class="col-sm-12">
+        	<div class="col-sm-12 nopad">
     		    <div class="card-3 card blue" id="distinct_reps_per_camp">
     		        <h1 class="title">{{__('widgets.distinct_reps_per_camp')}}</h1>
     		        <canvas id="distinct_reps_per_camp_graph"></canvas>
@@ -42,9 +43,9 @@
     		</div><!-- end column -->
     	</div><!-- end column -->
 
-    	<div class="col-sm-9">
-		    <div class="col-sm-12">
-			    <div class="card card-3b mbo" style="height: 310px">
+    	<div class="col-sm-9 pr0 nopadleft nopadright">
+		    <div class="col-sm-12 nopad">
+			    <div class="card card-3b mbo" style="height: 300px">
 	                <div class="card_table">
 	                    <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
 	                    <table class="table table-condensed table-striped" id="actions">
@@ -61,7 +62,7 @@
 	            </div>
 		    </div><!-- end column -->
 
-		    <div class="col-sm-12">
+		    <div class="col-sm-12 nopad">
 		    	<div class="card-3 card blue" id="logins_per_day">
 		    	    <h1 class="title">{{__('widgets.distinct_logins_per_day')}}</h1>
 		    	    <div style="height: 300px">
@@ -70,6 +71,6 @@
 		    	</div><!-- end card -->
 		    </div><!-- end column -->
 		</div><!-- end column -->
-    </div>
+	</div>
 </div>
 
