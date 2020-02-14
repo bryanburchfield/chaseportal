@@ -240,10 +240,6 @@ class MasterDashController extends Controller
         $theme = ($theme ? 'dark' : 'light');
         User::where('id', $user->id)->update(array('theme' => $theme));
 
-        if ($user->user_type == 'admin') {
-            return redirect('/dashboards/admin/settings');
-        } else {
-            return redirect()->back();
-        }
+        return redirect()->back();
     }
 }
