@@ -41,8 +41,8 @@ class CallerIdService
         $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
         $union = '';
-        // foreach (Dialer::all() as $i => $dialer) {
-        foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
+        foreach (Dialer::all() as $i => $dialer) {
+            // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
 
             $bind['startdate' . $i] = $startdate->toDateTimeString();
             $bind['enddate' . $i] = $enddate->toDateTimeString();
