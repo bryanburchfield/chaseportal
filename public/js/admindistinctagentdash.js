@@ -240,6 +240,8 @@ var Dashboard = {
 	            }
 
                 $('#actions tbody').append(actions_trs);
+                $('table#actions').DataTable();
+                $('table#actions').addClass('bs-select');
 			}
 		});
 	},

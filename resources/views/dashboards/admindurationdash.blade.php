@@ -67,9 +67,11 @@
 
 	<div class="row">
 		<div class="col-sm-3">
-		    <div class="card-3 card blue" id="callstatus_by_minutes">
-		        <h1 class="title">{{__('widgets.callstatus_by_minutes')}}</h1>
-		        <canvas id="callstatus_by_minutes_graph"></canvas>
+		    <div class="card-3 card blue flipping_card" id="callstatus_by_minutes">
+		    	<h1 class="title">{{__('widgets.callstatus_by_minutes')}}</h1>
+		    	<div class="front p20 mbp35">
+		       		<canvas id="callstatus_by_minutes_graph"></canvas>
+		     	</div>
 		    </div><!-- end card -->
 		</div><!-- end column -->
 

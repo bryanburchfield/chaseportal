@@ -287,6 +287,7 @@ var Dashboard = {
 
                 $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
 			}
+			
 		});
 	},
 

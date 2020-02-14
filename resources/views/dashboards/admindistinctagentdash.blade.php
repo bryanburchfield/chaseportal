@@ -12,7 +12,7 @@
     </div>
 
 	<div class="row">
-    	<div class="col-sm-3 pl0 nopadright">
+    	<div class="col-sm-3">
     	    <div class="col-sm-12 nopad">
     	    	<div class="card-3 card" id="distinct_agent_count">
     	    	    <div class="trend_indicator">
@@ -37,13 +37,13 @@
 
         	<div class="col-sm-12 nopad">
     		    <div class="card-3 card blue" id="distinct_reps_per_camp">
-    		        <h1 class="title">{{__('widgets.distinct_reps_per_camp')}}</h1>
+    		        <h1 class="title mb20">{{__('widgets.distinct_reps_per_camp')}}</h1>
     		        <canvas id="distinct_reps_per_camp_graph"></canvas>
     		    </div><!-- end card -->
     		</div><!-- end column -->
     	</div><!-- end column -->
 
-    	<div class="col-sm-9 pr0 nopadleft nopadright">
+    	<div class="col-sm-9 ">
 		    <div class="col-sm-12 nopad">
 			    <div class="card card-3b mbo" style="height: 300px">
 	                <div class="card_table">
@@ -51,9 +51,20 @@
 	                    <table class="table table-condensed table-striped" id="actions">
 	                        <thead>
 	                            <tr>
-	                                <th>{{__('widgets.date')}}</th>
-	                                <th>{{__('widgets.rep')}}</th>
-	                                <th>{{__('widgets.actions')}}</th>
+	                            	<th>
+	                            	    <span>{{__('widgets.date')}}</span>
+	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+	                            	</th>
+
+	                            	<th>
+	                            	    <span>{{__('widgets.rep')}}</span>
+	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+	                            	</th>
+
+	                            	<th>
+	                            	    <span>{{__('widgets.actions')}}</span>
+	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+	                            	</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody></tbody>
