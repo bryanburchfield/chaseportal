@@ -8,13 +8,13 @@
         ->where('group_id', Auth::User()->group_id)
         ->count();
     }
-    @endphp
+@endphp
 <div class="col-sm-6 pr0 mbmt50 mbp0">
 <h2 class="page_heading mb0">
     @can('accessSuperAdmin')
-        All Clients ({{ $tot_client_count }})
+        {{__('users.all_clients')}} ({{ $tot_client_count }})
     @endcan
-    All Users ({{ $tot_user_count }})
+    {{__('users.all_users')}} ({{ $tot_user_count }})
 </h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
@@ -29,14 +29,14 @@
                 <div class="panel-heading" role="tab" id="{{$mode}}_heading{{$db}}">
                     <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
-                        Dialer {{$db}}
+                        {{__('users.dialer')}} {{$db}}
 
                         @if($users->count())
                             (
                             @can('accessSuperAdmin')
-                                Clients: {{ $client_count }},
+                                {{__('users.clients')}}: {{ $client_count }},
                             @endcan
-                            Users: {{ $users->count() }}
+                            {{__('users.users')}}: {{ $users->count() }}
                             )
                         @endif
                         </a>
@@ -47,10 +47,10 @@
                         <table class="table table-responsive table-striped nobdr">
                             <thead>
                                 <tr>
-                                    <th>Client</th>
-                                    <th>Links</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th>{{__('users.client')}}</th>
+                                    <th>{{__('users.links')}}</th>
+                                    <th>{{__('users.edit')}}</th>
+                                    <th>{{__('users.delete')}}</th>
                                 </tr>
                             </thead>
 
