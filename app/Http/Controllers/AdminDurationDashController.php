@@ -94,9 +94,15 @@ class AdminDurationDashController extends Controller
         }
 
         // Calculate percents
-        $connect_pct = $total_calls - $system_pct;
-        $connect_pct = round($connect_pct / $total_calls * 100, 2) . '%';
-        $system_pct = round($system_pct / $total_calls * 100, 2) . '%';
+        if ($total_calls) {
+            $connect_pct = $total_calls - $system_pct;
+            $connect_pct = round($connect_pct / $total_calls * 100, 2) . '%';
+            $system_pct = round($system_pct / $total_calls * 100, 2) . '%';
+        } else {
+            $connect_pct = 0;
+            $connect_pct = '0.00%';
+            $system_pct = '0.00%';
+        }
 
         // Sort
         ksort($campaigns, SORT_NATURAL | SORT_FLAG_CASE);
