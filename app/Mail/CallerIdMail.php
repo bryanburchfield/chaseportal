@@ -12,7 +12,6 @@ class CallerIdMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $data;
-    public $pdf;
 
     public function __construct($data = [])
     {

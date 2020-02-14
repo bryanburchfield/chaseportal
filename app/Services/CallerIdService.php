@@ -41,8 +41,8 @@ class CallerIdService
         $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
         $union = '';
-        foreach (Dialer::all() as $i => $dialer) {
-            // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
+        // foreach (Dialer::all() as $i => $dialer) {
+        foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
 
             $bind['startdate' . $i] = $startdate->toDateTimeString();
             $bind['enddate' . $i] = $enddate->toDateTimeString();
@@ -118,6 +118,8 @@ class CallerIdService
             'to' => 'bryan.burchfield@chasedatacorp.com',
             'subject' => 'Caller ID Report',
             'pdf' => base64_encode($pdf),
+            'url' => url('/') . '/',
+            'date' => Carbon::parse('yesterday midnight')->toFormattedDateString(),
         ];
         $this->sendEmail($message);
     }
