@@ -96,12 +96,14 @@ class AdminDistinctAgentDashController extends Controller
         // Sort (dates should already be sorted)
         arsort($campaigns, SORT_NUMERIC);
 
+        $avg_reps = count($dates) ? array_sum($dates) / count($dates) : 0;
+
         return ['call_volume' => [
             'actions' => $actions,
             'campaigns' => $campaigns,
             'dates' => $dates,
             'rep_count' => count($rep_dtl),
-            'avg_reps' => round(array_sum($dates) / count($dates), 2),
+            'avg_reps' => round($avg_reps, 2),
             'details' => $details,
         ]];
     }
