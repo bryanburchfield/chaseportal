@@ -45,14 +45,14 @@
 
     	<div class="col-sm-9 ">
 		    <div class="col-sm-12 nopad">
-			    <div class="card card-3b mbo" style="height: 300px">
+			    <div class="card card-3b mbo" style="height: 320px">
 	                <div class="card_table">
 	                    <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
 	                    <table class="table table-condensed table-striped" id="actions">
 	                        <thead>
 	                            <tr>
 	                            	<th>
-	                            	    <span>{{__('widgets.date')}}</span>
+	                            	    <span>{{__('general.date')}}</span>
 	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
 	                            	</th>
 

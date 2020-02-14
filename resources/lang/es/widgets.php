@@ -4,6 +4,8 @@ return [
 	'abandon_calls'		=> 'Llamadas Abandonadas',
 	'abandon_rate'		=> 'Indice de Abandono',
 	'abandoned'			=> 'Abandonadas',
+	'actions'			=> 'Comportamiento',
+	'actions_timestamps'=> 'Marcas de Tiempo de Acción',
 	'admin'				=> 'Configuración',
 	'agent_call_status' => 'Disposición de Llamadas por Agente',
 	'agent_call_times'		=> 'Tiempo de Llamadas / Recuento de Llamadas por Agente',

@@ -4,6 +4,8 @@ return [
 	'abandon_calls'		=> 'Abandon Calls',
 	'abandon_rate'		=> 'Abandoned Rate',
 	'abandoned'			=> 'Abandoned',
+	'actions'			=> 'Actions',
+	'actions_timestamps'=> 'Action Timestamps',
 	'admin'				=> 'Admin',
 	'agent_call_status' => 'Agent Call Status',
 	'agent_call_times'		=> 'Agent Call Times / Call Count',
@@ -84,4 +86,5 @@ return [
 	'voicemails'		=> 'Voicemails',
 	'waiting'			=> 'Waiting',
 	'wrap_up'			=> 'Wrap Up',
+
 ];

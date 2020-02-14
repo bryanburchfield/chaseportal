@@ -77,4 +77,21 @@ return [
 	'voicemails'				=> 'Mensajes de Voz',
 	'waiting'					=> 'Esperando',
 	'wrapup'					=> 'Finalizando',
+
+	/// dataTable
+	'no_data'	=> 'No hay datos disponibles en la tabla',
+	'info'		=> 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
+	'info_empty'=> 'Mostrando 0 a 0 de 0 entradas',
+	'info_filtered'=>'(filtrado de _MAX_ entradas totales)',
+	'length_menu'	=> 'Mostrar entradas de _MENU_',
+	'loading'	=> 'Cargando',
+	'processing'=> 'Procesando',
+	'zero_records'	=> 'No se encontraron registros coincidentes',
+	'first'		=> 'Primero',
+	'last'		=> 'Último',
+	'next'		=> 'Próximo',
+	'previous'	=> 'Previo',
+	'ascending' => ': activar para ordenar la columna ascendente',
+	'descending'=> ': activar para ordenar la columna descendente'
+
 ];

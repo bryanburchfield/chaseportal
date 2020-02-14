@@ -240,7 +240,33 @@ var Dashboard = {
 	            }
 
                 $('#actions tbody').append(actions_trs);
-                $('table#actions').DataTable();
+                $('table#actions').DataTable({
+                	"bDestroy": true,
+                	"responsive": true,
+                	"language": {
+	    	            "sEmptyTable":     Lang.get('js_msgs.no_data'),
+		                "sInfo":           Lang.get('js_msgs.info'),
+		                "sInfoEmpty":      Lang.get('js_msgs.info_empty'),
+		                "sInfoFiltered":   Lang.get('js_msgs.info_filtered'),
+		                "sInfoPostFix":    "",
+		                "sInfoThousands":  ",",
+		                "sLengthMenu":     Lang.get('js_msgs.length_menu'),
+		                "sLoadingRecords": Lang.get('js_msgs.loading'),
+		                "sProcessing":     Lang.get('js_msgs.processing'),
+		                "sSearch":         Lang.get('js_msgs.search'),
+		                "sZeroRecords":    Lang.get('js_msgs.zero_records'),
+		                "oPaginate": {
+		                    "sFirst":    Lang.get('js_msgs.first'),
+		                    "sLast":     Lang.get('js_msgs.last'),
+		                    "sNext":     Lang.get('js_msgs.next'),
+		                    "sPrevious": Lang.get('js_msgs.previous')
+		                },
+		                "oAria": {
+		                    "sSortAscending":  Lang.get('js_msgs.ascending'),
+		                    "sSortDescending": Lang.get('js_msgs.descending')
+		                }
+	            	}
+    	        });
                 $('table#actions').addClass('bs-select');
 			}
 		});
