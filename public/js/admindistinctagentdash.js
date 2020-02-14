@@ -84,7 +84,7 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-
+				console.log(response);
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 				$('#distinct_agent_count .total').html(response.call_volume.rep_count);
@@ -200,7 +200,7 @@ var Dashboard = {
                                 scaleLabel: {
                                     fontColor: Master.tick_color,
                                     display: true,
-                                    labelString: 'Logins Per Day'
+                                    labelString: Lang.get('js_msgs.logins_per_day'),
                                 },
                             },
                         ]

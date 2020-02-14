@@ -39,6 +39,7 @@ return [
 	'inbound'					=> 'Entrante',
 	'interval_updated'			=> 'Intervalo Actualizado Exitosamente',
 	'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente',
+	'logins_per_day'			=> 'Inicios de Sesión Por Día',
 	'longest_hold_time'			=> 'Tiempo de Espera Más Largo (minutos)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutos',

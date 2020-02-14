@@ -39,6 +39,7 @@ return [
 	'inbound'					=> 'Inbound',
 	'interval_updated'			=> 'Interval successfully updated',
 	'large_dl_warning'			=> 'Report is too large to download. Please run smaller reports or choose a different format',
+	'logins_per_day'			=> 'Logins Per Day',
 	'longest_hold_time'			=> 'Longest Hold Time (minutes)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutes',

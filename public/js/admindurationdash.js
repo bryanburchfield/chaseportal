@@ -84,7 +84,6 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-				console.log(response);
 
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
@@ -287,7 +286,7 @@ var Dashboard = {
 
                 $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
 			}
-			
+
 		});
 	},
 
