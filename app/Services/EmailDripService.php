@@ -59,7 +59,7 @@ class EmailDripService
         }
     }
 
-    private function runDrip(EmailDripCampaign $email_drip_campaign)
+    public function runDrip(EmailDripCampaign $email_drip_campaign)
     {
         if (!Auth::check() || Auth::user()->group_id !== $email_drip_campaign->group_id) {
             // authenticate as user of the group
@@ -246,11 +246,13 @@ class EmailDripService
 
         $payload = [
             'from' => $email_drip_campaign->from,
-            // 'to' => $rec[$email_drip_campaign->email_field],
+
 
 
             // REMOVE AFTER TESTING
+            // 'to' => $rec[$email_drip_campaign->email_field],
             'to' => 'g.sandoval@chasedatacorp.com',
+
 
 
             'subject' => $subject,
