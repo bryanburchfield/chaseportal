@@ -11,7 +11,7 @@ trait SqlServerTraits
 
     private function runSql($sql, $bind, $db = null)
     {
-        $this->setSqlServer();
+        $this->setSqlServer($db);
 
         try {
             $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
@@ -36,6 +36,7 @@ trait SqlServerTraits
                 $db = $this->db;
             }
         }
+
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
