@@ -104,8 +104,6 @@
                                                                     <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>
                                                             @endforeach
-                                                        @else
-                                                            <div class="alert alert-info">{{__('tools.no_providers_added')}}</div>
                                                         @endif
                                                     </tbody>
                                                 </table>

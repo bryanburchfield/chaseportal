@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Controllers\EmailDripController;
+use App\Jobs\RunEmailDrip;
 use App\Models\EmailDripCampaign;
 use App\Models\EmailDripCampaignFilter;
 use App\Models\EmailDripSend;
@@ -48,17 +49,17 @@ class EmailDripService
             ->get();
 
         foreach ($email_drip_campaigns as $email_drip_campaign) {
+
             $email_service_provider = EmailServiceProvider::find($email_drip_campaign->email_service_provider_id);
 
             if ($email_service_provider) {
-                $email_drip_service = new EmailDripService($email_service_provider);
-
-                $email_drip_service->runDrip($email_drip_campaign);
+                // Dispatch job to run in the background
+                RunEmailDrip::dispatch($email_drip_campaign, $email_service_provider);
             }
         }
     }
 
-    private function runDrip(EmailDripCampaign $email_drip_campaign)
+    public function runDrip(EmailDripCampaign $email_drip_campaign)
     {
         if (!Auth::check() || Auth::user()->group_id !== $email_drip_campaign->group_id) {
             // authenticate as user of the group
@@ -245,11 +246,13 @@ class EmailDripService
 
         $payload = [
             'from' => $email_drip_campaign->from,
-            // 'to' => $rec[$email_drip_campaign->email_field],
+
 
 
             // REMOVE AFTER TESTING
+            // 'to' => $rec[$email_drip_campaign->email_field],
             'to' => 'g.sandoval@chasedatacorp.com',
+
 
 
             'subject' => $subject,
