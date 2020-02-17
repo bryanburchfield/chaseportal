@@ -239,7 +239,7 @@ trait ReportTraits
             }
         } else {
             try {
-                if ($request->export) {
+                if ($request->has('export') || $request->has('email')) {
                     $from = Carbon::parse($request->input('fromdate'));
                 } else {
                     $from = Carbon::createFromIsoFormat('L LT', $request->input('fromdate'), null, App::getLocale());
@@ -256,7 +256,7 @@ trait ReportTraits
             }
         } else {
             try {
-                if ($request->export) {
+                if ($request->has('export') || $request->has('email')) {
                     $to = Carbon::parse($request->input('todate'));
                 } else {
                     $to = Carbon::createFromIsoFormat('L LT', $request->input('todate'), null, App::getLocale());
@@ -374,7 +374,7 @@ trait ReportTraits
     private function getSessionParams(Request $request)
     {
         // if we're not doing report export, return
-        if (empty($request->export)) {
+        if (empty($request->has('export'))) {
             return $request;
         }
 
