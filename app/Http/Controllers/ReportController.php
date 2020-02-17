@@ -57,8 +57,6 @@ class ReportController extends Controller
         $request->request->add(['all' => 1]);
 
         return $this->reportservice->report->emailReport($request);
-
-        abort(404);
     }
 
     public function returnView($results, MessageBag $errors = null)
