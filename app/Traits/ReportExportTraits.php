@@ -164,10 +164,10 @@ trait ReportExportTraits
 
         // default date range if report requires it
         if (isset($this->params['fromdate'])) {
-            $fromdate = Carbon::parse('midnight yesterday', $tz)->tz('UTC');
-            $todate = Carbon::parse('midnight today', $tz)->tz('UTC');
-            $request->request->add(['fromdate' => $fromdate]);
-            $request->request->add(['todate' => $todate]);
+            $fromdate = Carbon::parse('midnight yesterday', $tz)->tz($tz);
+            $todate = Carbon::parse('midnight today', $tz)->tz($tz);
+            $request->request->add(['fromdate' => $fromdate->toDateTimeString()]);
+            $request->request->add(['todate' => $todate->toDateTimeString()]);
         }
 
         $pdf = $this->pdfExport($request);
@@ -187,25 +187,17 @@ trait ReportExportTraits
                 Carbon::parse()->tz($tz)->isoFormat('lll') . "\n";
         }
 
-        // store pdf to temp file
-        $filename = tempnam(sys_get_temp_dir(), 'report_');
-        $fp = fopen($filename, 'w');
-        fwrite($fp, $pdf);
-        fclose($fp);
-
         // email report
         $message = [
             'to' => $request->email,
             'subject' => $reportName,
             'reportName' => $reportName,
             'daterange' => $daterange,
-            'pdf' => $filename,
+            'pdf' => base64_encode($pdf),
             'url' => url('/') . '/',
             'settings' => url('/dashboards/automatedreports'),
         ];
         $this->sendEmail($message);
-
-        unlink($filename);
     }
 
     private function sendEmail($message)
