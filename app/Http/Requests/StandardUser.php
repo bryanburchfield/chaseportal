@@ -45,7 +45,7 @@ class StandardUser extends FormRequest
                 'nullable',
                 new UniqueEmail($user),
             ],
-            'phone' => 'required',
+            'phone' => 'nullable',
             'tz' => 'required',
             'db' => 'required',
         ];
