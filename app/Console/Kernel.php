@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Services\CallerIdService;
 use App\Services\DemoClientService;
 use App\Services\LeadMoveService;
+use Illuminate\Support\Facades\App;
 
 class Kernel extends ConsoleKernel
 {
@@ -63,12 +64,14 @@ class Kernel extends ConsoleKernel
             ->everyTenMinutes()
             ->runInBackground();
 
-        // Caller ID Report
-        $schedule->call(function () {
-            CallerIdService::execute();
-        })
-            ->dailyAt('8:00')
-            ->timezone('America/New_York');
+        // Caller ID Report (production only)
+        if (App::environment('production')) {
+            $schedule->call(function () {
+                CallerIdService::execute();
+            })
+                ->dailyAt('8:00')
+                ->timezone('America/New_York');
+        }
     }
 
     /**
