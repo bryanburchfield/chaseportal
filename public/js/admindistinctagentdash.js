@@ -199,9 +199,7 @@ var Dashboard = {
 	                                color: Master.gridline_color,
 	                            },
 	                        }],
-	                        yAxes: [
-
-	                            {
+	                        yAxes: [{
 	                                gridLines: {
 	                                    color: Master.gridline_color,
 	                                },
@@ -214,8 +212,11 @@ var Dashboard = {
 	                                    display: true,
 	                                    labelString: Lang.get('js_msgs.logins_per_day'),
 	                                },
-	                            },
-	                        ]
+	                                ticks: {
+	                                    fontColor: Master.tick_color,
+	                                    beginAtZero: true,
+	                                },
+	                            }],
 	                    },
 	                    tooltips: {
 	                        enabled: true,
