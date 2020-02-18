@@ -144,7 +144,7 @@ class AdminController extends Controller
             'page' => $page,
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
-            'default_lead_fields' => array_keys($this->defaultLeadFields()),
+            'default_lead_fields' => ['Rep'] + array_keys($this->defaultLeadFields()),
             'dbs' => $dbs,
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
