@@ -115,18 +115,14 @@ class CallerIdService
     {
         // email report
         $message = [
-            'to' => 'bryan.burchfield@chasedatacorp.com',
             'subject' => 'Caller ID Report',
             'pdf' => base64_encode($pdf),
             'url' => url('/') . '/',
             'date' => Carbon::parse('yesterday midnight')->toFormattedDateString(),
         ];
-        $this->sendEmail($message);
-    }
 
-    private function sendEmail($message)
-    {
-        Mail::to($message['to'])
+        Mail::to('jonathan.gryczka@chasedatacorp.com')
+            ->cc('ahmed@chasedatacorp.com')
             ->send(new CallerIdMail($message));
     }
 }
