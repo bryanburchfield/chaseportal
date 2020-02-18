@@ -150,24 +150,25 @@ class AdminDurationDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $sql = "SELECT Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
-            FROM DialingResults DR
-            WHERE GroupId = :groupid
-            AND Date >= :fromdate
-            AND Date < :todate
-            AND CallType NOT IN (7,8)
-            AND CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY Date, Campaign, CallStatus";
-
         $bind = [
             'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
         ];
 
+        $sql = "SELECT Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
+            FROM DialingResults DR
+            WHERE GroupId = :groupid
+            AND Date >= :fromdate
+            AND Date < :todate
+            AND CallType NOT IN (7,8)
+            AND CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
+
+        $sql .= " GROUP BY Date, Campaign, CallStatus";
 
         return $this->runSql($sql, $bind);
     }

@@ -119,23 +119,24 @@ class AdminDistinctAgentDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $sql = "SELECT Date, Rep, Campaign, Action
-            FROM AgentActivity AA
-            WHERE GroupId = :groupid
-            AND Date >= :fromdate
-            AND Date < :todate
-            AND Action IN ('Login','Logout','InboundCall')
-            ORDER BY Date";
-
         $bind = [
             'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
         ];
 
-        list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
+        $sql = "SELECT Date, Rep, Campaign, Action
+            FROM AgentActivity AA
+            WHERE GroupId = :groupid
+            AND Date >= :fromdate
+            AND Date < :todate
+            AND Action IN ('Login','Logout','InboundCall')";
+
+        list($where, $extrabind) = $this->campaignClause('AA', 0, $campaign);
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
+
+        $sql .= " ORDER BY Date";
 
         return $this->runSql($sql, $bind);
     }
