@@ -57,12 +57,12 @@
                         @endphp
 
                         <div class="panel-body nested">
-                            <div class="panel-group" id="group_accordion">
+                            <div class="panel-group" id="group_accordion{{$db}}">
                                 @foreach($groups as $id)
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="group_heading{{$id}}">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#group_accordion" aria-expanded="false" aria-controls="group_{{$db}}_{{$id}}">{{$id}}</a>
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#group_accordion{{$db}}" aria-expanded="false" aria-controls="group_{{$db}}_{{$id}}">{{$id}}</a>
                                         </h4>
                                     </div>
 
