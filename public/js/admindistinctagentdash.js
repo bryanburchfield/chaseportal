@@ -183,13 +183,9 @@ var Dashboard = {
 	                var logins_per_day_options={
 	                    responsive: true,
 	                    maintainAspectRatio:false,
-	                    legend: {  
-	                        position: 'bottom',
-	                        labels: {
-	                            boxWidth: 12,
-	                            fontColor: Master.tick_color,
-	                        } 
-	                    },
+	                    legend: {
+                            display: false
+                         },
 	                    scales: {
 	                        xAxes: [{
 	                            ticks: {
