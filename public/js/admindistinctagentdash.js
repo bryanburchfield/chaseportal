@@ -60,8 +60,8 @@ var Dashboard = {
 
 		// dashboard widgets
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
-		    $('.preloader').fadeOut('slow');
 		    Master.check_reload();
+		    $('.preloader').fadeOut('slow');
 		});
 	},
 
@@ -239,7 +239,6 @@ var Dashboard = {
 	            	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
 	            }
 
-
                 ///// ACTIONS TABLE
                 $('#actions tbody').empty();
 
@@ -249,6 +248,9 @@ var Dashboard = {
 	                    actions_trs+= '<tr class="results"><td>'+response.call_volume.actions[i].Date+'</td><td>'+response.call_volume.actions[i].Rep+'</td><td>'+response.call_volume.actions[i].Action+'</td></tr>';
 	                }
 	            }
+
+	            $('table#actions').DataTable().clear();
+	            $('table#actions').DataTable().destroy();
 
                 $('#actions tbody').append(actions_trs);
                 $('table#actions').DataTable({
@@ -288,9 +290,8 @@ var Dashboard = {
 	    $.when(
 	        this.call_volume(datefilter, this.chartColors),
 	        ).done(function () {
-	            $('.preloader').fadeOut('slow');
-	            // Dashboard.resizeCardTableDivs();
 	            Master.check_reload();
+	            $('.preloader').fadeOut('slow');
 	        });
 
 	},
