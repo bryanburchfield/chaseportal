@@ -62,11 +62,11 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="group_heading{{$id}}">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group{{$id}}" data-toggle="collapse" data-parent="#group_accordion" aria-expanded="false" aria-controls="group{{$id}}">{{$id}}</a>
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#group_accordion" aria-expanded="false" aria-controls="group_{{$db}}_{{$id}}">{{$id}}</a>
                                         </h4>
                                     </div>
 
-                                    <div id="group{{$id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="group_heading{{$id}}">
+                                    <div id="group_{{$db}}_{{$id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="group_heading{{$id}}">
                                         <div class="panel-body">
                                             <table class="table table-responsive table-striped nobdr">
                                                 <thead>
