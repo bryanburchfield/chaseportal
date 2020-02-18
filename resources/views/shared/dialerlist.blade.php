@@ -50,10 +50,7 @@
 
                     @can('accessSuperAdmin')
                         @php
-                            $groups=array();
-                            foreach($users as $user){
-                                if( !in_array($user->group_id,$groups)) array_push($groups,$user->group_id);
-                            }
+                            $groups = $users->unique('group_id')->pluck('group_id')->sort()->values();
                         @endphp
 
                         <div class="panel-body nested">
