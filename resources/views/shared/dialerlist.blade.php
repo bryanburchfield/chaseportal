@@ -18,6 +18,9 @@
 </h2>
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
+    <?php
+    //dd(App\Models\Dialer::orderBy('dialer_numb')->get());
+    ?>
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
                 $db = sprintf("%02d", $dialer->dialer_numb);
@@ -42,29 +45,84 @@
                         </a>
                     </h4>
                 </div>
-                <div id="{{$mode}}_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{$mode}}_heading{{$db}}">
-                    <div class="panel-body">
-                        <table class="table table-responsive table-striped nobdr">
-                            <thead>
-                                <tr>
-                                    <th>{{__('users.client')}}</th>
-                                    <th>{{__('users.links')}}</th>
-                                    <th>{{__('users.edit')}}</th>
-                                    <th>{{__('users.delete')}}</th>
-                                </tr>
-                            </thead>
 
-                            <tbody>
-                            @foreach($users as $user)
-                                <tr id="user{{$user->id}}" data-id="{{$user->id}}">
-                                <td>{{$user->group_id}} - {{$user->name}}</td>
-                                <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
-                                <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-                                <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                <div id="{{$mode}}_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{$mode}}_heading{{$db}}">
+
+                    @can('accessSuperAdmin')
+                        @php
+                            $groups=array();
+                            foreach($users as $user){
+                                if( !in_array($user->group_id,$groups)) array_push($groups,$user->group_id);
+                            }
+                        @endphp
+
+                        <div class="panel-body nested">
+                            <div class="panel-group" id="group_accordion">
+                                @foreach($groups as $id)
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="group_heading{{$id}}">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group{{$id}}" data-toggle="collapse" data-parent="#group_accordion" aria-expanded="false" aria-controls="group{{$id}}">{{$id}}</a>
+                                        </h4>
+                                    </div>
+
+                                    <div id="group{{$id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="group_heading{{$id}}">
+                                        <div class="panel-body">
+                                            <table class="table table-responsive table-striped nobdr">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{__('users.client')}}</th>
+                                                        <th>{{__('users.links')}}</th>
+                                                        <th>{{__('users.edit')}}</th>
+                                                        <th>{{__('users.delete')}}</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                @foreach($users->sortBy('group_id') as $user)
+                                                    @if($id == $user->group_id)
+                                                        <tr id="user{{$user->id}}" data-id="{{$user->id}}">
+                                                        <td>{{$user->group_id}} - {{$user->name}}</td>
+                                                        <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
+                                                        <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+                                                        <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                    @endif
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                    @endcan
+
+                    @cannot('accessSuperAdmin')
+                        <div class="panel-body">
+                            <table class="table table-responsive table-striped nobdr">
+                                <thead>
+                                    <tr>
+                                        <th>{{__('users.client')}}</th>
+                                        <th>{{__('users.links')}}</th>
+                                        <th>{{__('users.edit')}}</th>
+                                        <th>{{__('users.delete')}}</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                @foreach($users->sortBy('group_id') as $user)
+                                    <tr id="user{{$user->id}}" data-id="{{$user->id}}">
+                                    <td>{{$user->group_id}} - {{$user->name}}</td>
+                                    <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
+                                    <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
+                                    <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endcan
                 </div>
             </div>
         @endforeach
