@@ -43,7 +43,7 @@ return [
 	'longest_hold_time'			=> 'Tiempo de Espera Más Largo (minutos)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutos',
-	'no_data'					=> 'Aún Sin Datos',
+	'no_data'					=> 'Datos No Disponibles',
 	'non_callable'				=> 'No Invocable',
 	'non_callable_by_disp'		=> 'Conductores no Invocables por Disposición',
 	'none_selected'				=> 'Nada Seleccionado',
@@ -80,7 +80,6 @@ return [
 	'wrapup'					=> 'Finalizando',
 
 	/// dataTable
-	'no_data'	=> 'No hay datos disponibles en la tabla',
 	'info'		=> 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
 	'info_empty'=> 'Mostrando 0 a 0 de 0 entradas',
 	'info_filtered'=>'(filtrado de _MAX_ entradas totales)',

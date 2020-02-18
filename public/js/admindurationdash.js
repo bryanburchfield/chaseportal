@@ -92,6 +92,8 @@ var Dashboard = {
 				$('#total_minutes .total').html(Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds));
 				$('#total_calls .total').html(response.call_volume.total_calls);
 
+				$('#callstatus_by_minutes_graph, #calls_minutes_per_day_graph, #calls_by_campaign').parent().find('.no_data').remove();
+
 				////////////////////////////////////////////////////////////
 				////    MINUTES BY CALLSTATUS DOUGNUT GRAPH
 				///////////////////////////////////////////////////////////
@@ -100,177 +102,184 @@ var Dashboard = {
 				    window.minutes_by_callstatus_chart.destroy();
 				}
 
-				const callstatuses_obj = response.call_volume.callstatuses
-                const callstatuses_obj_keys = Object.getOwnPropertyNames(callstatuses_obj);
-                var chart_colors_array = Master.return_chart_colors_hash(callstatuses_obj_keys);
+				if(Object.keys(response.call_volume.callstatuses).length){
+					const callstatuses_obj = response.call_volume.callstatuses
+	                const callstatuses_obj_keys = Object.getOwnPropertyNames(callstatuses_obj);
+	                var chart_colors_array = Master.return_chart_colors_hash(callstatuses_obj_keys);
 
-				let callstatuses = [];
+					let callstatuses = [];
 
-				if (callstatuses_obj_keys.length) {
-				    for (let i = 0; i < callstatuses_obj_keys.length; i++) {
-				        callstatuses.push(Object.values(callstatuses_obj)[i]['Minutes']);
-				    }
+					if (callstatuses_obj_keys.length) {
+					    for (let i = 0; i < callstatuses_obj_keys.length; i++) {
+					        callstatuses.push(Object.values(callstatuses_obj)[i]['Minutes']);
+					    }
+					}
+
+					var callstatus_by_minutes_data = {
+						datasets: [{
+							data:callstatuses,
+							backgroundColor: chart_colors_array,
+						}],
+					    labels: callstatuses_obj_keys,
+					    elements: {
+					        center: {
+					            color: '#203047',
+					            fontStyle: 'Segoeui',
+					            sidePadding: 15
+					        }
+					    },
+					};
+
+					var callstatus_by_minutes_options = {
+					    responsive: true,
+					    legend: {
+					        display: false
+					    },
+					    tooltips: {
+					        enabled: true,
+					    }
+					}
+
+					var ctx = document.getElementById('callstatus_by_minutes_graph').getContext('2d');
+
+					if (window.minutes_by_callstatus_chart != undefined) {
+	                    window.minutes_by_callstatus_chart.destroy();
+	                }
+
+					window.minutes_by_callstatus_chart = new Chart(ctx, {
+					    type: 'doughnut',
+					    data: callstatus_by_minutes_data,
+					    options: callstatus_by_minutes_options
+					});
+				}else{
+					$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#callstatus_by_minutes_graph');
 				}
-
-				var callstatus_by_minutes_data = {
-					datasets: [{
-						data:callstatuses,
-						backgroundColor: chart_colors_array,
-					}],
-				    labels: callstatuses_obj_keys,
-				    elements: {
-				        center: {
-				            color: '#203047',
-				            fontStyle: 'Segoeui',
-				            sidePadding: 15
-				        }
-				    },
-				};
-
-				var callstatus_by_minutes_options = {
-				    responsive: true,
-				    legend: {
-				        display: false
-				    },
-				    tooltips: {
-				        enabled: true,
-				    }
-				}
-
-				var ctx = document.getElementById('callstatus_by_minutes_graph').getContext('2d');
-
-				if (window.minutes_by_callstatus_chart != undefined) {
-                    window.minutes_by_callstatus_chart.destroy();
-                }
-
-				window.minutes_by_callstatus_chart = new Chart(ctx, {
-				    type: 'doughnut',
-				    data: callstatus_by_minutes_data,
-				    options: callstatus_by_minutes_options
-				});
 
 				////////////////////////////////////////////////////////////
 				////    CALLS & MINUTES PER DAY BAR GRAPH
 				///////////////////////////////////////////////////////////
 
-				const calls_minutes_per_day_obj = response.call_volume.dates
-                const calls_minutes_per_day_obj_keys = Object.getOwnPropertyNames(calls_minutes_per_day_obj);
-                var chart_colors_array = Master.return_chart_colors_hash(calls_minutes_per_day_obj_keys);
-				let call_minutes = [];
-				let call_count = [];
-
-				if (calls_minutes_per_day_obj_keys.length) {
-				    for (let i = 0; i < calls_minutes_per_day_obj_keys.length; i++) {
-				        call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
-				        call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
-				    }
+				if (window.calls_minutes_per_day_chart != undefined) {
+				    window.calls_minutes_per_day_chart.destroy();
 				}
 
-				var calls_minutes_per_day_data = {
-                 	labels: calls_minutes_per_day_obj_keys,
-                    datasets: [
-                      {
-                        yAxisID: 'A',
-                        label: Lang.get('js_msgs.call_time'),
-                        backgroundColor: chartColors.green,
-                        data: call_minutes
-                      },
-                      {
-                        yAxisID: 'B',
-                        label: Lang.get('js_msgs.call_count'),
-                        backgroundColor: chartColors.orange,
-                        fillOpacity: .5, 
-                        data: call_count
-                      }
-                    ]
-                };
+				if(Object.keys(response.call_volume.dates).length){
+					const calls_minutes_per_day_obj = response.call_volume.dates
+	                const calls_minutes_per_day_obj_keys = Object.getOwnPropertyNames(calls_minutes_per_day_obj);
+	                var chart_colors_array = Master.return_chart_colors_hash(calls_minutes_per_day_obj_keys);
+					let call_minutes = [];
+					let call_count = [];
 
-                var calls_minutes_per_day_options={
-                    responsive: true,
-                    maintainAspectRatio:false,
-                    legend: {  
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 12,
-                            fontColor: Master.tick_color,
-                        } 
-                    },
-                    scales: {
-                        xAxes: [{
-                            ticks: {
-                                fontColor: Master.tick_color,
-                            },
-                            gridLines: {
-                                color: Master.gridline_color,
-                            },
-                        }],
-                        yAxes: [
+					if (calls_minutes_per_day_obj_keys.length) {
+					    for (let i = 0; i < calls_minutes_per_day_obj_keys.length; i++) {
+					        call_minutes.push(Object.values(calls_minutes_per_day_obj)[i]['Seconds']);
+					        call_count.push(Object.values(calls_minutes_per_day_obj)[i]['Count']);
+					    }
+					}
 
-                            {
-                                gridLines: {
-                                    color: Master.gridline_color,
-                                },
-                                id:'A',
-                                type: 'linear',
-                                position:'left',
-                                scalePositionLeft: true,
-                                scaleLabel: {
-                                    fontColor: Master.tick_color,
-                                    display: true,
-                                    labelString: Lang.get('js_msgs.minutes')
-                                },
-                                ticks: {
-                                    beginAtZero: true,
-                                    callback: function(value, index, values) {
-                                       return Math.round(parseInt(value) / 60);
-                                    }
-                                }
-                            },
-                            {
-                                id:'B',
-                                type: 'linear',
-                                position:'right',
-                                scalePositionLeft: false,
-                                scaleLabel: {
-                                    fontColor: Master.tick_color,
-                                    display: true,
-                                    labelString: Lang.get('js_msgs.call_count')
-                                },
-                                ticks: {
-                                    fontColor: Master.tick_color,
-                                    beginAtZero: true,
-                                }
-                            }
+					var calls_minutes_per_day_data = {
+	                 	labels: calls_minutes_per_day_obj_keys,
+	                    datasets: [
+	                      {
+	                        yAxisID: 'A',
+	                        label: Lang.get('js_msgs.call_time'),
+	                        backgroundColor: chartColors.green,
+	                        data: call_minutes
+	                      },
+	                      {
+	                        yAxisID: 'B',
+	                        label: Lang.get('js_msgs.call_count'),
+	                        backgroundColor: chartColors.orange,
+	                        fillOpacity: .5, 
+	                        data: call_count
+	                      }
+	                    ]
+	                };
 
-                        ]
-                    },
-                    tooltips: {
-                        enabled: true,
-                        mode: 'single',
-                        callbacks: {
-                            label: function (tooltipItems, data) {
-                                if (tooltipItems.datasetIndex === 0) {
-                                    return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
-                                }else{
-                                    return tooltipItems.yLabel;
-                                }
-                            }
-                        }
-                    }
-                }
+	                var calls_minutes_per_day_options={
+	                    responsive: true,
+	                    maintainAspectRatio:false,
+	                    legend: {  
+	                        position: 'bottom',
+	                        labels: {
+	                            boxWidth: 12,
+	                            fontColor: Master.tick_color,
+	                        } 
+	                    },
+	                    scales: {
+	                        xAxes: [{
+	                            ticks: {
+	                                fontColor: Master.tick_color,
+	                            },
+	                            gridLines: {
+	                                color: Master.gridline_color,
+	                            },
+	                        }],
+	                        yAxes: [
 
-                if (window.calls_minutes_per_day_chart != undefined) {
-                    window.calls_minutes_per_day_chart.destroy();
-                }
+	                            {
+	                                gridLines: {
+	                                    color: Master.gridline_color,
+	                                },
+	                                id:'A',
+	                                type: 'linear',
+	                                position:'left',
+	                                scalePositionLeft: true,
+	                                scaleLabel: {
+	                                    fontColor: Master.tick_color,
+	                                    display: true,
+	                                    labelString: Lang.get('js_msgs.minutes')
+	                                },
+	                                ticks: {
+	                                    beginAtZero: true,
+	                                    callback: function(value, index, values) {
+	                                       return Math.round(parseInt(value) / 60);
+	                                    }
+	                                }
+	                            },
+	                            {
+	                                id:'B',
+	                                type: 'linear',
+	                                position:'right',
+	                                scalePositionLeft: false,
+	                                scaleLabel: {
+	                                    fontColor: Master.tick_color,
+	                                    display: true,
+	                                    labelString: Lang.get('js_msgs.call_count')
+	                                },
+	                                ticks: {
+	                                    fontColor: Master.tick_color,
+	                                    beginAtZero: true,
+	                                }
+	                            }
 
-                var ctx = document.getElementById('calls_minutes_per_day_graph').getContext('2d');
+	                        ]
+	                    },
+	                    tooltips: {
+	                        enabled: true,
+	                        mode: 'single',
+	                        callbacks: {
+	                            label: function (tooltipItems, data) {
+	                                if (tooltipItems.datasetIndex === 0) {
+	                                    return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
+	                                }else{
+	                                    return tooltipItems.yLabel;
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
 
-                window.calls_minutes_per_day_chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: calls_minutes_per_day_data,
-                    options: calls_minutes_per_day_options
-                });
+	                var ctx = document.getElementById('calls_minutes_per_day_graph').getContext('2d');
 
+	                window.calls_minutes_per_day_chart = new Chart(ctx, {
+	                    type: 'bar',
+	                    data: calls_minutes_per_day_data,
+	                    options: calls_minutes_per_day_options
+	                });
+				}else{
+					$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#calls_minutes_per_day_graph');
+				}
 
                 ///// CALLS BY CAMPAIGN TABLE
                 $('#calls_by_campaign tbody').empty();
@@ -282,11 +291,11 @@ var Dashboard = {
 	                }
 
 	                calls_by_campaign_trs+= '<tr class="results"><td><b>Total</b></td><td><b>'+Master.formatNumber(response.call_volume.total_calls)+'</b></td><td><b>'+Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds)+'</b></td></tr>';
+	                $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
+	            }else{
+	            	$('<div class="alert alert-info no_data top45">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#calls_by_campaign');
 	            }
-
-                $('#calls_by_campaign tbody').append(calls_by_campaign_trs);
 			}
-
 		});
 	},
 

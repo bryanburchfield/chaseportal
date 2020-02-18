@@ -43,7 +43,7 @@ return [
 	'longest_hold_time'			=> 'Longest Hold Time (minutes)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutes',
-	'no_data'					=> 'No Data Yet',
+	'no_data'					=> 'No Data Available ',
 	'non_callable'				=> 'Non Callable',
 	'non_callable_by_disp'		=> 'Non-Callable Leads by Disposition',
 	'none_selected'				=> 'None Selected',
@@ -80,7 +80,6 @@ return [
 	'wrapup'					=> 'Wrapup',
 
 	/// dataTable
-	'no_data'	=> 'No data available in table',
 	'info'		=> 'Showing _START_ to _END_ of _TOTAL_ entries',
 	'info_empty'=> 'Showing 0 to 0 of 0 entries',
 	'info_filtered'=>'(filtered from _MAX_ total entries)',
