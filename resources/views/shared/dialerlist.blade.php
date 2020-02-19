@@ -50,7 +50,7 @@
                     </h4>
                 </div>
 
-                <div id="{{$mode}}_dialer{{$db}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{$mode}}_heading{{$db}}">
+                <div id="{{$mode}}_dialer{{$db}}" class="panel-collapse {{Auth::User()->isType('superadmin') ? 'collapse' : ''}}" role="tabpanel" aria-labelledby="{{$mode}}_heading{{$db}}">
 
                     @can('accessSuperAdmin')
                         @php
