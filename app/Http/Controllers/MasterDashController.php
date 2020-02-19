@@ -38,6 +38,8 @@ class MasterDashController extends Controller
             $page['type'] = 'kpi_page';
         }
 
+        $page['menu'] = $this->pageMenu($this->currentDash);
+
         $dashbody = 'dashboards.' . $this->currentDash;
 
         $data = [
@@ -55,6 +57,16 @@ class MasterDashController extends Controller
         ];
 
         return view('masterdash')->with($data);
+    }
+
+    private function pageMenu($page)
+    {
+        $pagemenus = [
+            'admindurationdash' => 'admin',
+            'admindistinctagentdash' => 'admin',
+        ];
+
+        return (isset($pagemenus[$page])) ? $pagemenus[$page] : 'base';
     }
 
     public function demoLogin(Request $request)
@@ -84,6 +96,22 @@ class MasterDashController extends Controller
         Auth::loginUsingId($user->id);
 
         return view('demo.welcome', ['user' => $user]);
+    }
+
+    public function adminDistinctAgentDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'admindistinctagentdash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function adminDurationDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'admindurationdash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
     }
 
     public function inboundDashboard(Request $request)
@@ -212,10 +240,6 @@ class MasterDashController extends Controller
         $theme = ($theme ? 'dark' : 'light');
         User::where('id', $user->id)->update(array('theme' => $theme));
 
-        if ($user->user_type == 'admin') {
-            return redirect('/dashboards/admin#settings');
-        } else {
-            return redirect()->back();
-        }
+        return redirect()->back();
     }
 }

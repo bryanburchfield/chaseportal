@@ -40,10 +40,11 @@ return [
 	'inbound'					=> 'Entrante',
 	'interval_updated'			=> 'Intervalo Actualizado Exitosamente',
 	'large_dl_warning'			=> 'El informe es demasiado pesado para descargar. Por favor corra informes más pequeños o escoja un formato diferente',
+	'logins_per_day'			=> 'Inicios de Sesión Por Día',
 	'longest_hold_time'			=> 'Tiempo de Espera Más Largo (minutos)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutos',
-	'no_data'					=> 'Aún Sin Datos',
+	'no_data'					=> 'Datos No Disponibles',
 	'non_callable'				=> 'No Invocable',
 	'non_callable_by_disp'		=> 'Conductores no Invocables por Disposición',
 	'none_selected'				=> 'Nada Seleccionado',
@@ -78,4 +79,20 @@ return [
 	'voicemails'				=> 'Mensajes de Voz',
 	'waiting'					=> 'Esperando',
 	'wrapup'					=> 'Finalizando',
+
+	/// dataTable
+	'info'		=> 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
+	'info_empty'=> 'Mostrando 0 a 0 de 0 entradas',
+	'info_filtered'=>'(filtrado de _MAX_ entradas totales)',
+	'length_menu'	=> 'Mostrar entradas de _MENU_',
+	'loading'	=> 'Cargando',
+	'processing'=> 'Procesando',
+	'zero_records'	=> 'No se encontraron registros coincidentes',
+	'first'		=> 'Primero',
+	'last'		=> 'Último',
+	'next'		=> 'Próximo',
+	'previous'	=> 'Previo',
+	'ascending' => ': activar para ordenar la columna ascendente',
+	'descending'=> ': activar para ordenar la columna descendente'
+
 ];

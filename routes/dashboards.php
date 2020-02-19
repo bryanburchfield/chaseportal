@@ -11,6 +11,12 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
 
+        // Admin only dashboards
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
+            Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
+        });
+
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
         Route::post('/kpi/recipients', 'KpiController@addRecipient');
@@ -40,17 +46,31 @@ Route::prefix('dashboards')->group(function () {
         // Admin only
         // prefix('admin') isn't working for some reason
         Route::group(['middleware' => 'can:accessAdmin'], function () {
-            Route::get('admin/', 'AdminController@index');
             Route::post('admin/add_user', 'AdminController@addUser');
-            Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
             Route::post('admin/delete_user', 'AdminController@deleteUser');
             Route::post('admin/get_user', 'AdminController@getUser');
             Route::post('admin/update_user', 'AdminController@updateUser');
-            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
+            Route::get('admin/cdr_lookup', 'AdminController@loadCdrLookup');
             Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
-            Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::post('admin/get_client_tables', 'AdminController@getClientTables');
             Route::post('admin/get_table_fields', 'AdminController@getTableFields');
+            Route::get('admin/manage_users', 'AdminController@manageUsers');
+            Route::get('admin/duration_dashboard', 'AdminController@durationDashboard');
+            Route::get('admin/distinct_agent_dashboard', 'AdminController@distinctAgentDashboard');
+            Route::post('admin/load_admin_nav', function () {
+                return view('shared.admin_sidenav');
+            });
+            Route::post('admin/load_sidenav', function () {
+                return view('shared.sidenav');
+            });
+        });
+
+        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+            Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
+            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
+            Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
+            Route::post('admin/edit_myself', 'AdminController@editMyself');
+            Route::get('admin/settings', 'AdminController@settings');
         });
     });
 });

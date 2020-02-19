@@ -302,6 +302,11 @@ span {
   color: #ddd;
 }
 
+#sidebar ul li.active > a:hover,
+#sidebar ul li a[aria-expanded=true] > a:hover {
+  color: #e49831;
+}
+
 #sidebar ul li a {
   text-align: left;
   padding: 10px;
@@ -1394,8 +1399,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_rule button.multiselect,
 .update_rule .form-control,
 .edit_myself select,
-.demo_user select,
-.demo_user .form-control,
+.add_user input.form-control,
+.edit_user input.form-control,
+.edit_myself input.form-control,
 #webhook_generator input.form-control,
 #webhook_generator select,
 .add_provider .form-control,
@@ -1405,7 +1411,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_campaign_form .form-control,
 .add_esp .form-control,
 .edit_esp .form-control,
-#campaignFilterModal .form-control {
+#campaignFilterModal .form-control,
+input.datepicker_only,
+select.input-sm {
   background: #eee !important;
 }
 
@@ -2911,6 +2919,10 @@ td.bg-danger {
   top: 25px;
 }
 
+.dataTables_filter label input {
+  margin: 0 5px 10px 5px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -3067,14 +3079,6 @@ MEDIAQUERIES
 }
 
 @media (min-width: 768px) {
-  .nopadleft {
-    padding-left: 0;
-  }
-
-  .nopadright {
-    padding-right: 0;
-  }
-
   .pl0 {
     padding-left: 0;
   }
@@ -3156,11 +3160,11 @@ MEDIAQUERIES
   }
 
   .nopadleft {
-    padding: 0;
+    padding-left: 0;
   }
 
   .nopadright {
-    padding: 0;
+    padding-right: 0;
   }
 
   .col-xs-3.brand {

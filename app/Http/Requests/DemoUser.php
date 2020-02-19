@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use App\Rules\UniqueEmail;
-use App\Rules\UniqueName;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,10 +34,7 @@ class DemoUser extends FormRequest
 
         // expiration only required on add
         return [
-            'name' => [
-                'required',
-                new UniqueName($user),
-            ],
+            'name' => 'required',
             'email' => [
                 'nullable',
                 new UniqueEmail($user),

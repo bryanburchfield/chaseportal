@@ -10,6 +10,7 @@ var Master = {
 		grey: 'rgb(68,68,68)'
 	},
 
+    page_menuitem:$('#sidebar').find('.page_menuitem').val(),
 	curpage: '',
 	pagesize: '',
 	pag_link: '',
@@ -102,6 +103,7 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
+
         // $('.upload_email_template').on('click', this.upload_email_template);
         $('.add_esp').on('submit', this.add_esp);
         $('.edit_server_modal').on('click', this.edit_server_modal);
@@ -124,6 +126,8 @@ var Master = {
         $('.camp_filters_link').on('click', this.goto_camp_filters);
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.cancel_modal_form').on('click', this.cancel_modal_form);
+        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
+        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     hide_modal_error:function(){
@@ -2311,13 +2315,6 @@ var Master = {
 
         var that = $(this).parent();
         var form_data = $(that).serialize();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
         $.ajax({
             url: '/tools/email_drip/test_connection ',
             type: 'POST',
@@ -2347,6 +2344,51 @@ var Master = {
                     $(that).find('.alert-danger').text('Connection Failed').show();
                 }
             }
+        });
+    },
+
+    update_sidenav:function(e){
+        e.preventDefault();
+        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
+            Master.page_menuitem = $('.page_menuitem').val();
+        }else{
+            $('.page_menuitem').each(function(){
+                $(this).val(Master.page_menuitem);
+            });
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $('#sidebar').empty();
+
+        if($(this).hasClass('back_to_sidenav')){
+            var path = '/dashboards/admin/load_sidenav';
+        }else{
+            var path = '/dashboards/admin/load_admin_nav';
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+
+        $.ajax({
+            url: path,
+            type: 'POST',
+            dataType: 'html',
+            data: { },
+            success: function (response) {
+                $('#sidebar').append(response);
+                $('ul.list-unstyled.components').find('li').each(function(){
+                    if($(this).data('page') == Master.page_menuitem){
+                        $(this).addClass('active');
+                    }
+                });
+            }
+        });
+
+        $("body").bind("DOMNodeInserted", function() {
+            $('.page_menuitem').val(Master.page_menuitem);
         });
     },
 
@@ -2971,6 +3013,7 @@ $(document).ready(function () {
             x++;
         }
     });
+
 });
 
 // populate dnc file upload name in input

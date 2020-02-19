@@ -40,10 +40,11 @@ return [
 	'inbound'					=> 'Inbound',
 	'interval_updated'			=> 'Interval successfully updated',
 	'large_dl_warning'			=> 'Report is too large to download. Please run smaller reports or choose a different format',
+	'logins_per_day'			=> 'Logins Per Day',
 	'longest_hold_time'			=> 'Longest Hold Time (minutes)',
 	'manual'					=> 'Manual',
 	'minutes'					=> 'Minutes',
-	'no_data'					=> 'No Data Yet',
+	'no_data'					=> 'No Data Available ',
 	'non_callable'				=> 'Non Callable',
 	'non_callable_by_disp'		=> 'Non-Callable Leads by Disposition',
 	'none_selected'				=> 'None Selected',
@@ -78,4 +79,19 @@ return [
 	'voicemails'				=> 'Voicemails',
 	'waiting'					=> 'Waiting',
 	'wrapup'					=> 'Wrapup',
+
+	/// dataTable
+	'info'		=> 'Showing _START_ to _END_ of _TOTAL_ entries',
+	'info_empty'=> 'Showing 0 to 0 of 0 entries',
+	'info_filtered'=>'(filtered from _MAX_ total entries)',
+	'length_menu'	=> 'Show _MENU_ entries',
+	'loading'	=> 'Loading',
+	'processing'=> 'Processing',
+	'zero_records'	=> 'No matching records found',
+	'first'		=> 'First',
+	'last'		=> 'Last',
+	'next'		=> 'Next',
+	'previous'	=> 'Previous',
+	'ascending' => ': activate to sort column ascending',
+	'descending'=> ': activate to sort column descending'
 ];
