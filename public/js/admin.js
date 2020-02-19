@@ -25,7 +25,7 @@ var Admin = {
 		$('.generate_url').on('click', this.generate_url);
 		$('.checkall_system_macro').on('click', this.toggleall_system_macro);
 		$('body').on('dblclick', '.field_name', this.edit_field_name);
-		$('.preloader').fadeOut('slow');
+		// $('.preloader').fadeOut('slow');
 	},
 
 	// add global user

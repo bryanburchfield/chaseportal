@@ -57,11 +57,8 @@ var Dashboard = {
 	time: new Date().getTime(),
 
 	init:function(){
-
-		// dashboard widgets
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
 		    Master.check_reload();
-		    $('.preloader').fadeOut('slow');
 		});
 	},
 
@@ -277,7 +274,11 @@ var Dashboard = {
 		                }
 	            	}
     	        });
+
                 $('table#actions').addClass('bs-select');
+
+                // fade out preloader here because .done is not working
+	            $('.preloader').fadeOut('slow');
 			}
 		});
 	},
@@ -285,12 +286,10 @@ var Dashboard = {
 	refresh: function (datefilter, campaign) {
 
 	    $.when(
-	        this.call_volume(datefilter, this.chartColors),
-	        ).done(function () {
-	            Master.check_reload();
+	        this.call_volume(datefilter, this.chartColors)).done(function () {
 	            $('.preloader').fadeOut('slow');
+	            Master.check_reload();
 	        });
-
 	},
 }
 

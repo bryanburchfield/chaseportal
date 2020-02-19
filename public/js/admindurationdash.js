@@ -57,10 +57,7 @@ var Dashboard = {
 	time: new Date().getTime(),
 
 	init:function(){
-
-		/// dashboard widgets
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
-		    $('.preloader').fadeOut('slow');
 		    Master.check_reload();
 		});
 	},
@@ -295,6 +292,9 @@ var Dashboard = {
 	            }else{
 	            	$('<div class="alert alert-info no_data top45">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#calls_by_campaign');
 	            }
+
+	            // fade out preloader here because .done is not working
+	            $('.preloader').fadeOut('slow');
 			}
 		});
 	},
@@ -302,13 +302,10 @@ var Dashboard = {
 	refresh: function (datefilter, campaign) {
 
 	    $.when(
-	        this.call_volume(datefilter, this.chartColors),
-	        ).done(function () {
+	        this.call_volume(datefilter, this.chartColors)).done(function () {
 	            $('.preloader').fadeOut('slow');
-	            // Dashboard.resizeCardTableDivs();
 	            Master.check_reload();
 	        });
-
 	},
 }
 
