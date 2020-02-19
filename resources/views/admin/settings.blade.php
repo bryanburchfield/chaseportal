@@ -3,9 +3,6 @@
 
 @section('content')
 <div class="preloader"></div>
-<?php
-	//dd($default_lead_fields);
-?>
 <div class="wrapper">
 
 	@include('shared.admin_sidenav')
@@ -65,3 +62,4 @@
 </div>
 
 @include('shared.reportmodal')
+@endsection
