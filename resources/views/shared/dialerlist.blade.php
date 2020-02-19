@@ -23,6 +23,10 @@
     ?>
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
+                // Bail if not superadmin and not this user's dialer
+                if(!Auth::User()->isType('superadmin') && Auth::User()->db != $dialer->reporting_db) {
+                    continue;
+                }
                 $db = sprintf("%02d", $dialer->dialer_numb);
                 $users = $dialer->users(true);
                 $client_count = $dialer->group_count(true);
