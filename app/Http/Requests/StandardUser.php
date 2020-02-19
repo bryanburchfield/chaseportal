@@ -6,7 +6,6 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
 use App\Rules\UniqueEmail;
-use App\Rules\UniqueName;
 use Illuminate\Support\Facades\Auth;
 
 class StandardUser extends FormRequest
@@ -52,10 +51,7 @@ class StandardUser extends FormRequest
                     }
                 },
             ],
-            'name' => [
-                'required',
-                new UniqueName($user),
-            ],
+            'name' => 'required',
             'email' => [
                 'nullable',
                 new UniqueEmail($user),
