@@ -287,7 +287,6 @@ var Dashboard = {
 
 	    $.when(
 	        this.call_volume(datefilter, this.chartColors)).done(function () {
-	            $('.preloader').fadeOut('slow');
 	            Master.check_reload();
 	        });
 	},
