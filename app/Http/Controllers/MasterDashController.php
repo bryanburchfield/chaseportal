@@ -146,6 +146,23 @@ class MasterDashController extends Controller
         return $this->index($request);
     }
 
+    public function complianceDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'compliancedash']);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function complianceDashboardSettings(Request $request)
+    {
+        $request->merge(['dashboard' => 'compliancedash']);
+        $request->merge(['settings' => 1]);
+        $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
     public function kpi(Request $request)
     {
         $request->merge(['dashboard' => 'kpidash']);

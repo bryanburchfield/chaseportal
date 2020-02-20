@@ -10,6 +10,8 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/outbounddashboard', 'MasterDashController@outboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
+        Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
+        Route::get('/compliancedashboardsettings', 'MasterDashController@complianceDashboardSettings');
 
         // Admin only dashboards
         Route::group(['middleware' => 'can:accessAdmin'], function () {
