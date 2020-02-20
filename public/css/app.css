@@ -381,6 +381,28 @@ span {
   transform: translateX(50%);
 }
 
+#sidebar_nots {
+  min-width: 300px;
+  max-width: 300px;
+  color: #fff;
+  background: #efefef;
+  border-left: 1px solid #abbdd8;
+  transition: all, ease, 0.3s;
+}
+
+#sidebar_nots.active {
+  min-width: 300px;
+  max-width: 300px;
+}
+
+#sidebar_nots.active .dropdown-toggle::after {
+  top: auto;
+  bottom: 10px;
+  right: 50%;
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+}
+
 button,
 button:active,
 button:focus {
@@ -1998,6 +2020,12 @@ a.run_kpi.btn {
   margin-left: -80px !important;
 }
 
+#sidebar_nots {
+  min-width: 0px;
+  max-width: 0px;
+  margin-right: 0px !important;
+}
+
 .dropdown-toggle::after {
   top: auto;
   bottom: 10px;
@@ -2924,6 +2952,36 @@ td.bg-danger {
 
 .dataTables_filter label input {
   margin: 0 5px 10px 5px;
+}
+
+.btn-notifications {
+  background: none;
+  color: #33A09B;
+  position: relative;
+  font-size: 18px;
+  bottom: 2px;
+}
+
+.btn-notifications:hover {
+  color: #E15B23;
+}
+
+.btn-notifications:hover span.numb_notifications {
+  background: #33A09B;
+  color: #fff;
+}
+
+span.numb_notifications {
+  position: relative;
+  bottom: 10px;
+  right: 7px;
+  background: #E15B23;
+  color: #fff;
+  height: 17px;
+  width: 17px;
+  border-radius: 20px;
+  padding: 1px 0 0;
+  font-size: 11px;
 }
 
 /* ---------------------------------------------------

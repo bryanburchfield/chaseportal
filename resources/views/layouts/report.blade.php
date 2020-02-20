@@ -66,6 +66,8 @@
                 </div>
             </div>
         </div>
+
+        @include('shared.notifications_bar')
     </div>
     @include('shared.reportmodal')
     
@@ -99,6 +101,10 @@
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
+            });
+
+            $('.btn-notifications, .close_nots_bar').on('click', function () {
+                $('#sidebar_nots').toggleClass('active');
             });
         });
     </script>

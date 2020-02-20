@@ -320,6 +320,48 @@ i, span {
     }
 }
 
+#sidebar_nots {
+    min-width: 300px;
+    max-width: 300px;
+    color: #aaa;
+    background: #0f131f; 
+    border-left: 1px solid darken(#23354e,10%);
+    @include transition(all, ease, 0.3s);
+
+    &.active {
+        min-width: 300px;
+        max-width: 300px;
+
+        .dropdown-toggle::after {
+            top: auto;
+            bottom: 10px;
+            right: 50%;
+            -webkit-transform: translateX(50%);
+            -ms-transform: translateX(50%);
+            transform: translateX(50%);
+        }
+    }
+
+    .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#aaa;&:hover{color:#eee;}}
+
+    .not_header{
+        padding-top: 20px;
+        .not_header_inner{
+            padding-left: 13px;
+            padding-right: 13px;
+        }
+
+        h4{
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        label{
+            color:darken(#aaa,10%);
+        }
+    }
+}
 
 button, button:active, button:focus {
     outline: none !important;
@@ -1863,6 +1905,12 @@ a.run_kpi.btn {
     margin-left: -80px !important;
 }
 
+#sidebar_nots {
+    min-width: 0px;
+    max-width: 0px;
+    margin-right: 0px !important;
+}
+
 .dropdown-toggle::after {
     top: auto;
     bottom: 10px;
@@ -1874,6 +1922,10 @@ a.run_kpi.btn {
 
 #sidebar.active {
     margin-left: 0 !important;
+}
+
+#sidebar_nots.active {
+    // margin-right: 250px !important;
 }
 
 /* collapses sidebar on mobile, stop removing, its fkn needed*/
@@ -2765,6 +2817,29 @@ td.bg-danger{
 
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
+}
+
+.btn-notifications{
+    background:none;
+    color:#fff;
+    position:relative;
+    font-size: 18px;
+    bottom:2px;
+    &:hover{color: $green;}
+    &:hover span.numb_notifications{background: #fff;color:$green;}
+}
+
+span.numb_notifications{
+    position:relative;
+    bottom:10px;
+    right:7px;
+    background: $orange;
+    color:#fff;
+    height: 17px;
+    width: 17px;
+    @include border-radius(20px);
+    padding: 1px 0 0;
+    font-size: 11px;
 }
 
 /* ---------------------------------------------------
