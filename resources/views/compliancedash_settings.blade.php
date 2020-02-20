@@ -12,23 +12,19 @@
         <div class="col-sm-12 card">
     	    <form action="#" method="post" class="form">
     	    	@csrf
-    			@foreach ($pause_codes as $key => $value)
+    			@foreach ($pause_codes as $key => $rec)
     				<div class="form-group col-sm-4">
-    					<label>Code</label>
-    	    			<select name="" id="" class="form-control">
-    	    				<option value="">Select One</option>
-    						<option value="{{ $value['code'] }}">{{$value['code']}}</option>
-    					</select>
+    					<label>{{ $rec['code'] }}</label>
 					</div>
 
 					<div class="form-group col-sm-4">
 						<label>Minutes Per Day</label>
-						<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$key['minutes_per_day']}}">
+						<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$rec['minutes_per_day']}}">
 					</div>
 
 					<div class="form-group col-sm-4">
 						<label>Times Per Day</label>
-						<input type="text" class="form-control times_per_day" name="times_per_day" value="{{$key['times_per_day']}}">
+						<input type="text" class="form-control times_per_day" name="times_per_day" value="{{$rec['times_per_day']}}">
 					</div>
     			@endforeach
 
