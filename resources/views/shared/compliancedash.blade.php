@@ -4,6 +4,6 @@
 <div class="row">
 Dash cards go here
 <p>
-<a href="{{ action('MasterDashController@complianceDashboardSettings') }}">Go To Settings</a>
+<a href="{{ action('ComplianceDashController@settingsIndex') }}">Go To Settings</a>
 </p>
 </div>

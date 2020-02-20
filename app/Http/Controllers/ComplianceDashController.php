@@ -40,6 +40,21 @@ class ComplianceDashController extends Controller
         return view('compliancedash')->with($data);
     }
 
+    public function settingsIndex()
+    {
+        $page = [
+            'menuitem' => 'compliancedash',
+            'type' => 'page',
+        ];
+
+        $data = [
+            'page' => $page,
+            'pause_codes' => $this->getPauseCodes(),
+        ];
+
+        return view('dashboards.compliance_settings')->with($data);
+    }
+
     public function getPauseCodes()
     {
         // get pause codes from our settings table
