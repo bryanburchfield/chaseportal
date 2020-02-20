@@ -11,6 +11,7 @@
 
         <div class="col-sm-12 card">
     	    <form action="#" method="post" class="form">
+    	    	@csrf
     			@foreach ($pause_codes as $key => $value)
     				<div class="form-group col-sm-4">
     					<label>Code</label>
