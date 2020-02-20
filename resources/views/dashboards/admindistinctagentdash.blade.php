@@ -38,7 +38,9 @@
         	<div class="col-sm-12 nopad">
     		    <div class="card-3 card blue" id="distinct_reps_per_camp">
     		        <h1 class="title mb20">{{__('widgets.distinct_reps_per_camp')}}</h1>
-    		        <canvas id="distinct_reps_per_camp_graph"></canvas>
+                    <div class="front p20 mbp35">
+    		          <canvas id="distinct_reps_per_camp_graph"></canvas>
+                  </div>
     		    </div><!-- end card -->
     		</div><!-- end column -->
     	</div><!-- end column -->
