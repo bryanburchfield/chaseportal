@@ -81,6 +81,7 @@ var Dashboard = {
 			},
 
 			success: function (response) {
+				console.log(response);
 
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
@@ -111,13 +112,12 @@ var Dashboard = {
 					        callstatuses.push(Object.values(callstatuses_obj)[i]['Minutes']);
 					    }
 					}
-
+					console.log(callstatuses);
 					var callstatus_by_minutes_data = {
 						datasets: [{
 							data:callstatuses,
 							backgroundColor: chart_colors_array,
 						}],
-					    labels: callstatuses_obj_keys,
 					    elements: {
 					        center: {
 					            color: '#203047',
@@ -125,23 +125,24 @@ var Dashboard = {
 					            sidePadding: 15
 					        }
 					    },
+					    labels: callstatuses_obj_keys,
 					};
 
 					var callstatus_by_minutes_options = {
 					    responsive: true,
 					    legend: {
-					        display: false
-					    },
+                        	display: false,
+                        	fontColor: Master.tick_color,
+	                        labels: {
+	                            fontColor: Master.tick_color
+	                        },
+	                    },
 					    tooltips: {
 					        enabled: true,
 					    }
 					}
 
 					var ctx = document.getElementById('callstatus_by_minutes_graph').getContext('2d');
-
-					if (window.minutes_by_callstatus_chart != undefined) {
-	                    window.minutes_by_callstatus_chart.destroy();
-	                }
 
 					window.minutes_by_callstatus_chart = new Chart(ctx, {
 					    type: 'doughnut',
@@ -230,7 +231,7 @@ var Dashboard = {
 	                                ticks: {
 	                                    beginAtZero: true,
 	                                    callback: function(value, index, values) {
-	                                       return Math.round(parseInt(value) / 60);
+	                                       return Math.round((parseInt(value) /60) * 10) / 10;
 	                                    }
 	                                }
 	                            },
