@@ -52,7 +52,7 @@ class ComplianceDashController extends Controller
             'pause_codes' => $this->getPauseCodes(),
         ];
 
-        return view('dashboards.compliance_settings')->with($data);
+        return view('compliancedash_settings')->with($data);
     }
 
     public function getPauseCodes()
