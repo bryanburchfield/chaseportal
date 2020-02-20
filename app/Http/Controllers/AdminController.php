@@ -17,12 +17,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
+use Illuminate\View\View;
+use Illuminate\Contracts\View\Factory;
 
 class AdminController extends Controller
 {
     use TimeTraits;
     use SqlServerTraits;
 
+    /**
+     * Return admin sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadAdminNav()
+    {
+        return view('shared.admin_sidenav');
+    }
+
+    /**
+     * return regular sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadSideNav()
+    {
+        return view('shared.sidenav');
+    }
+
+    /**
+     * Set DB
+     *  
+     * @param string|null $db 
+     * @return void 
+     */
     private function setDb($db = null)
     {
         if (empty($db)) {
@@ -530,7 +558,7 @@ class AdminController extends Controller
 
         return ['fields' => array_values($result)];
     }
-    
+
     private function defaultLeadFields()
     {
         return [
