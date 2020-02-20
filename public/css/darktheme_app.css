@@ -1603,7 +1603,8 @@ input[type=number]::-webkit-outer-spin-button {
 #webhook_generator input.form-control,
 #webhook_generator select,
 input.datepicker_only,
-select.input-sm {
+select.input-sm,
+.add_custom_field input.form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
