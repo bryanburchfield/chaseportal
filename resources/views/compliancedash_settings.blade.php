@@ -8,7 +8,6 @@
 <div class="row">
     <div class="col-sm-12">
         <p><a href="{{ action('MasterDashController@complianceDashboard') }}">Back to Dashboard</a></p>
-
         <div class="card p0">
         	<table class="table">
         		<thead>
@@ -46,7 +45,7 @@
 		    	    </form>
         		</tbody>
         	</table>
-    	    
+
 	    </div>
     </div>
 </div>

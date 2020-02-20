@@ -85,7 +85,7 @@ class ComplianceDashController extends Controller
         return $pause_codes->sortBy('code');
     }
 
-    public function updateFilters(Request $request)
+    public function updateSettings(Request $request)
     {
         Log::debug($request->all());
     }
