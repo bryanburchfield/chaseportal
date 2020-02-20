@@ -23,7 +23,8 @@
 		    				<tr >
 			    				<td>
 				    				<div class="form-group">
-				    	    			<input type="text" class="form-control code" readonly name="code[]" value="{{ $pause_code['code'] }}">
+				    					<h4><b>{{$pause_code['code']}}</b></h4>
+				    	    			<input type="hidden" class="form-control code" readonly name="code[]" value="{{ $pause_code['code'] }}">
 									</div>
 			    				</td>
 
