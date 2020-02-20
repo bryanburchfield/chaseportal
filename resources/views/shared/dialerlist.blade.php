@@ -58,16 +58,16 @@
                         @endphp
 
                         <div class="panel-body nested">
-                            <div class="panel-group" id="group_accordion{{$db}}">
+                            <div class="panel-group" id="{{$mode}}_group_accordion{{$db}}">
                                 @foreach($groups as $id)
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="group_heading{{$id}}">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#group_accordion{{$db}}" aria-expanded="false" aria-controls="group_{{$db}}_{{$id}}">{{$id}}</a>
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#{{$mode}}_group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#{{$mode}}_group_accordion{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_group_{{$db}}_{{$id}}">{{$id}}</a>
                                         </h4>
                                     </div>
 
-                                    <div id="group_{{$db}}_{{$id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="group_heading{{$id}}">
+                                    <div id="{{$mode}}_group_{{$db}}_{{$id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="group_heading{{$id}}">
                                         <div class="panel-body">
                                             <table class="table table-responsive table-striped nobdr">
                                                 <thead>

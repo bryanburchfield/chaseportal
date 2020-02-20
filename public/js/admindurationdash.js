@@ -81,7 +81,6 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-				console.log(response);
 
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
@@ -112,7 +111,7 @@ var Dashboard = {
 					        callstatuses.push(Object.values(callstatuses_obj)[i]['Minutes']);
 					    }
 					}
-					console.log(callstatuses);
+
 					var callstatus_by_minutes_data = {
 						datasets: [{
 							data:callstatuses,
