@@ -112,8 +112,8 @@ class AdminDurationDashController extends Controller
         });
 
         // Convert secs to mins
-        foreach ($callstatuses as &$rec) {
-            $rec['Minutes'] = round($rec['Minutes'] / 60, 0);
+        foreach ($callstatuses as &$statrec) {
+            $statrec['Minutes'] = round($statrec['Minutes'] / 60, 0);
         }
 
         // Convert camp array to numeric index
