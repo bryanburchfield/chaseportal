@@ -20,6 +20,7 @@
 		    	    <form action="#" method="post" class="form compliance_settings">
 		    	    	@csrf
 		    			@foreach ($pause_codes as $pause_code)
+		    			<h1>test</h1>
 		    				<tr >
 			    				<td>
 				    				<div class="form-group">
