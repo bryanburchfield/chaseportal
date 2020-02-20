@@ -29,13 +29,13 @@
 
 								<td>
 									<div class="form-group">
-										<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$key['minutes_per_day']}}">
+										<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$value['minutes_per_day']}}">
 									</div>
 								</td>
 
 								<td>
 									<div class="form-group">
-										<input type="text" class="form-control times_per_day" name="times_per_day"  value="{{$key['times_per_day']}}">
+										<input type="text" class="form-control times_per_day" name="times_per_day"  value="{{$value['times_per_day']}}">
 									</div>
 								</td>
 							</tr>
