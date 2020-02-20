@@ -1417,7 +1417,8 @@ select.input-sm,
 input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
-.compliance_settings .form-control {
+.compliance_settings .form-control,
+.form-control.code {
   background: #eee !important;
 }
 

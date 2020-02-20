@@ -20,10 +20,10 @@
 		    	    <form action="#" method="post" class="form compliance_settings">
 		    	    	@csrf
 		    			@foreach ($pause_codes as $key => $value)
-		    				<tr>
+		    				<tr >
 			    				<td>
 				    				<div class="form-group">
-				    	    			<input type="text" class="form-control minutes_per_day" disabled name="minutes_per_day" value="{{ $value['code'] }}">
+				    	    			<input type="text" class="form-control code" disabled name="code" value="{{ $value['code'] }}">
 									</div>
 			    				</td>
 
