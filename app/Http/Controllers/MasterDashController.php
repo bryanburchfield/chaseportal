@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 class MasterDashController extends Controller
 {
     public $currentDash;
+    private $nojs = false;
 
     use DashTraits;
 
@@ -55,6 +56,10 @@ class MasterDashController extends Controller
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $db_list
         ];
+
+        if ($this->nojs) {
+            unset($data['jsfile']);
+        }
 
         return view('masterdash')->with($data);
     }
@@ -159,6 +164,7 @@ class MasterDashController extends Controller
         $request->merge(['dashboard' => 'compliancedash']);
         $request->merge(['settings' => 1]);
         $this->setDashboard($request);
+        $this->nojs = true;
 
         return $this->index($request);
     }
