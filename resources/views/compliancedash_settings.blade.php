@@ -9,31 +9,44 @@
     <div class="col-sm-12">
         <p><a href="{{ action('MasterDashController@complianceDashboard') }}">Back to Dashboard</a></p>
 
-        <div class="col-sm-12 card">
-    	    <form action="#" method="post" class="form">
-    	    	@csrf
-    			@foreach ($pause_codes as $key => $value)
-    				<div class="form-group col-sm-4">
-    					<label>Code</label>
-    	    			<select name="" id="" class="form-control">
-    	    				<option value="">Select One</option>
-    						<option value="{{ $value['code'] }}">{{$value['code']}}</option>
-    					</select>
-					</div>
+        <div class="card p0">
+        	<table class="table">
+        		<thead>
+        			<th>Code</th>
+        			<th>Minutes Per Day</th>
+        			<th># ofTimes Per Day</th>
+        		</thead>
 
-					<div class="form-group col-sm-4">
-						<label>Minutes Per Day</label>
-						<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$key['minutes_per_day']}}">
-					</div>
+        		<tbody>
+		    	    <form action="#" method="post" class="form compliance_settings">
+		    	    	@csrf
+		    			@foreach ($pause_codes as $key => $value)
+		    				<tr>
+			    				<td>
+				    				<div class="form-group">
+				    	    			<input type="text" class="form-control minutes_per_day" disabled name="minutes_per_day" value="{{ $value['code'] }}">
+									</div>
+			    				</td>
 
-					<div class="form-group col-sm-4">
-						<label>Times Per Day</label>
-						<input type="text" class="form-control times_per_day" name="times_per_day" value="{{$key['times_per_day']}}">
-					</div>
-    			@endforeach
+								<td>
+									<div class="form-group">
+										<input type="text" class="form-control minutes_per_day" name="minutes_per_day" value="{{$key['minutes_per_day']}}">
+									</div>
+								</td>
 
-	    		<input type="submit" class="btn btn-primary" value="Do Something">
-    	    </form>
+								<td>
+									<div class="form-group">
+										<input type="text" class="form-control times_per_day" name="times_per_day"  value="{{$key['times_per_day']}}">
+									</div>
+								</td>
+							</tr>
+		    			@endforeach
+
+			    		<input type="submit" class="btn btn-primary" value="Do Something">
+		    	    </form>
+        		</tbody>
+        	</table>
+    	    
 	    </div>
     </div>
 </div>
