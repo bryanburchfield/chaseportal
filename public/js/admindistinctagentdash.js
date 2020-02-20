@@ -171,7 +171,7 @@ var Dashboard = {
 	                      {
 	                        yAxisID: 'A',
 	                        label: Lang.get('js_msgs.call_time'),
-	                        backgroundColor: chart_colors_array,
+	                        backgroundColor: chartColors.green,
 	                        data: logins[0]
 	                      },
 	                    ]
