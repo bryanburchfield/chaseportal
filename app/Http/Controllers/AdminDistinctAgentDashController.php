@@ -6,6 +6,7 @@ use App\Traits\DashTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminDistinctAgentDashController extends Controller
 {
@@ -42,8 +43,6 @@ class AdminDistinctAgentDashController extends Controller
 
         $details = $this->filterDetails();
 
-        $results = $this->getCallVolume();
-
         // Initialize return vars
         $actions = [];
         $campaigns = [];
@@ -53,8 +52,8 @@ class AdminDistinctAgentDashController extends Controller
         $date_dtl = [];
         $rep_dtl = [];
 
-        // Loop thru results, buuld return vals
-        foreach ($results as $rec) {
+        foreach ($this->getCallVolume() as $rec) {
+
             $actions[] = [
                 'Date' =>  Carbon::parse($rec['Date'])
                     ->tz($tz)
@@ -108,10 +107,16 @@ class AdminDistinctAgentDashController extends Controller
         ]];
     }
 
-    private function getCallVolume()
+    private function getCallVolume($date = null)
     {
         $campaign = $this->campaign;
-        $dateFilter = $this->dateFilter;
+
+        if ($date === null) {
+            $dateFilter = $this->dateFilter;
+        } else {
+            $day = Carbon::parse($date)->format('m/d/Y');
+            $dateFilter = "$day - $day";
+        }
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
@@ -138,11 +143,12 @@ class AdminDistinctAgentDashController extends Controller
 
         $sql .= " ORDER BY Date";
 
-        return $this->runSql($sql, $bind);
+        return $this->yieldSql($sql, $bind);
     }
 
     public function getLoginDetails(Request $request)
     {
+        Log::debug($request->all());
         return 'test';
     }
 }
