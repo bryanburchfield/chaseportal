@@ -60,7 +60,12 @@ var Dashboard = {
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
 		    Master.check_reload();
 		});
+		Dashboard.eventHandlers();
 	},
+
+	eventHandlers: function () {
+        $('.logins_drilldown').on('click', 'a', this.change_login_details);
+    },
 
 	call_volume:function(datefilter, chartColors){
 		var campaign = $('.filter_campaign li ').text();
@@ -81,7 +86,7 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-
+				console.log(response);
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 				$('#distinct_agent_count .total').html(response.call_volume.rep_count);
@@ -164,6 +169,13 @@ var Dashboard = {
 					        logins.push(Object.values(logins_per_day_obj));
 					    }
 					}
+
+					var days='';
+					for(var i=0;i<logins_per_day_obj_keys.length;i++){
+						days+='<a href="'+logins_per_day_obj_keys[i]+'">'+logins_per_day_obj_keys[i]+'</a>';
+					}
+
+					$('.logins_drilldown').append(days);
 
 					var logins_per_day_data = {
 	                 	labels: logins_per_day_obj_keys,
@@ -281,6 +293,32 @@ var Dashboard = {
 	            $('.preloader').fadeOut('slow');
 			}
 		});
+	},
+
+	change_login_details:function(e){
+		e.preventDefault();
+		var interval = $(this).attr('href');
+		console.log(interval);
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/admindistinctagentdashboard/get_login_details',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				interval:interval,
+			},
+
+			success: function (response) {
+				console.log(response);
+			}
+		});
+
 	},
 
 	refresh: function (datefilter, campaign) {
