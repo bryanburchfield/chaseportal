@@ -149,92 +149,8 @@ var Dashboard = {
 					$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#distinct_reps_per_camp_graph');
 				}
 
-				// ////////////////////////////////////////////////////////////
-				// ////    LOGINS PER DAY BAR GRAPH
-				// ///////////////////////////////////////////////////////////
 
-
-				if (window.logins_per_day_chart != undefined) {
-				    window.logins_per_day_chart.destroy();
-				}
-
-				if(Object.keys(response.call_volume.dates).length){
-		
-					var days='';
-					for(var i=0;i<response.call_volume.dates.counts.length;i++){
-						days+='<a href="'+response.call_volume.dates.fulldates[i]+'">'+response.call_volume.dates.labels[i]+'</a>';
-					}
-					$('.logins_drilldown .options').empty();
-					$('.logins_drilldown .options').append(days);
-
-					var logins_per_day_data = {
-	                 	labels: response.call_volume.dates.labels,
-	                    datasets: [
-	                      {
-	                        yAxisID: 'A',
-	                        label: Lang.get('js_msgs.call_time'),
-	                        backgroundColor: chartColors.green,
-	                        data: response.call_volume.dates.counts
-	                      },
-	                    ]
-	                };
-
-	                var logins_per_day_options={
-	                    responsive: true,
-	                    maintainAspectRatio:false,
-	                    legend: {
-                            display: false
-                         },
-	                    scales: {
-	                        xAxes: [{
-	                            ticks: {
-	                                fontColor: Master.tick_color,
-	                            },
-	                            gridLines: {
-	                                color: Master.gridline_color,
-	                            },
-	                        }],
-	                        yAxes: [{
-	                                gridLines: {
-	                                    color: Master.gridline_color,
-	                                },
-	                                id:'A',
-	                                type: 'linear',
-	                                position:'left',
-	                                scalePositionLeft: true,
-	                                scaleLabel: {
-	                                    fontColor: Master.tick_color,
-	                                    display: true,
-	                                    labelString: Lang.get('js_msgs.logins_per_day'),
-	                                },
-	                                ticks: {
-	                                    fontColor: Master.tick_color,
-	                                    beginAtZero: true,
-	                                },
-	                            }],
-	                    },
-	                    tooltips: {
-	                        enabled: true,
-	                        mode: 'single',
-	                        callbacks: {
-	                            label: function (tooltipItems, data) {
-	                            	return tooltipItems.yLabel;
-	                            }
-	                        }
-	                    }
-	                }
-
-	                var ctx = document.getElementById('logins_per_day_graph').getContext('2d');
-
-	                window.logins_per_day_chart = new Chart(ctx, {
-	                    type: 'bar',
-	                    data: logins_per_day_data,
-	                    options: logins_per_day_options
-	                });
-
-	            }else{
-	            	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
-	            }
+				Dashboard.build_login_table(response.call_volume.dates );
 
                 ///// ACTIONS TABLE
                 $('#actions tbody').empty();
@@ -306,9 +222,98 @@ var Dashboard = {
 
 			success: function (response) {
 				console.log(response);
+				Dashboard.build_login_table(response);
 			}
 		});
+	},
 
+	build_login_table:function(response){
+		console.log(response);
+		// ////////////////////////////////////////////////////////////
+		// ////    LOGINS PER DAY BAR GRAPH
+		// ///////////////////////////////////////////////////////////
+
+
+		if (window.logins_per_day_chart != undefined) {
+		    window.logins_per_day_chart.destroy();
+		}
+
+		if(Object.keys(response.call_volume.dates).length){
+			var days='';
+			for(var i=0;i<response.call_volume.dates.counts.length;i++){
+				days+='<a href="'+response.call_volume.dates.fulldates[i]+'">'+response.call_volume.dates.labels[i]+'</a>';
+			}
+			$('.logins_drilldown .options').empty();
+			$('.logins_drilldown .options').append(days);
+
+			var logins_per_day_data = {
+             	labels: response.call_volume.dates.labels,
+                datasets: [
+                  {
+                    yAxisID: 'A',
+                    label: Lang.get('js_msgs.call_time'),
+                    backgroundColor: chartColors.green,
+                    data: response.call_volume.dates.counts
+                  },
+                ]
+            };
+
+            var logins_per_day_options={
+                responsive: true,
+                maintainAspectRatio:false,
+                legend: {
+                    display: false
+                 },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: Master.tick_color,
+                        },
+                        gridLines: {
+                            color: Master.gridline_color,
+                        },
+                    }],
+                    yAxes: [{
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                            id:'A',
+                            type: 'linear',
+                            position:'left',
+                            scalePositionLeft: true,
+                            scaleLabel: {
+                                fontColor: Master.tick_color,
+                                display: true,
+                                labelString: Lang.get('js_msgs.logins_per_day'),
+                            },
+                            ticks: {
+                                fontColor: Master.tick_color,
+                                beginAtZero: true,
+                            },
+                        }],
+                },
+                tooltips: {
+                    enabled: true,
+                    mode: 'single',
+                    callbacks: {
+                        label: function (tooltipItems, data) {
+                        	return tooltipItems.yLabel;
+                        }
+                    }
+                }
+            }
+
+            var ctx = document.getElementById('logins_per_day_graph').getContext('2d');
+
+            window.logins_per_day_chart = new Chart(ctx, {
+                type: 'bar',
+                data: logins_per_day_data,
+                options: logins_per_day_options
+            });
+
+        }else{
+        	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
+        }
 	},
 
 	refresh: function (datefilter, campaign) {
