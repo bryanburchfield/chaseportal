@@ -85,7 +85,7 @@ class AdminDistinctAgentDashController extends Controller
             }
         }
 
-        // Count disticnt reps
+        // Count disticnt reps, & sort reps by date
         foreach ($campaign_dtl as $k => $campaign) {
             $campaigns[$k] = count($campaign);
         }
