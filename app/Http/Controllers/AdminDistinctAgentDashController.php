@@ -76,7 +76,7 @@ class AdminDistinctAgentDashController extends Controller
             if ($rec['Action'] == 'Login') {
                 $date = Carbon::parse($rec['Date'])
                     ->tz($tz)
-                    ->isoFormat('MMM DD');
+                    ->format('m/d/Y');
 
                 if (!isset($date_dtl[$date][$rec['Rep']])) {
                     $date_dtl[$date][$rec['Rep']] = 1;
@@ -92,10 +92,26 @@ class AdminDistinctAgentDashController extends Controller
             $dates[$k] = count($date);
         }
 
-        // Sort (dates should already be sorted)
-        arsort($campaigns, SORT_NUMERIC);
-
+        // Calc overall avg reps
         $avg_reps = count($dates) ? array_sum($dates) / count($dates) : 0;
+
+        // convert dates array to nested indexed
+        $labels = [];
+        $fulldates = [];
+        $counts = [];
+        foreach ($dates as $date => $count) {
+            $labels[] = Carbon::parse($date)->isoFormat('MMM DD');
+            $fulldates[] = $date;
+            $counts[] = $count;
+        }
+        $dates = [
+            'labels' => $labels,
+            'fulldates' => $fulldates,
+            'counts' => $counts,
+        ];
+
+        // Sort campaigns
+        arsort($campaigns, SORT_NUMERIC);
 
         return ['call_volume' => [
             'actions' => $actions,
