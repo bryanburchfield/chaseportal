@@ -159,32 +159,32 @@ var Dashboard = {
 				}
 
 				if(Object.keys(response.call_volume.dates).length){
-					const logins_per_day_obj = response.call_volume.dates
-	                const logins_per_day_obj_keys = Object.getOwnPropertyNames(logins_per_day_obj);
-	                var chart_colors_array = Master.return_chart_colors_hash(logins_per_day_obj_keys);
-					let logins = [];
+					// const logins_per_day_obj = response.call_volume.dates
+	    //             const logins_per_day_obj_keys = Object.getOwnPropertyNames(logins_per_day_obj);
+	    //             var chart_colors_array = Master.return_chart_colors_hash(logins_per_day_obj_keys);
+					// let logins = [];
 
-					if (logins_per_day_obj_keys.length) {
-					    for (let i = 0; i < logins_per_day_obj_keys.length; i++) {
-					        logins.push(Object.values(logins_per_day_obj));
-					    }
-					}
+					// if (logins_per_day_obj_keys.length) {
+					//     for (let i = 0; i < logins_per_day_obj_keys.length; i++) {
+					//         logins.push(Object.values(logins_per_day_obj));
+					//     }
+					// }
 
 					var days='';
-					for(var i=0;i<logins_per_day_obj_keys.length;i++){
-						days+='<a href="'+logins_per_day_obj_keys[i]+'">'+logins_per_day_obj_keys[i]+'</a>';
+					for(var i=0;i<response.call_volume.dates.counts.length;i++){
+						days+='<a href="'+response.call_volume.dates.fulldates[i]+'">'+response.call_volume.dates.labels[i]+'</a>';
 					}
 
 					$('.logins_drilldown').append(days);
 
 					var logins_per_day_data = {
-	                 	labels: logins_per_day_obj_keys,
+	                 	labels: response.call_volume.dates.labels,
 	                    datasets: [
 	                      {
 	                        yAxisID: 'A',
 	                        label: Lang.get('js_msgs.call_time'),
 	                        backgroundColor: chartColors.green,
-	                        data: logins[0]
+	                        data: response.call_volume.dates.counts
 	                      },
 	                    ]
 	                };
@@ -298,8 +298,7 @@ var Dashboard = {
 
 	change_login_details:function(e){
 		e.preventDefault();
-		var interval = $(this).attr('href');
-		console.log(interval);
+		var date = $(this).attr('href');
 
 		$.ajaxSetup({
 			headers: {
@@ -312,7 +311,7 @@ var Dashboard = {
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				interval:interval,
+				date:date,
 			},
 
 			success: function (response) {
