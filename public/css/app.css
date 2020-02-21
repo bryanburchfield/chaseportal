@@ -2850,6 +2850,10 @@ td.bg-danger {
   margin: 0 5px 10px 5px;
 }
 
+.card_dropdown-content.logins_drilldown {
+  max-height: 240px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

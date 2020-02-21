@@ -605,6 +605,7 @@ var Dashboard = {
             dataType: 'json',
             data:{datefilter:datefilter},
             success:function(response){
+                console.log(response);
                 $('#rep_talktime').parent().find('.no_data').remove();
 
                 if(!response.agent_calltime.rep.length){

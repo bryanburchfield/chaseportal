@@ -131,7 +131,7 @@ var Dashboard = {
 					    },
 					    tooltips: {
 					        enabled: true,
-					    }
+					    },
 					}
 
 					var ctx = document.getElementById('distinct_reps_per_camp_graph').getContext('2d');
@@ -241,6 +241,7 @@ var Dashboard = {
 	                    data: logins_per_day_data,
 	                    options: logins_per_day_options
 	                });
+
 	            }else{
 	            	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
 	            }
