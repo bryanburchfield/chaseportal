@@ -89,10 +89,8 @@ class AdminDistinctAgentDashController extends Controller
         foreach ($campaign_dtl as $k => $campaign) {
             $campaigns[$k] = count($campaign);
         }
-        foreach ($date_dtl as $k => &$date) {
+        foreach ($date_dtl as $k => $date) {
             $dates[$k] = count($date);
-            $date = array_keys($date);
-            natcasesort($date);
         }
 
         // Sort (dates should already be sorted)
@@ -104,7 +102,6 @@ class AdminDistinctAgentDashController extends Controller
             'actions' => $actions,
             'campaigns' => $campaigns,
             'dates' => $dates,
-            'date_dtl' => $date_dtl,
             'rep_count' => count($rep_dtl),
             'avg_reps' => round($avg_reps, 2),
             'details' => $details,
