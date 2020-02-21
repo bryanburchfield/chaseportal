@@ -159,23 +159,13 @@ var Dashboard = {
 				}
 
 				if(Object.keys(response.call_volume.dates).length){
-					// const logins_per_day_obj = response.call_volume.dates
-	    //             const logins_per_day_obj_keys = Object.getOwnPropertyNames(logins_per_day_obj);
-	    //             var chart_colors_array = Master.return_chart_colors_hash(logins_per_day_obj_keys);
-					// let logins = [];
-
-					// if (logins_per_day_obj_keys.length) {
-					//     for (let i = 0; i < logins_per_day_obj_keys.length; i++) {
-					//         logins.push(Object.values(logins_per_day_obj));
-					//     }
-					// }
-
+		
 					var days='';
 					for(var i=0;i<response.call_volume.dates.counts.length;i++){
 						days+='<a href="'+response.call_volume.dates.fulldates[i]+'">'+response.call_volume.dates.labels[i]+'</a>';
 					}
-
-					$('.logins_drilldown').append(days);
+					$('.logins_drilldown .options').empty();
+					$('.logins_drilldown .options').append(days);
 
 					var logins_per_day_data = {
 	                 	labels: response.call_volume.dates.labels,
