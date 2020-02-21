@@ -216,7 +216,7 @@ class LeaderDashController extends Controller
 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
-'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound')
+'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound', 'SMS Received','SMS Delivered')
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i";
 
