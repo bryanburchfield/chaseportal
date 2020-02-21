@@ -143,4 +143,9 @@ class AdminDistinctAgentDashController extends Controller
 
         return $this->runSql($sql, $bind);
     }
+
+    public function getLoginDetails(Request $request)
+    {
+        return 'test';
+    }
 }

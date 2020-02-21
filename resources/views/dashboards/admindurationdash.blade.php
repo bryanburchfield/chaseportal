@@ -76,7 +76,18 @@
 		</div><!-- end column -->
 
 		<div class="col-sm-9">
-		    <div class="card card-3b mbo" style="height: 330px">
+		    <div class="card-3 card blue" id="calls_minutes_per_day">
+		        <h1 class="title">{{__('widgets.calls_minutes_per_day')}}</h1>
+		        <div style="height: 280px">
+		        	<canvas id="calls_minutes_per_day_graph"></canvas>
+		        </div>
+		    </div><!-- end card -->
+		</div><!-- end column -->
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="card card-3b mbo" style="height: 330px">
                 <div class="card_table">
                     <h1 class="title">{{__('widgets.calls_by_campaign')}}</h1>
                     <table class="table table-condensed table-striped" id="calls_by_campaign">
@@ -91,17 +102,6 @@
                     </table>
                 </div>
             </div>
-		</div><!-- end column -->
-	</div>
-
-	<div class="row">
-		<div class="col-sm-12">
-		    <div class="card-3 card blue" id="calls_minutes_per_day">
-		        <h1 class="title">{{__('widgets.calls_minutes_per_day')}}</h1>
-		        <div style="height: 300px">
-		        	<canvas id="calls_minutes_per_day_graph"></canvas>
-		        </div>
-		    </div><!-- end card -->
 		</div><!-- end column -->
 	</div>
 </div>
