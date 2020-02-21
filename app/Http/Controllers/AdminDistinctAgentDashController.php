@@ -100,7 +100,7 @@ class AdminDistinctAgentDashController extends Controller
         $fulldates = [];
         $counts = [];
         foreach ($dates as $date => $count) {
-            $labels[] = Carbon::parse($date)->tz($tz)->isoFormat('MMM DD');
+            $labels[] = Carbon::parse($date)->isoFormat('MMM DD');
             $fulldates[] = $date;
             $counts[] = $count;
         }
@@ -195,7 +195,7 @@ class AdminDistinctAgentDashController extends Controller
 
         // Create return arrays
         foreach ($dates as $date => $count) {
-            $labels[] = Carbon::parse($date)->format('H:i');
+            $labels[] = Carbon::parse($date)->isoFormat('ha');
             $counts[] = $count;
         }
         $dates = [
