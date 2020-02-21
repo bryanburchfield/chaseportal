@@ -84,7 +84,7 @@ class AdminDistinctAgentDashController extends Controller
             }
         }
 
-        // Count disticnt reps
+        // Count distinct reps
         foreach ($campaign_dtl as $k => $campaign) {
             $campaigns[$k] = count($campaign);
         }
@@ -100,7 +100,7 @@ class AdminDistinctAgentDashController extends Controller
         $fulldates = [];
         $counts = [];
         foreach ($dates as $date => $count) {
-            $labels[] = Carbon::parse($date)->isoFormat('MMM DD');
+            $labels[] = Carbon::parse($date)->tz($tz)->isoFormat('MMM DD');
             $fulldates[] = $date;
             $counts[] = $count;
         }
@@ -130,8 +130,7 @@ class AdminDistinctAgentDashController extends Controller
         if ($date === null) {
             $dateFilter = $this->dateFilter;
         } else {
-            $day = Carbon::parse($date)->format('m/d/Y');
-            $dateFilter = "$day - $day";
+            $dateFilter = "$date $date";
         }
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
@@ -164,7 +163,48 @@ class AdminDistinctAgentDashController extends Controller
 
     public function getLoginDetails(Request $request)
     {
-        Log::debug($request->all());
-        return 'test';
+        // make sure we got a date
+        if ($request->missing('date')) {
+            return 'error';
+        }
+
+        $this->getSession($request);
+
+        $tz = Auth::user()->ianaTz;
+
+        $date_dtl = [];
+        $dates = [];
+
+        foreach ($this->getCallVolume($request->date) as $rec) {
+            // Distinct logins per day
+            if ($rec['Action'] == 'Login') {
+                $date = Carbon::parse($rec['Date'])
+                    ->tz($tz)
+                    ->format('m/d/Y H:00');
+
+                if (!isset($date_dtl[$date][$rec['Rep']])) {
+                    $date_dtl[$date][$rec['Rep']] = 1;
+                }
+            }
+        }
+
+        // Count distinct reps
+        foreach ($date_dtl as $k => $date) {
+            $dates[$k] = count($date);
+        }
+
+        // Create return arrays
+        foreach ($dates as $date => $count) {
+            $labels[] = Carbon::parse($date)->format('H:i');
+            $counts[] = $count;
+        }
+        $dates = [
+            'labels' => $labels,
+            'counts' => $counts,
+        ];
+
+        return [
+            'dates' => $dates,
+        ];
     }
 }
