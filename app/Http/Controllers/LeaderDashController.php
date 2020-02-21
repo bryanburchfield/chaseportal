@@ -208,15 +208,17 @@ class LeaderDashController extends Controller
 				WHERE Disposition = DR.CallStatus
 				AND (GroupId = DR.GroupId OR IsSystem=1)
 				AND (Campaign = DR.Campaign OR Campaign = '')
-				ORDER BY [Description] Desc) DI
-			WHERE DR.GroupId = :groupid$i
+				ORDER BY [id]) DI
+            WHERE DR.GroupId = :groupid$i
+            AND DR.CallType NOT IN (7,8)
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
 			AND DR.CallStatus NOT IN (
 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
 'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
-'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound', 'SMS Received','SMS Delivered')
+'CR_CNCT/CON_PVD', ' ', 'CR_HANGUP', 'Inbound',
+'TRANSFERRED','PARKED')
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i";
 
@@ -352,5 +354,4 @@ class LeaderDashController extends Controller
             'Sales' => array_column($result, 'Sales'),
         ];
     }
-
 }
