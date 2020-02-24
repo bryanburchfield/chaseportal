@@ -36,8 +36,8 @@
     	    </div><!-- end column -->
 
         	<div class="col-sm-12 nopad">
-    		    <div class="card-3 card blue" id="distinct_reps_per_camp">
-    		        <h1 class="title mb20">{{__('widgets.distinct_reps_per_camp')}}</h1>
+    		    <div class="card-3 card blue flipping_card" id="distinct_reps_per_camp">
+    		        <h1 class="title">{{__('widgets.distinct_reps_per_camp')}}</h1>
                     <div class="front p20 mbp35">
     		          <canvas id="distinct_reps_per_camp_graph"></canvas>
                   </div>
@@ -47,41 +47,58 @@
 
     	<div class="col-sm-9 ">
 		    <div class="col-sm-12 nopad">
-			    <div class="card card-3b mbo" style="height: 320px">
-	                <div class="card_table">
-	                    <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
-	                    <table class="table table-condensed table-striped" id="actions">
-	                        <thead>
-	                            <tr>
-	                            	<th>
-	                            	    <span>{{__('general.date')}}</span>
-	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-	                            	</th>
+			    <div class="card-3 card blue" id="logins_per_day">
+                    <h1 class="title">{{__('widgets.distinct_logins_per_day')}}</h1>
+                    <!-- three dot menu -->
+                    <div class="card_dropdown mv_left">
+                        <!-- three dots -->
+                        <ul class="card_dropbtn icons btn-left showLeft">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <p class="login_date"></p>
+                        <!-- menu -->
+                        <div id="card_dropdown" class="card_dropdown-content logins_drilldown">
+                            <h3>{{__('widgets.view_day_details')}}</h3>
+                            <div class="options"></div>
+                        </div>
+                    </div>
 
-	                            	<th>
-	                            	    <span>{{__('widgets.rep')}}</span>
-	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-	                            	</th>
 
-	                            	<th>
-	                            	    <span>{{__('widgets.actions')}}</span>
-	                            	    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-	                            	</th>
-	                            </tr>
-	                        </thead>
-	                        <tbody></tbody>
-	                    </table>
-	                </div>
-	            </div>
+                    <div style="height: 312px">
+                        <canvas id="logins_per_day_graph"></canvas>
+                    </div>
+                </div><!-- end card -->
 		    </div><!-- end column -->
 
 		    <div class="col-sm-12 nopad">
-		    	<div class="card-3 card blue" id="logins_per_day">
-		    	    <h1 class="title">{{__('widgets.distinct_logins_per_day')}}</h1>
-		    	    <div style="height: 300px">
-		    	    	<canvas id="logins_per_day_graph"></canvas>
-		    	    </div>
-		    	</div><!-- end card -->
+                <div class="card card-3b mbo" style="height: 345px">
+                    <div class="card_table">
+                        <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
+                        <table class="table table-condensed table-striped" id="actions">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span>{{__('general.date')}}</span>
+                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                    </th>
+
+                                    <th>
+                                        <span>{{__('widgets.rep')}}</span>
+                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                    </th>
+
+                                    <th>
+                                        <span>{{__('widgets.actions')}}</span>
+                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
 		    </div><!-- end column -->
 		</div><!-- end column -->
 	</div>

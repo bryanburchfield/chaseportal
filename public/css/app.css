@@ -2926,6 +2926,21 @@ td.bg-danger {
   margin: 0 5px 10px 5px;
 }
 
+#logins_per_day .card_dropdown.mv_left {
+  left: 8px;
+  top: 12px;
+}
+
+#logins_per_day .card_dropdown-content.logins_drilldown {
+  max-height: 240px;
+}
+
+p.login_date {
+  float: right;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

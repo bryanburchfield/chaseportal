@@ -55,15 +55,26 @@ var Dashboard = {
 	datefilter: document.getElementById("datefilter").value,
 	databases: '',
 	time: new Date().getTime(),
+	login_chart_date:'',
+	login_chart_date_fmt:'',
+	login_chart_view:'daily',
 
 	init:function(){
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
 		    Master.check_reload();
 		});
+		Dashboard.eventHandlers();
 	},
+
+	eventHandlers: function () {
+        $('.logins_drilldown').on('click', 'a.change_login_details', this.change_login_details);
+        $('.logins_drilldown').on('click', 'a.back_to_daily_view', this.back_to_days);
+    },
 
 	call_volume:function(datefilter, chartColors){
 		var campaign = $('.filter_campaign li ').text();
+		$('.login_date').html('');
+		Dashboard.login_chart_view = 'daily';
 
 		$.ajaxSetup({
 			headers: {
@@ -126,7 +137,7 @@ var Dashboard = {
 					    },
 					    tooltips: {
 					        enabled: true,
-					    }
+					    },
 					}
 
 					var ctx = document.getElementById('distinct_reps_per_camp_graph').getContext('2d');
@@ -144,94 +155,7 @@ var Dashboard = {
 					$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#distinct_reps_per_camp_graph');
 				}
 
-				// ////////////////////////////////////////////////////////////
-				// ////    LOGINS PER DAY BAR GRAPH
-				// ///////////////////////////////////////////////////////////
-
-
-				if (window.logins_per_day_chart != undefined) {
-				    window.logins_per_day_chart.destroy();
-				}
-
-				if(Object.keys(response.call_volume.dates).length){
-					const logins_per_day_obj = response.call_volume.dates
-	                const logins_per_day_obj_keys = Object.getOwnPropertyNames(logins_per_day_obj);
-	                var chart_colors_array = Master.return_chart_colors_hash(logins_per_day_obj_keys);
-					let logins = [];
-
-					if (logins_per_day_obj_keys.length) {
-					    for (let i = 0; i < logins_per_day_obj_keys.length; i++) {
-					        logins.push(Object.values(logins_per_day_obj));
-					    }
-					}
-
-					var logins_per_day_data = {
-	                 	labels: logins_per_day_obj_keys,
-	                    datasets: [
-	                      {
-	                        yAxisID: 'A',
-	                        label: Lang.get('js_msgs.call_time'),
-	                        backgroundColor: chartColors.green,
-	                        data: logins[0]
-	                      },
-	                    ]
-	                };
-
-	                var logins_per_day_options={
-	                    responsive: true,
-	                    maintainAspectRatio:false,
-	                    legend: {
-                            display: false
-                         },
-	                    scales: {
-	                        xAxes: [{
-	                            ticks: {
-	                                fontColor: Master.tick_color,
-	                            },
-	                            gridLines: {
-	                                color: Master.gridline_color,
-	                            },
-	                        }],
-	                        yAxes: [{
-	                                gridLines: {
-	                                    color: Master.gridline_color,
-	                                },
-	                                id:'A',
-	                                type: 'linear',
-	                                position:'left',
-	                                scalePositionLeft: true,
-	                                scaleLabel: {
-	                                    fontColor: Master.tick_color,
-	                                    display: true,
-	                                    labelString: Lang.get('js_msgs.logins_per_day'),
-	                                },
-	                                ticks: {
-	                                    fontColor: Master.tick_color,
-	                                    beginAtZero: true,
-	                                },
-	                            }],
-	                    },
-	                    tooltips: {
-	                        enabled: true,
-	                        mode: 'single',
-	                        callbacks: {
-	                            label: function (tooltipItems, data) {
-	                            	return tooltipItems.yLabel;
-	                            }
-	                        }
-	                    }
-	                }
-
-	                var ctx = document.getElementById('logins_per_day_graph').getContext('2d');
-
-	                window.logins_per_day_chart = new Chart(ctx, {
-	                    type: 'bar',
-	                    data: logins_per_day_data,
-	                    options: logins_per_day_options
-	                });
-	            }else{
-	            	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
-	            }
+				Dashboard.build_login_chart(response.call_volume.dates);
 
                 ///// ACTIONS TABLE
                 $('#actions tbody').empty();
@@ -281,6 +205,151 @@ var Dashboard = {
 	            $('.preloader').fadeOut('slow');
 			}
 		});
+	},
+
+	change_login_details:function(e){
+		e.preventDefault();
+		var date = $(this).attr('href');
+		if($(this).hasClass('back_to_day_view')){
+			Dashboard.login_chart_date_fmt = $(this).text();
+		}
+
+		Dashboard.login_chart_date = date;
+
+		$('.login_date').html(Dashboard.login_chart_date_fmt);
+		Dashboard.login_chart_view=$(this).data('view');
+
+		var quarterly=0;
+		if(Dashboard.login_chart_view == 'quarterly'){
+			quarterly=1;
+		}
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/admindistinctagentdashboard/get_login_details',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				date:date,
+				quarterly:quarterly,
+			},
+
+			success: function (response) {
+				console.log(response);
+				Dashboard.build_login_chart(response.dates);
+			}
+		});
+	},
+
+	back_to_days:function(e){
+		
+		$('.login_date').html('');
+		Dashboard.login_chart_view = 'daily';
+		Dashboard.call_volume(Dashboard.login_chart_date, Dashboard.chartColors);
+	},
+
+	build_login_chart:function(response){
+		// ////////////////////////////////////////////////////////////
+		// ////    LOGINS PER DAY BAR GRAPH
+		// ///////////////////////////////////////////////////////////
+
+		if (window.logins_per_day_chart != undefined) {
+		    window.logins_per_day_chart.destroy();
+		}
+
+		if(Object.keys(response).length){
+			var days='';
+			var link='';
+
+			$('.logins_drilldown .options').empty();
+			if(Dashboard.login_chart_view == 'daily'){
+				for(var i=0;i<response.counts.length;i++){
+					days+='<a class="change_login_details back_to_day_view" data-view="hourly" href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
+				}
+				$('.logins_drilldown .options').append(days);
+			}
+
+			if(Dashboard.login_chart_view == 'hourly'){
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">'+Lang.get('js_msgs.back_to_daily_view')+'</a><a href="'+Dashboard.login_chart_date+'" data-view="quarterly" class="view_quarterly change_login_details">'+Lang.get('js_msgs.view_quarterly')+'</a>';
+			}else if(Dashboard.login_chart_view == 'quarterly'){
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">'+Lang.get('js_msgs.back_to_daily_view')+'</a><a href="'+Dashboard.login_chart_date+'" data-view="hourly" class="back_to_hourly_view change_login_details">'+Lang.get('js_msgs.back_to_hourly_view')+'</a>';
+			}
+
+			$('.logins_drilldown .options').append(link);
+
+			var logins_per_day_data = {
+             	labels: response.labels,
+                datasets: [
+                  {
+                    yAxisID: 'A',
+                    label: Lang.get('js_msgs.call_time'),
+                    backgroundColor: Dashboard.chartColors.green,
+                    data: response.counts
+                  },
+                ]
+            };
+
+            var logins_per_day_options={
+                responsive: true,
+                maintainAspectRatio:false,
+                legend: {
+                    display: false
+                 },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: Master.tick_color,
+                        },
+                        gridLines: {
+                            color: Master.gridline_color,
+                        },
+                    }],
+                    yAxes: [{
+                            gridLines: {
+                                color: Master.gridline_color,
+                            },
+                            id:'A',
+                            type: 'linear',
+                            position:'left',
+                            scalePositionLeft: true,
+                            scaleLabel: {
+                                fontColor: Master.tick_color,
+                                display: true,
+                                labelString: Lang.get('js_msgs.logins_per_day'),
+                            },
+                            ticks: {
+                                fontColor: Master.tick_color,
+                                beginAtZero: true,
+                            },
+                        }],
+                },
+                tooltips: {
+                    enabled: true,
+                    mode: 'single',
+                    callbacks: {
+                        label: function (tooltipItems, data) {
+                        	return tooltipItems.yLabel;
+                        }
+                    }
+                }
+            }
+
+            var ctx = document.getElementById('logins_per_day_graph').getContext('2d');
+
+            window.logins_per_day_chart = new Chart(ctx, {
+                type: 'bar',
+                data: logins_per_day_data,
+                options: logins_per_day_options
+            });
+
+        }else{
+        	$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#logins_per_day_graph');
+        }
 	},
 
 	refresh: function (datefilter, campaign) {

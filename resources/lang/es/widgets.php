@@ -38,6 +38,8 @@ return [
 	'distinct_logins_per_day'=> 'Distintos inicios de sesión por día',
 	'distinct_reps_per_camp'	=> 'Representantes distintos por campaña',
 	'duration'			=> 'Duración',
+	'edit_myself'		=> 'Editarme',
+	'go_back'			=> 'Regresa',
 	'handled_total'		=> 'Manejadas/Total; para Manejadas que se responden con',
 	'highest'			=> 'Más Alto',
 	'inbound'			=> 'Entrante',
@@ -73,6 +75,7 @@ return [
 	'total_minutes'		=> 'Minutos Totales',
 	'total_outbound_calls'	=> 'Total de Llamadas Salientes',
 	'total_sales'		=> 'Total de Ventas',
+	'view_day_details'	=> 'Ver Detalles Del Día',
 	'voicemails'		=> 'Mensajes de Voz',
 
 	'agent_dash'		=> 'Tablero de Agentes',
