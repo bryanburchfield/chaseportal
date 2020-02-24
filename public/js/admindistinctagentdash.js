@@ -57,6 +57,7 @@ var Dashboard = {
 	time: new Date().getTime(),
 	login_chart_date:'',
 	login_chart_view:'daily',
+	login_menu:'',
 
 	init:function(){
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
@@ -66,7 +67,8 @@ var Dashboard = {
 	},
 
 	eventHandlers: function () {
-        $('.logins_drilldown').on('click', 'a', this.change_login_details);
+        $('.logins_drilldown').on('click', 'a.change_login_details', this.change_login_details);
+        $('.logins_drilldown').on('click', 'a.back_to_daily_view', this.back_to_days);
     },
 
 	call_volume:function(datefilter, chartColors){
@@ -207,12 +209,8 @@ var Dashboard = {
 	change_login_details:function(e){
 		e.preventDefault();
 		var date = $(this).attr('href');
+		Dashboard.login_chart_date = date;
 		Dashboard.login_chart_view=$(this).data('view');
-
-		if(Dashboard.login_chart_date == ''){
-			Dashboard.login_chart_date = date;
-			Dashboard.login_chart_view='hourly';
-		}
 
 		if(Dashboard.login_chart_view == 'quarterly'){
 			var quarterly=1;
@@ -239,15 +237,21 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-				console.log(response);
 				Dashboard.build_login_chart(response.dates);
 			}
 		});
 	},
 
+	back_to_days:function(e){
+		e.preventDefault();
+		Dashboard.login_chart_view = 'daily';
+		Dashboard.call_volume(Dashboard.login_chart_date, Dashboard.chartColors);
+		// $('.logins_drilldown .options').empty();
+		// $('.logins_drilldown .options').append(Dashboard.login_menu);
+	},
+
 	build_login_chart:function(response){
 		console.log(response);
-		console.log(Dashboard.login_chart_date);
 		// ////////////////////////////////////////////////////////////
 		// ////    LOGINS PER DAY BAR GRAPH
 		// ///////////////////////////////////////////////////////////
@@ -263,15 +267,16 @@ var Dashboard = {
 			$('.logins_drilldown .options').empty();
 			if(Dashboard.login_chart_view == 'daily'){
 				for(var i=0;i<response.counts.length;i++){
-					days+='<a href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
+					days+='<a class="change_login_details" data-view="hourly" href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
 				}
+				Dashboard.login_menu = days;
 				$('.logins_drilldown .options').append(days);
 			}
 
 			if(Dashboard.login_chart_view == 'hourly'){
-				link = '<a href="'+Dashboard.login_chart_date+'" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="quarterly" class="view_quarterly">View Quarterly</a>';
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="quarterly" class="view_quarterly change_login_details">View Quarterly</a>';
 			}else if(Dashboard.login_chart_view == 'quarterly'){
-				link = '<a href="'+Dashboard.login_chart_date+'" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="hourly" class="back_to_hourly_view">Back to Hourly View</a>';
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="hourly" class="back_to_hourly_view change_login_details">Back to Hourly View</a>';
 			}
 
 			$('.logins_drilldown .options').append(link);
