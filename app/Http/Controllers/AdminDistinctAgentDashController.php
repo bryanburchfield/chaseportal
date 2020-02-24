@@ -235,21 +235,12 @@ class AdminDistinctAgentDashController extends Controller
 
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
-        // always show leading/trailing whitespace when viewing date rage
-        if ($interval == 1440) {
-            $data_started = true;
-        } else {
-            $data_started = false;
-        }
-
         while ($fromDate < $toDate) {
             $format = $this->getDateFormat($interval);
 
             $idx = $fromDate->tz(Auth::user()->ianaTz)->format($format);
 
-            if (isset($dates[$idx])) {
-                $data_started = true;
-            } elseif ($data_started) {
+            if (!isset($dates[$idx])) {
                 $dates[$idx] = 0;
             }
 
@@ -257,6 +248,11 @@ class AdminDistinctAgentDashController extends Controller
         }
 
         ksort($dates);
+
+        // always show leading/trailing whitespace when viewing daily date rage
+        if ($interval !== 1440) {
+            $dates = $this->cleanWhitespace($dates);
+        }
 
         return $dates;
     }
@@ -281,5 +277,24 @@ class AdminDistinctAgentDashController extends Controller
             floor($dateTime->format('i') / $interval) * $interval,
             0
         );
+    }
+
+    private function cleanWhitespace(array $dates)
+    {
+        $start = 0;
+        $end = 0;
+
+        $idx = 0;
+        foreach ($dates as $key => $count) {
+            if ($count) {
+                if (!$start) {
+                    $start = $idx;
+                }
+                $end = $idx;
+            }
+            $idx++;
+        }
+
+        return array_slice($dates, $start, $end - $start + 1, true);
     }
 }
