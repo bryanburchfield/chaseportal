@@ -57,12 +57,15 @@
                             <li></li>
                             <li></li>
                         </ul>
+
                         <!-- menu -->
                         <div id="card_dropdown" class="card_dropdown-content logins_drilldown">
                             <h3>View Day Details</h3>
                             <div class="options"></div>
                         </div>
                     </div>
+
+
                     <div style="height: 312px">
                         <canvas id="logins_per_day_graph"></canvas>
                     </div>

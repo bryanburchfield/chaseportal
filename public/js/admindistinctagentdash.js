@@ -55,6 +55,7 @@ var Dashboard = {
 	datefilter: document.getElementById("datefilter").value,
 	databases: '',
 	time: new Date().getTime(),
+	login_chart_view:'daily',
 
 	init:function(){
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
@@ -150,7 +151,7 @@ var Dashboard = {
 				}
 
 
-				Dashboard.build_login_table(response.call_volume.dates );
+				Dashboard.build_login_chart(response.call_volume.dates );
 
                 ///// ACTIONS TABLE
                 $('#actions tbody').empty();
@@ -205,6 +206,7 @@ var Dashboard = {
 	change_login_details:function(e){
 		e.preventDefault();
 		var date = $(this).attr('href');
+		Dashboard.login_chart_view='hourly';
 
 		$.ajaxSetup({
 			headers: {
@@ -222,38 +224,47 @@ var Dashboard = {
 
 			success: function (response) {
 				console.log(response);
-				Dashboard.build_login_table(response);
+				Dashboard.build_login_chart(response.dates);
 			}
 		});
 	},
 
-	build_login_table:function(response){
+	build_login_chart:function(response){
 		console.log(response);
 		// ////////////////////////////////////////////////////////////
 		// ////    LOGINS PER DAY BAR GRAPH
 		// ///////////////////////////////////////////////////////////
 
-
 		if (window.logins_per_day_chart != undefined) {
 		    window.logins_per_day_chart.destroy();
 		}
 
-		if(Object.keys(response.call_volume.dates).length){
+		if(Object.keys(response).length){
 			var days='';
-			for(var i=0;i<response.call_volume.dates.counts.length;i++){
-				days+='<a href="'+response.call_volume.dates.fulldates[i]+'">'+response.call_volume.dates.labels[i]+'</a>';
+			var link='';
+
+			for(var i=0;i<response.counts.length;i++){
+				days+='<a href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
 			}
 			$('.logins_drilldown .options').empty();
 			$('.logins_drilldown .options').append(days);
 
+			if(Dashboard.login_chart_view == 'hourly'){
+				link = '<a href="#" class="back_to_daily_view">Back to Daily View</a>';
+			}else if(Dashboard.login_chart_view == 'quarter_hour'){
+				link = '<a href="#" class="back_to_daily_view">Back to Daily View</a><a href="#" class="back_to_hourly_view">Back to Hourly View</a>';
+			}
+
+			$('.logins_drilldown .options').append(link);
+
 			var logins_per_day_data = {
-             	labels: response.call_volume.dates.labels,
+             	labels: response.labels,
                 datasets: [
                   {
                     yAxisID: 'A',
                     label: Lang.get('js_msgs.call_time'),
-                    backgroundColor: chartColors.green,
-                    data: response.call_volume.dates.counts
+                    backgroundColor: Dashboard.chartColors.green,
+                    data: response.counts
                   },
                 ]
             };
