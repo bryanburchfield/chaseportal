@@ -200,6 +200,7 @@ class AdminDistinctAgentDashController extends Controller
         }
         $dates = [
             'labels' => $labels,
+            'fulldates' => $labels,
             'counts' => $counts,
         ];
 
