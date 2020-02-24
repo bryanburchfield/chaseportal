@@ -455,7 +455,9 @@ var Master = {
                     // }
 
                     if(Master.leadrule_filters_used!=Master.leadrule_filters){
-                        $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                        if(!$(new_filter).find('a.remove_filter').length){
+                            $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                        }
                     }
 
                     if(Master.leadrule_filters == Master.leadrule_filters_used){
