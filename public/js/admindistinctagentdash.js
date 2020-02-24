@@ -73,6 +73,8 @@ var Dashboard = {
 
 	call_volume:function(datefilter, chartColors){
 		var campaign = $('.filter_campaign li ').text();
+		$('.login_date').html('');
+		Dashboard.login_chart_view = 'daily';
 
 		$.ajaxSetup({
 			headers: {
@@ -244,7 +246,7 @@ var Dashboard = {
 	},
 
 	back_to_days:function(e){
-		e.preventDefault();
+		
 		$('.login_date').html('');
 		Dashboard.login_chart_view = 'daily';
 		Dashboard.call_volume(Dashboard.login_chart_date, Dashboard.chartColors);
