@@ -6,7 +6,6 @@ use App\Traits\DashTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AdminDistinctAgentDashController extends Controller
 {
@@ -168,9 +167,12 @@ class AdminDistinctAgentDashController extends Controller
 
     public function getLoginDetails(Request $request)
     {
-        // make sure we got a date
-        if ($request->missing('date')) {
-            return 'error';
+        if ($request->quarterly == 1) {
+            $interval = 15;
+            $label_format = 'h:mma';
+        } else {
+            $interval = 60;
+            $label_format = 'ha';
         }
 
         $this->getSession($request);
@@ -183,9 +185,13 @@ class AdminDistinctAgentDashController extends Controller
         foreach ($this->getCallVolume($request->date) as $rec) {
             // Distinct logins per day
             if ($rec['Action'] == 'Login') {
-                $date = Carbon::parse($rec['Date'])
+
+                // round timestamp to $interval
+                $datetime = $this->roundToMinutes(Carbon::parse($rec['Date']), $interval);
+
+                $date = $datetime
                     ->tz($tz)
-                    ->format($this->getDateFormat(60));
+                    ->format($this->getDateFormat($interval));
 
                 if (!isset($date_dtl[$date][$rec['Rep']])) {
                     $date_dtl[$date][$rec['Rep']] = 1;
@@ -199,11 +205,11 @@ class AdminDistinctAgentDashController extends Controller
         }
 
         // fill in holes
-        $dates = $this->addEmptyRecs($dates, 60, $request->date);
+        $dates = $this->addEmptyRecs($dates, $interval, $request->date);
 
         // Create return arrays
         foreach ($dates as $date => $count) {
-            $labels[] = Carbon::parse($date)->isoFormat('ha');
+            $labels[] = Carbon::parse($date)->isoFormat($label_format);
             $counts[] = $count;
         }
         $dates = [
@@ -217,7 +223,7 @@ class AdminDistinctAgentDashController extends Controller
         ];
     }
 
-    private function addEmptyRecs($dates, $minutes, $date = null)
+    private function addEmptyRecs($dates, $interval, $date = null)
     {
         if ($date === null) {
             $dateFilter = $this->dateFilter;
@@ -230,14 +236,14 @@ class AdminDistinctAgentDashController extends Controller
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
         // always show leading/trailing whitespace when viewing date rage
-        if ($minutes == 1440) {
+        if ($interval == 1440) {
             $data_started = true;
         } else {
             $data_started = false;
         }
 
         while ($fromDate < $toDate) {
-            $format = $this->getDateFormat($minutes);
+            $format = $this->getDateFormat($interval);
 
             $idx = $fromDate->tz(Auth::user()->ianaTz)->format($format);
 
@@ -247,7 +253,7 @@ class AdminDistinctAgentDashController extends Controller
                 $dates[$idx] = 0;
             }
 
-            $fromDate->addMinutes($minutes);
+            $fromDate->addMinutes($interval);
         }
 
         ksort($dates);
@@ -255,19 +261,25 @@ class AdminDistinctAgentDashController extends Controller
         return $dates;
     }
 
-    private function getDateFormat($minutes)
+    private function getDateFormat($interval)
     {
-        switch ($minutes) {
+        switch ($interval) {
             case '1440':
                 $format = 'Y-m-d';
                 break;
-            case '60':
-                $format = 'Y-m-d H:00';
-                break;
             default:
-                $format = 'Y-m-d H:m';
+                $format = 'Y-m-d H:i';
         }
 
         return $format;
+    }
+
+    private function roundToMinutes(Carbon $dateTime, $interval)
+    {
+        return $dateTime->setTime(
+            $dateTime->format('H'),
+            floor($dateTime->format('i') / $interval) * $interval,
+            0
+        );
     }
 }
