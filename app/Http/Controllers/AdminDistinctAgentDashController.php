@@ -132,8 +132,8 @@ class AdminDistinctAgentDashController extends Controller
         if ($date === null) {
             $dateFilter = $this->dateFilter;
         } else {
-            // make sure date is <m>
-            $date = Carbon::parse($date)->format('m/d/Y');
+            // ISO format so dateRange() will work
+            $date = Carbon::parse($date)->isoFormat('L');
             $dateFilter = "$date $date";
         }
 
