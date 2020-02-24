@@ -200,6 +200,12 @@ class LeadMoveService
                 case 'days_called':
                     $sql .= $this->sqlDay($i, $db);
                     break;
+                case 'ring_group':
+                    $sql .= $this->sqlRingGroup($i, $db);
+                    break;
+                case 'call_status':
+                    $sql .= " AND CallStatus = :param$i";
+                    break;
                 default:  // error!
                     return [];
             }
@@ -238,6 +244,17 @@ class LeadMoveService
             FROM [$db].[dbo].[DialingResults]
             WHERE GroupId = Leads.GroupId
             AND LeadId = Leads.Id) > :param$i";
+    }
+
+    private function sqlRingGroup($i, $db)
+    {
+        return " AND EXISTS (SELECT COUNT(I.id)
+            FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[InboundSource] I ON I.InboundSource = DR.CallerId AND I.Description = :param$i
+            WHERE DR.GroupId = Leads.GroupId
+            AND DR.LeadId = Leads.Id
+            AND DR.CallType = 1
+            AND DR.attempt = 1)";
     }
 
     private function initApi($db)
