@@ -56,8 +56,8 @@ var Dashboard = {
 	databases: '',
 	time: new Date().getTime(),
 	login_chart_date:'',
+	login_chart_date_fmt:'',
 	login_chart_view:'daily',
-	// login_menu:'',
 
 	init:function(){
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
@@ -90,7 +90,7 @@ var Dashboard = {
 			},
 
 			success: function (response) {
-				console.log(response);
+
 				$('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 				$('#distinct_agent_count .total').html(response.call_volume.rep_count);
@@ -153,8 +153,7 @@ var Dashboard = {
 					$('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#distinct_reps_per_camp_graph');
 				}
 
-
-				Dashboard.build_login_chart(response.call_volume.dates );
+				Dashboard.build_login_chart(response.call_volume.dates);
 
                 ///// ACTIONS TABLE
                 $('#actions tbody').empty();
@@ -209,18 +208,19 @@ var Dashboard = {
 	change_login_details:function(e){
 		e.preventDefault();
 		var date = $(this).attr('href');
-		Dashboard.login_chart_date = date;
-		Dashboard.login_chart_view=$(this).data('view');
-		$('.login_date').html(date);
-
-		if(Dashboard.login_chart_view == 'quarterly'){
-			var quarterly=1;
-		}else{
-			var quarterly=0;
+		if($(this).hasClass('back_to_day_view')){
+			Dashboard.login_chart_date_fmt = $(this).text();
 		}
 
-		console.log(Dashboard.login_chart_view +' '+quarterly);
-		console.log(Dashboard.login_chart_date+' '+ date);
+		Dashboard.login_chart_date = date;
+
+		$('.login_date').html(Dashboard.login_chart_date_fmt);
+		Dashboard.login_chart_view=$(this).data('view');
+
+		var quarterly=0;
+		if(Dashboard.login_chart_view == 'quarterly'){
+			quarterly=1;
+		}
 
 		$.ajaxSetup({
 			headers: {
@@ -245,14 +245,12 @@ var Dashboard = {
 
 	back_to_days:function(e){
 		e.preventDefault();
+		$('.login_date').html('');
 		Dashboard.login_chart_view = 'daily';
 		Dashboard.call_volume(Dashboard.login_chart_date, Dashboard.chartColors);
-		// $('.logins_drilldown .options').empty();
-		// $('.logins_drilldown .options').append(Dashboard.login_menu);
 	},
 
 	build_login_chart:function(response){
-		console.log(response);
 		// ////////////////////////////////////////////////////////////
 		// ////    LOGINS PER DAY BAR GRAPH
 		// ///////////////////////////////////////////////////////////
@@ -268,9 +266,8 @@ var Dashboard = {
 			$('.logins_drilldown .options').empty();
 			if(Dashboard.login_chart_view == 'daily'){
 				for(var i=0;i<response.counts.length;i++){
-					days+='<a class="change_login_details" data-view="hourly" href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
+					days+='<a class="change_login_details back_to_day_view" data-view="hourly" href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
 				}
-				// Dashboard.login_menu = days;
 				$('.logins_drilldown .options').append(days);
 			}
 
