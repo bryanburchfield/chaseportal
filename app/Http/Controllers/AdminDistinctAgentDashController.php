@@ -76,7 +76,7 @@ class AdminDistinctAgentDashController extends Controller
             if ($rec['Action'] == 'Login') {
                 $date = Carbon::parse($rec['Date'])
                     ->tz($tz)
-                    ->format('m/d/Y');
+                    ->format($this->getDateFormat(1440));
 
                 if (!isset($date_dtl[$date][$rec['Rep']])) {
                     $date_dtl[$date][$rec['Rep']] = 1;
@@ -91,6 +91,9 @@ class AdminDistinctAgentDashController extends Controller
         foreach ($date_dtl as $k => $date) {
             $dates[$k] = count($date);
         }
+
+        // fill in holes
+        $dates = $this->addEmptyRecs($dates, 1440);
 
         // Calc overall avg reps
         $avg_reps = count($dates) ? array_sum($dates) / count($dates) : 0;
@@ -130,6 +133,8 @@ class AdminDistinctAgentDashController extends Controller
         if ($date === null) {
             $dateFilter = $this->dateFilter;
         } else {
+            // make sure date is <m>
+            $date = Carbon::parse($date)->format('m/d/Y');
             $dateFilter = "$date $date";
         }
 
@@ -180,7 +185,7 @@ class AdminDistinctAgentDashController extends Controller
             if ($rec['Action'] == 'Login') {
                 $date = Carbon::parse($rec['Date'])
                     ->tz($tz)
-                    ->format('m/d/Y H:00');
+                    ->format($this->getDateFormat(60));
 
                 if (!isset($date_dtl[$date][$rec['Rep']])) {
                     $date_dtl[$date][$rec['Rep']] = 1;
@@ -192,6 +197,9 @@ class AdminDistinctAgentDashController extends Controller
         foreach ($date_dtl as $k => $date) {
             $dates[$k] = count($date);
         }
+
+        // fill in holes
+        $dates = $this->addEmptyRecs($dates, 60, $request->date);
 
         // Create return arrays
         foreach ($dates as $date => $count) {
@@ -207,5 +215,59 @@ class AdminDistinctAgentDashController extends Controller
         return [
             'dates' => $dates,
         ];
+    }
+
+    private function addEmptyRecs($dates, $minutes, $date = null)
+    {
+        if ($date === null) {
+            $dateFilter = $this->dateFilter;
+        } else {
+            // make sure date is <m>
+            $date = Carbon::parse($date)->format('m/d/Y');
+            $dateFilter = "$date $date";
+        }
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // always show leading/trailing whitespace when viewing date rage
+        if ($minutes == 1440) {
+            $data_started = true;
+        } else {
+            $data_started = false;
+        }
+
+        while ($fromDate < $toDate) {
+            $format = $this->getDateFormat($minutes);
+
+            $idx = $fromDate->tz(Auth::user()->ianaTz)->format($format);
+
+            if (isset($dates[$idx])) {
+                $data_started = true;
+            } elseif ($data_started) {
+                $dates[$idx] = 0;
+            }
+
+            $fromDate->addMinutes($minutes);
+        }
+
+        ksort($dates);
+
+        return $dates;
+    }
+
+    private function getDateFormat($minutes)
+    {
+        switch ($minutes) {
+            case '1440':
+                $format = 'Y-m-d';
+                break;
+            case '60':
+                $format = 'Y-m-d H:00';
+                break;
+            default:
+                $format = 'Y-m-d H:m';
+        }
+
+        return $format;
     }
 }
