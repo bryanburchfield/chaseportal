@@ -3208,6 +3208,12 @@ td.bg-danger {
   max-height: 240px;
 }
 
+p.login_date {
+  float: right;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

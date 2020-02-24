@@ -57,7 +57,7 @@ var Dashboard = {
 	time: new Date().getTime(),
 	login_chart_date:'',
 	login_chart_view:'daily',
-	login_menu:'',
+	// login_menu:'',
 
 	init:function(){
 		$.when(this.call_volume(this.datefilter, this.chartColors)).done(function () {
@@ -211,6 +211,7 @@ var Dashboard = {
 		var date = $(this).attr('href');
 		Dashboard.login_chart_date = date;
 		Dashboard.login_chart_view=$(this).data('view');
+		$('.login_date').html(date);
 
 		if(Dashboard.login_chart_view == 'quarterly'){
 			var quarterly=1;
@@ -269,7 +270,7 @@ var Dashboard = {
 				for(var i=0;i<response.counts.length;i++){
 					days+='<a class="change_login_details" data-view="hourly" href="'+response.fulldates[i]+'">'+response.labels[i]+'</a>';
 				}
-				Dashboard.login_menu = days;
+				// Dashboard.login_menu = days;
 				$('.logins_drilldown .options').append(days);
 			}
 

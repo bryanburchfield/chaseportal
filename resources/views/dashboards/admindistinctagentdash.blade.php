@@ -57,7 +57,7 @@
                             <li></li>
                             <li></li>
                         </ul>
-
+                        <p class="login_date"></p>
                         <!-- menu -->
                         <div id="card_dropdown" class="card_dropdown-content logins_drilldown">
                             <h3>View Day Details</h3>
