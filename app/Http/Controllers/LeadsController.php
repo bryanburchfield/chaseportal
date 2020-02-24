@@ -140,6 +140,8 @@ class LeadsController extends Controller
             'destination_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->destination_campaign),
             'page' => $page,
             'campaigns' => $campaigns,
+            'inbound_sources' => $this->getAllInboundSources(),
+            'call_statuses' => $this->getAllCallStatuses(),
         ];
 
         return view('tools.edit_contactflow_builder')->with($data);
@@ -503,5 +505,44 @@ AND Date < :to_date";
         ];
 
         return $this->yieldSql($sql, $bind);
+    }
+
+    private function getAllInboundSources()
+    {
+        $sql = '';
+        $union = '';
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
+            $sql .= "$union SELECT DISTINCT Description
+            FROM [$db].[dbo].[InboundSources]
+            WHERE GroupId = :groupid$i
+            AND InboundSource != ''";
+
+            $union = ' UNION';
+        }
+        $sql .= " ORDER BY Description";
+
+        return resultsToList($this->runSql($sql, $bind));
+    }
+
+    private function getAllCallStatuses()
+    {
+        $bind = [];
+
+        $sql = '';
+        $union = '';
+        foreach (Auth::user()->getDatabaseList() as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+
+            $sql .= "$union SELECT DISTINCT Disposition
+            FROM [$db].[dbo].[Dispos]
+            WHERE (GroupId = :groupid$i OR GroupId = -1)";
+
+            $union = ' UNION';
+        }
+        $sql .= " ORDER BY Disposition";
+
+        return resultsToList($this->runSql($sql, $bind));
     }
 }
