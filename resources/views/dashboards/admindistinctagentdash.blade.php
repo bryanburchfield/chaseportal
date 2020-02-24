@@ -35,7 +35,7 @@
     	        </div><!-- end card -->
     	    </div><!-- end column -->
 
-        	<div class="col-sm-12">
+        	<div class="col-sm-12 nopad">
     		    <div class="card-3 card blue flipping_card" id="distinct_reps_per_camp">
     		        <h1 class="title">{{__('widgets.distinct_reps_per_camp')}}</h1>
                     <div class="front p20 mbp35">
@@ -73,7 +73,7 @@
 		    </div><!-- end column -->
 
 		    <div class="col-sm-12 nopad">
-                <div class="card card-3b mbo" style="height: 320px">
+                <div class="card card-3b mbo" style="height: 345px">
                     <div class="card_table">
                         <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
                         <table class="table table-condensed table-striped" id="actions">

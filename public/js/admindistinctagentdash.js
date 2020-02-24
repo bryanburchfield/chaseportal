@@ -240,6 +240,7 @@ var Dashboard = {
 			},
 
 			success: function (response) {
+				console.log(response);
 				Dashboard.build_login_chart(response.dates);
 			}
 		});
