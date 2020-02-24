@@ -84,6 +84,8 @@
 										<option {{$value->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
 										<option {{ $value->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
 										<option {{ $value->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
+										<option {{ $value->type=='ring_group' ? 'selected' :'' }} value="ring_group">{{__('tools.ring_group')}}</option>
+										<option {{ $value->type=='call_status' ? 'selected' :'' }} value="call_status">{{__('tools.call_status')}}</option>
 									</select>
             					</div>
 
