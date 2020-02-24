@@ -274,9 +274,9 @@ var Dashboard = {
 			}
 
 			if(Dashboard.login_chart_view == 'hourly'){
-				link = '<a href="#" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="quarterly" class="view_quarterly change_login_details">View Quarterly</a>';
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">'+Lang.get('js_msgs.back_to_daily_view')+'</a><a href="'+Dashboard.login_chart_date+'" data-view="quarterly" class="view_quarterly change_login_details">'+Lang.get('js_msgs.view_quarterly')+'</a>';
 			}else if(Dashboard.login_chart_view == 'quarterly'){
-				link = '<a href="#" data-view="daily" class="back_to_daily_view">Back to Daily View</a><a href="'+Dashboard.login_chart_date+'" data-view="hourly" class="back_to_hourly_view change_login_details">Back to Hourly View</a>';
+				link = '<a href="#" data-view="daily" class="back_to_daily_view">'+Lang.get('js_msgs.back_to_daily_view')+'</a><a href="'+Dashboard.login_chart_date+'" data-view="hourly" class="back_to_hourly_view change_login_details">'+Lang.get('js_msgs.back_to_hourly_view')+'</a>';
 			}
 
 			$('.logins_drilldown .options').append(link);
