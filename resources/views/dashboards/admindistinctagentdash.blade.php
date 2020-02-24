@@ -60,7 +60,7 @@
                         <p class="login_date"></p>
                         <!-- menu -->
                         <div id="card_dropdown" class="card_dropdown-content logins_drilldown">
-                            <h3>View Day Details</h3>
+                            <h3>{{__('widgets.view_day_details')}}</h3>
                             <div class="options"></div>
                         </div>
                     </div>
