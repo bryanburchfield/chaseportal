@@ -7,9 +7,11 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidRuleFilters implements Rule
 {
     protected $filter_types = [
-        'lead_age',
-        'lead_attempts',
-        'days_called',
+        'lead_age' => 'int',
+        'lead_attempts' => 'int',
+        'days_called' => 'int',
+        'ring_group' => 'string',
+        'call_status' => 'string',
     ];
 
     /**
@@ -22,16 +24,14 @@ class ValidRuleFilters implements Rule
     public function passes($attribute, $value)
     {
         foreach ($value as $type => $val) {
-            if (!in_array($type, $this->filter_types)) {
+            if (!in_array($type, array_keys($this->filter_types))) {
                 return false;
             }
-            if (is_numeric($val)) {
-                $val = (int) $val;
-            } else {
-                $val = null;
-            }
-            if (!is_int($val) || $val < 0) {
-                return false;
+            if ($this->filter_types[$type] == 'int') {
+                $val = is_numeric($val) ? (int) $val : null;
+                if (!is_int($val) || $val < 0) {
+                    return false;
+                }
             }
         }
 
