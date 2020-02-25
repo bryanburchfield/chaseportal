@@ -14,6 +14,7 @@ use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LeadMoveService
 {
@@ -164,7 +165,9 @@ class LeadMoveService
             "\n";
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;
+
         $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
+
         if ($result === false) {
             return false;
         }
@@ -210,7 +213,7 @@ class LeadMoveService
                     return [];
             }
 
-            $bind['param$i'] = $lead_rule_filter->value;
+            $bind["param$i"] = $lead_rule_filter->value;
         }
 
         $leads = $this->runSql($sql, $bind);
@@ -248,9 +251,9 @@ class LeadMoveService
 
     private function sqlRingGroup($i, $db)
     {
-        return " AND EXISTS (SELECT COUNT(I.id)
+        return " AND EXISTS (SELECT I.id
             FROM [$db].[dbo].[DialingResults] DR
-            INNER JOIN [$db].[dbo].[InboundSource] I ON I.InboundSource = DR.CallerId AND I.Description = :param$i
+            INNER JOIN [$db].[dbo].[InboundSources] I ON I.InboundSource = DR.CallerId AND I.Description = :param$i
             WHERE DR.GroupId = Leads.GroupId
             AND DR.LeadId = Leads.Id
             AND DR.CallType = 1
