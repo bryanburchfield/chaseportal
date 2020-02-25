@@ -238,7 +238,7 @@ class EmailDripController extends Controller
     {
         $results = $this->getAllSubcampaigns($request->campaign);
 
-        return ['subcampaigns' => [''] + array_values($results)];
+        return ['subcampaigns' => array_values($results)];
     }
 
     /**
