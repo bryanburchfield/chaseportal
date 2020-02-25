@@ -432,7 +432,7 @@ var Master = {
             }
         }
 
-        var subcamp_response = Master.get_subcampaigns(campaign, 'email_drip/get_subcampaigns');
+        var subcamp_response = Master.get_subcampaigns(campaign, '/tools/email_drip/get_subcampaigns');
         $('.drip_campaigns_subcampaign').empty();
         $(sel).find('.email').empty();
 
