@@ -73,15 +73,12 @@ return [
 	'name'			=> 'Name',
 	'no_file'		=> 'No File Chosen',
 	'no_rules'		=> 'No Rules have been added yet',
-<<<<<<< HEAD
 	'no_providers'	=> 'No providers have been created yet',
-	'no_providers_added'	=> 'No Email Providers have need added',
+	'no_providers_added'	=> 'No Email Providers have been added',
 	'numb_days_between_emails'	=> '# of Days Between Emails',
 	'numb_times_can_be_emailed'	=> '# of times a lead can be emailed',
 	'password'		=> 'Password',
-=======
 	'numb_filter_attempts'		=> 'Number of Attempts to Filter by',
->>>>>>> flowbuilder
 	'phone'			=> 'Phone',
 	'port'			=> 'Port',
 	'processed'		=> 'Processed',
