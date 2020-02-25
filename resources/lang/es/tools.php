@@ -133,7 +133,7 @@ return [
 	'dnc_upload2'	=> "Si el archivo tiene una fila de encabezado, debe haber una columna 'Teléfono'.",
 	'dnc_upload3'	=> "Si el archivo no tiene una fila de encabezado, los números de teléfono deben estar en la primera columna.",
 
-	'blank' => 'blanco',
+	'no_subcampaign' => 'sin subcampaña',
 	'any' => 'ninguno',
 	'process'	=> 'Proceso',
 	'in_process'	=> 'En proceso',
