@@ -64,7 +64,11 @@
                                                                 <td>{{$drip->subject}}</td>
                                                                 <td>{{$drip->from}}</td>
                                             					<td>{{$drip->campaign}}</td>
-                                                                <td>{{$drip->subcampaign}}</td>
+                                                                <td>
+                                                                @foreach ($drip->subcampaign as $subcampaign)
+                                                                    {{$subcampaign}}<br>
+                                                                @endforeach
+                                                                </td>
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>
                                                                 <td>{{$drip->days_between_emails}}</td>
