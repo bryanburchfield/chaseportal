@@ -62,6 +62,8 @@ class LeadsController extends Controller
             'lead_rules' => $lead_rules,
             'campaigns' => $this->getAllCampaigns(),
             'history' => $this->getHistory(),
+            'inbound_sources' => $this->getAllInboundSources(),
+            'call_statuses' => $this->getAllCallStatuses(),
         ];
 
         return view('tools.contactflow_builder')->with($data);
