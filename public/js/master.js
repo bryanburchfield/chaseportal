@@ -429,14 +429,23 @@ var Master = {
         }
 
         var subcamp_response = Master.get_subcampaigns(campaign);
-        var subcampaigns='<option value=""> Select One</option>';
-        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
-            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
-        }
+        $('.drip_campaigns_subcampaign').empty();
+        $(sel).find('.email').empty();
 
         $('.drip_campaigns_subcampaign').empty();
+        var subcampaigns;
+        for (var i = 0; i < subcamp_response.responseJSON.subcampaigns.length; i++) {
+            subcampaigns += '<option value="' + subcamp_response.responseJSON.subcampaigns[i] + '">' + subcamp_response.responseJSON.subcampaigns[i] + '</option>';
+        }
+
         $('.drip_campaigns_subcampaign').append(subcampaigns);
-        $(sel).find('.email').empty();
+        $(".drip_campaigns_subcampaign").multiselect('rebuild');
+        $(".drip_campaigns_subcampaign").multiselect('refresh');
+
+        $('.drip_campaigns_subcampaign')
+            .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
+            .multiselect('selectAll', false)
+            .multiselect('updateButtonText');
 
         $.ajaxSetup({
             headers: {
