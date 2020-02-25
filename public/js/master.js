@@ -551,7 +551,6 @@ var Master = {
         var duplicate_filters = false;
         $('.lead_rule_filter_type').each(function(){
             if(!filters.hasOwnProperty($(this).val())){
-                console.log($(this).val());
                 filters[$(this).val()] = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + $(this).val() + '"]').find('.form-control ').val();
             }else{
                 $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
@@ -620,7 +619,7 @@ var Master = {
 
         var filters={};
         $('.lead_rule_filter_type').each(function(){
-            filters[$(this).val()] = $(this).parent().next('div').find('input.filter_value').val();
+            filters[$(this).val()] = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + $(this).val() + '"]').find('.form-control ').val();
         });
 
         $.ajaxSetup({
