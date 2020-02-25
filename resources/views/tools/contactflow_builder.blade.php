@@ -152,12 +152,39 @@ if (Auth::user()->isType('demo')) {
 
                                                         <div class="form-group">
                                                             {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                                            {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control lead_rule_filter_type", 'required'=>true]) !!}
+                                                            <select name="filter_type" id="filter_type" class="form-control lead_rule_filter_type" required>
+                                                                <option value="">{{__('general.select_one')}}</option>
+                                                                <option data-filtertype="lead_age" value="lead_age">{{__('tools.lead_age')}}</option>
+                                                                <option data-filtertype="lead_attempts" value="lead_attempts">{{__('tools.lead_attempts')}}</option>
+                                                                <option data-filtertype="days_called" value="days_called">{{__('tools.days_called')}}</option>
+                                                                <option data-filtertype="ring_group" value="ring_group">{{__('tools.ring_group')}}</option>
+                                                                <option data-filtertype="call_status" value="call_status">{{__('tools.call_status')}}</option>
+                                                            </select>
                                                         </div>
 
-                                                        <div class="form-group">
+                                                        <div class="form-group subfilter_group" data-subfilter="lead_age">
                                                             {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'required'=>true, 'id'=>'']) !!}
+                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'id'=>'']) !!}
+                                                        </div>
+
+                                                        <div class="form-group subfilter_group hidetilloaded" data-subfilter="days_called">
+                                                            {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
+                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'id'=>'']) !!}
+                                                        </div>
+
+                                                        <div class="form-group subfilter_group hidetilloaded" data-subfilter="lead_attempts">
+                                                            {!! Form::label('filter_value', __('tools.numb_filter_attempts')) !!}
+                                                            {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'id'=>'']) !!}
+                                                        </div>
+
+                                                        <div class="form-group subfilter_group hidetilloaded" data-subfilter="ring_group">
+                                                            {!! Form::label('filter_type', __('tools.inbound_sources')) !!}
+                                                            {!! Form::select("inbound_sources", $inbound_sources, null, ["class" => "form-control inbound_sources lead_rule_filter_value"]) !!}
+                                                        </div>
+
+                                                        <div class="form-group subfilter_group hidetilloaded" data-subfilter="call_status">
+                                                            {!! Form::label('filter_type', __('tools.call_statuses')) !!}
+                                                            {!! Form::select("call_statuses ", $call_statuses , null, ["class" => "form-control call_statuses lead_rule_filter_value"]) !!}
                                                         </div>
 
                                                         <a href="#" class="add_leadrule_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
