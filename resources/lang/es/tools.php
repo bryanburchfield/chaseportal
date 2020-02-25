@@ -134,7 +134,7 @@ return [
 	'dnc_upload3'	=> "Si el archivo no tiene una fila de encabezado, los números de teléfono deben estar en la primera columna.",
 
 	'no_subcampaign' => '[Sin Subcampaña]',
-	'any' => '[Cualquier Subcampaña]',
+	'any' => 'Cualquier Subcampaña',
 	'process'	=> 'Proceso',
 	'in_process'	=> 'En proceso',
 	'less_than'		=> 'Menos Que',

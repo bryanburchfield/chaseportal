@@ -136,7 +136,7 @@ return [
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process',
 	'no_subcampaign' => '[No Subcampaign]',
-	'any' => '[Any Subcampaign]',
+	'any' => 'Any Subcampaign',
 
 	//////////  OPERATORS
 
