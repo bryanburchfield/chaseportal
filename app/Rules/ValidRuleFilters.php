@@ -6,6 +6,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidRuleFilters implements Rule
 {
+    protected $rulenumb;
+
     protected $filter_types = [
         'lead_age' => 'int',
         'lead_attempts' => 'int',
@@ -23,7 +25,9 @@ class ValidRuleFilters implements Rule
      */
     public function passes($attribute, $value)
     {
+        $this->rulenumb = 0;
         foreach ($value as $type => $val) {
+            $this->rulenumb++;
             if (!in_array($type, array_keys($this->filter_types))) {
                 return false;
             }
@@ -45,6 +49,6 @@ class ValidRuleFilters implements Rule
      */
     public function message()
     {
-        return trans('tools.invalid_filter');
+        return trans('tools.invalid_filter') . ' #' . $this->rulenumb;
     }
 }
