@@ -388,7 +388,11 @@ var Master = {
         });
     },
 
-    get_subcampaigns:function(campaign){
+    get_subcampaigns:function(campaign, path=''){
+
+        if(!path){
+            path = '/tools/contactflow_builder/get_subcampaigns';
+        }
 
         $.ajaxSetup({
             headers: {
@@ -397,7 +401,7 @@ var Master = {
         });
 
         return $.ajax({
-            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            url: path ,
             type: 'POST',
             dataType: 'json',
             async: false,
@@ -428,7 +432,7 @@ var Master = {
             }
         }
 
-        var subcamp_response = Master.get_subcampaigns(campaign);
+        var subcamp_response = Master.get_subcampaigns(campaign, 'email_drip/get_subcampaigns');
         $('.drip_campaigns_subcampaign').empty();
         $(sel).find('.email').empty();
 
