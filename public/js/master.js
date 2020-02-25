@@ -447,7 +447,7 @@ var Master = {
         $(".drip_campaigns_subcampaign").multiselect('refresh');
 
         $('.drip_campaigns_subcampaign')
-            .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
+            .multiselect({ nonSelectedText: '', })
             .multiselect('selectAll', true)
             .multiselect('updateButtonText');
 

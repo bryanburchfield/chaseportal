@@ -30,10 +30,7 @@
 
 <div class="form-group">
     <label>{{__('tools.subcampaign')}}</label>
-    <select name="subcampaign"class="form-control drip_campaigns_subcampaign multiselect" multiple="true">
-        <option value="">{{__('tools.select_one')}}</option>
-    </select>
-
+    <select name="subcampaign"class="form-control drip_campaigns_subcampaign multiselect" multiple="true"></select>
 </div>
 
 <div class="form-group">
