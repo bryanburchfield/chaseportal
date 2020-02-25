@@ -169,6 +169,11 @@ class EmailDripController extends Controller
      */
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
     {
+        // create array with "" if subcamp 'none' was selected
+        if (is_array($request->subcampaign) && empty($request->subcamp)) {
+            $request->merge(['subcampaign' => ['']]);
+        }
+
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
         $email_drip_campaign->user_id = Auth::User()->id;
