@@ -71,7 +71,7 @@
                                                                 @isset($drip->subcampaign)
                                                                     @foreach ($drip->subcampaign as $subcampaign)
                                                                         @if ($subcampaign == '')
-                                                                            <i>{{__('tools.blank')}}</i><br>
+                                                                            <i>{{__('tools.none')}}</i><br>
                                                                         @else
                                                                             {{$subcampaign}}<br>
                                                                         @endif

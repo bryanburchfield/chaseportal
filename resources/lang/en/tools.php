@@ -135,7 +135,7 @@ return [
 
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process',
-	'blank' => 'blank',
+	'none' => 'none',
 	'any' => 'any',
 
 	//////////  OPERATORS
