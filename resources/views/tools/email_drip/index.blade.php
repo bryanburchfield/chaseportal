@@ -66,7 +66,11 @@
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>
                                                                 @foreach ($drip->subcampaign as $subcampaign)
+                                                                @if ($subcampaign == '')
+                                                                    <i>{{__('tools.blank')}}</i><br>
+                                                                @else
                                                                     {{$subcampaign}}<br>
+                                                                @endif
                                                                 @endforeach
                                                                 </td>
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
