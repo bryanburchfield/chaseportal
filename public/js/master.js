@@ -437,9 +437,8 @@ var Master = {
         $(sel).find('.email').empty();
 
         $('.drip_campaigns_subcampaign').empty();
-        var subcampaigns='';
+        var subcampaigns='<option value="">'+Lang.get('js_msgs.none')+'</option>';
         for (var i = 0; i < subcamp_response.responseJSON.subcampaigns.length; i++) {
-
             subcampaigns += '<option value="' + subcamp_response.responseJSON.subcampaigns[i] + '">' + subcamp_response.responseJSON.subcampaigns[i] + '</option>';
         }
 
