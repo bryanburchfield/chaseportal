@@ -65,13 +65,18 @@
                                                                 <td>{{$drip->from}}</td>
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>
-                                                                @foreach ($drip->subcampaign as $subcampaign)
-                                                                @if ($subcampaign == '')
-                                                                    <i>{{__('tools.blank')}}</i><br>
-                                                                @else
-                                                                    {{$subcampaign}}<br>
-                                                                @endif
-                                                                @endforeach
+                                                                @empty($drip->subcampaign)
+                                                                    <i>{{__('tools.any')}}</i><br>
+                                                                @endempty
+                                                                @isset($drip->subcampaign)
+                                                                    @foreach ($drip->subcampaign as $subcampaign)
+                                                                        @if ($subcampaign == '')
+                                                                            <i>{{__('tools.blank')}}</i><br>
+                                                                        @else
+                                                                            {{$subcampaign}}<br>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endisset
                                                                 </td>
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>

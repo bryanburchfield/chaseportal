@@ -14,7 +14,7 @@ class ChangeSubcampaignToJsonOnEmailDripCampaigns extends Migration
     public function up()
     {
         Schema::table('email_drip_campaigns', function (Blueprint $table) {
-            $table->json('subcampaign')->nullable(false)->change();
+            $table->json('subcampaign')->nullable()->change();
         });
     }
 

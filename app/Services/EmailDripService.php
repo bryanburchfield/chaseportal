@@ -121,13 +121,15 @@ class EmailDripService
         $sql .= " WHERE GroupId = :group_id
         AND Campaign = :campaign";
 
-        $in = '';
-        foreach ($email_drip_campaign->subcampaign as $i => $subcampaign) {
-            $in .= ':subcampaign' . $i . ',';
-            $bind['subcampaign' . $i] = $subcampaign;
+        if (!empty($email_drip_campaign->subcampaign)) {
+            $in = '';
+            foreach ($email_drip_campaign->subcampaign as $i => $subcampaign) {
+                $in .= ':subcampaign' . $i . ',';
+                $bind['subcampaign' . $i] = $subcampaign;
+            }
+            $in = rtrim($in, ',');
+            $sql .= " AND Subcampaign IN ($in)";
         }
-        $in = rtrim($in, ',');
-        $sql .= " AND Subcampaign IN ($in)";
 
         $sql .= ' ' . $where . "
             AND L.id IN (
