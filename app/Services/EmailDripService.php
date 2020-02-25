@@ -14,7 +14,6 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class EmailDripService
@@ -124,6 +123,9 @@ class EmailDripService
         if (!empty($email_drip_campaign->subcampaign)) {
             $in = '';
             foreach ($email_drip_campaign->subcampaign as $i => $subcampaign) {
+                if ($subcampaign == '!!none!!') {
+                    $subcampaign = '';
+                }
                 $in .= ':subcampaign' . $i . ',';
                 $bind['subcampaign' . $i] = $subcampaign;
             }
