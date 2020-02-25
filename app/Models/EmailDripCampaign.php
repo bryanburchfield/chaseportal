@@ -25,6 +25,10 @@ class EmailDripCampaign extends Model
         'last_run_to',
     ];
 
+    protected $casts = [
+        'subcampaign' => 'array',
+    ];
+
     public function emailServiceProvider()
     {
         return $this->belongsTo('App\Models\EmailServiceProvider');

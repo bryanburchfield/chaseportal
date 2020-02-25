@@ -14,6 +14,7 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class EmailDripService
@@ -120,10 +121,13 @@ class EmailDripService
         $sql .= " WHERE GroupId = :group_id
         AND Campaign = :campaign";
 
-        if (!empty($email_drip_campaign->subcampaign)) {
-            $sql .= " AND Subcampaign = :subcampaign";
-            $bind['subcampaign'] = $email_drip_campaign->subcampaign;
+        $in = '';
+        foreach ($email_drip_campaign->subcampaign as $i => $subcampaign) {
+            $in .= ':subcampaign' . $i . ',';
+            $bind['subcampaign' . $i] = $subcampaign;
         }
+        $in = rtrim($in, ',');
+        $sql .= " AND Subcampaign IN ($in)";
 
         $sql .= ' ' . $where . "
             AND L.id IN (
