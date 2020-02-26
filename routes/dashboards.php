@@ -11,12 +11,6 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
 
-        // Admin only dashboards
-        Route::group(['middleware' => 'can:accessAdmin'], function () {
-            Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
-            Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
-        });
-
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
         Route::post('/kpi/recipients', 'KpiController@addRecipient');
@@ -67,6 +61,9 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
             Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::get('admin/settings', 'AdminController@settings');
+            // Super Admin only dashboards
+            Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
+            Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
         });
     });
 });
