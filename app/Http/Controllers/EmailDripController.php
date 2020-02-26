@@ -40,9 +40,13 @@ class EmailDripController extends Controller
             'type' => 'other',
         ];
 
+        // create blank drip campaign so blade doesn't throw errors
+        $email_drip_campaign = new EmailDripCampaign();
+
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
+            'email_drip_campaign' => $email_drip_campaign,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
             'provider_types' => $this->getProviderTypes(),
@@ -230,14 +234,15 @@ class EmailDripController extends Controller
      */
     public function editEmailDripCampaign(Request $request)
     {
-        $campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
+
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
         ];
         $data = [
             'page' => $page,
-            'campaign' => $campaign,
+            'email_drip_campaign' => $email_drip_campaign,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
             'provider_types' => $this->getProviderTypes(),
