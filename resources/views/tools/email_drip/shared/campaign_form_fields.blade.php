@@ -1,21 +1,22 @@
+@csrf
 <div class="form-group">
     <label>{{__('tools.name')}}</label>
-    <input type="text" class="form-control name" name="name" required>
+    <input type="text" class="form-control name" name="name" value="{{old('name', $email_drip_campaign->name)}}" required>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.description')}}</label>
-    <input type="text" class="form-control description" name="description" required>
+    <input type="text" class="form-control description" name="description" value="{{old('description', $email_drip_campaign->description)}}" required>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.subject')}}</label>
-    <input type="text" class="form-control subject" name="subject" required>
+    <input type="text" class="form-control subject" name="subject" value="{{old('subject', $email_drip_campaign->subject)}}" required>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.from')}}</label>
-    <input type="text" class="form-control from" name="from" required>
+    <input type="text" class="form-control from" name="from"  value="{{old('from', $email_drip_campaign->from)}}" required>
 </div>
 
 <div class="form-group">
@@ -23,22 +24,22 @@
     <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
         <option value="">{{__('tools.select_one')}}</option>
         @foreach($campaigns as $key => $value)
-            <option value="{{$key}}">{{$value}}</option>
+            <option {{$key==old('campaign', $email_drip_campaign->campaign) ? 'selected' :'' }} value="{{$key}}">{{$value}}</option>
         @endforeach
     </select>
 </div>
 
 <div class="form-group">
-    <label>{{__('tools.subcampaign')}}</label>
-    <select name="subcampaign"class="form-control drip_campaigns_subcampaign">
-        <option value="">{{__('tools.select_one')}}</option>
-    </select>
+    <label>{{__('tools.subcampaigns')}}</label>
+    {!! Form::select("subcampaigns[]", $subcampaigns, $email_drip_campaign->subcampaigns, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
 </div>
 
 <div class="form-group">
     <label>{{__('tools.email_field')}}</label>
-    <select name="email_field" class="form-control email" required>
-        <option value="">{{__('tools.select_one')}}</option>
+    <select name="email_field" class="form-control email">
+        @foreach($email_fields as $key => $value)
+            <option {{$key==old('email_field', $email_drip_campaign->email_field) ? 'selected' :'' }} value="{{$key}}">{{$key}}</option>
+        @endforeach
     </select>
 </div>
 
@@ -47,9 +48,10 @@
     <select name="template_id" class="template_id form-control">
         <option value="">{{__('tools.select_one')}}</option>
         @foreach($templates as $template)
-            <option value="{{$template->id}}">{{$template->Name}}</option>
+            <option {{$template->id==old('template_id', $email_drip_campaign->template_id) ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
         @endforeach
     </select>
+
 </div>
 
 <div class="form-group">
@@ -57,19 +59,19 @@
     <select name="email_service_provider_id" class="form-control email_service_provider_id" required>
         <option value="">{{__('tools.select_one')}}</option>
         @foreach($email_service_providers as $server)
-            <option value="{{$server->id}}">{{$server->name}}</option>
+            <option {{$server->id==old('email_service_provider_id', $email_drip_campaign->email_service_provider_id) ? 'selected' :'' }} value="{{$server->id}}">{{$server->name}}</option>
         @endforeach
     </select>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.numb_times_can_be_emailed')}}</label>
-    <input type="number" class="form-control emails_per_lead" name="emails_per_lead" min="0" max="1000">
+    <input type="number" class="form-control emails_per_lead" name="emails_per_lead" value="{{old('emails_per_lead', $email_drip_campaign->emails_per_lead)}}" min="0" max="1000">
 </div>
 
 <div class="form-group">
     <label>{{__('tools.numb_days_between_emails')}}</label>
-    <input type="number" class="form-control days_between_emails" name="days_between_emails" min="0" max="1000">
+    <input type="number" class="form-control days_between_emails" name="days_between_emails" value="{{old('days_between_emails', $email_drip_campaign->days_between_emails)}}" min="0" max="1000">
 </div>
 
-<input type="hidden" name="id" class="id">
+<input type="hidden" name="id" class="id" value="{{!empty($email_drip_campaign) ? $email_drip_campaign->id : ''}}">

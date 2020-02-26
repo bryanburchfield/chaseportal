@@ -49,6 +49,7 @@ return [
 	'no_data'					=> 'No Data Available ',
 	'non_callable'				=> 'Non Callable',
 	'non_callable_by_disp'		=> 'Non-Callable Leads by Disposition',
+	'no_subcampaign'			=> 'No Subcampaign',
 	'none_selected'				=> 'None Selected',
 	'numb_filter_attempts'		=> 'Number of Attempts to Filter by',
 	'ordered_by'				=> 'order by',

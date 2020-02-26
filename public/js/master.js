@@ -113,8 +113,8 @@ var Master = {
         $('.delete_email_service_provider').on('click', this.delete_esp);
         $('.create_campaign_form').on('submit', this.create_email_campaign);
         $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
-        $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
-        $('.edit_campaign').on('click', this.update_email_campaign);
+        // $('.edit_campaign_modal').on('click', this.edit_campaign_modal);
+        // $('.edit_campaign').on('click', this.update_email_campaign);
         $('.delete_campaign ').on('click', this.delete_campaign);
         $('.provider_type').on('change', this.get_provider_properties);
 
@@ -405,7 +405,11 @@ var Master = {
         });
     },
 
-    get_subcampaigns:function(campaign){
+    get_subcampaigns:function(campaign, path=''){
+
+        if(!path){
+            path = '/tools/contactflow_builder/get_subcampaigns';
+        }
 
         $.ajaxSetup({
             headers: {
@@ -414,7 +418,7 @@ var Master = {
         });
 
         return $.ajax({
-            url: '/tools/contactflow_builder/get_subcampaigns' ,
+            url: path ,
             type: 'POST',
             dataType: 'json',
             async: false,
@@ -445,15 +449,31 @@ var Master = {
             }
         }
 
-        var subcamp_response = Master.get_subcampaigns(campaign);
-        var subcampaigns='<option value=""> Select One</option>';
-        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
-            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
-        }
+        var subcamp_response = Master.get_subcampaigns(campaign, '/tools/email_drip/get_subcampaigns');
+        $('.drip_campaigns_subcampaign').empty();
+        $(sel).find('.email').empty();
+        console.log(subcamp_response);
+        var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
+        var subcamp_obj_length = Object.keys(subcamp_obj).length;
+        const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
+        let subcampaigns_array = [];
+        subcampaigns_array.push(Object.values(subcamp_obj));
 
         $('.drip_campaigns_subcampaign').empty();
+
+        var subcampaigns='';
+        for (var i = 0; i < subcampaigns_array[0].length; i++) {
+            subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+        }
+
         $('.drip_campaigns_subcampaign').append(subcampaigns);
-        $(sel).find('.email').empty();
+        $(".drip_campaigns_subcampaign").multiselect('rebuild');
+        $(".drip_campaigns_subcampaign").multiselect('refresh');
+
+        $('.drip_campaigns_subcampaign')
+            .multiselect({ nonSelectedText: '', })
+            .multiselect('selectAll', true)
+            .multiselect('updateButtonText');
 
         $.ajaxSetup({
             headers: {
@@ -2444,17 +2464,7 @@ var Master = {
     create_email_campaign:function(e){
         e.preventDefault();
 
-        var name = $(this).find('.name').val(),
-            description = $(this).find('.description').val(),
-            subject = $(this).find('.subject').val(),
-            from = $(this).find('.from').val(),
-            campaign = $(this).find('.campaign').val(),
-            subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
-            email_service_provider_id = $(this).find('.email_service_provider_id').val(),
-            email_field= $(this).find('.email').val(),
-            template_id = $(this).find('.template_id').val(),
-            emails_per_lead = $(this).find('.emails_per_lead').val(),
-            days_between_emails = $(this).find('.days_between_emails').val()
+        var form_data = $(this).serialize();
         ;
 
         $.ajaxSetup({
@@ -2466,19 +2476,7 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/add_campaign',
             type: 'POST',
-            data: {
-                name: name,
-                description: description,
-                email_field:email_field,
-                from:from,
-                subject:subject,
-                campaign: campaign,
-                subcampaign: subcampaign,
-                email_service_provider_id: email_service_provider_id,
-                template_id:template_id,
-                emails_per_lead:emails_per_lead,
-                days_between_emails:days_between_emails
-            },
+            data:form_data,
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
                 window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
@@ -2503,75 +2501,75 @@ var Master = {
         });
     },
 
-    update_email_campaign:function(e){
-        e.preventDefault();
-        var id = $('.edit_campaign_form').find('.id').val(),
-            name = $('.edit_campaign_form').find('.name').val(),
-            description = $('.edit_campaign_form').find('.description').val(),
-            from = $('.edit_campaign_form').find('.from').val(),
-            subject = $('.edit_campaign_form').find('.subject').val(),
-            campaign = $('.edit_campaign_form').find('.campaign').val(),
-            subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
-            email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
-            email_field= $('.edit_campaign_form').find('.email').val(),
-            template_id = $('.edit_campaign_form').find('.template_id').val(),
-            emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
-            days_between_emails = $('.edit_campaign_form').find('.days_between_emails').val()
-        ;
+    // update_email_campaign:function(e){
+    //     e.preventDefault();
+    //     var id = $('.edit_campaign_form').find('.id').val(),
+    //         name = $('.edit_campaign_form').find('.name').val(),
+    //         description = $('.edit_campaign_form').find('.description').val(),
+    //         from = $('.edit_campaign_form').find('.from').val(),
+    //         subject = $('.edit_campaign_form').find('.subject').val(),
+    //         campaign = $('.edit_campaign_form').find('.campaign').val(),
+    //         subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
+    //         email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
+    //         email_field= $('.edit_campaign_form').find('.email').val(),
+    //         template_id = $('.edit_campaign_form').find('.template_id').val(),
+    //         emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
+    //         days_between_emails = $('.edit_campaign_form').find('.days_between_emails').val()
+    //     ;
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         }
+    //     });
 
-        $.ajax({
-            url: '/tools/email_drip/update_campaign',
-            type: 'POST',
-            data: {
-                id:id,
-                name: name,
-                description: description,
-                from:from,
-                subject:subject,
-                email_field:email_field,
-                campaign: campaign,
-                subcampaign: subcampaign,
-                email_service_provider_id: email_service_provider_id,
-                template_id:template_id,
-                emails_per_lead:emails_per_lead,
-                days_between_emails:days_between_emails
-            },
-            success: function (response) {
+    //     $.ajax({
+    //         url: '/tools/email_drip/update_campaign',
+    //         type: 'POST',
+    //         data: {
+    //             id:id,
+    //             name: name,
+    //             description: description,
+    //             from:from,
+    //             subject:subject,
+    //             email_field:email_field,
+    //             campaign: campaign,
+    //             subcampaign: subcampaign,
+    //             email_service_provider_id: email_service_provider_id,
+    //             template_id:template_id,
+    //             emails_per_lead:emails_per_lead,
+    //             days_between_emails:days_between_emails
+    //         },
+    //         success: function (response) {
 
-                $('.create_campaign ').find('i').remove();
-                location.reload();
-            },error: function (data) {
+    //             $('.create_campaign ').find('i').remove();
+    //             location.reload();
+    //         },error: function (data) {
 
-                $('.create_campaign ').find('i').remove();
-                if (data.status === 422) {
-                    $('.edit_campaign_form .alert').empty();
-                    $('.edit_campaign_form .btn').find('i').remove();
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+    //             $('.create_campaign ').find('i').remove();
+    //             if (data.status === 422) {
+    //                 $('.edit_campaign_form .alert').empty();
+    //                 $('.edit_campaign_form .btn').find('i').remove();
+    //                 var errors = $.parseJSON(data.responseText);
+    //                 $.each(errors, function (key, value) {
 
-                        if ($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                                $('.edit_campaign_form .alert-danger').append('<li>'+value+'</li>');
-                            });
-                        }
+    //                     if ($.isPlainObject(value)) {
+    //                         $.each(value, function (key, value) {
+    //                             $('.edit_campaign_form .alert-danger').append('<li>'+value+'</li>');
+    //                         });
+    //                     }
 
-                        $('.edit_campaign_form .alert-danger').show();
-                    });
-                }
-            }
-        });
-    },
+    //                     $('.edit_campaign_form .alert-danger').show();
+    //                 });
+    //             }
+    //         }
+    //     });
+    // },
 
     edit_campaign_modal:function(e){
         e.preventDefault();
         var id = $(this).data('campaignid');
-
+        console.log('test');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

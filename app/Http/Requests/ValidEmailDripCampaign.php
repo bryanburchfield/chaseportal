@@ -31,7 +31,7 @@ class ValidEmailDripCampaign extends FormRequest
             'name' => 'required',
             'description' => 'required',
             'campaign' => 'required',
-            'subcampaign' => 'nullable',
+            'subcampaign' => 'nullable|array',
             'subject' => 'required',
             'from' => 'required',
             'email_field' => 'required',
@@ -44,7 +44,7 @@ class ValidEmailDripCampaign extends FormRequest
             ],
             'template_id' => 'required|integer',
             'emails_per_lead' => 'required|integer',
-            'days_between_emails' => 'nullable|integer',
+            'days_between_emails' => 'required|integer',
         ];
     }
 }

@@ -40,7 +40,7 @@
                                                             <th>{{__('tools.subject')}}</th>
                                                             <th>{{__('tools.from')}}</th>
                                         					<th>{{__('tools.campaign')}}</th>
-                                        					<th>{{__('tools.subcampaign')}}</th>
+                                        					<th>{{__('tools.subcampaigns')}}</th>
                                         					<th>{{__('tools.provider')}}</th>
                                                             <th>{{__('tools.emails_per_lead')}}</th>
                                                             <th>{{__('tools.days_between_emails')}}</th>
@@ -64,12 +64,25 @@
                                                                 <td>{{$drip->subject}}</td>
                                                                 <td>{{$drip->from}}</td>
                                             					<td>{{$drip->campaign}}</td>
-                                                                <td>{{$drip->subcampaign}}</td>
+                                                                <td>
+                                                                @empty($drip->subcampaigns)
+                                                                    <i>{{__('tools.any')}}</i><br>
+                                                                @endempty
+                                                                @isset($drip->subcampaigns)
+                                                                    @foreach ($drip->subcampaigns as $subcampaign)
+                                                                        @if ($subcampaign == '!!none!!')
+                                                                            <i>{{__('tools.no_subcampaign')}}</i><br>
+                                                                        @else
+                                                                            {{$subcampaign}}<br>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endisset
+                                                                </td>
                                                                 <td>{{$drip->emailServiceProvider->name}}</td>
                                                                 <td>{{$drip->emails_per_lead}}</td>
                                                                 <td>{{$drip->days_between_emails}}</td>
                                                                 <td><a href="{{url('/tools/email_drip/update_filters/'.$drip->id)}}" class="campaign_filter_modal {{$drip->emailDripCampaignFilters->isEmpty() ? 'needs_filters' : 'has_filters'}}"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_campaign_modal" data-campaignid="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="edit_rules" href="{{ url('/tools/email_drip/edit_campaign/'.$drip->id) }}" data-name="{{$drip->name}}" data-user="{{$drip->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$drip->name}}" data-id="{{$drip->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                             				</tr>
                                                         @endforeach

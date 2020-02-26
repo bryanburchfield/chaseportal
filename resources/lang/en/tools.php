@@ -106,11 +106,13 @@ return [
 	'email_service_providers'	=> 'Email Providers',
 	'start_over'	=> 'Start Over',
 	'subcampaign'	=> 'Subcampaign',
+	'subcampaigns'	=> 'Subcampaigns',
 	'subject'		=> 'Subject',
 	'templates'		=> 'Templates',
 	'test_connection' => 'Test Connection',
 	'tools'			=> 'Tools',
 	'undo_move'		=> 'Undo Move',
+	'update_campaign'	=> 'Update Campaign',
 	'upload'		=> 'Upload',
 	'upload_a_file'	=> 'Upload a File',
 	'upload_new_file' => 'Upload a New File',
@@ -140,6 +142,8 @@ return [
 
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process',
+	'no_subcampaign' => '[No Subcampaign]',
+	'any' => 'Any Subcampaign',
 
 	//////////  OPERATORS
 

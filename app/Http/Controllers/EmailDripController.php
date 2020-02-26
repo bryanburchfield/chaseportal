@@ -40,18 +40,52 @@ class EmailDripController extends Controller
             'type' => 'other',
         ];
 
+        // create blank drip campaign so shared blade doesn't throw errors
+        $email_drip_campaign = new EmailDripCampaign();
+
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
+            'email_drip_campaign' => $email_drip_campaign,
+            'email_fields' => [],
             'provider_types' => $this->getProviderTypes(),
             'campaigns' => $this->getAllCampaigns(),
+            'subcampaigns' => [],
             'templates' => $this->getTemplates(),
-            'operators' => $this->getOperators(),
         ];
 
         return view('tools.email_drip.index')->with($data);
+    }
+
+    /**
+     * Edit a drip campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
+    public function editEmailDripCampaign(Request $request)
+    {
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+
+        $campaign_request = new Request(['campaign' => $email_drip_campaign->campaign]);
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+        $data = [
+            'page' => $page,
+            'email_drip_campaign' => $email_drip_campaign,
+            'email_service_providers' => $this->getEmailServiceProviders(),
+            'email_fields' => $this->getTableFields($campaign_request),
+            'campaigns' => $this->getAllCampaigns(),
+            'subcampaigns' => $this->getAllSubcampaignsWithNone($email_drip_campaign->campaign),
+            'templates' => $this->getTemplates(),
+        ];
+
+        return view('tools.email_drip.edit_campaign')->with($data);
     }
 
     public function updateFilters(Request $request)
@@ -169,6 +203,11 @@ class EmailDripController extends Controller
      */
     public function addEmailDripCampaign(ValidEmailDripCampaign $request)
     {
+        // create array with "" if subcamp 'none' was selected
+        if (is_array($request->subcampaigns) && empty($request->subcampaigns)) {
+            $request->merge(['subcampaigns' => ['']]);
+        }
+
         $email_drip_campaign = new EmailDripCampaign($request->all());
 
         $email_drip_campaign->user_id = Auth::User()->id;
@@ -190,17 +229,19 @@ class EmailDripController extends Controller
      */
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
-        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+
+        // clean out subcamps if they didn't select any
+        if ($request->missing('subcampaigns')) {
+            $request->merge(['subcampaigns' => []]);
+        }
 
         $email_drip_campaign->fill($request->all());
         $email_drip_campaign->user_id = Auth::User()->id;
 
         $email_drip_campaign->save();
 
-        return [
-            'status' => 'success',
-            'email_drip_campaign_id' => $email_drip_campaign->id,
-        ];
+        return redirect()->action('EmailDripController@index');
     }
 
     /**
@@ -211,21 +252,10 @@ class EmailDripController extends Controller
      */
     public function deleteEmailDripCampaign(Request $request)
     {
-        $email_campaign = EmailDripCampaign::findOrFail($request->id);
-        $email_campaign->delete();
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+        $email_drip_campaign->delete();
 
         return ['status' => 'success'];
-    }
-
-    /**
-     * Return drip campaign
-     * 
-     * @param Request $request 
-     * @return mixed 
-     */
-    public function getEmailDripCampaign(Request $request)
-    {
-        return EmailDripCampaign::findOrFail($request->id);
     }
 
     /**
@@ -236,9 +266,17 @@ class EmailDripController extends Controller
      */
     public function getSubcampaigns(Request $request)
     {
-        $results = $this->getAllSubcampaigns($request->campaign);
+        $results = $this->getAllSubcampaignsWithNone($request->campaign);
 
-        return ['subcampaigns' => array_values($results)];
+        return ['subcampaigns' => $results];
+    }
+
+    private function getAllSubcampaignsWithNone($campaign)
+    {
+        $results = $this->getAllSubcampaigns($campaign);
+        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
+
+        return $results;
     }
 
     /**

@@ -49,6 +49,7 @@ return [
 	'no_data'					=> 'Datos No Disponibles',
 	'non_callable'				=> 'No Invocable',
 	'non_callable_by_disp'		=> 'Conductores no Invocables por Disposición',
+	'no_subcampaign'			=> 'Sin Subcampaña',
 	'none_selected'				=> 'Nada Seleccionado',
 	'numb_filter_attempts'		=> 'Número de Intentos para Filtrar por',
 	'ordered_by'				=> 'Ordenar por',
