@@ -431,11 +431,11 @@ var Master = {
                 sel = $('.create_campaign_form');
             }
         }
-        
+
         var subcamp_response = Master.get_subcampaigns(campaign, '/tools/email_drip/get_subcampaigns');
         $('.drip_campaigns_subcampaign').empty();
         $(sel).find('.email').empty();
-
+        console.log(subcamp_response);
         var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
         var subcamp_obj_length = Object.keys(subcamp_obj).length;
         const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);

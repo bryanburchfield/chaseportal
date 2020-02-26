@@ -21,10 +21,18 @@
                     <div class="col-sm-6">
                         <div class="card mt30">
                             <form action="/tools/email_drip/update_campaign" method="post" class="form edit_campaign_form">
-                                 @include('tools.email_drip.shared.campaign_form_fields')
+                                @include('tools.email_drip.shared.campaign_form_fields')
+
+                                @if($errors->any())
+                                <div class="alert alert-danger">
+                                    @foreach($errors->all() as $e)
+                                        <li>{{ $e }}</li>
+                                     @endforeach
+                                </div>
+                                @endif
 
                                 <div class="alert alert-success hidetilloaded"></div>
-                                <div class="alert alert-danger hidetilloaded"></div>
+
                                 <button type="submit" class="btn btn-primary update_campaign add_btn_loader mt10 mb0">{{__('tools.update_campaign')}}</button>
                             </form>
                         </div>
