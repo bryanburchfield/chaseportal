@@ -106,6 +106,7 @@ return [
 	'test_connection' => 'Test Connection',
 	'tools'			=> 'Tools',
 	'undo_move'		=> 'Undo Move',
+	'update_campaign'	=> 'Update Campaign',
 	'upload'		=> 'Upload',
 	'upload_a_file'	=> 'Upload a File',
 	'upload_new_file' => 'Upload a New File',

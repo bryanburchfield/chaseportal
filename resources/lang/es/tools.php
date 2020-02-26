@@ -106,6 +106,7 @@ return [
 	'test_connection' => 'Conexión de Prueba',
 	'tools'			=> 'Herramientas',
 	'undo_move'		=> 'Deshacer movimiento',
+	'update_campaign'	=> 'Actualizar Campaña',
 	'upload'		=> 'Sube',
 	'upload_a_file' => 'Sube un Archivo',
 	'upload_new_file' => 'Sube un nuevo Archivo',
