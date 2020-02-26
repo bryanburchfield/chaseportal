@@ -36,7 +36,7 @@
 <div class="form-group">
     <label>{{__('tools.email_field')}}</label>
     <select name="email_field" class="form-control email" required>
-        {{-- <option {{$emails_fields->id==$email_drip_campaign->email_field ? 'selected' :'' }} value="">{{__('tools.select_one')}}</option> --}}
+        {{-- <option {{$email_fields->id == $email_drip_campaign->email_field ? 'selected' :'' }} value="">{{__('tools.select_one')}}</option> --}}
     </select>
 </div>
 
