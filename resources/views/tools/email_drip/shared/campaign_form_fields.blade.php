@@ -23,7 +23,7 @@
     <select name="campaign" class="form-control campaign drip_campaigns_campaign_menu"  required>
         <option value="">{{__('tools.select_one')}}</option>
         @foreach($campaigns as $key => $value)
-            <option {{($key == $email_drip_campaign->campaign) ? 'selected' : '' }} value="{{$key}}">{{$value}}</option>
+            <option {{$key==$email_drip_campaign->campaign ? 'selected' :'' }} value="{{$key}}">{{$value}}</option>
         @endforeach
     </select>
 </div>
@@ -35,13 +35,14 @@
     @else
     {!! Form::select("subcampaign[]",  null, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
     @endif
-    </select>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.email_field')}}</label>
-    <select name="email_field" class="form-control email" required>
-        {{-- <option {{$$emails_fields->id==$email_drip_campaign->email_field ? 'selected' :'' }} value="">{{__('tools.select_one')}}</option> --}}
+    <select name="email_field" class="form-control email">
+        @foreach($email_fields as $key => $value)
+            <option {{$key==$email_drip_campaign->email_field ? 'selected' :'' }} value="{{$key}}">{{$key}}</option>
+        @endforeach
     </select>
 </div>
 

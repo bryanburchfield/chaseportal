@@ -40,19 +40,19 @@ class EmailDripController extends Controller
             'type' => 'other',
         ];
 
-        // create blank drip campaign so blade doesn't throw errors
+        // create blank drip campaign so shared blade doesn't throw errors
         $email_drip_campaign = new EmailDripCampaign();
 
         $data = [
             'page' => $page,
             'group_id' => Auth::user()->group_id,
-            'email_drip_campaign' => $email_drip_campaign,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
+            'email_drip_campaign' => $email_drip_campaign,
+            'email_fields' => [],
             'provider_types' => $this->getProviderTypes(),
             'campaigns' => $this->getAllCampaigns(),
             'templates' => $this->getTemplates(),
-            'operators' => $this->getOperators(),
         ];
 
         return view('tools.email_drip.index')->with($data);
@@ -77,6 +77,34 @@ class EmailDripController extends Controller
         ];
 
         return view('tools.email_drip.update_filters')->with($data);
+    }
+
+    /**
+     * Edit a drip campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
+    public function editEmailDripCampaign(Request $request)
+    {
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+
+        $campaign_request = new Request(['campaign' => $email_drip_campaign->campaign]);
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+        $data = [
+            'page' => $page,
+            'email_drip_campaign' => $email_drip_campaign,
+            'email_service_providers' => $this->getEmailServiceProviders(),
+            'email_fields' => $this->getTableFields($campaign_request),
+            'campaigns' => $this->getAllCampaigns(),
+            'templates' => $this->getTemplates(),
+        ];
+
+        return view('tools.email_drip.edit_campaign')->with($data);
     }
 
     /**
@@ -199,7 +227,7 @@ class EmailDripController extends Controller
      */
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
-        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
         $email_drip_campaign->fill($request->all());
         $email_drip_campaign->user_id = Auth::User()->id;
@@ -220,39 +248,13 @@ class EmailDripController extends Controller
      */
     public function deleteEmailDripCampaign(Request $request)
     {
-        $email_campaign = EmailDripCampaign::findOrFail($request->id);
-        $email_campaign->delete();
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+        $email_drip_campaign->delete();
 
         return ['status' => 'success'];
     }
 
-    /**
-     * Return drip campaign
-     * 
-     * @param Request $request 
-     * @return mixed 
-     */
-    public function editEmailDripCampaign(Request $request)
-    {
-        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
 
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-        $data = [
-            'page' => $page,
-            'email_drip_campaign' => $email_drip_campaign,
-            'email_service_providers' => $this->getEmailServiceProviders(),
-            'email_drip_campaigns' => $this->getDripCampaigns(),
-            'provider_types' => $this->getProviderTypes(),
-            'campaigns' => $this->getAllCampaigns(),
-            'templates' => $this->getTemplates(),
-            'operators' => $this->getOperators(),
-        ];
-
-        return view('tools.email_drip.edit_campaign')->with($data);
-    }
 
     /**
      * Get Subcampaigns (ajax)
