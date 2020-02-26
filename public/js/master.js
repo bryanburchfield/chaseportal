@@ -455,7 +455,7 @@ var Master = {
 
         $('.drip_campaigns_subcampaign')
             .multiselect({ nonSelectedText: '', })
-            .multiselect('selectAll', false)
+            .multiselect('selectAll', true)
             .multiselect('updateButtonText');
 
         $.ajaxSetup({
