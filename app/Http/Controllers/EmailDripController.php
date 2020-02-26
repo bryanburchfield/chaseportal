@@ -80,6 +80,31 @@ class EmailDripController extends Controller
     }
 
     /**
+     * Edit a drip campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
+    public function editEmailDripCampaign(Request $request)
+    {
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+        $data = [
+            'page' => $page,
+            'email_drip_campaign' => $email_drip_campaign,
+            'email_service_providers' => $this->getEmailServiceProviders(),
+            'campaigns' => $this->getAllCampaigns(),
+            'templates' => $this->getTemplates(),
+        ];
+
+        return view('tools.email_drip.edit_campaign')->with($data);
+    }
+
+    /**
      * Add an SMTP Server
      * 
      * @param ValidEmailServiceProvider $request 
@@ -226,33 +251,7 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
-    /**
-     * Return drip campaign
-     * 
-     * @param Request $request 
-     * @return mixed 
-     */
-    public function editEmailDripCampaign(Request $request)
-    {
-        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-        $data = [
-            'page' => $page,
-            'email_drip_campaign' => $email_drip_campaign,
-            'email_service_providers' => $this->getEmailServiceProviders(),
-            'email_drip_campaigns' => $this->getDripCampaigns(),
-            'provider_types' => $this->getProviderTypes(),
-            'campaigns' => $this->getAllCampaigns(),
-            'templates' => $this->getTemplates(),
-            'operators' => $this->getOperators(),
-        ];
-
-        return view('tools.email_drip.edit_campaign')->with($data);
-    }
 
     /**
      * Get Subcampaigns (ajax)
@@ -585,7 +584,7 @@ class EmailDripController extends Controller
     {
         return EmailServiceProvider::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
-            ->findOrFail();
+            ->firstOrFail();
     }
 
     /**
@@ -598,7 +597,7 @@ class EmailDripController extends Controller
     {
         return EmailDripCampaign::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
-            ->findOrFail();
+            ->firstOrFail();
     }
 
     /**
