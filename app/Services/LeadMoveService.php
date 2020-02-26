@@ -212,7 +212,7 @@ class LeadMoveService
                     return [];
             }
 
-            $bind["param$i"] = $lead_rule_filter->value;
+            $bind['param' . $i] = $lead_rule_filter->value;
         }
 
         $leads = $this->runSql($sql, $bind);
