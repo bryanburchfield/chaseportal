@@ -101,6 +101,7 @@ return [
 	'email_service_providers'	=> 'Email Providers',
 	'start_over'	=> 'Start Over',
 	'subcampaign'	=> 'Subcampaign',
+	'subcampaigns'	=> 'Subcampaigns',
 	'subject'		=> 'Subject',
 	'templates'		=> 'Templates',
 	'test_connection' => 'Test Connection',

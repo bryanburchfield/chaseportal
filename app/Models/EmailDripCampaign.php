@@ -12,7 +12,7 @@ class EmailDripCampaign extends Model
         'name',
         'description',
         'campaign',
-        'subcampaign',
+        'subcampaigns',
         'subject',
         'from',
         'email_field',
@@ -26,7 +26,7 @@ class EmailDripCampaign extends Model
     ];
 
     protected $casts = [
-        'subcampaign' => 'array',
+        'subcampaigns' => 'array',
     ];
 
     public function emailServiceProvider()

@@ -40,7 +40,7 @@
                                                             <th>{{__('tools.subject')}}</th>
                                                             <th>{{__('tools.from')}}</th>
                                         					<th>{{__('tools.campaign')}}</th>
-                                        					<th>{{__('tools.subcampaign')}}</th>
+                                        					<th>{{__('tools.subcampaigns')}}</th>
                                         					<th>{{__('tools.provider')}}</th>
                                                             <th>{{__('tools.emails_per_lead')}}</th>
                                                             <th>{{__('tools.days_between_emails')}}</th>
@@ -65,11 +65,11 @@
                                                                 <td>{{$drip->from}}</td>
                                             					<td>{{$drip->campaign}}</td>
                                                                 <td>
-                                                                @empty($drip->subcampaign)
+                                                                @empty($drip->subcampaigns)
                                                                     <i>{{__('tools.any')}}</i><br>
                                                                 @endempty
-                                                                @isset($drip->subcampaign)
-                                                                    @foreach ($drip->subcampaign as $subcampaign)
+                                                                @isset($drip->subcampaigns)
+                                                                    @foreach ($drip->subcampaigns as $subcampaign)
                                                                         @if ($subcampaign == '!!none!!')
                                                                             <i>{{__('tools.no_subcampaign')}}</i><br>
                                                                         @else
