@@ -1,3 +1,4 @@
+@csrf
 <div class="form-group">
     <label>{{__('tools.name')}}</label>
     <input type="text" class="form-control name" name="name" value="{{!empty($email_drip_campaign) ? $email_drip_campaign->name : ''}}" required>
