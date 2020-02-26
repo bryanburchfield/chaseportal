@@ -263,7 +263,7 @@ class EmailDripController extends Controller
         $results = $this->getAllSubcampaigns($request->campaign);
         $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
 
-        return ['subcampaigns' => $results];
+        return $results;
     }
 
     /**
