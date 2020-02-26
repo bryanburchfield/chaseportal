@@ -30,13 +30,18 @@
 
 <div class="form-group">
     <label>{{__('tools.subcampaign')}}</label>
+    @if(!empty($email_drip_campaign->subcampaign))
     {!! Form::select("subcampaign[]", $email_drip_campaign->subcampaign, null, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
+    @else
+    {!! Form::select("subcampaign[]",  null, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
+    @endif
+    </select>
 </div>
 
 <div class="form-group">
     <label>{{__('tools.email_field')}}</label>
     <select name="email_field" class="form-control email" required>
-        {{-- <option {{$emails_fields->id==$email_drip_campaign->email_field ? 'selected' :'' }} value="">{{__('tools.select_one')}}</option> --}}
+        {{-- <option {{$$emails_fields->id==$email_drip_campaign->email_field ? 'selected' :'' }} value="">{{__('tools.select_one')}}</option> --}}
     </select>
 </div>
 
