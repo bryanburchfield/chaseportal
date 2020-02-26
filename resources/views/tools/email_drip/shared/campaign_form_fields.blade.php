@@ -1,3 +1,5 @@
+@csrf
+
 <div class="form-group">
     <label>{{__('tools.name')}}</label>
     <input type="text" class="form-control name" name="name" value="{{!empty($email_drip_campaign) ? $email_drip_campaign->name : ''}}" required>
@@ -32,9 +34,9 @@
     <label>{{__('tools.subcampaign')}}</label>
 
     @if(!empty($email_drip_campaign->subcampaign))
-        {!! Form::select("subcampaign[]", $email_drip_campaign->subcampaign, null, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
+        {!! Form::select("subcampaign[]", $email_drip_campaign['subcampaign'], null, ["class" => "form-control multiselect drip_campaigns_subcampaign", 'multiple'=>true]) !!}
     @else
-        <select name="subcampaign[]"  class="form-control multiselect drip_campaigns_subcampaign" multiple></select>
+        <select name="subcampaign[]"  class="form-control multiselect drip_campaigns_subcampaign" multiple="true"></select>
     @endif
 </div>
 
