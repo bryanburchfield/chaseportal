@@ -101,6 +101,7 @@ class EmailDripController extends Controller
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_fields' => $this->getTableFields($campaign_request),
             'campaigns' => $this->getAllCampaigns(),
+            'subcampaigns' => $this->getAllSubcampaignsWithNone($campaign_request),
             'templates' => $this->getTemplates(),
         ];
 
@@ -234,10 +235,7 @@ class EmailDripController extends Controller
 
         $email_drip_campaign->save();
 
-        return [
-            'status' => 'success',
-            'email_drip_campaign_id' => $email_drip_campaign->id,
-        ];
+        return redirect()->action('EmailDripController@index');
     }
 
     /**
@@ -254,19 +252,18 @@ class EmailDripController extends Controller
         return ['status' => 'success'];
     }
 
-
-
     /**
      * Get Subcampaigns (ajax)
      * 
      * @param Request $request 
      * @return array[] 
      */
-    public function getSubcampaigns(Request $request)
+    public function getAllSubcampaignsWithNone(Request $request)
     {
         $results = $this->getAllSubcampaigns($request->campaign);
+        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
 
-        return ['subcampaigns' => array_values($results)];
+        return ['subcampaigns' => $results];
     }
 
     /**
