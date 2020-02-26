@@ -2408,17 +2408,7 @@ var Master = {
     create_email_campaign:function(e){
         e.preventDefault();
 
-        var name = $(this).find('.name').val(),
-            description = $(this).find('.description').val(),
-            subject = $(this).find('.subject').val(),
-            from = $(this).find('.from').val(),
-            campaign = $(this).find('.campaign').val(),
-            subcampaign = $(this).find('.drip_campaigns_subcampaign').val(),
-            email_service_provider_id = $(this).find('.email_service_provider_id').val(),
-            email_field= $(this).find('.email').val(),
-            template_id = $(this).find('.template_id').val(),
-            emails_per_lead = $(this).find('.emails_per_lead').val(),
-            days_between_emails = $(this).find('.days_between_emails').val()
+        var form_data = $(this).serialize();
         ;
 
         $.ajaxSetup({
@@ -2430,19 +2420,7 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/add_campaign',
             type: 'POST',
-            data: {
-                name: name,
-                description: description,
-                email_field:email_field,
-                from:from,
-                subject:subject,
-                campaign: campaign,
-                subcampaign: subcampaign,
-                email_service_provider_id: email_service_provider_id,
-                template_id:template_id,
-                emails_per_lead:emails_per_lead,
-                days_between_emails:days_between_emails
-            },
+            data:form_data,
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
                 window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
