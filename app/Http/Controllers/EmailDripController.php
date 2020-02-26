@@ -199,7 +199,7 @@ class EmailDripController extends Controller
      */
     public function updateEmailDripCampaign(ValidEmailDripCampaign $request)
     {
-        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
         $email_drip_campaign->fill($request->all());
         $email_drip_campaign->user_id = Auth::User()->id;
@@ -220,8 +220,8 @@ class EmailDripController extends Controller
      */
     public function deleteEmailDripCampaign(Request $request)
     {
-        $email_campaign = EmailDripCampaign::findOrFail($request->id);
-        $email_campaign->delete();
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
+        $email_drip_campaign->delete();
 
         return ['status' => 'success'];
     }
@@ -234,7 +234,7 @@ class EmailDripController extends Controller
      */
     public function editEmailDripCampaign(Request $request)
     {
-        $email_drip_campaign = EmailDripCampaign::findOrFail($request->id);
+        $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
         $page = [
             'menuitem' => 'tools',
@@ -585,7 +585,7 @@ class EmailDripController extends Controller
     {
         return EmailServiceProvider::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
-            ->firstOrFail();
+            ->findOrFail();
     }
 
     /**
@@ -598,7 +598,7 @@ class EmailDripController extends Controller
     {
         return EmailDripCampaign::where('id', $id)
             ->where('group_id', Auth::User()->group_id)
-            ->firstOrFail();
+            ->findOrFail();
     }
 
     /**
