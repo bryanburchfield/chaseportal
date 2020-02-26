@@ -435,12 +435,18 @@ var Master = {
         var subcamp_response = Master.get_subcampaigns(campaign, '/tools/email_drip/get_subcampaigns');
         $('.drip_campaigns_subcampaign').empty();
         $(sel).find('.email').empty();
-        console.log(subcamp_response.responseJSON.subcampaigns);
-        console.log(subcamp_response.responseJSON.subcampaigns.length);
+
+        var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
+        var subcamp_obj_length = Object.keys(subcamp_obj).length;
+        const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
+        let subcampaigns_array = [];
+        subcampaigns_array.push(Object.values(subcamp_obj));
+
         $('.drip_campaigns_subcampaign').empty();
-        var subcampaigns='<option value="!!none!!">'+Lang.get('js_msgs.no_subcampaign')+'</option>';
-        for (var i = 0; i < subcamp_response.responseJSON.subcampaigns.length; i++) {
-            subcampaigns += '<option value="' + subcamp_response.responseJSON.subcampaigns[i] + '">' + subcamp_response.responseJSON.subcampaigns[i] + '</option>';
+
+        var subcampaigns='';
+        for (var i = 0; i < subcampaigns_array[0].length; i++) {
+            subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
         }
 
         $('.drip_campaigns_subcampaign').append(subcampaigns);
