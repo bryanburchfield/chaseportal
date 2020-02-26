@@ -435,7 +435,8 @@ var Master = {
         var subcamp_response = Master.get_subcampaigns(campaign, '/tools/email_drip/get_subcampaigns');
         $('.drip_campaigns_subcampaign').empty();
         $(sel).find('.email').empty();
-        
+        console.log(subcamp_response.responseJSON.subcampaigns);
+        console.log(subcamp_response.responseJSON.subcampaigns.length);
         $('.drip_campaigns_subcampaign').empty();
         var subcampaigns='<option value="!!none!!">'+Lang.get('js_msgs.no_subcampaign')+'</option>';
         for (var i = 0; i < subcamp_response.responseJSON.subcampaigns.length; i++) {
