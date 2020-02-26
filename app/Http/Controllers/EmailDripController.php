@@ -231,6 +231,11 @@ class EmailDripController extends Controller
     {
         $email_drip_campaign = $this->findEmailDripCampaign($request->id);
 
+        // clean out subcamps if they didn't select any
+        if ($request->missing('subcampaigns')) {
+            $request->merge(['subcampaigns' => []]);
+        }
+
         $email_drip_campaign->fill($request->all());
         $email_drip_campaign->user_id = Auth::User()->id;
 

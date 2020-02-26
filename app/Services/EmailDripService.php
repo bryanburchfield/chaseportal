@@ -120,9 +120,9 @@ class EmailDripService
         $sql .= " WHERE GroupId = :group_id
         AND Campaign = :campaign";
 
-        if (!empty($email_drip_campaign->subcampaign)) {
+        if (!empty($email_drip_campaign->subcampaigns)) {
             $in = '';
-            foreach ($email_drip_campaign->subcampaign as $i => $subcampaign) {
+            foreach ($email_drip_campaign->subcampaigns as $i => $subcampaign) {
                 if ($subcampaign == '!!none!!') {
                     $subcampaign = '';
                 }
