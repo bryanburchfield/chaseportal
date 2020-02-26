@@ -228,9 +228,25 @@ class EmailDripController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getEmailDripCampaign(Request $request)
+    public function editEmailDripCampaign(Request $request)
     {
-        return EmailDripCampaign::findOrFail($request->id);
+        $campaign = EmailDripCampaign::findOrFail($request->id);
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+        $data = [
+            'page' => $page,
+            'campaign' => $campaign,
+            'email_service_providers' => $this->getEmailServiceProviders(),
+            'email_drip_campaigns' => $this->getDripCampaigns(),
+            'provider_types' => $this->getProviderTypes(),
+            'campaigns' => $this->getAllCampaigns(),
+            'templates' => $this->getTemplates(),
+            'operators' => $this->getOperators(),
+        ];
+
+        return view('tools.email_drip.edit_campaign')->with($data);
     }
 
     /**

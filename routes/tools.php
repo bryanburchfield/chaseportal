@@ -45,7 +45,7 @@ Route::prefix('tools')->group(function () {
             Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
             Route::post('/delete_campaign', 'EmailDripController@deleteEmailDripCampaign');
             Route::post('/update_campaign', 'EmailDripController@updateEmailDripCampaign');
-            Route::post('/get_campaign', 'EmailDripController@getEmailDripCampaign');
+            Route::get('/edit_campaign/{id}', 'EmailDripController@editEmailDripCampaign');
             Route::post('/get_table_fields', 'EmailDripController@getTableFields');
             Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
             Route::post('/get_properties', 'EmailDripController@getProperties');
