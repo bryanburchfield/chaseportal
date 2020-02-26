@@ -6,11 +6,13 @@
 
     <ul class="list-unstyled components">
         <input type="hidden" class="page_menuitem" value="<?php echo !empty($page['menuitem']) ? $page['menuitem'] : '';?>">
-        @can('accessSuperAdmin')
+        
         <li><a class="back_to_sidenav" href="#"><i class="fas fa-arrow-circle-left"></i>{{__('widgets.go_back')}}</a></li>
+        @can('accessSuperAdmin')
         <li data-page="admindurationdash" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindurationdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDurationDashboard')}}"><i class="fas fa-user-clock"></i>{{__('sidenav.duration_dashboard')}}</a></li>
-        @endcan
+        
         <li data-page="admindistinctagentdash" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'admindistinctagentdash' ? 'class="active"' : ''; ?>><a href="{{action('MasterDashController@adminDistinctAgentDashboard')}}"><i class="fas fa-user-check"></i>{{__('sidenav.distinct_agent')}}</a></li>
+        @endcan
         <li data-page="manage_users" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'manage_users' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageUsers') }}"><i class="fas fa-users"></i>{{__('sidenav.manage_users')}}</a></li>
         <li data-page="cdr_lookup" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'cdr_lookup' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@cdrLookup') }}"><i class="fas fa-search"></i> {{__('sidenav.cdr_lookup')}}</a></li>
 
