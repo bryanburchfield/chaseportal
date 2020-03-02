@@ -459,6 +459,7 @@ span {
 #sidebar_nots .not_header .not_header_inner {
   padding-left: 13px;
   padding-right: 13px;
+  padding-bottom: 20px;
 }
 
 #sidebar_nots .not_header h4 {
@@ -469,6 +470,22 @@ span {
 
 #sidebar_nots .not_header label {
   color: #919191;
+}
+
+#sidebar_nots .notifications .not {
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #23354e;
+}
+
+#sidebar_nots .notifications .not h4 {
+  color: #33A09B;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 6px;
 }
 
 button,

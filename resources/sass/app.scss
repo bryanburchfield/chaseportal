@@ -318,6 +318,44 @@ i, span {
             transform: translateX(50%);
         }
     }
+
+    .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#aaa;&:hover{color:#eee;}}
+
+    .not_header{
+        padding-top: 20px;
+        .not_header_inner{
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-bottom: 20px;
+        }
+
+        h4{
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        label{
+            color:darken(#aaa,10%);
+        }
+    }
+
+    .notifications{
+        .not{
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ddd;
+            h4{
+                color: $green;
+                font-size: 14px;
+                font-weight: 600;
+                margin-top: 10px;
+                margin-bottom: 6px;
+            }
+        }
+    }
 }
 
 

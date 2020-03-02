@@ -403,6 +403,54 @@ span {
   transform: translateX(50%);
 }
 
+#sidebar_nots .close_nots_bar {
+  position: relative;
+  top: 0;
+  right: 10px;
+  float: right;
+  color: #aaa;
+}
+
+#sidebar_nots .close_nots_bar:hover {
+  color: #eee;
+}
+
+#sidebar_nots .not_header {
+  padding-top: 20px;
+}
+
+#sidebar_nots .not_header .not_header_inner {
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-bottom: 20px;
+}
+
+#sidebar_nots .not_header h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#sidebar_nots .not_header label {
+  color: #919191;
+}
+
+#sidebar_nots .notifications .not {
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #ddd;
+}
+
+#sidebar_nots .notifications .not h4 {
+  color: #33A09B;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
 button,
 button:active,
 button:focus {

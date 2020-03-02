@@ -50,7 +50,7 @@
 
                     <li class="notifications btn-group">
                         <button type="button" class="btn btn-notifications">
-                            <span><i class="fas fa-bell"></i><span class="numb_notifications">2</span></span>
+                            <span><i class="fas fa-bell"></i><span class="numb_notifications">3</span></span>
                         </button>
                     </li>
                 </div>
