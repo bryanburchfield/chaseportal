@@ -6,5 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeatureMessage extends Model
 {
-    //
+    public $timestamps = false;
+
+    protected $fillable = [
+        'title',
+        'body',
+        'created_at',
+    ];
+
+    public function readFeatureMessages()
+    {
+        return $this->hasMany('App\Models\ReadFeatureMessage');
+    }
 }

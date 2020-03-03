@@ -15,9 +15,14 @@ class CreateReadFeatureMessagesTable extends Migration
     {
         Schema::create('read_feature_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('message_id');
-            $table->integer('user_id');
+            $table->unsignedBigInteger('feature_message_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamp('read_at');
+
+            $table->foreign('user_id')
+                ->references('id')->on('users');
+            $table->foreign('feature_message_id')
+                ->references('id')->on('feature_messages');
         });
     }
 

@@ -134,9 +134,16 @@ class User extends Authenticatable
         return !empty($this->additional_dbs);
     }
 
+    public function readFeatureMessages()
+    {
+        return $this->hasMany('App\Models\ReadFeatureMessage');
+    }
+
     public function getFeatureMessages()
     {
-        return $feature_messages = FeatureMessage::all()->where('created_at', '>', Auth()->User()->created_at);
+        return FeatureMessage::where('created_at', '>', $this->created_at)
+            ->whereDoesntHave('readFeatureMessages')
+            ->get();
     }
 
     public function sendPasswordResetNotification($token)
