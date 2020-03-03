@@ -158,10 +158,12 @@ class CallerIdService
             $cc = 'ahmed@chasedatacorp.com';
         } else {
             $to = $this->email_to;
-            $cc = [
-                'jonathan.gryczka@chasedatacorp.com',
-                'ahmed@chasedatacorp.com',
-            ];
+            $cc = 'bryan.burchfield@chasedatacorp.com';
+
+            // $cc = [
+            //     'jonathan.gryczka@chasedatacorp.com',
+            //     'ahmed@chasedatacorp.com',
+            // ];
         }
 
         // email report
