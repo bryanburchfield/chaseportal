@@ -13,11 +13,10 @@
     	@foreach(Auth()->User()->getFeatureMessages() as $msg)
 	    	<div class="not" data-msgid="{{$msg->id}}">
 	    		<div class="not_read"></div>
-	    		<p class="not_date">{{$msg->created_at}}</p>
+	    		<p class="not_date">{{Carbon\Carbon::parse($msg->created_at)->format('M j, Y')}}</p>
 	    		<h4>{{$msg->title}}</h4>
 	    		<p>{{$msg->body}}</p>
 	    	</div>
     	@endforeach
-    	
     </div>
 </div>
