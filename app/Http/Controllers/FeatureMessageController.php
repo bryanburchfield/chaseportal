@@ -19,7 +19,7 @@ class FeatureMessageController extends Controller
     {
 
     	ReadFeatureMessage::create([
-    		'message_id'=> $request->id,
+    		'feature_message_id'=> $request->id,
     		'user_id' => Auth::user()->id,
     		'created_at' => now(),
     	]);

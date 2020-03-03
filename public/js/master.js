@@ -2942,7 +2942,7 @@ var Master = {
         e.preventDefault();
         var id = $(this).data('msgid');
         var that = $(this);
-        console.log(id);
+        var unread = parseInt($('.numb_notifications').text());
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2957,7 +2957,8 @@ var Master = {
             },
             success:function(response){
                 $(that).find('.not_read').remove();
-                console.log(response);
+                unread--;
+                $('.numb_notifications').html(unread);
             }
         });
     }

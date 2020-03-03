@@ -51,7 +51,16 @@
 
                     <li class="notifications btn-group">
                         <button type="button" class="btn btn-notifications">
-                            <span><i class="fas fa-bell"></i><span class="numb_notifications">{{count(Auth()->User()->getFeatureMessages())}}</span></span>
+                            
+                            <span>
+                                
+                                <i class="fas fa-bell"></i>
+                                
+                            @if(count(Auth()->User()->getFeatureMessages()))
+                                <span class="numb_notifications">{{count(Auth()->User()->getFeatureMessages())}}</span>
+                            @endif
+                        </span>
+                            
                         </button>
                     </li>
                 </div>
