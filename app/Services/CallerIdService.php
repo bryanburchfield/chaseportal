@@ -120,7 +120,7 @@ class CallerIdService
             'GroupID',
             'GroupName',
             'CallerID',
-            'Count',
+            'Dials in Last 30 Days',
         ];
 
         $pdf = new PDF();
