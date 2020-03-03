@@ -14,9 +14,13 @@ class CallerIdService
     use SqlServerTraits;
     use TimeTraits;
 
-    public static function execute()
+    public $group_id;
+
+    public static function execute($group_id = null)
     {
         $caller_id_service = new CallerIdService;
+
+        $caller_id_service->group_id = $group_id;
 
         $caller_id_service->runReport();
     }
@@ -38,6 +42,7 @@ class CallerIdService
 
         $bind = [];
 
+
         $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
         $union = '';
@@ -52,9 +57,16 @@ class CallerIdService
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
-                AND DR.CallerId != ''
+                AND DR.CallerId != ''";
+
+            if ($this->group_id !== null) {
+                $bind['group_id'] = $this->group_id;
+                $sql .= "' AND DR.GroupId = :group_id";
+            }
+
+            $sql .= "
                 GROUP BY DR.GroupId, GroupName, CallerId
-                HAVING COUNT(*) >= 5000
+                HAVING COUNT(*) >= 5500
                 ";
 
             $union = 'UNION ALL';
@@ -62,7 +74,7 @@ class CallerIdService
 
         $sql .= ") tmp
             GROUP BY GroupId, GroupName, CallerId
-            HAVING SUM(cnt) >= 5000
+            HAVING SUM(cnt) >= 5500
             ORDER BY GroupName, Dials desc";
 
         return $this->runSql($sql, $bind);
