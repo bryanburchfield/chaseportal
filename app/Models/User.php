@@ -134,6 +134,11 @@ class User extends Authenticatable
         return !empty($this->additional_dbs);
     }
 
+    public function getFeatureMessages()
+    {
+        return $feature_messages = FeatureMessage::all()->where('created_at', '>', Auth()->User()->created_at);
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ChaseResetPasswordNotification($token));

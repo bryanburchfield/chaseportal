@@ -42,6 +42,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_filters', 'MasterDashController@updateFilters');
         Route::post('campaign_search', 'MasterDashController@campaignSearch');
+        Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
 
         // Admin only
         // prefix('admin') isn't working for some reason

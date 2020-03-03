@@ -53,7 +53,7 @@ class MasterDashController extends Controller
             'page' => $page,
             'dashbody' => $dashbody,
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
-            'db_list' => $db_list
+            'db_list' => $db_list,
         ];
 
         return view('masterdash')->with($data);

@@ -128,6 +128,7 @@ var Master = {
         $('.cancel_modal_form').on('click', this.cancel_modal_form);
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        $('.not').on('click', this.set_feature_msg_read);
 	},
 
     hide_modal_error:function(){
@@ -2936,6 +2937,30 @@ var Master = {
         e.preventDefault();
         $(this).parent().parent().find('.form')[0].reset()
     },
+
+    set_feature_msg_read:function(e){
+        e.preventDefault();
+        var id = $(this).data('msgid');
+        var that = $(this);
+        console.log(id);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/dashboards/feature_msg_read',
+            type:'POST',
+            data:{
+                id:id,
+            },
+            success:function(response){
+                $(that).find('.not_read').remove();
+                console.log(response);
+            }
+        });
+    }
 }
 
 $(document).ready(function () {

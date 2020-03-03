@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
@@ -50,7 +51,7 @@
 
                     <li class="notifications btn-group">
                         <button type="button" class="btn btn-notifications">
-                            <span><i class="fas fa-bell"></i><span class="numb_notifications">3</span></span>
+                            <span><i class="fas fa-bell"></i><span class="numb_notifications">{{count(Auth()->User()->getFeatureMessages())}}</span></span>
                         </button>
                     </li>
                 </div>
