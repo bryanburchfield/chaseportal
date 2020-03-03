@@ -2,14 +2,15 @@
 
 namespace App\Services\Reports;
 
+use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Carbon;
 
 class BwrOmni
 {
     use ReportTraits;
+    use CampaignTraits;
 
     public function __construct()
     {
@@ -20,27 +21,27 @@ class BwrOmni
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
-            'TotalLeads' => 'reports.',
-            'SalesPerAttempt' => 'reports.',
-            'Callable' => 'reports.',
-            'Dials' => 'reports.',
-            'AvgAttempt' => 'reports.',
-            'Connects' => 'reports.',
-            'Contacts' => 'reports.',
-            'Sales' => 'reports.',
-            'SalesPerDial' => 'reports.',
-            'ConversionRate' => 'reports.',
-            'ManHours' => 'reports.',
-            'DialsPerManHour' => 'reports.',
-            'ConnectsPerManHour' => 'reports.',
-            'ContactsPerManHour' => 'reports.',
-            'SalesPerManHour' => 'reports.',
-            'WaitingTimeSec' => 'reports.',
-            'AvgWaitingTimeSec' => 'reports.',
-            'CallTimeSec' => 'reports.',
-            'AvgCallTimeSec' => 'reports.',
-            'PausedTimeSec' => 'reports.pausedtimesec',
-            'DispositionTimeSec' => 'reports.pausedtimesec',
+            'TotalLeads' => 'reports.total_leads',
+            'SalesPerAttempt' => 'reports.sales_per_attempt',
+            'Callable' => 'reports.callable',
+            'Dials' => 'reports.dials',
+            'AvgAttempt' => 'reports.avg_attempt',
+            'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
+            'Sales' => 'reports.sales',
+            'SalesPerDial' => 'reports.sales_per_dial',
+            'ConversionRate' => 'reports.conversion_rate',
+            'ManHourSec' => 'reports.manhours',
+            'DialsPerManHour' => 'reports.dials_per_manhour',
+            'ConnectsPerManHour' => 'reports.connects_per_manhour',
+            'ContactsPerManHour' => 'reports.contacts_per_manhour',
+            'SalesPerManHour' => 'reports.sales_per_manhour',
+            'WaitingTimeSec' => 'reports.waiting_time',
+            'AvgWaitingTimeSec' => 'reports.avg_waiting_time',
+            'CallTimeSec' => 'reports.call_time',
+            'AvgCallTimeSec' => 'reports.avg_call_time',
+            'PausedTimeSec' => 'reports.paused_time',
+            'DispositionTimeSec' => 'reports.disposition_time',
         ];
     }
 
@@ -68,8 +69,6 @@ class BwrOmni
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
-
-        $tz =  Auth::user()->tz;
 
         $bind = [
             'group_id1' => Auth::user()->group_id,
@@ -111,6 +110,7 @@ class BwrOmni
                         ORDER BY [id] Desc
                     ), 0) as IsCallable
                 FROM Leads L
+                INNER JOIN #SelectedCampaign C on C.CampaignName = L.Campaign
                 LEFT OUTER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid
                 LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId 
                 WHERE L.GroupId = :group_id1
@@ -138,6 +138,7 @@ class BwrOmni
                     DR.Attempt,
                     D.Type
                 FROM DialingResults DR
+                INNER JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
                 LEFT OUTER JOIN Dispos D ON D.Disposition = DR.CallStatus AND D.GroupId = DR.GroupId 
                 WHERE DR.GroupId = :group_id2
                 AND DR.Date >= :startdate
@@ -155,7 +156,7 @@ class BwrOmni
                 C.SalesPerDial,
                 C.ConversionRate 
             FROM #tmp_leads L
-            INNER JOIN #tmp_calls C ON C.Campaign = L.Campaign AND C.Subcampaign = L.Subcampaign
+            LEFT OUTER JOIN #tmp_calls C ON C.Campaign = L.Campaign AND C.Subcampaign = L.Subcampaign
             ORDER BY L.Campaign, L.Subcampaign";
 
         $results = $this->processResults($sql, $bind);
@@ -180,35 +181,116 @@ class BwrOmni
 
         $results = [];
         $old_campaign = '';
+        $totals = [
+            'TotalLeads' => 0,
+            'Callable' => 0,
+            'Dials' => 0,
+            'Connects' => 0,
+            'Contacts' => 0,
+            'Sales' => 0,
+        ];
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
 
-            // Add fields to rec
-            $rec['ManHours'] = '';
-            $rec['DialsPerManHour'] = '';
-            $rec['ConnectsPerManHour'] = '';
-            $rec['ContactsPerManHour'] = '';
-            $rec['SalesPerManHour'] = '';
-            $rec['WaitingTimeSec'] = '';
-            $rec['AvgWaitingTimeSec'] = '';
-            $rec['CallTimeSec'] = '';
-            $rec['AvgCallTimeSec'] = '';
-            $rec['PausedTimeSec'] = '';
-            $rec['DispositionTimeSec'] = '';
-
             if ($rec['Campaign'] != $old_campaign && $old_campaign != '') {
-                //
+                // append agent actiivity to results
+                $results[] = $this->addCampaignTotals($totals, $old_campaign, $bind['startdate'], $bind['enddate']);
+
+                // clear totals
+                $totals = [
+                    'TotalLeads' => 0,
+                    'Callable' => 0,
+                    'Dials' => 0,
+                    'Connects' => 0,
+                    'Contacts' => 0,
+                    'Sales' => 0,
+                ];
             }
-            $results[] = $rec;
             $old_campaign = $rec['Campaign'];
+
+            // Add empty activity fields to rec
+            $rec = $rec + $this->emptyActivityRec();
+
+            // if outer join didn't find any dials, fill with 0s
+            if ($rec['Dials'] == '') {
+                $rec['Dials'] = 0;
+                $rec['AvgAttempt'] = 0;
+                $rec['Connects'] = 0;
+                $rec['Contacts'] = 0;
+                $rec['Sales'] = 0;
+                $rec['SalesPerDial'] = 0;
+                $rec['ConversionRate'] = 0;
+            }
+
+            // format fields
+            $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
+            $rec['AvgAttempt'] = number_format($rec['AvgAttempt'], 0);
+            $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
+            $rec['ConversionRate'] = number_format($rec['ConversionRate'], 4);
+
+            $results[] = $rec;
+            $totals['TotalLeads'] += $rec['TotalLeads'];
+            $totals['Callable'] += $rec['Callable'];
+            $totals['Dials'] += $rec['Dials'];
+            $totals['Connects'] += $rec['Connects'];
+            $totals['Contacts'] += $rec['Contacts'];
+            $totals['Sales'] += $rec['Sales'];
         }
+
+        // add last campaign actiivity
+        $results[] = $this->addCampaignTotals($totals, $old_campaign, $bind['startdate'], $bind['enddate']);
 
         return $results;
     }
 
+    private function addCampaignTotals($totals, $campaign, $startDate, $endDate)
+    {
+        // build empty record
+        $rec = $this->emptyBaseRec() + $this->emptyActivityRec();
+
+        $rec['Campaign'] = $campaign;
+        $rec['Subcampaign'] = '[Campaign Totals]';
+
+        $activity = $this->getAgentActivity($campaign, $startDate, $endDate);
+
+        $rec['ManHourSec'] = $activity['ManHourSec'];
+        $rec['WaitingTimeSec'] = $activity['WaitingTimeSec'];
+        $rec['CallTimeSec'] = $activity['CallTimeSec'];
+        $rec['PausedTimeSec'] = $activity['PausedTimeSec'];
+        $rec['DispositionTimeSec'] = $activity['DispositionTimeSec'];
+        $rec['AvgWaitingTimeSec'] = $activity['AvgWaitingTimeSec'];
+        $rec['AvgCallTimeSec'] = $activity['AvgCallTimeSec'];
+
+        if ($rec['ManHourSec'] == 0) {
+            $rec['DialsPerManHour'] = 0;
+            $rec['ConnectsPerManHour'] = 0;
+            $rec['ContactsPerManHour'] = 0;
+            $rec['SalesPerManHour'] = 0;
+        } else {
+            $rec['DialsPerManHour'] = $totals['Dials'] / ($rec['ManHourSec'] / 60);
+            $rec['ConnectsPerManHour'] = $totals['Connects'] / ($rec['ManHourSec'] / 60);
+            $rec['ContactsPerManHour'] = $totals['Contacts'] / ($rec['ManHourSec'] / 60);
+            $rec['SalesPerManHour'] = $totals['Sales'] / ($rec['ManHourSec'] / 60);
+        }
+
+        // format fields
+        $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
+        $rec['DialsPerManHour'] = number_format($rec['DialsPerManHour'], 2);
+        $rec['ConnectsPerManHour'] = number_format($rec['ConnectsPerManHour'], 2);
+        $rec['ContactsPerManHour'] = number_format($rec['ContactsPerManHour'], 2);
+        $rec['SalesPerManHour'] = number_format($rec['SalesPerManHour'], 2);
+        $rec['WaitingTimeSec'] = $this->secondsToHms($rec['WaitingTimeSec']);
+        $rec['AvgWaitingTimeSec'] = $this->secondsToHms($rec['AvgWaitingTimeSec']);
+        $rec['CallTimeSec'] = $this->secondsToHms($rec['CallTimeSec']);
+        $rec['AvgCallTimeSec'] = $this->secondsToHms($rec['AvgCallTimeSec']);
+        $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+        $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+
+        return $rec;
+    }
+
     private function getAgentActivity($campaign, $startDate, $endDate)
     {
-
         $bind = [
             'group_id' => Auth::user()->group_id,
             'startdate' => $startDate,
@@ -216,12 +298,30 @@ class BwrOmni
             'campaign' => $campaign,
         ];
 
+        $sql = "SELECT Rep, Date, Action, Duration
+                FROM AgentActivity
+                WHERE GroupId = :group_id
+                AND Date >= :startdate
+                AND Date < :enddate
+                and Campaign = :campaign
+                ORDER BY Rep, Date";
+
+        $results = $this->processActivity($sql, $bind);
+
+        return $results;
+    }
+
+    private function processActivity($sql, $bind)
+    {
         // loop thru results looking for log in/out times
         // total up paused and not paused times
         // then do our sorting
         // finally, format fields
 
         $tmpsheet = [];
+
+        $waits = 0;
+        $calls = 0;
 
         $oldrep = '';
         $i = 0;
@@ -232,17 +332,18 @@ class BwrOmni
                 $loggedin = false;
                 $tmpsheet[$i]['Date'] = $rec['Date'];
                 $tmpsheet[$i]['Rep'] = $rec['Rep'];
-                $tmpsheet[$i]['Campaign'] = '';
                 $tmpsheet[$i]['LogInTime'] = '';
                 $tmpsheet[$i]['LogOutTime'] = '';
                 $tmpsheet[$i]['ManHourSec'] = 0;
                 $tmpsheet[$i]['PausedTimeSec'] = 0;
+                $tmpsheet[$i]['WaitingTimeSec'] = 0;
+                $tmpsheet[$i]['CallTimeSec'] = 0;
+                $tmpsheet[$i]['DispositionTimeSec'] = 0;
             }
             switch ($rec['Action']) {
                 case 'Login':
                     if (!$loggedin) {
                         $tmpsheet[$i]['LogInTime'] = $rec['Date'];
-                        $tmpsheet[$i]['Campaign'] = $rec['Campaign'];
                         $loggedin = true;
                     }
                     break;
@@ -258,6 +359,26 @@ class BwrOmni
                         $tmpsheet[$i]['PausedTimeSec'] += $rec['Duration'];
                     }
                     break;
+                case 'Waiting':
+                    if ($loggedin) {
+                        $waits++;
+                        $tmpsheet[$i]['WaitingTimeSec'] += $rec['Duration'];
+                        $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
+                    }
+                    break;
+                case 'Call':
+                    if ($loggedin) {
+                        $calls++;
+                        $tmpsheet[$i]['CallTimeSec'] += $rec['Duration'];
+                        $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
+                    }
+                    break;
+                case 'Disposition':
+                    if ($loggedin) {
+                        $tmpsheet[$i]['DispositionTimeSec'] += $rec['Duration'];
+                        $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
+                    }
+                    break;
                 default:
                     if ($loggedin) {
                         $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
@@ -265,50 +386,70 @@ class BwrOmni
             }
         }
 
+        $results = [
+            'ManHourSec' => 0,
+            'PausedTimeSec' => 0,
+            'WaitingTimeSec' => 0,
+            'CallTimeSec' => 0,
+            'DispositionTimeSec' => 0,
+            'AvgWaitingTimeSec' => 0,
+            'AvgCallTimeSec' => 0,
+        ];
+
         // remove any rows that don't have login and logout times
-        $results = [];
         foreach ($tmpsheet as $rec) {
             if ($rec['LogInTime'] != '' || $rec['LogOutTime'] != '') {
-                $results[] = $rec;
+                $results['ManHourSec'] += $rec['ManHourSec'];
+                $results['PausedTimeSec'] += $rec['PausedTimeSec'];
+                $results['WaitingTimeSec'] += $rec['WaitingTimeSec'];
+                $results['CallTimeSec'] += $rec['ManHourSec'];
+                $results['DispositionTimeSec'] += $rec['ManHourSec'];
             }
         }
 
-        // now sort
-        if (!empty($this->params['orderby'])) {
-            $field = key($this->params['orderby']);
-            $dir = $this->params['orderby'][$field] == 'desc' ? SORT_DESC : SORT_ASC;
-            $col = array_column($results, $field);
-            array_multisort($col, $dir, $results);
+        if ($waits > 0) {
+            $results['AvgWaitingTimeSec'] = $results['WaitingTimeSec'] / $waits;
         }
-
-        // this sets the order of the columns
-        foreach ($this->params['columns'] as $k => $v) {
-            $total[$k] = '';
+        if ($calls > 0) {
+            $results['AvgCallTimeSec'] = $results['WaitingTimeSec'] / $calls;
         }
-
-        $total['Date'] = 'Total:';
-        $total['ManHourSec'] = 0;
-        $total['PausedTimeSec'] = 0;
-
-        foreach ($results as &$rec) {
-            $total['ManHourSec'] += $rec['ManHourSec'];
-            $total['PausedTimeSec'] += $rec['PausedTimeSec'];
-
-            $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
-            $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
-            $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
-        }
-
-        // format totals
-        $total['ManHourSec'] = $this->secondsToHms($total['ManHourSec']);
-        $total['PausedTimeSec'] = $this->secondsToHms($total['PausedTimeSec']);
-
-        // Tack on the totals row
-        $results[] = $total;
 
         return $results;
+    }
+
+    private function emptyBaseRec()
+    {
+        return [
+            'Campaign' => '',
+            'Subcampaign' => '',
+            'TotalLeads' => '',
+            'SalesPerAttempt' => '',
+            'Callable' => '',
+            'Dials' => '',
+            'AvgAttempt' => '',
+            'Connects' => '',
+            'Contacts' => '',
+            'Sales' => '',
+            'SalesPerDial' => '',
+            'ConversionRate' => '',
+        ];
+    }
+
+    private function emptyActivityRec()
+    {
+        return [
+            'ManHourSec' => '',
+            'DialsPerManHour' => '',
+            'ConnectsPerManHour' => '',
+            'ContactsPerManHour' => '',
+            'SalesPerManHour' => '',
+            'WaitingTimeSec' => '',
+            'AvgWaitingTimeSec' => '',
+            'CallTimeSec' => '',
+            'AvgCallTimeSec' => '',
+            'PausedTimeSec' => '',
+            'DispositionTimeSec' => '',
+        ];
     }
 
     private function processInput(Request $request)
@@ -322,15 +463,15 @@ class BwrOmni
         // Check report filters
         $this->checkDateRangeFilters($request);
 
-        if (empty($request->reps)) {
-            $this->errors->add('reps.required', trans('reports.errrepsrequired'));
+        if (empty($request->campaigns)) {
+            $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
-            $this->params['reps'] = $request->reps;
+            $this->params['campaigns'] = $request->campaigns;
         }
 
-        if (!empty($request->skills)) {
-            $this->params['skills'] = $request->skills;
-        }
+
+
+
 
         // Save params to session
         $this->saveSessionParams();
