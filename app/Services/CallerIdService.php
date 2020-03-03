@@ -14,13 +14,27 @@ class CallerIdService
     use SqlServerTraits;
     use TimeTraits;
 
-    public $group_id;
+    private $group_id;
+    private $dialer_numb;
+    private $email_to;
+
+    public function __construct($group_id = null)
+    {
+        $this->group_id = $group_id;
+        if ($this->group_id !== null) {
+            $this->setGroup();
+        }
+    }
+
+    private function setGroup()
+    {
+        $this->dialer_numb = 0;
+        $this->email_to = '';
+    }
 
     public static function execute($group_id = null)
     {
-        $caller_id_service = new CallerIdService;
-
-        $caller_id_service->group_id = $group_id;
+        $caller_id_service = new CallerIdService($group_id);
 
         $caller_id_service->runReport();
     }
