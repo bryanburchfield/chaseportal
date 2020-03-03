@@ -18,11 +18,9 @@ class FeatureMessageController extends Controller
 
 	public function readMessage(Request $request)
 	{
-
 		ReadFeatureMessage::firstOrCreate([
 			'feature_message_id' => $request->id,
 			'user_id' => Auth::user()->id,
-			'created_at' => now(),
 		]);
 
 		return $request->id;

@@ -17,7 +17,7 @@ class CreateReadFeatureMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('feature_message_id');
             $table->unsignedBigInteger('user_id');
-            $table->timestamp('read_at');
+            $table->timestamp('read_at')->useCurrent();
 
             $table->foreign('user_id')
                 ->references('id')->on('users');
