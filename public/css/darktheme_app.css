@@ -478,6 +478,7 @@ span {
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid #23354e;
+  position: relative;
 }
 
 #sidebar_nots .notifications .not h4 {
@@ -486,6 +487,22 @@ span {
   font-weight: 600;
   margin-top: 10px;
   margin-bottom: 6px;
+}
+
+#sidebar_nots .notifications .not .not_date {
+  color: #999;
+  font-size: 12px;
+}
+
+#sidebar_nots .notifications .not .not_read {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  border-radius: 10px;
+  background: #33A09B;
+  height: 12px;
+  width: 12px;
+  display: block;
 }
 
 button,

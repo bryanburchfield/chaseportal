@@ -11,16 +11,19 @@
 
     <div class="notifications">
     	<div class="not">
+    		<p class="not_date">Mar 2, 2020</p>
     		<h4>Something New Here</h4>
     		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto voluptatum inventore, labore consequatur, aut debitis eligendi sequi nihil corrupti magnam minima amet alias rem. Nulla repudiandae, odit mollitia accusamus placeat!</p>
     	</div>
 
     	<div class="not">
+    		<p class="not_date">Mar 1, 2020</p>
     		<h4>Another One Here</h4>
     		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia placeat harum, ipsa libero aliquid, obcaecati labore dolorem, delectus amet numquam animi aspernatur ratione! Atque minima, magni suscipit dolores, aliquid vero.</p>
     	</div>
 
     	<div class="not">
+    		<p class="not_date">Feb 26, 2020</p>
     		<h4>Something Else Here</h4>
     		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto voluptatum inventore, labore consequatur, aut debitis eligendi sequi nihil corrupti magnam minima amet alias rem.</p>
     	</div>
