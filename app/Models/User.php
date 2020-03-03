@@ -142,6 +142,7 @@ class User extends Authenticatable
     public function getFeatureMessages()
     {
         return FeatureMessage::where('created_at', '>', $this->created_at)
+            ->where('expires', '>', now())
             ->whereDoesntHave('readFeatureMessages')
             ->get();
     }
