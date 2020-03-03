@@ -15,7 +15,7 @@ class AddExpirationToFeatureMessagesTable extends Migration
     public function up()
     {
         Schema::table('feature_messages', function (Blueprint $table) {
-            $table->timestamp('expires')->default(Carbon::parse('+3 months'));
+            $table->timestamp('expires_at')->default(Carbon::parse('+3 months'));
         });
     }
 
