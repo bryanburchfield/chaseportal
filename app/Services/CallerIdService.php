@@ -17,10 +17,13 @@ class CallerIdService
     private $group_id;
     private $dialer_numb;
     private $email_to;
+    private $startdate;
+    private $enddate;
 
     public function __construct($group_id = null)
     {
         $this->group_id = $group_id;
+
         if ($this->group_id !== null) {
             $this->setGroup();
         }
@@ -28,8 +31,16 @@ class CallerIdService
 
     private function setGroup()
     {
-        $this->dialer_numb = 0;
-        $this->email_to = '';
+        // hard-coded recips
+        $canned = [
+            235773  => [
+                'dialer_numb' => 26,
+                'email_to' => 'g.sandoval@chasedatacorp.com',
+            ],
+        ];
+
+        $this->dialer_numb = $canned[$this->group_id]['dialer_numb'];
+        $this->email_to = $canned[$this->group_id]['email_to'];
     }
 
     public static function execute($group_id = null)
@@ -51,11 +62,10 @@ class CallerIdService
 
     private function runQuery()
     {
-        $enddate = Carbon::parse('midnight');
-        $startdate = $enddate->copy()->subDay();
+        $this->enddate = Carbon::parse('midnight');
+        $this->startdate = $this->enddate->copy()->subDay(30);
 
         $bind = [];
-
 
         $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
@@ -63,8 +73,12 @@ class CallerIdService
         foreach (Dialer::all() as $i => $dialer) {
             // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
 
-            $bind['startdate' . $i] = $startdate->toDateTimeString();
-            $bind['enddate' . $i] = $enddate->toDateTimeString();
+            if ($this->dialer_numb !== null && $dialer->dialer_numb != $this->dialer_numb) {
+                continue;
+            }
+
+            $bind['startdate' . $i] = $this->startdate->toDateTimeString();
+            $bind['enddate' . $i] = $this->enddate->toDateTimeString();
 
             $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId, COUNT(*) cnt FROM " .
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
@@ -75,7 +89,7 @@ class CallerIdService
 
             if ($this->group_id !== null) {
                 $bind['group_id'] = $this->group_id;
-                $sql .= "' AND DR.GroupId = :group_id";
+                $sql .= " AND DR.GroupId = :group_id";
             }
 
             $sql .= "
@@ -139,16 +153,28 @@ class CallerIdService
 
     private function emailReport($pdf)
     {
+        if ($this->email_to === null) {
+            $to = 'jonathan.gryczka@chasedatacorp.com';
+            $cc = 'ahmed@chasedatacorp.com';
+        } else {
+            $to = $this->email_to;
+            $cc = [
+                'jonathan.gryczka@chasedatacorp.com',
+                'ahmed@chasedatacorp.com',
+            ];
+        }
+
         // email report
         $message = [
             'subject' => 'Caller ID Report',
             'pdf' => base64_encode($pdf),
             'url' => url('/') . '/',
-            'date' => Carbon::parse('yesterday midnight')->toFormattedDateString(),
+            'startdate' => $this->startdate->toFormattedDateString(),
+            'enddate' => $this->enddate->toFormattedDateString(),
         ];
 
-        Mail::to('jonathan.gryczka@chasedatacorp.com')
-            ->cc('ahmed@chasedatacorp.com')
+        Mail::to($to)
+            ->cc($cc)
             ->send(new CallerIdMail($message));
     }
 }

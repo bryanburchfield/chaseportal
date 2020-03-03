@@ -557,7 +557,8 @@
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>{{ $data['date'] }}</h2>
+                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>
+                                            {{ $data['startdate'] }} - {{ $data['enddate'] }}  </h2>
                                     </div>
                                 </td>
                             </tr>
