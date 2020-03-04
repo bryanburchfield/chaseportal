@@ -11,7 +11,7 @@
 
     <div class="notifications">
 		@foreach(Auth()->User()->getFeatureMessages() as $msg)
-			<div class="not" data-msgid="{{$msg->id}}">
+			<div class="not {{!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first() ? 'unread' : ''}}" data-msgid="{{$msg->id}}">
 				@if (!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first())
 					<div class="not_read"></div>
 				@endif
