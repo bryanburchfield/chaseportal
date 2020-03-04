@@ -1502,7 +1502,8 @@ input.datepicker_only,
 select.input-sm,
 input.datepicker_only,
 select.input-sm,
-.add_custom_field input.form-control {
+.add_custom_field input.form-control,
+.create_notification .form-control {
   background: #eee !important;
 }
 

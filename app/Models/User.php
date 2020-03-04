@@ -143,6 +143,7 @@ class User extends Authenticatable
     {
         return FeatureMessage::where('created_at', '>', $this->created_at)
             ->where('expires_at', '>', now())
+            ->orderBy('id', 'desc')
             ->get();
     }
 

@@ -1713,7 +1713,8 @@ input.datepicker_only,
 select.input-sm,
 input.datepicker_only,
 select.input-sm,
-.add_custom_field input.form-control {
+.add_custom_field input.form-control,
+.create_notification .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;

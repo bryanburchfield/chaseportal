@@ -72,6 +72,8 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
             Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::get('admin/settings', 'AdminController@settings');
+            Route::get('admin/notifications', 'FeatureMessageController@index');
+            Route::post('admin/create_message', 'FeatureMessageController@createMessage');
         });
     });
 });
