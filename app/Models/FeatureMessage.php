@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class FeatureMessage extends Model
@@ -11,7 +12,6 @@ class FeatureMessage extends Model
     protected $fillable = [
         'title',
         'body',
-        'created_at',
         'expires_at',
     ];
 

@@ -17,7 +17,8 @@ class CreateFeatureMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('body');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('expires_at')->nullable();
         });
     }
 

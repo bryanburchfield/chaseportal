@@ -20,9 +20,12 @@ class CreateReadFeatureMessagesTable extends Migration
             $table->timestamp('read_at')->useCurrent();
 
             $table->foreign('user_id')
-                ->references('id')->on('users');
+                ->references('id')->on('users')
+                ->onDelete('cascade');
+
             $table->foreign('feature_message_id')
-                ->references('id')->on('feature_messages');
+                ->references('id')->on('feature_messages')
+                ->onDelete('cascade');
         });
     }
 
