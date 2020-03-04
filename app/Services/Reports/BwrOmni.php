@@ -6,7 +6,6 @@ use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Facades\Log;
 
 class BwrOmni
 {
@@ -19,6 +18,7 @@ class BwrOmni
 
         $this->params['reportName'] = 'reports.bwr_omni';
         $this->params['nostreaming'] = 1;
+        $this->params['campaigns'] = [];
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
@@ -95,7 +95,7 @@ class BwrOmni
                     WHEN SUM(Attempt) = 0 THEN 0
                     ELSE SUM(CASE WHEN Type = 3 THEN 1 ELSE 0 END) / SUM(CAST(Attempt as decimal))
                 END as SalesPerAttempt,
-                CAST(AVG(Attempt) as decimal) as AvgAttempts
+                AVG(CAST(Attempt as decimal)) as AvgAttempts
             INTO #tmp_leads
             FROM (
                 SELECT
@@ -192,8 +192,6 @@ class BwrOmni
     {
         // Add totals row after each campaign
 
-        $results = [];
-        $old_campaign = '';
         $totals = [
             'TotalLeads' => 0,
             'Attempts' => 0,
@@ -204,22 +202,13 @@ class BwrOmni
             'Sales' => 0,
         ];
 
+        $results = [];
+        $old_campaign = '';
+
         foreach ($this->yieldSql($sql, $bind) as $rec) {
             if (empty($rec)) {
                 continue;
             }
-
-            // add to totals
-            $totals['TotalLeads'] += $rec['TotalLeads'];
-            $totals['Attempts'] += $rec['Attempts'];
-            $totals['Callable'] += $rec['Callable'];
-            $totals['Dials'] += $rec['Dials'];
-            $totals['Connects'] += $rec['Connects'];
-            $totals['Contacts'] += $rec['Contacts'];
-            $totals['Sales'] += $rec['Sales'];
-
-            // unset Attempts since we aren't priting it
-            unset($rec['Attempts']);
 
             if ($rec['Campaign'] != $old_campaign && $old_campaign != '') {
                 // append agent actiivity to results
@@ -241,6 +230,18 @@ class BwrOmni
             }
             $old_campaign = $rec['Campaign'];
 
+            // add to totals
+            $totals['TotalLeads'] += $rec['TotalLeads'];
+            $totals['Attempts'] += $rec['Attempts'];
+            $totals['Callable'] += $rec['Callable'];
+            $totals['Dials'] += $rec['Dials'];
+            $totals['Connects'] += $rec['Connects'];
+            $totals['Contacts'] += $rec['Contacts'];
+            $totals['Sales'] += $rec['Sales'];
+
+            // unset Attempts since we aren't priting it
+            unset($rec['Attempts']);
+
             // Add empty activity fields to rec
             $rec = $rec + $this->emptyActivityRec();
 
@@ -257,12 +258,7 @@ class BwrOmni
             }
 
             // format fields
-            $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
-            $rec['AvgAttempts'] = number_format($rec['AvgAttempts'], 0);
-            $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
-            $rec['ConversionRate'] = number_format($rec['ConversionRate'], 4);
-            $rec['ConnectRate'] = number_format($rec['ConnectRate'], 4);
-            $rec['ContactRate'] = number_format($rec['ContactRate'], 4);
+            $rec = $this->formatFields($rec);
 
             $results[] = $rec;
         }
@@ -280,8 +276,8 @@ class BwrOmni
         // build empty record
         $rec = $this->emptyBaseRec() + $this->emptyActivityRec();
 
-        $rec['Campaign'] = $campaign;
-        $rec['Subcampaign'] = '[Campaign Totals]';
+        $rec['Campaign'] = 'TOTALS:';
+        $rec['Subcampaign'] = '';
 
         // calculate totals
         $rec['TotalLeads'] = $totals['TotalLeads'];
@@ -304,18 +300,23 @@ class BwrOmni
         }
 
         if ($totals['Dials'] == 0) {
+            $rec['ConnectRate'] = 0;
+            $rec['ContactRate'] = 0;
             $rec['SalesPerDial'] = 0;
         } else {
+            $rec['ConnectRate'] = $totals['Connects'] / $totals['Dials'];
+            $rec['ContactRate'] = $totals['Contacts'] / $totals['Dials'];
             $rec['SalesPerDial'] = $totals['Sales'] / $totals['Dials'];
         }
 
-        // $rec['ConversionRate'] = 0;
+        if ($totals['Contacts'] == 0) {
+            $rec['ConversionRate'] = 0;
+        } else {
+            $rec['ConversionRate'] = $totals['Sales'] / $totals['Contacts'];
+        }
 
         // format fields
-        $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
-        // $rec['AvgAttempts'] = number_format($rec['AvgAttempts'], 0);
-        $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
-        // $rec['ConversionRate'] = number_format($rec['ConversionRate'], 4);
+        $rec = $this->formatFields($rec);
 
         // Get agent activity
         $activity = $this->getAgentActivity($campaign, $startDate, $endDate);
@@ -334,10 +335,10 @@ class BwrOmni
             $rec['ContactsPerManHour'] = 0;
             $rec['SalesPerManHour'] = 0;
         } else {
-            $rec['DialsPerManHour'] = $totals['Dials'] / ($rec['ManHourSec'] / 60);
-            $rec['ConnectsPerManHour'] = $totals['Connects'] / ($rec['ManHourSec'] / 60);
-            $rec['ContactsPerManHour'] = $totals['Contacts'] / ($rec['ManHourSec'] / 60);
-            $rec['SalesPerManHour'] = $totals['Sales'] / ($rec['ManHourSec'] / 60);
+            $rec['DialsPerManHour'] = $totals['Dials'] / ($rec['ManHourSec'] / 3600);
+            $rec['ConnectsPerManHour'] = $totals['Connects'] / ($rec['ManHourSec'] / 3600);
+            $rec['ContactsPerManHour'] = $totals['Contacts'] / ($rec['ManHourSec'] / 3600);
+            $rec['SalesPerManHour'] = $totals['Sales'] / ($rec['ManHourSec'] / 3600);
         }
 
         // format fields
@@ -352,6 +353,18 @@ class BwrOmni
         $rec['AvgCallTimeSec'] = $this->secondsToHms($rec['AvgCallTimeSec']);
         $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
         $rec['DispositionTimeSec'] = $this->secondsToHms($rec['DispositionTimeSec']);
+
+        return $rec;
+    }
+
+    private function formatFields($rec)
+    {
+        $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
+        $rec['AvgAttempts'] = number_format($rec['AvgAttempts'], 2);
+        $rec['ConnectRate'] = number_format($rec['ConnectRate'] * 100, 2) . '%';
+        $rec['ContactRate'] = number_format($rec['ContactRate'] * 100, 2) . '%';
+        $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
+        $rec['ConversionRate'] = number_format($rec['ConversionRate'] * 100, 2) . '%';
 
         return $rec;
     }
