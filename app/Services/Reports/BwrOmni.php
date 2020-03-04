@@ -6,6 +6,7 @@ use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Facades\Log;
 
 class BwrOmni
 {
@@ -22,12 +23,14 @@ class BwrOmni
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
             'TotalLeads' => 'reports.total_leads',
-            'SalesPerAttempt' => 'reports.sales_per_attempt',
             'Callable' => 'reports.callable',
+            'SalesPerAttempt' => 'reports.sales_per_attempt',
+            'AvgAttempts' => 'reports.avg_attempts',
             'Dials' => 'reports.dials',
-            'AvgAttempt' => 'reports.avg_attempt',
             'Connects' => 'reports.connects',
+            'ConnectRate' => 'reports.connect_rate',
             'Contacts' => 'reports.contacts',
+            'ContactRate' => 'reports.contact_rate',
             'Sales' => 'reports.sales',
             'SalesPerDial' => 'reports.sales_per_dial',
             'ConversionRate' => 'reports.conversion_rate',
@@ -85,12 +88,14 @@ class BwrOmni
             SELECT
                 Campaign,
                 Subcampaign,
+                SUM(Attempt) as Attempts,
                 COUNT(*) as TotalLeads,
+                SUM(CAST(IsCallable as INT)) As Callable,
                 CASE
-                    WHEN SUM(Attempt)= 0 THEN 0
+                    WHEN SUM(Attempt) = 0 THEN 0
                     ELSE SUM(CASE WHEN Type = 3 THEN 1 ELSE 0 END) / SUM(CAST(Attempt as decimal))
                 END as SalesPerAttempt,
-                SUM(CAST(IsCallable as INT)) As Callable
+                CAST(AVG(Attempt) as decimal) as AvgAttempts
             INTO #tmp_leads
             FROM (
                 SELECT
@@ -121,9 +126,16 @@ class BwrOmni
                 Campaign,
                 Subcampaign,
                 COUNT(*) as Dials,
-                AVG(Attempt) as AvgAttempt,
                 SUM(CASE WHEN Type > 0 THEN 1 ELSE 0 END) as Connects,
+        CASE 
+            WHEN COUNT(*) = 0 THEN 0
+            ELSE SUM(CASE WHEN Type > 0 THEN 1 ELSE 0 END) / CAST(COUNT(*) as decimal)
+        END as ConnectRate,
                 SUM(CASE WHEN Type > 1 THEN 1 ELSE 0 END) as Contacts,
+        CASE 
+            WHEN COUNT(*) = 0 THEN 0
+            ELSE SUM(CASE WHEN Type > 1 THEN 1 ELSE 0 END) / CAST(COUNT(*) as decimal)
+        END as ContactRate,
                 SUM(CASE WHEN Type = 3 THEN 1 ELSE 0 END) as Sales,
                 SUM(CASE WHEN Type = 3 THEN 1 ELSE 0 END) / CAST(COUNT(*) as decimal) as SalesPerDial,
                 CASE 
@@ -149,9 +161,10 @@ class BwrOmni
             SELECT
                 L.*,
                 C.Dials,
-                C.AvgAttempt,
                 C.Connects,
+                C.ConnectRate,
                 C.Contacts,
+                C.ContactRate,
                 C.Sales,
                 C.SalesPerDial,
                 C.ConversionRate 
@@ -183,6 +196,7 @@ class BwrOmni
         $old_campaign = '';
         $totals = [
             'TotalLeads' => 0,
+            'Attempts' => 0,
             'Callable' => 0,
             'Dials' => 0,
             'Connects' => 0,
@@ -191,14 +205,33 @@ class BwrOmni
         ];
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
+            if (empty($rec)) {
+                continue;
+            }
+
+            // add to totals
+            $totals['TotalLeads'] += $rec['TotalLeads'];
+            $totals['Attempts'] += $rec['Attempts'];
+            $totals['Callable'] += $rec['Callable'];
+            $totals['Dials'] += $rec['Dials'];
+            $totals['Connects'] += $rec['Connects'];
+            $totals['Contacts'] += $rec['Contacts'];
+            $totals['Sales'] += $rec['Sales'];
+
+            // unset Attempts since we aren't priting it
+            unset($rec['Attempts']);
 
             if ($rec['Campaign'] != $old_campaign && $old_campaign != '') {
                 // append agent actiivity to results
                 $results[] = $this->addCampaignTotals($totals, $old_campaign, $bind['startdate'], $bind['enddate']);
 
+                // insert a blank line
+                $results[] = $this->emptyBaseRec() + $this->emptyActivityRec();
+
                 // clear totals
                 $totals = [
                     'TotalLeads' => 0,
+                    'Attempts' => 0,
                     'Callable' => 0,
                     'Dials' => 0,
                     'Connects' => 0,
@@ -214,9 +247,10 @@ class BwrOmni
             // if outer join didn't find any dials, fill with 0s
             if ($rec['Dials'] == '') {
                 $rec['Dials'] = 0;
-                $rec['AvgAttempt'] = 0;
                 $rec['Connects'] = 0;
+                $rec['ConnectRate'] = 0;
                 $rec['Contacts'] = 0;
+                $rec['ContactRate'] = 0;
                 $rec['Sales'] = 0;
                 $rec['SalesPerDial'] = 0;
                 $rec['ConversionRate'] = 0;
@@ -224,21 +258,19 @@ class BwrOmni
 
             // format fields
             $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
-            $rec['AvgAttempt'] = number_format($rec['AvgAttempt'], 0);
+            $rec['AvgAttempts'] = number_format($rec['AvgAttempts'], 0);
             $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
             $rec['ConversionRate'] = number_format($rec['ConversionRate'], 4);
+            $rec['ConnectRate'] = number_format($rec['ConnectRate'], 4);
+            $rec['ContactRate'] = number_format($rec['ContactRate'], 4);
 
             $results[] = $rec;
-            $totals['TotalLeads'] += $rec['TotalLeads'];
-            $totals['Callable'] += $rec['Callable'];
-            $totals['Dials'] += $rec['Dials'];
-            $totals['Connects'] += $rec['Connects'];
-            $totals['Contacts'] += $rec['Contacts'];
-            $totals['Sales'] += $rec['Sales'];
         }
 
         // add last campaign actiivity
-        $results[] = $this->addCampaignTotals($totals, $old_campaign, $bind['startdate'], $bind['enddate']);
+        if (!empty($old_campaign)) {
+            $results[] = $this->addCampaignTotals($totals, $old_campaign, $bind['startdate'], $bind['enddate']);
+        }
 
         return $results;
     }
@@ -251,6 +283,41 @@ class BwrOmni
         $rec['Campaign'] = $campaign;
         $rec['Subcampaign'] = '[Campaign Totals]';
 
+        // calculate totals
+        $rec['TotalLeads'] = $totals['TotalLeads'];
+        $rec['Callable'] = $totals['Callable'];
+        $rec['Dials'] = $totals['Dials'];
+        $rec['Connects'] = $totals['Connects'];
+        $rec['Contacts'] = $totals['Contacts'];
+        $rec['Sales'] = $totals['Sales'];
+
+        if ($totals['Attempts'] == 0) {
+            $rec['SalesPerAttempt'] = 0;
+        } else {
+            $rec['SalesPerAttempt'] = $totals['Sales'] / $totals['Attempts'];
+        }
+
+        if ($totals['TotalLeads'] == 0) {
+            $rec['AvgAttempts'] = 0;
+        } else {
+            $rec['AvgAttempts'] = $totals['Attempts'] / $totals['TotalLeads'];
+        }
+
+        if ($totals['Dials'] == 0) {
+            $rec['SalesPerDial'] = 0;
+        } else {
+            $rec['SalesPerDial'] = $totals['Sales'] / $totals['Dials'];
+        }
+
+        // $rec['ConversionRate'] = 0;
+
+        // format fields
+        $rec['SalesPerAttempt'] = number_format($rec['SalesPerAttempt'], 4);
+        // $rec['AvgAttempts'] = number_format($rec['AvgAttempts'], 0);
+        $rec['SalesPerDial'] = number_format($rec['SalesPerDial'], 4);
+        // $rec['ConversionRate'] = number_format($rec['ConversionRate'], 4);
+
+        // Get agent activity
         $activity = $this->getAgentActivity($campaign, $startDate, $endDate);
 
         $rec['ManHourSec'] = $activity['ManHourSec'];
@@ -423,12 +490,14 @@ class BwrOmni
             'Campaign' => '',
             'Subcampaign' => '',
             'TotalLeads' => '',
-            'SalesPerAttempt' => '',
             'Callable' => '',
+            'SalesPerAttempt' => '',
+            'AvgAttempts' => '',
             'Dials' => '',
-            'AvgAttempt' => '',
             'Connects' => '',
+            'ConnectRate' => '',
             'Contacts' => '',
+            'ContactRate' => '',
             'Sales' => '',
             'SalesPerDial' => '',
             'ConversionRate' => '',
