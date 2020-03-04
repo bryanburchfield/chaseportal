@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CallerIdService
 {
@@ -55,8 +57,8 @@ class CallerIdService
         $results = $this->runQuery();
 
         if (!empty($results)) {
-            $pdf = $this->makePdf($results);
-            $this->emailReport($pdf);
+            $csvfile = $this->makeCsv($results);
+            $this->emailReport($csvfile);
         }
     }
 
@@ -108,14 +110,8 @@ class CallerIdService
         return $this->runSql($sql, $bind);
     }
 
-    private function makePdf($results)
+    private function makeCsv($results)
     {
-        $pagesize = 29;
-        $totrows = count($results);
-
-        $totpages = floor($totrows / $pagesize);
-        $totpages += floor($totrows / $pagesize) == ($totrows / $pagesize) ? 0 : 1;
-
         $headers = [
             'GroupID',
             'GroupName',
@@ -123,21 +119,15 @@ class CallerIdService
             'Dials in Last 30 Days',
         ];
 
-        $pdf = new PDF();
+        array_unshift($results, $headers);
 
-        for ($i = 1; $i <= $totpages; $i++) {
-            $data = $this->arrayData(array_slice($results, ($i - 1) * $pagesize, $pagesize));
+        // Create a uniquish filename
+        $tempfile = '/' . uniqid() . '.csv';
 
-            // format numbers
-            foreach ($data as &$row) {
-                $row[3] = number_format($row[3]);
-            }
+        // this write to the directiory: storage_path('app')
+        Excel::store(new ReportExport($results), $tempfile);
 
-            $pdf->AddPage('L', 'Legal');
-            $pdf->FancyTable($headers, $data);
-        }
-
-        return $pdf->Output('S');
+        return $tempfile;
     }
 
     private function arrayData($array)
@@ -151,8 +141,15 @@ class CallerIdService
         return $data;
     }
 
-    private function emailReport($pdf)
+    private function emailReport($csvfile)
     {
+        // path out file
+        $csvfile = storage_path('app' . $csvfile);
+
+        // read file into variable, then delete file
+        $csv = file_get_contents($csvfile);
+        unlink($csvfile);
+
         if ($this->email_to === null) {
             $to = 'jonathan.gryczka@chasedatacorp.com';
             $cc = 'ahmed@chasedatacorp.com';
@@ -169,7 +166,7 @@ class CallerIdService
         // email report
         $message = [
             'subject' => 'Caller ID Report',
-            'pdf' => base64_encode($pdf),
+            'csv' => base64_encode($csv),
             'url' => url('/') . '/',
             'startdate' => $this->startdate->toFormattedDateString(),
             'enddate' => $this->enddate->toFormattedDateString(),

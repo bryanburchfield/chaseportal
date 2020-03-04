@@ -24,10 +24,10 @@ class CallerIdMail extends Mailable implements ShouldQueue
             ->view('mail.callerid')
             ->subject($this->data['subject'])
             ->attachData(
-                base64_decode($this->data['pdf']),
-                'callerid.pdf',
+                base64_decode($this->data['csv']),
+                'callerid.csv',
                 [
-                    'mime' => 'application/pdf',
+                    'mime' => 'text/csv',
                 ]
             );
     }
