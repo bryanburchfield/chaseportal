@@ -14,8 +14,6 @@
 			<div class="not" data-msgid="{{$msg->id}}">
 				@if (!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first())
 					<div class="not_read"></div>
-				@else
-					<div class="was_read"></div>
 				@endif
 	    		<p class="not_date">{{Carbon\Carbon::parse($msg->created_at)->format('M j, Y')}}</p>
 	    		<h4>{{$msg->title}}</h4>
