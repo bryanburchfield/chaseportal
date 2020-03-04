@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
@@ -53,8 +52,8 @@
                         <button type="button" class="btn btn-notifications">
                             <span>
                                 <i class="fas fa-bell"></i>
-                                @if(count(Auth()->User()->getFeatureMessages()))
-                                    <span class="numb_notifications">{{count(Auth()->User()->getFeatureMessages())}}</span>
+                                @if(Auth::user()->unreadFeatureMessagesCount())
+                                    <span class="numb_notifications">{{Auth::user()->unreadFeatureMessagesCount()}}</span>
                                 @endif
                             </span>
                         </button>
