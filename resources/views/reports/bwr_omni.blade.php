@@ -44,6 +44,27 @@
 			</div>
 		</div>
 
+		<div class="col-sm-4">
+			<div class="form-group">
+				{!! Form::label('data_sources_primary', __('reports.data_source_primary')) !!}
+				{!! Form::select("data_sources_primary[]", $filters['data_sources_primary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_primary_select','multiple'=>true]) !!}
+			</div>
+		</div>
+
+		<div class="col-sm-4">
+			<div class="form-group">
+				{!! Form::label('data_sources_secondary', __('reports.data_source_secondary')) !!}
+				{!! Form::select("data_sources_secondary[]", $filters['data_sources_secondary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_secondary_select','multiple'=>true]) !!}
+			</div>
+		</div>
+
+		<div class="col-sm-4">
+			<div class="form-group">
+				{!! Form::label('programs', __('reports.program')) !!}
+				{!! Form::select("programs[]", $filters['programs'], null, ["class" => "form-control multiselect", 'id'=> 'program_select','multiple'=>true]) !!}
+			</div>
+		</div>
+
 	</div>
 
 	<div class="alert alert-danger report_errors"></div>

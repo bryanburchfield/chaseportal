@@ -19,32 +19,35 @@ class BwrOmni
         $this->params['reportName'] = 'reports.bwr_omni';
         $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
+        $this->params['data_sources_primary'] = [];
+        $this->params['data_sources_secondary'] = [];
+        $this->params['programs'] = [];
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
             'TotalLeads' => 'reports.total_leads',
-            'Callable' => 'reports.callable',
+            'Callable' => 'reports.available',
             'SalesPerAttempt' => 'reports.sales_per_attempt',
             'AvgAttempts' => 'reports.avg_attempts',
-            'Dials' => 'reports.dials',
+            'Dials' => 'reports.dialed',
             'Connects' => 'reports.connects',
-            'ConnectRate' => 'reports.connect_rate',
+            'ConnectRate' => 'reports.connectrate',
             'Contacts' => 'reports.contacts',
-            'ContactRate' => 'reports.contact_rate',
+            'ContactRate' => 'reports.contactrate',
             'Sales' => 'reports.sales',
             'SalesPerDial' => 'reports.sales_per_dial',
-            'ConversionRate' => 'reports.conversion_rate',
+            'ConversionRate' => 'reports.conversionrate',
             'ManHourSec' => 'reports.manhours',
             'DialsPerManHour' => 'reports.dials_per_manhour',
             'ConnectsPerManHour' => 'reports.connects_per_manhour',
             'ContactsPerManHour' => 'reports.contacts_per_manhour',
             'SalesPerManHour' => 'reports.sales_per_manhour',
-            'WaitingTimeSec' => 'reports.waiting_time',
-            'AvgWaitingTimeSec' => 'reports.avg_waiting_time',
-            'CallTimeSec' => 'reports.call_time',
-            'AvgCallTimeSec' => 'reports.avg_call_time',
-            'PausedTimeSec' => 'reports.paused_time',
-            'DispositionTimeSec' => 'reports.disposition_time',
+            'WaitingTimeSec' => 'reports.waittimesec',
+            'AvgWaitingTimeSec' => 'reports.avwaittime',
+            'CallTimeSec' => 'reports.talktimesec',
+            'AvgCallTimeSec' => 'reports.avtalktime',
+            'PausedTimeSec' => 'reports.pausedtimesec',
+            'DispositionTimeSec' => 'reports.dispositiontimesec',
         ];
     }
 
@@ -55,10 +58,67 @@ class BwrOmni
                 $this->params['fromdate'],
                 $this->params['todate']
             ),
+            'data_sources_primary' => $this->getAllDataSourcePrimary(),
+            'data_sources_secondary' => $this->getAllDataSourceSecondary(),
+            'programs' => $this->getAllProgram(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
         return $filters;
+    }
+
+    private function getAllDataSourcePrimary()
+    {
+        $db = Auth::User()->db;
+
+        $sql = '';
+
+        $sql .=  "SELECT DISTINCT Data_Source_Primary
+            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
+            WHERE Data_Source_Primary is not null
+            AND Data_Source_Primary != ''";
+
+        $results = resultsToList($this->runSql($sql));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
+    }
+
+    private function getAllDataSourceSecondary()
+    {
+        $db = Auth::User()->db;
+
+        $sql = '';
+
+        $sql .=  "SELECT DISTINCT Data_Source_Secondary
+            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
+            WHERE Data_Source_Secondary is not null
+            AND Data_Source_Secondary != ''";
+
+        $results = resultsToList($this->runSql($sql));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
+    }
+
+    private function getAllProgram()
+    {
+        $db = Auth::User()->db;
+
+        $sql = '';
+
+        $sql .=  "SELECT DISTINCT Program
+            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
+            WHERE Program is not null
+            AND Program != ''";
+
+        $results = resultsToList($this->runSql($sql));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
     }
 
     private function executeReport($all = false)
@@ -81,7 +141,36 @@ class BwrOmni
             'campaigns' => $campaigns,
         ];
 
-        $sql = "SET NOCOUNT ON;
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['data_sources_primary'])) {
+            $data_sources_primary = str_replace("'", "''", implode('!#!', $this->params['data_sources_primary']));
+            $bind['data_sources_primary'] = $data_sources_primary;
+
+            $sql .= "
+            CREATE TABLE #SelectedPrimary(Data_Source_Primary varchar(255) Primary Key);
+            INSERT INTO #SelectedPrimary SELECT DISTINCT [value] from dbo.SPLIT(:data_sources_primary, '!#!');";
+        }
+
+        if (!empty($this->params['data_sources_secondary'])) {
+            $data_sources_secondary = str_replace("'", "''", implode('!#!', $this->params['data_sources_secondary']));
+            $bind['data_sources_secondary'] = $data_sources_secondary;
+
+            $sql .= "
+            CREATE TABLE #SelectedSecondary(Data_Source_Secondary varchar(255) Primary Key);
+            INSERT INTO #SelectedSecondary SELECT DISTINCT [value] from dbo.SPLIT(:data_sources_secondary, '!#!');";
+        }
+
+        if (!empty($this->params['programs'])) {
+            $programs = str_replace("'", "''", implode('!#!', $this->params['programs']));
+            $bind['programs'] = $programs;
+
+            $sql .= "
+            CREATE TABLE #SelectedProgram(Program varchar(255) Primary Key);
+            INSERT INTO #SelectedProgram SELECT DISTINCT [value] from dbo.SPLIT(:programs, '!#!');";
+        }
+
+        $sql .= "
             CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
             
@@ -102,9 +191,6 @@ class BwrOmni
                     L.Campaign,
                     IsNull(L.Subcampaign, '') as Subcampaign,
                     L.Attempt,
-                    A.Data_Source_Primary,
-                    A.Data_Source_Secondary,
-                    A.Program,
                     D.Type,
                     IsNull((
                         SELECT TOP 1 D.IsCallable
@@ -116,8 +202,31 @@ class BwrOmni
                     ), 0) as IsCallable
                 FROM Leads L
                 INNER JOIN #SelectedCampaign C on C.CampaignName = L.Campaign
-                LEFT OUTER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid
-                LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId 
+                LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId";
+
+        if (
+            !empty($this->params['data_sources_primary']) ||
+            !empty($this->params['data_sources_secondary']) ||
+            !empty($this->params['programs'])
+        ) {
+            $sql .= "
+                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
+
+            if (!empty($this->params['data_sources_primary'])) {
+                $sql .= "
+                INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
+            }
+            if (!empty($this->params['data_sources_secondary'])) {
+                $sql .= "
+                INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
+            }
+            if (!empty($this->params['programs'])) {
+                $sql .= "
+                INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
+            }
+        }
+
+        $sql .= "
                 WHERE L.GroupId = :group_id1
             ) tmp
             GROUP BY Campaign, Subcampaign;
@@ -151,7 +260,32 @@ class BwrOmni
                     D.Type
                 FROM DialingResults DR
                 INNER JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
-                LEFT OUTER JOIN Dispos D ON D.Disposition = DR.CallStatus AND D.GroupId = DR.GroupId 
+                LEFT OUTER JOIN Dispos D ON D.Disposition = DR.CallStatus AND D.GroupId = DR.GroupId";
+
+        if (
+            !empty($this->params['data_sources_primary']) ||
+            !empty($this->params['data_sources_secondary']) ||
+            !empty($this->params['programs'])
+        ) {
+            $sql .= "
+                INNER JOIN Leads L ON L.id = DR.LeadId 
+                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
+
+            if (!empty($this->params['data_sources_primary'])) {
+                $sql .= "
+                    INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
+            }
+            if (!empty($this->params['data_sources_secondary'])) {
+                $sql .= "
+                    INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
+            }
+            if (!empty($this->params['programs'])) {
+                $sql .= "
+                    INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
+            }
+        }
+
+        $sql .= "
                 WHERE DR.GroupId = :group_id2
                 AND DR.Date >= :startdate
                 AND DR.Date < :enddate
@@ -276,7 +410,7 @@ class BwrOmni
         // build empty record
         $rec = $this->emptyBaseRec() + $this->emptyActivityRec();
 
-        $rec['Campaign'] = 'TOTALS:';
+        $rec['Campaign'] = strtoupper(trans('reports.total')) . ':';
         $rec['Subcampaign'] = '';
 
         // calculate totals
@@ -550,10 +684,17 @@ class BwrOmni
         } else {
             $this->params['campaigns'] = $request->campaigns;
         }
+        if (!empty($request->data_sources_primary)) {
+            $this->params['data_sources_primary'] = $request->data_sources_primary;
+        }
 
+        if (!empty($request->data_sources_secondary)) {
+            $this->params['data_sources_secondary'] = $request->data_sources_secondary;
+        }
 
-
-
+        if (!empty($request->programs)) {
+            $this->params['programs'] = $request->programs;
+        }
 
         // Save params to session
         $this->saveSessionParams();
