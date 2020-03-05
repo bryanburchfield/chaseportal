@@ -3293,6 +3293,10 @@ p.login_date {
   margin-right: 10px;
 }
 
+.bwr_omni table thead th a {
+  display: none;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

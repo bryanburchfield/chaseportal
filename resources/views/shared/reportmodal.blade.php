@@ -34,6 +34,10 @@
                     'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
                 ];
 
+                if(Auth::User()->group_id == 224500) {
+                    $reports['bwr_omni'] = __('reports.bwr_omni');
+                }
+
                 if(!Auth::User()->isDemo()) {
                     $reports['call_details'] = __('reports.call_details');
                 }

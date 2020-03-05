@@ -8,21 +8,21 @@
     "packages": [
         {
             "name": "codedge/laravel-fpdf",
-            "version": "1.5",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codedge/laravel-fpdf.git",
-                "reference": "6596b7be2de7f143abbe1de6472bbb5a8d22672f"
+                "reference": "b33e4f32c0a2c4e7c17631179dc726ccd1f78b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/6596b7be2de7f143abbe1de6472bbb5a8d22672f",
-                "reference": "6596b7be2de7f143abbe1de6472bbb5a8d22672f",
+                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/b33e4f32c0a2c4e7c17631179dc726ccd1f78b39",
+                "reference": "b33e4f32c0a2c4e7c17631179dc726ccd1f78b39",
                 "shasum": ""
             },
             "require": {
                 "illuminate/support": "5.*|6.*",
-                "php": ">=5.4.0"
+                "php": ">=7.2"
             },
             "type": "library",
             "extra": {
@@ -50,13 +50,13 @@
                     "email": "holger.loesken@codedge.de"
                 }
             ],
-            "description": "Laravel 5 package for use with Fpdf. It ships with Fpdf 1.81.",
+            "description": "Laravel package to include Fpdf. It ships with Fpdf 1.81.",
             "keywords": [
                 "fpdf",
                 "laravel",
                 "pdf"
             ],
-            "time": "2019-09-19T19:00:05+00:00"
+            "time": "2019-12-27T23:06:03+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
