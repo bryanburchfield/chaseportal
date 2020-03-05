@@ -25,6 +25,9 @@ class BwrOmni
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
+            'Data_Source_Primary' => 'reports.data_source_primary',
+            'Data_Source_Secondary' => 'reports.data_source_secondary',
+            'Program' => 'reports.program',
             'TotalLeads' => 'reports.total_leads',
             'Callable' => 'reports.available',
             'SalesPerAttempt' => 'reports.sales_per_attempt',
@@ -177,6 +180,9 @@ class BwrOmni
             SELECT
                 Campaign,
                 Subcampaign,
+                Data_Source_Primary,
+                Data_Source_Secondary,
+                Program,
                 SUM(Attempt) as Attempts,
                 COUNT(*) as TotalLeads,
                 SUM(CAST(IsCallable as INT)) As Callable,
@@ -189,6 +195,9 @@ class BwrOmni
             FROM (
                 SELECT
                     L.Campaign,
+                    A.Data_Source_Primary,
+                    A.Data_Source_Secondary,
+                    A.Program,
                     IsNull(L.Subcampaign, '') as Subcampaign,
                     L.Attempt,
                     D.Type,
@@ -202,16 +211,14 @@ class BwrOmni
                     ), 0) as IsCallable
                 FROM Leads L
                 INNER JOIN #SelectedCampaign C on C.CampaignName = L.Campaign
-                LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId";
+                LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId
+                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
         if (
             !empty($this->params['data_sources_primary']) ||
             !empty($this->params['data_sources_secondary']) ||
             !empty($this->params['programs'])
         ) {
-            $sql .= "
-                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
-
             if (!empty($this->params['data_sources_primary'])) {
                 $sql .= "
                 INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
@@ -229,11 +236,14 @@ class BwrOmni
         $sql .= "
                 WHERE L.GroupId = :group_id1
             ) tmp
-            GROUP BY Campaign, Subcampaign;
+            GROUP BY Campaign, Subcampaign, Data_Source_Primary, Data_Source_Secondary, Program;
 
             SELECT
                 Campaign,
                 Subcampaign,
+                Data_Source_Primary,
+                Data_Source_Secondary,
+                Program,
                 COUNT(*) as Dials,
                 SUM(CASE WHEN Type > 0 THEN 1 ELSE 0 END) as Connects,
         CASE 
@@ -256,20 +266,22 @@ class BwrOmni
                 SELECT 
                     DR.Campaign,
                     IsNull(DR.Subcampaign, '') as Subcampaign,
+                    A.Data_Source_Primary,
+                    A.Data_Source_Secondary,
+                    A.Program,
                     DR.Attempt,
                     D.Type
                 FROM DialingResults DR
                 INNER JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
-                LEFT OUTER JOIN Dispos D ON D.Disposition = DR.CallStatus AND D.GroupId = DR.GroupId";
+                LEFT OUTER JOIN Dispos D ON D.Disposition = DR.CallStatus AND D.GroupId = DR.GroupId
+                INNER JOIN Leads L ON L.id = DR.LeadId 
+                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
         if (
             !empty($this->params['data_sources_primary']) ||
             !empty($this->params['data_sources_secondary']) ||
             !empty($this->params['programs'])
         ) {
-            $sql .= "
-                INNER JOIN Leads L ON L.id = DR.LeadId 
-                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
             if (!empty($this->params['data_sources_primary'])) {
                 $sql .= "
@@ -290,7 +302,7 @@ class BwrOmni
                 AND DR.Date >= :startdate
                 AND DR.Date < :enddate
             ) tmp
-            GROUP BY Campaign, Subcampaign
+            GROUP BY Campaign, Subcampaign, Data_Source_Primary, Data_Source_Secondary, Program;
 
             SELECT
                 L.*,
@@ -303,7 +315,12 @@ class BwrOmni
                 C.SalesPerDial,
                 C.ConversionRate 
             FROM #tmp_leads L
-            LEFT OUTER JOIN #tmp_calls C ON C.Campaign = L.Campaign AND C.Subcampaign = L.Subcampaign
+            LEFT OUTER JOIN #tmp_calls C ON
+                C.Campaign = L.Campaign AND
+                C.Subcampaign = L.Subcampaign AND
+                C.Data_Source_Primary = L.Data_Source_Primary AND
+                C.Data_Source_Secondary = L.Data_Source_Secondary AND
+                C.Program = L.Program
             ORDER BY L.Campaign, L.Subcampaign";
 
         $results = $this->processResults($sql, $bind);
@@ -636,6 +653,9 @@ class BwrOmni
         return [
             'Campaign' => '',
             'Subcampaign' => '',
+            'Data_Source_Primary' => '',
+            'Data_Source_Secondary' => '',
+            'Program' => '',
             'TotalLeads' => '',
             'Callable' => '',
             'SalesPerAttempt' => '',
