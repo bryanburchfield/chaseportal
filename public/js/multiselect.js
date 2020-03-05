@@ -10,7 +10,7 @@
 	});
 
 	// preselect all campaigns
-	$('#call_details #campaign_select, #agent_summary_campaign #campaign_select, #agent_summary_subcampaign #campaign_select, #inbound_summary #campaign_select')
+	$('#call_details #campaign_select, #agent_summary_campaign #campaign_select, #agent_summary_subcampaign #campaign_select, #inbound_summary #campaign_select, #bwr_omni #campaign_select')
 		.multiselect({nonSelectedText: Lang.get('js_msgs.select_campaign'),})
 		.multiselect('selectAll', false)
     	.multiselect('updateButtonText');

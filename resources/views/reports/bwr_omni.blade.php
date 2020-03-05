@@ -40,7 +40,7 @@
 		<div class="col-sm-4">
 			<div class="form-group">
 				{!! Form::label('campaigns', __('reports.campaign')) !!}
-				{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+				{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true, 'required' => true,]) !!}
 			</div>
 		</div>
 
