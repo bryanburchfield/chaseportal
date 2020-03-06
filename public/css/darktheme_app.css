@@ -161,6 +161,14 @@ h6 {
   padding-bottom: 20px;
 }
 
+.fz15 {
+  font-size: 15px;
+}
+
+.fw600 {
+  font-weight: 600;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }

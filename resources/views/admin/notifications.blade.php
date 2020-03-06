@@ -36,12 +36,12 @@
 								</div>
 
 								<div class="form-group">
-									<label class="checkbox-inline">
+									<label class="checkbox-inline fz15 fw600">
 										<input type="checkbox" name="active" value="1" checked> Publish Now?
 									</label>
 								</div>
 
-								<button type="submit" class="btn btn-primary mt30">{{__('general.submit')}}</button>
+								<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
 
 								<br><br>
 
@@ -75,8 +75,8 @@
 												<td><input type="checkbox" class="checkbox published" name="published" data-id="{{$msg->id}}" {{$msg->active ? 'checked' : ''}}></td>
 												<td>{{$msg->id}}</td>
 												<td>{{$msg->title}}</td>
-												<td>{{$msg->body}}</td>
-												<td><a class="edit_msg" href="{{url('admin/notifications/'.$msg->id)}}"><i class="fas fa-edit"></i></a></td>
+												<td>{{ \Illuminate\Support\Str::limit($msg->body, 40, $end='...') }}</td>
+												<td><a class="edit_msg" href="{{url('dashboards/admin/notifications/'.$msg->id)}}"><i class="fas fa-edit"></i></a></td>
 												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
 											</tr>
 										@endforeach
