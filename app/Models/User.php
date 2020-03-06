@@ -177,10 +177,4 @@ class User extends Authenticatable
     {
         $this->notify(new WelcomeDemoNotification($user));
     }
-
-    public function toggleUserNotifications()
-    {
-        $this->feature_message_notifications = !$this->feature_message_notifications;
-        $this->save();
-    }
 }
