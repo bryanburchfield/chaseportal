@@ -14,7 +14,7 @@ class AddActiveColumnToFeatureMessages extends Migration
     public function up()
     {
         Schema::table('feature_messages', function (Blueprint $table) {
-            $table->boolean('active')->default(1)->nullable();
+            $table->boolean('active')->default(0)->nullable();
         });
     }
 

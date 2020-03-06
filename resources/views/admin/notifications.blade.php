@@ -27,7 +27,6 @@
 									notification_title', 'required'=>true]) !!}
 								</div>
 
-
 								<div class="form-group">
 									{!! Form::label('body', 'Body') !!}
 									{!! Form::textarea("body", null, ["class" => "form-control notification_body", 'required'=>true]) !!}
@@ -35,7 +34,7 @@
 
 								<div class="form-group">
 									<label class="checkbox-inline">
-										<input type="checkbox" name="active[]" value="1" checked> Publish Now?
+										<input type="checkbox" name="active" value="1" checked> Publish Now?
 									</label>
 								</div>
 
