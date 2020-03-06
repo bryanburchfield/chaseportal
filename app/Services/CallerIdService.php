@@ -5,11 +5,14 @@ namespace App\Services;
 use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
+use App\Models\TwilioAreaCode;
+use App\Models\TwilioNumber;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
 {
@@ -17,47 +20,108 @@ class CallerIdService
     use TimeTraits;
 
     private $group_id;
-    private $dialer_numb;
     private $email_to;
     private $startdate;
     private $enddate;
 
-    public function __construct($group_id = null)
+    private function initialize()
     {
-        $this->group_id = $group_id;
+        echo "truncating\n";
 
-        if ($this->group_id !== null) {
-            $this->setGroup();
-        }
+        TwilioAreaCode::truncate();
+        TwilioNumber::truncate();
+
+        $sid = config('twilio.did_sid');
+        $token = config('twilio.did_token');
+
+        echo "Clinet $sid $token\n";
+
+        $this->twilio = new Twilio($sid, $token);
     }
 
-    private function setGroup()
+    private function setGroup($group_id = null)
     {
+        echo "set group: $group_id\n";
+
         // hard-coded recips
         $canned = [
             235773  => [
-                'dialer_numb' => 26,
                 'email_to' => 'g.sandoval@chasedatacorp.com',
             ],
         ];
 
-        $this->dialer_numb = $canned[$this->group_id]['dialer_numb'];
-        $this->email_to = $canned[$this->group_id]['email_to'];
+        if (!isset($canned[$group_id])) {
+            $this->group_id = null;
+            $this->email_to = null;
+            return false;
+        }
+
+        $this->group_id = $group_id;
+        $this->email_to = $canned[$group_id]['email_to'];
+
+        return true;
     }
 
-    public static function execute($group_id = null)
+    public static function execute()
     {
-        $caller_id_service = new CallerIdService($group_id);
-
+        $caller_id_service = new CallerIdService();
         $caller_id_service->runReport();
     }
 
     public function runReport()
     {
-        $results = $this->runQuery();
+        $this->initialize();
+
+        $group_id = '';
+        $results = [];
+        $all_results = [];
+
+        foreach ($this->runQuery() as $rec) {
+            // check if this number is still active
+            if ($this->activeNumber($rec['CallerId'])) {
+
+                $all_results[] = $rec;
+
+                // Send email on change of group
+                if ($group_id != '' && $group_id != $rec['GroupId']) {
+
+                    echo "done with $group_id\n";
+
+                    if ($this->setGroup($group_id)) {
+
+                        echo "emailing $group_id\n";
+
+                        $csvfile = $this->makeCsv($results);
+                        $this->emailReport($csvfile);
+                    }
+
+                    $results = [];
+                }
+
+                $results[] = $rec;
+                $group_id = $rec['GroupId'];
+            }
+        }
+
+        echo "last group $group_id\n";
 
         if (!empty($results)) {
-            $csvfile = $this->makeCsv($results);
+            if ($this->setGroup($group_id)) {
+
+                echo "emailing $group_id\n";
+
+                $csvfile = $this->makeCsv($results);
+                $this->emailReport($csvfile);
+            }
+        }
+
+        if (!empty($all_results)) {
+
+            echo "emailing all results\n";
+
+            // clear group specific vars
+            $this->setGroup();
+            $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
     }
@@ -69,15 +133,11 @@ class CallerIdService
 
         $bind = [];
 
-        $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
+        $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
             // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
-
-            if ($this->dialer_numb !== null && $dialer->dialer_numb != $this->dialer_numb) {
-                continue;
-            }
 
             $bind['startdate' . $i] = $this->startdate->toDateTimeString();
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
@@ -87,14 +147,7 @@ class CallerIdService
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
-                AND DR.CallerId != ''";
-
-            if ($this->group_id !== null) {
-                $bind['group_id'] = $this->group_id;
-                $sql .= " AND DR.GroupId = :group_id";
-            }
-
-            $sql .= "
+                AND DR.CallerId != ''
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= 5500
                 ";
@@ -130,16 +183,16 @@ class CallerIdService
         return $tempfile;
     }
 
-    private function arrayData($array)
-    {
-        $data = [];
+    // private function arrayData($array)
+    // {
+    //     $data = [];
 
-        foreach ($array as $rec) {
-            $data[] = array_values($rec);
-        }
+    //     foreach ($array as $rec) {
+    //         $data[] = array_values($rec);
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
     private function emailReport($csvfile)
     {
@@ -175,5 +228,61 @@ class CallerIdService
         Mail::to($to)
             ->cc($cc)
             ->send(new CallerIdMail($message));
+    }
+
+    private function activeNumber($phone)
+    {
+        echo "incoming $phone\n";
+
+        // strip non-digits from phone
+        $phone = preg_replace("/[^0-9]/", '', $phone);
+
+        // if it's a bogus number, return it as active
+        if (strlen($phone) !== 10) {
+            return true;
+        }
+
+        // There are 8 chances any number could already be loaded
+        for ($i = 0; $i < 8; $i++) {
+
+            $twilio_areacode = TwilioAreaCode::find(substr($phone, $i, 3));
+
+            if ($twilio_areacode) {
+                break;
+            }
+        }
+
+        // if we don't alrady have it, load up the tables
+        if (!$twilio_areacode) {
+            $areacode = substr($phone, 0, 3);
+
+            echo "adding areacode $areacode\n";
+
+            TwilioAreaCode::create(['areacode' => $areacode]);
+
+            // this will get any number with those 3 digits
+            $phones = $this->twilio->incomingPhoneNumbers
+                ->read(
+                    array("phoneNumber" => $areacode)
+                );
+
+            $phones = collect($phones);
+
+            echo "Found " . $phones->count() . "\n";
+
+            $phones->each(function ($item, $key) {
+                // strip the "+1" off the number
+                // try/catch is probably faster than firstOrCreate()
+                try {
+                    TwilioNumber::create(['phone' => substr($item->phoneNumber, 2)]);
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            });
+
+            echo "Inserted\n";
+        }
+
+        return TwilioNumber::find($phone);
     }
 }
