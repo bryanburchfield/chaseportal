@@ -27,6 +27,9 @@
 									notification_title', 'required'=>true]) !!}
 								</div>
 
+								{!! Form::hidden('id', null, ['class'=>'form-control
+									id']) !!}
+
 								<div class="form-group">
 									{!! Form::label('body', 'Body') !!}
 									{!! Form::textarea("body", null, ["class" => "form-control notification_body", 'required'=>true]) !!}
@@ -73,7 +76,7 @@
 												<td>{{$msg->id}}</td>
 												<td>{{$msg->title}}</td>
 												<td>{{$msg->body}}</td>
-												<td><a class="edit_msg" href="#"><i class="fas fa-edit"></i></a></td>
+												<td><a class="edit_msg" href="{{url('admin/notifications/'.$msg->id)}}"><i class="fas fa-edit"></i></a></td>
 												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
 											</tr>
 										@endforeach
