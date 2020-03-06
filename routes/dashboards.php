@@ -37,6 +37,8 @@ Route::prefix('dashboards')->group(function () {
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
 
+        Route::get('/notifications/{id}', 'FeatureMessageController@viewMessage');
+
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_filters', 'MasterDashController@updateFilters');
