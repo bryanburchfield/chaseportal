@@ -35,7 +35,22 @@ class FeatureMessageController extends Controller
 		$msg = new FeatureMessage();
 		$msg->title = $request->title;
 		$msg->body = $request->body;
+		$msg->active = $request->active;
 		$msg->save();
 		return redirect()->back();
+	}
+
+	public function publishMessage(Request $request)
+	{
+		$msg = FeatureMessage::findOrFail($request->id);
+		$msg->active = $request->active;
+		$msg->save();
+		return redirect()->back();
+	}
+
+	public function deleteMsg(Request $request)
+	{
+		FeatureMessage::findOrFail($request->id)->delete();
+		return ['delete_msg' => 1];
 	}
 }

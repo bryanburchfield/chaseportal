@@ -2242,7 +2242,8 @@ a.edit_recip_glyph {
   margin-right: 10px;
 }
 
-.users a.remove_user i {
+.users a.remove_user i,
+a.remove_msg i {
   position: relative;
   top: 2px;
   color: #E15B23;

@@ -33,6 +33,11 @@
 									{!! Form::textarea("body", null, ["class" => "form-control notification_body", 'required'=>true]) !!}
 								</div>
 
+								<div class="form-group">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="active[]" value="1" checked> Publish Now?
+									</label>
+								</div>
 
 								<button type="submit" class="btn btn-primary mt30">{{__('general.submit')}}</button>
 
@@ -53,9 +58,11 @@
 								<table class="table">
 									<thead>
 										<tr>
+											<th>Published</th>
 											<th>ID</th>
 											<th>Title</th>
 											<th>Body</th>
+											<th>Edit</th>
 											<th>Delete</th>
 										</tr>
 									</thead>
@@ -63,10 +70,12 @@
 									<tbody>
 										@foreach($feature_messages as $msg)
 											<tr>
+												<td><input type="checkbox" class="checkbox published" name="published" data-id="{{$msg->id}}" {{$msg->active ? 'checked' : ''}}></td>
 												<td>{{$msg->id}}</td>
 												<td>{{$msg->title}}</td>
 												<td>{{$msg->body}}</td>
-												<td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="newtest" data-user="68"><i class="fa fa-trash-alt"></i></a></td>
+												<td><a class="edit_msg" href="#"><i class="fas fa-edit"></i></a></td>
+												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
 											</tr>
 										@endforeach
 									</tbody>
@@ -80,6 +89,26 @@
 	</div>
 
 	@include('shared.notifications_bar')
+</div>
+
+<!-- Delete Msg Modal -->
+<div class="modal fade" id="deleteMsgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_msg')}}</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="id" name="id" value="">
+            	<h3>{{__('users.are_you_sure')}} <span class="title"></span>?</h3>
+            </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('users.cancel')}}</button>
+	            <button type="button" class="btn btn-danger delete_msg">{{__('users.delete')}}</button>
+	        </div>
+	    </div>
+    </div>
 </div>
 
 @include('shared.reportmodal')

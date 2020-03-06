@@ -11,14 +11,16 @@
 
     <div class="notifications">
 		@foreach(Auth()->User()->getFeatureMessages() as $msg)
-			<div class="not {{!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first() ? 'unread' : ''}}" data-msgid="{{$msg->id}}">
-				@if (!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first())
-					<div class="not_read"></div>
-				@endif
-	    		<p class="not_date">{{Carbon\Carbon::parse($msg->created_at)->format('M j, Y')}}</p>
-	    		<h4>{{$msg->title}}</h4>
-	    		<p>{{$msg->body}}</p>
-	    	</div>
+            @if($msg->active)
+    			<div class="not {{!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first() ? 'unread' : ''}}" data-msgid="{{$msg->id}}">
+    				@if (!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first())
+    					<div class="not_read"></div>
+    				@endif
+    	    		<p class="not_date">{{Carbon\Carbon::parse($msg->created_at)->format('M j, Y')}}</p>
+    	    		<h4>{{$msg->title}}</h4>
+    	    		<p>{{$msg->body}}</p>
+    	    	</div>
+            @endif
     	@endforeach
     </div>
 </div>

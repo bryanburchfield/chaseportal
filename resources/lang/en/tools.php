@@ -25,6 +25,7 @@ return [
 	'days_to_filter'	=> 'Days to Filter By',
 	'delete'		=> 'Delete',
 	'delete_campaign'	=> 'Delete Campaign',
+	'delete_msg'	=> 'Delete Message',
 	'delete_provider'	=> 'Delete Provider',
 	'delete_rule'	=> 'Delete Rule',
 	'delete_server'	=> 'Delete SMTP Server',

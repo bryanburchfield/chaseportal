@@ -74,6 +74,8 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/settings', 'AdminController@settings');
             Route::get('admin/notifications', 'FeatureMessageController@index');
             Route::post('admin/create_message', 'FeatureMessageController@createMessage');
+            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
+            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
         });
     });
 });

@@ -151,6 +151,7 @@ class User extends Authenticatable
     {
         return FeatureMessage::where('created_at', '>', $this->created_at)
             ->where('expires_at', '>', now())
+            ->where('active', '=', 1)
             ->leftJoin('read_feature_messages', function ($join) {
                 $join->on('read_feature_messages.feature_message_id', '=', 'feature_messages.id')
                     ->where('read_feature_messages.user_id', '=', $this->id);
