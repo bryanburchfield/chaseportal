@@ -35,6 +35,7 @@ class User extends Authenticatable
         'language_displayed',
         'phone',
         'expiration',
+        'feature_message_notifications',
     ];
 
     /**
@@ -175,5 +176,11 @@ class User extends Authenticatable
     public function sendWelcomeDemoEmail($user)
     {
         $this->notify(new WelcomeDemoNotification($user));
+    }
+
+    public function toggleUserNotifications()
+    {
+        $this->feature_message_notifications = !$this->feature_message_notifications;
+        $this->save();
     }
 }
