@@ -73,7 +73,8 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::get('admin/settings', 'AdminController@settings');
             Route::get('admin/notifications', 'FeatureMessageController@index');
-            Route::post('admin/create_message', 'FeatureMessageController@createMessage');
+            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
+            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
             Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
             Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
         });
