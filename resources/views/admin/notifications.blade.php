@@ -17,7 +17,7 @@
 					<div class="col-sm-12">
 						<div class="mt30" id="notifications">
 							<div class="col-sm-6 mb20 card">
-								<h2 class="page_heading">Create Notification</h2>
+								<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
 								{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
 								create_notification']) !!}
