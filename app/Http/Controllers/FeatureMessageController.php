@@ -10,14 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class FeatureMessageController extends Controller
 {
-	public function index()
+	public function index($feature_message_id = null)
 	{
 		$page['menuitem'] = 'notifications';
 		$page['type'] = 'page';
 		$data = [
 			'page' => $page,
-			'feature_messages' => Auth()->User()->getFeatureMessages()
+			'feature_messages' => Auth()->User()->getFeatureMessages(),
+			'feature_message' => FeatureMessage::findOrNew($feature_message_id),
 		];
+
 		return view('admin.notifications')->with($data);
 	}
 
@@ -31,11 +33,30 @@ class FeatureMessageController extends Controller
 		return $request->id;
 	}
 
-	public function createMessage(Request $request)
+	public function editMessage(Request $request)
 	{
-		FeatureMessage::create($request->all());
+		return $this->index($request->id);
+	}
 
-		return redirect()->back();
+	public function saveMessage(Request $request)
+	{
+		// if 'active' checkbox wasn't checked, there will be no var for it
+		if ($request->missing('active')) {
+			$request->merge(['active' => 0]);
+		}
+
+		// If id is empty, we're adding a new record
+		if (empty($request->id)) {
+			$feature_message = FeatureMessage::create($request->all());
+			$feature_message->expires_at = Carbon::parse('+1 year');
+		} else {
+			$feature_message = FeatureMessage::findOrFail($request->id);
+			$feature_message->fill($request->all());
+		}
+
+		$feature_message->save();
+
+		return redirect()->action('FeatureMessageController@index');
 	}
 
 	public function publishMessage(Request $request)

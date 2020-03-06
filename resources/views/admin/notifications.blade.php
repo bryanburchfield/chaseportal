@@ -19,25 +19,24 @@
 							<div class="col-sm-6 mb20 card">
 								<h2 class="page_heading">Create Notification</h2>
 
-								{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@createMessage', 'class'=>'form
+								{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
 								create_notification']) !!}
 								<div class="form-group">
 									{!! Form::label('title', 'Title') !!}
-									{!! Form::text('title', null, ['class'=>'form-control
+									{!! Form::text('title', $feature_message->title, ['class'=>'form-control
 									notification_title', 'required'=>true]) !!}
 								</div>
 
-								{!! Form::hidden('id', null, ['class'=>'form-control
-									id']) !!}
+								{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
 
 								<div class="form-group">
 									{!! Form::label('body', 'Body') !!}
-									{!! Form::textarea("body", null, ["class" => "form-control notification_body", 'required'=>true]) !!}
+									{!! Form::textarea("body", $feature_message->body, ["class" => "form-control notification_body", 'required'=>true]) !!}
 								</div>
 
 								<div class="form-group">
 									<label class="checkbox-inline">
-										<input type="checkbox" name="active" value="1" checked> Publish Now?
+										<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
 									</label>
 								</div>
 
@@ -76,7 +75,7 @@
 												<td>{{$msg->id}}</td>
 												<td>{{$msg->title}}</td>
 												<td>{{$msg->body}}</td>
-												<td><a class="edit_msg" href="{{url('admin/notifications/'.$msg->id)}}"><i class="fas fa-edit"></i></a></td>
+												<td><a class="edit_msg" href="{{action('FeatureMessageController@editMessage', [$msg->id])}}"><i class="fas fa-edit"></i></a></td>
 												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
 											</tr>
 										@endforeach
