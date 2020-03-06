@@ -5,8 +5,6 @@ namespace App\Services;
 use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
-use App\Models\TwilioAreaCode;
-use App\Models\TwilioNumber;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
@@ -26,23 +24,14 @@ class CallerIdService
 
     private function initialize()
     {
-        echo "truncating\n";
-
-        TwilioAreaCode::truncate();
-        TwilioNumber::truncate();
-
         $sid = config('twilio.did_sid');
         $token = config('twilio.did_token');
-
-        echo "Clinet $sid $token\n";
 
         $this->twilio = new Twilio($sid, $token);
     }
 
     private function setGroup($group_id = null)
     {
-        echo "set group: $group_id\n";
-
         // hard-coded recips
         $canned = [
             235773  => [
@@ -85,12 +74,7 @@ class CallerIdService
                 // Send email on change of group
                 if ($group_id != '' && $group_id != $rec['GroupId']) {
 
-                    echo "done with $group_id\n";
-
                     if ($this->setGroup($group_id)) {
-
-                        echo "emailing $group_id\n";
-
                         $csvfile = $this->makeCsv($results);
                         $this->emailReport($csvfile);
                     }
@@ -103,22 +87,14 @@ class CallerIdService
             }
         }
 
-        echo "last group $group_id\n";
-
         if (!empty($results)) {
             if ($this->setGroup($group_id)) {
-
-                echo "emailing $group_id\n";
-
                 $csvfile = $this->makeCsv($results);
                 $this->emailReport($csvfile);
             }
         }
 
         if (!empty($all_results)) {
-
-            echo "emailing all results\n";
-
             // clear group specific vars
             $this->setGroup();
             $csvfile = $this->makeCsv($all_results);
@@ -183,17 +159,6 @@ class CallerIdService
         return $tempfile;
     }
 
-    // private function arrayData($array)
-    // {
-    //     $data = [];
-
-    //     foreach ($array as $rec) {
-    //         $data[] = array_values($rec);
-    //     }
-
-    //     return $data;
-    // }
-
     private function emailReport($csvfile)
     {
         // path out file
@@ -208,12 +173,10 @@ class CallerIdService
             $cc = 'ahmed@chasedatacorp.com';
         } else {
             $to = $this->email_to;
-            $cc = 'bryan.burchfield@chasedatacorp.com';
-
-            // $cc = [
-            //     'jonathan.gryczka@chasedatacorp.com',
-            //     'ahmed@chasedatacorp.com',
-            // ];
+            $cc = [
+                'jonathan.gryczka@chasedatacorp.com',
+                'ahmed@chasedatacorp.com',
+            ];
         }
 
         // email report
@@ -232,57 +195,32 @@ class CallerIdService
 
     private function activeNumber($phone)
     {
-        echo "incoming $phone\n";
-
         // strip non-digits from phone
         $phone = preg_replace("/[^0-9]/", '', $phone);
 
-        // if it's a bogus number, return it as active
+        // strip leading '1' if it's 11 digits
+        if (strlen($phone) == 11) {
+            if (substr($phone, 0, 1) == '1') {
+                $phone = substr($phone, 1);
+            }
+        }
+
+        // if it's not 10 digits, return it as active
         if (strlen($phone) !== 10) {
             return true;
         }
 
-        // There are 8 chances any number could already be loaded
-        for ($i = 0; $i < 8; $i++) {
+        // Look it up
+        $phones = $this->twilio->incomingPhoneNumbers
+            ->read(
+                array("phoneNumber" => $phone)
+            );
 
-            $twilio_areacode = TwilioAreaCode::find(substr($phone, $i, 3));
-
-            if ($twilio_areacode) {
-                break;
-            }
+        // Did we find it?
+        if (collect($phones)->isEmpty()) {
+            return false;
         }
 
-        // if we don't alrady have it, load up the tables
-        if (!$twilio_areacode) {
-            $areacode = substr($phone, 0, 3);
-
-            echo "adding areacode $areacode\n";
-
-            TwilioAreaCode::create(['areacode' => $areacode]);
-
-            // this will get any number with those 3 digits
-            $phones = $this->twilio->incomingPhoneNumbers
-                ->read(
-                    array("phoneNumber" => $areacode)
-                );
-
-            $phones = collect($phones);
-
-            echo "Found " . $phones->count() . "\n";
-
-            $phones->each(function ($item, $key) {
-                // strip the "+1" off the number
-                // try/catch is probably faster than firstOrCreate()
-                try {
-                    TwilioNumber::create(['phone' => substr($item->phoneNumber, 2)]);
-                } catch (\Throwable $th) {
-                    //throw $th;
-                }
-            });
-
-            echo "Inserted\n";
-        }
-
-        return TwilioNumber::find($phone);
+        return true;
     }
 }
