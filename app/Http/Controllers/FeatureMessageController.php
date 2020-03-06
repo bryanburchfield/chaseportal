@@ -12,12 +12,19 @@ class FeatureMessageController extends Controller
 {
 	public function index($feature_message_id = null)
 	{
+		// id will be passed in if editing
+		if ($feature_message_id !== null) {
+			$feature_message = FeatureMessage::findOrFail($feature_message_id);
+		} else {
+			$feature_message = new FeatureMessage();
+		}
+
 		$page['menuitem'] = 'notifications';
 		$page['type'] = 'page';
 		$data = [
 			'page' => $page,
 			'feature_messages' => Auth()->User()->getFeatureMessages(),
-			'feature_message' => FeatureMessage::findOrNew($feature_message_id),
+			'feature_message' => $feature_message,
 		];
 
 		return view('admin.notifications')->with($data);
