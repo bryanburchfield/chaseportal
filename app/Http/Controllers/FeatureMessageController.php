@@ -32,11 +32,11 @@ class FeatureMessageController extends Controller
 
 	public function viewMessage(Request $request)
 	{
-		// if(not read){
-		// 	$this->readMessage($request->id);
-		// }
-		
 		$feature_message = FeatureMessage::findOrFail($request->id);
+
+		// Set message as read ($request->id is the message id)
+		$this->readMessage($request);
+
 		$page['menuitem'] = 'notifications';
 		$page['type'] = 'page';
 		$data = [
@@ -98,12 +98,5 @@ class FeatureMessageController extends Controller
 		FeatureMessage::findOrFail($request->id)->delete();
 
 		return ['delete_msg' => 1];
-	}
-
-	public function toggleNotifications(Request $request)
-	{
-		Auth()->User()->toggleUserNotifications();
-
-		return redirect()->back();
 	}
 }
