@@ -13,6 +13,7 @@ class FeatureMessage extends Model
         'title',
         'body',
         'expires_at',
+        'active',
     ];
 
     public function readFeatureMessages()

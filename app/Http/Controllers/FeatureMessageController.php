@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FeatureMessage;
 use App\Models\ReadFeatureMessage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class FeatureMessageController extends Controller
@@ -14,8 +15,8 @@ class FeatureMessageController extends Controller
 		$page['menuitem'] = 'notifications';
 		$page['type'] = 'page';
 		$data = [
-		    'page' => $page,
-		    'feature_messages' => Auth()->User()->getFeatureMessages()
+			'page' => $page,
+			'feature_messages' => Auth()->User()->getFeatureMessages()
 		];
 		return view('admin.notifications')->with($data);
 	}
@@ -32,25 +33,25 @@ class FeatureMessageController extends Controller
 
 	public function createMessage(Request $request)
 	{
-		$msg = new FeatureMessage();
-		$msg->title = $request->title;
-		$msg->body = $request->body;
-		$msg->active = $request->active;
-		$msg->save();
+		FeatureMessage::create($request->all());
+
 		return redirect()->back();
 	}
 
 	public function publishMessage(Request $request)
 	{
 		$msg = FeatureMessage::findOrFail($request->id);
+
 		$msg->active = $request->active;
 		$msg->save();
-		return redirect()->back();
+
+		return ['publish_msg' => 1];
 	}
 
 	public function deleteMsg(Request $request)
 	{
 		FeatureMessage::findOrFail($request->id)->delete();
+
 		return ['delete_msg' => 1];
 	}
 }
