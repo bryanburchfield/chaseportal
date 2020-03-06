@@ -30,6 +30,23 @@ class FeatureMessageController extends Controller
 		return view('admin.notifications')->with($data);
 	}
 
+	public function viewMessage(Request $request)
+	{
+		// if(not read){
+		// 	$this->readMessage($request->id);
+		// }
+		
+		$feature_message = FeatureMessage::findOrFail($request->id);
+		$page['menuitem'] = 'notifications';
+		$page['type'] = 'page';
+		$data = [
+			'page' => $page,
+			'feature_messages' => Auth()->User()->getFeatureMessages(),
+			'feature_message' => $feature_message,
+		];
+		return view('dashboards.message')->with($data);
+	}
+
 	public function readMessage(Request $request)
 	{
 		ReadFeatureMessage::firstOrCreate([

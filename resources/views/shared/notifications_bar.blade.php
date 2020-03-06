@@ -12,6 +12,7 @@
     <div class="notifications">
 		@foreach(Auth()->User()->getFeatureMessages() as $msg)
             @if($msg->active)
+                <a href="{{action('FeatureMessageController@viewMessage', [$msg->id])}}">
     			<div class="not {{!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first() ? 'unread' : ''}}" data-msgid="{{$msg->id}}">
     				@if (!$msg->readFeatureMessages->where('user_id',Auth::User()->id)->first())
     					<div class="not_read"></div>
@@ -20,6 +21,7 @@
     	    		<h4>{{$msg->title}}</h4>
     	    		<p>{{$msg->body}}</p>
     	    	</div>
+                </a>
             @endif
     	@endforeach
     </div>
