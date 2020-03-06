@@ -16,4 +16,10 @@
 		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->theme == 'dark' ? '1' : '0'}}" name="theme[]" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> Enable Dark Theme</label>
 		<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
 	</form>
+
+	<form action="{{action('FeatureMessageController@toggleNotifications')}}" method="POST" class="form toggle_theme">
+		@csrf
+		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->feature_message_notifications ? '1' : '0'}}" name="notifications[]" {{Auth::user()->feature_message_notifications ? 'checked' : ''}}> Enable New Feature Notifications</label>
+		<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
+	</form>
 </div>

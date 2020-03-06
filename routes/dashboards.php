@@ -27,6 +27,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('settings', 'MasterDashController@updateUserSettings');
         Route::post('settings/update_lang_display', 'MasterDashController@updateLangDisplay');
         Route::post('settings/update_theme', 'MasterDashController@updateTheme');
+        Route::post('settings/toggle_notifications', 'FeatureMessageController@toggleNotifications');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');

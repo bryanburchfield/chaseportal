@@ -14,7 +14,6 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 
@@ -530,7 +529,7 @@ class AdminController extends Controller
 
         return ['fields' => array_values($result)];
     }
-    
+
     private function defaultLeadFields()
     {
         return [

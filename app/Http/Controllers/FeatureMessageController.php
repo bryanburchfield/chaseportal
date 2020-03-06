@@ -82,4 +82,11 @@ class FeatureMessageController extends Controller
 
 		return ['delete_msg' => 1];
 	}
+
+	public function toggleNotifications(Request $request)
+	{
+		Auth()->User()->toggleUserNotifications();
+
+		return redirect()->back();
+	}
 }
