@@ -64,6 +64,11 @@ class User extends Authenticatable
         'expires_in',
     ];
 
+    public function loginAudits()
+    {
+        return $this->hasMany('App\Models\LoginAudit');
+    }
+
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);
