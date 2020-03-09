@@ -514,8 +514,7 @@ class KpiController extends Controller
         foreach (KpiGroup::where('active', 1)->orderBy('group_id')->get() as $rec) {
             switch ($rec->interval) {
                 case 15:
-                    // $expression = '0,15,30,45 8-20 * * 1-5';
-                    $expression = '* * * * 1-5';
+                    $expression = '0,15,30,45 8-20 * * 1-5';
                     break;
                 case 30:
                     $expression = '0,30 8-20 * * 1-5';
@@ -565,7 +564,10 @@ class KpiController extends Controller
         $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
 
         if ($user) {
+            // set a flag so the audit trail doesn't pick it up
+            $user->cron = true;
             Auth::login($user);
+
             $kpi = new KpiController();
 
             $request = new Request();

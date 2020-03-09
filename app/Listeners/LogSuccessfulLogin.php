@@ -29,6 +29,11 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
+        // Check if this is from a cron job (set in controller)
+        if (isset($event->user->cron)) {
+            return;
+        }
+
         UserAudit::create([
             'ip' => $this->request->ip(),
             'user_id' => $event->user->id,

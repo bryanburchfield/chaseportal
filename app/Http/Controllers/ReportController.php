@@ -162,6 +162,9 @@ class ReportController extends Controller
         if (Auth::check()) {
             Auth::logout();
         }
+
+        // set a flag so the audit trail doesn't pick it up
+        $user->cron = true;
         Auth::login($user);
 
         if (in_array($user->language, config('localization.locales'))) {
