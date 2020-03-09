@@ -514,7 +514,8 @@ class KpiController extends Controller
         foreach (KpiGroup::where('active', 1)->orderBy('group_id')->get() as $rec) {
             switch ($rec->interval) {
                 case 15:
-                    $expression = '0,15,30,45 8-20 * * 1-5';
+                    // $expression = '0,15,30,45 8-20 * * 1-5';
+                    $expression = '* * * * 1-5';
                     break;
                 case 30:
                     $expression = '0,30 8-20 * * 1-5';
@@ -555,8 +556,12 @@ class KpiController extends Controller
      */
     public static function cronRun(KpiGroup $kpiGroup)
     {
+        // They should never be logged in at this point, but just in case
+        if (Auth::check()) {
+            Auth::logout();
+        }
+
         // authenticate as user of the group
-        Auth::logout();
         $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
 
         if ($user) {
@@ -567,6 +572,8 @@ class KpiController extends Controller
             $request->setMethod('POST');
             $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
             $kpi->runKpi($request);
+
+            Auth::logout();
         }
     }
 }
