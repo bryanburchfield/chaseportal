@@ -14,10 +14,9 @@
 
 		<div>
 			<label class="checkbox-inline">
-			<input type="checkbox" value="1" name="theme" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> Enable Dark Theme</label>
+			<input type="checkbox" value="1" name="theme" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> {{__('general.enable_dark_theme')}}</label>
 		</div>
 
-		<div>
 			<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
 		</div>
 	</form>
