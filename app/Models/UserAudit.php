@@ -9,6 +9,7 @@ class UserAudit extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'ip',
         'user_id',
         'email',
         'action',
