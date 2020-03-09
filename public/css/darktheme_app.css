@@ -453,11 +453,11 @@ span {
   top: 0;
   right: 10px;
   float: right;
-  color: #aaa;
+  color: #d9534f;
 }
 
 #sidebar_nots .close_nots_bar:hover {
-  color: #eee;
+  color: #d43f3a;
 }
 
 #sidebar_nots .not_header {
@@ -467,7 +467,7 @@ span {
 #sidebar_nots .not_header .not_header_inner {
   padding-left: 13px;
   padding-right: 13px;
-  padding-bottom: 20px;
+  padding-bottom: 13px;
 }
 
 #sidebar_nots .not_header h4 {

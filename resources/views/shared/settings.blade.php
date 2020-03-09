@@ -18,11 +18,6 @@
 		</div>
 
 		<div>
-			<label class="checkbox-inline">
-			<input type="checkbox" value="1" name="feature_message_notifications" {{Auth::user()->feature_message_notifications ? 'checked' : ''}}> Enable New Feature Notifications</label>
-		</div>
-
-		<div>
 			<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
 		</div>
 	</form>

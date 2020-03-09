@@ -345,14 +345,14 @@ i, span {
         }
     }
 
-    .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#aaa;&:hover{color:#eee;}}
+    .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
 
     .not_header{
         padding-top: 20px;
         .not_header_inner{
             padding-left: 13px;
             padding-right: 13px;
-            padding-bottom: 20px;
+            padding-bottom: 13px;
         }
 
         h4{
@@ -2852,6 +2852,7 @@ td.bg-danger{
     bottom:2px;
     &:hover{color: $green;}
     &:hover span.numb_notifications{background: #fff;color:$green;}
+
 }
 
 span.numb_notifications{

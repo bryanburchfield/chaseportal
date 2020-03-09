@@ -394,7 +394,7 @@ span {
   max-width: 300px;
   color: #fff;
   background: #efefef;
-  border-left: 1px solid #abbdd8;
+  border-left: 1px solid #ccc;
   transition: all, ease, 0.3s;
 }
 
@@ -414,13 +414,13 @@ span {
 #sidebar_nots .close_nots_bar {
   position: relative;
   top: 0;
-  right: 10px;
+  right: 0px;
   float: right;
-  color: #aaa;
+  color: #d9534f;
 }
 
 #sidebar_nots .close_nots_bar:hover {
-  color: #eee;
+  color: #d43f3a;
 }
 
 #sidebar_nots .not_header {
@@ -430,7 +430,7 @@ span {
 #sidebar_nots .not_header .not_header_inner {
   padding-left: 13px;
   padding-right: 13px;
-  padding-bottom: 20px;
+  padding-bottom: 13px;
 }
 
 #sidebar_nots .not_header h4 {
@@ -448,7 +448,8 @@ span {
   padding-right: 13px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #ccc;
+  position: relative;
 }
 
 #sidebar_nots .notifications .not h4 {
@@ -460,7 +461,7 @@ span {
 }
 
 #sidebar_nots .notifications .not .not_date {
-  color: #999;
+  color: #333;
   font-size: 12px;
 }
 
@@ -3045,6 +3046,11 @@ td.bg-danger {
   color: #fff;
 }
 
+.btn-notifications:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 span.numb_notifications {
   position: relative;
   bottom: 10px;
@@ -3062,6 +3068,14 @@ span.numb_notifications {
   float: left;
   margin-top: 10px;
   margin-right: 15px;
+}
+
+#sidebar_nots .not_header h4 {
+  color: #595C63;
+}
+
+.not p {
+  color: #595C63;
 }
 
 /* ---------------------------------------------------
