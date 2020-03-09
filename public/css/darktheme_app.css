@@ -513,6 +513,10 @@ span {
   display: block;
 }
 
+#sidebar_nots .notifications .not:hover {
+  background: #171e30;
+}
+
 button,
 button:active,
 button:focus {

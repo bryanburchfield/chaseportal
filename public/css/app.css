@@ -476,6 +476,10 @@ span {
   display: block;
 }
 
+#sidebar_nots .notifications .not:hover {
+  background: #fcfcfc;
+}
+
 button,
 button:active,
 button:focus {
