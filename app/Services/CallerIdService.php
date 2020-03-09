@@ -2,21 +2,52 @@
 
 namespace App\Services;
 
+use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CallerIdService
 {
     use SqlServerTraits;
     use TimeTraits;
 
-    public static function execute()
+    private $group_id;
+    private $dialer_numb;
+    private $email_to;
+    private $startdate;
+    private $enddate;
+
+    public function __construct($group_id = null)
     {
-        $caller_id_service = new CallerIdService;
+        $this->group_id = $group_id;
+
+        if ($this->group_id !== null) {
+            $this->setGroup();
+        }
+    }
+
+    private function setGroup()
+    {
+        // hard-coded recips
+        $canned = [
+            235773  => [
+                'dialer_numb' => 26,
+                'email_to' => 'g.sandoval@chasedatacorp.com',
+            ],
+        ];
+
+        $this->dialer_numb = $canned[$this->group_id]['dialer_numb'];
+        $this->email_to = $canned[$this->group_id]['email_to'];
+    }
+
+    public static function execute($group_id = null)
+    {
+        $caller_id_service = new CallerIdService($group_id);
 
         $caller_id_service->runReport();
     }
@@ -26,15 +57,15 @@ class CallerIdService
         $results = $this->runQuery();
 
         if (!empty($results)) {
-            $pdf = $this->makePdf($results);
-            $this->emailReport($pdf);
+            $csvfile = $this->makeCsv($results);
+            $this->emailReport($csvfile);
         }
     }
 
     private function runQuery()
     {
-        $enddate = Carbon::parse('midnight');
-        $startdate = $enddate->copy()->subDay();
+        $this->enddate = Carbon::parse('midnight');
+        $this->startdate = $this->enddate->copy()->subDay(30);
 
         $bind = [];
 
@@ -44,17 +75,28 @@ class CallerIdService
         foreach (Dialer::all() as $i => $dialer) {
             // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
 
-            $bind['startdate' . $i] = $startdate->toDateTimeString();
-            $bind['enddate' . $i] = $enddate->toDateTimeString();
+            if ($this->dialer_numb !== null && $dialer->dialer_numb != $this->dialer_numb) {
+                continue;
+            }
+
+            $bind['startdate' . $i] = $this->startdate->toDateTimeString();
+            $bind['enddate' . $i] = $this->enddate->toDateTimeString();
 
             $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId, COUNT(*) cnt FROM " .
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
-                AND DR.CallerId != ''
+                AND DR.CallerId != ''";
+
+            if ($this->group_id !== null) {
+                $bind['group_id'] = $this->group_id;
+                $sql .= " AND DR.GroupId = :group_id";
+            }
+
+            $sql .= "
                 GROUP BY DR.GroupId, GroupName, CallerId
-                HAVING COUNT(*) >= 5000
+                HAVING COUNT(*) >= 5500
                 ";
 
             $union = 'UNION ALL';
@@ -62,42 +104,30 @@ class CallerIdService
 
         $sql .= ") tmp
             GROUP BY GroupId, GroupName, CallerId
-            HAVING SUM(cnt) >= 5000
+            HAVING SUM(cnt) >= 5500
             ORDER BY GroupName, Dials desc";
 
         return $this->runSql($sql, $bind);
     }
 
-    private function makePdf($results)
+    private function makeCsv($results)
     {
-        $pagesize = 29;
-        $totrows = count($results);
-
-        $totpages = floor($totrows / $pagesize);
-        $totpages += floor($totrows / $pagesize) == ($totrows / $pagesize) ? 0 : 1;
-
         $headers = [
             'GroupID',
             'GroupName',
             'CallerID',
-            'Count',
+            'Dials in Last 30 Days',
         ];
 
-        $pdf = new PDF();
+        array_unshift($results, $headers);
 
-        for ($i = 1; $i <= $totpages; $i++) {
-            $data = $this->arrayData(array_slice($results, ($i - 1) * $pagesize, $pagesize));
+        // Create a uniquish filename
+        $tempfile = '/' . uniqid() . '.csv';
 
-            // format numbers
-            foreach ($data as &$row) {
-                $row[3] = number_format($row[3]);
-            }
+        // this write to the directiory: storage_path('app')
+        Excel::store(new ReportExport($results), $tempfile);
 
-            $pdf->AddPage('L', 'Legal');
-            $pdf->FancyTable($headers, $data);
-        }
-
-        return $pdf->Output('S');
+        return $tempfile;
     }
 
     private function arrayData($array)
@@ -111,18 +141,39 @@ class CallerIdService
         return $data;
     }
 
-    private function emailReport($pdf)
+    private function emailReport($csvfile)
     {
+        // path out file
+        $csvfile = storage_path('app' . $csvfile);
+
+        // read file into variable, then delete file
+        $csv = file_get_contents($csvfile);
+        unlink($csvfile);
+
+        if ($this->email_to === null) {
+            $to = 'jonathan.gryczka@chasedatacorp.com';
+            $cc = 'ahmed@chasedatacorp.com';
+        } else {
+            $to = $this->email_to;
+            $cc = 'bryan.burchfield@chasedatacorp.com';
+
+            // $cc = [
+            //     'jonathan.gryczka@chasedatacorp.com',
+            //     'ahmed@chasedatacorp.com',
+            // ];
+        }
+
         // email report
         $message = [
             'subject' => 'Caller ID Report',
-            'pdf' => base64_encode($pdf),
+            'csv' => base64_encode($csv),
             'url' => url('/') . '/',
-            'date' => Carbon::parse('yesterday midnight')->toFormattedDateString(),
+            'startdate' => $this->startdate->toFormattedDateString(),
+            'enddate' => $this->enddate->toFormattedDateString(),
         ];
 
-        Mail::to('jonathan.gryczka@chasedatacorp.com')
-            ->cc('ahmed@chasedatacorp.com')
+        Mail::to($to)
+            ->cc($cc)
             ->send(new CallerIdMail($message));
     }
 }

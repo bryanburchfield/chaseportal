@@ -557,13 +557,24 @@
                             <tr>
                                 <td>
                                     <div class="text" style="text-align: center;">
-                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>{{ $data['date'] }}</h2>
+                                        <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>{{ $data['startdate'] }} - {{ $data['enddate'] }}</h2>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr><!-- end tr -->
+
+                <tr>
+                    <td class="bg_dark email-section" style="text-align:center;">
+                        <div class="heading-section heading-section-white">
+                            <p>Based on our findings we are giving you notice that the attached numbers could be flagged as Telemarketer
+                               or SPAM.  As a courtesy this month we will go ahead and replace these numbers for you. Moving forward
+                               there will be a $3 charge per number. If you do not want this please contact me asap.</p>
+                             <p>Support Manager</p>
+                        </div>
+                    </td>
+                </tr><!-- end: tr -->
             </table>
 
             <!-- Begin footer-->
