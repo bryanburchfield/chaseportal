@@ -14,12 +14,12 @@
 
 		<div>
 			<label class="checkbox-inline">
-			<input type="checkbox" value="1" name="theme" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> Enable Dark Theme</label>
+			<input type="checkbox" value="1" name="theme" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> {{__('general.enable_dark_theme')}}</label>
 		</div>
 
 		<div>
 			<label class="checkbox-inline">
-			<input type="checkbox" value="1" name="feature_message_notifications" {{Auth::user()->feature_message_notifications ? 'checked' : ''}}> Enable New Feature Notifications</label>
+			<input type="checkbox" value="1" name="feature_message_notifications" {{Auth::user()->feature_message_notifications ? 'checked' : ''}}> {{__('general.enable_notifications')}}</label>
 		</div>
 
 		<div>
