@@ -42,6 +42,7 @@ return [
 	'my_settings'				=> 'My Settings',
 	'new_password'				=> 'New Password',
 	'no'						=> 'No',
+	'notifications'				=> 'Notifications',
 	'of'						=> 'OF',
 	'outbound_dashboard'	=> 'Outbound Dashboard',
 	'page'						=> 'Page',

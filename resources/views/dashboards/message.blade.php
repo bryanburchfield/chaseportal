@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', __('widgets.notifications'))
+@section('title', __('general.notifications'))
 
 @section('content')
 <div class="preloader"></div>
@@ -17,7 +17,9 @@
 
 					<div class="col-sm-12">
 						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="btn_flt_rgt btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
+					</div>
 
+					<div class="col-sm-6">
 						{{$feature_message->body}}
 					</div>
 			    </div>

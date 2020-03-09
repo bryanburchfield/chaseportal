@@ -42,6 +42,7 @@ return [
 	'my_settings'				=> 'Mi Configuración',
 	'new_password'				=> 'Nueva Contraseña',
 	'no'						=> 'No',
+	'notifications'				=> 'Notificaciones',
 	'of'						=> 'de',
 	'outbound_dashboard'	=> 'Panel de Salida',
 	'page'						=> 'Página',

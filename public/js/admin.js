@@ -334,37 +334,6 @@ var Admin = {
 		$(modal).find('span.username').html(name);
 	},
 
-	populate_msg_delete_modal:function(e){
-		e.preventDefault();
-		var id = $(this).data('id');
-		var title = $(this).data('title');
-		$('#deleteMsgModal').find('input.id').val(id);
-		$('#deleteMsgModal').find('h3 span.title').text(title);
-	},
-
-	delete_msg:function(e){
-		e.preventDefault();
-		var id = $('#deleteMsgModal .id').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-			}
-		});
-
-		$.ajax({
-			url: '/dashboards/admin/delete_msg',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				id: id
-			},
-			success: function (response) {
-				window.location.reload();
-			}
-		});
-	},
-
 	// remove global/demo users
 	remove_user: function (e) {
 		e.preventDefault();
@@ -719,6 +688,37 @@ var Admin = {
                 console.log(response);
             }
         });
+    },
+
+    populate_msg_delete_modal:function(e){
+    	e.preventDefault();
+    	var id = $(this).data('id');
+    	var title = $(this).data('title');
+    	$('#deleteMsgModal').find('input.id').val(id);
+    	$('#deleteMsgModal').find('h3 span.title').text(title);
+    },
+
+    delete_msg:function(e){
+    	e.preventDefault();
+    	var id = $('#deleteMsgModal .id').val();
+
+    	$.ajaxSetup({
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    		}
+    	});
+
+    	$.ajax({
+    		url: '/dashboards/admin/delete_msg',
+    		type: 'POST',
+    		dataType: 'json',
+    		data: {
+    			id: id
+    		},
+    		success: function (response) {
+    			window.location.reload();
+    		}
+    	});
     }
 }
 
