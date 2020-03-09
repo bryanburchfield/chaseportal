@@ -19,8 +19,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('showreport', 'MasterDashController@showReport');
         Route::get('settings', 'MasterDashController@showSettings');
         Route::post('settings', 'MasterDashController@updateUserSettings');
-        Route::post('settings/update_lang_display', 'MasterDashController@updateLangDisplay');
-        Route::post('settings/update_theme', 'MasterDashController@updateTheme');
+        Route::post('settings/update_settings', 'UserController@updateSettings');
 
         // Reports
         Route::get('automatedreports', 'AutomatedReportController@automatedReports');
@@ -32,10 +31,13 @@ Route::prefix('dashboards')->group(function () {
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
 
+        Route::get('/notifications/{id}', 'FeatureMessageController@viewMessage');
+
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_filters', 'MasterDashController@updateFilters');
         Route::post('campaign_search', 'MasterDashController@campaignSearch');
+        Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
 
         // Admin only
         // prefix('admin') isn't working for some reason
@@ -62,6 +64,11 @@ Route::prefix('dashboards')->group(function () {
             // Super Admin only dashboards
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
+            Route::get('admin/notifications', 'FeatureMessageController@index');
+            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
+            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
+            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
+            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
         });
     });
 });

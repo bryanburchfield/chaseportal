@@ -128,6 +128,7 @@ var Master = {
         $('.cancel_modal_form').on('click', this.cancel_modal_form);
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        // $('.not.unread').on('click', this.set_feature_msg_read);
 	},
 
     hide_modal_error:function(){
@@ -2935,6 +2936,39 @@ var Master = {
         e.preventDefault();
         $(this).parent().parent().find('.form')[0].reset()
     },
+
+    // set_feature_msg_read:function(e){
+    //     e.preventDefault();
+    //     if($(this).hasClass('unread')){
+    //         var id = $(this).data('msgid');
+    //         var that = $(this);
+    //         var unread = parseInt($('.numb_notifications').text());
+    //         $(this).removeClass('unread');
+
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //             }
+    //         });
+
+    //         $.ajax({
+    //             url:'/dashboards/feature_msg_read',
+    //             type:'POST',
+    //             data:{
+    //                 id:id,
+    //             },
+    //             success:function(response){
+    //                 $(that).find('.not_read').remove();
+    //                 unread--;
+    //                 if(!unread){
+    //                     $('.numb_notifications').remove();
+    //                 }else{
+    //                     $('.numb_notifications').html(unread);
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 }
 
 $(document).ready(function () {

@@ -27,6 +27,7 @@ return [
 	'days_to_filter'	=> 'Días para Filtrar',
 	'delete'		=> 'Eliminar',
 	'delete_campaign'	=> 'Eliminar Campaña',
+	'delete_msg'	=> 'Borrar Mensaje',
 	'delete_provider'	=> 'Eliminar Proveedor',
 	'delete_rule'	=> 'Eliminar Regla',
 	'delete_server'	=> 'Eliminar SMTP Servidor',

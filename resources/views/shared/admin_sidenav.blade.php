@@ -18,7 +18,9 @@
 
         @can('accessSuperAdmin')
             <li data-page="webhook_generator" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'webhook_generator' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@webhookGenerator') }}"><i class="fas fa-link"></i> Webhook Generator</a></li>
-            <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'settings' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@settings') }}"><i class="fas fa-link"></i> {{__('widgets.edit_myself')}}</a></li>
+            <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'settings' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@settings') }}"><i class="fas fa-link"></i> Edit Myself</a></li>
+            <li data-page="notifications" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'notifications' ? 'class="active"' : ''; ?>><a href="{{ action('FeatureMessageController@index') }}"><i class="fas fa-bell"></i> Notifications</a></li>
+
         @endcan
         </ul>
 </nav>

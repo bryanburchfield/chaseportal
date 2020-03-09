@@ -120,6 +120,8 @@
 			</div>
 		</div>
 	</div>
+
+	@include('shared.notifications_bar')
 </div>
 
 <!-- Delete DNC Modal -->

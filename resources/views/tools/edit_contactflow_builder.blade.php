@@ -173,6 +173,8 @@
 			</div>
 		</div>
 	</div>
+
+	@include('shared.notifications_bar')
 </div>
 
 @include('shared.reportmodal')
