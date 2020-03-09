@@ -90,11 +90,12 @@ class FeatureMessageController extends Controller
 		$msg->active = $request->active;
 		$msg->save();
 
-		return ['publish_msg' => 1];
+		return ['publish_msg' => $request->active];
 	}
 
 	public function deleteMsg(Request $request)
 	{
+		ReadFeatureMessage::where('feature_message_id', $request->id)->delete();
 		FeatureMessage::findOrFail($request->id)->delete();
 
 		return ['delete_msg' => 1];

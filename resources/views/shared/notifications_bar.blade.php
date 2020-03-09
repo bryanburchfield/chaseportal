@@ -19,7 +19,7 @@
     				@endif
     	    		<p class="not_date">{{Carbon\Carbon::parse($msg->created_at)->format('M j, Y')}}</p>
     	    		<h4>{{$msg->title}}</h4>
-    	    		<p>{{$msg->body}}</p>
+    	    		<p>{{ \Illuminate\Support\Str::limit($msg->body, 85, $end='...') }}</p>
     	    	</div>
                 </a>
             @endif
