@@ -159,7 +159,9 @@ class ReportController extends Controller
             return;
         }
 
-        Auth::logout();
+        if (Auth::check()) {
+            Auth::logout();
+        }
         Auth::login($user);
 
         if (in_array($user->language, config('localization.locales'))) {
