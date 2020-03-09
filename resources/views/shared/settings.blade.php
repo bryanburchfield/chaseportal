@@ -18,6 +18,5 @@
 		</div>
 
 			<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
-		</div>
 	</form>
 </div>
