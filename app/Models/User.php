@@ -35,7 +35,6 @@ class User extends Authenticatable
         'language_displayed',
         'phone',
         'expiration',
-        'feature_message_notifications',
     ];
 
     /**

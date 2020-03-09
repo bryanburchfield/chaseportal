@@ -25,7 +25,6 @@ return [
 	'edit_recip'				=> 'Revisar Destinatario',
 	'email'						=> 'Email',
 	'enable_dark_theme' => 'Enable Dark Theme',
-	'enable_notifications' => 'Enable Notifications',
 	'end_date'					=> 'Fecha Final',
 	'first'						=> 'Primera',
 	'forgot_pw'					=> 'Olvidaste Contraseña',

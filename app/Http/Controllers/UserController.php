@@ -15,16 +15,12 @@ class UserController extends Controller
         if ($request->missing('theme')) {
             $request->merge(['theme' => 0]);
         }
-        if ($request->missing('feature_message_notifications')) {
-            $request->merge(['feature_message_notifications' => 0]);
-        }
 
         // Theme = 1 means dark, otherwise light
         $theme = $request->theme ? 'dark' : 'light';
 
         // Update the user
         Auth()->User()->language_displayed = $request->language_displayed;
-        Auth()->User()->feature_message_notifications = $request->feature_message_notifications;
         Auth()->User()->theme = $theme;
         Auth()->User()->save();
 

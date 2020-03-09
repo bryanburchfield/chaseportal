@@ -25,7 +25,6 @@ return [
 	'edit_recip'				=> 'Edit Recipient',
 	'email'						=> 'Email Address',
 	'enable_dark_theme' => 'Enable Dark Theme',
-	'enable_notifications' => 'Enable Notifications',
 	'end_date'					=> 'End Date',
 	'first'						=> 'First',
 	'forgot_pw'					=> 'Forgot Your Password',
