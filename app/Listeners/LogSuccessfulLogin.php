@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\LoginAudit;
+use App\Models\UserAudit;
 use Illuminate\Auth\Events\Login;
 
 class LogSuccessfulLogin
@@ -15,10 +15,10 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
-        LoginAudit::create([
-            'action' => 'Login',
-            'email' => $event->user->email,
+        UserAudit::create([
             'user_id' => $event->user->id,
+            'email' => $event->user->email,
+            'action' => 'Login',
         ]);
     }
 }

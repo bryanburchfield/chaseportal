@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\LoginAudit;
+use App\Models\UserAudit;
 use Illuminate\Auth\Events\Logout;
 
 class LogSuccessfulLogout
@@ -15,10 +15,10 @@ class LogSuccessfulLogout
      */
     public function handle(Logout $event)
     {
-        LoginAudit::create([
-            'action' => 'Logout',
-            'email' => $event->user->email,
+        UserAudit::create([
             'user_id' => $event->user->id,
+            'email' => $event->user->email,
+            'action' => 'Logout',
         ]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\LoginAudit;
+use App\Models\UserAudit;
 use Illuminate\Auth\Events\Failed;
 
 class LogFailedLogin
@@ -17,10 +17,10 @@ class LogFailedLogin
     {
         $user_id = empty($event->user) ? null : $event->user->id;
 
-        LoginAudit::create([
-            'action' => 'Failed',
-            'email' => $event->credentials['email'],
+        UserAudit::create([
             'user_id' => $user_id,
+            'email' => $event->credentials['email'],
+            'action' => 'Failed',
         ]);
     }
 }
