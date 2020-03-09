@@ -9,7 +9,7 @@ trait SqlServerTraits
 {
     protected $db;
 
-    private function runSql($sql, $bind, $db = null)
+    private function runSql($sql, $bind = [], $db = null)
     {
         $this->setSqlServer($db);
 
@@ -40,7 +40,7 @@ trait SqlServerTraits
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
-    private function runMultiSql($sql, $bind)
+    private function runMultiSql($sql, $bind = [])
     {
         if (Auth::check()) {
             $db = Auth::user()->db;
@@ -67,7 +67,7 @@ trait SqlServerTraits
         return $result;
     }
 
-    private function yieldSql($sql, $bind)
+    private function yieldSql($sql, $bind = [])
     {
         if (Auth::check()) {
             $db = Auth::user()->db;
