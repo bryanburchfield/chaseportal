@@ -93,7 +93,10 @@ class LeadMoveService
                 Auth::logout();
             }
             $user = User::where('group_id', '=', $lead_rule->group_id)->first();
+
             if ($user) {
+                // set a flag so the audit trail doesn't pick it up
+                $user->cron = true;
                 Auth::login($user);
             }
         }
