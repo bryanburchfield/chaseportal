@@ -62,10 +62,15 @@ class EmailDripService
     public function runDrip(EmailDripCampaign $email_drip_campaign)
     {
         if (!Auth::check() || Auth::user()->group_id !== $email_drip_campaign->group_id) {
+            if (Auth::check()) {
+                Auth::logout();
+            }
+
             // authenticate as user of the group
-            Auth::logout();
             $user = User::where('group_id', '=', $email_drip_campaign->group_id)->first();
             if ($user) {
+                // Set flag so audit trail doesn't pick this up
+                $user->cron = true;
                 Auth::login($user);
             }
         }
