@@ -14,59 +14,59 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
-					<div class="col-sm-12">
-						<div class="mt30" id="notifications">
-							<div class="col-sm-6 mb20 card">
-								<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
+					<div class="col-sm-12 mt30">
 
-								{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
-								create_notification']) !!}
-								<div class="form-group">
-									{!! Form::label('title', 'Title') !!}
-									{!! Form::text('title', $feature_message->title, ['class'=>'form-control
-									notification_title', 'required'=>true]) !!}
-								</div>
+						<div class="col-sm-6 mb20 card">
+							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
-								{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
-
-								<div class="form-group">
-									{!! Form::label('body', 'Body') !!}
-									{!! Form::textarea("body", $feature_message->body, ["class" => "form-control notification_body", 'required'=>true]) !!}
-								</div>
-
-								<div class="form-group">
-									<label class="checkbox-inline">
-										<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
-									</label>
-								</div>
-
-								@if(!empty($feature_message->id))
-									<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary">Cancel</a>
-								@endif
-
-								<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
-
-								<br><br>
-
-								@if($errors->any())
-								<div class="alert alert-danger">
-									@foreach($errors->all() as $e)
-									{{ $e }}
-									@endforeach
-								</div>
-								@endif
-
-								{!! Form::close() !!}
+							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
+							create_notification']) !!}
+							<div class="form-group">
+								{!! Form::label('title', 'Title') !!}
+								{!! Form::text('title', $feature_message->title, ['class'=>'form-control
+								notification_title', 'required'=>true]) !!}
 							</div>
 
-							<div class="col-sm-6">
-								<table class="table">
+							{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
+
+							<div class="form-group">
+								{!! Form::label('body', 'Body') !!}
+								{!! Form::textarea("body", $feature_message->body, ["class" => "form-control notification_body", 'required'=>true]) !!}
+							</div>
+
+							<div class="form-group">
+								<label class="checkbox-inline">
+									<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
+								</label>
+							</div>
+
+							@if(!empty($feature_message->id))
+								<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary">Cancel</a>
+							@endif
+
+							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
+
+							<br><br>
+
+							@if($errors->any())
+							<div class="alert alert-danger">
+								@foreach($errors->all() as $e)
+								{{ $e }}
+								@endforeach
+							</div>
+							@endif
+
+							{!! Form::close() !!}
+						</div>
+
+						<div class="col-sm-6">
+							<div class="table-responsive">
+								<table class="table table-striped">
 									<thead>
 										<tr>
 											<th>Published</th>
 											<th>ID</th>
 											<th>Title</th>
-											<th>Body</th>
 											<th>Edit</th>
 											<th>Delete</th>
 										</tr>
@@ -78,7 +78,6 @@
 												<td><input type="checkbox" class="checkbox published" name="published" data-id="{{$msg->id}}" {{$msg->active ? 'checked' : ''}}></td>
 												<td>{{$msg->id}}</td>
 												<td>{{$msg->title}}</td>
-												<td>{{ \Illuminate\Support\Str::limit($msg->body, 40, $end='...') }}</td>
 												<td><a class="edit_msg" href="{{action('FeatureMessageController@editMessage', [$msg->id])}}"><i class="fas fa-edit"></i></a></td>
 												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
 											</tr>

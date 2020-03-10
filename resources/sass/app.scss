@@ -1809,7 +1809,8 @@ a.run_kpi.btn {
 }
 
 #sidebar_nots.active {
-    // margin-right: 250px !important;
+    position: relative;
+    z-index: 9999;
 }
 
 /* collapses sidebar on mobile, stop removing, its fkn needed*/

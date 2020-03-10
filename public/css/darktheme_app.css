@@ -2377,6 +2377,11 @@ a.run_kpi.btn:hover {
   margin-left: 0 !important;
 }
 
+#sidebar_nots.active {
+  position: relative;
+  z-index: 9999;
+}
+
 /* collapses sidebar on mobile, stop removing, its fkn needed*/
 
 .prel {
