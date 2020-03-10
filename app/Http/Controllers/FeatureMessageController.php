@@ -7,6 +7,7 @@ use App\Models\FeatureMessage;
 use App\Models\ReadFeatureMessage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Parsedown;
 
 class FeatureMessageController extends Controller
 {
@@ -33,6 +34,9 @@ class FeatureMessageController extends Controller
 	public function viewMessage(Request $request)
 	{
 		$feature_message = FeatureMessage::findOrFail($request->id);
+
+		// Convert markdown to html
+		$feature_message->body = (new \Parsedown)->text($feature_message->body);
 
 		// Set message as read ($request->id is the message id)
 		$this->readMessage($request);

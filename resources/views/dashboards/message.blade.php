@@ -20,7 +20,7 @@
 					</div>
 
 					<div class="col-sm-6">
-						{{$feature_message->body}}
+						{!! $feature_message->body !!}
 					</div>
 			    </div>
 			</div>
