@@ -20,7 +20,7 @@
 					</div>
 
 					<div class="col-sm-6">
-						{!! $feature_message->body !!}
+						{!! $feature_message->mark_down !!}
 					</div>
 			    </div>
 			</div>
