@@ -20,4 +20,14 @@ class FeatureMessage extends Model
     {
         return $this->hasMany('App\Models\ReadFeatureMessage');
     }
+
+    public function getMarkDownAttribute($value)
+    {
+        return (new \Parsedown)->text($this->body);
+    }
+
+    public function getTextBodyAttribute($value)
+    {
+        return strip_tags((new \Parsedown)->text($this->body));
+    }
 }

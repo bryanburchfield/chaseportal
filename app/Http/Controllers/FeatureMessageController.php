@@ -35,9 +35,6 @@ class FeatureMessageController extends Controller
 	{
 		$feature_message = FeatureMessage::findOrFail($request->id);
 
-		// Convert markdown to html
-		$feature_message->body = (new \Parsedown)->text($feature_message->body);
-
 		// Set message as read ($request->id is the message id)
 		$this->readMessage($request);
 
