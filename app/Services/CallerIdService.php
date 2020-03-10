@@ -124,6 +124,7 @@ class CallerIdService
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
                 AND DR.CallerId != ''
+                AND DR.CallType = 0
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= 5500
                 ";
