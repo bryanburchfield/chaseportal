@@ -416,12 +416,11 @@ var Master = {
     },
 
     change_filter_label: function () {
+        var filtertype = $(this).find('option:selected').data('filtertype');
+        $(this).parent().parent().find('.subfilter_group').hide();
+        var subfilter = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + filtertype + '"]');
+        $(subfilter).show();
 
-        if ($(this).val() == 'lead_attempts') {
-            $(this).parent().next().find('label').html(Lang.get('js_msgs.numb_filter_attempts'));
-        } else {
-            $(this).parent().next().find('label').html(Lang.get('js_msgs.days_to_filter_by'));
-        }
     },
 
     add_leadrule_filter:function(e){
@@ -429,8 +428,8 @@ var Master = {
 
         if(Master.leadrule_filters_used < Master.leadrule_filters){
             $('.alert.filter_error').hide();
-            var selected_filter = $(this).parent().find('select').val();
-            var selected_value = $(this).parent().find('input').val();
+            var selected_filter = $(this).parent().find('.lead_rule_filter_type').val();
+            var selected_value = $(this).parent().find('.subfilter_group[data-subfilter="' + selected_filter + '"] .form-control').val();
 
             if(selected_filter && selected_value){
                 $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
@@ -455,7 +454,9 @@ var Master = {
                     // }
 
                     if(Master.leadrule_filters_used!=Master.leadrule_filters){
-                        $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                        if(!$(new_filter).find('a.remove_filter').length){
+                            $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                        }
                     }
 
                     if(Master.leadrule_filters == Master.leadrule_filters_used){
@@ -550,7 +551,7 @@ var Master = {
         var duplicate_filters = false;
         $('.lead_rule_filter_type').each(function(){
             if(!filters.hasOwnProperty($(this).val())){
-                filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+                filters[$(this).val()] = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + $(this).val() + '"]').find('.form-control ').val();
             }else{
                 $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
                 duplicate_filters=true;
@@ -618,7 +619,7 @@ var Master = {
 
         var filters={};
         $('.lead_rule_filter_type').each(function(){
-            filters[$(this).val()] = $(this).parent().next('div').find('input.filter_value').val();
+            filters[$(this).val()] = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + $(this).val() + '"]').find('.form-control ').val();
         });
 
         $.ajaxSetup({

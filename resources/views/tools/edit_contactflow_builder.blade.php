@@ -81,16 +81,38 @@
             						<label>{{__('tools.filter_type')}}</label>
 									<select name="filter_type" class="form-control update_filter_type lead_rule_filter_type">
 										<option value="">{{__('general.select_one')}}</option>
-										<option {{$value->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
-										<option {{ $value->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
-										<option {{ $value->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
+										<option data-filtertype="lead_age" {{$value->type=='lead_age' ? 'selected' :'' }} value="lead_age">{{__('tools.lead_age')}}</option>
+										<option data-filtertype="lead_attempts" {{ $value->type=='lead_attempts' ? 'selected' :'' }} value="lead_attempts">{{__('tools.lead_attempts')}}</option>
+										<option data-filtertype="days_called" {{ $value->type=='days_called' ? 'selected' :'' }} value="days_called">{{__('tools.days_called')}}</option>
+										<option data-filtertype="ring_group" {{ $value->type=='ring_group' ? 'selected' :'' }} value="ring_group">{{__('tools.ring_group')}}</option>
+										<option data-filtertype="call_status" {{ $value->type=='call_status' ? 'selected' :'' }} value="call_status">{{__('tools.call_status')}}</option>
 									</select>
             					</div>
 
-								<div class="form-group">
-									<label>{{ __('tools.days_to_filter')}}</label>
-									<input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$value->value}}">
-								</div>
+            					<div class="form-group subfilter_group {{$value->type=='lead_age' ? '' :'hidetilloaded'}}" data-subfilter="lead_age">
+            					    {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
+            					    <input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$value->value}}">
+            					</div>
+
+            					<div class="form-group subfilter_group {{$value->type=='days_called' ? '' :'hidetilloaded'}}" data-subfilter="days_called">
+            					    {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
+            					    <input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$value->value}}">
+            					</div>
+
+            					<div class="form-group subfilter_group {{$value->type=='lead_attempts' ? '' :'hidetilloaded'}}" data-subfilter="lead_attempts">
+            					    {!! Form::label('filter_value', __('tools.numb_filter_attempts')) !!}
+            					    <input type="text" class="form-control filter_value" id="update_filter_value" name="filter_value" value="{{$value->value}}">
+            					</div>
+
+            					<div class="form-group subfilter_group {{$value->type=='ring_group' ? '' :'hidetilloaded'}}" data-subfilter="ring_group">
+            					    {!! Form::label('filter_type', __('tools.inbound_sources')) !!}
+                                    {!! Form::select("inbound_sources", $inbound_sources, $value->value, ["class" => "form-control inbound_sources lead_rule_filter_value"]) !!}
+            					</div>
+
+            					<div class="form-group subfilter_group {{$value->type=='call_status' ? '' :'hidetilloaded'}}" data-subfilter="call_status">
+            					    {!! Form::label('filter_type', __('tools.call_statuses')) !!}
+            					    {!! Form::select("call_statuses ", $call_statuses , $value->value, ["class" => "form-control call_statuses lead_rule_filter_value"]) !!}
+            					</div>
 
 								{{-- Need to get count of available filters --}}
 								@if($key == count($lead_rule->LeadRuleFilters) -1)

@@ -164,7 +164,9 @@ class LeadMoveService
             "\n";
         $data['Campaign'] = $detail->destination_campaign;
         $data['Subcampaign'] = $detail->destination_subcampaign;
+
         $result = $api->UpdateDataByLeadId($data, $detail->group_id, '', '', $detail->lead_id);
+
         if ($result === false) {
             return false;
         }
@@ -200,11 +202,17 @@ class LeadMoveService
                 case 'days_called':
                     $sql .= $this->sqlDay($i, $db);
                     break;
+                case 'ring_group':
+                    $sql .= $this->sqlRingGroup($i, $db);
+                    break;
+                case 'call_status':
+                    $sql .= " AND CallStatus = :param$i";
+                    break;
                 default:  // error!
                     return [];
             }
 
-            $bind['param$i'] = $lead_rule_filter->value;
+            $bind['param' . $i] = $lead_rule_filter->value;
         }
 
         $leads = $this->runSql($sql, $bind);
@@ -238,6 +246,17 @@ class LeadMoveService
             FROM [$db].[dbo].[DialingResults]
             WHERE GroupId = Leads.GroupId
             AND LeadId = Leads.Id) > :param$i";
+    }
+
+    private function sqlRingGroup($i, $db)
+    {
+        return " AND EXISTS (SELECT I.id
+            FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[InboundSources] I ON I.InboundSource = DR.CallerId AND I.Description = :param$i
+            WHERE DR.GroupId = Leads.GroupId
+            AND DR.LeadId = Leads.Id
+            AND DR.CallType = 1
+            AND DR.attempt = 1)";
     }
 
     private function initApi($db)
