@@ -9,7 +9,6 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::redirect('/', 'tools/contactflow_builder');
 
             // Contact Flow (leads)
-
             Route::prefix('contactflow_builder')->group(function () {
                 Route::get('/', 'LeadsController@index');
                 Route::get('/edit_rule/{id}', 'LeadsController@editLeadRule');
