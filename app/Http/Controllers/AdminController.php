@@ -10,18 +10,48 @@ use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
 use App\Models\System;
-use App\Traits\SqlServerTraits;
-use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
+use Illuminate\View\View;
+use Illuminate\Contracts\View\Factory;
 
 class AdminController extends Controller
 {
     use TimeTraits;
     use SqlServerTraits;
+
+
+    /**
+     * Return admin sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadAdminNav()
+    {
+        return view('shared.admin_sidenav');
+    }
+
+    /**
+     * return regular sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadSideNav()
+    {
+        return view('shared.sidenav');
+    }
+
+    /**
+     * Set DB
+     *  
+     * @param string|null $db 
+     * @return void 
+     */
 
     private function setDb($db = null)
     {
@@ -37,7 +67,7 @@ class AdminController extends Controller
      * @param Request $request 
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
-    public function index(Request $request)
+    public function manageUsers(Request $request)
     {
         $groupId = Auth::user()->group_id;
         $this->setDb();
@@ -132,19 +162,33 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'admin';
+        $page['menuitem'] = 'manage_users';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
-            'default_lead_fields' => ['Rep'] + $this->defaultLeadFields(),
             'dbs' => $dbs,
+            'user_types' => $this->userTypes(),
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
         ];
 
-        return view('dashboards.admin')->with($data);
+        return view('admin.index')->with($data);
+    }
+
+    public function userTypes()
+    {
+        // Build user type selection
+        $user_types = [
+            'client' => 'Client',
+            'admin' => 'Admin',
+        ];
+        if (Auth::User()->isType('superadmin')) {
+            $user_types += ['superadmin' => 'SuperAdmin'];
+        }
+
+        return $user_types;
     }
 
     /**
@@ -349,6 +393,56 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
+    public function loadCdrLookup()
+    {
+        $page['menuitem'] = 'cdr_lookup';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+        ];
+
+        return view('admin.cdr_lookup')->with($data);
+    }
+
+    public function webhookGenerator()
+    {
+        $dbs = ['' => trans('general.select_one')];
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
+
+        $page['menuitem'] = 'webhook_generator';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'dbs'  => $dbs,
+            'jsfile' => [],
+            'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('admin.webhook_generator')->with($data);
+    }
+
+    public function settings()
+    {
+
+        $dbs = ['' => trans('general.select_one')];
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
+        $page['menuitem'] = 'settings';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'dbs'  => $dbs,
+            'jsfile' => [],
+        ];
+
+        return view('admin.settings')->with($data);
+    }
     /**
      * CDR Lookup
      * 

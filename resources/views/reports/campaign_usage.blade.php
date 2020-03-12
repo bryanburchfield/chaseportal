@@ -45,7 +45,7 @@
 	@include('reports.report_warning_inc')
 @endsection
 @section('extras')
-<div class="col-sm-7 nopadright">
+<div class="col-sm-7 col-xs-12 nopadright pl0">
 	<div class="col-sm-12 nopad">
 		<div class="card card-6 hidetilloaded" >
 			<h1 class="title fw600">{{__('reports.count_of_leads_by_attempt')}}</h1>
@@ -55,13 +55,13 @@
 		</div>
 	</div>
 
-	<div class="col-sm-6 nopadleft">
+	<div class="col-sm-6 nopadleft nopadright pl0">
 		<div class="card hidetilloaded">
 			<canvas id="call_stats"></canvas>
 		</div>
 	</div>
 
-	<div class="col-sm-6 nopadright">
+	<div class="col-sm-6 nopadleft nopadright pr0">
 		<div class="card hidetilloaded">
 			<canvas id="subcampaigns"></canvas>
 		</div>

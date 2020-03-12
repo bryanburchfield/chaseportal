@@ -255,6 +255,10 @@ i, span {
             &>a i {
                 color:#ddd;
             }
+
+            &>a:hover{
+                color: #e49831;
+            }
         }
 
         a {
@@ -1295,7 +1299,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only {
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only, select.input-sm, .add_custom_field input.form-control {
     background: darken($blue, 2%) !important;
     border: none;
     color: lighten(#aaa, 5%);
@@ -2711,6 +2715,27 @@ td.bg-danger{
 }
 
 .bwr_omni table thead th a{display: none;}
+.dataTables_filter label input{
+    margin:0 5px 10px 5px;
+}
+
+#logins_per_day{
+
+    .card_dropdown.mv_left{
+        left:8px;
+        top:12px;
+    }
+
+    .card_dropdown-content.logins_drilldown{
+        max-height: 240px;
+    }
+}
+
+p.login_date {
+    float: right;
+    font-weight: 600;
+    margin-right: 10px;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
@@ -2862,16 +2887,7 @@ MEDIAQUERIES
 }
 
 @media (min-width:768px) {
-    .nopadleft {
-        padding-left: 0;
-    }
-
-    .nopadright {
-        padding-right: 0;
-    }
-
     .pl0{padding-left: 0;}
-
 }
 
 @media handheld, only screen and (max-width:768px) {
@@ -2937,11 +2953,11 @@ MEDIAQUERIES
     }
 
     .nopadleft {
-        padding: 0;
+        padding-left: 0;
     }
 
     .nopadright {
-        padding: 0;
+        padding-right: 0;
     }
 
     .col-xs-3.brand {

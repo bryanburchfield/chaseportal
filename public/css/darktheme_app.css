@@ -344,6 +344,11 @@ span {
   color: #ddd;
 }
 
+#sidebar ul li.active > a:hover,
+#sidebar ul li a[aria-expanded=true] > a:hover {
+  color: #e49831;
+}
+
 #sidebar ul li a {
   text-align: left;
   padding: 10px;
@@ -1605,7 +1610,9 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_myself input.form-control,
 #webhook_generator input.form-control,
 #webhook_generator select,
-input.datepicker_only {
+input.datepicker_only,
+select.input-sm,
+.add_custom_field input.form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -3200,6 +3207,25 @@ td.bg-danger {
   display: none;
 }
 
+.dataTables_filter label input {
+  margin: 0 5px 10px 5px;
+}
+
+#logins_per_day .card_dropdown.mv_left {
+  left: 8px;
+  top: 12px;
+}
+
+#logins_per_day .card_dropdown-content.logins_drilldown {
+  max-height: 240px;
+}
+
+p.login_date {
+  float: right;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
@@ -3356,14 +3382,6 @@ MEDIAQUERIES
 }
 
 @media (min-width: 768px) {
-  .nopadleft {
-    padding-left: 0;
-  }
-
-  .nopadright {
-    padding-right: 0;
-  }
-
   .pl0 {
     padding-left: 0;
   }
@@ -3445,11 +3463,11 @@ MEDIAQUERIES
   }
 
   .nopadleft {
-    padding: 0;
+    padding-left: 0;
   }
 
   .nopadright {
-    padding: 0;
+    padding-right: 0;
   }
 
   .col-xs-3.brand {

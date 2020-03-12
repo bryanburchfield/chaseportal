@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Dialer extends Model
 {
@@ -15,15 +16,17 @@ class Dialer extends Model
                         ->orWhere('additional_dbs', $this->reporting_db);
                 }
             )
-                ->whereNotIn('user_type', ['demo', 'expired'])
-                ->get();
+                ->whereNotIn('user_type', ['demo', 'expired']);
         } else {
             $users = User::where('db', $this->reporting_db)
-                ->whereNotIn('user_type', ['demo', 'expired'])
-                ->get();
+                ->whereNotIn('user_type', ['demo', 'expired']);
         }
 
-        return $users;
+        if (Auth::User()->isType('superadmin')) {
+            return $users->get();
+        } else {
+            return $users->where('group_id', Auth::User()->group_id)->get();
+        }
     }
 
     public function group_count($include_additional = false)
@@ -47,4 +50,5 @@ class Dialer extends Model
 
         return $count;
     }
+
 }

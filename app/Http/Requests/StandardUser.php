@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
 use App\Rules\UniqueEmail;
-use App\Rules\UniqueName;
-
+use Illuminate\Support\Facades\Auth;
 
 class StandardUser extends FormRequest
 {
@@ -27,6 +27,10 @@ class StandardUser extends FormRequest
      */
     public function rules()
     {
+        $admincontroller = new AdminController;
+
+        $valid_user_types = array_keys($admincontroller->userTypes());
+
         // Check if we're adding or editing
         if (!empty($this->id)) {
             $user = User::find($this->id);
@@ -36,16 +40,31 @@ class StandardUser extends FormRequest
 
         // expiration only required on add
         return [
-            'group_id' => 'required|integer',
-            'name' => [
+            'group_id' => [
                 'required',
-                new UniqueName($user),
+                'integer',
+                function ($attribute, $value, $fail) {
+                    if (!Auth::User()->isType('superadmin')) {
+                        if ($value != Auth::User()->group_id) {
+                            $fail(trans('custom_validation.group_must_be') . ' ' . Auth::User()->group_id);
+                        }
+                    }
+                },
             ],
+            'name' => 'required',
             'email' => [
                 'nullable',
                 new UniqueEmail($user),
             ],
-            'phone' => 'nullable',
+            'user_type' => [
+                'required',
+                function ($attribute, $value, $fail) use ($valid_user_types) {
+                    if (!in_array($value, $valid_user_types)) {
+                        $fail(trans('custom_validation.invalid_user_type'));
+                    }
+                },
+            ],
+            'phone' => 'required',
             'tz' => 'required',
             'db' => 'required',
         ];

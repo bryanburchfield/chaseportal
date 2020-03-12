@@ -10,6 +10,7 @@ var Master = {
 		grey: 'rgb(68,68,68)'
 	},
 
+    page_menuitem:$('#sidebar').find('.page_menuitem').val(),
 	curpage: '',
 	pagesize: '',
 	pag_link: '',
@@ -101,6 +102,9 @@ var Master = {
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
         $('.toggle_instruc').on('click', this.toggle_instructions);
+
+        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
+        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     hide_modal_error:function(){
@@ -2075,8 +2079,52 @@ var Master = {
         }
 
         that.parent().find('.instuc_div').slideToggle();
-    }
+    },
 
+    update_sidenav:function(e){
+        e.preventDefault();
+        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
+            Master.page_menuitem = $('.page_menuitem').val();
+        }else{
+            $('.page_menuitem').each(function(){
+                $(this).val(Master.page_menuitem);
+            });
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $('#sidebar').empty();
+
+        if($(this).hasClass('back_to_sidenav')){
+            var path = '/dashboards/admin/load_sidenav';
+        }else{
+            var path = '/dashboards/admin/load_admin_nav';
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+
+        $.ajax({
+            url: path,
+            type: 'POST',
+            dataType: 'html',
+            data: { },
+            success: function (response) {
+                $('#sidebar').append(response);
+                $('ul.list-unstyled.components').find('li').each(function(){
+                    if($(this).data('page') == Master.page_menuitem){
+                        $(this).addClass('active');
+                    }
+                });
+            }
+        });
+
+        $("body").bind("DOMNodeInserted", function() {
+            $('.page_menuitem').val(Master.page_menuitem);
+        });
+    }
 }
 
 $(document).ready(function () {
