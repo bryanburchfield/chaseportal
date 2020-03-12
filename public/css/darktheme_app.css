@@ -2595,6 +2595,7 @@ a[aria-expanded=true] {
 .note-editor.note-airframe .note-statusbar .note-resizebar,
 .note-editor.note-frame .note-statusbar .note-resizebar {
   background: #1d2b40 !important;
+  color: #eee !important;
 }
 
 .note-editor.note-airframe,
