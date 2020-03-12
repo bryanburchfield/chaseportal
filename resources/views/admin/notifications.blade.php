@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="col-sm-12 mt30">
 
-						<div class="col-sm-6 mb20 card">
+						<div class="col-sm-8 mb20 card">
 							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
 							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
@@ -58,7 +58,7 @@
 							{!! Form::close() !!}
 						</div>
 
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class="table-responsive">
 								<table class="table table-striped">
 									<thead>

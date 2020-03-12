@@ -2588,6 +2588,27 @@ a[aria-expanded=true] {
   height: 40px;
 }
 
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #1d2b40 !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #1b293c !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #111a26;
+  height: 45px;
+}
+
 .panel-default {
   border: none;
 }
