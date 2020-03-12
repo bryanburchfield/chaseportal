@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['summernote' => true])
 @section('title', __('widgets.admin') .' - '. __('general.notifications'))
 
 @section('content')
