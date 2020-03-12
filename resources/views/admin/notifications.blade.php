@@ -30,8 +30,7 @@
 							{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
 
 							<div class="form-group">
-								{!! Form::label('body', 'Body') !!}
-								{!! Form::textarea("body", $feature_message->body, ["class" => "form-control notification_body", 'required'=>true]) !!}
+								{!! Form::textarea("body", $feature_message->body, ["id" => "summernote", "class" => "form-control notification_body", 'required'=>true]) !!}
 							</div>
 
 							<div class="form-group">
@@ -116,4 +115,15 @@
 </div>
 
 @include('shared.reportmodal')
+
+<!-- Summernote CDN -->
+<link href="{{ asset('/css/summernote.min.css') }}" rel="stylesheet">
+<script src="{{ asset('/js/summernote.js') }}"></script>
+
+<script>
+	$(document).ready(function() {
+  $('#summernote').summernote();
+});
+</script>
+
 @endsection
