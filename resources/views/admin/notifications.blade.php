@@ -116,14 +116,4 @@
 
 @include('shared.reportmodal')
 
-<!-- Summernote CDN -->
-<link href="{{ asset('/css/summernote.min.css') }}" rel="stylesheet">
-<script src="{{ asset('/js/summernote.js') }}"></script>
-
-<script>
-	$(document).ready(function() {
-  $('#summernote').summernote();
-});
-</script>
-
 @endsection
