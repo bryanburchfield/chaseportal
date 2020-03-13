@@ -27,6 +27,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    @isset($summernote)
+        <link href="{{ asset('/css/summernote.min.css') }}" rel="stylesheet">
+    @endisset
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.min.js"></script>
     <script src="/js/respond.min.js"></script>
@@ -64,10 +67,14 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
 
+    @isset($summernote)
+        <script src="{{ asset('/js/summernote.min.js') }}"></script>
+    @endisset
+
     @isset($jsfile)
-    @foreach($jsfile as $js)
-    <script src="/js/{{ $js }}" type="text/javascript"></script>
-    @endforeach
+        @foreach($jsfile as $js)
+            <script src="/js/{{ $js }}" type="text/javascript"></script>
+        @endforeach
     @endisset
     
     <script src="/js/master.js"></script>
@@ -93,7 +100,13 @@
             $('.btn-notifications, .close_nots_bar').on('click', function () {
                 $('#sidebar_nots').toggleClass('active');
             });
+            @isset($summernote)
+                $('#summernote').summernote({
+                    height: 200
+                });
+            @endisset
         });
     </script>
+
   </body>
 </html>

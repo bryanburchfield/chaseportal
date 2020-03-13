@@ -1279,7 +1279,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control {
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control {
     background: #eee !important;
 }
 
@@ -1809,7 +1809,8 @@ a.run_kpi.btn {
 }
 
 #sidebar_nots.active {
-    // margin-right: 250px !important;
+    position: relative;
+    z-index: 9999;
 }
 
 /* collapses sidebar on mobile, stop removing, its fkn needed*/
@@ -1988,6 +1989,19 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
     color:#fff;
     height: 40px;
+}
+
+.note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar, {
+    background: #eee !important;
+}
+
+.note-editor.note-airframe, .note-editor.note-frame, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar{
+    border:1px solid #ccc !important;
+}
+
+.note-toolbar.panel-heading{
+    background: #eee;
+    height: 45px;
 }
 
 .db_select a.dropdown-toggle {
@@ -2235,6 +2249,11 @@ div.vertical-line{
     margin: 0 auto;
     left: 51.5%;
     display: block;
+}
+
+.table>thead>tr>th{
+    background: $green;
+    color: #fff;
 }
 
 .form-holder.welcome_box{

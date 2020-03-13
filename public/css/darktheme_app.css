@@ -1726,7 +1726,8 @@ select.input-sm,
 input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
-.create_notification .form-control {
+.create_notification .form-control,
+.add_demo_user .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -2377,6 +2378,11 @@ a.run_kpi.btn:hover {
   margin-left: 0 !important;
 }
 
+#sidebar_nots.active {
+  position: relative;
+  z-index: 9999;
+}
+
 /* collapses sidebar on mobile, stop removing, its fkn needed*/
 
 .prel {
@@ -2581,6 +2587,28 @@ a[aria-expanded=true] {
   /* IE6-9 */
   color: #fff;
   height: 40px;
+}
+
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #1d2b40 !important;
+  color: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #1b293c !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #111a26;
+  height: 45px;
 }
 
 .panel-default {

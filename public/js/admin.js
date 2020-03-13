@@ -716,7 +716,7 @@ var Admin = {
     			id: id
     		},
     		success: function (response) {
-    			window.location.reload();
+    			window.location= "/dashboards/admin/notifications";
     		}
     	});
     }
