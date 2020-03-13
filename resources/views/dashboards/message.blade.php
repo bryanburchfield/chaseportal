@@ -19,7 +19,7 @@
 						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="btn_flt_rgt btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
 					</div>
 
-					<div class="col-sm-6">
+					<div class="col-sm-6 notification_msg">
 						{!! $feature_message->mark_down !!}
 					</div>
 			    </div>

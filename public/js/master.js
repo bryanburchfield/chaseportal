@@ -2937,39 +2937,6 @@ var Master = {
         e.preventDefault();
         $(this).parent().parent().find('.form')[0].reset()
     },
-
-    // set_feature_msg_read:function(e){
-    //     e.preventDefault();
-    //     if($(this).hasClass('unread')){
-    //         var id = $(this).data('msgid');
-    //         var that = $(this);
-    //         var unread = parseInt($('.numb_notifications').text());
-    //         $(this).removeClass('unread');
-
-    //         $.ajaxSetup({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //             }
-    //         });
-
-    //         $.ajax({
-    //             url:'/dashboards/feature_msg_read',
-    //             type:'POST',
-    //             data:{
-    //                 id:id,
-    //             },
-    //             success:function(response){
-    //                 $(that).find('.not_read').remove();
-    //                 unread--;
-    //                 if(!unread){
-    //                     $('.numb_notifications').remove();
-    //                 }else{
-    //                     $('.numb_notifications').html(unread);
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
 }
 
 $(document).ready(function () {
@@ -3046,6 +3013,10 @@ $(document).ready(function () {
             $(this).find('#update_filter_value').attr('id', 'update_filter_value'+x).attr('name', 'filter_value'+x);
             x++;
         }
+    });
+
+    $('.notification_msg').find('img').each(function(){
+        $(this).addClass('img-responsive');
     });
 
 });
