@@ -11,13 +11,13 @@
         <div class="card p0">
         	<table class="table">
         		<thead>
-        			<th>Code</th>
-        			<th>Minutes Per Day</th>
-        			<th># ofTimes Per Day</th>
+        			<th>{{__('general.code')}}</th>
+        			<th>{{__('general.minutes_per_day')}}</th>
+        			<th>{{__('general.times_per_day')}}</th>
         		</thead>
 
         		<tbody>
-		    	    <form action="#" method="post" class="form compliance_settings">
+		    	    <form method="post" class="form compliance_settings">
 		    	    	@csrf
 		    			@foreach ($pause_codes as $pause_code)
 		    				<tr >
@@ -42,7 +42,8 @@
 							</tr>
 		    			@endforeach
 
-			    		<input type="submit" class="btn btn-primary" value="Do Something">
+						<input type="submit" class="btn btn-primary" value="{{__('general.save')}}" />
+						<input type="submit" class="btn btn-default btn-cancel mr10" name="cancel" value="{{__('general.cancel')}}" />
 		    	    </form>
         		</tbody>
         	</table>

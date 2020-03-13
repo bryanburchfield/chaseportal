@@ -12,34 +12,6 @@ class ComplianceDashController extends Controller
 {
     use DashTraits;
 
-    /**
-     * Display dashboard for standalone
-     *
-     * @param Request $request
-     * @return view
-     */
-    public function index(Request $request)
-    {
-        $this->getSession($request);
-
-        $campaigns = $this->campaignGroups();
-
-        $jsfile[] = "compliancedash.js";
-        $cssfile[] = "compliancedash.css";
-
-        $data = [
-            'isApi' => $this->isApi,
-            'campaign' => $this->campaign,
-            'dateFilter' => $this->dateFilter,
-            'campaign_list' => $campaigns,
-            'curdash' => 'compliancedash',
-            'jsfile' => $jsfile,
-            'cssfile' => $cssfile,
-        ];
-
-        return view('compliancedash')->with($data);
-    }
-
     public function settingsIndex()
     {
         $page = [
@@ -87,6 +59,31 @@ class ComplianceDashController extends Controller
 
     public function updateSettings(Request $request)
     {
-        Log::debug($request->all());
+        // Bail if they canceled
+        if ($request->has('cancel')) {
+            return redirect()->action('MasterDashController@complianceDashboard');
+        }
+
+        // check that they sumbitted something
+        if ($request->missing('code')) {
+            return redirect()->action('MasterDashController@complianceDashboard');
+        }
+
+        // update/insert records
+        foreach ($request->code as $i => $code) {
+
+            $pause_code = PauseCode::firstOrNew([
+                'group_id' => Auth::User()->group_id,
+                'code' => $code,
+            ]);
+
+            $pause_code->user_id = Auth::User()->id;
+            $pause_code->minutes_per_day = $request->minutes_per_day[$i];
+            $pause_code->times_per_day = $request->times_per_day[$i];
+            $pause_code->save();
+        }
+
+        session()->flash('flash', trans('general.settings_saved'));
+        return redirect()->action('MasterDashController@complianceDashboard');
     }
 }
