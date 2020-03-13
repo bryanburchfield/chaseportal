@@ -23,7 +23,7 @@
 	<div class="alert alert-danger mt20"></div>
 
     <div class="form-group mb20">
-    	{!! Form::submit(($mode == 'edit' ? 'Update' : 'Create'), ['class'=>'btn btn-primary mb0 btn_flt_rgt mb20'] ) !!}
+    	{!! Form::submit(($mode == 'edit' ? 'Update' : 'Create'), ['class'=>'btn btn-primary mb0 mb20'] ) !!}
     </div>
 
 {!! Form::close() !!}

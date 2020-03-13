@@ -1516,7 +1516,8 @@ select.input-sm,
 input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
-.create_notification .form-control {
+.create_notification .form-control,
+.add_demo_user .form-control {
   background: #eee !important;
 }
 
@@ -2311,7 +2312,24 @@ a[aria-expanded=true] {
   height: 40px;
 }
 
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #ccc !important;
+}
+
 .note-toolbar.panel-heading {
+  background: #eee;
   height: 45px;
 }
 
@@ -2594,6 +2612,11 @@ div.vertical-line {
   margin: 0 auto;
   left: 51.5%;
   display: block;
+}
+
+.table > thead > tr > th {
+  background: #33A09B;
+  color: #fff;
 }
 
 .form-holder.welcome_box {
