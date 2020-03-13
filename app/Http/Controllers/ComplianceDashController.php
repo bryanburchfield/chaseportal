@@ -86,4 +86,29 @@ class ComplianceDashController extends Controller
         session()->flash('flash', trans('general.settings_saved'));
         return redirect()->action('MasterDashController@complianceDashboard');
     }
+
+    public function agentCompliance(Request $request)
+    {
+        $this->getSession($request);
+
+        $details = $this->filterDetails();
+        $result = $this->getAgentCompliance();
+
+        $agent_compliance = [];
+
+
+
+
+        return ['agent_compliance' => [
+            'agent_compliance' => $agent_compliance,
+            'details' => $details,
+        ]];
+    }
+
+    private function getAgentCompliance()
+    {
+        // sql here
+
+        return [];
+    }
 }

@@ -10,6 +10,11 @@
 			<form method="post" class="form compliance_settings">
 				@csrf
 				<table class="table">
+					<colgroup>
+						<col style="width: 50%;">
+						<col style="width: 25%;">
+						<col style="width: 25%;">
+					</colgroup>
 					<thead>
 						<th>{{__('general.code')}}</th>
 						<th>{{__('general.minutes_per_day')}}</th>
@@ -20,7 +25,7 @@
 		    				<tr >
 			    				<td>
 				    				<div class="form-group">
-				    					<h4><b>{{$pause_code['code']}}</b></h4>
+				    					<h5><b>{{$pause_code['code']}}</b></h5>
 				    	    			<input type="hidden" class="form-control code" readonly name="code[]" value="{{ $pause_code['code'] }}">
 									</div>
 			    				</td>
