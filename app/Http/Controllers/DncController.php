@@ -29,9 +29,11 @@ class DncController extends Controller
      */
     public function index()
     {
+        $jsfile[]='tools.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
+            'jsfile'=> $jsfile,
             'page' => $page,
             'files' => $this->paginateCollection($this->getFiles()),
         ];

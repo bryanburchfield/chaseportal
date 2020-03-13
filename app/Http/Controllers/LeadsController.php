@@ -56,7 +56,10 @@ class LeadsController extends Controller
             'type' => 'other',
         ];
 
+        $jsfile[]='tools.js';
+
         $data = [
+            'jsfile' => $jsfile,
             'page' => $page,
             'group_id' => Auth::user()->group_id,
             'lead_rules' => $lead_rules,
@@ -136,7 +139,11 @@ class LeadsController extends Controller
             'menuitem' => 'tools',
             'type' => 'other',
         ];
+
+        $jsfile[]='tools.js';
+
         $data = [
+            'jsfile'=>$jsfile,
             'lead_rule' => $lead_rule,
             'source_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->source_campaign),
             'destination_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->destination_campaign),
