@@ -65,7 +65,7 @@ class StandardUser extends FormRequest
                     }
                 },
             ],
-            'phone' => 'nullable',
+            'phone' => 'required',
             'tz' => 'required',
             'db' => 'required',
         ];

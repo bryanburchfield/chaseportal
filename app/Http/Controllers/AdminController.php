@@ -50,6 +50,7 @@ class AdminController extends Controller
      * @param string|null $db 
      * @return void 
      */
+
     private function setDb($db = null)
     {
         if (empty($db)) {

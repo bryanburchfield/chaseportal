@@ -24,13 +24,13 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('phone', 'Phone') !!}
-                {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>false]) !!}
+                {!! Form::label('user_type', __('users.user_type')) !!}
+                {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('user_type', __('users.user_type')) !!}
-                {!! Form::select("user_type", $user_types, null, ["class" => "form-control", 'id'=> 'user_type', 'required'=>true]) !!}
+                {!! Form::label('phone', __('users.phone')) !!}
+                {!! Form::text('phone', null, ['class'=>'form-control phone', 'required'=>true]) !!}
             </div>
 
             <div class="form-group">

@@ -15,16 +15,7 @@ var Admin = {
 		$('.cdr_lookup_form').on('submit', this.cdr_lookup);
 
 		// webhook handlers
-        $('body').on('click', '.remove_field', this.remove_field);
-        $('body').on('click', '.undo_remove_field', this.undo_remove_field);
-        $('.add_custom_field').on('submit', this.add_custom_field);
-        $('#webhook_generator #db').on('change', this.get_client_tables);
-        $('#client_table').on('change', this.get_table_fields);
-        $('body').on('click', '.use_system_macro', this.toggle_system_macro);
-        $('body').on('focusin', '.field .form-group .form-control', this.highlight_custom_field);
-        $('.generate_url').on('click', this.generate_url);
-        $('.checkall_system_macro').on('click', this.toggleall_system_macro);
-        $('body').on('dblclick', '.field_name', this.edit_field_name);
+
         $('body').on('keyup', '.field .webhook_field_value', this.uncheck_macro);
 		$('body').on('click', '.remove_field', this.remove_field);
 		$('body').on('click', '.undo_remove_field', this.undo_remove_field);

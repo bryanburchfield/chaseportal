@@ -1,5 +1,5 @@
 @php
-    // Really shouldn't put logic inside blades...
+
     if(Auth::User()->isType('superadmin')) {
         $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->count();
         $tot_client_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->distinct('group_id')->count();
@@ -16,11 +16,13 @@
     @endcan
     {{__('users.all_users')}} ({{ $tot_user_count }})
 </h2>
+
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
 
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
+
                 // Bail if not superadmin and not this user's dialer
                 if(!Auth::User()->isType('superadmin') && Auth::User()->db != $dialer->reporting_db) {
                     continue;

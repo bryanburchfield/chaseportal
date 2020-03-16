@@ -10,6 +10,7 @@ use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
 {
@@ -17,47 +18,86 @@ class CallerIdService
     use TimeTraits;
 
     private $group_id;
-    private $dialer_numb;
     private $email_to;
     private $startdate;
     private $enddate;
 
-    public function __construct($group_id = null)
+    private function initialize()
     {
-        $this->group_id = $group_id;
+        $sid = config('twilio.did_sid');
+        $token = config('twilio.did_token');
 
-        if ($this->group_id !== null) {
-            $this->setGroup();
-        }
+        $this->twilio = new Twilio($sid, $token);
     }
 
-    private function setGroup()
+    private function setGroup($group_id = null)
     {
         // hard-coded recips
         $canned = [
             235773  => [
-                'dialer_numb' => 26,
                 'email_to' => 'g.sandoval@chasedatacorp.com',
             ],
         ];
 
-        $this->dialer_numb = $canned[$this->group_id]['dialer_numb'];
-        $this->email_to = $canned[$this->group_id]['email_to'];
+        if (!isset($canned[$group_id])) {
+            $this->group_id = null;
+            $this->email_to = null;
+            return false;
+        }
+
+        $this->group_id = $group_id;
+        $this->email_to = $canned[$group_id]['email_to'];
+
+        return true;
     }
 
-    public static function execute($group_id = null)
+    public static function execute()
     {
-        $caller_id_service = new CallerIdService($group_id);
-
+        $caller_id_service = new CallerIdService();
         $caller_id_service->runReport();
     }
 
     public function runReport()
     {
-        $results = $this->runQuery();
+        $this->initialize();
+
+        $group_id = '';
+        $results = [];
+        $all_results = [];
+
+        foreach ($this->runQuery() as $rec) {
+            // check if this number is still active
+            if ($this->activeNumber($rec['CallerId'])) {
+
+                $all_results[] = $rec;
+
+                // Send email on change of group
+                if ($group_id != '' && $group_id != $rec['GroupId']) {
+
+                    if ($this->setGroup($group_id)) {
+                        $csvfile = $this->makeCsv($results);
+                        $this->emailReport($csvfile);
+                    }
+
+                    $results = [];
+                }
+
+                $results[] = $rec;
+                $group_id = $rec['GroupId'];
+            }
+        }
 
         if (!empty($results)) {
-            $csvfile = $this->makeCsv($results);
+            if ($this->setGroup($group_id)) {
+                $csvfile = $this->makeCsv($results);
+                $this->emailReport($csvfile);
+            }
+        }
+
+        if (!empty($all_results)) {
+            // clear group specific vars
+            $this->setGroup();
+            $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
     }
@@ -69,15 +109,11 @@ class CallerIdService
 
         $bind = [];
 
-        $sql = "SELECT GroupID, GroupName, CallerId, SUM(cnt) Dials FROM (";
+        $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) Dials FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
             // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
-
-            if ($this->dialer_numb !== null && $dialer->dialer_numb != $this->dialer_numb) {
-                continue;
-            }
 
             $bind['startdate' . $i] = $this->startdate->toDateTimeString();
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
@@ -87,14 +123,8 @@ class CallerIdService
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
-                AND DR.CallerId != ''";
-
-            if ($this->group_id !== null) {
-                $bind['group_id'] = $this->group_id;
-                $sql .= " AND DR.GroupId = :group_id";
-            }
-
-            $sql .= "
+                AND DR.CallerId != ''
+                AND DR.CallType = 0
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= 5500
                 ";
@@ -130,17 +160,6 @@ class CallerIdService
         return $tempfile;
     }
 
-    private function arrayData($array)
-    {
-        $data = [];
-
-        foreach ($array as $rec) {
-            $data[] = array_values($rec);
-        }
-
-        return $data;
-    }
-
     private function emailReport($csvfile)
     {
         // path out file
@@ -155,12 +174,10 @@ class CallerIdService
             $cc = 'ahmed@chasedatacorp.com';
         } else {
             $to = $this->email_to;
-            $cc = 'bryan.burchfield@chasedatacorp.com';
-
-            // $cc = [
-            //     'jonathan.gryczka@chasedatacorp.com',
-            //     'ahmed@chasedatacorp.com',
-            // ];
+            $cc = [
+                'jonathan.gryczka@chasedatacorp.com',
+                'ahmed@chasedatacorp.com',
+            ];
         }
 
         // email report
@@ -175,5 +192,36 @@ class CallerIdService
         Mail::to($to)
             ->cc($cc)
             ->send(new CallerIdMail($message));
+    }
+
+    private function activeNumber($phone)
+    {
+        // strip non-digits from phone
+        $phone = preg_replace("/[^0-9]/", '', $phone);
+
+        // strip leading '1' if it's 11 digits
+        if (strlen($phone) == 11) {
+            if (substr($phone, 0, 1) == '1') {
+                $phone = substr($phone, 1);
+            }
+        }
+
+        // if it's not 10 digits, return it as active
+        if (strlen($phone) !== 10) {
+            return true;
+        }
+
+        // Look it up
+        $phones = $this->twilio->incomingPhoneNumbers
+            ->read(
+                array("phoneNumber" => $phone)
+            );
+
+        // Did we find it?
+        if (collect($phones)->isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }
