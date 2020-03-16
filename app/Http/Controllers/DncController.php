@@ -125,10 +125,12 @@ class DncController extends Controller
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
     public function uploadIndex()
-    {
+    {   
+        $jsfile[]='tools.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
+            'jsfile'=>$jsfile,
             'page' => $page,
         ];
 
