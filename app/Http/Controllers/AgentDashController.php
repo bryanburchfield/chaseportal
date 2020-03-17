@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -156,7 +157,7 @@ class AgentDashController extends Controller
             FROM [$db].[dbo].[DialingResults] DR
             WHERE DR.Duration <> 0
             AND DR.CallType NOT IN (7,8)
-            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
             AND DR.GroupId = :groupid$i
             AND DR.Rep = :rep$i
             AND DR.Date >= :fromdate$i
@@ -192,8 +193,156 @@ class AgentDashController extends Controller
         return  array_map(array(&$this, $mapFunction), $result);
     }
 
+    public function campaignStats(Request $request)
+    {
+        $this->getSession($request);
+
+        $result = $this->getCampaignStats();
+    }
+
+    private function getCampaignStats()
+    {
+        $activity = $this->getCampaignActivity();
+        $dialingresults = $this->getCampaignDialingresults();
+
+        Log::debug($activity);
+        Log::debug($dialingresults);
+
+        // combine 
+        $results = $activity + $dialingresults;
+
+        return $results;
+    }
+
+    private function getCampaignActivity()
+    {
+        $tz = Auth::user()->tz;
+
+        $dateFilter = $this->dateFilter;
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
+
+        // group by date/hour or just date
+        if ($byHour) {
+            $mapFunction = 'dateTimeToHour';
+            $format = 'Y-m-d H:i:s.000';
+            $modifier = "+1 hour";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz'),
+            CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
+        } else {
+            $mapFunction = 'dateTimeToDay';
+            $format = 'Y-m-d 00:00:00.000';
+            $modifier = "+1 day";
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)";
+        }
+
+        $bind = [];
+
+        $sql = "SELECT Time,
+        'Calls' = SUM([Calls]),
+        'TalkTime' = SUM([TalkTime]),
+        'WrapUpTime' = SUM([WrapUpTime])
+        FROM (";
+
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $fromDate;
+            $bind['todate' . $i] = $toDate;
+            $bind['rep' . $i] = $this->rep;
+
+            $sql .= " $union SELECT $xAxis Time,
+            'Calls' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN 1 ELSE 0 END),
+            'TalkTime' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN AA.Duration ELSE 0 END),
+            'WrapUpTime' = SUM(CASE WHEN AA.Action = 'Disposition' THEN AA.Duration ELSE 0 END)
+            FROM [$db].[dbo].[AgentActivity] AA
+            WHERE AA.GroupId = :groupid$i
+            AND AA.Rep = :rep$i
+            AND AA.Date >= :fromdate$i
+            AND AA.Date < :todate$i
+            GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp
+        GROUP BY [Time]";
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function getCampaignDialingresults()
+    {
+        $tz = Auth::user()->tz;
+
+        $dateFilter = $this->dateFilter;
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+        $byHour = $this->byHour($dateFilter);
+
+        // group by date/hour or just date
+        if ($byHour) {
+            $mapFunction = 'dateTimeToHour';
+            $format = 'Y-m-d H:i:s.000';
+            $modifier = "+1 hour";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz'),
+            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
+        } else {
+            $mapFunction = 'dateTimeToDay';
+            $format = 'Y-m-d 00:00:00.000';
+            $modifier = "+1 day";
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)
+            ";
+        }
+
+        $bind = [];
+
+        $sql = "SELECT Time,
+        'HoldTime' = SUM([Holdtime]),
+        'Drops' = SUM([Drops])
+        FROM (";
+
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $fromDate;
+            $bind['todate' . $i] = $toDate;
+            $bind['rep' . $i] = $this->rep;
+
+            $sql .= " $union SELECT $xAxis as 'Time',
+	        'Holdtime' = SUM(DR.HoldTime),
+			'Drops' = SUM(CASE WHEN DR.CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.Duration > 0
+            AND DR.CallType NOT IN (7,8)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND DR.GroupId = :groupid$i
+            AND DR.Rep = :rep$i
+            AND DR.Date >= :fromdate$i
+			AND DR.Date < :todate$i
+            GROUP BY $xAxis";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp
+        GROUP BY [Time]
+        ORDER BY [Time]";
+
+        return $this->runSql($sql, $bind);
+    }
+
     public function repPerformance(Request $request)
     {
+        $this->campaignStats($request);
+
         $this->getSession($request);
 
         $result = $this->getRepPerformance();
@@ -273,7 +422,7 @@ class AgentDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+        // list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
         $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
 
@@ -396,7 +545,7 @@ class AgentDashController extends Controller
                 CallStatus,
                 'Call Count' = COUNT(CallStatus)
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.CallStatus NOT IN( 'CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Delivered', 'SMS Received')
+            WHERE DR.CallStatus NOT IN( 'CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Delivered', 'SMS Received')
             AND DR.CallType NOT IN (7,8)
             AND DR.GroupId = :groupid$i
             AND DR.Rep = :rep$i
