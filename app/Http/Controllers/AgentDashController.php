@@ -198,29 +198,31 @@ class AgentDashController extends Controller
 
         $result = $this->getCampaignStats();
 
+        // sort be campaign
+        ksort($result, SORT_NATURAL | SORT_FLAG_CASE);
+
         $total_talk_time = 0;
         $top_ten = [];
 
         // Compute averages
         foreach ($result as $campaign => &$rec) {
+            // Delete any with no calls
+            if ($rec['Calls'] == 0) {
+                unset($result[$campaign]);
+                continue;
+            }
+
             $total_talk_time += $rec['TalkTime'];
 
             $top_ten[$rec['Campaign']] = $rec['Calls'];
 
-            if ($rec['Calls'] == 0) {
-                $rec['AvgTalkTime'] = $this->secondsToHms(0);
-                $rec['AvgHoldTime'] = $this->secondsToHms(0);
-                $rec['AvgHandleTime'] = $this->secondsToHms(0);
-                $rec['DropRate'] = '0.00%';
-            } else {
-                $rec['AvgTalkTime'] = $this->secondsToHms($rec['TalkTime'] / $rec['Calls']);
-                $rec['AvgHoldTime'] = $this->secondsToHms($rec['HoldTime'] / $rec['Calls']);
-                $rec['AvgHandleTime'] = $this->secondsToHms(($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls']);
-                $rec['DropRate'] = number_format($rec['Drops'] / $rec['Calls'] * 100, 2) . '%';
-            }
+            $rec['AvgTalkTime'] = $this->secondsToHms($rec['TalkTime'] / $rec['Calls']);
+            $rec['AvgHoldTime'] = $this->secondsToHms($rec['HoldTime'] / $rec['Calls']);
+            $rec['AvgHandleTime'] = $this->secondsToHms(($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls']);
+            $rec['DropRate'] = number_format($rec['Drops'] / $rec['Calls'] * 100, 2) . '%';
         }
 
-        // sort top 10
+        // sort by calls and slice top 10
         arsort($top_ten);
         $top_ten = array_slice($top_ten, 0, 10);
 
@@ -359,71 +361,6 @@ class AgentDashController extends Controller
         }
         $sql .= ") tmp
         GROUP BY Campaign";
-
-        return $this->runSql($sql, $bind);
-    }
-
-    public function callStatusCount(Request $request)
-    {
-        $this->getSession($request);
-
-        $result = $this->getCallStatusCount();
-
-        $labels = [];
-        $data = [];
-
-        foreach ($result as $r) {
-            array_push($labels, $r['CallStatus']);
-            array_push($data, $r['Call Count']);
-        }
-
-        return ['call_status_count' => [
-            'labels' => $labels,
-            'data' => $data,
-        ]];
-    }
-
-    public function getCallStatusCount()
-    {
-        $dateFilter = $this->dateFilter;
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        // convert to datetime strings
-        $fromDate = $fromDate->format('Y-m-d H:i:s');
-        $toDate = $toDate->format('Y-m-d H:i:s');
-
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        $bind = [];
-
-        $sql = "SELECT
-         CallStatus,
-         'Call Count' = SUM([Call Count])
-         FROM (";
-
-        $union = '';
-        foreach ($this->databases as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['fromdate' . $i] = $fromDate;
-            $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
-
-            $sql .= " $union SELECT
-                CallStatus,
-                'Call Count' = COUNT(CallStatus)
-            FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.CallStatus NOT IN( 'CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Delivered', 'SMS Received')
-            AND DR.CallType NOT IN (7,8)
-            AND DR.GroupId = :groupid$i
-            AND DR.Rep = :rep$i
-            AND DR.Date >= :fromdate$i
-            AND DR.Date < :todate$i
-            GROUP BY DR.CallStatus";
-
-            $union = 'UNION ALL';
-        }
-        $sql .= ") tmp
-        GROUP BY CallStatus";
 
         return $this->runSql($sql, $bind);
     }
