@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
-use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -190,7 +189,7 @@ class AgentDashController extends Controller
         $result = $this->formatVolume($result, $params);
 
         // now format the xAxis datetimes and return the results
-        return  array_map(array(&$this, $mapFunction), $result);
+        return array_map(array(&$this, $mapFunction), $result);
     }
 
     public function campaignStats(Request $request)
@@ -198,6 +197,32 @@ class AgentDashController extends Controller
         $this->getSession($request);
 
         $result = $this->getCampaignStats();
+
+        // Compute averages
+        foreach ($result as $campaign => &$rec) {
+            if ($rec['Calls'] == 0) {
+                $rec['AvgTalkTime'] = 0;
+                $rec['AvgHoldTime'] = 0;
+                $rec['AvgHandleTime'] = 0;
+                $rec['DropRate'] = 0;
+            } else {
+                $rec['AvgTalkTime'] = $rec['TalkTime'] / $rec['Calls'];
+                $rec['AvgHoldTime'] = $rec['HoldTime'] / $rec['Calls'];
+                $rec['AvgHandleTime'] = ($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls'];
+                $rec['DropRate'] = $rec['Drops'] / $rec['Calls'] * 100;
+            }
+        }
+
+        // return separate arrays for each item
+        return [
+            'campaign_stats' => [
+                'Campaign' => array_column($result, 'Campaign'),
+                'AvgTalkTime' => array_column($result, 'AvgTalkTime'),
+                'AvgHoldTime' => array_column($result, 'AvgHoldTime'),
+                'AvgHandleTime' => array_column($result, 'AvgHandleTime'),
+                'DropRate' => array_column($result, 'DropRate'),
+            ]
+        ];
     }
 
     private function getCampaignStats()
@@ -205,13 +230,30 @@ class AgentDashController extends Controller
         $activity = $this->getCampaignActivity();
         $dialingresults = $this->getCampaignDialingresults();
 
-        Log::debug($activity);
-        Log::debug($dialingresults);
+        // combine two results
+        $final = [];
 
-        // combine 
-        $results = $activity + $dialingresults;
+        foreach ($activity as $rec) {
+            $final[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
+            $final[$rec['Campaign']]['Calls'] = $rec['Calls'];
+            $final[$rec['Campaign']]['TalkTime'] = $rec['TalkTime'];
+            $final[$rec['Campaign']]['WrapUpTime'] = $rec['WrapUpTime'];
+            $final[$rec['Campaign']]['HoldTime'] = 0;
+            $final[$rec['Campaign']]['Drops'] = 0;
+        }
 
-        return $results;
+        foreach ($dialingresults as $rec) {
+            if (!isset($final[$rec['Campaign']])) {
+                $final[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
+                $final[$rec['Campaign']]['Calls'] = 0;
+                $final[$rec['Campaign']]['TalkTime'] = 0;
+                $final[$rec['Campaign']]['WrapUpTime'] = 0;
+            }
+            $final[$rec['Campaign']]['HoldTime'] = $rec['HoldTime'];
+            $final[$rec['Campaign']]['Drops'] = $rec['Drops'];
+        }
+
+        return $final;
     }
 
     private function getCampaignActivity()
@@ -225,25 +267,9 @@ class AgentDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz'),
-            CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)";
-        }
-
         $bind = [];
 
-        $sql = "SELECT Time,
+        $sql = "SELECT Campaign,
         'Calls' = SUM([Calls]),
         'TalkTime' = SUM([TalkTime]),
         'WrapUpTime' = SUM([WrapUpTime])
@@ -256,7 +282,7 @@ class AgentDashController extends Controller
             $bind['todate' . $i] = $toDate;
             $bind['rep' . $i] = $this->rep;
 
-            $sql .= " $union SELECT $xAxis Time,
+            $sql .= " $union SELECT AA.Campaign,
             'Calls' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN 1 ELSE 0 END),
             'TalkTime' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN AA.Duration ELSE 0 END),
             'WrapUpTime' = SUM(CASE WHEN AA.Action = 'Disposition' THEN AA.Duration ELSE 0 END)
@@ -265,12 +291,12 @@ class AgentDashController extends Controller
             AND AA.Rep = :rep$i
             AND AA.Date >= :fromdate$i
             AND AA.Date < :todate$i
-            GROUP BY $xAxis";
+            GROUP BY AA.Campaign";
 
             $union = 'UNION ALL';
         }
         $sql .= ") tmp
-        GROUP BY [Time]";
+        GROUP BY Campaign";
 
         return $this->runSql($sql, $bind);
     }
@@ -286,26 +312,9 @@ class AgentDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = $this->byHour($dateFilter);
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz'),
-            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)
-            ";
-        }
-
         $bind = [];
 
-        $sql = "SELECT Time,
+        $sql = "SELECT Campaign,
         'HoldTime' = SUM([Holdtime]),
         'Drops' = SUM([Drops])
         FROM (";
@@ -317,7 +326,7 @@ class AgentDashController extends Controller
             $bind['todate' . $i] = $toDate;
             $bind['rep' . $i] = $this->rep;
 
-            $sql .= " $union SELECT $xAxis as 'Time',
+            $sql .= " $union SELECT DR.Campaign,
 	        'Holdtime' = SUM(DR.HoldTime),
 			'Drops' = SUM(CASE WHEN DR.CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END)
             FROM [$db].[dbo].[DialingResults] DR
@@ -328,21 +337,18 @@ class AgentDashController extends Controller
             AND DR.Rep = :rep$i
             AND DR.Date >= :fromdate$i
 			AND DR.Date < :todate$i
-            GROUP BY $xAxis";
+            GROUP BY Campaign";
 
             $union = 'UNION ALL';
         }
         $sql .= ") tmp
-        GROUP BY [Time]
-        ORDER BY [Time]";
+        GROUP BY Campaign";
 
         return $this->runSql($sql, $bind);
     }
 
     public function repPerformance(Request $request)
     {
-        $this->campaignStats($request);
-
         $this->getSession($request);
 
         $result = $this->getRepPerformance();
