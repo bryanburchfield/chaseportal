@@ -23,6 +23,27 @@
             <div class="filters  col-sm-5">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span>{{__('general.interaction')}}</span>
+                    </button>
+
+                    <ul class="dropdown-menu filter_campaign stop-propagation">
+                        <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
+
+                        {{-- @foreach($campaign_list as $campaign)
+                            <div class="checkbox">
+                                <label class="campaign_label">
+                                    <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
+                                    <span>
+                                        {{$campaign['name']}}
+                                    </span>
+                                </label>
+                            </div>
+                        @endforeach --}}
+                    </ul>
+                </div>
+                    
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <span>{{__('general.date')}}</span>
                     </button>
 
