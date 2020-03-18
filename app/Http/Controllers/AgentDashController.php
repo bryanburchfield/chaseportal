@@ -199,28 +199,39 @@ class AgentDashController extends Controller
         $result = $this->getCampaignStats();
 
         $total_talk_time = 0;
+        $top_ten = [];
 
         // Compute averages
         foreach ($result as $campaign => &$rec) {
             $total_talk_time += $rec['TalkTime'];
 
+            $top_ten[$rec['Campaign']] = $rec['Calls'];
+
             if ($rec['Calls'] == 0) {
-                $rec['AvgTalkTime'] = 0;
-                $rec['AvgHoldTime'] = 0;
-                $rec['AvgHandleTime'] = 0;
-                $rec['DropRate'] = 0;
+                $rec['AvgTalkTime'] = $this->secondsToHms(0);
+                $rec['AvgHoldTime'] = $this->secondsToHms(0);
+                $rec['AvgHandleTime'] = $this->secondsToHms(0);
+                $rec['DropRate'] = '0.00%';
             } else {
-                $rec['AvgTalkTime'] = round($rec['TalkTime'] / $rec['Calls']);
-                $rec['AvgHoldTime'] = round($rec['HoldTime'] / $rec['Calls']);
-                $rec['AvgHandleTime'] = round(($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls']);
-                $rec['DropRate'] = round($rec['Drops'] / $rec['Calls'] * 100, 2);
+                $rec['AvgTalkTime'] = $this->secondsToHms($rec['TalkTime'] / $rec['Calls']);
+                $rec['AvgHoldTime'] = $this->secondsToHms($rec['HoldTime'] / $rec['Calls']);
+                $rec['AvgHandleTime'] = $this->secondsToHms(($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls']);
+                $rec['DropRate'] = number_format($rec['Drops'] / $rec['Calls'] * 100, 2) . '%';
             }
         }
+
+        // sort top 10
+        arsort($top_ten);
+        $top_ten = array_slice($top_ten, 0, 10);
 
         // return separate arrays for each item
         return [
             'campaign_stats' => [
                 'TotalTalkTime' => $this->secondsToHms($total_talk_time),
+                'TopTen' => [
+                    'Campaign' => array_keys($top_ten),
+                    'Calls' => array_values($top_ten),
+                ],
                 'Campaign' => array_column($result, 'Campaign'),
                 'AvgTalkTime' => array_column($result, 'AvgTalkTime'),
                 'AvgHoldTime' => array_column($result, 'AvgHoldTime'),
@@ -350,161 +361,6 @@ class AgentDashController extends Controller
         GROUP BY Campaign";
 
         return $this->runSql($sql, $bind);
-    }
-
-    public function repPerformance(Request $request)
-    {
-        $this->getSession($request);
-
-        $result = $this->getRepPerformance();
-
-        $time_labels = [];
-        $calls = [];
-        $calls_time_array = [];
-        $paused = [];
-        $paused_time_array = [];
-        $waiting = [];
-        $waiting_time_array = [];
-        $wrapup = [];
-        $wrapup_time_array = [];
-
-        $calls_time = 0;
-        $paused_time = 0;
-        $waiting_time = 0;
-        $wrapup_time = 0;
-        $total_time = 0;
-
-        foreach ($result as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
-                $datetime = date("D n/j/y", strtotime($r['Time']));
-            }
-
-            array_push($calls_time_array, $r['Calls']);
-            array_push($paused_time_array, $r['Paused']);
-            array_push($waiting_time_array, $r['Waiting']);
-            array_push($wrapup_time_array, $r['Wrap Up Time']);
-
-            array_push($time_labels, $datetime);
-            array_push($calls, $r['Calls']);
-            array_push($paused, $r['Paused']);
-            array_push($waiting, $r['Waiting']);
-            array_push($wrapup, $r['Wrap Up Time']);
-
-            $calls_time += $r['Calls'];
-            $paused_time += $r['Paused'];
-            $waiting_time += $r['Waiting'];
-            $wrapup_time += $r['Wrap Up Time'];
-        }
-
-        $total_time = $calls_time + $paused_time + $waiting_time + $wrapup_time;
-
-        $calls_time = $this->secondsToHms(round($calls_time));
-        $paused_time = $this->secondsToHms(round($paused_time));
-        $waiting_time = $this->secondsToHms(round($waiting_time));
-        $wrapup_time = $this->secondsToHms(round($wrapup_time));
-        $total_time = $this->secondsToHms(round($total_time));
-
-        return [
-            'rep_performance' => [
-                'time' => $time_labels,
-                'calls' => $calls,
-                'paused' => $paused,
-                'waiting' => $waiting,
-                'wrapup' => $wrapup,
-                'calls_time' => $calls_time,
-                'paused_time' => $paused_time,
-                'waiting_time' => $waiting_time,
-                'wrapup_time' => $wrapup_time,
-                'total' => $total_time
-            ]
-        ];
-    }
-
-    public function getRepPerformance()
-    {
-        $tz = Auth::user()->tz;
-
-        $dateFilter = $this->dateFilter;
-        list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        // convert to datetime strings
-        $fromDate = $fromDate->format('Y-m-d H:i:s');
-        $toDate = $toDate->format('Y-m-d H:i:s');
-
-        // list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-        $byHour = ($dateFilter == 'today' || $dateFilter == 'yesterday') ? true : false;
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz'),
-            CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)";
-        }
-
-        $bind = [];
-
-        $sql = "SELECT Time,
-        'Calls' = SUM([Calls]),
-        'Paused' = SUM([Paused]),
-        'Waiting' = SUM([Waiting]),
-        'Wrap Up Time' = SUM([Wrap Up Time])
-        FROM (";
-
-        $union = '';
-        foreach ($this->databases as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['fromdate' . $i] = $fromDate;
-            $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
-
-            $sql .= " $union SELECT $xAxis Time,
-            'Calls' = SUM(CASE WHEN AA.Action IN ('Call', 'ManualCall', 'InboundCall') THEN AA.Duration ELSE 0 END),
-            'Paused' = SUM(CASE WHEN AA.Action = 'Paused' THEN AA.Duration ELSE 0 END),
-            'Waiting' = SUM(CASE WHEN AA.Action = 'Waiting' THEN AA.Duration ELSE 0 END),
-            'Wrap Up Time' = SUM(CASE WHEN AA.Action = 'Disposition' THEN AA.Duration ELSE 0 END)
-            FROM [$db].[dbo].[AgentActivity] AA
-            WHERE AA.GroupId = :groupid$i
-            AND AA.Rep = :rep$i
-            AND AA.Date >= :fromdate$i
-            AND AA.Date < :todate$i
-            GROUP BY $xAxis";
-
-            $union = 'UNION ALL';
-        }
-        $sql .= ") tmp
-        GROUP BY [Time]";
-
-        $result = $this->runSql($sql, $bind);
-
-        $params = [
-            'fromDate' => $fromDate,
-            'toDate' => $toDate,
-            'modifier' => $modifier,
-            'byHour' => $byHour,
-            'format' => $format,
-            'zeroRec' => [
-                'Time' => '',
-                'Calls' => '0',
-                'Paused' => '0',
-                'Waiting' => '0',
-                'Wrap Up Time' => '0',
-            ],
-        ];
-
-        $result = $this->formatVolume($result, $params);
-
-        // now format the xAxis datetimes and return the results
-        return  array_map(array(&$this, $mapFunction), $result);
     }
 
     public function callStatusCount(Request $request)
