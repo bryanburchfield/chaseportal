@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -45,26 +46,73 @@ class AgentDashController extends Controller
 
     private function agentCampaigns()
     {
-        $sql = '';
+        // If the rep has a skill, then create campaign list based on that
+        // otherwise, get a list of all campaigns in DialingResults tagged to them
         $bind = [
             'groupid' => Auth::user()->group_id,
             'rep' => $this->rep,
         ];
 
-        $sql = "SELECT C.CampaignName
+        $sql = "SELECT Skill FROM Reps
+            WHERE GroupId = :groupid
+            AND RepName = :rep";
+
+        $results = $this->runSql($sql, $bind);
+
+        if (!count($results)) {
+            $skill = null;
+        } else {
+            $skill = $results[0]['Skill'];
+        }
+
+
+        if ($skill === null) {
+            // get from DR
+        } else {
+            $sql = "SELECT C.CampaignName as Campaign
             FROM Reps R
             INNER JOIN SkillList SL ON SL.Skill = R.Skill AND SL.GroupId = R.GroupId 
             INNER JOIN Campaigns C ON C.GroupId = SL.GroupId AND C.CampaignName = SL.Campaign AND C.IsActive = 1
             WHERE R.GroupId = :groupid
-            AND RepName = :rep";
+            AND R.RepName = :rep";
+        }
 
-        $results = resultsToList($this->runSql($sql, $bind));
+        $result = $this->runSql($sql, $bind);
 
-        $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
+        $result = array_column($result, 'Campaign');
 
-        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+        if (empty($this->campaign)) {
+            $selected = [];
+        } else {
+            $selected = (array) $this->campaign;
+        }
 
-        return $results;
+        // add any selected camps that aren't in the result set
+        foreach ($selected as $camp) {
+            if (!in_array($camp, $result)) {
+                $result[] = $camp;
+            }
+        }
+
+        natcasesort($result);
+
+        $camparray = [];
+
+        $camparray[] = [
+            'name' => trans('general.all_campaigns'),
+            'value' => '',
+            'selected' => empty($selected) ? 1 : 0,
+        ];
+
+        foreach ($result as $camp) {
+            $camparray[] = [
+                'name' => $camp,
+                'value' => $camp,
+                'selected' => in_array($camp, $selected) ? 1 : 0,
+            ];
+        }
+
+        return $camparray;
     }
 
     /**
