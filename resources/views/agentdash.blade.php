@@ -127,49 +127,21 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 pr0">
+            <div class="col-sm-6 pr0 ">
                 <div class="bdrcard">
-                    <div class="col-sm-4 pr0">
-                        <table class="table table-condensed ">
-                            <tr class="bdrtop_none">
-                                <th>{{__('widgets.call')}}</th>
-                                <th class="tar">{{__('widgets.talk_time')}}</th>
-                            </tr>
-
+                <table class="table table-condensed campaign_stats_table table-striped">
+                        <thead>
                             <tr>
-                                <td>{{__('widgets.calls')}}</td>
-                                <td class="tar call_total"></td>
+                                <th>Campaign</th>
+                                <th>Avg Talk Time</th>
+                                <th>Avg Hold Time</th>
+                                <th>Avg Handle Time</th>
+                                <th>Drop Rate</th>
                             </tr>
+                        </thead>
 
-                            <tr>
-                                <td>{{__('widgets.paused')}}</td>
-                                <td class="tar paused_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.waiting')}}</td>
-                                <td class="tar waiting_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.wrap_up')}}</td>
-                                <td class="tar wrapup_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.total')}}</td>
-                                <td class="tar total_total"></td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="col-sm-8 pl0">
-                        <div class="card-6 card">
-                            <div class="inandout" style="height:240px">
-                                <canvas id="rep_performance"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -177,7 +149,7 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="card" style="height:280px">
-                    <canvas id="call_status_count"></canvas>
+                    <canvas id="calls_by_camp"></canvas>
                 </div>
             </div>
 

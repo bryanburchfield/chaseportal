@@ -55,7 +55,7 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
@@ -67,7 +67,7 @@ var Dashboard = {
     },
 
     refresh(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.rep_performance(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
         }); 
@@ -209,7 +209,7 @@ var Dashboard = {
         });
     },
 
-    rep_performance:function(datefilter, chartColors){
+    campaign_stats:function(datefilter, chartColors){
 
         $.ajaxSetup({
             headers: {
@@ -219,133 +219,26 @@ var Dashboard = {
 
         $.ajax({
             async: true,
-            url: '/agentdashboard/rep_performance',
+            url: '/agentdashboard/campaign_stats',
             type: 'POST',
             dataType: 'json',
             data:{
                 datefilter:datefilter
             },
             success:function(response){
-                $('#total_talktime').html(response.rep_performance.calls_time);
 
-                var call_total = response.rep_performance.calls_time,
-                    paused_total = response.rep_performance.paused_time,
-                    waiting_total = response.rep_performance.waiting_time,
-                    wrapup_total = response.rep_performance.wrapup_time,
-                    total_total=response.rep_performance.total
-                ;
+                $('#total_talktime').html(response.campaign_stats.TotalTalkTime);
+                $('.campaign_stats_table tbody').empty();
 
-                $('.call_total').text(call_total);
-                $('.paused_total').text(paused_total);
-                $('.waiting_total').text(waiting_total);
-                $('.wrapup_total').text(wrapup_total);
-                $('.total_total').text(total_total);
-
-                var rep_performance = {
-                    labels: response.rep_performance.time,
-                    datasets: [{
-                        label: Lang.get('js_msgs.calls'),
-                        borderColor: chartColors.green,
-                        backgroundColor: chartColors.green,
-                        fill: false,
-                        data: response.rep_performance.calls,
-                        yAxisID: 'y-axis-1',
-                    },{
-                        label: Lang.get('js_msgs.paused'),
-                        borderColor: chartColors.red,
-                        backgroundColor: chartColors.red,
-                        fill: false,
-                        data: response.rep_performance.paused,
-                        yAxisID: 'y-axis-1',
-                    },{
-                        label: Lang.get('js_msgs.waiting'),
-                        borderColor: chartColors.orange,
-                        backgroundColor: chartColors.orange,
-                        fill: false,
-                        data: response.rep_performance.waiting,
-                        yAxisID: 'y-axis-1',
-                    },
-                    {
-                        label: Lang.get('js_msgs.wrapup'),
-                        borderColor: chartColors.blue,
-                        backgroundColor: chartColors.blue,
-                        fill: false,
-                        data: response.rep_performance.wrapup,
-                        yAxisID: 'y-axis-1',
+                if (response.campaign_stats.Campaign.length) {
+                    var trs='';
+                    for (var i = 0; i < response.campaign_stats.Campaign.length; i++) {
+                        trs += '<tr><td>' + response.campaign_stats.Campaign[i] + '</td><td>' + response.campaign_stats.AvgTalkTime[i] + '</td><td>' + response.campaign_stats.AvgHoldTime[i] + '</td><td>' + response.campaign_stats.AvgHandleTime[i] + '</td><td>' + response.campaign_stats.DropRate[i] + '</td></tr>';
                     }
-                    ]
-                };
-
-                var rep_performance_options={
-                    responsive: true,
-                    maintainAspectRatio:false,
-                    hoverMode: 'index',
-                    stacked: false,
-                    scales: {
-                        yAxes: [{
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            id: 'y-axis-1',
-                        }, {
-                            type: 'linear',
-                            display: false,
-                            id: 'y-axis-2',
-
-                            // grid line settings
-                            gridLines: {
-                                drawOnChartArea: false, // only want the grid lines for one axis to show up
-                            },
-                        }],
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 12
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: Lang.get('js_msgs.actions_by_day')
-                    }
+                    $('.campaign_stats_table tbody').append(trs);
                 }
 
-                // call duration inbound line graph
-                var ctx = document.getElementById('rep_performance').getContext('2d');
-
-                if(window.rep_performance_chart != undefined){
-                    window.rep_performance_chart.destroy();
-                }
-                window.rep_performance_chart = new Chart(ctx, {
-                    type: 'line',
-                    data: rep_performance,
-                    options: rep_performance_options
-                });
-
-            },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#rep_performance');
-                Dashboard.display_error(div, textStatus, errorThrown);
-            }
-        });
-    },
-
-    call_status_count:function(datefilter, chartColors){
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            async: true,
-            url: '/agentdashboard/call_status_count',
-            type: 'POST',
-            dataType: 'json',
-            data:{ datefilter:datefilter},
-            success:function(response){
-
-                var response_length = response['call_status_count']['labels'].length;
+                var response_length = response.campaign_stats.TopTen.Campaign.length;
                 const chart_colors = Object.keys(Dashboard.chartColors)
                 var chart_colors_array=[];
 
@@ -358,24 +251,24 @@ var Dashboard = {
                     j++;
                 }
 
-                var call_status_count = {
-                  labels: response['call_status_count']['labels'],
+                var calls_by_camp = {
+                  labels: response.campaign_stats.TopTen.Campaign,
                         datasets: [
                           {
                             label: "",
                             backgroundColor: chart_colors_array,
-                            data: response['call_status_count']['data']
+                            data: response.campaign_stats.TopTen.Calls
                           }
                         ]
                 };
 
-                var call_status_count_options={
+                var calls_by_camp_options={
                     responsive: true,
                     maintainAspectRatio:false,
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: Lang.get('js_msgs.call_status_by_type')
+                        text: Lang.get('js_msgs.top_ten_calls_by_camp')
                     },
                     scales: {
                         yAxes: [{
@@ -387,25 +280,25 @@ var Dashboard = {
                 }
 
                 // call status count bar graph
-                var ctx = document.getElementById('call_status_count').getContext('2d');
+                var ctx = document.getElementById('calls_by_camp').getContext('2d');
 
-                if(window.call_status_count_chart != undefined){
-                  window.call_status_count_chart.destroy();
+                if(window.calls_by_camp_chart != undefined){
+                  window.calls_by_camp_chart.destroy();
                 }
 
-                window.call_status_count_chart = new Chart(ctx, {
+                window.calls_by_camp_chart = new Chart(ctx, {
                     type: 'bar',
-                    data: call_status_count,
-                    options: call_status_count_options
+                    data: calls_by_camp,
+                    options: calls_by_camp_options
                 });
 
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#call_status_count');
+                var div = $('#rep_performance');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
-        });        
+        });
     },
-        
+
     update_datefilter:function(datefilter){
         $.ajaxSetup({
             headers: {
