@@ -20,7 +20,7 @@ class AgentDashController extends Controller
     {
         $this->getSession($request);
 
-        $campaigns = $this->campaignGroups();
+        $campaigns = $this->agentCampaigns();
 
         $jsfile[] = "agentdash.js";
         $cssfile[] = "agentdash.css";
@@ -37,6 +37,30 @@ class AgentDashController extends Controller
         ];
 
         return view('agentdash')->with($data);
+    }
+
+    private function agentCampaigns()
+    {
+        $sql = '';
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'rep' => $this->rep,
+        ];
+
+        $sql = "SELECT C.CampaignName
+            FROM Reps R
+            INNER JOIN SkillList SL ON SL.Skill = R.Skill AND SL.GroupId = R.GroupId 
+            INNER JOIN Campaigns C ON C.GroupId = SL.GroupId AND C.CampaignName = SL.Campaign AND C.IsActive = 1
+            WHERE R.GroupId = :groupid
+            AND RepName = :rep";
+
+        $results = resultsToList($this->runSql($sql, $bind));
+
+        $results = ['_MANUAL_CALL_' => '_MANUAL_CALL_'] + $results;
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
     }
 
     /**
