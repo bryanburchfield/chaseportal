@@ -55,7 +55,7 @@ var Dashboard = {
     datefilter : document.getElementById("datefilter").value,
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
@@ -67,7 +67,7 @@ var Dashboard = {
     },
 
     refresh(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.call_status_count(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
         }); 
@@ -235,34 +235,10 @@ var Dashboard = {
                     for (var i = 0; i < response.campaign_stats.Campaign.length; i++) {
                         trs += '<tr><td>' + response.campaign_stats.Campaign[i] + '</td><td>' + response.campaign_stats.AvgTalkTime[i] + '</td><td>' + response.campaign_stats.AvgHoldTime[i] + '</td><td>' + response.campaign_stats.AvgHandleTime[i] + '</td><td>' + response.campaign_stats.DropRate[i] + '</td></tr>';
                     }
-
                     $('.campaign_stats_table tbody').append(trs);
                 }
 
-            },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#rep_performance');
-                Dashboard.display_error(div, textStatus, errorThrown);
-            }
-        });
-    },
-
-    call_status_count:function(datefilter, chartColors){
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            async: true,
-            url: '/agentdashboard/call_status_count',
-            type: 'POST',
-            dataType: 'json',
-            data:{ datefilter:datefilter},
-            success:function(response){
-                console.log(response);
-                var response_length = response['call_status_count']['labels'].length;
+                var response_length = response.campaign_stats.TopTen.Campaign.length;
                 const chart_colors = Object.keys(Dashboard.chartColors)
                 var chart_colors_array=[];
 
@@ -275,18 +251,18 @@ var Dashboard = {
                     j++;
                 }
 
-                var call_status_count = {
-                  labels: response['call_status_count']['labels'],
+                var calls_by_camp = {
+                  labels: response.campaign_stats.TopTen.Campaign,
                         datasets: [
                           {
                             label: "",
                             backgroundColor: chart_colors_array,
-                            data: response['call_status_count']['data']
+                            data: response.campaign_stats.TopTen.Calls
                           }
                         ]
                 };
 
-                var call_status_count_options={
+                var calls_by_camp_options={
                     responsive: true,
                     maintainAspectRatio:false,
                     legend: { display: false },
@@ -304,25 +280,25 @@ var Dashboard = {
                 }
 
                 // call status count bar graph
-                var ctx = document.getElementById('call_status_count').getContext('2d');
+                var ctx = document.getElementById('calls_by_camp').getContext('2d');
 
-                if(window.call_status_count_chart != undefined){
-                  window.call_status_count_chart.destroy();
+                if(window.calls_by_camp_chart != undefined){
+                  window.calls_by_camp_chart.destroy();
                 }
 
-                window.call_status_count_chart = new Chart(ctx, {
+                window.calls_by_camp_chart = new Chart(ctx, {
                     type: 'bar',
-                    data: call_status_count,
-                    options: call_status_count_options
+                    data: calls_by_camp,
+                    options: calls_by_camp_options
                 });
 
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#call_status_count');
+                var div = $('#rep_performance');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
-        });        
+        });
     },
-        
+
     update_datefilter:function(datefilter){
         $.ajaxSetup({
             headers: {

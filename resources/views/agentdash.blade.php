@@ -127,7 +127,8 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 pr0">
+            <div class="col-sm-6 pr0 ">
+                <div class="bdrcard">
                 <table class="table table-condensed campaign_stats_table">
                         <thead>
                             <tr>
@@ -141,13 +142,14 @@
 
                         <tbody></tbody>
                     </table>
+                </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-9">
                 <div class="card" style="height:280px">
-                    <canvas id="call_status_count"></canvas>
+                    <canvas id="calls_by_camp"></canvas>
                 </div>
             </div>
 
