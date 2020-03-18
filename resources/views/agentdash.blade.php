@@ -129,7 +129,7 @@
 
             <div class="col-sm-6 pr0 ">
                 <div class="bdrcard">
-                <table class="table table-condensed campaign_stats_table">
+                <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
                             <tr>
                                 <th>Campaign</th>

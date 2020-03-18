@@ -672,6 +672,8 @@ span.selected_campaign {
     color: #33A09B;
     font-weight: 600;
 }
+
+.campaign_stats_table thead tr th{background: #203047;color:#fff;}
   
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{
