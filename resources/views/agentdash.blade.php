@@ -33,7 +33,7 @@
                         @foreach($campaign_list as $campaign)
                             <div class="checkbox">
                                 <label class="campaign_label">
-                                    <input class="campaign_group" required type="checkbox"   value="{{$campaign}}" name="campaigns">
+                                    <input class="campaign_group" required type="checkbox"  value="{{$campaign}}" name="campaigns">
                                     <span>
                                         {{$campaign}}
                                     </span>
