@@ -198,24 +198,29 @@ class AgentDashController extends Controller
 
         $result = $this->getCampaignStats();
 
+        $total_talk_time = 0;
+
         // Compute averages
         foreach ($result as $campaign => &$rec) {
+            $total_talk_time += $rec['TalkTime'];
+
             if ($rec['Calls'] == 0) {
                 $rec['AvgTalkTime'] = 0;
                 $rec['AvgHoldTime'] = 0;
                 $rec['AvgHandleTime'] = 0;
                 $rec['DropRate'] = 0;
             } else {
-                $rec['AvgTalkTime'] = $rec['TalkTime'] / $rec['Calls'];
-                $rec['AvgHoldTime'] = $rec['HoldTime'] / $rec['Calls'];
-                $rec['AvgHandleTime'] = ($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls'];
-                $rec['DropRate'] = $rec['Drops'] / $rec['Calls'] * 100;
+                $rec['AvgTalkTime'] = round($rec['TalkTime'] / $rec['Calls']);
+                $rec['AvgHoldTime'] = round($rec['HoldTime'] / $rec['Calls']);
+                $rec['AvgHandleTime'] = round(($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['Calls']);
+                $rec['DropRate'] = round($rec['Drops'] / $rec['Calls'] * 100, 2);
             }
         }
 
         // return separate arrays for each item
         return [
             'campaign_stats' => [
+                'TotalTalkTime' => $this->secondsToHms($total_talk_time),
                 'Campaign' => array_column($result, 'Campaign'),
                 'AvgTalkTime' => array_column($result, 'AvgTalkTime'),
                 'AvgHoldTime' => array_column($result, 'AvgHoldTime'),
