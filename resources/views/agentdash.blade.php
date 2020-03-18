@@ -27,21 +27,22 @@
                     </button>
 
                     <ul class="dropdown-menu filter_campaign stop-propagation">
+                        <div class="form-group mb0"><input type="text" class="form-control campaign_search" placeholder="{{__('general.search')}}"></div>
                         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
 
-                        {{-- @foreach($campaign_list as $campaign)
+                        @foreach($campaign_list as $campaign)
                             <div class="checkbox">
                                 <label class="campaign_label">
-                                    <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
+                                    <input class="campaign_group" required type="checkbox"   value="{{$campaign}}" name="campaigns">
                                     <span>
-                                        {{$campaign['name']}}
+                                        {{$campaign}}
                                     </span>
                                 </label>
                             </div>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
-                    
+
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <span>{{__('general.date')}}</span>

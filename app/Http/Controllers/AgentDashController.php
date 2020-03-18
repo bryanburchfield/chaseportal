@@ -22,7 +22,11 @@ class AgentDashController extends Controller
 
         $campaigns = $this->agentCampaigns();
 
-        $jsfile[] = "agentdash.js";
+        $jsfile=[
+            "agentdash.js",
+            "multiselect_lib.js"
+        ];
+
         $cssfile[] = "agentdash.css";
 
         $data = [

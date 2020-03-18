@@ -377,17 +377,14 @@ $(document).ready(function(){
         }
     }
 
-    // $('.count').each(function () {
-    //     $(this).prop('Counter',0).animate({
-    //         Counter: $(this).text()
-    //     }, {
-    //         duration: 1500,
-    //         easing: 'swing',
-    //         step: function (now) {
-    //             $(this).text(Math.ceil(now));
-    //         }
-    //     });
-    // });
+    $('.stop-propagation').on('click', function (e) {
+        e.stopPropagation();
+    });
+    
+    $('.filter_campaign').on('click', '.stop-propagation', function (e) {
+        console.log('test');
+        e.stopPropagation();
+    });
 
     $(".startdate").datepicker({
         maxDate: '0',
