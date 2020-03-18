@@ -292,7 +292,7 @@ var Dashboard = {
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: Lang.get('js_msgs.call_status_by_type')
+                        text: Lang.get('js_msgs.top_ten_calls_by_camp')
                     },
                     scales: {
                         yAxes: [{

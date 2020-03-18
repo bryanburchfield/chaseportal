@@ -82,6 +82,7 @@ return [
 	'voicemails'				=> 'Voicemails',
 	'waiting'					=> 'Waiting',
 	'wrapup'					=> 'Wrapup',
+	'top_ten_calls_by_camp' => 'Top 10 Calls by Campaign',
 
 	/// dataTable
 	'info'		=> 'Showing _START_ to _END_ of _TOTAL_ entries',
