@@ -44,7 +44,7 @@ class AgentDashController extends Controller
         return view('agentdash')->with($data);
     }
 
-    private function agentCampaigns()
+    public function agentCampaigns()
     {
         $bind = [
             'groupid' => Auth::user()->group_id,
@@ -156,6 +156,14 @@ class AgentDashController extends Controller
         }
 
         $avg_handle_time = $this->secondsToHms($avg_handle_time);
+        Log::debug(
+            ['call_volume' => [
+                'tot_outbound' => $tot_outbound,
+                'tot_inbound' => $tot_inbound,
+                'avg_handle_time' => $avg_handle_time,
+                'details' => $details,
+            ]]
+        );
 
         return ['call_volume' => [
             'tot_outbound' => $tot_outbound,
