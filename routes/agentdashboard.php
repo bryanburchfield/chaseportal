@@ -13,6 +13,5 @@ Route::prefix('agentdashboard')->group(function () {
         Route::post('call_volume', 'AgentDashController@callVolume');
         Route::post('campaign_stats', 'AgentDashController@campaignStats');
         Route::post('get_sales', 'AgentDashController@sales');
-        Route::post('update_filters', 'AgentDashController@updateFilters');
     });
 });

@@ -84,10 +84,6 @@ class AgentDashController extends Controller
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-
-
-
-
         $bind = [
             'groupid' => Auth::user()->group_id,
             'rep' => $this->rep,
@@ -109,7 +105,6 @@ class AgentDashController extends Controller
         // If the rep has a skill, then create campaign list based on that
         // otherwise, get a list of all campaigns in DialingResults tagged to them
         if ($skill === null) {
-
             $bind['fromdate'] = $fromDate;
             $bind['todate'] = $toDate;
 
@@ -202,14 +197,6 @@ class AgentDashController extends Controller
         }
 
         $avg_handle_time = $this->secondsToHms($avg_handle_time);
-        Log::debug(
-            ['call_volume' => [
-                'tot_outbound' => $tot_outbound,
-                'tot_inbound' => $tot_inbound,
-                'avg_handle_time' => $avg_handle_time,
-                'details' => $details,
-            ]]
-        );
 
         return ['call_volume' => [
             'tot_outbound' => $tot_outbound,
