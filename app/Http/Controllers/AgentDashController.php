@@ -44,8 +44,27 @@ class AgentDashController extends Controller
         return view('agentdash')->with($data);
     }
 
-    public function agentCampaigns()
+    public function agentCampaignSearch(Request $request)
     {
+        return ['search_result' => $this->agentCampaigns(trim($request->get('query')))];
+    }
+
+    private function agentCampaigns($partial = null)
+    {
+        $request = new Request();
+
+        $this->getSession($request);
+
+        list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+
+
+
+
         $bind = [
             'groupid' => Auth::user()->group_id,
             'rep' => $this->rep,
@@ -67,12 +86,6 @@ class AgentDashController extends Controller
         // If the rep has a skill, then create campaign list based on that
         // otherwise, get a list of all campaigns in DialingResults tagged to them
         if ($skill === null) {
-            $dateFilter = $this->dateFilter;
-            list($fromDate, $toDate) = $this->dateRange($dateFilter);
-
-            // convert to datetime strings
-            $fromDate = $fromDate->format('Y-m-d H:i:s');
-            $toDate = $toDate->format('Y-m-d H:i:s');
 
             $bind['fromdate'] = $fromDate;
             $bind['todate'] = $toDate;
@@ -84,6 +97,11 @@ class AgentDashController extends Controller
                 AND Rep = :rep
                 AND Date >= :fromdate
                 AND Date < :todate";
+
+            if (!empty($partial)) {
+                $bind['name'] = $partial . '%';
+                $sql .= " AND Campaign LIKE :name";
+            }
         } else {
             $sql = "SELECT C.CampaignName as Campaign
             FROM Reps R
@@ -91,6 +109,11 @@ class AgentDashController extends Controller
             INNER JOIN Campaigns C ON C.GroupId = SL.GroupId AND C.CampaignName = SL.Campaign AND C.IsActive = 1
             WHERE R.GroupId = :groupid
             AND R.RepName = :rep";
+
+            if (!empty($partial)) {
+                $bind['name'] = $partial . '%';
+                $sql .= " AND CampaignName LIKE :name";
+            }
         }
 
         $result = $this->runSql($sql, $bind);
