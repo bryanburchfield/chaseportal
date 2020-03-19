@@ -111,10 +111,10 @@
             <div class="col-sm-6 pl0">
                 <div class="bdrcard">
                     <div class="col-sm-4 pr0">
-                        <table class="table table-condensed ">
+                        <table class="table table-condensed">
                             <tr class="bdrtop_none">
-                                <th>{{__('widgets.call_types')}}</th>
-                                <th class="tar"># {{__('widgets.call_status')}}</th>
+                                <th>{{__('widgets.campaign')}}</th>
+                                <th class="tar">{{__('widgets.numb_of_calls')}}</th>
                             </tr>
 
                             <tr>

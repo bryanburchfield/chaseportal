@@ -386,7 +386,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/dashboards/campaign_search',
+            url: '/agentdashboard/campaign_search',
             type: 'POST',
             dataType: 'json',
             data: { query: query },

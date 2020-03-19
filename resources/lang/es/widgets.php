@@ -48,6 +48,7 @@ return [
 	'max_handle_time'	=> 'Tiempo Máximo de Manejo',
 	'max_hold_time'		=> 'Tiempo Máximo de Espera',
 	'missed_calls'		=> 'Llamadas Perdidas',
+	'numb_of_calls'		=> '# de llamadas',
 	'outbound'			=> 'Saliente',
 	'rep' 				=> 'Agente',
 	'rep_avg_handletime' => 'Tiempo Promedio de Manejo por Agente',
