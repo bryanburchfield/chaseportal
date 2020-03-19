@@ -475,7 +475,7 @@ var Dashboard = {
         });
 
         $.ajax({
-            url: '/dashboards/update_filters',
+            url: '/agentdashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: { campaign: campaigns },
