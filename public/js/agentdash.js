@@ -108,6 +108,7 @@ var Dashboard = {
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
                 $('#total_outbound .total').html(response.call_volume.tot_outbound);
                 $('#total_inbound .total').html(response.call_volume.tot_inbound);
+                $('#total_talktime').html(response.call_volume.tot_talk_time);
 
                 var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
 
@@ -232,7 +233,7 @@ var Dashboard = {
             },
             success:function(response){
                 console.log(response);
-                $('#total_talktime').html(response.campaign_stats.TotalTalkTime);
+
                 $('.campaign_stats_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {
