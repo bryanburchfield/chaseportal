@@ -186,6 +186,7 @@ class AgentDashController extends Controller
 
         $tot_outbound = 0;
         $tot_inbound = 0;
+        $tot_talk_time = 0;
         $avg_handle_time = 0;
 
         $result = $this->getCallVolume();
@@ -204,17 +205,28 @@ class AgentDashController extends Controller
 
         $avg_handle_time = $this->secondsToHms($avg_handle_time);
 
+        // Now get talk time
+        $result = $this->getAgentTalkTime();
+
+        if (count($result)) {
+            if ($result[0]['TalkTime'] !== null) {
+                $tot_talk_time = $result[0]['TalkTime'];
+            }
+        }
+
         Log::debug(['call_volume' => [
             'tot_outbound' => $tot_outbound,
             'tot_inbound' => $tot_inbound,
-            'avg_handle_time' => $avg_handle_time,
+            'tot_talk_time' => $this->secondsToHms($tot_talk_time),
+            'avg_handle_time' => $this->secondsToHms($avg_handle_time),
             'details' => $details,
         ]]);
 
         return ['call_volume' => [
             'tot_outbound' => $tot_outbound,
             'tot_inbound' => $tot_inbound,
-            'avg_handle_time' => $avg_handle_time,
+            'tot_talk_time' => $this->secondsToHms($tot_talk_time),
+            'avg_handle_time' => $this->secondsToHms($avg_handle_time),
             'details' => $details,
         ]];
     }
@@ -264,6 +276,42 @@ class AgentDashController extends Controller
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function getAgentTalkTime()
+    {
+        $dateFilter = $this->dateFilter;
+        $campaign = $this->campaign;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'rep' => $this->rep,
+            'fromdate' => $fromDate,
+            'todate' => $toDate,
+        ];
+
+        $sql = "SELECT 'TalkTime' = SUM(AA.Duration)
+            FROM AgentActivity AA
+            WHERE AA.GroupId = :groupid
+            AND AA.Rep = :rep
+            AND AA.Date >= :fromdate
+            AND AA.Date < :todate
+            AND AA.Action IN ('Call', 'ManualCall', 'InboundCall')";
+
+        list($where, $extrabind) = $this->campaignClause('AA', 0, $campaign);
+        $sql .= " $where";
+        $bind = array_merge($bind, $extrabind);
+
+        Log::debug($sql);
+        Log::debug($bind);
 
         return $this->runSql($sql, $bind);
     }
