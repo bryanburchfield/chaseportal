@@ -23,7 +23,7 @@ class AgentDashController extends Controller
 
         $campaigns = $this->agentCampaigns();
 
-        $jsfile=[
+        $jsfile = [
             "agentdash.js",
             "multiselect_lib.js"
         ];
@@ -46,13 +46,12 @@ class AgentDashController extends Controller
 
     private function agentCampaigns()
     {
-        // If the rep has a skill, then create campaign list based on that
-        // otherwise, get a list of all campaigns in DialingResults tagged to them
         $bind = [
             'groupid' => Auth::user()->group_id,
             'rep' => $this->rep,
         ];
 
+        // Find if the rep has a skill
         $sql = "SELECT Skill FROM Reps
             WHERE GroupId = :groupid
             AND RepName = :rep";
@@ -65,9 +64,26 @@ class AgentDashController extends Controller
             $skill = $results[0]['Skill'];
         }
 
-
+        // If the rep has a skill, then create campaign list based on that
+        // otherwise, get a list of all campaigns in DialingResults tagged to them
         if ($skill === null) {
-            // get from DR
+            $dateFilter = $this->dateFilter;
+            list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+            // convert to datetime strings
+            $fromDate = $fromDate->format('Y-m-d H:i:s');
+            $toDate = $toDate->format('Y-m-d H:i:s');
+
+            $bind['fromdate'] = $fromDate;
+            $bind['todate'] = $toDate;
+
+            $sql = "SELECT DISTINCT Campaign
+                FROM DialingResults
+                WHERE GroupId = :groupid
+                AND Campaign != ''
+                AND Rep = :rep
+                AND Date >= :fromdate
+                AND Date < :todate";
         } else {
             $sql = "SELECT C.CampaignName as Campaign
             FROM Reps R
@@ -125,147 +141,78 @@ class AgentDashController extends Controller
     {
         $this->getSession($request);
 
-        $result = $this->getCallVolume();
         $details = $this->filterDetails($this->dateFilter);
-
-        $time_labels = [];
-        $outbound = [];
-        $inbound = [];
-        $manual = [];
 
         $tot_outbound = 0;
         $tot_inbound = 0;
-        $tot_manual = 0;
-        $tot_total = 0;
-        $duration = 0;
+        $avg_handle_time = 0;
 
-        foreach ($result as $r) {
-            if ($this->byHour($this->dateFilter)) {
-                $datetime = date("g:i", strtotime($r['Time']));
-            } else {
-                $datetime = date("D n/j/y", strtotime($r['Time']));
-            }
+        $result = $this->getCallVolume();
 
-            $tot_outbound += $r['Outbound'];
-            $tot_manual += $r['Manual'];
-            $tot_inbound += $r['Inbound'];
-            $duration += $r['Duration'];
-
-            array_push($time_labels, $datetime);
-            array_push($inbound, $r['Inbound']);
-            array_push($outbound, $r['Outbound']);
-            array_push($manual, $r['Manual']);
+        if (count($result)) {
+            $tot_outbound = $result[0]['OutboundCalls'];
+            $tot_inbound = $result[0]['InboundCalls'];
+            $avg_handle_time = $result[0]['HandledCalls'] == 0 ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
         }
 
-        $tot_total = $tot_inbound + $tot_outbound + $tot_manual;
-        $avg_handle_time = $this->secondsToHms($tot_total != 0 ? round($duration / $tot_total) : 0);
+        $avg_handle_time = $this->secondsToHms($avg_handle_time);
 
         return ['call_volume' => [
-            'time' => $time_labels,
-            'outbound' => $outbound,
-            'inbound' => $inbound,
-            'manual' => $manual,
             'tot_outbound' => $tot_outbound,
             'tot_inbound' => $tot_inbound,
-            'tot_manual' => $tot_manual,
-            'tot_total' => $tot_total,
             'avg_handle_time' => $avg_handle_time,
             'details' => $details,
         ]];
     }
 
     /**
-     * Query call volume
+     * Query call volume - This is specific to the selected agent / campaign(s)
      *
      * @param boolean $prev
      * @return void
      */
     private function getCallVolume()
     {
-        $tz = Auth::user()->tz;
-
         $dateFilter = $this->dateFilter;
+        $campaign = $this->campaign;
+
         list($fromDate, $toDate) = $this->dateRange($dateFilter);
 
         // convert to datetime strings
         $fromDate = $fromDate->format('Y-m-d H:i:s');
         $toDate = $toDate->format('Y-m-d H:i:s');
 
-        $byHour = $this->byHour($dateFilter);
-
-        // group by date/hour or just date
-        if ($byHour) {
-            $mapFunction = 'dateTimeToHour';
-            $format = 'Y-m-d H:i:s.000';
-            $modifier = "+1 hour";
-            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz'),
-            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME))";
-        } else {
-            $mapFunction = 'dateTimeToDay';
-            $format = 'Y-m-d 00:00:00.000';
-            $modifier = "+1 day";
-            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' AS DATE) AS DATETIME)
-            ";
-        }
-
-        $bind = [];
-
-        $sql = "SELECT Time,
-        'Outbound' = SUM([Outbound]),
-        'Inbound' = SUM([Inbound]),
-        'Manual' = SUM([Manual]),
-        'Duration' = SUM([Duration])
-        FROM (";
-
-        $union = '';
-        foreach ($this->databases as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-            $bind['fromdate' . $i] = $fromDate;
-            $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
-
-            $sql .= " $union SELECT $xAxis as 'Time',
-	        'Outbound' = SUM(CASE WHEN DR.CallType NOT IN (1,2,11) THEN 1 ELSE 0 END),
-			'Inbound' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
-			'Manual' = SUM(CASE WHEN DR.CallType IN (2) THEN 1 ELSE 0 END),
-            'Duration' = SUM(DR.Duration)
-            FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.Duration <> 0
-            AND DR.CallType NOT IN (7,8)
-            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
-            AND DR.GroupId = :groupid$i
-            AND DR.Rep = :rep$i
-            AND DR.Date >= :fromdate$i
-			AND DR.Date < :todate$i
-            GROUP BY $xAxis";
-
-            $union = 'UNION ALL';
-        }
-        $sql .= ") tmp
-        GROUP BY [Time]
-        ORDER BY [Time]";
-
-        $result = $this->runSql($sql, $bind);
-
-        $params = [
-            'fromDate' => $fromDate,
-            'toDate' => $toDate,
-            'modifier' => $modifier,
-            'byHour' => $byHour,
-            'format' => $format,
-            'zeroRec' => [
-                'Time' => '',
-                'Outbound' => 0,
-                'Inbound' => 0,
-                'Manual' => 0,
-                'Duration' => 0,
-            ],
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'rep' => $this->rep,
+            'fromdate' => $fromDate,
+            'todate' => $toDate,
         ];
 
-        $result = $this->formatVolume($result, $params);
+        $sql = "SELECT
+            'InboundCalls' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
+            'OutboundCalls' = SUM(CASE WHEN DR.CallType NOT IN (1,11) THEN 1 ELSE 0 END),
+            'HandledCalls' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+                'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+                'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
+            'HandleTime' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
+                'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+                'CR_HANGUP', 'Inbound Voicemail') THEN DR.HandleTime ELSE 0 END)
+            FROM DialingResults DR
+            WHERE DR.CallType NOT IN (7,8)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND Duration > 0
+            AND DR.Rep = :rep
+            AND DR.Date >= :fromdate
+            AND DR.Date < :todate
+            AND DR.GroupId = :groupid";
 
-        // now format the xAxis datetimes and return the results
-        return array_map(array(&$this, $mapFunction), $result);
+
+        list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
+        $sql .= " $where";
+        $bind = array_merge($bind, $extrabind);
+
+        return $this->runSql($sql, $bind);
     }
 
     public function campaignStats(Request $request)
