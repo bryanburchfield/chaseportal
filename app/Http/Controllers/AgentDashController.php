@@ -34,7 +34,6 @@ class AgentDashController extends Controller
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
             'dateFilter' => $this->dateFilter,
-            'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
             'curdash' => 'agentdash',
             'jsfile' => $jsfile,
@@ -199,11 +198,9 @@ class AgentDashController extends Controller
                 $tot_inbound = $result[0]['InboundCalls'];
             }
             if ($result[0]['HandleTime'] !== null && $result[0]['HandledCalls'] !== null) {
-                $avg_handle_time = $result[0]['HandledCalls'] == 0 ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
+                $avg_handle_time = ($result[0]['HandledCalls'] == 0) ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
             }
         }
-
-        $avg_handle_time = $this->secondsToHms($avg_handle_time);
 
         // Now get talk time
         $result = $this->getAgentTalkTime();
@@ -213,14 +210,6 @@ class AgentDashController extends Controller
                 $tot_talk_time = $result[0]['TalkTime'];
             }
         }
-
-        Log::debug(['call_volume' => [
-            'tot_outbound' => $tot_outbound,
-            'tot_inbound' => $tot_inbound,
-            'tot_talk_time' => $this->secondsToHms($tot_talk_time),
-            'avg_handle_time' => $this->secondsToHms($avg_handle_time),
-            'details' => $details,
-        ]]);
 
         return ['call_volume' => [
             'tot_outbound' => $tot_outbound,
@@ -258,11 +247,11 @@ class AgentDashController extends Controller
         $sql = "SELECT
             'InboundCalls' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
             'OutboundCalls' = SUM(CASE WHEN DR.CallType NOT IN (1,11) THEN 1 ELSE 0 END),
-            'HandledCalls' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-                'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+            'HandledCalls' = SUM(CASE WHEN DR.CallType IN (1,11) AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
+                'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
                 'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-            'HandleTime' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS', 'CR_NORB', 'CR_BUSY',
-                'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
+            'HandleTime' = SUM(CASE WHEN DR.CallType IN (1,11) AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
+                'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
                 'CR_HANGUP', 'Inbound Voicemail') THEN DR.HandleTime ELSE 0 END)
             FROM DialingResults DR
             WHERE DR.CallType NOT IN (7,8)
@@ -304,14 +293,11 @@ class AgentDashController extends Controller
             AND AA.Rep = :rep
             AND AA.Date >= :fromdate
             AND AA.Date < :todate
-            AND AA.Action IN ('Call', 'ManualCall', 'InboundCall')";
+            AND AA.Action = 'InboundCall'";
 
         list($where, $extrabind) = $this->campaignClause('AA', 0, $campaign);
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
-
-        Log::debug($sql);
-        Log::debug($bind);
 
         return $this->runSql($sql, $bind);
     }
@@ -519,7 +505,6 @@ class AgentDashController extends Controller
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
 
             $sql .= " $union SELECT 'Sales' = COUNT(id)
                 FROM [$db].[dbo].[DialingResults] DR
@@ -530,7 +515,6 @@ class AgentDashController extends Controller
                     AND (Campaign = DR.Campaign OR Campaign = '')
                     ORDER BY [id]) DI
                 WHERE DR.GroupId = :groupid$i
-                AND DR.Rep = :rep$i
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i
                 AND DR.CallType IN (1,11)
