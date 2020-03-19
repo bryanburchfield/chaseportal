@@ -104,9 +104,9 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
+                console.log(response);
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
-                $('#total_outbound .total').html(parseInt(response.call_volume.tot_outbound) + parseInt(response.call_volume.tot_manual));
+                $('#total_outbound .total').html(response.call_volume.tot_outbound);
                 $('#total_inbound .total').html(response.call_volume.tot_inbound);
 
                 var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
@@ -231,7 +231,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
+                console.log(response);
                 $('#total_talktime').html(response.campaign_stats.TotalTalkTime);
                 $('.campaign_stats_table tbody').empty();
 
@@ -480,7 +480,6 @@ var Dashboard = {
             dataType: 'json',
             data: { campaign: campaigns },
             success: function (response) {
-                console.log(response);
                 Dashboard.set_campaigns(response);
             }
         });
@@ -510,7 +509,6 @@ var Dashboard = {
         var checked;
 
         for (var i = 0; i < obj.length; i++) {
-            console.log('SET CAMPS:'+ obj[i].value);
             checked = obj[i].selected;
             if (checked) { checked = 'checked'; } else { checked = ''; }
             campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"><span>' + obj[i].name + '</span></label></div>';
@@ -538,7 +536,6 @@ $(document).ready(function(){
     });
     
     $('.filter_campaign').on('click', '.stop-propagation', function (e) {
-        console.log('test');
         e.stopPropagation();
     });
 
