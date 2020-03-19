@@ -8,6 +8,7 @@ Route::prefix('agentdashboard')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
 
         // ajax targets
+        Route::post('update_filters', 'AgentDashController@agentUpdateFilters');
         Route::post('campaign_search', 'AgentDashController@agentCampaignSearch');
         Route::post('call_volume', 'AgentDashController@callVolume');
         Route::post('campaign_stats', 'AgentDashController@campaignStats');

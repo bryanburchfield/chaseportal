@@ -49,6 +49,29 @@ class AgentDashController extends Controller
         return ['search_result' => $this->agentCampaigns(trim($request->get('query')))];
     }
 
+    public function agentUpdateFilters(Request $request)
+    {
+        $filters = [
+            'databases',
+            'campaign',
+            'dateFilter',
+        ];
+
+        foreach ($filters as $filter) {
+            if (isset($request->$filter)) {
+                $val = $request->input($filter);
+                if (is_array($val)) {
+                    $val = array_filter($val);
+                }
+                session([$filter => $val]);
+            }
+        }
+
+        Auth::user()->persistFilters($request);
+
+        return ['campaigns' => $this->agentCampaigns()];
+    }
+
     private function agentCampaigns($partial = null)
     {
         $request = new Request();
