@@ -191,12 +191,25 @@ class AgentDashController extends Controller
         $result = $this->getCallVolume();
 
         if (count($result)) {
-            $tot_outbound = $result[0]['OutboundCalls'];
-            $tot_inbound = $result[0]['InboundCalls'];
-            $avg_handle_time = $result[0]['HandledCalls'] == 0 ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
+            if ($result[0]['OutboundCalls'] !== null) {
+                $tot_outbound = $result[0]['OutboundCalls'];
+            }
+            if ($result[0]['InboundCalls'] !== null) {
+                $tot_inbound = $result[0]['InboundCalls'];
+            }
+            if ($result[0]['HandleTime'] !== null && $result[0]['HandledCalls'] !== null) {
+                $avg_handle_time = $result[0]['HandledCalls'] == 0 ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
+            }
         }
 
         $avg_handle_time = $this->secondsToHms($avg_handle_time);
+
+        Log::debug(['call_volume' => [
+            'tot_outbound' => $tot_outbound,
+            'tot_inbound' => $tot_inbound,
+            'avg_handle_time' => $avg_handle_time,
+            'details' => $details,
+        ]]);
 
         return ['call_volume' => [
             'tot_outbound' => $tot_outbound,
@@ -247,7 +260,6 @@ class AgentDashController extends Controller
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
             AND DR.GroupId = :groupid";
-
 
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
