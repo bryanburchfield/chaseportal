@@ -480,6 +480,7 @@ var Dashboard = {
             dataType: 'json',
             data: { campaign: campaigns },
             success: function (response) {
+                console.log(response);
                 Dashboard.set_campaigns(response);
             }
         });
@@ -509,6 +510,7 @@ var Dashboard = {
         var checked;
 
         for (var i = 0; i < obj.length; i++) {
+            console.log('SET CAMPS:'+ obj[i].value);
             checked = obj[i].selected;
             if (checked) { checked = 'checked'; } else { checked = ''; }
             campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"><span>' + obj[i].name + '</span></label></div>';
