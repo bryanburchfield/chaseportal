@@ -766,6 +766,14 @@ ul.dropdown-menu.filter_campaign .checkbox {
     border: none;
 }
 
+.max_height350{max-height: 350px;}
+
+.overflow_none{overflow: hidden;}
+.campaign_totals{
+  position: relative;
+  overflow-y: scroll; 
+}
+
   
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{

@@ -106,12 +106,12 @@
                 </div><!-- end card -->
             </div><!-- end column -->
         </div>
-
-        <div class="row bdrless_card">
-            <div class="col-sm-6 pl0">
-                <div class="bdrcard">
-                    <div class="col-sm-4 pr0">
-                        <table class="table table-condensed campaign_totals_table">
+        
+        <div class="row bdrless_card max_height350">
+            <div class="col-sm-12 pl0 pr0">
+                <div class="bdrcard overflow_none" >
+                    <div class="col-sm-4 campaign_totals" style="height:330px">
+                        <table class="table table-condensed campaign_totals_table" >
                             <thead>
                                 <tr class="bdrtop_none">
                                     <th>{{__('widgets.campaign')}}</th>
@@ -125,16 +125,18 @@
 
                     <div class="col-sm-8 pl0">
                         <div class="card-6 card">
-                            <div class="inbound inandout" style="height:240px">
+                            <div class="inbound inandout" style="height:330px">
                                 <canvas id="campaign_calls"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-sm-6 pr0 ">
-                <div class="bdrcard">
+        <div class="row bdrless_card">
+            <div class="col-sm-9 pl0">
+                <div class="bdrcard" style="height:285px">
                 <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
                             <tr>
@@ -150,19 +152,19 @@
                     </table>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="card" style="height:280px">
-                    <canvas id="calls_by_camp"></canvas>
-                </div>
-            </div>
-
-            <div class="col-sm-3 ">
+            <div class="col-sm-3 pr0">
                 <div class="card blue total_calls_card">
                     <h1 class="title">{{__('widgets.total_conversions')}}</h1>
                     <h2 class="total_conversions cnt"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card" style="height:370px">
+                    <canvas id="calls_by_camp"></canvas>
                 </div>
             </div>
         </div>
