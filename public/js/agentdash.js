@@ -59,7 +59,7 @@ var Dashboard = {
     init:function(){
         $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
-            $('.preloader').fadeOut('slow');
+            // $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
         });        
     },
@@ -71,7 +71,7 @@ var Dashboard = {
     refresh(){
         $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
-            $('.preloader').fadeOut('slow');
+            // $('.preloader').fadeOut('slow');
         }); 
     },
 
@@ -113,8 +113,6 @@ var Dashboard = {
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
                 var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
-
-                
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume');
@@ -329,9 +327,9 @@ var Dashboard = {
                     data: calls_by_camp,
                     options: calls_by_camp_options
                 });
-
+                $('.preloader').fadeOut('slow');
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#rep_performance');
+                var div = $('#calls_by_camp');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
