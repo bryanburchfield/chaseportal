@@ -312,13 +312,13 @@ class AgentDashController extends Controller
         ksort($result, SORT_NATURAL | SORT_FLAG_CASE);
 
         $total_talk_time = 0;
-        $top_ten = [];
+        $calls_by_campaign = [];
 
         // Compute averages
         foreach ($result as $campaign => &$rec) {
             $total_talk_time += $rec['TalkTime'];
 
-            $top_ten[$rec['Campaign']] = $rec['Dials'];
+            $calls_by_campaign[$rec['Campaign']] = $rec['Dials'];
 
             $rec['AvgTalkTime'] = $this->secondsToHms(($rec['AgentCalls'] == 0) ? 0 : $rec['TalkTime'] / $rec['AgentCalls']);
             $rec['AvgHandleTime'] = $this->secondsToHms(($rec['AgentCalls'] == 0) ? 0 : ($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['AgentCalls']);
@@ -326,14 +326,20 @@ class AgentDashController extends Controller
             $rec['DropRate'] = number_format(($rec['Dials'] == 0) ? 0 : $rec['Drops'] / $rec['Dials'] * 100, 2) . '%';
         }
 
-        // sort by calls and slice top 10
-        arsort($top_ten);
-        $top_ten = array_slice($top_ten, 0, 10);
+        // sort by calls 
+        arsort($calls_by_campaign);
+
+        // and slice top 10
+        $top_ten = array_slice($calls_by_campaign, 0, 10);
 
         // return separate arrays for each item
         return [
             'campaign_stats' => [
                 'TotalTalkTime' => $this->secondsToHms($total_talk_time),
+                'CallsByCampaign' => [
+                    'Campaign' => array_keys($calls_by_campaign),
+                    'Calls' => array_values($calls_by_campaign),
+                ],
                 'TopTen' => [
                     'Campaign' => array_keys($top_ten),
                     'Calls' => array_values($top_ten),
