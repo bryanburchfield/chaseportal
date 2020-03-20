@@ -12,6 +12,7 @@ Route::prefix('agentdashboard')->group(function () {
         Route::post('campaign_search', 'AgentDashController@agentCampaignSearch');
         Route::post('call_volume', 'AgentDashController@callVolume');
         Route::post('campaign_stats', 'AgentDashController@campaignStats');
+        Route::post('campaign_chart', 'AgentDashController@campaignChart');
         Route::post('get_sales', 'AgentDashController@sales');
     });
 });

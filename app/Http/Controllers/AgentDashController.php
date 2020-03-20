@@ -416,6 +416,7 @@ class AgentDashController extends Controller
         $campaign_stats = [];
         // this is set to true after an inbound call so we can look for dispo recs
         $aftercall = false;
+        $campaign = '';
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
             if ($aftercall) {
@@ -526,5 +527,130 @@ class AgentDashController extends Controller
 
         $result = $this->runSql($sql, $bind);
         return $result[0];
+    }
+
+    public function campaignChart(Request $request)
+    {
+        $this->getSession($request);
+
+        $result = $this->getCampaignChart();
+
+        $times = [];
+        $campaign_calls = [];
+
+        if (count($result)) {
+            // build time array from the first camp
+            $campaigns = array_keys($result);
+            foreach ($result[$campaigns[0]] as $rec) {
+                $times[] = $rec['Time'];
+            }
+            // and buld the calls over time array
+            foreach ($result as $campaign => $details) {
+                $campaign_calls[] = [
+                    'campaign' => $campaign,
+                    'calls' => array_column($details, 'Calls'),
+                ];
+            }
+        }
+
+        return ['campaign_chart' => [
+            'times' => $times,
+            'campaign_calls' => $campaign_calls,
+        ]];
+    }
+
+    public function getCampaignChart()
+    {
+        $dateFilter = $this->dateFilter;
+        $timeZoneName = Auth::user()->tz;
+
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        $byHour = $this->byHour($dateFilter);
+
+        // group by date/hour or just date
+        if ($byHour) {
+            $mapFunction = 'dateTimeToHour';
+            $format = 'Y-m-d H:i:s.000';
+            $modifier = "+1 hour";
+            $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName'),
+            CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+        } else {
+            $mapFunction = 'dateTimeToDay';
+            $format = 'Y-m-d 00:00:00.000';
+            $modifier = "+1 day";
+            $xAxis = "CAST(CAST(CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME)
+            ";
+        }
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+        $bind = [];
+
+        $sql = "SELECT Campaign, [Time],'Calls' = SUM([Calls])
+        FROM (";
+
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['groupid' . $i] = Auth::user()->group_id;
+            $bind['fromdate' . $i] = $fromDate;
+            $bind['todate' . $i] = $toDate;
+            $bind['rep' . $i] = $this->rep;
+
+            $sql .= " $union SELECT DR.Campaign, $xAxis Time,
+			'Calls' = COUNT(*)
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.Duration > 0
+            AND DR.CallType IN (1,11)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND DR.GroupId = :groupid$i
+            AND DR.Rep = :rep$i
+            AND DR.Date >= :fromdate$i
+			AND DR.Date < :todate$i
+            GROUP BY DR.Campaign, $xAxis";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp
+        GROUP BY Campaign, [Time]
+        ORDER BY Campaign, [Time]";
+
+        $result = $this->runSql($sql, $bind);
+
+        // build out arrays for each campaign
+        $params = [
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+            'modifier' => $modifier,
+            'byHour' => $byHour,
+            'format' => $format,
+            'zeroRec' => [
+                'Time' => '',
+                'Calls' => 0,
+            ],
+        ];
+
+        $campaign = '';
+        $final = [];
+        $tmp = [];
+
+        foreach ($result as $rec) {
+            if ($campaign != '' && $rec['Campaign'] != $campaign) {
+                $final[$campaign] = array_map(array(&$this, $mapFunction), $this->formatVolume($tmp, $params));
+                $tmp = [];
+            }
+            $tmp[] = [
+                'Time' => $rec['Time'],
+                'Calls' => $rec['Calls'],
+            ];
+            $campaign = $rec['Campaign'];
+        }
+        if (count($tmp)) {
+            $final[$campaign] = array_map(array(&$this, $mapFunction), $this->formatVolume($tmp, $params));
+        }
+
+        return $final;
     }
 }
