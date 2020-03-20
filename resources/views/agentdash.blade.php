@@ -111,38 +111,22 @@
             <div class="col-sm-6 pl0">
                 <div class="bdrcard">
                     <div class="col-sm-4 pr0">
-                        <table class="table table-condensed">
-                            <tr class="bdrtop_none">
-                                <th>{{__('widgets.campaign')}}</th>
-                                <th class="tar">{{__('widgets.numb_of_calls')}}</th>
-                            </tr>
+                        <table class="table table-condensed campaign_totals_table">
+                            <thead>
+                                <tr class="bdrtop_none">
+                                    <th>{{__('widgets.campaign')}}</th>
+                                    <th class="tar">{{__('widgets.numb_of_calls')}}</th>
+                                </tr>
+                            </thead>
 
-                            <tr>
-                                <td>{{__('widgets.inbound')}}</td>
-                                <td class="tar inbound_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.manual')}}</td>
-                                <td class="tar manual_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.outbound')}}</td>
-                                <td class="tar outbound_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.total')}}</td>
-                                <td class="tar total_calls"></td>
-                            </tr>
+                            <tbody></tbody>
                         </table>
                     </div>
 
                     <div class="col-sm-8 pl0">
                         <div class="card-6 card">
                             <div class="inbound inandout" style="height:240px">
-                                <canvas id="call_volume"></canvas>
+                                <canvas id="campaign_calls"></canvas>
                             </div>
                         </div>
                     </div>

@@ -57,7 +57,7 @@ var Dashboard = {
     active_camp_search: '',
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
@@ -69,7 +69,7 @@ var Dashboard = {
     },
 
     refresh(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
         }); 
@@ -104,49 +104,74 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
                 $('#total_outbound .total').html(response.call_volume.tot_outbound);
                 $('#total_inbound .total').html(response.call_volume.tot_inbound);
                 $('#total_talktime').html(response.call_volume.tot_talk_time);
 
-                var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
-
-                $('.inbound_total').html(response.call_volume.tot_inbound);
-                $('.outbound_total').html(response.call_volume.tot_outbound);
-                $('.manual_total').html(response.call_volume.tot_manual);
-                $('.total_calls').html(response.call_volume.tot_total);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
-                var call_volume = {
+                var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
 
-                    labels: response.call_volume.time,
-                    datasets: [{
-                        label: Lang.get('js_msgs.inbound'),
-                        borderColor: chartColors.orange,
-                        backgroundColor: chartColors.orange,
-                        fill: false,
-                        data: response.call_volume.inbound,
-                        yAxisID: 'y-axis-1',
-                    },{
-                        label: Lang.get('js_msgs.outbound'),
-                        borderColor: chartColors.green,
-                        backgroundColor: chartColors.green,
-                        fill: false,
-                        data: response.call_volume.outbound,
-                        yAxisID: 'y-axis-1'
-                    },{
-                        label: Lang.get('js_msgs.manual'),
-                        borderColor: chartColors.grey,
-                        backgroundColor: chartColors.grey,
-                        fill: false,
-                        data: response.call_volume.manual,
-                        yAxisID: 'y-axis-1'
-                    }]
+                
+
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#call_volume');
+                Dashboard.display_error(div, textStatus, errorThrown);
+
+            }
+        });
+    },
+
+    campaign_chart:function(datefilter, chartColors){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            async: true,
+            url: '/agentdashboard/campaign_chart',
+            type: 'POST',
+            dataType: 'json',
+            data:{
+                datefilter:datefilter
+            },
+            success:function(response){
+
+                var campaign_calls = {
+                    labels: response.campaign_chart.times,
+                    datasets: []
                 };
 
-                var call_volume_options={
+                var j=0;
+                const chart_colors = Object.keys(Dashboard.chartColors)
+                var chart_colors_array=[];
+                var j=0;
+                for (var i=0; i < response.campaign_chart.campaign_calls.length; i++) {
+                    if(j==chart_colors.length){
+                        j=0;
+                    }
+                    chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
+                    j++;
+                }
+
+                for(var i=0; i<response.campaign_chart.campaign_calls.length;i++){
+                    if(j==chart_colors_array.length){j=0;}
+                    campaign_calls.datasets.push({
+                            label: response.campaign_chart.campaign_calls[i].campaign,
+                            borderColor: chart_colors_array[j],
+                            backgroundColor: chart_colors_array[j],
+                            fill: false,
+                            data: response.campaign_chart.campaign_calls[i].calls,
+                            yAxisID: 'y-axis-1',
+                        });
+                    j++;
+                }
+
+                var campaign_calls_options={
                     responsive: true,
                     maintainAspectRatio:false,
                     hoverMode: 'index',
@@ -181,18 +206,18 @@ var Dashboard = {
                 }
 
                 // call volume inbound line graph
-                var ctx = document.getElementById('call_volume').getContext('2d');
-                if(window.call_volume_chart != undefined){
-                    window.call_volume_chart.destroy();
+                var ctx = document.getElementById('campaign_calls').getContext('2d');
+                if(window.campaign_calls_chart != undefined){
+                    window.campaign_calls_chart.destroy();
                 }
-                window.call_volume_chart = new Chart(ctx, {
+                window.campaign_calls_chart = new Chart(ctx, {
                     type: 'line',
-                    data: call_volume,
-                    options: call_volume_options
+                    data: campaign_calls,
+                    options: campaign_calls_options
                 });
 
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#call_volume');
+                var div = $('#campaign_calls');
                 Dashboard.display_error(div, textStatus, errorThrown);
 
             }
@@ -232,9 +257,8 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
 
-                $('.campaign_stats_table tbody').empty();
+                $('.campaign_stats_table tbody, .campaign_totals_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {
                     var trs='';
@@ -242,6 +266,14 @@ var Dashboard = {
                         trs += '<tr><td>' + response.campaign_stats.Campaign[i] + '</td><td>' + response.campaign_stats.AvgTalkTime[i] + '</td><td>' + response.campaign_stats.AvgHoldTime[i] + '</td><td>' + response.campaign_stats.AvgHandleTime[i] + '</td><td>' + response.campaign_stats.DropRate[i] + '</td></tr>';
                     }
                     $('.campaign_stats_table tbody').append(trs);
+                }
+
+                if (response.campaign_stats.CallsByCampaign.Campaign.length) {
+                    var trs='';
+                    for (var i = 0; i < response.campaign_stats.CallsByCampaign.Campaign.length; i++) {
+                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td></tr>';
+                    }
+                    $('.campaign_totals_table tbody').append(trs);
                 }
 
                 var response_length = response.campaign_stats.TopTen.Campaign.length;
