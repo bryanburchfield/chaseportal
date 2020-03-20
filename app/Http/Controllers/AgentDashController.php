@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
+use Illuminate\Support\Carbon;
 
 class AgentDashController extends Controller
 {
@@ -541,7 +542,14 @@ class AgentDashController extends Controller
             // build time array from the first camp
             $campaigns = array_keys($result);
             foreach ($result[$campaigns[0]] as $rec) {
-                $times[] = $rec['Time'];
+
+                if ($this->byHour($this->dateFilter)) {
+                    $datetime = Carbon::parse($rec['Time'])->isoFormat('H:mm');
+                } else {
+                    $datetime = Carbon::parse($rec['Time'])->isoFormat('ddd l');
+                }
+
+                $times[] = $datetime;
             }
             // and buld the calls over time array
             foreach ($result as $campaign => $details) {
