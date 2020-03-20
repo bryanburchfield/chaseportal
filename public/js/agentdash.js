@@ -59,7 +59,7 @@ var Dashboard = {
     init:function(){
         $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
-            // $('.preloader').fadeOut('slow');
+            $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
         });        
     },
@@ -71,7 +71,7 @@ var Dashboard = {
     refresh(){
         $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
-            // $('.preloader').fadeOut('slow');
+            $('.preloader').fadeOut('slow');
         }); 
     },
 
@@ -95,7 +95,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/call_volume',
             type: 'POST',
@@ -129,7 +129,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/campaign_chart',
             type: 'POST',
@@ -224,7 +224,7 @@ var Dashboard = {
 
     get_total_conversions:function(datefilter){
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/get_sales',
             type: 'POST',
@@ -246,7 +246,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/campaign_stats',
             type: 'POST',
@@ -327,7 +327,7 @@ var Dashboard = {
                     data: calls_by_camp,
                     options: calls_by_camp_options
                 });
-                $('.preloader').fadeOut('slow');
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#calls_by_camp');
                 Dashboard.display_error(div, textStatus, errorThrown);
