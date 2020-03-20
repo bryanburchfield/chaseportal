@@ -155,7 +155,7 @@ div.container-fluid.bg {
   border: 1px solid #d1d1d1;
   padding: 20px 10px 10px;
   overflow: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .card .title {
   text-transform: uppercase;
@@ -246,10 +246,19 @@ table tr th{text-align: center;}
 .bdrcard{
   border: 1px solid #d1d1d1;
   /*margin: 0;*/
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   padding: 0;
   overflow: auto;
 }
+
+.campaign_totals_table thead tr th{
+  background: #203047;
+  color: #fff;
+  text-align: left;
+  padding-left: 10px !important;
+}
+
+.campaign_totals_table tbody tr td{padding-left: 10px !important;}
 
 .bdrcard.bl0{border-left: none !important;}
 
