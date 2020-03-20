@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
-use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -597,18 +596,16 @@ class AgentDashController extends Controller
             $bind['groupid' . $i] = Auth::user()->group_id;
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
-            $bind['rep' . $i] = $this->rep;
 
             $sql .= " $union SELECT DR.Campaign, $xAxis Time,
 			'Calls' = COUNT(*)
             FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.Duration > 0
-            AND DR.CallType IN (1,11)
-            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            WHERE DR.CallType IN (1,11)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
             AND DR.GroupId = :groupid$i
-            AND DR.Rep = :rep$i
             AND DR.Date >= :fromdate$i
-			AND DR.Date < :todate$i
+            AND DR.Date < :todate$i
+            AND DR.Duration > 0
             GROUP BY DR.Campaign, $xAxis";
 
             $union = 'UNION ALL';
