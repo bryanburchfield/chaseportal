@@ -24,6 +24,9 @@ class CallerIdService
 
     private function initialize()
     {
+        $this->enddate = Carbon::parse('midnight');
+        $this->startdate = $this->enddate->copy()->subDay(30);
+
         $sid = config('twilio.did_sid');
         $token = config('twilio.did_token');
 
@@ -69,11 +72,13 @@ class CallerIdService
             // check if this number is still active
             if ($this->activeNumber($rec['CallerId'])) {
 
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
+
                 $all_results[] = $rec;
 
                 // Send email on change of group
                 if ($group_id != '' && $group_id != $rec['GroupId']) {
-
                     if ($this->setGroup($group_id)) {
                         $csvfile = $this->makeCsv($results);
                         $this->emailReport($csvfile);
@@ -104,12 +109,9 @@ class CallerIdService
 
     private function runQuery()
     {
-        $this->enddate = Carbon::parse('midnight');
-        $this->startdate = $this->enddate->copy()->subDay(30);
-
         $bind = [];
 
-        $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) Dials FROM (";
+        $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -118,13 +120,22 @@ class CallerIdService
             $bind['startdate' . $i] = $this->startdate->toDateTimeString();
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
 
-            $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId, COUNT(*) cnt FROM " .
+            $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId,
+              'cnt' = COUNT(*),
+              'Contacts' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
+             FROM " .
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
-                WHERE DR.Date >= :startdate$i and DR.Date < :enddate$i
+                OUTER APPLY (SELECT TOP 1 [Type]
+                    FROM " . '[' . $dialer->reporting_db . ']' . ".[dbo].[Dispos]
+                    WHERE Disposition = DR.CallStatus
+                    AND (GroupId = DR.GroupId OR IsSystem=1)
+                    AND (Campaign = DR.Campaign OR Campaign = '')
+                    ORDER BY [id]) DI
+                WHERE DR.Date >= :startdate$i AND DR.Date < :enddate$i
                 AND DR.CallerId != ''
-                AND DR.CallType = 0
+                AND DR.CallType IN (0,2)
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= 5500
                 ";
@@ -137,7 +148,7 @@ class CallerIdService
             HAVING SUM(cnt) >= 5500
             ORDER BY GroupName, Dials desc";
 
-        return $this->runSql($sql, $bind);
+        return $this->yieldSql($sql, $bind);
     }
 
     private function makeCsv($results)
@@ -147,6 +158,7 @@ class CallerIdService
             'GroupName',
             'CallerID',
             'Dials in Last 30 Days',
+            'Contact Rate',
         ];
 
         array_unshift($results, $headers);
@@ -191,6 +203,7 @@ class CallerIdService
 
         Mail::to($to)
             ->cc($cc)
+            ->bcc('bryan.burchfield@chasedatacorp.com')
             ->send(new CallerIdMail($message));
     }
 
