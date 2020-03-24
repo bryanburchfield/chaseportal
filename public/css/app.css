@@ -2881,6 +2881,10 @@ p.login_date {
   display: none;
 }
 
+.calls_per_hour table tbody tr:last-of-type td {
+  font-weight: 600;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
