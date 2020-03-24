@@ -22,6 +22,7 @@
                     'agent_timesheet' =>  __('reports.agent_timesheet'),
                     'campaign_usage' =>  __('reports.campaign_usage'),
                     'caller_id' =>  __('reports.caller_id'),
+                    'calls_per_hour' =>  __('reports.calls_per_hour'),
                     'inbound_summary' =>  __('reports.inbound_summary'),
                     'campaign_summary' =>  __('reports.campaign_summary'),
                     'subcampaign_summary' =>  __('reports.subcampaign_summary'),
