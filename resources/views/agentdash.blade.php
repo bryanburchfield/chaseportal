@@ -23,6 +23,28 @@
             <div class="filters  col-sm-5">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span>{{__('general.interaction')}}</span>
+                    </button>
+
+                    <ul class="dropdown-menu filter_campaign stop-propagation">
+                        <div class="form-group mb0"><input type="text" class="form-control campaign_search" placeholder="{{__('general.search')}}"></div>
+                        <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
+
+                        @foreach($campaign_list as $campaign)
+                            <div class="checkbox">
+                                <label class="campaign_label">
+                                    <input class="campaign_group" required type="checkbox" {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
+                                    <span>
+                                        {{$campaign['name']}}
+                                    </span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <span>{{__('general.date')}}</span>
                     </button>
 
@@ -84,51 +106,37 @@
                 </div><!-- end card -->
             </div><!-- end column -->
         </div>
+        
+        <div class="row bdrless_card max_height350">
+            <div class="col-sm-12 pl0 pr0">
+                <div class="bdrcard overflow_none" >
+                    <div class="col-sm-4 campaign_totals pl0" style="height:330px">
+                        <table class="table table-condensed campaign_totals_table" >
+                            <thead>
+                                <tr class="bdrtop_none">
+                                    <th>{{__('widgets.campaign')}}</th>
+                                    <th class="tar">{{__('widgets.numb_of_calls')}}</th>
+                                </tr>
+                            </thead>
 
-        <div class="row bdrless_card">
-            <div class="col-sm-6 pl0">
-                <div class="bdrcard">
-                    <div class="col-sm-4 pr0">
-                        <table class="table table-condensed ">
-                            <tr class="bdrtop_none">
-                                <th>{{__('widgets.call_types')}}</th>
-                                <th class="tar"># {{__('widgets.call_status')}}</th>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.inbound')}}</td>
-                                <td class="tar inbound_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.manual')}}</td>
-                                <td class="tar manual_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.outbound')}}</td>
-                                <td class="tar outbound_total"></td>
-                            </tr>
-
-                            <tr>
-                                <td>{{__('widgets.total')}}</td>
-                                <td class="tar total_calls"></td>
-                            </tr>
+                            <tbody></tbody>
                         </table>
                     </div>
 
                     <div class="col-sm-8 pl0">
                         <div class="card-6 card">
-                            <div class="inbound inandout" style="height:240px">
-                                <canvas id="call_volume"></canvas>
+                            <div class="inbound inandout" style="height:330px">
+                                <canvas id="campaign_calls"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-sm-6 pr0 ">
-                <div class="bdrcard">
+        <div class="row bdrless_card">
+            <div class="col-sm-9 pl0">
+                <div class="bdrcard" style="height:285px">
                 <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
                             <tr>
@@ -144,19 +152,19 @@
                     </table>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="card" style="height:280px">
-                    <canvas id="calls_by_camp"></canvas>
-                </div>
-            </div>
-
-            <div class="col-sm-3 ">
+            <div class="col-sm-3 pr0">
                 <div class="card blue total_calls_card">
                     <h1 class="title">{{__('widgets.total_conversions')}}</h1>
                     <h2 class="total_conversions cnt"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card" style="height:370px">
+                    <canvas id="calls_by_camp"></canvas>
                 </div>
             </div>
         </div>

@@ -53,9 +53,11 @@ var Dashboard = {
     },
 
     datefilter : document.getElementById("datefilter").value,
+    first_search: true,
+    active_camp_search: '',
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
@@ -67,7 +69,7 @@ var Dashboard = {
     },
 
     refresh(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
         }); 
@@ -75,6 +77,9 @@ var Dashboard = {
 
     eventHandlers:function(){
         $('.date_filters li a').on('click', this.filter_date);
+        $('.campaign_search').on('keyup', this.search_campaigns);
+        $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
+        $('.select_campaign').on('click', this.filter_campaign);
     },
 
     display_error:function(div, textStatus, errorThrown){
@@ -90,7 +95,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/call_volume',
             type: 'POST',
@@ -99,48 +104,72 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
-                $('#total_outbound .total').html(parseInt(response.call_volume.tot_outbound) + parseInt(response.call_volume.tot_manual));
+                $('#total_outbound .total').html(response.call_volume.tot_outbound);
                 $('#total_inbound .total').html(response.call_volume.tot_inbound);
+                $('#total_talktime').html(response.call_volume.tot_talk_time);
 
-                var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
-
-                $('.inbound_total').html(response.call_volume.tot_inbound);
-                $('.outbound_total').html(response.call_volume.tot_outbound);
-                $('.manual_total').html(response.call_volume.tot_manual);
-                $('.total_calls').html(response.call_volume.tot_total);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
-                var call_volume = {
+                var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
 
-                    labels: response.call_volume.time,
-                    datasets: [{
-                        label: Lang.get('js_msgs.inbound'),
-                        borderColor: chartColors.orange,
-                        backgroundColor: chartColors.orange,
-                        fill: false,
-                        data: response.call_volume.inbound,
-                        yAxisID: 'y-axis-1',
-                    },{
-                        label: Lang.get('js_msgs.outbound'),
-                        borderColor: chartColors.green,
-                        backgroundColor: chartColors.green,
-                        fill: false,
-                        data: response.call_volume.outbound,
-                        yAxisID: 'y-axis-1'
-                    },{
-                        label: Lang.get('js_msgs.manual'),
-                        borderColor: chartColors.grey,
-                        backgroundColor: chartColors.grey,
-                        fill: false,
-                        data: response.call_volume.manual,
-                        yAxisID: 'y-axis-1'
-                    }]
+            },error: function (jqXHR,textStatus,errorThrown) {
+                var div = $('#call_volume');
+                Dashboard.display_error(div, textStatus, errorThrown);
+
+            }
+        });
+    },
+
+    campaign_chart:function(datefilter, chartColors){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            async: true,
+            url: '/agentdashboard/campaign_chart',
+            type: 'POST',
+            dataType: 'json',
+            data:{
+                datefilter:datefilter
+            },
+            success:function(response){
+
+                var campaign_calls = {
+                    labels: response.campaign_chart.times,
+                    datasets: []
                 };
 
-                var call_volume_options={
+                var j=0;
+                const chart_colors = Object.keys(Dashboard.chartColors)
+                var chart_colors_array=[];
+                var j=0;
+                for (var i=0; i < response.campaign_chart.campaign_calls.length; i++) {
+                    if(j==chart_colors.length){
+                        j=0;
+                    }
+                    chart_colors_array.push(eval('chartColors.'+chart_colors[j]));
+                    j++;
+                }
+
+                for(var i=0; i<response.campaign_chart.campaign_calls.length;i++){
+                    if(j==chart_colors_array.length){j=0;}
+                    campaign_calls.datasets.push({
+                            label: response.campaign_chart.campaign_calls[i].campaign,
+                            borderColor: chart_colors_array[j],
+                            backgroundColor: chart_colors_array[j],
+                            fill: false,
+                            data: response.campaign_chart.campaign_calls[i].calls,
+                            yAxisID: 'y-axis-1',
+                        });
+                    j++;
+                }
+
+                var campaign_calls_options={
                     responsive: true,
                     maintainAspectRatio:false,
                     hoverMode: 'index',
@@ -175,18 +204,18 @@ var Dashboard = {
                 }
 
                 // call volume inbound line graph
-                var ctx = document.getElementById('call_volume').getContext('2d');
-                if(window.call_volume_chart != undefined){
-                    window.call_volume_chart.destroy();
+                var ctx = document.getElementById('campaign_calls').getContext('2d');
+                if(window.campaign_calls_chart != undefined){
+                    window.campaign_calls_chart.destroy();
                 }
-                window.call_volume_chart = new Chart(ctx, {
+                window.campaign_calls_chart = new Chart(ctx, {
                     type: 'line',
-                    data: call_volume,
-                    options: call_volume_options
+                    data: campaign_calls,
+                    options: campaign_calls_options
                 });
 
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#call_volume');
+                var div = $('#campaign_calls');
                 Dashboard.display_error(div, textStatus, errorThrown);
 
             }
@@ -195,7 +224,7 @@ var Dashboard = {
 
     get_total_conversions:function(datefilter){
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/get_sales',
             type: 'POST',
@@ -217,7 +246,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentdashboard/campaign_stats',
             type: 'POST',
@@ -227,8 +256,7 @@ var Dashboard = {
             },
             success:function(response){
 
-                $('#total_talktime').html(response.campaign_stats.TotalTalkTime);
-                $('.campaign_stats_table tbody').empty();
+                $('.campaign_stats_table tbody, .campaign_totals_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {
                     var trs='';
@@ -236,6 +264,14 @@ var Dashboard = {
                         trs += '<tr><td>' + response.campaign_stats.Campaign[i] + '</td><td>' + response.campaign_stats.AvgTalkTime[i] + '</td><td>' + response.campaign_stats.AvgHoldTime[i] + '</td><td>' + response.campaign_stats.AvgHandleTime[i] + '</td><td>' + response.campaign_stats.DropRate[i] + '</td></tr>';
                     }
                     $('.campaign_stats_table tbody').append(trs);
+                }
+
+                if (response.campaign_stats.CallsByCampaign.Campaign.length) {
+                    var trs='';
+                    for (var i = 0; i < response.campaign_stats.CallsByCampaign.Campaign.length; i++) {
+                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td></tr>';
+                    }
+                    $('.campaign_totals_table tbody').append(trs);
                 }
 
                 var response_length = response.campaign_stats.TopTen.Campaign.length;
@@ -293,7 +329,7 @@ var Dashboard = {
                 });
 
             },error: function (jqXHR,textStatus,errorThrown) {
-                var div = $('#rep_performance');
+                var div = $('#calls_by_camp');
                 Dashboard.display_error(div, textStatus, errorThrown);
             }
         });
@@ -363,7 +399,156 @@ var Dashboard = {
     title_options :{
         fontColor:'#144da1',
         fontSize:16,
-    }
+    },
+
+    search_campaigns: function () {
+        var query = $(this).val();
+
+        if (Dashboard.first_search) {
+            if ($('.filter_campaign li').hasClass('active')) {
+                Dashboard.active_camp_search = $('.filter_campaign li.active').text();
+            }
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/agentdashboard/campaign_search',
+            type: 'POST',
+            dataType: 'json',
+            data: { query: query },
+            success: function (response) {
+
+                var is_array = Array.isArray(response.search_result);
+                var obj = response['search_result'];
+                $('.filter_campaign .checkbox').remove();
+                var campaign_searchresults = '';
+
+                if (!is_array) {
+                    var obj = Object.keys(obj).map(function (key) {
+                        return [obj[key]];
+                    });
+                }
+
+                var checked;
+
+                for (var i = 0; i < obj.length; i++) {
+                    checked = obj[i].selected;
+                    if (checked) { checked = 'checked'; } else { checked = ''; }
+                    campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"><span>' + obj[i].name + '</span></label></div>';
+                }
+
+                Dashboard.first_search = false;
+
+                $('.filter_campaign').append(campaign_searchresults);
+            }
+        });
+    },
+
+    adjust_campaign_filters: function () {
+
+        // Get amount of selected checkboxes
+        var checked = [];
+        $('.campaign_label input:checked').each(function () {
+            checked.push($(this).attr('name'));
+        });
+
+        /// check if target is NOT All Camps
+        if ($(this).val() != '') {
+            // See if others are checked
+            if (checked.length) {
+                // check if All Camps is checked
+                if ($('.filter_campaign .campaign_group').eq(0).is(':checked')) {
+                    // uncheck all camps because others are being selected
+                    $('.filter_campaign .campaign_group').eq(0).removeAttr('checked');
+                }
+            }
+        } else { /// ALL camps is being checked
+            // check if All Camps was already checked
+            if ($('.filter_campaign .campaign_group').eq(0).is(':checked')) {
+                $('.filter_campaign .campaign_group').removeAttr('checked'); /// uncheck all other camps
+                $('.filter_campaign .campaign_group').eq(0).prop('checked', true); // recheck all camps
+            }
+
+            if (!checked.length) { // if nothing is selected reselect All Camps because something has to be checked
+                $('.filter_campaign .campaign_group').eq(0).prop('checked', true);
+            }
+        }
+    },
+
+    // ran when submit is clicked in the interaction menu
+    filter_campaign: function () {
+
+        $('.preloader').show();
+
+        datefilter = $('#datefilter').val();
+        var checked = $(".campaign_group:checkbox:checked").length;
+        $('.alert').remove();
+        $('.campaign_search').val('');
+
+        if (checked) {
+            $('.filter_campaign').parent().removeClass('open');
+            $('.filter_campaign').prev('.dropdown-toggle').attr('aria-expanded', false);
+            var campaigns = [];
+            $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function () {
+                campaigns.push($(this).val());
+            });
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/agentdashboard/update_filters',
+            type: 'POST',
+            dataType: 'json',
+            data: { campaign: campaigns },
+            success: function (response) {
+                Dashboard.set_campaigns(response);
+            }
+        });
+    },
+
+    // ran after submit is clicked in the interaction menu, after filter_campaign()
+    set_campaigns: function (response) {
+        var campaigns = [];
+        $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function () {
+            campaigns.push($(this).val());
+            //// if total is selected, uncheck all checkboxes
+            if ($(this).val() == '') {
+                $('.filter_campaign .checkbox label input[name="campaigns"]:checkbox').removeAttr('checked');
+            }
+        });
+
+        var is_array = Array.isArray(response.campaigns);
+        var obj = response['campaigns'];
+        $('.filter_campaign .checkbox').remove();
+        var campaign_searchresults = '';
+
+        if (!is_array) {
+            var obj = Object.keys(obj).map(function (key) {
+                return [obj[key]];
+            });
+        }
+        var checked;
+
+        for (var i = 0; i < obj.length; i++) {
+            checked = obj[i].selected;
+            if (checked) { checked = 'checked'; } else { checked = ''; }
+            campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"><span>' + obj[i].name + '</span></label></div>';
+        }
+
+        $('.filter_campaign').append(campaign_searchresults);
+
+        Dashboard.refresh(datefilter);
+    },
 }
 
 $(document).ready(function(){
@@ -377,17 +562,13 @@ $(document).ready(function(){
         }
     }
 
-    // $('.count').each(function () {
-    //     $(this).prop('Counter',0).animate({
-    //         Counter: $(this).text()
-    //     }, {
-    //         duration: 1500,
-    //         easing: 'swing',
-    //         step: function (now) {
-    //             $(this).text(Math.ceil(now));
-    //         }
-    //     });
-    // });
+    $('.stop-propagation').on('click', function (e) {
+        e.stopPropagation();
+    });
+    
+    $('.filter_campaign').on('click', '.stop-propagation', function (e) {
+        e.stopPropagation();
+    });
 
     $(".startdate").datepicker({
         maxDate: '0',
