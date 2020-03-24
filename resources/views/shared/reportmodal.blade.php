@@ -33,6 +33,8 @@
                     'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
                     'lead_inventory' =>  __('reports.lead_inventory'),
                     'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
+
+                    
                 ];
 
                 if(Auth::User()->group_id == 224500) {
@@ -45,14 +47,17 @@
 
                 asort($reports);
 
-                $i=0;
+                $i=1;
+                $second_col=0;
+                $is_odd = count($reports) % 2;
+
+                echo '<div class="col-sm-6 nopad">';
                 foreach($reports as $key => $value){
-                    if(!$i){echo '<div class="col-sm-6 nopad">';}
-                    if($i == count($reports) / 2 + 1){echo '<div class="col-sm-6 nopad">';}
+                    if($i > count($reports) / 2 + 1 && $is_odd && !$second_col ||  !$is_odd  && $i == count($reports) /2 +1  ){echo '</div><div class="col-sm-6 nopad">'; $second_col=1;}
                     echo '<div class="radio">';
                         echo '<label><input type="radio" name="report_option" class="report_option" value="'.$key.'">'.$value.'</label>';
                     echo '</div>';
-                    if($i == count($reports) / 2 || $i == count($reports) -1){echo '</div>';}
+                    if(($is_odd && $i == count($reports) / 2) || $i == count($reports)  ){echo '</div>';}
                     $i++;
                 }
                 @endphp
