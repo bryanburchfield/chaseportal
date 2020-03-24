@@ -16,6 +16,7 @@ class AutomatedReportController extends Controller
             'agent_summary_campaign' => 'Agent Summary by Campaign',
             'agent_summary' => 'Agent Summary',
             'agent_summary_subcampaign' => 'Agent Summary by Subcampaign',
+            'calls_per_hour' => 'Calls per Hour',
             'campaign_call_log' => 'Campaign Call Log',
             'campaign_summary' => 'Campaign Summary',
             'inbound_summary' => 'Inbound Summary',
