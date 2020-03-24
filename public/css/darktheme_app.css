@@ -3226,6 +3226,10 @@ p.login_date {
   margin-right: 10px;
 }
 
+.calls_per_hour table thead th a {
+  display: none;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
