@@ -37,6 +37,7 @@ return [
 	'distinct_agent_count' => 'Conde de agente distinto',
 	'distinct_logins_per_day'=> 'Distintos inicios de sesión por día',
 	'distinct_reps_per_camp'	=> 'Representantes distintos por campaña',
+	'drop_rate'			=> 'Tasa de Abandono',
 	'duration'			=> 'Duración',
 	'edit_myself'		=> 'Editarme',
 	'go_back'			=> 'Regresa',

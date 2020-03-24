@@ -140,11 +140,11 @@
                 <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
                             <tr>
-                                <th>Campaign</th>
-                                <th>Avg Talk Time</th>
-                                <th>Avg Hold Time</th>
-                                <th>Avg Handle Time</th>
-                                <th>Drop Rate</th>
+                                <th>{{__('widgets.campaign')}}</th>
+                                <th>{{__('widgets.avg_talk_time')}}</th>
+                                <th>{{__('widgets.avg_hold_time')}}</th>
+                                <th>{{__('widgets.avg_handle_time')}}</th>
+                                <th>{{__('widgets.drop_rate')}}</th>
                             </tr>
                         </thead>
 
