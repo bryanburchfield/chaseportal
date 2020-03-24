@@ -35,6 +35,28 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('campaigns', __('reports.campaign')) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('reps', __('reports.rep')) !!}
+						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('call_type', __('reports.call_type')) !!}
+						{!! Form::select("call_type", $filters['call_types'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
