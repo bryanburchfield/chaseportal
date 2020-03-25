@@ -145,6 +145,7 @@ class CallsPerHour
                     'Outbound' = SUM(CASE WHEN DR.CallType NOT IN (1,11) THEN 1 ELSE 0 END),
                     'Inbound' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
                     'Abandoned' = SUM(CASE WHEN DR.CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END),
+                    -- 'Dropped' = SUM(CASE WHEN DR.CallStatus = 'CR_DROPPED' THEN 1 ELSE 0 END),
                     'Sales' = SUM(ISNULL(CASE WHEN DI.Type = 3 THEN 1 ELSE NULL END, 0)),
                     'TalkTime' = SUM(CASE WHEN DI.Type > 1 THEN DR.Duration ELSE 0 END),
                     'Contacts' = SUM(ISNULL(CASE WHEN DI.Type > 1 THEN 1 ELSE NULL END, 0))
@@ -158,7 +159,7 @@ class CallsPerHour
                     ORDER BY [id]) DI
                 WHERE $call_type_where
                 AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
-                    'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE',
+                    'CR_NORB', 'CR_BUSY', 'CR_FAXTONE',
                     'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
                     'CR_CNCT/CON_PVD', '', 'Inbound', 'Inbound Voicemail')
                 AND DR.GroupId = :groupid
