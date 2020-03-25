@@ -1529,6 +1529,10 @@ var Master = {
 					}
 				}
 
+                if (response.params.report == 'calls_per_hour') {
+                    Master.calls_per_hour(response);
+                }
+
 				if (response.params.report == 'campaign_usage') {
 					Master.campaign_usage(response);
 				}
@@ -1548,6 +1552,87 @@ var Master = {
 		}); /// end ajax
 	}, /// end update_report function
 
+
+    calls_per_hour:function(response){
+
+        $('.hidetilloaded').show();
+        var chartColors = Master.chartColors;
+
+        var drop_abandon_counts = {
+
+            labels: response.extras.Date,
+            datasets: [{
+                label: Lang.get('js_msgs.abandoned'),
+                borderColor: chartColors.green,
+                backgroundColor: chartColors.green,
+                fill: false,
+                data: response.extras.Abandoned,
+                yAxisID: 'y-axis-1',
+            }, {
+                label: Lang.get('js_msgs.dropped'),
+                borderColor: chartColors.blue,
+                backgroundColor: chartColors.blue,
+                fill: false,
+                data: response.extras.Dropped,
+                yAxisID: 'y-axis-1'
+            }]
+        };
+
+        var drop_abandon_counts_options = {
+            responsive: true,
+            hoverMode: 'index',
+            stacked: false,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        fontColor: Master.tick_color,
+                    },
+                    gridLines: {
+                        color: Master.gridline_color,
+                    },
+                }],
+                yAxes: [{
+                    gridLines: {
+                        color: Master.gridline_color,
+                    },
+                    ticks: {
+                        fontColor: Master.tick_color,
+                    },
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'y-axis-1',
+                }, {
+                    type: 'linear',
+                    display: false,
+                    id: 'y-axis-2',
+
+                    gridLines: {
+                        drawOnChartArea: false,
+                    },
+                }],
+            },
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12,
+                    fontColor: Master.tick_color,
+                }
+            }
+        }
+
+        ///////////////// CALL VOLUME GRAPH
+        var ctx = document.getElementById('drop_abandon_counts').getContext('2d');
+        if (window.drop_abandon_counts_chart != undefined) {
+            window.drop_abandon_counts_chart.destroy();
+        }
+        window.drop_abandon_counts_chart = new Chart(ctx, {
+            type: 'line',
+            data: drop_abandon_counts,
+            options: drop_abandon_counts_options
+        });
+    },
+
 	campaign_usage: function (response) {
 
 		$('.hidetilloaded').show();
@@ -1558,7 +1643,6 @@ var Master = {
 			xaxis_labels.push(i);
 		}
 
-		// return false;
 		var leads_by_attempt_data = {
 			labels: xaxis_labels,
 			datasets: [
