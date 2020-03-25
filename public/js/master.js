@@ -1561,21 +1561,7 @@ var Master = {
         var drop_abandon_counts = {
 
             labels: response.extras.Date,
-            datasets: [{
-                label: Lang.get('js_msgs.abandoned'),
-                borderColor: chartColors.green,
-                backgroundColor: chartColors.green,
-                fill: false,
-                data: response.extras.Abandoned,
-                yAxisID: 'y-axis-1',
-            }, {
-                label: Lang.get('js_msgs.dropped'),
-                borderColor: chartColors.blue,
-                backgroundColor: chartColors.blue,
-                fill: false,
-                data: response.extras.Dropped,
-                yAxisID: 'y-axis-1'
-            },
+            datasets: [
             {
                 label: Lang.get('js_msgs.inbound'),
                 borderColor: chartColors.orange,
@@ -1585,11 +1571,27 @@ var Master = {
                 yAxisID: 'y-axis-1'
             },
             {
+                label: Lang.get('js_msgs.abandoned'),
+                borderColor: chartColors.green,
+                backgroundColor: chartColors.green,
+                fill: false,
+                data: response.extras.Abandoned,
+                yAxisID: 'y-axis-1',
+            }, 
+            {
                 label: Lang.get('js_msgs.outbound'),
                 borderColor: chartColors.grey,
                 backgroundColor: chartColors.grey,
                 fill: false,
                 data: response.extras.Outbound,
+                yAxisID: 'y-axis-1'
+            },
+            {
+                label: Lang.get('js_msgs.dropped'),
+                borderColor: chartColors.blue,
+                backgroundColor: chartColors.blue,
+                fill: false,
+                data: response.extras.Dropped,
                 yAxisID: 'y-axis-1'
             }
             ]
