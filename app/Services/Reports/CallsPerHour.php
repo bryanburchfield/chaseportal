@@ -195,6 +195,9 @@ class CallsPerHour
             'Contacts' => 0,
         ];
         $final = [];
+        $this->extras['Date'] = [];
+        $this->extras['Abandoned'] = [];
+        $this->extras['Dropped'] = [];
 
         foreach ($results as $rec) {
             $totalcalls = $rec['Inbound'] + $rec['Outbound'];
@@ -215,6 +218,10 @@ class CallsPerHour
                 'TalkTime' => $this->secondsToHms($rec['TalkTime']),
                 'ContactRatio' => number_format($rec['Contacts'] / $totalcalls * 100, 2) . '%',
             ];
+
+            $this->extras['Date'][] = $data['Date'];
+            $this->extras['Abandoned'][] = $data['Abandoned'];
+            $this->extras['Dropped'][] = $data['Dropped'];
 
             $final[] = $data;
 
