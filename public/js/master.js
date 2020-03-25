@@ -1429,7 +1429,7 @@ var Master = {
 	}, /// end update_report function
 
 	campaign_usage: function (response) {
-
+            console.log(response);
 		$('.hidetilloaded').show();
 		var chartColors = Master.chartColors;
 
