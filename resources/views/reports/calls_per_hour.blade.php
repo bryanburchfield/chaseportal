@@ -80,7 +80,7 @@
 @section('extras')
 <div class="col-sm-7 col-xs-12 nopadright pl0 mt30">
 	<div class="card card-6 hidetilloaded" >
-		<h1 class="title fw600">Drop / Abandoned Counts </h1>
+		<h1 class="title fw600">{{__('widgets.drop_abandoned_counts')}} </h1>
 		<div class="inbound inandout" style="min-height:300px;">
 			<canvas id="drop_abandon_counts"></canvas>
 		</div>

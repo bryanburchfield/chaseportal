@@ -41,6 +41,7 @@ return [
 	'distinct_agent_count' => 'Distinct Agent Count',
 	'distinct_logins_per_day'=> 'Distinct Logins Per Day',
 	'distinct_reps_per_camp'	=> 'Distinct Reps Per Campaign',
+	'drop_abandoned_counts'	=> 'Drop / Abandoned Counts',
 	'duration'			=> 'Duration',
 	'edit_myself'		=> 'Edit Myself',
 	'go_back'			=> 'Go Back',
