@@ -1575,7 +1575,24 @@ var Master = {
                 fill: false,
                 data: response.extras.Dropped,
                 yAxisID: 'y-axis-1'
-            }]
+            },
+            {
+                label: Lang.get('js_msgs.inbound'),
+                borderColor: chartColors.orange,
+                backgroundColor: chartColors.orange,
+                fill: false,
+                data: response.extras.Inbound,
+                yAxisID: 'y-axis-1'
+            },
+            {
+                label: Lang.get('js_msgs.outbound'),
+                borderColor: chartColors.grey,
+                backgroundColor: chartColors.grey,
+                fill: false,
+                data: response.extras.Outbound,
+                yAxisID: 'y-axis-1'
+            }
+            ]
         };
 
         var drop_abandon_counts_options = {
