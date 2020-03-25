@@ -220,6 +220,8 @@ class CallsPerHour
             ];
 
             $this->extras['Date'][] = $data['Date'];
+            $this->extras['Inbound'][] = $data['Inbound'];
+            $this->extras['Outbound'][] = $data['Outbound'];
             $this->extras['Abandoned'][] = $data['Abandoned'];
             $this->extras['Dropped'][] = $data['Dropped'];
 
