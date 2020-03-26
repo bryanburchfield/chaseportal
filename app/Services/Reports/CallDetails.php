@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CallDetails
 {
@@ -50,6 +51,7 @@ class CallDetails
             'Duration' => 'reports.duration',
             'CallType' => 'reports.calltype',
             'Details' => 'reports.details',
+            'AgentHangup' => 'reports.agent_hangup',
         ];
     }
 
@@ -261,9 +263,6 @@ class CallDetails
             $where .= " AND (IsNull(DR.CallStatus, '') NOT IN ('Inbound', 'Inbound Voicemail') AND IsNull(DR.Rep, '') <> '')";
         }
 
-
-
-
         $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
                 FROM [Dispos] D
                 WHERE D.Disposition = DR.CallStatus
@@ -299,10 +298,18 @@ class CallDetails
                     WHEN DR.CallType >= 10 THEN 'Transferred'
                     ELSE 'Unknown'
                 END as CallType,
-                DR.Details
+                DR.Details,
+                AA.Details as AgentHangup
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
             FROM [DialingResults] DR WITH(NOLOCK)
+            OUTER APPLY (SELECT TOP 1 Details
+                FROM AgentActivity AA WITH(NOLOCK)
+                WHERE AA.ActivityId = DR.ActivityId
+                AND AA.GroupId = DR.GroupId
+                AND AA.Rep = DR.Rep
+                AND AA.Details = 'Agent Hangup Call'
+                ) AA
             LEFT OUTER JOIN [Leads] L ON L.id = DR.LeadId";
 
         if (!(empty($this->advanced_table))) {
@@ -327,8 +334,6 @@ class CallDetails
             $sql .= " AND $is_callable_sql = :is_callable";
         }
 
-
-
         if (strlen($this->params['calltype']) !== 0) {
             $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
         }
@@ -348,6 +353,9 @@ class CallDetails
             $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
+
+        Log::debug($sql);
+        Log::debug($bind);
 
         return [$sql, $bind];
     }
