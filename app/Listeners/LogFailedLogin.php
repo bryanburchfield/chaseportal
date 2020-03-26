@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Models\UserAudit;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class LogFailedLogin
 {
