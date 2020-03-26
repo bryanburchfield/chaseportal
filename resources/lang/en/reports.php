@@ -70,6 +70,7 @@ return [
 	'abandoned'           => 'Abandoned Calls',
 	'abandonrate' => 'Abandon Rate',
 	'agent'               => 'Agent Calls',
+	'agent_hangup'        => 'Hangup',
 	'aph'                 => 'S-L-A/HR',
 	'attempt'             => 'Attempt',
 	'auto_report_text' => 'Here you can toggle on and off automated reports. Reports are emailed to the address you registered with and will be sent daily at 6:00am EST.',

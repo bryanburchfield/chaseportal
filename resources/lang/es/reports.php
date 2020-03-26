@@ -72,6 +72,7 @@ return [
      'abandoned'           => 'Llamadas Abandonadas',
      'abandonrate' => 'Tasa de Abandono',
      'agent'               => 'Llamadas de Agentes',
+     'agent_hangup'        => 'Colgar',
      'aph'                 => 'V-P-C/Hora',
      'attempt'             => 'Intentos',
      'auto_report_text' => 'Aquí puede alternar entre habilitar y deshabilitar informes automáticos. Los informes se envían al correo electrónico con el que se registró y serán enviados diariamente a las 6:00am EST',
