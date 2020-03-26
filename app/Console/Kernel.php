@@ -66,15 +66,6 @@ class Kernel extends ConsoleKernel
 
         // Caller ID Report (production only)
         if (App::environment('production')) {
-
-            // Run for BT only
-            $schedule->call(function () {
-                CallerIdService::execute(235773);
-            })
-                ->dailyAt('7:50')
-                ->timezone('America/New_York');
-
-            // Run for all groups
             $schedule->call(function () {
                 CallerIdService::execute();
             })
