@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -500,6 +501,25 @@ class KpiController extends Controller
             $values[] = array_values((array) $rec);
         }
         return $values;
+    }
+
+    public function auditRecipient(Request $request)
+    {
+        $recipient = Recipient::find($request->id);
+
+        // In case the recipient was deleted, create a temp one with the old id
+        if (!$recipient) {
+            $recipient = new Recipient();
+            $recipient->id = $request->id;
+        }
+
+        $audits = $recipient->audits;
+
+        $data = [
+            'recipient' =>  $recipient,
+            'audits' =>  $audits,
+        ];
+        return view('dashboards.recipient_audit')->with($data);
     }
 
     /**
