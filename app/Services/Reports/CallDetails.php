@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class CallDetails
 {
@@ -353,9 +352,6 @@ class CallDetails
             $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
-
-        Log::debug($sql);
-        Log::debug($bind);
 
         return [$sql, $bind];
     }
