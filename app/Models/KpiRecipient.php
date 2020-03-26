@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class KpiRecipient extends Model
+class KpiRecipient extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     public function kpi()
     {
         return $this->belongsTo('App\Models\Kpi');
