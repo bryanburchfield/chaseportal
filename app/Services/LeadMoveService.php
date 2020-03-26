@@ -89,9 +89,14 @@ class LeadMoveService
     {
         if (!Auth::check() || Auth::user()->group_id !== $lead_rule->group_id) {
             // authenticate as user of the group
-            Auth::logout();
+            if (Auth::check()) {
+                Auth::logout();
+            }
             $user = User::where('group_id', '=', $lead_rule->group_id)->first();
+
             if ($user) {
+                // set a flag so the audit trail doesn't pick it up
+                $user->cron = true;
                 Auth::login($user);
             }
         }

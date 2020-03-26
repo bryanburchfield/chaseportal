@@ -555,18 +555,27 @@ class KpiController extends Controller
      */
     public static function cronRun(KpiGroup $kpiGroup)
     {
+        // They should never be logged in at this point, but just in case
+        if (Auth::check()) {
+            Auth::logout();
+        }
+
         // authenticate as user of the group
-        Auth::logout();
         $user = User::where('group_id', '=', $kpiGroup->group_id)->first();
 
         if ($user) {
+            // set a flag so the audit trail doesn't pick it up
+            $user->cron = true;
             Auth::login($user);
+
             $kpi = new KpiController();
 
             $request = new Request();
             $request->setMethod('POST');
             $request->request->add(['kpi_id' => $kpiGroup->kpi_id]);
             $kpi->runKpi($request);
+
+            Auth::logout();
         }
     }
 }
