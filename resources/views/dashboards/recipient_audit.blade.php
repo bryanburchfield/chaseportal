@@ -33,13 +33,13 @@
                         <div class="table-responsive">
                             <table class="table table-striped audit_table">
                                 <thead>
-                                    <th>Type</th>
+                                    <th>Event</th>
                                     <th>At</th>
                                     <th>From</th>
                                     <th>By</th>
                                     <th>Field</th>
-                                    <th>Old</th>
-                                    <th>New</th>
+                                    <th>Old Value</th>
+                                    <th>New Value</th>
                                 </thead>
 
                                 <tbody>
