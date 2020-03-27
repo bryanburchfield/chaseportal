@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -101,15 +102,25 @@ class KpiController extends Controller
         $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
-        $this->removeRecipientFromAll($recipient->id);
-        if (!empty($request->kpi_list)) {
+        // add/remove recip from kpis
+        if (empty($request->kpi_list)) {
+            $this->removeRecipientFromAll($recipient->id);
+        } else {
+            $kpi_ids = [];
             foreach ($request->kpi_list as $kpi_id) {
                 if (is_numeric($kpi_id)) {
-                    $kr = new KpiRecipient();
-                    $kr->kpi_id = $kpi_id;
-                    $kr->recipient_id = $recipient->id;
-                    $kr->save();
+                    $kpi_ids[] = $kpi_id;
+                    $kpi_recipient = KpiRecipient::where('kpi_id', $kpi_id)->where('recipient_id', $recipient->id)->first();
+                    if (!$kpi_recipient) {
+                        $kpi_recipient = KpiRecipient::create(['kpi_id' => $kpi_id, 'recipient_id' => $recipient->id]);
+                    }
                 }
+            }
+
+            // delete any not on the list
+            // Can't do a mass delete because it won't create audit records
+            foreach (KpiRecipient::where('recipient_id', $recipient->id)->whereNotIn('kpi_id', $kpi_ids)->get() as $kpi_recipient) {
+                $kpi_recipient->delete();
             }
         }
 

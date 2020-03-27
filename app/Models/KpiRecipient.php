@@ -9,6 +9,11 @@ class KpiRecipient extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    protected $fillable = [
+        'kpi_id',
+        'recipient_id',
+    ];
+
     public function kpi()
     {
         return $this->belongsTo('App\Models\Kpi');
