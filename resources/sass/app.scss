@@ -78,6 +78,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0 !important;
 }
 
+.mb5{margin-bottom: 5px;}
+
 .mb10 {
     margin-bottom: 10px;
 }
@@ -1181,7 +1183,7 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .drip_campaigns table th {
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .audit_table th{
     background: $blue;
     border-top: 0;
     color: #fff;
@@ -1690,6 +1692,14 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
 }
 
 a.edit_recip_glyph{right:35px;color:#33A09B;}
+a.kpi_change_details{
+     margin-right: 10px;
+    position: absolute;
+    bottom: 19px;
+    right: 64px;
+    color: $blue;
+    font-size: 16px;
+}
 
 .users p {
     font-size: 16px;
@@ -2696,6 +2706,12 @@ span.numb_notifications{
 
 .calls_per_hour table thead th a {display: none;}
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
+.card.oauto{overflow: auto;}
+.kpi_change_info{
+    display: inline-block;
+    min-width: 80px;
+    font-weight: 600;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
