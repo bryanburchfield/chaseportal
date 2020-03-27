@@ -56,11 +56,21 @@
                                             <td>{{ $audit->created_at }}</td>
                                             <td>{{ $audit->ip_address }}</td>
                                             <td>{{ $audit->user->name }} ({{ $audit->user->email }}</td>
-                                            @for ($i = 0; $i < count($modified); $i++)
-                                                <td>{{ $fields[$i] }}</td>
-                                                <td>{{ isset($old[$i]) ? $old[$i] : '' }}</td>
-                                                <td>{{ isset($new[$i]) ? $new[$i] : '' }}</td>
-                                            @endfor
+                                            <td>
+                                                @foreach ($fields as $val)
+                                                    {{ $val }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($old as $val)
+                                                    {{ $val }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($new as $val)
+                                                    {{ $val }}<br>
+                                                @endforeach
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
