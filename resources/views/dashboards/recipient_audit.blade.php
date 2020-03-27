@@ -21,7 +21,6 @@
 
                         <div class="col-sm-5 pl0">
                             <div class="card">
-                                <h4>Current Values</h4>
                                 {{ __('general.full_name') }}: {{ $recipient->name}}<br>
                                 {{ __('general.email') }}: {{ $recipient->email}}<br>
                                 {{ __('general.phone') }}: {{ $recipient->phone}}<br>
