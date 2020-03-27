@@ -88,7 +88,7 @@
                             $details = reset($created_at_array);
                         @endphp
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <div class="card">
                                 <h4 class="mb5">At: {{ $details['created_at'] }}</h4>
                                 <h4 class="mb5"> From: {{ $details['ip_address'] }}</h4>
