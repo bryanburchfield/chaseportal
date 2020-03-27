@@ -89,7 +89,7 @@
 
                         <div class="col-sm-12">
                             <div class="card oauto">
-                                <div class="col-sm-4 kpi_change_info_cnt">
+                                <div class="col-sm-4 kpi_change_info_cnt pl0">
                                     <h4 class="mb10"><span class="kpi_change_info">At:</span> {{ $details['created_at']->tz('America/New_York')->toCookieString() }}</h4>
                                     <h4 class="mb10"> <span class="kpi_change_info">From:</span> {{ $details['ip_address'] }}</h4>
                                     <h4 class="mb10"><span class="kpi_change_info">By:</span> {{ $details['user_name'] }} </h4>
