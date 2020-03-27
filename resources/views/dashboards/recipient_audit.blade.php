@@ -76,22 +76,29 @@
                                 </tbody>
                             </table>
                         </div>
-                        ============== KPI Changes ==================
-
-                        @foreach ($kpi_recipient_audits as $created_at_array)
-                            @php
-                                // grab first record of array
-                                $details = reset($created_at_array);
-                            @endphp
-                            <hr>
-                            At: {{ $details['created_at'] }}<br>
-                            From: {{ $details['ip_address'] }}<br>
-                            By: {{ $details['user_name'] }} ({{ $details['user_email'] }})<br>
-                            @foreach ($created_at_array as $audit)
-                                {{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}<br>
-                            @endforeach
-                        @endforeach
                     </div>
+
+                    <div class="col-sm-12">
+                        <h2 class="mt20">KPI Changes</h2>
+                    </div>
+
+                    @foreach ($kpi_recipient_audits as $created_at_array)
+                        @php
+                            // grab first record of array
+                            $details = reset($created_at_array);
+                        @endphp
+
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <h4 class="mb5">At: {{ $details['created_at'] }}</h4>
+                                <h4 class="mb5"> From: {{ $details['ip_address'] }}</h4>
+                                <h4 class="mb20">By: {{ $details['user_name'] }} ({{ $details['user_email'] }})</h4>
+                                @foreach ($created_at_array as $audit)
+                                    <p>{{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}</p>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
 				</div>
 			</div>
 		</div>
