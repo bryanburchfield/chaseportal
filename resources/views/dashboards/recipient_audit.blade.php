@@ -28,7 +28,7 @@
                             </div>
                         </div>
 					</div>
-    <?php dd($audits);?>
+
                     <div class="col-sm-12">
                         <div class="table-responsive">
                             <table class="table table-striped audit_table">
