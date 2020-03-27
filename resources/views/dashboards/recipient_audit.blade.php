@@ -16,31 +16,35 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
+                        <h2>Recipient Audit Trail</h2>
+                        <a class="btn btn-primary btn_flt_rgt" href="{{ URL::previous() }}">Go Back</a>
 
-						<div class="tab-pane mt30" id="audit_trail">
+                        <div class="col-sm-5 pl0">
+                            <div class="card">
+                                <h4>Current Values</h4>
+                                {{ __('general.full_name') }}: {{ $recipient->name}}<br>
+                                {{ __('general.email') }}: {{ $recipient->email}}<br>
+                                {{ __('general.phone') }}: {{ $recipient->phone}}<br>
+                            </div>
+                        </div>
+					</div>
 
-                            <h2 class="bbnone mb20">Recipient Audit Trail</h2>
-                            <a class="btn btn-primary" href="{{ URL::previous() }}">Go Back</a>
-
-                            <h4>Current Values</h4>
-                            {{ __('general.full_name') }}: {{ $recipient->name}}<br>
-                            {{ __('general.email') }}: {{ $recipient->email}}<br>
-                            {{ __('general.phone') }}: {{ $recipient->phone}}<br>
-
-                            @foreach ($audits as $audit)
-                                @php
-                                    $modified = $audit->getModified();
-                                    $fields = array_keys($modified);
-                                    $old = array_column($modified, 'old');
-                                    $new = array_column($modified, 'new');
-                                @endphp
-                                <hr>
-                                ==== {{ $audit->event }} ====<br>
-                                At: {{ $audit->created_at }}<br>
-                                From: {{ $audit->ip_address }}<br>
-                                By: {{ $audit->user->name }} ({{ $audit->user->email }})<br>
-
-                                <table border=1>
+                    <div class="col-sm-12">
+                        @foreach ($audits as $audit)
+                            @php
+                                $modified = $audit->getModified();
+                                $fields = array_keys($modified);
+                                $old = array_column($modified, 'old');
+                                $new = array_column($modified, 'new');
+                            @endphp
+                            <hr>
+                            ==== {{ $audit->event }} ====<br>
+                            At: {{ $audit->created_at }}<br>
+                            From: {{ $audit->ip_address }}<br>
+                            By: {{ $audit->user->name }} ({{ $audit->user->email }})<br>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped audit_table">
                                     <thead>
                                         <th>Field</th>
                                         <th>Old</th>
@@ -56,26 +60,25 @@
                                     @endfor
                                     </tbody>
                                 </table>
-                            @endforeach
+                            </div>
+                        @endforeach
 
-                            ============== KPI Changes ==================
-                            
-                            @foreach ($kpi_recipient_audits as $created_at_array)
-                                @php
-                                    // grab first record of array
-                                    $details = reset($created_at_array);
-                                @endphp
-                                <hr>
-                                At: {{ $details['created_at'] }}<br>
-                                From: {{ $details['ip_address'] }}<br>
-                                By: {{ $details['user_name'] }} ({{ $details['user_email'] }})<br>
-                                @foreach ($created_at_array as $audit)
-                                    {{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}<br>
-                                @endforeach
+                        ============== KPI Changes ==================
+                        
+                        @foreach ($kpi_recipient_audits as $created_at_array)
+                            @php
+                                // grab first record of array
+                                $details = reset($created_at_array);
+                            @endphp
+                            <hr>
+                            At: {{ $details['created_at'] }}<br>
+                            From: {{ $details['ip_address'] }}<br>
+                            By: {{ $details['user_name'] }} ({{ $details['user_email'] }})<br>
+                            @foreach ($created_at_array as $audit)
+                                {{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}<br>
                             @endforeach
-
-						</div>
-					</div>
+                        @endforeach
+                    </div>
 				</div>
 			</div>
 		</div>
