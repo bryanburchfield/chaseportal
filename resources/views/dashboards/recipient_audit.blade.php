@@ -52,7 +52,7 @@
                                         
                                         <tr>
                                             <td>{{ $audit->event }}</td>
-                                            <td>{{ $audit->created_at }}</td>
+                                            <td>{{ $audit->created_at->tz('America/New_York')->toCookieString() }}</td>
                                             <td>{{ $audit->ip_address }}</td>
                                             <td>{{ $audit->user->name }} ({{ $audit->user->email }}</td>
                                             <td>
@@ -90,7 +90,7 @@
                         <div class="col-sm-12">
                             <div class="card oauto">
                                 <div class="col-sm-4 kpi_change_info_cnt">
-                                    <h4 class="mb10"><span class="kpi_change_info">At:</span> {{ $details['created_at'] }}</h4>
+                                    <h4 class="mb10"><span class="kpi_change_info">At:</span> {{ $details['created_at']->tz('America/New_York')->toCookieString() }}</h4>
                                     <h4 class="mb10"> <span class="kpi_change_info">From:</span> {{ $details['ip_address'] }}</h4>
                                     <h4 class="mb10"><span class="kpi_change_info">By:</span> {{ $details['user_name'] }} </h4>
                                     <h4 class="mb20"><span class="kpi_change_info"> </span> {{ $details['user_email'] }}</h4>
