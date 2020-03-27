@@ -58,6 +58,22 @@
                                 </table>
                             @endforeach
 
+                            ============== KPI Changes ==================
+                            
+                            @foreach ($kpi_recipient_audits as $created_at_array)
+                                @php
+                                    // grab first record of array
+                                    $details = reset($created_at_array);
+                                @endphp
+                                <hr>
+                                At: {{ $details['created_at'] }}<br>
+                                From: {{ $details['ip_address'] }}<br>
+                                By: {{ $details['user_name'] }} ({{ $details['user_email'] }})<br>
+                                @foreach ($created_at_array as $audit)
+                                    {{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}<br>
+                                @endforeach
+                            @endforeach
+
 						</div>
 					</div>
 				</div>
