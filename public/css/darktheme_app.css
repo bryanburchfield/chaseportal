@@ -2127,6 +2127,15 @@ a.edit_recip_glyph {
   color: #33A09B;
 }
 
+a.kpi_change_details {
+  margin-right: 10px;
+  position: absolute;
+  bottom: 19px;
+  right: 64px;
+  color: #ddd;
+  font-size: 16px;
+}
+
 .users p {
   font-size: 16px;
   font-weight: 600;
