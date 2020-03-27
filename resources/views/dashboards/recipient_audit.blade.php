@@ -89,10 +89,11 @@
 
                         <div class="col-sm-12">
                             <div class="card oauto">
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 kpi_change_info_cnt">
                                     <h4 class="mb10"><span class="kpi_change_info">At:</span> {{ $details['created_at'] }}</h4>
                                     <h4 class="mb10"> <span class="kpi_change_info">From:</span> {{ $details['ip_address'] }}</h4>
-                                    <h4 class="mb20"><span class="kpi_change_info">By:</span> {{ $details['user_name'] }} ({{ $details['user_email'] }})</h4>
+                                    <h4 class="mb10"><span class="kpi_change_info">By:</span> {{ $details['user_name'] }} </h4>
+                                    <h4 class="mb20"><span class="kpi_change_info"> </span> {{ $details['user_email'] }}</h4>
                                 </div>
                                 <div class="col-sm-4">
                                     @foreach ($created_at_array as $audit)
