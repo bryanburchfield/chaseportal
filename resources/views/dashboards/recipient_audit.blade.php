@@ -30,41 +30,44 @@
 					</div>
 
                     <div class="col-sm-12">
-                        @foreach ($audits as $audit)
-                            @php
-                                $modified = $audit->getModified();
-                                $fields = array_keys($modified);
-                                $old = array_column($modified, 'old');
-                                $new = array_column($modified, 'new');
-                            @endphp
-                            <hr>
-                            ==== {{ $audit->event }} ====<br>
-                            At: {{ $audit->created_at }}<br>
-                            From: {{ $audit->ip_address }}<br>
-                            By: {{ $audit->user->name }} ({{ $audit->user->email }})<br>
-                            
-                            <div class="table-responsive">
-                                <table class="table table-striped audit_table">
-                                    <thead>
-                                        <th>Field</th>
-                                        <th>Old</th>
-                                        <th>New</th>
-                                    </thead>
-                                    <tbody>
-                                    @for ($i = 0; $i < count($modified); $i++)
-                                        <tr>
-                                            <td>{{ $fields[$i] }}</td>
-                                            <td>{{ isset($old[$i]) ? $old[$i] : '' }}</td>
-                                            <td>{{ isset($new[$i]) ? $new[$i] : '' }}</td>
-                                        </tr>
-                                    @endfor
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endforeach
+                        <div class="table-responsive">
+                            <table class="table table-striped audit_table">
+                                <thead>
+                                    <th>Type</th>
+                                    <th>At</th>
+                                    <th>From</th>
+                                    <th>By</th>
+                                    <th>Field</th>
+                                    <th>Old</th>
+                                    <th>New</th>
+                                </thead>
 
+                                <tbody>
+                                    @foreach ($audits as $audit)
+                                        @php
+                                            $modified = $audit->getModified();
+                                            $fields = array_keys($modified);
+                                            $old = array_column($modified, 'old');
+                                            $new = array_column($modified, 'new');
+                                        @endphp
+                                        
+                                        <tr>
+                                            <td>{{ $audit->event }}</td>
+                                            <td>{{ $audit->created_at }}</td>
+                                            <td>{{ $audit->ip_address }}</td>
+                                            <td>{{ $audit->user->name }} ({{ $audit->user->email }}</td>
+                                            @for ($i = 0; $i < count($modified); $i++)
+                                                <td>{{ $fields[$i] }}</td>
+                                                <td>{{ isset($old[$i]) ? $old[$i] : '' }}</td>
+                                                <td>{{ isset($new[$i]) ? $new[$i] : '' }}</td>
+                                            @endfor
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         ============== KPI Changes ==================
-                        
+
                         @foreach ($kpi_recipient_audits as $created_at_array)
                             @php
                                 // grab first record of array
