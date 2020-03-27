@@ -2523,6 +2523,13 @@ p.login_date {
     margin-right: 10px;
 }
 
+.card.oauto{overflow: auto;}
+.kpi_change_info{
+    display: inline-block;
+    min-width: 80px;
+    font-weight: 600;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

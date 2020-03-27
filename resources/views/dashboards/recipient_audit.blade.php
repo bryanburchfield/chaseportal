@@ -89,13 +89,17 @@
                         @endphp
 
                         <div class="col-sm-12">
-                            <div class="card">
-                                <h4 class="mb5">At: {{ $details['created_at'] }}</h4>
-                                <h4 class="mb5"> From: {{ $details['ip_address'] }}</h4>
-                                <h4 class="mb20">By: {{ $details['user_name'] }} ({{ $details['user_email'] }})</h4>
-                                @foreach ($created_at_array as $audit)
-                                    <p>{{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}</p>
-                                @endforeach
+                            <div class="card oauto">
+                                <div class="col-sm-4">
+                                    <h4 class="mb10"><span class="kpi_change_info">At:</span> {{ $details['created_at'] }}</h4>
+                                    <h4 class="mb10"> <span class="kpi_change_info">From:</span> {{ $details['ip_address'] }}</h4>
+                                    <h4 class="mb20"><span class="kpi_change_info">By:</span> {{ $details['user_name'] }} ({{ $details['user_email'] }})</h4>
+                                </div>
+                                <div class="col-sm-4">
+                                    @foreach ($created_at_array as $audit)
+                                        <li>{{ $audit['kpi_event'] }} {{ __('kpi.' . $audit['kpi']->name) }}</li>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     @endforeach
