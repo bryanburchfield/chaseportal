@@ -1760,8 +1760,8 @@ span.selected_campaign {
   display: none;
 }
 
-.report_totals {
-  background: #EFF1F2;
+.report_totals td {
+  background: #33A09B;
 }
 
 .report_totals td {
@@ -3057,7 +3057,8 @@ td.bg-danger {
   top: 25px;
 }
 
-.bwr_omni table thead th a {
+.bwr_omni table thead th a,
+.agent_pause_time table thead th a {
   display: none;
 }
 
