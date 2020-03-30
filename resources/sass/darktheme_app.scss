@@ -2714,7 +2714,9 @@ td.bg-danger{
     color:#a94442;
 }
 
-.bwr_omni table thead th a{display: none;}
+//prevent sorting
+.bwr_omni table thead th a, .shift_report table thead th a {display: none;}
+
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
 }
@@ -2736,6 +2738,7 @@ p.login_date {
     font-weight: 600;
     margin-right: 10px;
 }
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

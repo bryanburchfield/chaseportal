@@ -2497,7 +2497,9 @@ td.bg-danger{
     background: #f2dede;
     color:#a94442;
 }
-.bwr_omni table thead th a{display: none;}
+
+//prevent sorting
+.bwr_omni table thead th a, .shift_report table thead th a {display: none;}
 
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
@@ -2548,8 +2550,8 @@ MEDIAQUERIES
         font-size: 20px;
         margin-bottom: 25px;
     }
-
 }
+
 
 @media handheld, only screen and (max-width: 1300px){
     .flowchart_element{
