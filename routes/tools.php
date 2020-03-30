@@ -57,6 +57,15 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/validate_filter', 'EmailDripController@validateFilter');
                 Route::post('/delete_filter', 'EmailDripController@deleteFilter');
             });
+
+
+            // Playbook
+            Route::prefix('playbook')->group(function () {
+                Route::get('/', 'PlaybookController@index');
+                Route::get('/filters', 'PlaybookController@FilterIndex');
+                Route::get('/actions', 'PlaybookController@ActionIndex');
+                Route::get('/email_service_providers', 'PlaybookController@EmailServiceProviderIndex');
+            });
         });
     });
 });
