@@ -2,6 +2,7 @@
 
 namespace App\Services\Reports;
 
+use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
@@ -10,6 +11,7 @@ use Illuminate\Support\Carbon;
 class ShiftReport
 {
     use ReportTraits;
+    use CampaignTraits;
 
     public function __construct()
     {
@@ -29,6 +31,10 @@ class ShiftReport
     {
         $filters = [
             'db_list' => Auth::user()->getDatabaseArray(),
+            'campaigns' => $this->getAllCampaigns(
+                $this->params['fromdate'],
+                $this->params['todate']
+            ),
         ];
 
         return $filters;
@@ -69,8 +75,23 @@ class ShiftReport
 
         $tz =  Auth::user()->tz;
 
-        $sql = "SET NOCOUNT ON;
+        $bind = [];
 
+        $sql = "SET NOCOUNT ON;
+        CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);";
+
+        // load temp tables
+        $join = '';
+        if (!empty($this->params['campaigns'])) {
+            $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
+            $bind['campaigns'] = $campaigns;
+
+            $join = 'INNER JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign';
+            $sql .= "
+            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
+        }
+
+        $sql .= "
         CREATE TABLE #ShiftReport(
             Date date,
             Campaign varchar(150),
@@ -117,6 +138,7 @@ class ShiftReport
             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
          0 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        $join
         WHERE dr.GroupId = :group_id$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
@@ -162,6 +184,7 @@ class ShiftReport
             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
          1 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        $join
         WHERE dr.GroupId = :group_id1$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
@@ -241,6 +264,10 @@ class ShiftReport
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        if (!empty($request->campaigns)) {
+            $this->params['campaigns'] = $request->campaigns;
+        }
 
         // Save params to session
         $this->saveSessionParams();

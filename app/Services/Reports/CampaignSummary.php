@@ -17,7 +17,7 @@ class CampaignSummary
         $this->params['reportName'] = 'reports.campaign_summary';
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
-            'Total' => 'reports.totalcalls',
+            'Total' => 'reports.total',
             'Dialed' => 'reports.dialed',
             'DPH' => 'reports.dph',
             'Available' => 'reports.available',
