@@ -223,8 +223,58 @@ class AgentPauseTime
             array_multisort($col, $dir, $results);
         }
 
-        // format fields
-        foreach ($results as &$rec) {
+        $blankrec = [
+            'Rep' => '',
+            'Campaign' => '',
+            'LogInTime' => '',
+            'LogOutTime' => '',
+            'PausedTime' => '',
+            'UnPausedTime' => '',
+            'PausedTimeSec' => '',
+            'BreakCode' => '',
+            'TotPausedSec' => '',
+            'TotManHours' => '',
+        ];
+
+        $zerorec = [
+            'Rep' => trans('reports.total'),
+            'Campaign' => '',
+            'LogInTime' => '',
+            'LogOutTime' => '',
+            'PausedTime' => '',
+            'UnPausedTime' => '',
+            'PausedTimeSec' => 0,
+            'BreakCode' => '',
+            'TotPausedSec' => 0,
+            'TotManHours' => 0,
+        ];
+
+        $totals = $zerorec;
+        $subtotals = $zerorec;
+
+        $final = [];
+        $rep = '';
+        // format fields and add totals
+        foreach ($results as $rec) {
+            // add to totals
+            $totals['PausedTimeSec'] += $rec['PausedTimeSec'];
+            $totals['TotPausedSec'] += $rec['TotPausedSec'];
+            $totals['TotManHours'] += $rec['TotManHours'];
+            $subtotals['PausedTimeSec'] += $rec['PausedTimeSec'];
+            $subtotals['TotPausedSec'] += $rec['TotPausedSec'];
+            $subtotals['TotManHours'] += $rec['TotManHours'];
+
+            // add subtotal line if rep changes
+            if ($rec['Rep'] != $rep && $rep != '') {
+                $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
+                $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
+                $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
+
+                $final[] = $subtotals;
+                $final[] = $blankrec;
+                $subtotals = $zerorec;
+            }
+
             $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
             $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
             $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->isoFormat('L LT');
@@ -233,9 +283,27 @@ class AgentPauseTime
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
             $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);
             $rec['TotManHours'] = $this->secondsToHms($rec['TotManHours']);
+
+            $rep = $rec['Rep'];
+
+            $final[] = $rec;
         }
 
-        return $results;
+        if (count($final)) {
+            $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
+            $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
+            $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
+
+            $totals['PausedTimeSec'] = $this->secondsToHms($totals['PausedTimeSec']);
+            $totals['TotPausedSec'] = $this->secondsToHms($totals['TotPausedSec']);
+            $totals['TotManHours'] = $this->secondsToHms($totals['TotManHours']);
+
+            $final[] = $subtotals;
+            $final[] = $blankrec;
+            $final[] = $totals;
+        }
+
+        return $final;
     }
 
     private function processInput(Request $request)
