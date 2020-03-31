@@ -183,7 +183,10 @@ class CallerIdService
 
         if ($this->email_to === null) {
             $to = 'jonathan.gryczka@chasedatacorp.com';
-            $cc = 'ahmed@chasedatacorp.com';
+            $cc = [
+                'g.sandoval@chasedatacorp.com',
+                'ahmed@chasedatacorp.com',
+            ];
         } else {
             $to = $this->email_to;
             $cc = [
