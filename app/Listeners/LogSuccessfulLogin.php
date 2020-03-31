@@ -34,11 +34,17 @@ class LogSuccessfulLogin
             return;
         }
 
+        $action = 'Login';
+
+        if (session('isApi', 0)) {
+            $action = 'API Login';
+        }
+
         UserAudit::create([
             'ip' => $this->request->ip(),
             'user_id' => $event->user->id,
             'email' => $event->user->email,
-            'action' => 'Login',
+            'action' => $action,
         ]);
     }
 }
