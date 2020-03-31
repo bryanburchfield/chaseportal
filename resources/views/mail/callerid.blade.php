@@ -558,6 +558,7 @@
                                 <td>
                                     <div class="text" style="text-align: center;">
                                         <h2 style="color:#ffffff;"><span>CALLER ID REPORT</span> <br>{{ $data['startdate'] }} - {{ $data['enddate'] }}</h2>
+                                        <h2 style="color:#ffffff;">>{{ $data['maxcount'] }} Dials</h2>
                                     </div>
                                 </td>
                             </tr>
