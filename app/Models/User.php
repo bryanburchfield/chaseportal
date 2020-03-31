@@ -11,11 +11,13 @@ use App\Notifications\WelcomeDemoNotification;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Password;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
     use Notifiable;
     use TimeTraits;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +65,11 @@ class User extends Authenticatable
     protected $appends = [
         'expires_in',
     ];
+
+    public function userAudits()
+    {
+        return $this->hasMany('App\Models\UserAudit');
+    }
 
     public function getIanaTzAttribute()
     {

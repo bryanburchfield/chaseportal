@@ -15,5 +15,9 @@ Route::prefix('kpi')->group(function () {
         Route::post('remove_recipient_from_all', 'KpiController@removeRecipient');
         Route::post('ajax_search', 'KpiController@searchRecipients');
         Route::post('get_recipient', 'KpiController@getRecipient');
+
+        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+            Route::get('recipients/audit/{id}', 'KpiController@auditRecipient');
+        });
     });
 });

@@ -72,6 +72,9 @@
                                 @if(!Auth::user()->isType('demo') || $recipient->user_id == Auth::user()->id)
                                     <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-user-edit"></i></a>
                                     <a class="remove_recip_glyph" data-toggle="modal" data-target="#deleteRecipModal" href="#" data-recip="{{ $recipient->id }}" data-userid="{{$recipient->id}}" data-username="{{$recipient->name}}"><i class="fas fa-trash-alt"></i></a>
+                                    @if(Auth::user()->isType('superadmin'))
+                                        <a class="kpi_change_details" href="{{action('KpiController@auditRecipient', ['id' => $recipient->id])}}"><i class="fas fa-link"></i></a>
+                                    @endif
                                 @endif
                             </div>
                         @empty
