@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AgentPauseTime
 {
@@ -51,7 +52,7 @@ class AgentPauseTime
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
-        $tz =  Auth::user()->tz;
+        $tz = Auth::user()->tz;
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
@@ -111,7 +112,7 @@ class AgentPauseTime
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     private function processResults($sql, $bind)
