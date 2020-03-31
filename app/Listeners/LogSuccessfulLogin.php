@@ -30,7 +30,7 @@ class LogSuccessfulLogin
     public function handle(Login $event)
     {
         // Check if this is from a cron job (set in controller)
-        if (isset($event->user->cron)) {
+        if (session('isCron', 0)) {
             return;
         }
 

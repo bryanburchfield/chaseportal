@@ -96,7 +96,7 @@ class LeadMoveService
 
             if ($user) {
                 // set a flag so the audit trail doesn't pick it up
-                $user->cron = true;
+                session(['isCron' => 1]);
                 Auth::login($user);
             }
         }
