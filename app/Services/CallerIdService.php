@@ -21,12 +21,10 @@ class CallerIdService
     private $email_to;
     private $startdate;
     private $enddate;
+    private $maxcount;
 
     private function initialize()
     {
-        $this->enddate = Carbon::parse('midnight');
-        $this->startdate = $this->enddate->copy()->subDay(30);
-
         $sid = config('twilio.did_sid');
         $token = config('twilio.did_token');
 
@@ -64,11 +62,21 @@ class CallerIdService
     {
         $this->initialize();
 
+        // run report for >5.5k calls over 30 days
+
+        $this->enddate = Carbon::parse('midnight');
+        $this->startdate = $this->enddate->copy()->subDay(30);
+        $this->maxcount = 5500;
+
         $group_id = '';
         $results = [];
         $all_results = [];
 
         foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
+
             // check if this number is still active
             if ($this->activeNumber($rec['CallerId'])) {
 
@@ -105,20 +113,51 @@ class CallerIdService
             $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
+
+        // Now run report for >15.5k calls yesterday
+
+        $this->enddate = Carbon::parse('midnight');
+        $this->startdate = $this->enddate->copy()->subDay(1);
+        $this->maxcount = 15500;
+
+        $all_results = [];
+
+        foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
+
+            // check if this number is still active
+            if ($this->activeNumber($rec['CallerId'])) {
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
+
+                $all_results[] = $rec;
+            }
+        }
+
+        if (!empty($all_results)) {
+            // clear group specific vars
+            $this->setGroup();
+            $csvfile = $this->makeCsv($all_results);
+            $this->emailReport($csvfile);
+        }
     }
 
     private function runQuery()
     {
         $bind = [];
+        $bind['maxcount'] = $this->maxcount;
 
         $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
 
         $union = '';
-        foreach (Dialer::all() as $i => $dialer) {
-            // foreach (Dialer::where('id', 7)->get() as $i => $dialer) {
+        // foreach (Dialer::all() as $i => $dialer) {
+        foreach (Dialer::where('dialer_numb', 26)->get() as $i => $dialer) {
 
             $bind['startdate' . $i] = $this->startdate->toDateTimeString();
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
+            $bind['inner_maxcount' . $i] = $this->maxcount;
 
             $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId,
               'cnt' = COUNT(*),
@@ -137,7 +176,7 @@ class CallerIdService
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 GROUP BY DR.GroupId, GroupName, CallerId
-                HAVING COUNT(*) >= 5500
+                HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
             $union = 'UNION ALL';
@@ -145,7 +184,7 @@ class CallerIdService
 
         $sql .= ") tmp
             GROUP BY GroupId, GroupName, CallerId
-            HAVING SUM(cnt) >= 5500
+            HAVING SUM(cnt) >= :maxcount
             ORDER BY GroupName, Dials desc";
 
         return $this->yieldSql($sql, $bind);
@@ -153,11 +192,17 @@ class CallerIdService
 
     private function makeCsv($results)
     {
+        if ($this->maxcount == 5500) {
+            $days = 'Dials in Last 30 Days';
+        } else {
+            $days = 'Dials Yesterday';
+        }
+
         $headers = [
             'GroupID',
             'GroupName',
             'CallerID',
-            'Dials in Last 30 Days',
+            $days,
             'Contact Rate',
         ];
 
@@ -202,6 +247,7 @@ class CallerIdService
             'url' => url('/') . '/',
             'startdate' => $this->startdate->toFormattedDateString(),
             'enddate' => $this->enddate->toFormattedDateString(),
+            'maxcount' => $this->maxcount,
         ];
 
         Mail::to($to)
