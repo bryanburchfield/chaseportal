@@ -164,7 +164,7 @@ class ReportController extends Controller
         }
 
         // set a flag so the audit trail doesn't pick it up
-        $user->cron = true;
+        session(['isCron' => 1]);
         Auth::login($user);
 
         if (in_array($user->language, config('localization.locales'))) {
