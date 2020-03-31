@@ -31,6 +31,7 @@ class LogSuccessfulLogout
     {
         // Check if this is from a cron job (set in controller)
         if (isset($event->user->cron)) {
+            unset($event->user->cron);
             return;
         }
 
