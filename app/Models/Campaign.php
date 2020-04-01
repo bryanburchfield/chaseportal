@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\SqlServerTraits;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Campaign extends Model
 {
@@ -14,61 +15,24 @@ class Campaign extends Model
     protected $table = 'Campaigns';
     protected $primaryKey = ['CampaignName', 'GroupId'];
     protected $keyType = 'string';
-    protected $fillable = [
-        'CampaignName',
-        'GroupId',
-    ];
-
     public $incrementing = false;
 
-    /**
-     * Return the Custom Table ID tied to a dialer campaign
-     * 
-     * @param mixed $campaign 
-     * @return int|mixed 
-     */
-    public function customTableId()
+    public function __construct(array $attributes = array())
     {
-        $sql = "SELECT AdvancedTable
-            FROM Campaigns
-            WHERE GroupId = :group_id
-            AND CampaignName = :campaign";
+        parent::__construct($attributes);
 
-        $bind = [
-            'group_id' => $this->GroupId,
-            'campaign' => $this->CampaignName,
-        ];
-
-        $results = $this->runSql($sql, $bind);
-
-        if (!isset($results[0]['AdvancedTable'])) {
-            return -1;
+        if (empty(config('database.connections.sqlsrv.database'))) {
+            if (Auth::check()) {
+                $db = Auth::user()->db;
+            } else {
+                $db = 'PowerV2_Reporting_Dialer-07';
+            }
+            config(['database.connections.sqlsrv.database' => $db]);
         }
-
-        return $results[0]['AdvancedTable'];
     }
 
-    /**
-     * Return all string fields of the Custom Table tied to a campaign
-     * 
-     * @param Request $request 
-     * @return array|mixed 
-     */
-    public function customTableFields()
+    public function advancedTable()
     {
-        $table_id = $this->customTableId();
-
-        if ($table_id == -1) {
-            return [];
-        }
-
-        $sql = "SELECT FieldName, [Type]
-            FROM AdvancedTableFields
-            INNER JOIN FieldTypes ON FieldTypes.id = AdvancedTableFields.FieldType
-            WHERE AdvancedTable = :table_id";
-
-        $results = resultsToList($this->runSql($sql, ['table_id' => $table_id]));
-
-        return $results;
+        return $this->belongsTo('App\Models\AdvancedTable', 'AdvancedTable');
     }
 }

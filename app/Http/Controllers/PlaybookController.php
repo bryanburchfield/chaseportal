@@ -7,8 +7,6 @@ use App\Models\Campaign;
 use App\Models\EmailServiceProvider;
 use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
-use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -236,9 +234,23 @@ class PlaybookController extends Controller
      */
     public function getTableFields(Request $request)
     {
-        $campaign = new Campaign(['CampaignName' => $request->campaign, 'GroupId' => Auth::user()->group_id]);
+        $campaign = Campaign::where('CampaignName', $request->campaign)
+            ->where('GroupId', Auth::user()->group_id)
+            ->first();
 
-        return $campaign->customTableFields();
+        $fields = [];
+        foreach ($campaign->advancedTable->advancedTableFields as $field) {
+            // only return 2:string, 4:text, 5:phone
+            if (
+                $field->fieldType->id == 2 ||
+                $field->fieldType->id == 4 ||
+                $field->fieldType->id == 5
+            ) {
+                $fields[$field->FieldName] = $field->fieldType->Type;
+            }
+        }
+
+        return $fields;
     }
 
     /**
