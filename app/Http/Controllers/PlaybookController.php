@@ -238,7 +238,7 @@ class PlaybookController extends Controller
     {
         $campaign = new Campaign(['CampaignName' => $request->campaign, 'GroupId' => Auth::user()->group_id]);
 
-        return $campaign->getTableFields();
+        return $campaign->customTableFields();
     }
 
     /**

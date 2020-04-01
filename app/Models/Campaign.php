@@ -54,7 +54,7 @@ class Campaign extends Model
      * @param Request $request 
      * @return array|mixed 
      */
-    public function getTableFields()
+    public function customTableFields()
     {
         $table_id = $this->customTableId();
 
