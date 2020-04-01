@@ -14,23 +14,17 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class EmailDripService
 {
     use SqlServerTraits;
-
-    // Directory where Email Service Providers live
-    // This is in the controller class too!
-    const ESP_DIR = 'Interfaces/EmailServiceProvider';
 
     private $email_service_provider;
 
     public function __construct(EmailServiceProvider $email_service_provider)
     {
         // full path the class so we don't have to import it
-        $class = 'App\\' . str_replace('/', '\\', self::ESP_DIR) . '\\' .
-            Str::studly($email_service_provider->provider_type);
+        $class = $email_service_provider->providerClassName();
 
         $this->email_service_provider = new $class($email_service_provider);
     }
