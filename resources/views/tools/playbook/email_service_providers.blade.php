@@ -78,7 +78,7 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form add_esp">
-                    @include('tools.email_drip.email_service_provider')
+                    @include('tools.playbook.shared.email_service_provider_form')
                     <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
@@ -103,7 +103,7 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form edit_esp">
-                    @include('tools.email_drip.email_service_provider')
+                    @include('tools.playbook.shared.email_service_provider_form')
                     <input type="hidden" name="id" class="id" value="">
                     <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>

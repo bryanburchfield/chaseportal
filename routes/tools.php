@@ -65,6 +65,18 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::get('/filters', 'PlaybookController@FilterIndex');
                 Route::get('/actions', 'PlaybookController@ActionIndex');
                 Route::get('/email_service_providers', 'PlaybookController@EmailServiceProviderIndex');
+
+                // Ajax
+                Route::post('/get_provider_properties', 'PlaybookController@getProviderProperties');
+                Route::post('/test_connection', 'PlaybookController@testConnection');
+                Route::post('/get_esp', 'PlaybookController@getEmailServiceProvider');
+                Route::post('/add_esp', 'PlaybookController@addEmailServiceProvider');
+                Route::post('/delete_esp', 'PlaybookController@deleteEmailServiceProvider');
+                Route::post('/update_esp', 'PlaybookController@updateEmailServiceProvider');
+
+                Route::post('/get_table_fields', 'PlaybookController@getTableFields');
+                Route::post('/get_subcampaigns', 'PlaybookController@getSubcampaigns');
+                Route::post('/get_operators', 'PlaybookController@getOperators');
             });
         });
     });
