@@ -61,21 +61,27 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
 
             // Playbook
             Route::prefix('playbook')->group(function () {
-                Route::get('/', 'PlaybookController@index');
-                Route::get('/filters', 'PlaybookController@FilterIndex');
-                Route::get('/actions', 'PlaybookController@ActionIndex');
-                Route::get('/email_service_providers', 'PlaybookController@EmailServiceProviderIndex');
 
-                // Ajax
-                Route::post('/get_provider_properties', 'PlaybookController@getProviderProperties');
-                Route::post('/test_connection', 'PlaybookController@testConnection');
-                Route::post('/get_esp', 'PlaybookController@getEmailServiceProvider');
-                Route::post('/add_esp', 'PlaybookController@addEmailServiceProvider');
-                Route::post('/delete_esp', 'PlaybookController@deleteEmailServiceProvider');
-                Route::post('/update_esp', 'PlaybookController@updateEmailServiceProvider');
-                Route::post('/get_table_fields', 'PlaybookController@getTableFields');
-                Route::post('/get_subcampaigns', 'PlaybookController@getSubcampaigns');
-                Route::post('/get_operators', 'PlaybookController@getOperators');
+                // Campaigns
+                Route::get('/', 'PlaybookCampaignController@index');
+
+                // Filters
+                Route::get('/filters', 'PlaybookFilterController@index');
+
+                // Actions
+                Route::get('/actions', 'PlaybookActionController@index');
+
+                // Email Serivce Providers
+                Route::get('/email_service_providers', 'PlaybookEmailProviderController@index');
+                Route::post('/get_provider_properties', 'PlaybookEmailProviderController@getProviderProperties');
+                Route::post('/test_connection', 'PlaybookEmailProviderController@testConnection');
+                Route::post('/get_esp', 'PlaybookEmailProviderController@getEmailServiceProvider');
+                Route::post('/add_esp', 'PlaybookEmailProviderController@addEmailServiceProvider');
+                Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
+                Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
+                Route::post('/get_table_fields', 'PlaybookEmailProviderController@getTableFields');
+                Route::post('/get_subcampaigns', 'PlaybookEmailProviderController@getSubcampaigns');
+                Route::post('/get_operators', 'PlaybookEmailProviderController@getOperators');
             });
         });
     });

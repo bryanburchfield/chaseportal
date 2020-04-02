@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class PlaybookController extends Controller
+class PlaybookEmailProviderController extends Controller
 {
     use CampaignTraits;
     use SqlServerTraits;
@@ -22,77 +22,8 @@ class PlaybookController extends Controller
     public function __construct()
     {
         $this->jsfile = [
-            "playbook.js",
+            "playbook_email_providers.js",
         ];
-    }
-
-    /**
-     * Playbook campaigns index
-     * 
-     * @return View|Factory 
-     */
-    public function index()
-    {
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $data = [
-            'page' => $page,
-            'jsfile' => $this->jsfile,
-            'group_id' => Auth::user()->group_id,
-            'email_service_providers' => $this->getEmailServiceProviders(),
-            'email_fields' => [],
-            'campaigns' => $this->getAllCampaigns(),
-            'subcampaigns' => [],
-        ];
-
-        return view('tools.playbook.campaigns')->with($data);
-    }
-
-    /**
-     * Playbook Filters index
-     * 
-     * @return View|Factory 
-     */
-    public function FilterIndex()
-    {
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $data = [
-            'page' => $page,
-            'jsfile' => $this->jsfile,
-            'group_id' => Auth::user()->group_id,
-            'campaigns' => $this->getAllCampaigns(),
-        ];
-
-        return view('tools.playbook.filters')->with($data);
-    }
-
-    /**
-     * Playbook Actions index
-     * 
-     * @return View|Factory 
-     */
-    public function ActionIndex()
-    {
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $data = [
-            'page' => $page,
-            'jsfile' => $this->jsfile,
-            'group_id' => Auth::user()->group_id,
-            'campaigns' => $this->getAllCampaigns(),
-        ];
-
-        return view('tools.playbook.actions')->with($data);
     }
 
     /**
@@ -100,7 +31,7 @@ class PlaybookController extends Controller
      * 
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
-    public function EmailServiceProviderIndex()
+    public function index()
     {
         $page = [
             'menuitem' => 'tools',
