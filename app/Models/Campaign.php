@@ -24,8 +24,6 @@ class Campaign extends Model
         if (empty(config('database.connections.sqlsrv.database'))) {
             if (Auth::check()) {
                 $db = Auth::user()->db;
-            } else {
-                $db = 'PowerV2_Reporting_Dialer-07';
             }
             config(['database.connections.sqlsrv.database' => $db]);
         }
