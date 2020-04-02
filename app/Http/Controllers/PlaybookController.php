@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\EmailServiceProvider;
 use App\Services\EmailDripService;
 use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -15,6 +16,16 @@ use Illuminate\View\View;
 class PlaybookController extends Controller
 {
     use CampaignTraits;
+    use SqlServerTraits;
+
+    private $jsfile;
+
+    public function __construct()
+    {
+        $this->jsfile = [
+            "playbook.js",
+        ];
+    }
 
     /**
      * Playbook campaigns index
@@ -30,6 +41,7 @@ class PlaybookController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => $this->jsfile,
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_fields' => [],
@@ -54,6 +66,7 @@ class PlaybookController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => $this->jsfile,
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
         ];
@@ -75,6 +88,7 @@ class PlaybookController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => $this->jsfile,
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
         ];
@@ -96,6 +110,7 @@ class PlaybookController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => $this->jsfile,
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'provider_types' => EmailServiceProvider::providerTypes(),

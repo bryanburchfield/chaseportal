@@ -73,7 +73,6 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/add_esp', 'PlaybookController@addEmailServiceProvider');
                 Route::post('/delete_esp', 'PlaybookController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookController@updateEmailServiceProvider');
-
                 Route::post('/get_table_fields', 'PlaybookController@getTableFields');
                 Route::post('/get_subcampaigns', 'PlaybookController@getSubcampaigns');
                 Route::post('/get_operators', 'PlaybookController@getOperators');
