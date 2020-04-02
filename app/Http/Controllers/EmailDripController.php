@@ -45,6 +45,7 @@ class EmailDripController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => ['email_drip.js'],
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_drip_campaigns' => $this->getDripCampaigns(),
@@ -77,6 +78,7 @@ class EmailDripController extends Controller
         ];
         $data = [
             'page' => $page,
+            'jsfile' => ['email_drip.js'],
             'email_drip_campaign' => $email_drip_campaign,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_fields' => $this->getTableFields($campaign_request),
@@ -99,6 +101,7 @@ class EmailDripController extends Controller
 
         $data = [
             'page' => $page,
+            'jsfile' => ['email_drip.js'],
             'group_id' => Auth::user()->group_id,
             'email_drip_campaign' => $email_drip_campaign,
             'operators' => $this->getOperators(),

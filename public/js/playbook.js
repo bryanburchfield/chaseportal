@@ -53,7 +53,7 @@ var Playbook = {
 	edit_provider_modal: function (e) {
 		e.preventDefault();
 
-		var id = $(this).data('serverid');
+		var id = $(this).data('providerid');
 
 		$.ajaxSetup({
 			headers: {

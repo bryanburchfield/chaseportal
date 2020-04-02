@@ -25,7 +25,7 @@
 
                                 <div class="tab-pane mt30" id="email_service_providers">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_provider_modal">{{__('tools.add_provider')}}</a>
 
                                         <div class="table-responsive nobdr email_service_providers">
                                             <table class="table mt20">
@@ -39,13 +39,13 @@
                                                 </thead>
                                                 <tbody>
                                                     @if(count($email_service_providers))
-                                                        @foreach($email_service_providers as $server)
+                                                        @foreach($email_service_providers as $provider)
                                                             <tr>
-                                                                <td>{{$server->name}}</td>
-                                                                <td>{{$server->provider_type}}</td>
+                                                                <td>{{$provider->name}}</td>
+                                                                <td>{{$provider->provider_type}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_provider_modal" data-providerid="{{$provider->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$provider->name}}" data-id="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
