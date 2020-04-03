@@ -23,9 +23,10 @@
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('tools.playbook.shared.topnav', ['playbook_page' => 'filters'])
 
-								<div class="tab-pane mt30" id="email_service_playbook_filters">
+								<div class="tab-pane mt30" id="playbook_filters">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal">{{__('tools.add_filter')}}</a>
+                                        
                                         <div class="table-responsive nobdr filters">
                                             <table class="table mt20">
                                                 <thead>
