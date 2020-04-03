@@ -213,6 +213,7 @@ class AgentPauseTime
                 $results[$i]['TotManHours'] = $reprec['TotManHours'];
 
                 // display blanks for subsequent records of same login session
+                $reprec['Campaign'] = '';
                 $reprec['TotManHours'] = '';
                 $reprec['LogInTime'] = '';
                 $reprec['LogOutTime'] = '';
