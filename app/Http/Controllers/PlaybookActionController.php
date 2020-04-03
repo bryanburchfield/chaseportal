@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PlaybookActionController extends Controller
 {
-    private $jsfile;
-
-    public function __construct()
-    {
-        $this->jsfile = [
-            "playbook_actions.js",
-        ];
-    }
+    use CampaignTraits;
+    use SqlServerTraits;
 
     /**
      * Playbook campaigns index
@@ -30,8 +26,9 @@ class PlaybookActionController extends Controller
 
         $data = [
             'page' => $page,
-            'jsfile' => $this->jsfile,
+            'jsfile' => ['playbook_actions.js'],
             'group_id' => Auth::user()->group_id,
+            'campaigns' => $this->getAllCampaigns(),
         ];
 
         return view('tools.playbook.actions')->with($data);

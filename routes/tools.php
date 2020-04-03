@@ -64,9 +64,11 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
 
                 // Campaigns
                 Route::get('/', 'PlaybookCampaignController@index');
+                Route::post('/get_subcampaigns', 'PlaybookCampaignController@getSubcampaigns');
 
                 // Filters
                 Route::get('/filters', 'PlaybookFilterController@index');
+                Route::post('/get_table_fields', 'PlaybookFilterController@getTableFields');
 
                 // Actions
                 Route::get('/actions', 'PlaybookActionController@index');
@@ -79,9 +81,6 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/add_esp', 'PlaybookEmailProviderController@addEmailServiceProvider');
                 Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
-                Route::post('/get_table_fields', 'PlaybookEmailProviderController@getTableFields');
-                Route::post('/get_subcampaigns', 'PlaybookEmailProviderController@getSubcampaigns');
-                Route::post('/get_operators', 'PlaybookEmailProviderController@getOperators');
             });
         });
     });

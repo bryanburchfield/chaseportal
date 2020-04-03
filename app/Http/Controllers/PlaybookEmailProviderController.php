@@ -3,29 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidEmailServiceProvider;
-use App\Models\Campaign;
 use App\Models\EmailServiceProvider;
 use App\Services\EmailDripService;
-use App\Traits\CampaignTraits;
-use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class PlaybookEmailProviderController extends Controller
 {
-    use CampaignTraits;
-    use SqlServerTraits;
-
-    private $jsfile;
-
-    public function __construct()
-    {
-        $this->jsfile = [
-            "playbook_email_providers.js",
-        ];
-    }
-
     /**
      * Email Serice Providers index
      * 
@@ -40,7 +25,7 @@ class PlaybookEmailProviderController extends Controller
 
         $data = [
             'page' => $page,
-            'jsfile' => $this->jsfile,
+            'jsfile' => ['playbook_email_providers.js'],
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'provider_types' => EmailServiceProvider::providerTypes(),
@@ -169,167 +154,5 @@ class PlaybookEmailProviderController extends Controller
         $email_drip_service = new EmailDripService(new EmailServiceProvider($request->all()));
 
         return $email_drip_service->testConnection();
-    }
-
-    /**
-     * Return all string fields of the Custom Table tied to a campaign
-     * 
-     * @param Request $request 
-     * @return array|mixed 
-     */
-    public function getTableFields(Request $request)
-    {
-        $campaign = Campaign::where('CampaignName', $request->campaign)
-            ->where('GroupId', Auth::user()->group_id)
-            ->first();
-
-        $fields = [];
-        foreach ($campaign->advancedTable->advancedTableFields as $field) {
-            // only return 2:string, 4:text, 5:phone
-            if (
-                $field->fieldType->id == 2 ||
-                $field->fieldType->id == 4 ||
-                $field->fieldType->id == 5
-            ) {
-                $fields[$field->FieldName] = $field->fieldType->Type;
-            }
-        }
-
-        return $fields;
-    }
-
-    /**
-     * Get Subcampaigns (ajax)
-     * 
-     * @param Request $request 
-     * @return array[] 
-     */
-    public function getSubcampaigns(Request $request)
-    {
-        $results = $this->getAllSubcampaignsWithNone($request->campaign);
-
-        return ['subcampaigns' => $results];
-    }
-
-    /**
-     * Append "!!none!!" to the list of subcampaigns
-     * 
-     * @param mixed $campaign 
-     * @return mixed 
-     */
-    private function getAllSubcampaignsWithNone($campaign)
-    {
-        $results = $this->getAllSubcampaigns($campaign);
-        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
-
-        return $results;
-    }
-
-    /**
-     * Return list of operators for filters
-     * 
-     * @param bool $detail 
-     * @return array 
-     */
-    public function getOperators($detail = false)
-    {
-        $mathops_detail = [
-            '=' => [
-                'description' => trans('tools.equals'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            '!=' => [
-                'description' => trans('tools.not_equals'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            '<' => [
-                'description' => trans('tools.less_than'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            '>' => [
-                'description' => trans('tools.greater_than'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            '<=' => [
-                'description' => trans('tools.less_than_or_equals'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            '>=' => [
-                'description' => trans('tools.greater_than_or_equals'),
-                'allow_nulls' => false,
-                'value_type' => 'string',
-            ],
-            'blank' => [
-                'description' => trans('tools.is_blank'),
-                'allow_nulls' => true,
-                'value_type' => null,
-            ],
-            'not_blank' => [
-                'description' => trans('tools.is_not_blank'),
-                'allow_nulls' => true,
-                'value_type' => null,
-            ],
-        ];
-
-        $dateops_detail = [
-            'days_ago' => [
-                'description' => trans('tools.days_ago'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-            'days_from_now' => [
-                'description' => trans('tools.days_from_now'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-            '<_days_ago' => [
-                'description' => trans('tools.less_than_days_ago'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-            '>_days_ago' => [
-                'description' => trans('tools.greater_than_days_ago'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-            '<_days_from_now' => [
-                'description' => trans('tools.less_than_days_from_now'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-            '>_days_from_now' => [
-                'description' => trans('tools.greater_than_days_from_now'),
-                'allow_nulls' => false,
-                'value_type' => 'integer',
-            ],
-        ];
-
-        // there's a better way to do this
-        if ($detail) {
-            $mathops = $mathops_detail;
-            $dateops = $dateops_detail;
-        } else {
-            $mathops = [];
-            $dateops = [];
-            foreach ($mathops_detail as $key => $array) {
-                $mathops[$key] = $array['description'];
-            }
-            foreach ($dateops_detail as $key => $array) {
-                $dateops[$key] = $array['description'];
-            }
-        }
-
-        return [
-            'integer' => $mathops,
-            'string' => $mathops,
-            'date' => array_merge($mathops, $dateops),
-            'text' => $mathops,
-            'phone' => $mathops,
-        ];
     }
 }
