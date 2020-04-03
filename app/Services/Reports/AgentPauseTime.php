@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Hamcrest\Type\IsInteger;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -27,10 +28,9 @@ class AgentPauseTime
             'LogInTime' => 'reports.logintime',
             'LogOutTime' => 'reports.logouttime',
             'PausedTime' => 'reports.pausedtime',
+            'BreakCode' => 'reports.breakcode',
             'UnPausedTime' => 'reports.unpausedtime',
             'PausedTimeSec' => 'reports.pausedtimesec',
-            'BreakCode' => 'reports.breakcode',
-            'TotPausedSec' => 'reports.totpausedsec',
             'TotManHours' => 'reports.totmanhours',
         ];
     }
@@ -132,7 +132,6 @@ class AgentPauseTime
             'Campaign' => '',
             'LogInTime' => '',
             'LogOutTime' => '',
-            'TotPausedSec' => 0,
             'TotManHours' => 0,
             'PauseRecs' => [],
         ];
@@ -167,7 +166,6 @@ class AgentPauseTime
                     break;
                 case 'Paused':
                     if (!empty($tmparray[$i]['LogInTime']) && round($rec['Duration']) > 0) {
-                        $tmparray[$i]['TotPausedSec'] += $rec['Duration'];
                         $tmparray[$i]['PauseRecs'][] = $rec['id'];
                         $idarray[] = [
                             'id' => $rec['id'],
@@ -187,7 +185,7 @@ class AgentPauseTime
         // remove any rows that don't have both login and logout times or no paused or no manhours
         $outerarray = [];
         foreach ($tmparray as $rec) {
-            if (!empty($rec['LogInTime']) && !empty($rec['LogOutTime']) && round($rec['TotPausedSec']) > 0 && round($rec['TotManHours']) > 0) {
+            if (!empty($rec['LogInTime']) && !empty($rec['LogOutTime']) && round($rec['TotManHours']) > 0) {
                 $outerarray[] = $rec;
             }
         }
@@ -208,21 +206,17 @@ class AgentPauseTime
                 $results[$i]['LogOutTime'] = $reprec['LogOutTime'];
 
                 $results[$i]['PausedTime'] = $pausedTime;
+                $results[$i]['BreakCode'] = $idarray[$key]['Details'];
                 $results[$i]['UnPausedTime'] = $idarray[$key]['Date'];
                 $results[$i]['PausedTimeSec'] = $idarray[$key]['Duration'];
-                $results[$i]['BreakCode'] = $idarray[$key]['Details'];
 
-                $results[$i]['TotPausedSec'] = $reprec['TotPausedSec'];
                 $results[$i]['TotManHours'] = $reprec['TotManHours'];
-            }
-        }
 
-        // now sort
-        if (!empty($this->params['orderby'])) {
-            $field = key($this->params['orderby']);
-            $dir = $this->params['orderby'][$field] == 'desc' ? SORT_DESC : SORT_ASC;
-            $col = array_column($results, $field);
-            array_multisort($col, $dir, $results);
+                // display blanks for subsequent records of same login session
+                $reprec['TotManHours'] = '';
+                $reprec['LogInTime'] = '';
+                $reprec['LogOutTime'] = '';
+            }
         }
 
         $blankrec = [
@@ -231,10 +225,9 @@ class AgentPauseTime
             'LogInTime' => '',
             'LogOutTime' => '',
             'PausedTime' => '',
+            'BreakCode' => '',
             'UnPausedTime' => '',
             'PausedTimeSec' => '',
-            'BreakCode' => '',
-            'TotPausedSec' => '',
             'TotManHours' => '',
         ];
 
@@ -244,10 +237,9 @@ class AgentPauseTime
             'LogInTime' => '',
             'LogOutTime' => '',
             'PausedTime' => '',
+            'BreakCode' => '',
             'UnPausedTime' => '',
             'PausedTimeSec' => 0,
-            'BreakCode' => '',
-            'TotPausedSec' => 0,
             'TotManHours' => 0,
         ];
 
@@ -260,16 +252,15 @@ class AgentPauseTime
         foreach ($results as $rec) {
             // add to totals
             $totals['PausedTimeSec'] += $rec['PausedTimeSec'];
-            $totals['TotPausedSec'] += $rec['TotPausedSec'];
-            $totals['TotManHours'] += $rec['TotManHours'];
-            $subtotals['PausedTimeSec'] += $rec['PausedTimeSec'];
-            $subtotals['TotPausedSec'] += $rec['TotPausedSec'];
-            $subtotals['TotManHours'] += $rec['TotManHours'];
+
+            // Manhours might be blank
+            if (is_numeric($rec['TotManHours'])) {
+                $totals['TotManHours'] += $rec['TotManHours'];
+            }
 
             // add subtotal line if rep changes
             if ($rec['Rep'] != $rep && $rep != '') {
                 $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
-                $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
                 $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
 
                 $final[] = $subtotals;
@@ -277,14 +268,32 @@ class AgentPauseTime
                 $subtotals = $zerorec;
             }
 
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            // add to subtotals
+            $subtotals['PausedTimeSec'] += $rec['PausedTimeSec'];
+
+            // Manhours might be blank
+            if (is_numeric($rec['TotManHours'])) {
+                $subtotals['TotManHours'] += $rec['TotManHours'];
+            }
+
+            // Login times might be blank
+            if (empty($rec['LogInTime'])) {
+                $rec['LogInTime'] = '';
+                $rec['LogOutTime'] = '';
+            } else {
+                $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+                $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            }
+
             $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->isoFormat('L LT');
             $rec['UnPausedTime'] = Carbon::parse($rec['UnPausedTime'])->isoFormat('L LT');
-
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
-            $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);
-            $rec['TotManHours'] = $this->secondsToHms($rec['TotManHours']);
+
+            if (is_numeric($rec['TotManHours'])) {
+                $rec['TotManHours'] = $this->secondsToHms($rec['TotManHours']);
+            } else {
+                $rec['TotManHours'] = '';
+            }
 
             $rep = $rec['Rep'];
 
@@ -293,11 +302,9 @@ class AgentPauseTime
 
         if (count($final)) {
             $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
-            $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
             $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
 
             $totals['PausedTimeSec'] = $this->secondsToHms($totals['PausedTimeSec']);
-            $totals['TotPausedSec'] = $this->secondsToHms($totals['TotPausedSec']);
             $totals['TotManHours'] = $this->secondsToHms($totals['TotManHours']);
 
             $final[] = $subtotals;
