@@ -10,7 +10,6 @@ use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Twilio\Rest\Client as Twilio;
@@ -90,49 +89,49 @@ class CallerIdService
         $results = [];
         $all_results = [];
 
-        // foreach ($this->runQuery() as $rec) {
-        //     if (count($rec) == 0) {
-        //         continue;
-        //     }
+        foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
 
-        //     // check if this number is still active
-        //     if ($this->activeNumber($rec['CallerId'])) {
+            // check if this number is still active
+            if ($this->activeNumber($rec['CallerId'])) {
 
-        //         $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-        //         unset($rec['Contacts']);
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
 
-        //         // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-        //         $all_results[] = $rec;
+                $all_results[] = $rec;
 
-        //         // Send email on change of group
-        //         if ($group_id != '' && $group_id != $rec['GroupId']) {
-        //             if ($this->setGroup($group_id)) {
-        //                 $csvfile = $this->makeCsv($results);
-        //                 $this->emailReport($csvfile);
-        //             }
+                // Send email on change of group
+                if ($group_id != '' && $group_id != $rec['GroupId']) {
+                    if ($this->setGroup($group_id)) {
+                        $csvfile = $this->makeCsv($results);
+                        $this->emailReport($csvfile);
+                    }
 
-        //             $results = [];
-        //         }
+                    $results = [];
+                }
 
-        //         $results[] = $rec;
-        //         $group_id = $rec['GroupId'];
-        //     }
-        // }
+                $results[] = $rec;
+                $group_id = $rec['GroupId'];
+            }
+        }
 
-        // if (!empty($results)) {
-        //     if ($this->setGroup($group_id)) {
-        //         $csvfile = $this->makeCsv($results);
-        //         $this->emailReport($csvfile);
-        //     }
-        // }
+        if (!empty($results)) {
+            if ($this->setGroup($group_id)) {
+                $csvfile = $this->makeCsv($results);
+                $this->emailReport($csvfile);
+            }
+        }
 
-        // if (!empty($all_results)) {
-        //     // clear group specific vars
-        //     $this->setGroup();
-        //     $csvfile = $this->makeCsv($all_results);
-        //     $this->emailReport($csvfile);
-        // }
+        if (!empty($all_results)) {
+            // clear group specific vars
+            $this->setGroup();
+            $csvfile = $this->makeCsv($all_results);
+            $this->emailReport($csvfile);
+        }
 
         // Now run report for >15.5k calls yesterday
 
@@ -215,20 +214,24 @@ class CallerIdService
     private function makeCsv($results)
     {
         if ($this->maxcount == 5500) {
-            $days = 'Dials in Last 30 Days';
+            $headers = [
+                'GroupID',
+                'GroupName',
+                'CallerID',
+                'Dials in Last 30 Days',
+                'Contact Rate',
+            ];
         } else {
-            $days = 'Dials Yesterday';
+            $headers = [
+                'GroupID',
+                'GroupName',
+                'CallerID',
+                'Dials Yesterday',
+                'Contact Rate',
+                'Flagged',
+                'Flagged By',
+            ];
         }
-
-        $headers = [
-            'GroupID',
-            'GroupName',
-            'CallerID',
-            $days,
-            'Contact Rate',
-            'Flagged',
-            'Flagged By',
-        ];
 
         array_unshift($results, $headers);
 
@@ -341,15 +344,13 @@ class CallerIdService
                 ],
             ]);
         } catch (Exception $e) {
-            Log::error('Adding ' . $phone);
-            Log::info($e->getMessage());
             // don't care
         }
 
         // Check number
 
-        // Wait a few secs after adding - seems to improve results
-        sleep(3);
+        // Wait a while after adding - seems to improve results
+        sleep(10);
 
         if (!$this->waitToSend()) {
             return [$flagged, $flags];
@@ -364,13 +365,7 @@ class CallerIdService
 
             $content = json_decode($response->getBody()->getContents(), true);
         } catch (Exception $e) {
-            Log::error('Checking ' . $phone);
-            Log::info($e->getMessage());
             $content = '';
-        }
-
-        if ($phone == '13176485769') {
-            Log::debug($content);
         }
 
         if (is_array($content)) {
@@ -399,8 +394,6 @@ class CallerIdService
                 'headers' => $this->calleridHeaders,
             ]);
         } catch (Exception $e) {
-            Log::error('Deleting ' . $phone);
-            Log::info($e->getMessage());
             // don't really care
         }
 
