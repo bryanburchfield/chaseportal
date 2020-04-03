@@ -34,7 +34,7 @@
                                                         <th>{{__('tools.campaign')}}</th>
                                                         <th>{{__('tools.field')}}</th>
                                                         <th>{{__('tools.operator')}}</th>
-                                                        <th>{{__('tools.value')}}</th>
+                                                        <th>{{__('tools.filter_value')}}</th>
                                                         <th>{{__('tools.edit')}}</th>
                                                         <th>{{__('tools.delete')}}</th>
                                                     </tr>
