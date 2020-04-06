@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlaybookCampaign;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
@@ -29,9 +30,22 @@ class PlaybookCampaignController extends Controller
             'jsfile' => ['playbook_campaigns.js'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
+            'playbook_campaigns' => $this->getPlaybookCampaigns(),
         ];
 
         return view('tools.playbook.campaigns')->with($data);
+    }
+
+    /**
+     * Campaigns configured for this group
+     * 
+     * @return mixed 
+     */
+    private function getPlaybookCampaigns()
+    {
+        return PlaybookCampaign::where('group_id', Auth::User()->group_id)
+            ->orderBy('name')
+            ->get();
     }
 
     /**
