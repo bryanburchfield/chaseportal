@@ -983,7 +983,7 @@ var Master = {
 
 					$('#' + report + ' #campaign_select')
 						.multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
-						.multiselect('selectAll', false)
+						.multiselect('selectAll', true)
 						.multiselect('updateButtonText');
 				}
 			});

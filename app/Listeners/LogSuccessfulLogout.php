@@ -30,15 +30,22 @@ class LogSuccessfulLogout
     public function handle(Logout $event)
     {
         // Check if this is from a cron job (set in controller)
-        if (isset($event->user->cron)) {
+        if (session('isCron', 0)) {
             return;
+        }
+
+
+        $action = 'Logout';
+
+        if (session('isApi', 0)) {
+            $action = 'API Logout';
         }
 
         UserAudit::create([
             'ip' => $this->request->ip(),
             'user_id' => $event->user->id,
             'email' => $event->user->email,
-            'action' => 'Logout',
+            'action' => $action,
         ]);
     }
 }

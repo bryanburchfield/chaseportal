@@ -41,8 +41,8 @@ trait DashTraits
         }
 
         // Login that user and set session var so we know it's via API
-        Auth::loginUsingId($user->id);
         session(['isApi' => 1]);
+        Auth::login($user);
 
         if (isset($rep)) {
             $this->rep = $request->rep;

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AgentPauseTime
 {
@@ -17,6 +18,7 @@ class AgentPauseTime
 
         $this->params['reportName'] = 'reports.agent_pause_time';
         $this->params['nostreaming'] = 1;
+        $this->params['hasTotals'] = true;
         $this->params['reps'] = [];
         $this->params['skills'] = [];
         $this->params['columns'] = [
@@ -50,7 +52,7 @@ class AgentPauseTime
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
-        $tz =  Auth::user()->tz;
+        $tz = Auth::user()->tz;
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
@@ -110,7 +112,7 @@ class AgentPauseTime
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     private function processResults($sql, $bind)
@@ -223,8 +225,58 @@ class AgentPauseTime
             array_multisort($col, $dir, $results);
         }
 
-        // format fields
-        foreach ($results as &$rec) {
+        $blankrec = [
+            'Rep' => '',
+            'Campaign' => '',
+            'LogInTime' => '',
+            'LogOutTime' => '',
+            'PausedTime' => '',
+            'UnPausedTime' => '',
+            'PausedTimeSec' => '',
+            'BreakCode' => '',
+            'TotPausedSec' => '',
+            'TotManHours' => '',
+        ];
+
+        $zerorec = [
+            'Rep' => trans('reports.total'),
+            'Campaign' => '',
+            'LogInTime' => '',
+            'LogOutTime' => '',
+            'PausedTime' => '',
+            'UnPausedTime' => '',
+            'PausedTimeSec' => 0,
+            'BreakCode' => '',
+            'TotPausedSec' => 0,
+            'TotManHours' => 0,
+        ];
+
+        $totals = $zerorec;
+        $subtotals = $zerorec;
+
+        $final = [];
+        $rep = '';
+        // format fields and add totals
+        foreach ($results as $rec) {
+            // add to totals
+            $totals['PausedTimeSec'] += $rec['PausedTimeSec'];
+            $totals['TotPausedSec'] += $rec['TotPausedSec'];
+            $totals['TotManHours'] += $rec['TotManHours'];
+            $subtotals['PausedTimeSec'] += $rec['PausedTimeSec'];
+            $subtotals['TotPausedSec'] += $rec['TotPausedSec'];
+            $subtotals['TotManHours'] += $rec['TotManHours'];
+
+            // add subtotal line if rep changes
+            if ($rec['Rep'] != $rep && $rep != '') {
+                $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
+                $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
+                $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
+
+                $final[] = $subtotals;
+                $final[] = $blankrec;
+                $subtotals = $zerorec;
+            }
+
             $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
             $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
             $rec['PausedTime'] = Carbon::parse($rec['PausedTime'])->isoFormat('L LT');
@@ -233,9 +285,27 @@ class AgentPauseTime
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
             $rec['TotPausedSec'] = $this->secondsToHms($rec['TotPausedSec']);
             $rec['TotManHours'] = $this->secondsToHms($rec['TotManHours']);
+
+            $rep = $rec['Rep'];
+
+            $final[] = $rec;
         }
 
-        return $results;
+        if (count($final)) {
+            $subtotals['PausedTimeSec'] = $this->secondsToHms($subtotals['PausedTimeSec']);
+            $subtotals['TotPausedSec'] = $this->secondsToHms($subtotals['TotPausedSec']);
+            $subtotals['TotManHours'] = $this->secondsToHms($subtotals['TotManHours']);
+
+            $totals['PausedTimeSec'] = $this->secondsToHms($totals['PausedTimeSec']);
+            $totals['TotPausedSec'] = $this->secondsToHms($totals['TotPausedSec']);
+            $totals['TotManHours'] = $this->secondsToHms($totals['TotManHours']);
+
+            $final[] = $subtotals;
+            $final[] = $blankrec;
+            $final[] = $totals;
+        }
+
+        return $final;
     }
 
     private function processInput(Request $request)

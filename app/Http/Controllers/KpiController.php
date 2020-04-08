@@ -15,10 +15,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Twilio\Rest\Client as Twilio;
+use OwenIt\Auditing\Models\Audit;
 
 class KpiController extends Controller
 {
@@ -100,15 +102,25 @@ class KpiController extends Controller
         $recipient->phone = $this->formatPhone($request->phone);
         $recipient->save();
 
-        $this->removeRecipientFromAll($recipient->id);
-        if (!empty($request->kpi_list)) {
+        // add/remove recip from kpis
+        if (empty($request->kpi_list)) {
+            $this->removeRecipientFromAll($recipient->id);
+        } else {
+            $kpi_ids = [];
             foreach ($request->kpi_list as $kpi_id) {
                 if (is_numeric($kpi_id)) {
-                    $kr = new KpiRecipient();
-                    $kr->kpi_id = $kpi_id;
-                    $kr->recipient_id = $recipient->id;
-                    $kr->save();
+                    $kpi_ids[] = $kpi_id;
+                    $kpi_recipient = KpiRecipient::where('kpi_id', $kpi_id)->where('recipient_id', $recipient->id)->first();
+                    if (!$kpi_recipient) {
+                        $kpi_recipient = KpiRecipient::create(['kpi_id' => $kpi_id, 'recipient_id' => $recipient->id]);
+                    }
                 }
+            }
+
+            // delete any not on the list
+            // Can't do a mass delete because it won't create audit records
+            foreach (KpiRecipient::where('recipient_id', $recipient->id)->whereNotIn('kpi_id', $kpi_ids)->get() as $kpi_recipient) {
+                $kpi_recipient->delete();
             }
         }
 
@@ -502,6 +514,82 @@ class KpiController extends Controller
         return $values;
     }
 
+    public function auditRecipient(Request $request)
+    {
+        $recipient = Recipient::find($request->id);
+
+        // In case the recipient was deleted, create a temp one with the old id
+        if (!$recipient) {
+            $recipient = new Recipient();
+            $recipient->id = $request->id;
+        }
+
+        $audits = $recipient->audits;
+
+        // find all KpiRecipient audit recs with this recipient_id
+        $kpi_recipient_audits = [];
+        foreach (Audit::where('auditable_type', 'App\Models\KpiRecipient')->get() as $audit) {
+            if (
+                (isset($audit->old_values['recipient_id']) && $audit->old_values['recipient_id'] == $request->id) ||
+                (isset($audit->new_values['recipient_id']) && $audit->new_values['recipient_id'] == $request->id)
+            ) {
+                // Change 'event' to something more meaningful
+                switch ($audit->event) {
+                    case 'created':
+                        $audit->kpi_event = "Added to";
+                        break;
+                    case 'deleted':
+                        $audit->kpi_event = "Removed from";
+                        break;
+                    default:
+                        $audit->kpi_event = $audit->event;
+                }
+                // One of these will be set
+                $kpi_id = isset($audit->old_values['kpi_id']) ?  $audit->old_values['kpi_id'] : $audit->new_values['kpi_id'];
+
+                $kpi = Kpi::find($kpi_id);
+
+                // just in case
+                if (!$kpi) {
+                    $kpi = new Kpi;
+                }
+
+                $created_at = $audit->created_at->toDateTimeString();
+
+                // if we're creating, and there was a matching deleted, ignore both
+                if ($audit->event == 'created' && isset($kpi_recipient_audits[$created_at])) {
+                    foreach ($kpi_recipient_audits[$created_at] as $key => $saved_audit) {
+                        if ($saved_audit['event'] == 'deleted' && $saved_audit['kpi'] == $kpi) {
+                            unset($kpi_recipient_audits[$created_at][$key]);
+                            continue 2;
+                        }
+                    }
+                }
+
+                $kpi_recipient_audits[$created_at][] = [
+                    'created_at' => $audit->created_at,
+                    'ip_address' => $audit->ip_address,
+                    'user_name' => $audit->user->name,
+                    'user_email' => $audit->user->email,
+                    'event' => $audit->event,
+                    'kpi_event' => $audit->kpi_event,
+                    'kpi' => $kpi,
+                ];
+            }
+        }
+
+        $page['menuitem'] = 'kpidash';
+        $page['type'] = 'page';
+
+        $data = [
+            'page' => $page,
+            'recipient' =>  $recipient,
+            'audits' =>  $audits,
+            'kpi_recipient_audits' =>  $kpi_recipient_audits,
+        ];
+        return view('dashboards.recipient_audit')->with($data);
+    }
+
     /**
      * Return all kpi_group records that are due to run at this time
      *
@@ -565,7 +653,7 @@ class KpiController extends Controller
 
         if ($user) {
             // set a flag so the audit trail doesn't pick it up
-            $user->cron = true;
+            session(['isCron' => 1]);
             Auth::login($user);
 
             $kpi = new KpiController();

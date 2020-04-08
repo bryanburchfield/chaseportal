@@ -121,6 +121,10 @@ h6 {
   margin-bottom: 0 !important;
 }
 
+.mb5 {
+  margin-bottom: 5px;
+}
+
 .mb10 {
   margin-bottom: 10px;
 }
@@ -1376,7 +1380,8 @@ p.descrip.top14 {
 .rules_table th,
 .demo_user_table th,
 .dnc_table th,
-.drip_campaigns table th {
+.drip_campaigns table th,
+.audit_table th {
   background: #203047;
   border-top: 0;
   color: #fff;
@@ -1756,8 +1761,8 @@ span.selected_campaign {
   display: none;
 }
 
-.report_totals {
-  background: #EFF1F2;
+.report_totals td {
+  background: #33A09B;
 }
 
 .report_totals td {
@@ -1982,6 +1987,15 @@ a.edit_recip_glyph {
 a.edit_recip_glyph {
   right: 35px;
   color: #33A09B;
+}
+
+a.kpi_change_details {
+  margin-right: 10px;
+  position: absolute;
+  bottom: 19px;
+  right: 64px;
+  color: #203047;
+  font-size: 16px;
 }
 
 .users p {
@@ -3044,7 +3058,8 @@ td.bg-danger {
   top: 25px;
 }
 
-.bwr_omni table thead th a {
+.bwr_omni table thead th a,
+.agent_pause_time table thead th a {
   display: none;
 }
 
@@ -3065,10 +3080,6 @@ p.login_date {
   float: right;
   font-weight: 600;
   margin-right: 10px;
-}
-
-.bwr_omni table thead th a {
-  display: none;
 }
 
 .btn-notifications {
@@ -3126,6 +3137,20 @@ span.numb_notifications {
 
 .calls_per_hour table tbody tr:last-of-type td {
   font-weight: 600;
+}
+
+.card.oauto {
+  overflow: auto;
+}
+
+.kpi_change_info {
+  display: inline-block;
+  min-width: 65px;
+  font-weight: 600;
+}
+
+.kpi_change_info_cnt h4 {
+  font-size: 15px;
 }
 
 /* ---------------------------------------------------
