@@ -7,7 +7,6 @@ use App\Models\FeatureMessage;
 use App\Models\ReadFeatureMessage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Parsedown;
 
 class FeatureMessageController extends Controller
 {
