@@ -20,7 +20,7 @@
 					</div>
 
 					<div class="col-sm-12 notification_msg">
-						{!! $feature_message->mark_down !!}
+						{!! $feature_message->body !!}
 					</div>
 			    </div>
 			</div>
