@@ -7,15 +7,15 @@
 
 <div class="field"></div>
 
-<div class="col-sm-3 filter_operators_div">
-    <label>{{_('tools.operator')}}</label>
+<div class="col-sm-6 filter_operators_div pl0">
+    <label>{{__('tools.operator')}}</label>
     <div class="form-group">
         <select class="form-control filter_operators" name="filter_operators[]" data-type="operator">
         </select>
     </div>
 </div>
 
-<div class="col-sm-3 filter_values_div">
+<div class="col-sm-6 filter_values_div pr0">
     <label>{{__('tools.value')}}</label>
     <input type="text" class="form-control filter_value" name="filter_values[]" data-type="value" value="">
 </div>

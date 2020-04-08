@@ -1523,7 +1523,10 @@ input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
 .create_notification .form-control,
-.add_demo_user .form-control {
+.add_demo_user .form-control,
+.add_filter .form-control,
+.add_action .form-control,
+.add_campaign .form-control {
   background: #eee !important;
 }
 

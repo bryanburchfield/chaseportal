@@ -76,17 +76,17 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_action')}}</h4>
             </div>
 
-            <div class="modal-body">
-                <form action="#" method="post" class="form add_action">
+            <form action="#" method="post" class="form add_action">
+                <div class="modal-body">
                     @include('tools.playbook.shared.action_form')
-                    <input type="submit" class="btn btn-primary add_action" value="{{__('tools.add_action')}}">
-                </form>
-                <input type="hidden" name="playbook_action_id" id="playbook_action_id" value="">
-            </div>
+                    <input type="hidden" name="playbook_action_id" id="playbook_action_id" value="">
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_action" value="{{__('tools.add_action')}}">
+                </div>
+            </form>
         </div>
     </div>
 </div>

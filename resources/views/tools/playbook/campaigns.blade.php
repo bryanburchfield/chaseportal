@@ -79,18 +79,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_campaign')}}</h4>
             </div>
-
-            <div class="modal-body">
-                <form action="#" method="post" class="form add_campaign">
+            
+            <form action="#" method="post" class="form add_campaign">
+                <div class="modal-body">
                     @include('tools.playbook.shared.campaign_form')
-                    <input type="submit" class="btn btn-primary add_campaign" value="{{__('tools.add_campaign')}}">
-                </form>
-                <input type="hidden" name="playbook_campaign_id" id="playbook_campaign_id" value="">
-            </div>
+                    <input type="hidden" name="playbook_campaign_id" id="playbook_campaign_id" value="">
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_campaign" value="{{__('tools.add_campaign')}}">
+                </div>
+            </form>
         </div>
     </div>
 </div>

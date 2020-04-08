@@ -5,7 +5,7 @@
 
 <div class="campaign"></div>
 
-<div class="col-sm-3 action_operators_div">
+<div class="action_operators_div">
     <label>{{__('tools.action_type')}}</label>
     <div class="form-group">
         <select class="form-control action_operators" name="action_operators[]" data-type="operator">
