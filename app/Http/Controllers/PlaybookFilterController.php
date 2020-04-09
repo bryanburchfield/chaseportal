@@ -8,6 +8,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PlaybookFilterController extends Controller
 {
@@ -183,5 +184,23 @@ class PlaybookFilterController extends Controller
         }
 
         return $fields;
+    }
+
+    public function addFilter(Request $request)
+    {
+        Log::debug('Add');
+        Log::debug($request);
+    }
+
+    public function updateFilter(Request $request)
+    {
+        Log::debug('Update');
+        Log::debug($request);
+    }
+
+    public function deleteFilter(Request $request)
+    {
+        Log::debug('Delete');
+        Log::debug($request);
     }
 }

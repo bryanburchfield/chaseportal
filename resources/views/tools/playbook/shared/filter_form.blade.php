@@ -3,14 +3,26 @@
     <input type="text" class="form-control name" name="name" value="" required>
 </div>
 
-<div class="campaign"></div>
+<div class="col-sm-6 filter_campaigns_div pl0">
+    <label>{{__('tools.campaign')}}</label>
+    <div class="form-group">
+        <select class="form-control filter_campaigns" name="campaigns[]" data-type="campaign">
+        </select>
+    </div>
+</div>
 
-<div class="field"></div>
+<div class="col-sm-6 filter_fields_div pl0">
+    <label>{{__('tools.field')}}</label>
+    <div class="form-group">
+        <select class="form-control filter_fields" name="fields[]" data-type="field">
+        </select>
+    </div>
+</div>
 
 <div class="col-sm-6 filter_operators_div pl0">
     <label>{{__('tools.operator')}}</label>
     <div class="form-group">
-        <select class="form-control filter_operators" name="filter_operators[]" data-type="operator">
+        <select class="form-control filter_operators" name="operators[]" data-type="operator">
         </select>
     </div>
 </div>
