@@ -63,8 +63,11 @@ class PlaybookFilterController extends Controller
             ->first();
 
         $fields = [];
-        foreach ($campaign->advancedTable->advancedTableFields as $field) {
-            $fields[$field->FieldName] = $field->fieldType->Type;
+
+        if ($campaign->advancedTable) {
+            foreach ($campaign->advancedTable->advancedTableFields as $field) {
+                $fields[$field->FieldName] = $field->fieldType->Type;
+            }
         }
 
         return $fields;
