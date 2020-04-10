@@ -36,7 +36,6 @@ var Playbook_Filters = {
 	get_operators:function(){
 
 		var field_type = $('.filter_fields').find('option:selected').data('type');
-		console.log(field +'-'+field_type);
 
 		$.ajaxSetup({
 			headers: {
