@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="col-sm-6 filter_fields_div pl0">
+<div class="col-sm-6 filter_fields_div pr0">
     <label>{{__('tools.field')}}</label>
     <div class="form-group">
         <select class="form-control filter_fields" name="fields[]" data-type="field">
