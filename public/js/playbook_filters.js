@@ -21,9 +21,7 @@ var Playbook_Filters = {
 			type: 'POST',
 			data: {campaign:campaign},
 			success: function (response) {
-				// console.log(response);
 				var filter_fields = [];
-				// console.log(Object.entries(response) );
 				for(var i=0;i<Object.entries(response).length;i++){
 			    	filter_fields += '<option data-type="'+Object.entries(response)[i][1]+'" value="'+Object.entries(response)[i][0]+'">'+Object.entries(response)[i][0]+'</option>';
 			    }
@@ -35,7 +33,7 @@ var Playbook_Filters = {
 
 	get_operators:function(){
 
-		var field_type = $('.filter_fields').find('option:selected').data('type');
+		var type = $('.filter_fields').find('option:selected').data('type');
 
 		$.ajaxSetup({
 			headers: {
@@ -50,22 +48,12 @@ var Playbook_Filters = {
 				type:type
 			},
 			success: function (response) {
-				console.log(response);
 				var operators = [];
+				for(var i=0;i<Object.entries(response).length;i++){
+					operators += '<option value="'+Object.entries(response)[i][0]+'">'+Object.entries(response)[i][1]+'</option>';					
+				}
 
-				// for(var i=0;i<response.length;i++){
-				// 	if(field_type == response[i]){
-				// 		console.log(Object.entries(response[i]));
-				// 		// for(var j=0;j<response[i].length;j++){
-				// 	    	// operators += '<option value="'+response[i][]+'">'+Object.keys(response)[i]+'</option>';
-				// 	    // }
-				// 	}
-				// }
-				
-
-				
-
-				// $('.filter_fields').append(filter_fields);
+				$('.filter_operators').append(operators);
 			}
 		});
 	}
