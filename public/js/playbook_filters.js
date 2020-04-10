@@ -34,7 +34,7 @@ var Playbook_Filters = {
 	},
 
 	get_operators:function(){
-		var field = $('.filter_fields').find('option:selected').val();
+
 		var field_type = $('.filter_fields').find('option:selected').data('type');
 		console.log(field +'-'+field_type);
 
@@ -48,7 +48,6 @@ var Playbook_Filters = {
 			url: '/tools/playbook/get_operators',
 			type: 'POST',
 			data: {
-				field:field,
 				type:type
 			},
 			success: function (response) {
