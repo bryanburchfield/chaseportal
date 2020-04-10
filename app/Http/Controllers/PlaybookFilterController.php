@@ -32,7 +32,6 @@ class PlaybookFilterController extends Controller
             'jsfile' => ['playbook_filters.js'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
-            'operators' => PlaybookFilter::getOperators(),
             'playbook_filters' => $this->getPlaybookFilters(),
         ];
 
@@ -93,5 +92,10 @@ class PlaybookFilterController extends Controller
         Log::debug($request);
 
         return ['status' => 'success'];
+    }
+
+    public function getOperators(Request $request)
+    {
+        return PlaybookFilter::getOperators();
     }
 }
