@@ -21,7 +21,7 @@ class PlaybookFilter extends Model
      * @param bool $detail 
      * @return array 
      */
-    public static function getOperators($detail = false)
+    public static function getOperators($field_type = null)
     {
         $mathops_detail = [
             '=' => [
@@ -99,27 +99,30 @@ class PlaybookFilter extends Model
             ],
         ];
 
-        // there's a better way to do this
-        if ($detail) {
-            $mathops = $mathops_detail;
-            $dateops = $dateops_detail;
-        } else {
-            $mathops = [];
-            $dateops = [];
-            foreach ($mathops_detail as $key => $array) {
-                $mathops[$key] = $array['description'];
-            }
-            foreach ($dateops_detail as $key => $array) {
-                $dateops[$key] = $array['description'];
-            }
+        $mathops = [];
+        $dateops = [];
+        foreach ($mathops_detail as $key => $array) {
+            $mathops[$key] = $array['description'];
+        }
+        foreach ($dateops_detail as $key => $array) {
+            $dateops[$key] = $array['description'];
         }
 
-        return [
+        $return = [
             'integer' => $mathops,
             'string' => $mathops,
             'date' => array_merge($mathops, $dateops),
             'text' => $mathops,
             'phone' => $mathops,
         ];
+
+        if ($field_type !== null) {
+            if (isset($return[$field_type])) {
+                return $return[$field_type];
+            }
+            return [];
+        }
+
+        return $return;
     }
 }
