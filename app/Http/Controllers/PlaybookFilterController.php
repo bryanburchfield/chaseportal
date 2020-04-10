@@ -99,6 +99,8 @@ class PlaybookFilterController extends Controller
 
     public function getOperators(Request $request)
     {
-        return PlaybookFilter::getOperators();
+        $type = $request->has('type') ? $request->type : null;
+
+        return PlaybookFilter::getOperators($type);
     }
 }
