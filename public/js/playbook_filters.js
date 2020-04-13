@@ -9,6 +9,7 @@ var Playbook_Filters = {
 
 	get_fields: function () {
 		var campaign = $(this).val();
+		$('.loader_hor').show();
 
 		$.ajaxSetup({
 			headers: {
@@ -21,6 +22,7 @@ var Playbook_Filters = {
 			type: 'POST',
 			data: { campaign: campaign },
 			success: function (response) {
+				$('.loader_hor').hide();
 				var filter_fields = '<option value="">Select One</option>';
 				for (var i = 0; i < Object.entries(response).length; i++) {
 					filter_fields += '<option data-type="' + Object.entries(response)[i][1] + '" value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][0] + '</option>';
@@ -32,6 +34,7 @@ var Playbook_Filters = {
 	},
 
 	get_operators: function () {
+		$('.loader_hor').show();
 		var type = $('.filter_fields').find('option:selected').data('type');
 
 		$.ajaxSetup({
@@ -47,6 +50,7 @@ var Playbook_Filters = {
 				type: type
 			},
 			success: function (response) {
+				$('.loader_hor').hide();
 				var operators;
 				for (var i = 0; i < Object.entries(response).length; i++) {
 					operators += '<option value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][1] + '</option>';
@@ -73,6 +77,20 @@ var Playbook_Filters = {
 			data: form,
 			success: function (response) {
 				console.log(response);
+			}, error: function (data) {
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.add_filter .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.add_filter .alert-danger').show();
+					});
+				}
 			}
 		});
 	}

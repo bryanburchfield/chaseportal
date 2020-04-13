@@ -84,9 +84,13 @@
             <form method="post" class="form add_filter">
                 <div class="modal-body">
                     @include('tools.playbook.shared.filter_form')
+
+                    <div class="alert alert-danger hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
+
+                    <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                     <input type="submit" class="btn btn-primary add_filter" value="{{__('tools.add_filter')}}">
                     <input type="hidden" name="id" id="id" value="">
