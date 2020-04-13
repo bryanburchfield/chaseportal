@@ -94,9 +94,7 @@ class PlaybookFilterController extends Controller
 
     public function deleteFilter(Request $request)
     {
-        Log::debug('Delete');
-        Log::debug($request);
-
+        PlaybookFilter::find($request->id)->delete($request->id);
         return ['status' => 'success'];
     }
 

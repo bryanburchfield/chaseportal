@@ -26,9 +26,9 @@
 								<div class="tab-pane mt30" id="playbook_filters">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal">{{__('tools.add_filter')}}</a>
-                                        
+
                                         <div class="table-responsive nobdr filters_table">
-                                            <table class="table mt20">
+                                            <table class="table mt20 table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.name')}}</th>
@@ -115,12 +115,12 @@
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
                     <input type="hidden" name="id" class="id" value="{{old('id')}}">
-                    <button type="submit" class="btn btn-primary edit_filter add_btn_loader">{{__('tools.save_changes')}}</button>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="submit" class="btn btn-primary edit_filter add_btn_loader">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>

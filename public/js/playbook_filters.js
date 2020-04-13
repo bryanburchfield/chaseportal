@@ -5,6 +5,8 @@ var Playbook_Filters = {
 		$('.filter_campaigns').on('change', this.get_fields);
 		$('.add_filter').on('change', '.filter_fields', this.get_operators);
 		$('.add_filter').on('submit', this.add_filter);
+		$('.delete_playbook_filter').on('click', this.delete_filter);
+		$('.remove_playbook_filter_modal').on('click', this.populate_delete_modal);
 	},
 
 	get_fields: function () {
@@ -93,6 +95,36 @@ var Playbook_Filters = {
 
 						$('.add_filter .alert-danger').show();
 					});
+				}
+			}
+		});
+	},
+
+	populate_delete_modal:function(e){
+		e.preventDefault();
+		var id = $(this).data('id');
+		$('#deleteFilterModal').find('input#id').val(id);
+	},
+
+	delete_filter:function(e){
+		e.preventDefault();
+		var id = $(this).parent().parent().find('#id').val();
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/filters/'+id,
+			type: 'DELETE',
+			data: {
+				id:id
+			},
+			success: function (response) {
+				console.log(response);
+				if(response.status == 'success'){
+					location.reload();
 				}
 			}
 		});

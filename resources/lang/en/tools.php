@@ -44,6 +44,7 @@ return [
 	'dnc_importer'	=> 'DNC Importer',
 	'edit'			=> 'Edit',
 	'edit_drip_campaign'	=> 'Edit Drip Campaign',
+	'edit_filter'	=> 'Edit Filter',
 	'edit_provider'	=> 'Edit Provider',
 	'edit_rule'		=> 'Edit Rule',
 	'edit_server'	=> 'Edit SMTP Server',
