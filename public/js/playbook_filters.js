@@ -64,7 +64,7 @@ var Playbook_Filters = {
 	add_filter: function (e) {
 		e.preventDefault();
 		var form = $(this).serialize();
-
+		$('.add_filter .alert-danger').empty().hide();
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
