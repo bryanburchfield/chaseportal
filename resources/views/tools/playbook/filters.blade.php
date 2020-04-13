@@ -89,7 +89,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                     <input type="submit" class="btn btn-primary add_filter" value="{{__('tools.add_filter')}}">
-                    <input type="hidden" name="playbook_filter_id" id="playbook_filter_id" value="">
+                    <input type="hidden" name="id" id="id" value="">
                 </div>
              </form>
         </div>
@@ -109,7 +109,7 @@
                 <form method="post" class="form edit_filter">
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
-                    <input type="hidden" name="id" class="id" value="">
+                    <input type="hidden" name="id" class="id" value="{{old('id')}}">
                     <button type="submit" class="btn btn-primary edit_filter add_btn_loader">{{__('tools.save_changes')}}</button>
                 </form>
             </div>
@@ -132,7 +132,7 @@
 
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
-                <input type="hidden" name="id" id="id" value="">
+                <input type="hidden" name="id" id="id" value="{{old('id')}}">
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 

@@ -13,7 +13,7 @@
 <div class="col-sm-6 filter_fields_div pr0">
     <label>{{__('tools.field')}}</label>
     <div class="form-group">
-        <select class="form-control filter_fields" name="fields[]" data-type="field">
+        <select class="form-control filter_fields" name="field" data-type="field">
         </select>
     </div>
 </div>
@@ -21,14 +21,14 @@
 <div class="col-sm-6 filter_operators_div pl0">
     <label>{{__('tools.operator')}}</label>
     <div class="form-group">
-        <select class="form-control filter_operators" name="operators[]" data-type="operator">
+        <select class="form-control filter_operators" name="operator" data-type="operator">
         </select>
     </div>
 </div>
 
 <div class="col-sm-6 filter_values_div pr0">
     <label>{{__('tools.value')}}</label>
-    <input type="text" class="form-control filter_value" name="filter_values[]" data-type="value" value="">
+    <input type="text" class="form-control filter_value" name="value" data-type="value" value="">
 </div>
 
 <div class="alert alert-success hidetilloaded"></div>
