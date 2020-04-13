@@ -90,6 +90,11 @@ trait SqlServerTraits
     private function defaultLeadFields()
     {
         return [
+            'Lead Age' => 'integer',
+            'Attempts' => 'integer',
+            'Days Called' => 'integer',
+            'Ring Group' => 'string',
+            'Call Status' => 'string',
             'ClientId' => 'string',
             'FirstName' => 'string',
             'LastName' => 'string',

@@ -63,7 +63,7 @@ class PlaybookFilterController extends Controller
             ->where('GroupId', Auth::user()->group_id)
             ->first();
 
-        $fields = [];
+        $fields = $this->defaultLeadFields();
 
         if ($campaign->advancedTable) {
             foreach ($campaign->advancedTable->advancedTableFields as $field) {

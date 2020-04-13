@@ -23,7 +23,49 @@ class PlaybookFilter extends Model
      */
     public static function getOperators($field_type = null)
     {
-        $mathops_detail = [
+        $mathops_detail = self::mathopsDetail();
+        $dateops_detail = self::dateopsDetail();
+
+        $mathops = [];
+        $dateops = [];
+        foreach ($mathops_detail as $key => $array) {
+            $mathops[$key] = $array['description'];
+        }
+        foreach ($dateops_detail as $key => $array) {
+            $dateops[$key] = $array['description'];
+        }
+
+        $return = [
+            'integer' => $mathops,
+            'string' => $mathops,
+            'date' => array_merge($mathops, $dateops),
+            'text' => $mathops,
+            'phone' => $mathops,
+        ];
+
+        if ($field_type !== null) {
+            if (isset($return[$field_type])) {
+                return $return[$field_type];
+            }
+            return [];
+        }
+
+        return $return;
+    }
+
+    public static function operatorDetail($operator)
+    {
+        $mathops_detail = self::mathopsDetail();
+        $dateops_detail = self::dateopsDetail();
+
+        $ops = array_merge($mathops_detail, $dateops_detail);
+
+        return $ops[$operator];
+    }
+
+    private static function mathopsDetail()
+    {
+        return [
             '=' => [
                 'description' => trans('tools.equals'),
                 'allow_nulls' => false,
@@ -65,8 +107,11 @@ class PlaybookFilter extends Model
                 'value_type' => null,
             ],
         ];
+    }
 
-        $dateops_detail = [
+    private static function dateopsDetail()
+    {
+        return [
             'days_ago' => [
                 'description' => trans('tools.days_ago'),
                 'allow_nulls' => false,
@@ -98,31 +143,5 @@ class PlaybookFilter extends Model
                 'value_type' => 'integer',
             ],
         ];
-
-        $mathops = [];
-        $dateops = [];
-        foreach ($mathops_detail as $key => $array) {
-            $mathops[$key] = $array['description'];
-        }
-        foreach ($dateops_detail as $key => $array) {
-            $dateops[$key] = $array['description'];
-        }
-
-        $return = [
-            'integer' => $mathops,
-            'string' => $mathops,
-            'date' => array_merge($mathops, $dateops),
-            'text' => $mathops,
-            'phone' => $mathops,
-        ];
-
-        if ($field_type !== null) {
-            if (isset($return[$field_type])) {
-                return $return[$field_type];
-            }
-            return [];
-        }
-
-        return $return;
     }
 }

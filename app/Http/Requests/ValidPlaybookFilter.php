@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\PlaybookFilter;
+use App\Rules\FilterValue;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Validation\Rule;
@@ -72,7 +73,7 @@ class ValidPlaybookFilter extends FormRequest
             ],
             'field' => 'required',
             'operator' => 'required',
-            'value' => 'nullable',
+            'value' => new FilterValue($this->operator),
         ];
     }
 }
