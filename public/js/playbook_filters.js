@@ -77,6 +77,9 @@ var Playbook_Filters = {
 			data: form,
 			success: function (response) {
 				console.log(response);
+				if(response.status == 'success'){
+					location.reload();
+				}
 			}, error: function (data) {
 				if (data.status === 422) {
 					var errors = $.parseJSON(data.responseText);
