@@ -4,7 +4,6 @@ namespace App\Rules;
 
 use App\Models\PlaybookFilter;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\Log;
 
 class FilterValue implements Rule
 {
@@ -19,7 +18,6 @@ class FilterValue implements Rule
     public function __construct($operator)
     {
         $this->operator = $operator;
-        Log::debug($operator);
     }
 
     /**
@@ -31,6 +29,11 @@ class FilterValue implements Rule
      */
     public function passes($attribute, $value)
     {
+        // If no operater selected, don't bother
+        if (empty($this->operator)) {
+            return true;
+        }
+
         $detail = PlaybookFilter::operatorDetail($this->operator);
 
         if (empty($value)) {
