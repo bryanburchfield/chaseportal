@@ -51,6 +51,11 @@ class PlaybookFilterController extends Controller
             ->get();
     }
 
+    public function getFilter(Request $request)
+    {
+        return $this->findPlaybookFilter($request->id);
+    }
+
     /**
      * Return fields of the Custom Table tied to a campaign
      * 
