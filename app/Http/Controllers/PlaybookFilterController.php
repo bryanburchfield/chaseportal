@@ -94,7 +94,9 @@ class PlaybookFilterController extends Controller
 
     public function deleteFilter(Request $request)
     {
-        PlaybookFilter::find($request->id)->delete($request->id);
+        $playbook_filter = $this->findPlaybookFilter($request->id);
+        $playbook_filter->delete();
+
         return ['status' => 'success'];
     }
 
@@ -103,5 +105,12 @@ class PlaybookFilterController extends Controller
         $type = $request->has('type') ? $request->type : null;
 
         return PlaybookFilter::getOperators($type);
+    }
+
+    private function findPlaybookfilter($id)
+    {
+        return PlaybookFilter::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
     }
 }
