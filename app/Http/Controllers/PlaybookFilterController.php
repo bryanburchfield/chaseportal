@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidPlaybookFilter;
 use App\Models\Campaign;
 use App\Models\PlaybookFilter;
 use App\Traits\CampaignTraits;
@@ -73,7 +74,7 @@ class PlaybookFilterController extends Controller
         return $fields;
     }
 
-    public function addFilter(Request $request)
+    public function addFilter(ValidPlaybookFilter $request)
     {
         Log::debug('Add');
         Log::debug($request);
@@ -81,7 +82,7 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
-    public function updateFilter(Request $request)
+    public function updateFilter(ValidPlaybookFilter $request)
     {
         Log::debug('Update');
         Log::debug($request);
