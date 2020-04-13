@@ -91,8 +91,8 @@ class PlaybookFilterController extends Controller
 
     public function updateFilter(ValidPlaybookFilter $request)
     {
-        Log::debug('Update');
-        Log::debug($request);
+        $playbook_filter = $this->findPlaybookFilter($request->id);
+        $playbook_filter->update($request->all());
 
         return ['status' => 'success'];
     }
