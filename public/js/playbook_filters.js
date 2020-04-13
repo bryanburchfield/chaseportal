@@ -26,7 +26,7 @@ var Playbook_Filters = {
 					filter_fields += '<option data-type="' + Object.entries(response)[i][1] + '" value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][0] + '</option>';
 				}
 
-				$('.filter_fields').append(filter_fields);
+				$('.filter_fields').html(filter_fields);
 			}
 		});
 	},
@@ -52,7 +52,7 @@ var Playbook_Filters = {
 					operators += '<option value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][1] + '</option>';
 				}
 
-				$('.filter_operators').append(operators);
+				$('.filter_operators').html(operators);
 			}
 		});
 	},
