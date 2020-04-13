@@ -76,8 +76,10 @@ class PlaybookFilterController extends Controller
 
     public function addFilter(ValidPlaybookFilter $request)
     {
-        Log::debug('Add');
-        Log::debug($request);
+        $data = $request->all();
+        $data['group_id'] = Auth::user()->group_id;
+
+        PlaybookFilter::create($data);
 
         return ['status' => 'success'];
     }
