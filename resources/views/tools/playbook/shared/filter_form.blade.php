@@ -30,7 +30,3 @@
     <label>{{__('tools.value')}}</label>
     <input type="text" class="form-control filter_value" name="value" data-type="value" value="">
 </div>
-
-<div class="alert alert-success hidetilloaded"></div>
-<div class="alert alert-danger hidetilloaded"></div>
-<div class="alert connection_msg hidetilloaded"></div>

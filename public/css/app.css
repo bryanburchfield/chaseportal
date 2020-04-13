@@ -3160,6 +3160,10 @@ span.numb_notifications {
   float: left;
 }
 
+.add_filter .alert {
+  clear: both;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

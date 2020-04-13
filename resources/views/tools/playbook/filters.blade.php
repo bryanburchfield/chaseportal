@@ -85,7 +85,9 @@
                 <div class="modal-body">
                     @include('tools.playbook.shared.filter_form')
 
+                    <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
+                    <div class="alert connection_msg hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
