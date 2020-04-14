@@ -9,7 +9,6 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookFilterController extends Controller
 {
@@ -51,6 +50,12 @@ class PlaybookFilterController extends Controller
             ->get();
     }
 
+    /**
+     * Return a single playbook_filters record by id
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getFilter(Request $request)
     {
         return $this->findPlaybookFilter($request->id);
@@ -79,6 +84,12 @@ class PlaybookFilterController extends Controller
         return $fields;
     }
 
+    /**
+     * Create new playbook_filters record
+     * 
+     * @param ValidPlaybookFilter $request 
+     * @return string[] 
+     */
     public function addFilter(ValidPlaybookFilter $request)
     {
         $data = $request->all();
@@ -89,6 +100,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update a playbook_filters record
+     * 
+     * @param ValidPlaybookFilter $request 
+     * @return string[] 
+     */
     public function updateFilter(ValidPlaybookFilter $request)
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
@@ -97,6 +114,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete a playbook_filters record
+     * 
+     * @param Request $request 
+     * @return string[] 
+     */
     public function deleteFilter(Request $request)
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
@@ -105,6 +128,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Return a list of availabe operators
+     * 
+     * @param Request $request 
+     * @return array 
+     */
     public function getOperators(Request $request)
     {
         $type = $request->has('type') ? $request->type : null;
@@ -112,6 +141,11 @@ class PlaybookFilterController extends Controller
         return PlaybookFilter::getOperators($type);
     }
 
+    /**
+     * Find plabook_filters record by id for user's group
+     * @param mixed $id 
+     * @return mixed 
+     */
     private function findPlaybookfilter($id)
     {
         return PlaybookFilter::where('id', $id)
