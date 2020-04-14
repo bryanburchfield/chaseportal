@@ -3,14 +3,20 @@ var Playbook_Filters = {
 	init: function () {
 		// $("#addFilterModal").on('show.bs.modal', this.get_fields);
 		$('.filter_campaigns').on('change', this.get_fields);
+		$('.filter_fields').on('change', this.update_filter_fields);
 		$('.add_filter').on('change', '.filter_fields', this.get_operators);
 		$('.add_filter').on('submit', this.add_filter);
 		$('.delete_playbook_filter').on('click', this.delete_filter);
-		$('.remove_playbook_filter_modal').on('click', this.populate_delete_modal);
+		$('.remove_playbook_filter_modal, .edit_playbook_filter_modal').on('click', this.populate_filter_modal);
 	},
 
-	get_fields: function () {
-		var campaign = $(this).val();
+	get_fields: function (selected_campaign=1) {
+		if(selected_campaign.type == 'change'){
+			campaign = $(this).val();
+		}else{
+			campaign=selected_campaign;
+		}
+
 		$('.loader_hor').show();
 
 		$.ajaxSetup({
@@ -22,6 +28,7 @@ var Playbook_Filters = {
 		$.ajax({
 			url: '/tools/playbook/get_table_fields',
 			type: 'POST',
+			async:false,
 			data: { campaign: campaign },
 			success: function (response) {
 				$('.loader_hor').hide();
@@ -35,8 +42,16 @@ var Playbook_Filters = {
 		});
 	},
 
-	get_operators: function () {
+	get_operators: function (field_type=1) {
 		$('.loader_hor').show();
+
+		if(field_type.type == 'change'){
+			type = $('.filter_fields').find('option:selected').data('type');
+		}else{
+			type=field_type;
+		}
+		console.log(type);
+
 		var type = $('.filter_fields').find('option:selected').data('type');
 
 		$.ajaxSetup({
@@ -48,10 +63,12 @@ var Playbook_Filters = {
 		$.ajax({
 			url: '/tools/playbook/get_operators',
 			type: 'POST',
+			async:false,
 			data: {
 				type: type
 			},
 			success: function (response) {
+				console.log(response);
 				$('.loader_hor').hide();
 				var operators;
 				for (var i = 0; i < Object.entries(response).length; i++) {
@@ -100,15 +117,66 @@ var Playbook_Filters = {
 		});
 	},
 
-	populate_delete_modal:function(e){
+	populate_filter_modal:function(e){
 		e.preventDefault();
+		var modal = $(this).data('target');
 		var id = $(this).data('id');
-		$('#deleteFilterModal').find('input#id').val(id);
+		$(modal).find('input.id').val(id);
+
+		if(modal.substring(1) == 'editFilterModal'){
+			Playbook_Filters.edit_filter(id);
+		}
+	},
+
+	edit_filter:function(id){
+
+		$('.loader_hor').show();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/filters/'+id,
+			type: 'GET',
+
+			data: {
+				id:id
+			},
+			success: function (response) {
+				console.log(response);
+
+				$('#editFilterModal').find('.name').val(response.name);
+				$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
+
+				$.when(Playbook_Filters.get_fields(response.campaign))
+				.then(function(){
+				    $("#editFilterModal .filter_fields option[value='"+response.field+"']").prop('selected', true);
+				})
+				.then(function(){
+					var type = $( "#editFilterModal .filter_fields option:selected").data('type');
+					Playbook_Filters.get_operators(type)
+				})
+				.then(function(){
+					$("#editFilterModal .filter_operators option[value='"+response.operator+"']").prop('selected', true);
+				});
+
+
+
+				// $('#editFilterModal').find('.filter_fields').val(response.field);
+
+				// if(response.status == 'success'){
+				// 	location.reload();
+				// }
+			}
+		});
 	},
 
 	delete_filter:function(e){
 		e.preventDefault();
-		var id = $(this).parent().parent().find('#id').val();
+		var id = $(this).parent().parent().find('.id').val();
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -133,4 +201,8 @@ var Playbook_Filters = {
 
 $(document).ready(function () {
 	Playbook_Filters.init();
+
+	$('#myModal').on('hidden.bs.modal', function () {
+	    // do something…
+	});
 });

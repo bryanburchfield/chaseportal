@@ -50,7 +50,7 @@
                                                                 <td>{{$playbook_filter->operator}}</td>
                                                                 <td>{{$playbook_filter->value}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-playbook_filterid="{{$playbook_filter->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_playbook_filter_modal" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
@@ -91,7 +91,6 @@
                 </div>
 
                 <div class="modal-footer">
-
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                     <input type="submit" class="btn btn-primary add_filter" value="{{__('tools.add_filter')}}">
@@ -119,6 +118,7 @@
             </div>
 
             <div class="modal-footer">
+                <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                 <button type="submit" class="btn btn-primary edit_filter add_btn_loader">{{__('tools.save_changes')}}</button>
             </div>
@@ -137,7 +137,7 @@
 
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
-                <input type="hidden" name="id" id="id" value="{{old('id')}}">
+                <input type="hidden" name="id" class="id" value="{{old('id')}}">
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 
