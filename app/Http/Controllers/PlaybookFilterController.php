@@ -62,7 +62,7 @@ class PlaybookFilterController extends Controller
     }
 
     /**
-     * Return fields of the Custom Table tied to a campaign
+     * Return availble fields for a filter
      * 
      * @param Request $request 
      * @return array|mixed 
@@ -71,13 +71,15 @@ class PlaybookFilterController extends Controller
     {
         $fields = $this->defaultLeadFields();
 
-        $campaign = Campaign::where('CampaignName', $request->campaign)
-            ->where('GroupId', Auth::user()->group_id)
-            ->first();
+        if ($request->has('campaign')) {
+            $campaign = Campaign::where('CampaignName', $request->campaign)
+                ->where('GroupId', Auth::user()->group_id)
+                ->first();
 
-        if ($campaign && $campaign->advancedTable) {
-            foreach ($campaign->advancedTable->advancedTableFields as $field) {
-                $fields[$field->FieldName] = $field->fieldType->Type;
+            if ($campaign && $campaign->advancedTable) {
+                foreach ($campaign->advancedTable->advancedTableFields as $field) {
+                    $fields[$field->FieldName] = $field->fieldType->Type;
+                }
             }
         }
 
