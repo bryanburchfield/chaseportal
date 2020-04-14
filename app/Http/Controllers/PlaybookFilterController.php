@@ -69,13 +69,13 @@ class PlaybookFilterController extends Controller
      */
     public function getTableFields(Request $request)
     {
+        $fields = $this->defaultLeadFields();
+
         $campaign = Campaign::where('CampaignName', $request->campaign)
             ->where('GroupId', Auth::user()->group_id)
             ->first();
 
-        $fields = $this->defaultLeadFields();
-
-        if ($campaign->advancedTable) {
+        if ($campaign && $campaign->advancedTable) {
             foreach ($campaign->advancedTable->advancedTableFields as $field) {
                 $fields[$field->FieldName] = $field->fieldType->Type;
             }
