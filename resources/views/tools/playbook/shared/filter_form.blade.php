@@ -14,6 +14,10 @@
     <label>{{__('tools.field')}}</label>
     <div class="form-group">
         <select class="form-control filter_fields" name="field" data-type="field">
+            <option value>{{__('general.select_one')}}</option>
+            @foreach ($fields as $name => $type)
+                <option data-type="{{$type}}" value="{{$name}}">{{$name}}</option>
+            @endforeach
         </select>
     </div>
 </div>

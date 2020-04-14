@@ -32,6 +32,7 @@ class PlaybookFilterController extends Controller
             'jsfile' => ['playbook_filters.js'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
+            'fields' => $this->defaultLeadFields(),
             'playbook_filters' => $this->getPlaybookFilters(),
         ];
 
