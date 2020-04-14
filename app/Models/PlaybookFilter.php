@@ -15,6 +15,20 @@ class PlaybookFilter extends Model
         'value',
     ];
 
+    public function getOperatorNameAttribute()
+    {
+        $operators = self::getOperators();
+        foreach ($operators as $group => $ops) {
+            foreach ($ops as $operator => $description) {
+                if ($operator == $this->operator) {
+                    return $description;
+                }
+            }
+        }
+
+        return '';
+    }
+
     /**
      * Return list of operators for filters
      * 

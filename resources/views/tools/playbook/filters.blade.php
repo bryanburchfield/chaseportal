@@ -47,7 +47,7 @@
                                                                 <td>{{$playbook_filter->name}}</td>
                                                                 <td>{{$playbook_filter->campaign}}</td>
                                                                 <td>{{$playbook_filter->field}}</td>
-                                                                <td>{{$playbook_filter->operator}}</td>
+                                                                <td>{{$playbook_filter->operator_name}}</td>
                                                                 <td>{{$playbook_filter->value}}</td>
                                                                 <?php $mode='edit';?>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}"><i class="fas fa-edit"></i></a></td>

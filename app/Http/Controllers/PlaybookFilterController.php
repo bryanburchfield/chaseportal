@@ -9,7 +9,6 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookFilterController extends Controller
 {
@@ -51,34 +50,48 @@ class PlaybookFilterController extends Controller
             ->get();
     }
 
+    /**
+     * Return a single playbook_filters record by id
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getFilter(Request $request)
     {
         return $this->findPlaybookFilter($request->id);
     }
 
     /**
-     * Return fields of the Custom Table tied to a campaign
+     * Return availble fields for a filter
      * 
      * @param Request $request 
      * @return array|mixed 
      */
     public function getTableFields(Request $request)
     {
-        $campaign = Campaign::where('CampaignName', $request->campaign)
-            ->where('GroupId', Auth::user()->group_id)
-            ->first();
-
         $fields = $this->defaultLeadFields();
 
-        if ($campaign->advancedTable) {
-            foreach ($campaign->advancedTable->advancedTableFields as $field) {
-                $fields[$field->FieldName] = $field->fieldType->Type;
+        if ($request->has('campaign')) {
+            $campaign = Campaign::where('CampaignName', $request->campaign)
+                ->where('GroupId', Auth::user()->group_id)
+                ->first();
+
+            if ($campaign && $campaign->advancedTable) {
+                foreach ($campaign->advancedTable->advancedTableFields as $field) {
+                    $fields[$field->FieldName] = $field->fieldType->Type;
+                }
             }
         }
 
         return $fields;
     }
 
+    /**
+     * Create new playbook_filters record
+     * 
+     * @param ValidPlaybookFilter $request 
+     * @return string[] 
+     */
     public function addFilter(ValidPlaybookFilter $request)
     {
         $data = $request->all();
@@ -89,6 +102,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update a playbook_filters record
+     * 
+     * @param ValidPlaybookFilter $request 
+     * @return string[] 
+     */
     public function updateFilter(ValidPlaybookFilter $request)
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
@@ -97,6 +116,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete a playbook_filters record
+     * 
+     * @param Request $request 
+     * @return string[] 
+     */
     public function deleteFilter(Request $request)
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
@@ -105,6 +130,12 @@ class PlaybookFilterController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Return a list of availabe operators
+     * 
+     * @param Request $request 
+     * @return array 
+     */
     public function getOperators(Request $request)
     {
         $type = $request->has('type') ? $request->type : null;
@@ -112,6 +143,11 @@ class PlaybookFilterController extends Controller
         return PlaybookFilter::getOperators($type);
     }
 
+    /**
+     * Find plabook_filters record by id for user's group
+     * @param mixed $id 
+     * @return mixed 
+     */
     private function findPlaybookfilter($id)
     {
         return PlaybookFilter::where('id', $id)

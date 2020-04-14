@@ -63,10 +63,9 @@ class ValidPlaybookFilter extends FormRequest
                 }),
             ],
             'campaign' => [
-                'required',
+                'nullable',
                 function ($attribute, $value, $fail) {
                     if (!in_array($value, array_values($this->getAllCampaigns()))) {
-
                         $fail(trans('custom_validation.campaign_invalid'));
                     }
                 },
