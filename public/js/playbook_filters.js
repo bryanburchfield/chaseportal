@@ -50,9 +50,6 @@ var Playbook_Filters = {
 		}else{
 			type=field_type;
 		}
-		console.log(type);
-
-		var type = $('.filter_fields').find('option:selected').data('type');
 
 		$.ajaxSetup({
 			headers: {
@@ -163,13 +160,8 @@ var Playbook_Filters = {
 					$("#editFilterModal .filter_operators option[value='"+response.operator+"']").prop('selected', true);
 				});
 
+				$('#editFilterModal').find('.filter_value').val(response.value);
 
-
-				// $('#editFilterModal').find('.filter_fields').val(response.field);
-
-				// if(response.status == 'success'){
-				// 	location.reload();
-				// }
 			}
 		});
 	},
