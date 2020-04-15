@@ -70,7 +70,9 @@
 <div class="lead hidetilloaded action_type_fields">
     <div class="form-group">
         <label>To Campaign</label>
-        <select name="to_campaign" class="form-control to_campaign"></select>
+        <div class="form-group">
+            {!! Form::select("to_campaign", [null=>__('general.select_one')] + $campaigns, old('campaign'), ["class" => "form-control to_campaign", 'required'=>false]) !!}
+        </div>
     </div>
 
     <div class="form-group">
