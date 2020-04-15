@@ -11,26 +11,32 @@ var Playbook_Filters = {
 	},
 
 	get_fields: function (selected_campaign=1) {
-		if(selected_campaign.type == 'change'){
-			campaign = $(this).val();
-		}else{
-			campaign=selected_campaign;
-		}
 
 		$('.loader_hor').show();
 
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+		if(selected_campaign != null){
+			// add filter
+			if(selected_campaign.type == 'change'){
+				campaign = $(this).val();
+			}else{ // edit filter
+				campaign=selected_campaign;
 			}
-		});
 
-		$.ajax({
-			url: '/tools/playbook/get_table_fields',
-			type: 'POST',
-			async:false,
-			data: { campaign: campaign },
-			success: function (response) {
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+				}
+			});
+
+			$('.filter_fields').empty();
+			return $.ajax({
+				url: '/tools/playbook/get_table_fields',
+				type: 'POST',
+				// async:false,
+				data: { campaign: campaign },
+				
+			}).done(function(response){
+				console.log(response);
 				$('.loader_hor').hide();
 				var filter_fields = '<option value="">Select One</option>';
 				for (var i = 0; i < Object.entries(response).length; i++) {
@@ -38,8 +44,8 @@ var Playbook_Filters = {
 				}
 
 				$('.filter_fields').html(filter_fields);
-			}
-		});
+			});
+		}
 	},
 
 	get_operators: function (field_type=1) {
@@ -57,23 +63,20 @@ var Playbook_Filters = {
 			}
 		});
 
-		$.ajax({
+		return $.ajax({
 			url: '/tools/playbook/get_operators',
 			type: 'POST',
-			async:false,
-			data: {
-				type: type
-			},
-			success: function (response) {
-				console.log(response);
-				$('.loader_hor').hide();
-				var operators;
-				for (var i = 0; i < Object.entries(response).length; i++) {
-					operators += '<option value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][1] + '</option>';
-				}
-
-				$('.filter_operators').html(operators);
+			// async:false,
+			data: {type: type},
+		}).done(function(response){
+			console.log(response);
+			$('.loader_hor').hide();
+			var operators;
+			for (var i = 0; i < Object.entries(response).length; i++) {
+				operators += '<option value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][1] + '</option>';
 			}
+
+			$('.filter_operators').html(operators);
 		});
 	},
 
@@ -138,31 +141,27 @@ var Playbook_Filters = {
 		$.ajax({
 			url: '/tools/playbook/filters/'+id,
 			type: 'GET',
-
 			data: {
 				id:id
 			},
-			success: function (response) {
-				console.log(response);
-
-				$('#editFilterModal').find('.name').val(response.name);
-				$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
-
-				$.when(Playbook_Filters.get_fields(response.campaign))
-				.then(function(){
-				    $("#editFilterModal .filter_fields option[value='"+response.field+"']").prop('selected', true);
-				})
-				.then(function(){
-					var type = $( "#editFilterModal .filter_fields option:selected").data('type');
+		}).done(function(response){
+			console.log(response);
+			var type;
+			$.when(
+				Playbook_Filters.get_fields(response.campaign)
+			).done(function() {
+				$("#editFilterModal .filter_fields option[value='"+response.field+"']").prop('selected', true);
+				type = $( "#editFilterModal .filter_fields option:selected").data('type');
+				$.when(
 					Playbook_Filters.get_operators(type)
-				})
-				.then(function(){
+				).done(function() {
+					$('#editFilterModal').find('.name').val(response.name);
+					$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 					$("#editFilterModal .filter_operators option[value='"+response.operator+"']").prop('selected', true);
+					$('#editFilterModal').find('.filter_value').val(response.value);
+					$('.loader_hor').hide();
 				});
-
-				$('#editFilterModal').find('.filter_value').val(response.value);
-
-			}
+			});
 		});
 	},
 
@@ -194,7 +193,7 @@ var Playbook_Filters = {
 $(document).ready(function () {
 	Playbook_Filters.init();
 
-	$('#myModal').on('hidden.bs.modal', function () {
-	    // do something…
+	$('#editFilterModal').on('hidden.bs.modal', function () {
+	    $('.edit_filter').trigger("reset");
 	});
 });
