@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Script extends Model
+class Script extends SqlSrvModel
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
