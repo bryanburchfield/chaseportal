@@ -149,7 +149,7 @@ class PlaybookFilterController extends Controller
      * @param mixed $id 
      * @return mixed 
      */
-    private function findPlaybookfilter($id)
+    private function findPlaybookFilter($id)
     {
         return PlaybookFilter::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
