@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class InboundSource extends Model
+class InboundSource extends SqlSrvModel
 {
     // set db and actual table name
     protected $connection = 'sqlsrv';
