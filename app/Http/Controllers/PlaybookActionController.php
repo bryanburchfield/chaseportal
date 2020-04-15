@@ -85,7 +85,7 @@ class PlaybookActionController extends Controller
         return ['status' => 'success'];
     }
 
-    public function updateFilter(Request $request)
+    public function updateAction(Request $request)
     {
         Log::debug('add');
         Log::debug($request->all());
@@ -97,7 +97,7 @@ class PlaybookActionController extends Controller
         return ['status' => 'success'];
     }
 
-    public function deleteFilter(Request $request)
+    public function deleteAction(Request $request)
     {
         // on delete cascade takes care of the sub-table records
         $playbook_action = $this->findPlaybookAction($request->id);
