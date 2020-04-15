@@ -13,6 +13,10 @@ if (!function_exists('deleteColumn')) {
 if (!function_exists('resultsToList')) {
     function resultsToList($results)
     {
+        if ($results instanceof Illuminate\Database\Eloquent\Collection) {
+            $results = $results->toArray();
+        }
+
         // flatten array, create k=>v pairs
         if (count($results)) {
             $arr = [];

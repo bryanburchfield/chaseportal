@@ -111,6 +111,6 @@ class PlaybookActionController extends Controller
     {
         $campaign = $request->has('campaign') ? $request->campaign : '';
 
-        return Dispo::availableDispos($campaign);
+        return resultsToList(Dispo::availableDispos($campaign));
     }
 }

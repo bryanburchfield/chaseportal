@@ -81,7 +81,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::get('/actions/{id}', 'PlaybookActionController@getAction');
                 Route::patch('/actions/{id}', 'PlaybookActionController@updateAction');
                 Route::delete('/actions/{id}', 'PlaybookActionController@deleteAction');
-                Route::get('/get_dispos', 'PlaybookActionController@getDispos');
+                Route::post('/get_dispos', 'PlaybookActionController@getDispos');
 
                 // Email Serivce Providers
                 Route::get('/email_service_providers', 'PlaybookEmailProviderController@index');
