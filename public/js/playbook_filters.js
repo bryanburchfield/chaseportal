@@ -8,6 +8,7 @@ var Playbook_Filters = {
 		$('.add_filter').on('submit', this.add_filter);
 		$('.delete_playbook_filter').on('click', this.delete_filter);
 		$('.remove_playbook_filter_modal, .edit_playbook_filter_modal').on('click', this.populate_filter_modal);
+		$('.update_filter').on('click', this.update_filter);
 	},
 
 	get_fields: function (selected_campaign=1) {
@@ -32,9 +33,7 @@ var Playbook_Filters = {
 			return $.ajax({
 				url: '/tools/playbook/get_table_fields',
 				type: 'POST',
-				// async:false,
 				data: { campaign: campaign },
-				
 			}).done(function(response){
 				console.log(response);
 				$('.loader_hor').hide();
@@ -66,7 +65,6 @@ var Playbook_Filters = {
 		return $.ajax({
 			url: '/tools/playbook/get_operators',
 			type: 'POST',
-			// async:false,
 			data: {type: type},
 		}).done(function(response){
 			console.log(response);
@@ -162,6 +160,33 @@ var Playbook_Filters = {
 					$('.loader_hor').hide();
 				});
 			});
+		});
+	},
+
+	update_filter:function(e){
+		e.preventDefault();
+		var form_data = $('.edit_filter').serialize();
+		var id = $('.edit_filter').find('.id').val();
+
+		console.log(id);
+		console.log(form_data);
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/filters/'+id,
+			type: 'PATCH',
+			dataType: 'json',
+			data: form_data,
+			success: function (response) {
+				if(response.status == 'success'){
+					location.reload();
+				}
+			},
 		});
 	},
 

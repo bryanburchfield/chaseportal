@@ -120,7 +120,7 @@
             <div class="modal-footer">
                 <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="submit" class="btn btn-primary edit_filter add_btn_loader">{{__('tools.save_changes')}}</button>
+                <button type="submit" class="btn btn-primary update_filter add_btn_loader">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>
