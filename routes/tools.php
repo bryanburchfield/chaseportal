@@ -74,6 +74,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::delete('/filters/{id}', 'PlaybookFilterController@deleteFilter');
                 Route::post('/get_table_fields', 'PlaybookFilterController@getTableFields');
                 Route::post('/get_operators', 'PlaybookFilterController@getOperators');
+                Route::post('/get_dispos', 'PlaybookFilterController@getDispos');
 
                 // Actions
                 Route::get('/actions', 'PlaybookActionController@index');
