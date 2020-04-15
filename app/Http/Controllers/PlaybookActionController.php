@@ -7,6 +7,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PlaybookActionController extends Controller
 {
@@ -46,5 +47,39 @@ class PlaybookActionController extends Controller
         return PlaybookAction::where('group_id', Auth::User()->group_id)
             ->orderBy('name')
             ->get();
+    }
+
+    /**
+     * Return a single playbook_actions record by id
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
+    public function getAction(Request $request)
+    {
+        return $this->findPlaybookAction($request->id);
+    }
+
+    /**
+     * Find plabook_actions record by id for user's group
+     * @param mixed $id 
+     * @return mixed 
+     */
+    private function findPlaybookAction($id)
+    {
+        return PlaybookAction::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+    }
+
+    public function addAction(Request $request)
+    {
+        $data = $request->all();
+        $data['group_id'] = Auth::user()->group_id;
+
+        Log::debug('add');
+        Log::debug($request->all());
+
+        return ['status' => 'success'];
     }
 }
