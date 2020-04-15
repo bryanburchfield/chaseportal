@@ -74,11 +74,34 @@ class PlaybookActionController extends Controller
 
     public function addAction(Request $request)
     {
+        Log::debug('add');
+        Log::debug($request->all());
+
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
 
+        // insert stuff
+
+        return ['status' => 'success'];
+    }
+
+    public function updateFilter(Request $request)
+    {
         Log::debug('add');
         Log::debug($request->all());
+
+        $playbook_action = $this->findPlaybookAction($request->id);
+
+        // update stuff
+
+        return ['status' => 'success'];
+    }
+
+    public function deleteFilter(Request $request)
+    {
+        // on delete cascade takes care of the sub-table records
+        $playbook_action = $this->findPlaybookAction($request->id);
+        $playbook_action->delete();
 
         return ['status' => 'success'];
     }
