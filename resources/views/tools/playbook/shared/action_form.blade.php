@@ -23,6 +23,12 @@
 </div>
 
 <div class="email hidetilloaded action_type_fields">
+
+    <div class="form-group">
+        <label>From</label>
+        <input type="text" class="form-control from" name="from">
+    </div>
+
     <div class="form-group">
         <label>Email Field</label>
         <input type="text" class="form-control email_field" name="email_field">
@@ -34,13 +40,18 @@
     </div>
 
     <div class="form-group">
-        <label>Emails Per Lead</label>
-        <input type="text" class="form-control emails_per_lead" name="emails_per_lead">
+        <label>Email Template</label>
+        <select name="email_template" class="form-control email_template"></select>
     </div>
 
     <div class="form-group">
-        <label>From</label>
-        <input type="text" class="form-control from" name="from">
+        <label>Email Provider</label>
+        <select name="email_provider" class="form-control email_provider"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Emails Per Lead</label>
+        <input type="text" class="form-control emails_per_lead" name="emails_per_lead">
     </div>
 </div>
 
