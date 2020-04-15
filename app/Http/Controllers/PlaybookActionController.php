@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dispo;
 use App\Models\PlaybookAction;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
@@ -104,5 +105,12 @@ class PlaybookActionController extends Controller
         $playbook_action->delete();
 
         return ['status' => 'success'];
+    }
+
+    public function getDispos(Request $request)
+    {
+        $campaign = $request->has('campaign') ? $request->campaign : '';
+
+        return Dispo::availableDispos($campaign);
     }
 }

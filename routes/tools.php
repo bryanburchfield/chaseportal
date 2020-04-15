@@ -77,6 +77,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
 
                 // Actions
                 Route::get('/actions', 'PlaybookActionController@index');
+                Route::post('/get_dispos', 'PlaybookFilterController@getDispos');
 
                 // Email Serivce Providers
                 Route::get('/email_service_providers', 'PlaybookEmailProviderController@index');
