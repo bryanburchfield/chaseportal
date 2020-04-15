@@ -84,7 +84,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_action" value="{{__('tools.add_action')}}">
+                    <input type="submit" class="btn btn-primary" value="{{__('tools.add_action')}}">
                 </div>
             </form>
         </div>

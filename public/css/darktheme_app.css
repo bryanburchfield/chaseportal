@@ -3511,6 +3511,10 @@ span.numb_notifications {
   clear: both;
 }
 
+.lead.action_type_fields {
+  font-size: 13px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

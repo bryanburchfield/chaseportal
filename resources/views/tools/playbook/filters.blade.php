@@ -110,7 +110,7 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" class="form edit_filter">
+                <form action="#" method="post" class="form edit_filter">
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
                     <input type="hidden" name="id" class="id" value="{{old('id')}}">

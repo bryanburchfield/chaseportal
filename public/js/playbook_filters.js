@@ -168,9 +168,6 @@ var Playbook_Filters = {
 		var form_data = $('.edit_filter').serialize();
 		var id = $('.edit_filter').find('.id').val();
 
-		console.log(id);
-		console.log(form_data);
-
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
