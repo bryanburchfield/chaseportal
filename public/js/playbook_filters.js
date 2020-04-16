@@ -119,11 +119,14 @@ var Playbook_Filters = {
 		e.preventDefault();
 		var modal = $(this).data('target');
 		var id = $(this).data('id');
+		var name = $(this).data('name');
 		$(modal).find('input.id').val(id);
 
 		if(modal.substring(1) == 'editFilterModal'){
 			Playbook_Filters.edit_filter(id);
 		}
+
+		$(modal).find('.modal-body h3 span').text(name);
 	},
 
 	edit_filter:function(id){

@@ -50,7 +50,7 @@
                                                                 <td>{{$playbook_filter->operator_name}}</td>
                                                                 <td>{{$playbook_filter->value}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}" data-name="{{$playbook_filter->name}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_playbook_filter_modal" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
@@ -110,6 +110,7 @@
             </div>
 
             <div class="modal-body">
+                <h3><span></span></h3><br>
                 <form action="#" method="post" class="form edit_filter">
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
