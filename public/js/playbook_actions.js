@@ -50,13 +50,17 @@ var Playbook_Actions = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/get_dispos/',
+			url: '/tools/playbook/get_dispos',
 			type: 'POST',
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				console.log(response);
-
+				var response = Object.keys(response);
+				var dispos='<option value="">Select One</option>';
+				for(var i=0;i<response.length;i++){
+					dispos+='<option value="'+response[i]+'">'+response[i]+'</option>';
+				}
+				$('.call_status').append(dispos);
 			},
 		});
 	}
