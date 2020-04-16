@@ -23,65 +23,69 @@
 </div>
 
 <div class="email hidetilloaded action_type_fields">
-
     <div class="form-group">
-        <label>From</label>
-        <input type="text" class="form-control from" name="from">
-    </div>
-
-    <div class="form-group">
-        <label>Email Field</label>
-        <input type="text" class="form-control email_field" name="email_field">
-    </div>
-
-    <div class="form-group">
-        <label>Days Between Emails</label>
-        <input type="text" class="form-control days_between_emails" name="days_between_emails">
-    </div>
-
-    <div class="form-group">
-        <label>Email Template</label>
-        <select name="email_template" class="form-control email_template"></select>
-    </div>
-
-    <div class="form-group">
-        <label>Email Provider</label>
+        <label>{{__('tools.email_provider')}}</label>
         <select name="email_provider" class="form-control email_provider"></select>
     </div>
 
     <div class="form-group">
-        <label>Emails Per Lead</label>
+        <label>{{__('tools.email_template')}}</label>
+        <select name="email_template" class="form-control email_template"></select>
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.email_field')}}</label>
+        <input type="text" class="form-control email_field" name="email_field">
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.subject')}}</label>
+        <input type="text" class="form-control from" name="subject">
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.from')}}</label>
+        <input type="text" class="form-control from" name="from">
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.days_between_emails')}}</label>
+        <input type="text" class="form-control days_between_emails" name="days_between_emails">
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.emails_per_lead')}}</label>
         <input type="text" class="form-control emails_per_lead" name="emails_per_lead">
     </div>
 </div>
 
 <div class="sms hidetilloaded action_type_fields">
     <div class="form-group">
-        <label>To Campaign</label>
+        <label>{{__('tools.from_number')}}</label>
         <input type="text" class="form-control from_number" name="from_number">
     </div>
 
     <div class="form-group">
-        <label>Message</label>
+        <label>{{__('tools.message')}}</label>
         <textarea name="message" rows="8" class="form-control message"></textarea>
     </div>
 </div>
 
 <div class="lead hidetilloaded action_type_fields">
     <div class="form-group">
-        <label>To Campaign</label>
+        <label>{{__('tools.to_campaign')}}</label>
         <div class="form-group">
             {!! Form::select("to_campaign", [null=>__('general.select_one')] + $campaigns, old('campaign'), ["class" => "form-control to_campaign", 'required'=>false]) !!}
         </div>
     </div>
 
     <div class="form-group">
-        <label>To SubCampaign</label>
+        <label>{{__('tools.to_subcampaign')}}</label>
         <select name="to_subcampaign" class="form-control to_subcampaign"></select>
     </div>
 
     <div class="form-group">
-        <label>Call Status</label>
+        <label>{{__('tools.to_callstatus')}}</label>
         <select name="to_callstatus" class="form-control call_status"></select>
     </div>
 </div>

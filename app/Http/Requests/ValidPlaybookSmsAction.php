@@ -13,7 +13,7 @@ class ValidPlaybookSmsAction extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class ValidPlaybookSmsAction extends FormRequest
     public function rules()
     {
         return [
-            //
+            'from_numb' => 'required',
+            'message' => 'required',
         ];
     }
 }

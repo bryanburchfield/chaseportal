@@ -65,7 +65,21 @@ class PlaybookActionController extends Controller
      */
     public function getAction(Request $request)
     {
-        return $this->findPlaybookAction($request->id);
+        $playbook_action = $this->findPlaybookAction($request->id);
+
+        switch ($playbook_action->action_type) {
+            case 'email':
+                $record = PlaybookEmailAction::where('playbook_action_id', $playbook_action->id)->first();
+                break;
+            case 'sms':
+                $record = PlaybookSmsAction::where('playbook_action_id', $playbook_action->id)->first();
+                break;
+            case 'lead':
+                $record = PlaybookLeadAction::where('playbook_action_id', $playbook_action->id)->first();
+                break;
+        }
+
+        return $playbook_action->toArray() + $record->toArray();
     }
 
     /**
@@ -111,6 +125,7 @@ class PlaybookActionController extends Controller
 
         $data = $request->all();
 
+        // transaction since we're doing a bunch of updates/deletes/inserts
         DB::beginTransaction();
 
         // update action
@@ -119,21 +134,15 @@ class PlaybookActionController extends Controller
         // delete any off-type actions - use find/delete so audit trail works
         if ($data['action_type'] != 'email') {
             $playbook_email_action = PlaybookEmailAction::where('playbook_action_id', $data['id'])->first();
-            if ($playbook_email_action) {
-                $playbook_email_action->delete();
-            }
+            $playbook_email_action->delete();
         }
         if ($data['action_type'] != 'sms') {
             $playbook_sms_action = PlaybookSmsAction::where('playbook_action_id', $data['id'])->first();
-            if ($playbook_sms_action) {
-                $playbook_sms_action->delete();
-            }
+            $playbook_sms_action->delete();
         }
         if ($data['action_type'] != 'lead') {
             $playbook_lead_action = PlaybookLeadAction::where('playbook_action_id', $data['id'])->first();
-            if ($playbook_lead_action) {
-                $playbook_lead_action->delete();
-            }
+            $playbook_lead_action->delete();
         }
 
         // update/create action type
