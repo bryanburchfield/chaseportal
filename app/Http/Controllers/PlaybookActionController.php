@@ -6,6 +6,7 @@ use App\Http\Requests\ValidPlaybookAction;
 use App\Http\Requests\ValidPlaybookEmailAction;
 use App\Http\Requests\ValidPlaybookLeadAction;
 use App\Http\Requests\ValidPlaybookSmsAction;
+use App\Models\Campaign;
 use App\Models\Dispo;
 use App\Models\EmailServiceProvider;
 use App\Models\PlaybookAction;
@@ -187,6 +188,31 @@ class PlaybookActionController extends Controller
         $results = $this->getAllSubcampaignsWithNone($request->campaign);
 
         return ['subcampaigns' => $results];
+    }
+
+    /**
+     * Return custom table fields
+     * 
+     * @param Request $request 
+     * @return array|mixed 
+     */
+    public function getTableFields(Request $request)
+    {
+        $fields = [];
+
+        if ($request->has('campaign')) {
+            $campaign = Campaign::where('CampaignName', $request->campaign)
+                ->where('GroupId', Auth::user()->group_id)
+                ->first();
+
+            if ($campaign && $campaign->advancedTable) {
+                foreach ($campaign->advancedTable->advancedTableFields as $field) {
+                    $fields[$field->FieldName] = $field->fieldType->Type;
+                }
+            }
+        }
+
+        return $fields;
     }
 
     private function getAllSubcampaignsWithNone($campaign)
