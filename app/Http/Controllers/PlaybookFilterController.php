@@ -68,7 +68,7 @@ class PlaybookFilterController extends Controller
      * @param Request $request 
      * @return array|mixed 
      */
-    public function getTableFields(Request $request)
+    public function getFilterFields(Request $request)
     {
         $fields = $this->defaultLeadFields();
 
