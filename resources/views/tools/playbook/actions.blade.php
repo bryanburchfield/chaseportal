@@ -46,7 +46,7 @@
                                                                 <td>{{$playbook_action->campaign}}</td>
                                                                 <td>{{$playbook_action->action_type}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editActionModal" class=" edit_playbook_action_modal" data-playbook_actionid="{{$playbook_action->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editActionModal" class=" edit_playbook_action_modal" data-id="{{$playbook_action->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_playbook_action_modal" data-toggle="modal" data-target="#deleteActionModal" href="#" data-name="{{$playbook_action->name}}" data-id="{{$playbook_action->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach

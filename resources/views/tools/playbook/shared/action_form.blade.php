@@ -35,7 +35,7 @@
 
     <div class="form-group">
         <label>{{__('tools.email_field')}}</label>
-        <input type="text" class="form-control email_field" name="email_field">
+        <select name="email_field" class="form-control email_field"></select>
     </div>
 
     <div class="form-group">

@@ -31,7 +31,7 @@ var Playbook_Filters = {
 
 			$('.filter_fields').empty();
 			return $.ajax({
-				url: '/tools/playbook/get_table_fields',
+				url: '/tools/playbook/get_filter_fields',
 				type: 'POST',
 				data: { campaign: campaign },
 			}).done(function(response){

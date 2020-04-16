@@ -4,7 +4,8 @@ var Playbook_Actions = {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);
 		$('.to_campaign').on('change', this.update_call_statuses);
-		$('.edit_playbook_action_modal').on('click', this.populate_edit_modal);
+		$('.edit_playbook_action_modal, .remove_playbook_action_modal').on('click', this.populate_filter_modal);
+		$('.filter_campaigns').on('change', this.get_table_fields );
 	},
 
 	add_action: function (e) {
@@ -24,7 +25,6 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: form_data,
 			success: function (response) {
-				console.log(response);
 				if (response.status == 'success') {
 					location.reload();
 				}
@@ -101,7 +101,7 @@ var Playbook_Actions = {
 			}
 		});
 
-		$.ajax({
+		return $.ajax({
 			url: '/tools/playbook/get_subcampaigns',
 			type: 'POST',
 			dataType: 'json',
@@ -118,10 +118,25 @@ var Playbook_Actions = {
 		});
 	},
 
-	populate_edit_modal:function(e){
+	populate_filter_modal:function(e){
 		e.preventDefault();
+
+		var modal = $(this).data('target');
+		var id = $(this).data('id');
+		var name = $(this).data('name');
+		$(modal).find('input.id').val(id);
+
+		if(modal.substring(1) == 'editActionModal'){
+			Playbook_Actions.edit_filter(id);
+		}
+
+		$(modal).find('.modal-body h3 span').text(name);
+
 		var id = $(this).data('playbook_actionid');
 
+	},
+
+	edit_filter:function(id){
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -142,8 +157,46 @@ var Playbook_Actions = {
 				Playbook_Actions.update_action_fields(event, response.action_type);
 
 				if(response.action_type == 'lead'){
-					// edit_action.find(".to_campaign option[value='"+response.action_type+"']").prop('selected', true);
+					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
+
+					$.when(
+						Playbook_Actions.get_subcamps(response.to_campaign)
+					).done(function() {
+						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
+					});
+					edit_action.find(".call_status option[value='"+response.to_call_status+"']").prop('selected', true);
 				}
+			},
+		});
+	},
+
+	get_table_fields:function(e){
+		e.preventDefault();
+		var campaign = $(this).val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/get_table_fields',
+			type: 'POST',
+			dataType: 'json',
+			data: { campaign: campaign },
+			success: function (response) {
+
+				$('.email_field').empty();
+				var fields = '<option value="">Select One</option>';
+				var r = Object.entries(response);
+
+				for(var i=0;i<r.length;i++){
+					fields+='<option data-fieldtype="'+r[i][1]+'">'+r[i][0]+'</option>';
+				}
+
+				$('.email_field').append(fields);
+
 			},
 		});
 	}
@@ -151,4 +204,13 @@ var Playbook_Actions = {
 
 $(document).ready(function () {
 	Playbook_Actions.init();
+
+	$('#addActionModal').on('hidden.bs.modal', function () {
+	    $('.add_action').trigger("reset");
+	});
+
+	$('#editActionModal').on('hidden.bs.modal', function () {
+	    $('.edit_action').trigger("reset");
+	    $('.action_type_fields').hide();
+	});
 });
