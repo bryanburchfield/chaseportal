@@ -27,7 +27,21 @@ var Playbook_Actions = {
 				if (response.status == 'success') {
 					location.reload();
 				}
-			},
+			}, error: function (data) {
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.add_action .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.add_action .alert-danger').show();
+					});
+				}
+			}
 		});
 	},
 
