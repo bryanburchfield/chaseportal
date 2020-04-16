@@ -87,12 +87,15 @@ class PlaybookActionController extends Controller
         switch ($request->action_type) {
             case 'email':
                 app(ValidPlaybookEmailAction::class);
+                $model = PlaybookEmailAction::class;
                 break;
             case 'sms':
                 app(ValidPlaybookSmsAction::class);
+                $model = PlaybookSmsAction::class;
                 break;
             case 'lead':
                 app(ValidPlaybookLeadAction::class);
+                $model = PlaybookLeadAction::class;
                 break;
         }
 
@@ -103,20 +106,9 @@ class PlaybookActionController extends Controller
         DB::beginTransaction();
 
         $playbook_action = PlaybookAction::create($data);
-
         $data['playbook_action_id'] = $playbook_action->id;
 
-        switch ($request->action_type) {
-            case 'email':
-                PlaybookEmailAction::create($data);
-                break;
-            case 'sms':
-                PlaybookSmsAction::create($data);
-                break;
-            case 'lead':
-                PlaybookLeadAction::create($data);
-                break;
-        }
+        $model::create($data);
 
         DB::commit();
 
