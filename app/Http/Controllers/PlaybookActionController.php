@@ -150,4 +150,25 @@ class PlaybookActionController extends Controller
 
         return resultsToList(Dispo::availableDispos($campaign));
     }
+
+    /**
+     * Get Subcampaigns (ajax)
+     * 
+     * @param Request $request 
+     * @return array[] 
+     */
+    public function getSubcampaigns(Request $request)
+    {
+        $results = $this->getAllSubcampaignsWithNone($request->campaign);
+
+        return ['subcampaigns' => $results];
+    }
+
+    private function getAllSubcampaignsWithNone($campaign)
+    {
+        $results = $this->getAllSubcampaigns($campaign);
+        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
+
+        return $results;
+    }
 }
