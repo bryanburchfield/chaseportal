@@ -1281,7 +1281,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .add_filter .form-control, .add_action .form-control, .add_campaign .form-control, .edit_filter .form-control {
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .add_filter .form-control, .add_action .form-control, .add_campaign .form-control, .edit_filter .form-control, .edit_action .form-control {
     background: #eee !important;
 }
 
@@ -1716,7 +1716,7 @@ a.kpi_change_details{
     margin-right: 10px;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_filter_modal i {
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_filter_modal i, .actions a.remove_playbook_action_modal i {
     position: relative;
     top: 2px;
     color: $orange;

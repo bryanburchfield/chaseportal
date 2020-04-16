@@ -28,12 +28,14 @@
                                         <a href="#" data-toggle="modal" data-target="#addActionModal" class="btn btn-primary add_playbook_action_modal">{{__('tools.add_action')}}</a>
                                         
                                         <div class="table-responsive nobdr actions">
-                                            <table class="table mt20">
+                                            <table class="table table-striped mt20">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.name')}}</th>
                                                         <th>{{__('tools.campaign')}}</th>
                                                         <th>{{__('tools.action_type')}}</th>
+                                                        <th>{{__('tools.edit')}}</th>
+                                                        <th>{{__('tools.delete')}}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -104,12 +106,12 @@
                 <form action="#" method="post" class="form edit_action">
                     @include('tools.playbook.shared.action_form')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_action add_btn_loader">{{__('tools.save_changes')}}</button>
+                    
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_action add_btn_loader">{{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>

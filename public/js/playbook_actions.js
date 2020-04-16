@@ -4,6 +4,7 @@ var Playbook_Actions = {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);
 		$('.to_campaign').on('change', this.update_call_statuses);
+		$('.edit_playbook_action_modal').on('click', this.populate_edit_modal);
 	},
 
 	add_action: function (e) {
@@ -45,9 +46,13 @@ var Playbook_Actions = {
 		});
 	},
 
-	update_action_fields: function (e) {
+	update_action_fields: function(e, type='') {
 
-		var type = $(this).val();
+		if(!type){
+			var type = $(this).val();
+		}
+
+		console.log(type);
 		$('.action_type_fields').hide();
 		$('.action_type_fields.' + type).show();
 
@@ -109,6 +114,36 @@ var Playbook_Actions = {
 					sub_camps+='<option value="'+response[i]+'">'+response[i]+'</option>';
 				}
 				$('.to_subcampaign').append(sub_camps);
+			},
+		});
+	},
+
+	populate_edit_modal:function(e){
+		e.preventDefault();
+		var id = $(this).data('playbook_actionid');
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/actions/'+id,
+			type: 'GET',
+			dataType: 'json',
+			data: { id: id },
+			success: function (response) {
+				console.log(response);
+				var edit_action = $('.edit_action');
+				edit_action.find('.name').val(response.name);
+				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
+				edit_action.find(".action_types option[value='"+response.action_type+"']").prop('selected', true);
+				Playbook_Actions.update_action_fields(event, response.action_type);
+
+				if(response.action_type == 'lead'){
+					// edit_action.find(".to_campaign option[value='"+response.action_type+"']").prop('selected', true);
+				}
 			},
 		});
 	}

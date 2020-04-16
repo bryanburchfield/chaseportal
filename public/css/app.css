@@ -1527,7 +1527,8 @@ select.input-sm,
 .add_filter .form-control,
 .add_action .form-control,
 .add_campaign .form-control,
-.edit_filter .form-control {
+.edit_filter .form-control,
+.edit_action .form-control {
   background: #eee !important;
 }
 
@@ -2020,7 +2021,8 @@ a.kpi_change_details {
 .users a.remove_user i,
 .demo_user_modal_link.remove_user i,
 a.remove_msg i,
-a.remove_playbook_filter_modal i {
+a.remove_playbook_filter_modal i,
+.actions a.remove_playbook_action_modal i {
   position: relative;
   top: 2px;
   color: #E15B23;
