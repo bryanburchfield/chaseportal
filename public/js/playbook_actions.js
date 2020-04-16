@@ -166,13 +166,31 @@ var Playbook_Actions = {
 					});
 					edit_action.find(".call_status option[value='"+response.to_call_status+"']").prop('selected', true);
 				}
+
+				if(response.action_type == 'email'){
+					edit_action.find(".email_service_provider_id option[value='"+response.email_service_provider_id+"']").prop('selected', true);
+					edit_action.find(".template_id  option[value='"+response.template_id+"']").prop('selected', true);
+					edit_action.find(".subject").val(response.subject);
+					edit_action.find(".from").val(response.from);
+					edit_action.find(".days_between_emails").val(response.days_between_emails);
+					edit_action.find(".emails_per_lead").val(response.emails_per_lead);
+					$.when(
+						Playbook_Actions.get_table_fields(event, response.campaign)
+					).done(function() {
+						edit_action.find(".email_field option[value='"+response.email_field+"']").prop('selected', true);
+					});
+
+				}
 			},
 		});
 	},
 
-	get_table_fields:function(e){
+	get_table_fields:function(e, campaign){
 		e.preventDefault();
-		var campaign = $(this).val();
+
+		if(!campaign){
+			var campaign = $(this).val();
+		}
 
 		$.ajaxSetup({
 			headers: {

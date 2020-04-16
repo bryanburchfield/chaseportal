@@ -50,7 +50,7 @@
 
     <div class="form-group">
         <label>{{__('tools.subject')}}</label>
-        <input type="text" class="form-control from" name="subject">
+        <input type="text" class="form-control subject" name="subject">
     </div>
 
     <div class="form-group">
