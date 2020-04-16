@@ -2,15 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Models\PlaybookFilter;
-use App\Rules\FilterValue;
+use App\Models\PlaybookAction;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class ValidPlaybookFilter extends FormRequest
+class ValidPlaybookAction extends FormRequest
 {
     use CampaignTraits;
     use SqlServerTraits;
@@ -35,7 +34,7 @@ class ValidPlaybookFilter extends FormRequest
         // if id not passed (adding), insert id=0
         // otherwise, check that filter belongs to user's group_id, 404 if not
         if ($this->filled('id')) {
-            $playbook_filter = PlaybookFilter::where('id', $this->id)
+            $playbook_action = PlaybookAction::where('id', $this->id)
                 ->where('group_id', Auth::user()->group_id)
                 ->firstOrFail();
         } else {
@@ -56,7 +55,7 @@ class ValidPlaybookFilter extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('playbook_filters')->where(function ($query) use ($group_id, $id) {
+                Rule::unique('playbook_actions')->where(function ($query) use ($group_id, $id) {
                     return $query
                         ->where('group_id', $group_id)
                         ->where('id', '!=', $id);
@@ -70,9 +69,10 @@ class ValidPlaybookFilter extends FormRequest
                     }
                 },
             ],
-            'field' => 'required',
-            'operator' => 'required',
-            'value' => new FilterValue($this->operator),
+            'action_type' => [
+                'required',
+                Rule::in(['email', 'sms', 'lead']),
+            ],
         ];
     }
 }

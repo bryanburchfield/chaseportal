@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidPlaybookAction;
+use App\Http\Requests\ValidPlaybookEmailAction;
+use App\Http\Requests\ValidPlaybookLeadAction;
+use App\Http\Requests\ValidPlaybookSmsAction;
 use App\Models\Dispo;
 use App\Models\PlaybookAction;
+use App\Models\PlaybookEmailAction;
+use App\Models\PlaybookLeadAction;
+use App\Models\PlaybookSmsAction;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PlaybookActionController extends Controller
@@ -73,15 +81,44 @@ class PlaybookActionController extends Controller
             ->firstOrFail();
     }
 
-    public function addAction(Request $request)
+    public function addAction(ValidPlaybookAction $request)
     {
-        Log::debug('add');
-        Log::debug($request->all());
+        // validate fields based on action_type
+        switch ($request->action_type) {
+            case 'email':
+                app(ValidPlaybookEmailAction::class);
+                break;
+            case 'sms':
+                app(ValidPlaybookSmsAction::class);
+                break;
+            case 'lead':
+                app(ValidPlaybookLeadAction::class);
+                break;
+        }
 
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
 
-        // insert stuff
+        // use transaction since we're inserting 2 records
+        DB::beginTransaction();
+
+        $playbook_action = PlaybookAction::create($data);
+
+        $data['playbook_action_id'] = $playbook_action->id;
+
+        switch ($request->action_type) {
+            case 'email':
+                PlaybookEmailAction::create($data);
+                break;
+            case 'sms':
+                PlaybookSmsAction::create($data);
+                break;
+            case 'lead':
+                PlaybookLeadAction::create($data);
+                break;
+        }
+
+        DB::commit();
 
         return ['status' => 'success'];
     }

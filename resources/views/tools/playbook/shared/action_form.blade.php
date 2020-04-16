@@ -82,7 +82,7 @@
 
     <div class="form-group">
         <label>Call Status</label>
-        <select name="call_status" class="form-control call_status"></select>
+        <select name="to_callstatus" class="form-control call_status"></select>
     </div>
 </div>
 
