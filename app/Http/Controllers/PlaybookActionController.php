@@ -16,7 +16,6 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookActionController extends Controller
 {
@@ -84,17 +83,7 @@ class PlaybookActionController extends Controller
     public function addAction(ValidPlaybookAction $request)
     {
         // validate fields based on action_type
-        switch ($request->action_type) {
-            case 'email':
-                app(ValidPlaybookEmailAction::class);
-                break;
-            case 'sms':
-                app(ValidPlaybookSmsAction::class);
-                break;
-            case 'lead':
-                app(ValidPlaybookLeadAction::class);
-                break;
-        }
+        $model = $this->validateActionType($request);
 
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
@@ -103,34 +92,57 @@ class PlaybookActionController extends Controller
         DB::beginTransaction();
 
         $playbook_action = PlaybookAction::create($data);
-
         $data['playbook_action_id'] = $playbook_action->id;
 
-        switch ($request->action_type) {
-            case 'email':
-                PlaybookEmailAction::create($data);
-                break;
-            case 'sms':
-                PlaybookSmsAction::create($data);
-                break;
-            case 'lead':
-                PlaybookLeadAction::create($data);
-                break;
-        }
+        $model::create($data);
 
         DB::commit();
 
         return ['status' => 'success'];
     }
 
-    public function updateAction(Request $request)
+    public function updateAction(ValidPlaybookAction $request)
     {
-        Log::debug('add');
-        Log::debug($request->all());
-
+        // first, make sure it's the correct group
         $playbook_action = $this->findPlaybookAction($request->id);
 
-        // update stuff
+        // validate fields based on action_type
+        $model = $this->validateActionType($request);
+
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        // update action
+        $playbook_action->update($data);
+
+        // delete any off-type actions - use find/delete so audit trail works
+        if ($data['action_type'] != 'email') {
+            $playbook_email_action = PlaybookEmailAction::where('playbook_action_id', $data['id'])->first();
+            if ($playbook_email_action) {
+                $playbook_email_action->delete();
+            }
+        }
+        if ($data['action_type'] != 'sms') {
+            $playbook_sms_action = PlaybookSmsAction::where('playbook_action_id', $data['id'])->first();
+            if ($playbook_sms_action) {
+                $playbook_sms_action->delete();
+            }
+        }
+        if ($data['action_type'] != 'lead') {
+            $playbook_lead_action = PlaybookLeadAction::where('playbook_action_id', $data['id'])->first();
+            if ($playbook_lead_action) {
+                $playbook_lead_action->delete();
+            }
+        }
+
+        // update/create action type
+        $model::updateOrCreate(
+            ['playbook_action_id', $data['id']],
+            $data,
+        );
+
+        DB::commit();
 
         return ['status' => 'success'];
     }
@@ -170,5 +182,25 @@ class PlaybookActionController extends Controller
         $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
 
         return $results;
+    }
+
+    private function validateActionType(Request $request)
+    {
+        switch ($request->action_type) {
+            case 'email':
+                app(ValidPlaybookEmailAction::class);
+                $model = PlaybookEmailAction::class;
+                break;
+            case 'sms':
+                app(ValidPlaybookSmsAction::class);
+                $model = PlaybookSmsAction::class;
+                break;
+            case 'lead':
+                app(ValidPlaybookLeadAction::class);
+                $model = PlaybookLeadAction::class;
+                break;
+        }
+
+        return $model;
     }
 }
