@@ -24,14 +24,23 @@
 
 <div class="email hidetilloaded action_type_fields">
     <div class="form-group">
-        <label>{{__('tools.email_provider')}}</label>
-        {!! Form::select("email_provider",  $email_service_providers, old('email_provider'), ["class" => "form-control email_provider", 'required'=>false]) !!}
-
+        <label>{{__('tools.provider')}}</label>
+        <select name="email_service_provider_id" class="form-control email_service_provider_id" required>
+            <option value="">{{__('tools.select_one')}}</option>
+            @foreach($email_service_providers as $server)
+                <option {{$server->id==old('email_service_provider_id') ? 'selected' :'' }} value="{{$server->id}}">{{$server->name}}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="form-group">
-        <label>{{__('tools.email_template')}}</label>
-        <select name="email_template" class="form-control email_template"></select>
+        <label>{{__('tools.templates')}}</label>
+        <select name="template_id" class="template_id form-control">
+            <option value="">{{__('tools.select_one')}}</option>
+            @foreach($templates as $template)
+                <option {{$template->id==old('template_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="form-group">
