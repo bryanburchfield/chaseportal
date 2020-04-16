@@ -7,10 +7,12 @@ use App\Http\Requests\ValidPlaybookEmailAction;
 use App\Http\Requests\ValidPlaybookLeadAction;
 use App\Http\Requests\ValidPlaybookSmsAction;
 use App\Models\Dispo;
+use App\Models\EmailServiceProvider;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookSmsAction;
+use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
@@ -40,6 +42,8 @@ class PlaybookActionController extends Controller
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'playbook_actions' => $this->getPlaybookActions(),
+            'email_service_providers' => $this->getEmailServiceProviders(),
+            'templates' => Script::emailTemplates(),
         ];
 
         return view('tools.playbook.actions')->with($data);
@@ -211,5 +215,17 @@ class PlaybookActionController extends Controller
         }
 
         return $model;
+    }
+
+    /**
+     * Servers configured for this group
+     * 
+     * @return mixed 
+     */
+    private function getEmailServiceProviders()
+    {
+        return EmailServiceProvider::where('group_id', Auth::User()->group_id)
+            ->orderBy('name')
+            ->get();
     }
 }
