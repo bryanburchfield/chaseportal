@@ -25,7 +25,8 @@
 <div class="email hidetilloaded action_type_fields">
     <div class="form-group">
         <label>{{__('tools.email_provider')}}</label>
-        <select name="email_provider" class="form-control email_provider"></select>
+        {!! Form::select("email_provider",  $email_service_providers, old('email_provider'), ["class" => "form-control email_provider", 'required'=>false]) !!}
+
     </div>
 
     <div class="form-group">
