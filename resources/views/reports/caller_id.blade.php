@@ -2,6 +2,7 @@
 @section('title', __('general.reports'))
 
 @section('content')
+	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm btn_flt_rgt"><i class="fas fa-info-circle"></i> Info</a>
 	<h3 class="heading">{{__('reports.caller_id')}}</h3>
 
 	<div class="report_filters card col-sm-12">
