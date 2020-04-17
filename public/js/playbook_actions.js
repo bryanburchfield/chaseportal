@@ -179,6 +179,9 @@ var Playbook_Actions = {
 					).done(function() {
 						edit_action.find(".email_field option[value='"+response.email_field+"']").prop('selected', true);
 					});
+				}
+
+				if(response.action_type == 'sms'){
 
 				}
 			},
@@ -205,7 +208,7 @@ var Playbook_Actions = {
 			data: { campaign: campaign },
 			success: function (response) {
 
-				$('.edit_action .email_field').empty();
+				$('.email_field').empty();
 				var fields = '<option value="">Select One</option>';
 				var r = Object.entries(response);
 
@@ -213,7 +216,7 @@ var Playbook_Actions = {
 					fields+='<option data-fieldtype="'+r[i][1]+'" value="'+r[i][0]+'">'+r[i][0]+'</option>';
 				}
 
-				$('.edit_action .email_field').append(fields);
+				$('.email_field').append(fields);
 			},
 		});
 	}
