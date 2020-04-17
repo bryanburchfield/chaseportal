@@ -24,7 +24,7 @@ class ValidPlaybookSmsAction extends FormRequest
     public function rules()
     {
         return [
-            'from_numb' => 'required',
+            'from_number' => 'required',
             'message' => 'required',
         ];
     }
