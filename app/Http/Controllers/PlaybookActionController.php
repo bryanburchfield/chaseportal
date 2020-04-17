@@ -158,7 +158,7 @@ class PlaybookActionController extends Controller
 
         // update/create action type
         $model::updateOrCreate(
-            ['playbook_action_id', $data['id']],
+            ['playbook_action_id' => $data['id']],
             $data,
         );
 
