@@ -40,11 +40,10 @@ class AgentActivity
 
     public function getInfo()
     {
-        $info['columns'] = $this->params['columns'];
-
-        $info['paragraphs'] = 2;
-
-        return $info;
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 2,
+        ];
     }
 
     private function executeReport($all = false)
