@@ -85,6 +85,7 @@ return [
 	'calls'               => 'Total Dials',
 	'calls_by_caller_ID'	=> 'Calls by Caller ID',
 	'callstatus'          => 'Call Status',
+	'callstatus_description' => 'Description',
 	'calltype'            => 'Call Type',
 	'cepts'               => 'Operator Disconnects',
 	'cnt'                 => 'Calls',
@@ -130,6 +131,7 @@ return [
 	'resultcodes'         => 'Result Codes',
 	'saleratevalue'       => 'S-L-A Rate Value',
 	'sales'               => 'Sale/Lead/App',
+	'sales_count'         => 'SalesCount',
 	'source'              => 'Inbound Source',
 	'stat'                => 'Status',
 	'subcampaign'         => 'Subcampaign',
@@ -157,6 +159,6 @@ return [
 	'sales_per_attempt' => 'Sales/Attempt',
 	'sales_per_dial' => 'Sales/Dial',
 	'sales_per_manhour' => 'Sales/ManHour',
-	'total_leads' => 'Imported',
+	'total_leads' => 'Total Leads',
 	'waiting_time' => 'Wait Time',
 ];
