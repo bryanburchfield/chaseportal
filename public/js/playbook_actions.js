@@ -77,7 +77,7 @@ var Playbook_Actions = {
 			}
 		});
 
-		$.ajax({
+		return $.ajax({
 			url: '/tools/playbook/get_dispos',
 			type: 'POST',
 			dataType: 'json',
@@ -163,8 +163,8 @@ var Playbook_Actions = {
 						Playbook_Actions.get_subcamps(response.to_campaign)
 					).done(function() {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
+						edit_action.find(".call_status option[value='"+response.to_call_status+"']").prop('selected', true);
 					});
-					edit_action.find(".call_status option[value='"+response.to_call_status+"']").prop('selected', true);
 				}
 
 				if(response.action_type == 'email'){
@@ -198,23 +198,22 @@ var Playbook_Actions = {
 			}
 		});
 
-		$.ajax({
+		return $.ajax({
 			url: '/tools/playbook/get_table_fields',
 			type: 'POST',
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
 
-				$('.email_field').empty();
+				$('.edit_action .email_field').empty();
 				var fields = '<option value="">Select One</option>';
 				var r = Object.entries(response);
 
 				for(var i=0;i<r.length;i++){
-					fields+='<option data-fieldtype="'+r[i][1]+'">'+r[i][0]+'</option>';
+					fields+='<option data-fieldtype="'+r[i][1]+'" value="'+r[i][0]+'">'+r[i][0]+'</option>';
 				}
 
-				$('.email_field').append(fields);
-
+				$('.edit_action .email_field').append(fields);
 			},
 		});
 	}
