@@ -2906,6 +2906,10 @@ p.login_date {
   font-size: 15px;
 }
 
+.report_info_columns h4 {
+  border-bottom: 1px solid #ddd;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
