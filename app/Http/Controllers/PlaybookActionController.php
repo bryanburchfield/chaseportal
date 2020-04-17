@@ -138,16 +138,22 @@ class PlaybookActionController extends Controller
 
         // delete any off-type actions - use find/delete so audit trail works
         if ($data['action_type'] != 'email') {
-            $playbook_email_action = PlaybookEmailAction::where('playbook_action_id', $data['id'])->first();
-            $playbook_email_action->delete();
+            $subaction = PlaybookEmailAction::where('playbook_action_id', $data['id'])->first();
+            if ($subaction) {
+                $subaction->delete();
+            }
         }
         if ($data['action_type'] != 'sms') {
-            $playbook_sms_action = PlaybookSmsAction::where('playbook_action_id', $data['id'])->first();
-            $playbook_sms_action->delete();
+            $subaction = PlaybookSmsAction::where('playbook_action_id', $data['id'])->first();
+            if ($subaction) {
+                $subaction->delete();
+            }
         }
         if ($data['action_type'] != 'lead') {
-            $playbook_lead_action = PlaybookLeadAction::where('playbook_action_id', $data['id'])->first();
-            $playbook_lead_action->delete();
+            $subaction = PlaybookLeadAction::where('playbook_action_id', $data['id'])->first();
+            if ($subaction) {
+                $subaction->delete();
+            }
         }
 
         // update/create action type
