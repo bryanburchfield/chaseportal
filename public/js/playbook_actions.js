@@ -33,6 +33,7 @@ var Playbook_Actions = {
 			}, error: function (data) {
 				console.log(data);
 				if (data.status === 422) {
+					$('.add_action .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
@@ -216,16 +217,17 @@ var Playbook_Actions = {
 			}, error: function (data) {
 				console.log(data);
 				if (data.status === 422) {
+					$('.edit_action .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
 						if ($.isPlainObject(value)) {
 							$.each(value, function (key, value) {
-								$('.add_action .alert-danger').append('<li>' + value + '</li>');
+								$('.edit_action .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
-
-						$('.add_action .alert-danger').show();
+						$('.add_btn_loader i').hide();
+						$('.edit_action .alert-danger').show();
 					});
 				}
 			}
