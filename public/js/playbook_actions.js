@@ -153,7 +153,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-				console.log(response);
+
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -162,12 +162,11 @@ var Playbook_Actions = {
 
 				if(response.action_type == 'lead'){
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
-
 					$.when(
 						Playbook_Actions.get_subcamps(response.to_campaign)
 					).done(function() {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
-						edit_action.find(".call_status option[value='"+response.to_call_status+"']").prop('selected', true);
+						edit_action.find(".call_status option[value='"+response.to_callstatus+"']").prop('selected', true);
 					});
 				}
 
