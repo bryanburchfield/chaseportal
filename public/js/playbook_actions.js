@@ -154,7 +154,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-
+				console.log(response);
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -169,6 +169,11 @@ var Playbook_Actions = {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
 						edit_action.find(".call_status option[value='"+response.to_callstatus+"']").prop('selected', true);
 					});
+				}
+
+				if(response.action_type == 'sms'){
+					edit_action.find('.from_number').val(response.from_number);
+					edit_action.find('.message').val(response.message);
 				}
 
 				if(response.action_type == 'email'){
