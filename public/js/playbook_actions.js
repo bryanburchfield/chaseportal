@@ -7,6 +7,7 @@ var Playbook_Actions = {
 		$('.edit_playbook_action_modal, .remove_playbook_action_modal').on('click', this.populate_filter_modal);
 		$('.filter_campaigns').on('change', this.get_table_fields);
 		$('.edit_action').on('submit', this.update_action);
+		$('.delete_playbook_action ').on('click', this.delete_action);
 	},
 
 	add_action: function (e) {
@@ -262,6 +263,29 @@ var Playbook_Actions = {
 				}
 
 				$('.email_field').append(fields);
+			},
+		});
+	},
+
+	delete_action:function(e){
+		e.preventDefault();
+		var id = $(this).parent().parent().find('.id').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/actions/'+id,
+			type: 'DELETE',
+			dataType: 'json',
+			data: { id: id },
+			success: function (response) {
+				if (response.status == 'success') {
+					location.reload();
+				}
 			},
 		});
 	}
