@@ -25,7 +25,7 @@
 <div class="email hidetilloaded action_type_fields">
     <div class="form-group">
         <label>{{__('tools.provider')}}</label>
-        <select name="email_service_provider_id" class="form-control email_service_provider_id" required>
+        <select name="email_service_provider_id" class="form-control email_service_provider_id">
             <option value="">{{__('tools.select_one')}}</option>
             @foreach($email_service_providers as $server)
                 <option {{$server->id==old('email_service_provider_id') ? 'selected' :'' }} value="{{$server->id}}">{{$server->name}}</option>

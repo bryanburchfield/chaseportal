@@ -56,7 +56,7 @@ var Playbook_Actions = {
 			var type = $(this).val();
 		}
 
-		console.log(type);
+		$('.alert-danger').empty().hide();
 		$('.action_type_fields').hide();
 		$('.action_type_fields.' + type).show();
 
