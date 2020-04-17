@@ -34,6 +34,18 @@ class ReportController extends Controller
         return $this->returnView($results);
     }
 
+    public function info(Request $request)
+    {
+        $pagedata = $this->reportservice->getPageData();
+        $report_info = $this->reportservice->getReportInfo();
+
+        return view('reports/info')
+            ->with(array_merge(
+                $pagedata,
+                ['report_info' => $report_info],
+            ));
+    }
+
     public function exportReport(Request $request)
     {
         $request = $this->parseRequest($request);

@@ -38,6 +38,22 @@ class AgentActivity
         return $filters;
     }
 
+    public function getInfo()
+    {
+        $info[] = 'This is paragraph one';
+        $info[] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ' .
+            'aliqua. Commodo nulla facilisi nullam vehicula ipsum a arcu cursus. Volutpat maecenas volutpat blandit aliquam. Porttitor rhoncus ' .
+            'dolor purus non enim praesent elementum. Proin sed libero enim sed. Fringilla ut morbi tincidunt augue interdum velit euismod in. ' .
+            'Ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Pellentesque elit ullamcorper dignissim cras. Dignissim enim sit ' .
+            'amet venenatis urna cursus eget. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec. Metus vulputate eu scelerisque ' .
+            'felis. Amet consectetur adipiscing elit duis tristique sollicitudin nibh. Aliquam purus sit amet luctus venenatis lectus magna fringilla ' .
+            'urna. Interdum consectetur libero id faucibus nisl tincidunt. Eget mi proin sed libero enim sed faucibus turpis. Cursus in hac habitasse platea ' .
+            'dictumst quisque. Eget nulla facilisi etiam dignissim diam quis enim.';
+        $info[] = '"This is paragraph three';
+
+        return $info;
+    }
+
     private function executeReport($all = false)
     {
         list($sql, $bind) = $this->makeQuery($all);
