@@ -44,6 +44,14 @@ class CampaignCallLog
         return $filters;
     }
 
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 0,
+        ];
+    }
+
     private function executeReport($all = false)
     {
         $this->setHeadings();

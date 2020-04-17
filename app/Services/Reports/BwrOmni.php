@@ -70,6 +70,14 @@ class BwrOmni
         return $filters;
     }
 
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 0,
+        ];
+    }
+
     private function getAllDataSourcePrimary()
     {
         $db = Auth::User()->db;
