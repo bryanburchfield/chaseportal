@@ -8,9 +8,18 @@
 
 	<div class="report_filters card col-sm-12">
 
-        @foreach ($report_info as $paragraph)
-            <p class="mb10">{{$paragraph}}</p>
-        @endforeach
+        @for ($i = 1; $i <= $paragraphs; $i++)
+            <p class="mb10">{{__('report_info.' . $report . '_' . $i)}}</p>
+        @endfor
+
+        @if (count($columns))
+            <h5 class="mb10">{{__('report_info.columns')}}:</h5>
+            @foreach ($columns as $column)
+                <p class="mb5">
+                    <b>{{__($column)}}</b> : {{__('report_info.' . Str::after($column, '.'))}}
+                </p>
+            @endforeach
+        @endif
 
 	</div><!-- end report_filters -->
 
