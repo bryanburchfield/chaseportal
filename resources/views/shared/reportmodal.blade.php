@@ -36,6 +36,8 @@
 
                 if(Auth::User()->group_id == 224500) {
                     $reports['bwr_omni'] = __('reports.bwr_omni');
+                    unset($reports['production_report']);
+                    $reports['bwr_production_report'] = __('reports.production_report');
                 }
 
                 if(!Auth::User()->isDemo()) {
