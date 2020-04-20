@@ -43,9 +43,19 @@ class ProductionReport
 
     public function getInfo()
     {
+        // Columns are dynamic, so here are the static ones
+        $columns = [
+            'Rep' => 'reports.rep',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
+            'Sales' => 'reports.sales',
+            'SalesHr' => 'reports.sales_per_manhour',
+        ];
+
         return [
-            'columns' => $this->params['columns'],
-            'paragraphs' => 0,
+            'columns' => $columns,
+            'paragraphs' => 2,
         ];
     }
 

@@ -24,7 +24,7 @@ class CampaignCallLog
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'CallStatus' => 'reports.callstatus',
-            'Description' => 'reports.description',
+            'Description' => 'reports.callstatus_description',
             'Cnt' => 'reports.cnt',
             'Pct' => 'reports.pct',
         ];
@@ -48,7 +48,7 @@ class CampaignCallLog
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 0,
+            'paragraphs' => 3,
         ];
     }
 

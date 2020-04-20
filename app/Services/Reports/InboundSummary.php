@@ -50,7 +50,7 @@ class InboundSummary
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 0,
+            'paragraphs' => 1,
         ];
     }
 

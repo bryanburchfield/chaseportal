@@ -5,7 +5,6 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Carbon;
 
 class MissedCalls
 {
@@ -39,7 +38,7 @@ class MissedCalls
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 0,
+            'paragraphs' => 1,
         ];
     }
 
