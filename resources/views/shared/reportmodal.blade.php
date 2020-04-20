@@ -35,9 +35,12 @@
                 ];
 
                 if(Auth::User()->group_id == 224500) {
-                    $reports['bwr_omni'] = __('reports.bwr_omni');
                     unset($reports['production_report']);
+                    unset($reports['campaign_call_log']);
+
+                    $reports['bwr_omni'] = __('reports.bwr_omni');
                     $reports['bwr_production_report'] = __('reports.production_report');
+                    $reports['bwr_campaign_call_log'] = __('reports.campaign_call_log');
                 }
 
                 if(!Auth::User()->isDemo()) {
