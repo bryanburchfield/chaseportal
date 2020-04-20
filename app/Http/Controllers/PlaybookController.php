@@ -27,7 +27,7 @@ class PlaybookController extends Controller
 
         $data = [
             'page' => $page,
-            'jsfile' => ['playbook_campaigns.js'],
+            'jsfile' => ['contacts_playbooks.js'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'contacts_playbooks' => $this->getPlaybooks(),

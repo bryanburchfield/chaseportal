@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PlaybookCampaignFilter extends Model
+class ContactsPlaybookAction extends Model
 {
     protected $fillable = [
-        'playbook_campaign_id',
-        'playbook_filter_id',
+        'contacts_playbook_id',
+        'playbook_action_id',
     ];
 }
