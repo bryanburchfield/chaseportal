@@ -1,4 +1,4 @@
-var Playbook_Campaigns = {
+var Contacts_Playbook = {
 
 	init:function(){
 		console.log('init ran');
@@ -6,5 +6,5 @@ var Playbook_Campaigns = {
 }
 
 $(document).ready(function(){
-	Playbook_Campaigns.init();
+	Contacts_Playbook.init();
 });
