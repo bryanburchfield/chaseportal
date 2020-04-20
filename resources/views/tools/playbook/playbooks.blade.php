@@ -21,13 +21,13 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active mt30">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'campaigns'])
+                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'playbooks'])
 
-								<div class="tab-pane mt30" id="playbook_campaigns">
+								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addCampaignModal" class="btn btn-primary add_playbook_campaign_modal">{{__('tools.add_campaign')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
                                         
-                                        <div class="table-responsive nobdr campaigns">
+                                        <div class="table-responsive nobdr playbooks">
                                             <table class="table mt20">
                                                 <thead>
                                                     <tr>
@@ -40,16 +40,16 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if(count($playbook_campaigns))
-                                                        @foreach($playbook_campaigns as $playbook_campaign)
+                                                    @if(count($contacts_playbooks))
+                                                        @foreach($contacts_playbooks as $playbook)
                                                             <tr>
-                                                                <td>{{$playbook_campaign->name}}</td>
-                                                                <td>{{$playbook_campaign->campaign}}</td>
-                                                                <td>{{$playbook_campaign->subcampaign}}</td>
-                                                                <td>{{$playbook_campaign->active}}</td>
+                                                                <td>{{$playbook->name}}</td>
+                                                                <td>{{$playbook->campaign}}</td>
+                                                                <td>{{$playbook->subcampaign}}</td>
+                                                                <td>{{$playbook->active}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editCampaignModal" class=" edit_playbook_campaign_modal" data-playbook_campaignid="{{$playbook_campaign->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_campaign_modal" data-toggle="modal" data-target="#deleteCampaignModal" href="#" data-name="{{$playbook_campaign->name}}" data-id="{{$playbook_campaign->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook__modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="remove_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-id="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -71,44 +71,44 @@
 
 @include('shared.reportmodal')
 
-<!-- Add Campaign Modal -->
-<div class="modal fade" id="addCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Add Playbook Modal -->
+<div class="modal fade" id="addPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_campaign')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_playbook')}}</h4>
             </div>
             
-            <form action="#" method="post" class="form add_campaign">
+            <form action="#" method="post" class="form add_playbook">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.campaign_form')
-                    <input type="hidden" name="playbook_campaign_id" id="playbook_campaign_id" value="">
+                    @include('tools.playbook.shared.playbook_form')
+                    <input type="hidden" name="contacts_playbook_id" id="contacts_playbook_id" value="">
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_campaign" value="{{__('tools.add_campaign')}}">
+                    <input type="submit" class="btn btn-primary add_playbook" value="{{__('tools.add_playbook')}}">
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Edit Campaign Modal -->
-<div class="modal fade" id="editCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Edit Plpaybook Modal -->
+<div class="modal fade" id="editPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_campaign')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_playbook')}}</h4>
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_campaign">
-                    @include('tools.playbook.shared.campaign_form')
+                <form action="#" method="post" class="form edit_playbook">
+                    @include('tools.playbook.shared.playbook_form')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_campaign add_btn_loader">{{__('tools.save_changes')}}</button>
+                    <button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
                 </form>
             </div>
 
@@ -119,13 +119,13 @@
     </div>
 </div>
 
-<!-- Delete Campaign Modal -->
-<div class="modal fade" id="deleteCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Delete Playbook Modal -->
+<div class="modal fade" id="deletePlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_campaign')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -136,7 +136,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_playbook_campaign add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
             </div>
         </div>
     </div>

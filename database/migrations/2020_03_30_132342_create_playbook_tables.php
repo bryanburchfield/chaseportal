@@ -135,6 +135,14 @@ class CreatePlaybookTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('playbook_tables');
+        Schema::dropIfExists('playbook_campaigns');
+        Schema::dropIfExists('playbook_filters');
+        Schema::dropIfExists('playbook_actions');
+        Schema::dropIfExists('playbook_sms_actions');
+        Schema::dropIfExists('playbook_lead_actions');
+        Schema::dropIfExists('playbook_email_actions');
+        Schema::dropIfExists('playbook_campaign_filters');
+        Schema::dropIfExists('playbook_campaign_actions');
+        Schema::dropIfExists('playbook_histories');
     }
 }

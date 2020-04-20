@@ -63,8 +63,8 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::prefix('playbook')->group(function () {
 
                 // Campaigns
-                Route::get('/', 'PlaybookCampaignController@index');
-                Route::post('/get_subcampaigns', 'PlaybookCampaignController@getSubcampaigns');
+                Route::get('/', 'PlaybookController@index');
+                Route::post('/get_subcampaigns', 'PlaybookController@getSubcampaigns');
 
                 // Filters
                 Route::get('/filters', 'PlaybookFilterController@index');
