@@ -6,6 +6,7 @@ return [
     // Columns
     'abandoned' => 'Calls that were Abandonded',
     'agent' => 'Number of Calls Dispositioned by an Agent',
+    'agent_hangup' => 'Indicates if the Agent hung up on the call.',
     'aph' => 'Total Sales/Leads/App dispositions divided by the worked hours.',
     'attempt' => 'Dialing Attempt Number',
     'available' => 'Callable Leads',
