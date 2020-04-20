@@ -42,7 +42,7 @@ class ReportController extends Controller
         return view('reports.info')
             ->with(array_merge(
                 $pagedata,
-                $report_info,
+                $report_info
             ));
     }
 
