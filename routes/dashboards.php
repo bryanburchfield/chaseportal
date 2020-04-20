@@ -30,6 +30,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('reports/report_export/{report}/{format}', 'ReportController@exportReport');
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
+        Route::get('reports/info/{report}', 'ReportController@info');
 
         Route::get('/notifications/{id}', 'FeatureMessageController@viewMessage');
 

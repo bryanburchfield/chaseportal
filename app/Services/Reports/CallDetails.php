@@ -82,6 +82,14 @@ class CallDetails
         return $filters;
     }
 
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 2,
+        ];
+    }
+
     private function getAllCustomTables()
     {
         $sql = "SELECT TableName

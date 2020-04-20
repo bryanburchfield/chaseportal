@@ -46,6 +46,14 @@ class InboundSummary
         return $filters;
     }
 
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 1,
+        ];
+    }
+
     private function executeReport($all = false)
     {
         list($sql, $bind) = $this->makeQuery($all);

@@ -5,7 +5,6 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Carbon;
 
 class MissedCalls
 {
@@ -33,6 +32,14 @@ class MissedCalls
         ];
 
         return $filters;
+    }
+
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 1,
+        ];
     }
 
     private function executeReport($all = false)

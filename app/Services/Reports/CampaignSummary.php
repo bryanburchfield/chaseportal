@@ -17,7 +17,7 @@ class CampaignSummary
         $this->params['reportName'] = 'reports.campaign_summary';
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
-            'Total' => 'reports.total',
+            'Total' => 'reports.total_leads',
             'Dialed' => 'reports.dialed',
             'DPH' => 'reports.dph',
             'Available' => 'reports.available',
@@ -40,6 +40,14 @@ class CampaignSummary
         ];
 
         return $filters;
+    }
+
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 1,
+        ];
     }
 
     private function executeReport($all = false)

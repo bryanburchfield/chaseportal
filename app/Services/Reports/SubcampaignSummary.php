@@ -20,7 +20,7 @@ class SubcampaignSummary
             'Date' => 'reports.date',
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
-            'Total' => 'reports.total',
+            'Total' => 'reports.total_leads',
             'Dialed' => 'reports.dialed',
             'DPH' => 'reports.dph',
             'Available' => 'reports.available',
@@ -45,6 +45,14 @@ class SubcampaignSummary
         ];
 
         return $filters;
+    }
+
+    public function getInfo()
+    {
+        return [
+            'columns' => $this->params['columns'],
+            'paragraphs' => 1,
+        ];
     }
 
     private function executeReport($all = false)

@@ -38,6 +38,22 @@ class ProductionReportSubcampaign
         return $filters;
     }
 
+    public function getInfo()
+    {
+        // Columns are dynamic, so here are the static ones
+        $columns = [
+            'Subcamp' => 'reports.subcampaign',
+            'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
+            'Sales' => 'reports.sales_count',
+        ];
+
+        return [
+            'columns' => $columns,
+            'paragraphs' => 2,
+        ];
+    }
+
     private function executeReport($all = false)
     {
         $this->setHeadings();

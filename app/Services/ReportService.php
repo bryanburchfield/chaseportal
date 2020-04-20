@@ -61,4 +61,9 @@ class ReportService
     {
         return $this->report->getSql($request);
     }
+
+    public function getReportInfo()
+    {
+        return $this->report->getInfo();
+    }
 }
