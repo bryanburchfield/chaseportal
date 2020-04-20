@@ -39,7 +39,7 @@ class ReportController extends Controller
         $pagedata = $this->reportservice->getPageData();
         $report_info = $this->reportservice->getReportInfo();
 
-        return view('reports/info')
+        return view('reports.info')
             ->with(array_merge(
                 $pagedata,
                 $report_info,
