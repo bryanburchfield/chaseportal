@@ -33,9 +33,13 @@
                         'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
                         'lead_inventory' =>  __('reports.lead_inventory'),
                         'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
-
-                        
                     ];
+
+                    if(Auth::User()->group_id == 224500) {
+                        $reports['bwr_omni'] = __('reports.bwr_omni');
+                        unset($reports['production_report']);
+                        $reports['bwr_production_report'] = __('reports.production_report');
+                    }
 
                     if(Auth::User()->group_id == 224500) {
                         $reports['bwr_omni'] = __('reports.bwr_omni');
