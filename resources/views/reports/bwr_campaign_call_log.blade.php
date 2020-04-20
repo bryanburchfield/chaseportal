@@ -74,10 +74,17 @@
 						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('skills', __('reports.skill')) !!}
+						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
-
 
 			{!! Form::hidden('report', $report, ['id'=>'report']) !!}
 			{!! Form::submit(__('reports.run_report'), ['class'=>'btn btn-primary mb0']) !!}

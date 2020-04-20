@@ -26,6 +26,7 @@ class BwrCampaignCallLog
         $this->params['data_sources_secondary'] = [];
         $this->params['programs'] = [];
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'CallStatus' => 'reports.callstatus',
@@ -39,6 +40,7 @@ class BwrCampaignCallLog
     {
         $filters = [
             'reps' => $this->getAllReps(),
+            'skills' => $this->getAllSkills(),
             'campaigns' => $this->getAllCampaigns(
                 $this->params['fromdate'],
                 $this->params['todate']
@@ -68,7 +70,16 @@ class BwrCampaignCallLog
 
         $bind = [];
 
-        $sql = "SET NOCOUNT ON;
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from [dbo].SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "
         SELECT COUNT(DISTINCT Rep) TotReps, SUM(ManHours) ManHours FROM (";
 
         $union = '';
@@ -77,24 +88,32 @@ class BwrCampaignCallLog
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT Rep, sum(Duration) ManHours
-            FROM [$db].[dbo].[AgentActivity]
-            WHERE GroupId = :group_id$i
-            AND date >= :startdate$i
-            AND date < :enddate$i
-            AND [Action] NOT IN ('Paused','Login','Logout')";
+            $sql .= " $union SELECT AA.Rep, sum(AA.Duration) ManHours
+            FROM [$db].[dbo].[AgentActivity] AA";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE AA.GroupId = :group_id$i
+            AND AA.date >= :startdate$i
+            AND AA.date < :enddate$i
+            AND AA.[Action] NOT IN ('Paused','Login','Logout')";
 
             if (!empty($campaigns)) {
                 $bind['campaigns' . $i] = $campaigns;
-                $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
+                $sql .= " AND AA.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
             }
 
             if (!empty($reps)) {
                 $bind['reps' . $i] = $reps;
-                $sql .= " AND Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps$i, '!#!'))";
+                $sql .= " AND AA.Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps$i, '!#!'))";
             }
 
-            $sql .= "GROUP BY Rep";
+            $sql .= "GROUP BY AA.Rep";
 
             $union = 'UNION ALL';
         }
@@ -106,9 +125,17 @@ class BwrCampaignCallLog
         $this->extras['summary']['TotReps'] = $summ[0]['TotReps'];
         $this->extras['summary']['ManHours'] = round($summ[0]['ManHours'] / 60 / 60, 2);
 
+        $bind = [];
+
         // do this as 2nd query since it needs a yield() statement
         $sql = "SET NOCOUNT ON;";
-        $bind = [];
+
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from [dbo].SPLIT('$list', '!#!');";
+        }
 
         if (!empty($this->params['data_sources_primary'])) {
             $data_sources_primary = str_replace("'", "''", implode('!#!', $this->params['data_sources_primary']));
@@ -153,6 +180,12 @@ class BwrCampaignCallLog
             INNER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId 
             INNER JOIN [$db].[dbo].[ADVANCED_BWR_Master_Table] A ON A.LeadID = L.IdGuid
             LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
 
             if (!empty($this->params['data_sources_primary'])) {
                 $sql .= "
@@ -364,6 +397,11 @@ class BwrCampaignCallLog
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
         }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
+        }
+
         if (!empty($request->campaigns)) {
             $this->params['campaigns'] = $request->campaigns;
         }
