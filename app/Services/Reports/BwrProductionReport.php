@@ -49,6 +49,25 @@ class BwrProductionReport
         return $filters;
     }
 
+    public function getInfo()
+    {
+        // Columns are dynamic, so here are the static ones
+        $columns = [
+            'Rep' => 'reports.rep',
+            'ManHours' => 'reports.manhours',
+            'Connects' => 'reports.connects',
+            'Calls' => 'reports.calls',
+            'Contacts' => 'reports.contacts',
+            'Sales' => 'reports.sales',
+            'SalesHr' => 'reports.sales_per_manhour',
+        ];
+
+        return [
+            'columns' => $columns,
+            'paragraphs' => 2,
+        ];
+    }
+
     private function executeReport($all = false)
     {
         $this->setHeadings();
