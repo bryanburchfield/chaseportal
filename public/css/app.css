@@ -2910,6 +2910,10 @@ p.login_date {
   border-bottom: 1px solid #ddd;
 }
 
+.report_desc p {
+  font-size: 15px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

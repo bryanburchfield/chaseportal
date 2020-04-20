@@ -6,7 +6,7 @@
     <a class="btn btn-primary btn_flt_rgt" href="{{ action('ReportController@index', ['report' => $report]) }}">{{__('tools.back')}}</a>
     <h3 class="heading">{{__('reports.' . $report)}}</h3>
 
-	<div class="report_filters col-sm-8 mt20 p0">
+	<div class="report_desc col-sm-8 mt20 p0">
 
         @for ($i = 1; $i <= $paragraphs; $i++)
             <p class="mb10">{{__('report_info.' . $report . '_' . $i)}}</p>
