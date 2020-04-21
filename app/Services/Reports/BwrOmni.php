@@ -2,6 +2,7 @@
 
 namespace App\Services\Reports;
 
+use App\Traits\BwrTraits;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ class BwrOmni
 {
     use ReportTraits;
     use CampaignTraits;
+    use BwrTraits;
 
     public function __construct()
     {
@@ -76,60 +78,6 @@ class BwrOmni
             'columns' => $this->params['columns'],
             'paragraphs' => 2,
         ];
-    }
-
-    private function getAllDataSourcePrimary()
-    {
-        $db = Auth::User()->db;
-
-        $sql = '';
-
-        $sql .=  "SELECT DISTINCT Data_Source_Primary
-            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
-            WHERE Data_Source_Primary is not null
-            AND Data_Source_Primary != ''";
-
-        $results = resultsToList($this->runSql($sql));
-
-        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
-
-        return $results;
-    }
-
-    private function getAllDataSourceSecondary()
-    {
-        $db = Auth::User()->db;
-
-        $sql = '';
-
-        $sql .=  "SELECT DISTINCT Data_Source_Secondary
-            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
-            WHERE Data_Source_Secondary is not null
-            AND Data_Source_Secondary != ''";
-
-        $results = resultsToList($this->runSql($sql));
-
-        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
-
-        return $results;
-    }
-
-    private function getAllProgram()
-    {
-        $db = Auth::User()->db;
-
-        $sql = '';
-
-        $sql .=  "SELECT DISTINCT Program
-            FROM [$db].[dbo].[ADVANCED_BWR_Master_Table]
-            WHERE Program is not null
-            AND Program != ''";
-
-        $results = resultsToList($this->runSql($sql));
-
-        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
-
-        return $results;
     }
 
     private function executeReport($all = false)
@@ -222,23 +170,17 @@ class BwrOmni
                 LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId
                 INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
-        if (
-            !empty($this->params['data_sources_primary']) ||
-            !empty($this->params['data_sources_secondary']) ||
-            !empty($this->params['programs'])
-        ) {
-            if (!empty($this->params['data_sources_primary'])) {
-                $sql .= "
-                INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
-            }
-            if (!empty($this->params['data_sources_secondary'])) {
-                $sql .= "
-                INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
-            }
-            if (!empty($this->params['programs'])) {
-                $sql .= "
-                INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
-            }
+        if (!empty($this->params['data_sources_primary'])) {
+            $sql .= "
+            INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
+        }
+        if (!empty($this->params['data_sources_secondary'])) {
+            $sql .= "
+            INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
+        }
+        if (!empty($this->params['programs'])) {
+            $sql .= "
+            INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
         }
 
         $sql .= "
@@ -285,24 +227,17 @@ class BwrOmni
                 INNER JOIN Leads L ON L.id = DR.LeadId 
                 INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
-        if (
-            !empty($this->params['data_sources_primary']) ||
-            !empty($this->params['data_sources_secondary']) ||
-            !empty($this->params['programs'])
-        ) {
-
-            if (!empty($this->params['data_sources_primary'])) {
-                $sql .= "
-                    INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
-            }
-            if (!empty($this->params['data_sources_secondary'])) {
-                $sql .= "
-                    INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
-            }
-            if (!empty($this->params['programs'])) {
-                $sql .= "
-                    INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
-            }
+        if (!empty($this->params['data_sources_primary'])) {
+            $sql .= "
+            INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
+        }
+        if (!empty($this->params['data_sources_secondary'])) {
+            $sql .= "
+            INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
+        }
+        if (!empty($this->params['programs'])) {
+            $sql .= "
+            INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
         }
 
         $sql .= "

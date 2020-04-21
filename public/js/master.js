@@ -1544,6 +1544,10 @@ var Master = {
 				if (response.params.report == 'caller_id') {
 					Master.caller_id(response);
 				}
+
+                if (response.params.report == 'bwr_campaign_call_log') {
+                    Master.campaign_call_log(response);
+                }
 			}
 		}); /// end ajax
 	}, /// end update_report function
