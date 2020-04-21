@@ -14,6 +14,8 @@ return [
 	'agent_summary_campaign'        => 'Agent Summary By Camp',
 	'agent_summary_subcampaign'     => 'Agent Summary By Sub',
 	'agent_timesheet'               => 'Agent Time Sheet',
+	'bwr_campaign_call_log'         => 'Campaign Call Log',
+	'bwr_production_report'         => 'Production Report',
 	'call_details'                  => 'Call Details',
 	'caller_id'                     => 'Caller ID Tracking',
 	'calls_per_hour'                => 'Calls Per Hour',
