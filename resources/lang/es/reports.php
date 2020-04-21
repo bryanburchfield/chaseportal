@@ -14,6 +14,8 @@ return [
      'agent_summary_campaign'        => 'Resumen de Agentes por Campaña',
      'agent_summary_subcampaign'     => 'Resumen de Agentes por Sub-campaña',
      'agent_timesheet'               => 'Planilla Horaria de Agentes',
+     'bwr_campaign_call_log'         => 'Registros de Llamadas de Campañas',
+     'bwr_production_report'         => 'Reporte de Productividad',
      'call_details'                  => 'Detalles de Llamadas',
      'caller_id'                     => 'Llamadas por Caller ID',
      'campaign_call_log'             => 'Registros de Llamadas de Campañas',
