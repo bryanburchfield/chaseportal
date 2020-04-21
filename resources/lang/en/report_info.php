@@ -103,9 +103,14 @@ return [
     'agent_summary_campaign_1' => 'This report summarizes agent activity for the selected campaigns and specified date range.',
     'agent_summary_subcampaign_1' => 'This report summarizes agent activity by subcampaign for the selected campaigns and specified date range.',
     'agent_timesheet_1' => 'This report lists all the login sessions for a Rep, along with the total Man Hours and Logged in Time.',
+    'bwr_campaign_call_log_1' => 'This report summarizes all dials by their disposition.',
+    'bwr_campaign_call_log_2' => 'Charts break down the call volume by 15 minute intervals, as well as graphical depictions of ' .
+        'agent vs system handled calls and call status distrubution.',
     'bwr_omni_1' => 'This report details dialing results and agent activity by campaign/subcampaign for the specified date range.',
     'bwr_omni_2' => 'Because agent man hours, pause time, wait time, etc can\'t be associated with a specific subcampaign or data source, ' .
         'these numbers appear only on the subtotals and totals lines.',
+    'bwr_production_report_1' => 'This report summarizes calls by an agent during the date range.',
+    'bwr_production_report_2' => 'There will be a column for each call disposition in addition to the standard columns listed here.',
     'call_details_1' => 'This report details each dial attempt made for the given parameters.',
     'call_details_2' => 'If a custom table is specified, then the lead information fields from that table will also be displayed.',
     'caller_id_1' => 'This report summarizes outbound calls by the Caller ID used.',
