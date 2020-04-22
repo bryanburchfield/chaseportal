@@ -183,7 +183,6 @@ class AgentDashController extends Controller
 
         $details = $this->filterDetails($this->dateFilter);
 
-        $tot_outbound = 0;
         $tot_inbound = 0;
         $tot_talk_time = 0;
         $avg_handle_time = 0;
@@ -191,9 +190,6 @@ class AgentDashController extends Controller
         $result = $this->getCallVolume();
 
         if (count($result)) {
-            if ($result[0]['OutboundCalls'] !== null) {
-                $tot_outbound = $result[0]['OutboundCalls'];
-            }
             if ($result[0]['InboundCalls'] !== null) {
                 $tot_inbound = $result[0]['InboundCalls'];
             }
@@ -212,7 +208,6 @@ class AgentDashController extends Controller
         }
 
         return ['call_volume' => [
-            'tot_outbound' => $tot_outbound,
             'tot_inbound' => $tot_inbound,
             'tot_talk_time' => $this->secondsToHms($tot_talk_time),
             'avg_handle_time' => $this->secondsToHms($avg_handle_time),
@@ -245,16 +240,15 @@ class AgentDashController extends Controller
         ];
 
         $sql = "SELECT
-            'InboundCalls' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
-            'OutboundCalls' = SUM(CASE WHEN DR.CallType NOT IN (1,11) THEN 1 ELSE 0 END),
-            'HandledCalls' = SUM(CASE WHEN DR.CallType IN (1,11) AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
+            'InboundCalls' = COUNT(*),
+            'HandledCalls' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
                 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
                 'CR_HANGUP', 'Inbound Voicemail') THEN 1 ELSE 0 END),
-            'HandleTime' = SUM(CASE WHEN DR.CallType IN (1,11) AND DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
+            'HandleTime' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
                 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
                 'CR_HANGUP', 'Inbound Voicemail') THEN DR.HandleTime ELSE 0 END)
             FROM DialingResults DR
-            WHERE DR.CallType NOT IN (7,8)
+            WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
             AND DR.Rep = :rep
@@ -311,6 +305,7 @@ class AgentDashController extends Controller
         // sort by campaign
         ksort($result, SORT_NATURAL | SORT_FLAG_CASE);
 
+        $total_calls = 0;
         $total_talk_time = 0;
         $calls_by_campaign = [];
 
@@ -319,6 +314,7 @@ class AgentDashController extends Controller
             $total_talk_time += $rec['TalkTime'];
 
             $calls_by_campaign[$rec['Campaign']] = $rec['Dials'];
+            $total_calls += $rec['Dials'];
 
             $rec['AvgTalkTime'] = $this->secondsToHms(($rec['AgentCalls'] == 0) ? 0 : $rec['TalkTime'] / $rec['AgentCalls']);
             $rec['AvgHandleTime'] = $this->secondsToHms(($rec['AgentCalls'] == 0) ? 0 : ($rec['TalkTime'] + $rec['WrapUpTime']) / $rec['AgentCalls']);
@@ -335,6 +331,7 @@ class AgentDashController extends Controller
         // return separate arrays for each item
         return [
             'campaign_stats' => [
+                'TotalCalls' => $total_calls,
                 'TotalTalkTime' => $this->secondsToHms($total_talk_time),
                 'CallsByCampaign' => [
                     'Campaign' => array_keys($calls_by_campaign),
