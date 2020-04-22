@@ -54,6 +54,23 @@ trait DashTraits
         return $this->index($request);
     }
 
+    private function checkAgentCampaign()
+    {
+        // Check if there's a 'campaign' session var
+        // set from agent's most recent login if not
+        if (!session()->has('campaign')) {
+
+            $campaign = $this->getAgentLoggedinCampaign($this->rep);
+
+            if (!empty($campaign)) {
+                $this->campaign = $campaign;
+            } else {
+                $this->campaign = '';
+            }
+            session(['campaign' => $this->campaign]);
+        }
+    }
+
     private function getSession(Request $request)
     {
         // Check if there's a 'campaign' session var
@@ -508,5 +525,30 @@ trait DashTraits
         }
 
         return $dblist;
+    }
+
+    private function getAgentLoggedinCampaign($rep)
+    {
+        $campaign = '';
+
+        $sql = "SELECT TOP 1 Campaign
+            FROM AgentActivity
+            WHERE GroupId = :group_id
+            AND Rep = :rep
+            AND Action = 'Login'
+            ORDER BY Date DESC";
+
+        $bind = [
+            'group_id' => Auth::user()->group_id,
+            'rep' => $this->rep,
+        ];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (count($results)) {
+            $campaign = $results[0]['Campaign'];
+        }
+
+        return $campaign;
     }
 }

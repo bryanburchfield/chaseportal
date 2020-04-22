@@ -19,6 +19,9 @@ class AgentDashController extends Controller
      */
     public function index(Request $request)
     {
+        // Set initial campaign baseed on most recent agent login
+        $this->checkAgentCampaign();
+
         $this->getSession($request);
 
         $campaigns = $this->agentCampaigns();
