@@ -34,10 +34,10 @@
     </div>
 
     <div class="form-group">
-        <label>{{__('tools.templates')}}</label>
+        <label>{{__('tools.email_template')}}</label>
         <select name="template_id" class="template_id form-control">
             <option value="">{{__('tools.select_one')}}</option>
-            @foreach($templates as $template)
+            @foreach($email_templates as $template)
                 <option {{$template->id==old('template_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
             @endforeach
         </select>

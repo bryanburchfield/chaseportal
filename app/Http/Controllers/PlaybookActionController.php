@@ -44,7 +44,8 @@ class PlaybookActionController extends Controller
             'campaigns' => $this->getAllCampaigns(),
             'playbook_actions' => $this->getPlaybookActions(),
             'email_service_providers' => $this->getEmailServiceProviders(),
-            'templates' => Script::emailTemplates(),
+            'email_templates' => Script::emailTemplates(),
+            'sms_templates' => Script::smsTemplates(),
         ];
 
         return view('tools.playbook.actions')->with($data);
