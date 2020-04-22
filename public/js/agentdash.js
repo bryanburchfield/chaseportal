@@ -105,8 +105,7 @@ var Dashboard = {
             },
             success:function(response){
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
-                $('#total_outbound .total').html(response.call_volume.tot_outbound);
-                $('#total_inbound .total').html(response.call_volume.tot_inbound);
+                $('#handled_calls .total').html(response.call_volume.tot_inbound);
                 $('#total_talktime').html(response.call_volume.tot_talk_time);
 
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
@@ -256,6 +255,7 @@ var Dashboard = {
             },
             success:function(response){
 
+                $('#total_inbound .total').html(response.campaign_stats.TotalCalls);
                 $('.campaign_stats_table tbody, .campaign_totals_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {

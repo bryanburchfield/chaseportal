@@ -79,15 +79,15 @@
 
         <div class="row">
             <div class="col-sm-3 col-xs-6">
-                <div class="card-3 card blue" id="total_outbound">
-                    <h1 class="title">{{__('widgets.total_outbound')}}</h1>
+                <div class="card-3 card blue" id="total_inbound">
+                    <h1 class="title">{{__('widgets.total_inbound_calls')}}</h1>
                     <h4 class="data count total"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
 
             <div class="col-sm-3 col-xs-6">
-                <div class="card-3 card orange" id="total_inbound">
-                    <h1 class="title">{{__('widgets.total_inbound')}}</h1>
+                <div class="card-3 card orange" id="handled_calls">
+                    <h1 class="title">{{__('widgets.handled_calls')}}</h1>
                     <h4 class="data count total"></h4>
                 </div><!-- end card -->
             </div><!-- end column -->
@@ -114,7 +114,7 @@
                         <table class="table table-condensed campaign_totals_table" >
                             <thead>
                                 <tr class="bdrtop_none">
-                                    <th>{{__('widgets.campaign')}}</th>
+                                    <th>{{__('widgets.inbound_service_queue')}}</th>
                                     <th class="tar">{{__('widgets.numb_of_calls')}}</th>
                                 </tr>
                             </thead>
@@ -140,7 +140,7 @@
                 <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
                             <tr>
-                                <th>{{__('widgets.campaign')}}</th>
+                                <th>{{__('widgets.inbound_service_queue')}}</th>
                                 <th>{{__('widgets.avg_talk_time')}}</th>
                                 <th>{{__('widgets.avg_hold_time')}}</th>
                                 <th>{{__('widgets.avg_handle_time')}}</th>
