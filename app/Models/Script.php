@@ -23,4 +23,17 @@ class Script extends SqlSrvModel
             ->where('HtmlContent', '!=', '')
             ->get();
     }
+
+    public static function smsTemplates($group_id = null)
+    {
+        if (Auth::check() && empty($group_id)) {
+            $group_id = Auth::user()->group_id;
+        }
+
+        return Script::where('GroupId', $group_id)
+            ->where('Name', 'like', 'sms[_]%')
+            ->whereNotNull('HtmlContent')
+            ->where('HtmlContent', '!=', '')
+            ->get();
+    }
 }

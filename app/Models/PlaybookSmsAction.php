@@ -9,6 +9,6 @@ class PlaybookSmsAction extends Model
     protected $fillable = [
         'playbook_action_id',
         'from_number',
-        'message',
+        'template_id',
     ];
 }
