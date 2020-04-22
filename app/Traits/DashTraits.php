@@ -63,7 +63,7 @@ trait DashTraits
             $campaign = $this->getAgentLoggedinCampaign($this->rep);
 
             if (!empty($campaign)) {
-                $this->campaign = $campaign;
+                $this->campaign = (array) $campaign;
             } else {
                 $this->campaign = '';
             }
