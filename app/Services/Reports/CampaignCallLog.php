@@ -154,7 +154,7 @@ class CampaignCallLog
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     private function processResults($sql, $bind)

@@ -86,7 +86,7 @@ class AgentSummarySubcampaign
             $results = $this->processResults($results);
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     public function makeQuery($all)
