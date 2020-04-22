@@ -375,7 +375,7 @@ class ProductionReport
             $results = $this->processResults($results);
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     private function processResults($results)
