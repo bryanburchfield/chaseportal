@@ -187,19 +187,30 @@ class AgentDashController extends Controller
         $details = $this->filterDetails($this->dateFilter);
 
         $tot_inbound = 0;
+        $tot_handled = 0;
         $tot_talk_time = 0;
+        $tot_handle_time = 0;
         $avg_handle_time = 0;
+
+        $rep_handled = 0;
+        $rep_handle_time = 0;
+        $rep_avg_handle_time = 0;
 
         $result = $this->getCallVolume();
 
-        if (count($result)) {
-            if ($result[0]['InboundCalls'] !== null) {
-                $tot_inbound = $result[0]['InboundCalls'];
+        foreach ($result as $rec) {
+            if ($rec['Rep'] === $this->rep) {
+                $rep_handle_time += $rec['HandleTime'];
+                $rep_handled += $rec['HandledCalls'];
             }
-            if ($result[0]['HandleTime'] !== null && $result[0]['HandledCalls'] !== null) {
-                $avg_handle_time = ($result[0]['HandledCalls'] == 0) ? 0 : $result[0]['HandleTime'] / $result[0]['HandledCalls'];
-            }
+
+            $tot_inbound += $rec['InboundCalls'];
+            $tot_handle_time += $rec['HandleTime'];
+            $tot_handled += $rec['HandledCalls'];
         }
+
+        $avg_handle_time = ($tot_handled == 0) ? 0 : $tot_handle_time / $tot_handled;
+        $rep_avg_handle_time = ($rep_handled == 0) ? 0 : $rep_handle_time / $rep_handled;
 
         // Now get talk time
         $result = $this->getAgentTalkTime();
@@ -212,8 +223,11 @@ class AgentDashController extends Controller
 
         return ['call_volume' => [
             'tot_inbound' => $tot_inbound,
+            'tot_handled' => $tot_handled,
             'tot_talk_time' => $this->secondsToHms($tot_talk_time),
             'avg_handle_time' => $this->secondsToHms($avg_handle_time),
+            'rep_handled' => $rep_handled,
+            'rep_avg_handle_time' => $this->secondsToHms($rep_avg_handle_time),
             'details' => $details,
         ]];
     }
@@ -242,7 +256,7 @@ class AgentDashController extends Controller
             'todate' => $toDate,
         ];
 
-        $sql = "SELECT
+        $sql = "SELECT Rep,
             'InboundCalls' = COUNT(*),
             'HandledCalls' = SUM(CASE WHEN DR.CallStatus NOT IN ( 'CR_CEPT', 'CR_CNCT/CON_PAMD',
                 'CR_NOANS', 'CR_NORB', 'CR_BUSY', 'CR_DROPPED', 'CR_FAXTONE', 'CR_FAILED', 'CR_DISCONNECTED',
@@ -257,7 +271,8 @@ class AgentDashController extends Controller
             AND DR.Rep = :rep
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
-            AND DR.GroupId = :groupid";
+            AND DR.GroupId = :groupid
+            GROUP BY Rep";
 
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
@@ -480,9 +495,22 @@ class AgentDashController extends Controller
     {
         $this->getSession($request);
 
-        $result = $this->getSales();
+        $tot_sales = 0;
+        $rep_sales = 0;
 
-        return ['total_sales' => $result['Sales']];
+        $results = $this->getSales();
+
+        foreach ($results as $rec) {
+            if ($rec['Rep'] == $this->rep) {
+                $rep_sales += $rec['Sales'];
+            }
+            $tot_sales += $rec['Sales'];
+        }
+
+        return [
+            'total_sales' => $tot_sales,
+            'rep_sales' => $rep_sales,
+        ];
     }
 
     public function getSales()
@@ -498,7 +526,7 @@ class AgentDashController extends Controller
 
         $bind = [];
 
-        $sql = "SELECT SUM(Sales) as Sales
+        $sql = "SELECT Rep, SUM(Sales) as Sales
         FROM (";
 
         $union = '';
@@ -507,7 +535,7 @@ class AgentDashController extends Controller
             $bind['fromdate' . $i] = $fromDate;
             $bind['todate' . $i] = $toDate;
 
-            $sql .= " $union SELECT 'Sales' = COUNT(id)
+            $sql .= " $union SELECT DR.Rep, 'Sales' = COUNT(id)
                 FROM [$db].[dbo].[DialingResults] DR
                 CROSS APPLY (SELECT TOP 1 [Type]
                     FROM  [$db].[dbo].[Dispos] DI
@@ -519,14 +547,16 @@ class AgentDashController extends Controller
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i
                 AND DR.CallType IN (1,11)
-                AND DI.Type = 3";
+                AND DI.Type = 3
+                GROUP BY DR.Rep";
 
             $union = 'UNION ALL';
         }
-        $sql .= ") tmp";
+        $sql .= ") tmp
+        GROUP BY Rep";
 
-        $result = $this->runSql($sql, $bind);
-        return $result[0];
+        $results = $this->runSql($sql, $bind);
+        return $results;
     }
 
     public function campaignChart(Request $request)
