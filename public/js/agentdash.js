@@ -106,7 +106,7 @@ var Dashboard = {
             success:function(response){
                 console.log(response);
                 $('#total_inbound .total').html(response.call_volume.rep_inbound);
-                $('#avg_handle_time').html(response.call_volume.avg_handle_time);
+                $('#avg_handle_time').html(response.call_volume.rep_avg_handle_time);
                 $('#handled_calls .total').html(response.call_volume.rep_handled);
                 $('#total_talktime').html(response.call_volume.rep_talk_time );
 
