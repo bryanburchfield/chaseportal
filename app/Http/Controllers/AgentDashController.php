@@ -358,7 +358,11 @@ class AgentDashController extends Controller
             'campaign_stats' => [
                 'TotalCalls' => $total_calls,
                 'TotalTalkTime' => $this->secondsToHms($total_talk_time),
-                'CallsByCampaign' => $calls_by_campaign,
+                'CallsByCampaign' => [
+                    'Campaign' => array_column($calls_by_campaign, 'Campaign'),
+                    'Calls' => array_column($calls_by_campaign, 'Dials'),
+                    'AbandonCalls' => array_column($calls_by_campaign, 'AbandonCalls'),
+                ],
                 'TopTen' => [
                     'Campaign' => array_keys($top_ten),
                     'Calls' => array_values($top_ten),
