@@ -105,7 +105,6 @@ var Dashboard = {
             },
             success:function(response){
 
-                console.log(response);
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
                 $('#handled_calls .total').html(response.call_volume.tot_inbound);
                 $('#total_talktime').html(response.call_volume.rep_talk_time );
@@ -126,7 +125,6 @@ var Dashboard = {
                     $('.handled_stats .'+response_handled[0][0]).animate(
                         {width:100+"%"},
                         {duration: 1000});
-                    console.log(response_handled[0][0]);
                     
                     $('.handled_stats .'+response_handled[1][0]).animate(
                         {width:response_handled[1][1]/ response_handled[0][1]*100+"%"},
@@ -341,7 +339,7 @@ var Dashboard = {
                 if (response.campaign_stats.CallsByCampaign.Campaign.length) {
                     var trs='';
                     for (var i = 0; i < response.campaign_stats.CallsByCampaign.Campaign.length; i++) {
-                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td></tr>';
+                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.AbandonCalls[i] + '</td></tr>';
                     }
                     $('.campaign_totals_table tbody').append(trs);
                 }

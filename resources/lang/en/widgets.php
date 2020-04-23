@@ -81,6 +81,7 @@ return [
 	'top_ten_dispos'	=> 'Top 10 Dispositions',
 	'total'				=> 'Total',
 	'total_calls'		=> 'Total Calls',
+	'total_calls_abandon'	=> 'Total Calls Abandon',
 	'total_contacts'	=> 'Total Contacts',
 	'total_conversions' => 'Total Conversions',
 	'total_dials'		=> 'Total Dials',
