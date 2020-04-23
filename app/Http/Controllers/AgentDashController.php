@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -353,8 +352,6 @@ class AgentDashController extends Controller
 
         // and slice top 10
         $top_ten = array_slice($calls_by_campaign, 0, 10);
-
-        Log::debug($calls_by_campaign);
 
         // return separate arrays for each item
         return [
