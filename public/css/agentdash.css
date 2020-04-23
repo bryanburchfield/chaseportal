@@ -8,18 +8,10 @@ applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abb
 }
 
 .mb0{margin-bottom: 0;}
-
-.mt20 {
-  margin-top: 20px;
-}
-
-.mt50 {
-  margin-top: 50px;
-}
-
-.mb20 {
-  margin-bottom: 20px;
-}
+.mt20 {margin-top: 20px;}
+.mt30{margin-top: 30px;}
+.mt50 {margin-top: 50px;}
+.mb20 {margin-bottom: 20px;}
 
 .pl0{padding-left: 0 !important;}
 .pr0{padding-right: 0 !important;}
@@ -685,7 +677,7 @@ span.selected_campaign {
     font-weight: 600;
 }
 
-.campaign_stats_table thead tr th{background: #203047;color:#fff;}
+.campaign_stats_table thead tr th{background: #203047;color:#fff;text-align: left;}
 
 ul.dropdown-menu.filter_campaign {
     max-height: 270px;
@@ -782,6 +774,48 @@ ul.dropdown-menu.filter_campaign .checkbox {
   position: relative;
   overflow-y: scroll; 
 }
+
+.card.stats .title{color: #595C63;}
+
+.stats_item{
+    font-weight: 600;
+    float: left;
+    margin-right: 20px;
+}
+
+.stats_item span{
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50px;
+    float: left;
+    margin-right: 3px;
+    position: relative;
+    top: 2px;
+}
+
+.stats_chart {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 15px;
+}
+
+.stats_item span.repstats, .stats_chart .rep{
+    background: #339FFF;
+}
+
+.stats_item span.teamstats, .stats_chart .team{
+    background: #33A09B;
+}
+
+.stats_chart h4{font-size: 13px;font-weight: 600;margin-bottom: 5px;}
+
+.stats_chart .rep, .stats_chart .team{height: 20px;margin-bottom: 3px;}
+
+.handled_stats .rep, .handled_stats .team, .interactions_stats .rep, .interactions_stats .team, .avg_handle_time_stats .rep, .avg_handle_time_stats .team{width: 0;}
+
+
+/*.stats_chart .rep, .stats_chart .team, .stats_chart .total{float: left;}*/
 
   
 @media handheld, only screen and (max-width: 991px) {
