@@ -386,9 +386,10 @@ class AgentDashController extends Controller
             $final[$rec['Campaign']]['AgentCalls'] = $rec['AgentCalls'];
             $final[$rec['Campaign']]['TalkTime'] = $rec['TalkTime'];
             $final[$rec['Campaign']]['WrapUpTime'] = $rec['WrapUpTime'];
+            $final[$rec['Campaign']]['Dials'] = 0;
             $final[$rec['Campaign']]['HoldTime'] = 0;
             $final[$rec['Campaign']]['Drops'] = 0;
-            $final[$rec['Campaign']]['Dials'] = 0;
+            $final[$rec['Campaign']]['AbandonCalls'] = 0;
         }
 
         foreach ($dialingresults as $rec) {
@@ -401,6 +402,7 @@ class AgentDashController extends Controller
             $final[$rec['Campaign']]['Dials'] = $rec['Dials'];
             $final[$rec['Campaign']]['HoldTime'] = $rec['HoldTime'];
             $final[$rec['Campaign']]['Drops'] = $rec['Drops'];
+            $final[$rec['Campaign']]['AbandonCalls'] = $rec['AbandonCalls'];
         }
 
         return $final;
@@ -480,6 +482,7 @@ class AgentDashController extends Controller
         $sql = "SELECT Campaign,
                 'Dials' = COUNT(*),
                 'HoldTime' = SUM(HoldTime),
+                'AbandonCalls' = SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
                 'Drops' = SUM(CASE WHEN CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END)
             FROM DialingResults
             WHERE CallType IN (1,11)
