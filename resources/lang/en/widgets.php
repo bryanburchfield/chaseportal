@@ -69,6 +69,7 @@ return [
 	'seconds'			=> 'Seconds',
 	'service_level'		=> 'Service Level',
 	'settings'			=> 'Settings',
+	'stats'				=> 'My Stats vs Team Stats',
 	'system_calls'		=> 'System Calls',
 	'talk_time'			=> 'Talk Time',
 	'time'				=> 'Time',

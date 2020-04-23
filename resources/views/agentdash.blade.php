@@ -135,7 +135,7 @@
         </div>
 
         <div class="row bdrless_card">
-            <div class="col-sm-9 pl0">
+            <div class="col-sm-8 pl0">
                 <div class="bdrcard" style="height:285px">
                 <table class="table table-condensed campaign_stats_table table-striped">
                         <thead>
@@ -153,10 +153,32 @@
                 </div>
             </div>
 
-            <div class="col-sm-3 pr0">
-                <div class="card blue total_calls_card">
-                    <h1 class="title">{{__('widgets.total_conversions')}}</h1>
-                    <h2 class="total_conversions cnt"></h2>
+            <div class="col-sm-4 pr0">
+                <div class="card stats" style="height:285px">
+                    <h1 class="title mb20">{{__('widgets.stats')}}</h1>
+
+                    <div class="handled_stats stats_chart col-sm-6 p0">
+                        <h4>Handled</h4>
+                        <div class="rep rep_handled"></div>
+                        <div class="team tot_handled"></div>
+                    </div>
+
+                    <div class="avg_handle_time_stats stats_chart col-sm-6 p0">
+                        <h4>Avg Handle Time</h4>
+                        <div class="rep rep_avg_handle_time"></div>
+                        <div class="team rep_talk_time"></div>
+                    </div>
+
+                    <div class="interactions_stats stats_chart col-sm-6 p0">
+                        <h4>Successful Interactions</h4>
+                        <div class="rep rep_sales" ></div>
+                        <div class="team total_sales"></div>
+                    </div>
+
+                    <div class="stats_legend col-sm-12 mt30 pl0">
+                        <div class="stats_item"><span class="repstats"></span>My Stats</div>
+                        <div class="stats_item"><span class="teamstats"></span>Team Stats</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,7 +190,7 @@
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 </div>
 
 @include('shared.datepicker')

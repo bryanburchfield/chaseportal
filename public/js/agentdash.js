@@ -57,7 +57,7 @@ var Dashboard = {
     active_camp_search: '',
 
     init:function(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter, this.chartColors), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
             Dashboard.eventHandlers();
@@ -69,7 +69,7 @@ var Dashboard = {
     },
 
     refresh(){
-        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
+        $.when(this.get_call_volume(this.datefilter, this.chartColors), this.campaign_stats(this.datefilter, this.chartColors), this.get_total_conversions(this.datefilter, this.chartColors), this.campaign_chart(this.datefilter, this.chartColors)).done(function(){
             $('.card_dropbtn').on('click', this.toggle_dotmenu);
             $('.preloader').fadeOut('slow');
         }); 
@@ -104,14 +104,67 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
+
+                console.log(response);
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
                 $('#handled_calls .total').html(response.call_volume.tot_inbound);
-                $('#total_talktime').html(response.call_volume.tot_talk_time);
+                $('#total_talktime').html(response.call_volume.rep_talk_time );
 
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.call_volume.details[1]);
 
                 var total_calls = parseInt(response.call_volume.outbound) + parseInt(response.call_volume.inbound) + parseInt(response.call_volume.manual);
+
+                var response_handled = {
+                    'rep_handled': response.call_volume.rep_handled,
+                    'tot_handled': response.call_volume.tot_handled,
+                }
+
+                response_handled=Object.entries(response_handled);
+
+                if(response_handled[0][1] > response_handled[1][1]){
+                    $('.handled_stats .'+response_handled[0][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+                    console.log(response_handled[0][0]);
+                    
+                    $('.handled_stats .'+response_handled[1][0]).animate(
+                        {width:response_handled[1][1]/ response_handled[0][1]*100+"%"},
+                        {duration: 1000});
+                }else{
+                    
+                   $('.handled_stats .'+response_handled[1][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+
+                   // $('.handled_stats .'+response_handled[1][0]).next('.total').text(response_handled[1][1]);
+                    $('.handled_stats .'+response_handled[0][0]).animate(
+                        {width:response_handled[0][1]/ response_handled[1][1]*100+"%"},
+                        {duration: 1000});
+                }
+
+                var response_avg_handle_time = {
+                    'rep_avg_handle_time': response.call_volume.avg_handle_time_secs,
+                    'rep_talk_time': response.call_volume.rep_talk_time_secs,
+                }
+
+                response_avg_handle_time=Object.entries(response_avg_handle_time);
+
+                if(response_avg_handle_time[0][1] > response_avg_handle_time[1][1]){
+                    $('.avg_handle_time_stats .'+response_avg_handle_time[0][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+                    $('.avg_handle_time_stats .'+response_avg_handle_time[1][0]).animate(
+                        {width:response_avg_handle_time[1][1]/ response_avg_handle_time[0][1]*100+"%"},
+                        {duration: 1000});
+                }else{
+                   $('.avg_handle_time_stats .'+response_avg_handle_time[1][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+                    $('.avg_handle_time_stats .'+response_avg_handle_time[0][0]).animate(
+                        {width:response_avg_handle_time[0][1]/ response_avg_handle_time[1][1]*100+"%"},
+                        {duration: 1000});
+                }
 
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume');
@@ -120,6 +173,8 @@ var Dashboard = {
             }
         });
     },
+
+
 
     campaign_chart:function(datefilter, chartColors){
         $.ajaxSetup({
@@ -221,7 +276,7 @@ var Dashboard = {
         });
     },
 
-    get_total_conversions:function(datefilter){
+    get_total_conversions:function(datefilter, chartColors){
 
         return $.ajax({
             async: true,
@@ -232,7 +287,24 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                $('.total_conversions').html(response.total_sales);
+                console.log(response);
+                response=Object.entries(response);
+
+                if(response[0][1] > response[1][1]){
+                    $('.interactions_stats .'+response[0][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+                    $('.interactions_stats .'+response[1][0]).animate(
+                        {width:response[1][1]/ response[0][1]*100+"%"},
+                        {duration: 1000});
+                }else{
+                   $('.interactions_stats .'+response[1][0]).animate(
+                        {width:100+"%"},
+                        {duration: 1000});
+                    $('.interactions_stats .'+response[0][0]).animate(
+                        {width:response[0][1]/ response[1][1]*100+"%"},
+                        {duration: 1000});
+                }
             }
         });
     },

@@ -64,6 +64,7 @@ return [
 	'seconds'			=> 'Segundos',
 	'service_level'		=> 'Nivel de Servicio',
 	'settings'			=> 'Ajustes',
+	'stats'				=> 'Mis estadísticas vs Estadísticas del equipo',
 	'system_calls'		=> 'Llamada Al Sistema',
 	'time'				=> 'Tiempo',
 	'top_ten_agent_call_counts'	=> 'Los 10 Mejores Recuentos de Llamadas por Agente',
