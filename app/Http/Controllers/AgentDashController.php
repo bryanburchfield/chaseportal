@@ -188,11 +188,11 @@ class AgentDashController extends Controller
 
         $tot_inbound = 0;
         $tot_handled = 0;
-        $tot_talk_time = 0;
         $tot_handle_time = 0;
         $avg_handle_time = 0;
 
         $rep_handled = 0;
+        $rep_talk_time = 0;
         $rep_handle_time = 0;
         $rep_avg_handle_time = 0;
 
@@ -217,15 +217,15 @@ class AgentDashController extends Controller
 
         if (count($result)) {
             if ($result[0]['TalkTime'] !== null) {
-                $tot_talk_time = $result[0]['TalkTime'];
+                $rep_talk_time = $result[0]['TalkTime'];
             }
         }
 
         return ['call_volume' => [
             'tot_inbound' => $tot_inbound,
             'tot_handled' => $tot_handled,
-            'tot_talk_time' => $this->secondsToHms($tot_talk_time),
-            'tot_talk_time_secs' => round($tot_talk_time),
+            'rep_talk_time' => $this->secondsToHms($rep_talk_time),
+            'rep_talk_time_secs' => round($rep_talk_time),
             'avg_handle_time' => $this->secondsToHms($avg_handle_time),
             'avg_handle_time_secs' => round($avg_handle_time),
             'rep_handled' => $rep_handled,
