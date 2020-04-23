@@ -271,7 +271,7 @@ class AgentDashController extends Controller
                 'CR_HANGUP', 'Inbound Voicemail') THEN DR.HandleTime ELSE 0 END)
             FROM DialingResults DR
             WHERE DR.CallType IN (1,11)
-            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound', 'TRANSFERRED','PARKED','SMS Received','SMS Delivered')
             AND Duration > 0
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
@@ -494,7 +494,7 @@ class AgentDashController extends Controller
                 'Drops' = SUM(CASE WHEN CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END)
             FROM DialingResults
             WHERE CallType IN (1,11)
-            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
             AND GroupId = :groupid
             AND Date >= :fromdate
 			AND Date < :todate
@@ -653,7 +653,7 @@ class AgentDashController extends Controller
 			'Calls' = COUNT(*)
             FROM [$db].[dbo].[DialingResults] DR
             WHERE DR.CallType IN (1,11)
-            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','Inbound Voicemail','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
             AND DR.GroupId = :groupid$i
             AND DR.Date >= :fromdate$i
             AND DR.Date < :todate$i
