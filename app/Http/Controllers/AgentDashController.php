@@ -275,11 +275,14 @@ class AgentDashController extends Controller
             AND Duration > 0
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
-            AND DR.GroupId = :groupid
-            GROUP BY Rep";
+            AND DR.GroupId = :groupid";
 
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
+
+        $sql .= "
+            GROUP BY Rep";
+
         $bind = array_merge($bind, $extrabind);
 
         return $this->runSql($sql, $bind);
@@ -350,7 +353,9 @@ class AgentDashController extends Controller
         }
 
         // sort by calls 
-        arsort($calls_by_campaign);
+        usort($calls_by_campaign, function ($a, $b) {
+            return $a['Dials'] < $b['Dials'];
+        });
 
         // and slice top 10
         $top_ten = array_slice($calls_by_campaign, 0, 10);
@@ -366,8 +371,8 @@ class AgentDashController extends Controller
                     'AbandonCalls' => array_column($calls_by_campaign, 'AbandonCalls'),
                 ],
                 'TopTen' => [
-                    'Campaign' => array_keys($top_ten),
-                    'Calls' => array_values($top_ten),
+                    'Campaign' => array_column($top_ten, 'Campaign'),
+                    'Calls' => array_column($top_ten, 'Dials'),
                 ],
                 'Campaign' => array_column($result, 'Campaign'),
                 'AvgTalkTime' => array_column($result, 'AvgTalkTime'),
