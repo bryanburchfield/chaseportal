@@ -168,8 +168,7 @@ class ProductionReport
 
             $sql .= "
             $union SELECT dr.CallStatus, dr.Rep
-            FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-            LEFT JOIN Dispos d on d.Disposition = dr.CallStatus";
+            FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
@@ -185,9 +184,9 @@ class ProductionReport
             $sql .= "
                 WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+''' AND '
 
-        SET @query = @query + N'dr.Date between '''+CAST(:startdate1$i as nvarchar)+''' and '''+CAST(:enddate1$i as nvarchar)+''' AND
-                (((d.GroupId=dr.GroupId OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR
-                dr.CallStatus = ''UNFINISHED'')";
+        SET @query = @query + N'dr.Date between '''+CAST(:startdate1$i as nvarchar)+''' and '''+CAST(:enddate1$i as nvarchar)+'''
+        AND dr.CallStatus != ''''
+        AND dr.Rep != ''''";
 
             $union = 'UNION';
         }
@@ -224,7 +223,7 @@ class ProductionReport
 
             set @query = N'UPDATE ' + @temp_table_name + N' SET ManHours = IsNull(a.ManHours/3600, 0)
             FROM (SELECT Rep, SUM(Duration) as ManHours
-                  FROM AgentActivity aa WITH(NOLOCK)'";
+                  FROM [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)'";
 
         if (!empty($campaigns)) {
             $sql .= "
@@ -272,7 +271,7 @@ class ProductionReport
             $sql .= "
                 $union SELECT r.Rep, d.Type, count(r.id) as [Cnt]
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                    CROSS APPLY (SELECT TOP 1 [Type] FROM Dispos WHERE Disposition=r.CallStatus AND
+                    CROSS APPLY (SELECT TOP 1 [Type] FROM [$db].[dbo].[Dispos] WHERE Disposition=r.CallStatus AND
                             (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
                             ORDER BY [id]) d";
 
