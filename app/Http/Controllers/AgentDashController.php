@@ -275,11 +275,14 @@ class AgentDashController extends Controller
             AND Duration > 0
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
-            AND DR.GroupId = :groupid
-            GROUP BY Rep";
+            AND DR.GroupId = :groupid";
 
         list($where, $extrabind) = $this->campaignClause('DR', 0, $campaign);
         $sql .= " $where";
+
+        $sql .= "
+            GROUP BY Rep";
+
         $bind = array_merge($bind, $extrabind);
 
         return $this->runSql($sql, $bind);
