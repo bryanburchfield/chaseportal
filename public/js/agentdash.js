@@ -105,9 +105,9 @@ var Dashboard = {
             },
             success:function(response){
                 console.log(response);
-                $('#total_inbound .total').html(response.call_volume.tot_inbound);
+                $('#total_inbound .total').html(response.call_volume.rep_inbound);
                 $('#avg_handle_time').html(response.call_volume.avg_handle_time);
-                $('#handled_calls .total').html(response.call_volume.tot_inbound);
+                $('#handled_calls .total').html(response.call_volume.rep_handled);
                 $('#total_talktime').html(response.call_volume.rep_talk_time );
 
                 $('.filter_time_camp_dets p .selected_campaign').html(response.call_volume.details[0]);
