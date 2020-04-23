@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AgentDashController extends Controller
 {
@@ -333,7 +334,12 @@ class AgentDashController extends Controller
         foreach ($result as $campaign => &$rec) {
             $total_talk_time += $rec['TalkTime'];
 
-            $calls_by_campaign[$rec['Campaign']] = $rec['Dials'];
+            $calls_by_campaign[$rec['Campaign']] = [
+                'Campaign' => $rec['Campaign'],
+                'Dials' => $rec['Dials'],
+                'AbandonCalls' => $rec['AbandonCalls'],
+            ];
+
             $total_calls += $rec['Dials'];
 
             $rec['AvgTalkTime'] = $this->secondsToHms(($rec['AgentCalls'] == 0) ? 0 : $rec['TalkTime'] / $rec['AgentCalls']);
@@ -348,15 +354,14 @@ class AgentDashController extends Controller
         // and slice top 10
         $top_ten = array_slice($calls_by_campaign, 0, 10);
 
+        Log::debug($calls_by_campaign);
+
         // return separate arrays for each item
         return [
             'campaign_stats' => [
                 'TotalCalls' => $total_calls,
                 'TotalTalkTime' => $this->secondsToHms($total_talk_time),
-                'CallsByCampaign' => [
-                    'Campaign' => array_keys($calls_by_campaign),
-                    'Calls' => array_values($calls_by_campaign),
-                ],
+                'CallsByCampaign' => $calls_by_campaign,
                 'TopTen' => [
                     'Campaign' => array_keys($top_ten),
                     'Calls' => array_values($top_ten),
