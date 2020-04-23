@@ -126,6 +126,50 @@ class ProductionReport
             ];
         }
 
+        // Now get dialing results
+        $bind = [];
+
+        $sql = 'SET NOCOUNT ON;';
+
+        if (!empty($this->params['skills'])) {
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$skills', '!#!');";
+        }
+
+        $union = '';
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
+            $sql .= " $union SELECT
+            DR.Rep, DR.CallStatus, COUNT(*) as Calls
+            FROM [$db].[dbo].[DialingResults] DR
+            WHERE DR.GroupId = :group_id$i
+            AND DR.Date >= :startdate$i
+            AND DR.Date < :enddate$i
+            AND DR.CallStatus NOT IN ('','CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','CR_DISCONNECTED','SMS Delivered','SMS Received')";
+
+            if (!empty($campaigns)) {
+                $bind['campaigns1' . $i] = $campaigns;
+                $sql .= " AND DR.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns1$i, '!#!'))";
+            }
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $union = 'UNION ALL';
+        }
+
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+            if (!count($rec)) {
+                break;
+            }
+        }
 
 
 
