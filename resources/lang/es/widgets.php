@@ -74,6 +74,7 @@ return [
 	'top_ten_calls_by_camp' => 'Los 10 Mejores Recuentos de Llamada por Campaña',
 	'top_ten_dispos'	=> 'Las 10 Mejores Disposiciones',
 	'total'				=> 'Total',
+	'total_calls_abandon'	=> 'Total de llamadas abandonadas',
 	'total_contacts'	=> 'Total de Contactados',
 	'total_conversions' => 'Conversiones',
 	'total_dials'		=> 'Total de Marcaciones',
