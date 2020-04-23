@@ -191,15 +191,17 @@ class AgentDashController extends Controller
         $tot_handle_time = 0;
         $avg_handle_time = 0;
 
+        $rep_inbound = 0;
         $rep_handled = 0;
-        $rep_talk_time = 0;
         $rep_handle_time = 0;
         $rep_avg_handle_time = 0;
+        $rep_talk_time = 0;
 
         $result = $this->getCallVolume();
 
         foreach ($result as $rec) {
             if ($rec['Rep'] === $this->rep) {
+                $rep_inbound += $rec['InboundCalls'];
                 $rep_handle_time += $rec['HandleTime'];
                 $rep_handled += $rec['HandledCalls'];
             }
@@ -224,12 +226,14 @@ class AgentDashController extends Controller
         return ['call_volume' => [
             'tot_inbound' => $tot_inbound,
             'tot_handled' => $tot_handled,
-            'rep_talk_time' => $this->secondsToHms($rep_talk_time),
-            'rep_talk_time_secs' => round($rep_talk_time),
             'avg_handle_time' => $this->secondsToHms($avg_handle_time),
             'avg_handle_time_secs' => round($avg_handle_time),
+            'rep_inbound' => $rep_inbound,
             'rep_handled' => $rep_handled,
             'rep_avg_handle_time' => $this->secondsToHms($rep_avg_handle_time),
+            'rep_avg_handle_time_secs' => round($rep_avg_handle_time),
+            'rep_talk_time' => $this->secondsToHms($rep_talk_time),
+            'rep_talk_time_secs' => round($rep_talk_time),
             'details' => $details,
         ]];
     }
@@ -253,7 +257,6 @@ class AgentDashController extends Controller
 
         $bind = [
             'groupid' => Auth::user()->group_id,
-            'rep' => $this->rep,
             'fromdate' => $fromDate,
             'todate' => $toDate,
         ];
@@ -270,7 +273,6 @@ class AgentDashController extends Controller
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound')
             AND Duration > 0
-            AND DR.Rep = :rep
             AND DR.Date >= :fromdate
             AND DR.Date < :todate
             AND DR.GroupId = :groupid
