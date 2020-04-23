@@ -99,4 +99,16 @@ class PlaybookController extends Controller
 
         return ['status' => 'success'];
     }
+
+    public function getPlaybook(Request $request)
+    {
+        return $this->findPlaybook($request->id);
+    }
+
+    private function findPlaybook($id)
+    {
+        return ContactsPlaybook::where('id', $id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+    }
 }
