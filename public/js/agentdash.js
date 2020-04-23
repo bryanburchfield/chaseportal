@@ -326,7 +326,7 @@ var Dashboard = {
             },
             success:function(response){
 
-                
+                console.log(response);
                 $('.campaign_stats_table tbody, .campaign_totals_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {
