@@ -7,6 +7,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PlaybookController extends Controller
 {
@@ -73,5 +74,29 @@ class PlaybookController extends Controller
         $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
 
         return $results;
+    }
+
+    public function addPlaybook(Request $request)
+    {
+        Log::debug('add');
+        Log::debug($request->all());
+
+        return ['status' => 'success'];
+    }
+
+    public function updatePlaybook(Request $request)
+    {
+        Log::debug('update');
+        Log::debug($request->all());
+
+        return ['status' => 'success'];
+    }
+
+    public function deletePlaybook(Request $request)
+    {
+        Log::debug('delete');
+        Log::debug($request->all());
+
+        return ['status' => 'success'];
     }
 }

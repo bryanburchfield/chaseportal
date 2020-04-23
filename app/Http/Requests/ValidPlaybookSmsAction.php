@@ -25,7 +25,7 @@ class ValidPlaybookSmsAction extends FormRequest
     {
         return [
             'from_number' => 'required',
-            'message' => 'required',
+            'template_id' => 'required|integer',
         ];
     }
 }

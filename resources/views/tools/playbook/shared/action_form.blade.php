@@ -76,8 +76,13 @@
     </div>
 
     <div class="form-group">
-        <label>{{__('tools.message')}}</label>
-        <textarea name="message" rows="8" class="form-control message"></textarea>
+        <label>{{__('tools.sms_template')}}</label>
+        <select name="template_id" class="template_id form-control">
+            <option value="">{{__('tools.select_one')}}</option>
+            @foreach($sms_templates as $template)
+                <option {{$template->id==old('template_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
+            @endforeach
+        </select>
     </div>
 </div>
 
