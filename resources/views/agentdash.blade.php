@@ -116,6 +116,7 @@
                                 <tr class="bdrtop_none">
                                     <th>{{__('widgets.inbound_service_queue')}}</th>
                                     <th class="tar">{{__('widgets.numb_of_calls')}}</th>
+                                    <th>{{__('widgets.total_calls_abandon')}}</th>
                                 </tr>
                             </thead>
 
