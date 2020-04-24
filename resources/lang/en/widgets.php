@@ -57,7 +57,7 @@ return [
 	'max_hold_time'		=> 'Max Hold Time',
 	'missed_calls'		=> 'Missed Calls',
 	'my_stats'			=> 'My Stats',
-	'numb_of_calls'		=> '# Calls',
+	'numb_of_calls'		=> 'Calls',
 	'outbound'			=> 'Outbound',
 	'paused'			=> 'Paused',
 	'rep' 				=> 'Rep',
