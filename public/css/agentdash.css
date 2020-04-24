@@ -830,8 +830,10 @@ ul.dropdown-menu.filter_campaign .checkbox {
 .stats_chart .total{
     width: 12%;
     padding-left: 1%;
+    font-size: 11px;
+    font-weight: 600;
 }
-  
+
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{
     font-size: 32px;

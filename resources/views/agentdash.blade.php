@@ -160,7 +160,7 @@
 
                     <div class="stats">
                         <div class="handled_stats stats_chart col-sm-6 p0">
-                            <h4>Handled</h4>
+                            <h4>{{__('widgets.Manejado')}}</h4>
                             <div class="outer rep">
                                 <div class="rep rep_handled inner"></div>
                             </div>
@@ -172,7 +172,7 @@
                         </div>
 
                         <div class="avg_handle_time_stats stats_chart col-sm-6 pr0">
-                            <h4>Avg Handle Time</h4>
+                            <h4>{{__('widgets.avg_handle_time')}}</h4>
                             <div class="outer rep">
                                 <div class="rep rep_avg_handle_time inner"></div>
                             </div>
@@ -184,7 +184,7 @@
                         </div>
 
                         <div class="interactions_stats stats_chart col-sm-6 p0">
-                            <h4>Successful Interactions</h4>
+                            <h4>{{__('widgets.successful_interactions')}}</h4>
                             <div class="outer rep">
                                 <div class="rep rep_sales inner" ></div>
                             </div>
@@ -196,8 +196,8 @@
                         </div>
 
                         <div class="stats_legend col-sm-12 mt30 pl0">
-                            <div class="stats_item"><span class="repstats"></span>My Stats</div>
-                            <div class="stats_item"><span class="teamstats"></span>Team Stats</div>
+                            <div class="stats_item"><span class="repstats"></span>{{__('widgets.my_stats')}}</div>
+                            <div class="stats_item"><span class="teamstats"></span>{{__('widgets.team_stats')}}</div>
                         </div>
                     </div>
                 </div>

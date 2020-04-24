@@ -104,7 +104,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
+
                 $('#total_inbound .total').html(response.call_volume.rep_inbound);
                 $('#avg_handle_time').html(response.call_volume.rep_avg_handle_time);
                 $('#handled_calls .total').html(response.call_volume.rep_handled);
@@ -293,7 +293,6 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                console.log(response);
                 response=Object.entries(response);
 
                 if(response[0][1] > response[1][1]){
@@ -336,7 +335,6 @@ var Dashboard = {
             },
             success:function(response){
 
-                console.log(response);
                 $('.campaign_stats_table tbody, .campaign_totals_table tbody').empty();
 
                 if (response.campaign_stats.Campaign.length) {
