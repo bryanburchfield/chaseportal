@@ -160,7 +160,7 @@
 
                     <div class="stats">
                         <div class="handled_stats stats_chart col-sm-6 p0">
-                            <h4>{{__('widgets.Manejado')}}</h4>
+                            <h4>{{__('widgets.handled')}}</h4>
                             <div class="outer rep">
                                 <div class="rep rep_handled inner"></div>
                             </div>
