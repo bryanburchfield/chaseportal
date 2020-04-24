@@ -2867,7 +2867,7 @@ td.bg-danger{
 }
 
 //prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a {display: none;}
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a {display: none;}
 
 .dataTables_filter label input{
     margin:0 5px 10px 5px;

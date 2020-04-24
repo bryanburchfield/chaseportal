@@ -126,7 +126,7 @@ class CampaignCallLog
             WHERE DR.GroupId = :group_id1$i
             AND DR.Date >= :startdate1$i
             AND DR.Date < :enddate1$i
-            AND DR.CallStatus not in ('','CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','CR_DISCONNECTED','SMS Delivered','SMS Received')";
+            AND DR.CallStatus not in ('','CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','CR_DISCONNECTED','SMS Delivered','SMS Received','Inbound')";
 
             if (!empty($campaigns)) {
                 $bind['campaigns1' . $i] = $campaigns;

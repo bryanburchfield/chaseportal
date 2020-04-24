@@ -3058,7 +3058,9 @@ td.bg-danger {
 }
 
 .bwr_omni table thead th a,
-.agent_pause_time table thead th a {
+.agent_pause_time table thead th a,
+.production_report table thead th a,
+.bwr_production_report table thead th a {
   display: none;
 }
 
