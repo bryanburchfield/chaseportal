@@ -121,26 +121,27 @@ var Dashboard = {
                 }
 
                 response_handled=Object.entries(response_handled);
-
                 if(response_handled[0][1] > response_handled[1][1]){
-                    $('.handled_stats .'+response_handled[0][0]).animate(
+                    $('.handled_stats .outer .'+response_handled[0][0]).animate(
                         {width:100+"%"},
                         {duration: 1000});
                     
-                    $('.handled_stats .'+response_handled[1][0]).animate(
+                    $('.handled_stats .outer .'+response_handled[1][0]).animate(
                         {width:response_handled[1][1]/ response_handled[0][1]*100+"%"},
                         {duration: 1000});
                 }else{
                     
-                   $('.handled_stats .'+response_handled[1][0]).animate(
+                   $('.handled_stats .outer .'+response_handled[1][0]).animate(
                         {width:100+"%"},
                         {duration: 1000});
 
-                   // $('.handled_stats .'+response_handled[1][0]).next('.total').text(response_handled[1][1]);
-                    $('.handled_stats .'+response_handled[0][0]).animate(
+                    $('.handled_stats .outer .'+response_handled[0][0]).animate(
                         {width:response_handled[0][1]/ response_handled[1][1]*100+"%"},
                         {duration: 1000});
                 }
+
+                $('.handled_stats .outer .'+response_handled[0][0]).parent().next('.total').text(Dashboard.formatNumber(response_handled[0][1]));
+                $('.handled_stats .outer .'+response_handled[1][0]).parent().next('.total').text(Dashboard.formatNumber(response_handled[1][1]));
 
                 var response_avg_handle_time = {
                     'rep_avg_handle_time': response.call_volume.avg_handle_time_secs,
@@ -165,6 +166,10 @@ var Dashboard = {
                         {duration: 1000});
                 }
 
+                $('.avg_handle_time_stats .outer .'+response_avg_handle_time[0][0]).parent().next('.total').text(Dashboard.formatNumber(response_avg_handle_time[0][1]));
+                $('.avg_handle_time_stats .outer .'+response_avg_handle_time[1][0]).parent().next('.total').text(Dashboard.formatNumber(response_avg_handle_time[1][1]));
+
+
             },error: function (jqXHR,textStatus,errorThrown) {
                 var div = $('#call_volume');
                 Dashboard.display_error(div, textStatus, errorThrown);
@@ -173,7 +178,9 @@ var Dashboard = {
         });
     },
 
-
+    formatNumber: function (num) {
+        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
 
     campaign_chart:function(datefilter, chartColors){
         $.ajaxSetup({
@@ -304,6 +311,9 @@ var Dashboard = {
                         {width:response[0][1]/ response[1][1]*100+"%"},
                         {duration: 1000});
                 }
+
+                $('.interactions_stats .outer .'+response[0][0]).parent().next('.total').text(Dashboard.formatNumber(response[0][1]));
+                $('.interactions_stats .outer .'+response[1][0]).parent().next('.total').text(Dashboard.formatNumber(response[1][1]));
             }
         });
     },
