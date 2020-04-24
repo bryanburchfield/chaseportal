@@ -342,6 +342,7 @@ class AgentDashController extends Controller
                 'Campaign' => $rec['Campaign'],
                 'Dials' => $rec['Dials'],
                 'AbandonCalls' => $rec['AbandonCalls'],
+                'VoiceMail' => $rec['VoiceMail'],
             ];
 
             $total_calls += $rec['Dials'];
@@ -360,6 +361,15 @@ class AgentDashController extends Controller
         // and slice top 10
         $top_ten = array_slice($calls_by_campaign, 0, 10);
 
+        // Create a 'fake' campaign called 'Personal DID' and prepend to array
+        $results = $this->getPersonalDidStats();
+        if (count($results)) {
+            $rec = $results[0];
+            $rec['Campaign'] = trans('widgets.personal_did');
+
+            array_unshift($calls_by_campaign, $rec);
+        }
+
         // return separate arrays for each item
         return [
             'campaign_stats' => [
@@ -369,6 +379,7 @@ class AgentDashController extends Controller
                     'Campaign' => array_column($calls_by_campaign, 'Campaign'),
                     'Calls' => array_column($calls_by_campaign, 'Dials'),
                     'AbandonCalls' => array_column($calls_by_campaign, 'AbandonCalls'),
+                    'VoiceMail' => array_column($calls_by_campaign, 'VoiceMail'),
                 ],
                 'TopTen' => [
                     'Campaign' => array_column($top_ten, 'Campaign'),
@@ -403,6 +414,7 @@ class AgentDashController extends Controller
             $final[$rec['Campaign']]['HoldTime'] = 0;
             $final[$rec['Campaign']]['Drops'] = 0;
             $final[$rec['Campaign']]['AbandonCalls'] = 0;
+            $final[$rec['Campaign']]['VoiceMail'] = 0;
         }
 
         foreach ($dialingresults as $rec) {
@@ -416,6 +428,7 @@ class AgentDashController extends Controller
             $final[$rec['Campaign']]['HoldTime'] = $rec['HoldTime'];
             $final[$rec['Campaign']]['Drops'] = $rec['Drops'];
             $final[$rec['Campaign']]['AbandonCalls'] = $rec['AbandonCalls'];
+            $final[$rec['Campaign']]['VoiceMail'] = $rec['VoiceMail'];
         }
 
         return $final;
@@ -446,6 +459,7 @@ class AgentDashController extends Controller
 
         // this will hold all the stats per campaign
         $campaign_stats = [];
+
         // this is set to true after an inbound call so we can look for dispo recs
         $aftercall = false;
         $campaign = '';
@@ -494,9 +508,10 @@ class AgentDashController extends Controller
 
         $sql = "SELECT Campaign,
                 'Dials' = COUNT(*),
-                'HoldTime' = SUM(HoldTime),
+                'HoldTime' = SUM(CASE WHEN HoldTime > 0 THEN HoldTime ELSE 0 END),
                 'AbandonCalls' = SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),
-                'Drops' = SUM(CASE WHEN CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END)
+                'Drops' = SUM(CASE WHEN CallStatus = 'CR_HANGUP' THEN 1 ELSE 0 END),
+                'VoiceMail' = SUM(CASE WHEN CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END)
             FROM DialingResults
             WHERE CallType IN (1,11)
             AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
@@ -505,6 +520,55 @@ class AgentDashController extends Controller
 			AND Date < :todate
             AND Duration > 0
             GROUP BY Campaign";
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function getPersonalDidStats()
+    {
+        $dateFilter = $this->dateFilter;
+        list($fromDate, $toDate) = $this->dateRange($dateFilter);
+
+        // convert to datetime strings
+        $fromDate = $fromDate->format('Y-m-d H:i:s');
+        $toDate = $toDate->format('Y-m-d H:i:s');
+
+        // Get rep's personal callerid
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'rep' => $this->rep,
+        ];
+
+        $sql = "SELECT dbo.GetSettingEx(:groupid, :rep, 'InboundCallerId', '') as CallerId";
+        $caller_id = $this->runSql($sql, $bind);
+
+        if (count($caller_id)) {
+            $caller_id = $caller_id[0]['CallerId'];
+        } else {
+            $caller_id = '';
+        }
+
+        $bind = [
+            'groupid' => Auth::user()->group_id,
+            'fromdate' => $fromDate,
+            'todate' => $toDate,
+            'rep' => $this->rep,
+            'callerid' => $caller_id,
+        ];
+
+        $sql = "SELECT
+                'Dials' = ISNULL(COUNT(*),0),
+                'AbandonCalls' = ISNULL(SUM(CASE WHEN CallStatus='CR_HANGUP' THEN 1 ELSE 0 END),0),
+                'VoiceMail' = ISNULL(SUM(CASE WHEN CallStatus='Inbound Voicemail' THEN 1 ELSE 0 END),0)
+            FROM DialingResults
+            WHERE CallType IN (1,11)
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','Inbound','TRANSFERRED','PARKED','SMS Received','SMS Delivered')
+            AND GroupId = :groupid
+            AND Date >= :fromdate
+			AND Date < :todate
+            AND Duration > 0
+            AND (Rep = '' OR Rep = :rep)
+            AND CallerId = :callerid";
 
         return $this->runSql($sql, $bind);
     }

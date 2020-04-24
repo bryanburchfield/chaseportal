@@ -110,13 +110,14 @@
         <div class="row bdrless_card max_height350">
             <div class="col-sm-12 pl0 pr0">
                 <div class="bdrcard overflow_none" >
-                    <div class="col-sm-4 campaign_totals pl0 pr0" style="height:330px">
+                    <div class="col-sm-5 campaign_totals pl0 pr0" style="height:330px">
                         <table class="table table-condensed campaign_totals_table" >
                             <thead>
                                 <tr class="bdrtop_none">
                                     <th>{{__('widgets.inbound_service_queue')}}</th>
                                     <th class="tar">{{__('widgets.numb_of_calls')}}</th>
-                                    <th>{{__('widgets.total_calls_abandon')}}</th>
+                                    <th>{{__('widgets.abandoned')}}</th>
+                                    <th>{{__('widgets.voicemails')}}</th>
                                 </tr>
                             </thead>
 
@@ -124,7 +125,7 @@
                         </table>
                     </div>
 
-                    <div class="col-sm-8 pl0">
+                    <div class="col-sm-7 pl0">
                         <div class="card-6 card">
                             <div class="inbound inandout" style="height:330px">
                                 <canvas id="campaign_calls"></canvas>

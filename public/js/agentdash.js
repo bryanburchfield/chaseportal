@@ -348,7 +348,7 @@ var Dashboard = {
                 if (response.campaign_stats.CallsByCampaign.Campaign.length) {
                     var trs='';
                     for (var i = 0; i < response.campaign_stats.CallsByCampaign.Campaign.length; i++) {
-                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.AbandonCalls[i] + '</td></tr>';
+                        trs += '<tr><td>' + response.campaign_stats.CallsByCampaign.Campaign[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.Calls[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.AbandonCalls[i] + '</td><td>' + response.campaign_stats.CallsByCampaign.VoiceMail[i] + '</td></tr>';
                     }
                     $('.campaign_totals_table tbody').append(trs);
                 }
