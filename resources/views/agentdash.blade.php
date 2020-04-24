@@ -11,7 +11,7 @@
     <div class="container mt50">
 
         <div class="container-fluid">
-            <div class="col-xs-7">
+            <div class="col-xs-7 pl0">
                 <div class="filter_time_camp_dets">
                     <p>
                         <span class="selected_datetime"></span> |
@@ -110,7 +110,7 @@
         <div class="row bdrless_card max_height350">
             <div class="col-sm-12 pl0 pr0">
                 <div class="bdrcard overflow_none" >
-                    <div class="col-sm-4 campaign_totals pl0" style="height:330px">
+                    <div class="col-sm-4 campaign_totals pl0 pr0" style="height:330px">
                         <table class="table table-condensed campaign_totals_table" >
                             <thead>
                                 <tr class="bdrtop_none">
@@ -155,30 +155,50 @@
             </div>
 
             <div class="col-sm-4 pr0">
-                <div class="card stats" style="height:285px">
-                    <h1 class="title mb20">{{__('widgets.stats')}}</h1>
+                <div class="card stats_card p0" style="height:285px">
+                    <h1 class="title mb20 ">{{__('widgets.stats')}}</h1>
 
-                    <div class="handled_stats stats_chart col-sm-6 p0">
-                        <h4>Handled</h4>
-                        <div class="rep rep_handled"></div>
-                        <div class="team tot_handled"></div>
-                    </div>
+                    <div class="stats">
+                        <div class="handled_stats stats_chart col-sm-6 p0">
+                            <h4>{{__('widgets.Manejado')}}</h4>
+                            <div class="outer rep">
+                                <div class="rep rep_handled inner"></div>
+                            </div>
+                            <div class="total"></div>
+                            <div class="outer team">
+                                <div class="team tot_handled inner"></div>
+                            </div>
+                            <div class="total"></div>
+                        </div>
 
-                    <div class="avg_handle_time_stats stats_chart col-sm-6 p0">
-                        <h4>Avg Handle Time</h4>
-                        <div class="rep rep_avg_handle_time"></div>
-                        <div class="team rep_talk_time"></div>
-                    </div>
+                        <div class="avg_handle_time_stats stats_chart col-sm-6 pr0">
+                            <h4>{{__('widgets.avg_handle_time')}}</h4>
+                            <div class="outer rep">
+                                <div class="rep rep_avg_handle_time inner"></div>
+                            </div>
+                            <div class="total"></div>
+                            <div class="outer team">
+                                <div class="team rep_talk_time inner"></div>
+                            </div>
+                            <div class="total"></div>
+                        </div>
 
-                    <div class="interactions_stats stats_chart col-sm-6 p0">
-                        <h4>Successful Interactions</h4>
-                        <div class="rep rep_sales" ></div>
-                        <div class="team total_sales"></div>
-                    </div>
+                        <div class="interactions_stats stats_chart col-sm-6 p0">
+                            <h4>{{__('widgets.successful_interactions')}}</h4>
+                            <div class="outer rep">
+                                <div class="rep rep_sales inner" ></div>
+                            </div>
+                            <div class="total"></div>
+                            <div class="outer team">
+                                <div class="team total_sales inner"></div>
+                            </div>
+                            <div class="total"></div>
+                        </div>
 
-                    <div class="stats_legend col-sm-12 mt30 pl0">
-                        <div class="stats_item"><span class="repstats"></span>My Stats</div>
-                        <div class="stats_item"><span class="teamstats"></span>Team Stats</div>
+                        <div class="stats_legend col-sm-12 mt30 pl0">
+                            <div class="stats_item"><span class="repstats"></span>{{__('widgets.my_stats')}}</div>
+                            <div class="stats_item"><span class="teamstats"></span>{{__('widgets.team_stats')}}</div>
+                        </div>
                     </div>
                 </div>
             </div>

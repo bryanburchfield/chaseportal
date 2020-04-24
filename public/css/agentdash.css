@@ -11,7 +11,8 @@ applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abb
 .mt20 {margin-top: 20px;}
 .mt30{margin-top: 30px;}
 .mt50 {margin-top: 50px;}
-.mb20 {margin-bottom: 20px;}
+.mb20 {margin-bottom: 20px !important;}
+.mb30{margin-bottom: 30px !important;}
 
 .pl0{padding-left: 0 !important;}
 .pr0{padding-right: 0 !important;}
@@ -775,6 +776,9 @@ ul.dropdown-menu.filter_campaign .checkbox {
   overflow-y: scroll; 
 }
 
+.stats_card{padding: 0px;}
+.stats_card .title{background: #203047; color:#fff;padding: 10px;}
+.stats{padding: 0 10px 10px;}
 .card.stats .title{color: #595C63;}
 
 .stats_item{
@@ -795,22 +799,23 @@ ul.dropdown-menu.filter_campaign .checkbox {
 }
 
 .stats_chart {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 3px;
+    padding-right: 8px;
     margin-bottom: 15px;
 }
 
 .stats_chart .outer{
     background: #ddd;
-    width: 100%;
+    width: 87%;
     height: 20px;
+    float: left;
 }
 
-.stats_item span.repstats, .stats_chart .rep{
+.stats_item span.repstats, .stats_chart .outer .rep{
     background: #339FFF;
 }
 
-.stats_item span.teamstats, .stats_chart .team{
+.stats_item span.teamstats, .stats_chart .outer .team{
     background: #33A09B;
 }
 
@@ -818,12 +823,17 @@ ul.dropdown-menu.filter_campaign .checkbox {
 
 .stats_chart .rep, .stats_chart .team{height: 20px;margin-bottom: 3px;}
 
-.handled_stats .rep, .handled_stats .team, .interactions_stats .rep, .interactions_stats .team, .avg_handle_time_stats .rep, .avg_handle_time_stats .team{width: 0;}
+.handled_stats .rep .rep_handled, .handled_stats .team .rep_handled, .interactions_stats .rep .rep_sales, .interactions_stats .team .total_sales, .avg_handle_time_stats .rep .rep_avg_handle_time, .avg_handle_time_stats .team .rep_talk_time{width: 0;}
 
 
-/*.stats_chart .rep, .stats_chart .team, .stats_chart .total{float: left;}*/
+.stats_chart .rep, .stats_chart .team, .stats_chart .total{float: left;}
+.stats_chart .total{
+    width: 12%;
+    padding-left: 1%;
+    font-size: 11px;
+    font-weight: 600;
+}
 
-  
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{
     font-size: 32px;
