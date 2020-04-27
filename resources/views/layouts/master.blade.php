@@ -66,7 +66,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
-
+    <script src="/js/campaign_search.js"></script>
     @isset($summernote)
         <script src="{{ asset('/js/summernote.min.js') }}"></script>
     @endisset

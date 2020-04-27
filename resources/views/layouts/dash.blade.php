@@ -63,6 +63,7 @@
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
     <script src="/js/gauge.js"></script>
+    <script src="/js/campaign_search.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)

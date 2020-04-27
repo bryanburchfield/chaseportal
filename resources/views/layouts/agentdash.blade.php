@@ -44,7 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">"></script> 
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
-
+    <script src="/js/campaign_search.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)
