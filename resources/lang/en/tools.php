@@ -83,6 +83,8 @@ return [
 	'lead_update'	=> 'Lead Update',
 	'leads_moved'	=> '# of Leads Moved',
 	'line'			=> 'Line',
+	'manage_actions'=>'Manage Actions',
+	'manage_filters'=> 'Manage Filters',
 	'message'		=> 'Message',
 	'move_history'	=> 'Move History',
 	'name'			=> 'Name',

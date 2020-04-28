@@ -3522,6 +3522,11 @@ span.numb_notifications {
   clear: both;
 }
 
+a.playbook_actions_modal,
+a.playbook_filters_modal {
+  color: #ddd;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

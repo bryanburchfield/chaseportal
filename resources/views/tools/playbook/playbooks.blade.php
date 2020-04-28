@@ -59,14 +59,22 @@
                                                                     @endisset
                                                                 </td>
                                                                 <td>
-                                                                    @foreach ($playbook->filters as $filter)
-                                                                        {{$filter->name}}<br>
-                                                                    @endforeach
+                                                                    @if(count($playbook->filters))
+                                                                        @foreach ($playbook->filters as $filter)
+                                                                            <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class=" playbook_filters_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$filter->name}}</a>
+                                                                        @endforeach
+                                                                    @else
+                                                                        <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal"><i data-id="{{$playbook->id}}" class="far fa-eye"></i></a>
+                                                                    @endif
                                                                 </td>
                                                                 <td>
-                                                                    @foreach ($playbook->actions as $action)
-                                                                        {{$action->name}}<br>
-                                                                    @endforeach
+                                                                    @if(count($playbook->actions))
+                                                                        @foreach ($playbook->actions as $action)
+                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-id="{{$playbook->id}}" class="playbook_actions_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$action->name}}</a>
+                                                                        @endforeach
+                                                                    @else
+                                                                        <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal"><i data-id="{{$playbook->id}}" class="far fa-eye"></i></a>
+                                                                    @endif
                                                                 </td>
                                                                 <?php $mode='edit';?>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook__modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
@@ -146,6 +154,52 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
+                <input type="hidden" name="id" id="id" value="">
+                <div class="alert alert-danger hidetilloaded mt20"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Playbook Actions Modal -->
+<div class="modal fade" id="actionPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.manage_actions')}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
+                <input type="hidden" name="id" id="id" value="">
+                <div class="alert alert-danger hidetilloaded mt20"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Playbook Filters Modal -->
+<div class="modal fade" id="filterPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.manage_filter')}}</h4>
             </div>
 
             <div class="modal-body">

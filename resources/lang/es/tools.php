@@ -85,6 +85,8 @@ return [
 	'lead_update'	=> 'Actualización De Plomo',
 	'leads_moved'	=> '# De Conductores Movidos',
 	'line'			=> 'Línea',
+	'manage_actions'=>	'Administrar Acciones',
+	'manage_filters'=> 'Administrar Filtros',
 	'message'		=> 'Mensaje',
 	'move_history'	=> 'Mover Historia',
 	'name'			=> 'Nombre',
