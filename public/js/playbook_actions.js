@@ -113,10 +113,10 @@ var Playbook_Actions = {
 			data: { campaign: campaign },
 			success: function (response) {
 				$('.to_subcampaign').empty();
-				var response = Object.values(response.subcampaigns);
+				var response = Object.entries(response.subcampaigns);
 				var sub_camps='<option value="">Select One</option>';
 				for(var i=0;i<response.length;i++){
-					sub_camps+='<option value="'+response[i]+'">'+response[i]+'</option>';
+					sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
 				}
 				$('.to_subcampaign').append(sub_camps);
 			},
