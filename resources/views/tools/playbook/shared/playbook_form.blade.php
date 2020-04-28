@@ -13,10 +13,6 @@
     <select name="subcampaign" class="form-control subcampaign"></select>
 </div>
 
-<div class="form-group">
-    <label class="checkbox-inline"><input type="checkbox" name="active" value="">Active</label>
-</div>
-
 <div class="alert alert-success hidetilloaded"></div>
 <div class="alert alert-danger hidetilloaded"></div>
 <div class="alert connection_msg hidetilloaded"></div>

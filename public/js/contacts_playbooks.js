@@ -24,14 +24,15 @@ var Contacts_Playbook = {
 	        },
 
 	        success:function(response){
-	        	console.log(response);
-	            var subcampaigns='<option value=""> Select One</option>';
-	            for(var i=0; i<response.subcampaigns.length;i++){
-	                subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
-	            }
-
                 $('.subcampaign').empty();
-                $('.subcampaign').append(subcampaigns);
+
+                var response = Object.values(response.subcampaigns);
+                var sub_camps='<option value="">Select One</option>';
+                for(var i=0;i<response.length;i++){
+                	sub_camps+='<option value="'+response[i]+'">'+response[i]+'</option>';
+                }
+
+                $('.subcampaign').append(sub_camps);
 	        }
 	    });
 	},
