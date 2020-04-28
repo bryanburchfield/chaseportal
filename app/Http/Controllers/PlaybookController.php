@@ -143,7 +143,7 @@ class PlaybookController extends Controller
             ->join('playbook_filters', 'contacts_playbook_filters.playbook_filter_id', '=', 'playbook_filters.id')
             ->where('contacts_playbook_id', $contacts_playbook->id)
             ->select(
-                'contacts_playbook_filters.id as contacts_playbook_filters_id',
+                'contacts_playbook_filters.id as contacts_playbook_filter_id',
                 'contacts_playbook_filters.playbook_filter_id',
                 'playbook_filters.name'
             )
@@ -159,7 +159,7 @@ class PlaybookController extends Controller
             ->join('playbook_actions', 'contacts_playbook_actions.playbook_action_id', '=', 'playbook_actions.id')
             ->where('contacts_playbook_id', $contacts_playbook->id)
             ->select(
-                'contacts_playbook_actions.id as contacts_playbook_actions_id',
+                'contacts_playbook_actions.id as contacts_playbook_action_id',
                 'contacts_playbook_actions.playbook_action_id',
                 'playbook_actions.name'
             )
