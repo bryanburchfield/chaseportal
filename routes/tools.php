@@ -68,7 +68,8 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::get('/playbooks/{id}', 'PlaybookController@getPlaybook');
                 Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');
                 Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');
-                Route::post('/get_subcampaigns', 'PlaybookController@getSubcampaigns');
+                Route::post('/get_filters', 'PlaybookController@getFilters');
+                Route::post('/get_actions', 'PlaybookController@getActions');
 
                 // Filters
                 Route::get('/filters', 'PlaybookFilterController@index');

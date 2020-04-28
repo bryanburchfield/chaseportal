@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactsPlaybook;
+use App\Models\PlaybookAction;
+use App\Models\PlaybookFilter;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
@@ -110,5 +112,29 @@ class PlaybookController extends Controller
         return ContactsPlaybook::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
+    }
+
+    public function getFilters(Request $request)
+    {
+        $campaign = $request->has('campaign') ? $request->campaign : null;
+
+        return PlaybookFilter::where('group_id', Auth::user()->group_id)
+            ->where(function ($q) use ($campaign) {
+                $q->where('campaign', $campaign)
+                    ->orWhereNull('campaign');
+            })
+            ->get();
+    }
+
+    public function getActions(Request $request)
+    {
+        $campaign = $request->has('campaign') ? $request->campaign : null;
+
+        return PlaybookAction::where('group_id', Auth::user()->group_id)
+            ->where(function ($q) use ($campaign) {
+                $q->where('campaign', $campaign)
+                    ->orWhereNull('campaign');
+            })
+            ->get();
     }
 }
