@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'actions'		=> 'Comportamiento',
 	'action_type'	=> 'Tipo de Acción',
 	'active'		=> 'Activo',
 	'add_action'	=> 'Agregar Acción',
@@ -68,6 +69,7 @@ return [
 	'filter_value'	=> 'Valor del Filtro',
 	'filter_value'	=> 'Valor del Filtro',
 	'filters_required' => 'Debe ingresar al menos un filtro',
+	'filters'		=> 'Filtros',
 	'from'			=> 'Desde',
 	'from_number'	=> 'De Número',
 	'has_header'	=> 'Tiene fila de Encabezado',

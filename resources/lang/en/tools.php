@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'actions'		=> 'Actions',
 	'action_type'	=> 'Action Type',
 	'active'		=> 'Active',
 	'add_action'	=> 'Add Action',
@@ -66,6 +67,7 @@ return [
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
 	'filters_required' => 'You must enter at least one filter',
+	'filters'		=> 'Filters',
 	'from'			=> 'From',
 	'from_number'	=> 'From Number',
 	'has_header'	=> 'Has Header Row',

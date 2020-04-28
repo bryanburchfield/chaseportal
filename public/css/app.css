@@ -1528,7 +1528,8 @@ select.input-sm,
 .add_action .form-control,
 .add_campaign .form-control,
 .edit_filter .form-control,
-.edit_action .form-control {
+.edit_action .form-control,
+#addPlaybookModal .form-control {
   background: #eee !important;
 }
 
