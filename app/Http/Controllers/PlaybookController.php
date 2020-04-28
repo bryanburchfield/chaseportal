@@ -10,6 +10,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PlaybookController extends Controller
@@ -132,6 +133,43 @@ class PlaybookController extends Controller
     public function getPlaybook(Request $request)
     {
         return $this->findPlaybook($request->id);
+    }
+
+    public function getPlaybookFilters(Request $request)
+    {
+        $contacts_playbook = $this->findPlaybook($request->id);
+
+        return DB::table('contacts_playbook_filters')
+            ->join('playbook_filters', 'contacts_playbook_filters.playbook_filter_id', '=', 'playbook_filters.id')
+            ->where('contacts_playbook_id', $contacts_playbook->id)
+            ->select(
+                'contacts_playbook_filters.id as contacts_playbook_filters_id',
+                'contacts_playbook_filters.playbook_filter_id',
+                'playbook_filters.name',
+                'playbook_filters.field',
+                'playbook_filters.operator',
+                'playbook_filters.value'
+            )
+            ->orderBy('playbook_filters.name')
+            ->get();
+    }
+
+    public function getPlaybookActions(Request $request)
+    {
+        $contacts_playbook = $this->findPlaybook($request->id);
+
+        return DB::table('contacts_playbook_actions')
+            ->join('playbook_actions', 'contacts_playbook_actions.playbook_action_id', '=', 'playbook_actions.id')
+            ->where('contacts_playbook_id', $contacts_playbook->id)
+            ->select(
+                'contacts_playbook_actions.id as contacts_playbook_actions_id',
+                'contacts_playbook_actions.playbook_action_id',
+                'playbook_actions.name',
+                'playbook_actions.campaign',
+                'playbook_actions.action_type'
+            )
+            ->orderBy('playbook_actions.name')
+            ->get();
     }
 
     private function findPlaybook($id)

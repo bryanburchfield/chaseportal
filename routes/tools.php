@@ -70,10 +70,12 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');
                 Route::post('/get_filters', 'PlaybookController@getFilters');
                 Route::post('/get_actions', 'PlaybookController@getActions');
+                Route::post('/get_playbook_filters', 'PlaybookController@getPlaybookFilters');
+                Route::post('/get_playbook_actions', 'PlaybookController@getPlaybookActions');
                 Route::get('/update_filters/{contacts_playbook_id}', 'PlaybookController@updateFilters');
-                Route::get('/update_actionss/{contacts_playbook_id}', 'PlaybookController@updateActions');
+                Route::get('/update_actions/{contacts_playbook_id}', 'PlaybookController@updateActions');
                 Route::post('/update_filters', 'PlaybookController@saveFilters');
-                Route::post('/update_actionss', 'PlaybookController@saveActions');
+                Route::post('/update_actions', 'PlaybookController@saveActions');
 
 
                 // Filters
