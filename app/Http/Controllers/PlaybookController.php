@@ -209,4 +209,14 @@ class PlaybookController extends Controller
     {
         # code...
     }
+
+    public function deleteFilter(Request $request)
+    {
+        # code...
+    }
+
+    public function deleteAction(Request $request)
+    {
+        # code...
+    }
 }

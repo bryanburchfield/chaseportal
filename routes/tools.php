@@ -63,39 +63,35 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::prefix('playbook')->group(function () {
 
                 // Playbooks
-                Route::get('/', 'PlaybookController@index');
-                Route::post('/playbooks', 'PlaybookController@addPlaybook');
-                Route::get('/playbooks/{id}', 'PlaybookController@getPlaybook');
-                Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');
-                Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');
-                Route::post('/get_filters', 'PlaybookController@getFilters');
-                Route::post('/get_actions', 'PlaybookController@getActions');
-                Route::post('/get_playbook_filters', 'PlaybookController@getPlaybookFilters');
-                Route::post('/get_playbook_actions', 'PlaybookController@getPlaybookActions');
-                Route::get('/update_filters/{contacts_playbook_id}', 'PlaybookController@updateFilters');
-                Route::get('/update_actions/{contacts_playbook_id}', 'PlaybookController@updateActions');
-                Route::post('/update_filters', 'PlaybookController@saveFilters');
-                Route::post('/update_actions', 'PlaybookController@saveActions');
+                Route::get('/', 'PlaybookController@index');  // playbooks index
+                Route::post('/playbooks', 'PlaybookController@addPlaybook');  // add a playbook
+                Route::get('/playbooks/{id}', 'PlaybookController@getPlaybook');  // get a playbook by id
+                Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');  // update a playbook by id
+                Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
 
+                // Playbook filters
+                Route::get('/playbooks/filters/{id}', 'PlaybookController@getPlaybookFilters');  // get filters on a playbook by id
+                Route::patch('/playbooks/filters/{id}', 'PlaybookController@saveFilters');  // add/update filters on a playbook by id
+                Route::delete('/playbooks/filter/{id}', 'PlaybookController@deleteFilter');  // delete a contacts_playbook_filter by id
+
+                // Playbook actions
+                Route::get('/playbook/actions/{id}', 'PlaybookController@getPlaybookActions');  // get actions on a playbook by id
+                Route::patch('/playbooks/actions/{id}', 'PlaybookController@saveActions');  // add/update filters on a playbook by id
+                Route::delete('/playbooks/action/{id}', 'PlaybookController@deleteAction');  // delete a contacts_playbook_action by id
 
                 // Filters
-                Route::get('/filters', 'PlaybookFilterController@index');
-                Route::post('/filters', 'PlaybookFilterController@addFilter');
-                Route::get('/filters/{id}', 'PlaybookFilterController@getFilter');
-                Route::patch('/filters/{id}', 'PlaybookFilterController@updateFilter');
-                Route::delete('/filters/{id}', 'PlaybookFilterController@deleteFilter');
-                Route::post('/get_filter_fields', 'PlaybookFilterController@getFilterFields');
-                Route::post('/get_operators', 'PlaybookFilterController@getOperators');
+                Route::get('/filters', 'PlaybookFilterController@index');  // filters index
+                Route::post('/filters', 'PlaybookFilterController@addFilter');  // add a filter
+                Route::get('/filters/{id}', 'PlaybookFilterController@getFilter');  // get a filter by id
+                Route::patch('/filters/{id}', 'PlaybookFilterController@updateFilter');  // update a filter by id
+                Route::delete('/filters/{id}', 'PlaybookFilterController@deleteFilter');  // delete a filter by id
 
                 // Actions
-                Route::get('/actions', 'PlaybookActionController@index');
-                Route::post('/actions', 'PlaybookActionController@addAction');
-                Route::get('/actions/{id}', 'PlaybookActionController@getAction');
-                Route::patch('/actions/{id}', 'PlaybookActionController@updateAction');
-                Route::delete('/actions/{id}', 'PlaybookActionController@deleteAction');
-                Route::post('/get_dispos', 'PlaybookActionController@getDispos');
-                Route::post('/get_subcampaigns', 'PlaybookActionController@getSubcampaigns');
-                Route::post('/get_table_fields', 'PlaybookActionController@getTableFields');
+                Route::get('/actions', 'PlaybookActionController@index');  // actions index
+                Route::post('/actions', 'PlaybookActionController@addAction');  // add an action
+                Route::get('/actions/{id}', 'PlaybookActionController@getAction');  // get an action by id
+                Route::patch('/actions/{id}', 'PlaybookActionController@updateAction');  // update an action by id
+                Route::delete('/actions/{id}', 'PlaybookActionController@deleteAction');  // delete an action by id
 
                 // Email Serivce Providers
                 Route::get('/email_service_providers', 'PlaybookEmailProviderController@index');
@@ -105,6 +101,15 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/add_esp', 'PlaybookEmailProviderController@addEmailServiceProvider');
                 Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
+
+                // Shared ajax
+                Route::post('/get_filters', 'PlaybookController@getFilters');  // get all available filters: pass in 'campaign' (optional)
+                Route::post('/get_actions', 'PlaybookController@getActions');  // get all available actions: pass in 'campaign' (optional)
+                Route::post('/get_filter_fields', 'PlaybookFilterController@getFilterFields');  // get all available fields: pass in 'campaign' (optional)
+                Route::post('/get_operators', 'PlaybookFilterController@getOperators');  // get all available operators: pass in 'type' (optional)
+                Route::post('/get_dispos', 'PlaybookActionController@getDispos');  // get all available dispos (call statuses): pass in 'campaign' (optional)
+                Route::post('/get_subcampaigns', 'PlaybookActionController@getSubcampaigns'); // get all subcampaigns: pass in 'campaign' (required)
+                Route::post('/get_table_fields', 'PlaybookActionController@getTableFields');  // get all custom table fields: pass in 'campaign' (required)
             });
         });
     });
