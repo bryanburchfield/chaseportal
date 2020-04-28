@@ -40,6 +40,30 @@ class PlaybookController extends Controller
         return view('tools.playbook.playbooks')->with($data);
     }
 
+    public function updateFilters(Request $request)
+    {
+        Log::debug($request->all());
+
+        $page = [
+            'menuitem' => 'tools',
+            'type' => 'other',
+        ];
+
+        $data = [
+            'page' => $page,
+            'jsfile' => ['contacts_playbooks.js'],
+            'group_id' => Auth::user()->group_id,
+            'contacts_playbook' => $this->findPlaybook($request->contacts_playbook_id),
+        ];
+
+        return view('tools.playbook.update_filters')->with($data);
+    }
+
+    public function updateActions(Request $request)
+    {
+        # code...
+    }
+
     /**
      * Campaigns configured for this group
      * 
@@ -83,8 +107,6 @@ class PlaybookController extends Controller
     {
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
-
-        Log::debug($data);
 
         ContactsPlaybook::create($data);
 
@@ -143,5 +165,15 @@ class PlaybookController extends Controller
             })
             ->orderBy('name')
             ->get();
+    }
+
+    public function saveFilters(Request $request)
+    {
+        # code...
+    }
+
+    public function saveActions(Request $request)
+    {
+        # code...
     }
 }
