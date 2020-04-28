@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
@@ -78,10 +79,14 @@ class PlaybookController extends Controller
         return $results;
     }
 
-    public function addPlaybook(Request $request)
+    public function addPlaybook(ValidPlaybook $request)
     {
-        Log::debug('add');
-        Log::debug($request->all());
+        $data = $request->all();
+        $data['group_id'] = Auth::user()->group_id;
+
+        Log::debug($data);
+
+        ContactsPlaybook::create($data);
 
         return ['status' => 'success'];
     }

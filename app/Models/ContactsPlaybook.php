@@ -13,4 +13,14 @@ class ContactsPlaybook extends Model
         'subcampaign',
         'active',
     ];
+
+    public function filters()
+    {
+        return $this->hasMany('App\Models\ContactsPlaybookFilter');
+    }
+
+    public function actions()
+    {
+        return $this->hasMany('App\Models\ContactsPlaybookAction');
+    }
 }

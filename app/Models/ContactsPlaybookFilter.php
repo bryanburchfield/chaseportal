@@ -10,4 +10,9 @@ class ContactsPlaybookFilter extends Model
         'contacts_playbook_id',
         'playbook_filter_id',
     ];
+
+    public function playbook()
+    {
+        return $this->belongsTo('App\Models\ContactsPlaybook');
+    }
 }

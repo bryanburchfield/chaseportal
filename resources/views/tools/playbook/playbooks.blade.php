@@ -34,7 +34,8 @@
                                                         <th>{{__('tools.name')}}</th>
                                                         <th>{{__('tools.campaign')}}</th>
                                                         <th>{{__('tools.subcampaign')}}</th>
-                                                        <th>{{__('tools.active')}}</th>
+                                                        <th>{{__('tools.filters')}}</th>
+                                                        <th>{{__('tools.actions')}}</th>
                                                         <th>{{__('tools.edit')}}</th>
                                                         <th>{{__('tools.delete')}}</th>
                                                     </tr>
@@ -45,8 +46,28 @@
                                                             <tr>
                                                                 <td>{{$playbook->name}}</td>
                                                                 <td>{{$playbook->campaign}}</td>
-                                                                <td>{{$playbook->subcampaign}}</td>
-                                                                <td>{{$playbook->active}}</td>
+                                                                <td>
+                                                                    @empty($playbook->subcampaign)
+                                                                        <i>{{__('tools.any')}}</i><br>
+                                                                    @endempty
+                                                                    @isset($playbook->subcampaign)
+                                                                        @if ($playbook->subcampaign == '!!none!!')
+                                                                            <i>{{__('tools.no_subcampaign')}}</i><br>
+                                                                        @else
+                                                                            {{$playbook->subcampaign}}<br>
+                                                                        @endif
+                                                                    @endisset
+                                                                </td>
+                                                                <td>
+                                                                    @foreach ($playbook->filters as $filter)
+                                                                        {{$filter->name}}<br>
+                                                                    @endforeach
+                                                                </td>
+                                                                <td>
+                                                                    @foreach ($playbook->actions as $action)
+                                                                        {{$action->name}}<br>
+                                                                    @endforeach
+                                                                </td>
                                                                 <?php $mode='edit';?>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook__modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
                                                                 <td><a class="remove_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-id="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
@@ -83,7 +104,6 @@
             <form action="#" method="post" class="form add_playbook">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
-                    <input type="hidden" name="contacts_playbook_id" id="contacts_playbook_id" value="">
                 </div>
 
                 <div class="modal-footer">

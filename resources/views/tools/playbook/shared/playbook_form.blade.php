@@ -5,7 +5,7 @@
 
 <div class="form-group">
     <label>{{__('tools.campaign')}}</label>
-    {!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+    {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
 </div>
 
 <div class="form-group">
