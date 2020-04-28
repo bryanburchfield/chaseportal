@@ -14,16 +14,6 @@
 </div>
 
 <div class="form-group">
-    <label>{{__('tools.filters')}}</label>
-    <select name="filters" class="form-control filters"></select>
-</div>
-
-<div class="form-group">
-    <label>{{__('tools.actions')}}</label>
-    <select name="actions" class="form-control actions"></select>
-</div>
-
-<div class="form-group">
     <label class="checkbox-inline"><input type="checkbox" name="active" value="">Active</label>
 </div>
 
