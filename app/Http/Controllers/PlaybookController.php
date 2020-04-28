@@ -123,6 +123,7 @@ class PlaybookController extends Controller
                 $q->where('campaign', $campaign)
                     ->orWhereNull('campaign');
             })
+            ->orderBy('name')
             ->get();
     }
 
@@ -135,6 +136,7 @@ class PlaybookController extends Controller
                 $q->where('campaign', $campaign)
                     ->orWhereNull('campaign');
             })
+            ->orderBy('name')
             ->get();
     }
 }
