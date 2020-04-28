@@ -61,19 +61,19 @@
                                                                 <td>
                                                                     @if(count($playbook->filters))
                                                                         @foreach ($playbook->filters as $filter)
-                                                                            <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class=" playbook_filters_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$filter->name}}</a>
+                                                                            <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="0" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i> {{$filter->playbook_filter->name}}</a>
                                                                         @endforeach
                                                                     @else
-                                                                        <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal"><i data-id="{{$playbook->id}}" class="far fa-eye"></i></a>
+                                                                        <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="1" data-playbookid="{{$playbook->id}}"><i class="far fa-eye"></i></a>
                                                                     @endif
                                                                 </td>
                                                                 <td>
                                                                     @if(count($playbook->actions))
                                                                         @foreach ($playbook->actions as $action)
-                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-id="{{$playbook->id}}" class="playbook_actions_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$action->playbook_action->name}}</a>
+                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-playbookid="{{$playbook->id}}" data-is_empty="0" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}"><i class="fas fa-edit"></i> {{$action->playbook_action->name}}</a>
                                                                         @endforeach
                                                                     @else
-                                                                        <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal"><i data-id="{{$playbook->id}}" class="far fa-eye"></i></a>
+                                                                        <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="1" data-playbookid="{{$playbook->id}}"><i class="far fa-eye"></i></a>
                                                                     @endif
                                                                 </td>
                                                                 <?php $mode='edit';?>
@@ -199,7 +199,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.manage_filter')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.manage_filters')}}</h4>
             </div>
 
             <div class="modal-body">
