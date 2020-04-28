@@ -145,10 +145,7 @@ class PlaybookController extends Controller
             ->select(
                 'contacts_playbook_filters.id as contacts_playbook_filters_id',
                 'contacts_playbook_filters.playbook_filter_id',
-                'playbook_filters.name',
-                'playbook_filters.field',
-                'playbook_filters.operator',
-                'playbook_filters.value'
+                'playbook_filters.name'
             )
             ->orderBy('playbook_filters.name')
             ->get();
@@ -164,9 +161,7 @@ class PlaybookController extends Controller
             ->select(
                 'contacts_playbook_actions.id as contacts_playbook_actions_id',
                 'contacts_playbook_actions.playbook_action_id',
-                'playbook_actions.name',
-                'playbook_actions.campaign',
-                'playbook_actions.action_type'
+                'playbook_actions.name'
             )
             ->orderBy('playbook_actions.name')
             ->get();
