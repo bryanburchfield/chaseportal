@@ -49,6 +49,7 @@ return [
 	'edit_action'	=> 'Editar Acción',
 	'edit_drip_campaign'	=> 'Editar Campaña de Goteo',
 	'edit_filter'	=> 'Editar Filtro',
+	'edit_playbook'	=> 'Editar Libro de Jugadas',
 	'edit_provider'	=> 'Editar Proveedor',
 	'edit_rule'		=> 'Revisar Regla',
 	'edit_server'	=> 'Editar SMTP Servidor',

@@ -49,6 +49,7 @@ return [
 	'edit_action'	=> 'Edit Action',
 	'edit_drip_campaign'	=> 'Edit Drip Campaign',
 	'edit_filter'	=> 'Edit Filter',
+	'edit_playbook'	=> 'Edit Playbook',
 	'edit_provider'	=> 'Edit Provider',
 	'edit_rule'		=> 'Edit Rule',
 	'edit_server'	=> 'Edit SMTP Server',

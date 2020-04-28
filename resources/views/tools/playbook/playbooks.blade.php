@@ -132,17 +132,16 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_playbook')}}</h4>
             </div>
 
-            <div class="modal-body">
-                <form action="#" method="post" class="form edit_playbook">
-                    @include('tools.playbook.shared.playbook_form')
-                    <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
-                </form>
-            </div>
+            <form action="#" method="post" class="form edit_playbook">
+                <div class="modal-body">
+                        @include('tools.playbook.shared.playbook_form')
+                        <input type="hidden" name="id" class="id" value="">
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

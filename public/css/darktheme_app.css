@@ -1738,7 +1738,8 @@ select.input-sm,
 .add_campaign .form-control,
 .edit_filter .form-control,
 .edit_action .form-control,
-#addPlaybookModal .form-control {
+#addPlaybookModal .form-control,
+.edit_playbook .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -2279,10 +2280,11 @@ a.kpi_change_details {
 .demo_user_modal_link.remove_user i,
 a.remove_msg i,
 a.remove_playbook_filter_modal i,
-.actions a.remove_playbook_action_modal i {
+.actions a.remove_playbook_action_modal i,
+a.remove_playbook_modal i {
   position: relative;
   top: 2px;
-  color: #E15B23;
+  color: #d9534f;
 }
 
 .users td a.remove_user {
