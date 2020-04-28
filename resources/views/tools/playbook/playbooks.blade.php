@@ -70,7 +70,7 @@
                                                                 <td>
                                                                     @if(count($playbook->actions))
                                                                         @foreach ($playbook->actions as $action)
-                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-id="{{$playbook->id}}" class="playbook_actions_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$action->name}}</a>
+                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-id="{{$playbook->id}}" class="playbook_actions_modal" data-playbookid="1"><i class="fas fa-edit"></i>{{$action->playbook_action->name}}</a>
                                                                         @endforeach
                                                                     @else
                                                                         <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal"><i data-id="{{$playbook->id}}" class="far fa-eye"></i></a>

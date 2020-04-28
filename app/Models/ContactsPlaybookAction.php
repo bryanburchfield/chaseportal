@@ -15,4 +15,9 @@ class ContactsPlaybookAction extends Model
     {
         return $this->belongsTo('App\Models\ContactsPlaybook');
     }
+
+    public function playbook_action()
+    {
+        return $this->belongsTo('App\Models\PlaybookAction');
+    }
 }

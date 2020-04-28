@@ -15,4 +15,9 @@ class ContactsPlaybookFilter extends Model
     {
         return $this->belongsTo('App\Models\ContactsPlaybook');
     }
+
+    public function playbook_filter()
+    {
+        return $this->belongsTo('App\Models\PlaybookFilter');
+    }
 }
