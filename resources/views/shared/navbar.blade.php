@@ -1,9 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
-           <button type="button" id="sidebarCollapse" class="btn">
-               <i class="fas fa-align-left"></i>
-           </button>
+           @if(!session()->has('isSso'))
+            <button type="button" id="sidebarCollapse" class="btn">
+                <i class="fas fa-align-left"></i>
+            </button>
+           @endif
 
            @if(Auth::user()->theme == 'dark')
                <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo">
@@ -18,12 +20,14 @@
 
                 <div class="input-group-btn">
 
-                    {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
-                        @csrf
-                        <div class="btn-group">
-                        {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
-                        </div>
-                    {!! Form::close() !!}
+                    @if(!session()->has('isSso'))
+                        {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
+                            @csrf
+                            <div class="btn-group">
+                            {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
+                            </div>
+                        {!! Form::close() !!}
+                    @endif
 
                     @if($page['type'] =='dash')
                         @include('dashboards.dashnav')

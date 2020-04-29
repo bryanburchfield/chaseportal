@@ -39,7 +39,10 @@
 
     <div class="wrapper">
 
-        @include('shared.sidenav')
+        @if(!session()->has('isSso'))
+            @include('shared.sidenav')
+        @endif
+
         <div id="content">
 
             @include('shared.navbar')
