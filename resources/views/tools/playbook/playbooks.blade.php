@@ -70,7 +70,7 @@
                                                                 <td>
                                                                     @if(count($playbook->actions))
                                                                         @foreach ($playbook->actions as $action)
-                                                                            <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" data-playbookid="{{$playbook->id}}" data-is_empty="0" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}"><i class="fas fa-edit"></i> {{$action->playbook_action->name}}</a>
+                                                                            <a href="#" data-toggle="modal" data-campaign="{{$playbook->campaign}}" data-target="#actionPlaybookModal" data-playbookid="{{$playbook->id}}" data-is_empty="0" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}"><i class="fas fa-edit"></i> {{$action->playbook_action->name}}</a>
                                                                         @endforeach
                                                                     @else
                                                                         <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="1" data-playbookid="{{$playbook->id}}"><i class="far fa-eye"></i></a>
@@ -78,7 +78,7 @@
                                                                 </td>
                                                                 <?php $mode='edit';?>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook_modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_modal" data-name="{{$playbook->name}}" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-playbookid="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a class="remove_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-playbookid="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -180,14 +180,15 @@
             </div>
 
             <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
                 <input type="hidden" name="id" id="id" value="">
+                <div class="playbook_action_manager"></div>
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 
             <div class="modal-footer">
+                <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-primary add_btn_loader"> {{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>
@@ -203,14 +204,15 @@
             </div>
 
             <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
                 <input type="hidden" name="id" id="id" value="">
+                <div class="playbook_filter_manager"></div>
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 
             <div class="modal-footer">
+                <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-primary add_btn_loader"> {{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>

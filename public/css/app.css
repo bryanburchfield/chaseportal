@@ -1530,7 +1530,8 @@ select.input-sm,
 .edit_filter .form-control,
 .edit_action .form-control,
 #addPlaybookModal .form-control,
-.edit_playbook .form-control {
+.edit_playbook .form-control,
+.modal_manage_fil_act .form-control {
   background: #eee !important;
 }
 
@@ -2025,7 +2026,9 @@ a.kpi_change_details {
 a.remove_msg i,
 a.remove_playbook_filter_modal i,
 .actions a.remove_playbook_action_modal i,
-a.remove_playbook_modal i {
+a.remove_playbook_modal i,
+a.delete_action_from_pb i,
+a.delete_filter_from_pb i {
   position: relative;
   top: 2px;
   color: #d9534f;
@@ -3182,6 +3185,15 @@ span.numb_notifications {
 a.playbook_actions_modal:hover,
 a.playbook_filters_modal:hover {
   color: #000;
+}
+
+p.modal_manage_fil_act {
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+p.modal_manage_fil_act span {
+  min-width: 100px;
 }
 
 /* ---------------------------------------------------
