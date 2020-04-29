@@ -41,30 +41,6 @@ class PlaybookController extends Controller
         return view('tools.playbook.playbooks')->with($data);
     }
 
-    public function updateFilters(Request $request)
-    {
-        Log::debug($request->all());
-
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $data = [
-            'page' => $page,
-            'jsfile' => ['contacts_playbooks.js'],
-            'group_id' => Auth::user()->group_id,
-            'contacts_playbook' => $this->findPlaybook($request->contacts_playbook_id),
-        ];
-
-        return view('tools.playbook.update_filters')->with($data);
-    }
-
-    public function updateActions(Request $request)
-    {
-        # code...
-    }
-
     /**
      * Campaigns configured for this group
      * 
@@ -114,18 +90,18 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
-    public function updatePlaybook(Request $request)
+    public function updatePlaybook(ValidPlaybook $request)
     {
-        Log::debug('update');
-        Log::debug($request->all());
+        $contacts_playbook = $this->findPlaybook($request->id);
+        $contacts_playbook->update($request->all());
 
         return ['status' => 'success'];
     }
 
     public function deletePlaybook(Request $request)
     {
-        Log::debug('delete');
-        Log::debug($request->all());
+        $contacts_playbook = $this->findPlaybook($request->id);
+        $contacts_playbook->delete();
 
         return ['status' => 'success'];
     }
@@ -202,21 +178,21 @@ class PlaybookController extends Controller
 
     public function saveFilters(Request $request)
     {
-        # code...
+        Log::debug($request->all());
     }
 
     public function saveActions(Request $request)
     {
-        # code...
+        Log::debug($request->all());
     }
 
     public function deleteFilter(Request $request)
     {
-        # code...
+        Log::debug($request->all());
     }
 
     public function deleteAction(Request $request)
     {
-        # code...
+        Log::debug($request->all());
     }
 }
