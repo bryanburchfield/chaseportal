@@ -23,4 +23,10 @@ class ContactsPlaybook extends Model
     {
         return $this->hasMany('App\Models\ContactsPlaybookAction');
     }
+
+    public function allowActive()
+    {
+        return $this->actions->count() > 0
+            && $this->filters->count() > 0;
+    }
 }
