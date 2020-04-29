@@ -178,7 +178,7 @@ class PlaybookController extends Controller
 
     public function saveFilters(Request $request)
     {
-        # code...
+        Log::debug($request->all());
     }
 
     public function saveActions(Request $request)
