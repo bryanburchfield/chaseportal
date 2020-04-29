@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
+use App\Models\ContactsPlaybookAction;
+use App\Models\ContactsPlaybookFilter;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
 use App\Traits\CampaignTraits;
@@ -176,22 +178,47 @@ class PlaybookController extends Controller
             ->get();
     }
 
+    public function deleteFilter(Request $request)
+    {
+        $contacts_playbook_filter = ContactsPlaybookFilter::where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+
+        $contacts_playbook_filter->delete();
+
+        $this->deactivateIfEmpty($contacts_playbook_filter->contacts_playbook_id);
+
+        return ['status' => 'success'];
+    }
+
+    public function deleteAction(Request $request)
+    {
+        $contacts_playbook_action = ContactsPlaybookAction::where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+
+        $contacts_playbook_action->delete();
+
+        $this->deactivateIfEmpty($contacts_playbook_action->contacts_playbook_id);
+
+        return ['status' => 'success'];
+    }
+
+    private function deactivateIfEmpty($id)
+    {
+        $contacts_playbook = ContactsPlaybook::find($id);
+
+        if (!$contacts_playbook->allowActive()) {
+            $contacts_playbook->update(['active' => 0]);
+        }
+    }
+
     public function saveFilters(Request $request)
     {
         Log::debug($request->all());
     }
 
     public function saveActions(Request $request)
-    {
-        Log::debug($request->all());
-    }
-
-    public function deleteFilter(Request $request)
-    {
-        Log::debug($request->all());
-    }
-
-    public function deleteAction(Request $request)
     {
         Log::debug($request->all());
     }
