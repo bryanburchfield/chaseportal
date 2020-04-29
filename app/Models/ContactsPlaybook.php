@@ -27,6 +27,6 @@ class ContactsPlaybook extends Model
     public function allowActive()
     {
         return $this->actions->count() > 0
-            && $this->actions->count() > 0;
+            && $this->filters->count() > 0;
     }
 }
