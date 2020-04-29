@@ -35,6 +35,7 @@ return [
 	'delete_action'	=> 'Eliminar Acción',
 	'delete_campaign'	=> 'Eliminar Campaña',
 	'delete_msg'	=> 'Borrar Mensaje',
+	'delete_playbook'=> 'Eliminar Playbook',
 	'delete_provider'	=> 'Eliminar Proveedor',
 	'delete_rule'	=> 'Eliminar Regla',
 	'delete_server'	=> 'Eliminar SMTP Servidor',

@@ -3529,6 +3529,11 @@ a.playbook_filters_modal {
   color: #ddd;
 }
 
+a.playbook_actions_modal:hover,
+a.playbook_filters_modal:hover {
+  color: #999;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

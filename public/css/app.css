@@ -3179,6 +3179,11 @@ span.numb_notifications {
   clear: both;
 }
 
+a.playbook_actions_modal:hover,
+a.playbook_filters_modal:hover {
+  color: #000;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

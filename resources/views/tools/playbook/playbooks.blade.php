@@ -77,8 +77,8 @@
                                                                     @endif
                                                                 </td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook__modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-id="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook_modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
+                                                                <td><a class="remove_playbook_modal" data-name="{{$playbook->name}}" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-playbookid="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -134,8 +134,9 @@
 
             <form action="#" method="post" class="form edit_playbook">
                 <div class="modal-body">
-                        @include('tools.playbook.shared.playbook_form')
-                        <input type="hidden" name="id" class="id" value="">
+                    @include('tools.playbook.shared.playbook_form')
+                    <input type="hidden" name="id" class="id" value="">
+                    <div class="alert alert-danger hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
@@ -157,7 +158,7 @@
 
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
-                <input type="hidden" name="id" id="id" value="">
+                <input type="hidden" name="id" class="id" value="">
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 
