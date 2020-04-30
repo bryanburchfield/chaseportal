@@ -437,6 +437,46 @@ var Contacts_Playbook = {
 	    });
 	},
 
+	update_playbook_filters:function(e){
+		e.preventDefault();
+		$('.alert').hide();
+		var filters = [];
+		var playbookid = $(this).parent().prev().find('#id').val();
+		var errors=0;
+		console.log(playbookid);
+		$('.modal_manage_fil_act').each(function(){
+			if($(this).find('.filter_menu').val() !=''){
+				filters.push($(this).find('.filter_menu').find(':selected').data('id'));
+			}else{
+				errors=1;
+				return false;
+			}
+		});
+
+		if(errors){$('.alert').text('Select an filter before saving changes').show();}
+
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/playbooks/filters/'+playbookid,
+	        type: 'PATCH',
+	        dataType: 'json',
+	        data:{
+	        	filters:filters
+	        },
+	        success:function(response){
+	        	console.log(response);
+                if(response.status == 'success'){
+	            	location.reload();
+	            }
+	        }
+	    });
+	},
+
 	campaign_warning:function(){
 		var warning = '<div class="alert alert-warning">By changing campaigns, youre going to ruin everything!!!!</div>';
 		$('.edit_playbook .modal-body').append(warning);
