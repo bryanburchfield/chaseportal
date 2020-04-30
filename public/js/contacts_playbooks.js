@@ -413,7 +413,11 @@ var Contacts_Playbook = {
 			}
 		});
 
-		if(errors){$('.alert').text('Select an action before saving changes').show();}
+		if(errors){
+			$('.alert').text('Select an action before saving changes').show();
+			$('.add_btn_loader ').hide();
+			return false;
+		}
 
 		$.ajaxSetup({
 	        headers: {
@@ -429,6 +433,7 @@ var Contacts_Playbook = {
 	        	actions:actions
 	        },
 	        success:function(response){
+	        	$('.add_btn_loader ').hide();
 	        	console.log(response);
                 if(response.status == 'success'){
 	            	location.reload();
@@ -443,7 +448,7 @@ var Contacts_Playbook = {
 		var filters = [];
 		var playbookid = $(this).parent().prev().find('#id').val();
 		var errors=0;
-		console.log(playbookid);
+
 		$('.modal_manage_fil_act').each(function(){
 			if($(this).find('.filter_menu').val() !=''){
 				filters.push($(this).find('.filter_menu').find(':selected').data('id'));
@@ -453,7 +458,11 @@ var Contacts_Playbook = {
 			}
 		});
 
-		if(errors){$('.alert').text('Select an filter before saving changes').show();}
+		if(errors){
+			$('.alert').text('Select a filter before saving changes').show();
+			$('.add_btn_loader ').hide();
+			return false;
+		}
 
 		$.ajaxSetup({
 	        headers: {
@@ -469,6 +478,7 @@ var Contacts_Playbook = {
 	        	filters:filters
 	        },
 	        success:function(response){
+	        	$('.add_btn_loader ').hide();
 	        	console.log(response);
                 if(response.status == 'success'){
 	            	location.reload();
