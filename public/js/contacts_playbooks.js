@@ -12,6 +12,7 @@ var Contacts_Playbook = {
 		$('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
 		$('.playbook_action_manager').on('click', '.delete_action_from_pb', this.delete_playbook_action);
 		$('.update_actions').on('click', this.update_playbook_actions);
+		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -319,7 +320,8 @@ var Contacts_Playbook = {
 
 			action_select+='</select></div>';
 			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
-			$('#'+modal).find('.modal-body .playbook_action_manager').prepend(actions);
+
+			$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
 
 			Contacts_Playbook.check_numb_actions();
 		});
@@ -381,6 +383,11 @@ var Contacts_Playbook = {
 	            }
 	        }
 	    });
+	},
+
+	campaign_warning:function(){
+		var warning = '<div class="alert alert-warning">By changing campaigns, youre going to ruin everything!!!!</div>';
+		$('.edit_playbook .modal-body').append(warning);
 	},
 
 	get_playbook:function(id){
