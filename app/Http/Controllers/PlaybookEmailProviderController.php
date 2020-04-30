@@ -129,7 +129,7 @@ class PlaybookEmailProviderController extends Controller
         $email_service_provider = $this->findEmailServiceProvider($request->id);
 
         // check for campaigns
-        if ($email_service_provider->emailDripCampaigns->count()) {
+        if ($email_service_provider->emailDripCampaigns->isNotEmpty()) {
             $error = ValidationException::withMessages([
                 'error' => [trans('tools.provider_in_use')],
             ]);

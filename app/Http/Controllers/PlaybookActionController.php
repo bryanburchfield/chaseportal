@@ -19,6 +19,7 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PlaybookActionController extends Controller
 {
@@ -174,7 +175,10 @@ class PlaybookActionController extends Controller
         $playbook_action = $this->findPlaybookAction($request->id);
 
         if ($playbook_action->contacts_playbook_actions->isNotEmpty()) {
-            return ['status' => 'fail'];
+            $error = ValidationException::withMessages([
+                'error' => [trans('tools.action_in_use')],
+            ]);
+            throw $error;
         }
 
         $playbook_action->delete();
