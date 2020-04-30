@@ -211,7 +211,7 @@ var Contacts_Playbook = {
 								$('.edit_playbook .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
-						$('.add_btn_loader i').hide();
+						$('.add_btn_loader i').remove();
 						$('.edit_playbook .alert-danger').show();
 					});
 				}
@@ -414,8 +414,7 @@ var Contacts_Playbook = {
 		});
 
 		if(errors){
-			$('.alert').text('Select an action before saving changes').show();
-			$('.add_btn_loader ').hide();
+			$('#actionPlaybookModal .alert').text('Select an action before saving changes').show();
 			return false;
 		}
 
@@ -433,7 +432,6 @@ var Contacts_Playbook = {
 	        	actions:actions
 	        },
 	        success:function(response){
-	        	$('.add_btn_loader ').hide();
 	        	console.log(response);
                 if(response.status == 'success'){
 	            	location.reload();
@@ -459,8 +457,7 @@ var Contacts_Playbook = {
 		});
 
 		if(errors){
-			$('.alert').text('Select a filter before saving changes').show();
-			$('.add_btn_loader ').hide();
+			$('#filterPlaybookModal .alert').text('Select a filter before saving changes').show();
 			return false;
 		}
 
@@ -478,7 +475,6 @@ var Contacts_Playbook = {
 	        	filters:filters
 	        },
 	        success:function(response){
-	        	$('.add_btn_loader ').hide();
 	        	console.log(response);
                 if(response.status == 'success'){
 	            	location.reload();
@@ -522,4 +518,8 @@ var Contacts_Playbook = {
 
 $(document).ready(function(){
 	Contacts_Playbook.init();
+
+	$('#actionPlaybookModal, #filterPlaybookModal').on('hidden.bs.modal', function () {
+	    $('.alert').hide();
+	});
 });
