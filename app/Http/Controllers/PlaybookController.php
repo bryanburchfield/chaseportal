@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidContactsPlaybookAction;
+use App\Http\Requests\ValidContactsPlaybookFilter;
 use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
@@ -187,13 +189,17 @@ class PlaybookController extends Controller
         }
     }
 
-    public function saveFilters(Request $request)
+    public function saveFilters(ValidContactsPlaybookFilter $request)
     {
         Log::debug($request->all());
+
+        return ['status' => 'success'];
     }
 
-    public function saveActions(Request $request)
+    public function saveActions(ValidContactsPlaybookAction $request)
     {
         Log::debug($request->all());
+
+        return ['status' => 'success'];
     }
 }

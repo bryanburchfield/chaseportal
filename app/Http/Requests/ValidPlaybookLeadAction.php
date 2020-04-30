@@ -39,7 +39,6 @@ class ValidPlaybookLeadAction extends FormRequest
                 empty(request('to_subcampaign')) &&
                 empty(request('to_callstatus'))
             ) {
-
                 $validator->errors()->add('to_campaign', trans('custom_validation.lead_update_empty'));
             }
         });
