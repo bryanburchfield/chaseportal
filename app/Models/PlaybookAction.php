@@ -12,4 +12,9 @@ class PlaybookAction extends Model
         'campaign',
         'action_type',
     ];
+
+    public function contacts_playbook_actions()
+    {
+        return $this->hasMany('App\Models\ContactsPlaybookAction');
+    }
 }

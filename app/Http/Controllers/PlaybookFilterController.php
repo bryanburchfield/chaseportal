@@ -126,6 +126,11 @@ class PlaybookFilterController extends Controller
     public function deleteFilter(Request $request)
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
+
+        if ($playbook_filter->contacts_playbook_filters->isNotEmpty()) {
+            return ['status' => 'fail'];
+        }
+
         $playbook_filter->delete();
 
         return ['status' => 'success'];

@@ -172,6 +172,11 @@ class PlaybookActionController extends Controller
     {
         // on delete cascade takes care of the sub-table records
         $playbook_action = $this->findPlaybookAction($request->id);
+
+        if ($playbook_action->contacts_playbook_actions->isNotEmpty()) {
+            return ['status' => 'fail'];
+        }
+
         $playbook_action->delete();
 
         return ['status' => 'success'];

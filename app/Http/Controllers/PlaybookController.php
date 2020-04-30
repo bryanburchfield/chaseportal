@@ -191,14 +191,16 @@ class PlaybookController extends Controller
 
     public function saveFilters(ValidContactsPlaybookFilter $request)
     {
-        Log::debug($request->all());
+        $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
+        $contacts_playbook->saveFilters($request->filters);
 
         return ['status' => 'success'];
     }
 
     public function saveActions(ValidContactsPlaybookAction $request)
     {
-        Log::debug($request->all());
+        $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
+        $contacts_playbook->saveActions($request->actions);
 
         return ['status' => 'success'];
     }

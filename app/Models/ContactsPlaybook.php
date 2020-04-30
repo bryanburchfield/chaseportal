@@ -41,6 +41,58 @@ class ContactsPlaybook extends Model
         DB::commit();
     }
 
+    public function saveFilters(array $filters = [])
+    {
+        $filters = collect(array_values($filters));
+        $existing_filters = collect();
+
+        $this->filters->each(function ($contacts_playbook_filter) use (&$existing_filters) {
+            $existing_filters->push($contacts_playbook_filter->playbook_filter_id);
+        });
+
+        DB::beginTransaction();
+
+        // insert any not already there
+        $filters->diff($existing_filters)->each(function ($playbook_filter_id) {
+            ContactsPlaybookFilter::create(['contacts_playbook_id' => $this->id, 'playbook_filter_id' => $playbook_filter_id]);
+        });
+
+        // delete any not submitted
+        $existing_filters->diff($filters)->each(function ($playbook_filter_id) {
+            ContactsPlaybookFilter::where('contacts_playbook_id', $this->id)
+                ->where('playbook_filter_id', $playbook_filter_id)
+                ->delete();
+        });
+
+        DB::commit();
+    }
+
+    public function saveActions(array $actions = [])
+    {
+        $actions = collect(array_values($actions));
+        $existing_actions = collect();
+
+        $this->actions->each(function ($contacts_playbook_action) use (&$existing_actions) {
+            $existing_actions->push($contacts_playbook_action->playbook_action_id);
+        });
+
+        DB::beginTransaction();
+
+        // insert any not already there
+        $actions->diff($existing_actions)->each(function ($playbook_action_id) {
+            ContactsPlaybookAction::create(['contacts_playbook_id' => $this->id, 'playbook_action_id' => $playbook_action_id]);
+        });
+
+        // delete any not submitted
+        $existing_actions->diff($actions)->each(function ($playbook_action_id) {
+            ContactsPlaybookAction::where('contacts_playbook_id', $this->id)
+                ->where('playbook_action_id', $playbook_action_id)
+                ->delete();
+        });
+
+        DB::commit();
+    }
+
     private function cleanFiltersAndActions()
     {
         // remove any filters and actions that don't match the campaign
