@@ -36,7 +36,13 @@ class ContactsPlaybook extends Model
         DB::beginTransaction();
 
         parent::update($attributes, $options);
+        $this->cleanFiltersAndActions();
 
+        DB::commit();
+    }
+
+    private function cleanFiltersAndActions()
+    {
         // remove any filters and actions that don't match the campaign
         foreach ($this->filters as $filter) {
             if ($filter->playbook_filter->campaign !== null && $filter->playbook_filter->campaign !== $this->campaign) {
@@ -48,7 +54,5 @@ class ContactsPlaybook extends Model
                 $action->delete();
             }
         }
-
-        DB::commit();
     }
 }
