@@ -37,7 +37,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-
+	        	console.log(response);
                 $('.subcampaign').empty();
                 var response = Object.entries(response.subcampaigns);
 
@@ -484,7 +484,8 @@ var Contacts_Playbook = {
 	},
 
 	campaign_warning:function(){
-		var warning = '<div class="alert alert-warning">By changing campaigns, youre going to ruin everything!!!!</div>';
+		$('.edit_playbook .modal-body .alert').remove();
+		var warning = '<div class="alert alert-warning">Note: If you change the Playbook Campaign you may loose filters and actions that are associated with it.</div>';
 		$('.edit_playbook .modal-body').append(warning);
 	},
 

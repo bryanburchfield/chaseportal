@@ -2,6 +2,7 @@
 
 return [
 	'actions'		=> 'Actions',
+	'action_in_use'	=> 'Action in Use',
 	'action_type'	=> 'Action Type',
 	'active'		=> 'Active',
 	'add_action'	=> 'Add Action',

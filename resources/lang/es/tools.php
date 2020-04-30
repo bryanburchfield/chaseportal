@@ -2,6 +2,7 @@
 
 return [
 	'actions'		=> 'Comportamiento',
+	'action_in_use'	=> 'Acción en Uso',
 	'action_type'	=> 'Tipo de Acción',
 	'active'		=> 'Activo',
 	'add_action'	=> 'Agregar Acción',

@@ -3196,15 +3196,15 @@ a.playbook_filters_modal:hover {
   top: 3px;
 }
 
-.add_action,
-.add_filter {
+a.add_action,
+a.add_filter {
   margin-top: 10px;
   display: inline-block;
   font-weight: 600;
 }
 
-.add_action i,
-.add_filter i {
+a.add_action i,
+a.add_filter i {
   color: #33A09B;
 }
 

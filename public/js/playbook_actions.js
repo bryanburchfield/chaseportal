@@ -291,7 +291,23 @@ var Playbook_Actions = {
 				if (response.status == 'success') {
 					location.reload();
 				}
-			},
+			}, error: function (data) {
+				console.log(data);
+				if (data.status === 422) {
+					$('#deleteActionModal .alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('#deleteActionModal .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('#deleteActionModal .alert-danger').show();
+					});
+				}
+			}
 		});
 	}
 }
