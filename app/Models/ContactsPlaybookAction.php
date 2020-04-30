@@ -11,7 +11,7 @@ class ContactsPlaybookAction extends Model
         'playbook_action_id',
     ];
 
-    public function playbook()
+    public function contacts_playbook()
     {
         return $this->belongsTo('App\Models\ContactsPlaybook');
     }

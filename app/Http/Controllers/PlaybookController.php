@@ -181,8 +181,12 @@ class PlaybookController extends Controller
     public function deleteFilter(Request $request)
     {
         $contacts_playbook_filter = ContactsPlaybookFilter::where('id', $request->id)
-            ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
+
+        // make sure it's our group
+        if ($contacts_playbook_filter->contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(404);
+        }
 
         $contacts_playbook_filter->delete();
 
@@ -194,8 +198,12 @@ class PlaybookController extends Controller
     public function deleteAction(Request $request)
     {
         $contacts_playbook_action = ContactsPlaybookAction::where('id', $request->id)
-            ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
+
+        // make sure it's our group
+        if ($contacts_playbook_action->contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(404);
+        }
 
         $contacts_playbook_action->delete();
 
