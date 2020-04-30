@@ -353,7 +353,7 @@ var Contacts_Playbook = {
 
 		$('.modal_manage_fil_act').each(function(){
 			if($(this).find('.action_menu').val() !=''){
-				actions.push($(this).find('.action_menu').val());
+				actions.push($(this).find('.action_menu').find(':selected').data('id'));
 			}else{
 				errors=1;
 				return false;
