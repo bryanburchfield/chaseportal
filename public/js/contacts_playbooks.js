@@ -1,5 +1,7 @@
 var Contacts_Playbook = {
 
+	pb_campaign:'',
+
 	init:function(){
 		$('#campaign_select').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
@@ -7,6 +9,9 @@ var Contacts_Playbook = {
 		$('.edit_playbook_modal, .remove_playbook_modal').on('click', this.pass_id_to_modal);
 		$('.delete_playbook_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
+		$('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
+		$('.playbook_action_manager').on('click', '.delete_action_from_pb', this.delete_playbook_action);
+		$('.update_actions').on('click', this.update_playbook_actions);
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -75,6 +80,7 @@ var Contacts_Playbook = {
 			campaign = $(this).data('campaign')
 		;
 
+		$(modal).find('#id').val(playbookid);
 		modal = modal.substring(1);
 
 		if(modal == 'filterPlaybookModal'){
@@ -90,7 +96,7 @@ var Contacts_Playbook = {
 		var id = $(this).data('playbookid');
 		var modal = $(this).data('target');
 		$(modal).find('.id').val(id);
-		console.log(id);
+
 		if($(this).data('name')){ /// pass name to delete modal
 			$(modal).find('h3 span').html($(this).data('name'));
 		}else{ // edit modal
@@ -101,6 +107,7 @@ var Contacts_Playbook = {
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
 
 		var all_filters;
+
 		$.when(
 			all_filters = Contacts_Playbook.get_filters(campaign, modal)
 		).done(function() {
@@ -126,14 +133,14 @@ var Contacts_Playbook = {
 	    					j=0
 	    				;
 	                    for(var i=0;i<response.length;i++){
-	                    	var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control">';
+	                    	var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">Select One</option>';
 	                    	for(var j=0;j<all_filters.responseJSON.length;j++){
 	                    		var selected = all_filters.responseJSON[j].name == response[i].name ? 'selected' :'';
 	                    		filter_select+='<option '+selected+' data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
 	                    	}
 
 	                    	filter_select+='</select></div>';
-	                    	filters+='<div class="modal_manage_fil_act" data-id="'+response[i].playbook_filter_id+'">'+filter_select+'<div class="col-sm-2"><a class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+	                    	filters+='<div class="modal_manage_fil_act" data-actionid="'+response[i].playbook_filter_id+'">'+filter_select+'<div class="col-sm-2"><a class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
 	                    }
 
 	                    $('#'+modal).find('.modal-body .playbook_filter_manager').append(filters);
@@ -245,15 +252,18 @@ var Contacts_Playbook = {
 
 	get_playbook_actions:function(campaign, playbookid, modal, is_empty){
 		var all_actions;
+		Contacts_Playbook.pb_campaign=campaign;
 		$.when(
 			all_actions = Contacts_Playbook.get_actions(campaign, modal)
 		).done(function() {
 			$('#'+modal).find('.modal-body .playbook_action_manager').empty();
+			var add_action_btn = '<a href="#" class="add_action mt20"><i class="fas fa-plus-circle"></i> Add Action</a>';
 
 			if(is_empty){
-				console.log('build menu its empty');
+            	$('#'+modal).find('.modal-body .playbook_action_manager').append(add_action_btn);
 			}else{
 				$('.loader_hor').show();
+
 				$.ajaxSetup({
 			        headers: {
 			            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -267,28 +277,118 @@ var Contacts_Playbook = {
 			        success:function(response){
 
 	    				$('#'+modal).find('.subcampaign option[value="'+response.subcampaign+'"]').prop('selected', true);
-	    				var actions='',
-	    					j=0
-	    				;
+	    				var actions='';
 
 	                    for(var i=0;i<response.length;i++){
-	                    	var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control">';
+	                    	var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">Select One</option>';
 	                    	for(var j=0;j<all_actions.responseJSON.length;j++){
 	                    		var selected = all_actions.responseJSON[j].name == response[i].name ? 'selected' :'';
 	                    		action_select+='<option '+selected+' data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
 	                    	}
 
 	                    	action_select+='</select></div>';
-	                    	actions+='<div class="modal_manage_fil_act" data-id="'+response[i].playbook_action_id+'">'+action_select+'<div class="col-sm-2"><a class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+	                    	actions+='<div class="modal_manage_fil_act" data-actionid="'+response[i].playbook_action_id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+response[i].playbook_action_id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
 	                    }
 
 	                    $('#'+modal).find('.modal-body .playbook_action_manager').append(actions);
+	                    $('#'+modal).find('.modal-body .playbook_action_manager').append(add_action_btn);
 	                    $('.loader_hor').hide();
 			        }
 			    });
 			}
 		});
 
+	},
+
+	add_new_action:function(e){
+		e.preventDefault();
+
+		var modal = $('div.modal.in').attr('id'),
+			all_actions,
+			actions='',
+			id = $(this).parent().parent().find('#id').val()
+		;
+
+		$.when(
+			all_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
+		).done(function() {
+			console.log(all_actions.responseJSON)
+			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">Select One</option>';
+			for(var j=0;j<all_actions.responseJSON.length;j++){
+				action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
+			}
+
+			action_select+='</select></div>';
+			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+			$('#'+modal).find('.modal-body .playbook_action_manager').prepend(actions);
+
+			if(all_actions.responseJSON.length == $('.modal_manage_fil_act').length){
+				$('.add_action ').hide();
+			}
+		});
+	},
+
+	delete_playbook_action:function(e){
+		e.preventDefault();
+		var id = $(this).data('actionid');
+		console.log(id);
+
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/playbooks/action/'+id,
+	        type: 'DELETE',
+	        dataType: 'json',
+	        success:function(response){
+                console.log(response);
+
+                $(this).parent().parent().parent().remove();
+	        }
+	    });
+	},
+
+	update_playbook_actions:function(e){
+		e.preventDefault();
+		$('.alert').hide();
+		var actions = [];
+		var playbookid = $(this).parent().prev().find('#id').val();
+		var errors=0;
+
+		$('.modal_manage_fil_act').each(function(){
+			if($(this).find('.action_menu').val() !=''){
+				actions.push($(this).find('.action_menu').val());
+			}else{
+				errors=1;
+				return false;
+			}
+		});
+
+		if(errors){$('.alert').text('Select an action before saving changes').show();}
+
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/playbooks/actions/'+id,
+	        type: 'PATCH',
+	        dataType: 'json',
+	        data:{
+	        	actions:actions
+	        },
+	        success:function(response){
+                console.log(response);
+                if(response.status == 'success'){
+	            	location.reload();
+	            }
+	        }
+	    });
 	},
 
 	get_playbook:function(id){

@@ -3539,11 +3539,21 @@ a.playbook_filters_modal:hover {
 
 .modal_manage_fil_act {
   margin-bottom: 5px;
-  font-size: 15px;
 }
 
-.modal_manage_fil_act span {
-  min-width: 100px;
+.modal_manage_fil_act a {
+  position: relative;
+  top: 3px;
+}
+
+.add_action {
+  margin-top: 10px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.add_action i {
+  color: #33A09B;
 }
 
 /* ---------------------------------------------------

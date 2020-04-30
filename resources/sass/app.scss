@@ -2731,14 +2731,24 @@ a.playbook_actions_modal, a.playbook_filters_modal{
     }
 }
 
-p.modal_manage_fil_act {
+.modal_manage_fil_act {
     margin-bottom: 5px;
-    font-size: 15px;
-
-    span {
-        min-width: 100px;
+    
+    a{
+        position: relative;
+        top:3px;
     }
 }
+
+.add_action{
+    margin-top: 10px;
+    display: inline-block;
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

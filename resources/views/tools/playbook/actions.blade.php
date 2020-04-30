@@ -41,7 +41,7 @@
                                                 <tbody>
                                                     @if(count($playbook_actions))
                                                         @foreach($playbook_actions as $playbook_action)
-                                                            <tr>
+                                                            <tr data-action_id="{{$playbook_action->id}}">
                                                                 <td>{{$playbook_action->name}}</td>
                                                                 <td>{{$playbook_action->campaign}}</td>
                                                                 <td>{{$playbook_action->action_type}}</td>

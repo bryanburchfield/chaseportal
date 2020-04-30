@@ -43,7 +43,7 @@
                                                 <tbody>
                                                     @if(count($contacts_playbooks))
                                                         @foreach($contacts_playbooks as $playbook)
-                                                            <tr>
+                                                            <tr data-playbook_id="{{$playbook->id}}">
                                                                 <td>{{$playbook->name}}</td>
                                                                 <td>{{$playbook->campaign}}</td>
                                                                 <td>
@@ -188,7 +188,7 @@
             <div class="modal-footer">
                 <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-primary add_btn_loader"> {{__('tools.save_changes')}}</button>
+                <button type="button" class="btn btn-primary add_btn_loader update_actions"> {{__('tools.save_changes')}}</button>
             </div>
         </div>
     </div>
