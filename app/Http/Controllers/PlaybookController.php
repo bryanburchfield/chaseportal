@@ -97,6 +97,18 @@ class PlaybookController extends Controller
         $contacts_playbook = $this->findPlaybook($request->id);
         $contacts_playbook->update($request->all());
 
+        // remove any filters and actions that don't match the campaign
+        foreach ($contacts_playbook->filters as $filter) {
+            if ($filter->playbook_filter->campaign !== null && $filter->playbook_filter->campaign !== $contacts_playbook->campaign) {
+                $filter->delete();
+            }
+        }
+        foreach ($contacts_playbook->actions as $action) {
+            if ($action->playbook_action->campaign !== null && $action->playbook_action->campaign !== $contacts_playbook->campaign) {
+                $action->delete();
+            }
+        }
+
         return ['status' => 'success'];
     }
 
