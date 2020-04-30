@@ -312,7 +312,6 @@ var Contacts_Playbook = {
 		$.when(
 			all_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			console.log(all_actions.responseJSON)
 			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">Select One</option>';
 			for(var j=0;j<all_actions.responseJSON.length;j++){
 				action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
@@ -322,33 +321,27 @@ var Contacts_Playbook = {
 			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
 			$('#'+modal).find('.modal-body .playbook_action_manager').prepend(actions);
 
-			if(all_actions.responseJSON.length == $('.modal_manage_fil_act').length){
-				$('.add_action ').hide();
-			}
+			Contacts_Playbook.check_numb_actions();
 		});
 	},
 
 	delete_playbook_action:function(e){
 		e.preventDefault();
-		var id = $(this).data('actionid');
-		console.log(id);
+		$(this).parent().parent().parent().remove();
+		Contacts_Playbook.check_numb_actions();
+	},
 
-		$.ajaxSetup({
-	        headers: {
-	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-	        }
-	    });
-
-	    $.ajax({
-	        url: '/tools/playbook/playbooks/action/'+id,
-	        type: 'DELETE',
-	        dataType: 'json',
-	        success:function(response){
-                console.log(response);
-
-                $(this).parent().parent().parent().remove();
-	        }
-	    });
+	check_numb_actions(){
+		var pb_actions;
+		$.when(
+			pb_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
+		).done(function() {
+			if(pb_actions.responseJSON.length == $('.modal_manage_fil_act').length){
+				$('.add_action ').hide();
+			}else{
+				$('.add_action ').show();
+			}
+		});
 	},
 
 	update_playbook_actions:function(e){
@@ -383,7 +376,6 @@ var Contacts_Playbook = {
 	        	actions:actions
 	        },
 	        success:function(response){
-                console.log(response);
                 if(response.status == 'success'){
 	            	location.reload();
 	            }
