@@ -3188,7 +3188,7 @@ a.playbook_filters_modal:hover {
 }
 
 .modal_manage_fil_act {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .modal_manage_fil_act a {
@@ -3196,13 +3196,15 @@ a.playbook_filters_modal:hover {
   top: 3px;
 }
 
-.add_action {
+.add_action,
+.add_filter {
   margin-top: 10px;
   display: inline-block;
   font-weight: 600;
 }
 
-.add_action i {
+.add_action i,
+.add_filter i {
   color: #33A09B;
 }
 

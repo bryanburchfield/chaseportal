@@ -2948,7 +2948,7 @@ a.playbook_actions_modal, a.playbook_filters_modal{
 }
 
 .modal_manage_fil_act {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     
     a{
         position: relative;
@@ -2956,7 +2956,7 @@ a.playbook_actions_modal, a.playbook_filters_modal{
     }
 }
 
-.add_action{
+.add_action, .add_filter{
     margin-top: 10px;
     display: inline-block;
     font-weight: 600;
