@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidEmailServiceProvider;
 use App\Models\EmailServiceProvider;
 use App\Services\EmailDripService;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class PlaybookEmailProviderController extends Controller
 {
@@ -122,7 +122,7 @@ class PlaybookEmailProviderController extends Controller
      * 
      * @param Request $request 
      * @return string[] 
-     * @throws ValidationException 
+     * @throws HttpResponseException 
      */
     public function deleteEmailServiceProvider(Request $request)
     {
@@ -130,10 +130,7 @@ class PlaybookEmailProviderController extends Controller
 
         // check for campaigns
         if ($email_service_provider->emailDripCampaigns->isNotEmpty()) {
-            $error = ValidationException::withMessages([
-                'error' => [trans('tools.provider_in_use')],
-            ]);
-            throw $error;
+            abort(response()->json(['errors' => ['1' => trans('tools.provider_in_use')]], 422));
         }
 
         $email_service_provider->delete();
@@ -145,8 +142,7 @@ class PlaybookEmailProviderController extends Controller
      * Test SMTP server connection
      * 
      * @param ValidEmailServiceProvider $request 
-     * @return string[] 
-     * @throws ValidationException 
+     * @return mixed 
      */
     public function testConnection(ValidEmailServiceProvider $request)
     {
