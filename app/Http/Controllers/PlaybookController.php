@@ -204,4 +204,22 @@ class PlaybookController extends Controller
 
         return ['status' => 'success'];
     }
+
+    public function toggleActive(Request $request)
+    {
+        $contacts_playbook = $this->findPlaybook($request->id);
+
+        // Toggle active
+        $contacts_playbook->active = !$contacts_playbook->active;
+
+        // If activating, reset run dates
+        if ($contacts_playbook->active == 1) {
+            $contacts_playbook->last_run_from = now();
+            $contacts_playbook->last_run_to = $contacts_playbook->last_run_from;
+        }
+
+        $contacts_playbook->save();
+
+        return ['status' => 'success'];
+    }
 }

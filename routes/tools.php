@@ -108,6 +108,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/get_dispos', 'PlaybookActionController@getDispos');  // get all available dispos (call statuses): pass in 'campaign' (optional)
                 Route::post('/get_subcampaigns', 'PlaybookActionController@getSubcampaigns'); // get all subcampaigns: pass in 'campaign' (required)
                 Route::post('/get_table_fields', 'PlaybookActionController@getTableFields');  // get all custom table fields: pass in 'campaign' (required)
+                Route::post('/toggle_playbook', 'PlaybookController@toggleActive');  // toggles a playbook active/inactive: pass in 'id' (required)
             });
         });
     });
