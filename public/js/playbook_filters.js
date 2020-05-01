@@ -35,7 +35,7 @@ var Playbook_Filters = {
 				type: 'POST',
 				data: { campaign: campaign },
 			}).done(function(response){
-				console.log(response);
+
 				$('.loader_hor').hide();
 				var filter_fields = '<option value="">Select One</option>';
 				for (var i = 0; i < Object.entries(response).length; i++) {
@@ -67,7 +67,6 @@ var Playbook_Filters = {
 			type: 'POST',
 			data: {type: type},
 		}).done(function(response){
-			console.log(response);
 			$('.loader_hor').hide();
 			var operators;
 			for (var i = 0; i < Object.entries(response).length; i++) {
@@ -93,7 +92,6 @@ var Playbook_Filters = {
 			type: 'POST',
 			data: form,
 			success: function (response) {
-				console.log(response);
 				if(response.status == 'success'){
 					location.reload();
 				}
@@ -146,7 +144,7 @@ var Playbook_Filters = {
 				id:id
 			},
 		}).done(function(response){
-			console.log(response);
+
 			var type;
 			$.when(
 				Playbook_Filters.get_fields(response.campaign)
@@ -206,9 +204,22 @@ var Playbook_Filters = {
 				id:id
 			},
 			success: function (response) {
-				console.log(response);
 				if(response.status == 'success'){
 					location.reload();
+				}
+			}, error: function (data) {
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('#deleteFilterModal .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('#deleteFilterModal .alert-danger').show();
+					});
 				}
 			}
 		});
