@@ -41,9 +41,9 @@ class ContactsPlaybook extends Model
         DB::commit();
     }
 
-    public function saveFilters(array $filters = [])
+    public function saveFilters($filters = [])
     {
-        $filters = collect(array_values($filters));
+        $filters = collect(array_values((array) $filters));
         $existing_filters = collect();
 
         $this->filters->each(function ($contacts_playbook_filter) use (&$existing_filters) {
@@ -64,12 +64,14 @@ class ContactsPlaybook extends Model
                 ->delete();
         });
 
+        $this->deactiveIfNeeded();
+
         DB::commit();
     }
 
-    public function saveActions(array $actions = [])
+    public function saveActions($actions = [])
     {
-        $actions = collect(array_values($actions));
+        $actions = collect(array_values((array) $actions));
         $existing_actions = collect();
 
         $this->actions->each(function ($contacts_playbook_action) use (&$existing_actions) {
@@ -90,6 +92,8 @@ class ContactsPlaybook extends Model
                 ->delete();
         });
 
+        $this->deactiveIfNeeded();
+
         DB::commit();
     }
 
@@ -105,6 +109,18 @@ class ContactsPlaybook extends Model
             if ($action->playbook_action->campaign !== null && $action->playbook_action->campaign !== $this->campaign) {
                 $action->delete();
             }
+        }
+
+        $this->deactiveIfNeeded();
+    }
+
+    private function deactiveIfNeeded()
+    {
+        $this->refresh();
+
+        // Decativate if no filters or no actions
+        if ($this->active && !$this->allowActive()) {
+            $this->update(['active' => 0]);
         }
     }
 }
