@@ -64,6 +64,8 @@ class ContactsPlaybook extends Model
                 ->delete();
         });
 
+        $this->deactiveIfNeeded();
+
         DB::commit();
     }
 
@@ -90,6 +92,8 @@ class ContactsPlaybook extends Model
                 ->delete();
         });
 
+        $this->deactiveIfNeeded();
+
         DB::commit();
     }
 
@@ -105,6 +109,16 @@ class ContactsPlaybook extends Model
             if ($action->playbook_action->campaign !== null && $action->playbook_action->campaign !== $this->campaign) {
                 $action->delete();
             }
+        }
+
+        $this->deactiveIfNeeded();
+    }
+
+    private function deactiveIfNeeded()
+    {
+        // Decativate if no filters or no actions
+        if ($this->active && !$this->allowActive()) {
+            $this->update(['active' => 0]);
         }
     }
 }
