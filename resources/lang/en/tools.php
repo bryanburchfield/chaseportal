@@ -36,7 +36,7 @@ return [
 	'delete_action'	=> 'Delete Action',
 	'delete_campaign'	=> 'Delete Campaign',
 	'delete_msg'	=> 'Delete Message',
-	'delete_playbook'=> 'Delete Playbook',
+	'delete_playbook' => 'Delete Playbook',
 	'delete_provider'	=> 'Delete Provider',
 	'delete_rule'	=> 'Delete Rule',
 	'delete_server'	=> 'Delete SMTP Server',
@@ -86,8 +86,8 @@ return [
 	'lead_update'	=> 'Lead Update',
 	'leads_moved'	=> '# of Leads Moved',
 	'line'			=> 'Line',
-	'manage_actions'=>'Manage Actions',
-	'manage_filters'=> 'Manage Filters',
+	'manage_actions' => 'Manage Actions',
+	'manage_filters' => 'Manage Filters',
 	'message'		=> 'Message',
 	'move_history'	=> 'Move History',
 	'name'			=> 'Name',
@@ -171,7 +171,7 @@ return [
 	'process'	=> 'Process',
 	'in_process'	=> 'In Process',
 	'no_subcampaign' => '[No Subcampaign]',
-	'any' => 'Any Subcampaign',
+	'any' => '[Any Subcampaign]',
 
 	//////////  OPERATORS
 
