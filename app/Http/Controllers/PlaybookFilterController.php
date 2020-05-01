@@ -9,7 +9,6 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class PlaybookFilterController extends Controller
 {
@@ -129,10 +128,7 @@ class PlaybookFilterController extends Controller
         $playbook_filter = $this->findPlaybookFilter($request->id);
 
         if ($playbook_filter->contacts_playbook_filters->isNotEmpty()) {
-            $error = ValidationException::withMessages([
-                'error' => [trans('tools.filter_in_use')],
-            ]);
-            throw $error;
+            abort(response()->json(['errors' => ['1' => trans('tools.filter_in_use')]], 422));
         }
 
         $playbook_filter->delete();
