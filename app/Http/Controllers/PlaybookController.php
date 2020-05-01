@@ -209,6 +209,10 @@ class PlaybookController extends Controller
     {
         $contacts_playbook = $this->findPlaybook($request->id);
 
+        if (!$contacts_playbook->active && !$contacts_playbook->allowActive()) {
+            abort(response()->json(['errors' => ['1' => trans('tools.playbook_cant_activate')]], 422));
+        }
+
         // Toggle active
         $contacts_playbook->active = !$contacts_playbook->active;
 
