@@ -68,6 +68,7 @@ return [
 	'file'			=> 'Archivo',
 	'file_name'		=> 'Nombre del Archivo',
 	'filter_error'	=> 'Seleccione un filtro y un valor antes de agregar otro.',
+	'filter_in_use'	=> 'Filtro en uso',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',

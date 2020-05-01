@@ -68,6 +68,7 @@ return [
 	'file'			=> 'File',
 	'file_name'		=> 'File Name',
 	'filter_error'	=> 'Please select a filter and value before adding another one',
+	'filter_in_use'	=> 'Filter In Use',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
 	'filters'		=> 'Filters',

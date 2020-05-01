@@ -13,7 +13,6 @@ var Playbook_Actions = {
 	add_action: function (e) {
 		e.preventDefault();
 		var form_data = $(this).serialize();
-		console.log(form_data);
 
 		$.ajaxSetup({
 			headers: {
@@ -27,12 +26,10 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: form_data,
 			success: function (response) {
-				console.log(response);
 				if (response.status == 'success') {
 					location.reload();
 				}
 			}, error: function (data) {
-				console.log(data);
 				if (data.status === 422) {
 					$('.add_action .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
@@ -61,7 +58,7 @@ var Playbook_Actions = {
 		$('.action_type_fields').hide();
 		$('.action_type_fields.' + type).show();
 
-		if(type == 'lead'){console.log('ran');
+		if(type == 'lead'){
 			Playbook_Actions.update_call_statuses();
 		}
 	},
@@ -154,7 +151,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-				console.log(response);
+
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -201,7 +198,6 @@ var Playbook_Actions = {
 		e.preventDefault();
 		var form_data = $(this).serialize();
 		var id = $(this).find('.id').val();
-		console.log(id);
 
 		$.ajaxSetup({
 			headers: {
@@ -215,12 +211,10 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: form_data,
 			success: function (response) {
-				console.log(response);
 				if (response.status == 'success') {
 					location.reload();
 				}
 			}, error: function (data) {
-				console.log(data);
 				if (data.status === 422) {
 					$('.edit_action .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
@@ -292,7 +286,6 @@ var Playbook_Actions = {
 					location.reload();
 				}
 			}, error: function (data) {
-				console.log(data);
 				if (data.status === 422) {
 					$('#deleteActionModal .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
