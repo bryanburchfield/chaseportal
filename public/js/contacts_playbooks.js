@@ -16,6 +16,7 @@ var Contacts_Playbook = {
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
+		$('.switch input').on('click', this.toggle_playbook);
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -519,7 +520,59 @@ var Contacts_Playbook = {
 				});
 	        }
 	    });
-	}
+	},
+
+	toggle_playbook:function(){
+
+        var checked;
+        var playbook_id = $(this).parent().parent().parent().data('playbook_id');
+
+        console.log(playbook_id);
+
+        if($(this).is(':checked')){
+            $(this).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(this).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/playbook/toggle_playbook',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:playbook_id,
+
+            },
+            success:function(response){
+            	console.log(response)
+            }, error: function (data) {
+
+				if (data.status === 422) {
+					console.log(data.status);
+					// $('.edit_playbook .alert-danger').empty();
+					// var errors = $.parseJSON(data.responseText);
+					// $.each(errors, function (key, value) {
+
+					// 	if ($.isPlainObject(value)) {
+					// 		$.each(value, function (key, value) {
+					// 			$('.edit_playbook .alert-danger').append('<li>' + value + '</li>');
+					// 		});
+					// 	}
+					// 	$('.add_btn_loader i').remove();
+					// 	$('.edit_playbook .alert-danger').show();
+					// });
+				}
+			}
+        });
+    },
 }
 
 $(document).ready(function(){

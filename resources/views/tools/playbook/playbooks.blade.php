@@ -31,6 +31,7 @@
                                             <table class="table mt20">
                                                 <thead>
                                                     <tr>
+                                                        <th>{{__('tools.active')}}</th>
                                                         <th>{{__('tools.name')}}</th>
                                                         <th>{{__('tools.campaign')}}</th>
                                                         <th>{{__('tools.subcampaign')}}</th>
@@ -44,6 +45,12 @@
                                                     @if(count($contacts_playbooks))
                                                         @foreach($contacts_playbooks as $playbook)
                                                             <tr data-playbook_id="{{$playbook->id}}">
+                                                                <td>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox" {{ ($playbook->active) ? 'checked' : '' }} name="playbook_input">
+                                                                        <span></span>
+                                                                    </label>
+                                                                </td>
                                                                 <td>{{$playbook->name}}</td>
                                                                 <td>{{$playbook->campaign}}</td>
                                                                 <td>
