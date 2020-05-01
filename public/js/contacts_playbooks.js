@@ -529,4 +529,8 @@ $(document).ready(function(){
 		$('.playbook_filter_manager .modal_manage_fil_act, .playbook_action_manager .modal_manage_fil_act').remove();
 	    $('.alert').hide();
 	});
+
+	$('#editPlaybookModal').on('hidden.bs.modal', function () {
+	    $('.alert').hide();
+	});
 });
