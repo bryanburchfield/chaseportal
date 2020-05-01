@@ -522,12 +522,16 @@ var Contacts_Playbook = {
 	    });
 	},
 
-	toggle_playbook:function(){
+	toggle_playbook:function(e){
+
+		if($(this).hasClass('doesnt_meet_reqs')){
+			e.preventDefault();
+		}
 
         var checked;
         var playbook_id = $(this).parent().parent().parent().data('playbook_id');
 
-        console.log(playbook_id);
+        $('.playbook_activation_errors.alert-danger').hide();
 
         if($(this).is(':checked')){
             $(this).attr('Checked','Checked');
@@ -556,20 +560,22 @@ var Contacts_Playbook = {
             }, error: function (data) {
 
 				if (data.status === 422) {
-					console.log(data.status);
-					// $('.edit_playbook .alert-danger').empty();
-					// var errors = $.parseJSON(data.responseText);
-					// $.each(errors, function (key, value) {
+					$('.playbook_activation_errors.alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
 
-					// 	if ($.isPlainObject(value)) {
-					// 		$.each(value, function (key, value) {
-					// 			$('.edit_playbook .alert-danger').append('<li>' + value + '</li>');
-					// 		});
-					// 	}
-					// 	$('.add_btn_loader i').remove();
-					// 	$('.edit_playbook .alert-danger').show();
-					// });
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+						$('.add_btn_loader i').remove();
+						$('.playbook_activation_errors.alert-danger').show();
+					});
 				}
+				$('html, body').animate({
+	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top
+	            }, 1000);
 			}
         });
     },

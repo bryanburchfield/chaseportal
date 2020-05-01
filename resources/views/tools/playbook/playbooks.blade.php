@@ -28,7 +28,7 @@
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
                                         
                                         <div class="table-responsive nobdr playbooks">
-                                            <table class="table mt20">
+                                            <table class="table mt20 table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.active')}}</th>
@@ -44,10 +44,20 @@
                                                 <tbody>
                                                     @if(count($contacts_playbooks))
                                                         @foreach($contacts_playbooks as $playbook)
+
                                                             <tr data-playbook_id="{{$playbook->id}}">
                                                                 <td>
+
+                                                                    @php
+                                                                    !count($playbook->filters) && !count($playbook->actions) ? $has_actions_filters='class=doesnt_meet_reqs' : $has_actions_filters='class=';
+                                                                    @endphp
+
                                                                     <label class="switch">
-                                                                        <input type="checkbox" {{ ($playbook->active) ? 'checked' : '' }} name="playbook_input">
+                                                                        <input type="checkbox"
+                                                                            {{ ($playbook->active) ? 'checked' : '' }}
+                                                                            name="playbook_input"
+                                                                            {{ $has_actions_filters}}
+                                                                        >
                                                                         <span></span>
                                                                     </label>
                                                                 </td>
@@ -92,6 +102,8 @@
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        <div class="alert alert-danger hidetilloaded playbook_activation_errors"></div>
                                     </div>
                                 </div>
                             </div>

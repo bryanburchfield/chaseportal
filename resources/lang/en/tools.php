@@ -106,6 +106,7 @@ return [
 	'playbook_actions'	=> 'Playbook Actions',
 	'playbook_filters'	=> 'Playbook Filters',
 	'playbooks'	=> 'Playbooks',
+	'playbook_cant_activate' => 'Playbook must have at least one filter and action to be activated',
 	'port'			=> 'Port',
 	'processed'		=> 'Processed',
 	'properties'	=> 'Properties',
