@@ -6,16 +6,17 @@ use App\Http\Requests\ValidContactsPlaybookAction;
 use App\Http\Requests\ValidContactsPlaybookFilter;
 use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
-use App\Models\ContactsPlaybookAction;
-use App\Models\ContactsPlaybookFilter;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
+use RuntimeException;
 
 class PlaybookController extends Controller
 {
@@ -84,6 +85,12 @@ class PlaybookController extends Controller
         return $results;
     }
 
+    /**
+     * Add a playbook
+     * 
+     * @param ValidPlaybook $request 
+     * @return string[] 
+     */
     public function addPlaybook(ValidPlaybook $request)
     {
         $data = $request->all();
@@ -94,6 +101,12 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update a playbook
+     * 
+     * @param ValidPlaybook $request 
+     * @return string[] 
+     */
     public function updatePlaybook(ValidPlaybook $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
@@ -102,6 +115,12 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete a playbook
+     * 
+     * @param Request $request 
+     * @return string[] 
+     */
     public function deletePlaybook(Request $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
@@ -110,11 +129,25 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Get a playbook (ajax)
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getPlaybook(Request $request)
     {
         return $this->findPlaybook($request->id);
     }
 
+    /**
+     * Get filters of a playbook (ajax)
+     * 
+     * @param Request $request 
+     * @return Collection 
+     * @throws InvalidArgumentException 
+     * @throws RuntimeException 
+     */
     public function getPlaybookFilters(Request $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
@@ -131,6 +164,14 @@ class PlaybookController extends Controller
             ->get();
     }
 
+    /**
+     * Get actions of a playbook (ajax)
+     * 
+     * @param Request $request 
+     * @return Collection 
+     * @throws InvalidArgumentException 
+     * @throws RuntimeException 
+     */
     public function getPlaybookActions(Request $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
@@ -147,6 +188,12 @@ class PlaybookController extends Controller
             ->get();
     }
 
+    /**
+     * Return playbook if group_id matches user
+     * 
+     * @param mixed $id 
+     * @return mixed 
+     */
     private function findPlaybook($id)
     {
         return ContactsPlaybook::where('id', $id)
@@ -154,6 +201,12 @@ class PlaybookController extends Controller
             ->firstOrFail();
     }
 
+    /**
+     * Get all available filters for a campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getFilters(Request $request)
     {
         $campaign = $request->has('campaign') ? $request->campaign : null;
@@ -167,6 +220,12 @@ class PlaybookController extends Controller
             ->get();
     }
 
+    /**
+     * Get all available actions for a campaign
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
     public function getActions(Request $request)
     {
         $campaign = $request->has('campaign') ? $request->campaign : null;
@@ -180,15 +239,12 @@ class PlaybookController extends Controller
             ->get();
     }
 
-    private function deactivateIfEmpty($id)
-    {
-        $contacts_playbook = ContactsPlaybook::find($id);
-
-        if (!$contacts_playbook->allowActive()) {
-            $contacts_playbook->update(['active' => 0]);
-        }
-    }
-
+    /**
+     *  Save filters on a playbook
+     * 
+     * @param ValidContactsPlaybookFilter $request 
+     * @return string[] 
+     */
     public function saveFilters(ValidContactsPlaybookFilter $request)
     {
         $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
@@ -197,6 +253,12 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Save actions on a playbook
+     * 
+     * @param ValidContactsPlaybookAction $request 
+     * @return string[] 
+     */
     public function saveActions(ValidContactsPlaybookAction $request)
     {
         $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
@@ -205,6 +267,13 @@ class PlaybookController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Toggle active status
+     * 
+     * @param Request $request 
+     * @return string[] 
+     * @throws HttpResponseException 
+     */
     public function toggleActive(Request $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
