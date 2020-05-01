@@ -24,6 +24,7 @@ var Contacts_Playbook = {
 		if(!campaign){
 			var campaign = $(this).val();
 		}
+		console.log(campaign);
 
 		$.ajaxSetup({
 	        headers: {
@@ -487,6 +488,8 @@ var Contacts_Playbook = {
 		$('.edit_playbook .modal-body .alert').remove();
 		var warning = '<div class="alert alert-warning">Note: If you change the Playbook Campaign you may loose filters and actions that are associated with it.</div>';
 		$('.edit_playbook .modal-body').append(warning);
+		var campaign = $(this).val();
+		Contacts_Playbook.get_subcampaigns(event, campaign);
 	},
 
 	get_playbook:function(id){
