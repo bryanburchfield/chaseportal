@@ -1,9 +1,9 @@
 <?php
 
 return [
-	'actions'		=> 'Actions',
 	'action_in_use'	=> 'Action in Use',
 	'action_type'	=> 'Action Type',
+	'actions'		=> 'Actions',
 	'active'		=> 'Active',
 	'add_action'	=> 'Add Action',
 	'add_campaign'	=> 'Add Campaign',
@@ -35,6 +35,7 @@ return [
 	'delete'		=> 'Delete',
 	'delete_action'	=> 'Delete Action',
 	'delete_campaign'	=> 'Delete Campaign',
+	'delete_filter'	=> 'Delete Filter',
 	'delete_msg'	=> 'Delete Message',
 	'delete_playbook' => 'Delete Playbook',
 	'delete_provider'	=> 'Delete Provider',
@@ -69,8 +70,8 @@ return [
 	'filter_error'	=> 'Please select a filter and value before adding another one',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
-	'filters_required' => 'You must enter at least one filter',
 	'filters'		=> 'Filters',
+	'filters_required' => 'You must enter at least one filter',
 	'from'			=> 'From',
 	'from_number'	=> 'From Number',
 	'has_header'	=> 'Has Header Row',

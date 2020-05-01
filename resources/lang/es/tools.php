@@ -1,9 +1,9 @@
 <?php
 
 return [
-	'actions'		=> 'Comportamiento',
 	'action_in_use'	=> 'Acción en Uso',
 	'action_type'	=> 'Tipo de Acción',
+	'actions'		=> 'Comportamiento',
 	'active'		=> 'Activo',
 	'add_action'	=> 'Agregar Acción',
 	'add_campaign'	=> 'Añadir Campaña',
@@ -35,6 +35,7 @@ return [
 	'delete'		=> 'Eliminar',
 	'delete_action'	=> 'Eliminar Acción',
 	'delete_campaign'	=> 'Eliminar Campaña',
+	'delete_filter'	=> 'Eliminar Filtro',
 	'delete_msg'	=> 'Borrar Mensaje',
 	'delete_playbook' => 'Eliminar Playbook',
 	'delete_provider'	=> 'Eliminar Proveedor',
@@ -71,8 +72,8 @@ return [
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
 	'filter_value'	=> 'Valor del Filtro',
-	'filters_required' => 'Debe ingresar al menos un filtro',
 	'filters'		=> 'Filtros',
+	'filters_required' => 'Debe ingresar al menos un filtro',
 	'from'			=> 'Desde',
 	'from_number'	=> 'De Número',
 	'has_header'	=> 'Tiene fila de Encabezado',
