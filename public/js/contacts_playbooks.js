@@ -24,7 +24,6 @@ var Contacts_Playbook = {
 		if(!campaign){
 			var campaign = $(this).val();
 		}
-		console.log(campaign);
 
 		$.ajaxSetup({
 	        headers: {
@@ -136,7 +135,6 @@ var Contacts_Playbook = {
 			        dataType: 'json',
 			        success:function(response){
 			        	console.log(response);
-			        	console.log(all_filters);
 	    				$('#'+modal).find('.subcampaign option[value="'+response.subcampaign+'"]').prop('selected', true);
 	    				var filters='',
 	    					j=0
@@ -149,12 +147,13 @@ var Contacts_Playbook = {
 	                    	}
 
 	                    	filter_select+='</select></div>';
-	                    	filters+='<div class="modal_manage_fil_act" data-filterid="'+response[i].playbook_filter_id+'">'+filter_select+'<div class="col-sm-2"><a class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+	                    	filters+='<div class="modal_manage_fil_act" data-filterid="'+response[i].playbook_filter_id+'">'+filter_select+'<div class="col-sm-2"><a class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 	                    }
 
 	                    $('#'+modal).find('.modal-body .playbook_filter_manager').append(filters);
 	                    $('#'+modal).find('.modal-body .playbook_filter_manager').append(add_filter_btn);
 	                    $('.loader_hor').hide();
+	                    Contacts_Playbook.check_numb_filters($('.add_filter'));
 			        }
 			    });
 			}
@@ -175,7 +174,9 @@ var Contacts_Playbook = {
 	        type: 'DELETE',
 	        dataType: 'json',
 	        success:function(response){
-                console.log(response);
+                if (response.status == 'success') {
+					location.reload();
+				}
 	        }
 	    });
 	},
@@ -297,12 +298,13 @@ var Contacts_Playbook = {
 	                    	}
 
 	                    	action_select+='</select></div>';
-	                    	actions+='<div class="modal_manage_fil_act" data-actionid="'+response[i].playbook_action_id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+response[i].playbook_action_id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+	                    	actions+='<div class="modal_manage_fil_act" data-actionid="'+response[i].playbook_action_id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+response[i].playbook_action_id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 	                    }
 
 	                    $('#'+modal).find('.modal-body .playbook_action_manager').append(actions);
 	                    $('#'+modal).find('.modal-body .playbook_action_manager').append(add_action_btn);
 	                    $('.loader_hor').hide();
+	                    Contacts_Playbook.check_numb_actions($('.add_action'));
 			        }
 			    });
 			}
@@ -328,7 +330,7 @@ var Contacts_Playbook = {
 			}
 
 			action_select+='</select></div>';
-			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 
 			$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
 			Contacts_Playbook.check_numb_actions($('.add_action'));
@@ -353,7 +355,7 @@ var Contacts_Playbook = {
 			}
 
 			filter_select+='</select></div>';
-			filters+='<div class="modal_manage_fil_act" data-filterid="'+id+'">'+filter_select+'<div class="col-sm-2"><a data-filterid="'+id+'" class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div>';
+			filters+='<div class="modal_manage_fil_act" data-filterid="'+id+'">'+filter_select+'<div class="col-sm-2"><a data-filterid="'+id+'" class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 
 			$(filters).insertBefore($('#'+modal).find('.modal-body .playbook_filter_manager a.add_filter '));
 			Contacts_Playbook.check_numb_filters($('.add_filter'));
@@ -524,6 +526,7 @@ $(document).ready(function(){
 	Contacts_Playbook.init();
 
 	$('#actionPlaybookModal, #filterPlaybookModal').on('hidden.bs.modal', function () {
+		$('.playbook_filter_manager .modal_manage_fil_act, .playbook_action_manager .modal_manage_fil_act').remove();
 	    $('.alert').hide();
 	});
 });

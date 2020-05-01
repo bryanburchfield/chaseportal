@@ -164,7 +164,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_playbook_playbook add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook_playbook"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
             </div>
         </div>
     </div>
