@@ -262,6 +262,41 @@ var Contacts_Playbook = {
 	    });
 	},
 
+	get_playbook_actions_count:function(campaign, playbookid){
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    return $.ajax({
+	        url: '/tools/playbook/playbook/actions/'+playbookid,
+	        type: 'GET',
+	        async:false,
+	        dataType: 'json',
+	        success:function(response){
+	        }
+	    });
+	},
+
+	get_playbook_filters_count:function(campaign, playbookid){
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    return $.ajax({
+	        url: '/tools/playbook/playbooks/filters/'+playbookid,
+	        type: 'GET',
+	        async:false,
+	        dataType: 'json',
+	        success:function(response){
+
+	        }
+	    });
+	},
+
 	get_playbook_actions:function(campaign, playbookid, modal, is_empty){
 		var all_actions;
 		Contacts_Playbook.pb_campaign=campaign;
@@ -524,12 +559,16 @@ var Contacts_Playbook = {
 
 	toggle_playbook:function(e){
 
-		if($(this).hasClass('doesnt_meet_reqs')){
-			e.preventDefault();
-		}
+        var checked,
+        	playbook_id = $(this).data('playbook_id'),
+        	campaign = $(this).data('campaign'),
+        	get_actions_count = Contacts_Playbook.get_playbook_actions_count(campaign, playbook_id),
+        	action_count = get_actions_count.responseJSON.length,
+        	get_filters_count = Contacts_Playbook.get_playbook_filters_count(campaign, playbook_id),
+        	filter_count = get_filters_count.responseJSON.length
+        ;
 
-        var checked;
-        var playbook_id = $(this).parent().parent().parent().data('playbook_id');
+    	if(!action_count || !filter_count){e.preventDefault();}
 
         $('.playbook_activation_errors.alert-danger').hide();
 
@@ -574,8 +613,8 @@ var Contacts_Playbook = {
 					});
 				}
 				$('html, body').animate({
-	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top
-	            }, 1000);
+	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
+	            }, 500);
 			}
         });
     },

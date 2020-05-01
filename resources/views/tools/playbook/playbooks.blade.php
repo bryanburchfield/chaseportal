@@ -26,8 +26,18 @@
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
-                                        
-                                        <div class="table-responsive nobdr playbooks">
+
+                                        <div class="toggle_all">
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                    name="playbook_input"
+                                                >
+                                                <span></span>
+                                            </label>
+                                            <span class="toggle_all_label">Activate All Playbooks</span>
+                                        </div>
+
+                                        <div class="table-responsive nobdr playbooks mt20">
                                             <table class="table mt20 table-striped">
                                                 <thead>
                                                     <tr>
@@ -48,15 +58,12 @@
                                                             <tr data-playbook_id="{{$playbook->id}}">
                                                                 <td>
 
-                                                                    @php
-                                                                    !count($playbook->filters) && !count($playbook->actions) ? $has_actions_filters='class=doesnt_meet_reqs' : $has_actions_filters='class=';
-                                                                    @endphp
-
                                                                     <label class="switch">
                                                                         <input type="checkbox"
                                                                             {{ ($playbook->active) ? 'checked' : '' }}
                                                                             name="playbook_input"
-                                                                            {{ $has_actions_filters}}
+                                                                            data-campaign="{{$playbook->campaign}}"
+                                                                            data-playbook_id="{{$playbook->id}}"
                                                                         >
                                                                         <span></span>
                                                                     </label>

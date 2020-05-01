@@ -3208,6 +3208,23 @@ a.add_filter i {
   color: #33A09B;
 }
 
+.toggle_all {
+  margin-bottom: 40px;
+}
+
+.toggle_all label.switch {
+  float: left;
+}
+
+.toggle_all span.toggle_all_label {
+  float: left;
+  font-weight: 600;
+  position: relative;
+  bottom: 1px;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

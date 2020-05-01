@@ -2965,6 +2965,23 @@ a.add_action, a.add_filter{
     }
 }
 
+.toggle_all{
+    margin-bottom: 40px;
+
+    label.switch{
+        float: left;
+    }
+
+    span.toggle_all_label{
+        float: left;
+        font-weight: 600;
+        position: relative;
+        bottom:1px;
+        font-size: 15px;
+        margin-left: 10px;
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
