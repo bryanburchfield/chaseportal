@@ -2108,14 +2108,14 @@ label.switch > span:after {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-label.switch > input[type=checkbox]:checked ~ span:before {
+label.switch > input.checked ~ span:before {
   -webkit-transform: scale(0);
           transform: scale(0);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
 }
 
-label.switch > input[type=checkbox]:checked ~ span:after {
+label.switch > input.checked ~ span:after {
   -webkit-transform: translate3d(100%, -50%, 0);
           transform: translate3d(100%, -50%, 0);
 }
@@ -3558,15 +3558,15 @@ a.add_filter i {
   color: #33A09B;
 }
 
-.toggle_all {
+.toggle_all_switch {
   margin-bottom: 40px;
 }
 
-.toggle_all label.switch {
+.toggle_all_switch label.switch {
   float: left;
 }
 
-.toggle_all span.toggle_all_label {
+.toggle_all_switch span.toggle_all_label {
   float: left;
   font-weight: 600;
   position: relative;

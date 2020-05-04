@@ -27,9 +27,9 @@
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
 
-                                        <div class="toggle_all">
+                                        <div class="toggle_all_switch">
                                             <label class="switch">
-                                                <input type="checkbox"
+                                                <input type="checkbox" class="toggle_all_playbooks"
                                                     name="playbook_input"
                                                 >
                                                 <span></span>
@@ -64,6 +64,7 @@
                                                                             name="playbook_input"
                                                                             data-campaign="{{$playbook->campaign}}"
                                                                             data-playbook_id="{{$playbook->id}}"
+                                                                            class="toggle_playbook {{ ($playbook->active) ? 'checked' : '' }}"
                                                                         >
                                                                         <span></span>
                                                                     </label>

@@ -16,7 +16,8 @@ var Contacts_Playbook = {
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
-		$('.switch input').on('click', this.toggle_playbook);
+		$('.switch input.toggle_playbook').on('click', this.toggle_playbook);
+		$('.switch input.toggle_all_playbooks').on('click', this.toggle_all_playbooks);
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -560,25 +561,12 @@ var Contacts_Playbook = {
 	toggle_playbook:function(e){
 
         var checked,
-        	playbook_id = $(this).data('playbook_id'),
-        	campaign = $(this).data('campaign'),
-        	get_actions_count = Contacts_Playbook.get_playbook_actions_count(campaign, playbook_id),
-        	action_count = get_actions_count.responseJSON.length,
-        	get_filters_count = Contacts_Playbook.get_playbook_filters_count(campaign, playbook_id),
-        	filter_count = get_filters_count.responseJSON.length
+        	that = $(this),
+        	playbook_id = that.data('playbook_id'),
+        	campaign = that.data('campaign')
         ;
 
-    	if(!action_count || !filter_count){e.preventDefault();}
-
         $('.playbook_activation_errors.alert-danger').hide();
-
-        if($(this).is(':checked')){
-            $(this).attr('Checked','Checked');
-            checked=1;
-        }else{
-            $(this).removeAttr('Checked');
-            checked=0;
-        }
 
         $.ajaxSetup({
             headers: {
@@ -595,10 +583,21 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(response)
+            	console.log(response);
+
+            	if(that.is(':checked')){
+            		that.addClass('checked');
+            	    that.attr('Checked','Checked');
+            	    checked=1;
+            	}else{
+            		that.removeClass('checked');
+            	    that.removeAttr('Checked');
+            	    checked=0;
+            	}
             }, error: function (data) {
 
 				if (data.status === 422) {
+					e.preventDefault();
 					$('.playbook_activation_errors.alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
@@ -618,6 +617,86 @@ var Contacts_Playbook = {
 			}
         });
     },
+
+    toggle_all_playbooks:function(){
+
+    	var checked,
+    		playbook_ids = [],
+    		that = $(this)
+    	;
+
+    	if(that.is(':checked')){
+    		that.addClass('checked');
+    	    that.attr('Checked','Checked');
+    	    checked=1;
+    	}else{
+    		that.removeClass('checked');
+    	    that.removeAttr('Checked');
+    	    checked=0;
+    	}
+
+    	$('.playbooks table tbody tr').each(function(){
+    		playbook_ids.push($(this).data('playbook_id'));
+    		if(checked){
+    			$(this).find('td:first').find('input.toggle_playbook').addClass('checked');
+    			$(this).find('td:first').find('input.toggle_playbook').attr('Checked','Checked');
+    		}else{
+    			$(this).find('td:first').find('input.toggle_playbook').removeClass('checked');
+    			$(this).find('td:first').find('input.toggle_playbook').removeAttr('Checked','Checked');
+    		}
+    	});
+
+    	playbook_ids.sort((a,b)=>a-b);
+
+    	$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/playbook/toggle_all_playbooks',
+            type:'POST',
+            data:{
+                checked:checked,
+                ids:playbook_ids,
+
+            },
+            success:function(response){
+            	console.log(response);
+
+            	if(that.is(':checked')){
+            		that.addClass('checked');
+            	    that.attr('Checked','Checked');
+            	    checked=1;
+            	}else{
+            		that.removeClass('checked');
+            	    that.removeAttr('Checked');
+            	    checked=0;
+            	}
+            }, error: function (data) {
+
+				if (data.status === 422) {
+					e.preventDefault();
+					$('.playbook_activation_errors.alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+						$('.add_btn_loader i').remove();
+						$('.playbook_activation_errors.alert-danger').show();
+					});
+				}
+				$('html, body').animate({
+	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
+	            }, 500);
+			}
+        });
+    }
 }
 
 $(document).ready(function(){
