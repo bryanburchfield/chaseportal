@@ -566,6 +566,8 @@ var Contacts_Playbook = {
         	campaign = that.data('campaign')
         ;
 
+        checked = Contacts_Playbook.toggle_checked(that, checked);
+
         $('.playbook_activation_errors.alert-danger').hide();
 
         $.ajaxSetup({
@@ -583,17 +585,9 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(response);
-
-            	if(that.is(':checked')){
-            		that.addClass('checked');
-            	    that.attr('Checked','Checked');
-            	    checked=1;
-            	}else{
-            		that.removeClass('checked');
-            	    that.removeAttr('Checked');
-            	    checked=0;
-            	}
+            	console.log(that);
+            	console.log(checked);
+            	Contacts_Playbook.toggle_checked(that, checked);
             }, error: function (data) {
 
 				if (data.status === 422) {
@@ -625,15 +619,7 @@ var Contacts_Playbook = {
     		that = $(this)
     	;
 
-    	if(that.is(':checked')){
-    		that.addClass('checked');
-    	    that.attr('Checked','Checked');
-    	    checked=1;
-    	}else{
-    		that.removeClass('checked');
-    	    that.removeAttr('Checked');
-    	    checked=0;
-    	}
+    	checked = Contacts_Playbook.toggle_checked(that, checked);
 
     	$('.playbooks table tbody tr').each(function(){
     		playbook_ids.push($(this).data('playbook_id'));
@@ -663,17 +649,10 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(response);
+            	// console.log(response);
+            	// Contacts_Playbook.toggle_checked(that, checked);
+            	// console.log(checked);
 
-            	if(that.is(':checked')){
-            		that.addClass('checked');
-            	    that.attr('Checked','Checked');
-            	    checked=1;
-            	}else{
-            		that.removeClass('checked');
-            	    that.removeAttr('Checked');
-            	    checked=0;
-            	}
             }, error: function (data) {
 
 				if (data.status === 422) {
@@ -696,6 +675,22 @@ var Contacts_Playbook = {
 	            }, 500);
 			}
         });
+    },
+
+    toggle_checked:function(that, checked){
+
+    	console.log(that);
+    	if(that.is(':checked')){
+    		that.addClass('checked');
+    	    that.attr('Checked','Checked');
+    	    checked=1;
+    	}else{
+    		that.removeClass('checked');
+    	    that.removeAttr('Checked');
+    	    checked=0;
+    	}
+    	console.log(checked);
+    	return checked;
     }
 }
 
