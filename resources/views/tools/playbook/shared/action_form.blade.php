@@ -84,6 +84,16 @@
             @endforeach
         </select>
     </div>
+
+    <div class="form-group">
+        <label>{{__('tools.sms_per_lead')}}</label>
+        <input type="text" class="form-control sms_per_lead " name="sms_per_lead ">
+    </div>
+
+    <div class="form-group">
+        <label>{{__('tools.days_between_sms')}}</label>
+        <input type="text" class="form-control days_between_sms" name="days_between_sms">
+    </div>
 </div>
 
 <div class="lead hidetilloaded action_type_fields">
