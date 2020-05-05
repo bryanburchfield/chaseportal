@@ -39,7 +39,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-	        	console.log(response);
+	        	// console.log(response);
                 $('.subcampaign').empty();
                 var response = Object.entries(response.subcampaigns);
 
@@ -566,7 +566,7 @@ var Contacts_Playbook = {
         	campaign = that.data('campaign')
         ;
 
-        checked = Contacts_Playbook.toggle_checked(that, checked);
+        checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
         $('.playbook_activation_errors.alert-danger').hide();
 
@@ -585,11 +585,11 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(that);
-            	console.log(checked);
-            	Contacts_Playbook.toggle_checked(that, checked);
+            	console.log(response);
+            	Contacts_Playbook.toggle_checked(that, checked, 0);
             }, error: function (data) {
-
+            	Contacts_Playbook.toggle_checked(that, checked, 1);
+            	e.preventDefault();
 				if (data.status === 422) {
 					e.preventDefault();
 					$('.playbook_activation_errors.alert-danger').empty();
@@ -619,7 +619,7 @@ var Contacts_Playbook = {
     		that = $(this)
     	;
 
-    	checked = Contacts_Playbook.toggle_checked(that, checked);
+    	checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
     	$('.playbooks table tbody tr').each(function(){
     		playbook_ids.push($(this).data('playbook_id'));
@@ -649,9 +649,6 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	// console.log(response);
-            	// Contacts_Playbook.toggle_checked(that, checked);
-            	// console.log(checked);
 
             }, error: function (data) {
 
@@ -677,10 +674,9 @@ var Contacts_Playbook = {
         });
     },
 
-    toggle_checked:function(that, checked){
+    toggle_checked:function(that, checked, error){
 
-    	console.log(that);
-    	if(that.is(':checked')){
+    	if(that.is(':checked') && !error){
     		that.addClass('checked');
     	    that.attr('Checked','Checked');
     	    checked=1;
@@ -689,7 +685,7 @@ var Contacts_Playbook = {
     	    that.removeAttr('Checked');
     	    checked=0;
     	}
-    	console.log(checked);
+
     	return checked;
     }
 }
