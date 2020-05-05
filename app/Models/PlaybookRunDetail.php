@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PlaybookRunDetail extends Model
 {
     protected $fillable = [
-        'contacts_playbook_id',
+        'playbook_run_id',
         'reporting_db',
         'lead_id',
     ];

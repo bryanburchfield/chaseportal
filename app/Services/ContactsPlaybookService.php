@@ -1,5 +1,9 @@
 <?php
 
+/////////////////////////////
+// look for TODO's!!!!
+/////////////////////////////
+
 namespace App\Services;
 
 use App\Includes\PowerImportAPI;
@@ -7,10 +11,13 @@ use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
+use App\Models\EmailServiceProvider;
 use App\Models\PlaybookAction;
+use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookFilter;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunDetail;
+use App\Models\Script;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
@@ -54,7 +61,7 @@ class ContactsPlaybookService
 
         foreach ($contacts_playbooks as $contacts_playbook) {
             if ($this->login($contacts_playbook->group_id)) {
-                // should dispatch this to run in the background
+                // TODO:  dispatch this to run in the background
                 $this->runPlaybook($contacts_playbook);
             }
         }
@@ -355,6 +362,8 @@ class ContactsPlaybookService
 
     private function actionLead(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
+        echo "Move Lead: " . $rec['lead_id'] . "\n";
+
         $api = $this->initApi(Auth::user()->db);
 
         $data = [];
@@ -369,25 +378,26 @@ class ContactsPlaybookService
             $data['CallStatus'] = $playbook_action->playbook_lead_action->to_callstatus;
         }
 
-        echo "Moving Lead: " . $rec['lead_id'] .
-            " to " . $data['Campaign'] .
-            "/" . $data['Subcampaign'] .
-            "\n";
+        echo "Moving Lead: " . $rec['lead_id'] . "\n";
+        dump($data);
+        echo  "\n";
 
         // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
     }
 
     private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
+        echo "Email Lead: " . $rec['lead_id'] . "\n";
+
         // If email field is blank, bail now
         if (
             $rec[$playbook_action->playbook_email_action->email_field] == 'NULL' ||
             empty($rec[$playbook_action->playbook_email_action->email_field])
         ) {
-            continue;
+            return;
         }
 
-        // Check limits for total sends and days between
+        // Get history of sends for this lead for this playbook
         $sends = PlaybookRun::where('contacts_playbook_id', $contacts_playbook_action->contacts_playbook_id)
             ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
             ->where('reporting_db', Auth::user()->db)
@@ -395,11 +405,91 @@ class ContactsPlaybookService
             ->select('playbook_run_details.created_at')
             ->orderBy('playbook_run_details.created_at')
             ->get();
+
+        // Bail if over limit or under days between
+        if ($sends->isNotEmpty()) {
+            if ($sends->count() >= $playbook_action->emails_per_lead) {
+                return;
+            }
+
+            if (!empty($playbook_action->days_between_emails)) {
+                if ($sends->last()->created_at->diffInDays() < $playbook_action->days_between_emails) {
+                    return;
+                }
+            }
+        }
+
+
+        // ok to send
+        $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);
     }
 
     private function actionSms(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
+        echo "SMS Lead: " . $rec['lead_id'] . "\n";
+
+        // Check for phone number
         // Check limits for total sends and days between
+    }
+
+    private function emailLead(ContactsPlaybook $contacts_playbook, PlaybookEmailAction $playbook_email_action, $rec)
+    {
+        // load body from template
+        $script = Script::find($playbook_email_action->template_id);
+        if (!$script) {
+            return;
+        }
+
+        // Put these into vars since we'll do search & replace on them
+        $body = $script->HtmlContent;
+        $subject = $playbook_email_action->subject;
+
+        // get list of mergable fields
+        if (!empty($contacts_playbook->campaign)) {
+            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
+                ->where('CampaignName', $contacts_playbook->campaign)
+                ->first();
+        } else {
+            $campaign = new Campaign;
+        }
+
+        $fields = array_keys($campaign->getFilterFields());
+
+        // do merge
+        foreach ($fields as $field) {
+            $body = str_ireplace('(#' . $field . '#)', htmlspecialchars($rec[$field]), $body);
+            $subject = str_ireplace('(#' . $field . '#)', $rec[$field], $subject);
+        }
+
+        // build payload
+        $payload = [
+            'from' => $playbook_email_action->from,
+
+
+
+            // TODO: REMOVE AFTER TESTING
+            // 'to' => $rec[$email_drip_campaign->email_field],
+            'to' => 'g.sandoval@chasedatacorp.com',
+
+
+
+            'subject' => $subject,
+            'body' => $body,
+            'tag' => $contacts_playbook->name,
+        ];
+
+        // find ESP model
+        $email_service_provider = EmailServiceProvider::find($playbook_email_action->email_service_provider_id);
+        if (!$email_service_provider) {
+            return;
+        }
+
+        // instantiate ESP interface
+        $class = $email_service_provider->providerClassName();
+        $email_service_provider = new $class($email_service_provider);
+
+        // Fire!
+        $result = $email_service_provider->send($payload);
     }
 
     private function initApi($db)

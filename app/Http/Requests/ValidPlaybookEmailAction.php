@@ -19,6 +19,19 @@ class ValidPlaybookEmailAction extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        //we have to rename email_script_id to template_idgroup_id, 404 if not
+        if ($this->filled('email_script_id')) {
+            $this->merge(['template_id' => $this->email_script_id]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array

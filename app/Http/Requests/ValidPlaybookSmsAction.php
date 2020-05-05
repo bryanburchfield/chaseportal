@@ -17,6 +17,19 @@ class ValidPlaybookSmsAction extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        //we have to rename sms_script_id to template_idgroup_id, 404 if not
+        if ($this->filled('sms_script_id')) {
+            $this->merge(['template_id' => $this->sms_script_id]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array

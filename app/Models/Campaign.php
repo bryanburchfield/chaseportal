@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Traits\SqlServerTraits;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Campaign extends SqlSrvModel
 {
@@ -15,8 +13,26 @@ class Campaign extends SqlSrvModel
     protected $keyType = 'string';
     public $incrementing = false;
 
+    use SqlServerTraits;
+
     public function advancedTable()
     {
         return $this->belongsTo('App\Models\AdvancedTable', 'AdvancedTable');
+    }
+
+    public function getFilterFields()
+    {
+        $fields = $this->defaultLeadFields();
+
+        if ($this->id) {
+
+            if ($this->advancedTable) {
+                foreach ($this->advancedTable->advancedTableFields as $field) {
+                    $fields[$field->FieldName] = $field->fieldType->Type;
+                }
+            }
+        }
+
+        return $fields;
     }
 }
