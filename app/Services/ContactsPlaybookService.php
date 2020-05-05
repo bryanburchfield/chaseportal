@@ -9,6 +9,8 @@ use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
+use App\Models\PlaybookRun;
+use App\Models\PlaybookRunDetail;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
@@ -100,6 +102,9 @@ class ContactsPlaybookService
         $contacts_playbook->last_run_to = $now;
         $contacts_playbook->save();
 
+        // Log the run
+        $playbook_run = PlaybookRun::create(['contacts_playbook_id' => $contacts_playbook->id]);
+
         // Set SqlSrv database
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
@@ -113,9 +118,12 @@ class ContactsPlaybookService
         $results = $this->runSql($sql, $bind);
 
         foreach ($results as $rec) {
-
-            // log here!!
-
+            // Log the detail
+            PlaybookRunDetail::create([
+                'playbook_run_id' => $playbook_run->id,
+                'reporting_db' => $db,
+                'lead_id' => $rec['lead_id'],
+            ]);
 
             foreach ($contacts_playbook->actions as $contacts_playbook_action) {
                 $this->runAction($contacts_playbook_action, $rec);
@@ -334,18 +342,18 @@ class ContactsPlaybookService
 
         switch ($playbook_action->action_type) {
             case 'lead':
-                $this->actionLead($playbook_action, $rec);
+                $this->actionLead($contacts_playbook_action, $playbook_action, $rec);
                 break;
             case 'email':
-                $this->actionEmail($playbook_action, $rec);
+                $this->actionEmail($contacts_playbook_action, $playbook_action, $rec);
                 break;
             case 'sms':
-                $this->actionSms($playbook_action, $rec);
+                $this->actionSms($contacts_playbook_action, $playbook_action, $rec);
                 break;
         }
     }
 
-    private function actionLead(PlaybookAction $playbook_action, $rec)
+    private function actionLead(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
         $api = $this->initApi(Auth::user()->db);
 
@@ -369,7 +377,7 @@ class ContactsPlaybookService
         // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
     }
 
-    private function actionEmail(PlaybookAction $playbook_action, $rec)
+    private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
         // If email field is blank, bail now
         if (
@@ -379,14 +387,19 @@ class ContactsPlaybookService
             continue;
         }
 
-
-        //
-
+        // Check limits for total sends and days between
+        $sends = PlaybookRun::where('contacts_playbook_id', $contacts_playbook_action->contacts_playbook_id)
+            ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
+            ->where('reporting_db', Auth::user()->db)
+            ->where('lead_id', $rec['lead_id'])
+            ->select('playbook_run_details.created_at')
+            ->orderBy('playbook_run_details.created_at')
+            ->get();
     }
 
-    private function actionSms(PlaybookAction $playbook_action, $rec)
+    private function actionSms(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
-        # code...
+        // Check limits for total sends and days between
     }
 
     private function initApi($db)

@@ -10,5 +10,7 @@ class PlaybookSmsAction extends Model
         'playbook_action_id',
         'from_number',
         'template_id',
+        'sms_per_lead',
+        'days_between_sms',
     ];
 }

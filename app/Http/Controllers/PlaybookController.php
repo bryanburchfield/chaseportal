@@ -276,14 +276,23 @@ class PlaybookController extends Controller
      */
     public function toggleActive(Request $request)
     {
-        $contacts_playbook = $this->findPlaybook($request->id);
-
-        if (!$contacts_playbook->active && !$contacts_playbook->allowActive()) {
+        if (!$this->updateActive($request->id, $request->checked)) {
             abort(response()->json(['errors' => ['1' => trans('tools.playbook_cant_activate')]], 422));
         }
 
-        // Toggle active
-        $contacts_playbook->active = !$contacts_playbook->active;
+        return ['status' => 'success'];
+    }
+
+    private function updateActive($id, $active)
+    {
+        $contacts_playbook = $this->findPlaybook($id);
+
+        if ($active && !$contacts_playbook->allowActive()) {
+            return false;
+        }
+
+        // Set active
+        $contacts_playbook->active = $active;
 
         // If activating, reset run dates
         if ($contacts_playbook->active == 1) {
@@ -293,31 +302,55 @@ class PlaybookController extends Controller
 
         $contacts_playbook->save();
 
-        return ['status' => 'success'];
+        return true;
     }
 
     /**
      * Activate all playbooks
      * 
      * @param Request $request 
-     * @return string[] 
-     * @throws HttpResponseException 
+     * @return (string|array)[]|string[] 
      */
     public function activateAllPlaybooks(Request $request)
     {
+        // get all inactive playbooks
+        $playbooks = ContactsPlaybook::where('group_id', Auth::user()->group_id)
+            ->where('active', 0)
+            ->get();
+
+        $fails = [];
+        foreach ($playbooks as $playbook) {
+            if (!$this->updateActive($playbook->id, 1)) {
+                $fails[] = $playbook->id;
+            }
+        }
+
+        if (count($fails)) {
+            return [
+                'status' => 'error',
+                'failed' => $fails,
+            ];
+        }
 
         return ['status' => 'success'];
     }
 
-     /**
-     *  Deactivate all playbooks
+    /**
+     * Deactivate all playbooks
      * 
      * @param Request $request 
      * @return string[] 
-     * @throws HttpResponseException 
      */
     public function deactivateAllPlaybooks(Request $request)
     {
+        // get all active playbooks
+        $playbooks = ContactsPlaybook::where('group_id', Auth::user()->group_id)
+            ->where('active', 1)
+            ->get();
+
+        foreach ($playbooks as $playbook) {
+            $this->updateActive($playbook->id, 0);
+        }
 
         return ['status' => 'success'];
     }

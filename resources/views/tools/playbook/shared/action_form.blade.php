@@ -87,7 +87,7 @@
 
     <div class="form-group">
         <label>{{__('tools.sms_per_lead')}}</label>
-        <input type="text" class="form-control sms_per_lead " name="sms_per_lead ">
+        <input type="text" class="form-control sms_per_lead" name="sms_per_lead">
     </div>
 
     <div class="form-group">
