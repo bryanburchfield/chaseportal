@@ -642,7 +642,6 @@ var Contacts_Playbook = {
             data:{
                 checked:checked,
                 ids:playbook_ids,
-
             },
             success:function(response){
             	var that;
@@ -652,7 +651,7 @@ var Contacts_Playbook = {
             			Contacts_Playbook.toggle_checked(that, 0, 1);
             		}
 
-            		var warning_msg='<h4 class="mb20"><b>The following playbooks could not be activated. Please make sure each playbook has filters and actions.</b></h4>';
+            		var warning_msg='<h4 class="mb20"><b>' + Lang.get('js_msgs.playbook_warning') + '</b></h4>';
             		for(var i=0;i<response.failed.names.length;i++){
             			warning_msg+='<li>'+ response.failed.names[i] +'</li>';
             		}
@@ -673,6 +672,8 @@ var Contacts_Playbook = {
     		playbook_ids = [],
     		that = $(this)
     	;
+
+    	$('.playbook_activation_errors.alert-danger, .playbook_activation_warning').empty().hide();
 
     	$('.playbooks table tbody tr').each(function(){
     		playbook_ids.push($(this).data('playbook_id'));
@@ -702,7 +703,7 @@ var Contacts_Playbook = {
     },
 
     toggle_checked:function(that, checked, error){
-    	
+
     	if(that.is(':checked') && !error){
     		that.addClass('checked');
     	    that.attr('Checked','Checked');
