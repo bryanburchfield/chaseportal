@@ -117,6 +117,7 @@
                                         </div>
 
                                         <div class="alert alert-danger hidetilloaded playbook_activation_errors"></div>
+                                        <div class="alert alert-warning hidetilloaded playbook_activation_warning"></div>
                                     </div>
                                 </div>
                             </div>

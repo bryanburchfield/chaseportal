@@ -569,7 +569,7 @@ var Contacts_Playbook = {
 
         checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
-        $('.playbook_activation_errors.alert-danger').hide();
+        $('.playbook_activation_errors.alert-danger, .playbook_activation_warning').hide();
 
         $.ajaxSetup({
             headers: {
@@ -628,8 +628,7 @@ var Contacts_Playbook = {
     	});
 
     	playbook_ids.sort((a,b)=>a-b);
-
-    	console.log(playbook_ids);
+    	$('.playbook_activation_errors.alert-danger, .playbook_activation_warning').empty().hide();
 
     	$.ajaxSetup({
             headers: {
@@ -646,28 +645,24 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(response);
-            }, error: function (data) {
+            	var that;
+            	if(response.status=='error'){
+            		for(var i=0;i<response.failed.ids.length;i++){
+            			that = $('input.toggle_playbook[data-playbook_id="' + response.failed.ids[i] + '"]');
+            			Contacts_Playbook.toggle_checked(that, 0, 1);
+            		}
 
-				if (data.status === 422) {
-					e.preventDefault();
-					$('.playbook_activation_errors.alert-danger').empty();
-					var errors = $.parseJSON(data.responseText);
-					$.each(errors, function (key, value) {
+            		var warning_msg='<h4 class="mb20"><b>The following playbooks could not be activated. Please make sure each playbook has filters and actions.</b></h4>';
+            		for(var i=0;i<response.failed.names.length;i++){
+            			warning_msg+='<li>'+ response.failed.names[i] +'</li>';
+            		}
 
-						if ($.isPlainObject(value)) {
-							$.each(value, function (key, value) {
-								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
-							});
-						}
-						$('.add_btn_loader i').remove();
-						$('.playbook_activation_errors.alert-danger').show();
-					});
-				}
-				$('html, body').animate({
-	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
-	            }, 500);
-			}
+            		$('.playbook_activation_warning').append(warning_msg).show();
+					$('html, body').animate({
+		                scrollTop: $(".playbook_activation_warning").offset().top -80+'px'
+		            }, 500);
+            	}
+            }
         });
     },
 
@@ -702,33 +697,12 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-            	console.log(response);
-            }, error: function (data) {
-
-				if (data.status === 422) {
-					e.preventDefault();
-					$('.playbook_activation_errors.alert-danger').empty();
-					var errors = $.parseJSON(data.responseText);
-					$.each(errors, function (key, value) {
-
-						if ($.isPlainObject(value)) {
-							$.each(value, function (key, value) {
-								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
-							});
-						}
-						$('.add_btn_loader i').remove();
-						$('.playbook_activation_errors.alert-danger').show();
-					});
-				}
-				$('html, body').animate({
-	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
-	            }, 500);
-			}
+            }
         });
     },
 
     toggle_checked:function(that, checked, error){
-
+    	
     	if(that.is(':checked') && !error){
     		that.addClass('checked');
     	    that.attr('Checked','Checked');
