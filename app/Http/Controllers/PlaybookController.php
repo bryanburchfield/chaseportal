@@ -318,17 +318,22 @@ class PlaybookController extends Controller
             ->where('active', 0)
             ->get();
 
-        $fails = [];
+        $ids = [];
+        $names = [];
         foreach ($playbooks as $playbook) {
             if (!$this->updateActive($playbook->id, 1)) {
-                $fails[] = $playbook->id;
+                $ids[] = $playbook->id;
+                $names[] = $playbook->name;
             }
         }
 
-        if (count($fails)) {
+        if (count($ids)) {
             return [
                 'status' => 'error',
-                'failed' => $fails,
+                'failed' => [
+                    'ids' => $ids,
+                    'names' => $names,
+                ],
             ];
         }
 
