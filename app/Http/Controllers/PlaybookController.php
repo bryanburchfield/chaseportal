@@ -297,13 +297,26 @@ class PlaybookController extends Controller
     }
 
     /**
-     * Toggle active status of all playbooks
+     * Activate all playbooks
      * 
      * @param Request $request 
      * @return string[] 
      * @throws HttpResponseException 
      */
-    public function toggleAllActive(Request $request)
+    public function activateAllPlaybooks(Request $request)
+    {
+
+        return ['status' => 'success'];
+    }
+
+     /**
+     *  Deactivate all playbooks
+     * 
+     * @param Request $request 
+     * @return string[] 
+     * @throws HttpResponseException 
+     */
+    public function deactivateAllPlaybooks(Request $request)
     {
 
         return ['status' => 'success'];

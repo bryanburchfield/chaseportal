@@ -2991,6 +2991,16 @@ a.add_action, a.add_filter{
     }
 }
 
+.toggle_all_btns{
+    clear: both;
+    margin-bottom: 50px;
+    a{
+        float: left;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

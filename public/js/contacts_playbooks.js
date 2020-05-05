@@ -17,7 +17,8 @@ var Contacts_Playbook = {
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
 		$('.switch input.toggle_playbook').on('click', this.toggle_playbook);
-		$('.switch input.toggle_all_playbooks').on('click', this.toggle_all_playbooks);
+		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
+		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -612,24 +613,76 @@ var Contacts_Playbook = {
         });
     },
 
-    toggle_all_playbooks:function(){
+    activate_all_playbooks:function(e){
 
+    	e.preventDefault();
     	var checked,
     		playbook_ids = [],
     		that = $(this)
     	;
 
-    	checked = Contacts_Playbook.toggle_checked(that, checked, 0);
+    	$('.playbooks table tbody tr').each(function(){
+    		playbook_ids.push($(this).data('playbook_id'));
+    		$(this).find('td:first').find('input.toggle_playbook').addClass('checked');
+    		$(this).find('td:first').find('input.toggle_playbook').attr('Checked','Checked');
+    	});
+
+    	playbook_ids.sort((a,b)=>a-b);
+
+    	console.log(playbook_ids);
+
+    	$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/playbook/activate_all_playbooks',
+            type:'POST',
+            data:{
+                checked:checked,
+                ids:playbook_ids,
+
+            },
+            success:function(response){
+            	console.log(response);
+            }, error: function (data) {
+
+				if (data.status === 422) {
+					e.preventDefault();
+					$('.playbook_activation_errors.alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+						$('.add_btn_loader i').remove();
+						$('.playbook_activation_errors.alert-danger').show();
+					});
+				}
+				$('html, body').animate({
+	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
+	            }, 500);
+			}
+        });
+    },
+
+    deactivate_all_playbooks:function(e){
+
+    	e.preventDefault();
+    	var checked,
+    		playbook_ids = [],
+    		that = $(this)
+    	;
 
     	$('.playbooks table tbody tr').each(function(){
     		playbook_ids.push($(this).data('playbook_id'));
-    		if(checked){
-    			$(this).find('td:first').find('input.toggle_playbook').addClass('checked');
-    			$(this).find('td:first').find('input.toggle_playbook').attr('Checked','Checked');
-    		}else{
-    			$(this).find('td:first').find('input.toggle_playbook').removeClass('checked');
-    			$(this).find('td:first').find('input.toggle_playbook').removeAttr('Checked','Checked');
-    		}
+    		$(this).find('td:first').find('input.toggle_playbook').removeClass('checked');
+    		$(this).find('td:first').find('input.toggle_playbook').removeAttr('Checked','Checked');
     	});
 
     	playbook_ids.sort((a,b)=>a-b);
@@ -641,7 +694,7 @@ var Contacts_Playbook = {
         });
 
         $.ajax({
-            url:'/tools/playbook/toggle_all_playbooks',
+            url:'/tools/playbook/deactivate_all_playbooks',
             type:'POST',
             data:{
                 checked:checked,
@@ -649,7 +702,7 @@ var Contacts_Playbook = {
 
             },
             success:function(response){
-
+            	console.log(response);
             }, error: function (data) {
 
 				if (data.status === 422) {

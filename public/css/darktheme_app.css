@@ -3575,6 +3575,17 @@ a.add_filter i {
   margin-left: 10px;
 }
 
+.toggle_all_btns {
+  clear: both;
+  margin-bottom: 50px;
+}
+
+.toggle_all_btns a {
+  float: left;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

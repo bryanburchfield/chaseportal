@@ -27,7 +27,7 @@
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
 
-                                        <div class="toggle_all_switch">
+                                        {{-- <div class="toggle_all_switch">
                                             <label class="switch">
                                                 <input type="checkbox" class="toggle_all_playbooks"
                                                     name="playbook_input"
@@ -35,6 +35,11 @@
                                                 <span></span>
                                             </label>
                                             <span class="toggle_all_label">Activate All Playbooks</span>
+                                        </div> --}}
+                                        
+                                        <div class="toggle_all_btns">
+                                            <a href="#" class="btn btn-info activate_all_playbooks">Activate All Playbooks</a>
+                                            <a href="#" class="btn btn-danger deactivate_all_playbooks">Deactivate All Playbooks</a>
                                         </div>
 
                                         <div class="table-responsive nobdr playbooks mt20">
