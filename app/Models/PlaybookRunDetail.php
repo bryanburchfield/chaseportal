@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PlaybookHistory extends Model
+class PlaybookRunDetail extends Model
 {
-    protected $table = 'playbook_histories';
     protected $fillable = [
         'contacts_playbook_id',
         'reporting_db',
         'lead_id',
     ];
+
+    public function playbook_run()
+    {
+        return $this->belongsTo('App\Models\PlaybookRun');
+    }
 }

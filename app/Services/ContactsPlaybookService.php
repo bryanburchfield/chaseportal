@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Includes\PowerImportAPI;
 use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
+use App\Models\Dialer;
+use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
@@ -110,6 +113,10 @@ class ContactsPlaybookService
         $results = $this->runSql($sql, $bind);
 
         foreach ($results as $rec) {
+
+            // log here!!
+
+
             foreach ($contacts_playbook->actions as $contacts_playbook_action) {
                 $this->runAction($contacts_playbook_action, $rec);
             }
@@ -323,7 +330,72 @@ class ContactsPlaybookService
      */
     private function runAction(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
-        Log::debug($contacts_playbook_action);
-        Log::debug($rec);
+        $playbook_action = $contacts_playbook_action->playbook_action;
+
+        switch ($playbook_action->action_type) {
+            case 'lead':
+                $this->actionLead($playbook_action, $rec);
+                break;
+            case 'email':
+                $this->actionEmail($playbook_action, $rec);
+                break;
+            case 'sms':
+                $this->actionSms($playbook_action, $rec);
+                break;
+        }
+    }
+
+    private function actionLead(PlaybookAction $playbook_action, $rec)
+    {
+        $api = $this->initApi(Auth::user()->db);
+
+        $data = [];
+
+        if (!empty($playbook_action->playbook_lead_action->to_campaign)) {
+            $data['Campaign'] = $playbook_action->playbook_lead_action->to_campaign;
+        }
+        if (!empty($playbook_action->playbook_lead_action->to_subcampaign)) {
+            $data['Subcampaign'] = $playbook_action->playbook_lead_action->to_subcampaign;
+        }
+        if (!empty($playbook_action->playbook_lead_action->to_callstatus)) {
+            $data['CallStatus'] = $playbook_action->playbook_lead_action->to_callstatus;
+        }
+
+        echo "Moving Lead: " . $rec['lead_id'] .
+            " to " . $data['Campaign'] .
+            "/" . $data['Subcampaign'] .
+            "\n";
+
+        // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+    }
+
+    private function actionEmail(PlaybookAction $playbook_action, $rec)
+    {
+        // If email field is blank, bail now
+        if (
+            $rec[$playbook_action->playbook_email_action->email_field] == 'NULL' ||
+            empty($rec[$playbook_action->playbook_email_action->email_field])
+        ) {
+            continue;
+        }
+
+
+        //
+
+    }
+
+    private function actionSms(PlaybookAction $playbook_action, $rec)
+    {
+        # code...
+    }
+
+    private function initApi($db)
+    {
+        if (empty($this->powerImportApis[$db])) {
+            $fqdn = Dialer::where('reporting_db', $db)->pluck('dialer_fqdn')->first();
+            $this->powerImportApis[$db] = new PowerImportAPI('http://' . $fqdn . '/PowerStudio/WebAPI');
+        }
+
+        return $this->powerImportApis[$db];
     }
 }

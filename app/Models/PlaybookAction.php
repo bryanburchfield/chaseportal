@@ -17,4 +17,19 @@ class PlaybookAction extends Model
     {
         return $this->hasMany('App\Models\ContactsPlaybookAction');
     }
+
+    public function playbook_lead_action()
+    {
+        return $this->hasOne('App\Models\PlaybookLeadAction');
+    }
+
+    public function playbook_email_action()
+    {
+        return $this->hasOne('App\Models\PlaybookEmailAction');
+    }
+
+    public function playbook_sms_action()
+    {
+        return $this->hasOne('App\Models\PlaybookSmsAction');
+    }
 }
