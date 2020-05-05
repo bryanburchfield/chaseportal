@@ -21,32 +21,32 @@ var Playbook_Actions = {
 		;
 
 		if(action_type == 'email'){
-			var email_service_provider_id = $('.email_service_provider_id').val(),
-				template_id = $('.template_id').val(),
-				email_field = $('.email_field').val(),
-				subject = $('.subject').val(),
-				from = $('.from').val(),
-				days_between_emails = $('.days_between_emails').val(),
-				emails_per_lead = $('.emails_per_lead').val()
+			var email_service_provider_id = $('.email  .email_service_provider_id').val(),
+				template_id = $('.email  .template_id').val(),
+				email_field = $('.email  .email_field').val(),
+				subject = $('.email  .subject').val(),
+				from = $('.email  .from').val(),
+				days_between_emails = $('.email  .days_between_emails').val(),
+				emails_per_lead = $('.email  .emails_per_lead').val()
 			;
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&email_service_provider_id='+email_service_provider_id+'&template_id='+template_id+'&email_field='+email_field+'&subject='+subject+'&from='+from+'&days_between_emails='+days_between_emails+'&emails_per_lead='+emails_per_lead;
 		}
 
 		if(action_type == 'sms'){
-			var from_number = $('.from_number').val(),
-				template_id = $('.template_id').val(),
-				sms_per_lead = $('.sms_per_lead').val(),
-				days_between_sms = $('.days_between_sms').val()
+			var from_number = $('.sms .from_number').val(),
+				template_id = $('.sms .template_id').val(),
+				sms_per_lead = $('.sms .sms_per_lead').val(),
+				days_between_sms = $('.sms .days_between_sms').val()
 			;
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms;
 		}
 
 		if(action_type == 'lead'){
-			var to_campaign = $('.to_campaign').val(),
-				to_subcampaign = $('.to_subcampaign').val(),
-				to_callstatus = $('.to_callstatus').val()
+			var to_campaign = $('.lead .to_campaign').val(),
+				to_subcampaign = $('.lead .to_subcampaign').val(),
+				to_callstatus = $('.lead .to_callstatus').val()
 			;
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus;
