@@ -46,7 +46,7 @@ var Playbook_Actions = {
 		if(action_type == 'lead'){
 			var to_campaign = $('.lead .to_campaign').val(),
 				to_subcampaign = $('.lead .to_subcampaign').val(),
-				to_callstatus = $('.lead .to_callstatus').val()
+				to_callstatus = $('.lead .call_status').val()
 			;
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus;
@@ -238,8 +238,45 @@ var Playbook_Actions = {
 
 	update_action:function(e){
 		e.preventDefault();
-		var form_data = $(this).serialize();
-		var id = $(this).find('.id').val();
+		var name = $(this).find('.name').val(),
+			id = $(this).find('.id').val(),
+			action_type = $(this).find('.action_types').val(),
+			campaign = $(this).find('.filter_campaigns').val()
+		;
+
+		if(action_type == 'email'){
+			var email_service_provider_id = $(this).find('.email  .email_service_provider_id').val(),
+				template_id = $(this).find('.email  .template_id').val(),
+				email_field = $(this).find('.email  .email_field').val(),
+				subject = $(this).find('.email  .subject').val(),
+				from = $(this).find('.email  .from').val(),
+				days_between_emails = $(this).find('.email  .days_between_emails').val(),
+				emails_per_lead = $(this).find('.email  .emails_per_lead').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&email_service_provider_id='+email_service_provider_id+'&template_id='+template_id+'&email_field='+email_field+'&subject='+subject+'&from='+from+'&days_between_emails='+days_between_emails+'&emails_per_lead='+emails_per_lead+'&id='+id;
+		}
+
+		if(action_type == 'sms'){
+			var from_number = $(this).find('.sms .from_number').val(),
+				template_id = $(this).find('.sms .template_id').val(),
+				sms_per_lead = $(this).find('.sms .sms_per_lead').val(),
+				days_between_sms = $(this).find('.sms .days_between_sms').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms+'&id='+id;
+		}
+
+		if(action_type == 'lead'){
+			var to_campaign = $(this).find('.lead .to_campaign').val(),
+				to_subcampaign = $(this).find('.lead .to_subcampaign').val(),
+				to_callstatus = $(this).find('.lead .call_status').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus+'&id='+id;
+		}
+
+	console.log(form_data);
 
 		$.ajaxSetup({
 			headers: {
