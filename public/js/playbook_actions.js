@@ -4,7 +4,7 @@ var Playbook_Actions = {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);
 		$('.to_campaign').on('change', this.update_call_statuses);
-		$('.edit_playbook_action_modal, .remove_playbook_action_modal').on('click', this.populate_filter_modal);
+		$('.edit_playbook_action_modal, .remove_playbook_action_modal').on('click', this.populate_action_modal);
 		$('.filter_campaigns').on('change', this.get_table_fields);
 		$('.edit_action').on('submit', this.update_action);
 		$('.delete_playbook_action ').on('click', this.delete_action);
@@ -12,7 +12,26 @@ var Playbook_Actions = {
 
 	add_action: function (e) {
 		e.preventDefault();
-		var form_data = $(this).serialize();
+
+		var form_data;
+
+		var name = $(this).find('.name').val(),
+			campaign = $(this).find('.campaign').val(),
+			action_type = $(this).find('.action_types').val()
+		;
+
+		if(action_type == 'email'){
+			var email_service_provider_id = $('.email_service_provider_id').val(),
+				template_id = $('.template_id').val(),
+				email_field = $('.email_field').val(),
+				subject = $('.subject').val(),
+				from = $('.from').val(),
+				days_between_emails = $('.days_between_emails').val(),
+				emails_per_lead = $('.emails_per_lead').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&email_service_provider_id='+email_service_provider_id+'&template_id='+template_id+'&email_field='+email_field+'&subject='+subject+'&from='+from+'&days_between_emails='+days_between_emails+'&emails_per_lead='+emails_per_lead+';
+		}
 
 		$.ajaxSetup({
 			headers: {
@@ -120,7 +139,7 @@ var Playbook_Actions = {
 		});
 	},
 
-	populate_filter_modal:function(e){
+	populate_action_modal:function(e){
 		e.preventDefault();
 
 		var modal = $(this).data('target');
@@ -129,7 +148,7 @@ var Playbook_Actions = {
 		$(modal).find('input.id').val(id);
 
 		if(modal.substring(1) == 'editActionModal'){
-			Playbook_Actions.edit_filter(id);
+			Playbook_Actions.edit_action(id);
 		}
 
 		$(modal).find('.modal-body h3 span').text(name);
@@ -138,7 +157,7 @@ var Playbook_Actions = {
 
 	},
 
-	edit_filter:function(id){
+	edit_action:function(id){
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -151,7 +170,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-
+				console.log(response);
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -171,15 +190,18 @@ var Playbook_Actions = {
 				if(response.action_type == 'sms'){
 					edit_action.find('.from_number').val(response.from_number);
 					edit_action.find('.message').val(response.message);
+					edit_action.find('.sms_per_lead').val(response.sms_per_lead);
+					edit_action.find('.days_between_sms').val(response.days_between_sms);
+					edit_action.find(".template_id  option[value='"+response.template_id +"']").prop('selected', true);
 				}
 
 				if(response.action_type == 'email'){
 					edit_action.find(".email_service_provider_id option[value='"+response.email_service_provider_id+"']").prop('selected', true);
-					edit_action.find(".template_id  option[value='"+response.template_id+"']").prop('selected', true);
 					edit_action.find(".subject").val(response.subject);
 					edit_action.find(".from").val(response.from);
 					edit_action.find(".days_between_emails").val(response.days_between_emails);
 					edit_action.find(".emails_per_lead").val(response.emails_per_lead);
+					edit_action.find(".template_id  option[value='"+response.template_id +"']").prop('selected', true);
 					$.when(
 						Playbook_Actions.get_table_fields(event, response.campaign)
 					).done(function() {

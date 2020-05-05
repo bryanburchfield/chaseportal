@@ -35,10 +35,10 @@
 
     <div class="form-group">
         <label>{{__('tools.email_template')}}</label>
-        <select name="email_script_id" class="email_script_id form-control">
+        <select name="template_id" class="template_id form-control">
             <option value="">{{__('tools.select_one')}}</option>
             @foreach($email_templates as $template)
-                <option {{$template->id==old('email_script_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
+                <option {{$template->id==old('template_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
             @endforeach
         </select>
     </div>
@@ -77,10 +77,10 @@
 
     <div class="form-group">
         <label>{{__('tools.sms_template')}}</label>
-        <select name="sms_script_id" class="sms_script_id form-control">
+        <select name="template_id" class="template_id form-control">
             <option value="">{{__('tools.select_one')}}</option>
             @foreach($sms_templates as $template)
-                <option {{$template->id==old('sms_script_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
+                <option {{$template->id==old('template_id') ? 'selected' :'' }} value="{{$template->id}}">{{$template->Name}}</option>
             @endforeach
         </select>
     </div>

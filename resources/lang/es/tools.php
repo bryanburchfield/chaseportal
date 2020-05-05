@@ -63,6 +63,7 @@ return [
 	'email_field'	=> 'Campo de Correo Electrónico',
 	'email_service_providers'	=> 'Proveedores de correo electrónico',
 	'emails_per_lead'	=> 'Correos Electrónicos por Cliente Potencial',
+	'email_template'	=> 'Plantilla de correo electrónico',
 	'error'			=> 'Error',
 	'errors'		=> 'Errores',
 	'field'			=> 'Campo',

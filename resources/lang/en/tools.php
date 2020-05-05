@@ -63,6 +63,7 @@ return [
 	'email_field'	=> 'Email Field',
 	'email_service_providers'	=> 'Email Providers',
 	'emails_per_lead'	=> 'Emails Per Lead',
+	'email_template'	=> 'Email Template',
 	'error'			=> 'Error',
 	'errors'		=> 'Errors',
 	'field'			=> 'Field',
