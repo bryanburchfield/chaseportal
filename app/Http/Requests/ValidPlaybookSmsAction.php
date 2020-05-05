@@ -26,6 +26,8 @@ class ValidPlaybookSmsAction extends FormRequest
         return [
             'from_number' => 'required',
             'template_id' => 'required|integer',
+            'sms_per_lead' => 'required|integer',
+            'days_between_sms' => 'nullable|integer',
         ];
     }
 }
