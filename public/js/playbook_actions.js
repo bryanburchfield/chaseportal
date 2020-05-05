@@ -16,7 +16,7 @@ var Playbook_Actions = {
 		var form_data;
 
 		var name = $(this).find('.name').val(),
-			campaign = $(this).find('.campaign').val(),
+			campaign = $(this).find('.filter_campaigns').val(),
 			action_type = $(this).find('.action_types').val()
 		;
 
@@ -30,7 +30,26 @@ var Playbook_Actions = {
 				emails_per_lead = $('.emails_per_lead').val()
 			;
 
-			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&email_service_provider_id='+email_service_provider_id+'&template_id='+template_id+'&email_field='+email_field+'&subject='+subject+'&from='+from+'&days_between_emails='+days_between_emails+'&emails_per_lead='+emails_per_lead+';
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&email_service_provider_id='+email_service_provider_id+'&template_id='+template_id+'&email_field='+email_field+'&subject='+subject+'&from='+from+'&days_between_emails='+days_between_emails+'&emails_per_lead='+emails_per_lead;
+		}
+
+		if(action_type == 'sms'){
+			var from_number = $('.from_number').val(),
+				template_id = $('.template_id').val(),
+				sms_per_lead = $('.sms_per_lead').val(),
+				days_between_sms = $('.days_between_sms').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms;
+		}
+
+		if(action_type == 'lead'){
+			var to_campaign = $('.to_campaign').val(),
+				to_subcampaign = $('.to_subcampaign').val(),
+				to_callstatus = $('.to_callstatus').val()
+			;
+
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus;
 		}
 
 		$.ajaxSetup({
