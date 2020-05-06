@@ -87,7 +87,7 @@ trait SqlServerTraits
         }
     }
 
-    private function defaultLeadFields()
+    private function calculatedLeadFields()
     {
         return [
             'Lead Age' => 'integer',
@@ -95,6 +95,12 @@ trait SqlServerTraits
             'Days Called' => 'integer',
             'Ring Group' => 'string',
             'Call Status' => 'string',
+        ];
+    }
+
+    private function defaultLeadFields()
+    {
+        return [
             'ClientId' => 'string',
             'FirstName' => 'string',
             'LastName' => 'string',

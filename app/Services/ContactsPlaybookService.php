@@ -125,16 +125,16 @@ class ContactsPlaybookService
         $results = $this->runSql($sql, $bind);
 
         foreach ($results as $rec) {
+            foreach ($contacts_playbook->actions as $contacts_playbook_action) {
+                $this->runAction($contacts_playbook_action, $rec);
+            }
+
             // Log the detail
             PlaybookRunDetail::create([
                 'playbook_run_id' => $playbook_run->id,
                 'reporting_db' => $db,
                 'lead_id' => $rec['lead_id'],
             ]);
-
-            foreach ($contacts_playbook->actions as $contacts_playbook_action) {
-                $this->runAction($contacts_playbook_action, $rec);
-            }
         }
     }
 
@@ -362,8 +362,6 @@ class ContactsPlaybookService
 
     private function actionLead(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
     {
-        echo "Move Lead: " . $rec['lead_id'] . "\n";
-
         $api = $this->initApi(Auth::user()->db);
 
         $data = [];
@@ -380,7 +378,6 @@ class ContactsPlaybookService
 
         echo "Moving Lead: " . $rec['lead_id'] . "\n";
         dump($data);
-        echo  "\n";
 
         // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
     }
@@ -418,7 +415,6 @@ class ContactsPlaybookService
                 }
             }
         }
-
 
         // ok to send
         $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);

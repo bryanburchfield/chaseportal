@@ -20,12 +20,15 @@ class Campaign extends SqlSrvModel
         return $this->belongsTo('App\Models\AdvancedTable', 'AdvancedTable');
     }
 
-    public function getFilterFields()
+    public function getFilterFields($include_calculated = false)
     {
-        $fields = $this->defaultLeadFields();
+        $fields = [];
+        if ($include_calculated) {
+            $fields = $this->calculatedLeadFields();
+        }
+        $fields += $this->defaultLeadFields();
 
         if ($this->id) {
-
             if ($this->advancedTable) {
                 foreach ($this->advancedTable->advancedTableFields as $field) {
                     $fields[$field->FieldName] = $field->fieldType->Type;

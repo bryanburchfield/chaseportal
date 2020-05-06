@@ -32,7 +32,7 @@ class PlaybookFilterController extends Controller
             'jsfile' => ['playbook_filters.js'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
-            'fields' => $this->defaultLeadFields(),
+            'fields' => (new Campaign)->getFilterFields(true),
             'playbook_filters' => $this->getPlaybookFilters(),
         ];
 
@@ -70,7 +70,6 @@ class PlaybookFilterController extends Controller
      */
     public function getFilterFields(Request $request)
     {
-
         if ($request->has('campaign')) {
             $campaign = Campaign::where('GroupId', Auth::user()->group_id)
                 ->where('CampaignName', $request->campaign)
@@ -79,7 +78,7 @@ class PlaybookFilterController extends Controller
             $campaign = new Campaign;
         }
 
-        return $campaign->getFilterFields();
+        return $campaign->getFilterFields(true);
     }
 
     /**
