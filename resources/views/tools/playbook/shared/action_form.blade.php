@@ -45,7 +45,7 @@
 
     <div class="form-group">
         <label>{{__('tools.email_field')}}</label>
-        <select name="email_field" class="form-control email_field"></select>
+        {!! Form::select("email_field", [null=>__('general.select_one')], null, ["class" => "form-control email_field"]) !!}
     </div>
 
     <div class="form-group">
@@ -106,7 +106,7 @@
 
     <div class="form-group">
         <label>{{__('tools.to_subcampaign')}}</label>
-        {!! Form::select("to_subcampaign", [null=>__('general.select_one')], null, ["class" => "form-control to_subcampaign",]) !!}
+        {!! Form::select("to_subcampaign", [null=>__('general.select_one')], null, ["class" => "form-control to_subcampaign"]) !!}
     </div>
 
     <div class="form-group">
