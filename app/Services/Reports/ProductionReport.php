@@ -3,9 +3,9 @@
 namespace App\Services\Reports;
 
 use App\Traits\CampaignTraits;
+use App\Traits\ReportTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \App\Traits\ReportTraits;
 
 class ProductionReport
 {
