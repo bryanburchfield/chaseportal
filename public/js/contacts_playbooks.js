@@ -44,7 +44,7 @@ var Contacts_Playbook = {
                 $('.subcampaign').empty();
                 var response = Object.entries(response.subcampaigns);
 
-                var sub_camps='<option value="">Select One</option>';
+                var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
                 for(var i=0;i<response.length;i++){
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
@@ -120,7 +120,7 @@ var Contacts_Playbook = {
 			all_filters = Contacts_Playbook.get_filters(campaign, modal)
 		).done(function() {
 			$('#'+modal).find('.modal-body .playbook_filter_manager').empty();
-			var add_filter_btn = '<a href="#" class="add_filter mt20"><i class="fas fa-plus-circle"></i> Add Filter</a>';
+			var add_filter_btn = '<a href="#" class="add_filter mt20"><i class="fas fa-plus-circle"></i> '+Lang.get('js_msgs.add_filter')+'</a>';
 
 			if(is_empty){
             	$('#'+modal).find('.modal-body .playbook_filter_manager').append(add_filter_btn);
@@ -143,7 +143,7 @@ var Contacts_Playbook = {
 	    					j=0
 	    				;
 	                    for(var i=0;i<response.length;i++){
-	                    	var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">Select One</option>';
+	                    	var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 	                    	for(var j=0;j<all_filters.responseJSON.length;j++){
 	                    		var selected = all_filters.responseJSON[j].name == response[i].name ? 'selected' :'';
 	                    		filter_select+='<option '+selected+' data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
@@ -306,7 +306,7 @@ var Contacts_Playbook = {
 			all_actions = Contacts_Playbook.get_actions(campaign, modal)
 		).done(function() {
 			$('#'+modal).find('.modal-body .playbook_action_manager').empty();
-			var add_action_btn = '<a href="#" class="add_action mt20"><i class="fas fa-plus-circle"></i> Add Action</a>';
+			var add_action_btn = '<a href="#" class="add_action mt20"><i class="fas fa-plus-circle"></i> '+Lang.get('js_msgs.add_action')+'</a>';
 
 			if(is_empty){
             	$('#'+modal).find('.modal-body .playbook_action_manager').append(add_action_btn);
@@ -329,7 +329,7 @@ var Contacts_Playbook = {
 	    				var actions='';
 
 	                    for(var i=0;i<response.length;i++){
-	                    	var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">Select One</option>';
+	                    	var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 	                    	for(var j=0;j<all_actions.responseJSON.length;j++){
 	                    		var selected = all_actions.responseJSON[j].name == response[i].name ? 'selected' :'';
 	                    		action_select+='<option '+selected+' data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
@@ -362,7 +362,7 @@ var Contacts_Playbook = {
 		$.when(
 			all_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">Select One</option>';
+			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 			for(var j=0;j<all_actions.responseJSON.length;j++){
 				action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
 			}
@@ -387,7 +387,7 @@ var Contacts_Playbook = {
 		$.when(
 			all_filters = Contacts_Playbook.get_filters(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">Select One</option>';
+			var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 			for(var j=0;j<all_filters.responseJSON.length;j++){
 				filter_select+='<option data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
 			}
@@ -498,7 +498,7 @@ var Contacts_Playbook = {
 		});
 
 		if(errors){
-			$('#filterPlaybookModal .alert').text('Select a filter before saving changes').show();
+			$('#filterPlaybookModal .alert').text(Lang.get('js_msgs.save_warning')).show();
 			return false;
 		}
 
@@ -526,7 +526,7 @@ var Contacts_Playbook = {
 
 	campaign_warning:function(){
 		$('.edit_playbook .modal-body .alert').remove();
-		var warning = '<div class="alert alert-warning">Note: If you change the Playbook Campaign you may loose filters and actions that are associated with it.</div>';
+		var warning = '<div class="alert alert-warning">'+Lang.get('js_msgs.campaign_warning')+'</div>';
 		$('.edit_playbook .modal-body').append(warning);
 		var campaign = $(this).val();
 		Contacts_Playbook.get_subcampaigns(event, campaign);

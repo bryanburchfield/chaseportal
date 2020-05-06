@@ -157,7 +157,7 @@ var Playbook = {
 				}
 			}, statusCode: {
 				500: function (response) {
-					$(that).find('.alert-danger').text('Connection Failed').show();
+					$(that).find('.alert-danger').text(Lang.get('js_msgs.connection_failed')).show();
 				}
 			}
 		});
@@ -196,7 +196,6 @@ var Playbook = {
 				$('#deleteESPModal .btn').find('i').remove();
 				if (data.status === 422) {
 					$('#deleteESPModal .alert-danger').empty();
-					// $('#deleteESPModal .btn').find('i').remove();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 						if ($.isPlainObject(value)) {
@@ -230,7 +229,7 @@ var Playbook = {
 		var subcamp_response = Master.get_subcampaigns(campaign, '/tools/playbook/get_subcampaigns');
 		$('.drip_campaigns_subcampaign').empty();
 		$(sel).find('.email').empty();
-		console.log(subcamp_response);
+
 		var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
 		var subcamp_obj_length = Object.keys(subcamp_obj).length;
 		const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
@@ -270,7 +269,7 @@ var Playbook = {
 
 			success: function (response) {
 
-				var emails = '<option value="">Select One</option>';
+				var emails = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for (var index in response) {
 					emails += '<option value="' + index + '">' + index + '</option>';
 				}
@@ -330,7 +329,7 @@ var Playbook = {
 			},
 			success: function (response) {
 				$(that).parent().parent().next().find('.filter_operators').empty();
-				var operators = '<option value="">Select One</option>';
+				var operators = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 
 				for (let [key, value] of Object.entries(response[type])) {
 					operators += '<option value="' + key + '">' + value + '</option>';

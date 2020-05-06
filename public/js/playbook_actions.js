@@ -125,7 +125,7 @@ var Playbook_Actions = {
 			success: function (response) {
 				$('.call_status').empty();
 				var response = Object.keys(response);
-				var dispos='<option value="">Select One</option>';
+				var dispos='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for(var i=0;i<response.length;i++){
 					dispos+='<option value="'+response[i]+'">'+response[i]+'</option>';
 				}
@@ -147,10 +147,10 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				console.log(response);
+
 				$('.to_subcampaign').empty();
 				var response = Object.entries(response.subcampaigns);
-				var sub_camps='<option value="">Select One</option>';
+				var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for(var i=0;i<response.length;i++){
 					sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
 				}
@@ -190,7 +190,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-				console.log(response);
+
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -227,10 +227,6 @@ var Playbook_Actions = {
 					).done(function() {
 						edit_action.find(".email_field option[value='"+response.email_field+"']").prop('selected', true);
 					});
-				}
-
-				if(response.action_type == 'sms'){
-
 				}
 			},
 		});
@@ -275,8 +271,6 @@ var Playbook_Actions = {
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus+'&id='+id;
 		}
-
-	console.log(form_data);
 
 		$.ajaxSetup({
 			headers: {
@@ -333,7 +327,7 @@ var Playbook_Actions = {
 			success: function (response) {
 
 				$('.email_field').empty();
-				var fields = '<option value="">Select One</option>';
+				var fields = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				var r = Object.entries(response);
 
 				for(var i=0;i<r.length;i++){

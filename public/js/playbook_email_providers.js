@@ -157,7 +157,7 @@ var Playbook = {
 				}
 			}, statusCode: {
 				500: function (response) {
-					$(that).find('.alert-danger').text('Connection Failed').show();
+					$(that).find('.alert-danger').text(Lang.get('js_msgs.connection_failed')).show();
 				}
 			}
 		});
@@ -270,7 +270,7 @@ var Playbook = {
 
 			success: function (response) {
 
-				var emails = '<option value="">Select One</option>';
+				var emails = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for (var index in response) {
 					emails += '<option value="' + index + '">' + index + '</option>';
 				}
@@ -330,7 +330,7 @@ var Playbook = {
 			},
 			success: function (response) {
 				$(that).parent().parent().next().find('.filter_operators').empty();
-				var operators = '<option value="">Select One</option>';
+				var operators = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 
 				for (let [key, value] of Object.entries(response[type])) {
 					operators += '<option value="' + key + '">' + value + '</option>';

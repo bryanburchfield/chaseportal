@@ -1,7 +1,6 @@
 var Playbook_Filters = {
 
 	init: function () {
-		// $("#addFilterModal").on('show.bs.modal', this.get_fields);
 		$('.filter_campaigns').on('change', this.get_fields);
 		$('.filter_fields').on('change', this.update_filter_fields);
 		$('.add_filter').on('change', '.filter_fields', this.get_operators);
@@ -37,7 +36,7 @@ var Playbook_Filters = {
 			}).done(function(response){
 
 				$('.loader_hor').hide();
-				var filter_fields = '<option value="">Select One</option>';
+				var filter_fields = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for (var i = 0; i < Object.entries(response).length; i++) {
 					filter_fields += '<option data-type="' + Object.entries(response)[i][1] + '" value="' + Object.entries(response)[i][0] + '">' + Object.entries(response)[i][0] + '</option>';
 				}
