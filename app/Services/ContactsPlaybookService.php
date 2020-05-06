@@ -12,7 +12,6 @@ use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
 use App\Models\EmailServiceProvider;
-use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookFilter;
 use App\Models\PlaybookRun;
