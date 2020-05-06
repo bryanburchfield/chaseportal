@@ -89,7 +89,7 @@ var Playbook_Actions = {
 	update_action_fields: function(e, type='') {
 
 		if(!type){
-			var type = $(this).val();
+			if($(this).val() !=''){var type = $(this).val();}else{return false;}
 		}
 
 		$('.alert-danger').empty().hide();
@@ -388,5 +388,12 @@ $(document).ready(function () {
 	$('#editActionModal').on('hidden.bs.modal', function () {
 	    $('.edit_action').trigger("reset");
 	    $('.action_type_fields').hide();
+	    $(this).find('.alert').hide();
 	});
+
+	$('#addActionModal, #deleteActionModal').on('hidden.bs.modal', function () {
+	    $(this).find('.alert').hide();
+	});
+
+	
 });

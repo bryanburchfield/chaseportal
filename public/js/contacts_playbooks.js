@@ -371,6 +371,7 @@ var Contacts_Playbook = {
 			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 
 			$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
+			console.log(Contacts_Playbook.check_numb_actions($('.add_action')));
 			Contacts_Playbook.check_numb_actions($('.add_action'));
 		});
 	},
@@ -729,4 +730,5 @@ $(document).ready(function(){
 	$('#editPlaybookModal').on('hidden.bs.modal', function () {
 	    $('.alert').hide();
 	});
+
 });
