@@ -19,6 +19,7 @@ use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PlaybookActionController extends Controller
 {
@@ -102,6 +103,8 @@ class PlaybookActionController extends Controller
 
     public function addAction(ValidPlaybookAction $request)
     {
+        Log::debug($request->all());
+
         // validate fields based on action_type
         $model = $this->validateActionType($request);
 
@@ -123,6 +126,8 @@ class PlaybookActionController extends Controller
 
     public function updateAction(ValidPlaybookAction $request)
     {
+        Log::debug($request->all());
+
         // first, make sure it's the correct group
         $playbook_action = $this->findPlaybookAction($request->id);
 

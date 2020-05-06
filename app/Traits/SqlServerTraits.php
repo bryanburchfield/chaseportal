@@ -86,26 +86,4 @@ trait SqlServerTraits
             yield [];
         }
     }
-
-    private function defaultLeadFields()
-    {
-        return [
-            'Lead Age' => 'integer',
-            'Attempts' => 'integer',
-            'Days Called' => 'integer',
-            'Ring Group' => 'string',
-            'Call Status' => 'string',
-            'ClientId' => 'string',
-            'FirstName' => 'string',
-            'LastName' => 'string',
-            'PrimaryPhone' => 'phone',
-            'Address' => 'string',
-            'City' => 'string',
-            'State' => 'string',
-            'ZipCode' => 'string',
-            'Notes' => 'text',
-            'Campaign' => 'string',
-            'Subcampaign' => 'string',
-        ];
-    }
 }
