@@ -38,4 +38,32 @@ class Campaign extends SqlSrvModel
 
         return $fields;
     }
+
+    private function calculatedLeadFields()
+    {
+        return [
+            'Lead Age' => 'integer',
+            'Attempts' => 'integer',
+            'Days Called' => 'integer',
+            'Ring Group' => 'string',
+            'Call Status' => 'string',
+        ];
+    }
+
+    private function defaultLeadFields()
+    {
+        return [
+            'ClientId' => 'string',
+            'FirstName' => 'string',
+            'LastName' => 'string',
+            'PrimaryPhone' => 'phone',
+            'Address' => 'string',
+            'City' => 'string',
+            'State' => 'string',
+            'ZipCode' => 'string',
+            'Notes' => 'text',
+            'Campaign' => 'string',
+            'Subcampaign' => 'string',
+        ];
+    }
 }

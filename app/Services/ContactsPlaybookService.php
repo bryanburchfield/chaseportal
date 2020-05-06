@@ -25,6 +25,7 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Twilio\Rest\Client as Twilio;
 use InvalidArgumentException;
 
 class ContactsPlaybookService
@@ -33,6 +34,7 @@ class ContactsPlaybookService
     use TimeTraits;
 
     private $powerImportApis = [];
+    private $twilio;
 
     /**
      * Instantiate the class and off we go
@@ -345,23 +347,23 @@ class ContactsPlaybookService
      */
     private function runAction(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
-        $playbook_action = $contacts_playbook_action->playbook_action;
-
-        switch ($playbook_action->action_type) {
+        switch ($contacts_playbook_action->playbook_action->action_type) {
             case 'lead':
-                $this->actionLead($contacts_playbook_action, $playbook_action, $rec);
+                $this->actionLead($contacts_playbook_action, $rec);
                 break;
             case 'email':
-                $this->actionEmail($contacts_playbook_action, $playbook_action, $rec);
+                $this->actionEmail($contacts_playbook_action, $rec);
                 break;
             case 'sms':
-                $this->actionSms($contacts_playbook_action, $playbook_action, $rec);
+                $this->actionSms($contacts_playbook_action, $rec);
                 break;
         }
     }
 
-    private function actionLead(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
+    private function actionLead(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
+        $playbook_action = $contacts_playbook_action->playbook_action;
+
         $api = $this->initApi(Auth::user()->db);
 
         $data = [];
@@ -382,9 +384,11 @@ class ContactsPlaybookService
         // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
     }
 
-    private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
+    private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
         echo "Email Lead: " . $rec['lead_id'] . "\n";
+
+        $playbook_action = $contacts_playbook_action->playbook_action;
 
         // If email field is blank, bail now
         if (
@@ -395,13 +399,7 @@ class ContactsPlaybookService
         }
 
         // Get history of sends for this lead for this playbook
-        $sends = PlaybookRun::where('contacts_playbook_id', $contacts_playbook_action->contacts_playbook_id)
-            ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
-            ->where('reporting_db', Auth::user()->db)
-            ->where('lead_id', $rec['lead_id'])
-            ->select('playbook_run_details.created_at')
-            ->orderBy('playbook_run_details.created_at')
-            ->get();
+        $sends = $this->getHistory($contacts_playbook_action->contacts_playbook_id, $rec['lead_id']);
 
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
@@ -420,41 +418,71 @@ class ContactsPlaybookService
         $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);
     }
 
-    private function actionSms(ContactsPlaybookAction $contacts_playbook_action, PlaybookAction $playbook_action, $rec)
+    private function actionSms(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
         echo "SMS Lead: " . $rec['lead_id'] . "\n";
 
+        $playbook_action = $contacts_playbook_action->playbook_action;
+
         // Check for phone number
-        // Check limits for total sends and days between
+        if (empty($rec['PrimaryPhone'])) {
+            return;
+        }
+
+        // Get history of sends for this lead for this playbook
+        $sends = $this->getHistory($contacts_playbook_action->contacts_playbook_id, $rec['lead_id']);
+
+        // Bail if over limit or under days between
+        if ($sends->isNotEmpty()) {
+            if ($sends->count() >= $playbook_action->sms_per_lead) {
+                return;
+            }
+
+            if (!empty($playbook_action->days_between_sms)) {
+                if ($sends->last()->created_at->diffInDays() < $playbook_action->days_between_sms) {
+                    return;
+                }
+            }
+        }
+
+        $body = $this->mergeTemplate($playbook_action->playbook_sms_action->template_id, $playbook_action->campaign, $rec);
+
+        if ($body === false) {
+            return;
+        }
+
+        // Init Twilio if not already
+        if (empty($this->twilio)) {
+            $this->initTwilio();
+        }
+
+
+
+        // TODO:  REMOVE AFTER TESTING
+        $rec['PrimaryPhone'] = '3212629660';
+
+
+
+        $this->twilio->messages->create(
+            $rec['PrimaryPhone'],
+            [
+                'from' => $playbook_action->playbook_sms_action->from,
+                // 'from' => '+15614658213',
+                'body' => $body,
+            ]
+        );
+
+        return;
     }
 
     private function emailLead(ContactsPlaybook $contacts_playbook, PlaybookEmailAction $playbook_email_action, $rec)
     {
-        // load body from template
-        $script = Script::find($playbook_email_action->template_id);
-        if (!$script) {
+        // Get body and subject merged with rec
+        $body = $this->mergeTemplate($playbook_email_action->template_id, $contacts_playbook->campaign, $rec);
+        $subject = $this->mergeFields($playbook_email_action->subject, $contacts_playbook->campaign, $rec);
+
+        if ($body === false) {
             return;
-        }
-
-        // Put these into vars since we'll do search & replace on them
-        $body = $script->HtmlContent;
-        $subject = $playbook_email_action->subject;
-
-        // get list of mergable fields
-        if (!empty($contacts_playbook->campaign)) {
-            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
-                ->where('CampaignName', $contacts_playbook->campaign)
-                ->first();
-        } else {
-            $campaign = new Campaign;
-        }
-
-        $fields = array_keys($campaign->getFilterFields());
-
-        // do merge
-        foreach ($fields as $field) {
-            $body = str_ireplace('(#' . $field . '#)', htmlspecialchars($rec[$field]), $body);
-            $subject = str_ireplace('(#' . $field . '#)', $rec[$field], $subject);
         }
 
         // build payload
@@ -488,6 +516,49 @@ class ContactsPlaybookService
         $result = $email_service_provider->send($payload);
     }
 
+    private function mergeTemplate($template_id, $campaign, $rec)
+    {
+        // load body from template
+        $script = Script::find($template_id);
+        if (!$script) {
+            return false;
+        }
+
+        return $this->mergeFields($script->HtmlContent, $campaign, $rec);
+    }
+
+    private function mergeFields($text, $campaign, $rec)
+    {
+        // get list of mergable fields
+        if (!empty($campaign)) {
+            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
+                ->where('CampaignName', $campaign)
+                ->first();
+        } else {
+            $campaign = new Campaign;
+        }
+
+        $fields = array_keys($campaign->getFilterFields());
+
+        // do merge
+        foreach ($fields as $field) {
+            $text = str_ireplace('(#' . $field . '#)', htmlspecialchars($rec[$field]), $text);
+        }
+
+        return $text;
+    }
+
+    private function getHistory($contacts_playbook_id, $lead_id)
+    {
+        return PlaybookRun::where('contacts_playbook_id', $contacts_playbook_id)
+            ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
+            ->where('reporting_db', Auth::user()->db)
+            ->where('lead_id', $lead_id)
+            ->select('playbook_run_details.created_at')
+            ->orderBy('playbook_run_details.created_at')
+            ->get();
+    }
+
     private function initApi($db)
     {
         if (empty($this->powerImportApis[$db])) {
@@ -496,5 +567,12 @@ class ContactsPlaybookService
         }
 
         return $this->powerImportApis[$db];
+    }
+    private function initTwilio()
+    {
+        $sid    = config('twilio.did_sid');
+        $token  = config('twilio.did_token');
+
+        $this->twilio = new Twilio($sid, $token);
     }
 }
