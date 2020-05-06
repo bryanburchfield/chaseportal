@@ -106,7 +106,7 @@
 
     <div class="form-group">
         <label>{{__('tools.to_subcampaign')}}</label>
-        <select name="to_subcampaign" class="form-control to_subcampaign"></select>
+        {!! Form::select("to_subcampaign", [null=>__('general.select_one')], null, ["class" => "form-control to_subcampaign",]) !!}
     </div>
 
     <div class="form-group">

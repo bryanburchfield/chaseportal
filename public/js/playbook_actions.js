@@ -52,7 +52,6 @@ var Playbook_Actions = {
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&to_campaign='+to_campaign+'&to_subcampaign='+to_subcampaign+'&to_callstatus='+to_callstatus;
 		}
 
-
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -148,6 +147,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
+				console.log(response);
 				$('.to_subcampaign').empty();
 				var response = Object.entries(response.subcampaigns);
 				var sub_camps='<option value="">Select One</option>';
