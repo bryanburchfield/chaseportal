@@ -3,7 +3,12 @@ var Playbook_Actions = {
 	actions_dataTable: $('#actions_dataTable').DataTable({
 		responsive: true,
 		dom: 'Bfrtip',
-		buttons: []
+		buttons: [],
+		fnDrawCallback: function(oSettings) {
+	        if (oSettings._iDisplayLength >= oSettings.fnRecordsDisplay()) {
+	          $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+	        }
+	    }
 	}),
 
 	init: function () {
