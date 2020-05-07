@@ -41,6 +41,7 @@ class PlaybookActionController extends Controller
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_actions.js'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'playbook_actions' => $this->getPlaybookActions(),

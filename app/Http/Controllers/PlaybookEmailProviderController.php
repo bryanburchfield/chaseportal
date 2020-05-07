@@ -26,6 +26,7 @@ class PlaybookEmailProviderController extends Controller
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_email_providers.js'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'provider_types' => EmailServiceProvider::providerTypes(),
