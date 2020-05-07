@@ -30,6 +30,11 @@
     @isset($summernote)
         <link href="{{ asset('/css/summernote.min.css') }}" rel="stylesheet">
     @endisset
+    @isset($cssfile)
+        @foreach($cssfile as $css)
+            <link href="{{ $css }}" rel="stylesheet">
+        @endforeach
+    @endisset
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.min.js"></script>
     <script src="/js/respond.min.js"></script>
