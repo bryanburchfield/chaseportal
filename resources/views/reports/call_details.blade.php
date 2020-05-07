@@ -5,7 +5,7 @@
 	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm btn_flt_rgt"><i class="fas fa-info-circle"></i> Info</a>
 	<h3 class="heading">{{__('reports.call_details')}}</h3>
 	<div class="report_filters card col-sm-12">
-		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
+		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
 
@@ -15,7 +15,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => true, 'autocomplete'=> 'off']) !!}
+							{!! Form::text('fromdate', $params['fromdate'], ['class'=>'form-control datetimepicker fromdate', 'required' => true, 'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -28,7 +28,7 @@
 					<div class="form-group">
 						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
-							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker', 'required' => true, 'autocomplete'=> 'off']) !!}
+							{!! Form::text('todate', $params['todate'], ['class'=>'form-control datetimepicker todate', 'required' => true, 'autocomplete'=> 'off']) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
