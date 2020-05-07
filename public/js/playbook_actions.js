@@ -1,5 +1,11 @@
 var Playbook_Actions = {
 
+	actions_dataTable: $('#actions_dataTable').DataTable({
+		responsive: true,
+		dom: 'Bfrtip',
+		buttons: []
+	}),
+
 	init: function () {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);

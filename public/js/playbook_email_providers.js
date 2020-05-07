@@ -1,5 +1,11 @@
 var Playbook = {
 
+	emails_dataTable: $('#emails_dataTable').DataTable({
+		responsive: true,
+		dom: 'Bfrtip',
+		buttons: []
+	}),
+
 	init: function () {
 		$('.add_esp').on('submit', this.add_esp);
 		$('.edit_provider_modal').on('click', this.edit_provider_modal);

@@ -1,5 +1,9 @@
 var Contacts_Playbook = {
-
+	playbooks_datatable: $('#playbooks_datatable').DataTable({
+		responsive: true,
+		dom: 'Bfrtip',
+		buttons: []
+	}),
 	pb_campaign:'',
 
 	init:function(){

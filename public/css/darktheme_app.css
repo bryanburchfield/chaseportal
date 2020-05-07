@@ -2951,8 +2951,17 @@ div.vertical-line {
   display: block;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background: #182435;
+table.table.table-striped > tbody > tr:nth-of-type(odd) {
+  background: #182435 !important;
+}
+
+table.dataTable tbody tr:nth-of-type(even) {
+  background: #101824 !important;
+}
+
+.dataTables_info,
+.dataTables_filter label {
+  color: #ddd !important;
 }
 
 .table > thead > tr > th {

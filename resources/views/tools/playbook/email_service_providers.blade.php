@@ -28,7 +28,7 @@
                                         <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_provider_modal">{{__('tools.add_provider')}}</a>
 
                                         <div class="table-responsive nobdr email_service_providers">
-                                            <table class="table mt20">
+                                            <table class="table mt20 table-striped" id="emails_dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.name')}}</th>

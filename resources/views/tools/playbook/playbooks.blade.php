@@ -43,7 +43,7 @@
                                         </div>
 
                                         <div class="table-responsive nobdr playbooks mt20">
-                                            <table class="table mt20 table-striped">
+                                            <table class="table mt20 table-striped" id="playbooks_datatable">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.active')}}</th>

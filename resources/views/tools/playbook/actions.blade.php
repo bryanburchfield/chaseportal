@@ -28,7 +28,7 @@
                                         <a href="#" data-toggle="modal" data-target="#addActionModal" class="btn btn-primary add_playbook_action_modal">{{__('tools.add_action')}}</a>
                                         
                                         <div class="table-responsive nobdr actions">
-                                            <table class="table table-striped mt20">
+                                            <table class="table table-striped mt20" id="actions_dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.name')}}</th>

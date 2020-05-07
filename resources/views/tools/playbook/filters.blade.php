@@ -28,7 +28,7 @@
                                         <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal">{{__('tools.add_filter')}}</a>
 
                                         <div class="table-responsive nobdr filters_table">
-                                            <table class="table mt20 table-striped">
+                                            <table class="table mt20 table-striped" id="filters_dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('tools.name')}}</th>
