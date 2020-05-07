@@ -346,15 +346,17 @@ class ContactsPlaybookService
      */
     private function runAction(ContactsPlaybookAction $contacts_playbook_action, $rec)
     {
+        $result = false;
+
         switch ($contacts_playbook_action->playbook_action->action_type) {
             case 'lead':
-                $this->actionLead($contacts_playbook_action, $rec);
+                $result = $this->actionLead($contacts_playbook_action, $rec);
                 break;
             case 'email':
-                $this->actionEmail($contacts_playbook_action, $rec);
+                $result = $this->actionEmail($contacts_playbook_action, $rec);
                 break;
             case 'sms':
-                $this->actionSms($contacts_playbook_action, $rec);
+                $result = $this->actionSms($contacts_playbook_action, $rec);
                 break;
         }
     }
@@ -381,6 +383,8 @@ class ContactsPlaybookService
         dump($data);
 
         // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+
+        return true;
     }
 
     private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, $rec)
@@ -394,7 +398,7 @@ class ContactsPlaybookService
             $rec[$playbook_action->playbook_email_action->email_field] == 'NULL' ||
             empty($rec[$playbook_action->playbook_email_action->email_field])
         ) {
-            return;
+            return false;
         }
 
         // Get history of sends for this lead for this playbook
@@ -403,18 +407,18 @@ class ContactsPlaybookService
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
             if ($sends->count() >= $playbook_action->emails_per_lead) {
-                return;
+                return false;
             }
 
             if (!empty($playbook_action->days_between_emails)) {
                 if ($sends->last()->created_at->diffInDays() < $playbook_action->days_between_emails) {
-                    return;
+                    return false;
                 }
             }
         }
 
         // ok to send
-        $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);
+        return $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);
     }
 
     private function actionSms(ContactsPlaybookAction $contacts_playbook_action, $rec)
@@ -425,7 +429,7 @@ class ContactsPlaybookService
 
         // Check for phone number
         if (empty($rec['PrimaryPhone'])) {
-            return;
+            return false;
         }
 
         // Get history of sends for this lead for this playbook
@@ -434,12 +438,12 @@ class ContactsPlaybookService
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
             if ($sends->count() >= $playbook_action->sms_per_lead) {
-                return;
+                return false;
             }
 
             if (!empty($playbook_action->days_between_sms)) {
                 if ($sends->last()->created_at->diffInDays() < $playbook_action->days_between_sms) {
-                    return;
+                    return false;
                 }
             }
         }
@@ -447,7 +451,7 @@ class ContactsPlaybookService
         $body = $this->mergeTemplate($playbook_action->playbook_sms_action->template_id, $playbook_action->campaign, $rec);
 
         if ($body === false) {
-            return;
+            return false;
         }
 
         // Init Twilio if not already
@@ -461,17 +465,24 @@ class ContactsPlaybookService
         $rec['PrimaryPhone'] = '3212629660';
 
 
-
-        $this->twilio->messages->create(
+        echo "sending message\n";
+        // try {
+        $message = $this->twilio->messages->create(
             $rec['PrimaryPhone'],
             [
-                'from' => $playbook_action->playbook_sms_action->from,
-                // 'from' => '+15614658213',
+                // 'from' => $playbook_action->playbook_sms_action->from,
+                'from' => '+15614658213',
+
                 'body' => $body,
             ]
         );
+        dump($message);
+        // } catch (Exception $e) {
+        //     echo "SMS Failed\n";
+        //     return false;
+        // }
 
-        return;
+        return true;
     }
 
     private function emailLead(ContactsPlaybook $contacts_playbook, PlaybookEmailAction $playbook_email_action, $rec)
@@ -481,7 +492,7 @@ class ContactsPlaybookService
         $subject = $this->mergeFields($playbook_email_action->subject, $contacts_playbook->campaign, $rec);
 
         if ($body === false) {
-            return;
+            return false;
         }
 
         // build payload
@@ -504,7 +515,7 @@ class ContactsPlaybookService
         // find ESP model
         $email_service_provider = EmailServiceProvider::find($playbook_email_action->email_service_provider_id);
         if (!$email_service_provider) {
-            return;
+            return false;
         }
 
         // instantiate ESP interface
@@ -513,6 +524,8 @@ class ContactsPlaybookService
 
         // Fire!
         $result = $email_service_provider->send($payload);
+
+        return true;
     }
 
     private function mergeTemplate($template_id, $campaign, $rec)
@@ -569,8 +582,8 @@ class ContactsPlaybookService
     }
     private function initTwilio()
     {
-        $sid    = config('twilio.did_sid');
-        $token  = config('twilio.did_token');
+        $sid    = config('twilio.sid');
+        $token  = config('twilio.token');
 
         $this->twilio = new Twilio($sid, $token);
     }
