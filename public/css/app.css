@@ -169,6 +169,14 @@ h6 {
   padding-bottom: 20px;
 }
 
+.fz15 {
+  font-size: 15px;
+}
+
+.fw600 {
+  font-weight: 600;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
@@ -385,6 +393,97 @@ span {
   transform: translateX(50%);
 }
 
+#sidebar_nots {
+  min-width: 300px;
+  max-width: 300px;
+  color: #fff;
+  background: #efefef;
+  border-left: 1px solid #ccc;
+  transition: all, ease, 0.3s;
+}
+
+#sidebar_nots.active {
+  min-width: 300px;
+  max-width: 300px;
+}
+
+#sidebar_nots.active .dropdown-toggle::after {
+  top: auto;
+  bottom: 10px;
+  right: 50%;
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+}
+
+#sidebar_nots .close_nots_bar {
+  position: relative;
+  top: 0;
+  right: 0px;
+  float: right;
+  color: #d9534f;
+}
+
+#sidebar_nots .close_nots_bar:hover {
+  color: #d43f3a;
+}
+
+#sidebar_nots .not_header {
+  padding-top: 20px;
+}
+
+#sidebar_nots .not_header .not_header_inner {
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-bottom: 13px;
+}
+
+#sidebar_nots .not_header h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#sidebar_nots .not_header label {
+  color: #919191;
+}
+
+#sidebar_nots .notifications .not {
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #ccc;
+  position: relative;
+}
+
+#sidebar_nots .notifications .not h4 {
+  color: #33A09B;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+#sidebar_nots .notifications .not .not_date {
+  color: #333;
+  font-size: 12px;
+}
+
+#sidebar_nots .notifications .not .not_read {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  border-radius: 10px;
+  background: #33A09B;
+  height: 12px;
+  width: 12px;
+  display: block;
+}
+
+#sidebar_nots .notifications .not:hover {
+  background: #fcfcfc;
+}
+
 button,
 button:active,
 button:focus {
@@ -496,7 +595,8 @@ div.container-fluid.hero_bg .form-holder {
   clear: both;
 }
 
-#demoUserModal .modal-body {
+#demoUserModal .modal-body,
+#campaignFilterModal .modal-body {
   overflow: auto;
 }
 
@@ -1256,6 +1356,10 @@ div#dataTable_filter label {
   float: right;
 }
 
+.btn_flt_lft {
+  float: left;
+}
+
 h2.card_title {
   text-transform: uppercase;
   font-size: 16px;
@@ -1399,13 +1503,26 @@ input[type=number]::-webkit-outer-spin-button {
 .edit_rule button.multiselect,
 .update_rule .form-control,
 .edit_myself select,
-.demo_user select,
-.demo_user .form-control,
+.add_user input.form-control,
+.edit_user input.form-control,
+.edit_myself input.form-control,
 #webhook_generator input.form-control,
 #webhook_generator select,
+.add_provider .form-control,
+.add_smtp_server .form-control,
+.edit_smtp_server .form-control,
+.create_campaign_form .form-control,
+.edit_campaign_form .form-control,
+.add_esp .form-control,
+.edit_esp .form-control,
+#campaignFilterModal .form-control,
 input.datepicker_only,
 select.input-sm,
-.add_custom_field input.form-control {
+input.datepicker_only,
+select.input-sm,
+.add_custom_field input.form-control,
+.create_notification .form-control,
+.add_demo_user .form-control {
   background: #eee !important;
 }
 
@@ -1603,7 +1720,10 @@ span.selected_campaign {
 .reports_table tr:nth-of-type(odd),
 .cdr_results_table tr:nth-of-type(odd),
 .rules_table tr:nth-of-type(odd),
-.dnc_table tr:nth-of-type(odd) {
+.dnc_table tr:nth-of-type(odd),
+.providers_table tr:nth-of-type(odd),
+.smtp_servers table tr:nth-of-type(odd),
+.drip_campaigns table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -1893,7 +2013,8 @@ a.kpi_change_details {
 }
 
 .users a.remove_user i,
-.demo_user_modal_link.remove_user i {
+.demo_user_modal_link.remove_user i,
+a.remove_msg i {
   position: relative;
   top: 2px;
   color: #E15B23;
@@ -1993,6 +2114,12 @@ a.run_kpi.btn {
   margin-left: -80px !important;
 }
 
+#sidebar_nots {
+  min-width: 0px;
+  max-width: 0px;
+  margin-right: 0px !important;
+}
+
 .dropdown-toggle::after {
   top: auto;
   bottom: 10px;
@@ -2003,6 +2130,11 @@ a.run_kpi.btn {
 
 #sidebar.active {
   margin-left: 0 !important;
+}
+
+#sidebar_nots.active {
+  position: relative;
+  z-index: 9999;
 }
 
 /* collapses sidebar on mobile, stop removing, its fkn needed*/
@@ -2194,6 +2326,27 @@ a[aria-expanded=true] {
   height: 40px;
 }
 
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #ccc !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #eee;
+  height: 45px;
+}
+
 .db_select a.dropdown-toggle {
   float: right;
 }
@@ -2357,7 +2510,10 @@ p.name i {
   margin-bottom: 0;
 }
 
-.remove_user i {
+.remove_user i,
+.remove_smtp_server_modal i,
+.remove_campaign_modal i,
+.remove_email_service_provider_modal i {
   color: #d9534f;
 }
 
@@ -2400,10 +2556,6 @@ p.name i {
 
 .settings label {
   font-size: 15px;
-}
-
-.settings .update_lang_btn {
-  margin-left: 10px;
 }
 
 .kpi_list div.checkbox:nth-of-type(2) {
@@ -2476,6 +2628,11 @@ div.vertical-line {
   display: block;
 }
 
+.table > thead > tr > th {
+  background: #33A09B;
+  color: #fff;
+}
+
 .form-holder.welcome_box {
   padding: 30px 20px;
   text-align: center;
@@ -2522,19 +2679,6 @@ div.vertical-line {
   margin-top: 30px;
 }
 
-.settings form {
-  margin-bottom: 10px;
-}
-
-.settings form .btn {
-  margin: 0;
-  margin-left: 10px;
-}
-
-.settings form .btn:hover {
-  background-color: #d38826;
-}
-
 .hide_lang input[type=checkbox],
 .toggle_theme input[type=checkbox] {
   width: 15px;
@@ -2562,8 +2706,7 @@ div.vertical-line {
 }
 
 .settings form .btn {
-  margin: 0;
-  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .settings form .btn:hover {
@@ -2868,6 +3011,52 @@ td.bg-danger {
   color: #a94442;
 }
 
+[hidden] {
+  display: none !important;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.label-info {
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.btn-secondary {
+  background: #ccc;
+  color: #444;
+}
+
+.btn-secondary:hover {
+  background: #bbb;
+}
+
+.remove_camp_filter {
+  margin-top: 10px;
+  color: #d9534f;
+  position: relative;
+  top: 25px;
+}
+
 .bwr_omni table thead th a,
 .agent_pause_time table thead th a,
 .production_report table thead th a,
@@ -2892,6 +3081,67 @@ p.login_date {
   float: right;
   font-weight: 600;
   margin-right: 10px;
+}
+
+.bwr_omni table thead th a {
+  display: none;
+}
+
+.btn-notifications {
+  background: none;
+  color: #33A09B;
+  position: relative;
+  font-size: 18px;
+  bottom: 2px;
+}
+
+.btn-notifications:hover {
+  color: #E15B23;
+}
+
+.btn-notifications:hover span.numb_notifications {
+  background: #33A09B;
+  color: #fff;
+}
+
+.btn-notifications:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+span.numb_notifications {
+  position: relative;
+  bottom: 10px;
+  right: 7px;
+  background: #E15B23;
+  color: #fff;
+  height: 17px;
+  width: 17px;
+  border-radius: 20px;
+  padding: 1px 0 0;
+  font-size: 11px;
+}
+
+.btn-secondary.cancel {
+  float: left;
+  margin-top: 10px;
+  margin-right: 15px;
+}
+
+#sidebar_nots .not_header h4 {
+  color: #595C63;
+}
+
+.not p {
+  color: #595C63;
+}
+
+.calls_per_hour table thead th a {
+  display: none;
+}
+
+.calls_per_hour table tbody tr:last-of-type td {
+  font-weight: 600;
 }
 
 .card.oauto {

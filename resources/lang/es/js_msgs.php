@@ -49,6 +49,7 @@ return [
 	'no_data'					=> 'Datos No Disponibles',
 	'non_callable'				=> 'No Invocable',
 	'non_callable_by_disp'		=> 'Conductores no Invocables por Disposición',
+	'no_subcampaign'			=> 'Sin Subcampaña',
 	'none_selected'				=> 'Nada Seleccionado',
 	'numb_filter_attempts'		=> 'Número de Intentos para Filtrar por',
 	'ordered_by'				=> 'Ordenar por',
@@ -82,6 +83,7 @@ return [
 	'voicemails'				=> 'Mensajes de Voz',
 	'waiting'					=> 'Esperando',
 	'wrapup'					=> 'Finalizando',
+	'top_ten_calls_by_camp' => 'Los 10 Mejores Recuentos de Llamada por Campaña',
 
 	/// dataTable
 	'info'		=> 'Mostrando _START_ a _END_ de _TOTAL_ entradas',

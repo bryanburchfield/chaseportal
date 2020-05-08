@@ -49,6 +49,7 @@ return [
 	'no_data'					=> 'No Data Available ',
 	'non_callable'				=> 'Non Callable',
 	'non_callable_by_disp'		=> 'Non-Callable Leads by Disposition',
+	'no_subcampaign'			=> 'No Subcampaign',
 	'none_selected'				=> 'None Selected',
 	'numb_filter_attempts'		=> 'Number of Attempts to Filter by',
 	'ordered_by'				=> 'order by',
@@ -82,6 +83,7 @@ return [
 	'voicemails'				=> 'Voicemails',
 	'waiting'					=> 'Waiting',
 	'wrapup'					=> 'Wrapup',
+	'top_ten_calls_by_camp' => 'Top 10 Calls by Campaign',
 
 	/// dataTable
 	'info'		=> 'Showing _START_ to _END_ of _TOTAL_ entries',

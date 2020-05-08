@@ -14,7 +14,6 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\View\View;
@@ -24,7 +23,6 @@ class AdminController extends Controller
 {
     use TimeTraits;
     use SqlServerTraits;
-
 
     /**
      * Return admin sidenav

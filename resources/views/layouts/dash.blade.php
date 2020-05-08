@@ -63,6 +63,7 @@
     <script src="/js/multiselect.js"></script> 
     <script src="/js/color-hash.js"></script>
     <script src="/js/gauge.js"></script>
+    <script src="/js/campaign_search.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)
@@ -87,6 +88,10 @@
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
+            });
+
+            $('.btn-notifications, .close_nots_bar').on('click', function () {
+                $('#sidebar_nots').toggleClass('active');
             });
 
             

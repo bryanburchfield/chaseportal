@@ -50,5 +50,4 @@ class Dialer extends Model
 
         return $count;
     }
-
 }

@@ -56,6 +56,7 @@ class StandardUser extends FormRequest
                 'nullable',
                 new UniqueEmail($user),
             ],
+
             'user_type' => [
                 'required',
                 function ($attribute, $value, $fail) use ($valid_user_types) {

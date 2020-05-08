@@ -87,7 +87,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentoutbounddashboard/get_sales',
             type: 'POST',
@@ -110,7 +110,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentoutbounddashboard/call_volume',
             type: 'POST',
@@ -221,7 +221,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentoutbounddashboard/rep_performance',
             type: 'POST',
@@ -340,7 +340,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             async: true,
             url: '/agentoutbounddashboard/call_status_count',
             type: 'POST',

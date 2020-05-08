@@ -7,17 +7,12 @@ applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abb
   box-sizing: border-box;
 }
 
-.mt20 {
-  margin-top: 20px;
-}
-
-.mt50 {
-  margin-top: 50px;
-}
-
-.mb20 {
-  margin-bottom: 20px;
-}
+.mb0{margin-bottom: 0;}
+.mt20 {margin-top: 20px;}
+.mt30{margin-top: 30px;}
+.mt50 {margin-top: 50px;}
+.mb20 {margin-bottom: 20px !important;}
+.mb30{margin-bottom: 30px !important;}
 
 .pl0{padding-left: 0 !important;}
 .pr0{padding-right: 0 !important;}
@@ -116,6 +111,7 @@ div.container-fluid.bg {
 
 .filters .btn-group{
   float: right;
+  margin-left: 5px;
 }
 
 .filters .btn.btn-primary{
@@ -152,7 +148,7 @@ div.container-fluid.bg {
   border: 1px solid #d1d1d1;
   padding: 20px 10px 10px;
   overflow: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .card .title {
   text-transform: uppercase;
@@ -243,10 +239,19 @@ table tr th{text-align: center;}
 .bdrcard{
   border: 1px solid #d1d1d1;
   /*margin: 0;*/
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   padding: 0;
   overflow: auto;
 }
+
+.campaign_totals_table thead tr th{
+  background: #203047;
+  color: #fff;
+  text-align: left;
+  padding-left: 10px !important;
+}
+
+.campaign_totals_table tbody tr td{padding-left: 10px !important;}
 
 .bdrcard.bl0{border-left: none !important;}
 
@@ -672,7 +677,163 @@ span.selected_campaign {
     color: #33A09B;
     font-weight: 600;
 }
-  
+
+.campaign_stats_table thead tr th{background: #203047;color:#fff;text-align: left;}
+
+ul.dropdown-menu.filter_campaign {
+    max-height: 270px;
+    min-width: 240px;
+    max-width: 240px;
+    overflow-y: scroll;
+
+    .checkbox {
+        padding: 5px 0 5px 10px;
+        border-bottom: 1px solid #ddd;
+    }
+}
+
+.filters button {
+    font-weight: 600;
+}
+
+ul.dropdown-menu.filter_campaign::-webkit-scrollbar {
+    width: 0 !important
+}
+
+ul.dropdown-menu.filter_campaign {
+    overflow: -moz-scrollbars-none;
+}
+
+ul.dropdown-menu.filter_campaign {
+    -ms-overflow-style: none;
+}
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
+    padding: 0;
+}
+
+.dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
+    @include blue_grad(#263854, #1c273d);
+    color: #fff;
+}
+
+.dropdown-menu li:nth-child(even) {
+    background-color: #ececec;
+}
+
+.dropdown-menu li:hover {
+    background-color: #e4e4e4;
+}
+
+
+.filters {
+  margin-bottom: 10px;
+  float: right;
+  padding: 0;
+}
+
+.filters ul.dropdown-menu {
+  right: -65px;
+}
+
+.filters .btn-group {
+  float: right;
+}
+
+.filters .btn.btn-primary {
+  margin-bottom: 0;
+  background: none;
+}
+
+.filters .btn.btn-primary.select_database,
+.filters .btn.btn-primary.select_campaign {
+  position: relative;
+  margin-bottom: 10px;
+  background-color: #e49831;
+  border: 1px solid #f2ad4d;
+  border-radius: 0;
+  color: #fff;
+  font-weight: 600;
+}
+
+ul.dropdown-menu.filter_campaign .checkbox {
+    padding: 5px 0 5px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.campaign_search.form-control {
+    padding: 0 10px;
+    border: none;
+}
+
+.max_height350{max-height: 350px;}
+
+.overflow_none{overflow: hidden;}
+.campaign_totals{
+  position: relative;
+  overflow-y: scroll; 
+}
+
+.stats_card{padding: 0px;}
+.stats_card .title{background: #203047; color:#fff;padding: 10px;}
+.stats{padding: 0 10px 10px;}
+.card.stats .title{color: #595C63;}
+
+.stats_item{
+    font-weight: 600;
+    float: left;
+    margin-right: 20px;
+}
+
+.stats_item span{
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50px;
+    float: left;
+    margin-right: 3px;
+    position: relative;
+    top: 2px;
+}
+
+.stats_chart {
+    padding-left: 3px;
+    padding-right: 8px;
+    margin-bottom: 15px;
+}
+
+.stats_chart .outer{
+    background: #ddd;
+    width: 87%;
+    height: 20px;
+    float: left;
+}
+
+.stats_item span.repstats, .stats_chart .outer .rep{
+    background: #339FFF;
+}
+
+.stats_item span.teamstats, .stats_chart .outer .team{
+    background: #33A09B;
+}
+
+.stats_chart h4{font-size: 13px;font-weight: 600;margin-bottom: 5px;}
+
+.stats_chart .rep, .stats_chart .team{height: 20px;margin-bottom: 3px;}
+
+.handled_stats .rep .rep_handled, .handled_stats .team .rep_handled, .interactions_stats .rep .rep_sales, .interactions_stats .team .total_sales, .avg_handle_time_stats .rep .rep_avg_handle_time, .avg_handle_time_stats .team .rep_talk_time{width: 0;}
+
+
+.stats_chart .rep, .stats_chart .team, .stats_chart .total{float: left;}
+.stats_chart .total{
+    width: 12%;
+    padding-left: 1%;
+    font-size: 11px;
+    font-weight: 600;
+}
+
 @media handheld, only screen and (max-width: 991px) {
   .card h4.data{
     font-size: 32px;

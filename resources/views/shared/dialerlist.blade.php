@@ -19,9 +19,7 @@
 
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
-    <?php
-    //dd(App\Models\Dialer::orderBy('dialer_numb')->get());
-    ?>
+
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
 
@@ -99,7 +97,6 @@
                                 @endforeach
                             </div>
                         </div>
-                        
                     @endcan
 
                     @cannot('accessSuperAdmin')

@@ -5,15 +5,18 @@
 
 	<div class="divider"></div>
 
-	<form action="{{url('/dashboards/settings/update_lang_display')}}" method="POST" class="form hide_lang">
+	<form action="{{action('UserController@updateSettings')}}" method="POST" class="form hide_lang">
 		@csrf
-		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->language_displayed ? '1' : '0'}}" name="lang_displayed[]" {{Auth::user()->language_displayed ? 'checked' : ''}}> {{__('general.display_language')}}</label>
-		<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
-	</form>
+		<div>
+			<label class="checkbox-inline">
+			<input type="checkbox" value="1" name="language_displayed" {{Auth::user()->language_displayed ? 'checked' : ''}}> {{__('general.display_language')}}</label>
+		</div>
 
-	<form action="{{url('/dashboards/settings/update_theme')}}" method="POST" class="form toggle_theme">
-		@csrf
-		<label class="checkbox-inline"><input type="checkbox" value="{{Auth::user()->theme == 'dark' ? '1' : '0'}}" name="theme[]" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> Enable Dark Theme</label>
-		<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
+		<div>
+			<label class="checkbox-inline">
+			<input type="checkbox" value="1" name="theme" {{Auth::user()->theme == 'dark' ? 'checked' : ''}}> {{__('general.enable_dark_theme')}}</label>
+		</div>
+
+			<button type="submit" class="btn btn-primary btn-sm mt30 update_lang_btn add_btn_loader">{{__('general.update')}}</button>
 	</form>
 </div>

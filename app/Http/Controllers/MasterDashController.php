@@ -53,7 +53,7 @@ class MasterDashController extends Controller
             'page' => $page,
             'dashbody' => $dashbody,
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
-            'db_list' => $db_list
+            'db_list' => $db_list,
         ];
 
         return view('masterdash')->with($data);
@@ -222,24 +222,5 @@ class MasterDashController extends Controller
         $success[] = $user->update($update);
 
         return $this->showSettings($success);
-    }
-
-    public function updateLangDisplay(Request $request)
-    {
-        $user = Auth::user();
-        $display_lang = (int) $request->lang_displayed;
-        User::where('id', $user->id)->update(array('language_displayed' => $display_lang));
-
-        return redirect()->back();
-    }
-
-    public function updateTheme(Request $request)
-    {
-        $user = Auth::user();
-        $theme = (int) $request->theme;
-        $theme = ($theme ? 'dark' : 'light');
-        User::where('id', $user->id)->update(array('theme' => $theme));
-
-        return redirect()->back();
     }
 }

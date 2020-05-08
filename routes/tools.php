@@ -33,6 +33,30 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/upload', 'DncController@uploadFile');
                 Route::post('/process_file', 'DncController@processFile');
             });
+
+            // Email Drip Builder
+            Route::prefix('email_drip')->group(function () {
+                Route::get('/', 'EmailDripController@index');
+                Route::get('/update_filters/{email_drip_campaign_id}', 'EmailDripController@updateFilters');
+                Route::post('/test_connection', 'EmailDripController@testConnection');
+                Route::post('/add_esp', 'EmailDripController@addEmailServiceProvider');
+                Route::post('/delete_esp', 'EmailDripController@deleteEmailServiceProvider');
+                Route::post('/update_esp', 'EmailDripController@updateEmailServiceProvider');
+                Route::post('/get_esp', 'EmailDripController@getEmailServiceProvider');
+                Route::post('/add_campaign', 'EmailDripController@addEmailDripCampaign');
+                Route::post('/delete_campaign', 'EmailDripController@deleteEmailDripCampaign');
+                Route::post('/update_campaign', 'EmailDripController@updateEmailDripCampaign');
+                Route::get('/edit_campaign/{id}', 'EmailDripController@editEmailDripCampaign');
+                Route::post('/get_table_fields', 'EmailDripController@getTableFields');
+                Route::post('/get_subcampaigns', 'EmailDripController@getSubcampaigns');
+                Route::post('/get_properties', 'EmailDripController@getProperties');
+                Route::post('/toggle_email_campaign', 'EmailDripController@toggleEmailDripCampaign');
+                Route::post('/get_filters', 'EmailDripController@getFilters');
+                Route::post('/get_operators', 'EmailDripController@getOperators');
+                Route::post('/update_filters', 'EmailDripController@saveFilters');
+                Route::post('/validate_filter', 'EmailDripController@validateFilter');
+                Route::post('/delete_filter', 'EmailDripController@deleteFilter');
+            });
         });
     });
 });
