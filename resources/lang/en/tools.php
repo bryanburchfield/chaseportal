@@ -19,6 +19,7 @@ return [
 	'days_called'   => 'Distinct Days Leads are Called',
 	'days_to_filter'	=> 'Days to Filter By',
 	'delete'		=> 'Delete',
+	'delete_msg'	=> 'Delete Message',
 	'delete_rule'	=> 'Delete Rule',
 	'description'		=> 'Description',
 	'destination_campaign' => 'Destination Campaign',

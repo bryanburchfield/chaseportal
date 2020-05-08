@@ -41,6 +41,7 @@ return [
 	'my_settings'				=> 'Mi Configuración',
 	'new_password'				=> 'Nueva Contraseña',
 	'no'						=> 'No',
+	'notifications'				=> 'Notificaciones',
 	'of'						=> 'de',
 	'page'						=> 'Página',
 	'page_size'					=> 'Tamaño de Página',
