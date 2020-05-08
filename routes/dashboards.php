@@ -33,6 +33,10 @@ Route::prefix('dashboards')->group(function () {
         Route::post('reports/{report}', 'ReportController@runReport');
         Route::get('reports/info/{report}', 'ReportController@info');
 
+        // Notifications
+        Route::get('/notifications/{id}', 'FeatureMessageController@viewMessage');
+        Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
+
         // ajax targets
         Route::post('set_dashboard', 'MasterDashController@setDashboard');
         Route::post('update_filters', 'MasterDashController@updateFilters');
@@ -60,6 +64,12 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
             Route::post('admin/edit_myself', 'AdminController@editMyself');
             Route::get('admin/settings', 'AdminController@settings');
+            Route::get('admin/notifications', 'FeatureMessageController@index');
+            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
+            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
+            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
+            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
+
             // Super Admin only dashboards
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');

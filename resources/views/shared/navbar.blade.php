@@ -47,6 +47,17 @@
                             </ul>
                         </li>
                     @endif
+
+                    <li class="notifications btn-group">
+                        <button type="button" class="btn btn-notifications">
+                            <span>
+                                <i class="fas fa-bell"></i>
+                                @if(Auth::user()->unreadFeatureMessagesCount() != 0)
+                                    <span class="numb_notifications">{{Auth::user()->unreadFeatureMessagesCount()}}</span>
+                                @endif
+                            </span>
+                        </button>
+                    </li>
                 </div>
             </div>
 
