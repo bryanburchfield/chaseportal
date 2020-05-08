@@ -38,6 +38,7 @@ return [
 	'contact_rate'		=> 'Contact Rate',
 	'conversion_rate'	=> 'Conversion Rate',
 	'count'				=> 'Count',
+	'count_of_calls_per_hour'	=> 'Count of Calls Per Hour',
 	'distinct_agent_count' => 'Distinct Agent Count',
 	'distinct_logins_per_day'=> 'Distinct Logins Per Day',
 	'distinct_reps_per_camp'	=> 'Distinct Reps Per Campaign',

@@ -2916,6 +2916,14 @@ p.login_date {
   font-size: 15px;
 }
 
+.calls_per_hour table thead th a {
+  display: none;
+}
+
+.calls_per_hour table tbody tr:last-of-type td {
+  font-weight: 600;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

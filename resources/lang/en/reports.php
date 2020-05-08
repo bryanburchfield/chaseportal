@@ -18,6 +18,7 @@ return [
 	'bwr_production_report'         => 'Production Report',
 	'call_details'                  => 'Call Details',
 	'caller_id'                     => 'Caller ID Tracking',
+	'calls_per_hour'                => 'Calls Per Hour',
 	'campaign_call_log'             => 'Campaign Call Log',
 	'campaign_summary'              => 'Campaign Summary',
 	'campaign_usage'                => 'Campaign Usage',
@@ -69,6 +70,7 @@ return [
 
 	// Column headings
 	'abandoned'           => 'Abandoned Calls',
+	'abandonrate' => 'Abandon Rate',
 	'agent'               => 'Agent Calls',
 	'agent_hangup'        => 'Hangup',
 	'aph'                 => 'S-L-A/HR',
@@ -96,6 +98,7 @@ return [
 	'connectpct'          => 'Connect %',
 	'connectrate'         => 'Connect Rate',
 	'connects'            => 'Connects',
+	'contactpct' => 'Contact%',
 	'contacts'            => 'Contacts',
 	'conversionfactor'    => 'Conversion Factor',
 	'conversionrate'      => 'Conversion Rate',
@@ -107,7 +110,9 @@ return [
 	'details'             => 'Details',
 	'dialed'              => 'Dialed',
 	'dispositiontimesec'  => 'Wrap Up Time',
-	'download'               => 'Download',
+	'download'            => 'Download',
+	'dropped'             => 'Dropped',
+	'droprate'            => 'Drop Rate',
 	'dph'                 => 'Dials per Hr',
 	'dropcallspercentage' => 'Drop Rate (Connected Calls)',
 	'duration'            => 'Duration',
@@ -115,8 +120,11 @@ return [
 	'firstname'           => 'First',
 	'handledbyivr'        => 'Handled By IVR',
 	'handledbyrep'        => 'Handled By Rep',
+	'hour' => 'Hour',
 	'hours'               => 'Hours Worked',
 	'import_date' => 'Import Date',
+	'inbound' => 'Inbound',
+	'inbound_pct' => 'Inbound%',
 	'lastname'            => 'Last',
 	'leads'               => 'Sale/Lead/App',
 	'loggedintime'        => 'Logged In Time',
@@ -127,6 +135,8 @@ return [
 	'manhoursec'          => 'Man Hours',
 	'missedcalls'         => 'Missed Calls',
 	'mostrecent'          => 'Most Recent',
+	'outbound' => 'Outbound',
+	'outbound_pct' => 'Outbound%',
 	'pausedtime'          => 'Pause Time',
 	'pausedtimesec'       => 'Time Paused',
 	'pct'                 => 'Percent',
@@ -148,6 +158,9 @@ return [
 	'unpausedtime'        => 'UnPause Time',
 	'voicemail'           => 'Voice Mail',
 	'waittimesec'         => 'Wait Time',
+
+
+
 
 	// BWR Omni Report - no Spanish needed
 	'avg_attempts' => 'Avg Attempts',

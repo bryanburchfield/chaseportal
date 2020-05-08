@@ -34,6 +34,7 @@ return [
 	'contact_rate'		=> 'Tasa de Contacto',
 	'conversion_rate'	=> 'Tasa de Conversión',
 	'count'				=> 'Recuento',
+	'count_of_calls_per_hour'	=> 'Conteo de Llamadas Por Hora',
 	'distinct_agent_count' => 'Conde de agente distinto',
 	'distinct_logins_per_day'=> 'Distintos inicios de sesión por día',
 	'distinct_reps_per_camp'	=> 'Representantes distintos por campaña',

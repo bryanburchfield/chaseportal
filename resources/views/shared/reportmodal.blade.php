@@ -12,54 +12,70 @@
             <div class="modal-body">
 
                 @php
-                $reports = [
-                    'agent_analysis' =>  __('reports.agent_analysis'),
-                    'agent_summary' =>  __('reports.agent_summary'),
-                    'agent_summary_campaign' =>  __('reports.agent_summary_campaign'),
-                    'agent_summary_subcampaign' =>  __('reports.agent_summary_subcampaign'),
-                    'agent_pause_time' =>  __('reports.agent_pause_time'),
-                    'agent_activity' =>  __('reports.agent_activity'),
-                    'agent_timesheet' =>  __('reports.agent_timesheet'),
-                    'campaign_usage' =>  __('reports.campaign_usage'),
-                    'caller_id' =>  __('reports.caller_id'),
-                    'inbound_summary' =>  __('reports.inbound_summary'),
-                    'campaign_summary' =>  __('reports.campaign_summary'),
-                    'subcampaign_summary' =>  __('reports.subcampaign_summary'),
-                    'campaign_call_log' => __('reports.campaign_call_log'),
-                    'missed_calls' =>   __('reports.missed_calls'),
-                    'shift_report' =>  __('reports.shift_report'),
-                    'production_report' =>  __('reports.production_report'),
-                    'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
-                    'lead_inventory' =>  __('reports.lead_inventory'),
-                    'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
-                ];
+                    $reports = [
+                        'agent_analysis' =>  __('reports.agent_analysis'),
+                        'agent_summary' =>  __('reports.agent_summary'),
+                        'agent_summary_campaign' =>  __('reports.agent_summary_campaign'),
+                        'agent_summary_subcampaign' =>  __('reports.agent_summary_subcampaign'),
+                        'agent_pause_time' =>  __('reports.agent_pause_time'),
+                        'agent_activity' =>  __('reports.agent_activity'),
+                        'agent_timesheet' =>  __('reports.agent_timesheet'),
+                        'campaign_usage' =>  __('reports.campaign_usage'),
+                        'caller_id' =>  __('reports.caller_id'),
+                        'calls_per_hour' =>  __('reports.calls_per_hour'),
+                        'inbound_summary' =>  __('reports.inbound_summary'),
+                        'campaign_summary' =>  __('reports.campaign_summary'),
+                        'subcampaign_summary' =>  __('reports.subcampaign_summary'),
+                        'campaign_call_log' => __('reports.campaign_call_log'),
+                        'missed_calls' =>   __('reports.missed_calls'),
+                        'shift_report' =>  __('reports.shift_report'),
+                        'production_report' =>  __('reports.production_report'),
+                        'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
+                        'lead_inventory' =>  __('reports.lead_inventory'),
+                        'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
 
-                if(Auth::User()->group_id == 224500) {
-                    unset($reports['production_report']);
-                    unset($reports['campaign_call_log']);
+                    ];
 
-                    $reports['bwr_omni'] = __('reports.bwr_omni');
-                    $reports['bwr_production_report'] = __('reports.production_report');
-                    $reports['bwr_campaign_call_log'] = __('reports.campaign_call_log');
-                }
+                    if(Auth::User()->group_id == 224500) {
+                        unset($reports['production_report']);
+                        unset($reports['campaign_call_log']);
 
-                if(!Auth::User()->isDemo()) {
-                    $reports['call_details'] = __('reports.call_details');
-                }
+                        $reports['bwr_omni'] = __('reports.bwr_omni');
+                        $reports['bwr_production_report'] = __('reports.production_report');
+                        $reports['bwr_campaign_call_log'] = __('reports.campaign_call_log');
+                    }
 
-                asort($reports);
 
-                $i=0;
-                foreach($reports as $key => $value){
-                    if(!$i){echo '<div class="col-sm-6 nopad">';}
-                    if($i == count($reports) / 2 + 1){echo '<div class="col-sm-6 nopad">';}
-                    echo '<div class="radio">';
-                        echo '<label><input type="radio" name="report_option" class="report_option" value="'.$key.'">'.$value.'</label>';
-                    echo '</div>';
-                    if($i == count($reports) / 2 || $i == count($reports) -1){echo '</div>';}
-                    $i++;
-                }
+                    if(Auth::User()->group_id == 224500) {
+                        $reports['bwr_omni'] = __('reports.bwr_omni');
+                    }
+
+                    if(!Auth::User()->isDemo()) {
+                        $reports['call_details'] = __('reports.call_details');
+                    }
+
+                    asort($reports);
+
+                    // split the list in half
+                    $half = ceil(count($reports) / 2);
+                    $list1 = array_slice($reports, 0, $half);
+                    $list2 = array_slice($reports, $half);
                 @endphp
+
+                <div class="col-sm-6 nopad">
+                    @foreach ($list1 as $key => $value)
+                        <div class="radio">
+                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="col-sm-6 nopad">
+                    @foreach ($list2 as $key => $value)
+                        <div class="radio">
+                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
+                        </div>
+                    @endforeach
+                </div>
             </div>
 
             <div class="modal-footer">
