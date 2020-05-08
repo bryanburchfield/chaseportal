@@ -36,6 +36,8 @@ trait ReportTraits
             'databases' => [],
             'columns' => [],
         ];
+
+        $this->increaseLimits();
     }
 
     public function setDates()
