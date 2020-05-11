@@ -384,12 +384,14 @@ class AdminController extends Controller
             $user->update($request->all());
             Auth::logout();
             Auth::login($user);
+            session()->forget('databases');
         } catch (Exception $e) {
             return ['errors' => ['Update Failed']];
         }
 
         return ['success' => 1];
     }
+
 
     public function loadCdrLookup()
     {
