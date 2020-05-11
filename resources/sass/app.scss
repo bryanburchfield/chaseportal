@@ -2001,7 +2001,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     height: 40px;
 }
 
-.note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar, {
+.note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
     background: #eee !important;
 }
 
@@ -2662,6 +2662,7 @@ p.login_date {
     margin-right: 10px;
 }
 
+
 .bwr_omni table thead th a{display: none;}
 
 .btn-notifications{
@@ -2729,6 +2730,8 @@ span.numb_notifications{
         font-size: 15px;
     }
 }
+.calls_per_hour table thead th a {display: none;}
+.calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

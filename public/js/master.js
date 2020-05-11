@@ -1216,6 +1216,7 @@ var Master = {
             url: 'update_report',
             type: 'POST',
             dataType: 'json',
+            timeout:600000,
             data: {
                 curpage: curpage,
                 pagesize: pagesize,
@@ -1308,7 +1309,11 @@ var Master = {
                 if (response.params.report == 'bwr_campaign_call_log') {
                     Master.campaign_call_log(response);
                 }
-            }
+            }, error: function(jqXHR, textStatus){
+                if(textStatus === 'timeout'){     
+                     alert('Failed from timeout, please refresh your browser');         
+                }
+            },
         }); /// end ajax
     }, /// end update_report function
 
