@@ -27,6 +27,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="/css/summernote.min.css" rel="stylesheet" type="text/css"/>
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.min.js"></script>
     <script src="/js/respond.min.js"></script>
@@ -63,6 +64,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
+    <script src="/js/summernote.min.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)
@@ -91,9 +93,12 @@
             });
 
             $('.btn-notifications, .close_nots_bar').on('click', function () {
-                console.log('close side bar clicked');
                 $('#sidebar_nots').toggleClass('active');
             });
+
+            $('#summernote').summernote({
+               height: 200
+           });
         });
     </script>
   </body>

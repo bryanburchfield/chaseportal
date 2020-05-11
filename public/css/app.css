@@ -3077,6 +3077,27 @@ p.login_date {
   font-size: 15px;
 }
 
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #ccc !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #eee;
+  height: 45px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
