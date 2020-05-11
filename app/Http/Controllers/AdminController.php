@@ -392,7 +392,6 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
-
     public function loadCdrLookup()
     {
         $page['menuitem'] = 'cdr_lookup';
