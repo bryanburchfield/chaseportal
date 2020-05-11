@@ -112,6 +112,9 @@ h1, h2, h3, h4, h5, h6 {
 .pl10{padding-left: 10px;}
 .pb20 {padding-bottom: 20px;}
 
+.fz15{font-size: 15px;}
+.fw600{font-weight: 600;}
+
 .carb_mb30_mb {
     margin-bottom: 0;
 }
@@ -296,6 +299,117 @@ i, span {
             -ms-transform: translateX(50%);
             transform: translateX(50%);
         }
+    }
+}
+
+#sidebar_nots {
+    min-width: 300px;
+    max-width: 300px;
+    color: #fff;
+    background: #efefef;
+    border-left: 1px solid #ccc;
+    @include transition(all, ease, 0.3s);
+
+    &.active {
+        min-width: 300px;
+        max-width: 300px;
+
+        .dropdown-toggle::after {
+            top: auto;
+            bottom: 10px;
+            right: 50%;
+            -webkit-transform: translateX(50%);
+            -ms-transform: translateX(50%);
+            transform: translateX(50%);
+        }
+    }
+
+    .close_nots_bar{position: relative;top:0;right:0px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
+
+    .not_header{
+        padding-top: 20px;
+        .not_header_inner{
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-bottom: 13px;
+        }
+
+        h4{
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        label{
+            color:darken(#aaa,10%);
+        }
+    }
+
+    .notifications{
+        .not{
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ccc;
+            position: relative;
+
+            h4{
+                color: $green;
+                font-size: 14px;
+                font-weight: 600;
+                margin-top: 10px;
+                margin-bottom: 6px;
+            }
+
+            .not_date{color:#333;font-size: 12px;}
+            .not_read{position: absolute; top:12px; right:10px; @include border-radius(10px); background: $green;height: 12px;width: 12px;display: block;}
+
+            &:hover{
+                background: lighten(#efefef,5%);
+            }
+        }
+    }
+}
+
+.btn-notifications{
+    background:none;
+    color:$green;
+    position:relative;
+    font-size: 18px;
+    bottom:2px;
+    &:hover{color: $orange;}
+    &:hover span.numb_notifications{background: $green;color:#fff;}
+
+    &:focus{outline:none;@include box-shadow(none);}
+}
+
+span.numb_notifications{
+    position:relative;
+    bottom:10px;
+    right:7px;
+    background: $orange;
+    color:#fff;
+    height: 17px;
+    width: 17px;
+    @include border-radius(20px);
+    padding: 1px 0 0;
+    font-size: 11px;
+}
+
+.btn-secondary.cancel{
+    float: left;
+    margin-top: 10px;
+    margin-right: 15px;
+}
+
+#sidebar_nots .not_header h4{
+    color:#595C63;
+}
+
+.not {
+    p{
+        color: #595C63;
     }
 }
 
@@ -1204,7 +1318,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only, select.input-sm, .add_custom_field input.form-control{
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control, .edit_myself select, .demo_user select, .demo_user .form-control, #webhook_generator input.form-control, #webhook_generator select, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .notification_body{
     background: #eee !important;
 }
 
@@ -1639,7 +1753,7 @@ a.kpi_change_details{
     margin-right: 10px;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i {
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
     position: relative;
     top: 2px;
     color: $orange;
@@ -1722,6 +1836,12 @@ a.run_kpi.btn {
     margin-left: -80px !important;
 }
 
+#sidebar_nots {
+  min-width: 0px;
+  max-width: 0px;
+  margin-right: 0px !important;
+}
+
 .dropdown-toggle::after {
     top: auto;
     bottom: 10px;
@@ -1733,6 +1853,11 @@ a.run_kpi.btn {
 
 #sidebar.active {
     margin-left: 0 !important;
+}
+
+#sidebar_nots.active {
+  position: relative;
+  z-index: 9999;
 }
 
 /* collapses sidebar on mobile, stop removing, its fkn needed*/

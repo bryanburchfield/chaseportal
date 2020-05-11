@@ -89,6 +89,11 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
+
+            $('.btn-notifications, .close_nots_bar').on('click', function () {
+                console.log('close side bar clicked');
+                $('#sidebar_nots').toggleClass('active');
+            });
         });
     </script>
   </body>

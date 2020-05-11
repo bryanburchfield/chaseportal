@@ -34,7 +34,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="checkbox-inline">
+								<label class="checkbox-inline fz15 fw600">
 									<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
 								</label>
 							</div>

@@ -122,6 +122,8 @@
 	</div>
 </div>
 
+@include('shared.notifications_bar')
+
 <!-- Delete DNC Modal -->
 <div class="modal fade" id="deleteDNCModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

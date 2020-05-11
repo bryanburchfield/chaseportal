@@ -26,6 +26,9 @@ var Admin = {
 		$('.generate_url').on('click', this.generate_url);
 		$('.checkall_system_macro').on('click', this.toggleall_system_macro);
 		$('body').on('dblclick', '.field_name', this.edit_field_name);
+		$('.published').on('click', this.toggle_published_msg);
+		$('.remove_msg_modal').on('click', this.populate_msg_delete_modal);
+		$('.delete_msg').on('click', this.delete_msg);
 		// $('.preloader').fadeOut('slow');
 	},
 
@@ -645,7 +648,67 @@ var Admin = {
 		if($(this).parent().parent().parent().find('.use_system_macro').is(":checked")){
 			$(this).parent().parent().parent().find('.use_system_macro').prop('checked', false);
 		}
-	}
+	},
+
+	toggle_published_msg:function(){
+	        var active=0;
+	        var id = $(this).data('id');
+
+	        if($(this).is(':checked')){
+	            active=1;
+	        }else{
+	            active =0;
+	        }
+
+	        $.ajaxSetup({
+	            headers: {
+	                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	            }
+	        });
+
+	        $.ajax({
+	            url:'/dashboards/admin/publish_notification',
+	            type:'POST',
+	            data:{
+	                id:id,
+	                active:active
+	            },
+	            success:function(response){
+	                console.log(response);
+	            }
+	        });
+	    },
+
+	    populate_msg_delete_modal:function(e){
+	    	e.preventDefault();
+	    	var id = $(this).data('id');
+	    	var title = $(this).data('title');
+	    	$('#deleteMsgModal').find('input.id').val(id);
+	    	$('#deleteMsgModal').find('h3 span.title').text(title);
+	    },
+
+	    delete_msg:function(e){
+	    	e.preventDefault();
+	    	var id = $('#deleteMsgModal .id').val();
+
+	    	$.ajaxSetup({
+	    		headers: {
+	    			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	    		}
+	    	});
+
+	    	$.ajax({
+	    		url: '/dashboards/admin/delete_msg',
+	    		type: 'POST',
+	    		dataType: 'json',
+	    		data: {
+	    			id: id
+	    		},
+	    		success: function (response) {
+	    			window.location= "/dashboards/admin/notifications";
+	    		}
+	    	});
+	    }
 }
 
 $(document).ready(function () {

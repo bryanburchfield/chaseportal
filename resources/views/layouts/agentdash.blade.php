@@ -73,6 +73,9 @@
                 $('#sidebar').toggleClass('active');
             });
 
+            $('.btn-notifications, .close_nots_bar').on('click', function () {
+                $('#sidebar_nots').toggleClass('active');
+            });
             
         });
     </script>
