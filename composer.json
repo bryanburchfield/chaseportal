@@ -20,7 +20,8 @@
         "maatwebsite/excel": "^3.1",
         "mariuzzo/laravel-js-localization": "^1.5",
         "owen-it/laravel-auditing": "^10.0",
-        "twilio/sdk": "^5.31"
+        "twilio/sdk": "^5.31",
+        "wildbit/postmark-php": "^2.10"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

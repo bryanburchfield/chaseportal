@@ -505,7 +505,7 @@ class ContactsPlaybookService
 
 
             // TODO: REMOVE AFTER TESTING
-            // 'to' => $rec[$email_drip_campaign->email_field],
+            // 'to' => $rec[$playbook_email_action->email_field],
             'to' => 'g.sandoval@chasedatacorp.com',
 
 

@@ -8,7 +8,6 @@ use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
 use App\Services\CallerIdService;
 use App\Services\DemoClientService;
-use App\Services\EmailDripService;
 use App\Services\LeadMoveService;
 use Illuminate\Support\Facades\App;
 
@@ -63,13 +62,6 @@ class Kernel extends ConsoleKernel
             DemoClientService::expireDemos();
         })
             ->everyTenMinutes()
-            ->runInBackground();
-
-        // Run Email Drip campaigns
-        $schedule->call(function () {
-            EmailDripService::runDrips();
-        })
-            ->hourly()
             ->runInBackground();
 
         // Caller ID Report (production only)

@@ -23,11 +23,6 @@ class EmailServiceProvider extends Model
         'properties' => 'array',
     ];
 
-    public function emailDripCampaigns()
-    {
-        return $this->hasMany('App\Models\EmailDripCampaign');
-    }
-
     public function providerClassName()
     {
         return self::getProviderClassName($this->provider_type);

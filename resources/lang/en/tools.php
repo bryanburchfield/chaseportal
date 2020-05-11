@@ -58,8 +58,6 @@ return [
 	'edit_rule'		=> 'Edit Rule',
 	'edit_server'	=> 'Edit SMTP Server',
 	'email'			=> 'Email',
-	'email_drip_builder'	=> 'Email Drip Builder',
-	'email_drip_campaigns'	=> 'Email Drip Campaigns',
 	'email_field'	=> 'Email Field',
 	'email_service_providers'	=> 'Email Providers',
 	'emails_per_lead'	=> 'Emails Per Lead',

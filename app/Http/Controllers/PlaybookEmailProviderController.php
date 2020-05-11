@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidEmailServiceProvider;
 use App\Models\EmailServiceProvider;
-use App\Services\EmailDripService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -129,11 +128,6 @@ class PlaybookEmailProviderController extends Controller
     {
         $email_service_provider = $this->findEmailServiceProvider($request->id);
 
-        // check for campaigns
-        if ($email_service_provider->emailDripCampaigns->isNotEmpty()) {
-            abort(response()->json(['errors' => ['1' => trans('tools.provider_in_use')]], 422));
-        }
-
         $email_service_provider->delete();
 
         return ['status' => 'success'];
@@ -147,9 +141,12 @@ class PlaybookEmailProviderController extends Controller
      */
     public function testConnection(ValidEmailServiceProvider $request)
     {
-        // Convert request class to model class
-        $email_drip_service = new EmailDripService(new EmailServiceProvider($request->all()));
+        $email_service_provider = new EmailServiceProvider($request->all());
 
-        return $email_drip_service->testConnection();
+        $class = $email_service_provider->providerClassName();
+
+        $email_service_provider = new $class($email_service_provider);
+
+        return $email_service_provider->testConnection();
     }
 }

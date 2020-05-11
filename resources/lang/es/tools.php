@@ -58,8 +58,6 @@ return [
 	'edit_rule'		=> 'Revisar Regla',
 	'edit_server'	=> 'Editar SMTP Servidor',
 	'email'			=> 'Email',
-	'email_drip_builder'	=> 'Email Goteo Constructor',
-	'email_drip_campaigns'	=> 'Campañas de goteo por correo electrónico',
 	'email_field'	=> 'Campo de Correo Electrónico',
 	'email_service_providers'	=> 'Proveedores de correo electrónico',
 	'emails_per_lead'	=> 'Correos Electrónicos por Cliente Potencial',
