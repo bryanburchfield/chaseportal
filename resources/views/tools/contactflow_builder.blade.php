@@ -284,7 +284,7 @@ if (Auth::user()->isType('demo')) {
 		</div>
 	</div>
 
-    @include('shared.notifications_bar')
+@include('shared.notifications_bar')
 
 <!-- Rule Details Modal -->
 <div class="modal fade" id="leadDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

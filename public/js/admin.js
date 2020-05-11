@@ -653,6 +653,7 @@ var Admin = {
 	},
 
 	toggle_published_msg:function(){
+
         var active=0;
         var id = $(this).data('id');
 

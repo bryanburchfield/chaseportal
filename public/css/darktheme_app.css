@@ -455,7 +455,7 @@ span {
 #sidebar_nots .close_nots_bar {
   position: relative;
   top: 0;
-  right: 0px;
+  right: 10px;
   float: right;
   color: #d9534f;
 }
@@ -517,8 +517,45 @@ span {
   display: block;
 }
 
-#sidebar_nots .notifications .not:hover {
+#sidebar_nots .notifications .not:hover,
+#sidebar_nots .notifications .not.unread {
   background: #171e30;
+}
+
+.btn-notifications {
+  background: none;
+  color: #fff;
+  position: relative;
+  font-size: 18px;
+  bottom: 2px;
+}
+
+.btn-notifications:hover {
+  color: #33A09B;
+}
+
+.btn-notifications:hover span.numb_notifications {
+  background: #fff;
+  color: #33A09B;
+}
+
+span.numb_notifications {
+  position: relative;
+  bottom: 10px;
+  right: 7px;
+  background: #E15B23;
+  color: #fff;
+  height: 17px;
+  width: 17px;
+  border-radius: 20px;
+  padding: 1px 0 0;
+  font-size: 11px;
+}
+
+.btn-secondary.cancel {
+  float: left;
+  margin-top: 10px;
+  margin-right: 15px;
 }
 
 button,
@@ -1732,7 +1769,8 @@ input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
 .create_notification .form-control,
-.add_demo_user .form-control {
+.add_demo_user .form-control,
+.notification_body {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -2270,6 +2308,7 @@ a.kpi_change_details {
 }
 
 .users a.remove_user i,
+.demo_user_modal_link.remove_user i,
 a.remove_msg i {
   position: relative;
   top: 2px;
@@ -3517,6 +3556,28 @@ span.numb_notifications {
 
 .calls_per_hour table tbody tr:last-of-type td {
   font-weight: 600;
+}
+
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #1d2b40 !important;
+  color: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #1b293c !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #111a26;
+  height: 45px;
 }
 
 /* ---------------------------------------------------

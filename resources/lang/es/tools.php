@@ -61,7 +61,7 @@ return [
 	'filter_value'	=> 'Valor del Filtro',
 	'host'			=> 'Anfitrión',
 	'has_header'	=> 'Tiene fila de Encabezado',
-	'inbound_sources'=> 'Fuentes Entrantes',
+	'inbound_sources' => 'Fuentes Entrantes',
 	'instructions'	=> 'Instrucciones',
 	'lead_age'      => 'Edad de Plomo',
 	'lead_attempts' => '# de Intentos de Plomo',
