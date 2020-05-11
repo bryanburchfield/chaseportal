@@ -480,7 +480,8 @@ span {
   display: block;
 }
 
-#sidebar_nots .notifications .not:hover {
+#sidebar_nots .notifications .not:hover,
+#sidebar_nots .notifications .not.unread {
   background: #fcfcfc;
 }
 
