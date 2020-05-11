@@ -8,7 +8,6 @@ use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
 use App\Services\CallerIdService;
 use App\Services\DemoClientService;
-use App\Services\LeadMoveService;
 use Illuminate\Support\Facades\App;
 
 class Kernel extends ConsoleKernel
@@ -48,14 +47,6 @@ class Kernel extends ConsoleKernel
             ->dailyAt('6:00')
             ->timezone('America/New_York')
             ->runInBackground();
-
-        // Run Lead Filters
-        $schedule->call(function () {
-            LeadMoveService::runFilter();
-        })
-            ->dailyAt('6:30')
-            ->runInBackground()
-            ->timezone('America/New_York');
 
         // Expire Demo Users
         $schedule->call(function () {

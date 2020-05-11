@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\LeadsController;
+use App\Services\LeadsService;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 
@@ -71,7 +71,7 @@ class dump_leads extends Command
                'db' => $this->argument('db'),
           ]);
 
-          $lc = new LeadsController();
+          $lc = new LeadsService();
           $lc->leadDump($request);
      }
 }
