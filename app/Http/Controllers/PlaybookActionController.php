@@ -16,10 +16,11 @@ use App\Models\PlaybookSmsAction;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookActionController extends Controller
 {
@@ -102,10 +103,14 @@ class PlaybookActionController extends Controller
             ->firstOrFail();
     }
 
+    /**
+     * Add an action
+     * 
+     * @param ValidPlaybookAction $request 
+     * @return string[] 
+     */
     public function addAction(ValidPlaybookAction $request)
     {
-        Log::debug($request->all());
-
         // validate fields based on action_type
         $model = $this->validateActionType($request);
 
@@ -125,10 +130,14 @@ class PlaybookActionController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Update an action
+     * 
+     * @param ValidPlaybookAction $request 
+     * @return string[] 
+     */
     public function updateAction(ValidPlaybookAction $request)
     {
-        Log::debug($request->all());
-
         // first, make sure it's the correct group
         $playbook_action = $this->findPlaybookAction($request->id);
 
@@ -174,6 +183,13 @@ class PlaybookActionController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Delete an action
+     * 
+     * @param Request $request 
+     * @return string[] 
+     * @throws HttpResponseException 
+     */
     public function deleteAction(Request $request)
     {
         // on delete cascade takes care of the sub-table records
@@ -188,6 +204,12 @@ class PlaybookActionController extends Controller
         return ['status' => 'success'];
     }
 
+    /**
+     * Get available Dispos
+     * 
+     * @param Request $request 
+     * @return mixed|array 
+     */
     public function getDispos(Request $request)
     {
         $campaign = $request->has('campaign') ? $request->campaign : '';
@@ -234,6 +256,12 @@ class PlaybookActionController extends Controller
         return $fields;
     }
 
+    /**
+     * Get subcampaigns along with "!!none!!"
+     * 
+     * @param mixed $campaign 
+     * @return mixed 
+     */
     private function getAllSubcampaignsWithNone($campaign)
     {
         $results = $this->getAllSubcampaigns($campaign);
@@ -242,6 +270,13 @@ class PlaybookActionController extends Controller
         return $results;
     }
 
+    /**
+     * Validate and action based on its type
+     * 
+     * @param Request $request 
+     * @return mixed|string 
+     * @throws BindingResolutionException 
+     */
     private function validateActionType(Request $request)
     {
         switch ($request->action_type) {
