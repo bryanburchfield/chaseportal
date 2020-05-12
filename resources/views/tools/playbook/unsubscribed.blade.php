@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.minimal')
 @section('title', __('tools.tools'))
 
 @section('content')
