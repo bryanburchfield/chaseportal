@@ -14,8 +14,8 @@ var Contacts_Playbook = {
 	init:function(){
 		$('#campaign_select').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
-		$('.playbook_actions_modal, .playbook_filters_modal').on('click', this.populate_modal);
-		$('.edit_playbook_modal, .remove_playbook_modal').on('click', this.pass_id_to_modal);
+		$('#playbooks_datatable').on('click', '.playbook_actions_modal, .playbook_filters_modal', this.populate_modal);
+		$('#playbooks_datatable').on('click', '.edit_playbook_modal, .remove_playbook_modal', this.pass_id_to_modal);
 		$('.delete_playbook_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
 		$('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
@@ -25,7 +25,7 @@ var Contacts_Playbook = {
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
-		$('.switch input.toggle_playbook').on('click', this.toggle_playbook);
+		$('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 	},

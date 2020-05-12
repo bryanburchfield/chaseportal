@@ -4,7 +4,7 @@ return [
 	'abandoned'					=> 'Abandoned',
 	'actions_by_day'			=> 'Actions by Day',
 	'add_action'				=> 'Add Action',
-	'add_filter'				=> 'Add Another Filter',
+	'add_filter'				=> 'Add Filter',
 	'after_call_work'			=> 'After Call Work',
 	'agent_calls'				=> 'Agent Calls',
 	'agent_system_calls'		=> 'Agent vs System Calls',

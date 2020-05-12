@@ -4,7 +4,7 @@ return [
 	'abandoned'					=> 'Abandonada',
 	'actions_by_day'			=> 'Acciones por Día',
 	'add_action'				=> 'Agregar Acción',
-	'add_filter'				=> 'Agregar Otro Filtro',
+	'add_filter'				=> 'Agregar Filtro',
 	'after_call_work'			=> 'Tiempo Administrativo Posterior',
 	'agent_calls'				=> 'Llamadas de Agente',
 	'agent_system_calls'		=> 'Llamadas de Agentes vs del Sistema',

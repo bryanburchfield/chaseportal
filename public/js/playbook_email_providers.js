@@ -13,10 +13,10 @@ var Playbook = {
 
 	init: function () {
 		$('.add_esp').on('submit', this.add_esp);
-		$('.edit_provider_modal').on('click', this.edit_provider_modal);
+		$('#emails_dataTable').on('click', '.edit_provider_modal', this.edit_provider_modal);
 		$('.edit_esp').on('submit', this.update_esp);
 		$('.test_connection').on('click', this.test_connection);
-		$('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
+		$('#emails_dataTable').on('click', '.remove_email_service_provider_modal, .remove_campaign_modal', this.populate_delete_modal);
 		$('.delete_email_service_provider').on('click', this.delete_esp);
 		$('.drip_campaigns_campaign_menu').on('change', this.get_playbook_subcampaigns);
 		$('.provider_type').on('change', this.get_provider_properties);
@@ -362,4 +362,9 @@ var Playbook = {
 
 $(document).ready(function () {
 	Playbook.init();
+
+	$('#editESPModal').on('hidden.bs.modal', function () {
+	    $('.edit_esp').trigger("reset");
+	    $(this).find('.alert').hide();
+	});
 });

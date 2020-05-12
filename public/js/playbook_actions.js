@@ -15,7 +15,7 @@ var Playbook_Actions = {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);
 		$('.to_campaign').on('change', this.update_call_statuses);
-		$('.edit_playbook_action_modal, .remove_playbook_action_modal').on('click', this.populate_action_modal);
+		$('#actions_dataTable').on('click', '.edit_playbook_action_modal, .remove_playbook_action_modal', this.populate_action_modal);
 		$('.filter_campaigns').on('change', this.get_table_fields);
 		$('.edit_action').on('submit', this.update_action);
 		$('.delete_playbook_action ').on('click', this.delete_action);
@@ -319,6 +319,8 @@ var Playbook_Actions = {
 
 	get_table_fields:function(e, campaign){
 		e.preventDefault();
+		
+		$('.loader_hor').show();
 
 		if(!campaign){
 			var campaign = $(this).val();
@@ -336,7 +338,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-
+				console.log(response);
 				$('.email_field').empty();
 				var fields = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				var r = Object.entries(response);
@@ -346,6 +348,7 @@ var Playbook_Actions = {
 				}
 
 				$('.email_field').append(fields);
+				$('.loader_hor').hide();
 			},
 		});
 	},

@@ -17,7 +17,7 @@ var Playbook_Filters = {
 		$('.add_filter').on('change', '.filter_fields', this.get_operators);
 		$('.add_filter').on('submit', this.add_filter);
 		$('.delete_playbook_filter').on('click', this.delete_filter);
-		$('.remove_playbook_filter_modal, .edit_playbook_filter_modal').on('click', this.populate_filter_modal);
+		$('#filters_dataTable').on('click', '.remove_playbook_filter_modal, .edit_playbook_filter_modal', this.populate_filter_modal);
 		$('.update_filter').on('click', this.update_filter);
 	},
 
