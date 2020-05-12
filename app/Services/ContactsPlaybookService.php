@@ -24,6 +24,7 @@ use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as Twilio;
 use InvalidArgumentException;
@@ -476,24 +477,23 @@ class ContactsPlaybookService
 
 
         echo "sending message\n";
-        // try {
-        $message = $this->twilio->messages->create(
-            $rec['PrimaryPhone'],
-            [
+        try {
+            $message = $this->twilio->messages->create(
+                $rec['PrimaryPhone'],
+                [
 
-                // TODO: from number has to be from a select list
+                    // TODO: from number has to be from a select list
 
-                // 'from' => $playbook_action->playbook_sms_action->from,
-                'from' => '+15617258677',
+                    // 'from' => $playbook_action->playbook_sms_action->from,
+                    'from' => '+15617258677',
 
-                'body' => $body,
-            ]
-        );
-        dump($message);
-        // } catch (Exception $e) {
-        //     echo "SMS Failed\n";
-        //     return false;
-        // }
+                    'body' => $body,
+                ]
+            );
+        } catch (Exception $e) {
+            echo "SMS Failed\n";
+            return false;
+        }
 
         return true;
     }
@@ -508,6 +508,11 @@ class ContactsPlaybookService
             return false;
         }
 
+        $email = $rec[$playbook_email_action->email_field];
+
+        // Append optout link to body
+        $body .= $this->optoutLink($email);
+
         // build payload
         $payload = [
             'from' => $playbook_email_action->from,
@@ -515,7 +520,7 @@ class ContactsPlaybookService
 
 
             // TODO: REMOVE AFTER TESTING
-            // 'to' => $rec[$playbook_email_action->email_field],
+            // 'to' => $email,
             'to' => 'g.sandoval@chasedatacorp.com',
 
 
@@ -571,6 +576,13 @@ class ContactsPlaybookService
         }
 
         return $text;
+    }
+
+    private function optoutLink($email)
+    {
+        $optouturl = Url::signedRoute('playbook.optout', ['group_id' => Auth::user()->group_id, 'email' => $email]);
+
+        return view('tools.playbook.optout')->with(['optouturl' => $optouturl])->render();
     }
 
     private function getHistory($contacts_playbook_action, $lead_id)

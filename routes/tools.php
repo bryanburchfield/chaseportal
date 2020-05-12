@@ -61,6 +61,9 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
 
+                // Optout
+                Route::get('/optout', 'PlaybookController@optOut')->name('playbook.optout')->middleware('signed');
+
                 // Shared ajax
                 Route::post('/get_filters', 'PlaybookController@getFilters');  // get all available filters: pass in 'campaign' (optional)
                 Route::post('/get_actions', 'PlaybookController@getActions');  // get all available actions: pass in 'campaign' (optional)

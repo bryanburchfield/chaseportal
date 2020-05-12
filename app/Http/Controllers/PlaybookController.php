@@ -8,13 +8,16 @@ use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
+use App\Models\PlaybookOptout;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -359,5 +362,21 @@ class PlaybookController extends Controller
         }
 
         return ['status' => 'success'];
+    }
+
+    /**
+     * Opt out of emails
+     * 
+     * @param Request $request 
+     * @return View|Factory 
+     */
+    public function optOut(Request $request)
+    {
+        PlaybookOptout::create([
+            'group_id' => $request->group_id,
+            'email' => $request->email
+        ]);
+
+        return view('tools.playbook.unsubscribed');
     }
 }
