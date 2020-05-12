@@ -21,21 +21,6 @@ class CreateFeatureMessagesTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('expires_at')->nullable();
         });
-
-        Schema::create('read_feature_messages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('feature_message_id');
-            $table->unsignedBigInteger('user_id');
-            $table->timestamp('read_at')->useCurrent();
-
-            $table->foreign('user_id')
-                ->references('id')->on('users')
-                ->onDelete('cascade');
-
-            $table->foreign('feature_message_id')
-                ->references('id')->on('feature_messages')
-                ->onDelete('cascade');
-        });
     }
 
     /**
@@ -45,7 +30,6 @@ class CreateFeatureMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('read_feature_messages');
         Schema::dropIfExists('feature_messages');
     }
 }
