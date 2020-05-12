@@ -14,6 +14,7 @@ use App\Models\Dialer;
 use App\Models\EmailServiceProvider;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookFilter;
+use App\Models\PlaybookOptout;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunDetail;
 use App\Models\Script;
@@ -133,6 +134,7 @@ class ContactsPlaybookService
             // Log the detail
             PlaybookRunDetail::create([
                 'playbook_run_id' => $playbook_run->id,
+                'playbook_action_id' => $contacts_playbook_action->playbook_action_id,
                 'reporting_db' => $db,
                 'lead_id' => $rec['lead_id'],
             ]);
@@ -394,15 +396,23 @@ class ContactsPlaybookService
         $playbook_action = $contacts_playbook_action->playbook_action;
 
         // If email field is blank, bail now
+        $email = $rec[$playbook_action->playbook_email_action->email_field];
+        if ($email == 'NULL' || empty($email)) {
+            return false;
+        }
+
+        // Check if they opted-out
         if (
-            $rec[$playbook_action->playbook_email_action->email_field] == 'NULL' ||
-            empty($rec[$playbook_action->playbook_email_action->email_field])
+            PlaybookOptout::where('group_id', Auth::user()->group_id)
+            ->where('email', $email)
+            ->count()
+            > 0
         ) {
             return false;
         }
 
-        // Get history of sends for this lead for this playbook
-        $sends = $this->getHistory($contacts_playbook_action->contacts_playbook_id, $rec['lead_id']);
+        // Get history of sends for this lead for this playbook & action
+        $sends = $this->getHistory($contacts_playbook_action, $rec['lead_id']);
 
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
@@ -432,8 +442,8 @@ class ContactsPlaybookService
             return false;
         }
 
-        // Get history of sends for this lead for this playbook
-        $sends = $this->getHistory($contacts_playbook_action->contacts_playbook_id, $rec['lead_id']);
+        // Get history of sends for this lead for this playbook & action
+        $sends = $this->getHistory($contacts_playbook_action, $rec['lead_id']);
 
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
@@ -563,12 +573,13 @@ class ContactsPlaybookService
         return $text;
     }
 
-    private function getHistory($contacts_playbook_id, $lead_id)
+    private function getHistory($contacts_playbook_action, $lead_id)
     {
-        return PlaybookRun::where('contacts_playbook_id', $contacts_playbook_id)
+        return PlaybookRun::where('contacts_playbook_id', $contacts_playbook_action->contacts_playbook_id)
             ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
             ->where('reporting_db', Auth::user()->db)
             ->where('lead_id', $lead_id)
+            ->where('playbook_run_details.playbook_action_id', $contacts_playbook_action->playbook_action_id)
             ->select('playbook_run_details.created_at')
             ->orderBy('playbook_run_details.created_at')
             ->get();
