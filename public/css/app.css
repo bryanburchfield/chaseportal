@@ -117,6 +117,10 @@ h6 {
   margin-top: 50px;
 }
 
+.mt100 {
+  margin-top: 100px;
+}
+
 .mb0 {
   margin-bottom: 0 !important;
 }
@@ -175,6 +179,10 @@ h6 {
 
 .fw600 {
   font-weight: 600;
+}
+
+.tac {
+  text-align: center;
 }
 
 .carb_mb30_mb {
