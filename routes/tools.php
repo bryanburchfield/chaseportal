@@ -1,8 +1,13 @@
 <?php
+
+// Playbook Optout (outside of auth)
+Route::get('/tools/playbook/optout', 'PlaybookController@optOut')->name('playbook.optout')->middleware('signed');
+
 // Tools: all urls start with /tools/
 Route::group(['middleware' => 'can:accessAdmin'], function () {
     Route::prefix('tools')->group(function () {
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 
         // must be logged in to access any of these
         Route::group(['middleware' => 'auth'], function () {
@@ -60,9 +65,6 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/add_esp', 'PlaybookEmailProviderController@addEmailServiceProvider');
                 Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
-
-                // Optout
-                Route::get('/optout', 'PlaybookController@optOut')->name('playbook.optout')->middleware('signed');
 
                 // Shared ajax
                 Route::post('/get_filters', 'PlaybookController@getFilters');  // get all available filters: pass in 'campaign' (optional)
