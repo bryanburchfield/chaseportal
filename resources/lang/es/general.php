@@ -70,7 +70,7 @@ return [
 	'total_rows'				=> 'Filas Totales',
 	'trend_dashboard'			=> 'Panel de Tendencia',
 	'update'					=> 'Actualizar',
-	'unsubscribed'				=> 'You will no longer recieve emails.',
+	'unsubscribed'				=> 'Ya no recibirás correos electrónicos.',
 	'view_report'				=> 'Ver Informe',
 	'when'						=> 'Cuando',
 	'where'						=> 'Dónde',
