@@ -372,7 +372,7 @@ class PlaybookController extends Controller
      */
     public function optOut(Request $request)
     {
-        PlaybookOptout::create([
+        PlaybookOptout::firstOrCreate([
             'group_id' => $request->group_id,
             'email' => $request->email
         ]);
