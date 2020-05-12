@@ -221,6 +221,7 @@ class PlaybookActionController extends Controller
         if ($request->has('campaign')) {
             $campaign = Campaign::where('CampaignName', $request->campaign)
                 ->where('GroupId', Auth::user()->group_id)
+                ->with('advancedTable.advancedTableFields')
                 ->first();
 
             if ($campaign && $campaign->advancedTable) {
