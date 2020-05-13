@@ -39,7 +39,7 @@ class ContactsPlaybookService
     private $twilio;
 
     /**
-     * Instantiate the class and off we go
+     * Run each active playbook in the background
      * 
      * @return void 
      * @throws InvalidArgumentException 
@@ -51,13 +51,8 @@ class ContactsPlaybookService
             ->orderBy('name')
             ->get();
 
-        $service = new ContactsPlaybookService();
         foreach ($contacts_playbooks as $contacts_playbook) {
-            // Dispatch job to run in the background
-            // RunContactsPlaybook::dispatch($contacts_playbook);
-
-            // TODO: for testing run immediately
-            $service->runPlaybook($contacts_playbook);
+            RunContactsPlaybook::dispatch($contacts_playbook);
         }
     }
 

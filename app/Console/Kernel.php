@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
 use App\Services\CallerIdService;
+use App\Services\ContactsPlaybookService;
 use App\Services\DemoClientService;
 use Illuminate\Support\Facades\App;
 
@@ -63,6 +64,13 @@ class Kernel extends ConsoleKernel
                 ->dailyAt('8:00')
                 ->timezone('America/New_York');
         }
+
+        // Run Contacts Playbooks
+        $schedule->call(function () {
+            ContactsPlaybookService::execute();
+        })
+            ->hourly()
+            ->runInBackground();
     }
 
     /**
