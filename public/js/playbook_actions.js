@@ -221,7 +221,7 @@ var Playbook_Actions = {
 				}
 
 				if(response.action_type == 'sms'){
-					edit_action.find('.from_number').val(response.from_number);
+					edit_action.find(".from  option[value='"+response.from_number +"']").prop('selected', true);
 					edit_action.find('.message').val(response.message);
 					edit_action.find('.sms_per_lead').val(response.sms_per_lead);
 					edit_action.find('.days_between_sms').val(response.days_between_sms);

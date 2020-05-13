@@ -4,7 +4,6 @@
 @section('content')
 
 <div class="preloader"></div>
-
 <div class="wrapper">
 
 	@include('shared.sidenav')
