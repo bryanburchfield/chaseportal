@@ -70,7 +70,7 @@ class PlaybookSmsNumberController extends Controller
         ]);
         $playbook_sms_number->save();
 
-        return redirect()->action('PlaybookSmsNumberController@index');
+        return ['status' => 'success'];
     }
 
     /**
@@ -118,7 +118,7 @@ class PlaybookSmsNumberController extends Controller
         $playbook_sms_number->from_number = $request->get('from_number');
         $playbook_sms_number->save();
 
-        return redirect()->action('PlaybookSmsNumberController@index');
+        return ['status' => 'success'];
     }
 
     /**
@@ -132,6 +132,17 @@ class PlaybookSmsNumberController extends Controller
         $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
         $playbook_sms_number->delete();
 
-        return redirect()->action('PlaybookSmsNumberController@index');
+        return ['status' => 'success'];
+    }
+
+    /**
+     * Return a sms record by id
+     * 
+     * @param Request $request 
+     * @return mixed 
+     */
+    public function getSMS(Request $request)
+    {
+        return PlaybookSmsNumber::findOrFail($request->id);
     }
 }

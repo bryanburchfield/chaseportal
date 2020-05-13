@@ -1748,7 +1748,10 @@ select.input-sm,
 .edit_action .form-control,
 #addPlaybookModal .form-control,
 .edit_playbook .form-control,
-.modal_manage_fil_act .form-control {
+.modal_manage_fil_act .form-control,
+.add_sms .form-control,
+.delete_sms .form-control,
+.edit_sms .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -3605,6 +3608,10 @@ a.add_filter i {
 
 .paginate_button {
   padding: 0 !important;
+}
+
+table#sms_numbers_datatable tbody td .btn {
+  max-width: 110px;
 }
 
 /* ---------------------------------------------------

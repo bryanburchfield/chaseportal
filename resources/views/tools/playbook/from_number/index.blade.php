@@ -26,15 +26,15 @@
 								<div class="tab-pane mt30" id="sms_numbers">
                                     <div class="col-sm-12 nopad">
                                         <div class="table-responsive nobdr sms_numbers mt20">
-                                            <div>
-                                                <a style="margin: 19px;" href="{{ route('sms_numbers.create')}}" class="btn btn-primary">Add Number</a>
-                                            </div>
+                                            <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal">Add Number</a>
+
                                             <table class="table mt20 table-striped" id="sms_numbers_datatable">
                                                 <thead>
                                                     <tr>
                                                         <th>Group</th>
                                                         <th>Number</th>
-                                                        <th colspan=2>Actions</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -44,14 +44,10 @@
                                                                 <td>{{$playbook_sms_number->group_id}}</td>
                                                                 <td>{{$playbook_sms_number->from_number}}</td>
                                                                 <td>
-                                                                    <a href="{{ route('sms_numbers.edit',$playbook_sms_number->id)}}" class="btn btn-primary">Edit</a>
+                                                                    <a href="#" data-id="{{$playbook_sms_number->id}}" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600"><i class="fas fa-edit"></i> Edit</a>
                                                                 </td>
                                                                 <td>
-                                                                    <form action="{{ route('sms_numbers.destroy', $playbook_sms_number->id)}}" method="post">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                                                    </form>
+                                                                    <a href="#" data-number="{{$playbook_sms_number->from_number}}" data-id="{{$playbook_sms_number->id}}" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600"><i class="fa fa-trash-alt"></i> Delete</a>
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -73,5 +69,80 @@
 </div>
 
 @include('shared.reportmodal')
+
+<!-- Add Playbook Modal -->
+<div class="modal fade" id="addSMSModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add SMS Number</h4>
+            </div>
+            
+            <form action="#" method="post" class="form add_sms">
+                <div class="modal-body">
+                    @include('tools.playbook.from_number.shared.sms_form')
+                </div>
+
+                <div class="modal-footer">
+                    <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_sms" value="Add SMS">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Playbook Modal -->
+<div class="modal fade" id="editSMSModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit SMS Number</h4>
+            </div>
+            
+            <form action="#" method="post" class="form edit_sms">
+                <div class="modal-body">
+                    @include('tools.playbook.from_number.shared.sms_form')
+                </div>
+
+                <div class="modal-footer">
+                    <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary edit_sms" value="Edit SMS">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Playbook Modal -->
+<div class="modal fade" id="deleteSMSModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete SMS Number</h4>
+            </div>
+            
+            <form action="#" method="post" class="form delete_sms">
+                <div class="modal-body">
+                    <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
+                    <input type="hidden" name="id" class="id" value="">
+                    <div class="alert alert-danger hidetilloaded mt20"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-danger" value="Delete SMS">
+                    {{-- <button type="button" class="btn btn-danger delete_sms"><i class="fa fa-trash-alt"></i> Delete SMS</button> --}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @endsection

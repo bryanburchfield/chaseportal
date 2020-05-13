@@ -80,6 +80,10 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 // Superadmins can edit SMS from numbers
                 Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                     Route::resource('sms_numbers', 'PlaybookSmsNumberController');
+                    Route::post('/sms_number', 'PlaybookSmsNumberController@store');
+                    Route::get('/sms_number/{id}', 'PlaybookSmsNumberController@getSMS');
+                    Route::patch('/sms_number/{id}', 'PlaybookSmsNumberController@update');
+                    Route::delete('/sms_number/{id}', 'PlaybookSmsNumberController@destroy');
                 });
             });
         });
