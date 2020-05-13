@@ -7,6 +7,7 @@
 namespace App\Services;
 
 use App\Includes\PowerImportAPI;
+use App\Jobs\RunContactsPlaybook;
 use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
@@ -21,12 +22,12 @@ use App\Models\Script;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
-use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as Twilio;
+use Exception;
 use InvalidArgumentException;
 
 class ContactsPlaybookService
@@ -45,55 +46,19 @@ class ContactsPlaybookService
      */
     public static function execute()
     {
-        $service = new ContactsPlaybookService();
-        $service->runPlaybooks();
-    }
-
-    /**
-     * Run all active playbooks
-     * 
-     * @return void 
-     * @throws InvalidArgumentException 
-     */
-    public function runPlaybooks()
-    {
         $contacts_playbooks = ContactsPlaybook::where('active', 1)
             ->orderBy('group_id')
             ->orderBy('name')
             ->get();
 
+        $service = new ContactsPlaybookService();
         foreach ($contacts_playbooks as $contacts_playbook) {
-            if ($this->login($contacts_playbook->group_id)) {
-                // TODO:  dispatch this to run in the background
-                $this->runPlaybook($contacts_playbook);
-            }
+            // Dispatch job to run in the background
+            // RunContactsPlaybook::dispatch($contacts_playbook);
+
+            // TODO: for testing run immediately
+            $service->runPlaybook($contacts_playbook);
         }
-    }
-
-    /**
-     * Login as first member of group, if not already
-     * 
-     * @param mixed $group_id 
-     * @return bool 
-     */
-    private function login($group_id)
-    {
-        if (!Auth::check() || Auth::user()->group_id !== $group_id) {
-            // authenticate as user of the group
-            if (Auth::check()) {
-                Auth::logout();
-            }
-            $user = User::where('group_id', '=', $group_id)->first();
-
-            if ($user) {
-                // set a flag so the audit trail doesn't pick it up
-                session(['isCron' => 1]);
-                Auth::login($user);
-            }
-        }
-
-        // see if we actually logged someone in
-        return Auth::check();
     }
 
     /**
@@ -106,6 +71,10 @@ class ContactsPlaybookService
      */
     public function runPlaybook(ContactsPlaybook $contacts_playbook)
     {
+        if (!$this->login($contacts_playbook->group_id)) {
+            return;
+        }
+
         // update run times 
         $now = (new Carbon())->toDateTimeString();
         $contacts_playbook->last_run_from = empty($contacts_playbook->last_run_to) ? $now : $contacts_playbook->last_run_to;
@@ -140,6 +109,32 @@ class ContactsPlaybookService
                 'lead_id' => $rec['lead_id'],
             ]);
         }
+    }
+
+    /**
+     * Login as first member of group, if not already
+     * 
+     * @param mixed $group_id 
+     * @return bool 
+     */
+    private function login($group_id)
+    {
+        if (!Auth::check() || Auth::user()->group_id !== $group_id) {
+            // authenticate as user of the group
+            if (Auth::check()) {
+                Auth::logout();
+            }
+            $user = User::where('group_id', '=', $group_id)->first();
+
+            if ($user) {
+                // set a flag so the audit trail doesn't pick it up
+                session(['isCron' => 1]);
+                Auth::login($user);
+            }
+        }
+
+        // see if we actually logged someone in
+        return Auth::check();
     }
 
     /**
