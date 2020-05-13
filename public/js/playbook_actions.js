@@ -45,7 +45,7 @@ var Playbook_Actions = {
 		}
 
 		if(action_type == 'sms'){
-			var from_number = $('.sms .from_number').val(),
+			var from_number = $('.sms .from').val(),
 				template_id = $('.sms .template_id').val(),
 				sms_per_lead = $('.sms .sms_per_lead').val(),
 				days_between_sms = $('.sms .days_between_sms').val()
@@ -221,7 +221,7 @@ var Playbook_Actions = {
 				}
 
 				if(response.action_type == 'sms'){
-					edit_action.find(".from  option[value='"+response.from_number +"']").prop('selected', true);
+					edit_action.find(".from option[value='"+response.from_number +"']").prop('selected', true);
 					edit_action.find('.message').val(response.message);
 					edit_action.find('.sms_per_lead').val(response.sms_per_lead);
 					edit_action.find('.days_between_sms').val(response.days_between_sms);
@@ -267,7 +267,7 @@ var Playbook_Actions = {
 		}
 
 		if(action_type == 'sms'){
-			var from_number = $(this).find('.sms .from_number').val(),
+			var from_number = $(this).find('.sms .from').val(),
 				template_id = $(this).find('.sms .template_id').val(),
 				sms_per_lead = $(this).find('.sms .sms_per_lead').val(),
 				days_between_sms = $(this).find('.sms .days_between_sms').val()
