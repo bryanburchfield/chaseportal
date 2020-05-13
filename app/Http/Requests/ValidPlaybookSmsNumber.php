@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Models\PlaybookSmsNumber;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ValidPlaybookSmsNumber extends FormRequest
@@ -42,17 +41,15 @@ class ValidPlaybookSmsNumber extends FormRequest
      */
     public function rules()
     {
-        $playbook_sms_number = $this->playbook_sms_number;
-
         return [
             'group_id' => 'required|integer',
             'from_number' => [
                 'required',
                 'regex:/^\+1\d{10}$/',
-                Rule::unique('playbook_sms_numbers')->where(function ($query) use ($playbook_sms_number) {
-                    return $query->where('group_id', $playbook_sms_number->group_id)
-                        ->where('from_number', $playbook_sms_number->from_number)
-                        ->where('id', '!=', $playbook_sms_number->id);
+                Rule::unique('playbook_sms_numbers')->where(function ($query) {
+                    return $query->where('group_id', $this->playbook_sms_number->group_id)
+                        ->where('from_number', $this->playbook_sms_number->from_number)
+                        ->where('id', '!=', $this->playbook_sms_number->id);
                 }),
             ],
         ];
