@@ -3233,6 +3233,10 @@ a.add_filter i {
   margin-left: 10px;
 }
 
+.paginate_button {
+  padding: 0 !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

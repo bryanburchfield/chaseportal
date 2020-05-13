@@ -50,6 +50,7 @@ var Playbook_Actions = {
 				sms_per_lead = $('.sms .sms_per_lead').val(),
 				days_between_sms = $('.sms .days_between_sms').val()
 			;
+			from_number = encodeURIComponent(from_number);
 
 			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms;
 		}

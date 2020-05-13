@@ -365,23 +365,29 @@ var Contacts_Playbook = {
 		var modal = $('div.modal.in').attr('id'),
 			all_actions,
 			actions='',
-			id = $(this).parent().parent().find('#id').val()
+			id = $(this).parent().parent().find('#id').val(),
+			that = $(this)
 		;
 
 		$.when(
 			all_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-			for(var j=0;j<all_actions.responseJSON.length;j++){
-				action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
+
+			if(all_actions.responseJSON.length){
+				var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
+				for(var j=0;j<all_actions.responseJSON.length;j++){
+					action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
+				}
+
+				action_select+='</select></div>';
+				actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
+
+				$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
+				Contacts_Playbook.check_numb_actions($('.add_action'));
+			}else{
+				that.parent().parent().find('.alert').text('No available actions for this campaign');
+				that.parent().parent().find('.alert').show();
 			}
-
-			action_select+='</select></div>';
-			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
-
-			$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
-			console.log(Contacts_Playbook.check_numb_actions($('.add_action')));
-			Contacts_Playbook.check_numb_actions($('.add_action'));
 		});
 	},
 
@@ -391,22 +397,30 @@ var Contacts_Playbook = {
 		var modal = $('div.modal.in').attr('id'),
 			all_filters,
 			filters='',
-			id = $(this).parent().parent().find('#id').val()
+			id = $(this).parent().parent().find('#id').val(),
+			that = $(this)
 		;
 
 		$.when(
 			all_filters = Contacts_Playbook.get_filters(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-			for(var j=0;j<all_filters.responseJSON.length;j++){
-				filter_select+='<option data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
+
+			if(all_filters.responseJSON.length){
+				var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
+				for(var j=0;j<all_filters.responseJSON.length;j++){
+					filter_select+='<option data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
+				}
+
+				filter_select+='</select></div>';
+				filters+='<div class="modal_manage_fil_act" data-filterid="'+id+'">'+filter_select+'<div class="col-sm-2"><a data-filterid="'+id+'" class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
+
+				$(filters).insertBefore($('#'+modal).find('.modal-body .playbook_filter_manager a.add_filter '));
+				Contacts_Playbook.check_numb_filters($('.add_filter'));
+			}else{
+				that.parent().parent().find('.alert').text('No available filters for this campaign');
+				that.parent().parent().find('.alert').show();
 			}
-
-			filter_select+='</select></div>';
-			filters+='<div class="modal_manage_fil_act" data-filterid="'+id+'">'+filter_select+'<div class="col-sm-2"><a data-filterid="'+id+'" class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
-
-			$(filters).insertBefore($('#'+modal).find('.modal-body .playbook_filter_manager a.add_filter '));
-			Contacts_Playbook.check_numb_filters($('.add_filter'));
+			
 		});
 	},
 
@@ -427,6 +441,7 @@ var Contacts_Playbook = {
 		$.when(
 			pb_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
 		).done(function() {
+			console.log(pb_actions);
 			if(pb_actions.responseJSON.length == $('.playbook_action_manager .modal_manage_fil_act').length){
 				sel.hide();
 			}else{
