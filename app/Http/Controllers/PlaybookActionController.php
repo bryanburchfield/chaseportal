@@ -312,17 +312,6 @@ class PlaybookActionController extends Controller
     }
 
     /**
-     * Get SMS From numbers (ajax)
-     * 
-     * @param Request $request 
-     * @return mixed 
-     */
-    public function getSmsFromNumbers(Request $request)
-    {
-        return $this->smsFromNumbers();
-    }
-
-    /**
      * Return SMS from numbers
      * 
      * @return mixed 
