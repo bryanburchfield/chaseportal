@@ -463,7 +463,8 @@ class ContactsPlaybookService
 
 
         // TODO:  REMOVE AFTER TESTING
-        $rec['PrimaryPhone'] = '3212629660';
+        $rec['PrimaryPhone'] = '4076175882';
+
 
 
         echo "sending message\n";
@@ -506,7 +507,7 @@ class ContactsPlaybookService
 
             // TODO: REMOVE AFTER TESTING
             // 'to' => $email,
-            'to' => 'g.sandoval@chasedatacorp.com',
+            'to' => 'brandon.b@chasedatacorp.com',
 
 
 

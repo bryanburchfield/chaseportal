@@ -8,7 +8,6 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
     Route::prefix('tools')->group(function () {
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-
         // must be logged in to access any of these
         Route::group(['middleware' => 'auth'], function () {
             Route::redirect('/', 'tools/playbook');
@@ -77,6 +76,11 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/toggle_playbook', 'PlaybookController@toggleActive');  // toggles a playbook active/inactive: pass in 'id' (required)
                 Route::post('/activate_all_playbooks', 'PlaybookController@activateAllPlaybooks');  // toggles all playbooks active: pass in 'id' (required)
                 Route::post('/deactivate_all_playbooks', 'PlaybookController@deactivateAllPlaybooks');  // toggles all playbooks inactive/inactive: pass in 'id' (required)
+
+                // Superadmins can edit SMS from numbers
+                Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+                    Route::resource('sms_numbers', 'PlaybookSmsNumberController');
+                });
             });
         });
     });
