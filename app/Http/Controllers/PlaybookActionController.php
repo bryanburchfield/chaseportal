@@ -50,7 +50,6 @@ class PlaybookActionController extends Controller
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_templates' => Script::emailTemplates(),
             'sms_templates' => Script::smsTemplates(),
-            'sms_from_numbers' => $this->smsFromNumbers(),
         ];
 
         return view('tools.playbook.actions')->with($data);
@@ -311,7 +310,7 @@ class PlaybookActionController extends Controller
             ->get();
     }
 
-    private function smsFromNumbers()
+    public function getSmsFromNumbers(Request $request)
     {
         return PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])
             ->select('from_number')
