@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\PlaybookSmsNumber;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ValidPlaybookSmsAction extends FormRequest
 {
@@ -23,8 +25,17 @@ class ValidPlaybookSmsAction extends FormRequest
      */
     public function rules()
     {
+        $valid_from_numbers = PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])->get();
+
         return [
-            'from_number' => 'required',
+            'from_number' => [
+                'required',
+                function ($attribute, $value, $fail) use ($valid_from_numbers) {
+                    if (!$valid_from_numbers->containsStrict('from_number', $value)) {
+                        $fail(trans('custom_validation.invalid_sms_from_number'));
+                    }
+                },
+            ],
             'template_id' => 'required|integer',
             'sms_per_lead' => 'required|integer',
             'days_between_sms' => 'nullable|integer',

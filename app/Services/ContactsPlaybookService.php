@@ -476,12 +476,7 @@ class ContactsPlaybookService
             $message = $this->twilio->messages->create(
                 $rec['PrimaryPhone'],
                 [
-
-                    // TODO: from number has to be from a select list
-
-                    // 'from' => $playbook_action->playbook_sms_action->from,
-                    'from' => '+15617258677',
-
+                    'from' => $playbook_action->playbook_sms_action->from,
                     'body' => $body,
                 ]
             );
