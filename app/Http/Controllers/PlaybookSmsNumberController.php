@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidPlaybookSmsNumber;
 use App\Models\PlaybookSmsNumber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PlaybookSmsNumberController extends Controller
 {
@@ -19,36 +19,20 @@ class PlaybookSmsNumberController extends Controller
             ->orderBy('from_number')
             ->get();
 
-        $data = ['playbook_sms_numbers' => $playbook_sms_numbers];
-
-        return $this->returnView('index', $data);
-    }
-
-    private function returnView($view, $data = [])
-    {
         $page = [
             'menuitem' => 'tools',
             'type' => 'other',
         ];
 
-        $data = $data +
+        $data =
             [
                 'page' => $page,
                 'jsfile' => [],
                 'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+                'playbook_sms_numbers' => $playbook_sms_numbers,
             ];
 
-        return view('tools.playbook.from_number.' . $view)->with($data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return $this->returnView('create');
+        return view('tools.playbook.from_number.index')->with($data);
     }
 
     /**
@@ -57,46 +41,12 @@ class PlaybookSmsNumberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidPlaybookSmsNumber $request)
     {
-        $request->validate([
-            'group_id' => 'required',
-            'from_number' => 'required',
-        ]);
-
-        $playbook_sms_number = new PlaybookSmsNumber([
-            'group_id' =>  $request->get('group_id'),
-            'from_number' => $request->get('from_number'),
-        ]);
+        $playbook_sms_number = new PlaybookSmsNumber($request->all());
         $playbook_sms_number->save();
 
         return ['status' => 'success'];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
-
-        $data = ['playbook_sms_number' => $playbook_sms_number];
-
-        return $this->returnView('edit', $data);
     }
 
     /**
@@ -106,16 +56,10 @@ class PlaybookSmsNumberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ValidPlaybookSmsNumber $request, $id)
     {
-        $request->validate([
-            'group_id' => 'required',
-            'from_number' => 'required',
-        ]);
-
         $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
-        $playbook_sms_number->group_id =  $request->get('group_id');
-        $playbook_sms_number->from_number = $request->get('from_number');
+        $playbook_sms_number->update($request->all());
         $playbook_sms_number->save();
 
         return ['status' => 'success'];
@@ -141,7 +85,7 @@ class PlaybookSmsNumberController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getSMS(Request $request)
+    public function getPlaybookSmsNumber(Request $request)
     {
         return PlaybookSmsNumber::findOrFail($request->id);
     }
