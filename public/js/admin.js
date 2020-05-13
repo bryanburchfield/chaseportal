@@ -32,9 +32,9 @@ var Admin = {
 		$('.delete_msg').on('click', this.delete_msg);
 
 		$('.edit_sms_modal, .delete_sms_modal').on('click', this.populate_sms_modal);
-		$('.add_sms').on('submit', this.add_sms);
-		$('.edit_sms').on('submit', this.update_sms);
-		$('.delete_sms').on('submit', this.delete_sms);
+		$('.add_sms_number').on('submit', this.add_sms_number);
+		$('.edit_sms_number').on('submit', this.update_sms_number);
+		$('.delete_sms_number').on('submit', this.delete_sms_number);
 
 	},
 
@@ -724,13 +724,13 @@ var Admin = {
     	$(modal).find('.id').val(id);
 
     	if(modal.substring(1) == 'editSMSModal'){
-    		Admin.edit_sms(id);
+    		Admin.edit_sms_number(id);
     	}else{
     		$(modal).find('h3 span').text($(this).data('number'));
     	}
     },
 
-    add_sms:function(e){
+    add_sms_number:function(e){
     	e.preventDefault();
     	$('.loader_hor').show();
 		var form_data = $(this).serialize();
@@ -754,17 +754,17 @@ var Admin = {
 				$('.loader_hor').hide();
 			}, error: function (data) {
 				if (data.status === 422) {
-					$('.add_sms .alert-danger').empty();
+					$('.add_sms_number .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
 						if ($.isPlainObject(value)) {
 							$.each(value, function (key, value) {
-								$('.add_sms .alert-danger').append('<li>' + value + '</li>');
+								$('.add_sms_number .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
 
-						$('.add_sms .alert-danger').show();
+						$('.add_sms_number .alert-danger').show();
 					});
 					$('.loader_hor').hide();
 				}
@@ -772,7 +772,7 @@ var Admin = {
 		});
     },
 
-    edit_sms:function(id){
+    edit_sms_number:function(id){
 
     	$('.loader_hor').show();
 
@@ -795,11 +795,11 @@ var Admin = {
     	});
     },
 
-    update_sms:function(e){
+    update_sms_number:function(e){
     	e.preventDefault();
     	$('.loader_hor').show();
-		var form_data = $('.edit_sms').serialize();
-		var id = $('.edit_sms').find('.id').val();
+		var form_data = $('.edit_sms_number').serialize();
+		var id = $('.edit_sms_number').find('.id').val();
 
 		$.ajaxSetup({
 			headers: {
@@ -819,17 +819,17 @@ var Admin = {
 				$('.loader_hor').hide();
 			}, error: function (data) {
 				if (data.status === 422) {
-					$('.edit_sms .alert-danger').empty();
+					$('.edit_sms_number .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
 						if ($.isPlainObject(value)) {
 							$.each(value, function (key, value) {
-								$('.edit_sms .alert-danger').append('<li>' + value + '</li>');
+								$('.edit_sms_number .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
 
-						$('.edit_sms .alert-danger').show();
+						$('.edit_sms_number .alert-danger').show();
 					});
 					$('.loader_hor').hide();
 				}
@@ -837,7 +837,7 @@ var Admin = {
 		});
     },
 
-    delete_sms:function(e){
+    delete_sms_number:function(e){
     	e.preventDefault();
     	$('.loader_hor').show();
 		var id = $(this).find('.id').val();
@@ -880,4 +880,11 @@ var Admin = {
 
 $(document).ready(function () {
 	Admin.init();
+
+	$( "#addSMSModal" ).on('shown.bs.modal', function(){
+		if($('.from_number').val() == ''){
+			$('.from_number').val('+1');
+			$('.from_number').focus();
+		}
+	});
 });

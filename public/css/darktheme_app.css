@@ -1749,9 +1749,9 @@ select.input-sm,
 #addPlaybookModal .form-control,
 .edit_playbook .form-control,
 .modal_manage_fil_act .form-control,
-.add_sms .form-control,
-.delete_sms .form-control,
-.edit_sms .form-control {
+.add_sms_number .form-control,
+.delete_sms_number .form-control,
+.edit_sms_number .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;

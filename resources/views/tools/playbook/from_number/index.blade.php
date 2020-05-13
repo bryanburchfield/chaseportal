@@ -26,7 +26,7 @@
 								<div class="tab-pane mt30" id="sms_numbers">
                                     <div class="col-sm-12 nopad">
                                         <div class="table-responsive nobdr sms_numbers mt20">
-                                            <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal">Add Number</a>
+                                            <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal"><i class="fas fa-plus-circle"></i> Add Number</a>
 
                                             <table class="table mt20 table-striped" id="sms_numbers_datatable">
                                                 <thead>
@@ -79,7 +79,7 @@
                 <h4 class="modal-title" id="myModalLabel">Add SMS Number</h4>
             </div>
             
-            <form action="#" method="post" class="form add_sms">
+            <form action="#" method="post" class="form add_sms_number">
                 <div class="modal-body">
                     @include('tools.playbook.from_number.shared.sms_form')
                 </div>
@@ -87,7 +87,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_sms" value="Add SMS">
+                    <input type="submit" class="btn btn-primary add_sms" value="Add SMS Number">
                 </div>
             </form>
         </div>
@@ -103,7 +103,7 @@
                 <h4 class="modal-title" id="myModalLabel">Edit SMS Number</h4>
             </div>
             
-            <form action="#" method="post" class="form edit_sms">
+            <form action="#" method="post" class="form edit_sms_number">
                 <div class="modal-body">
                     @include('tools.playbook.from_number.shared.sms_form')
                 </div>
@@ -111,7 +111,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary edit_sms" value="Edit SMS">
+                    <input type="submit" class="btn btn-primary edit_sms" value="Edit SMS Number">
                 </div>
             </form>
         </div>
@@ -127,7 +127,7 @@
                 <h4 class="modal-title" id="myModalLabel">Delete SMS Number</h4>
             </div>
             
-            <form action="#" method="post" class="form delete_sms">
+            <form action="#" method="post" class="form delete_sms_number">
                 <div class="modal-body">
                     <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
                     <input type="hidden" name="id" class="id" value="">
@@ -137,8 +137,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-danger" value="Delete SMS">
-                    {{-- <button type="button" class="btn btn-danger delete_sms"><i class="fa fa-trash-alt"></i> Delete SMS</button> --}}
+                    <input type="submit" class="btn btn-danger" value="Delete SMS Number">
                 </div>
             </form>
         </div>
