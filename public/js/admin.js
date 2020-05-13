@@ -754,6 +754,7 @@ var Admin = {
 				$('.loader_hor').hide();
 			}, error: function (data) {
 				if (data.status === 422) {
+					console.log(data);
 					$('.add_sms_number .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
@@ -880,6 +881,12 @@ var Admin = {
 
 $(document).ready(function () {
 	Admin.init();
+
+	$('#editSMSModal, #addSMSModal').on('hidden.bs.modal', function () {
+	    $(this).find('.alert').hide();
+	    $('.add_sms_number').trigger("reset");
+	    $('.edit_sms_number').trigger("reset");
+	});
 
 	$( "#addSMSModal" ).on('shown.bs.modal', function(){
 		if($('.from_number').val() == ''){
