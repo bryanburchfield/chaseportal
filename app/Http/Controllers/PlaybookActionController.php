@@ -13,6 +13,7 @@ use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookSmsAction;
+use App\Models\PlaybookSmsNumber;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
@@ -49,6 +50,7 @@ class PlaybookActionController extends Controller
             'email_service_providers' => $this->getEmailServiceProviders(),
             'email_templates' => Script::emailTemplates(),
             'sms_templates' => Script::smsTemplates(),
+            'sms_from_numbers' => $this->smsFromNumbers(),
         ];
 
         return view('tools.playbook.actions')->with($data);
@@ -306,6 +308,14 @@ class PlaybookActionController extends Controller
     {
         return EmailServiceProvider::where('group_id', Auth::User()->group_id)
             ->orderBy('name')
+            ->get();
+    }
+
+    private function smsFromNumbers()
+    {
+        return PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])
+            ->select('from_number')
+            ->distinct()
             ->get();
     }
 }
