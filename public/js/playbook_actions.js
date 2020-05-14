@@ -99,7 +99,7 @@ var Playbook_Actions = {
 		});
 	},
 
-	update_action_fields: function(e, type='') {
+	update_action_fields: function(e, type='', campaign) {
 
 		if(!type){
 			if($(this).val() !=''){var type = $(this).val();}else{return false;}
@@ -110,11 +110,11 @@ var Playbook_Actions = {
 		$('.action_type_fields.' + type).show();
 
 		if(type == 'lead'){
-			Playbook_Actions.update_call_statuses();
+			Playbook_Actions.update_call_statuses(event, campaign);
 		}
 	},
 
-	update_call_statuses: function (e) {
+	update_call_statuses: function (e, campaign) {
 		var campaign;
 		if(e && e.type === 'change'){
 			e.preventDefault();
@@ -208,13 +208,13 @@ var Playbook_Actions = {
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 				edit_action.find(".action_types option[value='"+response.action_type+"']").prop('selected', true);
-				Playbook_Actions.update_action_fields(event, response.action_type);
+				Playbook_Actions.update_action_fields(event, response.action_type, response.to_campaign);
 
 				if(response.action_type == 'lead'){
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
 					$.when(
 						Playbook_Actions.get_subcamps(response.to_campaign),
-						Playbook_Actions.update_call_statuses()
+						Playbook_Actions.update_call_statuses(response.to_campaign)
 					).done(function() {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
 						edit_action.find(".call_status option[value='"+response.to_callstatus+"']").prop('selected', true);
