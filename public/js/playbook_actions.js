@@ -14,10 +14,9 @@ var Playbook_Actions = {
 	init: function () {
 		$('.add_action').on('submit', this.add_action);
 		$('.action_types').on('change', this.update_action_fields);
-		$('.to_campaign').on('change', this.update_call_statuses);
+		$('.to_campaign, .filter_campaigns').on('change', this.update_call_statuses);
 		$('#actions_dataTable').on('click', '.edit_playbook_action_modal, .remove_playbook_action_modal', this.populate_action_modal);
 		$('.filter_campaigns').on('change', this.get_table_fields);
-		$('.filter_campaigns').on('change', this.update_call_statuses);
 		$('.edit_action').on('submit', this.update_action);
 		$('.delete_playbook_action ').on('click', this.delete_action);
 	},
@@ -101,6 +100,10 @@ var Playbook_Actions = {
 	},
 
 	update_action_fields: function(e, type='', campaign) {
+		
+		if(!campaign){
+			campaign=$('.filter_campaigns').val();
+		}
 
 		if(!type){
 			if($(this).val() !=''){var type = $(this).val();}else{return false;}
@@ -109,22 +112,20 @@ var Playbook_Actions = {
 		$('.alert-danger').empty().hide();
 		$('.action_type_fields').hide();
 		$('.action_type_fields.' + type).show();
-		
+
 		if(type == 'lead'){
 			Playbook_Actions.update_call_statuses(event, campaign);
 		}
 	},
 
+	///get_dispos
 	update_call_statuses: function (e, campaign) {
-		var campaign;
 
+		campaign = !campaign ? $(this).val() :campaign;
 		if(e && e.type === 'change'){
 			e.preventDefault();
-			campaign = $(this).val();
 			Playbook_Actions.get_subcamps(campaign);
 		}
-
-		campaign = !campaign ? $('.to_campaign').val() :campaign;
 		
 		$.ajaxSetup({
 			headers: {
@@ -150,6 +151,7 @@ var Playbook_Actions = {
 	},
 
 	get_subcamps:function(campaign){
+		
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -162,7 +164,6 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-
 				$('.to_subcampaign').empty();
 				var response = Object.entries(response.subcampaigns);
 				var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
@@ -192,6 +193,7 @@ var Playbook_Actions = {
 
 	},
 
+	//populates action edit fields
 	edit_action:function(id){
 		$.ajaxSetup({
 			headers: {
@@ -210,7 +212,7 @@ var Playbook_Actions = {
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 				edit_action.find(".action_types option[value='"+response.action_type+"']").prop('selected', true);
-				if( response.to_campaign){
+				if(response.to_campaign){
 					Playbook_Actions.update_action_fields(event, response.action_type, response.to_campaign);
 				}else{
 					Playbook_Actions.update_action_fields(event, response.action_type, response.campaign);
