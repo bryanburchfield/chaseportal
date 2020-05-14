@@ -105,6 +105,7 @@ var Playbook_Actions = {
 			campaign=$('.filter_campaigns').val();
 		}
 
+
 		if(!type){
 			if($(this).val() !=''){var type = $(this).val();}else{return false;}
 		}
@@ -114,6 +115,7 @@ var Playbook_Actions = {
 		$('.action_type_fields.' + type).show();
 
 		if(type == 'lead'){
+			
 			Playbook_Actions.update_call_statuses(event, campaign);
 		}
 	},
@@ -121,7 +123,17 @@ var Playbook_Actions = {
 	///get_dispos
 	update_call_statuses: function (e, campaign) {
 
-		campaign = !campaign ? $(this).val() :campaign;
+		// campaign = !campaign ? $(this).val() :campaign;
+
+		if(e && e.type === 'change'){
+			if($('.to_campaign').val() == ''){
+				campaign= $('.filter_campaigns').val();
+			}else{
+				campaign = $('.to_campaign').val();
+			}
+		}
+		
+		console.log(campaign);
 		if(e && e.type === 'change'){
 			e.preventDefault();
 			Playbook_Actions.get_subcamps(campaign);
