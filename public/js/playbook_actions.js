@@ -209,7 +209,12 @@ var Playbook_Actions = {
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 				edit_action.find(".action_types option[value='"+response.action_type+"']").prop('selected', true);
-				Playbook_Actions.update_action_fields(event, response.action_type, response.to_campaign);
+				if( response.to_campaign){
+					Playbook_Actions.update_action_fields(event, response.action_type, response.to_campaign);
+				}else{
+					Playbook_Actions.update_action_fields(event, response.action_type, response.campaign);
+				}
+				
 
 				if(response.action_type == 'lead'){
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
