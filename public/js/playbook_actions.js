@@ -147,6 +147,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
+				
 				Playbook_Actions.active_modal.find('.call_status').empty();
 				var response = Object.keys(response);
 				var dispos='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
@@ -172,13 +173,13 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				$('.to_subcampaign').empty();
+				Playbook_Actions.active_modal.find('.to_subcampaign').empty();
 				var response = Object.entries(response.subcampaigns);
 				var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for(var i=0;i<response.length;i++){
 					sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
 				}
-				$('.to_subcampaign').append(sub_camps);
+				Playbook_Actions.active_modal.find('.to_subcampaign').append(sub_camps);
 			},
 		});
 	},
