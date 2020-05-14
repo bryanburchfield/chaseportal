@@ -108,7 +108,7 @@ var Playbook_Actions = {
 		$('.alert-danger').empty().hide();
 		$('.action_type_fields').hide();
 		$('.action_type_fields.' + type).show();
-
+		
 		if(type == 'lead'){
 			Playbook_Actions.update_call_statuses(event, campaign);
 		}
@@ -116,6 +116,7 @@ var Playbook_Actions = {
 
 	update_call_statuses: function (e, campaign) {
 		var campaign;
+
 		if(e && e.type === 'change'){
 			e.preventDefault();
 			campaign = $(this).val();
@@ -214,7 +215,6 @@ var Playbook_Actions = {
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
 					$.when(
 						Playbook_Actions.get_subcamps(response.to_campaign),
-						Playbook_Actions.update_call_statuses(response.to_campaign)
 					).done(function() {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
 						edit_action.find(".call_status option[value='"+response.to_callstatus+"']").prop('selected', true);
