@@ -103,7 +103,7 @@ var Playbook_Actions = {
 
 	update_action_fields: function(e, type='', campaign) {
 		if(!campaign){
-			campaign=$('#'+Playbook_Actions.active_modal).find('.filter_campaigns').val();
+			campaign=Playbook_Actions.active_modal.find('.filter_campaigns').val();
 		}
 
 		if(!type){
@@ -123,18 +123,13 @@ var Playbook_Actions = {
 	update_call_statuses: function (e, campaign) {		
 		
 		if(e && e.type === 'change'){
-			console.log(Playbook_Actions.active_modal);
-			console.log('changed');
-			if($('#'+Playbook_Actions.active_modal).find('.to_campaign').val() == ''){
-				campaign= $('#'+Playbook_Actions.active_modal).find('.filter_campaigns').val();
+			if(Playbook_Actions.active_modal.find('.to_campaign').val() == ''){
+				campaign= Playbook_Actions.active_modal.find('.filter_campaigns').val();
 			}else{
-				campaign = $('#'+Playbook_Actions.active_modal).find('.to_campaign').val();
+				campaign = Playbook_Actions.active_modal.find('.to_campaign').val();
 			}
 		}
 
-		// campaign = campaign;
-		
-		console.log(campaign);
 		if(e && e.type === 'change'){
 			e.preventDefault();
 			Playbook_Actions.get_subcamps(campaign);
@@ -152,13 +147,13 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				$('#'+Playbook_Actions.active_modal).find('.call_status').empty();
+				Playbook_Actions.active_modal.find('.call_status').empty();
 				var response = Object.keys(response);
 				var dispos='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for(var i=0;i<response.length;i++){
 					dispos+='<option value="'+response[i]+'">'+response[i]+'</option>';
 				}
-				$('#'+Playbook_Actions.active_modal).find('.call_status').append(dispos);
+				Playbook_Actions.active_modal.find('.call_status').append(dispos);
 			},
 		});
 	},
@@ -436,7 +431,7 @@ $(document).ready(function () {
 
 	$('div.modal').on('shown.bs.modal', function(){
 	    var id = $(this).attr('id');
-	    Playbook_Actions.active_modal=id;
+	    Playbook_Actions.active_modal = $('#'+id);
 	});
 	
 	
