@@ -6,7 +6,7 @@
 <div class="col-sm-6 filter_campaigns_div pl0">
     <label>{{__('tools.campaign')}}</label>
     <div class="form-group">
-        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, old('campaign'), ["class" => "form-control filter_campaigns", 'id'=> 'update_campaign_select', 'required'=>false]) !!}
+        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, old('campaign'), ["class" => "form-control filter_campaigns", 'required'=>false]) !!}
     </div>
 </div>
 
