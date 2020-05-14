@@ -123,8 +123,8 @@ var Playbook_Actions = {
 			Playbook_Actions.get_subcamps(campaign);
 		}
 
-		campaign = $('.to_campaign').val();
-
+		campaign = !campaign ? $('.to_campaign').val() :campaign;
+		
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
