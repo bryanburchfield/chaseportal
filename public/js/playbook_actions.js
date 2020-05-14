@@ -17,6 +17,7 @@ var Playbook_Actions = {
 		$('.to_campaign').on('change', this.update_call_statuses);
 		$('#actions_dataTable').on('click', '.edit_playbook_action_modal, .remove_playbook_action_modal', this.populate_action_modal);
 		$('.filter_campaigns').on('change', this.get_table_fields);
+		$('.filter_campaigns').on('change', this.update_call_statuses);
 		$('.edit_action').on('submit', this.update_action);
 		$('.delete_playbook_action ').on('click', this.delete_action);
 	},
@@ -214,7 +215,6 @@ var Playbook_Actions = {
 				}else{
 					Playbook_Actions.update_action_fields(event, response.action_type, response.campaign);
 				}
-				
 
 				if(response.action_type == 'lead'){
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
