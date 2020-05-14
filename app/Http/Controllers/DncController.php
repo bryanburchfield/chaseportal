@@ -29,7 +29,7 @@ class DncController extends Controller
      */
     public function index()
     {
-        $jsfile[]='tools.js';
+        $jsfile[]='dncuploader.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
@@ -126,7 +126,7 @@ class DncController extends Controller
      */
     public function uploadIndex()
     {   
-        $jsfile[]='tools.js';
+        $jsfile[]='dncuploader.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [

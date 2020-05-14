@@ -113,6 +113,10 @@ h6 {
   margin-top: 50px;
 }
 
+.mt100 {
+  margin-top: 100px;
+}
+
 .mb0 {
   margin-bottom: 0 !important;
 }
@@ -171,6 +175,10 @@ h6 {
 
 .fw600 {
   font-weight: 600;
+}
+
+.tac {
+  text-align: center;
 }
 
 .carb_mb30_mb {
@@ -1732,7 +1740,18 @@ input.datepicker_only,
 select.input-sm,
 .add_custom_field input.form-control,
 .create_notification .form-control,
-.add_demo_user .form-control {
+.add_demo_user .form-control,
+.add_filter .form-control,
+.add_action .form-control,
+.add_campaign .form-control,
+.edit_filter .form-control,
+.edit_action .form-control,
+#addPlaybookModal .form-control,
+.edit_playbook .form-control,
+.modal_manage_fil_act .form-control,
+.add_sms_number .form-control,
+.delete_sms_number .form-control,
+.edit_sms_number .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
@@ -2100,14 +2119,14 @@ label.switch > span:after {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-label.switch > input[type=checkbox]:checked ~ span:before {
+label.switch > input.checked ~ span:before {
   -webkit-transform: scale(0);
           transform: scale(0);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
 }
 
-label.switch > input[type=checkbox]:checked ~ span:after {
+label.switch > input.checked ~ span:after {
   -webkit-transform: translate3d(100%, -50%, 0);
           transform: translate3d(100%, -50%, 0);
 }
@@ -2270,10 +2289,16 @@ a.kpi_change_details {
 }
 
 .users a.remove_user i,
-a.remove_msg i {
+.demo_user_modal_link.remove_user i,
+a.remove_msg i,
+a.remove_playbook_filter_modal i,
+.actions a.remove_playbook_action_modal i,
+a.remove_playbook_modal i,
+a.delete_action_from_pb i,
+a.delete_filter_from_pb i {
   position: relative;
   top: 2px;
-  color: #E15B23;
+  color: #d9534f;
 }
 
 .users td a.remove_user {
@@ -2937,8 +2962,17 @@ div.vertical-line {
   display: block;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background: #182435;
+table.table.table-striped > tbody > tr:nth-of-type(odd) {
+  background: #182435 !important;
+}
+
+table.dataTable tbody tr:nth-of-type(even) {
+  background: #101824 !important;
+}
+
+.dataTables_info,
+.dataTables_filter label {
+  color: #ddd !important;
 }
 
 .table > thead > tr > th {
@@ -3480,10 +3514,6 @@ span.numb_notifications {
   margin-right: 15px;
 }
 
-.calls_per_hour table thead th a {
-  display: none;
-}
-
 .calls_per_hour table tbody tr:last-of-type td {
   font-weight: 600;
 }
@@ -3517,6 +3547,89 @@ span.numb_notifications {
 
 .calls_per_hour table tbody tr:last-of-type td {
   font-weight: 600;
+}
+
+.loader_hor {
+  float: left;
+}
+
+.add_filter .alert {
+  clear: both;
+}
+
+.lead.action_type_fields {
+  font-size: 13px;
+}
+
+.alert.cb {
+  clear: both;
+}
+
+a.playbook_actions_modal,
+a.playbook_filters_modal {
+  color: #ddd;
+}
+
+a.playbook_actions_modal:hover,
+a.playbook_filters_modal:hover {
+  color: #999;
+}
+
+.modal_manage_fil_act {
+  margin-bottom: 10px;
+}
+
+.modal_manage_fil_act a {
+  position: relative;
+  top: 3px;
+}
+
+a.add_action,
+a.add_filter {
+  margin-top: 10px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+a.add_action i,
+a.add_filter i {
+  color: #33A09B;
+}
+
+.toggle_all_switch {
+  margin-bottom: 40px;
+}
+
+.toggle_all_switch label.switch {
+  float: left;
+}
+
+.toggle_all_switch span.toggle_all_label {
+  float: left;
+  font-weight: 600;
+  position: relative;
+  bottom: 1px;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.toggle_all_btns {
+  clear: both;
+  margin-bottom: 50px;
+}
+
+.toggle_all_btns a {
+  float: left;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.paginate_button {
+  padding: 0 !important;
+}
+
+table#sms_numbers_datatable tbody td .btn {
+  max-width: 110px;
 }
 
 /* ---------------------------------------------------

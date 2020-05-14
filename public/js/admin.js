@@ -30,7 +30,12 @@ var Admin = {
 		$('.published').on('click', this.toggle_published_msg);
 		$('.remove_msg_modal').on('click', this.populate_msg_delete_modal);
 		$('.delete_msg').on('click', this.delete_msg);
-		// $('.preloader').fadeOut('slow');
+
+		$('.edit_sms_modal, .delete_sms_modal').on('click', this.populate_sms_modal);
+		$('.add_sms_number').on('submit', this.add_sms_number);
+		$('.edit_sms_number').on('submit', this.update_sms_number);
+		$('.delete_sms_number').on('submit', this.delete_sms_number);
+
 	},
 
 	// add global user
@@ -710,9 +715,183 @@ var Admin = {
     			window.location= "/dashboards/admin/notifications";
     		}
     	});
+    },
+
+    populate_sms_modal:function(e){
+    	e.preventDefault();
+    	var modal = $(this).data('target');
+    	var id = $(this).data('id');
+    	$(modal).find('.id').val(id);
+
+    	if(modal.substring(1) == 'editSMSModal'){
+    		Admin.edit_sms_number(id);
+    	}else{
+    		$(modal).find('h3 span').text($(this).data('number'));
+    	}
+    },
+
+    add_sms_number:function(e){
+    	e.preventDefault();
+    	$('.loader_hor').show();
+		var form_data = $(this).serialize();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/sms_number',
+			type: 'POST',
+			dataType: 'json',
+			data: form_data,
+			success: function (response) {
+
+				if(response.status == 'success'){
+					location.reload();
+				}
+				$('.loader_hor').hide();
+			}, error: function (data) {
+				if (data.status === 422) {
+					console.log(data);
+					$('.add_sms_number .alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.add_sms_number .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.add_sms_number .alert-danger').show();
+					});
+					$('.loader_hor').hide();
+				}
+			}
+		});
+    },
+
+    edit_sms_number:function(id){
+
+    	$('.loader_hor').show();
+
+    	$.ajaxSetup({
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    		}
+    	});
+
+    	$.ajax({
+    		url: '/tools/playbook/sms_number/'+id,
+    		type: 'GET',
+    		dataType: 'json',
+    		success: function (response) {
+
+    			$('#editSMSModal').find('.group_id').val(response.group_id);
+    			$('#editSMSModal').find('.from_number').val(response.from_number);
+    			$('.loader_hor').hide();
+    		}
+    	});
+    },
+
+    update_sms_number:function(e){
+    	e.preventDefault();
+    	$('.loader_hor').show();
+		var form_data = $('.edit_sms_number').serialize();
+		var id = $('.edit_sms_number').find('.id').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/sms_number/'+id,
+			type: 'PATCH',
+			dataType: 'json',
+			data: form_data,
+			success: function (response) {
+				if(response.status == 'success'){
+					location.reload();
+				}
+				$('.loader_hor').hide();
+			}, error: function (data) {
+				if (data.status === 422) {
+					$('.edit_sms_number .alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.edit_sms_number .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.edit_sms_number .alert-danger').show();
+					});
+					$('.loader_hor').hide();
+				}
+			}
+		});
+    },
+
+    delete_sms_number:function(e){
+    	e.preventDefault();
+    	$('.loader_hor').show();
+		var id = $(this).find('.id').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: '/tools/playbook/sms_number/'+id,
+			type: 'DELETE',
+			data: {
+				id:id
+			},
+			success: function (response) {
+				if(response.status == 'success'){
+					location.reload();
+				}
+				$('.loader_hor').hide();
+			}, error: function (data) {
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('#deleteSMSModal .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('#deleteSMSModal .alert-danger').show();
+					});
+				}
+			}
+		});
     }
 }
 
 $(document).ready(function () {
 	Admin.init();
+
+	$('#editSMSModal, #addSMSModal').on('hidden.bs.modal', function () {
+	    $(this).find('.alert').hide();
+	    $('.add_sms_number').trigger("reset");
+	    $('.edit_sms_number').trigger("reset");
+	});
+
+	$( "#addSMSModal" ).on('shown.bs.modal', function(){
+		if($('.from_number').val() == ''){
+			$('.from_number').val('+1');
+			$('.from_number').focus();
+		}
+	});
 });
