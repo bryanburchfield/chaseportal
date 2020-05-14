@@ -1,5 +1,7 @@
 var Playbook_Actions = {
 
+	active_modal:'',
+
 	actions_dataTable: $('#actions_dataTable').DataTable({
 		responsive: true,
 		dom: 'Bfrtip',
@@ -100,11 +102,9 @@ var Playbook_Actions = {
 	},
 
 	update_action_fields: function(e, type='', campaign) {
-		
 		if(!campaign){
-			campaign=$('.filter_campaigns').val();
+			campaign=$(Playbook_Actions.active_modal).find('.filter_campaigns').val();
 		}
-
 
 		if(!type){
 			if($(this).val() !=''){var type = $(this).val();}else{return false;}
@@ -115,23 +115,23 @@ var Playbook_Actions = {
 		$('.action_type_fields.' + type).show();
 
 		if(type == 'lead'){
-			
 			Playbook_Actions.update_call_statuses(event, campaign);
 		}
 	},
 
 	///get_dispos
-	update_call_statuses: function (e, campaign) {
-
-		// campaign = !campaign ? $(this).val() :campaign;
-
+	update_call_statuses: function (e, campaign) {		
+		console.log('get_dispos ran');
 		if(e && e.type === 'change'){
-			if($('.to_campaign').val() == ''){
-				campaign= $('.filter_campaigns').val();
+			console.log('changed');
+			if($(Playbook_Actions.active_modal).find('.to_campaign').val() == ''){
+				campaign= $(Playbook_Actions.active_modal).find('.filter_campaigns').val();
 			}else{
-				campaign = $('.to_campaign').val();
+				campaign = $(Playbook_Actions.active_modal).find('.to_campaign').val();
 			}
 		}
+
+		// campaign = campaign;
 		
 		console.log(campaign);
 		if(e && e.type === 'change'){
@@ -151,13 +151,13 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				$('.call_status').empty();
+				$(Playbook_Actions.active_modal).find('.call_status').empty();
 				var response = Object.keys(response);
 				var dispos='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				for(var i=0;i<response.length;i++){
 					dispos+='<option value="'+response[i]+'">'+response[i]+'</option>';
 				}
-				$('.call_status').append(dispos);
+				$(Playbook_Actions.active_modal).find('.call_status').append(dispos);
 			},
 		});
 	},
@@ -433,5 +433,10 @@ $(document).ready(function () {
 	    $(this).find('.alert').hide();
 	});
 
+	$('div.modal').on('shown.bs.modal', function(){
+	    var id = $(this).attr('id');
+	    Playbook_Actions.active_modal=id;
+	});
+	
 	
 });
