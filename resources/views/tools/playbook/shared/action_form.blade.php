@@ -59,13 +59,13 @@
     </div>
 
     <div class="form-group">
-        <label>{{__('tools.days_between_emails')}}</label>
-        <input type="text" class="form-control days_between_emails" name="days_between_emails">
+        <label>{{__('tools.emails_per_lead')}}</label>
+        <input type="text" class="form-control emails_per_lead" name="emails_per_lead">
     </div>
 
     <div class="form-group">
-        <label>{{__('tools.emails_per_lead')}}</label>
-        <input type="text" class="form-control emails_per_lead" name="emails_per_lead">
+        <label>{{__('tools.days_between_emails')}}</label>
+        <input type="text" class="form-control days_between_emails" name="days_between_emails">
     </div>
 </div>
 
@@ -89,15 +89,15 @@
             @endforeach
         </select>
     </div>
-
-    <div class="form-group">
-        <label>{{__('tools.sms_per_lead')}}</label>
-        <input type="text" class="form-control sms_per_lead" name="sms_per_lead">
-    </div>
-
+    
     <div class="form-group">
         <label>{{__('tools.days_between_sms')}}</label>
         <input type="text" class="form-control days_between_sms" name="days_between_sms">
+    </div>
+    
+    <div class="form-group">
+        <label>{{__('tools.sms_per_lead')}}</label>
+        <input type="text" class="form-control sms_per_lead" name="sms_per_lead">
     </div>
 </div>
 
