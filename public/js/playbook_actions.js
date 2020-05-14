@@ -213,7 +213,8 @@ var Playbook_Actions = {
 				if(response.action_type == 'lead'){
 					edit_action.find(".to_campaign option[value='"+response.to_campaign+"']").prop('selected', true);
 					$.when(
-						Playbook_Actions.get_subcamps(response.to_campaign)
+						Playbook_Actions.get_subcamps(response.to_campaign),
+						Playbook_Actions.update_call_statuses()
 					).done(function() {
 						edit_action.find(".to_subcampaign option[value='"+response.to_subcampaign+"']").prop('selected', true);
 						edit_action.find(".call_status option[value='"+response.to_callstatus+"']").prop('selected', true);
@@ -342,7 +343,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { campaign: campaign },
 			success: function (response) {
-				console.log(response);
+
 				$('.email_field').empty();
 				var fields = '<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
 				var r = Object.entries(response);
