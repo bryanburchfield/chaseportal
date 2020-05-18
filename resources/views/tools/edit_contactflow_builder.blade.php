@@ -28,7 +28,7 @@
 			    <div class="row">
 			        <div class="col-sm-9 col-sm-offset-3 pl0">
 			            <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.edit_rule')}}</h2>
-			            {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 edit_rule']) !!}
+			            {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 edit_rule fc_style']) !!}
 							<input type="hidden" value="{{$lead_rule->id}}" name="id" class="rule_id">
 			            <div class="card">
 			                <div class="form-group">
@@ -123,7 +123,7 @@
 									<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
 								@endif
 
-				                <div class="alert alert-danger filter_error mt20">Please select a filter and value before adding another one</div>
+				                <div class="alert alert-danger filter_error hidetilloaded mt20">Please select a filter and value before adding another one</div>
 
 				            </div>
 				        </div>
@@ -165,7 +165,7 @@
 
 			                <a href="{{url('/tools/contactflow_builder')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
 			                {!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
-			                <div class="alert alert-danger edit_rule_error mt20"></div>
+			                <div class="alert alert-danger edit_rule_error hidetilloaded mt20"></div>
 			            </div>
 			        {!! Form::close() !!}
 			        </div>

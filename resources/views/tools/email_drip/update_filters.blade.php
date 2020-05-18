@@ -25,7 +25,7 @@
 					    <form action="#" method="post" class="form update_filters">
 					    	@csrf
 
-					    	<div class="filter_fields_cnt">
+					    	<div class="filter_fields_cnt card">
 					    	    @if($email_drip_campaign->emailDripCampaignFilters->count())
 									@foreach($email_drip_campaign->emailDripCampaignFilters as $filter)
 										<div class="row filter_fields_div" data-filterid="{{$filter->id}}">

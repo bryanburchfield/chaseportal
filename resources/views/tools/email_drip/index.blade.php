@@ -147,7 +147,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form add_esp">
+                <form action="#" method="post" class="form add_esp fc_style">
                     @include('tools.email_drip.email_service_provider')
                     <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
@@ -172,7 +172,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_esp">
+                <form action="#" method="post" class="form edit_es fc_style">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
                     <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
@@ -220,7 +220,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form create_campaign_form">
+                <form action="#" method="post" class="form create_campaign_form fc_style">
                     @include('tools.email_drip.shared.campaign_form_fields')
 
                     <div class="alert alert-success hidetilloaded"></div>
@@ -246,7 +246,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_campaign_form">
+                <form action="#" method="post" class="form edit_campaign_form fc_style">
 
                     @include('tools.email_drip.shared.campaign_form_fields')
 

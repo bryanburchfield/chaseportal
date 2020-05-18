@@ -20,7 +20,7 @@
 
                     <div class="col-sm-6">
                         <div class="card mt30">
-                            <form action="/tools/email_drip/update_campaign" method="post" class="form edit_campaign_form">
+                            <form action="/tools/email_drip/update_campaign" method="post" class="form fc_style edit_campaign_form">
                                 @include('tools.email_drip.shared.campaign_form_fields')
 
                                 @if($errors->any())

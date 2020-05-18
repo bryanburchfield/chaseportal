@@ -21,6 +21,12 @@ $green: #33A09B;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=1); 
 }
 
+@mixin form_control_style(){
+    background: darken($blue, 2%) !important;
+    border: none;
+    color: lighten(#aaa, 5%);
+}
+
 //  #203047, #090d14
 @mixin blue_grad($color1, $color2){
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
@@ -65,60 +71,22 @@ h1, h2, h3, h4, h5, h6 {
     background-position: center;
 }
 
-.container-fluid.bg.dashboard.p20 {
-    // border-top: 1px solid #fff;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.mt20 {
-    margin-top: 20px;
-}
-
-.mt30 {
-    margin-top: 30px;
-}
-
-.mt50 {
-    margin-top: 50px;
-}
-
-.mb0 {
-    margin-bottom: 0 !important;
-}
-
+.mt10 {margin-top: 10px;}
+.mt20 {margin-top: 20px;}
+.mt30 {margin-top: 30px;}
+.mt50 {margin-top: 50px;}
+.mb0 {margin-bottom: 0 !important;}
 .mb5{margin-bottom: 5px;}
-
-.mb10 {
-    margin-bottom: 10px;
-}
-
-.mb15 {
-    margin-bottom: 15px;
-}
-
-.mb20 {
-    margin-bottom: 20px;
-}
-
-.mb30 {
-    margin-bottom: 30px;
-}
-
-.mb42 {
-    margin-bottom: 42px;
-}
-
-.mr10 {
-    margin-right: 10px;
-}
+.mb10 {margin-bottom: 10px;}
+.mb15 {margin-bottom: 15px;}
+.mb20 {margin-bottom: 20px;}
+.mb30 {margin-bottom: 30px;}
+.mb42 {margin-bottom: 42px;}
+.mr10 {margin-right: 10px;}
 
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
-
 .pl10{padding-left: 10px;}
 .pb20 {padding-bottom: 20px;}
 
@@ -508,7 +476,7 @@ div.container-fluid.hero_bg .form-holder {
     margin: 20px;
 }
 
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert, #webhook_generator .alert-danger {
+.new_source_subcampaign_group, .new_destination_subcampaign_group{
     display: none;
 }
 
@@ -886,16 +854,8 @@ input[type='file'] {
     text-transform: uppercase;
 }
 
-.card-6 .outbound {
-    display: none;
-}
-
 .card-6.outbound_default .outbound {
     display: block;
-}
-
-.card-6.outbound_default .inbound {
-    display: none;
 }
 
 .avgs_rgt {
@@ -1350,7 +1310,6 @@ p.descrip.top14 {
 .reports_table.table{width: 99%;}
 
 .report_download {
-    display: none;
     margin-bottom: 40px;
 }
 
@@ -1406,10 +1365,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .notification_body {
-    background: darken($blue, 2%) !important;
-    border: none;
-    color: lighten(#aaa, 5%);
+.fc_style, .tools{
+    .form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }   
 }
 
 .nav-tabs {
@@ -1658,9 +1617,12 @@ span.selected_campaign {
     border-color: #d6e9c6;
 }
 
-.hidetilloaded {
+.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db {
     display: none;
 }
+
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a {display: none;}
 
 .report_totals td{
     background: #33A09B;
@@ -1789,7 +1751,6 @@ h2 {
 .opt .kpi {
     clear: both;
     margin-top: 45px;
-    display: none;
 }
 
 .opt .options a, .opt .options h4 {
@@ -1810,7 +1771,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options, .expanded_emails {
     clear: both;
-    // display: none;
 }
 
 .expanded_options .user, .expanded_emails .user {
@@ -1844,7 +1804,6 @@ a.expand_dets, h4.expand_dets {
 }
 
 .user_email_form {
-    // display: none;
     clear: both;
 }
 
@@ -2007,7 +1966,6 @@ a.run_kpi.btn {
 .searchCnt{position: relative;}
 
 .search_results {
-    display: none;
     position: absolute;
     z-index: 99999;
     top: 45px;
@@ -2279,10 +2237,6 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border: 1px solid lighten(#23354e, 10%);
 }
 
-.cdr_table {
-    display: none;
-}
-
 .cdr_results_table {
     margin-top: 20px;
 }
@@ -2310,8 +2264,6 @@ h4.panel-title a{
 
 .user_links_modal h3 span{color: #aaa;}
 
-.multi_db{display: none;}
-
 .multi_db.show_multi_db{
   display: block;
 }
@@ -2334,8 +2286,6 @@ h4.panel-title a{
     top:9px;
 }
 
-#editRecipModal input.form-control{background: $blue;border:none;color:#aaa;}
-#editRecipModal .alert{display: none;}
 #editRecipModal .btn.btn-warning{background: $orange;border:none;}
 
 p.name span.name{width: 150px;}
@@ -2586,23 +2536,6 @@ div.vertical-line{
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{
     margin-bottom: 20px !important;
-}
-
-.add_demo_user, .edit_demo_user{
-    
-    input.form-control{
-        background: $blue;
-        border:none;
-        color:#aaa;
-    }
-
-    select{
-        background: $blue;
-        border:1px solid $blue;
-        color:#aaa;
-    }
-
-    .alert-danger{display: none;}
 }
 
 .modal-body h3.leaddetail_name{
@@ -2896,9 +2829,6 @@ td.bg-danger{
     top:25px;
 }
 
-//prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a {display: none;}
-
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
 }
@@ -2951,7 +2881,7 @@ span.numb_notifications{
     margin-top: 10px;
     margin-right: 15px;
 }
-.calls_per_hour table thead th a {display: none;}
+
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 .card.oauto{overflow: auto;}
 .kpi_change_info{
@@ -2975,7 +2905,7 @@ span.numb_notifications{
         font-size: 15px;
     }
 }
-.calls_per_hour table thead th a {display: none;}
+
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 
 .note-editor.note-airframe .note-status-output,
@@ -2998,6 +2928,13 @@ span.numb_notifications{
 .note-toolbar.panel-heading {
   background: #111a26;
   height: 45px;
+}
+
+.dt-buttons{
+    button{
+        background: $green;
+        color:#fff;
+    }
 }
 
 /* ---------------------------------------------------

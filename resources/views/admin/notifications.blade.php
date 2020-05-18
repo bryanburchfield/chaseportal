@@ -19,7 +19,7 @@
 						<div class="col-sm-8 mb20 card">
 							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
-							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
+							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form fc_style
 							create_notification']) !!}
 							<div class="form-group">
 								{!! Form::label('title', 'Title') !!}

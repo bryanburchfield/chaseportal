@@ -19,13 +19,13 @@
                 </label>
             </div>
 
-            <div class="kpi">
+            <div class="kpi hidetilloaded">
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
                 <div class="row mt30 options kpi_options_top">
                     <div class="col-sm-4">
                         <h4 class="expand_dets"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
                         <div class="expanded_options clear card">
-                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval">
+                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval fc_style">
                                 <div class="form-group">
                                     <label for="type">{{__('kpi.interval')}}</label>
                                     <select name="interval" class="form-control interval"  required>

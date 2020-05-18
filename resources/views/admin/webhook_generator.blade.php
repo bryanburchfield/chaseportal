@@ -17,7 +17,7 @@
 					<div class="col-sm-12">
 						<div id="webhook_generator">
 							<div class="col-sm-12">
-								<div class="col-sm-6 mt30 mb20 card">
+								<div class="col-sm-6 mt30 mb20 card fc_style">
 									<h2 class="page_heading">Webhook Generator</h2>
 									<div class="form-group">
 										<label>Group ID</label>
@@ -39,7 +39,7 @@
 										<input type="text" class="form-control" name="posting_url" id="posting_url">
 									</div>
 
-									<div class="alert alert-danger"></div>
+									<div class="alert alert-danger hidetilloaded"></div>
 								</div>
 							</div>
 						</div>
@@ -84,7 +84,7 @@
 								</div>
 
 								<div class="col-sm-7">
-									<form action="#" method="post" class="form-inline add_custom_field">
+									<form action="#" method="post" class="form-inline add_custom_field fc_style card">
 										<h3>Add Custom Field</h3>
 										<div class="form-group mr10">
 											<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>

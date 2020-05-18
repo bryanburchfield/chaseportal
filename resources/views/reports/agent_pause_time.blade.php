@@ -5,7 +5,7 @@
 	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm btn_flt_rgt"><i class="fas fa-info-circle"></i> Info</a>
 	<h3 class="heading">{{__('reports.agent_pause_time')}}</h3>
 
-	<div class="report_filters card col-sm-12">
+	<div class="report_filters card col-sm-12 fc_style">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
