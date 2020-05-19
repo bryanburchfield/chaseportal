@@ -280,12 +280,8 @@ span {
   color: #fff;
   background: #263854;
   /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #263854 0%, #171f33 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#263854", endColorstr="#171f33",GradientType=1 );
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=1 );
   transition: all, ease, 0.3s;
 }
 
@@ -305,8 +301,9 @@ span {
 #sidebar ul li a[aria-expanded=true] {
   color: #e49831;
   background: #1c273d;
+  /* Old browsers */
   background: linear-gradient(to right, #1c273d 0%, #263854 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1c273d, endColorstr=#263854,GradientType=1 );
 }
 
 #sidebar ul li.active > a i,
@@ -385,14 +382,6 @@ span {
   padding: 10px !important;
 }
 
-#sidebar.active .dropdown-toggle::after {
-  top: auto;
-  bottom: 10px;
-  right: 50%;
-  -webkit-transform: translateX(50%);
-  transform: translateX(50%);
-}
-
 #sidebar_nots {
   min-width: 300px;
   max-width: 300px;
@@ -405,14 +394,6 @@ span {
 #sidebar_nots.active {
   min-width: 300px;
   max-width: 300px;
-}
-
-#sidebar_nots.active .dropdown-toggle::after {
-  top: auto;
-  bottom: 10px;
-  right: 50%;
-  -webkit-transform: translateX(50%);
-  transform: translateX(50%);
 }
 
 #sidebar_nots .close_nots_bar {
@@ -751,8 +732,9 @@ div.container-fluid.bg {
 .dropdown-menu > .active > a:hover,
 .dropdown-menu.filter_campaign .active > a {
   background: #263854;
-  background: linear-gradient(to right, #263854 0%, #1c273d 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
+  /* Old browsers */
+  background: linear-gradient(to bottom, #263854 0%, #1c273d 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#1c273d,GradientType=0 );
   color: #fff;
 }
 
@@ -1223,8 +1205,9 @@ ul.dropdown-menu.filter_campaign {
 
 .modal-header {
   background: #263854;
-  background: linear-gradient(to right, #263854 0%, #171f33 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$color1", endColorstr="$color2", GradientType=1);
+  /* Old browsers */
+  background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;
   margin-bottom: 20px;
 }
@@ -2334,12 +2317,8 @@ a[aria-expanded=true] {
 .panel-default > .panel-heading {
   background: #263854;
   /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#263854", endColorstr="#171f33",GradientType=0 );
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;
   height: 40px;
 }
