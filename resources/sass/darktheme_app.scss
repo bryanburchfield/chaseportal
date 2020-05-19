@@ -25,19 +25,11 @@ $green: #33A09B;
         $opp_direction : right;
     }
 
-    background: $color1; /* Old browsers */
+    background: $color1;
     background: -moz-linear-gradient($direction,  $color1 0%, $color2 $stop); 
     background: -webkit-linear-gradient($direction,  $color1 0%,$color2 $stop); 
     background: linear-gradient(to $opp_direction,  $color1 0%,$color2 $stop);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} );
-}
-
-@mixin blue_grad2($color1, $color2){
-    background: $color1; /* Old browsers */
-    background: -moz-linear-gradient(top,  $color1 1%, $color2 52%); 
-    background: -webkit-linear-gradient(top,  $color1 1%,$color2 52%); 
-    background: linear-gradient(to bottom,  $color1 1%,$color2 52%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{ie_type} );
 }
 
 @mixin form_control_style(){
@@ -456,7 +448,7 @@ a.article, a.article:hover {
 }
 
 #content {
-    width: 100%;    /*padding: 20px;*/
+    width: 100%;
     min-height: 100vh;
     @include transition(all, ease, 0.3s);
 }
@@ -467,9 +459,7 @@ div.container-fluid.hero_bg {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    box-shadow: 0 5px 15px #19273d;
-    -moz-box-shadow: 0 5px 15px #19273d;
-    -webkit-box-shadow: 0 5px 15px #19273d;
+    @include box-shadow(0 5px 15px #19273d);
 }
 
 div.container-fluid.hero_bg .form-holder {
@@ -562,7 +552,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    @include blue_grad2(#101824, #090d14);
+    @include blue_grad(#101824, #090d14, top, 52%);
 }
 
 .navbar-header.home {
@@ -677,7 +667,7 @@ input[type='file'] {
 
 .card {
 
-    @include blue_grad2(#152130, #090d14);
+    @include blue_grad(#152130, #090d14, top, 52%);
     border-top: 1px solid #23354e;
     -moz-box-shadow: 0 2px 3px darken($blue, 20%);
     -webkit-box-shadow: 0 2px 3px darken($blue, 20%);
@@ -688,7 +678,7 @@ input[type='file'] {
     color: #aaaaaa;
 
     &.card_table, &.card_table2 {
-        @include blue_grad2(#101824, #090d14);
+        @include blue_grad(#101824, #090d14, top, 52%);
         width: 100%;
         height: 100%;
         overflow-y: scroll;
@@ -704,12 +694,12 @@ input[type='file'] {
         height: 100%;
         overflow-y: scroll;
         padding: 20px 10px;
-        @include blue_grad2(#101824, #090d14);
+        @include blue_grad(#101824, #090d14, top, 52%);
     }
 
     .front, .back {
         overflow: none;
-        @include blue_grad2(#101824, #090d14);
+        @include blue_grad(#101824, #090d14, top, 52%);
     }
 
     .back {
@@ -745,7 +735,7 @@ input[type='file'] {
     }
 
     &.flipping_card{
-        @include blue_grad2(#101824, #090d14);
+        @include blue_grad(#101824, #090d14, top, 52%);
         overflow: hidden;
         padding: 1px;
 
@@ -936,7 +926,7 @@ p.total {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    @include blue_grad2(#152130, #090d14);
+    @include blue_grad(#152130, #090d14, top, 52%);
     border-top: 1px solid #23354e;
     margin-top: 17%;
 }

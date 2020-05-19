@@ -13,7 +13,7 @@ $orange: #E15B23;
 $green: #33A09B;
 /////////
 
-@mixin blue_grad($color1, $color2, $direction){
+@mixin blue_grad($color1, $color2, $direction, $stop){
     $opp_direction : bottom;
     $ie_type:0;
 
@@ -25,10 +25,10 @@ $green: #33A09B;
         $opp_direction : right;
     }
 
-    background: $color1; /* Old browsers */
-    background: -moz-linear-gradient($direction,  $color1 0%, $color2 100%); 
-    background: -webkit-linear-gradient($direction,  $color1 0%,$color2 100%);
-    background: linear-gradient(to $opp_direction,  $color1 0%,$color2 100%);
+    background: $color1;
+    background: -moz-linear-gradient($direction,  $color1 0%, $color2 $stop); 
+    background: -webkit-linear-gradient($direction,  $color1 0%,$color2 $stop);
+    background: linear-gradient(to $opp_direction,  $color1 0%,$color2 $stop);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} ); 
 }
 
@@ -190,7 +190,7 @@ i, span {
     min-width: 250px;
     max-width: 250px;
     color: #fff;
-    @include blue_grad(#263854, #171f33, left);
+    @include blue_grad(#263854, #171f33, left, 100%);
     @include transition(all, ease, 0.3s);
     
     ul.components {
@@ -203,7 +203,7 @@ i, span {
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad(#1c273d, #263854, left);
+            @include blue_grad(#1c273d, #263854, left, 100%);
 
             &>a i {
                 color:#ddd;
@@ -449,7 +449,7 @@ a.article, a.article:hover {
 }
 
 #content {
-    width: 100%;    /*padding: 20px;*/
+    width: 100%;
     min-height: 100vh;
     @include transition(all, ease, 0.3s);
 }
@@ -460,9 +460,7 @@ div.container-fluid.hero_bg {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    box-shadow: 0 5px 15px #19273d;
-    -moz-box-shadow: 0 5px 15px #19273d;
-    -webkit-box-shadow: 0 5px 15px #19273d;
+    @include box-shadow(0 5px 15px #19273d);
 }
 
 div.container-fluid.hero_bg .form-holder {
@@ -576,7 +574,7 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
-    @include blue_grad(#263854, #1c273d, top);
+    @include blue_grad(#263854, #1c273d, top, 100%);
     color: #fff;
 }
 
@@ -1027,7 +1025,7 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#263854, #171f33, top);
+    @include blue_grad(#263854, #171f33, top, 100%);
     color: #fff;
     margin-bottom: 20px;
 }
@@ -2004,7 +2002,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .panel-default>.panel-heading{
-    @include blue_grad(#263854, #171f33, top);
+    @include blue_grad(#263854, #171f33, top, 100%);
     color:#fff;
     height: 40px;
 }

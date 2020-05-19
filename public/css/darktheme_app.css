@@ -258,7 +258,6 @@ span {
 
 .btn-default {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   border: 1px solid #131d2b;
@@ -270,7 +269,6 @@ span {
 .btn-default:focus {
   color: #eee !important;
   background: #283c59;
-  /* Old browsers */
   background: linear-gradient(to bottom, #283c59 0%, #111826 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#283c59, endColorstr=#111826,GradientType=0 );
   border: 1px solid #131d2b !important;
@@ -280,7 +278,6 @@ span {
 .btn-default:active,
 .open > .dropdown-toggle.btn-default {
   background: #283c59;
-  /* Old browsers */
   background: linear-gradient(to bottom, #283c59 0%, #111826 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#283c59, endColorstr=#111826,GradientType=0 );
 }
@@ -305,7 +302,6 @@ span {
   max-width: 250px;
   color: #fff;
   background: #1e2c42;
-  /* Old browsers */
   background: linear-gradient(to right, #1e2c42 0%, #0f1421 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1e2c42, endColorstr=#0f1421,GradientType=1 );
   transition: all, ease, 0.3s;
@@ -328,7 +324,6 @@ span {
 #sidebar ul li a[aria-expanded=true] {
   color: #e49831;
   background: #141c2c;
-  /* Old browsers */
   background: linear-gradient(to right, #141c2c 0%, #1e2c42 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#141c2c, endColorstr=#1e2c42,GradientType=1 );
 }
@@ -355,7 +350,6 @@ span {
 #sidebar ul li a:hover {
   color: #fff;
   background: #141c2c;
-  /* Old browsers */
   background: linear-gradient(to right, #141c2c 0%, #1e2c42 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#141c2c, endColorstr=#1e2c42,GradientType=1 );
 }
@@ -595,7 +589,6 @@ a.article:hover {
 
 #content {
   width: 100%;
-  /*padding: 20px;*/
   min-height: 100vh;
   transition: all, ease, 0.3s;
 }
@@ -607,8 +600,6 @@ div.container-fluid.hero_bg {
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 0 5px 15px #19273d;
-  -moz-box-shadow: 0 5px 15px #19273d;
-  -webkit-box-shadow: 0 5px 15px #19273d;
 }
 
 div.container-fluid.hero_bg .form-holder {
@@ -651,7 +642,6 @@ input.btn.btn-primary:hover {
 .input-group-addon {
   border: none;
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   color: #eee;
@@ -700,7 +690,6 @@ div.container-fluid.bg {
 
 .navbar-default {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   box-shadow: 0 1px 2px #28426d;
@@ -721,9 +710,8 @@ div.container-fluid.bg {
   z-index: 999;
   min-height: 55px;
   background: #101824;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #101824 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=0 );
 }
 
 .navbar-header.home {
@@ -751,7 +739,6 @@ div.container-fluid.bg {
 .dropdown-menu > .active > a:hover,
 .dropdown-menu.filter_campaign .active > a {
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to bottom, #263854 0%, #1c273d 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#1c273d,GradientType=0 );
   color: #fff;
@@ -872,9 +859,8 @@ input[type=file] {
 
 .card {
   background: #152130;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #152130 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#152130, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #152130 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#152130, endColorstr=#090d14,GradientType=0 );
   border-top: 1px solid #23354e;
   box-shadow: 0 2px 3px #000001;
   padding: 20px;
@@ -887,9 +873,8 @@ input[type=file] {
 .card.card_table,
 .card.card_table2 {
   background: #101824;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #101824 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=0 );
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -914,18 +899,16 @@ input[type=file] {
   overflow-y: scroll;
   padding: 20px 10px;
   background: #101824;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #101824 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=0 );
 }
 
 .card .front,
 .card .back {
   overflow: none;
   background: #101824;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #101824 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=0 );
 }
 
 .card .back {
@@ -962,9 +945,8 @@ input[type=file] {
 
 .card.flipping_card {
   background: #101824;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #101824 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #101824 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#101824, endColorstr=#090d14,GradientType=0 );
   overflow: hidden;
   padding: 1px;
 }
@@ -1163,9 +1145,8 @@ p.total {
 .form-holder {
   border-radius: 5px;
   background: #152130;
-  /* Old browsers */
-  background: linear-gradient(to bottom, #152130 1%, #090d14 52%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#152130, endColorstr=#090d14,GradientType=ie_type );
+  background: linear-gradient(to bottom, #152130 0%, #090d14 52%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#152130, endColorstr=#090d14,GradientType=0 );
   border-top: 1px solid #23354e;
   margin-top: 17%;
 }
@@ -1175,7 +1156,6 @@ p.total {
   padding: 12px 0;
   margin-bottom: 20px;
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   border-bottom: 1px solid #23354e;
@@ -1198,7 +1178,6 @@ p.total {
 
 .form-holder .input-group-addon:last-child {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   color: #eee;
@@ -1299,7 +1278,6 @@ ul.dropdown-menu.filter_campaign {
 
 .modal-header {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   color: #fff;
@@ -1811,7 +1789,6 @@ a.sort-by span.desc {
 
 .pagination > .active:not(.disabled) > a {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   border: 1px solid #203047;
@@ -2433,7 +2410,6 @@ a.run_kpi.btn:hover {
   font-weight: 700;
   color: #fff;
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
 }
@@ -2468,7 +2444,6 @@ a.run_kpi.btn:hover {
 .input-group-addon:not(:first-child):not(:last-child),
 .input-group-btn:not(:first-child):not(:last-child) {
   background: #203047;
-  /* Old browsers */
   background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
   color: #eee;
@@ -2492,7 +2467,6 @@ a[aria-expanded=true] {
 
 .panel-default > .panel-heading {
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;

@@ -279,7 +279,6 @@ span {
   max-width: 250px;
   color: #fff;
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to right, #263854 0%, #171f33 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=1 );
   transition: all, ease, 0.3s;
@@ -301,7 +300,6 @@ span {
 #sidebar ul li a[aria-expanded=true] {
   color: #e49831;
   background: #1c273d;
-  /* Old browsers */
   background: linear-gradient(to right, #1c273d 0%, #263854 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1c273d, endColorstr=#263854,GradientType=1 );
 }
@@ -585,7 +583,6 @@ a.article:hover {
 
 #content {
   width: 100%;
-  /*padding: 20px;*/
   min-height: 100vh;
   transition: all, ease, 0.3s;
 }
@@ -597,8 +594,6 @@ div.container-fluid.hero_bg {
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 0 5px 15px #19273d;
-  -moz-box-shadow: 0 5px 15px #19273d;
-  -webkit-box-shadow: 0 5px 15px #19273d;
 }
 
 div.container-fluid.hero_bg .form-holder {
@@ -732,7 +727,6 @@ div.container-fluid.bg {
 .dropdown-menu > .active > a:hover,
 .dropdown-menu.filter_campaign .active > a {
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to bottom, #263854 0%, #1c273d 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#1c273d,GradientType=0 );
   color: #fff;
@@ -1205,7 +1199,6 @@ ul.dropdown-menu.filter_campaign {
 
 .modal-header {
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;
@@ -2316,7 +2309,6 @@ a[aria-expanded=true] {
 
 .panel-default > .panel-heading {
   background: #263854;
-  /* Old browsers */
   background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;
