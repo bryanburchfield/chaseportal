@@ -326,13 +326,8 @@ span {
 #sidebar ul li a:hover {
   color: #fff;
   background: #1c273d;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #1c273d 0%, #263854 98%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1c273d", endColorstr="#263854", GradientType=1);
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1c273d, endColorstr=#263854,GradientType=1 );
 }
 
 #sidebar ul li a i {
@@ -521,13 +516,8 @@ button:focus {
 
 #sidebarCollapse {
   background: #33A09B;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #33A09B 0%, #007f76 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$green", endColorstr="#007f76", GradientType=0);
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#33A09B, endColorstr=#007f76,GradientType=0 );
 }
 
 #sidebarCollapse:hover {
@@ -600,15 +590,6 @@ div.container-fluid.hero_bg .form-holder {
   border: none;
 }
 
-.fpass_email_alert {
-  margin: 20px;
-}
-
-.new_source_subcampaign_group,
-.new_destination_subcampaign_group {
-  display: none;
-}
-
 .edit_demo_user .alert-success {
   clear: both;
 }
@@ -650,13 +631,8 @@ h1.fw600 {
 
 div.container-fluid.bg {
   background: #c9d2d6;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #c9d2d6 0%, #efefef 7%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c9d2d6", endColorstr="#efefef", GradientType=0);
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#c9d2d6, endColorstr=#efefef,GradientType=0 );
   min-height: 500px;
 }
 
@@ -676,8 +652,6 @@ div.container-fluid.bg {
 .navbar-default {
   background: #fff;
   box-shadow: 0 1px 2px #28426d;
-  -moz-box-shadow: 0 1px 2px #28426d;
-  -webkit-box-shadow: 0 1px 2px #28426d;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -693,13 +667,8 @@ div.container-fluid.bg {
   z-index: 999;
   min-height: 55px;
   background: #ffffff;
-  /* Old browsers */
-  /* FF3.6-15 */
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#e2e2e0", GradientType=0);
-  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#ffffff, endColorstr=#e2e2e0,GradientType=0 );
 }
 
 .navbar-header.home {
@@ -1744,7 +1713,9 @@ span.selected_campaign {
 .card-6 .outbound,
 .opt .kpi,
 .search_results,
-.multi_db {
+.multi_db,
+.new_source_subcampaign_group,
+.new_destination_subcampaign_group {
   display: none;
 }
 
@@ -2113,14 +2084,6 @@ a.run_kpi.btn {
   min-width: 0px;
   max-width: 0px;
   margin-right: 0px !important;
-}
-
-.dropdown-toggle::after {
-  top: auto;
-  bottom: 10px;
-  right: 50%;
-  -webkit-transform: translateX(50%);
-  transform: translateX(50%);
 }
 
 #sidebar.active {

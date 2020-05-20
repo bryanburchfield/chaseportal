@@ -12,8 +12,17 @@ $blue: #203047;
 $orange: #E15B23;
 $green: #33A09B;
 
-//  #203047, #090d14
-@mixin blue_grad($color1, $color2, $direction, $stop){
+@mixin base_style($background, $color, $bdr_type:null, $bdr:null, $fw:null){
+    
+    @if($bdr_type){$bdr_type: - $bdr_type;}
+
+    background: $background;
+    color: $color;
+    border#{$bdr_type}:$bdr;
+    font-weight: $fw;
+}
+
+@mixin gradient($color1, $color2, $direction, $start, $stop){
     $opp_direction : bottom;
     $ie_type:0;
 
@@ -26,9 +35,9 @@ $green: #33A09B;
     }
 
     background: $color1;
-    background: -moz-linear-gradient($direction,  $color1 0%, $color2 $stop); 
-    background: -webkit-linear-gradient($direction,  $color1 0%,$color2 $stop); 
-    background: linear-gradient(to $opp_direction,  $color1 0%,$color2 $stop);
+    background: -moz-linear-gradient($direction, $color1 $start, $color2 $stop); 
+    background: -webkit-linear-gradient($direction, $color1 $start, $color2 $stop); 
+    background: linear-gradient(to $opp_direction, $color1 $start, $color2 $stop);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} );
 }
 
@@ -126,16 +135,12 @@ img.text_logo {
 }
 
 input.btn.logout_btn {
-    background: #d9534f;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#d9534f, #fff, $fw:600);
     @include transition(all, ease, 0.3s);
-    border:none;
-}
 
-input.logout_btn:hover {
-    background: #bf3f3b;
-    color: #fff;
+    &:hover {
+        @include base_style(#bf3f3b, #fff);
+    }
 }
 
 .svg-inline--fa {
@@ -148,9 +153,8 @@ input.logout_btn:hover {
 
 .navbar {
     padding: 13px 20px 0;
-    background: #fff;
     border: none;
-    border-bottom: 1px solid lighten($blue,2%);
+    @include base_style(#fff, null, bottom, 1px solid lighten($blue,2%));   
     @include border-radius(0);
     margin-bottom: 40px;
 }
@@ -172,19 +176,17 @@ i, span {
 }
 
 .btn-default{
-    @include blue_grad(#203047, #090d14, top, 100%);
-    border: 1px solid darken(#23354e,10%);
-    color: #eee;
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include base_style(null, #eee, null, 1px solid darken(#23354e,10%));  
 
     &:hover, &:active, &:focus{
-        color: #eee !important;
-        @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%), top, 100%);
-        border: 1px solid darken(#23354e,10%) !important;
+        @include gradient(lighten(#203047,5%), lighten(#090d14, 5%), top, 0%, 100%);
+        @include base_style(null, #eee !important, null, 1px solid darken(#23354e,10%) !important);
     }
 }
 
 .btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
-    @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%), top, 100%);
+    @include gradient(lighten(#203047,5%), lighten(#090d14, 5%), top, 0%, 100%);
 }
 
 /* ---------------------------------------------------
@@ -204,10 +206,9 @@ i, span {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    color: #fff;
-    @include blue_grad(darken(#263854,5%), darken(#171f33, 5%), left, 100%);
+    @include gradient(darken(#263854,5%), darken(#171f33, 5%), left, 0%, 100%);
     @include transition(all, ease, 0.3s);
-    border-right: 1px solid darken(#23354e,10%);
+    @include base_style(null, #fff, right, 1px solid darken(#23354e,10%));
 
     ul.components {
         padding: 20px 0;
@@ -219,7 +220,7 @@ i, span {
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad(darken(#1c273d,5%), darken(#263854,5%), left, 100%);
+            @include gradient(darken(#1c273d,5%), darken(#263854,5%), left, 0%, 100%);
 
             &>a i {
                 color:#ddd;
@@ -240,7 +241,7 @@ i, span {
 
             &:hover {
                 color: #fff;
-                @include blue_grad(darken(#1c273d,5%), darken(#263854,5%), left, 100%);
+                @include gradient(darken(#1c273d,5%), darken(#263854,5%), left, 0%, 100%);
             }
 
             i {margin-right: 10px;}
@@ -278,37 +279,18 @@ i, span {
 
         ul ul a {padding: 10px !important;}
 
-        // .dropdown-toggle::after {
-        //     top: auto;
-        //     bottom: 10px;
-        //     right: 50%;
-        //     -webkit-transform: translateX(50%);
-        //     -ms-transform: translateX(50%);
-        //     transform: translateX(50%);
-        // }
     }
 }
 
 #sidebar_nots {
     min-width: 300px;
     max-width: 300px;
-    color: #aaa;
-    background: #0f131f; 
-    border-left: 1px solid darken(#23354e,10%);
+    @include base_style(#0f131f, #aaa, left, 1px solid darken(#23354e,10%));
     @include transition(all, ease, 0.3s);
 
     &.active {
         min-width: 300px;
         max-width: 300px;
-
-        // .dropdown-toggle::after {
-        //     top: auto;
-        //     bottom: 10px;
-        //     right: 50%;
-        //     -webkit-transform: translateX(50%);
-        //     -ms-transform: translateX(50%);
-        //     transform: translateX(50%);
-        // }
     }
 
     .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
@@ -359,22 +341,19 @@ i, span {
 }
 
 .btn-notifications{
-    background:none;
-    color:#fff;
+    @include base_style(none, #fff);
     position:relative;
     font-size: 18px;
     bottom:2px;
-    &:hover{color: $green;}
-    &:hover span.numb_notifications{background: #fff;color:$green;}
-
+    &:hover{@include base_style(null, $green);}
+    &:hover span.numb_notifications{@include base_style(#fff, $green);}
 }
 
 span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
+    @include base_style($orange, #fff);
     height: 17px;
     width: 17px;
     @include border-radius(20px);
@@ -393,11 +372,7 @@ button, button:active, button:focus {
 }
 
 #sidebarCollapse {
-    background: $green; /* Old browsers */
-    background: -moz-linear-gradient(top, $green 0%, #007f76 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, $green 0%, #007f76 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, $green 0%, #007f76 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$green', endColorstr='#007f76', GradientType=0); /* IE6-9 */
+    @include gradient($green, #007f76, top, 0%, 100%);
     
     &:hover {
         background: #2d938f;
@@ -411,13 +386,14 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
+// .dropdown-toggle::after {
+//     display: block;
+//     position: absolute;
+//     top: 50%;
+//     right: 20px;
+//     transform: translateY(-50%);
+//     border:1px solid yellow;
+// }
 
 ul ul a {
     font-size: 0.9em !important;
@@ -438,13 +414,11 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: $blue;
+    @include base_style($blue, #fff);
 }
 
 a.article, a.article:hover {
-    background: #1a283d !important;
-    color: #fff !important;
+    @include base_style( #1a283d !important, #fff !important);
 }
 
 #content {
@@ -466,14 +440,6 @@ div.container-fluid.hero_bg .form-holder {
     border: none;
 }
 
-.fpass_email_alert {
-    margin: 20px;
-}
-
-.new_source_subcampaign_group, .new_destination_subcampaign_group{
-    display: none;
-}
-
 .mb_logo {
     display: block;
     margin: 0 auto;
@@ -486,28 +452,23 @@ h1.fw600 {
 .btn.btn-primary, input.btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: $orange !important;
-    border: none;
-    color: #fff;
-    font-weight: 600;
+    @include base_style($orange !important, #fff, null, none, 600);
 
     &:hover {
-        background-color: darken($orange, 5%);
+        @include base_style(darken($orange, 5%), null);
     }
 }
 
 .input-group-addon{
     border: none;
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
 }
 
 .input-group-addon:last-child{border-left:1px solid lighten($blue, 5%);}
 
 .bootstrap-datetimepicker-widget{
-    background: $blue;
-    border: 1px solid lighten($blue, 5%);
-    color: #fff;
+    @include base_style($blue, #fff, null, 1px solid lighten($blue, 5%));
 }
 
 .bootstrap-datetimepicker-widget .datepicker:hover{ background: $blue;}
@@ -515,8 +476,7 @@ h1.fw600 {
 td.day.old:hover{color:blue;}
 
 div.container-fluid.bg {
-    background: darken(#151C2D, 4%);
-    border-top: 1px solid darken(#111d2d,10%);
+    @include base_style(darken(#151C2D, 4%), #fff, null, 1px solid darken(#111d2d,10%));
     min-height: 500px;
 }
 
@@ -534,10 +494,8 @@ div.container-fluid.bg {
 }
 
 .navbar-default {
-    @include blue_grad(#203047, #090d14, top, 100%);
-    box-shadow: 0 1px 2px #28426d;
-    -moz-box-shadow: 0 1px 2px #28426d;
-    -webkit-box-shadow: 0 1px 2px #28426d;
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include box-shadow( 0 1px 2px #28426d);
 
     .navbar-nav>li>a {
         color: #eee;
@@ -552,7 +510,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    @include blue_grad(#101824, #090d14, top, 52%);
+    @include gradient(#101824, #090d14, top, 0%, 52%);
 }
 
 .navbar-header.home {
@@ -560,7 +518,6 @@ div.container-fluid.bg {
     height: 75px;
     position: relative;
 }
-
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
     color: #eee;
@@ -572,7 +529,7 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
-    @include blue_grad(#263854, #1c273d, top, 100%);
+    @include gradient(#263854, #1c273d, top, 0%, 100%);
     color: #fff;
 }
 
@@ -666,19 +623,16 @@ input[type='file'] {
 }
 
 .card {
-
-    @include blue_grad(#152130, #090d14, top, 52%);
+    @include gradient(#152130, #090d14, top, 0%, 52%);
+    @include box-shadow(0 2px 3px darken($blue, 20%));
     border-top: 1px solid #23354e;
-    -moz-box-shadow: 0 2px 3px darken($blue, 20%);
-    -webkit-box-shadow: 0 2px 3px darken($blue, 20%);
-    box-shadow: 0 2px 3px darken($blue, 20%);
-    padding: 20px;  /*overflow: auto;*/
+    padding: 20px; 
     margin-bottom: 30px;
     transition: 0.3s;
-    color: #aaaaaa;
+    color: #aaa;
 
     &.card_table, &.card_table2 {
-        @include blue_grad(#101824, #090d14, top, 52%);
+        @include gradient(#101824, #090d14, top, 0%, 52%);
         width: 100%;
         height: 100%;
         overflow-y: scroll;
@@ -694,12 +648,12 @@ input[type='file'] {
         height: 100%;
         overflow-y: scroll;
         padding: 20px 10px;
-        @include blue_grad(#101824, #090d14, top, 52%);
+        @include gradient(#101824, #090d14, top, 0%, 52%);
     }
 
     .front, .back {
         overflow: none;
-        @include blue_grad(#101824, #090d14, top, 52%);
+        @include gradient(#101824, #090d14, top, 0%, 52%);
     }
 
     .back {
@@ -735,7 +689,7 @@ input[type='file'] {
     }
 
     &.flipping_card{
-        @include blue_grad(#101824, #090d14, top, 52%);
+        @include gradient(#101824, #090d14, top, 0%, 52%);
         overflow: hidden;
         padding: 1px;
 
@@ -926,7 +880,7 @@ p.total {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    @include blue_grad(#152130, #090d14, top, 52%);
+    @include gradient(#152130, #090d14, top, 0%, 52%);
     border-top: 1px solid #23354e;
     margin-top: 17%;
 }
@@ -937,7 +891,7 @@ p.total {
     border-radius: 5px 5px 0 0;
     padding: 12px 0;
     margin-bottom: 20px;
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     border-bottom: 1px solid #23354e;
     color: #fff;
     text-align: center;
@@ -957,7 +911,7 @@ p.total {
 }
 
 .form-holder .input-group-addon:last-child {
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
 }
 
@@ -1048,7 +1002,7 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #fff;
 }
 
@@ -1492,7 +1446,7 @@ a.sort-by span.desc {
     border: solid 1px $blue;
 }
 .pagination > .active:not(.disabled ) > a{
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     border: 1px solid $blue;
     color: white;
 }
@@ -1583,7 +1537,7 @@ span.selected_campaign {
     border-color: #d6e9c6;
 }
 
-.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db {
+.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db, .new_source_subcampaign_group, .new_destination_subcampaign_group {
     display: none;
 }
 
@@ -2043,7 +1997,7 @@ a.run_kpi.btn {
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
 }
 
 .card_dropdown-content a {
@@ -2072,7 +2026,7 @@ a.run_kpi.btn {
 }
 
 .input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {
-    @include blue_grad(#203047, #090d14, top, 100%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
     @include border-radius(0);
 }
@@ -2092,7 +2046,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .panel-default>.panel-heading{
-    @include blue_grad(#263854, #171f33,top, 100%);
+    @include gradient(#263854, #171f33,top, 0%, 100%);
     color:#fff;
     height: 40px;
 }

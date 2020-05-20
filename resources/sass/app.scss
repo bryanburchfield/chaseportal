@@ -13,7 +13,7 @@ $orange: #E15B23;
 $green: #33A09B;
 /////////
 
-@mixin blue_grad($color1, $color2, $direction, $stop){
+@mixin gradient($color1, $color2, $direction, $start, $stop){
     $opp_direction : bottom;
     $ie_type:0;
 
@@ -26,9 +26,9 @@ $green: #33A09B;
     }
 
     background: $color1;
-    background: -moz-linear-gradient($direction,  $color1 0%, $color2 $stop); 
-    background: -webkit-linear-gradient($direction,  $color1 0%,$color2 $stop);
-    background: linear-gradient(to $opp_direction,  $color1 0%,$color2 $stop);
+    background: -moz-linear-gradient($direction,  $color1 $start, $color2 $stop); 
+    background: -webkit-linear-gradient($direction, $color1 $start, $color2 $stop);
+    background: linear-gradient(to $opp_direction, $color1 $start, $color2 $stop);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} ); 
 }
 
@@ -190,7 +190,7 @@ i, span {
     min-width: 250px;
     max-width: 250px;
     color: #fff;
-    @include blue_grad(#263854, #171f33, left, 100%);
+    @include gradient(#263854, #171f33, left, 0%, 100%);
     @include transition(all, ease, 0.3s);
     
     ul.components {
@@ -203,7 +203,7 @@ i, span {
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad(#1c273d, #263854, left, 100%);
+            @include gradient(#1c273d, #263854, left, 0%, 100%);
 
             &>a i {
                 color:#ddd;
@@ -224,11 +224,7 @@ i, span {
 
             &:hover {
                 color: #fff;
-                background: #1c273d; /* Old browsers */
-                background: -moz-linear-gradient(left, #1c273d 0%, #263854 98%); /* FF3.6-15 */
-                background: -webkit-linear-gradient(left, #1c273d 0%, #263854 98%); /* Chrome10-25,Safari5.1-6 */
-                background: linear-gradient(to right, #1c273d 0%, #263854 98%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c273d', endColorstr='#263854', GradientType=1); /* IE6-9 */
+                @include gradient(#1c273d, #263854, left, 0%, 98%);
             }
             
             i {margin-right: 10px;}
@@ -267,14 +263,6 @@ i, span {
 
         ul ul a {padding: 10px !important;}
 
-        // .dropdown-toggle::after {
-        //     top: auto;
-        //     bottom: 10px;
-        //     right: 50%;
-        //     -webkit-transform: translateX(50%);
-        //     -ms-transform: translateX(50%);
-        //     transform: translateX(50%);
-        // }
     }
 }
 
@@ -289,15 +277,6 @@ i, span {
     &.active {
         min-width: 300px;
         max-width: 300px;
-
-        // .dropdown-toggle::after {
-        //     top: auto;
-        //     bottom: 10px;
-        //     right: 50%;
-        //     -webkit-transform: translateX(50%);
-        //     -ms-transform: translateX(50%);
-        //     transform: translateX(50%);
-        // }
     }
 
     .close_nots_bar{position: relative;top:0;right:0px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
@@ -394,11 +373,7 @@ button, button:active, button:focus {
 }
 
 #sidebarCollapse {
-    background: $green; /* Old browsers */
-    background: -moz-linear-gradient(top, $green 0%, #007f76 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, $green 0%, #007f76 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, $green 0%, #007f76 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$green', endColorstr='#007f76', GradientType=0); /* IE6-9 */
+    @include gradient($green, #007f76, top, 0%, 100%);
     
     &:hover {
         background: #2d938f;
@@ -467,14 +442,6 @@ div.container-fluid.hero_bg .form-holder {
     border: none;
 }
 
-.fpass_email_alert {
-    margin: 20px;
-}
-
-.new_source_subcampaign_group, .new_destination_subcampaign_group {
-    display: none;
-}
-
 .edit_demo_user .alert-success{clear: both;}
 
 #demoUserModal .modal-body, #campaignFilterModal .modal-body{
@@ -510,11 +477,7 @@ h1.fw600 {
 }
 
 div.container-fluid.bg {
-    background: #c9d2d6; /* Old browsers */
-    background: -moz-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #c9d2d6 0%, #efefef 7%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9d2d6', endColorstr='#efefef', GradientType=0); /* IE6-9 */
+    @include gradient(#c9d2d6, #efefef, top, 0%, 7%);
     min-height: 500px;
 }
 
@@ -533,9 +496,7 @@ div.container-fluid.bg {
 
 .navbar-default {
     background: #fff;
-    box-shadow: 0 1px 2px #28426d;
-    -moz-box-shadow: 0 1px 2px #28426d;
-    -webkit-box-shadow: 0 1px 2px #28426d;
+    @include box-shadow( 0 1px 2px #28426d);
 
     .navbar-nav>li>a {
         color: #eee;
@@ -550,11 +511,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
+    @include gradient(#ffffff, #e2e2e0, top, 75%, 99%);
 }
 
 .navbar-header.home {
@@ -574,7 +531,7 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
-    @include blue_grad(#263854, #1c273d, top, 100%);
+    @include gradient(#263854, #1c273d, top, 0%, 100%);
     color: #fff;
 }
 
@@ -1025,7 +982,7 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#263854, #171f33, top, 100%);
+    @include gradient(#263854, #171f33, top, 0%, 100%);
     color: #fff;
     margin-bottom: 20px;
 }
@@ -1499,7 +1456,7 @@ span.selected_campaign {
     border-color: #d6e9c6;
 }
 
-.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db {
+.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db, .new_source_subcampaign_group, .new_destination_subcampaign_group {
     display: none;
 }
 
@@ -1816,14 +1773,14 @@ a.run_kpi.btn {
     margin-right: 0px !important;
 }
 
-.dropdown-toggle::after {
-    top: auto;
-    bottom: 10px;
-    right: 50%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
+// .dropdown-toggle::after {
+//     top: auto;
+//     bottom: 10px;
+//     right: 50%;
+//     -webkit-transform: translateX(50%);
+//     -ms-transform: translateX(50%);
+//     transform: translateX(50%);
+// }
 
 #sidebar.active {
     margin-left: 0 !important;
@@ -2002,7 +1959,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .panel-default>.panel-heading{
-    @include blue_grad(#263854, #171f33, top, 100%);
+    @include gradient(#263854, #171f33, top, 0%, 100%);
     color:#fff;
     height: 40px;
 }
