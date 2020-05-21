@@ -298,9 +298,7 @@ i, span {
     .not_header{
         padding-top: 20px;
         .not_header_inner{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-bottom: 13px;
+            padding: 0 13px 13px;
         }
 
         h4{
@@ -316,10 +314,7 @@ i, span {
 
     .notifications{
         .not{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding:10px 13px;
             border-top: 1px solid #23354e;
             position: relative;
             h4{
@@ -1555,7 +1550,7 @@ label.switch > span:before {
     height: 100%;
     box-sizing: border-box;
     background-color: $blue;
-    border-radius: 60px;
+    @include border-radius(60px);
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
     @include opacity(1);
@@ -1569,8 +1564,8 @@ label.switch > span:after {
     height: calc(50px / 2);
     transform: translate3d(0, -50%, 0);
     background-color: #fff;
-    border-radius: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    @include border-radius(100%);
+    @include box-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
 }
 
 label.switch > input[type="checkbox"]:checked ~ span:before {
@@ -1840,17 +1835,17 @@ a.run_kpi.btn {
     top: 45px;
     width: 100%;
     @include base_style(#ededed, null, null, 1px solid #ddd);
-}
-
-.search_results h5 {
-    padding: 8px 5px;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
-}
-
-.search_results h5:hover {
-    @include base_style($blue, #fff);
-    cursor: pointer;
+    
+    h5 {
+        padding: 8px 5px;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
+        
+        &:hover {
+            @include base_style($blue, #fff);
+            cursor: pointer;
+        }
+    }
 }
 
 #settingsForm input.form-control {
@@ -1885,7 +1880,7 @@ a.run_kpi.btn {
     margin-right: 15px;
     margin-top: 3px;
     vertical-align: top;
-    border-radius: 50%;
+    @include border-radius(50%);
     pointer-events: none;
 }
 
@@ -2459,7 +2454,7 @@ a.remove_filter{
     text-align: right;
     @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }

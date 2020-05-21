@@ -13,6 +13,16 @@ $orange: #E15B23;
 $green: #33A09B;
 /////////
 
+@mixin base_style($background, $color, $bdr_type:null, $bdr:null, $fw:null){
+    
+    @if($bdr_type){$bdr_type: - $bdr_type;}
+
+    background: $background;
+    color: $color;
+    border#{$bdr_type}:$bdr;
+    font-weight: $fw;
+}
+
 @mixin gradient($color1, $color2, $direction, $start, $stop){
     $opp_direction : bottom;
     $ie_type:0;
@@ -128,15 +138,12 @@ img.text_logo {
 }
 
 input.btn.logout_btn {
-    background: #d9534f;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#d9534f, #fff, $fw:600);
     @include transition(all, ease, 0.3s);
 }
 
 input.logout_btn:hover {
-    background: #bf3f3b;
-    color: #fff;
+    @include base_style(#bf3f3b, #fff);
 }
 
 .svg-inline--fa {
@@ -149,9 +156,8 @@ input.logout_btn:hover {
 
 .navbar {
     padding: 13px 20px 0;
-    background: #fff;
     border: none;
-    border-bottom: 1px solid #abbdd8;
+    @include base_style(#fff, null, bottom, 1px solid #abbdd8);  
     @include border-radius(0);
     margin-bottom: 40px;
 }
@@ -244,7 +250,6 @@ i, span {
         max-width: 80px;
         text-align: center;
         
-        
         .sidebar-header h3, .CTAs{display: none;}
         .sidebar-header strong {display: block;}
 
@@ -253,7 +258,7 @@ i, span {
             text-align: center;
             font-size: 0.85em;
 
-            i {
+            i{
                 margin-right: 0;
                 display: block;
                 font-size: 1.8em;
@@ -262,16 +267,13 @@ i, span {
         }
 
         ul ul a {padding: 10px !important;}
-
     }
 }
 
 #sidebar_nots {
     min-width: 300px;
     max-width: 300px;
-    color: #fff;
-    background: #efefef;
-    border-left: 1px solid #ccc;
+    @include base_style(#efefef, #fff, left, 1px solid #ccc);
     @include transition(all, ease, 0.3s);
 
     &.active {
@@ -284,9 +286,7 @@ i, span {
     .not_header{
         padding-top: 20px;
         .not_header_inner{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-bottom: 13px;
+            padding: 0 13px 13px;
         }
 
         h4{
@@ -302,10 +302,7 @@ i, span {
 
     .notifications{
         .not{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding:10px 13px;
             border-top: 1px solid #ccc;
             position: relative;
 
@@ -328,13 +325,12 @@ i, span {
 }
 
 .btn-notifications{
-    background:none;
-    color:$green;
+    @include base_style(none, $green);
     position:relative;
     font-size: 18px;
     bottom:2px;
     &:hover{color: $orange;}
-    &:hover span.numb_notifications{background: $green;color:#fff;}
+    &:hover span.numb_notifications{@include base_style($green, #fff);}
 
     &:focus{outline:none;@include box-shadow(none);}
 }
@@ -343,10 +339,9 @@ span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
+    @include base_style($orange, #fff);
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
@@ -414,13 +409,11 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: $blue;
+    @include base_style(#fff, $blue);
 }
 
 a.article, a.article:hover {
-    background: #1a283d !important;
-    color: #fff !important;
+    @include base_style( #1a283d !important, #fff !important);
 }
 
 #content {
@@ -465,15 +458,11 @@ h1.fw600 {
 .btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: #e49831;
-    border: 1px solid #f2ad4d;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
 
     &:hover {
         background-color: #d38826;
     }
-
 }
 
 div.container-fluid.bg {
@@ -520,10 +509,8 @@ div.container-fluid.bg {
     position: relative;
 }
 
-
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: #eee;
-    background: none;
+    @include base_style(none, #eee);
 }
 
 .dropdown-menu li a {
@@ -543,7 +530,6 @@ div.container-fluid.bg {
     background-color: #e4e4e4;
 }
 
-
 .filters {
     margin-bottom: 10px;
     float: right;
@@ -559,11 +545,8 @@ div.container-fluid.bg {
         &.select_database, &.select_campaign {
             position: relative;
             margin-bottom: 10px;
-            background-color: #e49831;
-            border: 1px solid #f2ad4d;
+            @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
             @include border-radius(0);
-            color: #fff;
-            font-weight: 600;
         }
     }
 }
@@ -584,7 +567,6 @@ div.container-fluid.bg {
     }
 }
 
-
 .navbar-header.home .navbar-brand img {
     margin: 0 auto;
     display: block;
@@ -593,23 +575,18 @@ div.container-fluid.bg {
 input[type='file'] {
     border: none !important;
     box-shadow: none !important;
-    background: none !important
+    background: none !important;
 }
 
 .card {
-    background: #fff;
-    -moz-box-shadow: 0 2px 3px #ccd6dd;
-    -webkit-box-shadow: 0 2px 3px #ccd6dd;
-    box-shadow: 0 2px 3px #ccd6dd;
-    border-top: 3px solid #acb4c1;
-    padding: 20px;  /*overflow: auto;*/
+    @include box-shadow(0 2px 3px #ccd6dd);
+    @include base_style(#fff, null, top, 3px solid #acb4c1);
+    padding: 20px;
     margin-bottom: 30px;
     transition: 0.3s;
 
     &:hover {
-        -moz-box-shadow: 0 3px 5px #b5c3cc;
-        -webkit-box-shadow: 0 3px 5px #b5c3cc;
-        box-shadow: 0 3px 5px #b5c3cc;
+        @include box-shadow(0 3px 5px #b5c3cc);
     }
 
     &.card_table, &.card_table2 {
@@ -657,8 +634,7 @@ input[type='file'] {
         color: $blue;
 
         &.bg_rounded {
-            background: $green;
-            color: #fff;
+            @include base_style($green, #fff);
             border-radius: 100px;
             width: 100px;
             height: 100px;
@@ -688,7 +664,6 @@ input[type='file'] {
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
-
 
 .flip_card_btn:after, .card_drop_down:after {
     content: '\2807';
@@ -725,11 +700,9 @@ input[type='file'] {
     -ms-overflow-style: none;
 }
 
-
 .call_volume_details {
     float: left;
 }
-
 
 .card-6 h1.title {
     text-align: left;
@@ -762,10 +735,6 @@ input[type='file'] {
     display: block;
 }
 
-// .card-6.outbound_default .inbound {
-//     display: none;
-// }
-
 .avgs_rgt {
     float: right;
     position: relative;
@@ -792,27 +761,23 @@ p.total {
 }
 
 .total_calls_in, .total_calls_out {
-    padding: 17px;    /*height: 48%;*/
+    padding: 17px; 
 }
 
 .total_calls_out {
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff);
     margin-bottom: 10px;
 }
 
 .total_calls_in {
-    background: $blue;
-    color: #fff;
+    @include base_style($blue, #fff);
 }
 
 .total_calls_in h2, .total_calls_out h2 {
     text-align: center;
     font-size: 15px;
-    font-weight: 600;
     margin-bottom: 5%;
-    color: #fff;
-    border-bottom: none;
+    @include base_style(null, #fff, bottom, none, 600);
 }
 
 .total_calls_in p.total, .total_calls_out p.total {
@@ -837,7 +802,7 @@ p.total {
     background-color: #f9f9f9;
     min-width: 160px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
 }
 
@@ -861,24 +826,17 @@ p.total {
 }
 
 .form-holder {
-    border: 1px solid #ccc;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    background: #eee;
+    @include base_style(#eee, null, null, 1px solid #ccc);
+    @include border-radius(5px);
     margin-top: 17%;
 }
 
 .form-holder h4 {
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 0 0;
+    @include base_style($blue, #fff, $fw:600);
+    @include border-radius(5px 5px 0 0);
     padding: 12px 0;
     margin-bottom: 20px;
-    background: $blue;
-    color: #fff;
     text-align: center;
-    font-weight: 600;
     text-transform: uppercase;
     margin-top: 0;
 }
@@ -917,8 +875,7 @@ a.dropdown-toggle {
 }
 
 .dd_trigger .active, .filter_campaign .active {
-    background: $blue !important;
-    color: #fff !important;
+    @include base_style($blue !important, #fff !important);
 }
 
 #reports_modal .modal-footer .btn_flgrgt{
@@ -994,7 +951,7 @@ ul.dropdown-menu.filter_campaign {
 
 .close {
     color: #fff;
-   @include opacity(0.7);
+    @include opacity(0.7);
 
     &:hover {
         @include opacity(1);
@@ -1151,9 +1108,7 @@ p.descrip.top14 {
 }
 
 .reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .audit_table th{
-    background: $blue;
-    border-top: 0;
-    color: #fff;
+    @include base_style($blue, #fff, top, 0);
     padding: 10px !important;
 }
 
@@ -1252,7 +1207,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
         @include form_control_style();
     }   
 }
-
 
 .create_recips .btn-group ul .checkbox{
     margin: 3px 0;
@@ -1481,7 +1435,7 @@ label.switch {
     text-align: left;
     width: 50px;
     height: calc(50px / 2);
-    border-radius: 60px;
+    @include border-radius(60px);
     background-color: #4ed164;
     display: inline-block;
     position: relative;
@@ -1506,15 +1460,15 @@ label.switch > span:before, label.switch > span:after {
 }
 
 label.switch > input[type="checkbox"]:focus ~ span {
-    box-shadow: 0 0 0 2px #43b556;
+    @include box-shadow(0 0 0 2px #43b556);
 }
 
 label.switch > input[type="checkbox"]:checked:focus ~ span {
-    box-shadow: 0 0 0 2px #eee;
+    @include box-shadow(0 0 0 2px #eee);
 }
 
 label.switch > span {
-    border-radius: 60px;
+    @include border-radius(60px);
 }
 
 label.switch > span:before {
@@ -1522,7 +1476,7 @@ label.switch > span:before {
     height: 100%;
     box-sizing: border-box;
     background-color: #cecece;
-    border-radius: 60px;
+    @include border-radius(60px);
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
     @include opacity(1);
@@ -1536,8 +1490,8 @@ label.switch > span:after {
     height: calc(50px / 2);
     transform: translate3d(0, -50%, 0);
     background-color: #fff;
-    border-radius: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    @include border-radius(100%);
+    @include box-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
 }
 
 label.switch > input[type="checkbox"]:checked ~ span:before {
@@ -1550,12 +1504,10 @@ label.switch > input[type="checkbox"]:checked ~ span:after {
 }
 
 h2 {
-    font-weight: 600;
+    @include base_style(null, $blue, bottom, 1px solid #ddd, 600);
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    color: $blue;
 }
 
 .opt {
@@ -1661,7 +1613,7 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
 
 a.edit_recip_glyph{right:35px;color:#33A09B;}
 a.kpi_change_details{
-     margin-right: 10px;
+    margin-right: 10px;
     position: absolute;
     bottom: 19px;
     right: 64px;
@@ -1712,13 +1664,11 @@ a.fpass {
 a.run_kpi.btn {
     position: relative;
     bottom: 0px;
-    background: $blue;
-    color: #fff;
     clear: both;
     border: none;
+    @include base_style($blue, #fff, bottom, 1px solid #ddd);
     display: block;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 12px;
@@ -1737,7 +1687,6 @@ a.run_kpi.btn {
     to {
         transform: scale(1) rotate(360deg);
     }
-
 }
 
 @-webkit-keyframes spin2 {
@@ -1748,7 +1697,6 @@ a.run_kpi.btn {
     to {
         -webkit-transform: rotate(360deg);
     }
-
 }
 
 .total_calls_in h2, .total_calls_out h2 {
@@ -1773,15 +1721,6 @@ a.run_kpi.btn {
     margin-right: 0px !important;
 }
 
-// .dropdown-toggle::after {
-//     top: auto;
-//     bottom: 10px;
-//     right: 50%;
-//     -webkit-transform: translateX(50%);
-//     -ms-transform: translateX(50%);
-//     transform: translateX(50%);
-// }
-
 #sidebar.active {
     margin-left: 0 !important;
 }
@@ -1796,28 +1735,25 @@ a.run_kpi.btn {
     position: relative;
 }
 
-
 .searchCnt{position: relative;}
 
 .search_results {
     position: absolute;
     z-index: 99999;
     top: 45px;
-    border: 1px solid #ddd;
-    background: #ededed;
+    @include base_style(#ededed, null, null, 1px solid #ddd);
     width: 100%;
-}
+    
+    h5 {
+        padding: 8px 5px;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
 
-.search_results h5 {
-    padding: 8px 5px;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
-}
-
-.search_results h5:hover {
-    background: $blue;
-    color: #fff;
-    cursor: pointer;
+        &:hover {
+            @include base_style($blue, #fff);
+            cursor: pointer;
+        }
+    }
 }
 
 #settingsForm input.form-control {
@@ -1852,7 +1788,7 @@ a.run_kpi.btn {
     margin-right: 15px;
     margin-top: 3px;
     vertical-align: top;
-    border-radius: 50%;
+    @include border-radius(50%);
     pointer-events: none;
 }
 
@@ -1866,19 +1802,14 @@ a.run_kpi.btn {
 }
 
 .btn-left, .btn-right {
-    position: absolute;    /*top: 0.24em;*/
+    position: absolute;
 }
 
 .card_dropbtn {
-
-    /*position: fixed;*/
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
-}
-
-.card_dropbtn.btn-left {
 }
 
 .card_dropdown.mv_left {
@@ -1897,11 +1828,10 @@ a.run_kpi.btn {
     display: none;
     position: relative;
     margin-top: 40px;
-    background-color: #f9f9f9;
-    border: 1px solid #d1d1d1;
+    @include base_style(#f9f9f9, null, $bdr:1px solid #d1d1d1);
     max-width: 210px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
     right: 20px;
 }
@@ -1909,9 +1839,7 @@ a.run_kpi.btn {
 .card_dropdown-content h3 {
     padding: 10px;
     font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    background: $blue;
+    @include base_style($blue, #fff, $fw:700 );
 }
 
 .card_dropdown-content a {
@@ -1954,8 +1882,7 @@ a.run_kpi.btn {
 }
 
 ul.db_select li.active>a, a[aria-expanded="true"] {
-    background: none;
-    color: $green;
+    @include base_style(none, $green);
 }
 
 .panel-default>.panel-heading{
@@ -2040,9 +1967,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    background: #fff;
-    color: $blue;
-    font-weight: 600;
+    @include base_style(#fff, $blue, $fw:600);
 }
 
 .cdr_results_table {
@@ -2078,7 +2003,6 @@ h4.panel-title a{
 #kpi_select.multiselect + .btn-group li a label{
     padding: 0px;
     padding-left: 30px;
-
 }
 
 .checkbox.mb20{
@@ -2087,8 +2011,7 @@ h4.panel-title a{
 
 .fltlft{float: left;margin-right: 20px;}
 .undoselection_btn{
-    color: #d9534f;
-    font-weight: 600;
+    @include base_style(null, #d9534f, $fw:600);
     position: relative;
     top:9px;
 }
@@ -2119,7 +2042,6 @@ p.name i{margin-right: 5px;}
 
 .avg_wait_time_max{right: 6%;}
 .card.flipping_card .title.mb15{margin-bottom: 15px;}
-
 
 .rules_table tbody tr td .btn{
     max-width: 170px;
@@ -2216,8 +2138,7 @@ div.vertical-line{
 }
 
 .table>thead>tr>th{
-    background: $green;
-    color: #fff;
+    @include base_style($green, #fff);
 }
 
 .form-holder.welcome_box{
@@ -2303,8 +2224,7 @@ div.vertical-line{
 .demo_user_table_holder{overflow-x:auto;}
 
 .modal-body h3.leaddetail_name{
-    color:$blue;
-    font-weight: 600;
+    @include base_style(null, $blue, $fw:600);
     font-size: 25px;
     margin-bottom: 25px !important;
 }
@@ -2327,10 +2247,8 @@ div.vertical-line{
 .bbnone{border-bottom: none;}
 
 .add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
-    color: $green;
+    @include base_style(null, $green, $fw:600);
     font-size: 15px;
-    font-weight: 600;
-
     &:hover{color: darken($green,10%);}
     &:focus{color: darken($green,10%);}
 }
@@ -2344,13 +2262,11 @@ a.remove_filter{
 .leadfilter_row .card{overflow: auto;}
 
 .btn.btn-reset{
-    background: #ccc;
-    color:#333;
+    @include base_style(#ccc, #333);
     margin-right: 10px;
 
     &:hover{
-        color: #333 !important;
-        background:  darken(#ccc, 5%);
+        @include base_style(darken(#ccc, 5%), #333 !important);
     }
 }
 
@@ -2386,8 +2302,7 @@ a.remove_filter{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
     background: white;
     cursor: inherit;
@@ -2451,11 +2366,12 @@ a.toggle_instruc {
         &:nth-child(even){
             background: lighten(#EDF3F5, 1%);
         }
+
         border-bottom: 1px solid darken(#E1E9EC, 2%);
         padding-top: 15px;
         overflow: auto;
 
-         p.active{color:$green;}
+        p.active{color:$green;}
 
         .fa-times-circle{
             font-size: 16px;
@@ -2507,8 +2423,7 @@ a.toggle_instruc {
     }
 
     button.btn.generate_url{
-        background: $green ;
-        border:1px solid $green;
+        @include base_style($green, null, $bdr:1px solid $green);
         float: right;
 
         &:hover{
@@ -2522,9 +2437,8 @@ a.toggle_instruc {
 
     form.add_custom_field{
         padding: 20px;
-        border-radius: 5px;
-        background: lighten(#ddd, 1%) !important;
-        border: 1px solid darken(#ddd, 3%);
+        @include border-radius(5px);
+        @include base_style(lighten(#ddd, 1%) !important, null, $bdr: 1px solid darken(#ddd, 3%));
 
         div.form-group input.form-control {
             background: #eee !important;
@@ -2534,10 +2448,8 @@ a.toggle_instruc {
 
 .final_url_cnt{
     textarea.url.form-control{
-        color: $blue;
         @include border-radius(5px);
-        background: lighten(#ddd, 1%) !important;
-        border: 1px solid darken(#ddd, 3%);
+        @include base_style(lighten(#ddd, 1%) !important, $blue, $bdr:1px solid darken(#ddd, 3%));
         min-height: 100px;
         padding: 12px;
 
@@ -2546,8 +2458,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger{
-    background: #f2dede;
-    color:#a94442;
+    @include base_style(#f2dede, #a94442);
 }
 
 [hidden] {
@@ -2565,10 +2476,9 @@ td.bg-danger{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }
@@ -2576,8 +2486,7 @@ td.bg-danger{
 .label-info{font-size: 13px;margin-left: 10px;}
 
 .btn-secondary{
-    background: #ccc;
-    color: #444;
+    @include base_style(#ccc, #444);
 
     &:hover{
         background: #bbb;
@@ -2613,12 +2522,10 @@ p.login_date {
     margin-right: 10px;
 }
 
-
 .bwr_omni table thead th a{display: none;}
 
 .btn-notifications{
-    background:none;
-    color:$green;
+    @include base_style(none, $green);
     position:relative;
     font-size: 18px;
     bottom:2px;
@@ -2629,14 +2536,13 @@ p.login_date {
 }
 
 span.numb_notifications{
+    @include base_style($orange, #fff);
+    @include border-radius(20px);
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
-    @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
 }
@@ -2733,7 +2639,6 @@ MEDIAQUERIES
     }
 }
 
-
 @media handheld, only screen and (max-width: 1300px){
     .flowchart_element{
 
@@ -2778,7 +2683,6 @@ MEDIAQUERIES
             height: 75px;
         }
     }
-
 }
 
 @media handheld, only screen and (max-width:1010px) {
@@ -2801,7 +2705,6 @@ MEDIAQUERIES
         padding-left: 0;
         padding-right: 0;
     }
-
 }
 
 @media handheld, only screen and (max-width:991px) {
@@ -2833,9 +2736,6 @@ MEDIAQUERIES
         margin-bottom: 20px;
     }
 
-    /*.total_calls_in, .total_calls_out{
-      max-height: 160px;
-    }*/
     .total_calls_in h2, .total_calls_out h2 {
         font-size: 23px;
         margin-bottom: 20px;
@@ -2844,7 +2744,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 55px;
     }
-
 }
 
 @media (min-width:768px) {
@@ -2905,7 +2804,6 @@ MEDIAQUERIES
         margin-top: 120px;
     }
 
-
     .col-sm-3.report_download {
         margin-top: 20px;
     }
@@ -2923,7 +2821,6 @@ MEDIAQUERIES
         width: 50px;
     }
 
-    /*.col-sm-3.report_download{margin-bottom: 20px;}*/
     .col-sm-3.report_download h3 {
         margin-top: 0;
     }
@@ -2960,12 +2857,6 @@ MEDIAQUERIES
     }
 }
 
-/*@media handheld, only screen and (max-width: 668px){
-img.text_logo{
-  display: none;
-}
-
-}*/
 @media handheld, only screen and (max-width:556px) {
 
     .form-holder.welcome_box h1{font-size: 30px;}
@@ -3078,10 +2969,5 @@ img.text_logo{
     .col-xs-6 .card h1.title {
         font-size: 12px;
     }
-
 }
 
-/*@media handheld, only screen and (min-width: 552px) {
-  .nopad{padding: 0;}
-}
-*/

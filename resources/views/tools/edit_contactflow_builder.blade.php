@@ -19,7 +19,7 @@
 			<div class="container-full mt50 tools">
 				<div class="row">
 					<div class="col-sm-12">
-						@include('tools.shared.topnav', ['toolpage' => 'editrules'])
+						@include('tools.shared.topnav', ['toolpage' => 'rules'])
 					</div>
 				</div>
 			</div>

@@ -429,9 +429,7 @@ span {
 }
 
 #sidebar_nots .not_header .not_header_inner {
-  padding-left: 13px;
-  padding-right: 13px;
-  padding-bottom: 13px;
+  padding: 0 13px 13px;
 }
 
 #sidebar_nots .not_header h4 {
@@ -445,10 +443,7 @@ span {
 }
 
 #sidebar_nots .notifications .not {
-  padding-left: 13px;
-  padding-right: 13px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 13px;
   border-top: 1px solid #23354e;
   position: relative;
 }
@@ -3008,7 +3003,7 @@ a.remove_filter {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   outline: none;
-  background: white;
+  background: #fff;
   cursor: inherit;
   display: block;
 }
