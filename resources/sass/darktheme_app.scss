@@ -476,7 +476,7 @@ h1.fw600 {
 td.day.old:hover{color:blue;}
 
 div.container-fluid.bg {
-    @include base_style(darken(#151C2D, 4%), #fff, null, 1px solid darken(#111d2d,10%));
+    @include base_style(darken(#151C2D, 4%), null, top, 1px solid darken(#111d2d,10%));
     min-height: 500px;
 }
 
@@ -520,8 +520,7 @@ div.container-fluid.bg {
 }
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: #eee;
-    background: none;
+    @include base_style(none, #eee);
 }
 
 .dropdown-menu li a {
@@ -584,11 +583,8 @@ input.form-control.campaign_search{color:#aaa;}
         &.select_database, &.select_campaign {
             position: relative;
             margin-bottom: 10px;
-            background-color: #e49831;
-            border: 1px solid #f2ad4d;
+            @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
             @include border-radius(0);
-            color: #fff;
-            font-weight: 600;
         }
     }
 }
@@ -625,11 +621,10 @@ input[type='file'] {
 .card {
     @include gradient(#152130, #090d14, top, 0%, 52%);
     @include box-shadow(0 2px 3px darken($blue, 20%));
-    border-top: 1px solid #23354e;
+    @include base_style(null, #aaa, top, 1px solid #23354e);
     padding: 20px; 
     margin-bottom: 30px;
     transition: 0.3s;
-    color: #aaa;
 
     &.card_table, &.card_table2 {
         @include gradient(#101824, #090d14, top, 0%, 52%);
@@ -641,7 +636,9 @@ input[type='file'] {
         table {font-size: 12px;}
     }
 
-    input {background: darken($blue, 2%);color:#aaa;border:none;}
+    input {
+        @include base_style(darken($blue, 2%), #aaa, null, none);
+    }
 
     .card_table, .card_table2 {
         width: 100%;
@@ -677,8 +674,7 @@ input[type='file'] {
         color: #a0a0a0;
 
         &.bg_rounded {
-            background: $green;
-            color: #fff;
+            @include base_style($green, #fff);
             border-radius: 100px;
             width: 100px;
             height: 100px;
@@ -708,7 +704,6 @@ input[type='file'] {
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
-
 
 .flip_card_btn:after, .card_drop_down:after {
     content: '\2807';
@@ -745,11 +740,9 @@ input[type='file'] {
     -ms-overflow-style: none;
 }
 
-
 .call_volume_details {
     float: left;
 }
-
 
 .card-6 h1.title {
     text-align: left;
@@ -808,27 +801,23 @@ p.total {
 }
 
 .total_calls_in, .total_calls_out {
-    padding: 17px;    /*height: 48%;*/
+    padding: 17px;
 }
 
 .total_calls_out {
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff);
     margin-bottom: 10px;
 }
 
 .total_calls_in {
-    background: $blue;
-    color: #fff;
+    @include base_style($blue, #fff);
 }
 
 .total_calls_in h2, .total_calls_out h2 {
     text-align: center;
     font-size: 15px;
-    font-weight: 600;
     margin-bottom: 5%;
-    color: #fff;
-    border-bottom: none;
+    @include base_style(null, #fff, bottom, none, 600);
 }
 
 .total_calls_in p.total, .total_calls_out p.total {
@@ -877,25 +866,19 @@ p.total {
 }
 
 .form-holder {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    @include border-radius(5px);
     @include gradient(#152130, #090d14, top, 0%, 52%);
     border-top: 1px solid #23354e;
     margin-top: 17%;
 }
 
 .form-holder h4 {
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 0 0;
+    @include border-radius(5px 5px 0 0);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include base_style(null, #fff, bottom, 1px solid #23354e, 600);
     padding: 12px 0;
     margin-bottom: 20px;
-    @include gradient(#203047, #090d14, top, 0%, 100%);
-    border-bottom: 1px solid #23354e;
-    color: #fff;
     text-align: center;
-    font-weight: 600;
     text-transform: uppercase;
     margin-top: 0;
 }
@@ -905,9 +888,7 @@ p.total {
 }
 
 .form-holder form input {
-    background: darken($blue, 2%) !important;
-    border: none;
-    color: #aaa;
+    @include base_style(darken($blue, 2%) !important, #aaa, null, none);
 }
 
 .form-holder .input-group-addon:last-child {
@@ -937,8 +918,7 @@ a.dropdown-toggle {
 }
 
 .dd_trigger .active, .filter_campaign .active {
-    background: $blue !important;
-    color: #fff !important;
+    @include base_style($blue !important, #fff !important);
 }
 
 #reports_modal .modal-footer .btn_flgrgt{
@@ -1013,7 +993,7 @@ ul.dropdown-menu.filter_campaign {
 
 .close {
     color: #fff;
-   @include opacity(0.7);
+    @include opacity(0.7);
 
     &:hover {
         @include opacity(1);
@@ -1123,10 +1103,8 @@ h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     font-size: 16px;
     float: right;
     position: relative;
-    font-weight: 700;
-    color: $orange;
     bottom: 43px;
-    border-bottom: none;
+    @include base_style(null, $orange, bottom, none, 700);
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -1170,15 +1148,12 @@ p.descrip.top14 {
 }
 
 .reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .dnc_table th, .demo_user_table th, .audit_table th{
-    background: #33A09B;
-    border-top: 0;
-    color: #fff;
+    @include base_style(#33A09B, #fff, top, 0);
     padding: 10px !important;
 }
 
 .reports_table tbody tr:hover{
-    background: #23354e;
-    color: #fff;
+    @include base_style(#23354e, #fff);
 }
 
 .table>thead>tr>th{border-bottom: 1px solid $blue;}
@@ -1200,7 +1175,7 @@ p.descrip.top14 {
     border-bottom: 1px solid #23354e;
 }
 
-.modal-footer{background:darken( #0f131f,2%);border-top: 1px solid #23354e;}
+.modal-footer{@include base_style(darken( #0f131f,2%), null, top, 1px solid #23354e);}
 
 #reports_modal .alert-danger {
     font-weight: 600;
@@ -1268,9 +1243,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .bootstrap-datetimepicker-widget td.day:hover, .bootstrap-datetimepicker-widget td.hour:hover, .bootstrap-datetimepicker-widget td.minute:hover, .bootstrap-datetimepicker-widget td.second:hover {
-    background: #fff !important;
     cursor: pointer;
-    color:$blue;
+    @include base_style(#fff !important, $blue);
 }
 
 .bootstrap-datetimepicker-widget td span:hover {
@@ -1422,11 +1396,8 @@ a.sort-by span.desc {
     font-weight: 600;
 }
 
-.pagination > li > a
-{
-
-    background-color: #ccc;
-    color: $blue;
+.pagination > li > a{
+    @include base_style(#ccc, $blue);
 }
 
 .pagination > li > a:focus,
@@ -1434,27 +1405,19 @@ a.sort-by span.desc {
 .pagination > li > span:focus,
 .pagination > li > span:hover
 {
-    color: $blue;
-    background-color: #eee;
-    border-color: #ddd;
+    @include base_style($blue, #eee, null, 1px solid $blue);
 }
 
-.pagination > .active > a
-{
-    color: white;
-    background-color: $blue;
-    border: solid 1px $blue;
+.pagination > .active > a{
+    @include base_style($blue, #fff, null, 1px solid $blue);
 }
 .pagination > .active:not(.disabled ) > a{
     @include gradient(#203047, #090d14, top, 0%, 100%);
-    border: 1px solid $blue;
-    color: white;
+    @include base_style(null, #fff, null, 1px solid $blue);
 }
 
-.pagination > .active > a:hover
-{
-    background-color: lighten($blue,10%);
-    border: solid 1px lighten($blue,10%);
+.pagination > .active > a:hover{
+    @include base_style(lighten($blue,10%), null, null, 1px solid lighten($blue,10%));
 }
 
 .pag_report_errors, .report_errors {
@@ -1467,9 +1430,7 @@ a.sort-by span.desc {
 
 .pag_dets input {
     text-align: center;
-    background: $blue;
-    border:none;
-    color:lighten(#aaa,10%);
+    @include base_style($blue, lighten(#aaa,10%), null, none);
 }
 
 .form-group .btn-group button {
@@ -1494,8 +1455,8 @@ div.table-responsive .alert {
 
 .filter_time_camp_dets p {
     text-align: left;
-    font-size: 18px;
-    color: #ddd;
+    font-size: 17px;
+    color: #ccc;
     margin-top: 10px;
 }
 
@@ -1511,7 +1472,6 @@ span.selected_campaign {
 .reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd), .providers_table tr:nth-of-type(odd), .smtp_servers table tr:nth-of-type(odd), .drip_campaigns table tr:nth-of-type(odd) {
     background-color: darken($blue, 10%);
 }
-
 
 .agent_call_log .reports_table tr:nth-of-type(odd) {
     background-color: none;
@@ -1586,10 +1546,6 @@ label.switch > span:before, label.switch > span:after {
     position: absolute;
 }
 
-label.switch > input[type="checkbox"]:checked:focus ~ span {
-    // box-shadow: 0 0 0 2px #eee;
-}
-
 label.switch > span {
     border-radius: 60px;
 }
@@ -1627,12 +1583,10 @@ label.switch > input[type="checkbox"]:checked ~ span:after {
 }
 
 h2 {
-    font-weight: 600;
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
-    border-bottom: 1px solid darken(#23354e,5%);
-    color: #aaa;
+    @include base_style(null, #aaa, bottom, 1px solid darken(#23354e,5%), 600);
 }
 
 .opt {
@@ -1704,7 +1658,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
     clear: both;
-    // height: 65px;
     position: relative;
 }
 
@@ -1743,7 +1696,7 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
 
 a.edit_recip_glyph{right:35px;color:#33A09B;}
 a.kpi_change_details{
-     margin-right: 10px;
+    margin-right: 10px;
     position: absolute;
     bottom: 19px;
     right: 64px;
@@ -1794,10 +1747,8 @@ a.fpass {
 a.run_kpi.btn {
     position: relative;
     bottom: 0px;
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff, null, none);
     clear: both;
-    border: none;
     display: block;
     text-align: left;
     padding-top: 7px;
@@ -1805,8 +1756,7 @@ a.run_kpi.btn {
     font-size: 12px;
 
     &:hover{
-        background: darken($orange, 5%);
-        border:none !important;
+        @include base_style(darken($orange, 5%), null, null, none !important);
     }
 }
 
@@ -1882,16 +1832,14 @@ a.run_kpi.btn {
     position: relative;
 }
 
-
 .searchCnt{position: relative;}
 
 .search_results {
     position: absolute;
     z-index: 99999;
     top: 45px;
-    border: 1px solid #ddd;
-    background: #ededed;
     width: 100%;
+    @include base_style(#ededed, null, null, 1px solid #ddd);
 }
 
 .search_results h5 {
@@ -1901,8 +1849,7 @@ a.run_kpi.btn {
 }
 
 .search_results h5:hover {
-    background: $blue;
-    color: #fff;
+    @include base_style($blue, #fff);
     cursor: pointer;
 }
 
@@ -1952,19 +1899,14 @@ a.run_kpi.btn {
 }
 
 .btn-left, .btn-right {
-    position: absolute;    /*top: 0.24em;*/
+    position: absolute;
 }
 
 .card_dropbtn {
-
-    /*position: fixed;*/
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
-}
-
-.card_dropbtn.btn-left {
 }
 
 .card_dropdown.mv_left {
@@ -1983,11 +1925,10 @@ a.run_kpi.btn {
     display: none;
     position: relative;
     margin-top: 40px;
-    background-color: #f9f9f9;
-    border: 1px solid #d1d1d1;
     max-width: 210px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include base_style(#f9f9f9, null, null, 1px solid #d1d1d1);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
     right: 20px;
 }
@@ -2041,8 +1982,7 @@ a.run_kpi.btn {
 }
 
 ul.db_select li.active>a, a[aria-expanded="true"] {
-    background: none;
-    color: $green;
+    @include base_style(none, $green);
 }
 
 .panel-default>.panel-heading{
@@ -2052,8 +1992,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
-    background: #1d2b40 !important;
-    color:#eee !important;
+    @include base_style( #1d2b40 !important,#eee !important);
 }
 
 .note-editor.note-airframe, .note-editor.note-frame, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar{
@@ -2071,8 +2010,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .panel-default>.panel-heading+.panel-collapse>.panel-body{
-    background: darken($blue, 10%);
-    border-top: 1px solid lighten($blue, 10%);
+    @include base_style(darken($blue, 10%), null, 1px solid lighten($blue, 10%));
 }
 
 .nav-tabs {
@@ -2136,21 +2074,12 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border-top: 6px solid #d9534f;
 }
 
-.nav-tabs>li>a:hover {
-    border-color: #ddd;
-    background: #fff;
-}
-
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    background: #23354e;
-    color: #fff;
-    font-weight: 600;
-    border: 1px solid #23354e;
+    @include base_style(#23354e, #fff, null, 1px solid #23354e, 600);
 }
 
 .nav-tabs > li > a:hover{
-    background: lighten(#23354e, 10%);
-    border: 1px solid lighten(#23354e, 10%);
+    @include base_style(lighten(#23354e, 10%), null, null, 1px solid lighten(#23354e, 10%)!important);
 }
 
 .cdr_results_table {
@@ -2162,9 +2091,8 @@ div#cdr_dataTable_paginate {
 }
 
 h4.panel-title a{
-  display: block;
-  width: 100%;
-  // float: left;
+    display: block;
+    width: 100%;
 }
 
 .user_links_modal a:nth-of-type(odd) {
@@ -2187,7 +2115,6 @@ h4.panel-title a{
 #kpi_select.multiselect + .btn-group li a label{
     padding: 0px;
     padding-left: 30px;
-
 }
 
 .checkbox.mb20{
@@ -2231,15 +2158,13 @@ p.name i{margin-right: 5px;}
 .avg_wait_time_max{right: 6%;}
 .card.flipping_card .title.mb15{margin-bottom: 15px;}
 
-
 .rules_table tbody tr td .btn{
     max-width: 170px;
     font-weight: 600;
 }
 
 .btn-default.disable{
-    background: $blue;
-    color:#aaa;
+    @include base_style($blue, #aaa);
     &:hover{
         background: $blue !important;
     }
@@ -2331,13 +2256,8 @@ div.vertical-line{
 }
 
 .table>thead>tr>th{
-    background: $green;
-    color: #fff;
+    @include base_style($green, #fff);
 }
-
-// .dropdown-menu{
-//     background: $blue;
-// }
 
 .btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default{
     border:none;
@@ -2349,13 +2269,11 @@ div.vertical-line{
 }
 
 .multiselect-container.dropdown-menu{
-    background: $blue;
-    color: #aaa !important;
+    @include base_style($blue, #aaa !important);
 }
 
 .dropdown-menu li:nth-child(even){
-    background: darken($blue, 10%);
-    color: #aaa !important;
+    @include base_style(darken($blue, 10%), #aaa !important);
 }
 
 .dropdown-menu li{
@@ -2364,8 +2282,7 @@ div.vertical-line{
     }
 
     &:hover{
-        background: lighten($blue, 10%);
-        color: #aaa !important;
+        @include base_style(lighten($blue, 10%), #aaa !important);
     }
 }
 
@@ -2374,8 +2291,7 @@ div.vertical-line{
 }
 
 .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
-    background: lighten($blue, 5%);
-    color: #aaa !important;
+    @include base_style(lighten($blue, 5%), #aaa !important);
 }
 
 .form-holder.welcome_box{
@@ -2414,7 +2330,6 @@ div.vertical-line{
 
     &.expired{
         min-height: 150px;
-
 
         div.alert{
             font-size: 16px;
@@ -2496,24 +2411,20 @@ a.remove_filter{
 .leadfilter_row .card{overflow: auto;}
 
 .btn.btn-reset{
-    background: #ccc;
-    color:#333;
+    @include base_style(#ccc, #333);
     margin-right: 10px;
 
     &:hover{
-        color: #333 !important;
-        background:  darken(#ccc, 5%);
+        @include base_style(darken(#ccc, 5%), #333 !important);
     }
 }
 
 .btn.btn-cancel{
-    background: #ddd;
-    color: #666;
+    @include base_style(#ddd, #666);
     @include transition(all, ease, 0.3s);
 
     &:hover{
-        color:#444 !important;
-        background: darken(#ddd,10%);
+        @include base_style(darken(#ddd, 10%), #444 !important);
     }
 }
 
@@ -2546,8 +2457,7 @@ a.remove_filter{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
     background: white;
     cursor: inherit;
@@ -2668,9 +2578,8 @@ a.toggle_instruc {
 
     form.add_custom_field{
         padding: 20px;
-        border-radius: 5px;
-        background: #000001 !important;
-        border: 1px solid #1b293c;
+        @include border-radius(5px);
+        @include base_style( #000001 !important, null, 1px solid #1b293c);
 
         div.form-group input.form-control {
             background: darken($blue, 8%) !important;
@@ -2680,10 +2589,8 @@ a.toggle_instruc {
 
 .final_url_cnt{
     textarea.url.form-control{
-        color: $green;
         @include border-radius(5px);
-        background: darken($blue, 20%) !important;
-        border: 1px solid #1b293c;
+        @include base_style(darken($blue, 20%) !important, $green, null, 1px solid #1b293c);
         min-height: 100px;
         padding: 12px;
 
@@ -2696,8 +2603,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger{
-    background: #f2dede;
-    color:#a94442;
+    @include base_style(#f2dede, #a94442);
 }
 
 [hidden] {
@@ -2715,10 +2621,9 @@ td.bg-danger{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }
@@ -2726,8 +2631,7 @@ td.bg-danger{
 .label-info{font-size: 13px;margin-left: 10px;}
 
 .btn-secondary{
-    background: #ccc;
-    color: #444;
+    @include base_style(#ccc, #444);
 
     &:hover{
         background: #bbb;
@@ -2767,26 +2671,22 @@ p.login_date {
     margin-right: 10px;
 }
 
-
 .btn-notifications{
-    background:none;
-    color:#fff;
+    @include base_style(none, #fff);
     position:relative;
     font-size: 18px;
     bottom:2px;
     &:hover{color: $green;}
-    &:hover span.numb_notifications{background: #fff;color:$green;}
-
+    &:hover span.numb_notifications{@include base_style(#fff, $green);}
 }
 
 span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
+    @include base_style($orange, #fff);
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
@@ -2823,33 +2723,30 @@ span.numb_notifications{
 }
 
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
-
 .note-editor.note-airframe .note-status-output,
 .note-editor.note-frame .note-status-output,
 .note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable,
 .note-editor.note-airframe .note-statusbar .note-resizebar,
 .note-editor.note-frame .note-statusbar .note-resizebar {
-  background: #1d2b40 !important;
-  color: #eee !important;
+    @include base_style( #1d2b40 !important, #eee !important);
 }
 
 .note-editor.note-airframe,
 .note-editor.note-frame,
 .note-editor.note-airframe .note-statusbar .note-resizebar,
 .note-editor.note-frame .note-statusbar .note-resizebar {
-  border: 1px solid #1b293c !important;
+    border: 1px solid #1b293c !important;
 }
 
 .note-toolbar.panel-heading {
-  background: #111a26;
-  height: 45px;
+    background: #111a26;
+    height: 45px;
 }
 
 .dt-buttons{
     button{
-        background: $green;
-        color:#fff;
+        @include base_style($green, #fff);
     }
 }
 
@@ -2880,7 +2777,6 @@ MEDIAQUERIES
         font-size: 20px;
         margin-bottom: 25px;
     }
-
 }
 
 @media handheld, only screen and (max-width: 1300px){
@@ -2907,7 +2803,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
     }
-
 }
 
 @media handheld, only screen and (max-width:1070px) {
@@ -2928,7 +2823,6 @@ MEDIAQUERIES
             height: 75px;
         }
     }
-
 }
 
 @media handheld, only screen and (max-width:1010px) {
@@ -2936,7 +2830,6 @@ MEDIAQUERIES
         clear: both;
         display: block;
     }
-
 }
 
 @media handheld, only screen and (min-width:991px) {
@@ -2959,10 +2852,6 @@ MEDIAQUERIES
     .match_height_4_gt, .match_height_4_st {
         margin-bottom: 20px;
         padding: 0;
-    }
-
-    .col-md-4.col-sm-12.set_hgt, .get_hgt {
-        // padding: 0;
     }
 
     .mb80{margin-bottom: 80px;}
@@ -2988,9 +2877,6 @@ MEDIAQUERIES
         margin-bottom: 20px;
     }
 
-    /*.total_calls_in, .total_calls_out{
-      max-height: 160px;
-    }*/
     .total_calls_in h2, .total_calls_out h2 {
         font-size: 23px;
         margin-bottom: 20px;
@@ -2999,7 +2885,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 55px;
     }
-
 }
 
 @media (min-width:768px) {
@@ -3060,10 +2945,6 @@ MEDIAQUERIES
         margin-top: 120px;
     }
 
-    canvas#service_level {
-        // margin-bottom: 30px;
-    }
-
     .col-sm-3.report_download {
         margin-top: 20px;
     }
@@ -3081,7 +2962,6 @@ MEDIAQUERIES
         width: 50px;
     }
 
-    /*.col-sm-3.report_download{margin-bottom: 20px;}*/
     .col-sm-3.report_download h3 {
         margin-top: 0;
     }
@@ -3118,12 +2998,6 @@ MEDIAQUERIES
     }
 }
 
-/*@media handheld, only screen and (max-width: 668px){
-img.text_logo{
-  display: none;
-}
-
-}*/
 @media handheld, only screen and (max-width:556px) {
 
     .form-holder.welcome_box h1{font-size: 30px;}
@@ -3238,8 +3112,3 @@ img.text_logo{
     }
 
 }
-
-/*@media handheld, only screen and (min-width: 552px) {
-  .nopad{padding: 0;}
-}
-*/
