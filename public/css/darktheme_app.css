@@ -113,6 +113,10 @@ h6 {
   margin-top: 50px;
 }
 
+.mt60 {
+  margin-top: 60px;
+}
+
 .mb0 {
   margin-bottom: 0 !important;
 }
@@ -171,6 +175,18 @@ h6 {
 
 .fw600 {
   font-weight: 600;
+}
+
+.cb {
+  clear: both;
+}
+
+.flt_rgt {
+  float: right;
+}
+
+.flt_lft {
+  float: left;
 }
 
 .carb_mb30_mb {
@@ -777,10 +793,6 @@ ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
   right: -65px;
 }
 
-.filters .btn-group {
-  float: right;
-}
-
 .filters .btn.btn-primary {
   margin-bottom: 0;
   background: none;
@@ -988,16 +1000,6 @@ input[type=file] {
   margin-bottom: 8px;
 }
 
-.card-6 .btn-group {
-  float: right;
-}
-
-.card-6 .inbound,
-.card-6 .outbound {
-  clear: both;
-  margin-top: 60px;
-}
-
 .card-6 .inbound h4,
 .card-6 .outbound h4 {
   font-size: 15px;
@@ -1012,22 +1014,8 @@ input[type=file] {
 }
 
 .avgs_rgt {
-  float: right;
   position: relative;
   bottom: 20px;
-}
-
-.card-6 .inbound.mb0 {
-  margin-top: 0;
-}
-
-.card-12 .btn-group {
-  float: right;
-}
-
-.card-12 .inbound,
-.card-12 .outbound {
-  clear: both;
 }
 
 p.total {
@@ -1178,8 +1166,6 @@ a.dropdown-toggle {
 }
 
 #reports_modal .modal-footer .btn_flgrgt {
-  float: right;
-  margin-bottom: 0 !important;
   margin-right: 10px;
   color: #33A09B;
   font-weight: 600;
@@ -1312,7 +1298,6 @@ p.ajax_error {
 }
 
 .card-3 .outbound {
-  float: right;
   text-align: right;
   color: #888;
 }
@@ -1377,7 +1362,6 @@ h2.avg_tt,
 h2.avg_ct,
 h2.avg_cc {
   font-size: 16px;
-  float: right;
   position: relative;
   bottom: 43px;
   color: #E15B23;
@@ -1396,23 +1380,6 @@ h2.avg_cc,
 h2.avg_ct {
   bottom: 0 !important;
   margin-bottom: 0;
-}
-
-div#dataTable_filter label {
-  float: right;
-  margin-bottom: 20px;
-}
-
-.dataTables_paginate .pagination {
-  float: right;
-}
-
-.btn_flt_rgt {
-  float: right;
-}
-
-.btn_flt_lft {
-  float: left;
 }
 
 h2.card_title {
@@ -2008,7 +1975,6 @@ h2 {
 }
 
 .opt .switch {
-  float: right;
   margin-left: 20px;
 }
 
@@ -3017,10 +2983,6 @@ a.remove_filter {
   margin-right: 10px;
   font-weight: 600;
   margin-bottom: 20px;
-}
-
-.cb {
-  clear: both;
 }
 
 p.filename {

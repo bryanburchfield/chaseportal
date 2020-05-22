@@ -24,7 +24,7 @@
                             <h4 class="mb0">{{__('reports.'.$report['report'])}}</h4>
 
                             <div class="controls reports">
-                                <label class="switch">
+                                <label class="switch flt_rgt">
                                     <input type="checkbox" <?=($report['selected']) ? 'checked' : ''?> name="kpi_input">
                                     <span></span>
                                 </label>

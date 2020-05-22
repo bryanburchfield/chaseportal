@@ -20,7 +20,7 @@
 
                     {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                         @csrf
-                        <div class="btn-group">
+                        <div class="btn-group flt_rgt">
                         {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
                         </div>
                     {!! Form::close() !!}
@@ -36,7 +36,7 @@
                     @endif
 
                     @if(Auth::user()->language_displayed)
-                        <li class="btn-group">
+                        <li class="btn-group flt_rgt">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span><i class="fas fa-globe-americas"></i> Language</span>
                             </button>
@@ -48,7 +48,7 @@
                         </li>
                     @endif
 
-                    <li class="notifications btn-group">
+                    <li class="notifications btn-group flt_rgt">
                         <button type="button" class="btn btn-notifications">
                             <span>
                                 <i class="fas fa-bell"></i>

@@ -13,13 +13,13 @@
 
             <div class="controls">
                 <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
-                <label class="switch">
+                <label class="switch flt_rgt">
                     <input type="checkbox" {{ ($kpi->active) ? 'checked' : '' }} name="kpi_input">
                     <span></span>
                 </label>
             </div>
 
-            <div class="kpi hidetilloaded">
+            <div class="kpi cb hidetilloaded">
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
                 <div class="row mt30 options kpi_options_top">
                     <div class="col-sm-4">

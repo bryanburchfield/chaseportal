@@ -87,6 +87,7 @@ h1, h2, h3, h4, h5, h6 {
 .mt20 {margin-top: 20px;}
 .mt30 {margin-top: 30px;}
 .mt50 {margin-top: 50px;}
+.mt60{margin-top: 60px;}
 .mb0 {margin-bottom: 0 !important;}
 .mb5{margin-bottom: 5px;}
 .mb10 {margin-bottom: 10px;}
@@ -104,6 +105,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
+.cb{clear: both;}
+
+.flt_rgt {float: right;}
+.flt_lft {float: left;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -532,12 +537,9 @@ div.container-fluid.bg {
 
 .filters {
     margin-bottom: 10px;
-    float: right;
     padding: 0;
 
     ul.dropdown-menu {right: -65px;}
-    .btn-group {float: right;}
-
     .btn.btn-primary {
         margin-bottom: 0;
         background: none;
@@ -714,15 +716,6 @@ input[type='file'] {
     margin-bottom: 8px;
 }
 
-.card-6 .btn-group {
-    float: right;
-}
-
-.card-6 .inbound, .card-6 .outbound {
-    clear: both;
-    margin-top: 60px;
-}
-
 .card-6 .inbound h4, .card-6 .outbound h4 {
     font-size: 15px;
     font-weight: 600;
@@ -736,21 +729,8 @@ input[type='file'] {
 }
 
 .avgs_rgt {
-    float: right;
     position: relative;
     bottom: 20px;
-}
-
-.card-6 .inbound.mb0 {
-    margin-top: 0;
-}
-
-.card-12 .btn-group {
-    float: right;
-}
-
-.card-12 .inbound, .card-12 .outbound {
-    clear: both;
 }
 
 p.total {
@@ -879,7 +859,9 @@ a.dropdown-toggle {
 }
 
 #reports_modal .modal-footer .btn_flgrgt{
-    float: right;margin-bottom: 0 !important;margin-right: 10px;color:#33A09B;font-weight: 600;
+    margin-right: 10px;
+    color:#33A09B;
+    font-weight: 600;
     &:hover{
         color: darken(#33A09B, 10%);
     }
@@ -1004,7 +986,6 @@ p.ajax_error {
 }
 
 .card-3 .outbound {
-    float: right;
     text-align: right;
     color: #888;
 }
@@ -1059,12 +1040,9 @@ canvas#service_level {
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     font-size: 16px;
-    float: right;
     position: relative;
-    font-weight: 700;
-    color: $orange;
     bottom: 43px;
-    border-bottom: none;
+    @include base_style(null, $orange, bottom, none, 700);
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -1077,22 +1055,14 @@ h2.avg_cc, h2.avg_ct {
     margin-bottom: 0;
 }
 
-div#dataTable_filter label {
-    float: right;
-    margin-bottom: 20px;
-}
+// div#dataTable_filter label {
+//     float: right;
+//     margin-bottom: 20px;
+// }
 
-.dataTables_paginate .pagination {
-    float: right;
-}
-
-.btn_flt_rgt {
-    float: right;
-}
-
-.btn_flt_lft {
-    float: left;
-}
+// .dataTables_paginate .pagination {
+//     float: right;
+// }
 
 h2.card_title {
     text-transform: uppercase;
@@ -1535,12 +1505,10 @@ h2 {
 }
 
 .opt .switch {
-    float: right;
     margin-left: 20px;
 }
 
 .opt .kpi {
-    clear: both;
     margin-top: 45px;
 }
 
@@ -2319,8 +2287,6 @@ a.remove_filter{
     font-weight: 600;
     margin-bottom: 20px;
 }
-
-.cb{clear: both;}
 
 p.filename {
     float: left;

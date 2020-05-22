@@ -17,7 +17,7 @@
                 <h1 class="title tac">{{__('widgets.call_volume')}}</h1><br>
             </div>
 
-            <div class="inbound inandout mb60" style="height: 300px">
+            <div class="inbound inandout mb60 cb" style="height: 300px">
                 <canvas id="call_volume"></canvas>
             </div>
         </div>
