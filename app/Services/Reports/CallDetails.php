@@ -57,10 +57,7 @@ class CallDetails
     public function getFilters()
     {
         $filters = [
-            'campaigns' => $this->getAllCampaigns(
-                $this->params['fromdate'],
-                $this->params['todate']
-            ),
+            'campaigns' => $this->getAllCampaigns(),
             'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
