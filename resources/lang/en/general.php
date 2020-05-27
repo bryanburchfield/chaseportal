@@ -12,6 +12,7 @@ return [
 	'cancel'					=> 'Cancel',
 	'close'						=> 'Close',
 	'code'						=> 'Code',
+	'compliance_dashboard'		=> 'Compliance Dashboard',
 	'condition'					=> 'Condition',
 	'confirm_password'			=> 'Confirm Password',
 	'current_password'			=> 'Current Password',

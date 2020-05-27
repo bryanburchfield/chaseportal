@@ -12,6 +12,7 @@ return [
 	'cancel'					=> 'Cancelar',
 	'close'						=> 'Cerrar',
 	'code'						=> 'Código',
+	'compliance_dashboard'		=> 'Panel de Cumplimiento',
 	'condition'					=> 'Condición',
 	'confirm_password'			=> 'Confirmar Contraseña',
 	'current_password'			=> 'Contraseña Actual',
