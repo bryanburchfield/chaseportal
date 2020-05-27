@@ -173,7 +173,7 @@ class User extends Authenticatable implements Auditable
 
         $user = [];
         $user['name'] = $details['name'] . '_' . $details['group_id'] . '_' . substr($details['type'], 0, 1);
-        $user['email'] = md5($user['name']);
+        $user['email'] = md5($user['name']);  // Don't use Hash::make() because it's random
         $user['group_id'] = $details['group_id'];
         $user['password'] = 'SSO';
         $user['tz'] = $details['timezone'];
