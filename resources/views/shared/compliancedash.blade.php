@@ -6,8 +6,10 @@
 @endif
                             
 <div class="row">
-Dash cards go here
-<p>
-<a href="{{ action('ComplianceDashController@settingsIndex') }}">Go To Settings</a>
-</p>
+    <p>
+        <a class="btn btn-default" href="{{ action('ComplianceDashController@settingsIndex') }}">Go To Settings</a>
+    </p>
+
+    Dash cards go here
+
 </div>

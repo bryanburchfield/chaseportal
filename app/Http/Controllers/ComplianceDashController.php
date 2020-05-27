@@ -92,12 +92,8 @@ class ComplianceDashController extends Controller
         $this->getSession($request);
 
         $details = $this->filterDetails();
-        $result = $this->getAgentCompliance();
 
-        $agent_compliance = [];
-
-
-
+        $agent_compliance = $this->getAgentCompliance();
 
         return ['agent_compliance' => [
             'agent_compliance' => $agent_compliance,
@@ -107,8 +103,131 @@ class ComplianceDashController extends Controller
 
     private function getAgentCompliance()
     {
-        // sql here
+        $tz =  Auth::user()->tz;
+        list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
-        return [];
+        // Back toDate up a second since it's not inclusive
+        $toDate = $toDate->modify('-1 second');
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $sql = 'SET NOCOUNT ON;';
+
+        $union = '';
+        foreach ($this->databases as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
+            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as Date,
+            AA.Rep, [Action], AA.Duration, AA.Details
+            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
+
+            $sql .= "
+            WHERE AA.GroupId = :group_id$i
+            AND AA.Date >= :startdate$i
+            AND AA.Date < :enddate$i";
+
+            $union = 'UNION';
+        }
+
+        $sql .= " ORDER BY Rep, Date";
+
+        // Log::debug($sql);
+        // Log::debug($bind);
+
+        $results = $this->processResults($sql, $bind);
+
+        return $results;
+    }
+
+    private function processResults($sql, $bind)
+    {
+        $results = [];
+
+        // loop thru results looking for log in/out times
+        $tmparray = [];
+        $blankrec = [
+            'Rep' => '',
+            'WorkedTime' => 0,
+            'PausedTime' => 0,
+            'PauseRecs' => [],
+        ];
+
+        $i = 0;
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+
+            if ($i == 0) {
+                $i++;
+                $tmparray[$i] = $blankrec;
+                $tmparray[$i]['Rep'] = $rec['Rep'];
+            } else {
+                if ($rec['Rep'] != $tmparray[$i]['Rep']) {
+                    $i++;
+                    $tmparray[$i] = $blankrec;
+                    $tmparray[$i]['Rep'] = $rec['Rep'];
+                }
+            }
+
+            switch ($rec['Action']) {
+                case 'Login':
+                    break;
+                case 'Logout':
+                    break;
+                case 'Paused':
+                    if (round($rec['Duration']) > 0) {
+                        $tmparray[$i]['PausedTime'] += $rec['Duration'];
+                        $tmparray[$i]['PauseRecs'][] = [
+                            'Date' => substr($rec['Date'], 0, 26),  // strip offest
+                            'Duration' => $rec['Duration'],
+                            'Details' => $rec['Details'],
+                        ];
+                    }
+                    break;
+                default:
+                    $tmparray[$i]['WorkedTime'] += $rec['Duration'];
+            }
+        }
+
+        // remove any rows that don't have paused time or WorkedTime
+        $outerarray = [];
+        foreach ($tmparray as $i => $rec) {
+            if (round($rec['WorkedTime']) > 0 || round($rec['PausedTime']) > 0) {
+                $outerarray[$i] = $rec;
+                $outerarray[$i]['AllowedPausedTime'] = 0;
+                $outerarray[$i]['TotWorkedTime'] = 0;
+                $outerarray[$i]['PctWorked'] = 0;
+            }
+        }
+
+        // Go thru pause recs adding manhours for allowed pause codes
+        foreach ($outerarray as $rec) {
+
+
+
+
+
+            // get rid of detailed pause recs
+            unset($rec['PauseRecs']);
+
+            // do calcs
+            $rec['TotWorkedTime'] = $rec['WorkedTime'] + $rec['AllowedPausedTime'];
+            $rec['PctWorked'] = round($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100, 2);
+
+            // format fields
+            $rec['WorkedTime'] = $this->secondsToHms($rec['WorkedTime']);
+            $rec['PausedTime'] = $this->secondsToHms($rec['PausedTime']);
+            $rec['AllowedPausedTime'] = $this->secondsToHms($rec['AllowedPausedTime']);
+            $rec['TotWorkedTime'] = $this->secondsToHms($rec['TotWorkedTime']);
+            $results[] = $rec;
+        }
+
+
+
+        Log::debug($results);
+
+        return $results;
     }
 }

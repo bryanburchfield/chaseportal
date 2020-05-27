@@ -6,5 +6,8 @@ Route::prefix('compliancedashboard')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/settings', 'ComplianceDashController@settingsIndex');
         Route::post('/settings', 'ComplianceDashController@updateSettings');
+
+        // ajax targets
+        Route::post('get_compliance', 'ComplianceDashController@agentCompliance');
     });
 });
