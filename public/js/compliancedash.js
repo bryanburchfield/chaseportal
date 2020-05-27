@@ -72,17 +72,49 @@ var Dashboard = {
     },
 
     init: function () {
-        // $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors)).done(function(){
+        $.when(this.get_compliance()).done(function () {
             $('.preloader').fadeOut('slow');
             Master.check_reload();
-        // });
+        });
     },
 
     refresh:function(datefilter, campaign, inorout){
-        // $.when(this.get_call_volume(this.inorout, this.datefilter, this.chartColors)).done(function(){
+        $.when(this.get_compliance()).done(function(){
             $('.preloader').fadeOut('slow');
             Master.check_reload();
-        // });
+        });
+    },
+
+    get_compliance:function(){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/compliancedashboard/get_compliance',
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+
+            success: function (response) {
+
+                $('.filter_time_camp_dets p .selected_campaign').html(response.agent_compliance.details[0]);
+                $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
+                $('.agent_compliance_table tbody').empty();
+
+                if (response.agent_compliance.agent_compliance.length) {
+                    var trs;
+                    for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
+                        trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td></tr>';
+                    }
+
+                    $('.agent_compliance_table tbody').append(trs);
+                }
+            }
+        });
     },
 
     title_options: {
@@ -99,9 +131,6 @@ $(document).ready(function () {
     });
 
     Dashboard.init();
-
-    $('.enddate').datepicker({ maxDate: '0' });
-    $('.startdate').datepicker({ maxDate: '0' });
 });
 
 

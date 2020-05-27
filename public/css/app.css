@@ -1292,7 +1292,8 @@ p.descrip.top14 {
 .cdr_results_table th,
 .rules_table th,
 .demo_user_table th,
-.dnc_table th {
+.dnc_table th,
+.agent_compliance_table th {
   background: #203047;
   border-top: 0;
   color: #fff;
