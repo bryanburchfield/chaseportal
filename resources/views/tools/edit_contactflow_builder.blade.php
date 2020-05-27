@@ -120,7 +120,7 @@
 								@endif
 
 								@if($key)
-									<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
+									<a href="#" class="remove_filter flt_rgt"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
 								@endif
 
 				                <div class="alert alert-danger filter_error hidetilloaded mt20">Please select a filter and value before adding another one</div>

@@ -47,10 +47,10 @@
 @endsection
 @section('extras')
 <div class="col-sm-7 col-xs-12 nopadright pl0">
-	<div class="col-sm-12 nopad">
+	<div class="col-sm-12 p0">
 		<div class="card card-6 hidetilloaded" >
 			<h1 class="title fw600">{{__('reports.count_of_leads_by_attempt')}}</h1>
-			<div class="inbound inandout" style="min-height:300px;">
+			<div class="inbound inandout cb" style="min-height:300px;">
 				<canvas id="leads_by_attempt"></canvas>
 			</div>
 		</div>

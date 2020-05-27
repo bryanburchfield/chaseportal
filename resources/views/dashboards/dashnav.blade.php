@@ -7,7 +7,7 @@
                 <span>{{__('general.database')}}</span>
             </button>
 
-            <ul class="dropdown-menu db_select stop-propagation">
+            <ul class="dropdown-menu db_select flt_rgt stop-propagation">
                 @foreach ($db_list as $db)
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">

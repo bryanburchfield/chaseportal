@@ -153,6 +153,10 @@ h6 {
   margin-right: 10px;
 }
 
+.mr20 {
+  margin-right: 20px;
+}
+
 .p0 {
   padding: 0;
 }
@@ -215,14 +219,12 @@ a:focus {
 }
 
 .navbar button#sidebarCollapse {
-  float: left;
   margin-right: 20px;
   border-radius: 3px;
 }
 
 img.text_logo {
   max-width: 140px;
-  float: left;
 }
 
 .title.tac {
@@ -506,7 +508,6 @@ span.numb_notifications {
 }
 
 .btn-secondary.cancel {
-  float: left;
   margin-top: 10px;
   margin-right: 15px;
 }
@@ -911,10 +912,6 @@ input[type=file] {
   -ms-overflow-style: none;
 }
 
-.call_volume_details {
-  float: left;
-}
-
 .card-6 h1.title {
   text-align: left;
   float: left;
@@ -1208,9 +1205,9 @@ p.ajax_error {
 }
 
 .card-3 .inbound {
-  float: left;
   text-align: left;
   color: #888;
+  border: 10px solid red;
 }
 
 .card-3 .outbound {
@@ -1347,10 +1344,6 @@ p.descrip.top14 {
 #reports_modal .radio label {
   font-size: 16px;
   font-weight: 600;
-}
-
-#reports_modal .modal-footer .btn {
-  float: left;
 }
 
 .reports_table.table > tbody > tr > td,
@@ -1803,7 +1796,6 @@ h2 {
 
 .opt a,
 .opt h4 {
-  float: left;
   display: inline-block;
   font-size: 17px;
   font-weight: 600;
@@ -1930,11 +1922,6 @@ a.kpi_change_details {
   background: #eee;
 }
 
-.users a.remove_user {
-  float: right;
-  margin-right: 10px;
-}
-
 .users a.remove_user i,
 .demo_user_modal_link.remove_user i,
 a.remove_msg i {
@@ -1946,6 +1933,7 @@ a.remove_msg i {
 .users td a.remove_user {
   float: none;
   margin-left: 10px;
+  margin-right: 10px;
 }
 
 div.alert-danger p {
@@ -1959,10 +1947,6 @@ a.fpass {
 
 .navbar-brand.mb {
   display: none !important;
-}
-
-.controls {
-  float: right;
 }
 
 a.run_kpi.btn {
@@ -2254,10 +2238,6 @@ a[aria-expanded=true] {
   height: 45px;
 }
 
-.db_select a.dropdown-toggle {
-  float: right;
-}
-
 .db_select label {
   margin-bottom: 6px;
 }
@@ -2363,11 +2343,6 @@ h4.panel-title a {
 
 .checkbox.mb20 {
   margin-bottom: 20px;
-}
-
-.fltlft {
-  float: left;
-  margin-right: 20px;
 }
 
 .undoselection_btn {
@@ -2662,7 +2637,6 @@ div.vertical-line {
 
 a.remove_filter {
   color: #d9534f;
-  float: right;
   font-size: 15px;
 }
 
@@ -2748,7 +2722,6 @@ p.filename {
 }
 
 a.toggle_instruc {
-  float: right;
   color: #33A09B;
   font-size: 18px;
   position: relative;
@@ -2757,11 +2730,6 @@ a.toggle_instruc {
 
 .alert-info.alert-block button.close {
   color: #d9534f;
-}
-
-.dialerlist_icon {
-  float: right;
-  color: #33A09B;
 }
 
 .panel-title a:after {
@@ -2816,7 +2784,6 @@ a.toggle_instruc {
 }
 
 .webhook_fields label {
-  float: right;
   margin-top: 10px;
 }
 
@@ -2958,7 +2925,6 @@ td.bg-danger {
 }
 
 p.login_date {
-  float: right;
   font-weight: 600;
   margin-right: 10px;
 }
@@ -3000,12 +2966,6 @@ span.numb_notifications {
   width: 17px;
   padding: 1px 0 0;
   font-size: 11px;
-}
-
-.btn-secondary.cancel {
-  float: left;
-  margin-top: 10px;
-  margin-right: 15px;
 }
 
 #sidebar_nots .not_header h4 {

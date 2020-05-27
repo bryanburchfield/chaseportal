@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-sm-6 ">
 		<div class="card card-6">
-			<div class="call_volume_details">
+			<div class="call_volume_details flt_lft">
 				<h1 class="title">{{__('widgets.call_volume')}}</h1>
 				<p class="total mb_hide"></p>
 			</div>

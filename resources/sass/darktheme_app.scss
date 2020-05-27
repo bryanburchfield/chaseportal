@@ -93,6 +93,7 @@ h1, h2, h3, h4, h5, h6 {
 .mb30 {margin-bottom: 30px;}
 .mb42 {margin-bottom: 42px;}
 .mr10 {margin-right: 10px;}
+.mr20{margin-right: 20px;}
 
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
@@ -125,14 +126,12 @@ a, a:hover, a:focus {
 .card .back.p0{padding: 0;}
 
 .navbar button#sidebarCollapse {
-    float: left;
     margin-right: 20px;
     @include border-radius(3px);
 }
 
 img.text_logo {
     max-width: 140px;
-    float: left;
 }
 
 .title.tac {
@@ -362,7 +361,6 @@ span.numb_notifications{
 }
 
 .btn-secondary.cancel{
-    float: left;
     margin-top: 10px;
     margin-right: 15px;
 }
@@ -738,10 +736,6 @@ input[type='file'] {
     -ms-overflow-style: none;
 }
 
-.call_volume_details {
-    float: left;
-}
-
 .card-6 h1.title {
     text-align: left;
     float: left;
@@ -1018,7 +1012,6 @@ p.ajax_error {
 }
 
 .card-3 .inbound {
-    float: left;
     text-align: left;
     color: #888;
 }
@@ -1159,10 +1152,6 @@ p.descrip.top14 {
 #reports_modal .radio label {
     font-size: 16px;
     font-weight: 600;
-}
-
-#reports_modal .modal-footer .btn {
-    float: left;
 }
 
 .reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
@@ -1565,7 +1554,6 @@ h2 {
 }
 
 .opt a, .opt h4 {
-    float: left;
     display: inline-block;
     font-size: 17px;
     font-weight: 600;
@@ -1681,18 +1669,13 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user {
-    float: right;
-    margin-right: 10px;
-}
-
 .users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
     position: relative;
     top: 2px;
     color: $orange;
 }
 
-.users td a.remove_user{float: none;margin-left: 10px;}
+.users td a.remove_user{float: none;margin-left: 10px;margin-right: 10px;}
 
 div.alert-danger p {
     font-weight: 600;
@@ -1705,10 +1688,6 @@ a.fpass {
 
 .navbar-brand.mb {
     display: none !important;
-}
-
-.controls {
-    float: right;
 }
 
 a.run_kpi.btn {
@@ -1984,10 +1963,6 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border-bottom: 1px solid #23354e;
 }
 
-.db_select a.dropdown-toggle {
-    float: right;
-}
-
 .db_select label {
     margin-bottom: 6px;
 }
@@ -2088,7 +2063,6 @@ h4.panel-title a{
     margin-bottom: 20px;
 }
 
-.fltlft{float: left;margin-right: 20px;}
 .undoselection_btn{
     color: #d9534f;
     font-weight: 600;
@@ -2371,7 +2345,6 @@ div.vertical-line{
 
 a.remove_filter{
     color: #d9534f;
-    float: right;
     font-size: 15px;
 }
 
@@ -2448,7 +2421,6 @@ p.filename {
 }
 
 a.toggle_instruc {
-    float: right;
     color: #33A09B;
     font-size: 18px;
     position: relative;
@@ -2495,7 +2467,7 @@ a.toggle_instruc {
         }
     }
 
-    label{float: right;margin-top: 10px;}
+    label{margin-top: 10px;}
 
     h3{
         border-bottom: 1px solid #1b293c ;
@@ -2631,7 +2603,6 @@ td.bg-danger{
 }
 
 p.login_date {
-    float: right;
     font-weight: 600;
     margin-right: 10px;
 }
@@ -2655,12 +2626,6 @@ span.numb_notifications{
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
-}
-
-.btn-secondary.cancel{
-    float: left;
-    margin-top: 10px;
-    margin-right: 15px;
 }
 
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}

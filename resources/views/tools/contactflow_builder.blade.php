@@ -36,7 +36,7 @@ if (Auth::user()->isType('demo')) {
 
                                 <div class="tab-content">
                                     <div class="tab-pane active mt30" id="lead_rules">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <h2 class="page_heading"><i class="fa fa-cog"></i> {{__('tools.rules')}}</h2>
                                             <div class="table-responsive nobdr">
                                                 <table class="table rules_table mt20">
@@ -240,7 +240,7 @@ if (Auth::user()->isType('demo')) {
                                     </div>
 
                                     <div class="tab-pane mt30" id="move_history">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <div class="card">
                                                 <h2 class="page_heading"><i class="fa fa-history"></i> {{__('tools.lead_move_history')}}</h2>
 

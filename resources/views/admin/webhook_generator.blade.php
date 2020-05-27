@@ -55,7 +55,7 @@
 										</div>
 
 										<div class="col-sm-2">
-											<label class="checkbox-inline"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
+											<label class="checkbox-inline flt_rgt"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
 										</div>
 									</div>
 
@@ -75,7 +75,7 @@
 											</div>
 
 											<div class="col-sm-2">
-												<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+												<label class="checkbox-inline flt_rgt"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 											</div>
 										</div>
 									@endforeach

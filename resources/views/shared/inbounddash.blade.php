@@ -40,7 +40,7 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data abandoned"></p>
                 <p class="type">{{__('widgets.abandoned')}}</p>
             </div>
@@ -82,7 +82,7 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>
@@ -107,7 +107,7 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>
@@ -133,7 +133,7 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>

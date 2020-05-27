@@ -75,10 +75,10 @@
 
 @section('extras')
 <div class="col-sm-7 col-xs-12 nopadright pl0">
-	<div class="col-sm-12 nopad">
+	<div class="col-sm-12 p0">
 		<div class="card card-6 hidetilloaded" >
 			<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
-			<div class="inbound inandout" style="min-height:300px;">
+			<div class="inbound inandout cb" style="min-height:300px;">
 				<canvas id="call_volume"></canvas>
 			</div>
 		</div>

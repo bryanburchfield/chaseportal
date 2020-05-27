@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
-           <button type="button" id="sidebarCollapse" class="btn">
+           <button type="button" id="sidebarCollapse" class="btn flt_lft">
                <i class="fas fa-align-left"></i>
            </button>
 
            @if(Auth::user()->theme == 'dark')
-               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo">
+               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo flt_lft">
            @else
-               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo">
+               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo flt_lft">
            @endif
        </div>
 

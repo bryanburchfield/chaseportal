@@ -28,7 +28,7 @@
 
                                 <div class="tab-content">
                                     <div class="tab-pane active mt30" id="drip_campaigns">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
 											<a href="#" class="btn btn-primary create_new_drip" data-toggle="modal" data-target="#createCampaignModal">{{__('tools.create_campaign')}}</a>
                                         	<div class="table-responsive nobdr drip_campaigns">
                                         		<table class="table mt20">
@@ -93,7 +93,7 @@
                                     </div>
 
                                     <div class="tab-pane mt30" id="email_service_providers">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
 
                                             <div class="table-responsive nobdr email_service_providers">
