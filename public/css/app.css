@@ -165,6 +165,22 @@ h6 {
   padding-bottom: 20px;
 }
 
+.flt_lft {
+  float: left;
+}
+
+.flt_rgt {
+  float: right;
+}
+
+.cb {
+  clear: both;
+}
+
+.table > tbody > tr.p10 td {
+  padding: 10px 8px;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
