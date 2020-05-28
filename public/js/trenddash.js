@@ -504,8 +504,6 @@ var Dashboard = {
                         options: call_details_options
                     });
 
-                    console.log(response.call_details.max_hold);
-                    console.log(response.call_details.datetime);
                     var max_hold_time_data = {
                         labels: response.call_details.datetime,
                         datasets: [

@@ -7,18 +7,18 @@
 
 <div class="row">
     <div class="col-sm-12">
-    	<a class="btn btn-default btn-primary" href="{{ action('ComplianceDashController@settingsIndex') }}">Go To Settings</a>
+    	<a class="btn btn-default btn-primary flt_rgt" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
 
     	<div class="table-responsive">
     		<table class="table table-striped agent_compliance_table">
     			<thead>
     				<tr>
-    					<th class="th_mw100">Rep</th>
-    					<th>Worked Time</th>
-    					<th>Paused Time</th>
-    					<th>Allowed Paused Time</th>
-    					<th>Total Time Worked</th>
-    					<th>% Worked</th>
+    					<th class="th_mw100">{{__('widgets.rep')}}</th>
+    					<th>{{__('widgets.worked_time')}}</th>
+    					<th>{{__('widgets.paused_time')}}</th>
+    					<th>{{__('widgets.allowed_paused_time')}}</th>
+    					<th>{{__('widgets.total_time_worked')}}</th>
+    					<th>% {{__('widgets.worked')}}</th>
     				</tr>
     			</thead>
     			<tbody></tbody>

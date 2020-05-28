@@ -78,6 +78,7 @@ return [
 	'unselect_all'				=> 'Unselect All',
 	'voicemails'				=> 'Voicemails',
 	'waiting'					=> 'Waiting',
+	'worked'					=> 'Worked',
 	'wrapup'					=> 'Wrapup',
 
 	/// dataTable

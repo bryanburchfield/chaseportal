@@ -78,6 +78,7 @@ return [
 	'unselect_all'				=> 'Desmarcar Todo',
 	'voicemails'				=> 'Mensajes de Voz',
 	'waiting'					=> 'Esperando',
+	'worked'					=> 'Trabajado',
 	'wrapup'					=> 'Finalizando',
 
 	/// dataTable

@@ -182,7 +182,7 @@ var Dashboard = {
                                     scalePositionLeft: true,
                                     scaleLabel: {
                                         display: true,
-                                        labelString: '% Worked',
+                                        labelString: '% '+ Lang.get('js_msgs.worked'),
                                         fontColor: Master.tick_color,
                                     },
                                     ticks: {
