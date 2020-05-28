@@ -202,13 +202,15 @@ class CallDetails
 
         // Load all hangup AA recs +/- 1 hour of date range
         $sql .= "
-        SELECT ActivityId, Rep, Details
+        SELECT ActivityId, Rep
         INTO #tmphangups
         FROM AgentActivity WITH(NOLOCK)
         WHERE  GroupId = :group_id_aa
         AND Details = 'Agent Hangup Call'
         AND Date >= DATEADD(hour,-1,:startdate_aa)
         AND Date <= DATEADD(hour,1,:enddate_aa)
+
+        CREATE INDEX IX_tmphangup ON #tmphangups (ActivityId, Rep);
         ";
 
         if (!empty($this->params['campaigns']) && $this->params['campaigns'] != '*') {
@@ -322,7 +324,7 @@ class CallDetails
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
             FROM [DialingResults] DR WITH(NOLOCK)
-            OUTER APPLY (SELECT TOP 1 AA.Details
+            OUTER APPLY (SELECT TOP 1 'Agent Hangup' as Details
                 FROM #tmphangups AA
                 WHERE AA.ActivityId = DR.ActivityId
                 AND AA.Rep = DR.Rep
