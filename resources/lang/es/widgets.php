@@ -6,6 +6,7 @@ return [
 	'abandoned'			=> 'Abandonadas',
 	'actions'			=> 'Comportamiento',
 	'actions_timestamps'=> 'Marcas de Tiempo de Acción',
+	'adherence'			=> 'Adherencia',
 	'admin'				=> 'Configuración',
 	'agent_call_status' => 'Disposición de Llamadas por Agente',
 	'agent_call_times'		=> 'Tiempo de Llamadas / Recuento de Llamadas por Agente',

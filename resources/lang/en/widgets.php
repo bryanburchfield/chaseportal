@@ -6,6 +6,7 @@ return [
 	'abandoned'			=> 'Abandoned',
 	'actions'			=> 'Actions',
 	'actions_timestamps'=> 'Action Timestamps',
+	'adherence'			=> 'Adherence',
 	'admin'				=> 'Admin',
 	'agent_call_status' => 'Agent Call Status',
 	'agent_call_times'		=> 'Agent Call Times / Call Count',

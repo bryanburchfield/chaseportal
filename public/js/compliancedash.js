@@ -116,9 +116,14 @@ var Dashboard = {
                 $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
                 $('.agent_compliance_table tbody').empty();
 
+                var reps = [];
+                var pct_worked =[];
+
                 if (response.agent_compliance.agent_compliance.length) {
                     var trs;
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
+                        reps.push(response.agent_compliance.agent_compliance[i].Rep);
+                        pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorked);
                         trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
 
@@ -151,6 +156,50 @@ var Dashboard = {
                                 "sSortDescending": Lang.get('js_msgs.descending')
                             }
                         }
+                    });
+
+                    if (window.agent_worked_chart != undefined) {
+                        window.agent_worked_chart.destroy();
+                    }
+
+                    var chart_colors_array = Master.return_chart_colors_hash(reps);
+
+                    var agent_worked_data = {
+                        datasets: [{
+                            data: pct_worked,
+                            backgroundColor: chart_colors_array,
+                            label: 'Dataset 1'
+                        }],
+                        elements: {
+                            center: {
+                                color: '#203047',
+                                fontStyle: 'Segoeui',
+                                sidePadding: 15
+                            }
+                        },
+                        labels: reps
+                    };
+
+                    var agent_worked_options = {
+                        responsive: true,
+                        legend: {
+                            display: false,
+                            fontColor: Master.tick_color,
+                            labels: {
+                                fontColor: Master.tick_color
+                            },
+                        },
+                        tooltips: {
+                            enabled: true,
+                        }
+                    }
+
+                    var ctx = document.getElementById('agent_worked_graph').getContext('2d');
+
+                    window.agent_worked_chart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: agent_worked_data,
+                        options: agent_worked_options
                     });
                 }
             }

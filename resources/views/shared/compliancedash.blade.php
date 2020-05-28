@@ -26,4 +26,11 @@
     	</div>
     </div>
 
+    <div class="col-sm-3">
+    	<div class="card card-3b">
+	    	<h1 class="title">{{__('widgets.adherence')}}</h1>
+	    	<canvas id="agent_worked_graph"></canvas>
+    	</div>
+    </div>
+
 </div>
