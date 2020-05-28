@@ -42,17 +42,6 @@ Chart.pluginService.register({
 
 var Dashboard = {
 
-    actions_dataTable: $('.agent_compliance_table').DataTable({
-        responsive: true,
-        dom: 'Bfrtip',
-        buttons: [],
-        fnDrawCallback: function(oSettings) {
-            if (oSettings._iDisplayLength >= oSettings.fnRecordsDisplay()) {
-              $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
-            }
-        }
-    }),
-
     chartColors: {
         red: 'rgb(255,67,77)',
         orange: 'rgb(228,154,49)',
@@ -131,6 +120,11 @@ var Dashboard = {
                     $('table.agent_compliance_table').DataTable().destroy();
                     $('.agent_compliance_table tbody').append(trs);
                     $('table.agent_compliance_table').DataTable({
+                        fnDrawCallback: function(oSettings) {
+                            if (oSettings._iDisplayLength >= oSettings.fnRecordsDisplay()) {
+                              $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            }
+                        },
                         "bDestroy": true,
                         "responsive": true,
                         "language": {
