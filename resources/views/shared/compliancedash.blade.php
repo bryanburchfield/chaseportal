@@ -13,7 +13,7 @@
     		<table class="table table-striped agent_compliance_table">
     			<thead>
     				<tr>
-    					<th>Rep</th>
+    					<th class="th_mw100">Rep</th>
     					<th>Worked Time</th>
     					<th>Paused Time</th>
     					<th>Allowed Paused Time</th>

@@ -104,7 +104,7 @@ var Dashboard = {
             }
         });
 
-        $.ajax({
+        return $.ajax({
             url: '/compliancedashboard/get_compliance',
             type: 'POST',
             dataType: 'json',

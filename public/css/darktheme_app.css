@@ -173,6 +173,10 @@ h6 {
   clear: both;
 }
 
+.th_mw100 {
+  min-width: 100px;
+}
+
 .table > tbody > tr.p10 td {
   padding: 10px 8px;
 }
