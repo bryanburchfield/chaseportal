@@ -100,7 +100,7 @@ var Dashboard = {
             data: {},
 
             success: function (response) {
-
+                console.log(response);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.agent_compliance.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
                 $('.agent_compliance_table tbody').empty();
@@ -112,9 +112,12 @@ var Dashboard = {
                     var trs;
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
                         reps.push(response.agent_compliance.agent_compliance[i].Rep);
-                        pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorked);
+                        pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorked.slice(0, -1));
                         trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
+
+                    console.log(reps);
+                    console.log(pct_worked);
 
                     $('table.agent_compliance_table').DataTable().clear();
                     $('table.agent_compliance_table').DataTable().destroy();
@@ -185,6 +188,11 @@ var Dashboard = {
                         },
                         tooltips: {
                             enabled: true,
+                            callbacks: {
+                            label: function (tooltipItem, data) {
+                                return ' ' + data['labels'][tooltipItem['index']] + ' ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                            }
+                        }
                         }
                     }
 
