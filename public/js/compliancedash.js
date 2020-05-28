@@ -119,7 +119,7 @@ var Dashboard = {
                 if (response.agent_compliance.agent_compliance.length) {
                     var trs;
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
-                        trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td></tr>';
+                        trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
 
                     $('table.agent_compliance_table').DataTable().clear();
