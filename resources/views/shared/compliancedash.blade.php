@@ -25,12 +25,15 @@
     		</table>
     	</div>
     </div>
+</div>
 
-    <div class="col-sm-3">
-    	<div class="card card-3b">
+<div class="row">
+    <div class="col-sm-12">
+    	<div class="card card-12 mt30">
 	    	<h1 class="title">{{__('widgets.adherence')}}</h1>
-	    	<canvas id="agent_worked_graph"></canvas>
+	    	<div class="inbound" style="height:350px;">
+	    		<canvas id="agent_worked_graph"></canvas>
+	    	</div>
     	</div>
     </div>
-
 </div>

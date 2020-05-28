@@ -72,20 +72,20 @@ var Dashboard = {
     },
 
     init: function () {
-        $.when(this.get_compliance()).done(function () {
+        $.when(this.get_compliance(this.chartColors)).done(function () {
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
     },
 
     refresh:function(datefilter, campaign, inorout){
-        $.when(this.get_compliance()).done(function(){
+        $.when(this.get_compliance(this.chartColors)).done(function(){
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
     },
 
-    get_compliance:function(){
+    get_compliance:function(chartColors){
 
         $.ajaxSetup({
             headers: {
@@ -100,7 +100,7 @@ var Dashboard = {
             data: {},
 
             success: function (response) {
-                console.log(response);
+
                 $('.filter_time_camp_dets p .selected_campaign').html(response.agent_compliance.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
                 $('.agent_compliance_table tbody').empty();
@@ -112,12 +112,9 @@ var Dashboard = {
                     var trs;
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
                         reps.push(response.agent_compliance.agent_compliance[i].Rep);
-                        pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorked.slice(0, -1));
+                        pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorkedInteger);
                         trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
-
-                    console.log(reps);
-                    console.log(pct_worked);
 
                     $('table.agent_compliance_table').DataTable().clear();
                     $('table.agent_compliance_table').DataTable().destroy();
@@ -161,45 +158,61 @@ var Dashboard = {
 
                     var chart_colors_array = Master.return_chart_colors_hash(reps);
 
-                    var agent_worked_data = {
-                        datasets: [{
-                            data: pct_worked,
-                            backgroundColor: chart_colors_array,
-                            label: 'Dataset 1'
-                        }],
-                        elements: {
-                            center: {
-                                color: '#203047',
-                                fontStyle: 'Segoeui',
-                                sidePadding: 15
+                    let agent_worked_data = {
+                        labels: reps,
+                        datasets: [
+                            {
+                                backgroundColor: chartColors.green,
+                                data: pct_worked
                             }
-                        },
-                        labels: reps
+                        ]
                     };
 
-                    var agent_worked_options = {
+                    let agent_worked_options = {
                         responsive: true,
+                        maintainAspectRatio: false,
                         legend: {
                             display: false,
-                            fontColor: Master.tick_color,
-                            labels: {
-                                fontColor: Master.tick_color
-                            },
+                        },
+                        scales: {
+                            yAxes: [
+                                {
+                                    stacked: true,
+                                    position: 'left',
+                                    scalePositionLeft: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: '% Worked',
+                                        fontColor: Master.tick_color,
+                                    },
+                                    ticks: {
+                                        fontColor: Master.tick_color,
+                                    },
+                                    gridLines: {
+                                        color: Master.gridline_color,
+                                    },
+                                }
+                            ]
                         },
                         tooltips: {
                             enabled: true,
+                            mode: 'label',
                             callbacks: {
-                            label: function (tooltipItem, data) {
-                                return ' ' + data['labels'][tooltipItem['index']] + ' ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                label: function(tooltipItems, data) {
+                                    return tooltipItems.yLabel +'%';
+                                }
                             }
-                        }
                         }
                     }
 
                     var ctx = document.getElementById('agent_worked_graph').getContext('2d');
 
+                    if (window.agent_worked_chart != undefined) {
+                        window.agent_worked_chart.destroy();
+                    }
+
                     window.agent_worked_chart = new Chart(ctx, {
-                        type: 'doughnut',
+                        type: 'bar',
                         data: agent_worked_data,
                         options: agent_worked_options
                     });
