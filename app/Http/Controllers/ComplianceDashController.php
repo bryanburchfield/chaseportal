@@ -217,6 +217,7 @@ class ComplianceDashController extends Controller
             // do calcs
             $rec['TotWorkedTime'] = $rec['WorkedTime'] + $rec['AllowedPausedTime'];
             $rec['PctWorked'] = number_format($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100, 2) . '%';
+            $rec['PctWorkedInteger'] = round($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100);
 
             // format fields
             $rec['WorkedTime'] = $this->secondsToHms($rec['WorkedTime']);
