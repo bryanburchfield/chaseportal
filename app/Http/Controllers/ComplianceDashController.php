@@ -254,6 +254,15 @@ class ComplianceDashController extends Controller
                 $pause_codes->map(function ($item) {
                     $item['day_count'] = 0;
                     $item['day_duration'] = 0;
+
+                    // set unlimited if one value is zero
+                    if ($item['times_per_day'] > 0 && $item['minutes_per_day'] == 0) {
+                        $item['minutes_per_day'] = 999999;
+                    }
+                    if ($item['times_per_day'] == 0 && $item['minutes_per_day'] > 0) {
+                        $item['times_per_day'] = 999999;
+                    }
+
                     return $item;
                 });
             }
