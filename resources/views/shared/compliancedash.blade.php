@@ -14,11 +14,11 @@
     			<thead>
     				<tr>
     					<th>Rep</th>
-    					<th>Allowed Paused Time</th>
-    					<th>PausedTime</th>
-    					<th>% Worked</th>
-    					<th>Total Time Worked</th>
     					<th>Worked Time</th>
+    					<th>Paused Time</th>
+    					<th>Allowed Paused Time</th>
+    					<th>Total Time Worked</th>
+    					<th>% Worked</th>
     				</tr>
     			</thead>
     			<tbody></tbody>

@@ -103,7 +103,6 @@ class ComplianceDashController extends Controller
 
     private function getAgentCompliance()
     {
-        $tz =  Auth::user()->tz;
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
         // Back toDate up a second since it's not inclusive
@@ -121,8 +120,7 @@ class ComplianceDashController extends Controller
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as Date,
-            AA.Rep, [Action], AA.Duration, AA.Details
+            $sql .= " $union SELECT AA.Date, AA.Rep, [Action], AA.Duration, AA.Details
             FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
             $sql .= "
@@ -205,7 +203,7 @@ class ComplianceDashController extends Controller
         // Go thru pause recs adding manhours for allowed pause codes
         foreach ($outerarray as $rec) {
 
-
+            $rec['AllowedPausedTime'] = $this->calcAllowedPausedTime($rec['PauseRecs']);
 
 
 
@@ -224,10 +222,63 @@ class ComplianceDashController extends Controller
             $results[] = $rec;
         }
 
-
-
-        Log::debug($results);
+        // Log::debug($results);
 
         return $results;
+    }
+
+    private function calcAllowedPausedTime(array $pause_recs)
+    {
+        $allowed_pause_time = 0;
+
+        $pause_codes = PauseCode::where('group_id', Auth::User()->group_id)
+            ->select(['code', 'minutes_per_day', 'times_per_day'])
+            ->get();
+
+        $day = '';
+        foreach ($pause_recs as $rec) {
+            // Convert to local
+            $rec_day = $this->utcToLocal($rec['Date'])->toDateString();
+
+            // reset counts if day changed
+            if ($rec_day != $day) {
+                $pause_codes->map(function ($item) {
+                    $item['day_count'] = 0;
+                    $item['day_duration'] = 0;
+                    return $item;
+                });
+            }
+
+            // find pause code
+            $pause_code = $pause_codes->where('code', $rec['Details'])->first();
+
+            if (!$pause_code) {
+                continue;
+            }
+
+            // Increment count
+            $pause_code->day_count++;
+
+            // skip if over count or over duration
+            if ($pause_code->day_count > $pause_code->times_per_day || $pause_code->day_duration >= ($pause_code->minutes_per_day * 60)) {
+                continue;
+            }
+
+            // figure out duration allowed
+            $tot_time = $pause_code->day_duration + $rec['Duration'];
+
+            if ($tot_time > ($pause_code->minutes_per_day * 60)) {
+                $allowed_pause_time += ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
+            } else {
+                $allowed_pause_time += $rec['Duration'];
+            }
+
+            // add to day duration
+            $pause_code->day_duration += $rec['Duration'];
+        }
+
+        Log::debug($pause_codes);
+
+        return $allowed_pause_time;
     }
 }
