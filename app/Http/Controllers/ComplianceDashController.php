@@ -6,7 +6,6 @@ use App\Models\PauseCode;
 use App\Traits\DashTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ComplianceDashController extends Controller
 {
@@ -120,7 +119,7 @@ class ComplianceDashController extends Controller
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT AA.Date, AA.Rep, [Action], AA.Duration, AA.Details
+            $sql .= " $union SELECT AA.Rep, AA.Date, AA.Campaign, [Action], AA.Duration, AA.Details
             FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
             $sql .= "
@@ -133,9 +132,6 @@ class ComplianceDashController extends Controller
 
         $sql .= " ORDER BY Rep, Date";
 
-        // Log::debug($sql);
-        // Log::debug($bind);
-
         $results = $this->processResults($sql, $bind);
 
         return $results;
@@ -143,6 +139,10 @@ class ComplianceDashController extends Controller
 
     private function processResults($sql, $bind)
     {
+        // Only count work hours if logged in for selected campaign(s)
+        // But count all pause recs since camp doesn't matter
+        // We'll filter the pause data later
+
         $results = [];
 
         // loop thru results looking for log in/out times
@@ -154,9 +154,9 @@ class ComplianceDashController extends Controller
             'PauseRecs' => [],
         ];
 
+        $campaign_ok = false;
         $i = 0;
         foreach ($this->yieldSql($sql, $bind) as $rec) {
-
             if ($i == 0) {
                 $i++;
                 $tmparray[$i] = $blankrec;
@@ -171,21 +171,28 @@ class ComplianceDashController extends Controller
 
             switch ($rec['Action']) {
                 case 'Login':
+                    $campaign_ok = $this->checkCampaign($rec['Campaign']);
                     break;
                 case 'Logout':
+                    $campaign_ok = false;
                     break;
                 case 'Paused':
                     if (round($rec['Duration']) > 0) {
-                        $tmparray[$i]['PausedTime'] += $rec['Duration'];
+                        if ($campaign_ok) {
+                            $tmparray[$i]['PausedTime'] += $rec['Duration'];
+                        }
                         $tmparray[$i]['PauseRecs'][] = [
                             'Date' => substr($rec['Date'], 0, 26),  // strip offest
+                            'Campaign' => $rec['Campaign'],
                             'Duration' => $rec['Duration'],
                             'Details' => $rec['Details'],
                         ];
                     }
                     break;
                 default:
-                    $tmparray[$i]['WorkedTime'] += $rec['Duration'];
+                    if ($campaign_ok) {
+                        $tmparray[$i]['WorkedTime'] += $rec['Duration'];
+                    }
             }
         }
 
@@ -202,17 +209,14 @@ class ComplianceDashController extends Controller
 
         // Go thru pause recs adding manhours for allowed pause codes
         foreach ($outerarray as $rec) {
-
             $rec['AllowedPausedTime'] = $this->calcAllowedPausedTime($rec['PauseRecs']);
-
-
 
             // get rid of detailed pause recs
             unset($rec['PauseRecs']);
 
             // do calcs
             $rec['TotWorkedTime'] = $rec['WorkedTime'] + $rec['AllowedPausedTime'];
-            $rec['PctWorked'] = round($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100, 2);
+            $rec['PctWorked'] = number_format($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100, 2) . '%';
 
             // format fields
             $rec['WorkedTime'] = $this->secondsToHms($rec['WorkedTime']);
@@ -237,6 +241,11 @@ class ComplianceDashController extends Controller
 
         $day = '';
         foreach ($pause_recs as $rec) {
+            // if no duration then ignore
+            if ($rec['Duration'] == 0) {
+                continue;
+            }
+
             // Convert to local
             $rec_day = $this->utcToLocal($rec['Date'])->toDateString();
 
@@ -267,18 +276,34 @@ class ComplianceDashController extends Controller
             // figure out duration allowed
             $tot_time = $pause_code->day_duration + $rec['Duration'];
 
-            if ($tot_time > ($pause_code->minutes_per_day * 60)) {
-                $allowed_pause_time += ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
-            } else {
-                $allowed_pause_time += $rec['Duration'];
+            // Only add to the total if campaign matches selected
+            if ($this->checkCampaign($rec['Campaign'])) {
+                if ($tot_time > ($pause_code->minutes_per_day * 60)) {
+                    $allowed_pause_time += ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
+                } else {
+                    $allowed_pause_time += $rec['Duration'];
+                }
             }
 
             // add to day duration
             $pause_code->day_duration += $rec['Duration'];
         }
 
-        Log::debug($pause_codes);
-
         return $allowed_pause_time;
+    }
+
+    private function checkCampaign($campaign)
+    {
+        if (empty($this->campaign) || $this->campaign == 'Total') {
+            return true;
+        }
+
+        foreach ((array) $this->campaign as $camp) {
+            if ($camp == $campaign) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
