@@ -229,12 +229,15 @@ var Dashboard = {
 
 $(document).ready(function () {
 
+    Dashboard.init();
+
     $(".flipping_card").flip({trigger: 'manual',reverse:true});
     $(".flip_card_btn").on('click', function(){
         $(this).closest('.flipping_card').flip('toggle');
     });
 
-    Dashboard.init();
+    $('.dataTables_filter').addClass('flt_rgt');
+
 });
 
 
