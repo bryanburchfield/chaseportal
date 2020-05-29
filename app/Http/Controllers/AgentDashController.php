@@ -352,6 +352,7 @@ class AgentDashController extends Controller
             $rec['AvgHoldTime'] = $this->secondsToHms(($rec['Dials'] == 0) ? 0 : $rec['HoldTime'] / $rec['Dials']);
             $rec['DropRate'] = number_format(($rec['Dials'] == 0) ? 0 : $rec['Drops'] / $rec['Dials'] * 100, 2) . '%';
         }
+        unset($rec);
 
         // sort by calls 
         usort($calls_by_campaign, function ($a, $b) {
