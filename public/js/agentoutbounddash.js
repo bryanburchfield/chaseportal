@@ -119,7 +119,7 @@ var Dashboard = {
                 datefilter:datefilter
             },
             success:function(response){
-                
+
                 $('#total_outbound .total').html(parseInt(response['call_volume']['tot_outbound']) + parseInt(response['call_volume']['tot_manual']));
                 $('#total_inbound .total').html(response['call_volume']['tot_inbound']);
 
@@ -481,18 +481,6 @@ var Dashboard = {
 $(document).ready(function(){
 
     Dashboard.init();
-
-    $('.count').each(function () {
-        $(this).prop('Counter',0).animate({
-            Counter: $(this).text()
-        }, {
-            duration: 1500,
-            easing: 'swing',
-            step: function (now) {
-                $(this).text(Math.ceil(now));
-            }
-        });
-    });
 
     $(".startdate").datepicker({
         maxDate: '0',
