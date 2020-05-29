@@ -186,6 +186,9 @@ class CallDetails
         $bind['group_id'] =  Auth::user()->group_id;
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
+        $bind['group_id_aa'] =  Auth::user()->group_id;
+        $bind['startdate_aa'] = $startDate;
+        $bind['enddate_aa'] = $endDate;
 
         // create temp tables for joins
         $sql = "SET NOCOUNT ON;
@@ -196,6 +199,20 @@ class CallDetails
 
         $where = '';
         // load temp tables
+
+        // Load all hangup AA recs +/- 1 hour of date range
+        $sql .= "
+        SELECT ActivityId, Rep
+        INTO #tmphangups
+        FROM AgentActivity WITH(NOLOCK)
+        WHERE  GroupId = :group_id_aa
+        AND Details = 'Agent Hangup Call'
+        AND Date >= DATEADD(hour,-1,:startdate_aa)
+        AND Date <= DATEADD(hour,1,:enddate_aa)
+
+        CREATE INDEX IX_tmphangup ON #tmphangups (ActivityId, Rep);
+        ";
+
         if (!empty($this->params['campaigns']) && $this->params['campaigns'] != '*') {
             $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
             $bind['campaigns'] = $campaigns;
@@ -307,12 +324,10 @@ class CallDetails
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
             FROM [DialingResults] DR WITH(NOLOCK)
-            OUTER APPLY (SELECT TOP 1 Details
-                FROM AgentActivity AA WITH(NOLOCK)
+            OUTER APPLY (SELECT TOP 1 'Agent Hangup' as Details
+                FROM #tmphangups AA
                 WHERE AA.ActivityId = DR.ActivityId
-                AND AA.GroupId = DR.GroupId
                 AND AA.Rep = DR.Rep
-                AND AA.Details = 'Agent Hangup Call'
                 ) AA
             LEFT OUTER JOIN [Leads] L ON L.id = DR.LeadId";
 

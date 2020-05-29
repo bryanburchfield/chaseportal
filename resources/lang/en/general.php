@@ -40,6 +40,7 @@ return [
 	'master_dashboard'			=> 'Master Dashboard',
 	'my_settings'				=> 'My Settings',
 	'new_password'				=> 'New Password',
+	'notifications'				=> 'Notifications',
 	'no'						=> 'No',
 	'notifications'				=> 'Notifications',
 	'of'						=> 'OF',

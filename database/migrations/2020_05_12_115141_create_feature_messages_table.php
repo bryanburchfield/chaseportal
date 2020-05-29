@@ -16,7 +16,7 @@ class CreateFeatureMessagesTable extends Migration
         Schema::create('feature_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->text('body');
+            $table->longtext('body');
             $table->boolean('active')->default(0)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('expires_at')->nullable();

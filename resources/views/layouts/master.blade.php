@@ -106,6 +106,7 @@
             $('.btn-notifications, .close_nots_bar').on('click', function () {
                 $('#sidebar_nots').toggleClass('active');
             });
+
             @isset($summernote)
                 $('#summernote').summernote({
                     height: 200
