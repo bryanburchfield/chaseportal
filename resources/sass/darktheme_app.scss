@@ -1479,7 +1479,7 @@ label.switch {
     text-align: left;
     width: 50px;
     height: calc(50px / 2);
-    border-radius: 60px;
+    @include border-radius(60px);
     background-color: $green;
     display: inline-block;
     position: relative;
