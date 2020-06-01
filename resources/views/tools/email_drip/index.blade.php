@@ -149,14 +149,15 @@
             <div class="modal-body">
                 <form action="#" method="post" class="form add_esp fc_style">
                     @include('tools.email_drip.email_service_provider')
-                    <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
+                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_esp flt_lft" value="{{__('tools.add_provider')}}">
                     <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                
             </div>
         </div>
     </div>
