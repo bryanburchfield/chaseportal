@@ -176,13 +176,14 @@
                 <form action="#" method="post" class="form edit_es fc_style">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
+                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader flt_lft">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                
             </div>
         </div>
     </div>
