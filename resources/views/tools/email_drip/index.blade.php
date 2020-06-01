@@ -225,12 +225,14 @@
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0">{{__('tools.create_campaign')}}</button>
+                     <button type="button" class="btn btn-secondary cancel_modal_form mt10 mr10 flt_lft" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0 flt_lft">{{__('tools.create_campaign')}}</button>
+                   
                 </form>
             </div>
 
 	        <div class="modal-footer">
-                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
+                
 	        </div>
 	    </div>
     </div>
