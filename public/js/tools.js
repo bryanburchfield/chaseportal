@@ -173,22 +173,22 @@ var Tools = {
                     window.location.href = 'contactflow_builder';
                 },
                 error :function( data ) {
-                    $('.add_rule_error.alert').empty();
-                    $('.add_rule_error.alert').hide();
+                    $('.add_rule .alert').empty();
+                    $('.add_rule .alert').hide();
 
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
 
                         if($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                                $('.add_rule .alert').show().append('<li>'+value+'</li>');
                             });
                         }else{
-                            $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                            $('.add_rule .alert').show().append('<li>'+value+'</li>');
                         }
                     });
 
-                    $('.add_rule_error.alert li').first().remove();
+                    $('.add_rule .alert li').first().remove();
                 }
             });
         }
@@ -370,7 +370,7 @@ var Tools = {
 
                     if(Tools.leadrule_filters_used!=Tools.leadrule_filters){
                         if(!$(new_filter).find('a.remove_filter').length){
-                            $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                            $(new_filter).find('.card').append('<a href="#" class="remove_filter flt_rgt"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
                         }
                     }
 

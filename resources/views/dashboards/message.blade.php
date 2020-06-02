@@ -16,7 +16,7 @@
 			    <div class="row">
 
 					<div class="col-sm-12">
-						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="btn_flt_rgt btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
+						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="flt_rgt btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
 					</div>
 
 					<div class="col-sm-12 notification_msg">

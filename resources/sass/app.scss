@@ -11,14 +11,38 @@ applet, object, iframe, body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abb
 $blue: #203047;
 $orange: #E15B23;
 $green: #33A09B;
-/////////
 
-@mixin blue_grad($color1, $color2){
+@mixin base_style($background, $color, $bdr_type:null, $bdr:null, $fw:null){
+    
+    @if($bdr_type){$bdr_type: - $bdr_type;}
+
+    background: $background;
+    color: $color;
+    border#{$bdr_type}:$bdr;
+    font-weight: $fw;
+}
+
+@mixin gradient($color1, $color2, $direction, $start, $stop){
+    $opp_direction : bottom;
+    $ie_type:0;
+
+    @if $direction == top{
+        $opp_direction : bottom;
+        $ie_type:0;
+    }@else if $direction == left{
+        $ie_type:1;
+        $opp_direction : right;
+    }
+
     background: $color1;
-    background: -moz-linear-gradient(left, $color1 0%, $color2 100%);
-    background: -webkit-linear-gradient(left, $color1 0%, $color2 100%);
-    background: linear-gradient(to right, $color1 0%, $color2 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=1); 
+    background: -moz-linear-gradient($direction,  $color1 $start, $color2 $stop); 
+    background: -webkit-linear-gradient($direction, $color1 $start, $color2 $stop);
+    background: linear-gradient(to $opp_direction, $color1 $start, $color2 $stop);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} ); 
+}
+
+@mixin form_control_style(){
+    background: #eee !important;
 }
 
 body, html {
@@ -58,62 +82,33 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 1px solid #fff;
 }
 
-.mt10 {
-    margin-top: 10px;
-}
-
-.mt20 {
-    margin-top: 20px;
-}
-
-.mt30 {
-    margin-top: 30px;
-}
-
-.mt50 {
-    margin-top: 50px;
-}
-
-.mb0 {
-    margin-bottom: 0 !important;
-}
-
+.mt10 {margin-top: 10px;}
+.mt20 {margin-top: 20px;}
+.mt30 {margin-top: 30px;}
+.mt50 {margin-top: 50px;}
+.mt60{margin-top: 60px;}
+.mb0 {margin-bottom: 0 !important;}
 .mb5{margin-bottom: 5px;}
-
-.mb10 {
-    margin-bottom: 10px;
-}
-
-.mb15 {
-    margin-bottom: 15px;
-}
-
-.mb20 {
-    margin-bottom: 20px;
-}
-
-.mb30 {
-    margin-bottom: 30px;
-}
-
-.mb42 {
-    margin-bottom: 42px;
-}
-
-.mr10 {
-    margin-right: 10px;
-}
+.mb10 {margin-bottom: 10px;}
+.mb15 {margin-bottom: 15px;}
+.mb20 {margin-bottom: 20px;}
+.mb30 {margin-bottom: 30px;}
+.mb42 {margin-bottom: 42px;}
+.mr10 {margin-right: 10px;}
+.mr20{margin-right: 20px;}
 
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
-
 .p20{padding: 20px;}
-
 .pl10{padding-left: 10px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
+.cb{clear: both;}
+
+.flt_rgt {float: right;}
+.flt_lft {float: left;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -133,14 +128,12 @@ a, a:hover, a:focus {
 .card .back.p0{padding: 0;}
 
 .navbar button#sidebarCollapse {
-    float: left;
     margin-right: 20px;
     @include border-radius(3px);
 }
 
 img.text_logo {
     max-width: 140px;
-    float: left;
 }
 
 .title.tac {
@@ -148,15 +141,12 @@ img.text_logo {
 }
 
 input.btn.logout_btn {
-    background: #d9534f;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#d9534f, #fff, $fw:600);
     @include transition(all, ease, 0.3s);
 }
 
 input.logout_btn:hover {
-    background: #bf3f3b;
-    color: #fff;
+    @include base_style(#bf3f3b, #fff);
 }
 
 .svg-inline--fa {
@@ -169,10 +159,9 @@ input.logout_btn:hover {
 
 .navbar {
     padding: 13px 20px 0;
-    background: #fff;
     border: none;
-    border-bottom: 1px solid #abbdd8;
-    border-radius: 0;
+    @include base_style(#fff, null, bottom, 1px solid #abbdd8);  
+    @include border-radius(0);
     margin-bottom: 40px;
 }
 
@@ -210,11 +199,7 @@ i, span {
     min-width: 250px;
     max-width: 250px;
     color: #fff;
-    background: #263854; /* Old browsers */
-    background: -moz-linear-gradient(left,  #263854 0%, #171f33 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=1 ); /* IE6-9 */
+    @include gradient(#263854, #171f33, left, 0%, 100%);
     @include transition(all, ease, 0.3s);
     
     ul.components {
@@ -227,7 +212,7 @@ i, span {
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad(#1c273d, #263854);
+            @include gradient(#1c273d, #263854, left, 0%, 100%);
 
             &>a i {
                 color:#ddd;
@@ -248,11 +233,7 @@ i, span {
 
             &:hover {
                 color: #fff;
-                background: #1c273d; /* Old browsers */
-                background: -moz-linear-gradient(left, #1c273d 0%, #263854 98%); /* FF3.6-15 */
-                background: -webkit-linear-gradient(left, #1c273d 0%, #263854 98%); /* Chrome10-25,Safari5.1-6 */
-                background: linear-gradient(to right, #1c273d 0%, #263854 98%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c273d', endColorstr='#263854', GradientType=1); /* IE6-9 */
+                @include gradient(#1c273d, #263854, left, 0%, 98%);
             }
             
             i {margin-right: 10px;}
@@ -272,7 +253,6 @@ i, span {
         max-width: 80px;
         text-align: center;
         
-        
         .sidebar-header h3, .CTAs{display: none;}
         .sidebar-header strong {display: block;}
 
@@ -281,7 +261,7 @@ i, span {
             text-align: center;
             font-size: 0.85em;
 
-            i {
+            i{
                 margin-right: 0;
                 display: block;
                 font-size: 1.8em;
@@ -290,38 +270,18 @@ i, span {
         }
 
         ul ul a {padding: 10px !important;}
-
-        .dropdown-toggle::after {
-            top: auto;
-            bottom: 10px;
-            right: 50%;
-            -webkit-transform: translateX(50%);
-            -ms-transform: translateX(50%);
-            transform: translateX(50%);
-        }
     }
 }
 
 #sidebar_nots {
     min-width: 300px;
     max-width: 300px;
-    color: #fff;
-    background: #efefef;
-    border-left: 1px solid #ccc;
+    @include base_style(#efefef, #fff, left, 1px solid #ccc);
     @include transition(all, ease, 0.3s);
 
     &.active {
         min-width: 300px;
         max-width: 300px;
-
-        .dropdown-toggle::after {
-            top: auto;
-            bottom: 10px;
-            right: 50%;
-            -webkit-transform: translateX(50%);
-            -ms-transform: translateX(50%);
-            transform: translateX(50%);
-        }
     }
 
     .close_nots_bar{position: relative;top:0;right:0px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
@@ -329,9 +289,7 @@ i, span {
     .not_header{
         padding-top: 20px;
         .not_header_inner{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-bottom: 13px;
+            padding: 0 13px 13px;
         }
 
         h4{
@@ -347,10 +305,7 @@ i, span {
 
     .notifications{
         .not{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding:10px 13px;
             border-top: 1px solid #ccc;
             position: relative;
 
@@ -373,13 +328,12 @@ i, span {
 }
 
 .btn-notifications{
-    background:none;
-    color:$green;
+    @include base_style(none, $green);
     position:relative;
     font-size: 18px;
     bottom:2px;
     &:hover{color: $orange;}
-    &:hover span.numb_notifications{background: $green;color:#fff;}
+    &:hover span.numb_notifications{@include base_style($green, #fff);}
 
     &:focus{outline:none;@include box-shadow(none);}
 }
@@ -388,17 +342,15 @@ span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
+    @include base_style($orange, #fff);
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
 }
 
 .btn-secondary.cancel{
-    float: left;
     margin-top: 10px;
     margin-right: 15px;
 }
@@ -418,11 +370,7 @@ button, button:active, button:focus {
 }
 
 #sidebarCollapse {
-    background: $green; /* Old browsers */
-    background: -moz-linear-gradient(top, $green 0%, #007f76 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, $green 0%, #007f76 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, $green 0%, #007f76 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$green', endColorstr='#007f76', GradientType=0); /* IE6-9 */
+    @include gradient($green, #007f76, top, 0%, 100%);
     
     &:hover {
         background: #2d938f;
@@ -463,17 +411,15 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: $blue;
+    @include base_style(#fff, $blue);
 }
 
 a.article, a.article:hover {
-    background: #1a283d !important;
-    color: #fff !important;
+    @include base_style( #1a283d !important, #fff !important);
 }
 
 #content {
-    width: 100%;    /*padding: 20px;*/
+    width: 100%;
     min-height: 100vh;
     @include transition(all, ease, 0.3s);
 }
@@ -484,21 +430,11 @@ div.container-fluid.hero_bg {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    box-shadow: 0 5px 15px #19273d;
-    -moz-box-shadow: 0 5px 15px #19273d;
-    -webkit-box-shadow: 0 5px 15px #19273d;
+    @include box-shadow(0 5px 15px #19273d);
 }
 
 div.container-fluid.hero_bg .form-holder {
     border: none;
-}
-
-.fpass_email_alert {
-    margin: 20px;
-}
-
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert, #webhook_generator .alert-danger {
-    display: none;
 }
 
 .edit_demo_user .alert-success{clear: both;}
@@ -524,23 +460,15 @@ h1.fw600 {
 .btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: #e49831;
-    border: 1px solid #f2ad4d;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
 
     &:hover {
         background-color: #d38826;
     }
-
 }
 
 div.container-fluid.bg {
-    background: #c9d2d6; /* Old browsers */
-    background: -moz-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #c9d2d6 0%, #efefef 7%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #c9d2d6 0%, #efefef 7%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9d2d6', endColorstr='#efefef', GradientType=0); /* IE6-9 */
+    @include gradient(#c9d2d6, #efefef, top, 0%, 7%);
     min-height: 500px;
 }
 
@@ -559,9 +487,7 @@ div.container-fluid.bg {
 
 .navbar-default {
     background: #fff;
-    box-shadow: 0 1px 2px #28426d;
-    -moz-box-shadow: 0 1px 2px #28426d;
-    -webkit-box-shadow: 0 1px 2px #28426d;
+    @include box-shadow( 0 1px 2px #28426d);
 
     .navbar-nav>li>a {
         color: #eee;
@@ -576,11 +502,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
+    @include gradient(#ffffff, #e2e2e0, top, 75%, 99%);
 }
 
 .navbar-header.home {
@@ -589,10 +511,8 @@ div.container-fluid.bg {
     position: relative;
 }
 
-
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: #eee;
-    background: none;
+    @include base_style(none, #eee);
 }
 
 .dropdown-menu li a {
@@ -600,7 +520,7 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
-    @include blue_grad(#263854, #1c273d);
+    @include gradient(#263854, #1c273d, top, 0%, 100%);
     color: #fff;
 }
 
@@ -612,15 +532,11 @@ div.container-fluid.bg {
     background-color: #e4e4e4;
 }
 
-
 .filters {
     margin-bottom: 10px;
-    float: right;
     padding: 0;
 
     ul.dropdown-menu {right: -65px;}
-    .btn-group {float: right;}
-
     .btn.btn-primary {
         margin-bottom: 0;
         background: none;
@@ -628,11 +544,8 @@ div.container-fluid.bg {
         &.select_database, &.select_campaign {
             position: relative;
             margin-bottom: 10px;
-            background-color: #e49831;
-            border: 1px solid #f2ad4d;
-            border-radius: 0;
-            color: #fff;
-            font-weight: 600;
+            @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
+            @include border-radius(0);
         }
     }
 }
@@ -653,7 +566,6 @@ div.container-fluid.bg {
     }
 }
 
-
 .navbar-header.home .navbar-brand img {
     margin: 0 auto;
     display: block;
@@ -662,23 +574,18 @@ div.container-fluid.bg {
 input[type='file'] {
     border: none !important;
     box-shadow: none !important;
-    background: none !important
+    background: none !important;
 }
 
 .card {
-    background: #fff;
-    -moz-box-shadow: 0 2px 3px #ccd6dd;
-    -webkit-box-shadow: 0 2px 3px #ccd6dd;
-    box-shadow: 0 2px 3px #ccd6dd;
-    border-top: 3px solid #acb4c1;
-    padding: 20px;  /*overflow: auto;*/
+    @include box-shadow(0 2px 3px #ccd6dd);
+    @include base_style(#fff, null, top, 3px solid #acb4c1);
+    padding: 20px;
     margin-bottom: 30px;
     transition: 0.3s;
 
     &:hover {
-        -moz-box-shadow: 0 3px 5px #b5c3cc;
-        -webkit-box-shadow: 0 3px 5px #b5c3cc;
-        box-shadow: 0 3px 5px #b5c3cc;
+        @include box-shadow(0 3px 5px #b5c3cc);
     }
 
     &.card_table, &.card_table2 {
@@ -726,8 +633,7 @@ input[type='file'] {
         color: $blue;
 
         &.bg_rounded {
-            background: $green;
-            color: #fff;
+            @include base_style($green, #fff);
             border-radius: 100px;
             width: 100px;
             height: 100px;
@@ -757,7 +663,6 @@ input[type='file'] {
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
-
 
 .flip_card_btn:after, .card_drop_down:after {
     content: '\2807';
@@ -794,12 +699,6 @@ input[type='file'] {
     -ms-overflow-style: none;
 }
 
-
-.call_volume_details {
-    float: left;
-}
-
-
 .card-6 h1.title {
     text-align: left;
     float: left;
@@ -810,15 +709,6 @@ input[type='file'] {
     margin-bottom: 8px;
 }
 
-.card-6 .btn-group {
-    float: right;
-}
-
-.card-6 .inbound, .card-6 .outbound {
-    clear: both;
-    margin-top: 60px;
-}
-
 .card-6 .inbound h4, .card-6 .outbound h4 {
     font-size: 15px;
     font-weight: 600;
@@ -827,34 +717,13 @@ input[type='file'] {
     text-transform: uppercase;
 }
 
-.card-6 .outbound {
-    display: none;
-}
-
 .card-6.outbound_default .outbound {
     display: block;
 }
 
-.card-6.outbound_default .inbound {
-    display: none;
-}
-
 .avgs_rgt {
-    float: right;
     position: relative;
     bottom: 20px;
-}
-
-.card-6 .inbound.mb0 {
-    margin-top: 0;
-}
-
-.card-12 .btn-group {
-    float: right;
-}
-
-.card-12 .inbound, .card-12 .outbound {
-    clear: both;
 }
 
 p.total {
@@ -865,27 +734,23 @@ p.total {
 }
 
 .total_calls_in, .total_calls_out {
-    padding: 17px;    /*height: 48%;*/
+    padding: 17px; 
 }
 
 .total_calls_out {
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff);
     margin-bottom: 10px;
 }
 
 .total_calls_in {
-    background: $blue;
-    color: #fff;
+    @include base_style($blue, #fff);
 }
 
 .total_calls_in h2, .total_calls_out h2 {
     text-align: center;
     font-size: 15px;
-    font-weight: 600;
     margin-bottom: 5%;
-    color: #fff;
-    border-bottom: none;
+    @include base_style(null, #fff, bottom, none, 600);
 }
 
 .total_calls_in p.total, .total_calls_out p.total {
@@ -910,7 +775,7 @@ p.total {
     background-color: #f9f9f9;
     min-width: 160px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
 }
 
@@ -934,24 +799,17 @@ p.total {
 }
 
 .form-holder {
-    border: 1px solid #ccc;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    background: #eee;
+    @include base_style(#eee, null, null, 1px solid #ccc);
+    @include border-radius(5px);
     margin-top: 17%;
 }
 
 .form-holder h4 {
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 0 0;
+    @include base_style($blue, #fff, $fw:600);
+    @include border-radius(5px 5px 0 0);
     padding: 12px 0;
     margin-bottom: 20px;
-    background: $blue;
-    color: #fff;
     text-align: center;
-    font-weight: 600;
     text-transform: uppercase;
     margin-top: 0;
 }
@@ -990,12 +848,13 @@ a.dropdown-toggle {
 }
 
 .dd_trigger .active, .filter_campaign .active {
-    background: $blue !important;
-    color: #fff !important;
+    @include base_style($blue !important, #fff !important);
 }
 
 #reports_modal .modal-footer .btn_flgrgt{
-    float: right;margin-bottom: 0 !important;margin-right: 10px;color:#33A09B;font-weight: 600;
+    margin-right: 10px;
+    color:#33A09B;
+    font-weight: 600;
     &:hover{
         color: darken(#33A09B, 10%);
     }
@@ -1055,7 +914,7 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#263854, #171f33);
+    @include gradient(#263854, #171f33, top, 0%, 100%);
     color: #fff;
     margin-bottom: 20px;
 }
@@ -1067,7 +926,7 @@ ul.dropdown-menu.filter_campaign {
 
 .close {
     color: #fff;
-   @include opacity(0.7);
+    @include opacity(0.7);
 
     &:hover {
         @include opacity(1);
@@ -1114,13 +973,11 @@ p.ajax_error {
 }
 
 .card-3 .inbound {
-    float: left;
     text-align: left;
     color: #888;
 }
 
 .card-3 .outbound {
-    float: right;
     text-align: right;
     color: #888;
 }
@@ -1175,12 +1032,9 @@ canvas#service_level {
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     font-size: 16px;
-    float: right;
     position: relative;
-    font-weight: 700;
-    color: $orange;
     bottom: 43px;
-    border-bottom: none;
+    @include base_style(null, $orange, bottom, none, 700);
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -1193,22 +1047,14 @@ h2.avg_cc, h2.avg_ct {
     margin-bottom: 0;
 }
 
-div#dataTable_filter label {
-    float: right;
-    margin-bottom: 20px;
-}
+// div#dataTable_filter label {
+//     float: right;
+//     margin-bottom: 20px;
+// }
 
-.dataTables_paginate .pagination {
-    float: right;
-}
-
-.btn_flt_rgt {
-    float: right;
-}
-
-.btn_flt_lft {
-    float: left;
-}
+// .dataTables_paginate .pagination {
+//     float: right;
+// }
 
 h2.card_title {
     text-transform: uppercase;
@@ -1224,9 +1070,7 @@ p.descrip.top14 {
 }
 
 .reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .audit_table th{
-    background: $blue;
-    border-top: 0;
-    color: #fff;
+    @include base_style($blue, #fff, top, 0);
     padding: 10px !important;
 }
 
@@ -1254,10 +1098,6 @@ p.descrip.top14 {
     font-weight: 600;
 }
 
-#reports_modal .modal-footer .btn {
-    float: left;
-}
-
 .reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
     min-width: 125px;
     padding: 10px 4px;
@@ -1266,7 +1106,6 @@ p.descrip.top14 {
 .reports_table.table{width: 99%;}
 
 .report_download {
-    display: none;
     margin-bottom: 40px;
 }
 
@@ -1321,9 +1160,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .notification_body {
-
-    background: #eee !important;
+.fc_style, .tools{
+    .form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }   
 }
 
 .create_recips .btn-group ul .checkbox{
@@ -1390,7 +1230,7 @@ h3.heading {
 }
 
 .reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover {
-    background: #2f4c72;
+    background: darken($green, 6%);
 }
 
 .reports_table th > span, .uploader_table th > span {
@@ -1528,9 +1368,12 @@ span.selected_campaign {
     border-color: #d6e9c6;
 }
 
-.hidetilloaded {
+.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db, .new_source_subcampaign_group, .new_destination_subcampaign_group {
     display: none;
 }
+
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a {display: none;}
 
 .report_totals td{
     background:#33A09B;
@@ -1550,7 +1393,7 @@ label.switch {
     text-align: left;
     width: 50px;
     height: calc(50px / 2);
-    border-radius: 60px;
+    @include border-radius(60px);
     background-color: #4ed164;
     display: inline-block;
     position: relative;
@@ -1575,15 +1418,15 @@ label.switch > span:before, label.switch > span:after {
 }
 
 label.switch > input[type="checkbox"]:focus ~ span {
-    box-shadow: 0 0 0 2px #43b556;
+    @include box-shadow(0 0 0 2px #43b556);
 }
 
 label.switch > input[type="checkbox"]:checked:focus ~ span {
-    box-shadow: 0 0 0 2px #eee;
+    @include box-shadow(0 0 0 2px #eee);
 }
 
 label.switch > span {
-    border-radius: 60px;
+    @include border-radius(60px);
 }
 
 label.switch > span:before {
@@ -1591,7 +1434,7 @@ label.switch > span:before {
     height: 100%;
     box-sizing: border-box;
     background-color: #cecece;
-    border-radius: 60px;
+    @include border-radius(60px);
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
     @include opacity(1);
@@ -1605,8 +1448,8 @@ label.switch > span:after {
     height: calc(50px / 2);
     transform: translate3d(0, -50%, 0);
     background-color: #fff;
-    border-radius: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    @include border-radius(100%);
+    @include box-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
 }
 
 label.switch > input[type="checkbox"]:checked ~ span:before {
@@ -1619,12 +1462,10 @@ label.switch > input[type="checkbox"]:checked ~ span:after {
 }
 
 h2 {
-    font-weight: 600;
+    @include base_style(null, $blue, bottom, 1px solid #ddd, 600);
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    color: $blue;
 }
 
 .opt {
@@ -1635,7 +1476,6 @@ h2 {
 }
 
 .opt a, .opt h4 {
-    float: left;
     display: inline-block;
     font-size: 17px;
     font-weight: 600;
@@ -1652,14 +1492,11 @@ h2 {
 }
 
 .opt .switch {
-    float: right;
     margin-left: 20px;
 }
 
 .opt .kpi {
-    clear: both;
     margin-top: 45px;
-    display: none;
 }
 
 .opt .options a, .opt .options h4 {
@@ -1680,7 +1517,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options, .expanded_emails {
     clear: both;
-    // display: none;
 }
 
 .expanded_options .user, .expanded_emails .user {
@@ -1694,7 +1530,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
     clear: both;
-    // height: 65px;
     position: relative;
 }
 
@@ -1714,7 +1549,6 @@ a.expand_dets, h4.expand_dets {
 }
 
 .user_email_form {
-    // display: none;
     clear: both;
 }
 
@@ -1734,7 +1568,7 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
 
 a.edit_recip_glyph{right:35px;color:#33A09B;}
 a.kpi_change_details{
-     margin-right: 10px;
+    margin-right: 10px;
     position: absolute;
     bottom: 19px;
     right: 64px;
@@ -1752,18 +1586,13 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user {
-    float: right;
-    margin-right: 10px;
-}
-
 .users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
     position: relative;
     top: 2px;
     color: $orange;
 }
 
-.users td a.remove_user{float: none;margin-left: 10px;}
+.users td a.remove_user{float: none;margin-left: 10px; margin-right: 10px;}
 
 div.alert-danger p {
     font-weight: 600;
@@ -1778,20 +1607,14 @@ a.fpass {
     display: none !important;
 }
 
-.controls {
-    float: right;
-}
-
 a.run_kpi.btn {
     position: relative;
     bottom: 0px;
-    background: $blue;
-    color: #fff;
     clear: both;
     border: none;
+    @include base_style($blue, #fff, bottom, 1px solid #ddd);
     display: block;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 12px;
@@ -1810,7 +1633,6 @@ a.run_kpi.btn {
     to {
         transform: scale(1) rotate(360deg);
     }
-
 }
 
 @-webkit-keyframes spin2 {
@@ -1821,7 +1643,6 @@ a.run_kpi.btn {
     to {
         -webkit-transform: rotate(360deg);
     }
-
 }
 
 .total_calls_in h2, .total_calls_out h2 {
@@ -1846,15 +1667,6 @@ a.run_kpi.btn {
     margin-right: 0px !important;
 }
 
-.dropdown-toggle::after {
-    top: auto;
-    bottom: 10px;
-    right: 50%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
-
 #sidebar.active {
     margin-left: 0 !important;
 }
@@ -1869,29 +1681,25 @@ a.run_kpi.btn {
     position: relative;
 }
 
-
 .searchCnt{position: relative;}
 
 .search_results {
-    display: none;
     position: absolute;
     z-index: 99999;
     top: 45px;
-    border: 1px solid #ddd;
-    background: #ededed;
+    @include base_style(#ededed, null, null, 1px solid #ddd);
     width: 100%;
-}
+    
+    h5 {
+        padding: 8px 5px;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
 
-.search_results h5 {
-    padding: 8px 5px;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
-}
-
-.search_results h5:hover {
-    background: $blue;
-    color: #fff;
-    cursor: pointer;
+        &:hover {
+            @include base_style($blue, #fff);
+            cursor: pointer;
+        }
+    }
 }
 
 #settingsForm input.form-control {
@@ -1926,7 +1734,7 @@ a.run_kpi.btn {
     margin-right: 15px;
     margin-top: 3px;
     vertical-align: top;
-    border-radius: 50%;
+    @include border-radius(50%);
     pointer-events: none;
 }
 
@@ -1940,19 +1748,14 @@ a.run_kpi.btn {
 }
 
 .btn-left, .btn-right {
-    position: absolute;    /*top: 0.24em;*/
+    position: absolute;
 }
 
 .card_dropbtn {
-
-    /*position: fixed;*/
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
-}
-
-.card_dropbtn.btn-left {
 }
 
 .card_dropdown.mv_left {
@@ -1971,11 +1774,10 @@ a.run_kpi.btn {
     display: none;
     position: relative;
     margin-top: 40px;
-    background-color: #f9f9f9;
-    border: 1px solid #d1d1d1;
+    @include base_style(#f9f9f9, null, $bdr:1px solid #d1d1d1);
     max-width: 210px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
     right: 20px;
 }
@@ -1983,9 +1785,7 @@ a.run_kpi.btn {
 .card_dropdown-content h3 {
     padding: 10px;
     font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    background: $blue;
+    @include base_style($blue, #fff, $fw:700 );
 }
 
 .card_dropdown-content a {
@@ -2015,7 +1815,7 @@ a.run_kpi.btn {
 
 .input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {
     background: #fff !important;
-    border-radius: 0;
+    @include border-radius(0);
 }
 
 .db_select.ls_style_none {
@@ -2028,16 +1828,11 @@ a.run_kpi.btn {
 }
 
 ul.db_select li.active>a, a[aria-expanded="true"] {
-    background: none;
-    color: $green;
+    @include base_style(none, $green);
 }
 
 .panel-default>.panel-heading{
-    background: #263854; /* Old browsers */
-    background: -moz-linear-gradient(top,  #263854 0%, #171f33 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
+    @include gradient(#263854, #171f33, top, 0%, 100%);
     color:#fff;
     height: 40px;
 }
@@ -2053,10 +1848,6 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 .note-toolbar.panel-heading{
     background: #eee;
     height: 45px;
-}
-
-.db_select a.dropdown-toggle {
-    float: right;
 }
 
 .db_select label {
@@ -2118,13 +1909,7 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    background: #fff;
-    color: $blue;
-    font-weight: 600;
-}
-
-.cdr_table {
-    display: none;
+    @include base_style(#fff, $blue, $fw:600);
 }
 
 .cdr_results_table {
@@ -2153,8 +1938,6 @@ h4.panel-title a{
 
 .user_links_modal h3 span{color: #111;}
 
-.multi_db{display: none;}
-
 .multi_db.show_multi_db{
   display: block;
 }
@@ -2162,23 +1945,17 @@ h4.panel-title a{
 #kpi_select.multiselect + .btn-group li a label{
     padding: 0px;
     padding-left: 30px;
-
 }
 
 .checkbox.mb20{
     margin-bottom: 20px;
 }
 
-.fltlft{float: left;margin-right: 20px;}
 .undoselection_btn{
-    color: #d9534f;
-    font-weight: 600;
+    @include base_style(null, #d9534f, $fw:600);
     position: relative;
     top:9px;
 }
-
-#editRecipModal input.form-control{background: #eee;}
-#editRecipModal .alert{display: none;}
 
 p.name span.name{width: 150px;}
 p.name i{margin-right: 5px;}
@@ -2206,7 +1983,6 @@ p.name i{margin-right: 5px;}
 
 .avg_wait_time_max{right: 6%;}
 .card.flipping_card .title.mb15{margin-bottom: 15px;}
-
 
 .rules_table tbody tr td .btn{
     max-width: 170px;
@@ -2303,8 +2079,7 @@ div.vertical-line{
 }
 
 .table>thead>tr>th{
-    background: $green;
-    color: #fff;
+    @include base_style($green, #fff);
 }
 
 .form-holder.welcome_box{
@@ -2390,8 +2165,7 @@ div.vertical-line{
 .demo_user_table_holder{overflow-x:auto;}
 
 .modal-body h3.leaddetail_name{
-    color:$blue;
-    font-weight: 600;
+    @include base_style(null, $blue, $fw:600);
     font-size: 25px;
     margin-bottom: 25px !important;
 }
@@ -2414,30 +2188,25 @@ div.vertical-line{
 .bbnone{border-bottom: none;}
 
 .add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
-    color: $green;
+    @include base_style(null, $green, $fw:600);
     font-size: 15px;
-    font-weight: 600;
-
     &:hover{color: darken($green,10%);}
     &:focus{color: darken($green,10%);}
 }
 
 a.remove_filter{
     color: #d9534f;
-    float: right;
     font-size: 15px;
 }
 
 .leadfilter_row .card{overflow: auto;}
 
 .btn.btn-reset{
-    background: #ccc;
-    color:#333;
+    @include base_style(#ccc, #333);
     margin-right: 10px;
 
     &:hover{
-        color: #333 !important;
-        background:  darken(#ccc, 5%);
+        @include base_style(darken(#ccc, 5%), #333 !important);
     }
 }
 
@@ -2473,8 +2242,7 @@ a.remove_filter{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
     background: white;
     cursor: inherit;
@@ -2492,15 +2260,12 @@ a.remove_filter{
     margin-bottom: 20px;
 }
 
-.cb{clear: both;}
-
 p.filename {
     float: left;
     margin-top: 7px;
 }
 
 a.toggle_instruc {
-    float: right;
     color: #33A09B;
     font-size: 18px;
     position: relative;
@@ -2509,11 +2274,6 @@ a.toggle_instruc {
 
 .alert-info.alert-block button.close{
     color: #d9534f;
-}
-
-.dialerlist_icon{
-    float: right;
-    color: $green;
 }
 
 .panel-title a:after {
@@ -2535,14 +2295,14 @@ a.toggle_instruc {
 .webhook_fields{
     .field{
         input.form-control, select{background: #eee !important;height: 40px;};
-        &:nth-child(even){
-            background: lighten(#EDF3F5, 1%);
-        }
+        
+        &:nth-child(even){background: lighten(#EDF3F5, 1%);}
+
         border-bottom: 1px solid darken(#E1E9EC, 2%);
         padding-top: 15px;
         overflow: auto;
 
-         p.active{color:$green;}
+        p.active{color:$green;}
 
         .fa-times-circle{
             font-size: 16px;
@@ -2559,7 +2319,7 @@ a.toggle_instruc {
         }
     }
 
-    label{float: right;margin-top: 10px;}
+    label{margin-top: 10px;}
 
     h3{
         border-bottom: 1px solid #ddd ;
@@ -2590,12 +2350,11 @@ a.toggle_instruc {
 
     form{
         padding: 20px;
-        border:1px solid #1b293c;
+        border:1px solid #ddd;
     }
 
     button.btn.generate_url{
-        background: $green ;
-        border:1px solid $green;
+        @include base_style($green, null, $bdr:1px solid $green);
         float: right;
 
         &:hover{
@@ -2609,9 +2368,8 @@ a.toggle_instruc {
 
     form.add_custom_field{
         padding: 20px;
-        border-radius: 5px;
-        background: lighten(#ddd, 1%) !important;
-        border: 1px solid darken(#ddd, 3%);
+        @include border-radius(5px);
+        @include base_style(lighten(#ddd, 1%) !important, null, $bdr: 1px solid darken(#ddd, 3%));
 
         div.form-group input.form-control {
             background: #eee !important;
@@ -2621,10 +2379,8 @@ a.toggle_instruc {
 
 .final_url_cnt{
     textarea.url.form-control{
-        color: $blue;
         @include border-radius(5px);
-        background: lighten(#ddd, 1%) !important;
-        border: 1px solid darken(#ddd, 3%);
+        @include base_style(lighten(#ddd, 1%) !important, $blue, $bdr:1px solid darken(#ddd, 3%));
         min-height: 100px;
         padding: 12px;
 
@@ -2633,8 +2389,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger{
-    background: #f2dede;
-    color:#a94442;
+    @include base_style(#f2dede, #a94442);
 }
 
 [hidden] {
@@ -2652,10 +2407,9 @@ td.bg-danger{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }
@@ -2663,8 +2417,7 @@ td.bg-danger{
 .label-info{font-size: 13px;margin-left: 10px;}
 
 .btn-secondary{
-    background: #ccc;
-    color: #444;
+    @include base_style(#ccc, #444);
 
     &:hover{
         background: #bbb;
@@ -2677,9 +2430,6 @@ td.bg-danger{
     position: relative;
     top:25px;
 }
-
-//prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a {display: none;}
 
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
@@ -2698,17 +2448,14 @@ td.bg-danger{
 }
 
 p.login_date {
-    float: right;
     font-weight: 600;
     margin-right: 10px;
 }
 
-
 .bwr_omni table thead th a{display: none;}
 
 .btn-notifications{
-    background:none;
-    color:$green;
+    @include base_style(none, $green);
     position:relative;
     font-size: 18px;
     bottom:2px;
@@ -2719,22 +2466,15 @@ p.login_date {
 }
 
 span.numb_notifications{
+    @include base_style($orange, #fff);
+    @include border-radius(20px);
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
-    @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
-}
-
-.btn-secondary.cancel{
-    float: left;
-    margin-top: 10px;
-    margin-right: 15px;
 }
 
 #sidebar_nots .not_header h4{
@@ -2747,7 +2487,6 @@ span.numb_notifications{
     }
 }
 
-.calls_per_hour table thead th a {display: none;}
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 .card.oauto{overflow: auto;}
 .kpi_change_info{
@@ -2824,7 +2563,6 @@ MEDIAQUERIES
     }
 }
 
-
 @media handheld, only screen and (max-width: 1300px){
     .flowchart_element{
 
@@ -2869,7 +2607,6 @@ MEDIAQUERIES
             height: 75px;
         }
     }
-
 }
 
 @media handheld, only screen and (max-width:1010px) {
@@ -2892,17 +2629,12 @@ MEDIAQUERIES
         padding-left: 0;
         padding-right: 0;
     }
-
 }
 
 @media handheld, only screen and (max-width:991px) {
     .match_height_4_gt, .match_height_4_st {
         margin-bottom: 20px;
         padding: 0;
-    }
-
-    .col-md-4.col-sm-12.set_hgt, .get_hgt {
-        // padding: 0;
     }
 
     .mb80{margin-bottom: 80px;}
@@ -2928,9 +2660,6 @@ MEDIAQUERIES
         margin-bottom: 20px;
     }
 
-    /*.total_calls_in, .total_calls_out{
-      max-height: 160px;
-    }*/
     .total_calls_in h2, .total_calls_out h2 {
         font-size: 23px;
         margin-bottom: 20px;
@@ -2939,7 +2668,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 55px;
     }
-
 }
 
 @media (min-width:768px) {
@@ -3000,10 +2728,6 @@ MEDIAQUERIES
         margin-top: 120px;
     }
 
-    canvas#service_level {
-        // margin-bottom: 30px;
-    }
-
     .col-sm-3.report_download {
         margin-top: 20px;
     }
@@ -3021,7 +2745,6 @@ MEDIAQUERIES
         width: 50px;
     }
 
-    /*.col-sm-3.report_download{margin-bottom: 20px;}*/
     .col-sm-3.report_download h3 {
         margin-top: 0;
     }
@@ -3058,12 +2781,6 @@ MEDIAQUERIES
     }
 }
 
-/*@media handheld, only screen and (max-width: 668px){
-img.text_logo{
-  display: none;
-}
-
-}*/
 @media handheld, only screen and (max-width:556px) {
 
     .form-holder.welcome_box h1{font-size: 30px;}
@@ -3176,10 +2893,5 @@ img.text_logo{
     .col-xs-6 .card h1.title {
         font-size: 12px;
     }
-
 }
 
-/*@media handheld, only screen and (min-width: 552px) {
-  .nopad{padding: 0;}
-}
-*/

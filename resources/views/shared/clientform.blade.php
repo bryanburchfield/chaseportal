@@ -1,7 +1,7 @@
     <div class="col-sm-6 mb0 card">
         <h2 class="page_heading">{{ ($mode == 'edit') ? __('users.edit') : __('users.new') }} {{__('users.user')}}</h2>
 
-        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form ' . $mode . '_user']) !!}
+        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form fc_style ' . $mode . '_user']) !!}
 
             @can('accessSuperAdmin')
             <div class="form-group">
@@ -53,8 +53,9 @@
             @endif
 
             {!! Form::submit(($mode == 'edit' ? __('users.update') : __('users.create')) . ' User', ['class'=>'btn btn-primary mb0'] ) !!}
-
-            <div class="alert alert-danger mt20"></div>
+            
+            <div class="alert alert-success mt20 hidetilloaded"></div>
+            <div class="alert alert-danger mt20 hidetilloaded"></div>
 
         {!! Form::close() !!}
     </div>

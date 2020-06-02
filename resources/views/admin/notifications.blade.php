@@ -19,7 +19,7 @@
 						<div class="col-sm-8 mb20 card">
 							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
-							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form
+							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form fc_style
 							create_notification']) !!}
 							<div class="form-group">
 								{!! Form::label('title', 'Title') !!}
@@ -40,7 +40,7 @@
 							</div>
 
 							@if(!empty($feature_message->id))
-								<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary">Cancel</a>
+								<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary flt_lft">Cancel</a>
 							@endif
 
 							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>

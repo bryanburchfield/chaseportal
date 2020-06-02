@@ -20,7 +20,7 @@
 								<h2 class="page_heading">Edit Myself</h2>
 
 								{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form
-								edit_myself']) !!}
+								edit_myself fc_style']) !!}
 								<div class="form-group">
 									{!! Form::label('group_id', 'Group ID') !!}
 									{!! Form::text('group_id', Auth::user()->group_id, ['class'=>'form-control

@@ -2,12 +2,12 @@
 @if($page['type'] =='dash')
     @if($has_multiple_dbs)
 
-        <div class="btn-group">
+        <div class="btn-group flt_rgt">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span>{{__('general.database')}}</span>
             </button>
 
-            <ul class="dropdown-menu db_select stop-propagation">
+            <ul class="dropdown-menu db_select flt_rgt stop-propagation">
                 @foreach ($db_list as $db)
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">
@@ -23,14 +23,14 @@
 @endif
 
 @if($page['type']=='report')
-    <div class="btn-group">
+    <div class="btn-group flt_rgt">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="window.location.href = 'reportsettings.php';">
             <span>Report Settings</span>
         </button>
     </div>
 @endif
 
-<div class="btn-group">
+<div class="btn-group flt_rgt">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span>{{__('general.interaction')}}</span>
     </button>
@@ -55,7 +55,7 @@
     </ul>
 </div>
 
-<div class="btn-group">
+<div class="btn-group flt_rgt">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span>{{__('general.date')}}</span>
     </button>

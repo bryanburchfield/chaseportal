@@ -28,7 +28,7 @@
 
                                 <div class="tab-content">
                                     <div class="tab-pane active mt30" id="drip_campaigns">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
 											<a href="#" class="btn btn-primary create_new_drip" data-toggle="modal" data-target="#createCampaignModal">{{__('tools.create_campaign')}}</a>
                                         	<div class="table-responsive nobdr drip_campaigns">
                                         		<table class="table mt20">
@@ -93,7 +93,7 @@
                                     </div>
 
                                     <div class="tab-pane mt30" id="email_service_providers">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_server_modal">{{__('tools.add_provider')}}</a>
 
                                             <div class="table-responsive nobdr email_service_providers">
@@ -147,16 +147,17 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form add_esp">
+                <form action="#" method="post" class="form add_esp fc_style">
                     @include('tools.email_drip.email_service_provider')
-                    <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
-                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
+                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_esp flt_lft" value="{{__('tools.add_provider')}}">
+                    <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                
             </div>
         </div>
     </div>
@@ -172,16 +173,17 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_esp">
+                <form action="#" method="post" class="form edit_es fc_style">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
-                    <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
+                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader flt_lft">{{__('tools.save_changes')}}</button>
+                    <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                
             </div>
         </div>
     </div>
@@ -220,17 +222,19 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form create_campaign_form">
+                <form action="#" method="post" class="form create_campaign_form fc_style">
                     @include('tools.email_drip.shared.campaign_form_fields')
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0">{{__('tools.create_campaign')}}</button>
+                     <button type="button" class="btn btn-secondary cancel_modal_form mt10 mr10 flt_lft" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0 flt_lft">{{__('tools.create_campaign')}}</button>
+                   
                 </form>
             </div>
 
 	        <div class="modal-footer">
-                <button type="button" class="btn btn-secondary cancel_modal_form" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
+                
 	        </div>
 	    </div>
     </div>
@@ -246,7 +250,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_campaign_form">
+                <form action="#" method="post" class="form edit_campaign_form fc_style">
 
                     @include('tools.email_drip.shared.campaign_form_fields')
 

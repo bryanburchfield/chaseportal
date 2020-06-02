@@ -40,12 +40,12 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data abandoned"></p>
                 <p class="type">{{__('widgets.abandoned')}}</p>
             </div>
 
-            <div class="outbound">
+            <div class="outbound flt_rgt">
                 <p class="data voicemails"></p>
                 <p class="type">{{__('widgets.voicemails')}}</p>
             </div>
@@ -82,12 +82,12 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>
 
-            <div class="outbound">
+            <div class="outbound flt_rgt">
                 <p class="data highest"></p>
                 <p class="type">{{__('widgets.highest')}}</p>
             </div>
@@ -107,12 +107,12 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>
 
-            <div class="outbound">
+            <div class="outbound flt_rgt">
                 <p class="data highest"></p>
                 <p class="type">{{__('widgets.highest')}}</p>
             </div>
@@ -133,12 +133,12 @@
 
             <div class="divider"></div>
 
-            <div class="inbound">
+            <div class="inbound flt_lft">
                 <p class="data lowest"></p>
                 <p class="type">{{__('widgets.lowest')}}</p>
             </div>
 
-            <div class="outbound">
+            <div class="outbound flt_rgt">
                 <p class="data highest"></p>
                 <p class="type">{{__('widgets.highest')}}</p>
             </div>
@@ -171,7 +171,7 @@
         <div class="card-6 card">
             <h1 class="title">{{__('widgets.call_volume')}}</h1>
 
-            <div class="inbound inandout">
+            <div class="inbound inandout cb mt60">
                 <canvas id="call_volume_inbound"></canvas>
             </div>
         </div>
@@ -328,7 +328,7 @@
     <div class="col-sm-9">
         <div class="card card-12">
             <h1 class="title">{{__('widgets.agent_call_status')}}</h1>
-            <div class="inbound inandout" style="min-height:340px;">
+            <div class="inbound inandout cb" style="min-height:340px;">
                 <canvas id="agent_call_status"></canvas>
             </div>
         </div>

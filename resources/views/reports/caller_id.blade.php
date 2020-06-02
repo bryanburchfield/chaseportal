@@ -2,10 +2,10 @@
 @section('title', __('general.reports'))
 
 @section('content')
-	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm btn_flt_rgt"><i class="fas fa-info-circle"></i> Info</a>
+	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm flt_rgt"><i class="fas fa-info-circle"></i> Info</a>
 	<h3 class="heading">{{__('reports.caller_id')}}</h3>
 
-	<div class="report_filters card col-sm-12">
+	<div class="report_filters card col-sm-12 fc_style">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
 			<div class="row">
@@ -59,7 +59,7 @@
 		<div class="col-sm-12">
 			<div class="card card-6 hidetilloaded pb5" >
 				<h1 class="title fw600">{{__('reports.calls_by_caller_ID')}}</h1>
-				<div class="inbound inandout" style="min-height:300px;">
+				<div class="inbound inandout cb" style="min-height:300px;">
 					<canvas id="caller_id_graph"></canvas>
 				</div>
 			</div>

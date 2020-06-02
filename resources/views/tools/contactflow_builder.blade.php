@@ -36,7 +36,7 @@ if (Auth::user()->isType('demo')) {
 
                                 <div class="tab-content">
                                     <div class="tab-pane active mt30" id="lead_rules">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <h2 class="page_heading"><i class="fa fa-cog"></i> {{__('tools.rules')}}</h2>
                                             <div class="table-responsive nobdr">
                                                 <table class="table rules_table mt20">
@@ -107,7 +107,7 @@ if (Auth::user()->isType('demo')) {
                                             <div class="row">
                                                 <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                                                     <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
-                                                    {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_rule']) !!}
+                                                    {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 fc_style add_rule']) !!}
 
                                                     <div class="card">
                                                         <div class="form-group">
@@ -189,7 +189,7 @@ if (Auth::user()->isType('demo')) {
 
                                                         <a href="#" class="add_leadrule_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
 
-                                                        <div class="alert alert-danger filter_error mt20">{{__('tools.filter_error')}}</div>
+                                                        <div class="alert alert-danger filter_error hidetilloaded mt20">{{__('tools.filter_error')}}</div>
 
                                                     </div>
                                                 </div>
@@ -231,7 +231,7 @@ if (Auth::user()->isType('demo')) {
                                                         @else
                                                         {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
                                                         @endif
-                                                        <div class="alert alert-danger add_rule_error mt20"></div>
+                                                        <div class="alert alert-danger add_rule_error hidetilloaded mt20"></div>
                                                     </div>
                                                 {!! Form::close() !!}
                                                 </div>
@@ -240,7 +240,7 @@ if (Auth::user()->isType('demo')) {
                                     </div>
 
                                     <div class="tab-pane mt30" id="move_history">
-                                        <div class="col-sm-12 nopad">
+                                        <div class="col-sm-12 p0">
                                             <div class="card">
                                                 <h2 class="page_heading"><i class="fa fa-history"></i> {{__('tools.lead_move_history')}}</h2>
 

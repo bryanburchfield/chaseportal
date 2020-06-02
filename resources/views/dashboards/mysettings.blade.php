@@ -19,7 +19,7 @@
 						<h2>{{__('general.my_settings')}}</h2>
 
 						<div class="col-sm-6 card">
-							{!! Form::open(['method'=>'POST', 'class'=>'form user_settings', 'name' => 'user_settings']) !!}
+							{!! Form::open(['method'=>'POST', 'class'=>'form fc_style user_settings', 'name' => 'user_settings']) !!}
 
 								<div class="form-group">
 									{!! Form::label('name', __('general.full_name')) !!}

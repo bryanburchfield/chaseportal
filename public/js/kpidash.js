@@ -224,7 +224,7 @@ var KPI = {
                 $('#editRecipModal .modal-body form .kpi_list').empty();
                 $('#editRecipModal .modal-body form .user_id').val(id);
 
-                var kpi_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+                var kpi_list='<div class="checkbox mb20 select_all flt_lft mr20"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
                 var selected;
 
                 for(var i=0; i<response.kpi_list.length;i++){

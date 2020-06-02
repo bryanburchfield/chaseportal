@@ -16,31 +16,29 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div id="webhook_generator">
-							<div class="col-sm-12">
-								<div class="col-sm-6 mt30 mb20 card">
-									<h2 class="page_heading">Webhook Generator</h2>
-									<div class="form-group">
-										<label>Group ID</label>
-										<input type="text" class="form-control" name="group_id" id="group_id">
-									</div>
-
-									<div class="form-group">
-						                {!! Form::label('db', 'Database') !!}
-						                {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
-						            </div>
-
-									<div class="form-group">
-										<label>Table</label>
-										<select name="client_table" id="client_table" class="form-control"></select>
-									</div>
-
-									<div class="form-group">
-										<label>Posting URL</label>
-										<input type="text" class="form-control" name="posting_url" id="posting_url">
-									</div>
-
-									<div class="alert alert-danger"></div>
+							<div class="col-sm-6 mt30 mb20 card fc_style">
+								<h2 class="page_heading">Webhook Generator</h2>
+								<div class="form-group">
+									<label>Group ID</label>
+									<input type="text" class="form-control" name="group_id" id="group_id">
 								</div>
+
+								<div class="form-group">
+					                {!! Form::label('db', 'Database') !!}
+					                {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+					            </div>
+
+								<div class="form-group">
+									<label>Table</label>
+									<select name="client_table" id="client_table" class="form-control"></select>
+								</div>
+
+								<div class="form-group">
+									<label>Posting URL</label>
+									<input type="text" class="form-control" name="posting_url" id="posting_url">
+								</div>
+
+								<div class="alert alert-danger hidetilloaded"></div>
 							</div>
 						</div>
 
@@ -57,7 +55,7 @@
 										</div>
 
 										<div class="col-sm-2">
-											<label class="checkbox-inline"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
+											<label class="checkbox-inline flt_rgt"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
 										</div>
 									</div>
 
@@ -77,14 +75,14 @@
 											</div>
 
 											<div class="col-sm-2">
-												<label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+												<label class="checkbox-inline flt_rgt"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
 											</div>
 										</div>
 									@endforeach
 								</div>
 
 								<div class="col-sm-7">
-									<form action="#" method="post" class="form-inline add_custom_field">
+									<form action="#" method="post" class="form-inline add_custom_field fc_style card">
 										<h3>Add Custom Field</h3>
 										<div class="form-group mr10">
 											<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>

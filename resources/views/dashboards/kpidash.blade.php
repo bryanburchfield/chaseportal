@@ -9,23 +9,23 @@
         @foreach(\App\Models\Kpi::getKpis() as $kpi)
 
         <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">
-            <a href="#" class="kpi_trigger"> {{  __('kpi.' . $kpi->name) }}</a>
+            <a href="#" class="kpi_trigger flt_lft"> {{  __('kpi.' . $kpi->name) }}</a>
 
-            <div class="controls">
-                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
-                <label class="switch">
+            <div class="controls flt_rgt">
+                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm flt_lft"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
+                <label class="switch flt_rgt">
                     <input type="checkbox" {{ ($kpi->active) ? 'checked' : '' }} name="kpi_input">
                     <span></span>
                 </label>
             </div>
 
-            <div class="kpi">
+            <div class="kpi cb hidetilloaded">
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
                 <div class="row mt30 options kpi_options_top">
                     <div class="col-sm-4">
-                        <h4 class="expand_dets"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
+                        <h4 class="expand_dets flt_lft"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
                         <div class="expanded_options clear card">
-                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval">
+                            <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval fc_style">
                                 <div class="form-group">
                                     <label for="type">{{__('kpi.interval')}}</label>
                                     <select name="interval" class="form-control interval"  required>
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <h4 class="expand_dets"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
+                        <h4 class="expand_dets flt_lft"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
                         <div class="expanded_emails clear">
 
                         @forelse($kpi->recipients as $r)
@@ -56,8 +56,8 @@
                                     @endif
                                 </p>
                                 @if(!Auth::user()->isType('demo') || $r->user_id == Auth::user()->id)
-                                    <a class="edit_recip_glyph" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
-                                    <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
+                                    <a class="edit_recip_glyph flt_lft" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
+                                    <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph flt_lft" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                                 @endif
                             </div>
                         @empty

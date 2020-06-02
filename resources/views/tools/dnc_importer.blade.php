@@ -29,7 +29,7 @@
 							<h2 class="bbnone mb20">{{__('tools.dnc_files')}}</h2>
 
 							<div class="card instructions">
-								<a href="#" class="toggle_instruc"><i class="fas fa-angle-up"></i></a>
+								<a href="#" class="toggle_instruc flt_rgt"><i class="fas fa-angle-up"></i></a>
 								<h3><b>{{__('tools.instructions')}}</b></h3>
 								<div class="mt20 instuc_div">
 									<ul class="pl10 paditem5">

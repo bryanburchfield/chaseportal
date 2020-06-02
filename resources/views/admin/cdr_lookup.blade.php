@@ -17,7 +17,7 @@
 					<div class="col-sm-12 mt30">
 						<div class="report_filters card">
 							<h2 class="page_heading">CDR Lookup</h2>
-							<form action="#" method="POST" class="form cdr_lookup_form" name="cdr_lookup_form"
+							<form action="#" method="POST" class="form fc_style cdr_lookup_form" name="cdr_lookup_form"
 								id="">
 								<div class="row">
 
@@ -69,7 +69,7 @@
 							</form>
 						</div> <!-- end report_filters -->
 
-						<div class="table-responsive cdr_table ">
+						<div class="table-responsive cdr_table hidetilloaded fc_style">
 							<table class="cdr_results_table table table-hover reports_table" id="cdr_dataTable">
 								<thead>
 									<tr role="row">
