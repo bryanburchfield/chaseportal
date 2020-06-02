@@ -6,6 +6,7 @@ use App\Models\PauseCode;
 use App\Traits\DashTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ComplianceDashController extends Controller
 {
@@ -100,7 +101,21 @@ class ComplianceDashController extends Controller
         ]];
     }
 
-    private function getAgentCompliance()
+    public function agentDetail(Request $request)
+    {
+        Log::warning($request->all());
+        Log::warning($request->rep);
+
+        $this->getSession($request);
+
+        $agent_detail = $this->getAgentCompliance($request->rep);
+
+        return ['agent_detail' => [
+            'agent_detail' => $agent_detail,
+        ]];
+    }
+
+    private function getAgentCompliance($rep = null)
     {
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
@@ -119,7 +134,8 @@ class ComplianceDashController extends Controller
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT AA.Rep, AA.Date, AA.Campaign, [Action], AA.Duration, AA.Details
+
+            $sql .= " $union SELECT AA.id, AA.Rep, AA.Date, AA.Campaign, [Action], AA.Duration, AA.Details
             FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
 
             $sql .= "
@@ -127,12 +143,24 @@ class ComplianceDashController extends Controller
             AND AA.Date >= :startdate$i
             AND AA.Date < :enddate$i";
 
+            if ($rep !== null) {
+                $sql .= " AND AA.Rep = :rep$i";
+                $bind['rep' . $i] = $rep;
+            }
+
             $union = 'UNION';
         }
 
         $sql .= " ORDER BY Rep, Date";
 
-        $results = $this->processResults($sql, $bind);
+        Log::info($sql);
+        Log::info($bind);
+
+        list($results, $details) = $this->processResults($sql, $bind);
+
+        if ($rep !== null) {
+            return $details;
+        }
 
         return $results;
     }
@@ -146,6 +174,7 @@ class ComplianceDashController extends Controller
         $results = [];
 
         // loop thru results looking for log in/out times
+        $detail_array = [];
         $tmparray = [];
         $blankrec = [
             'Rep' => '',
@@ -172,8 +201,14 @@ class ComplianceDashController extends Controller
             switch ($rec['Action']) {
                 case 'Login':
                     $campaign_ok = $this->checkCampaign($rec['Campaign']);
+                    if ($campaign_ok) {
+                        $detail_array[] = $this->detailRec($rec);
+                    }
                     break;
                 case 'Logout':
+                    if ($campaign_ok) {
+                        $detail_array[] = $this->detailRec($rec);
+                    }
                     $campaign_ok = false;
                     break;
                 case 'Paused':
@@ -182,16 +217,21 @@ class ComplianceDashController extends Controller
                             $tmparray[$i]['PausedTime'] += $rec['Duration'];
                         }
                         $tmparray[$i]['PauseRecs'][] = [
+                            'id' => $rec['id'],
                             'Date' => substr($rec['Date'], 0, 26),  // strip offest
                             'Campaign' => $rec['Campaign'],
                             'Duration' => $rec['Duration'],
                             'Details' => $rec['Details'],
                         ];
+                        $detail_array[] = $this->detailRec($rec);
                     }
                     break;
                 default:
                     if ($campaign_ok) {
-                        $tmparray[$i]['WorkedTime'] += $rec['Duration'];
+                        if ($rec['Duration'] > 0) {
+                            $tmparray[$i]['WorkedTime'] += $rec['Duration'];
+                            $detail_array[] = $this->detailRec($rec);
+                        }
                     }
             }
         }
@@ -225,11 +265,45 @@ class ComplianceDashController extends Controller
             $rec['AllowedPausedTime'] = $this->secondsToHms($rec['AllowedPausedTime']);
             $rec['TotWorkedTime'] = $this->secondsToHms($rec['TotWorkedTime']);
 
-            $rec['detail_link'] = action('ComplianceDashController@agentCompliance');
+            // TODO:  change this to actual route
+            $rec['detail_link'] = action('ComplianceDashController@agentDetail', ['rep' => $rec['Rep']]);
             $results[] = $rec;
         }
 
-        return $results;
+        Log::debug($results);
+        // Log::debug($detail_array);
+
+        return [$results, $detail_array];
+    }
+
+    private function detailRec($rec)
+    {
+        $detail = [
+            'id' => $rec['id'],
+            'Date' => $rec['Date'],
+            'Action' => $rec['Action'],
+            'Details' => '',
+            'WorkedTime' => 0,
+            'PausedTime' => 0,
+            'AllowedPausedTime' => 0,
+        ];
+
+        switch ($rec['Action']) {
+            case 'Login':
+                $detail['Details'] = $rec['Campaign'];
+                break;
+            case 'Logout':
+                $detail['Details'] = $rec['Campaign'];
+                break;
+            case 'Paused':
+                $detail['Details'] = $rec['Details'];
+                $detail['PausedTime'] = $rec['Duration'];
+                break;
+            default:
+                $detail['Workedtime'] = $rec['Duration'];
+        }
+
+        return $detail;
     }
 
     private function calcAllowedPausedTime(array $pause_recs)
