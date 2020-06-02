@@ -125,6 +125,7 @@ var Dashboard = {
                               $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
                             }
                         },
+                        "autoWidth":false,
                         "bDestroy": true,
                         "responsive": true,
                         "language": {
