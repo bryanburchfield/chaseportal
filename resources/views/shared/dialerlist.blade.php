@@ -72,7 +72,8 @@
                                             <table class="table table-responsive table-striped nobdr">
                                                 <thead>
                                                     <tr>
-                                                        <th>{{__('users.client')}}</th>
+                                                        <th>{{__('users.name')}}</th>
+                                                        <th>{{__('users.user_type')}}</th>>
                                                         <th>{{__('users.links')}}</th>
                                                         <th>{{__('users.edit')}}</th>
                                                         <th>{{__('users.delete')}}</th>
@@ -80,10 +81,11 @@
                                                 </thead>
 
                                                 <tbody>
-                                                @foreach($users->sortBy('group_id') as $user)
+                                                @foreach($users->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE) as $user)
                                                     @if($id == $user->group_id)
                                                         <tr id="user{{$user->id}}" data-id="{{$user->id}}">
-                                                        <td>{{$user->group_id}} - {{$user->name}}</td>
+                                                        <td>{{$user->name}}</td>
+                                                        <td>{{$user->user_type}}</td>
                                                         <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
                                                         <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
                                                         <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
@@ -104,7 +106,8 @@
                             <table class="table table-responsive table-striped nobdr">
                                 <thead>
                                     <tr>
-                                        <th>{{__('users.client')}}</th>
+                                        <th>{{__('users.name')}}</th>
+                                        <th>{{__('users.user_type')}}</th>
                                         <th>{{__('users.links')}}</th>
                                         <th>{{__('users.edit')}}</th>
                                         <th>{{__('users.delete')}}</th>
@@ -112,9 +115,10 @@
                                 </thead>
 
                                 <tbody>
-                                @foreach($users->sortBy('group_id') as $user)
+                                @foreach($users->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE) as $user)
                                     <tr id="user{{$user->id}}" data-id="{{$user->id}}">
-                                    <td>{{$user->group_id}} - {{$user->name}}</td>
+                                    <td>{{$user->name}}</td>
+                                    <td>{{$user->user_type}}</td>
                                     <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
                                     <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
                                     <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
