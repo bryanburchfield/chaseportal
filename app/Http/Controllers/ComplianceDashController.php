@@ -224,10 +224,10 @@ class ComplianceDashController extends Controller
             $rec['PausedTime'] = $this->secondsToHms($rec['PausedTime']);
             $rec['AllowedPausedTime'] = $this->secondsToHms($rec['AllowedPausedTime']);
             $rec['TotWorkedTime'] = $this->secondsToHms($rec['TotWorkedTime']);
+
+            $rec['detail_link'] = action('ComplianceDashController@agentCompliance');
             $results[] = $rec;
         }
-
-        // Log::debug($results);
 
         return $results;
     }
