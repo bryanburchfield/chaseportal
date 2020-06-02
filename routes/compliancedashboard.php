@@ -9,5 +9,6 @@ Route::prefix('compliancedashboard')->group(function () {
 
         // ajax targets
         Route::post('get_compliance', 'ComplianceDashController@agentCompliance');
+        Route::post('get_details/{rep}', 'ComplianceDashController@agentDetail');
     });
 });
