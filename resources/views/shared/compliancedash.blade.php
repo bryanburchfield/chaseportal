@@ -45,18 +45,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_provider')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">Agent Details</h4>
             </div>
 
             <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
-                <input type="hidden" name="id" id="id" value="">
-                <div class="alert alert-danger hidetilloaded mt20"></div>
-            </div>
+                <div class="table-responsive">
+                    <table class="table table-striped agent_details">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Worked Time</th>
+                                <th>Paused Time</th>
+                                <th>Allowed Paused Time</th>                                
+                            </tr>
+                        </thead>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_email_service_provider add_btn_loader"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
