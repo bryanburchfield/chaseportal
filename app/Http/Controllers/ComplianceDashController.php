@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PauseCode;
 use App\Traits\DashTraits;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ComplianceDashController extends Controller
 {
@@ -103,9 +103,6 @@ class ComplianceDashController extends Controller
 
     public function agentDetail(Request $request)
     {
-        Log::warning($request->all());
-        Log::warning($request->rep);
-
         $this->getSession($request);
 
         $agent_detail = $this->getAgentCompliance($request->rep);
@@ -153,9 +150,6 @@ class ComplianceDashController extends Controller
 
         $sql .= " ORDER BY Rep, Date";
 
-        Log::info($sql);
-        Log::info($bind);
-
         list($results, $details) = $this->processResults($sql, $bind);
 
         if ($rep !== null) {
@@ -174,7 +168,7 @@ class ComplianceDashController extends Controller
         $results = [];
 
         // loop thru results looking for log in/out times
-        $detail_array = [];
+        $rep_details = new Collection();
         $tmparray = [];
         $blankrec = [
             'Rep' => '',
@@ -202,12 +196,12 @@ class ComplianceDashController extends Controller
                 case 'Login':
                     $campaign_ok = $this->checkCampaign($rec['Campaign']);
                     if ($campaign_ok) {
-                        $detail_array[] = $this->detailRec($rec);
+                        $rep_details->push($this->detailRec($rec));
                     }
                     break;
                 case 'Logout':
                     if ($campaign_ok) {
-                        $detail_array[] = $this->detailRec($rec);
+                        $rep_details->push($this->detailRec($rec));
                     }
                     $campaign_ok = false;
                     break;
@@ -223,14 +217,14 @@ class ComplianceDashController extends Controller
                             'Duration' => $rec['Duration'],
                             'Details' => $rec['Details'],
                         ];
-                        $detail_array[] = $this->detailRec($rec);
+                        $rep_details->push($this->detailRec($rec));
                     }
                     break;
                 default:
                     if ($campaign_ok) {
                         if ($rec['Duration'] > 0) {
                             $tmparray[$i]['WorkedTime'] += $rec['Duration'];
-                            $detail_array[] = $this->detailRec($rec);
+                            $rep_details->push($this->detailRec($rec));
                         }
                     }
             }
@@ -249,7 +243,7 @@ class ComplianceDashController extends Controller
 
         // Go thru pause recs adding manhours for allowed pause codes
         foreach ($outerarray as $rec) {
-            $rec['AllowedPausedTime'] = $this->calcAllowedPausedTime($rec['PauseRecs']);
+            $rec['AllowedPausedTime'] = $this->calcAllowedPausedTime($rec['PauseRecs'], $rep_details);
 
             // get rid of detailed pause recs
             unset($rec['PauseRecs']);
@@ -270,10 +264,11 @@ class ComplianceDashController extends Controller
             $results[] = $rec;
         }
 
-        Log::debug($results);
-        // Log::debug($detail_array);
+        $rep_details->map(function ($item) {
+            unset($item['id']);
+        });
 
-        return [$results, $detail_array];
+        return [$results, $rep_details];
     }
 
     private function detailRec($rec)
@@ -306,7 +301,7 @@ class ComplianceDashController extends Controller
         return $detail;
     }
 
-    private function calcAllowedPausedTime(array $pause_recs)
+    private function calcAllowedPausedTime(array $pause_recs, Collection $rep_details)
     {
         $allowed_pause_time = 0;
 
@@ -363,10 +358,19 @@ class ComplianceDashController extends Controller
             // Only add to the total if campaign matches selected
             if ($this->checkCampaign($rec['Campaign'])) {
                 if ($tot_time > ($pause_code->minutes_per_day * 60)) {
-                    $allowed_pause_time += ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
+                    $rec_allowed_pause_time = ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
                 } else {
-                    $allowed_pause_time += $rec['Duration'];
+                    $rec_allowed_pause_time = $rec['Duration'];
                 }
+                $allowed_pause_time += $rec_allowed_pause_time;
+
+                // There has got to be a better way to do this
+                $rep_details->transform(function ($item) use ($rec, $allowed_pause_time) {
+                    if ($item['id'] == $rec['id']) {
+                        $item['AllowedPausedTime'] = $allowed_pause_time;
+                    }
+                    return $item;
+                });
             }
 
             // add to day duration
