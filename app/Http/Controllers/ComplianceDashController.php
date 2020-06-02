@@ -266,10 +266,6 @@ class ComplianceDashController extends Controller
             $results[] = $rec;
         }
 
-        $rep_details->map(function ($item) {
-            unset($item['id']);
-        });
-
         return [$results, $rep_details];
     }
 
@@ -277,12 +273,12 @@ class ComplianceDashController extends Controller
     {
         $detail = [
             'id' => $rec['id'],
-            'Date' => $rec['Date'],
+            'Date' =>  $this->utcToLocal($rec['Date'])->toDateTimeString(),
             'Action' => $rec['Action'],
             'Details' => '',
-            'WorkedTime' => 0,
-            'PausedTime' => 0,
-            'AllowedPausedTime' => 0,
+            'WorkedTime' => '',
+            'PausedTime' => '',
+            'AllowedPausedTime' => '',
         ];
 
         switch ($rec['Action']) {
@@ -300,7 +296,7 @@ class ComplianceDashController extends Controller
                 break;
             default:
                 if (round($rec['Duration']) > 0) {
-                    $detail['Workedtime'] = $this->secondsToHms($rec['Duration']);
+                    $detail['WorkedTime'] = $this->secondsToHms($rec['Duration']);
                 }
         }
 
@@ -347,40 +343,41 @@ class ComplianceDashController extends Controller
             $pause_code = $pause_codes->where('code', $rec['Details'])->first();
 
             if (!$pause_code) {
-                continue;
-            }
+                $rec_allowed_pause_time = 0;
+            } else {
 
-            // Increment count
-            $pause_code->day_count++;
+                // Increment count
+                $pause_code->day_count++;
 
-            // skip if over count or over duration
-            if ($pause_code->day_count > $pause_code->times_per_day || $pause_code->day_duration >= ($pause_code->minutes_per_day * 60)) {
-                continue;
-            }
-
-            // figure out duration allowed
-            $tot_time = $pause_code->day_duration + $rec['Duration'];
-
-            // Only add to the total if campaign matches selected
-            if ($this->checkCampaign($rec['Campaign'])) {
-                if ($tot_time > ($pause_code->minutes_per_day * 60)) {
-                    $rec_allowed_pause_time = ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
+                // skip if over count or over duration
+                if ($pause_code->day_count > $pause_code->times_per_day || $pause_code->day_duration >= ($pause_code->minutes_per_day * 60)) {
+                    $rec_allowed_pause_time = 0;
                 } else {
-                    $rec_allowed_pause_time = $rec['Duration'];
-                }
-                $allowed_pause_time += $rec_allowed_pause_time;
 
-                // There has got to be a better way to do this
-                $rep_details->transform(function ($item) use ($rec, $allowed_pause_time) {
-                    if ($item['id'] == $rec['id']) {
-                        $item['AllowedPausedTime'] = $this->secondsToHms($allowed_pause_time);
+                    // figure out duration allowed
+                    $tot_time = $pause_code->day_duration + $rec['Duration'];
+
+                    // Only add to the total if campaign matches selected
+                    if ($this->checkCampaign($rec['Campaign'])) {
+                        if ($tot_time > ($pause_code->minutes_per_day * 60)) {
+                            $rec_allowed_pause_time = ($pause_code->minutes_per_day * 60) - $pause_code->day_duration;
+                        } else {
+                            $rec_allowed_pause_time = $rec['Duration'];
+                        }
+                        $allowed_pause_time += $rec_allowed_pause_time;
                     }
-                    return $item;
-                });
+                }
+                // add to day duration
+                $pause_code->day_duration += $rec['Duration'];
             }
 
-            // add to day duration
-            $pause_code->day_duration += $rec['Duration'];
+            // There has got to be a better way to do this
+            $rep_details->transform(function ($item) use ($rec, $rec_allowed_pause_time) {
+                if ($item['id'] == $rec['id']) {
+                    $item['AllowedPausedTime'] = $this->secondsToHms($rec_allowed_pause_time);
+                }
+                return $item;
+            });
         }
 
         return $allowed_pause_time;
