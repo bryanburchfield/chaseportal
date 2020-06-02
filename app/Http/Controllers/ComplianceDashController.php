@@ -224,7 +224,9 @@ class ComplianceDashController extends Controller
                     if ($campaign_ok) {
                         if ($rec['Duration'] > 0) {
                             $tmparray[$i]['WorkedTime'] += $rec['Duration'];
-                            $rep_details->push($this->detailRec($rec));
+                            if (round($rec['Duration']) > 0) {
+                                $rep_details->push($this->detailRec($rec));
+                            }
                         }
                     }
             }
@@ -291,11 +293,15 @@ class ComplianceDashController extends Controller
                 $detail['Details'] = $rec['Campaign'];
                 break;
             case 'Paused':
-                $detail['Details'] = $rec['Details'];
-                $detail['PausedTime'] = $rec['Duration'];
+                if (round($rec['Duration']) > 0) {
+                    $detail['Details'] = $rec['Details'];
+                    $detail['PausedTime'] = $this->secondsToHms($rec['Duration']);
+                }
                 break;
             default:
-                $detail['Workedtime'] = $rec['Duration'];
+                if (round($rec['Duration']) > 0) {
+                    $detail['Workedtime'] = $this->secondsToHms($rec['Duration']);
+                }
         }
 
         return $detail;
@@ -367,7 +373,7 @@ class ComplianceDashController extends Controller
                 // There has got to be a better way to do this
                 $rep_details->transform(function ($item) use ($rec, $allowed_pause_time) {
                     if ($item['id'] == $rec['id']) {
-                        $item['AllowedPausedTime'] = $allowed_pause_time;
+                        $item['AllowedPausedTime'] = $this->secondsToHms($allowed_pause_time);
                     }
                     return $item;
                 });
