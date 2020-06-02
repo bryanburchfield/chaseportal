@@ -76,6 +76,31 @@ var Dashboard = {
             $('.preloader').fadeOut('slow');
             Master.check_reload();
         });
+
+        $('body').on('click', '.js__modal_link', this.get_details);
+    },
+
+    get_details:function(e){
+
+        e.preventDefault();
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        return $.ajax({
+            url: '/compliancedashboard/get_details',
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+
+            success: function (response) {
+                console.log(response);
+                
+            }
+        });
     },
 
     refresh:function(datefilter, campaign, inorout){
@@ -100,7 +125,7 @@ var Dashboard = {
             data: {},
 
             success: function (response) {
-
+                console.log(response);
                 $('.filter_time_camp_dets p .selected_campaign').html(response.agent_compliance.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
                 $('.agent_compliance_table tbody').empty();
@@ -113,7 +138,7 @@ var Dashboard = {
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
                         reps.push(response.agent_compliance.agent_compliance[i].Rep);
                         pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorkedInteger);
-                        trs += '<tr><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
+                        trs += '<tr><td><a class="js__modal_link" href="#" data-toggle="modal" data-target="#agentModal"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
 
                     $('table.agent_compliance_table').DataTable().clear();
@@ -241,4 +266,8 @@ $(document).ready(function () {
 
 });
 
+// $(document).on('click', '.js__modal_link', function(e){
+//     e.preventDefault();
+//     e.stopPropagation();
+// });
 
