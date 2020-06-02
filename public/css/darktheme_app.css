@@ -1551,7 +1551,6 @@ p.descrip.top14 {
 .agent_compliance_table.table > thead > tr > th {
   min-width: 125px;
   padding: 10px 4px;
-  border: 1px solid red;
 }
 
 .reports_table.table {
