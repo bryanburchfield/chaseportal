@@ -83,7 +83,8 @@ var Dashboard = {
     get_details:function(e){
 
         e.preventDefault();
-        
+        var link = $(this).data('link');
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -91,7 +92,7 @@ var Dashboard = {
         });
 
         return $.ajax({
-            url: '/compliancedashboard/get_details',
+            url: link,
             type: 'POST',
             dataType: 'json',
             data: {},
@@ -138,7 +139,7 @@ var Dashboard = {
                     for (var i = 0; i < response.agent_compliance.agent_compliance.length; i++) {
                         reps.push(response.agent_compliance.agent_compliance[i].Rep);
                         pct_worked.push(response.agent_compliance.agent_compliance[i].PctWorkedInteger);
-                        trs += '<tr><td><a class="js__modal_link" href="#" data-toggle="modal" data-target="#agentModal"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
+                        trs += '<tr><td><a class="js__modal_link" data-link="'+response.agent_compliance.agent_compliance[i].detail_link+'" href="#" data-toggle="modal" data-target="#agentModal"><i data-id="{{$drip->id}}" class="far fa-eye"></i></a></td><td>' + response.agent_compliance.agent_compliance[i].Rep + '</td><td>' + response.agent_compliance.agent_compliance[i].WorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].AllowedPausedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].TotWorkedTime + '</td><td>' + response.agent_compliance.agent_compliance[i].PctWorked + '</td></tr>';
                     }
 
                     $('table.agent_compliance_table').DataTable().clear();
