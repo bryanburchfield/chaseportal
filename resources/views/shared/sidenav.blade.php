@@ -15,9 +15,10 @@
 
         <li data-page="leaderdash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'leaderdash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@leaderDashboard') }}"><i class="fas fa-trophy"></i>{{__('sidenav.leaderboard')}}</a></li>
 
-        <li data-page="leaderdash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'compliancedash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@complianceDashboard') }}"><i class="fas fa-clipboard-check"></i>{{__('sidenav.compliance_dashboard')}}</a></li>
+        <li data-page="compliancedash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'compliancedash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@complianceDashboard') }}"><i class="fas fa-clipboard-check"></i>{{__('sidenav.compliance_dashboard')}}</a></li>
 
         <li data-page="kpidash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'kpidash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@kpi') }}"><i class="fas fa-paper-plane"></i>{{__('sidenav.kpis')}}</a></li>
+        
         <li data-page="reports" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'reports' ? 'class="active"' : ''?> data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>{{__('sidenav.reports')}}</a></li>
 
         @if (config('app.env') != 'production' || Auth::user()->isType('admin'))
