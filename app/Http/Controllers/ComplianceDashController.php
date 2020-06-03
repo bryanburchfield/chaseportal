@@ -116,9 +116,6 @@ class ComplianceDashController extends Controller
     {
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
-        // Back toDate up a second since it's not inclusive
-        $toDate = $toDate->modify('-1 second');
-
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
