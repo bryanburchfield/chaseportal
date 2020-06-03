@@ -254,7 +254,7 @@ class ComplianceDashController extends Controller
                         $rep_details->push($this->detailRec($rec));
                         $pause_recs[] = [
                             'id' => $rec['id'],
-                            'Date' => substr($rec['Date'], 0, 26),  // strip offest
+                            'Date' => $rec['Date'],
                             'Campaign' => $rec['Campaign'],
                             'Duration' => $rec['Duration'],
                             'Details' => $rec['Details'],
