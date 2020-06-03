@@ -105,14 +105,14 @@ class ComplianceDashController extends Controller
     {
         $this->getSession($request);
 
-        $agent_detail = $this->getAgentCompliance($request->rep);
+        $agent_detail = $this->getAgentDetail($request->rep);
 
         return ['agent_detail' => [
             'agent_detail' => $agent_detail,
         ]];
     }
 
-    private function getAgentCompliance($rep = null)
+    private function getAgentCompliance()
     {
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
@@ -122,148 +122,157 @@ class ComplianceDashController extends Controller
 
         $sql = 'SET NOCOUNT ON;';
 
-        $union = '';
-        foreach ($this->databases as $i => $db) {
-            $bind['group_id' . $i] =  Auth::user()->group_id;
-            $bind['startdate' . $i] = $startDate;
-            $bind['enddate' . $i] = $endDate;
+        $bind['group_id'] =  Auth::user()->group_id;
+        $bind['startdate'] = $startDate;
+        $bind['enddate'] = $endDate;
 
+        $sql .= "SELECT Rep,
+              SUM(CASE WHEN AA.Action != 'Paused' THEN Duration ELSE 0 END) as WorkedTime,
+              SUM(CASE WHEN AA.Action = 'Paused' THEN Duration ELSE 0 END) as PausedTime
+            FROM [AgentActivity] AA WITH(NOLOCK)";
 
-            $sql .= " $union SELECT AA.id, AA.Rep, AA.Date, AA.Campaign, [Action], AA.Duration, AA.Details
-            FROM [$db].[dbo].[AgentActivity] AA WITH(NOLOCK)";
+        $sql .= "
+            WHERE AA.GroupId = :group_id
+            AND AA.Date >= :startdate
+            AND AA.Date < :enddate
+            AND AA.Action NOT IN ('Login', 'Logout')";
 
-            $sql .= "
-            WHERE AA.GroupId = :group_id$i
-            AND AA.Date >= :startdate$i
-            AND AA.Date < :enddate$i";
+        list($where, $extrabind) = $this->campaignClause('AA', 0, $this->campaign);
+        $sql .= " $where";
+        $bind = array_merge($bind, $extrabind);
 
-            if ($rep !== null) {
-                $sql .= " AND AA.Rep = :rep$i";
-                $bind['rep' . $i] = $rep;
+        $sql .= " GROUP BY Rep ORDER BY Rep";
+
+        // Pause details (select for all camps)
+        $bind['group_id2'] =  Auth::user()->group_id;
+        $bind['startdate2'] = $startDate;
+        $bind['enddate2'] = $endDate;
+
+        $sql .= " SELECT Rep, Date, Campaign, Duration, Details
+            FROM [AgentActivity] AA WITH(NOLOCK)";
+
+        $sql .= "
+            WHERE AA.GroupId = :group_id2
+            AND AA.Date >= :startdate2
+            AND AA.Date < :enddate2
+            AND AA.Action = 'Paused'
+            ORDER BY Rep, Date";
+
+        list($rep_array, $pause_array) = $this->runMultiSql($sql, $bind);
+
+        $results = $this->processResults($rep_array, $pause_array);
+
+        return $results;
+    }
+
+    private function getAgentDetail($rep)
+    {
+        list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
+
+        // convert to datetime strings
+        $startDate = $fromDate->format('Y-m-d H:i:s');
+        $endDate = $toDate->format('Y-m-d H:i:s');
+
+        $sql = 'SET NOCOUNT ON;';
+
+        $bind['group_id'] =  Auth::user()->group_id;
+        $bind['startdate'] = $startDate;
+        $bind['enddate'] = $endDate;
+        $bind['rep'] = $rep;
+
+        $sql .= " SELECT AA.id, AA.Rep, AA.Date, AA.Campaign, [Action], AA.Duration, AA.Details
+            FROM [AgentActivity] AA WITH(NOLOCK)";
+
+        $sql .= "
+            WHERE AA.GroupId = :group_id
+            AND AA.Date >= :startdate
+            AND AA.Date < :enddate
+            AND AA.Rep = :rep
+            ORDER BY Rep, Date";
+
+        $details = $this->processDetails($sql, $bind);
+
+        return $details;
+    }
+
+    private function processResults($rep_array, $pause_array)
+    {
+        $rep_details = collect();
+
+        foreach ($rep_array as $rep_rec) {
+
+            // get pause recs for this Rep
+            $keys = array_keys(array_column($pause_array, 'Rep'), $rep_rec['Rep']);
+            $rep_pause_array = array_map(function ($key) use ($pause_array) {
+                return $pause_array[$key];
+            }, $keys);
+
+            // Calculate paused time
+            $allowed_pause_time = $this->calcAllowedPausedTime($rep_pause_array, $rep_details);
+            $tot_worked_time = $rep_rec['WorkedTime'] + $allowed_pause_time;
+            if (($rep_rec['WorkedTime'] + $rep_rec['PausedTime']) == 0) {
+                $pct_worked = 0;
+            } else {
+                $pct_worked = $tot_worked_time / ($rep_rec['WorkedTime'] + $rep_rec['PausedTime']) * 100;
             }
 
-            $union = 'UNION';
-        }
-
-        $sql .= " ORDER BY Rep, Date";
-
-        list($results, $details) = $this->processResults($sql, $bind);
-
-        if ($rep !== null) {
-            return $details;
+            $results[] = [
+                'Rep' => $rep_rec['Rep'],
+                'WorkedTime' => $this->secondsToHms($rep_rec['WorkedTime']),
+                'PausedTime' => $this->secondsToHms($rep_rec['PausedTime']),
+                'AllowedPausedTime' => $this->secondsToHms($allowed_pause_time),
+                'TotWorkedTime' => $this->secondsToHms($tot_worked_time),
+                'PctWorked' => number_format($pct_worked, 2) . '%',
+                'PctWorkedInteger' => round($pct_worked),
+                'detail_link' => action('ComplianceDashController@agentDetail', ['rep' => $rep_rec['Rep']]),
+            ];
         }
 
         return $results;
     }
 
-    private function processResults($sql, $bind)
+    private function processDetails($sql, $bind)
     {
-        // Only count work hours if logged in for selected campaign(s)
-        // But count all pause recs since camp doesn't matter
-        // We'll filter the pause data later
+        $rep_details = collect();
+        $pause_recs = [];
 
-        $results = [];
-
-        // loop thru results looking for log in/out times
-        $rep_details = new Collection();
-        $tmparray = [];
-        $blankrec = [
-            'Rep' => '',
-            'WorkedTime' => 0,
-            'PausedTime' => 0,
-            'PauseRecs' => [],
-        ];
-
-        $campaign_ok = false;
-        $i = 0;
         foreach ($this->yieldSql($sql, $bind) as $rec) {
-            if ($i == 0) {
-                $i++;
-                $tmparray[$i] = $blankrec;
-                $tmparray[$i]['Rep'] = $rec['Rep'];
-            } else {
-                if ($rec['Rep'] != $tmparray[$i]['Rep']) {
-                    $i++;
-                    $tmparray[$i] = $blankrec;
-                    $tmparray[$i]['Rep'] = $rec['Rep'];
-                }
-            }
 
             switch ($rec['Action']) {
                 case 'Login':
-                    $campaign_ok = $this->checkCampaign($rec['Campaign']);
-                    if ($campaign_ok) {
+                    if ($this->checkCampaign($rec['Campaign'])) {
                         $rep_details->push($this->detailRec($rec));
                     }
                     break;
                 case 'Logout':
-                    if ($campaign_ok) {
+                    if ($this->checkCampaign($rec['Campaign'])) {
                         $rep_details->push($this->detailRec($rec));
                     }
-                    $campaign_ok = false;
                     break;
                 case 'Paused':
                     if (round($rec['Duration']) > 0) {
-                        if ($campaign_ok) {
-                            $tmparray[$i]['PausedTime'] += $rec['Duration'];
-                        }
-                        $tmparray[$i]['PauseRecs'][] = [
+                        $rep_details->push($this->detailRec($rec));
+                        $pause_recs[] = [
                             'id' => $rec['id'],
                             'Date' => substr($rec['Date'], 0, 26),  // strip offest
                             'Campaign' => $rec['Campaign'],
                             'Duration' => $rec['Duration'],
                             'Details' => $rec['Details'],
                         ];
-                        $rep_details->push($this->detailRec($rec));
                     }
                     break;
                 default:
-                    if ($campaign_ok) {
-                        if ($rec['Duration'] > 0) {
-                            $tmparray[$i]['WorkedTime'] += $rec['Duration'];
-                            if (round($rec['Duration']) > 0) {
-                                $rep_details->push($this->detailRec($rec));
-                            }
+                    if ($this->checkCampaign($rec['Campaign'])) {
+                        if (round($rec['Duration']) > 0) {
+                            $rep_details->push($this->detailRec($rec));
                         }
                     }
             }
         }
 
-        // remove any rows that don't have paused time or WorkedTime
-        $outerarray = [];
-        foreach ($tmparray as $i => $rec) {
-            if (round($rec['WorkedTime']) > 0 || round($rec['PausedTime']) > 0) {
-                $outerarray[$i] = $rec;
-                $outerarray[$i]['AllowedPausedTime'] = 0;
-                $outerarray[$i]['TotWorkedTime'] = 0;
-                $outerarray[$i]['PctWorked'] = 0;
-            }
-        }
+        $allowed_pause_time = $this->calcAllowedPausedTime($pause_recs, $rep_details);
 
-        // Go thru pause recs adding manhours for allowed pause codes
-        foreach ($outerarray as $rec) {
-            $rec['AllowedPausedTime'] = $this->calcAllowedPausedTime($rec['PauseRecs'], $rep_details);
-
-            // get rid of detailed pause recs
-            unset($rec['PauseRecs']);
-
-            // do calcs
-            $rec['TotWorkedTime'] = $rec['WorkedTime'] + $rec['AllowedPausedTime'];
-            $rec['PctWorked'] = number_format($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100, 2) . '%';
-            $rec['PctWorkedInteger'] = round($rec['TotWorkedTime'] / ($rec['WorkedTime'] + $rec['PausedTime']) * 100);
-
-            // format fields
-            $rec['WorkedTime'] = $this->secondsToHms($rec['WorkedTime']);
-            $rec['PausedTime'] = $this->secondsToHms($rec['PausedTime']);
-            $rec['AllowedPausedTime'] = $this->secondsToHms($rec['AllowedPausedTime']);
-            $rec['TotWorkedTime'] = $this->secondsToHms($rec['TotWorkedTime']);
-
-            // TODO:  change this to actual route
-            $rec['detail_link'] = action('ComplianceDashController@agentDetail', ['rep' => $rec['Rep']]);
-            $results[] = $rec;
-        }
-
-        return [$results, $rep_details];
+        return $rep_details;
     }
 
     private function detailRec($rec)

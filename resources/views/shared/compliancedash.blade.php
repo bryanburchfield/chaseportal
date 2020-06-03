@@ -55,7 +55,7 @@
                             <tr>
                                 <th>{{__('general.date')}}</th>
                                 <th>{{__('widgets.action')}}</th>
-                                <th>{{__('widgets.detils')}}</th>
+                                <th>{{__('widgets.details')}}</th>
                                 <th>{{__('widgets.worked_time')}}</th>
                                 <th>{{__('widgets.paused_time')}}</th>
                                 <th>{{__('widgets.allowed_paused_time')}}</th>                                
