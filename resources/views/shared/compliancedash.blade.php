@@ -39,13 +39,13 @@
     </div>
 </div>
 
-<!-- Delete Provider Modal -->
+<!-- Agent Details Modal -->
 <div class="modal fade " id="agentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Agent Details</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('widgets.agent_details')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -53,18 +53,16 @@
                     <table class="table table-striped agent_details">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Action</th>
-                                <th>Details</th>
-                                <th>Worked Time</th>
-                                <th>Paused Time</th>
-                                <th>Allowed Paused Time</th>                                
+                                <th>{{__('general.date')}}</th>
+                                <th>{{__('widgets.action')}}</th>
+                                <th>{{__('widgets.detils')}}</th>
+                                <th>{{__('widgets.worked_time')}}</th>
+                                <th>{{__('widgets.paused_time')}}</th>
+                                <th>{{__('widgets.allowed_paused_time')}}</th>                                
                             </tr>
                         </thead>
 
-                        <tbody>
-                            
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>

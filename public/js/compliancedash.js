@@ -80,6 +80,13 @@ var Dashboard = {
         $('body').on('click', '.js__modal_link', this.get_details);
     },
 
+    refresh:function(datefilter, campaign, inorout){
+        $.when(this.get_compliance(this.chartColors)).done(function(){
+            $('.preloader').fadeOut('slow');
+            Master.check_reload();
+        });
+    },
+
     get_details:function(e){
 
         e.preventDefault();
@@ -98,31 +105,18 @@ var Dashboard = {
             data: {},
 
             success: function (response) {
-                console.log(response);
 
                 $('.agent_details tbody').empty();
-
-                var reps = [];
-                var pct_worked =[];
 
                 if (response.agent_detail.agent_detail.length) {
                     var trs;
                     for (var i = 0; i < response.agent_detail.agent_detail.length; i++) {
-                        reps.push(response.agent_detail.agent_detail[i].Rep);
-                        pct_worked.push(response.agent_detail.agent_detail[i].PctWorkedInteger);
                         trs += '<tr><td>' + response.agent_detail.agent_detail[i].Date + '</td><td>' + response.agent_detail.agent_detail[i].Action + '</td><td>' + response.agent_detail.agent_detail[i].Details + '</td><td>' + response.agent_detail.agent_detail[i].WorkedTime + '</td><td>' + response.agent_detail.agent_detail[i].PausedTime + '</td><td>' + response.agent_detail.agent_detail[i].AllowedPausedTime + '</td></tr>';
                     }
 
                     $('.agent_details tbody').append(trs);
                 }
             }
-        });
-    },
-
-    refresh:function(datefilter, campaign, inorout){
-        $.when(this.get_compliance(this.chartColors)).done(function(){
-            $('.preloader').fadeOut('slow');
-            Master.check_reload();
         });
     },
 
@@ -141,7 +135,7 @@ var Dashboard = {
             data: {},
 
             success: function (response) {
-                console.log(response);
+
                 $('.filter_time_camp_dets p .selected_campaign').html(response.agent_compliance.details[0]);
                 $('.filter_time_camp_dets p .selected_datetime').html(response.agent_compliance.details[1]);
                 $('.agent_compliance_table tbody').empty();
@@ -278,12 +272,9 @@ $(document).ready(function () {
         $(this).closest('.flipping_card').flip('toggle');
     });
 
-    $('.dataTables_filter').addClass('flt_rgt');
+    $("body").bind("DOMNodeInserted", function() {
+        $(this).find('.dataTables_filter').addClass('fc_style flt_rgt');
+    });
 
 });
-
-// $(document).on('click', '.js__modal_link', function(e){
-//     e.preventDefault();
-//     e.stopPropagation();
-// });
 

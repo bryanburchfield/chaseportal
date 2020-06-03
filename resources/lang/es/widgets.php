@@ -4,6 +4,7 @@ return [
 	'abandon_calls'		=> 'Llamadas Abandonadas',
 	'abandon_rate'		=> 'Indice de Abandono',
 	'abandoned'			=> 'Abandonadas',
+	'action'			=> 'Acción',
 	'actions'			=> 'Comportamiento',
 	'actions_timestamps'=> 'Marcas de Tiempo de Acción',
 	'adherence'			=> 'Adherencia',
@@ -36,6 +37,7 @@ return [
 	'contact_rate'		=> 'Tasa de Contacto',
 	'conversion_rate'	=> 'Tasa de Conversión',
 	'count'				=> 'Recuento',
+	'details'			=> 'Detalles',
 	'distinct_agent_count' => 'Conde de agente distinto',
 	'distinct_logins_per_day'=> 'Distintos inicios de sesión por día',
 	'distinct_reps_per_camp'	=> 'Representantes distintos por campaña',
@@ -78,6 +80,7 @@ return [
 	'total_sales'		=> 'Total de Ventas',
 	'voicemails'		=> 'Mensajes de Voz',
 
+	'agent_details'		=> 'Detalles del Agent',
 	'agent_dash'		=> 'Tablero de Agentes',
 	'avg_handle_time'	=> 'Tiempo Promedio de Manejo',
 	'call_status'		=> 'Disposición de Llamada',
