@@ -37,8 +37,11 @@ class LogSuccessfulLogout
 
         $action = 'Logout';
 
+        // Special logout types
         if (session('isApi', 0)) {
             $action = 'API Logout';
+        } elseif (session('isSso', 0)) {
+            $action = 'SSO Logout';
         }
 
         UserAudit::create([

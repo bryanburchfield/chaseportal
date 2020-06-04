@@ -183,4 +183,32 @@ class User extends Authenticatable implements Auditable
     {
         $this->notify(new WelcomeDemoNotification($user));
     }
+
+    public static function getSsoUser($details)
+    {
+        // make sure all fields are set
+        if (
+            empty($details['name']) ||
+            empty($details['group_id']) ||
+            empty($details['type']) ||
+            empty($details['timezone']) ||
+            empty($details['reporting_db'])
+        ) {
+            return false;
+        }
+
+        $user = [];
+        $user['name'] = $details['name'] . '_' . $details['group_id'] . '_' . substr($details['type'], 0, 1);
+        $user['email'] = md5($user['name']);  // Don't use Hash::make() because it's random
+        $user['group_id'] = $details['group_id'];
+        $user['password'] = 'SSO';
+        $user['tz'] = $details['timezone'];
+        $user['db'] = $details['reporting_db'];
+        $user['user_type'] = 'client';
+
+        return self::updateOrCreate(
+            ['email' => $user['email']],
+            $user
+        );
+    }
 }

@@ -36,8 +36,11 @@ class LogSuccessfulLogin
 
         $action = 'Login';
 
+        // Special login types
         if (session('isApi', 0)) {
             $action = 'API Login';
+        } elseif (session('isSso', 0)) {
+            $action = 'SSO Login';
         }
 
         UserAudit::create([
