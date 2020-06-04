@@ -20,6 +20,7 @@ class AgentSummary
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
+            'Calls' => 'reports.calls',
             'Contacts' => 'reports.contacts',
             'Connects' => 'reports.connects',
             'Hours' => 'reports.hours',
@@ -103,6 +104,7 @@ class AgentSummary
         $sql .= "
         CREATE TABLE #AgentSummary(
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
+            Calls int DEFAULT 0,
             Contacts int DEFAULT 0,
             Connects int DEFAULT 0,
             Hours numeric(18,2) DEFAULT 0,
@@ -248,8 +250,9 @@ class AgentSummary
 
         UPDATE #AgentSummary
         SET TalkTimeSec = a.TalkTime,
-            TalkTimeCount = a.tot
-        FROM (SELECT aa.Rep, SUM(Duration) as TalkTime, COUNT(*) as tot
+            TalkTimeCount = a.tot,
+            Calls = a.tot
+        FROM (SELECT aa.Rep, SUM(Duration) as TalkTime, SUM([Count]) as tot
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Action in ('Call', 'ManualCall', 'InboundCall')
               GROUP BY aa.Rep) a
@@ -329,6 +332,7 @@ class AgentSummary
         }
 
         $total['Rep'] = 'Total:';
+        $total['Calls'] = 0;
         $total['TalkTimeSec'] = 0;
         $total['TalkTimeCount'] = 0;
         $total['PausedTimeSec'] = 0;
@@ -343,6 +347,7 @@ class AgentSummary
         $total['Leads'] = 0;
 
         foreach ($results as &$rec) {
+            $total['Calls'] += $rec['Calls'];
             $total['TalkTimeSec'] += $rec['TalkTimeSec'];
             $total['TalkTimeCount'] += $rec['TalkTimeCount'];
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
