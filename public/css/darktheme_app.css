@@ -181,6 +181,26 @@ h6 {
   text-align: center;
 }
 
+.flt_lft {
+  float: left;
+}
+
+.flt_rgt {
+  float: right;
+}
+
+.cb {
+  clear: both;
+}
+
+.th_mw100 {
+  min-width: 100px;
+}
+
+.table > tbody > tr.p10 td {
+  padding: 10px 8px;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
@@ -1605,7 +1625,7 @@ p.descrip.top14 {
 .rules_table th,
 .dnc_table th,
 .demo_user_table th,
-.audit_table th {
+.agent_compliance_table th {
   background: #33A09B;
   border-top: 0;
   color: #fff;
@@ -1670,7 +1690,7 @@ p.descrip.top14 {
 }
 
 .reports_table.table > tbody > tr > td,
-.reports_table.table > tbody > tr > th,
+.reports_table.table > thead > tr > th,
 .reports_table.table > tfoot > tr > td,
 .reports_table.table > tfoot > tr > th,
 .reports_table.table > thead > tr > td,
@@ -1789,7 +1809,8 @@ select.input-sm,
 .modal_manage_fil_act .form-control,
 .add_sms_number .form-control,
 .delete_sms_number .form-control,
-.edit_sms_number .form-control {
+.edit_sms_number .form-control,
+.compliance_settings .form-control {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;

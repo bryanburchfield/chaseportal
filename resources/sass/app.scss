@@ -119,6 +119,14 @@ h1, h2, h3, h4, h5, h6 {
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
 .tac{text-align: center;}
+
+.flt_lft{float: left;}
+.flt_rgt{float: right;}
+.cb{clear: both;}
+.th_mw100{min-width: 100px;}
+
+.table>tbody> tr.p10 td{padding: 10px 8px;}
+
 .carb_mb30_mb {
     margin-bottom: 0;
 }
@@ -1227,7 +1235,7 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .drip_campaigns table th, .audit_table th {
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .drip_campaigns table th, .audit_table th, .agent_compliance_table th {
     background: $blue;
     border-top: 0;
     color: #fff;
@@ -1262,7 +1270,7 @@ p.descrip.top14 {
     float: left;
 }
 
-.reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
+.reports_table.table>tbody>tr>td, .reports_table.table>thead>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th{
     min-width: 125px;
     padding: 10px 4px;
 }
@@ -1325,9 +1333,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .notification_body, .add_filter .form-control, .add_action .form-control, .add_campaign .form-control, .edit_filter .form-control, .edit_action .form-control, #addPlaybookModal .form-control, .edit_playbook .form-control,  .modal_manage_fil_act .form-control, .add_sms_number .form-control, .delete_sms_number .form-control, .edit_sms_number .form-control {
-
+.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .notification_body, .add_filter .form-control, .add_action .form-control, .add_campaign .form-control, .edit_filter .form-control, .edit_action .form-control, #addPlaybookModal .form-control, .edit_playbook .form-control,  .modal_manage_fil_act .form-control, .add_sms_number .form-control, .delete_sms_number .form-control, .edit_sms_number .form-control, .compliance_settings .form-control {
     background: #eee !important;
 }
 

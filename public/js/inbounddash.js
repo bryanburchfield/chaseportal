@@ -388,7 +388,7 @@ var Dashboard = {
             dataType: 'json',
             data: { campaign: campaign, dateFilter: datefilter },
             success: function (response) {
-
+                console.log(response);
                 Master.flip_card(response.call_count_reps.length, '#agent_call_count');
                 Master.flip_card(response.call_time_reps.length, '#agent_calltime');
                 $('#agent_call_count tbody, #agent_calltime tbody').empty();

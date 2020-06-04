@@ -88,6 +88,7 @@ return [
 	'view_quarterly'			=> 'View Quarterly',
 	'voicemails'				=> 'Voicemails',
 	'waiting'					=> 'Waiting',
+	'worked'					=> 'Worked',
 	'wrapup'					=> 'Wrapup',
 	'top_ten_calls_by_camp' => 'Top 10 Calls by Campaign',
 

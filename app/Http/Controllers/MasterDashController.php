@@ -146,6 +146,16 @@ class MasterDashController extends Controller
         return $this->index($request);
     }
 
+    public function complianceDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'compliancedash']);
+        $this->setDashboard($request);
+
+        $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
+
+        return $this->index($request);
+    }
+
     public function kpi(Request $request)
     {
         $request->merge(['dashboard' => 'kpidash']);
