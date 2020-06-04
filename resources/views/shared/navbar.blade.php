@@ -15,9 +15,7 @@
        </div>
 
         <div class="filters col-xs-10 col-sm-6">
-
             <div class="input-group">
-
                 <div class="input-group-btn">
 
                     @if(!session()->has('isSso'))
@@ -66,8 +64,6 @@
                     @endif
                 </div>
             </div>
-
         </div>
-
     </div>
 </nav>
