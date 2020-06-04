@@ -1,4 +1,4 @@
-{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form demo_user '. $mode .'_demo_user' ]) !!}
+{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form demo_user fc_style '. $mode .'_demo_user' ]) !!}
 
 	<div class="form-group">
 	    {!! Form::label('name', 'Name') !!}
@@ -19,8 +19,9 @@
 	    <label for="expiration" data-toggle="tooltip" data-placement="right" title="Select the length of the demo client's trial">{{$mode == 'edit' ? 'Extend Demo' : 'Expiration'}} <i class="fas fa-info-circle"></i></label>
 	    {!! Form::select("expiration", ['' => 'Select One', '5' => '5 Days', '10' => '10 Days', '15' => '15 Days', '30' => '30 Days'], null, ["class" => "form-control", 'id'=> 'expiration', ($mode == 'add' ? 'required' : '')]) !!}
 	</div>
-
-	<div class="alert alert-danger mt20"></div>
+	
+	<div class="alert alert-success mt20 hidetilloaded"></div>
+	<div class="alert alert-danger mt20 hidetilloaded"></div>
 
     <div class="form-group mb20">
     	{!! Form::submit(($mode == 'edit' ? 'Update' : 'Create'), ['class'=>'btn btn-primary mb0 mb20'] ) !!}

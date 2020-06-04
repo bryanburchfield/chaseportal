@@ -13,11 +13,11 @@
 
     <div class="col-md-9 col-sm-8 get_ldr_ht mb0">
         <div class="card card-12">
-            <div class="call_volume_details">
+            <div class="call_volume_details flt_lft">
                 <h1 class="title tac">{{__('widgets.call_volume')}}</h1><br>
             </div>
 
-            <div class="inbound inandout mb60" style="height: 300px">
+            <div class="inbound inandout mb60 cb" style="height: 300px">
                 <canvas id="call_volume"></canvas>
             </div>
         </div>

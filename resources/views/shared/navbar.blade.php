@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
+
            @if(!session()->has('isSso'))
             <button type="button" id="sidebarCollapse" class="btn">
                 <i class="fas fa-align-left"></i>
@@ -8,9 +9,9 @@
            @endif
 
            @if(Auth::user()->theme == 'dark')
-               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo">
+               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo flt_lft">
            @else
-               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo">
+               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo flt_lft">
            @endif
        </div>
 
@@ -21,7 +22,7 @@
                     @if(!session()->has('isSso'))
                         {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                             @csrf
-                            <div class="btn-group">
+                            <div class="btn-group flt_rgt">
                             {!! Form::submit(__('general.logout'),['class'=>'btn logout_btn']) !!}
                             </div>
                         {!! Form::close() !!}
@@ -38,7 +39,7 @@
                     @endif
 
                     @if(Auth::user()->language_displayed)
-                        <li class="btn-group">
+                        <li class="btn-group flt_rgt">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span><i class="fas fa-globe-americas"></i> Language</span>
                             </button>
@@ -50,8 +51,8 @@
                         </li>
                     @endif
 
-                     @if(!session()->has('isSso'))
-                        <li class="notifications btn-group">
+                    @if(!session()->has('isSso'))
+                        <li class="notifications btn-group flt_rgt">
                             <button type="button" class="btn btn-notifications">
                                 <span>
                                     <i class="fas fa-bell"></i>

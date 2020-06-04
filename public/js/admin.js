@@ -58,28 +58,30 @@ var Admin = {
 
 			success: function (response) {
 
-				$('form.add_user').append('<div class="alert alert-success mt20">User successfully added</div>');
+				$('form.add_user .alert-success').html('User successfully added').show();
+				$('form.add_user .alert-danger').empty().hide();
 				setTimeout(function () {
-					$('.alert').remove();
+					$('form.add_user .alert-success').hide();
 					$('form.add_user').trigger("reset");
 					window.location.reload();
 				}, 2500);
 			}, error: function (data) {
-				$('form.add_user .alert').empty();
+				$('form.add_user .alert-danger').empty();
 
 				var errors = $.parseJSON(data.responseText);
 				$.each(errors, function (key, value) {
 
 					if ($.isPlainObject(value)) {
 						$.each(value, function (key, value) {
-							$('form.add_user .alert').show().append('<li>' + value + '</li>');
+							$('form.add_user .alert-danger').show().append('<li>' + value + '</li>');
 						});
 					} else {
-						$('form.add_user .alert').show().append('<li>' + value + '</li>');
+						$('form.add_user .alert-danger').show().append('<li>' + value + '</li>');
 					}
 				});
 
 				$('form.add_user .alert li').first().remove();
+
 			}
 		});
 	},
@@ -103,31 +105,30 @@ var Admin = {
 			data: form_data,
 
 			success: function (response) {
-
-				$('form.edit_user').append('<div class="alert alert-success mt20">User successfully updated</div>');
-				$('.alert-success').show();
-				$('.alert-danger').hide();
+				$('form.edit_user .alert-success').html('User successfully updated').show();
+				$('form.edit_user .alert-danger').hide();
 
 				setTimeout(function () {
-					$('.alert-success').hide();
+					$('form.edit_user .alert-success').hide();
 					$('form.edit_user').trigger("reset");
 					window.location.reload();
 				}, 2500);
 			}, error: function (data) {
-				$('form.edit_user .alert').empty();
+				$('form.edit_user .alert-danger').empty();
 
 				var errors = $.parseJSON(data.responseText);
 				$.each(errors, function (key, value) {
 
 					if ($.isPlainObject(value)) {
 						$.each(value, function (key, value) {
-							$('form.edit_user .alert').show().append('<li>' + value + '</li>');
+							$('form.edit_user .alert-danger').show().append('<li>' + value + '</li>');
 						});
 					} else {
-						$('form.edit_user .alert').show().append('<li>' + value + '</li>');
+						$('form.edit_user .alert-danger').show().append('<li>' + value + '</li>');
 					}
 				});
-				$('form.edit_user .alert li').first().remove();
+
+				$('form.add_user .alert li').first().remove();
 			}
 		});
 	},
@@ -163,10 +164,9 @@ var Admin = {
 
 			success: function (response) {
 
-				$('<div class="alert alert-success">User successfully updated</div>').insertBefore('form.add_demo_user .btn-primary').parent();
-				$('.alert-success').show();
+				$('.add_demo_user .alert-success').html('User successfully updated').show();
 				setTimeout(function () {
-					$('.alert-success').hide();
+					$('.add_demo_user .alert-success').hide();
 					$('form.add_demo_user').trigger("reset");
 					location.reload();
 				}, 2500);
@@ -179,14 +179,14 @@ var Admin = {
 
 						if ($.isPlainObject(value)) {
 							$.each(value, function (key, value) {
-								$('form.add_demo_user .alert').show().append('<li>' + value + '</li>');
+								$('form.add_demo_user .alert-danger').show().append('<li>' + value + '</li>');
 							});
 						} else {
-							$('form.add_demo_user .alert').show().append('<li>' + value + '</li>');
+							$('form.add_demo_user .alert-danger').show().append('<li>' + value + '</li>');
 						}
 					});
 
-					$('form.add_demo_user .alert li').first().remove();
+					$('form.add_demo_user .alert-danger li').first().remove();
 				}
 			}
 		});
@@ -222,11 +222,10 @@ var Admin = {
 			},
 
 			success: function (response) {
-				$('form.edit_demo_user').append('<div class="alert alert-success oauto mt20">User successfully updated</div>');
-				$('.alert-success').show();
-				$('.alert-danger').hide();
+				$('form.edit_demo_user .alert-success').html('User successfully updated').show();
+				$('.edit_demo_user .alert-danger').hide();
 				setTimeout(function () {
-					$('.alert-success').remove();
+					$('.edit_demo_user .alert-success').hide();
 					$('#demoUserModal').modal('hide');
 					window.location.reload();
 				}, 2500);

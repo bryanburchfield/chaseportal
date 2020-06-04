@@ -13,7 +13,7 @@
 
 	<div class="row">
     	<div class="col-sm-3">
-    	    <div class="col-sm-12 nopad">
+    	    <div class="col-sm-12 p0">
     	    	<div class="card-3 card" id="distinct_agent_count">
     	    	    <div class="trend_indicator">
     	    	        <div class="trend_arrow"></div>
@@ -24,7 +24,7 @@
     	    	</div><!-- end card -->
     	    </div><!-- end column -->
 
-    	    <div class="col-sm-12 nopad">
+    	    <div class="col-sm-12 p0">
     	        <div class="card-3 card" id="avg_reps">
     	            <div class="trend_indicator">
     	                <div class="trend_arrow"></div>
@@ -35,7 +35,7 @@
     	        </div><!-- end card -->
     	    </div><!-- end column -->
 
-        	<div class="col-sm-12 nopad">
+        	<div class="col-sm-12 p0">
     		    <div class="card-3 card blue flipping_card" id="distinct_reps_per_camp">
     		        <h1 class="title">{{__('widgets.distinct_reps_per_camp')}}</h1>
                     <div class="front p20 mbp35">
@@ -46,7 +46,7 @@
     	</div><!-- end column -->
 
     	<div class="col-sm-9 ">
-		    <div class="col-sm-12 nopad">
+		    <div class="col-sm-12 p0">
 			    <div class="card-3 card blue" id="logins_per_day">
                     <h1 class="title">{{__('widgets.distinct_logins_per_day')}}</h1>
                     <!-- three dot menu -->
@@ -57,7 +57,7 @@
                             <li></li>
                             <li></li>
                         </ul>
-                        <p class="login_date"></p>
+                        <p class="login_date flt_rgt"></p>
                         <!-- menu -->
                         <div id="card_dropdown" class="card_dropdown-content logins_drilldown">
                             <h3>{{__('widgets.view_day_details')}}</h3>
@@ -72,7 +72,7 @@
                 </div><!-- end card -->
 		    </div><!-- end column -->
 
-		    <div class="col-sm-12 nopad">
+		    <div class="col-sm-12 p0">
                 <div class="card card-3b mbo" style="height: 345px">
                     <div class="card_table">
                         <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>

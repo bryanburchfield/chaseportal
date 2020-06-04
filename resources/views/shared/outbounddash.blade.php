@@ -96,7 +96,7 @@
         <div class="card-6 card outbound_default">
             <h1 class="title">{{__('widgets.call_volume')}}</h1>
 
-            <div class="outbound inandout">
+            <div class="outbound inandout cb mt60">
                 <canvas id="call_volume_outbound"></canvas>
             </div>
         </div>
@@ -253,7 +253,7 @@
     <div class="col-sm-9">
         <div class="card card-12">
             <h1 class="title">{{__('widgets.agent_call_status')}}</h1>
-            <div class="inbound inandout" style="min-height:340px;">
+            <div class="inbound inandout cb" style="min-height:340px;">
                 <canvas id="agent_call_status"></canvas>
             </div>
         </div>

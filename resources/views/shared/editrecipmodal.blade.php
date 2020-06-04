@@ -9,7 +9,7 @@
             </div>
 
             <div class="modal-body">
-                {!! Form::open(['method'=> 'POST', 'url' => '#', 'class' => 'form clear display update_recip']) !!}
+                {!! Form::open(['method'=> 'POST', 'url' => '#', 'class' => 'form fc_style clear display update_recip']) !!}
 
                 <div class="form-group">
                     {!! Form::label('name', __('general.full_name')) !!}
@@ -38,7 +38,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
                 {!! Form::submit(__('general.save'), ['class'=>'btn btn-warning btn-md mb0']) !!}
 
-                <div class="alert alert-danger mt20"></div>
+                <div class="alert alert-danger mt20 hidetilloaded"></div>
                 {!! Form::close() !!}
 
             </div>

@@ -5,7 +5,7 @@
 <!-- end pagination -->
 
 <!-- start download options -->
-<div class="col-sm-3 col-xs-6 report_download">
+<div class="col-sm-3 col-xs-6 report_download hidetilloaded">
 	<h3>{{__('general.download_report')}}:</h3>
 	<a target="_blank" href="report_export/{{$report}}/csv" data-report="{{$report}}" data-format="csv" class="report_dl_option" title="{{__('reports.download')}} CSV" data-dl_option="csv"><i class="fas fa-file-csv"></i></a>
 	<a target="_blank" href="report_export/{{$report}}/xls" data-report="{{$report}}" data-format="xls" class="report_dl_option" title="{{__('reports.download')}} Excel" data-dl_option="excel"><i class="fas fa-file-excel"></i></a>

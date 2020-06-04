@@ -19,7 +19,7 @@
                     <div class="col-sm-5 col-sm-push-7 create_recips">
                         <h2>{{__('kpi.create_recip')}}</h2>
 
-                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
+                        {!! Form::open(['method'=> 'POST', 'action' => 'KpiController@addRecipient', 'class' => 'form fc_style user_email_form card clear add_recipient display', 'data-kpi'=> "1"]) !!}
 
                             <div class="form-group searchCnt">
                                 {!! Form::label('name', __('general.full_name')) !!}

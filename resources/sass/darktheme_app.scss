@@ -12,24 +12,39 @@ $blue: #203047;
 $orange: #E15B23;
 $green: #33A09B;
 
+@mixin base_style($background, $color, $bdr_type:null, $bdr:null, $fw:null){
+    
+    @if($bdr_type){$bdr_type: - $bdr_type;}
 
-@mixin blue_grad_ltr($color1, $color2){
-    background: $color1;
-    background: -moz-linear-gradient(left, $color1 0%, $color2 100%);
-    background: -webkit-linear-gradient(left, $color1 0%, $color2 100%);
-    background: linear-gradient(to right, $color1 0%, $color2 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=1); 
+    background: $background;
+    color: $color;
+    border#{$bdr_type}:$bdr;
+    font-weight: $fw;
 }
 
-//  #203047, #090d14
-@mixin blue_grad($color1, $color2){
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#203047+0,090d14+100 */
-background: rgb(32,48,71); /* Old browsers */
-background: -moz-linear-gradient(top,  $color1 0%, $color2 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(top,  $color1 0%,$color2 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom,  $color1 0%,$color2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 ); /* IE6-9 */
+@mixin gradient($color1, $color2, $direction, $start, $stop){
+    $opp_direction : bottom;
+    $ie_type:0;
 
+    @if $direction == top{
+        $opp_direction : bottom;
+        $ie_type:0;
+    }@else if $direction == left{
+        $ie_type:1;
+        $opp_direction : right;
+    }
+
+    background: $color1;
+    background: -moz-linear-gradient($direction, $color1 $start, $color2 $stop); 
+    background: -webkit-linear-gradient($direction, $color1 $start, $color2 $stop); 
+    background: linear-gradient(to $opp_direction, $color1 $start, $color2 $stop);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} );
+}
+
+@mixin form_control_style(){
+    background: darken($blue, 2%) !important;
+    border: none;
+    color: lighten(#aaa, 5%);
 }
 
 body, html {
@@ -69,71 +84,41 @@ h1, h2, h3, h4, h5, h6 {
     // border-top: 1px solid #fff;
 }
 
-.mt10 {
-    margin-top: 10px;
-}
 
-.mt20 {
-    margin-top: 20px;
-}
-
-.mt30 {
-    margin-top: 30px;
-}
-
-.mt50 {
-    margin-top: 50px;
-}
-
-.mt100 {
-    margin-top: 100px;
-}
-
-.mb0 {
-    margin-bottom: 0 !important;
-}
+.mt10 {margin-top: 10px;}
+.mt20 {margin-top: 20px;}
+.mt30 {margin-top: 30px;}
+.mt50 {margin-top: 50px;}
+.mt60{margin-top: 60px;}
+.mb0 {margin-bottom: 0 !important;}
 
 .mb5{margin-bottom: 5px;}
-
-.mb10 {
-    margin-bottom: 10px;
-}
-
-.mb15 {
-    margin-bottom: 15px;
-}
-
-.mb20 {
-    margin-bottom: 20px;
-}
-
-.mb30 {
-    margin-bottom: 30px;
-}
-
-.mb42 {
-    margin-bottom: 42px;
-}
-
-.mr10 {
-    margin-right: 10px;
-}
+.mb10 {margin-bottom: 10px;}
+.mb15 {margin-bottom: 15px;}
+.mb20 {margin-bottom: 20px;}
+.mb30 {margin-bottom: 30px;}
+.mb42 {margin-bottom: 42px;}
+.mr10 {margin-right: 10px;}
+.mr20{margin-right: 20px;}
 
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
-
 .pl10{padding-left: 10px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
+
 .tac{text-align: center;}
 .flt_lft{float: left;}
 .flt_rgt{float: right;}
 .cb{clear: both;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
+.cb{clear: both;}
+.flt_rgt {float: right;}
+.flt_lft {float: left;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -153,14 +138,12 @@ a, a:hover, a:focus {
 .card .back.p0{padding: 0;}
 
 .navbar button#sidebarCollapse {
-    float: left;
     margin-right: 20px;
     @include border-radius(3px);
 }
 
 img.text_logo {
     max-width: 140px;
-    float: left;
 }
 
 .title.tac {
@@ -168,16 +151,12 @@ img.text_logo {
 }
 
 input.btn.logout_btn {
-    background: #d9534f;
-    color: #fff;
-    font-weight: 600;
+    @include base_style(#d9534f, #fff, $fw:600);
     @include transition(all, ease, 0.3s);
-    border:none;
-}
 
-input.logout_btn:hover {
-    background: #bf3f3b;
-    color: #fff;
+    &:hover {
+        @include base_style(#bf3f3b, #fff);
+    }
 }
 
 .svg-inline--fa {
@@ -190,10 +169,9 @@ input.logout_btn:hover {
 
 .navbar {
     padding: 13px 20px 0;
-    background: #fff;
     border: none;
-    border-bottom: 1px solid lighten($blue,2%);
-    border-radius: 0;
+    @include base_style(#fff, null, bottom, 1px solid lighten($blue,2%));   
+    @include border-radius(0);
     margin-bottom: 40px;
 }
 
@@ -214,19 +192,17 @@ i, span {
 }
 
 .btn-default{
-    @include blue_grad(#203047, #090d14);
-    border: 1px solid darken(#23354e,10%);
-    color: #eee;
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include base_style(null, #eee, null, 1px solid darken(#23354e,10%));  
 
     &:hover, &:active, &:focus{
-        color: #eee !important;
-        @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%));
-        border: 1px solid darken(#23354e,10%) !important;
+        @include gradient(lighten(#203047,5%), lighten(#090d14, 5%), top, 0%, 100%);
+        @include base_style(null, #eee !important, null, 1px solid darken(#23354e,10%) !important);
     }
 }
 
 .btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
-    @include blue_grad(lighten(#203047,5%), lighten(#090d14, 5%));
+    @include gradient(lighten(#203047,5%), lighten(#090d14, 5%), top, 0%, 100%);
 }
 
 /* ---------------------------------------------------
@@ -246,14 +222,9 @@ i, span {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    color: #fff;
-    background: #263854; /* Old browsers */
-    background: -moz-linear-gradient(left,  darken(#263854,5%) 0%, darken(#171f33, 5%)100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left,  darken(#263854,5%) 0%,darken(#171f33, 5%)100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right,  darken(#263854,5%) 0%,darken(#171f33, 5%)100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(#263854,5%)', endColorstr='darken(#171f33, 5%)',GradientType=1 ); /* IE6-9 */
+    @include gradient(darken(#263854,5%), darken(#171f33, 5%), left, 0%, 100%);
     @include transition(all, ease, 0.3s);
-    border-right: 1px solid darken(#23354e,10%);
+    @include base_style(null, #fff, right, 1px solid darken(#23354e,10%));
 
     ul.components {
         padding: 20px 0;
@@ -265,7 +236,7 @@ i, span {
 
         &.active, a[aria-expanded="true"]{
             color: #e49831;
-            @include blue_grad_ltr(darken(#1c273d,5%), darken(#263854,5%));
+            @include gradient(darken(#1c273d,5%), darken(#263854,5%), left, 0%, 100%);
 
             &>a i {
                 color:#ddd;
@@ -286,7 +257,7 @@ i, span {
 
             &:hover {
                 color: #fff;
-                @include blue_grad_ltr(darken(#1c273d,5%), darken(#263854,5%));
+                @include gradient(darken(#1c273d,5%), darken(#263854,5%), left, 0%, 100%);
             }
 
             i {margin-right: 10px;}
@@ -324,37 +295,18 @@ i, span {
 
         ul ul a {padding: 10px !important;}
 
-        .dropdown-toggle::after {
-            top: auto;
-            bottom: 10px;
-            right: 50%;
-            -webkit-transform: translateX(50%);
-            -ms-transform: translateX(50%);
-            transform: translateX(50%);
-        }
     }
 }
 
 #sidebar_nots {
     min-width: 300px;
     max-width: 300px;
-    color: #aaa;
-    background: #0f131f; 
-    border-left: 1px solid darken(#23354e,10%);
+    @include base_style(#0f131f, #aaa, left, 1px solid darken(#23354e,10%));
     @include transition(all, ease, 0.3s);
 
     &.active {
         min-width: 300px;
         max-width: 300px;
-
-        .dropdown-toggle::after {
-            top: auto;
-            bottom: 10px;
-            right: 50%;
-            -webkit-transform: translateX(50%);
-            -ms-transform: translateX(50%);
-            transform: translateX(50%);
-        }
     }
 
     .close_nots_bar{position: relative;top:0;right:10px;float:right;color:#d9534f;&:hover{color:darken(#d9534f,5%)}}
@@ -362,9 +314,7 @@ i, span {
     .not_header{
         padding-top: 20px;
         .not_header_inner{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-bottom: 13px;
+            padding: 0 13px 13px;
         }
 
         h4{
@@ -380,10 +330,7 @@ i, span {
 
     .notifications{
         .not{
-            padding-left: 13px;
-            padding-right: 13px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding:10px 13px;
             border-top: 1px solid #23354e;
             position: relative;
             h4{
@@ -405,22 +352,19 @@ i, span {
 }
 
 .btn-notifications{
-    background:none;
-    color:#fff;
+    @include base_style(none, #fff);
     position:relative;
     font-size: 18px;
     bottom:2px;
-    &:hover{color: $green;}
-    &:hover span.numb_notifications{background: #fff;color:$green;}
-
+    &:hover{@include base_style(null, $green);}
+    &:hover span.numb_notifications{@include base_style(#fff, $green);}
 }
 
 span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
+    @include base_style($orange, #fff);
     height: 17px;
     width: 17px;
     @include border-radius(20px);
@@ -429,7 +373,6 @@ span.numb_notifications{
 }
 
 .btn-secondary.cancel{
-    float: left;
     margin-top: 10px;
     margin-right: 15px;
 }
@@ -439,11 +382,7 @@ button, button:active, button:focus {
 }
 
 #sidebarCollapse {
-    background: $green; /* Old browsers */
-    background: -moz-linear-gradient(top, $green 0%, #007f76 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, $green 0%, #007f76 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, $green 0%, #007f76 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$green', endColorstr='#007f76', GradientType=0); /* IE6-9 */
+    @include gradient($green, #007f76, top, 0%, 100%);
     
     &:hover {
         background: #2d938f;
@@ -457,13 +396,14 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
+// .dropdown-toggle::after {
+//     display: block;
+//     position: absolute;
+//     top: 50%;
+//     right: 20px;
+//     transform: translateY(-50%);
+//     border:1px solid yellow;
+// }
 
 ul ul a {
     font-size: 0.9em !important;
@@ -484,17 +424,15 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: $blue;
+    @include base_style($blue, #fff);
 }
 
 a.article, a.article:hover {
-    background: #1a283d !important;
-    color: #fff !important;
+    @include base_style( #1a283d !important, #fff !important);
 }
 
 #content {
-    width: 100%;    /*padding: 20px;*/
+    width: 100%;
     min-height: 100vh;
     @include transition(all, ease, 0.3s);
 }
@@ -505,21 +443,11 @@ div.container-fluid.hero_bg {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    box-shadow: 0 5px 15px #19273d;
-    -moz-box-shadow: 0 5px 15px #19273d;
-    -webkit-box-shadow: 0 5px 15px #19273d;
+    @include box-shadow(0 5px 15px #19273d);
 }
 
 div.container-fluid.hero_bg .form-holder {
     border: none;
-}
-
-.fpass_email_alert {
-    margin: 20px;
-}
-
-.edit_user .alert, .form.add_user .alert, .form.add_demo_user .alert, .edit_demo_user .alert-danger, .add_rule_error.alert-danger, .filter_error.alert, .new_source_subcampaign_group, .new_destination_subcampaign_group, .edit_rule_error.alert, #webhook_generator .alert-danger {
-    display: none;
 }
 
 .mb_logo {
@@ -534,28 +462,23 @@ h1.fw600 {
 .btn.btn-primary, input.btn.btn-primary {
     position: relative;
     margin-bottom: 30px;
-    background-color: $orange !important;
-    border: none;
-    color: #fff;
-    font-weight: 600;
+    @include base_style($orange !important, #fff, null, none, 600);
 
     &:hover {
-        background-color: darken($orange, 5%);
+        @include base_style(darken($orange, 5%), null);
     }
 }
 
 .input-group-addon{
     border: none;
-    @include blue_grad(#203047, #090d14);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
 }
 
 .input-group-addon:last-child{border-left:1px solid lighten($blue, 5%);}
 
 .bootstrap-datetimepicker-widget{
-    background: $blue;
-    border: 1px solid lighten($blue, 5%);
-    color: #fff;
+    @include base_style($blue, #fff, null, 1px solid lighten($blue, 5%));
 }
 
 .bootstrap-datetimepicker-widget .datepicker:hover{ background: $blue;}
@@ -563,8 +486,7 @@ h1.fw600 {
 td.day.old:hover{color:blue;}
 
 div.container-fluid.bg {
-    background: darken(#151C2D, 4%);
-    border-top: 1px solid darken(#111d2d,10%);
+    @include base_style(darken(#151C2D, 4%), null, top, 1px solid darken(#111d2d,10%));
     min-height: 500px;
 }
 
@@ -582,10 +504,8 @@ div.container-fluid.bg {
 }
 
 .navbar-default {
-    @include blue_grad(#203047, #090d14);
-    box-shadow: 0 1px 2px #28426d;
-    -moz-box-shadow: 0 1px 2px #28426d;
-    -webkit-box-shadow: 0 1px 2px #28426d;
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include box-shadow( 0 1px 2px #28426d);
 
     .navbar-nav>li>a {
         color: #eee;
@@ -600,12 +520,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    background: #101824; /* Old browsers */
-    background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
-
+    @include gradient(#101824, #090d14, top, 0%, 52%);
 }
 
 .navbar-header.home {
@@ -614,10 +529,8 @@ div.container-fluid.bg {
     position: relative;
 }
 
-
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: #eee;
-    background: none;
+    @include base_style(none, #eee);
 }
 
 .dropdown-menu li a {
@@ -625,7 +538,7 @@ div.container-fluid.bg {
 }
 
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
-    @include blue_grad(#263854, #1c273d);
+    @include gradient(#263854, #1c273d, top, 0%, 100%);
     color: #fff;
 }
 
@@ -671,7 +584,6 @@ input.form-control.campaign_search{color:#aaa;}
     padding: 0;
 
     ul.dropdown-menu {right: -65px;}
-    .btn-group {float: right;}
 
     .btn.btn-primary {
         margin-bottom: 0;
@@ -680,11 +592,8 @@ input.form-control.campaign_search{color:#aaa;}
         &.select_database, &.select_campaign {
             position: relative;
             margin-bottom: 10px;
-            background-color: #e49831;
-            border: 1px solid #f2ad4d;
-            border-radius: 0;
-            color: #fff;
-            font-weight: 600;
+            @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
+            @include border-radius(0);
         }
     }
 }
@@ -705,7 +614,6 @@ input.form-control.campaign_search{color:#aaa;}
     }
 }
 
-
 .navbar-header.home .navbar-brand img {
     margin: 0 auto;
     display: block;
@@ -719,26 +627,15 @@ input[type='file'] {
 }
 
 .card {
-    background: #152130; /* Old browsers */
-    background: -moz-linear-gradient(top,  #152130 1%, #090d14 52%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #152130 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #152130 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#152130', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
-    border-top: 1px solid #23354e;
-    -moz-box-shadow: 0 2px 3px darken($blue, 20%);
-    -webkit-box-shadow: 0 2px 3px darken($blue, 20%);
-    box-shadow: 0 2px 3px darken($blue, 20%);
-    padding: 20px;  /*overflow: auto;*/
+    @include gradient(#152130, #090d14, top, 0%, 52%);
+    @include box-shadow(0 2px 3px darken($blue, 20%));
+    @include base_style(null, #aaa, top, 1px solid #23354e);
+    padding: 20px; 
     margin-bottom: 30px;
     transition: 0.3s;
-    color: #aaaaaa;
 
     &.card_table, &.card_table2 {
-        background: #101824; /* Old browsers */
-        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+        @include gradient(#101824, #090d14, top, 0%, 52%);
         width: 100%;
         height: 100%;
         overflow-y: scroll;
@@ -747,27 +644,21 @@ input[type='file'] {
         table {font-size: 12px;}
     }
 
-    input {background: darken($blue, 2%);color:#aaa;border:none;}
+    input {
+        @include base_style(darken($blue, 2%), #aaa, null, none);
+    }
 
     .card_table, .card_table2 {
         width: 100%;
         height: 100%;
         overflow-y: scroll;
         padding: 20px 10px;
-        background: #101824; /* Old browsers */
-        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+        @include gradient(#101824, #090d14, top, 0%, 52%);
     }
 
     .front, .back {
         overflow: none;
-        background: #101824; /* Old browsers */
-        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+        @include gradient(#101824, #090d14, top, 0%, 52%);
     }
 
     .back {
@@ -791,8 +682,7 @@ input[type='file'] {
         color: #a0a0a0;
 
         &.bg_rounded {
-            background: $green;
-            color: #fff;
+            @include base_style($green, #fff);
             border-radius: 100px;
             width: 100px;
             height: 100px;
@@ -803,11 +693,7 @@ input[type='file'] {
     }
 
     &.flipping_card{
-        background: #101824; /* Old browsers */
-        background: -moz-linear-gradient(top,  #101824 1%, #090d14 52%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #101824 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #101824 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#101824', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+        @include gradient(#101824, #090d14, top, 0%, 52%);
         overflow: hidden;
         padding: 1px;
 
@@ -826,7 +712,6 @@ input[type='file'] {
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
-
 
 .flip_card_btn:after, .card_drop_down:after {
     content: '\2807';
@@ -863,12 +748,6 @@ input[type='file'] {
     -ms-overflow-style: none;
 }
 
-
-.call_volume_details {
-    float: left;
-}
-
-
 .card-6 h1.title {
     text-align: left;
     float: left;
@@ -879,15 +758,6 @@ input[type='file'] {
     margin-bottom: 8px;
 }
 
-.card-6 .btn-group {
-    float: right;
-}
-
-.card-6 .inbound, .card-6 .outbound {
-    clear: both;
-    margin-top: 60px;
-}
-
 .card-6 .inbound h4, .card-6 .outbound h4 {
     font-size: 15px;
     font-weight: 600;
@@ -896,34 +766,13 @@ input[type='file'] {
     text-transform: uppercase;
 }
 
-.card-6 .outbound {
-    display: none;
-}
-
 .card-6.outbound_default .outbound {
     display: block;
 }
 
-.card-6.outbound_default .inbound {
-    display: none;
-}
-
 .avgs_rgt {
-    float: right;
     position: relative;
     bottom: 20px;
-}
-
-.card-6 .inbound.mb0 {
-    margin-top: 0;
-}
-
-.card-12 .btn-group {
-    float: right;
-}
-
-.card-12 .inbound, .card-12 .outbound {
-    clear: both;
 }
 
 p.total {
@@ -934,27 +783,23 @@ p.total {
 }
 
 .total_calls_in, .total_calls_out {
-    padding: 17px;    /*height: 48%;*/
+    padding: 17px;
 }
 
 .total_calls_out {
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff);
     margin-bottom: 10px;
 }
 
 .total_calls_in {
-    background: $blue;
-    color: #fff;
+    @include base_style($blue, #fff);
 }
 
 .total_calls_in h2, .total_calls_out h2 {
     text-align: center;
     font-size: 15px;
-    font-weight: 600;
     margin-bottom: 5%;
-    color: #fff;
-    border-bottom: none;
+    @include base_style(null, #fff, bottom, none, 600);
 }
 
 .total_calls_in p.total, .total_calls_out p.total {
@@ -1003,29 +848,19 @@ p.total {
 }
 
 .form-holder {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    background: #152130; /* Old browsers */
-    background: -moz-linear-gradient(top,  #152130 1%, #090d14 52%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #152130 1%,#090d14 52%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #152130 1%,#090d14 52%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#152130', endColorstr='#090d14',GradientType=0 ); /* IE6-9 */
+    @include border-radius(5px);
+    @include gradient(#152130, #090d14, top, 0%, 52%);
     border-top: 1px solid #23354e;
     margin-top: 17%;
 }
 
 .form-holder h4 {
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 0 0;
+    @include border-radius(5px 5px 0 0);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include base_style(null, #fff, bottom, 1px solid #23354e, 600);
     padding: 12px 0;
     margin-bottom: 20px;
-    @include blue_grad(#203047, #090d14);
-    border-bottom: 1px solid #23354e;
-    color: #fff;
     text-align: center;
-    font-weight: 600;
     text-transform: uppercase;
     margin-top: 0;
 }
@@ -1035,13 +870,11 @@ p.total {
 }
 
 .form-holder form input {
-    background: darken($blue, 2%) !important;
-    border: none;
-    color: #aaa;
+    @include base_style(darken($blue, 2%) !important, #aaa, null, none);
 }
 
 .form-holder .input-group-addon:last-child {
-    @include blue_grad(#203047, #090d14);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
 }
 
@@ -1067,12 +900,13 @@ a.dropdown-toggle {
 }
 
 .dd_trigger .active, .filter_campaign .active {
-    background: $blue !important;
-    color: #fff !important;
+    @include base_style($blue !important, #fff !important);
 }
 
 #reports_modal .modal-footer .btn_flgrgt{
-    float: right;margin-bottom: 0 !important;margin-right: 10px;color:#33A09B;font-weight: 600;
+    margin-right: 10px;
+    color:#33A09B;
+    font-weight: 600;
     &:hover{
         color: darken(#33A09B, 10%);
     }
@@ -1132,7 +966,7 @@ ul.dropdown-menu.filter_campaign {
 }
 
 .modal-header {
-    @include blue_grad(#203047, #090d14);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #fff;
 }
 
@@ -1143,7 +977,7 @@ ul.dropdown-menu.filter_campaign {
 
 .close {
     color: #fff;
-   @include opacity(0.7);
+    @include opacity(0.7);
 
     &:hover {
         @include opacity(1);
@@ -1190,13 +1024,11 @@ p.ajax_error {
 }
 
 .card-3 .inbound {
-    float: left;
     text-align: left;
     color: #888;
 }
 
 .card-3 .outbound {
-    float: right;
     text-align: right;
     color: #888;
 }
@@ -1251,12 +1083,9 @@ canvas#service_level {
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     font-size: 16px;
-    float: right;
     position: relative;
-    font-weight: 700;
-    color: $orange;
     bottom: 43px;
-    border-bottom: none;
+    @include base_style(null, $orange, bottom, none, 700);
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -1269,22 +1098,14 @@ h2.avg_cc, h2.avg_ct {
     margin-bottom: 0;
 }
 
-div#dataTable_filter label {
-    float: right;
-    margin-bottom: 20px;
-}
+// div#dataTable_filter label {
+//     float: right;
+//     margin-bottom: 20px;
+// }
 
-.dataTables_paginate .pagination {
-    float: right;
-}
-
-.btn_flt_rgt {
-    float: right;
-}
-
-.btn_flt_lft {
-    float: left;
-}
+// .dataTables_paginate .pagination {
+//     float: right;
+// }
 
 h2.card_title {
     text-transform: uppercase;
@@ -1299,16 +1120,13 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .dnc_table th, .demo_user_table th, .agent_compliance_table th {
-    background: #33A09B;
-    border-top: 0;
-    color: #fff;
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .dnc_table th, .demo_user_table th, .audit_table th{
+    @include base_style(#33A09B, #fff, top, 0);
     padding: 10px !important;
 }
 
 .reports_table tbody tr:hover{
-    background: #23354e;
-    color: #fff;
+    @include base_style(#23354e, #fff);
 }
 
 .table>thead>tr>th{border-bottom: 1px solid $blue;}
@@ -1330,7 +1148,7 @@ p.descrip.top14 {
     border-bottom: 1px solid #23354e;
 }
 
-.modal-footer{background:darken( #0f131f,2%);border-top: 1px solid #23354e;}
+.modal-footer{@include base_style(darken( #0f131f,2%), null, top, 1px solid #23354e);}
 
 #reports_modal .alert-danger {
     font-weight: 600;
@@ -1348,11 +1166,7 @@ p.descrip.top14 {
     font-weight: 600;
 }
 
-#reports_modal .modal-footer .btn {
-    float: left;
-}
-
-.reports_table.table>tbody>tr>td, .reports_table.table>thead>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
+.reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
     min-width: 125px;
     padding: 10px 4px;
 }
@@ -1360,7 +1174,6 @@ p.descrip.top14 {
 .reports_table.table{width: 99%;}
 
 .report_download {
-    display: none;
     margin-bottom: 40px;
 }
 
@@ -1399,9 +1212,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .bootstrap-datetimepicker-widget td.day:hover, .bootstrap-datetimepicker-widget td.hour:hover, .bootstrap-datetimepicker-widget td.minute:hover, .bootstrap-datetimepicker-widget td.second:hover {
-    background: #fff !important;
     cursor: pointer;
-    color:$blue;
+    @include base_style(#fff !important, $blue);
 }
 
 .bootstrap-datetimepicker-widget td span:hover {
@@ -1416,10 +1228,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     height: 40px;
 }
 
-.report_filters form input.form-control, .report_filters form select, .report_filters form button.multiselect, .form.adjust_interval select, .add_user select, .edit_user select, .create_recips form button.multiselect, .tools button.multiselect, .tools .form-control, .edit_rule .form-control, .edit_rule button.multiselect, .update_rule .form-control,.edit_myself select, .add_user input.form-control, .edit_user input.form-control, .edit_myself input.form-control, #webhook_generator input.form-control, #webhook_generator select, .add_provider .form-control, .add_smtp_server .form-control, .edit_smtp_server .form-control, .create_campaign_form .form-control,.edit_campaign_form .form-control, .add_esp .form-control, .edit_esp .form-control, #campaignFilterModal .form-control, input.datepicker_only, select.input-sm, input.datepicker_only, select.input-sm, .add_custom_field input.form-control, .create_notification .form-control, .add_demo_user .form-control, .notification_body, .add_filter .form-control, .add_action .form-control, .add_campaign .form-control, .edit_filter .form-control, .edit_action .form-control, #addPlaybookModal .form-control, .edit_playbook .form-control,  .modal_manage_fil_act .form-control, .add_sms_number .form-control, .delete_sms_number .form-control, .edit_sms_number .form-control, .compliance_settings .form-control  {
-    background: darken($blue, 2%) !important;
-    border: none;
-    color: lighten(#aaa, 5%);
+.fc_style, .tools{
+    .form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }   
 }
 
 .nav-tabs {
@@ -1553,11 +1365,8 @@ a.sort-by span.desc {
     font-weight: 600;
 }
 
-.pagination > li > a
-{
-
-    background-color: #ccc;
-    color: $blue;
+.pagination > li > a{
+    @include base_style(#ccc, $blue);
 }
 
 .pagination > li > a:focus,
@@ -1565,27 +1374,19 @@ a.sort-by span.desc {
 .pagination > li > span:focus,
 .pagination > li > span:hover
 {
-    color: $blue;
-    background-color: #eee;
-    border-color: #ddd;
+    @include base_style($blue, #eee, null, 1px solid $blue);
 }
 
-.pagination > .active > a
-{
-    color: white;
-    background-color: $blue;
-    border: solid 1px $blue;
+.pagination > .active > a{
+    @include base_style($blue, #fff, null, 1px solid $blue);
 }
 .pagination > .active:not(.disabled ) > a{
-    @include blue_grad(#203047, #090d14);
-    border: 1px solid $blue;
-    color: white;
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include base_style(null, #fff, null, 1px solid $blue);
 }
 
-.pagination > .active > a:hover
-{
-    background-color: lighten($blue,10%);
-    border: solid 1px lighten($blue,10%);
+.pagination > .active > a:hover{
+    @include base_style(lighten($blue,10%), null, null, 1px solid lighten($blue,10%));
 }
 
 .pag_report_errors, .report_errors {
@@ -1598,9 +1399,7 @@ a.sort-by span.desc {
 
 .pag_dets input {
     text-align: center;
-    background: $blue;
-    border:none;
-    color:lighten(#aaa,10%);
+    @include base_style($blue, lighten(#aaa,10%), null, none);
 }
 
 .form-group .btn-group button {
@@ -1625,8 +1424,8 @@ div.table-responsive .alert {
 
 .filter_time_camp_dets p {
     text-align: left;
-    font-size: 18px;
-    color: #ddd;
+    font-size: 17px;
+    color: #ccc;
     margin-top: 10px;
 }
 
@@ -1642,7 +1441,6 @@ span.selected_campaign {
 .reports_table tr:nth-of-type(odd), .cdr_results_table tr:nth-of-type(odd), .rules_table tr:nth-of-type(odd), .dnc_table tr:nth-of-type(odd), .providers_table tr:nth-of-type(odd), .smtp_servers table tr:nth-of-type(odd), .drip_campaigns table tr:nth-of-type(odd) {
     background-color: darken($blue, 10%);
 }
-
 
 .agent_call_log .reports_table tr:nth-of-type(odd) {
     background-color: none;
@@ -1668,9 +1466,12 @@ span.selected_campaign {
     border-color: #d6e9c6;
 }
 
-.hidetilloaded {
+.hidetilloaded, .card-6 .outbound, .opt .kpi, .search_results, .multi_db, .new_source_subcampaign_group, .new_destination_subcampaign_group {
     display: none;
 }
+
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a {display: none;}
 
 .report_totals td{
     background: #33A09B;
@@ -1690,7 +1491,7 @@ label.switch {
     text-align: left;
     width: 50px;
     height: calc(50px / 2);
-    border-radius: 60px;
+    @include border-radius(60px);
     background-color: $green;
     display: inline-block;
     position: relative;
@@ -1714,10 +1515,6 @@ label.switch > span:before, label.switch > span:after {
     position: absolute;
 }
 
-label.switch > input[type="checkbox"]:checked:focus ~ span {
-    // box-shadow: 0 0 0 2px #eee;
-}
-
 label.switch > span {
     border-radius: 60px;
 }
@@ -1727,7 +1524,7 @@ label.switch > span:before {
     height: 100%;
     box-sizing: border-box;
     background-color: $blue;
-    border-radius: 60px;
+    @include border-radius(60px);
     transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
     transform: scale(1);
     @include opacity(1);
@@ -1741,18 +1538,18 @@ label.switch > span:after {
     height: calc(50px / 2);
     transform: translate3d(0, -50%, 0);
     background-color: #fff;
-    border-radius: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    @include border-radius(100%);
+    @include box-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
 }
 
-// label.switch > input[type="checkbox"]:checked ~ span:before {
-//     transform: scale(0);
-//     @include opacity(0.7);
-// }
+label.switch > input[type="checkbox"]:checked ~ span:before {
+    transform: scale(0);
+    @include opacity(0.7);
+}
 
-// label.switch > input[type="checkbox"]:checked ~ span:after {
-//     transform: translate3d(100%, -50%, 0);
-// }
+label.switch > input[type="checkbox"]:checked ~ span:after {
+    transform: translate3d(100%, -50%, 0);
+}
 
 label.switch > input.checked ~ span:before{
     transform: scale(0);
@@ -1764,12 +1561,10 @@ label.switch > input.checked ~ span:after {
 }
 
 h2 {
-    font-weight: 600;
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
-    border-bottom: 1px solid darken(#23354e,5%);
-    color: #aaa;
+    @include base_style(null, #aaa, bottom, 1px solid darken(#23354e,5%), 600);
 }
 
 .opt {
@@ -1780,7 +1575,6 @@ h2 {
 }
 
 .opt a, .opt h4 {
-    float: left;
     display: inline-block;
     font-size: 17px;
     font-weight: 600;
@@ -1801,14 +1595,12 @@ h2 {
 }
 
 .opt .switch {
-    float: right;
     margin-left: 20px;
 }
 
 .opt .kpi {
     clear: both;
     margin-top: 45px;
-    display: none;
 }
 
 .opt .options a, .opt .options h4 {
@@ -1829,7 +1621,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options, .expanded_emails {
     clear: both;
-    // display: none;
 }
 
 .expanded_options .user, .expanded_emails .user {
@@ -1843,7 +1634,6 @@ a.expand_dets, h4.expand_dets {
 
 .expanded_options .user.clear, .expanded_emails .user.clear {
     clear: both;
-    // height: 65px;
     position: relative;
 }
 
@@ -1863,7 +1653,6 @@ a.expand_dets, h4.expand_dets {
 }
 
 .user_email_form {
-    // display: none;
     clear: both;
 }
 
@@ -1883,7 +1672,7 @@ a.remove_recip_glyph, a.remove_recip_fromall, a.edit_recip_glyph {
 
 a.edit_recip_glyph{right:35px;color:#33A09B;}
 a.kpi_change_details{
-     margin-right: 10px;
+    margin-right: 10px;
     position: absolute;
     bottom: 19px;
     right: 64px;
@@ -1901,18 +1690,13 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user {
-    float: right;
-    margin-right: 10px;
-}
-
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_filter_modal i, .actions a.remove_playbook_action_modal i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
     position: relative;
     top: 2px;
     color: #d9534f;
 }
 
-.users td a.remove_user{float: none;margin-left: 10px;}
+.users td a.remove_user{float: none;margin-left: 10px;margin-right: 10px;}
 
 div.alert-danger p {
     font-weight: 600;
@@ -1927,17 +1711,11 @@ a.fpass {
     display: none !important;
 }
 
-.controls {
-    float: right;
-}
-
 a.run_kpi.btn {
     position: relative;
     bottom: 0px;
-    background: $orange;
-    color: #fff;
+    @include base_style($orange, #fff, null, none);
     clear: both;
-    border: none;
     display: block;
     text-align: left;
     padding-top: 7px;
@@ -1945,8 +1723,7 @@ a.run_kpi.btn {
     font-size: 12px;
 
     &:hover{
-        background: darken($orange, 5%);
-        border:none !important;
+        @include base_style(darken($orange, 5%), null, null, none !important);
     }
 }
 
@@ -2022,29 +1799,25 @@ a.run_kpi.btn {
     position: relative;
 }
 
-
 .searchCnt{position: relative;}
 
 .search_results {
-    display: none;
     position: absolute;
     z-index: 99999;
     top: 45px;
-    border: 1px solid #ddd;
-    background: #ededed;
     width: 100%;
-}
-
-.search_results h5 {
-    padding: 8px 5px;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
-}
-
-.search_results h5:hover {
-    background: $blue;
-    color: #fff;
-    cursor: pointer;
+    @include base_style(#ededed, null, null, 1px solid #ddd);
+    
+    h5 {
+        padding: 8px 5px;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
+        
+        &:hover {
+            @include base_style($blue, #fff);
+            cursor: pointer;
+        }
+    }
 }
 
 #settingsForm input.form-control {
@@ -2079,7 +1852,7 @@ a.run_kpi.btn {
     margin-right: 15px;
     margin-top: 3px;
     vertical-align: top;
-    border-radius: 50%;
+    @include border-radius(50%);
     pointer-events: none;
 }
 
@@ -2093,19 +1866,14 @@ a.run_kpi.btn {
 }
 
 .btn-left, .btn-right {
-    position: absolute;    /*top: 0.24em;*/
+    position: absolute;
 }
 
 .card_dropbtn {
-
-    /*position: fixed;*/
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
-}
-
-.card_dropbtn.btn-left {
 }
 
 .card_dropdown.mv_left {
@@ -2124,11 +1892,10 @@ a.run_kpi.btn {
     display: none;
     position: relative;
     margin-top: 40px;
-    background-color: #f9f9f9;
-    border: 1px solid #d1d1d1;
     max-width: 210px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    @include base_style(#f9f9f9, null, null, 1px solid #d1d1d1);
+    @include box-shadow(0px 8px 16px 0px rgba(0, 0, 0, 0.2));
     z-index: 1;
     right: 20px;
 }
@@ -2138,7 +1905,7 @@ a.run_kpi.btn {
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    @include blue_grad(#203047, #090d14);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
 }
 
 .card_dropdown-content a {
@@ -2167,9 +1934,9 @@ a.run_kpi.btn {
 }
 
 .input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {
-    @include blue_grad(#203047, #090d14);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
     color: #eee;
-    border-radius: 0;
+    @include border-radius(0);
 }
 
 .db_select.ls_style_none {
@@ -2182,23 +1949,17 @@ a.run_kpi.btn {
 }
 
 ul.db_select li.active>a, a[aria-expanded="true"] {
-    background: none;
-    color: $green;
+    @include base_style(none, $green);
 }
 
 .panel-default>.panel-heading{
-    background: #263854; /* Old browsers */
-    background: -moz-linear-gradient(top,  #263854 0%, #171f33 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
+    @include gradient(#263854, #171f33,top, 0%, 100%);
     color:#fff;
     height: 40px;
 }
 
 .note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
-    background: #1d2b40 !important;
-    color:#eee !important;
+    @include base_style( #1d2b40 !important,#eee !important);
 }
 
 .note-editor.note-airframe, .note-editor.note-frame, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar{
@@ -2216,16 +1977,11 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
 }
 
 .panel-default>.panel-heading+.panel-collapse>.panel-body{
-    background: darken($blue, 10%);
-    border-top: 1px solid lighten($blue, 10%);
+    @include base_style(darken($blue, 10%), null, 1px solid lighten($blue, 10%));
 }
 
 .nav-tabs {
     border-bottom: 1px solid #23354e;
-}
-
-.db_select a.dropdown-toggle {
-    float: right;
 }
 
 .db_select label {
@@ -2281,25 +2037,12 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border-top: 6px solid #d9534f;
 }
 
-.nav-tabs>li>a:hover {
-    border-color: #ddd;
-    background: #fff;
-}
-
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    background: #23354e;
-    color: #fff;
-    font-weight: 600;
-    border: 1px solid #23354e;
+    @include base_style(#23354e, #fff, null, 1px solid #23354e, 600);
 }
 
 .nav-tabs > li > a:hover{
-    background: lighten(#23354e, 10%);
-    border: 1px solid lighten(#23354e, 10%);
-}
-
-.cdr_table {
-    display: none;
+    @include base_style(lighten(#23354e, 10%), null, null, 1px solid lighten(#23354e, 10%)!important);
 }
 
 .cdr_results_table {
@@ -2311,9 +2054,8 @@ div#cdr_dataTable_paginate {
 }
 
 h4.panel-title a{
-  display: block;
-  width: 100%;
-  // float: left;
+    display: block;
+    width: 100%;
 }
 
 .user_links_modal a:nth-of-type(odd) {
@@ -2329,8 +2071,6 @@ h4.panel-title a{
 
 .user_links_modal h3 span{color: #aaa;}
 
-.multi_db{display: none;}
-
 .multi_db.show_multi_db{
   display: block;
 }
@@ -2338,14 +2078,12 @@ h4.panel-title a{
 #kpi_select.multiselect + .btn-group li a label{
     padding: 0px;
     padding-left: 30px;
-
 }
 
 .checkbox.mb20{
     margin-bottom: 20px;
 }
 
-.fltlft{float: left;margin-right: 20px;}
 .undoselection_btn{
     color: #d9534f;
     font-weight: 600;
@@ -2353,8 +2091,6 @@ h4.panel-title a{
     top:9px;
 }
 
-#editRecipModal input.form-control{background: $blue;border:none;color:#aaa;}
-#editRecipModal .alert{display: none;}
 #editRecipModal .btn.btn-warning{background: $orange;border:none;}
 
 p.name span.name{width: 150px;}
@@ -2384,15 +2120,13 @@ p.name i{margin-right: 5px;}
 .avg_wait_time_max{right: 6%;}
 .card.flipping_card .title.mb15{margin-bottom: 15px;}
 
-
 .rules_table tbody tr td .btn{
     max-width: 170px;
     font-weight: 600;
 }
 
 .btn-default.disable{
-    background: $blue;
-    color:#aaa;
+    @include base_style($blue, #aaa);
     &:hover{
         background: $blue !important;
     }
@@ -2492,13 +2226,8 @@ table.dataTable tbody tr:nth-of-type(even){
 }
 
 .table>thead>tr>th{
-    background: $green;
-    color: #fff;
+    @include base_style($green, #fff);
 }
-
-// .dropdown-menu{
-//     background: $blue;
-// }
 
 .btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default{
     border:none;
@@ -2510,13 +2239,11 @@ table.dataTable tbody tr:nth-of-type(even){
 }
 
 .multiselect-container.dropdown-menu{
-    background: $blue;
-    color: #aaa !important;
+    @include base_style($blue, #aaa !important);
 }
 
 .dropdown-menu li:nth-child(even){
-    background: darken($blue, 10%);
-    color: #aaa !important;
+    @include base_style(darken($blue, 10%), #aaa !important);
 }
 
 .dropdown-menu li{
@@ -2525,8 +2252,7 @@ table.dataTable tbody tr:nth-of-type(even){
     }
 
     &:hover{
-        background: lighten($blue, 10%);
-        color: #aaa !important;
+        @include base_style(lighten($blue, 10%), #aaa !important);
     }
 }
 
@@ -2535,8 +2261,7 @@ table.dataTable tbody tr:nth-of-type(even){
 }
 
 .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
-    background: lighten($blue, 5%);
-    color: #aaa !important;
+    @include base_style(lighten($blue, 5%), #aaa !important);
 }
 
 .form-holder.welcome_box{
@@ -2576,7 +2301,6 @@ table.dataTable tbody tr:nth-of-type(even){
     &.expired{
         min-height: 150px;
 
-
         div.alert{
             font-size: 16px;
             margin-top: 30px;
@@ -2615,23 +2339,6 @@ table.dataTable tbody tr:nth-of-type(even){
     margin-bottom: 20px !important;
 }
 
-.add_demo_user, .edit_demo_user{
-    
-    input.form-control{
-        background: $blue;
-        border:none;
-        color:#aaa;
-    }
-
-    select{
-        background: $blue;
-        border:1px solid $blue;
-        color:#aaa;
-    }
-
-    .alert-danger{display: none;}
-}
-
 .modal-body h3.leaddetail_name{
     color:#eee;
     font-weight: 600;
@@ -2667,31 +2374,26 @@ table.dataTable tbody tr:nth-of-type(even){
 
 a.remove_filter{
     color: #d9534f;
-    float: right;
     font-size: 15px;
 }
 
 .leadfilter_row .card{overflow: auto;}
 
 .btn.btn-reset{
-    background: #ccc;
-    color:#333;
+    @include base_style(#ccc, #333);
     margin-right: 10px;
 
     &:hover{
-        color: #333 !important;
-        background:  darken(#ccc, 5%);
+        @include base_style(darken(#ccc, 5%), #333 !important);
     }
 }
 
 .btn.btn-cancel{
-    background: #ddd;
-    color: #666;
+    @include base_style(#ddd, #666);
     @include transition(all, ease, 0.3s);
 
     &:hover{
-        color:#444 !important;
-        background: darken(#ddd,10%);
+        @include base_style(darken(#ddd, 10%), #444 !important);
     }
 }
 
@@ -2724,10 +2426,9 @@ a.remove_filter{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }
@@ -2743,15 +2444,12 @@ a.remove_filter{
     margin-bottom: 20px;
 }
 
-.cb{clear: both;}
-
 p.filename {
     float: left;
     margin-top: 7px;
 }
 
 a.toggle_instruc {
-    float: right;
     color: #33A09B;
     font-size: 18px;
     position: relative;
@@ -2798,7 +2496,7 @@ a.toggle_instruc {
         }
     }
 
-    label{float: right;margin-top: 10px;}
+    label{margin-top: 10px;}
 
     h3{
         border-bottom: 1px solid #1b293c ;
@@ -2846,9 +2544,8 @@ a.toggle_instruc {
 
     form.add_custom_field{
         padding: 20px;
-        border-radius: 5px;
-        background: #000001 !important;
-        border: 1px solid #1b293c;
+        @include border-radius(5px);
+        @include base_style( #000001 !important, null, 1px solid #1b293c);
 
         div.form-group input.form-control {
             background: darken($blue, 8%) !important;
@@ -2858,10 +2555,8 @@ a.toggle_instruc {
 
 .final_url_cnt{
     textarea.url.form-control{
-        color: $green;
         @include border-radius(5px);
-        background: darken($blue, 20%) !important;
-        border: 1px solid #1b293c;
+        @include base_style(darken($blue, 20%) !important, $green, null, 1px solid #1b293c);
         min-height: 100px;
         padding: 12px;
 
@@ -2874,8 +2569,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger{
-    background: #f2dede;
-    color:#a94442;
+    @include base_style(#f2dede, #a94442);
 }
 
 [hidden] {
@@ -2893,10 +2587,9 @@ td.bg-danger{
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
+    @include opacity(0);
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
 }
@@ -2904,8 +2597,7 @@ td.bg-danger{
 .label-info{font-size: 13px;margin-left: 10px;}
 
 .btn-secondary{
-    background: #ccc;
-    color: #444;
+    @include base_style(#ccc, #444);
 
     &:hover{
         background: #bbb;
@@ -2922,9 +2614,6 @@ td.bg-danger{
     position: relative;
     top:25px;
 }
-
-//prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a {display: none;}
 
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
@@ -2943,39 +2632,29 @@ td.bg-danger{
 }
 
 p.login_date {
-    float: right;
     font-weight: 600;
     margin-right: 10px;
 }
 
 .btn-notifications{
-    background:none;
-    color:#fff;
+    @include base_style(none, #fff);
     position:relative;
     font-size: 18px;
     bottom:2px;
     &:hover{color: $green;}
-    &:hover span.numb_notifications{background: #fff;color:$green;}
-
+    &:hover span.numb_notifications{@include base_style(#fff, $green);}
 }
 
 span.numb_notifications{
     position:relative;
     bottom:10px;
     right:7px;
-    background: $orange;
-    color:#fff;
     height: 17px;
     width: 17px;
+    @include base_style($orange, #fff);
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
-}
-
-.btn-secondary.cancel{
-    float: left;
-    margin-top: 10px;
-    margin-right: 15px;
 }
 
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
@@ -3001,8 +2680,6 @@ span.numb_notifications{
         font-size: 15px;
     }
 }
-.calls_per_hour table thead th a {display: none;}
-.calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 
 .loader_hor{float: left;}
 .add_filter .alert{clear:both;}
@@ -3065,26 +2742,32 @@ a.add_action, a.add_filter{
 
 table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
 
+.calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
 .note-editor.note-airframe .note-status-output,
 .note-editor.note-frame .note-status-output,
 .note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable,
 .note-editor.note-airframe .note-statusbar .note-resizebar,
 .note-editor.note-frame .note-statusbar .note-resizebar {
-  background: #1d2b40 !important;
-  color: #eee !important;
+    @include base_style( #1d2b40 !important, #eee !important);
 }
 
 .note-editor.note-airframe,
 .note-editor.note-frame,
 .note-editor.note-airframe .note-statusbar .note-resizebar,
 .note-editor.note-frame .note-statusbar .note-resizebar {
-  border: 1px solid #1b293c !important;
+    border: 1px solid #1b293c !important;
 }
 
 .note-toolbar.panel-heading {
-  background: #111a26;
-  height: 45px;
+    background: #111a26;
+    height: 45px;
+}
+
+.dt-buttons{
+    button{
+        @include base_style($green, #fff);
+    }
 }
 
 /* ---------------------------------------------------
@@ -3114,7 +2797,6 @@ MEDIAQUERIES
         font-size: 20px;
         margin-bottom: 25px;
     }
-
 }
 
 @media handheld, only screen and (max-width: 1300px){
@@ -3141,7 +2823,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
     }
-
 }
 
 @media handheld, only screen and (max-width:1070px) {
@@ -3162,7 +2843,6 @@ MEDIAQUERIES
             height: 75px;
         }
     }
-
 }
 
 @media handheld, only screen and (max-width:1010px) {
@@ -3170,7 +2850,6 @@ MEDIAQUERIES
         clear: both;
         display: block;
     }
-
 }
 
 @media handheld, only screen and (min-width:991px) {
@@ -3193,10 +2872,6 @@ MEDIAQUERIES
     .match_height_4_gt, .match_height_4_st {
         margin-bottom: 20px;
         padding: 0;
-    }
-
-    .col-md-4.col-sm-12.set_hgt, .get_hgt {
-        // padding: 0;
     }
 
     .mb80{margin-bottom: 80px;}
@@ -3222,9 +2897,6 @@ MEDIAQUERIES
         margin-bottom: 20px;
     }
 
-    /*.total_calls_in, .total_calls_out{
-      max-height: 160px;
-    }*/
     .total_calls_in h2, .total_calls_out h2 {
         font-size: 23px;
         margin-bottom: 20px;
@@ -3233,7 +2905,6 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 55px;
     }
-
 }
 
 @media (min-width:768px) {
@@ -3294,10 +2965,6 @@ MEDIAQUERIES
         margin-top: 120px;
     }
 
-    canvas#service_level {
-        // margin-bottom: 30px;
-    }
-
     .col-sm-3.report_download {
         margin-top: 20px;
     }
@@ -3315,7 +2982,6 @@ MEDIAQUERIES
         width: 50px;
     }
 
-    /*.col-sm-3.report_download{margin-bottom: 20px;}*/
     .col-sm-3.report_download h3 {
         margin-top: 0;
     }
@@ -3352,12 +3018,6 @@ MEDIAQUERIES
     }
 }
 
-/*@media handheld, only screen and (max-width: 668px){
-img.text_logo{
-  display: none;
-}
-
-}*/
 @media handheld, only screen and (max-width:556px) {
 
     .form-holder.welcome_box h1{font-size: 30px;}
@@ -3472,8 +3132,3 @@ img.text_logo{
     }
 
 }
-
-/*@media handheld, only screen and (min-width: 552px) {
-  .nopad{padding: 0;}
-}
-*/

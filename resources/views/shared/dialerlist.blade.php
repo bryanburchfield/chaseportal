@@ -35,7 +35,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="{{$mode}}_heading{{$db}}">
                     <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
+                        <a class="collapsed flt_rgt" role="button" data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
                         {{__('users.dialer')}} {{$db}}
 
                         @if($users->count())
@@ -63,7 +63,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="group_heading{{$id}}">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#{{$mode}}_group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#{{$mode}}_group_accordion{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_group_{{$db}}_{{$id}}">{{$id}}</a>
+                                            <a class="collapsed flt_rgt" role="button" data-toggle="collapse" href="#{{$mode}}_group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#{{$mode}}_group_accordion{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_group_{{$db}}_{{$id}}">{{$id}}</a>
                                         </h4>
                                     </div>
 
