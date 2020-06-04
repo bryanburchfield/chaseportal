@@ -197,6 +197,8 @@ class ComplianceDashController extends Controller
 
     private function processResults($rep_array, $pause_array)
     {
+        $results = [];
+
         $rep_details = collect();
 
         foreach ($rep_array as $rep_rec) {
@@ -237,7 +239,6 @@ class ComplianceDashController extends Controller
         $pause_recs = [];
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
-
             switch ($rec['Action']) {
                 case 'Login':
                     if ($this->checkCampaign($rec['Campaign'])) {
@@ -251,7 +252,9 @@ class ComplianceDashController extends Controller
                     break;
                 case 'Paused':
                     if (round($rec['Duration']) > 0) {
-                        $rep_details->push($this->detailRec($rec));
+                        if ($this->checkCampaign($rec['Campaign'])) {
+                            $rep_details->push($this->detailRec($rec));
+                        }
                         $pause_recs[] = [
                             'id' => $rec['id'],
                             'Date' => $rec['Date'],
