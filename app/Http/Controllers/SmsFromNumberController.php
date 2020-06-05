@@ -20,7 +20,8 @@ class SmsFromNumberController extends Controller
             ->get();
 
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 
