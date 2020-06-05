@@ -106,6 +106,7 @@ return [
 	'playbook_filters'	=> 'Filtros de libro de jugadas',
 	'playbooks'	=> 'Libros de Jugadas',
 	'playbook_cant_activate' => 'Playbook debe tener al menos un filtro y una acción para activarse',
+	'playbook_touches'	=> 'Toques de Libro de Jugadas',
 	'port'			=> 'Puerto',
 	'processed'		=> 'Procesada',
 	'properties'	=> 'Propiedades',

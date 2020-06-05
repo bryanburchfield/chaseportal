@@ -34,6 +34,13 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');  // update a playbook by id
                 Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
 
+                // Touches
+                Route::get('/touches/{contacts_playbook_id}', 'PlaybookTouchController@index');  // touches index
+                Route::post('/touches/{contacts_playbook_id}', 'PlaybookTouchController@addPlaybookTouch');  // add a touch
+                Route::get('/touches/touch/{id}', 'PlaybookTouchController@getPlaybookTouch');  // get a touch by id
+                Route::patch('/touches/touch/{id}', 'PlaybookTouchController@updatePlaybookTouch');  // update a touch by id
+                Route::delete('/touches/touch/{id}', 'PlaybookTouchController@deletePlaybookTouch');  // delete a touch by id
+
                 // Playbook filters
                 Route::get('/playbooks/filters/{id}', 'PlaybookController@getPlaybookFilters');  // get filters on a playbook by id
                 Route::patch('/playbooks/filters/{id}', 'PlaybookController@saveFilters');  // add/update filters on a playbook by id
@@ -74,6 +81,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/get_subcampaigns', 'PlaybookActionController@getSubcampaigns'); // get all subcampaigns: pass in 'campaign' (required)
                 Route::post('/get_table_fields', 'PlaybookActionController@getTableFields');  // get all custom table fields: pass in 'campaign' (required)
                 Route::post('/toggle_playbook', 'PlaybookController@toggleActive');  // toggles a playbook active/inactive: pass in 'id' (required)
+                Route::post('/toggle_playbook_touch', 'PlaybookTouchController@toggleActive');  // toggles a touch active/inactive: pass in 'id' (required)
                 Route::post('/activate_all_playbooks', 'PlaybookController@activateAllPlaybooks');  // toggles all playbooks active: pass in 'id' (required)
                 Route::post('/deactivate_all_playbooks', 'PlaybookController@deactivateAllPlaybooks');  // toggles all playbooks inactive/inactive: pass in 'id' (required)
 

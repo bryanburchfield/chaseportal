@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookOptout;
+use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PlaybookController extends Controller
 {
+    use CampaignTraits;
+    use SqlServerTraits;
+
     /**
      * Playbook campaigns index
      * 
