@@ -23,10 +23,11 @@ class PlaybookFilterController extends Controller
     public function index()
     {
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
-
+        
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_filters.js'],

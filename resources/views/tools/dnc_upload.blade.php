@@ -16,9 +16,8 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
-						{{-- @include('tools.shared.topnav', ['toolpage' => 'dnc']) --}}
 
-						<div class="tab-pane mt30" id="dnc_importer">
+						<div class="tab-pane" id="dnc_importer">
                             <h2 class="bbnone mb20">{{__('tools.upload_dnc_file')}}</h2>
                             <ul class="pl10 paditem5">
 								<li>{{__('tools.dnc_upload1')}}</li>

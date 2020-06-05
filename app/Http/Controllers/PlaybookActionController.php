@@ -36,7 +36,8 @@ class PlaybookActionController extends Controller
     public function index()
     {
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 

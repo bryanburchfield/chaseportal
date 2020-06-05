@@ -243,7 +243,8 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $page['menuitem'] = 'tools';
+        $page['menuitem'] = 'dnc_importer';
+        $page['menu'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
@@ -266,7 +267,8 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $page['menuitem'] = 'tools';
+        $page['menuitem'] = 'dnc_importer';
+        $page['menu'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
