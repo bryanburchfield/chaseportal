@@ -25,13 +25,12 @@ class SmsFromNumberController extends Controller
             'type' => 'other',
         ];
 
-        $data =
-            [
-                'page' => $page,
-                'jsfile' => [],
-                'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
-                'playbook_sms_numbers' => $playbook_sms_numbers,
-            ];
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'playbook_sms_numbers' => $playbook_sms_numbers,
+        ];
 
         return view('tools.playbook.from_number.index')->with($data);
     }
