@@ -133,6 +133,7 @@ class NewPlaybookTables extends Migration
             $table->string('name');
             $table->boolean('active')->default(0);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('contacts_playbook_id')
                 ->references('id')->on('contacts_playbooks')

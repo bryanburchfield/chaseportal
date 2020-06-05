@@ -15,8 +15,8 @@ class PlaybookRun extends Model
         return $this->belongsTo('App\Models\ContactsPlaybook');
     }
 
-    public function playbook_run_details()
+    public function playbook_run_touches()
     {
-        return $this->hasMany('App\Models\PlaybookRunDetail');
+        return $this->hasMany('App\Models\PlaybookRunTouch');
     }
 }

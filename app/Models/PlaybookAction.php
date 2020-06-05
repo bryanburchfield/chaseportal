@@ -13,9 +13,9 @@ class PlaybookAction extends Model
         'action_type',
     ];
 
-    public function contacts_playbook_actions()
+    public function playbook_touch_actions()
     {
-        return $this->hasMany('App\Models\ContactsPlaybookAction');
+        return $this->hasMany('App\Models\PlaybookTouchAction');
     }
 
     public function playbook_lead_action()
