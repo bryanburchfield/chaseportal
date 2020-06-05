@@ -24,24 +24,13 @@
 
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
-
-                                        {{-- <div class="toggle_all_switch">
-                                            <label class="switch">
-                                                <input type="checkbox" class="toggle_all_playbooks"
-                                                    name="playbook_input"
-                                                >
-                                                <span></span>
-                                            </label>
-                                            <span class="toggle_all_label">Activate All Playbooks</span>
-                                        </div> --}}
+                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal flt_rgt">{{__('tools.add_playbook')}}</a>
                                         
-                                        <div class="toggle_all_btns">
+                                        <!-- <div class="toggle_all_btns">
                                             <a href="#" class="btn btn-info activate_all_playbooks">Activate All Playbooks</a>
                                             <a href="#" class="btn btn-danger deactivate_all_playbooks">Deactivate All Playbooks</a>
-                                        </div>
-
-                                        <div class="table-responsive nobdr playbooks mt20">
+                                        </div> -->
+                                       <!--  <div class="table-responsive nobdr playbooks mt20">
                                             <table class="table mt20 table-striped" id="playbooks_datatable">
                                                 <thead>
                                                     <tr>
@@ -113,10 +102,52 @@
                                                     @endif
                                                 </tbody>
                                             </table>
-                                        </div>
+                                        </div> -->
 
                                         <div class="alert alert-danger hidetilloaded playbook_activation_errors"></div>
                                         <div class="alert alert-warning hidetilloaded playbook_activation_warning"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
+                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
+                                            <h4 class="name">Defense Playbook</h4>
+
+                                            <label class="switch">
+                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
+                                                <span></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
+                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
+                                            <h4 class="name">Offense Playbook</h4>
+
+                                            <label class="switch">
+                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
+                                                <span></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
+                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
+                                            <h4 class="name">Defense Playbook II</h4>
+
+                                            <label class="switch">
+                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
+                                                <span></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
+                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
+                                            <h4 class="name">Offense Playbook II</h4>
+
+                                            <label class="switch">
+                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
+                                                <span></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

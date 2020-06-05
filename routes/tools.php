@@ -33,6 +33,9 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::get('/playbooks/{id}', 'PlaybookController@getPlaybook');  // get a playbook by id
                 Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');  // update a playbook by id
                 Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
+                Route::post('/playbooks/toggle/{id}', 'PlaybookController@togglePlaybook');  // toggle a playbook by id
+                // Touches
+                Route::get('/touches/', 'PlaybookTouchController@index');  // delete an action by id
 
                 // Playbook filters
                 Route::get('/playbooks/filters/{id}', 'PlaybookController@getPlaybookFilters');  // get filters on a playbook by id

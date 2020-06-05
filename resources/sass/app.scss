@@ -1572,14 +1572,14 @@ label.switch > span:after {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-// label.switch > input[type="checkbox"]:checked ~ span:before {
-//     transform: scale(0);
-//     @include opacity(0.7);
-// }
+label.switch > input[type="checkbox"]:checked ~ span:before {
+    transform: scale(0);
+    @include opacity(0.7);
+}
 
-// label.switch > input[type="checkbox"]:checked ~ span:after {
-//     transform: translate3d(100%, -50%, 0);
-// }
+label.switch > input[type="checkbox"]:checked ~ span:after {
+    transform: translate3d(100%, -50%, 0);
+}
 
 label.switch > input.checked ~ span:before{
     transform: scale(0);
@@ -2781,6 +2781,38 @@ a.add_action, a.add_filter{
 
 .paginate_button {padding: 0 !important;}
 table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
+
+.playbook, .touch{
+    a{
+        margin:0 auto;
+        display: block;
+        margin-bottom: 10px;
+
+        i{
+            margin:0 auto;
+            display: block;
+            text-align: center;
+            font-size: 55px;
+
+            &:hover{
+                 @include transition(all, ease, 0.3s);
+                color:$green;
+            }
+        }
+    }
+
+    .name{
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .switch{
+        margin:0 auto;
+        display: block;
+    }
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

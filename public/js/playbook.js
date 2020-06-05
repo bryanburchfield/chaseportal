@@ -11,6 +11,43 @@ var Playbook = {
 		$('.provider_type').on('change', this.get_provider_properties);
 		$('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
 		$('.cancel_modal_form').on('click', this.cancel_modal_form);
+		$('.switch input').on('click', this.toggle_playbook);
+	},
+
+	toggle_playbook:function(){
+
+	    var checked;
+	    var group_id = $('#group_id').val();
+	    var id = $(this).parent().parent().data('playbook');
+
+
+	    if($(this).is(':checked')){
+	        $(this).attr('Checked','Checked');
+	        checked=1;
+	    }else{
+	        $(this).removeAttr('Checked');
+	        checked=0;
+	    }
+
+	    $.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/toggle_playbook/'+id,
+	        type:'POST',
+	        data:{
+	            checked:checked,
+	            kpi:kpi,
+	            group_id:group_id
+
+	        },
+	        success:function(response){
+	        	console.log(response);
+	        }
+	    });
 	},
 
 	add_esp: function (e) {
