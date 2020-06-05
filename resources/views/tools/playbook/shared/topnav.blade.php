@@ -4,6 +4,6 @@
     <li @if ($playbook_page == 'actions') class="active" @endif><a href="{{action('PlaybookActionController@index')}}">{{__('tools.playbook_actions')}}</a></li>
     <li @if ($playbook_page == 'providers') class="active" @endif><a href="{{action('PlaybookEmailProviderController@index')}}">{{__('tools.email_service_providers')}}</a></li>
     @if (Auth::user()->isType('superadmin'))
-        <li @if ($playbook_page == 'sms_numbers') class="active" @endif><a href="{{action('PlaybookSmsNumberController@index')}}">SMS Numbers</a></li>
+        <li @if ($playbook_page == 'sms_numbers') class="active" @endif><a href="{{action('SmsFromNumberController@index')}}">SMS Numbers</a></li>
     @endif
 </ul>
