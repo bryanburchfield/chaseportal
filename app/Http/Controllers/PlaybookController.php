@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ValidContactsPlaybookAction;
-use App\Http\Requests\ValidContactsPlaybookFilter;
+use App\Http\Requests\ValidPlaybookTouchAction;
+use App\Http\Requests\ValidPlaybookTouchFilter;
 use App\Http\Requests\ValidPlaybook;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
@@ -247,10 +247,10 @@ class PlaybookController extends Controller
     /**
      *  Save filters on a playbook
      * 
-     * @param ValidContactsPlaybookFilter $request 
+     * @param ValidPlaybookTouchFilter $request 
      * @return string[] 
      */
-    public function saveFilters(ValidContactsPlaybookFilter $request)
+    public function saveFilters(ValidPlaybookTouchFilter $request)
     {
         $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
         $contacts_playbook->saveFilters($request->filters);
@@ -261,10 +261,10 @@ class PlaybookController extends Controller
     /**
      * Save actions on a playbook
      * 
-     * @param ValidContactsPlaybookAction $request 
+     * @param ValidPlaybookTouchAction $request 
      * @return string[] 
      */
-    public function saveActions(ValidContactsPlaybookAction $request)
+    public function saveActions(ValidPlaybookTouchAction $request)
     {
         $contacts_playbook = ContactsPlaybook::findOrFail($request->id);
         $contacts_playbook->saveActions($request->actions);
