@@ -18,13 +18,13 @@
         <li data-page="reports" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'reports' ? 'class="active"' : ''?> data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>{{__('sidenav.reports')}}</a></li>
 
         @if (Auth::user()->isType(['admin','superadmin']))
-            <li data-page="tools" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''?> ><a href="{{ action('PlaybookController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
+            <li data-page="tools" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''?> ><a href="#" class="tools_link" data-path="load_tools_nav"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
         @endif
 
         <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-cog"></i>{{__('sidenav.settings')}}</a></li>
 
         @can('accessAdmin')
-            <li data-page="admin" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'admin' ? 'class="active"' : ''?>><a class="admin_link" href="#"><i class="fas fa-user-shield"></i>{{__('sidenav.admin')}}</a></li>
+            <li data-page="admin" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'admin' ? 'class="active"' : ''?>><a href="#" class="admin_link" data-path="load_admin_nav"><i class="fas fa-user-shield"></i>{{__('sidenav.admin')}}</a></li>
         @endcan
     </ul>
 </nav>
