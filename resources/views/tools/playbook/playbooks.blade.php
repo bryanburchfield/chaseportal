@@ -26,128 +26,23 @@
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal flt_rgt">{{__('tools.add_playbook')}}</a>
                                         
-                                        <!-- <div class="toggle_all_btns">
-                                            <a href="#" class="btn btn-info activate_all_playbooks">Activate All Playbooks</a>
-                                            <a href="#" class="btn btn-danger deactivate_all_playbooks">Deactivate All Playbooks</a>
-                                        </div> -->
-                                       <!--  <div class="table-responsive nobdr playbooks mt20">
-                                            <table class="table mt20 table-striped" id="playbooks_datatable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>{{__('tools.active')}}</th>
-                                                        <th>{{__('tools.name')}}</th>
-                                                        <th>{{__('tools.campaign')}}</th>
-                                                        <th>{{__('tools.subcampaign')}}</th>
-                                                        <th>{{__('tools.filters')}}</th>
-                                                        <th>{{__('tools.actions')}}</th>
-                                                        <th>{{__('tools.edit')}}</th>
-                                                        <th>{{__('tools.delete')}}</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if(count($contacts_playbooks))
-                                                        @foreach($contacts_playbooks as $playbook)
-
-                                                            <tr data-playbook_id="{{$playbook->id}}">
-                                                                <td>
-
-                                                                    <label class="switch">
-                                                                        <input type="checkbox"
-                                                                            {{ ($playbook->active) ? 'checked' : '' }}
-                                                                            name="playbook_input"
-                                                                            data-campaign="{{$playbook->campaign}}"
-                                                                            data-playbook_id="{{$playbook->id}}"
-                                                                            class="toggle_playbook {{ ($playbook->active) ? 'checked' : '' }}"
-                                                                        >
-                                                                        <span></span>
-                                                                    </label>
-                                                                </td>
-                                                                <td>{{$playbook->name}}</td>
-                                                                <td>{{$playbook->campaign}}</td>
-                                                                <td>
-                                                                    @empty($playbook->subcampaign)
-                                                                        <i>{{__('tools.any')}}</i><br>
-                                                                    @endempty
-                                                                    @isset($playbook->subcampaign)
-                                                                        @if ($playbook->subcampaign == '!!none!!')
-                                                                            <i>{{__('tools.no_subcampaign')}}</i><br>
-                                                                        @else
-                                                                            {{$playbook->subcampaign}}<br>
-                                                                        @endif
-                                                                    @endisset
-                                                                </td>
-                                                                <td>
-                                                                    @if(count($playbook->filters))
-                                                                        @foreach ($playbook->filters as $filter)
-                                                                            <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="0" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i> {{$filter->playbook_filter->name}}</a>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <a href="#" data-toggle="modal" data-target="#filterPlaybookModal" class="playbook_filters_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="1" data-playbookid="{{$playbook->id}}"><i class="far fa-eye"></i></a>
-                                                                    @endif
-                                                                </td>
-                                                                <td>
-                                                                    @if(count($playbook->actions))
-                                                                        @foreach ($playbook->actions as $action)
-                                                                            <a href="#" data-toggle="modal" data-campaign="{{$playbook->campaign}}" data-target="#actionPlaybookModal" data-playbookid="{{$playbook->id}}" data-is_empty="0" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}"><i class="fas fa-edit"></i> {{$action->playbook_action->name}}</a>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <a href="#" data-toggle="modal" data-target="#actionPlaybookModal" class="playbook_actions_modal" data-campaign="{{$playbook->campaign}}" data-is_empty="1" data-playbookid="{{$playbook->id}}"><i class="far fa-eye"></i></a>
-                                                                    @endif
-                                                                </td>
-                                                                <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editPlaybookModal" class=" edit_playbook_modal" data-playbookid="{{$playbook->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal" href="#" data-name="{{$playbook->name}}" data-playbookid="{{$playbook->id}}"><i class="fa fa-trash-alt"></i></a></td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </div> -->
-
                                         <div class="alert alert-danger hidetilloaded playbook_activation_errors"></div>
                                         <div class="alert alert-warning hidetilloaded playbook_activation_warning"></div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
-                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
-                                            <h4 class="name">Defense Playbook</h4>
 
-                                            <label class="switch">
-                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
-                                                <span></span>
-                                            </label>
-                                        </div>
+                                        @foreach($contacts_playbooks as $contacts_playbook)
+                                            <div class="playbook col-sm-2" data-playbook="{{$contacts_playbook->id}}">
+                                                <a href="{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}"><i class="fas fa-book fa-3x"></i></a>
+                                                <h4 class="name">{{$contacts_playbook->name}}</h4>
 
-                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
-                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
-                                            <h4 class="name">Offense Playbook</h4>
-
-                                            <label class="switch">
-                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
-                                                <span></span>
-                                            </label>
-                                        </div>
-
-                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
-                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
-                                            <h4 class="name">Defense Playbook II</h4>
-
-                                            <label class="switch">
-                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
-                                                <span></span>
-                                            </label>
-                                        </div>
-
-                                        <div class="playbook col-sm-2" data-playbook="id_goes_here">
-                                            <a href="{{ action("PlaybookTouchController@index")}}"><i class="fas fa-book fa-3x"></i></a>
-                                            <h4 class="name">Offense Playbook II</h4>
-
-                                            <label class="switch">
-                                                <input type="checkbox"{{--  {{ ($kpi->active) ? 'checked' : '' }} --}} name="kpi_input">
-                                                <span></span>
-                                            </label>
-                                        </div>
+                                                <label class="switch">
+                                                    <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="kpi_input">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
