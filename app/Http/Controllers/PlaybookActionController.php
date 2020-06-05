@@ -13,7 +13,7 @@ use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookSmsAction;
-use App\Models\PlaybookSmsNumber;
+use App\Models\SmsFromNumber;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
@@ -319,7 +319,7 @@ class PlaybookActionController extends Controller
      */
     private function smsFromNumbers()
     {
-        return PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])
+        return SmsFromNumber::whereIn('group_id', [0, Auth::user()->group_id])
             ->select('from_number')
             ->distinct()
             ->get();

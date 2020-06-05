@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidPlaybookSmsNumber;
-use App\Models\PlaybookSmsNumber;
+use App\Models\SmsFromNumber;
 use Illuminate\Http\Request;
 
 class PlaybookSmsNumberController extends Controller
@@ -15,7 +15,7 @@ class PlaybookSmsNumberController extends Controller
      */
     public function index()
     {
-        $playbook_sms_numbers = PlaybookSmsNumber::orderBy('group_id')
+        $playbook_sms_numbers = SmsFromNumber::orderBy('group_id')
             ->orderBy('from_number')
             ->get();
 
@@ -43,7 +43,7 @@ class PlaybookSmsNumberController extends Controller
      */
     public function store(ValidPlaybookSmsNumber $request)
     {
-        $playbook_sms_number = new PlaybookSmsNumber($request->all());
+        $playbook_sms_number = new SmsFromNumber($request->all());
         $playbook_sms_number->save();
 
         return ['status' => 'success'];
@@ -58,7 +58,7 @@ class PlaybookSmsNumberController extends Controller
      */
     public function update(ValidPlaybookSmsNumber $request, $id)
     {
-        $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
+        $playbook_sms_number = SmsFromNumber::findOrFail($id);
         $playbook_sms_number->update($request->all());
         $playbook_sms_number->save();
 
@@ -73,7 +73,7 @@ class PlaybookSmsNumberController extends Controller
      */
     public function destroy($id)
     {
-        $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
+        $playbook_sms_number = SmsFromNumber::findOrFail($id);
         $playbook_sms_number->delete();
 
         return ['status' => 'success'];
@@ -87,6 +87,6 @@ class PlaybookSmsNumberController extends Controller
      */
     public function getPlaybookSmsNumber(Request $request)
     {
-        return PlaybookSmsNumber::findOrFail($request->id);
+        return SmsFromNumber::findOrFail($request->id);
     }
 }
