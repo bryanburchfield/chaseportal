@@ -35,7 +35,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
                 Route::post('/playbooks/toggle/{id}', 'PlaybookController@togglePlaybook');  // toggle a playbook by id
                 // Touches
-                Route::get('/touches/', 'PlaybookTouchController@index');  // delete an action by id
+                Route::get('/touches/', 'PlaybookTouchController@index');  // touches index
 
                 // Playbook filters
                 Route::get('/playbooks/filters/{id}', 'PlaybookController@getPlaybookFilters');  // get filters on a playbook by id
