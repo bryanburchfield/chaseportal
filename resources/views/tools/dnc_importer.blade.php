@@ -8,7 +8,7 @@
 <div class="wrapper">
 
 	@include('shared.sidenav')
-
+	
 	<div id="content">
 		@include('shared.navbar')
 

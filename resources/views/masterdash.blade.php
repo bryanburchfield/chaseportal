@@ -11,13 +11,7 @@
 
 <div class="wrapper">
 
-    @if (isset($page['menu']) && $page['menu'] == 'admin')
-        @include('shared.admin_sidenav')
-    @elseif(isset($page['menu']) && $page['menu'] == 'tools')
-        @include('shared.tools_sidenav')
-    @else
-        @include('shared.sidenav')
-    @endif
+    @include('shared.sidenav')
 
     <div id="content">
         @include('shared.navbar')
