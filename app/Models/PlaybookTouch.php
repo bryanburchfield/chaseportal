@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ContactsPlaybook extends Model
+class PlaybookTouch extends Model
 {
     protected $fillable = [
         'contacts_playbook_id',
