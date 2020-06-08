@@ -75,7 +75,6 @@
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
                     <input type="hidden" name="id" class="id" value="">
-                    <div class="alert alert-danger hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
