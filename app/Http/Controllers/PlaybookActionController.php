@@ -228,7 +228,7 @@ class PlaybookActionController extends Controller
      */
     public function getSubcampaigns(Request $request)
     {
-        $results = $this->getAllSubcampaignsWithNone($request->campaign);
+        $results = $this->getAllSubcampaigns($request->campaign);
 
         return ['subcampaigns' => $results];
     }
@@ -257,20 +257,6 @@ class PlaybookActionController extends Controller
         }
 
         return $fields;
-    }
-
-    /**
-     * Get subcampaigns along with "!!none!!"
-     * 
-     * @param mixed $campaign 
-     * @return mixed 
-     */
-    private function getAllSubcampaignsWithNone($campaign)
-    {
-        $results = $this->getAllSubcampaigns($campaign);
-        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
-
-        return $results;
     }
 
     /**
