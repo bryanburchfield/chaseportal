@@ -28,6 +28,44 @@ var Contacts_Playbook = {
 		$('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
+		$('.switch input').on('click', this.toggle_playbook);
+	},
+
+	toggle_playbook:function(e){
+		e.preventDefault();
+
+	    var checked;
+	    var id = $(this).parent().parent().data('playbook');
+
+	    if($(this).is(':checked')){
+	        $(this).attr('Checked','Checked');
+	        checked=1;
+	    }else{
+	        $(this).removeAttr('Checked');
+	        checked=0;
+	    }
+
+	    console.log(id);
+	    console.log(checked);
+
+	    $.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/toggle_playbook/',
+	        type:'POST',
+	        data:{
+	            id:id,
+	            checked:checked,
+
+	        },
+	        success:function(response){
+	        	console.log(response);
+	        }
+	    });
 	},
 
 	get_subcampaigns:function(e, campaign){
@@ -584,59 +622,59 @@ var Contacts_Playbook = {
 	    });
 	},
 
-	toggle_playbook:function(e){
+	// toggle_playbook:function(e){
 
-        var checked,
-        	that = $(this),
-        	playbook_id = that.data('playbook_id'),
-        	campaign = that.data('campaign')
-        ;
+ //        var checked,
+ //        	that = $(this),
+ //        	playbook_id = that.data('playbook_id'),
+ //        	campaign = that.data('campaign')
+ //        ;
 
-        checked = Contacts_Playbook.toggle_checked(that, checked, 0);
+ //        checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
-        $('.playbook_activation_errors.alert-danger, .playbook_activation_warning').hide();
+ //        $('.playbook_activation_errors.alert-danger, .playbook_activation_warning').hide();
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+ //        $.ajaxSetup({
+ //            headers: {
+ //                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+ //            }
+ //        });
 
-        $.ajax({
-            url:'/tools/playbook/toggle_playbook',
-            type:'POST',
-            data:{
-                checked:checked,
-                id:playbook_id,
+ //        $.ajax({
+ //            url:'/tools/playbook/toggle_playbook',
+ //            type:'POST',
+ //            data:{
+ //                checked:checked,
+ //                id:playbook_id,
 
-            },
-            success:function(response){
-            	console.log(response);
-            	Contacts_Playbook.toggle_checked(that, checked, 0);
-            }, error: function (data) {
-            	Contacts_Playbook.toggle_checked(that, checked, 1);
-            	e.preventDefault();
-				if (data.status === 422) {
-					e.preventDefault();
-					$('.playbook_activation_errors.alert-danger').empty();
-					var errors = $.parseJSON(data.responseText);
-					$.each(errors, function (key, value) {
+ //            },
+ //            success:function(response){
+ //            	console.log(response);
+ //            	Contacts_Playbook.toggle_checked(that, checked, 0);
+ //            }, error: function (data) {
+ //            	Contacts_Playbook.toggle_checked(that, checked, 1);
+ //            	e.preventDefault();
+	// 			if (data.status === 422) {
+	// 				e.preventDefault();
+	// 				$('.playbook_activation_errors.alert-danger').empty();
+	// 				var errors = $.parseJSON(data.responseText);
+	// 				$.each(errors, function (key, value) {
 
-						if ($.isPlainObject(value)) {
-							$.each(value, function (key, value) {
-								$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
-							});
-						}
-						$('.add_btn_loader i').remove();
-						$('.playbook_activation_errors.alert-danger').show();
-					});
-				}
-				$('html, body').animate({
-	                scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
-	            }, 500);
-			}
-        });
-    },
+	// 					if ($.isPlainObject(value)) {
+	// 						$.each(value, function (key, value) {
+	// 							$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
+	// 						});
+	// 					}
+	// 					$('.add_btn_loader i').remove();
+	// 					$('.playbook_activation_errors.alert-danger').show();
+	// 				});
+	// 			}
+	// 			$('html, body').animate({
+	//                 scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
+	//             }, 500);
+	// 		}
+ //        });
+ //    },
 
     activate_all_playbooks:function(e){
 

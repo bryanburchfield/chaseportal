@@ -2,7 +2,6 @@
 @section('title', __('tools.tools'))
 
 @section('content')
-
 <div class="preloader"></div>
 <div class="wrapper">
 
@@ -16,11 +15,12 @@
 			    <div class="row">
                     
 			    	<div class="col-sm-12">
-                        <h2 class="bbnone mb10">{{__('tools.playbook_touches')}}</h2>
+                        <h2 class="mb20">{{__('tools.playbook_touches')}}</h2>
 
                         <div class="col-sm-12 mt0 p0 mb30">
-                            <h3 class="playbook_campaign">Campaign: <span>My Campaign</span></h3>
-                            <h4 class="playbook_subcampaign">SubCampaign: <span>SubCampaign</span></h4>    
+                            <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
+                            <h3 class="playbook_campaign">Campaign: <span>{{$contacts_playbook->campaign}}</span></h3>
+                            <h4 class="playbook_subcampaign">SubCampaign: <span>{{$contacts_playbook->subcampaign}}</span></h4>    
                         </div>
 
                         <div class="touch col-sm-2">

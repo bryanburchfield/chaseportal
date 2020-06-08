@@ -3304,6 +3304,14 @@ table#sms_numbers_datatable tbody td .btn {
   color: #333;
 }
 
+.playbook_name {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  color: #333;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
