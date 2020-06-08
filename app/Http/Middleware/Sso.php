@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use Closure;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 
 class Sso
@@ -20,13 +21,39 @@ class Sso
         // if already logged in, don't bother
         if (Auth::guest()) {
 
+            // Make sure token and server are passed
+            if ($request->missing('Token') || $request->missing('Server')) {
+                abort(403, 'Unauthorized');
+            }
+
             // call API to get stuff
-            if ($request->query('token') == '12345') {
+            $url = 'https://' . $request->query('Server') . '.chasedatacorp.com/Admin/SSO.aspx';
+            // $url = 'https://' . $request->query('Server') . '.chasedatacorp.com/Admin/SSO.aspx?v=2&Token=' . $request->query('Token');
+
+            $client = new Client();
+
+            echo "<pre>";
+
+            $response = $client->get(
+                $url,
+                [
+                    'debug' => true,
+                    'query' => [
+                        'Token' => $request->query('Token'),
+                        'v' => 2,
+                    ]
+                ]
+            );
+            $api_user = json_decode($response->getBody()->getContents());
+
+            dd($api_user);
+
+            if (true) {
                 $sso_user = [
-                    'name' => 'bryan',
-                    'type' => 'rep',
-                    'group_id' => '777',
-                    'reporting_db' => 'PowerV2_Reporting_Dialer-07',
+                    'name' => $api_user->Username,
+                    'type' => $api_user->Role,
+                    'group_id' => $api_user->GroupId,
+                    'reporting_db' => $api_user->ReportingDatabase,
                     'timezone' => 'Eastern Standard Time',
                 ];
             }
