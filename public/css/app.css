@@ -3304,12 +3304,6 @@ table#sms_numbers_datatable tbody td .btn {
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #33A09B;
-}
-
-.playbook_campaign span,
-.playbook_subcampaign span {
-  color: #333;
 }
 
 .playbook_name {

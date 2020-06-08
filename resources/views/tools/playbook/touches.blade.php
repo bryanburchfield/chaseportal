@@ -20,8 +20,8 @@
                         <div class="col-sm-6 mt0 p0 mb30 card">
                             <a data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt"><i class="fas fa-edit"></i> Edit Playbook</a>
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
-                            <h3 class="playbook_campaign"><span>{{$contacts_playbook->campaign}}</span> {{$contacts_playbook->subcampaign}}</h3>
-                            <a href="{{action('PlaybookController@index')}}" class="btn btn-secondary flt_rgt">Go Back</a>
+                            <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} : {{$contacts_playbook->subcampaign}}</h3>
+                            <a href="{{action('PlaybookController@index')}}" class="btn btn-primary flt_rgt mb0">Go Back</a>
                         </div>
 			    	</div>
 				</div>
