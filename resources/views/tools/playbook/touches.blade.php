@@ -17,40 +17,43 @@
 			    	<div class="col-sm-12">
                         <h2 class="mb20">{{__('tools.playbook_touches')}}</h2>
 
-                        <div class="col-sm-12 mt0 p0 mb30">
+                        <div class="col-sm-6 mt0 p0 mb30 card">
+                            <a data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt"><i class="fas fa-edit"></i> Edit Playbook</a>
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">Campaign: <span>{{$contacts_playbook->campaign}}</span></h3>
                             <h4 class="playbook_subcampaign">SubCampaign: <span>{{$contacts_playbook->subcampaign}}</span></h4>    
                         </div>
-
-                        <div class="touch col-sm-2">
-                            <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                            <h4 class="name">SMS</h4>
-                            <label class="switch">
-                                <input type="checkbox" name="kpi_input">
-                                <span></span>
-                            </label>
-                        </div>
-
-                        <div class="touch col-sm-2">
-                            <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                            <h4 class="name">Email</h4>
-                            <label class="switch">
-                                <input type="checkbox" name="kpi_input">
-                                <span></span>
-                            </label>
-                        </div>
-
-                        <div class="touch col-sm-2">
-                            <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                            <h4 class="name">SMS</h4>
-                            <label class="switch">
-                                <input type="checkbox" name="kpi_input">
-                                <span></span>
-                            </label>
-                        </div>
 			    	</div>
 				</div>
+
+                <div class="row">
+                    <div class="touch col-sm-2">
+                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                        <h4 class="name">SMS</h4>
+                        <label class="switch">
+                            <input type="checkbox" name="kpi_input">
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div class="touch col-sm-2">
+                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                        <h4 class="name">Email</h4>
+                        <label class="switch">
+                            <input type="checkbox" name="kpi_input">
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div class="touch col-sm-2">
+                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                        <h4 class="name">SMS</h4>
+                        <label class="switch">
+                            <input type="checkbox" name="kpi_input">
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -60,4 +63,27 @@
 
 @include('shared.reportmodal')
 
+<!-- Edit Plpaybook Modal -->
+<div class="modal fade" id="editPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_playbook')}}</h4>
+            </div>
+
+            <form action="#" method="post" class="form edit_playbook">
+                <div class="modal-body">
+                    {{-- @include('tools.playbook.shared.playbook_form') --}}
+                    <input type="hidden" name="id" class="id" value="">
+                    <div class="alert alert-danger hidetilloaded"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

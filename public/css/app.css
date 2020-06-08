@@ -185,6 +185,14 @@ h6 {
   text-align: center;
 }
 
+.flt_lft {
+  float: left;
+}
+
+.flt_rgt {
+  float: right;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
@@ -3307,7 +3315,7 @@ table#sms_numbers_datatable tbody td .btn {
 .playbook_name {
   font-size: 19px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   color: #333;
 }

@@ -28,7 +28,8 @@ var Contacts_Playbook = {
 		$('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
-		$('.switch input').on('click', this.toggle_playbook);
+		$('.playbook .switch input').on('click', this.toggle_playbook);
+		$('.touch .switch input').on('click', this.toggle_touch);
 	},
 
 	toggle_playbook:function(e){
@@ -56,6 +57,43 @@ var Contacts_Playbook = {
 
 	    $.ajax({
 	        url: '/tools/playbook/toggle_playbook/',
+	        type:'POST',
+	        data:{
+	            id:id,
+	            checked:checked,
+
+	        },
+	        success:function(response){
+	        	console.log(response);
+	        }
+	    });
+	},
+
+	toggle_touch:function(e){
+		e.preventDefault();
+
+	    var checked;
+	    var id = $(this).parent().parent().data('playbook');
+
+	    if($(this).is(':checked')){
+	        $(this).attr('Checked','Checked');
+	        checked=1;
+	    }else{
+	        $(this).removeAttr('Checked');
+	        checked=0;
+	    }
+
+	    console.log(id);
+	    console.log(checked);
+
+	    $.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/toggle_playbook_touch/',
 	        type:'POST',
 	        data:{
 	            id:id,

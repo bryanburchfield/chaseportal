@@ -185,6 +185,14 @@ h6 {
   margin-bottom: 0;
 }
 
+.flt_lft {
+  float: left;
+}
+
+.flt_rgt {
+  float: right;
+}
+
 a,
 a:hover,
 a:focus {
@@ -3677,7 +3685,7 @@ table#sms_numbers_datatable tbody td .btn {
 .playbook_name {
   font-size: 19px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   color: #aaa;
 }
