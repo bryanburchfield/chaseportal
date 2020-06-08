@@ -45,15 +45,14 @@ class ValidPlaybook extends FormRequest
     public function rules()
     {
         $group_id = Auth::user()->group_id;
-        $id = $this->id;
 
         return [
             'name' => [
                 'required',
-                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id, $id) {
+                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id) {
                     return $query
                         ->where('group_id', $group_id)
-                        ->where('id', '!=', $id);
+                        ->where('id', '!=', $this->id);
                 }),
             ],
             'campaign' => 'required',
