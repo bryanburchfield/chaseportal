@@ -8,14 +8,18 @@ use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
 use App\Models\PlaybookTouch;
+use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookTouchController extends Controller
 {
+    use CampaignTraits;
+    use SqlServerTraits;
+
     private $contacts_playbook_id;
     private $contacts_playbook;
 
@@ -40,6 +44,7 @@ class PlaybookTouchController extends Controller
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
+            'campaigns' => $this->getAllCampaigns(),
             'playbook_touches' => $this->getPlaybookTouches(),
         ];
 
