@@ -15,7 +15,7 @@ var Contacts_Playbook = {
 		$('#campaign_select').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
 		$('#playbooks_datatable').on('click', '.playbook_actions_modal, .playbook_filters_modal', this.populate_modal);
-		$('#playbooks_datatable').on('click', '.edit_playbook_modal, .remove_playbook_modal', this.pass_id_to_modal);
+		$('.edit_playbook_modal').on('click', this.pass_id_to_modal);
 		$('.delete_playbook_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
 		$('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
@@ -194,6 +194,8 @@ var Contacts_Playbook = {
 		}else{ // edit modal
 			Contacts_Playbook.get_playbook(id);
 		}
+
+		console.log(id);
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -651,6 +653,7 @@ var Contacts_Playbook = {
 
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('#campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
+
                 $.when(
 					Contacts_Playbook.get_subcampaigns(event, response.campaign)
 				).done(function() {

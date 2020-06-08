@@ -4,7 +4,6 @@
 @section('content')
 <div class="preloader"></div>
 <div class="wrapper">
-
 	@include('shared.sidenav')
 
 	<div id="content">
@@ -18,7 +17,7 @@
                         <h2 class="mb20">{{__('tools.playbook_touches')}}</h2>
 
                         <div class="col-sm-6 mt0 p0 mb30 card">
-                            <a data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt"><i class="fas fa-edit"></i> Edit Playbook</a>
+                            <a data-playbookid="{{$contacts_playbook->id}}" data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt edit_playbook_modal"><i class="fas fa-edit"></i> Edit Playbook</a>
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} {{$contacts_playbook->subcampaign ? ': ' . $contacts_playbook->subcampaign : ''}}</h3>
                             <a href="{{action('PlaybookController@index')}}" class="btn btn-primary flt_rgt mb0">Go Back</a>
@@ -74,7 +73,7 @@
 
             <form action="#" method="post" class="form edit_playbook">
                 <div class="modal-body">
-                    {{-- @include('tools.playbook.shared.playbook_form') --}}
+                    @include('tools.playbook.shared.playbook_form')
                     <input type="hidden" name="id" class="id" value="">
                     <div class="alert alert-danger hidetilloaded"></div>
                 </div>
