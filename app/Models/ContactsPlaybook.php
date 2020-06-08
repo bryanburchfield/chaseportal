@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class ContactsPlaybook extends Model
 {
@@ -23,5 +22,12 @@ class ContactsPlaybook extends Model
     public function playbook_runs()
     {
         return $this->hasMany('App\Models\PlaybookRun');
+    }
+
+    public function allowActive()
+    {
+        $this->refresh();
+
+        return $this->playbook_touches->where('active', 1)->count() > 0;
     }
 }
