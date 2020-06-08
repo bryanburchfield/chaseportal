@@ -26,7 +26,7 @@ class PlaybookTouchController extends Controller
 
     public function index()
     {
-        $this->findPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($this->contacts_playbook_id);
 
         $page = [
             'menuitem' => 'playbook',
@@ -52,9 +52,9 @@ class PlaybookTouchController extends Controller
      * @param mixed $id 
      * @return mixed 
      */
-    private function findPlaybook($id)
+    private function setPlaybook($id)
     {
-        return ContactsPlaybook::where('id', $id)
+        $this->contacts_playbook = ContactsPlaybook::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
     }
@@ -68,7 +68,7 @@ class PlaybookTouchController extends Controller
 
     private function findPlaybookTouch($id)
     {
-        $this->findPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($this->contacts_playbook_id);
 
         return PlaybookTouch::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
@@ -77,7 +77,7 @@ class PlaybookTouchController extends Controller
 
     public function addPlaybookTouch(Request $request)
     {
-        $this->findPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($this->contacts_playbook_id);
 
         $data = $request->all();
         $data['contacts_playbook_id'] = $this->contacts_playbook_id;
@@ -90,7 +90,7 @@ class PlaybookTouchController extends Controller
 
     public function updatePlaybookTouch(Request $request)
     {
-        $this->findPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($this->contacts_playbook_id);
 
         $playbook_touch = $this->findPlaybookTouch($request->id);
         $playbook_touch->update($request->all());
@@ -100,7 +100,7 @@ class PlaybookTouchController extends Controller
 
     public function deletePlaybookTouch(Request $request)
     {
-        $this->findPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($this->contacts_playbook_id);
 
         $playbook_touch = $this->findPlaybookTouch($request->id);
         $playbook_touch->delete();
