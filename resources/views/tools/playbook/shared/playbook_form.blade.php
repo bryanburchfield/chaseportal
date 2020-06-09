@@ -10,7 +10,7 @@
 
 <div class="form-group">
     <label>{{__('tools.subcampaign')}}</label>
-    <select name="subcampaign" class="form-control subcampaign"></select>
+    <select name="subcampaign" class="form-control subcampaigns"></select>
 </div>
 
 <div class="alert alert-success hidetilloaded mb0"></div>

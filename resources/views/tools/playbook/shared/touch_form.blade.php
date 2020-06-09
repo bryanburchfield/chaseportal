@@ -15,8 +15,8 @@
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                         <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
                         {{-- <a href="{{ action("PlaybookTouchController@index", [$contacts_playbook->id])}}" class="btn btn-secondary flt_rgt mb0 mt20">Go Back</a> --}}
-                        {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_rule']) !!}
-
+                        {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_touch']) !!}
+                        <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook_id}}">
                         <div class="card">
                             <div class="form-group">
                                 {!! Form::label('rule_name', __('tools.rule_name')) !!}
@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <label for="subcamps">{{__('tools.subcampaign')}}</label>
                                 <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" />
-                                <datalist id="subcamps"></datalist>
+                                <datalist id="subcamps" class="subcampaigns"></datalist>
                             </div>
 
                         </div>
@@ -91,7 +91,7 @@
                             <div class="form-group">
                                 <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
                                 <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
-                                <datalist id="destination_subcampaign"></datalist>
+                                <datalist id="destination_subcampaign" class="subcampaigns"></datalist>
                             </div>
 
                         </div>

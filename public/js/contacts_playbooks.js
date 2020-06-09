@@ -30,6 +30,7 @@ var Contacts_Playbook = {
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 		$('.playbook .switch input').on('click', this.toggle_playbook);
 		$('.touch .switch input').on('click', this.toggle_touch);
+		$('.add_touch').on('submit', this.create_touch);
 	},
 
 	toggle_playbook:function(e){
@@ -65,7 +66,23 @@ var Contacts_Playbook = {
 	        },
 	        success:function(response){
 	        	console.log(response);
-	        }
+	        }, error: function (data) {
+				if (data.status === 422) {
+
+					$('#contact_playbooks .row .alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('#contact_playbooks .row .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('#contact_playbooks .row .alert-danger').show();
+					});
+				}
+			}
 	    });
 	},
 
@@ -130,7 +147,7 @@ var Contacts_Playbook = {
 	        data: {campaign: campaign,},
 	        success:function(response){
 	        	console.log(response);
-                $('.subcampaign').empty();
+                $('.subcampaigns').empty();
                 var response = Object.entries(response.subcampaigns);
 
                 var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
@@ -138,9 +155,9 @@ var Contacts_Playbook = {
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
 
-                $(that).parent().next().find('datalist').empty();
+                $(that).parent().next().find('.subcampaigns').empty();
 
-                $(that).parent().next().find('.subcampaign').append(sub_camps);
+                $(that).parent().next().find('.subcampaigns').append(sub_camps);
                 
                 
                 
@@ -691,60 +708,6 @@ var Contacts_Playbook = {
 	    });
 	},
 
-	// toggle_playbook:function(e){
-
- //        var checked,
- //        	that = $(this),
- //        	playbook_id = that.data('playbook_id'),
- //        	campaign = that.data('campaign')
- //        ;
-
- //        checked = Contacts_Playbook.toggle_checked(that, checked, 0);
-
- //        $('.playbook_activation_errors.alert-danger, .playbook_activation_warning').hide();
-
- //        $.ajaxSetup({
- //            headers: {
- //                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
- //            }
- //        });
-
- //        $.ajax({
- //            url:'/tools/playbook/toggle_playbook',
- //            type:'POST',
- //            data:{
- //                checked:checked,
- //                id:playbook_id,
-
- //            },
- //            success:function(response){
- //            	console.log(response);
- //            	Contacts_Playbook.toggle_checked(that, checked, 0);
- //            }, error: function (data) {
- //            	Contacts_Playbook.toggle_checked(that, checked, 1);
- //            	e.preventDefault();
-	// 			if (data.status === 422) {
-	// 				e.preventDefault();
-	// 				$('.playbook_activation_errors.alert-danger').empty();
-	// 				var errors = $.parseJSON(data.responseText);
-	// 				$.each(errors, function (key, value) {
-
-	// 					if ($.isPlainObject(value)) {
-	// 						$.each(value, function (key, value) {
-	// 							$('.playbook_activation_errors.alert-danger').append('<li>' + value + '</li>');
-	// 						});
-	// 					}
-	// 					$('.add_btn_loader i').remove();
-	// 					$('.playbook_activation_errors.alert-danger').show();
-	// 				});
-	// 			}
-	// 			$('html, body').animate({
-	//                 scrollTop: $(".playbook_activation_errors.alert-danger").offset().top -80+'px'
-	//             }, 500);
-	// 		}
- //        });
- //    },
-
     activate_all_playbooks:function(e){
 
     	e.preventDefault();
@@ -847,7 +810,79 @@ var Contacts_Playbook = {
     	}
 
     	return checked;
-    }
+    },
+
+    create_touch:function(e){
+        e.preventDefault();
+        $('#add_rule').find('.add_rule_error').empty().hide();
+        var rule_name = $('#rule_name').val(),
+            source_campaign = $('#campaign_select').val(),
+            source_subcampaign=$('.source_subcampaign').val(),
+            destination_campaign = $('#destination_campaign').val(),
+            destination_subcampaign = $('.destination_subcampaign').val(),
+            description = $('#description').val(),
+            playbook_id = $('.playbook_id').val()
+        ;
+
+        console.log(playbook_id);
+
+        var filters={};
+        var duplicate_filters = false;
+        $('.lead_rule_filter_type').each(function(){
+            if(!filters.hasOwnProperty($(this).val())){
+                filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+            }else{
+                $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
+                duplicate_filters=true;
+            }
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        if(!duplicate_filters){
+            $.ajax({
+                url: '/tools/playbook/touches/'+playbook_id,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    rule_name:rule_name,
+                    source_campaign:source_campaign,
+                    source_subcampaign:source_subcampaign,
+                    destination_campaign:destination_campaign,
+                    destination_subcampaign:destination_subcampaign,
+                    description:description,
+                    filters:filters
+                },
+
+                success:function(response){
+
+                    window.location.href = 'contactflow_builder';
+                },
+                error :function( data ) {
+                    $('.add_rule_error.alert').empty();
+                    $('.add_rule_error.alert').hide();
+
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                            });
+                        }else{
+                            $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                        }
+                    });
+
+                    $('.add_rule_error.alert li').first().remove();
+                }
+            });
+        }
+    },
 }
 
 $(document).ready(function(){
