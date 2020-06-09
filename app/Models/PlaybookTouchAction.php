@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlaybookTouchAction extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'playbook_touch_id',
         'playbook_action_id',

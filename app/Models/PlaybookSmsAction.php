@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlaybookSmsAction extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'playbook_action_id',
         'sms_from_number_id',

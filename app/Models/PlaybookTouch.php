@@ -3,15 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class PlaybookTouch extends Model
 {
+    use SoftDeletes;
+    use CascadesDeletes;
+
     protected $fillable = [
         'contacts_playbook_id',
         'name',
         'active',
     ];
+
+    protected $cascadeDeletes = ['playbook_touch_actions'];
 
     public function playbook_touch_filters()
     {

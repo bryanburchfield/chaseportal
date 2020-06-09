@@ -33,8 +33,9 @@ class NewPlaybookTables extends Migration
             $table->integer('group_id');
             $table->string('from_number', 15);
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->unique(['group_id', 'from_number']);
+            $table->unique(['group_id', 'from_number', 'deleted_at']);
         });
 
         Schema::create('playbook_optouts', function (Blueprint $table) {
@@ -75,10 +76,10 @@ class NewPlaybookTables extends Migration
             $table->smallInteger('sms_per_lead');
             $table->smallInteger('days_between_sms')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('playbook_action_id')
-                ->references('id')->on('playbook_actions')
-                ->onDelete('cascade');
+                ->references('id')->on('playbook_actions');
             $table->foreign('sms_from_number_id')
                 ->references('id')->on('sms_from_numbers');
         });
@@ -90,10 +91,10 @@ class NewPlaybookTables extends Migration
             $table->string('to_subcampaign')->nullable();
             $table->string('to_callstatus')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('playbook_action_id')
-                ->references('id')->on('playbook_actions')
-                ->onDelete('cascade');
+                ->references('id')->on('playbook_actions');
         });
 
         Schema::create('playbook_email_actions', function (Blueprint $table) {
@@ -107,10 +108,10 @@ class NewPlaybookTables extends Migration
             $table->smallInteger('emails_per_lead');
             $table->smallInteger('days_between_emails')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('playbook_action_id')
-                ->references('id')->on('playbook_actions')
-                ->onDelete('cascade');
+                ->references('id')->on('playbook_actions');
             $table->foreign('email_service_provider_id')
                 ->references('id')->on('email_service_providers');
         });
@@ -125,6 +126,7 @@ class NewPlaybookTables extends Migration
             $table->timestamp('last_run_to')->nullable();
             $table->boolean('active')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('playbook_touches', function (Blueprint $table) {
@@ -136,8 +138,7 @@ class NewPlaybookTables extends Migration
             $table->softDeletes();
 
             $table->foreign('contacts_playbook_id')
-                ->references('id')->on('contacts_playbooks')
-                ->onDelete('cascade');
+                ->references('id')->on('contacts_playbooks');
         });
 
         Schema::create('playbook_touch_filters', function (Blueprint $table) {
@@ -147,8 +148,7 @@ class NewPlaybookTables extends Migration
             $table->timestamps();
 
             $table->foreign('playbook_touch_id')
-                ->references('id')->on('playbook_touches')
-                ->onDelete('cascade');
+                ->references('id')->on('playbook_touches');
             $table->foreign('playbook_filter_id')
                 ->references('id')->on('playbook_filters');
         });
@@ -158,10 +158,10 @@ class NewPlaybookTables extends Migration
             $table->unsignedBigInteger('playbook_touch_id');
             $table->unsignedBigInteger('playbook_action_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('playbook_touch_id')
-                ->references('id')->on('playbook_touches')
-                ->onDelete('cascade');
+                ->references('id')->on('playbook_touches');
             $table->foreign('playbook_action_id')
                 ->references('id')->on('playbook_actions');
         });
@@ -172,8 +172,7 @@ class NewPlaybookTables extends Migration
             $table->timestamps();
 
             $table->foreign('contacts_playbook_id')
-                ->references('id')->on('contacts_playbooks')
-                ->onDelete('cascade');
+                ->references('id')->on('contacts_playbooks');
         });
 
         Schema::create('playbook_run_touches', function (Blueprint $table) {
