@@ -646,7 +646,7 @@ var Master = {
         campaign = $(campaign).find('a').text();
         var datefilter = $('#datefilter').val();
         $('.preloader').show();
-
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

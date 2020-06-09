@@ -54,46 +54,9 @@ trait DashTraits
         return $this->index($request);
     }
 
-    private function checkAgentCampaign()
-    {
-        // Check if there's a 'campaign' session var
-        // set from agent's most recent login if not
-        if (!session()->has('campaign')) {
-
-            $campaign = $this->getAgentLoggedinCampaign($this->rep);
-
-            if (!empty($campaign)) {
-                $this->campaign = (array) $campaign;
-            } else {
-                $this->campaign = '';
-            }
-            session(['campaign' => $this->campaign]);
-        }
-    }
-
     private function getSession(Request $request)
     {
-        // Check if there's a 'campaign' session var
-        // set from db if not
-        if (!session()->has('campaign')) {
-            $filters = (array) json_decode(Auth::user()->persist_filters);
-
-            if (isset($filters['campaign'])) {
-                $campaign = array_filter($filters['campaign']);
-            } else {
-                $campaign = '';
-            }
-
-            if (!empty($campaign)) {
-                $this->campaign = $campaign;
-            } else {
-                $this->campaign = '';
-            }
-            session(['campaign' => $this->campaign]);
-        }
-
         // This won't work inside __construct()
-        $this->campaign = session('campaign', '');
         $this->databases = session('databases', []);
         $this->dateFilter = session('dateFilter', 'today');
         $this->inorout = session('inorout', 'inbound');
@@ -113,6 +76,31 @@ trait DashTraits
 
         // set sqlsrv db up here too
         config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+
+        // Check if there's a 'campaign' session var
+        // set from db if not
+        if (!session()->has('campaign')) {
+            if ($this->isApi) {
+                $filters = [];
+            } else {
+                $filters = (array) json_decode(Auth::user()->persist_filters);
+            }
+
+            if (isset($filters['campaign'])) {
+                $campaign = array_filter($filters['campaign']);
+            } else {
+                $campaign = '';
+            }
+
+            if (!empty($campaign)) {
+                $this->campaign = $campaign;
+            } else {
+                $this->campaign = '';
+            }
+            session(['campaign' => $this->campaign]);
+        }
+
+        $this->campaign = session('campaign', '');
     }
 
     /**
@@ -413,6 +401,8 @@ trait DashTraits
 
     public function updateFilters(Request $request)
     {
+        $this->getSession(new Request());
+
         $filters = [
             'databases',
             'campaign',
@@ -442,9 +432,7 @@ trait DashTraits
 
     public function campaignGroups($partial = null)
     {
-        $request = new Request();
-
-        $this->getSession($request);
+        $this->getSession(new Request());
 
         list($fromDate, $toDate) = $this->dateRange($this->dateFilter);
 
@@ -525,30 +513,5 @@ trait DashTraits
         }
 
         return $dblist;
-    }
-
-    private function getAgentLoggedinCampaign($rep)
-    {
-        $campaign = '';
-
-        $sql = "SELECT TOP 1 Campaign
-            FROM AgentActivity
-            WHERE GroupId = :group_id
-            AND Rep = :rep
-            AND Action = 'Login'
-            ORDER BY Date DESC";
-
-        $bind = [
-            'group_id' => Auth::user()->group_id,
-            'rep' => $this->rep,
-        ];
-
-        $results = $this->runSql($sql, $bind);
-
-        if (count($results)) {
-            $campaign = $results[0]['Campaign'];
-        }
-
-        return $campaign;
     }
 }

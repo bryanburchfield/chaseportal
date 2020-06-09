@@ -29,6 +29,8 @@ var Campaign_Search = {
 	        }
 	    });
 
+	    console.log(campaign_search_url);
+
 	    $.ajax({
 	        url: campaign_search_url,
 	        type: 'POST',
@@ -103,6 +105,9 @@ var Campaign_Search = {
 	    $('.alert').remove();
 	    $('.campaign_search').val('');
 
+	    var path = $('.campaign_search_url').val();
+	    path=path.split(/[//]/)[1];
+
 	    if (checked) {
 	        $('.filter_campaign').parent().removeClass('open');
 	        $('.filter_campaign').prev('.dropdown-toggle').attr('aria-expanded', false);
@@ -119,7 +124,7 @@ var Campaign_Search = {
 	    });
 
 	    $.ajax({
-	        url: '/agentdashboard/update_filters',
+	        url: '/'+path+'/update_filters',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: { campaign: campaigns },
