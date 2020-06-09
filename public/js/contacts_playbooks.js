@@ -25,7 +25,7 @@ var Contacts_Playbook = {
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
-		$('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
+		// $('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 		$('.playbook .switch input').on('click', this.toggle_playbook);
@@ -58,11 +58,11 @@ var Contacts_Playbook = {
 
 	    $.ajax({
 	        url: '/tools/playbook/toggle_playbook/',
+	        dataType: 'json',
 	        type:'POST',
 	        data:{
 	            id:id,
 	            checked:checked,
-
 	        },
 	        success:function(response){
 	        	console.log(response);
