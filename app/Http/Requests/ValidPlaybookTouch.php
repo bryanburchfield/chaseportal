@@ -3,11 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Models\ContactsPlaybook;
+use App\Models\PlaybookTouch;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ValidPlaybook extends FormRequest
+class ValidPlaybookTouch extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +30,12 @@ class ValidPlaybook extends FormRequest
         // if id not passed (adding), insert id=0
         // otherwise, check that it belongs to user's group_id, 404 if not
         if ($this->filled('id')) {
-            $contacts_playbook = ContactsPlaybook::where('id', $this->id)
-                ->where('group_id', Auth::user()->group_id)
+            $playbook_touch = PlaybookTouch::where('id', $this->id)
+                ->with('contacts_playbook')
                 ->firstOrFail();
+            if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
+                abort(404);
+            }
         } else {
             $this->merge(['id' => 0]);
         }
@@ -47,12 +51,19 @@ class ValidPlaybook extends FormRequest
         $group_id = Auth::user()->group_id;
 
         return [
+            'contacts_playbook_id' => [
+                'required',
+                Rule::exists('contacts_playbooks', 'id')
+                    ->where(function ($query) use ($group_id) {
+                        $query->where('group_id', $group_id);
+                    }),
+            ],
             'name' => [
                 'required',
-                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id) {
+                Rule::unique('playbook_touch')->where(function ($query) {
                     return $query
-                        ->where('group_id', $group_id)
                         ->where('id', '!=', $this->id)
+                        ->where('contacts_playbook_id', $this->contacts_playbook_id)
                         ->whereNull('deleted_at');
                 }),
             ],

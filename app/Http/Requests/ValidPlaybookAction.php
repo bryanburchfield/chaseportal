@@ -58,7 +58,8 @@ class ValidPlaybookAction extends FormRequest
                 Rule::unique('playbook_actions')->where(function ($query) use ($group_id, $id) {
                     return $query
                         ->where('group_id', $group_id)
-                        ->where('id', '!=', $id);
+                        ->where('id', '!=', $id)
+                        ->whereNull('deleted_at');
                 }),
             ],
             'campaign' => [

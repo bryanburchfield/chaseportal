@@ -20,6 +20,11 @@ class PlaybookTouch extends Model
 
     protected $cascadeDeletes = ['playbook_touch_actions'];
 
+    public function contacts_playbook()
+    {
+        return $this->belongsTo('App\Models\ContactsPlaybook');
+    }
+
     public function playbook_touch_filters()
     {
         return $this->hasMany('App\Models\PlaybookTouchFilter');

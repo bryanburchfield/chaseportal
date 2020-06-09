@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\PlaybookSmsNumber;
+use App\Models\SmsFromNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +25,7 @@ class ValidPlaybookSmsAction extends FormRequest
      */
     public function rules()
     {
-        $valid_from_numbers = PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])->get();
+        $valid_from_numbers = SmsFromNumber::whereIn('group_id', [0, Auth::user()->group_id])->get();
 
         return [
             'from_number' => [

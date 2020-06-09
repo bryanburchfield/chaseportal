@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidPlaybookTouch;
 use App\Http\Requests\ValidPlaybookTouchAction;
 use App\Http\Requests\ValidPlaybookTouchFilter;
 use App\Models\ContactsPlaybook;
@@ -101,7 +102,7 @@ class PlaybookTouchController extends Controller
             ->firstOrFail();
     }
 
-    public function addPlaybookTouch(Request $request)
+    public function addPlaybookTouch(ValidPlaybookTouch $request)
     {
         $this->setPlaybook($this->contacts_playbook_id);
 
@@ -114,7 +115,7 @@ class PlaybookTouchController extends Controller
         return ['status' => 'success'];
     }
 
-    public function updatePlaybookTouch(Request $request)
+    public function updatePlaybookTouch(ValidPlaybookTouch $request)
     {
         $this->setPlaybook($this->contacts_playbook_id);
 
