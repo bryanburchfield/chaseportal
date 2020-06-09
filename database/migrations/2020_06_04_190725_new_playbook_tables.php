@@ -33,9 +33,8 @@ class NewPlaybookTables extends Migration
             $table->integer('group_id');
             $table->string('from_number', 15);
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->unique(['group_id', 'from_number', 'deleted_at']);
+            $table->unique(['group_id', 'from_number']);
         });
 
         Schema::create('playbook_optouts', function (Blueprint $table) {
