@@ -19,9 +19,6 @@ class AgentDashController extends Controller
      */
     public function index(Request $request)
     {
-        // Set initial campaign baseed on most recent agent login
-        $this->checkAgentCampaign();
-
         $this->getSession($request);
 
         $campaigns = $this->agentCampaigns();
@@ -68,8 +65,6 @@ class AgentDashController extends Controller
                 session([$filter => $val]);
             }
         }
-
-        Auth::user()->persistFilters($request);
 
         return ['campaigns' => $this->agentCampaigns()];
     }
