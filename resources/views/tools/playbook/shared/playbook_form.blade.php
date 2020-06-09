@@ -13,6 +13,8 @@
     <select name="subcampaign" class="form-control subcampaign"></select>
 </div>
 
-<div class="alert alert-success hidetilloaded"></div>
-<div class="alert alert-danger hidetilloaded"></div>
-<div class="alert connection_msg hidetilloaded"></div>
+<div class="alert alert-success hidetilloaded mb0"></div>
+<div class="alert alert-danger hidetilloaded mb0"></div>
+<div class="alert connection_msg hidetilloaded mb0"></div>
+
+<img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt20 flt_lft">

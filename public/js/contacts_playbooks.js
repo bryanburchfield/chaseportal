@@ -137,9 +137,13 @@ var Contacts_Playbook = {
                 for(var i=0;i<response.length;i++){
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
-                
+
                 $(that).parent().next().find('datalist').empty();
-                $(that).parent().next().find('datalist').append(sub_camps);
+
+                $(that).parent().next().find('.subcampaign').append(sub_camps);
+                
+                
+                
 
                 // $('.subcampaign').append(sub_camps);
 	        }
@@ -150,6 +154,7 @@ var Contacts_Playbook = {
 		e.preventDefault();
 
 		var form_data = $(this).serialize();
+		$('.loader_hor').show();
 
 		$.ajaxSetup({
 	        headers: {
@@ -163,11 +168,28 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: form_data,
 	        success:function(response){
-	            console.log(response);
+
 	            if(response.status == 'success'){
 	            	location.reload();
+	            	$('.loader_hor').hide();
 	            }
-	        }
+	        }, error: function (data) {
+				if (data.status === 422) {
+					$('.loader_hor').hide();
+					$('.add_playbook .alert-danger').empty();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.add_playbook .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+						$('.add_btn_loader i').remove();
+						$('.add_playbook .alert-danger').show();
+					});
+				}
+			}
 	    });
 	},
 
@@ -201,8 +223,6 @@ var Contacts_Playbook = {
 		}else{ // edit modal
 			Contacts_Playbook.get_playbook(id);
 		}
-
-		console.log(id);
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -231,7 +251,7 @@ var Contacts_Playbook = {
 			        type: 'GET',
 			        dataType: 'json',
 			        success:function(response){
-			        	console.log(response);
+
 	    				$('#'+modal).find('.subcampaign option[value="'+response.subcampaign+'"]').prop('selected', true);
 	    				var filters='',
 	    					j=0
@@ -283,6 +303,7 @@ var Contacts_Playbook = {
 
 		var form_data = $(this).serialize();
 		var id = $(this).find('.id').val();
+		$('.loader_hor').show();
 
 		$.ajaxSetup({
 			headers: {
@@ -298,9 +319,11 @@ var Contacts_Playbook = {
 			success: function (response) {
 				if (response.status == 'success') {
 					location.reload();
+					$('.loader_hor').hide();
 				}
 			}, error: function (data) {
 				if (data.status === 422) {
+					$('.loader_hor').hide();
 					$('.edit_playbook .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
@@ -526,7 +549,6 @@ var Contacts_Playbook = {
 		$.when(
 			pb_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
 		).done(function() {
-			console.log(pb_actions);
 			if(pb_actions.responseJSON.length == $('.playbook_action_manager .modal_manage_fil_act').length){
 				sel.hide();
 			}else{
@@ -583,7 +605,7 @@ var Contacts_Playbook = {
 	        	actions:actions
 	        },
 	        success:function(response){
-	        	console.log(response);
+
                 if(response.status == 'success'){
 	            	location.reload();
 	            }
@@ -626,7 +648,7 @@ var Contacts_Playbook = {
 	        	filters:filters
 	        },
 	        success:function(response){
-	        	console.log(response);
+
                 if(response.status == 'success'){
 	            	location.reload();
 	            }
@@ -654,7 +676,6 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
-                console.log(response);
 
                 var edit_modal = $('#editPlaybookModal');
 
