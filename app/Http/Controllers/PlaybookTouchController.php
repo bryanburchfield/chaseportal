@@ -51,6 +51,27 @@ class PlaybookTouchController extends Controller
         return view('tools.playbook.touches')->with($data);
     }
 
+    public function addPlaybookTouchForm()
+    {
+        $page = [
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
+            'type' => 'other',
+        ];
+
+        $data = [
+            'page' => $page,
+            'jsfile' => ['contacts_playbooks.js'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'group_id' => Auth::user()->group_id,
+            'contacts_playbook' => $this->contacts_playbook,
+            'campaigns' => $this->getAllCampaigns(),
+            'playbook_touches' => $this->getPlaybookTouches(),
+        ];
+
+        return view('tools.playbook.shared.touch_form')->with($data);
+    }
+
     /**
      * Return playbook if group_id matches user
      * 

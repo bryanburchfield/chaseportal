@@ -20,7 +20,8 @@
                             <a data-playbookid="{{$contacts_playbook->id}}" data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt edit_playbook_modal"><i class="fas fa-edit"></i> Edit Playbook</a>
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} {{$contacts_playbook->subcampaign ? ': ' . $contacts_playbook->subcampaign : ''}}</h3>
-                            <a href="{{action('PlaybookController@index')}}" class="btn btn-primary flt_rgt mb0">Go Back</a>
+                            <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}" class="btn btn-primary flt_lft mb0 mt20">Add Touch</a>
+                            <a href="{{action('PlaybookController@index')}}" class="btn btn-secondary flt_rgt mb0 mt20">Go Back</a>
                         </div>
 			    	</div>
 				</div>

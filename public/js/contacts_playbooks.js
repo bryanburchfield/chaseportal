@@ -12,7 +12,7 @@ var Contacts_Playbook = {
 	pb_campaign:'',
 
 	init:function(){
-		$('#campaign_select').on('change', this.get_subcampaigns);
+		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
 		$('#playbooks_datatable').on('click', '.playbook_actions_modal, .playbook_filters_modal', this.populate_modal);
 		$('.edit_playbook_modal').on('click', this.pass_id_to_modal);
@@ -113,11 +113,15 @@ var Contacts_Playbook = {
 			var campaign = $(this).val();
 		}
 
+		var that = $(this);
+
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
+
+	    console.log(campaign);
 
 	    return $.ajax({
 	        url: '/tools/playbook/get_subcampaigns',
@@ -125,7 +129,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-	        	// console.log(response);
+	        	console.log(response);
                 $('.subcampaign').empty();
                 var response = Object.entries(response.subcampaigns);
 
@@ -133,8 +137,11 @@ var Contacts_Playbook = {
                 for(var i=0;i<response.length;i++){
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
+                
+                $(that).parent().next().find('datalist').empty();
+                $(that).parent().next().find('datalist').append(sub_camps);
 
-                $('.subcampaign').append(sub_camps);
+                // $('.subcampaign').append(sub_camps);
 	        }
 	    });
 	},
