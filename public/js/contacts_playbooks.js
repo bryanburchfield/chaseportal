@@ -57,7 +57,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/toggle_playbook/',
+	        url: '/tools/playbook/toggle_playbook',
 	        dataType: 'json',
 	        type:'POST',
 	        data:{

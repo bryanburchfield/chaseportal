@@ -16,7 +16,7 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
-                        
+
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
@@ -25,9 +25,6 @@
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal flt_rgt">{{__('tools.add_playbook')}}</a>
-                                        
-                                        <div class="alert alert-danger hidetilloaded playbook_activation_errors"></div>
-                                        <div class="alert alert-warning hidetilloaded playbook_activation_warning"></div>
                                     </div>
 
                                     <div class="row">
@@ -43,8 +40,12 @@
                                                 </label>
                                             </div>
                                         @endforeach
+                                    </div>
 
-                                        <div class="alert alert-danger mt20 hidetilloaded"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mt30">
+                                            <div class="alert alert-danger hidetilloaded cb"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
