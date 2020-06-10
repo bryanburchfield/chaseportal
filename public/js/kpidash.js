@@ -129,7 +129,7 @@ var KPI = {
 
         var checked;
         var group_id = $('#group_id').val();
-        var kpi = $(this).parent().parent().parent().data('kpi');
+        // var kpi = $(this).parent().parent().parent().data('kpi');
 
 
         if($(this).is(':checked')){
@@ -140,25 +140,25 @@ var KPI = {
             checked=0;
         }
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //     }
+        // });
 
-        $.ajax({
-            url:'/kpi/toggle_kpi',
-            type:'POST',
-            data:{
-                checked:checked,
-                kpi:kpi,
-                group_id:group_id
+        // $.ajax({
+        //     url:'/kpi/toggle_kpi',
+        //     type:'POST',
+        //     data:{
+        //         checked:checked,
+        //         kpi:kpi,
+        //         group_id:group_id
 
-            },
-            success:function(response){
-                $("div[data-kpi='" + response.kpi_group.kpi_id +"']").find('.kpi .interval').val(response.kpi_group.interval);
-            }
-        });
+        //     },
+        //     success:function(response){
+        //         $("div[data-kpi='" + response.kpi_group.kpi_id +"']").find('.kpi .interval').val(response.kpi_group.interval);
+        //     }
+        // });
     },
 
     toggle_kpi_info:function(e){

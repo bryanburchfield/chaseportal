@@ -33,8 +33,7 @@ var Contacts_Playbook = {
 		$('.add_touch').on('submit', this.create_touch);
 	},
 
-	toggle_playbook:function(e){
-		e.preventDefault();
+	toggle_playbook:function(){
 
 	    var checked;
 	    var id = $(this).parent().parent().data('playbook');
@@ -46,9 +45,6 @@ var Contacts_Playbook = {
 	        $(this).removeAttr('Checked');
 	        checked=0;
 	    }
-
-	    console.log(id);
-	    console.log(checked);
 
 	    $.ajaxSetup({
 	        headers: {
@@ -86,8 +82,7 @@ var Contacts_Playbook = {
 	    });
 	},
 
-	toggle_touch:function(e){
-		e.preventDefault();
+	toggle_touch:function(){
 
 	    var checked;
 	    var id = $(this).parent().parent().data('playbook');
