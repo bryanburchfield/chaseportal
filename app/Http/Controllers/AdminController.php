@@ -382,9 +382,11 @@ class AdminController extends Controller
         try {
             $user = Auth::user();
             $user->update($request->all());
+
+            // Logout, clear session, log back in
             Auth::logout();
+            $request->session()->flush();
             Auth::login($user);
-            session()->forget('databases');
         } catch (Exception $e) {
             return ['errors' => ['Update Failed']];
         }
