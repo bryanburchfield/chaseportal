@@ -1875,18 +1875,6 @@ label.switch > span:after {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-label.switch > input[type=checkbox]:checked ~ span:before {
-  -webkit-transform: scale(0);
-          transform: scale(0);
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
-  opacity: 0.7;
-}
-
-label.switch > input[type=checkbox]:checked ~ span:after {
-  -webkit-transform: translate3d(100%, -50%, 0);
-          transform: translate3d(100%, -50%, 0);
-}
-
 label.switch > input.checked ~ span:before {
   -webkit-transform: scale(0);
           transform: scale(0);

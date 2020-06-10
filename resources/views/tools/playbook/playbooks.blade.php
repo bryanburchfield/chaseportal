@@ -24,22 +24,34 @@
 
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal flt_rgt">{{__('tools.add_playbook')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
                                     </div>
 
                                     <div class="row">
+                                        <div class="col-sm-12 mt30">
+                                            @foreach($contacts_playbooks as $contacts_playbook)
+                                                <div class="playbook col-sm-2" data-playbook="{{$contacts_playbook->id}}">
+                                                    <a href="{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}"><i class="fas fa-book fa-3x"></i></a>
+                                                    <h4 class="name">{{$contacts_playbook->name}}</h4>
 
-                                        @foreach($contacts_playbooks as $contacts_playbook)
-                                            <div class="playbook col-sm-2" data-playbook="{{$contacts_playbook->id}}">
-                                                <a href="{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}"><i class="fas fa-book fa-3x"></i></a>
-                                                <h4 class="name">{{$contacts_playbook->name}}</h4>
+                                                    <label class="switch">
+                                                        <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="playbook_input" class="toggle_playbook">
+                                                        <span></span>
+                                                    </label>
+                                                    {{-- <label class="switch">
+                                                        <input type="checkbox"
+                                                            {{ ($playbook->active) ? 'checked' : '' }}
+                                                            name="playbook_input"
+                                                            data-campaign="{{$playbook->campaign}}"
+                                                            data-playbook_id="{{$playbook->id}}"
+                                                            class="toggle_playbook {{ ($playbook->active) ? 'checked' : '' }}"
+                                                        >
+                                                        <span></span>
+                                                    </label> --}}
 
-                                                <label class="switch">
-                                                    <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="playbook_input">
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
 
                                     <div class="row">

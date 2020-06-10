@@ -28,23 +28,23 @@ var Contacts_Playbook = {
 		// $('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
-		$('.playbook .switch input').on('click', this.toggle_playbook);
+		$('.playbook').on('click', '.switch input', this.toggle_playbook);
 		$('.touch .switch input').on('click', this.toggle_touch);
 		$('.add_touch').on('submit', this.create_touch);
 	},
 
-	toggle_playbook:function(){
+	toggle_playbook:function(e){
 
 	    var checked;
 	    var id = $(this).parent().parent().data('playbook');
+	    var that = $(this);
 
 	    if($(this).is(':checked')){
-	        $(this).attr('Checked','Checked');
 	        checked=1;
 	    }else{
-	        $(this).removeAttr('Checked');
 	        checked=0;
 	    }
+
 
 	    $.ajaxSetup({
 	        headers: {
@@ -62,9 +62,12 @@ var Contacts_Playbook = {
 	        },
 	        success:function(response){
 	        	console.log(response);
+	        	Contacts_Playbook.toggle_checked(that, checked, 0);
 	        }, error: function (data) {
+	        	e.preventDefault();
+	        	Contacts_Playbook.toggle_checked(that, checked, 1);
+	        	
 				if (data.status === 422) {
-
 					$('#contact_playbooks .row .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
@@ -81,6 +84,26 @@ var Contacts_Playbook = {
 			}
 	    });
 	},
+
+	toggle_checked:function(that, checked, error){
+
+    	if(that.is(':checked') && !error){
+    		console.log('IF');
+    		$(that).addClass('checked');
+    	    $(that).attr('Checked','Checked');
+    	    checked=1;
+    	}else{
+		
+			console.log('ELSE-remove class');
+    		$(that).removeClass('checked');
+    	    $(that).removeAttr('Checked','Checked');
+    	    checked=0;
+    	}
+
+    	console.log($(that));
+
+    	return checked;
+    },
 
 	toggle_touch:function(){
 
@@ -105,7 +128,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/toggle_playbook_touch/',
+	        url: '/tools/playbook/toggle_playbook_touch',
 	        type:'POST',
 	        data:{
 	            id:id,
@@ -792,20 +815,20 @@ var Contacts_Playbook = {
         });
     },
 
-    toggle_checked:function(that, checked, error){
+    // toggle_checked:function(that, checked, error){
 
-    	if(that.is(':checked') && !error){
-    		that.addClass('checked');
-    	    that.attr('Checked','Checked');
-    	    checked=1;
-    	}else{
-    		that.removeClass('checked');
-    	    that.removeAttr('Checked');
-    	    checked=0;
-    	}
+    // 	if(that.is(':checked') && !error){
+    // 		that.addClass('checked');
+    // 	    that.attr('Checked','Checked');
+    // 	    checked=1;
+    // 	}else{
+    // 		that.removeClass('checked');
+    // 	    that.removeAttr('Checked');
+    // 	    checked=0;
+    // 	}
 
-    	return checked;
-    },
+    // 	return checked;
+    // },
 
     create_touch:function(e){
         e.preventDefault();
