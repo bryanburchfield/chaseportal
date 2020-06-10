@@ -17,8 +17,6 @@ use App\Models\SmsFromNumber;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -306,8 +304,8 @@ class PlaybookActionController extends Controller
     private function smsFromNumbers()
     {
         return SmsFromNumber::whereIn('group_id', [0, Auth::user()->group_id])
-            ->select('from_number')
-            ->distinct()
+            ->select(['id', 'from_number'])
+            ->orderBy('from_number')
             ->get();
     }
 }
