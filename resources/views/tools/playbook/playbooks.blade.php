@@ -35,7 +35,7 @@
                                                     <h4 class="name">{{$contacts_playbook->name}}</h4>
 
                                                     <label class="switch">
-                                                        <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="playbook_input" class="toggle_playbook">
+                                                        <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="playbook_input" class="toggle_playbook {{ ($contacts_playbook->active) ? 'checked' : '' }}">
                                                         <span></span>
                                                     </label>
                                                     {{-- <label class="switch">

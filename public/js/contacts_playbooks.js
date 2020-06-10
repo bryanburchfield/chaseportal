@@ -35,6 +35,8 @@ var Contacts_Playbook = {
 
 	toggle_playbook:function(e){
 
+		$('#contact_playbooks .row .alert-danger').empty().hide();
+
 	    var checked;
 	    var id = $(this).parent().parent().data('playbook');
 	    var that = $(this);
@@ -45,12 +47,13 @@ var Contacts_Playbook = {
 	        checked=0;
 	    }
 
-
 	    $.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
+
+	    console.log(id +' - '+ checked);
 
 	    $.ajax({
 	        url: '/tools/playbook/toggle_playbook',
@@ -61,14 +64,11 @@ var Contacts_Playbook = {
 	            checked:checked,
 	        },
 	        success:function(response){
-	        	console.log(response);
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
 	        }, error: function (data) {
 	        	e.preventDefault();
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
-	        	
 				if (data.status === 422) {
-					$('#contact_playbooks .row .alert-danger').empty();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
@@ -88,19 +88,14 @@ var Contacts_Playbook = {
 	toggle_checked:function(that, checked, error){
 
     	if(that.is(':checked') && !error){
-    		console.log('IF');
     		$(that).addClass('checked');
     	    $(that).attr('Checked','Checked');
     	    checked=1;
     	}else{
-		
-			console.log('ELSE-remove class');
     		$(that).removeClass('checked');
     	    $(that).removeAttr('Checked','Checked');
     	    checked=0;
     	}
-
-    	console.log($(that));
 
     	return checked;
     },
