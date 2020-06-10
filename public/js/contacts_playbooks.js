@@ -35,8 +35,6 @@ var Contacts_Playbook = {
 
 	toggle_playbook:function(e){
 
-		$('#contact_playbooks .row .alert-danger').empty().hide();
-
 	    var checked;
 	    var id = $(this).parent().parent().data('playbook');
 	    var that = $(this);
@@ -46,6 +44,8 @@ var Contacts_Playbook = {
 	    }else{
 	        checked=0;
 	    }
+
+	    // checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
 	    $.ajaxSetup({
 	        headers: {
@@ -64,11 +64,14 @@ var Contacts_Playbook = {
 	            checked:checked,
 	        },
 	        success:function(response){
+	        	console.log('SUCCESS');
+	        	$('#contact_playbooks .row .alert-danger').empty().hide();
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
 	        }, error: function (data) {
-	        	e.preventDefault();
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
+	        	e.preventDefault();
 				if (data.status === 422) {
+					$('#contact_playbooks .row .alert-danger').empty().hide();
 					var errors = $.parseJSON(data.responseText);
 					$.each(errors, function (key, value) {
 
@@ -96,7 +99,7 @@ var Contacts_Playbook = {
     	    $(that).removeAttr('Checked','Checked');
     	    checked=0;
     	}
-
+    	console.log(checked);
     	return checked;
     },
 
