@@ -24,23 +24,23 @@ class AgentCampaignDashController extends Controller
         $campaigns = $this->agentCampaigns();
 
         $jsfile = [
-            "agentdash.js",
+            "agentcampaigndash.js",
             "multiselect_lib.js"
         ];
 
-        $cssfile[] = "agentdash.css";
+        $cssfile[] = "agentcampaigndash.css";
 
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
             'dateFilter' => $this->dateFilter,
             'campaign_list' => $campaigns,
-            'curdash' => 'agentdash',
+            'curdash' => 'agentcampaigndash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
 
-        return view('agentdash')->with($data);
+        return view('agentcampaigndash')->with($data);
     }
 
     public function agentCampaignSearch(Request $request)

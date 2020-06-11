@@ -1,6 +1,6 @@
 <?php
 // Agent Dashboard: all urls start with /agentdashboard/
-Route::prefix('agentdashboard')->group(function () {
+Route::prefix('agentcampaigndashboard')->group(function () {
     Route::get('/', 'AgentCampaignDashController@apiLogin');
     Route::get('api/{token}/{rep}', 'AgentCampaignDashController@apiLogin');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');

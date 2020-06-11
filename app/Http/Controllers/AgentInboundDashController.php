@@ -22,8 +22,8 @@ class AgentInboundDashController extends Controller
 
         $campaigns = $this->campaignGroups();
 
-        $jsfile[] = "agentdash.js";
-        $cssfile[] = "agentdash.css";
+        $jsfile[] = "agentinbounddash.js";
+        $cssfile[] = "agentinbounddash.css";
 
         $data = [
             'isApi' => $this->isApi,
@@ -31,12 +31,12 @@ class AgentInboundDashController extends Controller
             'dateFilter' => $this->dateFilter,
             'inorout' => $this->inorout,
             'campaign_list' => $campaigns,
-            'curdash' => 'agentdash',
+            'curdash' => 'agentinbounddash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
 
-        return view('agentdash')->with($data);
+        return view('agentinbounddash')->with($data);
     }
 
     /**
