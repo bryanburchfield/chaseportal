@@ -156,6 +156,10 @@ var Dashboard = {
                 var response_length = response.Sales.length;
                 var chart_colors_array= Master.return_chart_colors_hash(response.Rep);
 
+                if(window.agent_sales_per_hour_chart != undefined){
+                    window.agent_sales_per_hour_chart.destroy();
+                }
+
                 var agent_sales_per_hour_data = {
                     datasets: [{
                         data: response.Sales,
