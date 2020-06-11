@@ -29,7 +29,7 @@
                     <ul class="dropdown-menu filter_campaign stop-propagation">
                         <div class="form-group mb0">
                             <input type="text" class="form-control campaign_search" placeholder="{{__('general.search')}}">
-                            <input type="hidden" class="campaign_search_url" value="/agentdashboard/campaign_search">
+                            <input type="hidden" class="campaign_search_url" value="/agentcampaigndashboard/campaign_search">
                         </div>
                         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
 
