@@ -73,7 +73,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>{{__('users.name')}}</th>
-                                                        <th>{{__('users.user_type')}}</th>>
+                                                        <th>{{__('users.user_type')}}</th>
                                                         <th>{{__('users.links')}}</th>
                                                         <th>{{__('users.edit')}}</th>
                                                         <th>{{__('users.delete')}}</th>

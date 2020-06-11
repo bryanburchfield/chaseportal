@@ -2037,15 +2037,18 @@ h4.panel-title a{
     width: 100%;
 }
 
-.user_links_modal a:nth-of-type(odd) {
+.user_links_modal h4:nth-of-type(odd) {
     background: $blue;
 }
 
-.user_links_modal a {
+.user_links_modal h4 {
+    font-size: 14px;
     padding: 3px 5px;
-    font-weight: 600;
+    font-weight: 500;
     display: block;
     clear: both;
+
+    span.dash_type{color:$green;font-weight: 600;}
 }
 
 .user_links_modal h3 span{color: #aaa;}
