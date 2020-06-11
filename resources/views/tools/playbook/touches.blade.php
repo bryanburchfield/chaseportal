@@ -5,7 +5,6 @@
 <div class="preloader"></div>
 <div class="wrapper">
 
-
 	@include('shared.sidenav')
 
 	<div id="content">
@@ -28,7 +27,7 @@
 			    	</div>
 				</div>
 
-                <div class="row">
+                <div class="row touches">
                     <div class="touch col-sm-2">
                         <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
                         <h4 class="name">SMS</h4>
@@ -54,6 +53,12 @@
                             <input type="checkbox" name="kpi_input">
                             <span></span>
                         </label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 mt30">
+                            <div class="alert alert-danger hidetilloaded cb"></div>
+                        </div>
                     </div>
                 </div>
 			</div>

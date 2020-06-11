@@ -41,14 +41,6 @@ var Contacts_Playbook = {
 	    	campaign = that.data('campaign')
 	    ;
 
-	    // if($(this).is(':checked')){
-	    // 	console.log('CHECKED');
-	    //     checked=1;
-	    // }else{
-	    // 	console.log('NOT CHECKED');
-	    //     checked=0;
-	    // }
-
 	    checked = Contacts_Playbook.toggle_checked(that, checked, 0);
 
 	    $('#contact_playbooks .row .alert-danger').empty().hide();
@@ -68,9 +60,7 @@ var Contacts_Playbook = {
 	            checked:checked,
 	        },
 	        success:function(response){
-	        	console.log('SUCCESS');
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
-
 	        }, error: function (data) {
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
 	        	e.preventDefault();
@@ -86,6 +76,56 @@ var Contacts_Playbook = {
 						}
 
 						$('#contact_playbooks .row .alert-danger').show();
+					});
+				}
+			}
+	    });
+	},
+
+	toggle_touch:function(e){
+
+		var checked,
+	    	that = $(this),
+	    	id = $(this).parent().parent().data('playbook')
+	    ;
+
+	    checked = Contacts_Playbook.toggle_checked(that, checked, 0);
+
+	    $('.touches .row .alert-danger').empty().hide();
+
+	    $.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    console.log(id+' '+ checked);
+
+	    $.ajax({
+	        url: '/tools/playbook/toggle_playbook_touch',
+	        type:'POST',
+	        data:{
+	            id:id,
+	            checked:checked,
+
+	        },
+	        success:function(response){
+	        	Contacts_Playbook.toggle_checked(that, checked, 0);
+	        }, error: function (data) {
+	        	Contacts_Playbook.toggle_checked(that, checked, 1);
+	        	e.preventDefault();
+				if (data.status === 422) {
+					$('.touches .row .alert-danger').empty().hide();
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('.touches .row .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.touches .row .alert-danger').show();
 					});
 				}
 			}
@@ -108,42 +148,6 @@ var Contacts_Playbook = {
 
     	return checked;
     },
-
-	toggle_touch:function(){
-
-	    var checked;
-	    var id = $(this).parent().parent().data('playbook');
-
-	    if($(this).is(':checked')){
-	        $(this).attr('Checked','Checked');
-	        checked=1;
-	    }else{
-	        $(this).removeAttr('Checked');
-	        checked=0;
-	    }
-
-	    console.log(id);
-	    console.log(checked);
-
-	    $.ajaxSetup({
-	        headers: {
-	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-	        }
-	    });
-
-	    $.ajax({
-	        url: '/tools/playbook/toggle_playbook_touch',
-	        type:'POST',
-	        data:{
-	            id:id,
-	            checked:checked,
-
-	        },
-	        success:function(response){
-	        	console.log(response);
-	        }
-	    });
-	},
 
 	get_subcampaigns:function(e, campaign){
 		e.preventDefault();
