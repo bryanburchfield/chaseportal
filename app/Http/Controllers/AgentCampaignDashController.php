@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Carbon;
 
-class AgentDashController extends Controller
+class AgentCampaignDashController extends Controller
 {
     use DashTraits;
 
