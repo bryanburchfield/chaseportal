@@ -146,13 +146,13 @@
                 <input type="hidden" class="app_token" name="app_token" value="">
                 <h3 class="mb10"><span class="username mb20"></span></h3>
             	<p>{{__('users.double_click')}}.</p><br>
-            	<h4><span class="dash_type">Agent Campaign</span> - <a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentcampaigndashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
-            	<h4><span class="dash_type">Agent Inbound</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentinbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
-				<h4><span class="dash_type">Agent Outbound</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
-				<h4><span class="dash_type">Inbound</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/inbounddashboard/api/<span class="url_token"></span></a></h4>
-				<h4><span class="dash_type">Outbound</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a></h4>
-				<h4><span class="dash_type">Leaderboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a></h4>
-				<h4><span class="dash_type">Trend</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a></h4>
+            	<h4><span class="dash_type">Agent Campaign Dashboard</span> - <a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentcampaigndashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
+            	<h4><span class="dash_type">Agent Inbound Flow Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentinbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
+				<h4><span class="dash_type">Agent Outbound Flow Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/agentoutbounddashboard/api/<span class="url_token"></span>/(#Rep#)</a></h4>
+				<h4><span class="dash_type">Inbound Campaign Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/inbounddashboard/api/<span class="url_token"></span></a></h4>
+				<h4><span class="dash_type">Outbound Campaign Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a></h4>
+				<h4><span class="dash_type">Leaderboard Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a></h4>
+				<h4><span class="dash_type">Trend Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a></h4>
 
             </div>
 	        <div class="modal-footer">

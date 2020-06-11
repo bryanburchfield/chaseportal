@@ -11,7 +11,7 @@
         <div class="filters">
             <div class="input-group">
                 <div class="input-group-btn">
-                    <div class="btn-group">
+                    <div class="btn-group flt_rgt">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span>{{__('general.interaction')}}</span>
                         </button>
@@ -37,7 +37,7 @@
                     </div>
 
 
-                    <div class="btn-group">
+                    <div class="btn-group flt_rgt">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span>{{__('general.date')}}</span>
                         </button>
@@ -50,7 +50,7 @@
                         </ul>
                     </div>
 
-                    <li class="btn-group">
+                    <li class="btn-group flt_rgt">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span><i class="fas fa-globe-americas"></i> Language</span>
                         </button>
