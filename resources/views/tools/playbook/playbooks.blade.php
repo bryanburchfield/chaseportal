@@ -38,17 +38,6 @@
                                                         <input type="checkbox" {{ ($contacts_playbook->active) ? 'checked' : '' }} name="playbook_input" class="toggle_playbook {{ ($contacts_playbook->active) ? 'checked' : '' }}">
                                                         <span></span>
                                                     </label>
-                                                    {{-- <label class="switch">
-                                                        <input type="checkbox"
-                                                            {{ ($playbook->active) ? 'checked' : '' }}
-                                                            name="playbook_input"
-                                                            data-campaign="{{$playbook->campaign}}"
-                                                            data-playbook_id="{{$playbook->id}}"
-                                                            class="toggle_playbook {{ ($playbook->active) ? 'checked' : '' }}"
-                                                        >
-                                                        <span></span>
-                                                    </label> --}}
-
                                                 </div>
                                             @endforeach
                                         </div>

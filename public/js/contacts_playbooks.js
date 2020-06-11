@@ -35,25 +35,29 @@ var Contacts_Playbook = {
 
 	toggle_playbook:function(e){
 
-	    var checked;
-	    var id = $(this).parent().parent().data('playbook');
-	    var that = $(this);
+	    var checked,
+	    	that = $(this),
+	    	id = $(this).parent().parent().data('playbook'),
+	    	campaign = that.data('campaign')
+	    ;
 
-	    if($(this).is(':checked')){
-	        checked=1;
-	    }else{
-	        checked=0;
-	    }
+	    // if($(this).is(':checked')){
+	    // 	console.log('CHECKED');
+	    //     checked=1;
+	    // }else{
+	    // 	console.log('NOT CHECKED');
+	    //     checked=0;
+	    // }
 
-	    // checked = Contacts_Playbook.toggle_checked(that, checked, 0);
+	    checked = Contacts_Playbook.toggle_checked(that, checked, 0);
+
+	    $('#contact_playbooks .row .alert-danger').empty().hide();
 
 	    $.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
-
-	    console.log(id +' - '+ checked);
 
 	    $.ajax({
 	        url: '/tools/playbook/toggle_playbook',
@@ -65,8 +69,8 @@ var Contacts_Playbook = {
 	        },
 	        success:function(response){
 	        	console.log('SUCCESS');
-	        	$('#contact_playbooks .row .alert-danger').empty().hide();
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
+
 	        }, error: function (data) {
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
 	        	e.preventDefault();
@@ -91,15 +95,17 @@ var Contacts_Playbook = {
 	toggle_checked:function(that, checked, error){
 
     	if(that.is(':checked') && !error){
-    		$(that).addClass('checked');
-    	    $(that).attr('Checked','Checked');
+    		that.addClass('checked');
+    	    that.attr('Checked','Checked');
+    	    that.prop('checked',true);
     	    checked=1;
     	}else{
-    		$(that).removeClass('checked');
-    	    $(that).removeAttr('Checked','Checked');
+    		that.removeClass('checked');
+    	    that.removeAttr('Checked');
+    	    that.prop('checked',false);
     	    checked=0;
     	}
-    	console.log(checked);
+
     	return checked;
     },
 
