@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use \App\Traits\DashTraits;
 use Illuminate\Support\Carbon;
 
-class AgentDashController extends Controller
+class AgentCampaignDashController extends Controller
 {
     use DashTraits;
 
@@ -24,23 +24,23 @@ class AgentDashController extends Controller
         $campaigns = $this->agentCampaigns();
 
         $jsfile = [
-            "agentdash.js",
+            "agentcampaigndash.js",
             "multiselect_lib.js"
         ];
 
-        $cssfile[] = "agentdash.css";
+        $cssfile[] = "agentcampaigndash.css";
 
         $data = [
             'isApi' => $this->isApi,
             'campaign' => $this->campaign,
             'dateFilter' => $this->dateFilter,
             'campaign_list' => $campaigns,
-            'curdash' => 'agentdash',
+            'curdash' => 'agentcampaigndash',
             'jsfile' => $jsfile,
             'cssfile' => $cssfile,
         ];
 
-        return view('agentdash')->with($data);
+        return view('agentcampaigndash')->with($data);
     }
 
     public function agentCampaignSearch(Request $request)

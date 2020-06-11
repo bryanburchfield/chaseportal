@@ -2352,15 +2352,21 @@ h4.panel-title a {
   width: 100%;
 }
 
-.user_links_modal a:nth-of-type(odd) {
+.user_links_modal h4:nth-of-type(odd) {
   background-color: #e6e6e6;
 }
 
-.user_links_modal a {
+.user_links_modal h4 {
   padding: 3px 5px;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 14px;
   display: block;
   clear: both;
+}
+
+.user_links_modal h4 span.dash_type {
+  color: #33A09B;
+  font-weight: 600;
 }
 
 .user_links_modal h3 span {

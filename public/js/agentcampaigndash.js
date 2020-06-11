@@ -94,7 +94,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/agentdashboard/call_volume',
+            url: '/agentcampaigndashboard/call_volume',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -188,7 +188,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/agentdashboard/campaign_chart',
+            url: '/agentcampaigndashboard/campaign_chart',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -283,7 +283,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/agentdashboard/get_sales',
+            url: '/agentcampaigndashboard/get_sales',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -324,7 +324,7 @@ var Dashboard = {
 
         return $.ajax({
             async: true,
-            url: '/agentdashboard/campaign_stats',
+            url: '/agentcampaigndashboard/campaign_stats',
             type: 'POST',
             dataType: 'json',
             data:{
@@ -420,7 +420,7 @@ var Dashboard = {
 
         $.ajax({
             async: true,
-            url: '/agentdashboard/update_filters',
+            url: '/agentcampaigndashboard/update_filters',
             type: 'POST',
             dataType: 'json',
             data: {datefilter: datefilter},
@@ -452,7 +452,7 @@ var Dashboard = {
             });
 
             $.ajax({
-                url: '/agentdashboard/update_filters',
+                url: '/agentcampaigndashboard/update_filters',
                 type: 'POST',
                 dataType: 'json',
                 data: {dateFilter:datefilter},

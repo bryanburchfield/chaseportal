@@ -877,9 +877,9 @@ var Dashboard = {
                     },
                 }
 
-                // if(window.agent_dispositions_chart != undefined){
-                //     window.agent_dispositions_chart.destroy();
-                // }
+                if(window.agent_dispositions_chart != undefined){
+                    window.agent_dispositions_chart.destroy();
+                }
 
                 var ctx = document.getElementById('agent_dispositions_graph').getContext('2d');
 

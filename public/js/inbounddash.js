@@ -617,6 +617,10 @@ var Dashboard = {
                     }
                 }
 
+                if(window.agent_dispositions_chart != undefined){
+                    window.agent_dispositions_chart.destroy();
+                }
+
                 var ctx = document.getElementById('agent_dispositions_graph').getContext('2d');
 
                 window.agent_dispositions_chart = new Chart(ctx, {
