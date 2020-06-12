@@ -15,7 +15,7 @@ class SmsFromNumberController extends Controller
      */
     public function index()
     {
-        $playbook_sms_numbers = SmsFromNumber::orderBy('group_id')
+        $sms_from_numbers = SmsFromNumber::orderBy('group_id')
             ->orderBy('from_number')
             ->get();
 
@@ -29,7 +29,7 @@ class SmsFromNumberController extends Controller
             'page' => $page,
             'jsfile' => [],
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
-            'playbook_sms_numbers' => $playbook_sms_numbers,
+            'sms_from_numbers' => $sms_from_numbers,
         ];
 
         return view('tools.playbook.from_number.index')->with($data);
@@ -43,8 +43,8 @@ class SmsFromNumberController extends Controller
      */
     public function store(ValidSmsFromNumber $request)
     {
-        $playbook_sms_number = new SmsFromNumber($request->all());
-        $playbook_sms_number->save();
+        $sms_from_number = new SmsFromNumber($request->all());
+        $sms_from_number->save();
 
         return ['status' => 'success'];
     }
@@ -58,9 +58,9 @@ class SmsFromNumberController extends Controller
      */
     public function update(ValidSmsFromNumber $request, $id)
     {
-        $playbook_sms_number = SmsFromNumber::findOrFail($id);
-        $playbook_sms_number->update($request->all());
-        $playbook_sms_number->save();
+        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number->update($request->all());
+        $sms_from_number->save();
 
         return ['status' => 'success'];
     }
@@ -73,8 +73,8 @@ class SmsFromNumberController extends Controller
      */
     public function destroy($id)
     {
-        $playbook_sms_number = SmsFromNumber::findOrFail($id);
-        $playbook_sms_number->delete();
+        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number->delete();
 
         return ['status' => 'success'];
     }
@@ -85,7 +85,7 @@ class SmsFromNumberController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getPlaybookSmsNumber(Request $request)
+    public function getSmsFromNumber(Request $request)
     {
         return SmsFromNumber::findOrFail($request->id);
     }

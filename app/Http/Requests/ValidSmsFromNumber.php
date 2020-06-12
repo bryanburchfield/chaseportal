@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 class ValidSmsFromNumber extends FormRequest
 {
-    protected $playbook_sms_number;
+    protected $sms_from_number;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,10 @@ class ValidSmsFromNumber extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if ($this->filled('id')) {
-            $this->playbook_sms_number = SmsFromNumber::findOrFail($this->id);
+        if (empty($this->id)) {
+            $this->sms_from_number = new SmsFromNumber($this->all());
         } else {
-            $this->playbook_sms_number = new SmsFromNumber($this->all());
+            $this->sms_from_number = SmsFromNumber::findOrFail($this->id);
         }
     }
 
@@ -47,9 +47,9 @@ class ValidSmsFromNumber extends FormRequest
                 'required',
                 'regex:/^\+1\d{10}$/',
                 Rule::unique('sms_from_numbers')->where(function ($query) {
-                    return $query->where('group_id', $this->playbook_sms_number->group_id)
-                        ->where('from_number', $this->playbook_sms_number->from_number)
-                        ->where('id', '!=', $this->playbook_sms_number->id);
+                    return $query->where('group_id', $this->sms_from_number->group_id)
+                        ->where('from_number', $this->sms_from_number->from_number)
+                        ->where('id', '!=', $this->sms_from_number->id);
                 }),
             ],
         ];

@@ -36,14 +36,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                        <td>0</td>
-                                                        <td>+15617258677</td>
+                                                    @foreach ($sms_from_numbers as $sms_from_number)
+                                                    <tr>
+                                                        <td>{{ $sms_from_number->group_id }}</td>
+                                                        <td>{{ $sms_from_number->from_number }}</td>
                                                         <td>
-                                                            <a href="#" data-id="2" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600"><i class="fas fa-edit"></i> Edit</a>
+                                                            <a href="#" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600"><i class="fas fa-edit"></i> Edit</a>
                                                         </td>
                                                         <td>
-                                                            <a href="#" data-number="+15617258677" data-id="2" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600"><i class="fa fa-trash-alt"></i> Delete</a>
+                                                            <a href="#" data-number="{{ $sms_from_number->from_number }}" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600"><i class="fa fa-trash-alt"></i> Delete</a>
                                                         </td>
+                                                     </tr>
+                                                    @endforeach
                                                     </tr>
                                                 </tbody>
                                             </table>

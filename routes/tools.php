@@ -92,7 +92,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                     Route::post('/sms_number', 'SmsFromNumberController@store');
                     Route::patch('/sms_number/{id}', 'SmsFromNumberController@update');
                     Route::delete('/sms_number/{id}', 'SmsFromNumberController@destroy');
-                    Route::get('/sms_number/{id}', 'SmsFromNumberController@getPlaybookSmsNumber');
+                    Route::get('/sms_number/{id}', 'SmsFromNumberController@getSmsFromNumber');
                 });
             });
         });
