@@ -25,6 +25,11 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
+        // Check if group_id = -1 then force user to select (for sso reports)
+        // Auth::user()->group_id = ???;
+        // Auth::user()->save();
+
+
         $this->reportservice->report->setDates();
 
         $results = [];
