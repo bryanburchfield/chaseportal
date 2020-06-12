@@ -542,7 +542,7 @@ var Contacts_Playbook = {
 				action_select+='</select></div>';
 				actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
 
-				$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action '));
+				$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action_btn '));
 				Contacts_Playbook.check_numb_actions($('.add_action'));
 			}else{
 				that.parent().parent().find('.alert').text('No available actions for this campaign');
@@ -864,6 +864,7 @@ var Contacts_Playbook = {
         });
 
         if(!duplicate_filters){
+        	console.log('test');
             $.ajax({
                 url: '/tools/playbook/touches/'+playbook_id,
                 type: 'POST',
@@ -879,7 +880,7 @@ var Contacts_Playbook = {
                 },
 
                 success:function(response){
-
+                	console.log(response);
                     window.location.href = 'contactflow_builder';
                 },
                 error :function( data ) {
