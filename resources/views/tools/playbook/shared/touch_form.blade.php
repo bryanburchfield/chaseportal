@@ -16,7 +16,7 @@
                         <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Add Touch</h2>
                         {{-- <a href="{{ action("PlaybookTouchController@index", [$contacts_playbook->id])}}" class="btn btn-secondary flt_rgt mb0 mt20">Go Back</a> --}}
                         {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_touch']) !!}
-                        <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook_id}}">
+                        <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook->id}}">
                         <div class="card">
                             <div class="form-group">
                                 {!! Form::label('rule_name', __('tools.rule_name')) !!}

@@ -54,6 +54,8 @@ class PlaybookTouchController extends Controller
 
     public function addPlaybookTouchForm()
     {
+        $this->setPlaybook($this->contacts_playbook_id);
+
         $page = [
             'menuitem' => 'playbook',
             'menu' => 'tools',
@@ -67,8 +69,8 @@ class PlaybookTouchController extends Controller
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
             'campaigns' => $this->getAllCampaigns(),
-            'playbook_touches' => $this->getPlaybookTouches(),
-            'contacts_playbook_id' => $this->contacts_playbook_id
+            'playbook_filters' => $this->filters(),
+            'playbook_actions' => $this->actions(),
         ];
 
         return view('tools.playbook.shared.touch_form')->with($data);
@@ -163,6 +165,26 @@ class PlaybookTouchController extends Controller
             )
             ->orderBy('playbook_filters.name')
             ->get();
+    }
+
+    private function actions()
+    {
+        $request = new Request();
+        if (!empty($this->contacts_playbook->campaign)) {
+            $request->merge(['campaign' => $this->contacts_playbook->campaign]);
+        }
+
+        return $this->getActions($request);
+    }
+
+    private function filters()
+    {
+        $request = new Request();
+        if (!empty($this->contacts_playbook->campaign)) {
+            $request->merge(['campaign' => $this->contacts_playbook->campaign]);
+        }
+
+        return $this->getFilters($request);
     }
 
     /**
