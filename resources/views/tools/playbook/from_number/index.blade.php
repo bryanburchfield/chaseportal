@@ -22,7 +22,33 @@
                                 @include('tools.playbook.shared.topnav', ['playbook_page' => 'sms_numbers'])
 
 								<div class="tab-pane mt30" id="sms_numbers">
-                                    
+                                    <div class="col-sm-12 nopad">
+                                        <div class="table-responsive nobdr sms_numbers mt20">
+                                            <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal"><i class="fas fa-plus-circle"></i> Add Number</a>
+
+                                            <table class="table mt20 table-striped" id="sms_numbers_datatable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Group</th>
+                                                        <th>Number</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        <td>0</td>
+                                                        <td>+15617258677</td>
+                                                        <td>
+                                                            <a href="#" data-id="2" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600"><i class="fas fa-edit"></i> Edit</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" data-number="+15617258677" data-id="2" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600"><i class="fa fa-trash-alt"></i> Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
