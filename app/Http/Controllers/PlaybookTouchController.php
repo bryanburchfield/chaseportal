@@ -68,7 +68,6 @@ class PlaybookTouchController extends Controller
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
-            'campaigns' => $this->getAllCampaigns(),
             'playbook_filters' => $this->filters(),
             'playbook_actions' => $this->actions(),
         ];
