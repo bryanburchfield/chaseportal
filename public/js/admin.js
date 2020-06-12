@@ -788,9 +788,8 @@ var Admin = {
     		type: 'GET',
     		dataType: 'json',
     		success: function (response) {
-
     			$('#editSMSModal').find('.group_id').val(response.group_id);
-    			$('#editSMSModal').find('.from_number').val(response.from_number);
+    			$('#editSMSModal').find('.sms_from_number_id').val(response.from_number);
     			$('.loader_hor').hide();
     		}
     	});
@@ -889,9 +888,9 @@ $(document).ready(function () {
 	});
 
 	$( "#addSMSModal" ).on('shown.bs.modal', function(){
-		if($('.from_number').val() == ''){
-			$('.from_number').val('+1');
-			$('.from_number').focus();
+		if($('.sms_from_number_id').val() == ''){
+			$('.sms_from_number_id').val('+1');
+			$('.sms_from_number_id').focus();
 		}
 	});
 });
