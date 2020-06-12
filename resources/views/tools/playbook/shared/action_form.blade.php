@@ -72,7 +72,7 @@
 <div class="sms hidetilloaded action_type_fields">
     <div class="form-group">
         <label>{{__('tools.from_number')}}</label>
-        <select name="sms_from_number_id" class="from form-control">
+        <select name="sms_from_number_id" class="sms_from_number_id form-control">
             <option value="">{{__('tools.select_one')}}</option>
             @foreach($sms_from_numbers as $number)
                 <option {{$number->id==old('from') ? 'selected' :'' }} value="{{$number->id}}">{{$number->from_number}}</option>

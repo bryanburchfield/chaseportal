@@ -1,6 +1,6 @@
 <div class="form-group">
     <label for="from_number">SMS From Number:</label>
-    <input type="text" class="form-control sms_from_number_id" name="sms_from_number_id"/>
+    <input type="text" class="form-control from_number" name="from_number"/>
 </div>
 
 <div class="form-group">
