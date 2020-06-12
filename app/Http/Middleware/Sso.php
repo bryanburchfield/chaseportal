@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use Closure;
+use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Facades\Auth;
 
 class Sso
@@ -20,19 +22,68 @@ class Sso
         // if already logged in, don't bother
         if (Auth::guest()) {
 
-            // call API to get stuff
-            if ($request->query('token') == '12345') {
-                $sso_user = [
-                    'name' => 'bryan',
-                    'type' => 'rep',
-                    'group_id' => '777',
-                    'reporting_db' => 'PowerV2_Reporting_Dialer-07',
-                    'timezone' => 'Eastern Standard Time',
-                ];
+            // Make sure token and server are passed
+            if ($request->missing('Token') || $request->missing('Server')) {
+                abort(403, 'Unauthorized');
             }
 
-            // Abort if not authorized
-            if (empty($sso_user['name'])) {
+            // call API to get stuff
+            $url = 'https://' . $request->query('Server') . '.chasedatacorp.com/Admin/SSO.aspx';
+
+            // URL redirects, so we need cookies
+            $jar = new CookieJar();
+            $client = new Client();
+
+            $response = $client->get(
+                $url,
+                [
+                    'cookies' => $jar,
+                    'query' => [
+                        'Token' => $request->query('Token'),
+                        'v' => 2,
+                    ]
+                ]
+            );
+
+            try {
+                $api_user = json_decode($response->getBody()->getContents());
+
+                // Abort if not authorized
+                if (
+                    empty($api_user->Username) ||
+                    empty($api_user->Role) ||
+                    empty($api_user->GroupId) ||
+                    empty($api_user->ReportingDatabase)
+                ) {
+                    abort(403, 'Unauthorized');
+                }
+
+                // Abort if group < -1,  set to 777 if == -1
+                $api_user->GroupId = (int) $api_user->GroupId;
+                if ($api_user->GroupId < -1) {
+                    abort(403, 'Unauthorized');
+                } elseif ($api_user->GroupId == -1) {
+                    $api_user->GroupId = 777;
+                }
+
+                // check role
+                $api_user->Role = strtolower($api_user->Role);
+                if (
+                    $api_user->Role != 'client' &&
+                    $api_user->Role != 'admin' &&
+                    $api_user->Role != 'superadmin'
+                ) {
+                    abort(403, 'Unauthorized');
+                }
+
+                $sso_user = [
+                    'name' => $api_user->Username,
+                    'type' => $api_user->Role,
+                    'group_id' => $api_user->GroupId,
+                    'reporting_db' => $api_user->ReportingDatabase,
+                    'timezone' => 'Eastern Standard Time',
+                ];
+            } catch (\Throwable $th) {
                 abort(403, 'Unauthorized');
             }
 
