@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-sm-3 pr0">
                         <div class="flowchart_element when"><span>{{__('general.where')}}</span></div>
                         <div class="vertical-line"></div>
@@ -47,7 +47,7 @@
 
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="row leadfilter_row">
                     <div class="col-sm-3 pr0">
@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="col-sm-9 pl0 mbp0">
-                        <div class="card" id="condition">
+                        <div class="card condition">
 
                             <div class="form-group">
                                 {!! Form::label('filter_type', __('tools.filter_type')) !!}

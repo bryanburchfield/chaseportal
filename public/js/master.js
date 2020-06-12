@@ -21,8 +21,7 @@ var Master = {
 	first_search: true,
 	active_camp_search: '',
 	tick_color: '#aaa',
-	gridline_color: '#1A2738',
-    
+	gridline_color: '#1A2738',    
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
@@ -87,6 +86,7 @@ var Master = {
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        
         // $('.not.unread').on('click', this.set_feature_msg_read);
 	},
 
@@ -453,86 +453,6 @@ var Master = {
         }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
             $('#destination_subcampaign').empty();
             $('#destination_subcampaign').append(subcampaigns);
-        }
-    },
-
-    change_filter_label: function () {
-        var filtertype = $(this).find('option:selected').data('filtertype');
-        $(this).parent().parent().find('.subfilter_group').hide();
-        var subfilter = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + filtertype + '"]');
-        $(subfilter).show();
-
-    },
-
-    add_leadrule_filter:function(e){
-        e.preventDefault();
-
-        if(Master.leadrule_filters_used < Master.leadrule_filters){
-            $('.alert.filter_error').hide();
-            var selected_filter = $(this).parent().find('.lead_rule_filter_type').val();
-            var selected_value = $(this).parent().find('.subfilter_group[data-subfilter="' + selected_filter + '"] .form-control').val();
-
-            if(selected_filter && selected_value){
-                $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height);
-
-                if(Master.leadrule_filters != Master.leadrule_filters_used ){
-                    // only add delete rule btn to edit form -check if only one condition is present
-                    // if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
-                    //     var add_delete_btn = true;
-                    // }
-
-                    Master.leadrule_filters_used=Master.leadrule_filters_used+1;
-                    var new_filter = $(this).parent().parent().parent().clone();
-                    $(new_filter).insertAfter('.leadfilter_row:last');
-                    var i = Master.leadrule_filters_used;
-                    $(new_filter).find('.lead_rule_filter_value, .lead_rule_filter_type,.filter_value').val('');
-                    $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
-                    $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
-                    $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
-                    /// only update filter menu for create rule form
-                    // if(!$(this).hasClass('edit_addrule')){
-                    //     $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
-                    // }
-
-                    if(Master.leadrule_filters_used!=Master.leadrule_filters){
-                        if(!$(new_filter).find('a.remove_filter').length){
-                            $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
-                        }
-                    }
-
-                    if(Master.leadrule_filters == Master.leadrule_filters_used){
-                        $(new_filter).find('a.add_leadrule_filter').remove();
-                    }
-
-                    // $(this).parent().find('select').attr('disabled', true);
-                    $(this).hide();
-                }
-            }else{
-                Master.flowchart_vline_height = $(this).parent().parent().parent().find('.vertical-line').height();
-                $(this).parent().find('.alert').show();
-                $(this).parent().parent().parent().find('.vertical-line').height(Master.flowchart_vline_height + 180);
-            }
-        }
-    },
-
-    remove_leadrule_filter:function(e){
-        e.preventDefault();
-
-        Master.leadrule_filters_used=Master.leadrule_filters_used-1;
-
-        $(this).parent().parent().parent().remove();
-        $('.update_filter_type').each(function(){
-            $(this).attr('disabled', true);
-        });
-        //// disable all but last filter selects
-        $('.update_filter_type').last().attr('disabled', false);
-
-        $('.leadfilter_row').find('.card').each(function(){
-            $(this).find('.add_leadrule_filter').remove();
-        });
-        // remove add new filter buttons from all cards, add to last one
-        if(Master.leadrule_filters_used != Master.leadrule_filters){
-            $('.leadfilter_row:last').find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> '+Lang.get('js_msgs.add_filter')+'</a>');
         }
     },
 

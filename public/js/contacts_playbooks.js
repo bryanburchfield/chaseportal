@@ -10,6 +10,11 @@ var Contacts_Playbook = {
 	    }
 	}),
 	pb_campaign:'',
+	// leadrule_filters_used:0,
+    // leadrule_filters:$('.leadfilter_row').length,
+    leadrule_filters: $('.lead_rule_filter_type').first().find('option').length -1,
+    leadrule_filters_used: $('.leadfilter_row').length,
+    flowchart_vline_height:$('.add_leadrule_filter').parent().parent().parent().find('.vertical-line').height,
 
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
@@ -31,6 +36,10 @@ var Contacts_Playbook = {
 		$('.playbook').on('click', '.switch input', this.toggle_playbook);
 		$('.touch .switch input').on('click', this.toggle_touch);
 		$('.add_touch').on('submit', this.create_touch);
+		$('body').on('click', 'a.add_leadrule_filter', this.add_leadrule_filter);
+		$('body').on('click', '.remove_filter', this.remove_leadrule_filter);
+		$('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
+        $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
 	},
 
 	toggle_playbook:function(e){
@@ -157,7 +166,7 @@ var Contacts_Playbook = {
 		}
 
 		var that = $(this);
-
+		console.log(that);
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -181,9 +190,9 @@ var Contacts_Playbook = {
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
 
-                $(that).parent().next().find('.subcampaigns').empty();
+                $('.subcampaigns').empty();
 
-                $(that).parent().next().find('.subcampaigns').append(sub_camps);
+                $('.subcampaigns').append(sub_camps);
                 
                 
                 
@@ -728,7 +737,7 @@ var Contacts_Playbook = {
                 $.when(
 					Contacts_Playbook.get_subcampaigns(event, response.campaign)
 				).done(function() {
-					edit_modal.find('.subcampaign option[value="'+response.subcampaign+'"]').prop('selected', true);
+					edit_modal.find('.subcampaigns option[value="'+response.subcampaign+'"]').prop('selected', true);
 				});
 	        }
 	    });
@@ -823,21 +832,6 @@ var Contacts_Playbook = {
         });
     },
 
-    // toggle_checked:function(that, checked, error){
-
-    // 	if(that.is(':checked') && !error){
-    // 		that.addClass('checked');
-    // 	    that.attr('Checked','Checked');
-    // 	    checked=1;
-    // 	}else{
-    // 		that.removeClass('checked');
-    // 	    that.removeAttr('Checked');
-    // 	    checked=0;
-    // 	}
-
-    // 	return checked;
-    // },
-
     create_touch:function(e){
         e.preventDefault();
         $('#add_rule').find('.add_rule_error').empty().hide();
@@ -909,6 +903,90 @@ var Contacts_Playbook = {
             });
         }
     },
+
+    add_leadrule_filter:function(e){
+        e.preventDefault();
+        console.log(Contacts_Playbook.leadrule_filters_used);
+        if(Contacts_Playbook.leadrule_filters_used < Contacts_Playbook.leadrule_filters){
+            $('.alert.filter_error').hide();
+            var selected_filter = $(this).parent().find('.lead_rule_filter_type').val();
+            // var selected_value = $(this).parent().find('.subfilter_group[data-subfilter="' + selected_filter + '"] .form-control').val();
+            var selected_value = $(this).parent().find('.lead_rule_filter_value').val();
+
+            console.log(selected_filter+' '+ selected_value);
+
+            if(selected_filter && selected_value){
+                $(this).parent().parent().parent().find('.vertical-line').height(Contacts_Playbook.flowchart_vline_height);
+
+                if(Contacts_Playbook.leadrule_filters != Contacts_Playbook.leadrule_filters_used ){
+                    // only add delete rule btn to edit form -check if only one condition is present
+                    // if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
+                    //     var add_delete_btn = true;
+                    // }
+
+                    Contacts_Playbook.leadrule_filters_used=Contacts_Playbook.leadrule_filters_used+1;
+                    var new_filter = $(this).parent().parent().parent().clone();
+                    console.log(new_filter);
+                    $(new_filter).insertAfter('.leadfilter_row:last');
+                    var i = Contacts_Playbook.leadrule_filters_used;
+                    $(new_filter).find('.lead_rule_filter_value, .lead_rule_filter_type,.filter_value').val('');
+                    $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
+                    $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
+                    $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
+                    /// only update filter menu for create rule form
+                    // if(!$(this).hasClass('edit_addrule')){
+                    //     $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
+                    // }
+
+                    if(Contacts_Playbook.leadrule_filters_used!=Contacts_Playbook.leadrule_filters){
+                        if(!$(new_filter).find('a.remove_filter').length){
+                            $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
+                        }
+                    }
+
+                    if(Contacts_Playbook.leadrule_filters == Contacts_Playbook.leadrule_filters_used){
+                        $(new_filter).find('a.add_leadrule_filter').remove();
+                    }
+
+                    // $(this).parent().find('select').attr('disabled', true);
+                    $(this).hide();
+                }
+            }else{
+                Contacts_Playbook.flowchart_vline_height = $(this).parent().parent().parent().find('.vertical-line').height();
+                $(this).parent().find('.alert').show();
+                $(this).parent().parent().parent().find('.vertical-line').height(Contacts_Playbook.flowchart_vline_height + 180);
+            }
+        }
+    },
+
+    remove_leadrule_filter:function(e){
+        e.preventDefault();
+
+        Contacts_Playbook.leadrule_filters_used=Contacts_Playbook.leadrule_filters_used-1;
+
+        $(this).parent().parent().parent().remove();
+        $('.update_filter_type').each(function(){
+            $(this).attr('disabled', true);
+        });
+        //// disable all but last filter selects
+        $('.update_filter_type').last().attr('disabled', false);
+
+        $('.leadfilter_row').find('.card').each(function(){
+            $(this).find('.add_leadrule_filter').remove();
+        });
+        // remove add new filter buttons from all cards, add to last one
+        if(Contacts_Playbook.leadrule_filters_used != Contacts_Playbook.leadrule_filters){
+            $('.leadfilter_row:last').find('.card').append('<a href="#" class="add_leadrule_filter edit_addrule"><i class="fas fa-plus-circle"></i> '+Lang.get('js_msgs.add_filter')+'</a>');
+        }
+    },
+
+    change_filter_label: function () {
+        var filtertype = $(this).find('option:selected').data('filtertype');
+        $(this).parent().parent().find('.subfilter_group').hide();
+        var subfilter = $(this).parent().parent().find('.subfilter_group[data-subfilter="' + filtertype + '"]');
+        $(subfilter).show();
+    },
+
 }
 
 $(document).ready(function(){
