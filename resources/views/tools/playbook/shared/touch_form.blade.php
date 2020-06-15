@@ -13,8 +13,7 @@
             <div class="container-full mt50 tools">
                 <div class="row">
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
-                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> Add Touch</h2>
-                        {{-- <a href="{{ action("PlaybookTouchController@index", [$contacts_playbook->id])}}" class="btn btn-secondary flt_rgt mb0 mt20">Go Back</a> --}}
+                        <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_touch')}}</h2>
                         {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 add_touch']) !!}
                         <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook->id}}">
                         <div class="card">
@@ -38,7 +37,7 @@
                             <div class="form-group">
                                 {!! Form::label('filter_type', __('tools.filter')) !!}
                                 <select name="filter_type" class="form-control filter_type">
-                                    <option value="">Select One</option>
+                                    <option value="">{{__('tools.select_one')}}</option>
                                     @foreach($playbook_filters as $filter)
                                         <option value="{{$filter->id}}">{{$filter->name}}</option>
                                     @endforeach
@@ -66,7 +65,7 @@
                             <div class="form-group">
                                 {!! Form::label('actions', __('tools.action')) !!}
                                 <select name="action_type" class="form-control action_type">
-                                    <option value="">Select One</option>
+                                    <option value="">{{__('tools.select_one')}}</option>
                                     @foreach($playbook_actions as $pb)
                                         <option value="{{$pb->id}}">{{$pb->name}}</option>
                                     @endforeach

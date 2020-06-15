@@ -3,6 +3,7 @@
 return [
 	'action_in_use'	=> 'Action in Use',
 	'action_type'	=> 'Action Type',
+	'action'		=> 'Action',
 	'actions'		=> 'Actions',
 	'active'		=> 'Active',
 	'add_action'	=> 'Add Action',
@@ -13,6 +14,7 @@ return [
 	'add_provider'	=> 'Add Provider',
 	'add_rule'		=> 'Add Rule',
 	'add_server'	=> 'Add SMTP Server',
+	'add_touch'		=> 'Add Touch',
 	'back'			=> 'Back',
 	'call_status'	=> 'Call Status',
 	'call_statuses'	=> 'Call Statuses',
@@ -70,6 +72,7 @@ return [
 	'filter_in_use'	=> 'Filter In Use',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'filter'		=> 'Filter',
 	'filters'		=> 'Filters',
 	'filters_required' => 'You must enter at least one filter',
 	'from'			=> 'From',
