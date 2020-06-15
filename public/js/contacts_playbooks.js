@@ -827,27 +827,35 @@ var Contacts_Playbook = {
     create_touch:function(e){
         e.preventDefault();
         $('#add_rule').find('.add_rule_error').empty().hide();
-        var rule_name = $('#rule_name').val(),
-            source_campaign = $('#campaign_select').val(),
-            source_subcampaign=$('.source_subcampaign').val(),
-            destination_campaign = $('#destination_campaign').val(),
-            destination_subcampaign = $('.destination_subcampaign').val(),
-            description = $('#description').val(),
+        var rule_name = $('#rule_name').val(),            
             playbook_id = $('.playbook_id').val()
         ;
 
         console.log(playbook_id);
 
-        var filters={};
-        var duplicate_filters = false;
+        // var filters={};
+        // var duplicate_filters = false;
+        // $('.filter_type').each(function(){
+        //     if(!filters.hasOwnProperty($(this).val())){
+        //         filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
+        //     }else{
+        //         $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
+        //         duplicate_filters=true;
+        //     }
+        // });
+
+        var filters = [];
         $('.filter_type').each(function(){
-            if(!filters.hasOwnProperty($(this).val())){
-                filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
-            }else{
-                $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
-                duplicate_filters=true;
-            }
+        	filters.push($(this).val());
         });
+
+        var actions = [];
+        $('.action').each(function(){
+        	actions.push($(this).val());
+        });
+
+        console.log(actions);
+        console.log(filters);
 
         $.ajaxSetup({
             headers: {
@@ -855,51 +863,44 @@ var Contacts_Playbook = {
             }
         });
 
-        if(!duplicate_filters){
-        	console.log('test');
-            $.ajax({
-                url: '/tools/playbook/touches/'+playbook_id,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    rule_name:rule_name,
-                    source_campaign:source_campaign,
-                    source_subcampaign:source_subcampaign,
-                    destination_campaign:destination_campaign,
-                    destination_subcampaign:destination_subcampaign,
-                    description:description,
-                    filters:filters
-                },
+        $.ajax({
+            url: '/tools/playbook/touches/'+playbook_id,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                rule_name:rule_name,
+              	actions:actions,
+            	filters:filters
+            },
 
-                success:function(response){
-                	console.log(response);
-                    window.location.href = 'contactflow_builder';
-                },
-                error :function( data ) {
-                    $('.add_rule_error.alert').empty();
-                    $('.add_rule_error.alert').hide();
+            success:function(response){
+            	console.log(response);
+                window.location.href = 'contactflow_builder';
+            },
+            error :function( data ) {
+                $('.add_rule_error.alert').empty();
+                $('.add_rule_error.alert').hide();
 
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
 
-                        if($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                                $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                            });
-                        }else{
+                    if($.isPlainObject(value)) {
+                        $.each(value, function (key, value) {
                             $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
-                        }
-                    });
+                        });
+                    }else{
+                        $('.add_rule_error.alert').show().append('<li>'+value+'</li>');
+                    }
+                });
 
-                    $('.add_rule_error.alert li').first().remove();
-                }
-            });
-        }
+                $('.add_rule_error.alert li').first().remove();
+            }
+        });
     },
 
     add_filter:function(e){
         e.preventDefault();
-console.log(Contacts_Playbook.leadrule_filters +' '+ Contacts_Playbook.leadrule_filters_used);
+
         if(Contacts_Playbook.leadrule_filters_used < Contacts_Playbook.leadrule_filters){
             $('.alert.filter_error').hide();
             var selected_filter = $(this).parent().find('.filter_type').val();
@@ -945,12 +946,11 @@ console.log(Contacts_Playbook.leadrule_filters +' '+ Contacts_Playbook.leadrule_
     	if(Contacts_Playbook.actions_used < Contacts_Playbook.actions){
     		$('.alert.action_error').hide();
     		var selected_action = $(this).parent().find('.action').val();
-
+    		console.log(selected_action);
     		if(selected_action){
     			var new_action = $(this).parent().parent().parent().clone();
     			$(new_action).insertAfter('.action_row:last');
-    			$(new_action).find('.action').val('');
-    			$(new_action).find('.action').val('');
+    			$(new_action).find('.action_type').val('');
 
     			if(Contacts_Playbook.actions_used!=Contacts_Playbook.actions){
     			    if(!$(new_action).find('a.remove_action').length){
