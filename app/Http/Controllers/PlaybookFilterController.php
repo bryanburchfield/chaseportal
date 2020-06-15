@@ -27,7 +27,7 @@ class PlaybookFilterController extends Controller
             'menu' => 'tools',
             'type' => 'other',
         ];
-        
+
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_filters.js'],
@@ -123,7 +123,7 @@ class PlaybookFilterController extends Controller
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
 
-        if ($playbook_filter->contacts_playbook_filters->isNotEmpty()) {
+        if ($playbook_filter->playbook_touch_filters->isNotEmpty()) {
             abort(response()->json(['errors' => ['1' => trans('tools.filter_in_use')]], 422));
         }
 
