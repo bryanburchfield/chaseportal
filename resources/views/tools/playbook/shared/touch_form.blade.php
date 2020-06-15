@@ -28,20 +28,15 @@
 
                 <div class="row leadfilter_row">
                     <div class="col-sm-3 pr0">
-                        <div class="flowchart_element condition mt35 mb30"><span>{{__('general.when')}}</span></div>
+                        <div class="flowchart_element condition mb30"><span>{{__('general.when')}}</span></div>
                         <div class="vertical-line"></div>
                     </div>
 
                     <div class="col-sm-9 pl0 mbp0">
                         <div class="card condition">
 
-                           {{--  <div class="form-group">
-                                {!! Form::label('filter_type', __('tools.filter_type')) !!}
-                                {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control lead_rule_filter_type", 'required'=>true]) !!}
-                            </div> --}}
-
                             <div class="form-group">
-                                {!! Form::label('filter_type', __('tools.campaign')) !!}
+                                {!! Form::label('filter_type', __('tools.filter')) !!}
                                 <select name="filter_type" class="form-control filter_type">
                                     <option value="">Select One</option>
                                     @foreach($playbook_filters as $filter)
@@ -69,8 +64,8 @@
                     <div class="col-sm-9 pl0 mbp0">
                         <div class="card" id="action">
                             <div class="form-group">
-                                {!! Form::label('actions', __('tools.campaign')) !!}
-                                <select name="action" class="form-control action">
+                                {!! Form::label('actions', __('tools.action')) !!}
+                                <select name="action_type" class="form-control action">
                                     <option value="">Select One</option>
                                     @foreach($playbook_actions as $pb)
                                         <option value="{{$pb->id}}">{{$pb->name}}</option>
@@ -89,16 +84,9 @@
 
                 <div class="row">
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
-                        <div class="card">
-                            <div class="form-group">
-                                {!! Form::label('description', __('tools.description')) !!}
-                                {!! Form::textarea("description", null, ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
-                            </div>
-
-                            <a href="{{ URL::previous() }}"  class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
-                            {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
-                            <div class="alert alert-danger add_rule_error mt20"></div>
-                        </div>
+                        <a href="{{ URL::previous() }}"  class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
+                        {!! Form::submit(__('tools.add_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
+                        <div class="alert alert-danger add_rule_error mt20"></div>
                     {!! Form::close() !!}
                     </div>
                 </div>
