@@ -2809,7 +2809,8 @@ div.vertical-line.hidetilloaded {
   color: #277976;
 }
 
-a.remove_filter {
+a.remove_filter,
+a.remove_action {
   color: #d9534f;
   float: right;
   font-size: 15px;

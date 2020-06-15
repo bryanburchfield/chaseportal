@@ -61,6 +61,7 @@ return [
 	'paused'					=> 'Paused',
 	'playbook_warning'			=> 'The following playbooks could not be activated. Please make sure each playbook has filters and actions.',
 	'reload_error_msg'			=> 'Something went wrong. Please reload the page.',
+	'remove_action'				=> 'Remove Action',
 	'remove_filter'				=> 'Remove Filter',
 	'rep'						=> 'Rep',
 	'reps'						=> 'Reps',

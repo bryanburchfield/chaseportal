@@ -2402,7 +2402,7 @@ div.vertical-line{
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter{
+a.remove_filter, a.remove_action{
     color: #d9534f;
     float: right;
     font-size: 15px;

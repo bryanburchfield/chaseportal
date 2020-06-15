@@ -2637,7 +2637,7 @@ table.dataTable tbody tr:nth-of-type(even){
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter{
+a.remove_filter, a.remove_action{
     color: #d9534f;
     float: right;
     font-size: 15px;

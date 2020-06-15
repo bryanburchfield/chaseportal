@@ -26,57 +26,41 @@
                     </div>
                 </div>
 
-                {{-- <div class="row">
-                    <div class="col-sm-3 pr0">
-                        <div class="flowchart_element when"><span>{{__('general.where')}}</span></div>
-                        <div class="vertical-line"></div>
-                    </div>
-
-                    <div class="col-sm-9 pl0 mbp0">
-                        <div class="card" id="when">
-                            <div class="form-group">
-                                {!! Form::label('source_campaign', __('tools.campaign')) !!}
-                                {!! Form::select("source_campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
-                            </div>
-
-                            <div class="form-group">
-                                <label for="subcamps">{{__('tools.subcampaign')}}</label>
-                                <input autocomplete="off" list="subcamps" name="subcamps" class="form-control source_subcampaign" />
-                                <datalist id="subcamps" class="subcampaigns"></datalist>
-                            </div>
-
-                        </div>
-                    </div>
-                </div> --}}
-
                 <div class="row leadfilter_row">
                     <div class="col-sm-3 pr0">
-                        <div class="flowchart_element condition mt35"><span>{{__('general.when')}}</span></div>
+                        <div class="flowchart_element condition mt35 mb30"><span>{{__('general.when')}}</span></div>
                         <div class="vertical-line"></div>
                     </div>
 
                     <div class="col-sm-9 pl0 mbp0">
                         <div class="card condition">
 
-                            <div class="form-group">
+                           {{--  <div class="form-group">
                                 {!! Form::label('filter_type', __('tools.filter_type')) !!}
                                 {!! Form::select("filter_type", array(null=>__('general.select_one'), 'lead_age' => __('tools.lead_age'), 'lead_attempts' => __('tools.lead_attempts'), 'days_called' => __('tools.days_called')), null, ["class" => "form-control lead_rule_filter_type", 'required'=>true]) !!}
-                            </div>
+                            </div> --}}
 
                             <div class="form-group">
-                                {!! Form::label('filter_value', __('tools.days_to_filter')) !!}
-                                {!! Form::text('filter_value', null, ['class'=>'form-control lead_rule_filter_value', 'required'=>true, 'id'=>'']) !!}
+                                {!! Form::label('filter_type', __('tools.campaign')) !!}
+                                <select name="filter_type" class="form-control filter_type">
+                                    <option value="">Select One</option>
+                                    @foreach($playbook_filters as $filter)
+                                        <option value="{{$filter->id}}">{{$filter->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <a href="#" class="add_leadrule_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
+                            @if(count($playbook_filters) > 1)
+                                <a href="#" class="add_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
+                            @endif
 
-                            <div class="alert alert-danger filter_error mt20">{{__('tools.filter_error')}}</div>
+                            <div class="alert alert-danger filter_error mt20 hidetilloaded">{{__('tools.filter_error')}}</div>
 
                         </div>
                     </div>
                 </div>
 
-                <div class="row campaign_row">
+                <div class="row action_row">
                     <div class="col-sm-3 pr0">
                         <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
                         <div class="vertical-line hidetilloaded"></div>
@@ -85,16 +69,20 @@
                     <div class="col-sm-9 pl0 mbp0">
                         <div class="card" id="action">
                             <div class="form-group">
-                                {!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
-                                {!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control destination_campaign", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+                                {!! Form::label('actions', __('tools.campaign')) !!}
+                                <select name="action" class="form-control action">
+                                    <option value="">Select One</option>
+                                    @foreach($playbook_actions as $pb)
+                                        <option value="{{$pb->id}}">{{$pb->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
-                                <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
-                                <datalist id="destination_subcampaign" class="destination_subcampaign subcampaigns"></datalist>
-                            </div>
-                            <a href="#" class="add_campaign"><i class="fas fa-plus-circle"></i> {{__('tools.add_campaign')}}</a>
+                            @if(count($playbook_actions) > 1)
+                                <a href="#" class="add_action"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
+                            @endif
+
+                            <div class="alert alert-danger action_error mt20 hidetilloaded">{{__('tools.action_error')}}</div>
                         </div>
                     </div>
                 </div>
