@@ -383,7 +383,7 @@ var Playbook_Actions = {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			}
 		});
-
+		console.log(id);
 		$.ajax({
 			url: '/tools/playbook/actions/'+id,
 			type: 'DELETE',
