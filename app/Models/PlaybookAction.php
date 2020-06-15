@@ -19,10 +19,9 @@ class PlaybookAction extends Model
     ];
 
     protected $cascadeDeletes = [
-        'playbook_touch_actions',
-        'playbook_lead_actions',
-        'playbook_sms_actions',
-        'playbook_email_actions',
+        'playbook_lead_action',
+        'playbook_sms_action',
+        'playbook_email_action',
     ];
 
     public function playbook_touch_actions()
