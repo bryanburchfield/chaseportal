@@ -6,7 +6,6 @@ use App\Models\PlaybookTouch;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ValidPlaybookTouch extends FormRequest
 {
@@ -27,9 +26,6 @@ class ValidPlaybookTouch extends FormRequest
      */
     protected function prepareForValidation()
     {
-        Log::debug($this->contacts_playbook_id;
-        Log::debug($this->all());
-
         // if id not passed (adding), insert id=0
         // otherwise, check that it belongs to user's group_id, 404 if not
         if ($this->filled('id')) {
