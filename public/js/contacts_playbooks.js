@@ -10,7 +10,7 @@ var Contacts_Playbook = {
 	    }
 	}),
 	pb_campaign:'',
-    actions: $('select.action').first().find('option').length -1,
+    actions: $('select.action_type').first().find('option').length -1,
     actions_used:$('.action_row').length,
     leadrule_filters: $('.filter_type').first().find('option').length -1,
     leadrule_filters_used: $('.leadfilter_row').length,
@@ -827,22 +827,9 @@ var Contacts_Playbook = {
     create_touch:function(e){
         e.preventDefault();
         $('#add_rule').find('.add_rule_error').empty().hide();
-        var rule_name = $('#rule_name').val(),            
+        var name = $('#name').val(),
             playbook_id = $('.playbook_id').val()
         ;
-
-        console.log(playbook_id);
-
-        // var filters={};
-        // var duplicate_filters = false;
-        // $('.filter_type').each(function(){
-        //     if(!filters.hasOwnProperty($(this).val())){
-        //         filters[$(this).val()] = $(this).parent().next('div').find('input.lead_rule_filter_value').val();
-        //     }else{
-        //         $('#add_rule .add_rule_error').html('<li>'+$(this).find("option:selected" ).text()+' filter was used more than once</li>').show();
-        //         duplicate_filters=true;
-        //     }
-        // });
 
         var filters = [];
         $('.filter_type').each(function(){
@@ -850,12 +837,9 @@ var Contacts_Playbook = {
         });
 
         var actions = [];
-        $('.action').each(function(){
+        $('.action_type').each(function(){
         	actions.push($(this).val());
         });
-
-        console.log(actions);
-        console.log(filters);
 
         $.ajaxSetup({
             headers: {
@@ -868,14 +852,14 @@ var Contacts_Playbook = {
             type: 'POST',
             dataType: 'json',
             data: {
-                rule_name:rule_name,
+                name:name,
               	actions:actions,
             	filters:filters
             },
 
             success:function(response){
             	console.log(response);
-                window.location.href = 'contactflow_builder';
+                window.location.href = '/tools/playbook';
             },
             error :function( data ) {
                 $('.add_rule_error.alert').empty();
@@ -945,7 +929,7 @@ var Contacts_Playbook = {
 
     	if(Contacts_Playbook.actions_used < Contacts_Playbook.actions){
     		$('.alert.action_error').hide();
-    		var selected_action = $(this).parent().find('.action').val();
+    		var selected_action = $(this).parent().find('.action_type').val();
     		console.log(selected_action);
     		if(selected_action){
     			var new_action = $(this).parent().parent().parent().clone();

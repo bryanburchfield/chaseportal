@@ -19,8 +19,8 @@
                         <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook->id}}">
                         <div class="card">
                             <div class="form-group">
-                                {!! Form::label('rule_name', __('tools.rule_name')) !!}
-                                {!! Form::text('rule_name', null, ['class'=>'form-control rule_name', 'required'=>true]) !!}
+                                {!! Form::label('name', __('tools.name')) !!}
+                                {!! Form::text('name', null, ['class'=>'form-control name', 'required'=>true]) !!}
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         <div class="card" id="action">
                             <div class="form-group">
                                 {!! Form::label('actions', __('tools.action')) !!}
-                                <select name="action_type" class="form-control action">
+                                <select name="action_type" class="form-control action_type">
                                     <option value="">Select One</option>
                                     @foreach($playbook_actions as $pb)
                                         <option value="{{$pb->id}}">{{$pb->name}}</option>
