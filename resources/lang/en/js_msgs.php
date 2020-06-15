@@ -3,6 +3,7 @@
 return [
 	'abandoned'					=> 'Abandoned',
 	'actions_by_day'			=> 'Actions by Day',
+	'action_taken'				=> 'Action Taken',
 	'add_action'				=> 'Add Action',
 	'add_filter'				=> 'Add Filter',
 	'after_call_work'			=> 'After Call Work',

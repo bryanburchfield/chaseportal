@@ -2445,6 +2445,10 @@ div.vertical-line{
     margin: 0 auto;
     left: 51.5%;
     display: block;
+
+    &.hidetilloaded{
+        display: none;
+    }
 }
 
 table.table.table-striped>tbody>tr:nth-of-type(odd){
@@ -2624,7 +2628,7 @@ table.dataTable tbody tr:nth-of-type(even){
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign, .add_campaign{
     color: $green;
     font-size: 15px;
     font-weight: 600;

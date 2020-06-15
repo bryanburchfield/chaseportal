@@ -2970,6 +2970,10 @@ div.vertical-line {
   display: block;
 }
 
+div.vertical-line.hidetilloaded {
+  display: none;
+}
+
 table.table.table-striped > tbody > tr:nth-of-type(odd) {
   background: #182435 !important;
 }
@@ -3160,7 +3164,8 @@ table.dataTable tbody tr:nth-of-type(even) {
 
 .add_leadrule_filter,
 .add_new_subcampaign,
-.undo_new_subcampaign {
+.undo_new_subcampaign,
+.add_campaign {
   color: #33A09B;
   font-size: 15px;
   font-weight: 600;
@@ -3168,13 +3173,15 @@ table.dataTable tbody tr:nth-of-type(even) {
 
 .add_leadrule_filter:hover,
 .add_new_subcampaign:hover,
-.undo_new_subcampaign:hover {
+.undo_new_subcampaign:hover,
+.add_campaign:hover {
   color: #277976;
 }
 
 .add_leadrule_filter:focus,
 .add_new_subcampaign:focus,
-.undo_new_subcampaign:focus {
+.undo_new_subcampaign:focus,
+.add_campaign:focus {
   color: #277976;
 }
 

@@ -70,6 +70,7 @@ class PlaybookTouchController extends Controller
             'contacts_playbook' => $this->contacts_playbook,
             'playbook_filters' => $this->filters(),
             'playbook_actions' => $this->actions(),
+            'campaigns' => $this->getAllCampaigns(),
         ];
 
         return view('tools.playbook.shared.touch_form')->with($data);

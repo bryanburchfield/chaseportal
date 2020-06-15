@@ -3,6 +3,7 @@
 return [
 	'abandoned'					=> 'Abandonada',
 	'actions_by_day'			=> 'Acciones por Día',
+	'action_taken'				=> 'Acción Tomada',
 	'add_action'				=> 'Agregar Acción',
 	'add_filter'				=> 'Agregar Filtro',
 	'after_call_work'			=> 'Tiempo Administrativo Posterior',

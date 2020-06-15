@@ -2276,6 +2276,10 @@ div.vertical-line{
     margin: 0 auto;
     left: 51.5%;
     display: block;
+    
+    &.hidetilloaded{
+        display: none;
+    }
 }
 
 .table>thead>tr>th{
@@ -2389,7 +2393,7 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign, .add_campaign{
     color: $green;
     font-size: 15px;
     font-weight: 600;

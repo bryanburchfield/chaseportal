@@ -76,24 +76,25 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row campaign_row">
                     <div class="col-sm-3 pr0">
                         <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
+                        <div class="vertical-line hidetilloaded"></div>
                     </div>
 
                     <div class="col-sm-9 pl0 mbp0">
                         <div class="card" id="action">
                             <div class="form-group">
                                 {!! Form::label('destination_campaign', __('tools.destination_campaign_ques')) !!}
-                                {!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control", 'id'=> 'destination_campaign', 'required'=>true]) !!}
+                                {!! Form::select("destination_campaign", [null=>__('general.select_one')] +$campaigns, null, ["class" => "form-control destination_campaign", 'id'=> 'destination_campaign', 'required'=>true]) !!}
                             </div>
 
                             <div class="form-group">
                                 <label for="subcamps">{{__('tools.destination_subcampaign_ques')}}</label>
                                 <input autocomplete="off" list="destination_subcampaign" name="destination_subcampaign" class="form-control destination_subcampaign" />
-                                <datalist id="destination_subcampaign" class="subcampaigns"></datalist>
+                                <datalist id="destination_subcampaign" class="destination_subcampaign subcampaigns"></datalist>
                             </div>
-
+                            <a href="#" class="add_campaign"><i class="fas fa-plus-circle"></i> {{__('tools.add_campaign')}}</a>
                         </div>
                     </div>
                 </div>

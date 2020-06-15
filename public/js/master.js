@@ -446,11 +446,12 @@ var Master = {
         for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
             subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
         }
-
+        console.log('HERE'+campaign);
         if(selector == 'campaign_select' || selector == 'update_campaign_select'){
             $('#subcamps').empty();
             $('#subcamps').append(subcampaigns);
         }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
+            console.log("HERE");
             $('#destination_subcampaign').empty();
             $('#destination_subcampaign').append(subcampaigns);
         }

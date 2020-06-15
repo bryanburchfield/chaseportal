@@ -12,6 +12,7 @@ var Contacts_Playbook = {
 	pb_campaign:'',
 	// leadrule_filters_used:0,
     // leadrule_filters:$('.leadfilter_row').length,
+    campaigns_used:1,
     leadrule_filters: $('.lead_rule_filter_type').first().find('option').length -1,
     leadrule_filters_used: $('.leadfilter_row').length,
     flowchart_vline_height:$('.add_leadrule_filter').parent().parent().parent().find('.vertical-line').height,
@@ -37,6 +38,7 @@ var Contacts_Playbook = {
 		$('.touch .switch input').on('click', this.toggle_touch);
 		$('.add_touch').on('submit', this.create_touch);
 		$('body').on('click', 'a.add_leadrule_filter', this.add_leadrule_filter);
+		$('body').on('click', 'a.add_campaign', this.add_campaign);
 		$('body').on('click', '.remove_filter', this.remove_leadrule_filter);
 		$('body').on('change', '.lead_rule_filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
@@ -182,7 +184,7 @@ var Contacts_Playbook = {
 	        data: {campaign: campaign,},
 	        success:function(response){
 	        	console.log(response);
-                $('.subcampaigns').empty();
+                // $('.subcampaigns').empty();
                 var response = Object.entries(response.subcampaigns);
 
                 var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
@@ -190,9 +192,9 @@ var Contacts_Playbook = {
                 	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
                 }
 
-                $('.subcampaigns').empty();
+                $('.subcampaigns.destination_subcampaign ').empty();
 
-                $('.subcampaigns').append(sub_camps);
+                $('.subcampaigns.destination_subcampaign ').append(sub_camps);
                 
                 
                 
@@ -907,7 +909,7 @@ var Contacts_Playbook = {
 
     add_leadrule_filter:function(e){
         e.preventDefault();
-        console.log(Contacts_Playbook.leadrule_filters_used);
+
         if(Contacts_Playbook.leadrule_filters_used < Contacts_Playbook.leadrule_filters){
             $('.alert.filter_error').hide();
             var selected_filter = $(this).parent().find('.lead_rule_filter_type').val();
@@ -920,11 +922,6 @@ var Contacts_Playbook = {
                 $(this).parent().parent().parent().find('.vertical-line').height(Contacts_Playbook.flowchart_vline_height);
 
                 if(Contacts_Playbook.leadrule_filters != Contacts_Playbook.leadrule_filters_used ){
-                    // only add delete rule btn to edit form -check if only one condition is present
-                    // if($(this).parent().parent().parent().parent().parent().attr('id') != 'add_rule'){
-                    //     var add_delete_btn = true;
-                    // }
-
                     Contacts_Playbook.leadrule_filters_used=Contacts_Playbook.leadrule_filters_used+1;
                     var new_filter = $(this).parent().parent().parent().clone();
                     console.log(new_filter);
@@ -934,11 +931,6 @@ var Contacts_Playbook = {
                     $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
                     $(new_filter).find('.lead_rule_filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
                     $(new_filter).find('.lead_rule_filter_value').attr('id', 'filter_value'+i).attr('name', 'filter_value'+i);
-                    /// only update filter menu for create rule form
-                    // if(!$(this).hasClass('edit_addrule')){
-                    //     $(new_filter).find('select.lead_rule_filter_type option[value="'+selected_filter+'"]').remove();
-                    // }
-
                     if(Contacts_Playbook.leadrule_filters_used!=Contacts_Playbook.leadrule_filters){
                         if(!$(new_filter).find('a.remove_filter').length){
                             $(new_filter).find('.card').append('<a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_filter')+'</a>');
@@ -949,7 +941,6 @@ var Contacts_Playbook = {
                         $(new_filter).find('a.add_leadrule_filter').remove();
                     }
 
-                    // $(this).parent().find('select').attr('disabled', true);
                     $(this).hide();
                 }
             }else{
@@ -958,6 +949,25 @@ var Contacts_Playbook = {
                 $(this).parent().parent().parent().find('.vertical-line').height(Contacts_Playbook.flowchart_vline_height + 180);
             }
         }
+    },
+
+    add_campaign:function(e){
+    	e.preventDefault();
+    	var i = Contacts_Playbook.campaigns_used;
+    	i++;
+
+    	var new_campaign = $(this).parent().parent().parent().clone();
+    	console.log(new_campaign);
+    	$(new_campaign).insertAfter('.campaign_row:last');
+    	$(new_campaign).find('.destination_subcampaign, .destination_campaign,.filter_value').val('');
+    	$(new_campaign).find('.flowchart_element span').text(Lang.get('js_msgs.action_taken'));
+    	$(new_campaign).find('.destination_campaign').attr('id', 'destination_campaign'+i).attr('name', 'destination_campaign'+i);
+    	$(new_campaign).find('.destination_subcampaign').attr('id', 'destination_subcampaign'+i).attr('name', 'destination_subcampaign'+i);
+    	$(new_campaign).find('.subcampaigns').empty();
+    	$(new_campaign).find('.destination_subcampaign').val('');
+    	
+    	Contacts_Playbook.campaigns_used++;
+    	$(this).first().parent().parent().parent().find('.vertical-line').show();
     },
 
     remove_leadrule_filter:function(e){
