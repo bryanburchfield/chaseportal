@@ -58,6 +58,7 @@ return [
 	'edit_provider'	=> 'Editar Proveedor',
 	'edit_rule'		=> 'Revisar Regla',
 	'edit_server'	=> 'Editar SMTP Servidor',
+	'edit_touch'	=> 'Editar Toque',
 	'email'			=> 'Email',
 	'email_field'	=> 'Campo de Correo Electrónico',
 	'email_service_providers'	=> 'Proveedores de correo electrónico',

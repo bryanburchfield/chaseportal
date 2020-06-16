@@ -58,6 +58,7 @@ return [
 	'edit_provider'	=> 'Edit Provider',
 	'edit_rule'		=> 'Edit Rule',
 	'edit_server'	=> 'Edit SMTP Server',
+	'edit_touch'	=> 'Edit Touch',
 	'email'			=> 'Email',
 	'email_field'	=> 'Email Field',
 	'email_service_providers'	=> 'Email Providers',
