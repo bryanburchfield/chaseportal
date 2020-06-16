@@ -79,7 +79,7 @@ class PlaybookTouchController extends Controller
     {
         $this->setPlaybook($this->contacts_playbook_id);
 
-        return $this->playbookTouchForm();
+        return $this->playbookTouchForm(new PlaybookTouch());
     }
 
     public function updatePlaybookTouchForm()
@@ -112,7 +112,9 @@ class PlaybookTouchController extends Controller
 
     private function findPlaybookTouch($id)
     {
-        $playbook_touch = PlaybookTouch::where('id', $id)->with('contacts_playbook')->firstOrFail();
+        $playbook_touch = PlaybookTouch::where('id', $id)
+            ->with(['contacts_playbook', 'playbook_touch_actions', 'playbook_touch_filters'])
+            ->firstOrFail();
 
         if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
             abort(404);
