@@ -1,3 +1,7 @@
+@php
+$mode = empty($playbook_touch->id) ? 'add' : 'edit';
+@endphp
+
 @extends('layouts.master')
 @section('title', __('tools.tools'))
 
@@ -6,13 +10,6 @@
 <div class="wrapper">
     @include('shared.sidenav')
 
-@php
-    if(empty($playbook_touch->created_at)){
-        $mode='add';
-    }else{
-        $mode='edit';
-    }
-@endphp
     <div id="content">
         @include('shared.navbar')
 
@@ -32,8 +29,8 @@
                     </div>
                 </div>
 
-                @if(count($playbook_touch->playbook_touch_filters))
-                    @foreach($playbook_touch->playbook_touch_filters as $filter)
+                @if($playbook_touch->playbook_touch_filters->count())
+                    @foreach($playbook_touch->playbook_touch_filters as $playbook_touch_filter)
                         <div class="row leadfilter_row">
 
                             <div class="col-sm-3 pr0">
@@ -48,20 +45,17 @@
                                         {!! Form::label('filter_type', __('tools.filter')) !!}
                                         <select name="filter_type" class="form-control filter_type">
                                             <option value="">{{__('tools.select_one')}}</option>
-                                            @foreach($playbook_filters as $filter)
-                                                <option {{$playbook_touch->playbook_touch_filters[$loop->index]->playbook_filter_id == $filter->id ? 'selected' : ''}} value="{{$filter->id}}">{{$filter->name}}</option>
+                                            @foreach($playbook_filters as $playbook_filter)
+                                                <option {{$playbook_filter->id == $playbook_touch_filter->playbook_filter_id ? 'selected' : ''}} value="{{$playbook_filter->id}}">{{$playbook_filter->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    @if($loop->index + 1 < count($playbook_filters))
+                                    @if($playbook_touch->playbook_touch_filters->count() < $playbook_filters->count())
                                         <a href="#" class="add_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
                                     @endif
-
                                     <a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
-
                                     <div class="alert alert-danger filter_error mt20 hidetilloaded">{{__('tools.filter_error')}}</div>
-
                                 </div>
                             </div>
                         </div>
@@ -75,34 +69,31 @@
 
                         <div class="col-sm-9 pl0 mbp0">
                             <div class="card condition">
-
                                 <div class="form-group">
                                     {!! Form::label('filter_type', __('tools.filter')) !!}
                                     <select name="filter_type" class="form-control filter_type">
                                         <option value="">{{__('tools.select_one')}}</option>
-                                        @foreach($playbook_filters as $filter)
-                                            <option value="{{$filter->id}}">{{$filter->name}}</option>
+                                        @foreach($playbook_filters as $playbook_filter)
+                                            <option value="{{$playbook_filter->id}}">{{$playbook_filter->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                @if(count($playbook_filters) > 1)
+                                @if($playbook_filters->count() > 1)
                                     <a href="#" class="add_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
                                 @endif
-
                                 <div class="alert alert-danger filter_error mt20 hidetilloaded">{{__('tools.filter_error')}}</div>
-
                             </div>
                         </div>
                     </div>
                 @endif
 
-                @if(count($playbook_touch->playbook_touch_actions))
-                    @foreach($playbook_touch->playbook_touch_actions as $action)
+                @if($playbook_touch->playbook_touch_actions->count())
+                    @foreach($playbook_touch->playbook_touch_actions as $playbook_touch_action)
                         <div class="row action_row">
                             <div class="col-sm-3 pr0">
                                 <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
-                                <div class="vertical-line {{count($playbook_touch->playbook_touch_actions)==$loop->index +1 ? 'hidetilloaded' : ''}}"></div>
+                                <div class="vertical-line {{$playbook_touch->playbook_touch_actions->count() == $loop->index + 1 ? 'hidetilloaded' : ''}}"></div>
                             </div>
 
                             <div class="col-sm-9 pl0 mbp0">
@@ -111,18 +102,16 @@
                                         {!! Form::label('actions', __('tools.action')) !!}
                                         <select name="action_type" class="form-control action_type">
                                             <option value="">{{__('tools.select_one')}}</option>
-                                            @foreach($playbook_actions as $pb)
-                                                <option value="{{$pb->id}}">{{$pb->name}}</option>
+                                            @foreach($playbook_actions as $playbook_action)
+                                                <option {{$playbook_action->id == $playbook_touch_action->playbook_action_id ? 'selected' : ''}} value="{{$playbook_action->id}}">{{$playbook_action->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    @if($loop->index + 1 < count($playbook_actions))
+                                    @if($playbook_touch->playbook_touch_actions->count() < $playbook_actions->count())
                                         <a href="#" class="add_action"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
                                     @endif
-
                                     <a href="#" class="remove_action"><i class="fas fa-trash-alt"></i> {{__('tools.remove_action')}}</a>
-
                                     <div class="alert alert-danger action_error mt20 hidetilloaded">{{__('tools.action_error')}}</div>
                                 </div>
                             </div>
@@ -141,16 +130,15 @@
                                     {!! Form::label('actions', __('tools.action')) !!}
                                     <select name="action_type" class="form-control action_type">
                                         <option value="">{{__('tools.select_one')}}</option>
-                                        @foreach($playbook_actions as $pb)
-                                            <option value="{{$pb->id}}">{{$pb->name}}</option>
+                                        @foreach($playbook_actions as $playbook_action)
+                                            <option value="{{$playbook_action->id}}">{{$playbook_action->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                @if(count($playbook_actions) > 1)
+                                @if($playbook_actions->count() > 1)
                                     <a href="#" class="add_action"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
                                 @endif
-
                                 <div class="alert alert-danger action_error mt20 hidetilloaded">{{__('tools.action_error')}}</div>
                             </div>
                         </div>
