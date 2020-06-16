@@ -27,6 +27,7 @@ class PlaybookTouchController extends Controller
     public function __construct(Request $request)
     {
         $this->contacts_playbook_id = $request->contacts_playbook_id;
+        $this->id = $request->id;
     }
 
     public function index()
@@ -111,9 +112,13 @@ class PlaybookTouchController extends Controller
 
     private function findPlaybookTouch($id)
     {
-        return PlaybookTouch::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
+        $playbook_touch = PlaybookTouch::where('id', $id)->with('contacts_playbook')->firstOrFail();
+
+        if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
+            abort(404);
+        }
+
+        return $playbook_touch;
     }
 
     public function addPlaybookTouch(ValidPlaybookTouch $request)
