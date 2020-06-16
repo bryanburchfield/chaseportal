@@ -3,6 +3,7 @@
 return [
 	'action_in_use'	=> 'Acción en Uso',
 	'action_type'	=> 'Tipo de Acción',
+	'action'		=> 'Acción',
 	'actions'		=> 'Comportamiento',
 	'active'		=> 'Activo',
 	'add_action'	=> 'Agregar Acción',
@@ -13,6 +14,7 @@ return [
 	'add_provider'	=> 'Añadir Proveedor',
 	'add_rule'		=> 'Agregar Regla',
 	'add_server'	=> 'Agregar SMTP Servidor',
+	'add_touch'		=> 'Añadir toque',
 	'back'			=> 'Atrás',
 	'call_status'	=> 'Estado De La Llamada',
 	'call_statuses'	=> 'Estados de Llamadas',
@@ -72,6 +74,7 @@ return [
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
 	'filter_value'	=> 'Valor del Filtro',
+	'filters'		=> 'Filtro',
 	'filters'		=> 'Filtros',
 	'filters_required' => 'Debe ingresar al menos un filtro',
 	'from'			=> 'Desde',
