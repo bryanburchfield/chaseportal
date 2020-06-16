@@ -865,7 +865,7 @@ var Contacts_Playbook = {
 
             success:function(response){
             	console.log(response);
-                window.location.href = '/tools/playbook';
+                window.location.href = '/tools/playbook/touches/'+playbook_id;
             },
             error :function( data ) {
                 $('.add_rule_error.alert').empty();

@@ -30,7 +30,7 @@
                 <div class="row touches">
                     @foreach($playbook_touches as $touch)
                         <div class="touch col-sm-2">
-                            <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                            <a href="{{action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}"><i class="fas fa-fingerprint fa-3x"></i></a>
                             <h4 class="name">{{$touch->name}}</h4>
                             <label class="switch">
                                 <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input">
