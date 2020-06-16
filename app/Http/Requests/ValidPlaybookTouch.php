@@ -28,20 +28,21 @@ class ValidPlaybookTouch extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // Playbook id comes from the url, it's not in $request->all()
+        // Playbook id might come from the url, not in $request->all()
         if (!empty($this->contacts_playbook_id)) {
             $this->merge(['contacts_playbook_id' => $this->contacts_playbook_id]);
         }
 
         // if id not passed (adding), insert id=0
         // otherwise, check that it belongs to user's group_id, 404 if not
-        if ($this->filled('id')) {
+        if (!empty($this->id)) {
             $playbook_touch = PlaybookTouch::where('id', $this->id)
                 ->with('contacts_playbook')
                 ->firstOrFail();
             if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
                 abort(404);
             }
+            $this->merge(['contacts_playbook_id' => $playbook_touch->contacts_playbook_id]);
         } else {
             $this->merge(['id' => 0]);
         }

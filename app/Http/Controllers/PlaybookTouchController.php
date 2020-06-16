@@ -145,7 +145,7 @@ class PlaybookTouchController extends Controller
 
     public function updatePlaybookTouch(ValidPlaybookTouch $request)
     {
-        $this->setPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($request->contacts_playbook_id);
 
         $playbook_touch = $this->findPlaybookTouch($request->id);
 
