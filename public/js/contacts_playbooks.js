@@ -891,9 +891,11 @@ var Contacts_Playbook = {
 
     update_touch:function(e){
     	e.preventDefault();
-    	$('#edit_rule').find('.edit_rule_error').empty().hide();
+    	$('.edit_rule_error.alert').hide();
+
     	var name = $('#name').val(),
-    	    playbook_touch_id = $('.playbook_id').val()
+    	    playbook_touch_id = $('.playbook_touch').val(),
+    	    playbook_id = $('.playbook_id').val()
     	;
 
     	var filters = [];
