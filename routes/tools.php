@@ -37,6 +37,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 // Touches
                 Route::get('/touches/{contacts_playbook_id}', 'PlaybookTouchController@index');  // touches index
                 Route::get('/add_touch/{contacts_playbook_id}', 'PlaybookTouchController@addPlaybookTouchForm');  // add touch form
+                Route::get('/update_touch/{id}', 'PlaybookTouchController@updatePlaybookTouchForm');  // update touch form
                 Route::post('/touches/{contacts_playbook_id}', 'PlaybookTouchController@addPlaybookTouch');  // add a touch
                 Route::get('/touches/touch/{id}', 'PlaybookTouchController@getPlaybookTouch');  // get a touch by id
                 Route::patch('/touches/touch/{id}', 'PlaybookTouchController@updatePlaybookTouch');  // update a touch by id

@@ -52,10 +52,8 @@ class PlaybookTouchController extends Controller
         return view('tools.playbook.touches')->with($data);
     }
 
-    public function addPlaybookTouchForm()
+    public function playbookTouchForm(PlaybookTouch $playbook_touch = null)
     {
-        $this->setPlaybook($this->contacts_playbook_id);
-
         $page = [
             'menuitem' => 'playbook',
             'menu' => 'tools',
@@ -68,11 +66,27 @@ class PlaybookTouchController extends Controller
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
+            'playbook_touch' => $playbook_touch,
             'playbook_filters' => $this->filters(),
             'playbook_actions' => $this->actions(),
         ];
 
         return view('tools.playbook.shared.touch_form')->with($data);
+    }
+
+    public function addPlaybookTouchForm()
+    {
+        $this->setPlaybook($this->contacts_playbook_id);
+
+        return $this->playbookTouchForm();
+    }
+
+    public function updatePlaybookTouchForm()
+    {
+        $playbook_touch = $this->findPlaybookTouch($this->id);
+        $this->setPlaybook($playbook_touch->contacts_playbook_id);
+
+        return $this->playbookTouchForm($playbook_touch);
     }
 
     /**
@@ -97,8 +111,6 @@ class PlaybookTouchController extends Controller
 
     private function findPlaybookTouch($id)
     {
-        $this->setPlaybook($this->contacts_playbook_id);
-
         return PlaybookTouch::where('id', $id)
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
