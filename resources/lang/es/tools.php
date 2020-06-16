@@ -120,6 +120,7 @@ return [
 	'provider_type'	=> 'Tipo de Proveedor',
 	'providers'		=> 'Proveedores',
 	'records'		=> 'Registros',
+	'remove_action'	=> 'Eliminar Acción',
 	'remove_filter'	=> 'Eliminar Filtro',
 	'reverse'		=> 'Marcha Atrás',
 	'reversed'		=> 'Invertido',

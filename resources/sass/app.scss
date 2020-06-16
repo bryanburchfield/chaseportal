@@ -2276,7 +2276,7 @@ div.vertical-line{
     margin: 0 auto;
     left: 51.5%;
     display: block;
-    
+
     &.hidetilloaded{
         display: none;
     }
@@ -2795,6 +2795,11 @@ table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
         margin:0 auto;
         display: block;
         margin-bottom: 10px;
+        border-radius: 100px;
+        width: 125px;
+        height: 125px;
+        padding-top: 28px;
+        border:6px solid #aaa;
 
         i{
             margin:0 auto;

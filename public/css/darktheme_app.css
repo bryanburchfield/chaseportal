@@ -3635,6 +3635,11 @@ table#sms_numbers_datatable tbody td .btn {
   margin: 0 auto;
   display: block;
   margin-bottom: 10px;
+  border-radius: 100px;
+  width: 125px;
+  height: 125px;
+  padding-top: 28px;
+  border: 6px solid #33A09B;
 }
 
 .playbook a i,

@@ -118,6 +118,7 @@ return [
 	'provider_type'	=> 'Provider Type',
 	'providers'		=> 'Providers',
 	'records'		=> 'Records',
+	'remove_action'	=> 'Remove Action',
 	'remove_filter'	=> 'Remove Filter',
 	'reverse'		=> 'Reverse',
 	'reversed'		=> 'Reversed',

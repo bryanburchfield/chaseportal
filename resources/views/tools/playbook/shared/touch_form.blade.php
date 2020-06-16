@@ -54,7 +54,7 @@
                                         </select>
                                     </div>
 
-                                    @if($loop->index + 1 < count($playbook_filters))
+                                    @if(count($playbook_touch->playbook_touch_filters) < count($playbook_filters))
                                         <a href="#" class="add_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
                                     @endif
 
@@ -117,7 +117,7 @@
                                         </select>
                                     </div>
 
-                                    @if($loop->index + 1 < count($playbook_actions))
+                                    @if(count($playbook_touch->playbook_touch_actions) < count($playbook_actions))
                                         <a href="#" class="add_action"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
                                     @endif
 

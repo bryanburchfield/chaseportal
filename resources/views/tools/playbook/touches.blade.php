@@ -27,7 +27,7 @@
 			    	</div>
 				</div>
 
-                <div class="row touches">
+                <div class="row touches mt30">
                     @foreach($playbook_touches as $touch)
                         <div class="touch col-sm-2">
                             <a href="{{action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}"><i class="fas fa-fingerprint fa-3x"></i></a>
