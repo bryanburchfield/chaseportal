@@ -112,7 +112,14 @@ class PlaybookTouchController extends Controller
         $data['contacts_playbook_id'] = $this->contacts_playbook_id;
         $data['group_id'] = Auth::user()->group_id;
 
-        PlaybookTouch::create($data);
+        DB::beginTransaction();
+
+        $playbook_touch = PlaybookTouch::create($data);
+
+        $playbook_touch->saveFilters($data['filters']);
+        $playbook_touch->saveActions($data['actions']);
+
+        DB::commit();
 
         return ['status' => 'success'];
     }
@@ -122,7 +129,17 @@ class PlaybookTouchController extends Controller
         $this->setPlaybook($this->contacts_playbook_id);
 
         $playbook_touch = $this->findPlaybookTouch($request->id);
+
+        $data = $request->all();
+
+        DB::beginTransaction();
+
         $playbook_touch->update($request->all());
+
+        $playbook_touch->saveFilters($data['filters']);
+        $playbook_touch->saveActions($data['actions']);
+
+        DB::commit();
 
         return ['status' => 'success'];
     }

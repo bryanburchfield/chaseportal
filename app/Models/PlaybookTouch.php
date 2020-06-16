@@ -62,8 +62,6 @@ class PlaybookTouch extends Model
             $existing_filters->push($playbook_touch_filter->playbook_filter_id);
         });
 
-        DB::beginTransaction();
-
         // insert any not already there
         $filters->diff($existing_filters)->each(function ($playbook_filter_id) {
             PlaybookTouchFilter::create(['playbook_touch_id' => $this->id, 'playbook_filter_id' => $playbook_filter_id]);
@@ -77,8 +75,6 @@ class PlaybookTouch extends Model
         });
 
         $this->deactiveIfNeeded();
-
-        DB::commit();
     }
 
     public function saveActions($actions = [])
@@ -89,8 +85,6 @@ class PlaybookTouch extends Model
         $this->playbook_touch_actions->each(function ($playbook_touch_action) use (&$existing_actions) {
             $existing_actions->push($playbook_touch_action->playbook_action_id);
         });
-
-        DB::beginTransaction();
 
         // insert any not already there
         $actions->diff($existing_actions)->each(function ($playbook_action_id) {
@@ -105,8 +99,6 @@ class PlaybookTouch extends Model
         });
 
         $this->deactiveIfNeeded();
-
-        DB::commit();
     }
 
     private function cleanFiltersAndActions()
