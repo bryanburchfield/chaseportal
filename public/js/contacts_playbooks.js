@@ -21,6 +21,7 @@ var Contacts_Playbook = {
 		$('.add_playbook').on('submit', this.add_playbook);
 		// $('#playbooks_datatable').on('click', '.playbook_actions_modal, .playbook_filters_modal', this.populate_modal);
 		$('.edit_playbook_modal').on('click', this.pass_id_to_modal);
+		$('.delete_playbook_modal').on('click', this.delete_playbook_modal);
 		$('.delete_playbook_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
 		// $('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
@@ -252,6 +253,10 @@ var Contacts_Playbook = {
 		}else{
 			return Contacts_Playbook.get_playbook_actions(campaign, playbookid, modal, is_empty);
 		}
+	},
+
+	delete_playbook_modal:function(){
+		$('#editPlaybookModal').modal('hide');
 	},
 
 	// pass id to edit and delete modals

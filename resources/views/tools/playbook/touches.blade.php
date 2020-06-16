@@ -30,7 +30,7 @@
                 <div class="row touches">
                     @foreach($playbook_touches as $touch)
                         <div class="touch col-sm-2">
-                            <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                            <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}"><i class="fas fa-fingerprint fa-3x"></i></a>
                             <h4 class="name">{{$touch->name}}</h4>
                             <label class="switch">
                                 <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input">
@@ -66,11 +66,11 @@
             <form action="#" method="post" class="form edit_playbook">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
-                    <input type="hidden" name="id" class="id" value="">
+                    <input type="hidden" name="id" class="id" value="{{$contacts_playbook->id}}">
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_lft delete_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal">{{__('tools.delete_playbook')}}</a>
+                    <a href="#" class="btn btn-danger flt_lft delete_playbook_modal" data-id="{{$contacts_playbook->id}}" data-toggle="modal" data-target="#deletePlaybookModal">{{__('tools.delete_playbook')}}</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
                 </div>
             </form>
@@ -89,12 +89,13 @@
 
             <form action="#" method="post" class="form edit_playbook">
                 <div class="modal-body">
-                    <input type="hidden" name="id" class="id" value="">
+                    <h3>{{__('tools.confirm_delete')}} {{$contacts_playbook->name}} ?</h3>
+                    <input type="hidden" name="id" class="id" value="{{$contacts_playbook->id}}">
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_lft delete_playbook">{{__('tools.delete_playbook')}}</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary delete_playbook add_btn_loader">{{__('tools.delete')}}</button>
+                    <a href="#" class="btn btn-danger flt_rgt delete_playbook">{{__('tools.delete_playbook')}}</a>
+                    <button type="button" class="btn btn-secondary flt_rgt mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                 </div>
             </form>
         </div>
