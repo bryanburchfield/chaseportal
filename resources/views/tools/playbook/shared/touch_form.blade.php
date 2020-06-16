@@ -49,7 +49,7 @@
                                         <select name="filter_type" class="form-control filter_type">
                                             <option value="">{{__('tools.select_one')}}</option>
                                             @foreach($playbook_filters as $filter)
-                                                <option value="{{$filter->id}}">{{$filter->name}}</option>
+                                                <option {{$playbook_touch->playbook_touch_filters[$loop->index]->playbook_filter_id == $filter->id ? 'selected' : ''}} value="{{$filter->id}}">{{$filter->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -102,7 +102,7 @@
                         <div class="row action_row">
                             <div class="col-sm-3 pr0">
                                 <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
-                                <div class="vertical-line hidetilloaded"></div>
+                                <div class="vertical-line {{count($playbook_touch->playbook_touch_actions)==$loop->index +1 ? 'hidetilloaded' : ''}}"></div>
                             </div>
 
                             <div class="col-sm-9 pl0 mbp0">
