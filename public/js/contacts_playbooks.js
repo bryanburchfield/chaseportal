@@ -37,6 +37,7 @@ var Contacts_Playbook = {
 		$('.playbook').on('click', '.switch input', this.toggle_playbook);
 		$('.touch .switch input').on('click', this.toggle_touch);
 		$('.add_touch').on('submit', this.create_touch);
+		$('.edit_touch').on('submit', this.update_touch);
 		$('body').on('click', 'a.add_filter', this.add_filter);
 		$('body').on('click', 'a.add_action', this.add_action);
 		$('body').on('click', '.remove_filter', this.remove_leadrule_filter);
@@ -886,6 +887,67 @@ var Contacts_Playbook = {
                 $('.add_rule_error.alert li').first().remove();
             }
         });
+    },
+
+    update_touch:function(e){
+    	e.preventDefault();
+    	$('#edit_rule').find('.edit_rule_error').empty().hide();
+    	var name = $('#name').val(),
+    	    id = $('.playbook_id').val()
+    	;
+
+    	var filters = [];
+    	$('.filter_type').each(function(){
+    		filters.push($(this).val());
+    	});
+
+    	var actions = [];
+    	$('.action_type').each(function(){
+    		actions.push($(this).val());
+    	});
+
+    	$.ajaxSetup({
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    	    }
+    	});
+
+    	console.log(filters);
+    	console.log(actions);
+
+    	$.ajax({
+    	    url: '/tools/playbook/touches/touch/'+id,
+    	    type: 'PATCH',
+    	    dataType: 'json',
+    	    data: {
+    	        name:name,
+    	      	actions:actions,
+    	    	filters:filters
+    	    },
+
+    	    success:function(response){
+    	    	console.log(response);
+    	        window.location.href = '/tools/playbook/touches/'+playbook_id;
+    	    },
+    	    error :function( data ) {
+    	        $('.edit_rule_error.alert').empty();
+    	        $('.edit_rule_error.alert').hide();
+
+    	        var errors = $.parseJSON(data.responseText);
+    	        $.each(errors, function (key, value) {
+
+    	            if($.isPlainObject(value)) {
+    	                $.each(value, function (key, value) {
+    	                    $('.edit_rule_error.alert').show().append('<li>'+value+'</li>');
+    	                });
+    	            }else{
+    	                $('.edit_rule_error.alert').show().append('<li>'+value+'</li>');
+    	            }
+    	        });
+
+    	        $('.edit_rule_error.alert li').first().remove();
+    	    }
+    	});
     },
 
     add_filter:function(e){

@@ -29,7 +29,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     </div>
                 </div>
 
-                @if($playbook_touch->playbook_touch_filters->count())
+                @if($playbook_touch->playbook_touch_filters->isNotEmpty())
                     @foreach($playbook_touch->playbook_touch_filters as $playbook_touch_filter)
                         <div class="row leadfilter_row">
 
@@ -89,7 +89,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     </div>
                 @endif
 
-                @if($playbook_touch->playbook_touch_actions->count())
+                @if($playbook_touch->playbook_touch_actions->isNotEmpty())
                     @foreach($playbook_touch->playbook_touch_actions as $playbook_touch_action)
                         <div class="row action_row">
                             <div class="col-sm-3 pr0">
@@ -150,7 +150,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                         <a href="{{ URL::previous() }}"  class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
                         {!! Form::submit(__('tools.'.$mode.'_rule'), ['class'=>'btn btn-primary mb0'] ) !!}
-                        <div class="alert alert-danger add_rule_error mt20"></div>
+                        <div class="alert alert-danger {{$mode}}_rule_error mt20"></div>
                     {!! Form::close() !!}
                     </div>
                 </div>
