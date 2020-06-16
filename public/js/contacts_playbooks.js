@@ -42,6 +42,7 @@ var Contacts_Playbook = {
 		$('body').on('click', '.remove_action', this.remove_action);
 		$('body').on('change', '.filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
+        $('.delete_playbook').on('click', this.delete_playbook);
 	},
 
 	toggle_playbook:function(e){
@@ -320,8 +321,8 @@ var Contacts_Playbook = {
 	},
 
 	delete_playbook:function(){
-		var id = $('#deletePlaybookModal').find('.id').val();
-
+		var id = $('.edit_playbook').find('.id').val();
+		console.log(id);
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -334,7 +335,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        success:function(response){
                 if (response.status == 'success') {
-					location.reload();
+					window.location.href = '/tools/playbook';
 				}
 	        }
 	    });

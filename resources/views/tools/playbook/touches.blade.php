@@ -28,32 +28,16 @@
 				</div>
 
                 <div class="row touches">
-                    <div class="touch col-sm-2">
-                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                        <h4 class="name">SMS</h4>
-                        <label class="switch">
-                            <input type="checkbox" name="kpi_input">
-                            <span></span>
-                        </label>
-                    </div>
-
-                    <div class="touch col-sm-2">
-                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                        <h4 class="name">Email</h4>
-                        <label class="switch">
-                            <input type="checkbox" name="kpi_input">
-                            <span></span>
-                        </label>
-                    </div>
-
-                    <div class="touch col-sm-2">
-                        <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
-                        <h4 class="name">SMS</h4>
-                        <label class="switch">
-                            <input type="checkbox" name="kpi_input">
-                            <span></span>
-                        </label>
-                    </div>
+                    @foreach($playbook_touches as $touch)
+                        <div class="touch col-sm-2">
+                            <a href="{{action('SmsFromNumberController@index')}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                            <h4 class="name">{{$touch->name}}</h4>
+                            <label class="switch">
+                                <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input">
+                                <span></span>
+                            </label>
+                        </div>
+                    @endforeach
 
                     <div class="row">
                         <div class="col-sm-6 mt30">
@@ -70,7 +54,7 @@
 
 @include('shared.reportmodal')
 
-<!-- Edit Plpaybook Modal -->
+<!-- Edit Playbook Modal -->
 <div class="modal fade" id="editPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -86,7 +70,31 @@
                 </div>
 
                 <div class="modal-footer">
+                    <a href="#" class="btn btn-danger flt_lft delete_playbook_modal" data-toggle="modal" data-target="#deletePlaybookModal">{{__('tools.delete_playbook')}}</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE Playbook Modal -->
+<div class="modal fade" id="deletePlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
+            </div>
+
+            <form action="#" method="post" class="form edit_playbook">
+                <div class="modal-body">
+                    <input type="hidden" name="id" class="id" value="">
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger flt_lft delete_playbook">{{__('tools.delete_playbook')}}</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary delete_playbook add_btn_loader">{{__('tools.delete')}}</button>
                 </div>
             </form>
         </div>
