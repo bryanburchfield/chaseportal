@@ -893,7 +893,7 @@ var Contacts_Playbook = {
     	e.preventDefault();
     	$('#edit_rule').find('.edit_rule_error').empty().hide();
     	var name = $('#name').val(),
-    	    id = $('.playbook_id').val()
+    	    playbook_touch_id = $('.playbook_id').val()
     	;
 
     	var filters = [];
@@ -912,11 +912,8 @@ var Contacts_Playbook = {
     	    }
     	});
 
-    	console.log(filters);
-    	console.log(actions);
-
     	$.ajax({
-    	    url: '/tools/playbook/touches/touch/'+id,
+    	    url: '/tools/playbook/touches/touch/'+playbook_touch_id,
     	    type: 'PATCH',
     	    dataType: 'json',
     	    data: {

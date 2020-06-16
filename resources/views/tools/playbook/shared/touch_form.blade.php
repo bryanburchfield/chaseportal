@@ -19,7 +19,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                         <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.'.$mode.'_touch')}}</h2>
                         {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 '.$mode.'_touch']) !!}
-                        <input type="hidden" class="playbook_id" name="playbook_id" value="{{$contacts_playbook->id}}">
+                        <input type="hidden" class="playbook_id" name="contacts_playbook_id" value="{{$contacts_playbook->id}}">
                         <div class="card">
                             <div class="form-group">
                                 {!! Form::label('name', __('tools.name')) !!}
