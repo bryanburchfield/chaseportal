@@ -2241,6 +2241,8 @@ p.name i{margin-right: 5px;}
         @include border-radius(25px);
     }
 
+    &.mt0{margin-top: 0;}
+    &.mt10{margin-top: 10px;}
     &.mt35{margin-top: 35px;}
 
     &:after{
@@ -2405,10 +2407,11 @@ div.vertical-line{
 a.remove_filter, a.remove_action{
     color: #d9534f;
     float: right;
-    font-size: 15px;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
-.leadfilter_row .card{overflow: auto;}
+.leadfilter_row .card, .action_row .card{overflow: auto;}
 
 .btn.btn-reset{
     background: #ccc;

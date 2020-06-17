@@ -2932,6 +2932,14 @@ p.name i {
   border-radius: 25px;
 }
 
+.flowchart_element.mt0 {
+  margin-top: 0;
+}
+
+.flowchart_element.mt10 {
+  margin-top: 10px;
+}
+
 .flowchart_element.mt35 {
   margin-top: 35px;
 }
@@ -3189,10 +3197,12 @@ a.remove_filter,
 a.remove_action {
   color: #d9534f;
   float: right;
-  font-size: 15px;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
-.leadfilter_row .card {
+.leadfilter_row .card,
+.action_row .card {
   overflow: auto;
 }
 

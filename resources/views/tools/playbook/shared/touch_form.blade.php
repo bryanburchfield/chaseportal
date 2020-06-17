@@ -35,7 +35,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                         <div class="row leadfilter_row">
 
                             <div class="col-sm-3 pr0">
-                                <div class="flowchart_element condition mb30"><span>{{$loop->index ?__('general.and') : __('general.when')}}</span></div>
+                                <div class="flowchart_element condition mb30 mt10"><span>{{$loop->index ?__('general.and') : __('general.when')}}</span></div>
                                 <div class="vertical-line"></div>
                             </div>
 
@@ -52,8 +52,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                                         </select>
                                     </div>
 
-
-                                    @if($playbook_touch->playbook_touch_filters->count() < $playbook_filters->count())
+                                    @if($playbook_touch->playbook_touch_filters->count() == $loop->last && $playbook_touch->playbook_touch_filters->count() !== $playbook_filters->count())
                                         <a href="#" class="add_filter"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
                                     @endif
                                     <a href="#" class="remove_filter"><i class="fas fa-trash-alt"></i> {{__('tools.remove_filter')}}</a>
@@ -65,7 +64,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                 @else
                     <div class="row leadfilter_row">
                         <div class="col-sm-3 pr0">
-                            <div class="flowchart_element condition mb30"><span>{{__('general.when')}}</span></div>
+                            <div class="flowchart_element condition mb30 mt0"><span>{{__('general.when')}}</span></div>
                             <div class="vertical-line"></div>
                         </div>
 
@@ -94,7 +93,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     @foreach($playbook_touch->playbook_touch_actions as $playbook_touch_action)
                         <div class="row action_row">
                             <div class="col-sm-3 pr0">
-                                <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
+                                <div class="flowchart_element action mb30 mt0"><span>{{__('general.actiontaken')}}</span></div>
                                 <div class="vertical-line {{$playbook_touch->playbook_touch_actions->count() == $loop->index + 1 ? 'hidetilloaded' : ''}}"></div>
                             </div>
 
@@ -110,7 +109,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                                         </select>
                                     </div>
 
-                                    @if($playbook_touch->playbook_touch_actions->count() < $playbook_actions->count())
+                                    @if($playbook_touch->playbook_touch_actions->count() == $loop->last && $playbook_touch->playbook_touch_actions->count() !== $playbook_actions->count())
                                         <a href="#" class="add_action"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
                                     @endif
                                     <a href="#" class="remove_action"><i class="fas fa-trash-alt"></i> {{__('tools.remove_action')}}</a>
@@ -122,7 +121,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                 @else
                     <div class="row action_row">
                         <div class="col-sm-3 pr0">
-                            <div class="flowchart_element action"><span>{{__('general.actiontaken')}}</span></div>
+                            <div class="flowchart_element action mb30 mt0"><span>{{__('general.actiontaken')}}</span></div>
                             <div class="vertical-line hidetilloaded"></div>
                         </div>
 

@@ -100,7 +100,7 @@ var Contacts_Playbook = {
 
 		var checked,
 	    	that = $(this),
-	    	id = $(this).parent().parent().data('playbook')
+	    	id = $(this).data('id')
 	    ;
 
 	    checked = Contacts_Playbook.toggle_checked(that, checked, 0);
@@ -122,6 +122,7 @@ var Contacts_Playbook = {
 
 	        },
 	        success:function(response){
+	        	console.log(response);
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
 	        }, error: function (data) {
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
@@ -1014,6 +1015,8 @@ var Contacts_Playbook = {
     			if(Contacts_Playbook.actions == Contacts_Playbook.actions_used){
     			    $(new_action).find('a.add_action').remove();
     			}
+
+    			$(this).hide();
 
     			$(this).first().parent().parent().parent().find('.vertical-line').show();
     		}else{
