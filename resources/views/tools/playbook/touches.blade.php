@@ -18,7 +18,6 @@
                         <h2 class="mb20">{{__('tools.playbook_touches')}}</h2>
 
                         <div class="col-sm-6 mt0 p0 mb30 card">
-                            <a data-playbookid="{{$contacts_playbook->id}}" data-toggle="modal" data-target="#editPlaybookModal" href="#" class="flt_rgt edit_playbook_modal"><i class="fas fa-edit"></i> Edit Playbook</a>
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} {{$contacts_playbook->subcampaign ? ': ' . $contacts_playbook->subcampaign : ''}}</h3>
                             <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}" class="btn btn-primary flt_lft mb0 mt20">Add Touch</a>
@@ -33,11 +32,11 @@
                             <a href="#"
                                 class="menu"
                                 data-toggle="popover"
-                                data-trigger="focus"
+                                {{-- data-trigger="focus" --}}
                                 data-content="<div>
                                     <ul>
                                         <li><a href='{{ action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}'>Edit</a></li>
-                                        <li><a href='#'data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal'>Delete</a></li>
+                                        <li><a href='#' class='delete_touch_modal' data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal' data-name='{{$touch->name}}'>Delete</a></li>
                                     </ul></div>">
                                 <i class="fas fa-book fa-3x"></i>
                             </a>

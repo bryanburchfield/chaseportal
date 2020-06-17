@@ -34,12 +34,12 @@
                                                     <a href="#"
                                                         class="menu"
                                                         data-toggle="popover"
-                                                        data-trigger="focus"
+                                                        {{-- data-trigger="focus" --}}
                                                         data-content="<div>
                                                             <ul>
                                                                 <li><a href='{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}'>View</a></li>
-                                                                <li><a href='#' class='pop_edit_playbook_modal' data-playbookid='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#editPlaybookModal'>Edit</a></li>
-                                                                <li><a href='#'data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#deletePlaybookModal'>Delete</a></li>
+                                                                <li><a href='#' class='edit_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#editPlaybookModal'>Edit</a></li>
+                                                                <li><a href='#' class='delete_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-name='{{$contacts_playbook->name}}' data-target='#deletePlaybookModal'>Delete</a></li>
                                                             </ul></div>">
                                                         <i class="fas fa-book fa-3x"></i>
                                                     </a>
@@ -137,7 +137,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                <button type="button" class="btn btn-danger delete_playbook_playbook"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
             </div>
         </div>
     </div>
