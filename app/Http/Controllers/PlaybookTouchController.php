@@ -137,6 +137,8 @@ class PlaybookTouchController extends Controller
 
         $playbook_touch->saveFilters($data['filters']);
         $playbook_touch->saveActions($data['actions']);
+        $playbook_touch->activate();
+        $playbook_touch->save();
 
         DB::commit();
 
@@ -159,6 +161,15 @@ class PlaybookTouchController extends Controller
         $playbook_touch->saveActions($data['actions']);
 
         DB::commit();
+
+        // just in case
+        if (!$playbook_touch->allowActive()) {
+            $playbook_touch->active = 0;
+            $playbook_touch->save();
+
+            $this->contacts_playbook->active = 0;
+            $this->contacts_playbook->save();
+        }
 
         return ['status' => 'success'];
     }
@@ -320,15 +331,11 @@ class PlaybookTouchController extends Controller
     {
         $playbook_touch = $this->findPlaybookTouch($id);
 
-        if ($active && !$playbook_touch->allowActive()) {
-            return false;
+        if ($active) {
+            return $playbook_touch->activate();
         }
 
-        // Set active
-        $playbook_touch->active = $active;
-        $playbook_touch->save();
-
-        return true;
+        return $playbook_touch->deactivate();
     }
 
     /**
