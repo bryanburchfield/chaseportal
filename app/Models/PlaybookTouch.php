@@ -18,7 +18,7 @@ class PlaybookTouch extends Model
         'active',
     ];
 
-    protected $cascadeDeletes = ['playbook_touch_actions'];
+    protected $cascadeDeletes = ['playbook_touch_actions', 'playbook_touch_filters'];
 
     public function contacts_playbook()
     {
