@@ -44,7 +44,7 @@
 
                             <h4 class="name">{{$touch->name}}</h4>
                             <label class="switch">
-                                <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input">
+                                <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input" class="toggle_touch {{ ($touch->active) ? 'checked' : '' }}">
                                 <span></span>
                             </label>
                         </div>
