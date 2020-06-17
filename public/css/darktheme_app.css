@@ -3640,8 +3640,8 @@ table#sms_numbers_datatable tbody td .btn {
   max-width: 110px;
 }
 
-.playbook a,
-.touch a {
+.playbook a.menu,
+.touch a.menu {
   margin: 0 auto;
   display: block;
   margin-bottom: 10px;
@@ -3652,16 +3652,16 @@ table#sms_numbers_datatable tbody td .btn {
   border: 6px solid #33A09B;
 }
 
-.playbook a i,
-.touch a i {
+.playbook a.menu i,
+.touch a.menu i {
   margin: 0 auto;
   display: block;
   text-align: center;
   font-size: 55px;
 }
 
-.playbook a i:hover,
-.touch a i:hover {
+.playbook a.menu i:hover,
+.touch a.menu i:hover {
   transition: all, ease, 0.3s;
   color: #33A09B;
 }
@@ -3678,6 +3678,39 @@ table#sms_numbers_datatable tbody td .btn {
 .touch .switch {
   margin: 0 auto;
   display: block;
+}
+
+.playbook .popover,
+.touch .popover {
+  min-width: 85px;
+}
+
+.playbook .popover .popover-content,
+.touch .popover .popover-content {
+  padding: 0;
+}
+
+.playbook .popover ul,
+.touch .popover ul {
+  list-style: none;
+}
+
+.playbook .popover ul li,
+.touch .popover ul li {
+  padding: 5px 10px;
+  color: #555;
+  font-weight: 600;
+  background: #ddd;
+}
+
+.playbook .popover ul li:nth-child(odd),
+.touch .popover ul li:nth-child(odd) {
+  background: #e9e9e9;
+}
+
+.playbook .popover ul li:hover,
+.touch .popover ul li:hover {
+  background: #fff;
 }
 
 .playbook_campaign,

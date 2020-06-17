@@ -3270,8 +3270,8 @@ table#sms_numbers_datatable tbody td .btn {
   max-width: 110px;
 }
 
-.playbook a,
-.touch a {
+.playbook a.menu,
+.touch a.menu {
   margin: 0 auto;
   display: block;
   margin-bottom: 10px;
@@ -3282,16 +3282,16 @@ table#sms_numbers_datatable tbody td .btn {
   border: 6px solid #aaa;
 }
 
-.playbook a i,
-.touch a i {
+.playbook a.menu i,
+.touch a.menu i {
   margin: 0 auto;
   display: block;
   text-align: center;
   font-size: 55px;
 }
 
-.playbook a i:hover,
-.touch a i:hover {
+.playbook a.menu i:hover,
+.touch a.menu i:hover {
   transition: all, ease, 0.3s;
   color: #33A09B;
 }

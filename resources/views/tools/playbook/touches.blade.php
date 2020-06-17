@@ -30,7 +30,18 @@
                 <div class="row touches mt30">
                     @foreach($playbook_touches as $touch)
                         <div class="touch col-sm-2">
-                            <a href="{{action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}"><i class="fas fa-fingerprint fa-3x"></i></a>
+                            <a href="#"
+                                class="menu"
+                                data-toggle="popover"
+                                data-trigger="focus"
+                                data-content="<div>
+                                    <ul>
+                                        <li><a href='{{ action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}'>Edit</a></li>
+                                        <li><a href='#'data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal'>Delete</a></li>
+                                    </ul></div>">
+                                <i class="fas fa-book fa-3x"></i>
+                            </a>
+
                             <h4 class="name">{{$touch->name}}</h4>
                             <label class="switch">
                                 <input type="checkbox" {{ ($touch->active) ? 'checked' : '' }} data-id="{{$touch->id}}" name="touch_input">
@@ -53,52 +64,7 @@
 </div>
 
 @include('shared.reportmodal')
+@include('tools.playbook.shared.playbook_modals')
 
-<!-- Edit Playbook Modal -->
-<div class="modal fade" id="editPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_playbook')}}</h4>
-            </div>
 
-            <form action="#" method="post" class="form edit_playbook">
-                <div class="modal-body">
-                    @include('tools.playbook.shared.playbook_form')
-                    <input type="hidden" name="id" class="id" value="{{$contacts_playbook->id}}">
-                </div>
-
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_lft delete_playbook_modal" data-id="{{$contacts_playbook->id}}" data-toggle="modal" data-target="#deletePlaybookModal">{{__('tools.delete_playbook')}}</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- DELETE Playbook Modal -->
-<div class="modal fade" id="deletePlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
-            </div>
-
-            <form action="#" method="post" class="form edit_playbook">
-                <div class="modal-body">
-                    <h3>{{__('tools.confirm_delete')}} {{$contacts_playbook->name}} ?</h3>
-                    <input type="hidden" name="id" class="id" value="{{$contacts_playbook->id}}">
-                </div>
-
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_rgt delete_playbook">{{__('tools.delete_playbook')}}</a>
-                    <button type="button" class="btn btn-secondary flt_rgt mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 @endsection

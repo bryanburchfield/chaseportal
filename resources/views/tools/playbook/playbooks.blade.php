@@ -31,7 +31,19 @@
                                         <div class="col-sm-12 mt30">
                                             @foreach($contacts_playbooks as $contacts_playbook)
                                                 <div class="playbook col-sm-2" data-playbook="{{$contacts_playbook->id}}">
-                                                    <a href="{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}"><i class="fas fa-book fa-3x"></i></a>
+                                                    <a href="#"
+                                                        class="menu"
+                                                        data-toggle="popover"
+                                                        data-trigger="focus"
+                                                        data-content="<div>
+                                                            <ul>
+                                                                <li><a href='{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}'>View</a></li>
+                                                                <li><a href='#' class='pop_edit_playbook_modal' data-playbookid='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#editPlaybookModal'>Edit</a></li>
+                                                                <li><a href='#'data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#deletePlaybookModal'>Delete</a></li>
+                                                            </ul></div>">
+                                                        <i class="fas fa-book fa-3x"></i>
+                                                    </a>
+
                                                     <h4 class="name">{{$contacts_playbook->name}}</h4>
 
                                                     <label class="switch">
@@ -130,6 +142,8 @@
         </div>
     </div>
 </div>
+
+@include('tools.playbook.shared.playbook_modals')
 
 <!-- Playbook Actions Modal -->
 <div class="modal fade" id="actionPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

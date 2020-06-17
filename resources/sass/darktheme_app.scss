@@ -3029,7 +3029,7 @@ a.add_action, a.add_filter{
 table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
 
 .playbook, .touch{
-    a{
+    a.menu{
         margin:0 auto;
         display: block;
         margin-bottom: 10px;
@@ -3063,6 +3063,24 @@ table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
     .switch{
         margin:0 auto;
         display: block;
+    }
+
+    .popover{
+        min-width: 85px;
+        .popover-content{padding: 0;}
+
+        ul{
+            list-style: none;
+            li{
+                padding: 5px 10px;
+                color:#555;
+                font-weight: 600;
+                background: #ddd;
+
+                &:nth-child(odd){background: darken(#eee, 2%);}
+                &:hover{background: #fff;}
+            }
+        }
     }
 }
 

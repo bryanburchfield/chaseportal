@@ -19,24 +19,19 @@ var Contacts_Playbook = {
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
-		// $('#playbooks_datatable').on('click', '.playbook_actions_modal, .playbook_filters_modal', this.populate_modal);
 		$('.edit_playbook_modal').on('click', this.pass_id_to_modal);
 		$('.delete_playbook_modal').on('click', this.delete_playbook_modal);
 		$('.delete_playbook_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
-		// $('.playbook_action_manager').on('click', '.add_action', this.add_new_action);
-		// $('.playbook_filter_manager').on('click', '.add_filter', this.add_new_filter);
-		// $('.playbook_action_manager').on('click', '.delete_action_from_pb', this.delete_playbook_action);
-		// $('.playbook_filter_manager').on('click', '.delete_filter_from_pb', this.delete_playbook_filter);
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
 		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
-		// $('#playbooks_datatable').on('click', '.switch input.toggle_playbook', this.toggle_playbook);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 		$('.playbook').on('click', '.switch input', this.toggle_playbook);
 		$('.touch .switch input').on('click', this.toggle_touch);
 		$('.add_touch').on('submit', this.create_touch);
+		$('body').on('click', '.pop_edit_playbook_modal', this.pass_id_to_modal);
 		$('.edit_touch').on('submit', this.update_touch);
 		$('body').on('click', 'a.add_filter', this.add_filter);
 		$('body').on('click', 'a.add_action', this.add_action);
@@ -45,6 +40,11 @@ var Contacts_Playbook = {
 		$('body').on('change', '.filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
         $('.delete_playbook').on('click', this.delete_playbook);
+        $('.menu').on('click', this.preventDefault);
+	},
+
+	preventDefault:function(e){
+		e.preventDefault();
 	},
 
 	toggle_playbook:function(e){
@@ -516,85 +516,6 @@ var Contacts_Playbook = {
 		});
 
 	},
-
-	// add_new_action:function(e){
-	// 	e.preventDefault();
-
-	// 	var modal = $('div.modal.in').attr('id'),
-	// 		all_actions,
-	// 		actions='',
-	// 		id = $(this).parent().parent().find('#id').val(),
-	// 		that = $(this)
-	// 	;
-
-	// 	console.log(modal);
-
-	// 	$.when(
-	// 		all_actions = Contacts_Playbook.get_actions(Contacts_Playbook.pb_campaign)
-	// 	).done(function() {
-
-	// 		if(all_actions.responseJSON.length){
-	// 			var action_select = '<div class="row"><div class="col-sm-10"><select class="form-control action_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-	// 			for(var j=0;j<all_actions.responseJSON.length;j++){
-	// 				action_select+='<option data-id="'+all_actions.responseJSON[j].id+'" value="'+all_actions.responseJSON[j].name+'">'+all_actions.responseJSON[j].name+'</option>';
-	// 			}
-
-	// 			action_select+='</select></div>';
-	// 			actions+='<div class="modal_manage_fil_act" data-actionid="'+id+'">'+action_select+'<div class="col-sm-2"><a data-actionid="'+id+'" class="delete_action_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
-
-	// 			$(actions).insertBefore($('#'+modal).find('.modal-body .playbook_action_manager a.add_action_btn '));
-	// 			Contacts_Playbook.check_numb_actions($('.add_action'));
-	// 		}else{
-	// 			that.parent().parent().find('.alert').text('No available actions for this campaign');
-	// 			that.parent().parent().find('.alert').show();
-	// 		}
-	// 	});
-	// },
-
-	// add_new_filter:function(e){
-	// 	e.preventDefault();
-
-	// 	var modal = $('div.modal.in').attr('id'),
-	// 		all_filters,
-	// 		filters='',
-	// 		id = $(this).parent().parent().find('#id').val(),
-	// 		that = $(this)
-	// 	;
-
-	// 	$.when(
-	// 		all_filters = Contacts_Playbook.get_filters(Contacts_Playbook.pb_campaign)
-	// 	).done(function() {
-
-	// 		if(all_filters.responseJSON.length){
-	// 			var filter_select = '<div class="row"><div class="col-sm-10"><select class="form-control filter_menu"><option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-	// 			for(var j=0;j<all_filters.responseJSON.length;j++){
-	// 				filter_select+='<option data-id="'+all_filters.responseJSON[j].id+'" value="'+all_filters.responseJSON[j].name+'">'+all_filters.responseJSON[j].name+'</option>';
-	// 			}
-
-	// 			filter_select+='</select></div>';
-	// 			filters+='<div class="modal_manage_fil_act" data-filterid="'+id+'">'+filter_select+'<div class="col-sm-2"><a data-filterid="'+id+'" class="delete_filter_from_pb" href="#"><i class="fa fa-trash-alt"></i></a></div></div></div>';
-
-	// 			$(filters).insertBefore($('#'+modal).find('.modal-body .playbook_filter_manager a.add_filter '));
-	// 			Contacts_Playbook.check_numb_filters($('.add_filter'));
-	// 		}else{
-	// 			that.parent().parent().find('.alert').text('No available filters for this campaign');
-	// 			that.parent().parent().find('.alert').show();
-	// 		}
-			
-	// 	});
-	// },
-
-	// delete_playbook_action:function(e){
-	// 	e.preventDefault();
-	// 	$(this).parent().parent().parent().remove();
-	// 	Contacts_Playbook.check_numb_actions($('.add_action'));
-	// },
-
-	// delete_playbook_filter:function(e){
-	// 	e.preventDefault();
-	// 	$(this).parent().parent().parent().remove();
-	// 	Contacts_Playbook.check_numb_filters($('.add_filter'));
-	// },
 
 	check_numb_actions(sel){
 		var pb_actions;
@@ -1080,6 +1001,10 @@ $(document).ready(function(){
 
 	$('#editPlaybookModal').on('hidden.bs.modal', function () {
 	    $('.alert').hide();
+	});
+
+	$('.menu').popover({
+	    html : true
 	});
 
 });
