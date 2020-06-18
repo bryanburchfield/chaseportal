@@ -3682,7 +3682,7 @@ table#sms_numbers_datatable tbody td .btn {
 
 .playbook .popover,
 .touch .popover {
-  min-width: 85px;
+  min-width: 95px;
 }
 
 .playbook .popover .popover-content,

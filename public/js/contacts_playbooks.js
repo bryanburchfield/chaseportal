@@ -262,6 +262,12 @@ var Contacts_Playbook = {
 		$('#editPlaybookModal').modal('hide');
 		var id = $(this).data('id');
 		$('#deletePlaybookModal').find('h3 span').html($(this).data('name'));
+		$('#deletePlaybookModal').find('.id').val($(this).data('id'));
+	},
+
+	delete_playbook:function(){
+		var id = $('#deletePlaybookModal').find('.id').val();
+
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -345,27 +351,6 @@ var Contacts_Playbook = {
 			}
 		});
 	},
-
-	// delete_playbook:function(){
-	// 	var id = $('.edit_playbook').find('.id').val();
-	// 	console.log(id);
-	// 	$.ajaxSetup({
-	//         headers: {
-	//             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-	//         }
-	//     });
-
-	//     $.ajax({
-	//         url: '/tools/playbook/playbooks/'+id,
-	//         type: 'DELETE',
-	//         dataType: 'json',
-	//         success:function(response){
- //                if (response.status == 'success') {
-	// 				window.location.href = '/tools/playbook';
-	// 			}
-	//         }
-	//     });
-	// },
 
 	update_playbook:function(e){
 		e.preventDefault();
