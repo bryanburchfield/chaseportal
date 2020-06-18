@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class ContactsPlaybook extends Model
@@ -36,5 +37,19 @@ class ContactsPlaybook extends Model
         $this->refresh();
 
         return $this->playbook_touches->where('active', 1)->count() > 0;
+    }
+
+    public function update(array $attributes = [], array $options = [])
+    {
+        DB::beginTransaction();
+
+        parent::update($attributes, $options);
+
+        foreach ($this->playbook_touches as $playbook_touch) {
+            $playbook_touch->cleanFiltersAndActions();
+            $playbook_touch->save();
+        }
+
+        DB::commit();
     }
 }
