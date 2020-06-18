@@ -2222,7 +2222,7 @@ p.name i{margin-right: 5px;}
     width: 160px;
     height: 160px;
     @include border-radius(100px);
-    background: $blue;
+    background: $green;
     display: table;
     margin: 0 auto;
     margin-top: 20px;
@@ -2246,7 +2246,7 @@ p.name i{margin-right: 5px;}
     &.mt35{margin-top: 35px;}
 
     &:after{
-        background: $blue;
+        background: $green;
         min-height: 2px;
         width: 45%;
         position: absolute;
@@ -2827,6 +2827,29 @@ table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
     .switch{
         margin:0 auto;
         display: block;
+    }
+
+    .popover{
+        min-width: 85px;
+        .popover-content{padding: 0;}
+
+        ul{
+            list-style: none;
+            li{
+                color:#555;
+                font-weight: 600;
+                background: #ddd;
+
+                &:nth-child(odd){background: darken(#eee, 2%);}
+                &:hover{background: #fff;}
+
+                a{
+                    padding: 5px 10px;
+                    width: 100%;
+                    display: block;
+                }
+            }
+        }
     }
 }
 

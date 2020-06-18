@@ -1,3 +1,26 @@
+<!-- Add Playbook Modal -->
+<div class="modal fade" id="addPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_playbook')}}</h4>
+            </div>
+            
+            <form action="#" method="post" class="form add_playbook">
+                <div class="modal-body">
+                    @include('tools.playbook.shared.playbook_form')
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_playbook" value="{{__('tools.add_playbook')}}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Edit Playbook Modal -->
 <div class="modal fade" id="editPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -10,11 +33,10 @@
             <form action="#" method="post" class="form edit_playbook">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
-                    <input type="hidden" name="id" class="id" value="{{empty($contacts_playbook->id)}}">
+                    <input type="hidden" name="id" class="id" value="">
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_lft delete_playbook_modal fw600" data-id="{{empty($contacts_playbook->id)}}" data-toggle="modal" data-target="#deletePlaybookModal"><i class="fas fa-trash-alt"></i> {{__('tools.delete_playbook')}}</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button><button type="submit" class="btn btn-primary edit_playbook add_btn_loader">{{__('tools.save_changes')}}</button>
                 </div>
             </form>
@@ -22,7 +44,7 @@
     </div>
 </div>
 
-<!-- DELETE Playbook Modal -->
+<!-- Delete Playbook Modal -->
 <div class="modal fade" id="deletePlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -31,31 +53,30 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form delete_playbook">
-                <div class="modal-body">
-                    <h3>{{__('tools.confirm_delete')}} {{empty($contacts_playbook->name)}} ?</h3>
-                    <input type="hidden" name="id" class="id" value="{{empty($contacts_playbook->id)}}">
-                </div>
+            <div class="modal-body">
+                <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
+                <input type="hidden" name="id" class="id" value="">
+                <div class="alert alert-danger hidetilloaded mt20"></div>
+            </div>
 
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-danger flt_rgt delete_playbook fw600"><i class="fas fa-trash-alt"></i> {{__('tools.delete_playbook')}}</a>
-                    <button type="button" class="btn btn-secondary flt_rgt mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                </div>
-            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger delete_playbook"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- DELETE Touch Modal -->
+<!-- Delete Touch Modal -->
 <div class="modal fade" id="deleteTouchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_playbook')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_touch')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form delete_playbook">
+            <form action="#" method="post" class="form delete_touch">
                 <div class="modal-body">
                     <h3>{{__('tools.confirm_delete')}} <span></span> ?</h3>
                     <input type="hidden" name="id" class="id" value="">

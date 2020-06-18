@@ -43,6 +43,7 @@ return [
 	'delete_provider'	=> 'Delete Provider',
 	'delete_rule'	=> 'Delete Rule',
 	'delete_server'	=> 'Delete SMTP Server',
+	'delete_touch'	=> 'Delete Touch',
 	'description'		=> 'Description',
 	'destination_campaign' => 'Destination Campaign',
 	'destination_campaign_ques'	=> 'What would you like the destination Campaign of the lead to be after it meets criteria?',

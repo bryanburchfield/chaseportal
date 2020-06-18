@@ -3072,13 +3072,18 @@ table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
         ul{
             list-style: none;
             li{
-                padding: 5px 10px;
                 color:#555;
                 font-weight: 600;
                 background: #ddd;
-
+                
                 &:nth-child(odd){background: darken(#eee, 2%);}
                 &:hover{background: #fff;}
+
+                a{
+                    padding: 5px 10px;
+                    width: 100%;
+                    display: block;
+                }
             }
         }
     }

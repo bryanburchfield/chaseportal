@@ -43,6 +43,7 @@ return [
 	'delete_provider'	=> 'Eliminar Proveedor',
 	'delete_rule'	=> 'Eliminar Regla',
 	'delete_server'	=> 'Eliminar SMTP Servidor',
+	'delete_touch'	=> 'Eliminar Toque',
 	'description'		=> 'Descripción',
 	'destination_campaign' => 'Campaña de Destino',
 	'destination_campaign_ques'	=> '¿Cuál desea como Campaña de destino para el Contacto cuando cumpla con los criterios?',

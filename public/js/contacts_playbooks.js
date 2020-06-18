@@ -40,7 +40,7 @@ var Contacts_Playbook = {
 		$('body').on('change', '.filter_type', this.change_filter_label);
         $('.edit_rule .update_filter_type').on('change', this.change_filter_label);
         $('.delete_playbook').on('click', this.delete_playbook);
-        $('.delete_touch').on('click', this.delete_touch);
+        $('a.delete_touch').on('click', this.delete_touch);
         $('.menu').on('click', this.preventDefault);
 	},
 
@@ -278,10 +278,6 @@ var Contacts_Playbook = {
 				}
 	        }
 	    });
-	},
-
-	delete_touch:function(){
-
 	},
 
 	// pass id to edit and delete modals
@@ -893,6 +889,32 @@ var Contacts_Playbook = {
     	    }
     	});
     },
+
+	delete_touch:function(e){
+		e.preventDefault();
+		var playbook_touch_id = $('form.delete_touch').find('.id').val();
+
+		console.log(playbook_touch_id);
+
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+	    $.ajax({
+	        url: '/tools/playbook/touches/touch/'+playbook_touch_id,
+	        type: 'DELETE',
+	        dataType: 'json',
+	        success:function(response){
+	        	console.log(response);
+	        	
+                if (response.status == 'success') {
+					// window.location.href = '/tools/playbook';
+				}
+	        }
+	    });
+	},
 
     add_filter:function(e){
         e.preventDefault();

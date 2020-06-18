@@ -17,4 +17,3 @@
 <div class="alert alert-danger hidetilloaded mb0"></div>
 <div class="alert connection_msg hidetilloaded mb0"></div>
 
-<img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt20 flt_lft">

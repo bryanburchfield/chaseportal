@@ -3697,7 +3697,6 @@ table#sms_numbers_datatable tbody td .btn {
 
 .playbook .popover ul li,
 .touch .popover ul li {
-  padding: 5px 10px;
   color: #555;
   font-weight: 600;
   background: #ddd;
@@ -3711,6 +3710,13 @@ table#sms_numbers_datatable tbody td .btn {
 .playbook .popover ul li:hover,
 .touch .popover ul li:hover {
   background: #fff;
+}
+
+.playbook .popover ul li a,
+.touch .popover ul li a {
+  padding: 5px 10px;
+  width: 100%;
+  display: block;
 }
 
 .playbook_campaign,
