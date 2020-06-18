@@ -893,8 +893,7 @@ var Contacts_Playbook = {
 	delete_touch:function(e){
 		e.preventDefault();
 		var playbook_touch_id = $('form.delete_touch').find('.id').val();
-
-		console.log(playbook_touch_id);
+		var playbook_id = $('.playbook_id').val();
 
 		$.ajaxSetup({
 	        headers: {
@@ -907,10 +906,8 @@ var Contacts_Playbook = {
 	        type: 'DELETE',
 	        dataType: 'json',
 	        success:function(response){
-	        	console.log(response);
-	        	
                 if (response.status == 'success') {
-					// window.location.href = '/tools/playbook';
+					window.location.href = '/tools/playbook/touches/'+playbook_id;
 				}
 	        }
 	    });
