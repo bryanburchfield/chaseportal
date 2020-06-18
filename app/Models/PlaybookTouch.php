@@ -139,7 +139,7 @@ class PlaybookTouch extends Model
         $this->deactiveIfNeeded();
     }
 
-    private function cleanFiltersAndActions()
+    public function cleanFiltersAndActions()
     {
         // remove any filters and actions that don't match the campaign
         foreach ($this->playbook_touch_filters as $playbook_touch_filter) {
