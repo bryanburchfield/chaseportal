@@ -13,11 +13,14 @@ use App\Models\ContactsPlaybook;
 use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
 use App\Models\EmailServiceProvider;
-use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookFilter;
 use App\Models\PlaybookOptout;
 use App\Models\PlaybookRun;
-use App\Models\PlaybookRunDetail;
+use App\Models\PlaybookRunTouch;
+use App\Models\PlaybookRunTouchAction;
+use App\Models\PlaybookRunTouchActionDetail;
+use App\Models\PlaybookTouch;
+use App\Models\PlaybookTouchAction;
 use App\Models\Script;
 use App\Models\User;
 use App\Traits\SqlServerTraits;
@@ -25,10 +28,8 @@ use App\Traits\TimeTraits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as Twilio;
 use Exception;
-use InvalidArgumentException;
 
 class ContactsPlaybookService
 {
@@ -66,6 +67,8 @@ class ContactsPlaybookService
      */
     public function runPlaybook(ContactsPlaybook $contacts_playbook)
     {
+        $this->echo('Running ' . $contacts_playbook->name);
+
         if (!$this->login($contacts_playbook->group_id)) {
             return;
         }
@@ -83,26 +86,39 @@ class ContactsPlaybookService
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
-        // Get query
-        list($sql, $bind) = $this->buildSql($contacts_playbook);
+        foreach ($contacts_playbook->playbook_touches as $playbook_touch) {
 
-        Log::debug($sql);
-        Log::debug($bind);
+            $this->echo('Touch ' . $playbook_touch->name);
 
-        $results = $this->runSql($sql, $bind);
+            // Get query
+            list($sql, $bind) = $this->buildSql($playbook_touch);
 
-        foreach ($results as $rec) {
-            foreach ($contacts_playbook->actions as $contacts_playbook_action) {
-                $this->runAction($contacts_playbook_action, $rec);
+            $results = $this->runSql($sql, $bind);
+
+            // Bail if no records matched
+            if (!count($results)) {
+                $this->echo('No results');
+                continue;
             }
 
-            // Log the detail
-            PlaybookRunDetail::create([
-                'playbook_run_id' => $playbook_run->id,
-                'playbook_action_id' => $contacts_playbook_action->playbook_action_id,
-                'reporting_db' => $db,
-                'lead_id' => $rec['lead_id'],
-            ]);
+            $playbook_run_touch = PlaybookRunTouch::create(['playbook_run_id' => $playbook_run->id, 'playbook_touch_id' => $playbook_touch->id]);
+
+            foreach ($playbook_touch->playbook_touch_actions as $playbook_touch_action) {
+                $playbook_run_touch_action = PlaybookRunTouchAction::create([
+                    'playbook_run_touch_id' => $playbook_run_touch->id,
+                    'playbook_action_id' => $playbook_touch_action->playbook_action_id
+                ]);
+
+                foreach ($results as $rec) {
+                    $this->runAction($playbook_touch_action, $rec);
+
+                    PlaybookRunTouchActionDetail::create([
+                        'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
+                        'reporting_db' => $db,
+                        'lead_id' => $rec['lead_id'],
+                    ]);
+                }
+            }
         }
     }
 
@@ -140,14 +156,14 @@ class ContactsPlaybookService
      * @throws Exception 
      * @throws InvalidArgumentException 
      */
-    private function buildSql(ContactsPlaybook $contacts_playbook)
+    private function buildSql(PlaybookTouch $playbook_touch)
     {
         // Set SqlSrv database
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
 
         // We'll need the campaign to get custom table fields
-        $campaign = Campaign::where('CampaignName', $contacts_playbook->campaign)
+        $campaign = Campaign::where('CampaignName', $playbook_touch->contacts_playbook->campaign)
             ->where('GroupId', Auth::user()->group_id)
             ->first();
 
@@ -156,11 +172,11 @@ class ContactsPlaybookService
         $dr_where = '';  // for DialingResults subquery
         $bind = [
             'group_id' => Auth::user()->group_id,
-            'campaign' => $contacts_playbook->campaign,
+            'campaign' => $playbook_touch->contacts_playbook->campaign,
         ];
 
-        foreach ($contacts_playbook->filters as $contacts_playbook_filter) {
-            $playbook_filter = $contacts_playbook_filter->playbook_filter;
+        foreach ($playbook_touch->playbook_touch_filters as $playbook_touch_filter) {
+            $playbook_filter = $playbook_touch_filter->playbook_filter;
 
             $and = ' AND ' . $this->buildAnd($playbook_filter, $campaign, $bind);
 
@@ -181,8 +197,8 @@ class ContactsPlaybookService
         $sql .= " WHERE GroupId = :group_id
         AND Campaign = :campaign";
 
-        if (!empty($contacts_playbook->subcampaign)) {
-            $subcampaign = ($contacts_playbook->subcampaign == '!!none!!') ? '' : $contacts_playbook->subcampaign;
+        if (!empty($playbook_touch->contacts_playbook->subcampaign)) {
+            $subcampaign = ($playbook_touch->contacts_playbook->subcampaign == '!!none!!') ? '' : $playbook_touch->contacts_playbook->subcampaign;
 
             $bind['subcampaign'] = $subcampaign;
 
@@ -192,8 +208,8 @@ class ContactsPlaybookService
         $sql .= ' ' . $where . "
             AND L.id IN (
             SELECT LeadId FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.Date > '$contacts_playbook->last_run_from'
-            AND DR.Date <= '$contacts_playbook->last_run_to'
+            WHERE DR.Date > '$playbook_touch->contacts_playbook->last_run_from'
+            AND DR.Date <= '$playbook_touch->contacts_playbook->last_run_to'
             $dr_where
             )";
 
@@ -337,26 +353,26 @@ class ContactsPlaybookService
      * @param mixed $rec 
      * @return void 
      */
-    private function runAction(ContactsPlaybookAction $contacts_playbook_action, $rec)
+    private function runAction(PlaybookTouchAction $playbook_touch_action, $rec)
     {
         $result = false;
 
-        switch ($contacts_playbook_action->playbook_action->action_type) {
+        switch ($playbook_touch_action->playbook_action->action_type) {
             case 'lead':
-                $result = $this->actionLead($contacts_playbook_action, $rec);
+                $result = $this->actionLead($playbook_touch_action, $rec);
                 break;
             case 'email':
-                $result = $this->actionEmail($contacts_playbook_action, $rec);
+                $result = $this->actionEmail($playbook_touch_action, $rec);
                 break;
             case 'sms':
-                $result = $this->actionSms($contacts_playbook_action, $rec);
+                $result = $this->actionSms($playbook_touch_action, $rec);
                 break;
         }
     }
 
-    private function actionLead(ContactsPlaybookAction $contacts_playbook_action, $rec)
+    private function actionLead(PlaybookTouchAction $playbook_touch_action, $rec)
     {
-        $playbook_action = $contacts_playbook_action->playbook_action;
+        $playbook_action = $playbook_touch_action->playbook_action;
 
         $api = $this->initApi(Auth::user()->db);
 
@@ -380,11 +396,11 @@ class ContactsPlaybookService
         return true;
     }
 
-    private function actionEmail(ContactsPlaybookAction $contacts_playbook_action, $rec)
+    private function actionEmail(PlaybookTouchAction $playbook_touch_action, $rec)
     {
         echo "Email Lead: " . $rec['lead_id'] . "\n";
 
-        $playbook_action = $contacts_playbook_action->playbook_action;
+        $playbook_action = $playbook_touch_action->playbook_action;
 
         // If email field is blank, bail now
         $email = $rec[$playbook_action->playbook_email_action->email_field];
@@ -403,7 +419,7 @@ class ContactsPlaybookService
         }
 
         // Get history of sends for this lead for this playbook & action
-        $sends = $this->getHistory($contacts_playbook_action, $rec['lead_id']);
+        $sends = $this->getHistory($playbook_touch_action, $rec['lead_id']);
 
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
@@ -419,14 +435,14 @@ class ContactsPlaybookService
         }
 
         // ok to send
-        return $this->emailLead($contacts_playbook_action->contacts_playbook, $playbook_action->playbook_email_action, $rec);
+        return $this->emailLead($playbook_touch_action, $rec);
     }
 
-    private function actionSms(ContactsPlaybookAction $contacts_playbook_action, $rec)
+    private function actionSms(PlaybookTouchAction $playbook_touch_action, $rec)
     {
         echo "SMS Lead: " . $rec['lead_id'] . "\n";
 
-        $playbook_action = $contacts_playbook_action->playbook_action;
+        $playbook_action = $playbook_touch_action->playbook_action;
 
         // Check for phone number
         if (empty($rec['PrimaryPhone'])) {
@@ -434,7 +450,7 @@ class ContactsPlaybookService
         }
 
         // Get history of sends for this lead for this playbook & action
-        $sends = $this->getHistory($contacts_playbook_action, $rec['lead_id']);
+        $sends = $this->getHistory($playbook_touch_action, $rec['lead_id']);
 
         // Bail if over limit or under days between
         if ($sends->isNotEmpty()) {
@@ -449,7 +465,11 @@ class ContactsPlaybookService
             }
         }
 
-        $body = $this->mergeTemplate($playbook_action->playbook_sms_action->template_id, $playbook_action->campaign, $rec);
+        $body = $this->mergeTemplate(
+            $playbook_touch_action->playbook_action->playbook_sms_action->template_id,
+            $playbook_touch_action->playbook_touch->contacts_playbook->campaign,
+            $rec
+        );
 
         if ($body === false) {
             return false;
@@ -463,7 +483,8 @@ class ContactsPlaybookService
 
 
         // TODO:  REMOVE AFTER TESTING
-        $rec['PrimaryPhone'] = '4076175882';
+        // $rec['PrimaryPhone'] = '4076175882';
+        $rec['PrimaryPhone'] = '3212629660';
 
 
 
@@ -472,7 +493,7 @@ class ContactsPlaybookService
             $message = $this->twilio->messages->create(
                 $rec['PrimaryPhone'],
                 [
-                    'from' => $playbook_action->playbook_sms_action->from,
+                    'from' => $playbook_touch_action->playbook_action->playbook_sms_action->sms_from_number->from_number,
                     'body' => $body,
                 ]
             );
@@ -484,24 +505,32 @@ class ContactsPlaybookService
         return true;
     }
 
-    private function emailLead(ContactsPlaybook $contacts_playbook, PlaybookEmailAction $playbook_email_action, $rec)
+    private function emailLead(PlaybookTouchAction $playbook_touch_action, $rec)
     {
         // Get body and subject merged with rec
-        $body = $this->mergeTemplate($playbook_email_action->template_id, $contacts_playbook->campaign, $rec);
-        $subject = $this->mergeFields($playbook_email_action->subject, $contacts_playbook->campaign, $rec);
+        $body = $this->mergeTemplate(
+            $playbook_touch_action->playbook_action->playbook_email_action->template_id,
+            $playbook_touch_action->playbook_touch->contacts_playbook->campaign,
+            $rec
+        );
+        $subject = $this->mergeFields(
+            $playbook_touch_action->playbook_action->playbook_email_action->subject,
+            $playbook_touch_action->playbook_touch->contacts_playbook->campaign,
+            $rec
+        );
 
         if ($body === false) {
             return false;
         }
 
-        $email = $rec[$playbook_email_action->email_field];
+        $email = $rec[$playbook_touch_action->playbook_action->playbook_email_action->email_field];
 
         // Append optout link to body
         $body .= $this->optoutLink($email);
 
         // build payload
         $payload = [
-            'from' => $playbook_email_action->from,
+            'from' => $playbook_touch_action->playbook_action->playbook_email_action->from,
 
 
 
@@ -513,11 +542,11 @@ class ContactsPlaybookService
 
             'subject' => $subject,
             'body' => $body,
-            'tag' => $contacts_playbook->name,
+            'tag' => $playbook_touch_action->playbook_touch->contacts_playbook->name,
         ];
 
         // find ESP model
-        $email_service_provider = EmailServiceProvider::find($playbook_email_action->email_service_provider_id);
+        $email_service_provider = EmailServiceProvider::find($playbook_touch_action->playbook_action->playbook_email_action->email_service_provider_id);
         if (!$email_service_provider) {
             return false;
         }
@@ -571,15 +600,16 @@ class ContactsPlaybookService
         return view('tools.playbook.optout')->with(['optouturl' => $optouturl])->render();
     }
 
-    private function getHistory($contacts_playbook_action, $lead_id)
+    private function getHistory(PlaybookTouchAction $playbook_touch_action, $lead_id)
     {
-        return PlaybookRun::where('contacts_playbook_id', $contacts_playbook_action->contacts_playbook_id)
-            ->join('playbook_run_details', 'playbook_run_details.playbook_run_id', '=', 'playbook_runs.id')
+        return PlaybookRun::where('contacts_playbook_id', $playbook_touch_action->contacts_playbook->contacts_playbook_id)
+            ->join('playbook_run_touches', 'playbook_run_touches.playbook_run_id', '=', 'playbook_runs.id')
+            ->join('playbook_run_touch_actions', 'playbook_run_touch_actions.playbook_run_touch_id', '=', 'playbook_run_touches.id')
+            ->join('playbook_run_touch_action_details', 'playbook_run_touch_action_details.playbook_run_touch_action_id', '=', 'playbook_run_touch_actions.id')
             ->where('reporting_db', Auth::user()->db)
             ->where('lead_id', $lead_id)
-            ->where('playbook_run_details.playbook_action_id', $contacts_playbook_action->playbook_action_id)
-            ->select('playbook_run_details.created_at')
-            ->orderBy('playbook_run_details.created_at')
+            ->select('playbook_run_touch_action_details.created_at')
+            ->orderBy('playbook_run_touch_action_details.created_at')
             ->get();
     }
 
@@ -592,11 +622,17 @@ class ContactsPlaybookService
 
         return $this->powerImportApis[$db];
     }
+
     private function initTwilio()
     {
         $sid    = config('twilio.sid');
         $token  = config('twilio.token');
 
         $this->twilio = new Twilio($sid, $token);
+    }
+
+    private function echo($msg = null)
+    {
+        echo date('Y-m-d H:i:s') . ': ' . $msg . "\n";
     }
 }
