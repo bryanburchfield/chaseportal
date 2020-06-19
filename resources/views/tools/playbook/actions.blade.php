@@ -23,7 +23,7 @@
 								<div class="tab-pane mt30" id="playbook_actions">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addActionModal" class="btn btn-primary add_playbook_action_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
-                                        
+
                                         <div class="table-responsive nobdr actions">
                                             <table class="table table-striped mt20" id="actions_dataTable">
                                                 <thead>
@@ -84,7 +84,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary" value="{{__('tools.add_action')}}">
+                    <button type="submit" class="btn btn-primary add_btn_loader">{{__('tools.add_action')}}</button>
                 </div>
             </form>
         </div>

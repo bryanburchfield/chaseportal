@@ -82,16 +82,12 @@
             <form method="post" class="form add_filter">
                 <div class="modal-body">
                     @include('tools.playbook.shared.filter_form')
-
-                    <div class="alert alert-success hidetilloaded"></div>
-                    <div class="alert alert-danger hidetilloaded"></div>
-                    <div class="alert connection_msg hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_filter" value="{{__('tools.add_filter')}}">
+                    <button type="submit" class="btn btn-primary add_filter add_btn_loader">{{__('tools.add_filter')}}</button>
                 </div>
              </form>
         </div>

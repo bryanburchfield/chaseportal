@@ -1976,6 +1976,11 @@ var Master = {
         });
     },
 
+    reset_modal_form:function(modal){
+        $(modal).find('form.form').trigger("reset");
+        $(modal).find('.alert').empty().hide();
+    }
+
 }
 
 $(document).ready(function () {

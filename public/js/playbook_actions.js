@@ -94,6 +94,7 @@ var Playbook_Actions = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.add_action .alert-danger').show();
 					});
 				}
@@ -416,24 +417,21 @@ var Playbook_Actions = {
 $(document).ready(function () {
 	Playbook_Actions.init();
 
-	$('#addActionModal').on('hidden.bs.modal', function () {
-	    $('.add_action').trigger("reset");
+	$('#deleteActionModal').on('hidden.bs.modal', function () {
+	    Master.reset_modal_form('#'+$(this).attr('id'));
 	});
 
-	$('#editActionModal').on('hidden.bs.modal', function () {
-	    $('.edit_action').trigger("reset");
+	$('#addActionModal, #editActionModal').on('hidden.bs.modal', function(){
+		var modal = '#'+$(this).attr('id');
+	    Master.reset_modal_form(modal);
+	    $(modal).find('.filter_campaigns').val('');
+	    $(modal +" .filter_campaigns option").prop('selected', false);
 	    $('.action_type_fields').hide();
-	    $(this).find('.alert').hide();
-	});
-
-	$('#addActionModal, #deleteActionModal').on('hidden.bs.modal', function () {
-	    $(this).find('.alert').hide();
 	});
 
 	$('div.modal').on('shown.bs.modal', function(){
 	    var id = $(this).attr('id');
 	    Playbook_Actions.active_modal = $('#'+id);
 	});
-	
-	
+
 });

@@ -116,6 +116,7 @@ var Playbook_Filters = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.add_filter .alert-danger').show();
 					});
 				}
@@ -207,6 +208,7 @@ var Playbook_Filters = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('#editFilterModal .alert-danger').show();
 					});
 				}
@@ -255,11 +257,11 @@ var Playbook_Filters = {
 $(document).ready(function () {
 	Playbook_Filters.init();
 
-	$('#editFilterModal').on('hidden.bs.modal', function () {
-		console.log('modal closed');
-	    $('form.edit_filter').trigger("reset");
-	    $('form.edit_filter').find('.filter_campaigns').val('');
-	    $("#editFilterModal .filter_campaigns option").prop('selected', false);
-	    $(this).find('.alert').empty().hide();
+	$('#addFilterModal, #editFilterModal').on('hidden.bs.modal', function(){
+		var modal = '#'+$(this).attr('id');
+	    Master.reset_modal_form(modal);
+	    $(modal).find('.filter_campaigns').val('');
+	    $(modal +" .filter_campaigns option").prop('selected', false);
 	});
+
 });

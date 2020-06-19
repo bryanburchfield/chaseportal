@@ -53,7 +53,7 @@ var Playbook = {
 								$('.add_esp .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
-
+						$('.add_btn_loader i').remove();
 						$('.add_esp .alert-danger').show();
 					});
 				}
@@ -124,11 +124,12 @@ var Playbook = {
 
 						if ($.isPlainObject(value)) {
 							$.each(value, function (key, value) {
-								$('.edit_smtp_server .alert-danger').append('<li>' + value + '</li>');
+								$('.edit_esp .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
 
-						$('.edit_smtp_server .alert-danger').show();
+						$('.add_btn_loader i').remove();
+						$('.edit_esp .alert-danger').show();
 					});
 				}
 			}
@@ -364,7 +365,6 @@ $(document).ready(function () {
 	Playbook.init();
 
 	$('#editESPModal').on('hidden.bs.modal', function () {
-	    $('.edit_esp').trigger("reset");
-	    $(this).find('.alert').hide();
+		Master.reset_modal_form('#'+$(this).attr('id'));
 	});
 });

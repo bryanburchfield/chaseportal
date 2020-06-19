@@ -84,7 +84,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_sms" value="Add SMS Number">
+                    <button type="submit" class="btn btn-primary add_sms add_btn_loader">Add SMS Number</button>
                 </div>
             </form>
         </div>
@@ -108,7 +108,7 @@
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary edit_sms" value="Edit SMS Number">
+                    <button type="submit" class="btn btn-primary edit_sms add_btn_loader">Edit SMS Number</button>
                 </div>
             </form>
         </div>

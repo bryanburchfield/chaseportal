@@ -73,9 +73,6 @@
 </div>
 
 @include('shared.reportmodal')
-
-
-
 @include('tools.playbook.shared.playbook_modals')
 
 <!-- Playbook Actions Modal -->

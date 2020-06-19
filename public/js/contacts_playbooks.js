@@ -19,9 +19,7 @@ var Contacts_Playbook = {
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
 		$('.add_playbook').on('submit', this.add_playbook);
-		// $('.edit_playbook_modal').on('click', this.pass_id_to_modal);
 		$('body').on('click', '.delete_playbook_modal', this.delete_playbook_modal);
-		// $('.delete_playbook').on('click', this.delete_playbook);
 		$('.edit_playbook').on('submit', this.update_playbook);
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
@@ -387,6 +385,7 @@ var Contacts_Playbook = {
 								$('.edit_playbook .alert-danger').append('<li>' + value + '</li>');
 							});
 						}
+
 						$('.add_btn_loader i').remove();
 						$('.edit_playbook .alert-danger').show();
 					});
@@ -1026,8 +1025,8 @@ $(document).ready(function(){
 	    $('.alert').hide();
 	});
 
-	$('#editPlaybookModal').on('hidden.bs.modal', function () {
-	    $('.alert').hide();
+	$('#editPlaybookModal, #addPlaybookModal').on('hidden.bs.modal', function () {
+		Master.reset_modal_form('#'+$(this).attr('id'));
 	});
 
 	$('.menu').popover({

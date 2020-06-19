@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_playbook')}}</h4>
             </div>
-            
+
             <form action="#" method="post" class="form add_playbook">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
@@ -14,7 +14,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_playbook" value="{{__('tools.add_playbook')}}">
+                    <button type="submit" class="btn btn-primary add_playbook add_btn_loader">{{__('tools.add_playbook')}}</button>
                 </div>
             </form>
         </div>

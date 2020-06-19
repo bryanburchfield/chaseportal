@@ -77,7 +77,7 @@
             <div class="modal-body">
                 <form action="#" method="post" class="form add_esp">
                     @include('tools.playbook.shared.email_service_provider_form')
-                    <input type="submit" class="btn btn-primary add_esp" value="{{__('tools.add_provider')}}">
+                    <button type="submit" class="btn btn-primary add_esp add_btn_loader">{{__('tools.add_provider')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">

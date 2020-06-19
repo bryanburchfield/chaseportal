@@ -765,8 +765,10 @@ var Admin = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.add_sms_number .alert-danger').show();
 					});
+
 					$('.loader_hor').hide();
 				}
 			}
@@ -830,8 +832,10 @@ var Admin = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.edit_sms_number .alert-danger').show();
 					});
+
 					$('.loader_hor').hide();
 				}
 			}
