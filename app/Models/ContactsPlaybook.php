@@ -17,6 +17,8 @@ class ContactsPlaybook extends Model
         'name',
         'campaign',
         'subcampaign',
+        'last_run_from',
+        'last_run_to',
         'active',
     ];
 

@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Twilio\Rest\Client as Twilio;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ContactsPlaybookService
 {
@@ -92,6 +93,9 @@ class ContactsPlaybookService
 
             // Get query
             list($sql, $bind) = $this->buildSql($playbook_touch);
+
+            Log::debug($sql);
+            Log::debug($bind);
 
             $results = $this->runSql($sql, $bind);
 
@@ -208,8 +212,8 @@ class ContactsPlaybookService
         $sql .= ' ' . $where . "
             AND L.id IN (
             SELECT LeadId FROM [$db].[dbo].[DialingResults] DR
-            WHERE DR.Date > '$playbook_touch->contacts_playbook->last_run_from'
-            AND DR.Date <= '$playbook_touch->contacts_playbook->last_run_to'
+            WHERE DR.Date > '" . $playbook_touch->contacts_playbook->last_run_from . "'
+            AND DR.Date <= '" . $playbook_touch->contacts_playbook->last_run_to . "'
             $dr_where
             )";
 
