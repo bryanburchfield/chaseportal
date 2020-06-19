@@ -32,7 +32,7 @@ class ValidPlaybookSmsAction extends FormRequest
                 'required',
                 Rule::exists('sms_from_numbers', 'id')
                     ->where(function ($query) use ($group_id) {
-                        $query->where('group_id', $group_id);
+                        $query->whereIn('group_id', [0, $group_id]);
                     }),
             ],
             'template_id' => 'required|integer',
