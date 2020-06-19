@@ -41,10 +41,10 @@
                                                         <td>{{ $sms_from_number->group_id }}</td>
                                                         <td>{{ $sms_from_number->from_number }}</td>
                                                         <td>
-                                                            <a href="#" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600"><i class="fas fa-edit"></i> Edit</a>
+                                                            <a href="#" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#editSMSModal" class="btn btn-sm btn-info edit_sms_modal fw600 table_btns"><i class="fas fa-edit"></i> Edit</a>
                                                         </td>
                                                         <td>
-                                                            <a href="#" data-number="{{ $sms_from_number->from_number }}" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600"><i class="fa fa-trash-alt"></i> Delete</a>
+                                                            <a href="#" data-number="{{ $sms_from_number->from_number }}" data-id="{{ $sms_from_number->id }}" data-toggle="modal" data-target="#deleteSMSModal" class="btn btn-danger btn-sm delete_sms_modal fw600 table_btns"><i class="fa fa-trash-alt"></i> Delete</a>
                                                         </td>
                                                      </tr>
                                                     @endforeach

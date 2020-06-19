@@ -1733,7 +1733,7 @@ a.kpi_change_details{
     margin-right: 10px;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_filter_modal i, .actions a.remove_playbook_action_modal i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
     position: relative;
     top: 2px;
     color: #d9534f;
@@ -2173,7 +2173,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i, .remove_email_service_provider_modal i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;
@@ -2791,7 +2791,7 @@ a.add_action, a.add_filter{
 }
 
 .paginate_button {padding: 0 !important;}
-table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
+.btn.table_btns{max-width: 110px;}
 
 .playbook, .touch{
     a.menu{

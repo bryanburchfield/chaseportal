@@ -24,7 +24,7 @@
 
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal">{{__('tools.add_playbook')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_playbook')}}</a>
                                     </div>
 
                                     <div class="row">

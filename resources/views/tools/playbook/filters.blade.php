@@ -23,7 +23,7 @@
 
 								<div class="tab-pane mt30" id="playbook_filters">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal">{{__('tools.add_filter')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
 
                                         <div class="table-responsive nobdr filters_table">
                                             <table class="table mt20 table-striped" id="filters_dataTable">
@@ -48,8 +48,8 @@
                                                                 <td>{{$playbook_filter->operator_name}}</td>
                                                                 <td>{{$playbook_filter->value}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}" data-name="{{$playbook_filter->name}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_filter_modal" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal  btn btn-sm btn-info fw600 table_btns" data-id="{{$playbook_filter->id}}" data-name="{{$playbook_filter->name}}"><i class="fas fa-edit"></i> {{__('tools.edit')}}</a></td>
+                                                                <td><a class="remove_playbook_filter_modal btn btn-sm btn-danger fw600 table_btns" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif

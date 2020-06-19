@@ -23,7 +23,7 @@
 
                                 <div class="tab-pane mt30" id="email_service_providers">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_provider_modal">{{__('tools.add_provider')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_provider_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_provider')}}</a>
 
                                         <div class="table-responsive nobdr email_service_providers">
                                             <table class="table mt20 table-striped" id="emails_dataTable">
@@ -42,8 +42,8 @@
                                                                 <td>{{$provider->name}}</td>
                                                                 <td>{{$provider->provider_type}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_provider_modal" data-providerid="{{$provider->id}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$provider->name}}" data-id="{{$provider->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_provider_modal btn btn-sm btn-info fw600 table_btns" data-providerid="{{$provider->id}}"><i class="fas fa-edit"></i> {{__('tools.edit')}}</a></td>
+                                                                <td><a class="remove_email_service_provider_modal btn btn-sm btn-danger fw600 table_btns" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$provider->name}}" data-id="{{$provider->id}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif

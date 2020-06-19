@@ -8,6 +8,6 @@
     <input type="text" class="form-control group_id" name="group_id"/>
 </div>
 
-<div class="alert alert-success hidetilloaded"></div>
-<div class="alert alert-danger hidetilloaded"></div>
+<div class="alert alert-success hidetilloaded cb"></div>
+<div class="alert alert-danger hidetilloaded cb"></div>
 <input type="hidden" class="id" value="">

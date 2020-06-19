@@ -2043,8 +2043,6 @@ a.kpi_change_details {
 .users a.remove_user i,
 .demo_user_modal_link.remove_user i,
 a.remove_msg i,
-a.remove_playbook_filter_modal i,
-.actions a.remove_playbook_action_modal i,
 a.remove_playbook_modal i,
 a.delete_action_from_pb i,
 a.delete_filter_from_pb i {
@@ -2545,8 +2543,7 @@ p.name i {
 
 .remove_user i,
 .remove_smtp_server_modal i,
-.remove_campaign_modal i,
-.remove_email_service_provider_modal i {
+.remove_campaign_modal i {
   color: #d9534f;
 }
 
@@ -3266,7 +3263,7 @@ a.add_filter i {
   padding: 0 !important;
 }
 
-table#sms_numbers_datatable tbody td .btn {
+.btn.table_btns {
   max-width: 110px;
 }
 
