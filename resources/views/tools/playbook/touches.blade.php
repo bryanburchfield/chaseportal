@@ -20,8 +20,8 @@
                         <div class="col-sm-6 mt0 p0 mb30 card">
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} {{$contacts_playbook->subcampaign ? ': ' . $contacts_playbook->subcampaign : ''}}</h3>
-                            <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}" class="btn btn-primary flt_lft mb0 mt20">Add Touch</a>
-                            <a href="{{action('PlaybookController@index')}}" class="btn btn-secondary flt_rgt mb0 mt20">Go Back</a>
+                            <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}" class="btn btn-primary flt_lft mb0 mt20">{{__('tools.add_touch')}}</a>
+                            <a href="{{action('PlaybookController@index')}}" class="btn btn-secondary flt_rgt mb0 mt20">{{__('widgets.go_back')}}</a>
                         </div>
 			    	</div>
 				</div>
@@ -35,8 +35,8 @@
                                 data-trigger="focus"
                                 data-content="<div>
                                     <ul>
-                                        <li><a href='{{ action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}'>Edit</a></li>
-                                        <li><a href='#' class='delete_touch_modal' data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal' data-name='{{$touch->name}}'>Delete</a></li>
+                                        <li><a href='{{ action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}'>{{__('tools.edit')}}</a></li>
+                                        <li><a href='#' class='delete_touch_modal' data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal' data-name='{{$touch->name}}'>{{__('tools.delete')}}</a></li>
                                     </ul></div>">
                                 <i class="fas fa-fingerprint"></i>
                             </a>

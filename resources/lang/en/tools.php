@@ -147,6 +147,7 @@ return [
 	'to_campaign'	=> 'To Campaign',
 	'to_subcampaign'	=> 'To Subcampaign',
 	'tools'			=> 'Tools',
+	'touches'		=> 'Touches',
 	'undo_move'		=> 'Undo Move',
 	'update_campaign'	=> 'Update Campaign',
 	'upload'		=> 'Upload',

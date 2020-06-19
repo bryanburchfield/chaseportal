@@ -149,6 +149,7 @@ return [
 	'to_campaign'	=> 'Hacer Campaña',
 	'to_subcampaign'	=> 'Subcampaña',
 	'tools'			=> 'Herramientas',
+	'touches'		=> 'Toques',
 	'undo_move'		=> 'Deshacer movimiento',
 	'update_campaign'	=> 'Actualizar Campaña',
 	'upload'		=> 'Sube',

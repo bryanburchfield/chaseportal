@@ -37,9 +37,9 @@
                                                         data-trigger="focus"
                                                         data-content="<div>
                                                             <ul>
-                                                                <li><a href='{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}'>View</a></li>
-                                                                <li><a href='#' class='edit_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#editPlaybookModal'>Edit</a></li>
-                                                                <li><a href='#' class='delete_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-name='{{$contacts_playbook->name}}' data-target='#deletePlaybookModal'>Delete</a></li>
+                                                                <li><a href='{{ action("PlaybookTouchController@index", ['contacts_playbook_id' => $contacts_playbook->id])}}'>{{__('tools.touches')}}</a></li>
+                                                                <li><a href='#' class='edit_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#editPlaybookModal'>{{__('tools.edit')}}</a></li>
+                                                                <li><a href='#' class='delete_playbook_modal' data-id='{{$contacts_playbook->id}}' data-toggle='modal' data-name='{{$contacts_playbook->name}}' data-target='#deletePlaybookModal'>{{__('tools.delete')}}</a></li>
                                                             </ul></div>">
                                                         <i class="fas fa-book fa-3x"></i>
                                                     </a>
