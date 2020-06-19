@@ -75,6 +75,7 @@ class PlaybookFilterController extends Controller
         if ($request->has('campaign')) {
             $campaign = Campaign::where('GroupId', Auth::user()->group_id)
                 ->where('CampaignName', $request->campaign)
+                ->with('advancedTable.advancedTableFields.fieldType')
                 ->first();
         } else {
             $campaign = new Campaign;
