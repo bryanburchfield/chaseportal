@@ -176,6 +176,7 @@ var Playbook_Filters = {
 
 	update_filter:function(e){
 		e.preventDefault();
+		$('#editFilterModal .alert-danger').hide();
 		var form_data = $('.edit_filter').serialize();
 		var id = $('.edit_filter').find('.id').val();
 
