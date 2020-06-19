@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\SmsFromNumber;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ValidSmsFromNumber extends FormRequest
@@ -28,7 +29,7 @@ class ValidSmsFromNumber extends FormRequest
     protected function prepareForValidation()
     {
         if (empty($this->id)) {
-            $this->sms_from_number = new SmsFromNumber($this->all());
+            $this->sms_from_number = new SmsFromNumber;
         } else {
             $this->sms_from_number = SmsFromNumber::findOrFail($this->id);
         }
@@ -41,14 +42,16 @@ class ValidSmsFromNumber extends FormRequest
      */
     public function rules()
     {
+        $group_id = Auth::user()->group_id;
+
         return [
             'group_id' => 'required|integer',
             'from_number' => [
                 'required',
                 'regex:/^\+1\d{10}$/',
-                Rule::unique('sms_from_numbers')->where(function ($query) {
-                    return $query->where('group_id', $this->sms_from_number->group_id)
-                        ->where('from_number', $this->sms_from_number->from_number)
+                Rule::unique('sms_from_numbers')->where(function ($query) use ($group_id) {
+                    return $query
+                        ->where('group_id', $group_id)
                         ->where('id', '!=', $this->sms_from_number->id);
                 }),
             ],
