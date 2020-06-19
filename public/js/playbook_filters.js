@@ -154,18 +154,19 @@ var Playbook_Filters = {
 				id:id
 			},
 		}).done(function(response){
-
+			console.log(response);
 			var type;
+			$("#editFilterModal .filter_campaigns option").prop('selected', false);
 			$.when(
 				Playbook_Filters.get_fields(response.campaign)
 			).done(function() {
 				$("#editFilterModal .filter_fields option[value='"+response.field+"']").prop('selected', true);
+				$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 				type = $( "#editFilterModal .filter_fields option:selected").data('type');
 				$.when(
 					Playbook_Filters.get_operators(type)
 				).done(function() {
 					$('#editFilterModal').find('.name').val(response.name);
-					$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 					$("#editFilterModal .filter_operators option[value='"+response.operator+"']").prop('selected', true);
 					$('#editFilterModal').find('.filter_value').val(response.value);
 					$('.loader_hor').hide();
@@ -255,7 +256,9 @@ $(document).ready(function () {
 	Playbook_Filters.init();
 
 	$('#editFilterModal').on('hidden.bs.modal', function () {
-	    $('.edit_filter').trigger("reset");
+		console.log('modal closed');
+	    $('form.edit_filter').trigger("reset");
+	    $('form.edit_filter').find('.filter_campaigns').val('');
 	    $(this).find('.alert').empty().hide();
 	});
 });
