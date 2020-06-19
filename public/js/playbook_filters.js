@@ -156,7 +156,7 @@ var Playbook_Filters = {
 		}).done(function(response){
 			console.log(response);
 			var type;
-			$("#editFilterModal .filter_campaigns option").prop('selected', false);
+			
 			$.when(
 				Playbook_Filters.get_fields(response.campaign)
 			).done(function() {
@@ -259,6 +259,7 @@ $(document).ready(function () {
 		console.log('modal closed');
 	    $('form.edit_filter').trigger("reset");
 	    $('form.edit_filter').find('.filter_campaigns').val('');
+	    $("#editFilterModal .filter_campaigns option").prop('selected', false);
 	    $(this).find('.alert').empty().hide();
 	});
 });
