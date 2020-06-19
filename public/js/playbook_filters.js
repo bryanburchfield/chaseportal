@@ -256,5 +256,6 @@ $(document).ready(function () {
 
 	$('#editFilterModal').on('hidden.bs.modal', function () {
 	    $('.edit_filter').trigger("reset");
+	    $(this).find('.alert').empty().hide();
 	});
 });
