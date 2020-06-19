@@ -76,7 +76,7 @@ class ValidPlaybookAction extends FormRequest
                         $value !== $this->playbook_action->campaign
                     ) {
                         if (PlaybookTouchAction::where('playbook_action_id', $this->playbook_action->id)->first()) {
-                            $fail(trans('custom_validation.cant_update_campaign'));
+                            $fail(trans('custom_validation.action_cant_update_campaign'));
                         }
                     }
                 },

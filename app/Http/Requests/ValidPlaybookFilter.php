@@ -76,7 +76,7 @@ class ValidPlaybookFilter extends FormRequest
                         $value !== $this->playbook_filter->campaign
                     ) {
                         if (PlaybookTouchFilter::where('playbook_filter_id', $this->playbook_filter->id)->first()) {
-                            $fail(trans('custom_validation.cant_update_campaign'));
+                            $fail(trans('custom_validation.filter_cant_update_campaign'));
                         }
                     }
                 },
