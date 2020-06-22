@@ -13,12 +13,10 @@ use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookSmsAction;
-use App\Models\PlaybookSmsNumber;
+use App\Models\SmsFromNumber;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +34,8 @@ class PlaybookActionController extends Controller
     public function index()
     {
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 
@@ -197,7 +196,7 @@ class PlaybookActionController extends Controller
         // on delete cascade takes care of the sub-table records
         $playbook_action = $this->findPlaybookAction($request->id);
 
-        if ($playbook_action->contacts_playbook_actions->isNotEmpty()) {
+        if ($playbook_action->playbook_touch_actions->isNotEmpty()) {
             abort(response()->json(['errors' => ['1' => trans('tools.action_in_use')]], 422));
         }
 
@@ -227,7 +226,7 @@ class PlaybookActionController extends Controller
      */
     public function getSubcampaigns(Request $request)
     {
-        $results = $this->getAllSubcampaignsWithNone($request->campaign);
+        $results = $this->getAllSubcampaigns($request->campaign);
 
         return ['subcampaigns' => $results];
     }
@@ -256,20 +255,6 @@ class PlaybookActionController extends Controller
         }
 
         return $fields;
-    }
-
-    /**
-     * Get subcampaigns along with "!!none!!"
-     * 
-     * @param mixed $campaign 
-     * @return mixed 
-     */
-    private function getAllSubcampaignsWithNone($campaign)
-    {
-        $results = $this->getAllSubcampaigns($campaign);
-        $results = ['!!none!!' => trans('tools.no_subcampaign')] + $results;
-
-        return $results;
     }
 
     /**
@@ -318,9 +303,9 @@ class PlaybookActionController extends Controller
      */
     private function smsFromNumbers()
     {
-        return PlaybookSmsNumber::whereIn('group_id', [0, Auth::user()->group_id])
-            ->select('from_number')
-            ->distinct()
+        return SmsFromNumber::whereIn('group_id', [0, Auth::user()->group_id])
+            ->select(['id', 'from_number'])
+            ->orderBy('from_number')
             ->get();
     }
 }

@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ContactsPlaybook;
-use App\Models\PlaybookFilter;
+use App\Models\PlaybookAction;
+use App\Models\PlaybookTouch;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ValidContactsPlaybookFilter extends FormRequest
+class ValidPlaybookTouchAction extends FormRequest
 {
-    protected $contacts_playbook;
+    protected $playbook_touch;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -29,18 +29,18 @@ class ValidContactsPlaybookFilter extends FormRequest
     protected function prepareForValidation()
     {
         // check that playbook belongs to user's group_id, 404 if not
-        $this->contacts_playbook = ContactsPlaybook::findOrFail($this->id);
+        $this->playbook_touch = PlaybookTouch::findOrFail($this->id);
 
-        if (!$this->has('filters')) {
+        if (!$this->has('playbook_touch_actions')) {
             return;
         }
 
         // dedup first
-        $filters = [];
-        foreach ($this->filters as $filter) {
-            $filters[$filter] = $filter;
+        $actions = [];
+        foreach ($this->playbook_touch_actions as $action) {
+            $actions[$action] = $action;
         }
-        $this->merge(['filters' => $filters]);
+        $this->merge(['actions' => $actions]);
     }
 
     /**
@@ -51,26 +51,26 @@ class ValidContactsPlaybookFilter extends FormRequest
     public function rules()
     {
         return [
-            'filters' => 'nullable|array',
+            'actions' => 'nullable|array',
         ];
     }
 
     public function withValidator($validator)
     {
-        if (!$this->has('filters')) {
+        if (!$this->has('actions')) {
             return;
         }
 
         $validator->after(function ($validator) {
 
             // check that they're all valid
-            foreach ($this->filters as $filter) {
-                $playbook_filter = PlaybookFilter::where('id', $filter)
+            foreach ($this->actions as $action) {
+                $playbook_action = PlaybookAction::where('id', $action)
                     ->where('group_id', Auth::user()->group_id)
                     ->first();
 
-                if (!$playbook_filter) {
-                    $validator->errors()->add('filters', trans('custom_validation.filter_not_found'));
+                if (!$playbook_action) {
+                    $validator->errors()->add('actions', trans('custom_validation.action_not_found'));
                 }
             }
         });

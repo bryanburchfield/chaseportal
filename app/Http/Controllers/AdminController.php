@@ -35,6 +35,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Return tools sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadToolsNav()
+    {
+        return view('shared.tools_sidenav');
+    }
+
+    /**
      * return regular sidenav
      * 
      * @return View|Factory 

@@ -3,17 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ContactsPlaybookAction extends Model
+class PlaybookTouchAction extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
-        'contacts_playbook_id',
+        'playbook_touch_id',
         'playbook_action_id',
     ];
 
-    public function contacts_playbook()
+    public function playbook_touch()
     {
-        return $this->belongsTo('App\Models\ContactsPlaybook');
+        return $this->belongsTo('App\Models\PlaybookTouch');
     }
 
     public function playbook_action()

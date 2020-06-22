@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ValidPlaybookSmsNumber;
-use App\Models\PlaybookSmsNumber;
+use App\Http\Requests\ValidSmsFromNumber;
+use App\Models\SmsFromNumber;
 use Illuminate\Http\Request;
 
-class PlaybookSmsNumberController extends Controller
+class SmsFromNumberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,22 +15,22 @@ class PlaybookSmsNumberController extends Controller
      */
     public function index()
     {
-        $playbook_sms_numbers = PlaybookSmsNumber::orderBy('group_id')
+        $sms_from_numbers = SmsFromNumber::orderBy('group_id')
             ->orderBy('from_number')
             ->get();
 
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 
-        $data =
-            [
-                'page' => $page,
-                'jsfile' => [],
-                'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
-                'playbook_sms_numbers' => $playbook_sms_numbers,
-            ];
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'sms_from_numbers' => $sms_from_numbers,
+        ];
 
         return view('tools.playbook.from_number.index')->with($data);
     }
@@ -41,10 +41,10 @@ class PlaybookSmsNumberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ValidPlaybookSmsNumber $request)
+    public function store(ValidSmsFromNumber $request)
     {
-        $playbook_sms_number = new PlaybookSmsNumber($request->all());
-        $playbook_sms_number->save();
+        $sms_from_number = new SmsFromNumber($request->all());
+        $sms_from_number->save();
 
         return ['status' => 'success'];
     }
@@ -56,11 +56,11 @@ class PlaybookSmsNumberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ValidPlaybookSmsNumber $request, $id)
+    public function update(ValidSmsFromNumber $request, $id)
     {
-        $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
-        $playbook_sms_number->update($request->all());
-        $playbook_sms_number->save();
+        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number->update($request->all());
+        $sms_from_number->save();
 
         return ['status' => 'success'];
     }
@@ -73,8 +73,8 @@ class PlaybookSmsNumberController extends Controller
      */
     public function destroy($id)
     {
-        $playbook_sms_number = PlaybookSmsNumber::findOrFail($id);
-        $playbook_sms_number->delete();
+        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number->delete();
 
         return ['status' => 'success'];
     }
@@ -85,8 +85,8 @@ class PlaybookSmsNumberController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getPlaybookSmsNumber(Request $request)
+    public function getSmsFromNumber(Request $request)
     {
-        return PlaybookSmsNumber::findOrFail($request->id);
+        return SmsFromNumber::findOrFail($request->id);
     }
 }

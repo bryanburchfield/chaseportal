@@ -23,7 +23,8 @@ class PlaybookFilterController extends Controller
     public function index()
     {
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 
@@ -74,6 +75,7 @@ class PlaybookFilterController extends Controller
         if ($request->has('campaign')) {
             $campaign = Campaign::where('GroupId', Auth::user()->group_id)
                 ->where('CampaignName', $request->campaign)
+                ->with('advancedTable.advancedTableFields.fieldType')
                 ->first();
         } else {
             $campaign = new Campaign;
@@ -122,7 +124,7 @@ class PlaybookFilterController extends Controller
     {
         $playbook_filter = $this->findPlaybookFilter($request->id);
 
-        if ($playbook_filter->contacts_playbook_filters->isNotEmpty()) {
+        if ($playbook_filter->playbook_touch_filters->isNotEmpty()) {
             abort(response()->json(['errors' => ['1' => trans('tools.filter_in_use')]], 422));
         }
 

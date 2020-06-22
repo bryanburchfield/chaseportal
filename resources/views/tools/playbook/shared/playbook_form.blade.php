@@ -10,9 +10,10 @@
 
 <div class="form-group">
     <label>{{__('tools.subcampaign')}}</label>
-    <select name="subcampaign" class="form-control subcampaign"></select>
+    <select name="subcampaign" class="form-control subcampaigns"></select>
 </div>
 
-<div class="alert alert-success hidetilloaded"></div>
-<div class="alert alert-danger hidetilloaded"></div>
-<div class="alert connection_msg hidetilloaded"></div>
+<div class="alert alert-success hidetilloaded mb0"></div>
+<div class="alert alert-danger hidetilloaded mb0"></div>
+<div class="alert connection_msg hidetilloaded mb0"></div>
+

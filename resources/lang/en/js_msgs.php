@@ -3,6 +3,7 @@
 return [
 	'abandoned'					=> 'Abandoned',
 	'actions_by_day'			=> 'Actions by Day',
+	'action_taken'				=> 'Action Taken',
 	'add_action'				=> 'Add Action',
 	'add_filter'				=> 'Add Filter',
 	'after_call_work'			=> 'After Call Work',
@@ -60,6 +61,7 @@ return [
 	'paused'					=> 'Paused',
 	'playbook_warning'			=> 'The following playbooks could not be activated. Please make sure each playbook has filters and actions.',
 	'reload_error_msg'			=> 'Something went wrong. Please reload the page.',
+	'remove_action'				=> 'Remove Action',
 	'remove_filter'				=> 'Remove Filter',
 	'rep'						=> 'Rep',
 	'reps'						=> 'Reps',

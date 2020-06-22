@@ -16,8 +16,6 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 			    	<div class="col-sm-12">
-                        @include('tools.shared.topnav', ['toolpage' => 'playbook'])
-                        
 			    		<div class="tab-content">
                             <div class="tab-pane active mt30">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
@@ -25,7 +23,7 @@
 
 								<div class="tab-pane mt30" id="playbook_filters">
                                     <div class="col-sm-12 nopad">
-                                        <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal">{{__('tools.add_filter')}}</a>
+                                        <a href="#" data-toggle="modal" data-target="#addFilterModal" class="btn btn-primary add_playbook_filter_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_filter')}}</a>
 
                                         <div class="table-responsive nobdr filters_table">
                                             <table class="table mt20 table-striped" id="filters_dataTable">
@@ -50,8 +48,8 @@
                                                                 <td>{{$playbook_filter->operator_name}}</td>
                                                                 <td>{{$playbook_filter->value}}</td>
                                                                 <?php $mode='edit';?>
-                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal" data-id="{{$playbook_filter->id}}" data-name="{{$playbook_filter->name}}"><i class="fas fa-edit"></i></a></td>
-                                                                <td><a class="remove_playbook_filter_modal" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                                <td><a href="#" data-toggle="modal" data-target="#editFilterModal" class=" edit_playbook_filter_modal  btn btn-sm btn-info fw600 table_btns" data-id="{{$playbook_filter->id}}" data-name="{{$playbook_filter->name}}"><i class="fas fa-edit"></i> {{__('tools.edit')}}</a></td>
+                                                                <td><a class="remove_playbook_filter_modal btn btn-sm btn-danger fw600 table_btns" data-toggle="modal" data-target="#deleteFilterModal" href="#" data-name="{{$playbook_filter->name}}" data-id="{{$playbook_filter->id}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -81,19 +79,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_filter')}}</h4>
             </div>
-            <form method="post" class="form add_filter">
+            <form method="post" class="form add_filter fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.filter_form')
-
-                    <div class="alert alert-success hidetilloaded"></div>
-                    <div class="alert alert-danger hidetilloaded"></div>
-                    <div class="alert connection_msg hidetilloaded"></div>
                 </div>
 
                 <div class="modal-footer">
                     <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_filter" value="{{__('tools.add_filter')}}">
+                    <button type="submit" class="btn btn-primary add_filter add_btn_loader">{{__('tools.add_filter')}}</button>
                 </div>
              </form>
         </div>
@@ -111,7 +105,7 @@
 
             <div class="modal-body">
                 <h3><span></span></h3><br>
-                <form action="#" method="post" class="form edit_filter">
+                <form action="#" method="post" class="form edit_filter fc_style">
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
                     <input type="hidden" name="id" class="id" value="{{old('id')}}">

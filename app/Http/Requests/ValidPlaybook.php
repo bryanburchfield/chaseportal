@@ -27,7 +27,7 @@ class ValidPlaybook extends FormRequest
     protected function prepareForValidation()
     {
         // if id not passed (adding), insert id=0
-        // otherwise, check that filter belongs to user's group_id, 404 if not
+        // otherwise, check that it belongs to user's group_id, 404 if not
         if ($this->filled('id')) {
             $contacts_playbook = ContactsPlaybook::where('id', $this->id)
                 ->where('group_id', Auth::user()->group_id)
@@ -45,15 +45,15 @@ class ValidPlaybook extends FormRequest
     public function rules()
     {
         $group_id = Auth::user()->group_id;
-        $id = $this->id;
 
         return [
             'name' => [
                 'required',
-                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id, $id) {
+                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id) {
                     return $query
                         ->where('group_id', $group_id)
-                        ->where('id', '!=', $id);
+                        ->where('id', '!=', $this->id)
+                        ->whereNull('deleted_at');
                 }),
             ],
             'campaign' => 'required',

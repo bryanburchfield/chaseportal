@@ -116,6 +116,7 @@ var Playbook_Filters = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.add_filter .alert-danger').show();
 					});
 				}
@@ -125,16 +126,12 @@ var Playbook_Filters = {
 
 	populate_filter_modal:function(e){
 		e.preventDefault();
-		var modal = $(this).data('target');
 		var id = $(this).data('id');
-		var name = $(this).data('name');
-		$(modal).find('input.id').val(id);
+		Master.pass_id_to_modal(this, id);
 
-		if(modal.substring(1) == 'editFilterModal'){
+		if($(this).data('target').substring(1) == 'editFilterModal'){
 			Playbook_Filters.edit_filter(id);
 		}
-
-		$(modal).find('.modal-body h3 span').text(name);
 	},
 
 	edit_filter:function(id){
@@ -156,16 +153,17 @@ var Playbook_Filters = {
 		}).done(function(response){
 
 			var type;
+
 			$.when(
 				Playbook_Filters.get_fields(response.campaign)
 			).done(function() {
 				$("#editFilterModal .filter_fields option[value='"+response.field+"']").prop('selected', true);
+				$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 				type = $( "#editFilterModal .filter_fields option:selected").data('type');
 				$.when(
 					Playbook_Filters.get_operators(type)
 				).done(function() {
 					$('#editFilterModal').find('.name').val(response.name);
-					$("#editFilterModal .filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
 					$("#editFilterModal .filter_operators option[value='"+response.operator+"']").prop('selected', true);
 					$('#editFilterModal').find('.filter_value').val(response.value);
 					$('.loader_hor').hide();
@@ -176,6 +174,7 @@ var Playbook_Filters = {
 
 	update_filter:function(e){
 		e.preventDefault();
+		$('#editFilterModal .alert-danger').hide();
 		var form_data = $('.edit_filter').serialize();
 		var id = $('.edit_filter').find('.id').val();
 
@@ -194,7 +193,22 @@ var Playbook_Filters = {
 				if(response.status == 'success'){
 					location.reload();
 				}
-			},
+			}, error: function (data) {
+				if (data.status === 422) {
+					var errors = $.parseJSON(data.responseText);
+					$.each(errors, function (key, value) {
+
+						if ($.isPlainObject(value)) {
+							$.each(value, function (key, value) {
+								$('#editFilterModal .alert-danger').append('<li>' + value + '</li>');
+							});
+						}
+
+						$('.add_btn_loader i').remove();
+						$('#editFilterModal .alert-danger').show();
+					});
+				}
+			}
 		});
 	},
 
@@ -239,7 +253,11 @@ var Playbook_Filters = {
 $(document).ready(function () {
 	Playbook_Filters.init();
 
-	$('#editFilterModal').on('hidden.bs.modal', function () {
-	    $('.edit_filter').trigger("reset");
+	$('#addFilterModal, #editFilterModal').on('hidden.bs.modal', function(){
+		var modal = '#'+$(this).attr('id');
+	    Master.reset_modal_form(modal);
+	    $(modal).find('.filter_campaigns').val('');
+	    $(modal +" .filter_campaigns option").prop('selected', false);
 	});
+
 });

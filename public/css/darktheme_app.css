@@ -221,6 +221,14 @@ h6 {
   margin-bottom: 0;
 }
 
+.flt_lft {
+  float: left;
+}
+
+.flt_rgt {
+  float: right;
+}
+
 a,
 a:hover,
 a:focus {
@@ -2113,9 +2121,17 @@ a.kpi_change_details {
   background: #eee;
 }
 
+.users a.remove_user {
+  float: right;
+  margin-right: 10px;
+}
+
 .users a.remove_user i,
 .demo_user_modal_link.remove_user i,
-a.remove_msg i {
+a.remove_msg i,
+a.remove_playbook_modal i,
+a.delete_action_from_pb i,
+a.delete_filter_from_pb i {
   position: relative;
   top: 2px;
   color: #d9534f;
@@ -2615,8 +2631,7 @@ p.name i {
 
 .remove_user i,
 .remove_smtp_server_modal i,
-.remove_campaign_modal i,
-.remove_email_service_provider_modal i {
+.remove_campaign_modal i {
   color: #d9534f;
 }
 
@@ -2694,6 +2709,14 @@ p.name i {
   border-radius: 25px;
 }
 
+.flowchart_element.mt0 {
+  margin-top: 0;
+}
+
+.flowchart_element.mt10 {
+  margin-top: 10px;
+}
+
 .flowchart_element.mt35 {
   margin-top: 35px;
 }
@@ -2730,6 +2753,10 @@ div.vertical-line {
   margin: 0 auto;
   left: 51.5%;
   display: block;
+}
+
+div.vertical-line.hidetilloaded {
+  display: none;
 }
 
 table.table.table-striped > tbody > tr:nth-of-type(odd) {
@@ -2903,7 +2930,8 @@ table.dataTable tbody tr:nth-of-type(even) {
 
 .add_leadrule_filter,
 .add_new_subcampaign,
-.undo_new_subcampaign {
+.undo_new_subcampaign,
+.add_campaign {
   color: #33A09B;
   font-size: 15px;
   font-weight: 600;
@@ -2911,22 +2939,28 @@ table.dataTable tbody tr:nth-of-type(even) {
 
 .add_leadrule_filter:hover,
 .add_new_subcampaign:hover,
-.undo_new_subcampaign:hover {
+.undo_new_subcampaign:hover,
+.add_campaign:hover {
   color: #277976;
 }
 
 .add_leadrule_filter:focus,
 .add_new_subcampaign:focus,
-.undo_new_subcampaign:focus {
+.undo_new_subcampaign:focus,
+.add_campaign:focus {
   color: #277976;
 }
 
-a.remove_filter {
+a.remove_filter,
+a.remove_action {
   color: #d9534f;
-  font-size: 15px;
+  float: right;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
-.leadfilter_row .card {
+.leadfilter_row .card,
+.action_row .card {
   overflow: auto;
 }
 
@@ -3349,8 +3383,102 @@ a.add_filter i {
   padding: 0 !important;
 }
 
-table#sms_numbers_datatable tbody td .btn {
+.btn.table_btns {
   max-width: 110px;
+}
+
+.playbook a.menu,
+.touch a.menu {
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 100px;
+  width: 125px;
+  height: 125px;
+  padding-top: 28px;
+  border: 6px solid #33A09B;
+}
+
+.playbook a.menu i,
+.touch a.menu i {
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  font-size: 55px;
+}
+
+.playbook a.menu i:hover,
+.touch a.menu i:hover {
+  transition: all, ease, 0.3s;
+  color: #33A09B;
+}
+
+.playbook .name,
+.touch .name {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.playbook .switch,
+.touch .switch {
+  margin: 0 auto;
+  display: block;
+}
+
+.playbook .popover,
+.touch .popover {
+  min-width: 95px;
+}
+
+.playbook .popover .popover-content,
+.touch .popover .popover-content {
+  padding: 0;
+}
+
+.playbook .popover ul,
+.touch .popover ul {
+  list-style: none;
+}
+
+.playbook .popover ul li,
+.touch .popover ul li {
+  color: #555;
+  font-weight: 600;
+  background: #ddd;
+}
+
+.playbook .popover ul li:nth-child(odd),
+.touch .popover ul li:nth-child(odd) {
+  background: #e9e9e9;
+}
+
+.playbook .popover ul li:hover,
+.touch .popover ul li:hover {
+  background: #fff;
+}
+
+.playbook .popover ul li a,
+.touch .popover ul li a {
+  padding: 5px 10px;
+  width: 100%;
+  display: block;
+}
+
+.playbook_campaign,
+.playbook_subcampaign {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.playbook_name {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  color: #aaa;
 }
 
 .calls_per_hour table tbody tr:last-of-type td {

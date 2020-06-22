@@ -3,6 +3,7 @@
 return [
 	'abandoned'					=> 'Abandonada',
 	'actions_by_day'			=> 'Acciones por Día',
+	'action_taken'				=> 'Acción Tomada',
 	'add_action'				=> 'Agregar Acción',
 	'add_filter'				=> 'Agregar Filtro',
 	'after_call_work'			=> 'Tiempo Administrativo Posterior',
@@ -60,6 +61,7 @@ return [
 	'paused'					=> 'Pausada',
 	'playbook_warning'			=> 'Los siguientes libros de jugadas no se pudieron activar. Asegúrate de que cada libro de jugadas tenga filtros y acciones.',
 	'reload_error_msg'			=> 'Algo salió mal. Por favor volver a cargar la página.',
+	'remove_action'				=> 'Eliminar Acción',
 	'remove_filter'				=> 'Eliminar Filtro',
 	'rep'						=> 'Agente',
 	'reps'						=> 'Agentes',

@@ -64,7 +64,7 @@ class MasterDashController extends Controller
             'admindistinctagentdash' => 'admin',
         ];
 
-        return (isset($pagemenus[$page])) ? $pagemenus[$page] : 'base';
+        return (isset($pagemenus[$page])) ? $pagemenus[$page] : 'dashboard';
     }
 
     public function demoLogin(Request $request)

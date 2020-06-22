@@ -47,15 +47,15 @@ var Playbook_Actions = {
 		}
 
 		if(action_type == 'sms'){
-			var from_number = $('.sms .from').val(),
+			var sms_from_number_id = $('.sms .sms_from_number_id').val(),
 				template_id = $('.sms .template_id').val(),
 				sms_per_lead = $('.sms .sms_per_lead').val(),
 				days_between_sms = $('.sms .days_between_sms').val()
 			;
 
-			from_number = encodeURIComponent(from_number);
+			sms_from_number_id = encodeURIComponent(sms_from_number_id);
 
-			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms;
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&sms_from_number_id='+sms_from_number_id+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms;
 		}
 
 		if(action_type == 'lead'){
@@ -94,6 +94,7 @@ var Playbook_Actions = {
 							});
 						}
 
+						$('.add_btn_loader i').remove();
 						$('.add_action .alert-danger').show();
 					});
 				}
@@ -187,19 +188,14 @@ var Playbook_Actions = {
 	populate_action_modal:function(e){
 		e.preventDefault();
 
-		var modal = $(this).data('target');
 		var id = $(this).data('id');
-		var name = $(this).data('name');
-		$(modal).find('input.id').val(id);
+		Master.pass_id_to_modal(this, id);
 
-		if(modal.substring(1) == 'editActionModal'){
+		if($(this).data('target').substring(1) == 'editActionModal'){
 			Playbook_Actions.edit_action(id);
 		}
 
-		$(modal).find('.modal-body h3 span').text(name);
-
 		var id = $(this).data('playbook_actionid');
-
 	},
 
 	//populates action edit fields
@@ -216,7 +212,7 @@ var Playbook_Actions = {
 			dataType: 'json',
 			data: { id: id },
 			success: function (response) {
-
+				console.log(response);
 				var edit_action = $('.edit_action');
 				edit_action.find('.name').val(response.name);
 				edit_action.find(".filter_campaigns option[value='"+response.campaign+"']").prop('selected', true);
@@ -238,7 +234,7 @@ var Playbook_Actions = {
 				}
 
 				if(response.action_type == 'sms'){
-					edit_action.find(".from option[value='"+response.from_number +"']").prop('selected', true);
+					edit_action.find(".sms_from_number_id option[value='"+response.sms_from_number_id +"']").prop('selected', true);
 					edit_action.find('.message').val(response.message);
 					edit_action.find('.sms_per_lead').val(response.sms_per_lead);
 					edit_action.find('.days_between_sms').val(response.days_between_sms);
@@ -284,15 +280,15 @@ var Playbook_Actions = {
 		}
 
 		if(action_type == 'sms'){
-			var from_number = $(this).find('.sms .from').val(),
+			var sms_from_number_id = $(this).find('.sms .sms_from_number_id').val(),
 				template_id = $(this).find('.sms .template_id').val(),
 				sms_per_lead = $(this).find('.sms .sms_per_lead').val(),
 				days_between_sms = $(this).find('.sms .days_between_sms').val()
 			;
 
-			from_number = encodeURIComponent(from_number);
+			sms_from_number_id = encodeURIComponent(sms_from_number_id);
 
-			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&from_number='+from_number+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms+'&id='+id;
+			form_data='name='+name+'&campaign='+campaign+'&action_type='+action_type+'&sms_from_number_id='+sms_from_number_id+'&template_id='+template_id+'&sms_per_lead='+sms_per_lead+'&days_between_sms='+days_between_sms+'&id='+id;
 		}
 
 		if(action_type == 'lead'){
@@ -383,7 +379,7 @@ var Playbook_Actions = {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			}
 		});
-
+		console.log(id);
 		$.ajax({
 			url: '/tools/playbook/actions/'+id,
 			type: 'DELETE',
@@ -416,24 +412,21 @@ var Playbook_Actions = {
 $(document).ready(function () {
 	Playbook_Actions.init();
 
-	$('#addActionModal').on('hidden.bs.modal', function () {
-	    $('.add_action').trigger("reset");
+	$('#deleteActionModal').on('hidden.bs.modal', function () {
+	    Master.reset_modal_form('#'+$(this).attr('id'));
 	});
 
-	$('#editActionModal').on('hidden.bs.modal', function () {
-	    $('.edit_action').trigger("reset");
+	$('#addActionModal, #editActionModal').on('hidden.bs.modal', function(){
+		var modal = '#'+$(this).attr('id');
+	    Master.reset_modal_form(modal);
+	    $(modal).find('.filter_campaigns').val('');
+	    $(modal +" .filter_campaigns option").prop('selected', false);
 	    $('.action_type_fields').hide();
-	    $(this).find('.alert').hide();
-	});
-
-	$('#addActionModal, #deleteActionModal').on('hidden.bs.modal', function () {
-	    $(this).find('.alert').hide();
 	});
 
 	$('div.modal').on('shown.bs.modal', function(){
 	    var id = $(this).attr('id');
 	    Playbook_Actions.active_modal = $('#'+id);
 	});
-	
-	
+
 });

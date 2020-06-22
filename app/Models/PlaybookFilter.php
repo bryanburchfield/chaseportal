@@ -15,9 +15,9 @@ class PlaybookFilter extends Model
         'value',
     ];
 
-    public function contacts_playbook_filters()
+    public function playbook_touch_filters()
     {
-        return $this->hasMany('App\Models\ContactsPlaybookFilter');
+        return $this->hasMany('App\Models\PlaybookTouchFilter');
     }
 
     public function getOperatorNameAttribute()

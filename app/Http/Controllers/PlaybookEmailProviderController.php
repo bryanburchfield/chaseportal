@@ -18,7 +18,8 @@ class PlaybookEmailProviderController extends Controller
     public function index()
     {
         $page = [
-            'menuitem' => 'tools',
+            'menuitem' => 'playbook',
+            'menu' => 'tools',
             'type' => 'other',
         ];
 

@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class PlaybookAction extends Model
 {
+    use SoftDeletes;
+    use CascadesDeletes;
+
     protected $fillable = [
         'group_id',
         'name',
@@ -13,9 +18,15 @@ class PlaybookAction extends Model
         'action_type',
     ];
 
-    public function contacts_playbook_actions()
+    protected $cascadeDeletes = [
+        'playbook_lead_action',
+        'playbook_sms_action',
+        'playbook_email_action',
+    ];
+
+    public function playbook_touch_actions()
     {
-        return $this->hasMany('App\Models\ContactsPlaybookAction');
+        return $this->hasMany('App\Models\PlaybookTouchAction');
     }
 
     public function playbook_lead_action()

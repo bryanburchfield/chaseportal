@@ -29,11 +29,12 @@ class DncController extends Controller
      */
     public function index()
     {
-        $jsfile[]='dncuploader.js';
-        $page['menuitem'] = 'tools';
+        $jsfile[] = 'dncuploader.js';
+        $page['menuitem'] = 'dnc_importer';
+        $page['menu'] = 'tools';
         $page['type'] = 'page';
         $data = [
-            'jsfile'=> $jsfile,
+            'jsfile' => $jsfile,
             'page' => $page,
             'files' => $this->paginateCollection($this->getFiles()),
         ];
@@ -125,12 +126,12 @@ class DncController extends Controller
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
     public function uploadIndex()
-    {   
-        $jsfile[]='dncuploader.js';
+    {
+        $jsfile[] = 'dncuploader.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
-            'jsfile'=>$jsfile,
+            'jsfile' => $jsfile,
             'page' => $page,
         ];
 
@@ -242,7 +243,8 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $page['menuitem'] = 'tools';
+        $page['menuitem'] = 'dnc_importer';
+        $page['menu'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
@@ -265,7 +267,8 @@ class DncController extends Controller
             ->where('group_id', Auth::user()->group_id)
             ->firstOrFail();
 
-        $page['menuitem'] = 'tools';
+        $page['menuitem'] = 'dnc_importer';
+        $page['menu'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,

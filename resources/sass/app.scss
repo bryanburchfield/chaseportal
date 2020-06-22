@@ -111,9 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .flt_lft{float: left;}
 .flt_rgt{float: right;}
-.cb{clear: both;}
 .th_mw100{min-width: 100px;}
-
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 .cb{clear: both;}
 .flt_rgt {float: right;}
@@ -1604,7 +1602,12 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
+.users a.remove_user {
+    float: right;
+    margin-right: 10px;
+}
+
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
     position: relative;
     top: 2px;
     color: #d9534f;
@@ -1995,7 +1998,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i, .remove_email_service_provider_modal i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;
@@ -2043,7 +2046,7 @@ p.name i{margin-right: 5px;}
     width: 160px;
     height: 160px;
     @include border-radius(100px);
-    background: $blue;
+    background: $green;
     display: table;
     margin: 0 auto;
     margin-top: 20px;
@@ -2062,10 +2065,12 @@ p.name i{margin-right: 5px;}
         @include border-radius(25px);
     }
 
+    &.mt0{margin-top: 0;}
+    &.mt10{margin-top: 10px;}
     &.mt35{margin-top: 35px;}
 
     &:after{
-        background: $blue;
+        background: $green;
         min-height: 2px;
         width: 45%;
         position: absolute;
@@ -2091,12 +2096,16 @@ p.name i{margin-right: 5px;}
 
 div.vertical-line{
     width: 2px;
-    background-color: $blue;
+    background-color: $green;
     height: 145px;
     position: absolute;
     margin: 0 auto;
     left: 51.5%;
     display: block;
+
+    &.hidetilloaded{
+        display: none;
+    }
 }
 
 .table>thead>tr>th{
@@ -2208,19 +2217,21 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign, .add_campaign{
     @include base_style(null, $green, $fw:600);
     font-size: 15px;
     &:hover{color: darken($green,10%);}
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter{
+a.remove_filter, a.remove_action{
     color: #d9534f;
-    font-size: 15px;
+    float: right;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
-.leadfilter_row .card{overflow: auto;}
+.leadfilter_row .card, .action_row .card{overflow: auto;}
 
 .btn.btn-reset{
     @include base_style(#ccc, #333);
@@ -2583,7 +2594,81 @@ a.add_action, a.add_filter{
 }
 
 .paginate_button {padding: 0 !important;}
-table#sms_numbers_datatable tbody td .btn{max-width: 110px;}
+.btn.table_btns{max-width: 110px;}
+
+.playbook, .touch{
+    a.menu{
+        margin:0 auto;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 100px;
+        width: 125px;
+        height: 125px;
+        padding-top: 28px;
+        border:6px solid #aaa;
+
+        i{
+            margin:0 auto;
+            display: block;
+            text-align: center;
+            font-size: 55px;
+
+            &:hover{
+                 @include transition(all, ease, 0.3s);
+                color:$green;
+            }
+        }
+    }
+
+    .name{
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .switch{
+        margin:0 auto;
+        display: block;
+    }
+
+    .popover{
+        min-width: 95px;
+        .popover-content{padding: 0;}
+
+        ul{
+            list-style: none;
+            li{
+                color:#555;
+                font-weight: 600;
+                background: #ddd;
+
+                &:nth-child(odd){background: darken(#eee, 2%);}
+                &:hover{background: #fff;}
+
+                a{
+                    padding: 5px 10px;
+                    width: 100%;
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.playbook_campaign, .playbook_subcampaign{
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.playbook_name{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color:#333;
+}
 
 .note-editor.note-airframe .note-status-output,
 .note-editor.note-frame .note-status-output,
