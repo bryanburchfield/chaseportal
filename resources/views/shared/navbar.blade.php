@@ -3,7 +3,7 @@
        <div class="col-xs-2 col-sm-6 brand pl0">
 
            @if(!session()->has('isSso'))
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn flt_lft">
                 <i class="fas fa-align-left"></i>
             </button>
            @endif
