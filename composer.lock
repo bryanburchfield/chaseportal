@@ -4,29 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f2f34e32aabce8649a951f757f7c0e5",
+    "content-hash": "f643f0f8ff568fc8e42dc340b59cd874",
     "packages": [
         {
             "name": "codedge/laravel-fpdf",
-            "version": "1.6.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codedge/laravel-fpdf.git",
-                "reference": "33bb3d039558ce978d7e1a39e955ea29f7854bc9"
+                "reference": "b33e4f32c0a2c4e7c17631179dc726ccd1f78b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/33bb3d039558ce978d7e1a39e955ea29f7854bc9",
-                "reference": "33bb3d039558ce978d7e1a39e955ea29f7854bc9",
+                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/b33e4f32c0a2c4e7c17631179dc726ccd1f78b39",
+                "reference": "b33e4f32c0a2c4e7c17631179dc726ccd1f78b39",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^6.0|^7.0",
-                "php": ">=7.3"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^4.0|^5.0",
-                "phpunit/phpunit": "^8.0|^9.0"
+                "illuminate/support": "5.*|6.*",
+                "php": ">=7.2"
             },
             "type": "library",
             "extra": {
@@ -41,7 +37,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Codedge\\Fpdf\\": "src"
+                    "Codedge\\Fpdf\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -54,13 +50,13 @@
                     "email": "holger.loesken@codedge.de"
                 }
             ],
-            "description": "Laravel package to include Fpdf. It ships with Fpdf 1.82.",
+            "description": "Laravel package to include Fpdf. It ships with Fpdf 1.81.",
             "keywords": [
                 "fpdf",
                 "laravel",
                 "pdf"
             ],
-            "time": "2020-03-06T14:28:53+00:00"
+            "time": "2019-12-27T23:06:03+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
