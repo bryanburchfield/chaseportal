@@ -80,7 +80,7 @@
                 <div class="modal-body">
                     <h3>{{__('tools.confirm_delete')}} <span></span> ?</h3>
                     <input type="hidden" name="id" class="id" value="">
-                    <input type="hidden" name="playbook_id" class="playbook_id" value="{{$contacts_playbook->id}}">
+                    <input type="hidden" name="playbook_id" class="playbook_id" value="">
                 </div>
 
                 <div class="modal-footer">
