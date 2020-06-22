@@ -126,7 +126,7 @@
 
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}} <span></span>?</h3>
-                <input type="hidden" name="id" id="id" value="">
+                <input type="hidden" name="id" class="id" value="">
                 <div class="alert alert-danger hidetilloaded mt20"></div>
             </div>
 

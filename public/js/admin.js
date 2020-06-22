@@ -490,7 +490,6 @@ var Admin = {
 		$(this).parent().parent().removeClass('field_removed');
 		$(this).parent().parent().find('input.form-control').removeClass('disabled');
 		$(this).parent().parent().find('input.form-control, input.use_system_macro').attr('disabled', false);
-
 	},
 
 	add_custom_field: function (e) {
@@ -719,13 +718,13 @@ var Admin = {
 
     populate_sms_modal:function(e){
     	e.preventDefault();
-    	var modal = $(this).data('target');
-    	var id = $(this).data('id');
-    	$(modal).find('.id').val(id);
+		var id = $(this).data('id');
+		Master.pass_id_to_modal(this, id);
 
-    	if(modal.substring(1) == 'editSMSModal'){
+    	if($(this).data('target').substring(1) == 'editSMSModal'){
     		Admin.edit_sms_number(id);
     	}else{
+    		var modal = $(this).data('target');
     		$(modal).find('h3 span').text($(this).data('number'));
     	}
     },

@@ -21,7 +21,7 @@ var Master = {
 	first_search: true,
 	active_camp_search: '',
 	tick_color: '#aaa',
-	gridline_color: '#1A2738',    
+	gridline_color: '#1A2738',
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
@@ -79,15 +79,9 @@ var Master = {
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
-
-        /// tool handlers
-        $('.save_leadrule_update').on('click', this.save_leadrule_update);
-
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
-        
-        // $('.not.unread').on('click', this.set_feature_msg_read);
 	},
 
     update_sidenav:function(e){
@@ -1805,72 +1799,6 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-
-    // update_email_campaign:function(e){
-    //     e.preventDefault();
-    //     var id = $('.edit_campaign_form').find('.id').val(),
-    //         name = $('.edit_campaign_form').find('.name').val(),
-    //         description = $('.edit_campaign_form').find('.description').val(),
-    //         from = $('.edit_campaign_form').find('.from').val(),
-    //         subject = $('.edit_campaign_form').find('.subject').val(),
-    //         campaign = $('.edit_campaign_form').find('.campaign').val(),
-    //         subcampaign = $('.edit_campaign_form').find('.drip_campaigns_subcampaign').val(),
-    //         email_service_provider_id = $('.edit_campaign_form').find('.email_service_provider_id').val(),
-    //         email_field= $('.edit_campaign_form').find('.email').val(),
-    //         template_id = $('.edit_campaign_form').find('.template_id').val(),
-    //         emails_per_lead = $('.edit_campaign_form').find('.emails_per_lead').val(),
-    //         days_between_emails = $('.edit_campaign_form').find('.days_between_emails').val()
-    //     ;
-
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //         }
-    //     });
-
-    //     $.ajax({
-    //         url: '/tools/email_drip/update_campaign',
-    //         type: 'POST',
-    //         data: {
-    //             id:id,
-    //             name: name,
-    //             description: description,
-    //             from:from,
-    //             subject:subject,
-    //             email_field:email_field,
-    //             campaign: campaign,
-    //             subcampaign: subcampaign,
-    //             email_service_provider_id: email_service_provider_id,
-    //             template_id:template_id,
-    //             emails_per_lead:emails_per_lead,
-    //             days_between_emails:days_between_emails
-    //         },
-    //         success: function (response) {
-
-    //             $('.create_campaign ').find('i').remove();
-    //             location.reload();
-    //         },error: function (data) {
-
-    //             $('.create_campaign ').find('i').remove();
-    //             if (data.status === 422) {
-    //                 $('.edit_campaign_form .alert').empty();
-    //                 $('.edit_campaign_form .btn').find('i').remove();
-    //                 var errors = $.parseJSON(data.responseText);
-    //                 $.each(errors, function (key, value) {
-
-    //                     if ($.isPlainObject(value)) {
-    //                         $.each(value, function (key, value) {
-    //                             $('.edit_campaign_form .alert-danger').append('<li>'+value+'</li>');
-    //                         });
-    //                     }
-
-    //                     $('.edit_campaign_form .alert-danger').show();
-    //                 });
-    //             }
-    //         }
-    //     });
-    // },
-
     edit_campaign_modal:function(e){
         e.preventDefault();
         var id = $(this).data('campaignid');
@@ -1979,6 +1907,15 @@ var Master = {
     reset_modal_form:function(modal){
         $(modal).find('form.form').trigger("reset");
         $(modal).find('.alert').empty().hide();
+    },
+
+    pass_id_to_modal:function(that, id){
+        var modal = $(that).data('target');
+        $(modal).find('.id').val(id);
+        console.log(modal +' '+ id);
+        if($(that).data('name')){
+            $(modal).find('h3 span').html($(that).data('name'));
+        }
     }
 
 }

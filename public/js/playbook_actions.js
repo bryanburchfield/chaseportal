@@ -188,19 +188,14 @@ var Playbook_Actions = {
 	populate_action_modal:function(e){
 		e.preventDefault();
 
-		var modal = $(this).data('target');
 		var id = $(this).data('id');
-		var name = $(this).data('name');
-		$(modal).find('input.id').val(id);
+		Master.pass_id_to_modal(this, id);
 
-		if(modal.substring(1) == 'editActionModal'){
+		if($(this).data('target').substring(1) == 'editActionModal'){
 			Playbook_Actions.edit_action(id);
 		}
 
-		$(modal).find('.modal-body h3 span').text(name);
-
 		var id = $(this).data('playbook_actionid');
-
 	},
 
 	//populates action edit fields

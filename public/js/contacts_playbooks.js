@@ -288,14 +288,8 @@ var Contacts_Playbook = {
 	pass_id_to_modal:function(e){
 		e.preventDefault();
 		var id = $(this).data('id');
-		var modal = $(this).data('target');
-		$(modal).find('.id').val(id);
-
-		if($(this).data('name')){ /// pass name to delete modal
-			$(modal).find('h3 span').html($(this).data('name'));
-		}else{ // edit modal
-			Contacts_Playbook.get_playbook(id);
-		}
+		Master.pass_id_to_modal(this, id);
+		Contacts_Playbook.get_playbook(id);
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){

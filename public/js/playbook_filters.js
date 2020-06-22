@@ -126,16 +126,12 @@ var Playbook_Filters = {
 
 	populate_filter_modal:function(e){
 		e.preventDefault();
-		var modal = $(this).data('target');
 		var id = $(this).data('id');
-		var name = $(this).data('name');
-		$(modal).find('input.id').val(id);
+		Master.pass_id_to_modal(this, id);
 
-		if(modal.substring(1) == 'editFilterModal'){
+		if($(this).data('target').substring(1) == 'editFilterModal'){
 			Playbook_Filters.edit_filter(id);
 		}
-
-		$(modal).find('.modal-body h3 span').text(name);
 	},
 
 	edit_filter:function(id){
@@ -155,9 +151,9 @@ var Playbook_Filters = {
 				id:id
 			},
 		}).done(function(response){
-			console.log(response);
+
 			var type;
-			
+
 			$.when(
 				Playbook_Filters.get_fields(response.campaign)
 			).done(function() {

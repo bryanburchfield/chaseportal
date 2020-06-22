@@ -177,18 +177,13 @@ var Playbook = {
 
 	populate_delete_modal: function (e) {
 		e.preventDefault();
-		var id = $(this).data('id'),
-			name = $(this).data('name'),
-			sel = $(this).data('target')
-			;
-
-		$(sel + ' h3').find('span').text(name);
-		$(sel + ' #id').val(id);
+		var id = $(this).data('id');
+		Master.pass_id_to_modal(this, id);
 	},
 
 	delete_esp: function (e) {
 		e.preventDefault();
-		var id = $('#deleteESPModal').find('#id').val();
+		var id = $('#deleteESPModal').find('.id').val();
 		$('#deleteESPModal .alert-danger').hide();
 		$.ajaxSetup({
 			headers: {
