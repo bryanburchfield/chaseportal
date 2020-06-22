@@ -75,7 +75,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_action')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form add_action">
+            <form action="#" method="post" class="form add_action fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.action_form')
                     <input type="hidden" name="id" class="id" value="">
@@ -100,7 +100,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_action')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form edit_action">
+            <form action="#" method="post" class="form edit_action fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.action_form')
                     <input type="hidden" name="id" class="id" value="">

@@ -7,7 +7,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_playbook')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form add_playbook">
+            <form action="#" method="post" class="form add_playbook fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
                 </div>
@@ -30,7 +30,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_playbook')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form edit_playbook">
+            <form action="#" method="post" class="form edit_playbook fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.playbook_form')
                     <input type="hidden" name="id" class="id" value="">
@@ -76,7 +76,7 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_touch')}}</h4>
             </div>
 
-            <form action="#" method="post" class="form delete_touch">
+            <form action="#" method="post" class="form delete_touch fc_style">
                 <div class="modal-body">
                     <h3>{{__('tools.confirm_delete')}} <span></span> ?</h3>
                     <input type="hidden" name="id" class="id" value="">

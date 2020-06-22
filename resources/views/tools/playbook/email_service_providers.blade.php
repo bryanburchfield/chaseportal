@@ -75,7 +75,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form add_esp">
+                <form action="#" method="post" class="form add_esp fc_style">
                     @include('tools.playbook.shared.email_service_provider_form')
                     <button type="submit" class="btn btn-primary add_esp add_btn_loader">{{__('tools.add_provider')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
@@ -100,7 +100,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="post" class="form edit_esp">
+                <form action="#" method="post" class="form edit_esp fc_style">
                     @include('tools.playbook.shared.email_service_provider_form')
                     <input type="hidden" name="id" class="id" value="">
                     <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>

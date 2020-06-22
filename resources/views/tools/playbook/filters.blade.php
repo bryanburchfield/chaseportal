@@ -79,7 +79,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.add_filter')}}</h4>
             </div>
-            <form method="post" class="form add_filter">
+            <form method="post" class="form add_filter fc_style">
                 <div class="modal-body">
                     @include('tools.playbook.shared.filter_form')
                 </div>
@@ -105,7 +105,7 @@
 
             <div class="modal-body">
                 <h3><span></span></h3><br>
-                <form action="#" method="post" class="form edit_filter">
+                <form action="#" method="post" class="form edit_filter fc_style">
                     @method('PATCH')
                     @include('tools.playbook.shared.filter_form')
                     <input type="hidden" name="id" class="id" value="{{old('id')}}">
