@@ -31,6 +31,8 @@ use Illuminate\Support\Facades\URL;
 use Twilio\Rest\Client as Twilio;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Exceptions\TwilioException;
 
 class ContactsPlaybookService
 {
@@ -39,6 +41,10 @@ class ContactsPlaybookService
 
     private $powerImportApis = [];
     private $twilio;
+
+    // cache sql server records for speed
+    private $script;
+    private $campaign;
 
     /**
      * Run each active playbook in the background
@@ -94,8 +100,8 @@ class ContactsPlaybookService
             // Get query
             list($sql, $bind) = $this->buildSql($playbook_touch);
 
-            Log::debug($sql);
-            Log::debug($bind);
+            // Log::debug($sql);
+            // Log::debug($bind);
 
             $results = $this->runSql($sql, $bind);
 
@@ -372,10 +378,14 @@ class ContactsPlaybookService
                 $result = $this->actionSms($playbook_touch_action, $rec);
                 break;
         }
+
+        return $result;
     }
 
     private function actionLead(PlaybookTouchAction $playbook_touch_action, $rec)
     {
+        $this->echo('Moving Lead: ' . $rec['lead_id']);
+
         $playbook_action = $playbook_touch_action->playbook_action;
 
         $api = $this->initApi(Auth::user()->db);
@@ -392,17 +402,14 @@ class ContactsPlaybookService
             $data['CallStatus'] = $playbook_action->playbook_lead_action->to_callstatus;
         }
 
-        echo "Moving Lead: " . $rec['lead_id'] . "\n";
-        dump($data);
-
-        // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+        $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
 
         return true;
     }
 
     private function actionEmail(PlaybookTouchAction $playbook_touch_action, $rec)
     {
-        echo "Email Lead: " . $rec['lead_id'] . "\n";
+        $this->echo('Email Lead: ' . $rec['lead_id']);
 
         $playbook_action = $playbook_touch_action->playbook_action;
 
@@ -444,7 +451,7 @@ class ContactsPlaybookService
 
     private function actionSms(PlaybookTouchAction $playbook_touch_action, $rec)
     {
-        echo "SMS Lead: " . $rec['lead_id'] . "\n";
+        $this->echo('SMS Lead: ' . $rec['lead_id']);
 
         $playbook_action = $playbook_touch_action->playbook_action;
 
@@ -487,12 +494,11 @@ class ContactsPlaybookService
 
 
         // TODO:  REMOVE AFTER TESTING
-        // $rec['PrimaryPhone'] = '4076175882';
-        $rec['PrimaryPhone'] = '3212629660';
+        $rec['PrimaryPhone'] = '4076175882';
 
 
 
-        echo "sending message\n";
+
         try {
             $message = $this->twilio->messages->create(
                 $rec['PrimaryPhone'],
@@ -501,8 +507,8 @@ class ContactsPlaybookService
                     'body' => $body,
                 ]
             );
-        } catch (Exception $e) {
-            echo "SMS Failed\n";
+        } catch (TwilioException $e) {
+            $this->echo('SMS Failed ' . $e->getMessage());
             return false;
         }
 
@@ -567,27 +573,36 @@ class ContactsPlaybookService
 
     private function mergeTemplate($template_id, $campaign, $rec)
     {
-        // load body from template
-        $script = Script::find($template_id);
-        if (!$script) {
-            return false;
+        if (empty($this->script) || $this->script->id != $template_id) {
+            // load body from template
+            $this->script = Script::find($template_id);
+            if (!$this->script) {
+                return false;
+            }
         }
 
-        return $this->mergeFields($script->HtmlContent, $campaign, $rec);
+        return $this->mergeFields($this->script->HtmlContent, $campaign, $rec);
     }
 
     private function mergeFields($text, $campaign, $rec)
     {
         // get list of mergable fields
         if (!empty($campaign)) {
-            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
-                ->where('CampaignName', $campaign)
-                ->first();
+            if (empty($this->campaign) || $this->campaign->CampaignName != $campaign) {
+                $this->campaign = Campaign::where('GroupId', Auth::user()->group_id)
+                    ->where('CampaignName', $campaign)
+                    ->with('advancedTable.advancedTableFields.fieldType')
+                    ->first();
+            }
         } else {
             $campaign = new Campaign;
         }
 
-        $fields = array_keys($campaign->getFilterFields());
+        $fields = array_keys($this->campaign->getFilterFields());
+
+        // make all keys lowercase
+        $rec = array_change_key_case($rec, CASE_LOWER);
+        $fields = array_map('strtolower', $fields);
 
         // do merge
         foreach ($fields as $field) {
@@ -606,10 +621,11 @@ class ContactsPlaybookService
 
     private function getHistory(PlaybookTouchAction $playbook_touch_action, $lead_id)
     {
-        return PlaybookRun::where('contacts_playbook_id', $playbook_touch_action->contacts_playbook->contacts_playbook_id)
+        return PlaybookRun::where('contacts_playbook_id', $playbook_touch_action->playbook_touch->contacts_playbook_id)
             ->join('playbook_run_touches', 'playbook_run_touches.playbook_run_id', '=', 'playbook_runs.id')
             ->join('playbook_run_touch_actions', 'playbook_run_touch_actions.playbook_run_touch_id', '=', 'playbook_run_touches.id')
             ->join('playbook_run_touch_action_details', 'playbook_run_touch_action_details.playbook_run_touch_action_id', '=', 'playbook_run_touch_actions.id')
+            ->where('playbook_run_touch_actions.playbook_action_id', $playbook_touch_action->playbook_action_id)
             ->where('reporting_db', Auth::user()->db)
             ->where('lead_id', $lead_id)
             ->select('playbook_run_touch_action_details.created_at')
@@ -629,14 +645,19 @@ class ContactsPlaybookService
 
     private function initTwilio()
     {
-        $sid    = config('twilio.sid');
-        $token  = config('twilio.token');
+        $sid = config('twilio.sid');
+        $token = config('twilio.token');
 
-        $this->twilio = new Twilio($sid, $token);
+        try {
+            $this->twilio = new Twilio($sid, $token);
+        } catch (ConfigurationException $e) {
+            $this->echo('FAILED ' . $e->getMessage());
+        }
     }
 
     private function echo($msg = null)
     {
         echo date('Y-m-d H:i:s') . ': ' . $msg . "\n";
+        Log::debug($msg);
     }
 }
