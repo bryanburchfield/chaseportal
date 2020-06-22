@@ -150,7 +150,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
                         <a href="{{ URL::previous() }}"  class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
                         {!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
-                        <div class="alert alert-danger {{$mode}}_rule_error mt20"></div>
+                        <div class="alert alert-danger {{$mode}}_rule_error mt20 hidetilloaded"></div>
                     {!! Form::close() !!}
                     </div>
                 </div>
