@@ -66,11 +66,11 @@ class Kernel extends ConsoleKernel
         }
 
         // Run Contacts Playbooks
-        $schedule->call(function () {
-            ContactsPlaybookService::execute();
-        })
-            ->hourly()
-            ->runInBackground();
+        // $schedule->call(function () {
+        //     ContactsPlaybookService::execute();
+        // })
+        //     ->hourly()
+        //     ->runInBackground();
     }
 
     /**
