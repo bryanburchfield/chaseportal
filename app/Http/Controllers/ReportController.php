@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AutomatedReport;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -26,17 +27,34 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         // Check if group_id = -1 then force user to select (for sso reports)
-        // Auth::user()->group_id = ???;
-        // Auth::user()->save();
-
+        if (Auth::user()->group_id == -1) {
+            return $this->setGroupForm();
+        }
 
         $this->reportservice->report->setDates();
 
-        $results = [];
         // Push old input to form
         $request->flash();
 
-        return $this->returnView($results);
+        return $this->returnView();
+    }
+
+    private function setGroupForm()
+    {
+        $data = [
+            'report' => $this->reportName,
+            'groups' => Group::allGroups(),
+        ];
+
+        return view('reports.choose_group')->with($data);
+    }
+
+    public function setGroup(Request $request)
+    {
+        Auth::user()->group_id = $request->group_id;
+        Auth::user()->save();
+
+        return $this->index($request);
     }
 
     public function info()
@@ -76,7 +94,7 @@ class ReportController extends Controller
         return $this->reportservice->report->emailReport($request);
     }
 
-    public function returnView($results, MessageBag $errors = null)
+    public function returnView($results = [], MessageBag $errors = null)
     {
         $view = $this->reportservice->viewName();
         $pagedata = $this->reportservice->getPageData();

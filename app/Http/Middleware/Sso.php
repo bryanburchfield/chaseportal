@@ -21,7 +21,6 @@ class Sso
     {
         // if already logged in, don't bother
         if (Auth::guest()) {
-
             // Make sure token and server are passed
             if ($request->missing('Token') || $request->missing('Server')) {
                 abort(403, 'Unauthorized');
@@ -58,12 +57,10 @@ class Sso
                     abort(403, 'Unauthorized');
                 }
 
-                // Abort if group < -1,  set to 777 if == -1
+                // Abort if group < -1
                 $api_user->GroupId = (int) $api_user->GroupId;
                 if ($api_user->GroupId < -1) {
                     abort(403, 'Unauthorized');
-                } elseif ($api_user->GroupId == -1) {
-                    $api_user->GroupId = 777;
                 }
 
                 // check role
