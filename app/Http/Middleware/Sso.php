@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use Closure;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Facades\Auth;
@@ -33,16 +34,21 @@ class Sso
             $jar = new CookieJar();
             $client = new Client();
 
-            $response = $client->get(
-                $url,
-                [
-                    'cookies' => $jar,
-                    'query' => [
-                        'Token' => $request->query('Token'),
-                        'v' => 2,
+            try {
+
+                $response = $client->get(
+                    $url,
+                    [
+                        'cookies' => $jar,
+                        'query' => [
+                            'Token' => $request->query('Token'),
+                            'v' => 2,
+                        ]
                     ]
-                ]
-            );
+                );
+            } catch (Exception $e) {
+                abort(403, 'Unauthorized');
+            }
 
             try {
                 $api_user = json_decode($response->getBody()->getContents());
@@ -78,7 +84,7 @@ class Sso
                     'type' => $api_user->Role,
                     'group_id' => $api_user->GroupId,
                     'reporting_db' => $api_user->ReportingDatabase,
-                    'timezone' => 'Eastern Standard Time',
+                    'timezone' => '',
                 ];
             } catch (\Throwable $th) {
                 abort(403, 'Unauthorized');

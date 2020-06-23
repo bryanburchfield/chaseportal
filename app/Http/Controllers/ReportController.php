@@ -8,12 +8,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
+use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    use SqlServerTraits;
+    use TimeTraits;
 
     protected $reportName;
     protected $reportservice;
@@ -26,9 +30,18 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        // Check if group_id = -1 then force user to select (for sso reports)
-        if (Auth::user()->group_id == -1) {
-            return $this->setGroupForm();
+        // SSO Checks
+        if (session('isSso', 0)) {
+            // Check if group_id = -1 then force user to select
+            if (Auth::user()->group_id == -1) {
+                return $this->setGroupForm();
+            }
+
+            // Set timezone if not already
+            if (empty(Auth::user()->tz)) {
+                Auth::user()->tz = $this->getSsoTz();
+                Auth::user()->save();
+            }
         }
 
         $this->reportservice->report->setDates();
@@ -55,6 +68,37 @@ class ReportController extends Controller
         Auth::user()->save();
 
         return $this->index($request);
+    }
+
+    private function getSsoTz()
+    {
+        $sql = "SET NOCOUNT ON;
+
+    DECLARE 
+    @TimeZoneStr varchar(3),
+    @TimeZone int
+
+	SET @TimeZone = dbo.GetSettingEx (:group, '', 'TimeZone', 2)
+
+	SET @TimeZoneStr='EST'	
+
+	SELECT @TimeZoneStr = timezone
+	FROM StateTimeZones
+	WHERE id = @TimeZone
+
+    SELECT @TimeZoneStr as TZ";
+
+        $bind = ['group' => Auth::user()->group_id];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $tz = 'EST';
+        } else {
+            $tz = $results[0]['TZ'];
+        }
+
+        return $this->abbrToText($tz);
     }
 
     public function info()
