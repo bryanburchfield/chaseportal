@@ -41,7 +41,7 @@ trait ReportExportTraits
         }
 
         if (empty($request->email)) {
-            return $pdf->Output();
+            return $pdf->Output('D', 'report.pdf');
         } else {
             return $pdf->Output('S');
         }
