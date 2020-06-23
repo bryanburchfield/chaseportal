@@ -9,6 +9,7 @@ var Contacts_Playbook = {
 	        }
 	    }
 	}),
+	playbook_id:'',
 	pb_campaign:'',
     actions: $('select.action_type').first().find('option').length -1,
     actions_used:$('.action_row').length,
@@ -290,6 +291,7 @@ var Contacts_Playbook = {
 		var id = $(this).data('id');
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
+		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -803,6 +805,7 @@ var Contacts_Playbook = {
                     }
                 });
 
+                $('.add_btn_loader i').remove();
                 $('.add_rule_error.alert li').first().remove();
             }
         });
@@ -871,7 +874,6 @@ var Contacts_Playbook = {
 	delete_touch:function(e){
 		e.preventDefault();
 		var playbook_touch_id = $('form.delete_touch').find('.id').val();
-		var playbook_id = $('.playbook_id').val();
 
 		$.ajaxSetup({
 	        headers: {
@@ -885,7 +887,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        success:function(response){
                 if (response.status == 'success') {
-					window.location.href = '/tools/playbook/touches/'+playbook_id;
+					window.location.href = '/tools/playbook/touches/'+Contacts_Playbook.playbook_id;
 				}
 	        }
 	    });

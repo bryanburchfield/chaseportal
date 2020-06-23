@@ -17,7 +17,7 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
 			    		<div class="tab-content">
-                            <div class="tab-pane active mt30">
+                            <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('tools.playbook.shared.topnav', ['playbook_page' => 'filters'])
 
