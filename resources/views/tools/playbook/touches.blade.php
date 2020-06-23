@@ -32,11 +32,11 @@
                             <a href="#"
                                 class="menu"
                                 data-toggle="popover"
-                                data-trigger="focus"
+                                {{-- data-trigger="focus" --}}
                                 data-content="<div>
                                     <ul>
                                         <li><a href='{{ action('PlaybookTouchController@updatePlaybookTouchForm', ['id' => $touch->id])}}'>{{__('tools.edit')}}</a></li>
-                                        <li><a href='#' class='delete_touch_modal' data-id='{{$touch->id}}' data-toggle='modal' data-target='#deleteTouchModal' data-name='{{$touch->name}}'>{{__('tools.delete')}}</a></li>
+                                        <li><a href='#' class='delete_touch_modal' data-id='{{$touch->id}}' data-playbook_id='{{$contacts_playbook->id}}' data-toggle='modal' data-target='#deleteTouchModal' data-name='{{$touch->name}}'>{{__('tools.delete')}}</a></li>
                                     </ul></div>">
                                 <i class="fas fa-fingerprint"></i>
                             </a>
