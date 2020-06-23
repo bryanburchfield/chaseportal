@@ -21,6 +21,10 @@ $green: #33A09B;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=1); 
 }
 
+@mixin form_control_style(){
+    background: #eee !important;
+}
+
 body, html {
     height: 100%;
 }
@@ -52,6 +56,12 @@ h1, h2, h3, h4, h5, h6 {
     background-repeat: no-repeat;
     background-color: rgba(255, 255, 255, 0.88);
     background-position: center;
+}
+
+.fc_style, .tools{
+    .form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }   
 }
 
 .container-fluid.bg.dashboard.p20 {
