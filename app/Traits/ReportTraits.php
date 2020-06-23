@@ -117,22 +117,27 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '01-01-190
 
     public function getAllReps($rollups = false)
     {
-        $bind = [];
+        if (session('ssoRelativeReps', 0)) {
+            $sql = "SELECT RepName as Campaign FROM dbo.GetAllRelativeReps(:username)";
+            $bind = ['username' => session('ssoUsername')];
+        } else {
+            $bind = [];
 
-        $sql = '';
-        $union = '';
+            $sql = '';
+            $union = '';
 
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
+            foreach (Auth::user()->getDatabaseList() as $i => $db) {
+                $bind['groupid' . $i] = Auth::user()->group_id;
 
-            $sql .= " $union SELECT RepName
+                $sql .= " $union SELECT RepName
             FROM [$db].[dbo].[Reps]
             WHERE isActive = 1
             AND GroupId = :groupid$i";
 
-            $union = ' UNION';
+                $union = ' UNION';
+            }
+            $sql .= " ORDER BY RepName";
         }
-        $sql .= " ORDER BY RepName";
 
         $results = resultsToList($this->runSql($sql, $bind));
 

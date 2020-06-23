@@ -73,7 +73,7 @@ class Sso
                 $api_user->Role = strtolower($api_user->Role);
                 if (
                     $api_user->Role != 'client' &&
-                    $api_user->Role != 'admin' &&
+                    $api_user->Role != 'administrator' &&
                     $api_user->Role != 'superadmin'
                 ) {
                     abort(403, 'Unauthorized');
@@ -98,8 +98,14 @@ class Sso
                 abort(403, 'Unauthorized');
             }
 
-            // set 'sso' on session
+            // set 'sso' on session and save original name
             session(['isSso' => 1]);
+            session(['ssoUsername' => $api_user->Username]);
+
+            // set var if superadmin
+            if ($api_user->GroupId == -1) {
+                session(['isSsoSuperadmin' => 1]);
+            }
 
             // Login as that user
             Auth::login($user);

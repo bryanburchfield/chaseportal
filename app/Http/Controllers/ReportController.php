@@ -35,6 +35,9 @@ class ReportController extends Controller
             // Check if group_id = -1 then force user to select
             if (Auth::user()->group_id == -1) {
                 return $this->setGroupForm();
+            } else {
+                // see if they have relative camps/reps
+                $this->getSsoRestrictions();
             }
 
             // Set timezone if not already
@@ -99,6 +102,23 @@ class ReportController extends Controller
         }
 
         return $this->abbrToText($tz);
+    }
+
+    private function getSsoRestrictions()
+    {
+        $sql = "SET NOCOUNT ON;
+      SELECT 'Camps' = dbo.UseRelativeCampaigns(:username1, 1);
+      SELECT 'Reps' = dbo.UseRelativeReps(:username2);";
+
+        $bind = [
+            'username1' => session('ssoUsername'),
+            'username2' => session('ssoUsername'),
+        ];
+
+        list($camps, $reps) = $this->runMultiSql($sql, $bind);
+
+        session(['ssoRelativeCampaigns' => $camps[0]['Camps']]);
+        session(['ssoRelativeReps' => $reps[0]['Reps']]);
     }
 
     public function info()
