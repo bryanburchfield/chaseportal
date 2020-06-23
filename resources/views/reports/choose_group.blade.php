@@ -1,5 +1,5 @@
 @extends('layouts.dash')
-@section('title', __('widgets.admin'))
+@section('title', 'Select Group')
 
 @section('content')
 
