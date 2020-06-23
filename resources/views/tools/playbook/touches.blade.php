@@ -13,11 +13,12 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt50 tools">
 			    <div class="row">
-                    
+                   
 			    	<div class="col-sm-12">
-                        <h2 class="mb20">{{__('tools.playbook_touches')}}</h2>
+                        <h2 class="bbnone">{{__('tools.playbook_touches')}}</h2>
+                        @include('tools.playbook.shared.topnav', ['playbook_page' => 'touches'])
 
-                        <div class="col-sm-6 mt0 p0 mb30 card">
+                        <div class="col-sm-6 mt30 p0 mb30 card tab-pane">
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
                             <h3 class="playbook_campaign">{{$contacts_playbook->campaign}} {{$contacts_playbook->subcampaign ? ': ' . $contacts_playbook->subcampaign : ''}}</h3>
                             <a href="{{action('PlaybookTouchController@addPlaybookTouchForm', [$contacts_playbook->id])}}" class="btn btn-primary flt_lft mb0 mt20">{{__('tools.add_touch')}}</a>
