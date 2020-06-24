@@ -1,6 +1,6 @@
 <input type="hidden" class="open_kpi_id" name="open_kpi_id" value="{{ old('kpi_id') }}">
 
-<div class="container-full mt20">
+<div class="container-full mt50">
     <div class="row">
         <div class="col-sm-12">
             <h2>{{__('kpi.kpi_notifications')}}</h2>
