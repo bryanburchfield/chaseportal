@@ -269,9 +269,6 @@ class CallDetails
             $where .= " AND (IsNull(DR.CallStatus, '') NOT IN ('Inbound', 'Inbound Voicemail') AND IsNull(DR.Rep, '') <> '')";
         }
 
-
-
-
         $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
                 FROM [Dispos] D
                 WHERE D.Disposition = DR.CallStatus
@@ -335,10 +332,18 @@ class CallDetails
             $sql .= " AND $is_callable_sql = :is_callable";
         }
 
-
-
         if (strlen($this->params['calltype']) !== 0) {
             $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
+        }
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
+            $bind['ssousercamp'] = session('ssoUsername');
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
+            $bind['ssouserrep'] = session('ssoUsername');
         }
 
         // Check params
