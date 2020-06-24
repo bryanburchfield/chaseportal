@@ -148,6 +148,7 @@ return [
 	'to_subcampaign'	=> 'To Subcampaign',
 	'tools'			=> 'Tools',
 	'touches'		=> 'Touches',
+	'touch_warning'	=> 'Please create filters and actions with the same campaign as this playbook to create touches.',
 	'undo_move'		=> 'Undo Move',
 	'update_campaign'	=> 'Update Campaign',
 	'upload'		=> 'Upload',

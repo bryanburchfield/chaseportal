@@ -150,6 +150,7 @@ return [
 	'to_subcampaign'	=> 'Subcampaña',
 	'tools'			=> 'Herramientas',
 	'touches'		=> 'Toques',
+	'touch_warning'	=> 'Cree filtros y acciones con la misma campaña que este libro de jugadas para crear toques.',
 	'undo_move'		=> 'Deshacer movimiento',
 	'update_campaign'	=> 'Actualizar Campaña',
 	'upload'		=> 'Sube',
