@@ -110,6 +110,16 @@ class CallerId
                 $sql .= " AND CallerId LIKE :caller_id$i";
             }
 
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
             $union = 'UNION ALL';
         }
 

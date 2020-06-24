@@ -165,7 +165,19 @@ class ShiftReport
                     'UNKNOWN',
                     'CR_BAD_NUMBER',
                     'CR_CEPT',
-                    'CR_FAXTONE')
+                    'CR_FAXTONE')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
         GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId
         UNION
         SELECT
@@ -211,7 +223,19 @@ class ShiftReport
                         'UNKNOWN',
                         'CR_BAD_NUMBER',
                         'CR_CEPT',
-                        'CR_FAXTONE')
+                        'CR_FAXTONE')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
+                $bind['ssousercamp2' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
         GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId";
 
             $union = 'UNION ALL';

@@ -147,7 +147,19 @@ class ProductionReport
                     WHERE dr.GroupId = :group_id$i
                     AND dr.Date >= :startdate$i
                     AND dr.Date < :enddate$i
-                    AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')
+                    AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
                     GROUP BY dr.CallStatus, dr.GroupId";
             $union = "UNION";
         }
@@ -188,6 +200,16 @@ class ProductionReport
         SET @query = @query + N'dr.Date between '''+CAST(:startdate1$i as nvarchar)+''' and '''+CAST(:enddate1$i as nvarchar)+''' AND
                 (((d.GroupId=dr.GroupId OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR
                 dr.CallStatus = ''UNFINISHED'')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns('''+CAST(:ssousercamp2$i as varchar)+''', 1))";
+                $bind['ssousercamp2' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps('''+CAST(:ssouserrep2$i as varchar)+'''))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
+            }
 
             $union = 'UNION';
         }
