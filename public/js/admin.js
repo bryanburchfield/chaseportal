@@ -517,7 +517,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'get_client_tables',
+			url: '/admin/get_client_tables',
 			type: 'POST',
 			dataType: 'json',
 			data: { group_id: group_id, database: database },
@@ -548,7 +548,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'get_table_fields',
+			url: '/admin/get_table_fields',
 			type: 'POST',
 			dataType: 'json',
 			data: { table_name: table_name, database: database },
