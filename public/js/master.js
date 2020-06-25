@@ -103,10 +103,10 @@ var Master = {
         $('#sidebar').empty();
 
         if($(this).hasClass('back_to_sidenav')){
-            var path = '/dashboards/admin/load_sidenav';
+            var path = '/admin/load_sidenav';
         }else{
             var path = $(this).data('path');
-            path = '/dashboards/admin/'+path;
+            path = '/admin/'+path;
             console.log(path);
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
