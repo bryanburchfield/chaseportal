@@ -4,15 +4,15 @@ namespace App\Services\Reports;
 
 use App\Traits\BwrTraits;
 use App\Traits\CampaignTraits;
+use App\Traits\ReportTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \App\Traits\ReportTraits;
 
 class BwrProductionReport
 {
-    use ReportTraits;
-    use CampaignTraits;
     use BwrTraits;
+    use CampaignTraits;
+    use ReportTraits;
 
     public function __construct()
     {
@@ -26,10 +26,7 @@ class BwrProductionReport
         $this->params['programs'] = [];
         $this->params['skills'] = [];
         $this->params['hasTotals'] = true;
-        $this->params['columns'] = [
-            'Rep' => 'reports.rep',
-            'ManHours' => 'reports.manhours',
-        ];
+        $this->params['columns'] = [];  // columns are mostly dynamic
     }
 
     public function getFilters()
@@ -51,13 +48,13 @@ class BwrProductionReport
 
     public function getInfo()
     {
-        // Columns are dynamic, so here are the static ones
+        // Columns are mostly dynamic, so here are the static ones
         $columns = [
             'Rep' => 'reports.rep',
             'ManHours' => 'reports.manhours',
             'Connects' => 'reports.connects',
-            'Calls' => 'reports.calls',
             'Contacts' => 'reports.contacts',
+            'ContsPerHour' => 'reports.contacts_per_manhour',
             'Sales' => 'reports.sales',
             'SalesHr' => 'reports.sales_per_manhour',
         ];
@@ -78,24 +75,86 @@ class BwrProductionReport
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
+        $skills = str_replace("'", "''", implode('!#!', $this->params['skills']));
 
-        // Check params
-        if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
-            $sort = '';
-            foreach ($this->params['orderby'] as $col => $dir) {
-                $sort .= ",[$col] $dir";
-            }
-            $orderby = ' ORDER BY ' . substr($sort, 1);
-        } else {
-            $orderby = ' ORDER BY [Rep]';
+        // Reps and CallStatuses tables
+        $reps = [];
+        $stats = [];
+
+        // Get Rep hours worked
+        $sql = "SET NOCOUNT ON;";
+
+        if (!empty($this->params['skills'])) {
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$skills', '!#!');";
         }
 
-        $bind['group_id20'] =  Auth::user()->group_id;
-        $bind['startdate20'] = $startDate;
-        $bind['enddate20'] = $endDate;
-        $bind['orderby'] = $orderby;
+        $sql .= "
+        SELECT Rep, SUM(Duration) ManHours FROM (";
 
-        $sql = "SET NOCOUNT ON;";
+        $bind = [];
+        $union = '';
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id' . $i] =  Auth::user()->group_id;
+            $bind['startdate' . $i] = $startDate;
+            $bind['enddate' . $i] = $endDate;
+
+            $sql .= " $union SELECT Rep, Duration
+            FROM [$db].[dbo].[AgentActivity]";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE GroupId = :group_id$i
+            AND date >= :startdate$i
+            AND date < :enddate$i
+            AND [Action] NOT IN ('Paused','Login','Logout')";
+
+            if (!empty($campaigns)) {
+                $bind['campaigns' . $i] = $campaigns;
+                $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
+            }
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+            GROUP BY Rep";
+
+        $results = $this->runSql($sql, $bind);
+
+        foreach ($results as $rec) {
+            $reps[$rec['Rep']] = [
+                'Rep' => $rec['Rep'],
+                'ManHours' => $rec['ManHours'],
+                'Stats' => [],
+                'Connects' => 0,
+                'Contacts' => 0,
+                'ContsPerHour' => 0,
+                'Sales' => 0,
+                'APH' => 0,
+            ];
+        }
+
+        // Now get dialing results
+        $bind = [];
+
+        $sql = 'SET NOCOUNT ON;';
 
         if (!empty($this->params['data_sources_primary'])) {
             $data_sources_primary = str_replace("'", "''", implode('!#!', $this->params['data_sources_primary']));
@@ -125,55 +184,34 @@ class BwrProductionReport
         }
 
         if (!empty($this->params['skills'])) {
-            $skills = str_replace("'", "''", implode('!#!', $this->params['skills']));
-            $bind['skills'] = $skills;
-
             $sql .= "
             CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
-            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT(:skills, '!#!');";
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$skills', '!#!');";
         }
 
         $sql .= "
-        CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key)";
+        SELECT Rep, CallStatus,
+            'Calls' = SUM(Calls),
+            'Connects' = SUM(Connects),
+            'Contacts' = SUM(Contacts),
+            'Sales' = SUM(Sales)
+        FROM (
+        ";
 
-        if (!empty($campaigns)) {
-            $bind['campaigns'] = $campaigns;
-
-            $sql .= "
-            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
-        }
-
-        $sql .= "
-        DECLARE
-            @cols NVARCHAR(MAX),
-            @params NVARCHAR(500),
-            @query NVARCHAR(MAX),
-            @temp_table_name NVARCHAR(100)
-
-        SET @cols = ''
-        SET @temp_table_name = '[##' + REPLACE(NEWID(), '-','') + ']'
-
-        SELECT  @cols = STUFF((
-          SELECT '],[' + t2.CallStatus
-          FROM (";
-
-        $union = "";
+        $union = '';
         foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id' . $i] = Auth::user()->group_id;
+            $bind['group_id' . $i] =  Auth::user()->group_id;
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= "
-                    $union SELECT dr.CallStatus
-                    FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-                    LEFT JOIN [$db].[dbo].[Dispos] d on d.Disposition = dr.CallStatus
-                    INNER JOIN Leads L ON L.id = dr.LeadId 
-                    INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
-
-            if (!empty($campaigns)) {
-                $sql .= "
-                    INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign";
-            }
+            $sql .= " $union SELECT DR.Rep, DR.CallStatus,
+            'Calls' = 1,
+            'Connects' = CASE WHEN DI.Type > 0 THEN 1 ELSE 0 END,
+            'Contacts' = CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END,
+            'Sales' = CASE WHEN DI.Type = 3 THEN 1 ELSE 0 END
+            FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId 
+            INNER JOIN [$db].[dbo].[ADVANCED_BWR_Master_Table] A ON A.LeadID = L.IdGuid";
 
             if (!empty($this->params['data_sources_primary'])) {
                 $sql .= "
@@ -190,309 +228,84 @@ class BwrProductionReport
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
-                    INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = dr.Rep
-                    INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
-            }
-
-            $sql .= "
-                    WHERE dr.GroupId = :group_id$i
-                    AND dr.Date >= :startdate$i
-                    AND dr.Date < :enddate$i
-                    AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type >= 0) OR dr.CallStatus = 'UNFINISHED')";
-
-            if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
-                $bind['ssousercamp1' . $i] = session('ssoUsername');
-            }
-
-            if (session('ssoRelativeReps', 0)) {
-                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
-                $bind['ssouserrep1' . $i] = session('ssoUsername');
-            }
-
-            $sql .= "
-                    GROUP BY dr.CallStatus, dr.GroupId";
-            $union = "UNION";
-        }
-        $sql .= ") AS t2
-            ORDER BY '],[' + t2.CallStatus
-            FOR XML PATH('')
-            ), 1, 2, '') + ']'
-
-        SET @query = N'SELECT Rep, CAST(0 as numeric(18,2)) as ManHours, '+ @cols +',
-        CAST(0 as int) as Calls, 
-        CAST(0 as int) as Connects, 
-        CAST(0 as int) as Contacts,
-        CAST(0 as numeric(18,2)) as ContactsPerHour, 
-        CAST(0 as int) as SalesCount, 
-        CAST(0 as numeric(18,2)) as SalesPerHour 
-        INTO ' + @temp_table_name + N'
-        FROM (";
-
-        $union = "";
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id1' . $i] = Auth::user()->group_id;
-            $bind['startdate1' . $i] = $startDate;
-            $bind['enddate1' . $i] = $endDate;
-
-            $sql .= "
-            $union SELECT dr.CallStatus, dr.Rep
-            FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-            LEFT JOIN Dispos d on d.Disposition = dr.CallStatus
-            INNER JOIN Leads L ON L.id = dr.LeadId 
-            INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
-
-            if (!empty($this->params['skills'])) {
-                $sql .= "
-                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = dr.Rep
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
                 INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
             }
 
-            if (!empty($campaigns)) {
-                $sql .= "
-                INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign";
-            }
-
-            if (!empty($this->params['data_sources_primary'])) {
-                $sql .= "
-                INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
-            }
-            if (!empty($this->params['data_sources_secondary'])) {
-                $sql .= "
-                INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
-            }
-            if (!empty($this->params['programs'])) {
-                $sql .= "
-                INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
-            }
-
             $sql .= "
-                WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+''' AND '
+            CROSS APPLY (
+                SELECT TOP 1 [Type]
+                FROM [$db].[dbo].[Dispos]
+                WHERE Disposition = DR.CallStatus
+                AND (GroupId = DR.GroupId OR IsSystem = 1)
+                AND (Campaign = DR.Campaign OR Campaign = '')
+                ORDER BY [id]) DI
+            WHERE DR.GroupId = :group_id$i
+            AND DR.Date >= :startdate$i
+            AND DR.Date < :enddate$i
+            AND DR.Rep != ''
+            AND DR.CallStatus NOT LIKE 'CR[_]%'
+            AND DR.CallStatus NOT IN ('','Inbound','Inbound Voicemail','SMS Delivered','SMS Received')";
 
-        SET @query = @query + N'dr.Date between '''+CAST(:startdate1$i as nvarchar)+''' and '''+CAST(:enddate1$i as nvarchar)+''' AND
-                (((d.GroupId=dr.GroupId OR d.IsSystem=1)  AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type >= 0) OR
-                dr.CallStatus = ''UNFINISHED'')";
+            if (!empty($campaigns)) {
+                $bind['campaigns1' . $i] = $campaigns;
+                $sql .= " AND DR.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns1$i, '!#!'))";
+            }
 
             if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns('''+CAST(:ssousercamp2$i as varchar)+''', 1))";
+                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
                 $bind['ssousercamp2' . $i] = session('ssoUsername');
             }
 
             if (session('ssoRelativeReps', 0)) {
-                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps('''+CAST(:ssouserrep2$i as varchar)+'''))";
+                $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
                 $bind['ssouserrep2' . $i] = session('ssoUsername');
             }
 
-            $union = 'UNION';
-        }
-
-        $sql .= ") p
-        PIVOT
-        (
-        count(CallStatus)
-        FOR CallStatus IN
-        ( '+
-        @cols +' )
-        ) AS pvt
-        ORDER BY Rep'
-
-        SET @params = '@CampaignIN varchar(max)'
-
-        BEGIN TRY";
-
-        if (!empty($campaigns)) {
-            $sql .= "
-            execute sp_executesql @query";
-        } else {
-            $bind['campaigns1'] = $campaigns;
-
-            $sql .= "
-            execute sp_executesql
-                @query, @params,
-                @CampaignIN=:campaigns1";
-        }
-
-        $sql .= "
-            IF OBJECT_ID('tempdb..' + @temp_table_name ) IS NULL
-                RETURN
-
-            set @query = N'UPDATE ' + @temp_table_name + N' SET ManHours = IsNull(a.ManHours/3600, 0)
-            FROM (SELECT Rep, SUM(Duration) as ManHours
-                  FROM AgentActivity aa WITH(NOLOCK)'";
-
-        if (!empty($campaigns)) {
-            $sql .= "
-                set @query = @query + N' INNER JOIN #SelectedCampaign c on c.CampaignName = aa.Campaign'";
-        }
-
-        $sql .= "
-            set @query = @query + N' WHERE aa.GroupId = ' + CAST(:group_id20 as nvarchar) + N' AND '
-
-            set @query = @query + N'aa.Date >= '''+CAST(:startdate20 as nvarchar)+''' AND aa.Date < '''+CAST(:enddate20 as nvarchar)+''' AND
-                    [Action] <> ''Paused''
-                GROUP BY Rep) a
-            WHERE
-                ' + @temp_table_name + N'.Rep = a.Rep'";
-
-        if (!empty($campaigns)) {
-            $bind['campaigns20'] = $campaigns;
-
-            $sql .= "
-            execute sp_executesql
-            @query, @params,
-            @CampaignIN=:campaigns20";
-        } else {
-            $sql .= "
-            execute sp_executesql @query";
-        }
-
-        $sql .= "
-            CREATE TABLE #DialingResultsStats(
-                Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS,
-                [Type] int,
-                [Count] int
-            )
-
-                INSERT INTO #DialingResultsStats
-                SELECT Rep, Type, SUM(Cnt) as [Count]
-                FROM (";
-
-        $union = '';
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id3' . $i] = Auth::user()->group_id;
-            $bind['startdate3' . $i] = $startDate;
-            $bind['enddate3' . $i] = $endDate;
-
-            $sql .= "
-                $union SELECT r.Rep, d.Type, count(r.id) as [Cnt]
-                FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                INNER JOIN Leads L ON L.id = r.LeadId 
-                INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid
-                    CROSS APPLY (SELECT TOP 1 [Type] FROM Dispos WHERE Disposition=r.CallStatus AND
-                            (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
-                            ORDER BY [id]) d";
-
-            if (!empty($campaigns)) {
-                $sql .= "
-                    INNER JOIN #SelectedCampaign c on c.CampaignName = r.Campaign";
-            }
-
-            if (!empty($this->params['data_sources_primary'])) {
-                $sql .= "
-                INNER JOIN #SelectedPrimary SP on SP.Data_Source_Primary = A.Data_Source_Primary";
-            }
-            if (!empty($this->params['data_sources_secondary'])) {
-                $sql .= "
-                INNER JOIN #SelectedSecondary SS on SS.Data_Source_Secondary = A.Data_Source_Secondary";
-            }
-            if (!empty($this->params['programs'])) {
-                $sql .= "
-                INNER JOIN #SelectedProgram PP on PP.Program = A.Program";
-            }
-
-            if (!empty($this->params['skills'])) {
-                $sql .= "
-                    INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
-                    INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
-            }
-
-            $sql .= "
-                WHERE r.GroupId = :group_id3$i
-                AND r.Date >= :startdate3$i
-                AND r.Date < :enddate3$i
-                AND d.Type >= 0";
-
-            if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND r.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp3$i, 1))";
-                $bind['ssousercamp3' . $i] = session('ssoUsername');
-            }
-
-            if (session('ssoRelativeReps', 0)) {
-                $sql .= " AND r.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep3$i))";
-                $bind['ssouserrep3' . $i] = session('ssoUsername');
-            }
-
-            $sql .= "
-                GROUP BY r.Rep, d.Type";
-
             $union = 'UNION ALL';
         }
+
         $sql .= ") tmp
-                GROUP BY Rep, Type
+        GROUP BY Rep, CallStatus";
 
-            CREATE INDEX IX_CampaignType ON #DialingResultsStats (Rep, [Type]);
-            CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+            if (!count($rec)) {
+                break;
+            }
 
-            set @query = N'UPDATE ' + @temp_table_name + N' SET
-                Calls = a.Calls
-            FROM (SELECT Rep, SUM([Count]) as Calls
-                FROM #DialingResultsStats
-                GROUP BY Rep) a
-            WHERE ' + @temp_table_name + N'.Rep = a.Rep'
+            // save to stats table
+            $stats[$rec['CallStatus']] = $rec['CallStatus'];
 
-            execute sp_executesql @query
+            // see if we have this rep
+            if (!isset($reps[$rec['Rep']])) {
+                $reps[$rec['Rep']] = [
+                    'Rep' => $rec['Rep'],
+                    'ManHours' => 0,
+                    'Stats' => [],
+                    'Connects' => 0,
+                    'Contacts' => 0,
+                    'ContsPerHour' => 0,
+                    'Sales' => 0,
+                    'APH' => 0,
+                ];
+            }
 
-            set @query = N'UPDATE ' + @temp_table_name + N' SET
-                Connects = a.Connects
-            FROM (SELECT Rep, SUM([Count]) as Connects
-                FROM #DialingResultsStats
-                WHERE [Type] > 0
-                GROUP BY Rep) a
-            WHERE ' + @temp_table_name + N'.Rep = a.Rep'
+            $reps[$rec['Rep']]['Connects'] += $rec['Connects'];
+            $reps[$rec['Rep']]['Contacts'] += $rec['Contacts'];
+            $reps[$rec['Rep']]['Sales'] += $rec['Sales'];
 
-            execute sp_executesql @query
+            // save rep stats
+            if (!isset($reps[$rec['Rep']]['Stats'][$rec['CallStatus']])) {
+                $reps[$rec['Rep']]['Stats'][$rec['CallStatus']] = 0;
+            }
+            $reps[$rec['Rep']]['Stats'][$rec['CallStatus']] += $rec['Calls'];
+        }
 
-            set @query = N'UPDATE ' + @temp_table_name + N' SET
-                Contacts = a.Contacts
-            FROM (SELECT Rep, SUM([Count]) as Contacts
-                FROM #DialingResultsStats
-                WHERE [Type] > 1
-                GROUP BY Rep) a
-            WHERE ' + @temp_table_name + N'.Rep = a.Rep'
+        // sort reps and stats
+        ksort($reps, SORT_STRING | SORT_FLAG_CASE);
+        ksort($stats, SORT_STRING | SORT_FLAG_CASE);
 
-            execute sp_executesql @query
-
-            set @query = N'UPDATE ' + @temp_table_name + N' SET
-                SalesCount = a.SalesCount
-            FROM (SELECT Rep, SUM([Count]) as SalesCount
-                FROM #DialingResultsStats
-                WHERE [Type] = 3
-                GROUP BY Rep) a
-            WHERE ' + @temp_table_name + N'.Rep = a.Rep'
-
-            execute sp_executesql @query
-
-            set @query = N'UPDATE ' + @temp_table_name + N' SET
-                ContactsPerHour = Contacts/ManHours,
-                SalesPerHour = SalesCount/ManHours
-            WHERE ManHours > 0'
-
-            execute sp_executesql @query
-
-            DROP TABLE #DialingResultsStats
-        END TRY
-
-        BEGIN CATCH
-
-            DECLARE @ErrorMessage NVARCHAR(4000);
-            DECLARE @ErrorSeverity INT;
-            DECLARE @ErrorState INT;
-
-            SELECT @ErrorMessage = ERROR_MESSAGE(),
-                    @ErrorSeverity = ERROR_SEVERITY(),
-                    @ErrorState = ERROR_STATE();
-
-            RAISERROR (@ErrorMessage,
-                        @ErrorSeverity,
-                        @ErrorState
-                        );
-            return
-        END CATCH
-
-        SET @query = 'SELECT * FROM ' + @temp_table_name  + ' ' + :orderby
-        execute sp_executesql @query";
-
-        $results = $this->runSql($sql, $bind);
+        $results = $this->processResults($reps, $stats);
 
         if (empty($results)) {
             $this->params['totrows'] = 0;
@@ -502,49 +315,96 @@ class BwrProductionReport
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
         }
 
         return $this->getPage($results, $all);
     }
 
-    private function processResults($results)
+    private function processResults($reps, $stats)
     {
-        if (!count($results)) return $results;
+        $results = [];
+
+        if (!count($reps)) {
+            return $results;
+        }
+
+        // start to set up blank row
+        $zerorec = [
+            'Rep' => '',
+            'ManHours' => 0,
+        ];
 
         // Columns are variable, so set them now
-        $this->params['columns'] = [];
-        $total = [];
+        $this->params['columns'] = [
+            'Rep' => trans('reports.rep'),
+            'ManHours' => trans('reports.manhours'),
+        ];
 
-        foreach ($results[0] as $k => $v) {
-            switch ($k) {
-                case 'Rep':
-                    $k = trans('reports.rep');
-                    break;
-                case 'ManHours':
-                    $k = trans('reports.manhours');
-                    break;
+        foreach ($stats as $call_status) {
+            $this->params['columns'][] = $call_status;
+            $zerorec[$call_status] = 0;
+        }
+
+        $this->params['columns'][] = trans('reports.connects');
+        $this->params['columns'][] = trans('reports.contacts');
+        $this->params['columns'][] = trans('reports.contacts_per_manhour');
+        $this->params['columns'][] = trans('reports.sales');
+        $this->params['columns'][] = trans('reports.sales_per_manhour');
+
+        // Finish blank record
+        $zerorec['Connects'] = 0;
+        $zerorec['Contacts'] = 0;
+        $zerorec['ContsPerHour'] = 0;
+        $zerorec['Sales'] = 0;
+        $zerorec['APH'] = 0;
+
+        // Create totals record
+        $total = $zerorec;
+        $total['Rep'] = trans('reports.total') . ':';
+
+        foreach ($reps as $rep => $reprec) {
+            $row = $zerorec;
+
+            $row['Rep'] = $rep;
+            $row['ManHours'] = $reprec['ManHours'];
+            $row['Connects'] = $reprec['Connects'];
+            $row['Contacts'] = $reprec['Contacts'];
+            $row['Sales'] = $reprec['Sales'];
+
+            // Add to totals
+            $total['ManHours'] += $reprec['ManHours'];
+            $total['Connects'] += $reprec['Connects'];
+            $total['Contacts'] += $reprec['Contacts'];
+            $total['Sales'] += $reprec['Sales'];
+
+            foreach ($reprec['Stats'] as $call_status => $count) {
+                $row[$call_status] = $count;
+                $total[$call_status] += $count;
             }
-            $this->params['columns'][] = $k;
-        }
 
-        // this sets the order of the columns
-        foreach ($this->params['columns'] as $k => $v) {
-            $total[$v] = '';
-        }
+            // Do calcs
+            $row['ManHours'] = number_format($row['ManHours'] / 60 / 60, 2);
 
-        foreach ($this->params['columns'] as $k) {
-            $total[$k] = 0;
-        }
-        $total[trans('reports.rep')] = trans('reports.total') . ':';
-
-        foreach ($results as &$rec) {
-            foreach ($rec as $k => $v) {
-                if ($k != 'Rep') {
-                    $k = ($k == 'ManHours') ? trans('reports.manhours') : $k;
-                    $total[$k] += $v;
-                }
+            if ($row['ManHours'] == 0) {
+                $row['ContsPerHour'] = 0;
+                $row['APH'] = 0;
+            } else {
+                $row['ContsPerHour'] = round($row['Contacts'] / $row['ManHours'], 2);
+                $row['APH'] = round($row['Sales'] / $row['ManHours'], 2);
             }
+
+            $results[] = $row;
+        }
+
+        // Do calcs
+        $total['ManHours'] = number_format($total['ManHours'] / 60 / 60, 2);
+
+        if ($total['ManHours'] == 0) {
+            $total['ContsPerHour'] = 0;
+            $total['APH'] = 0;
+        } else {
+            $total['ContsPerHour'] = round($total['Contacts'] / $total['ManHours'], 2);
+            $total['APH'] = round($total['Sales'] / $total['ManHours'], 2);
         }
 
         // Tack on the totals row
