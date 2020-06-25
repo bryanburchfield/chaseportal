@@ -37,10 +37,15 @@
                 {!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
             </div>
 
+            @can('accessSuperAdmin')
             <div class="form-group">
                 {!! Form::label('db', __('users.database')) !!}
                 {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
             </div>
+            @endcan
+            @cannot('accessSuperAdmin')
+                {!! Form::hidden('db', Auth::User()->db, ['db'=>Auth::User()->db]) !!}
+            @endcannot
 
             {{-- <div class="form-group">
                 {!! Form::label('additional_dbs', 'Database 2') !!}
