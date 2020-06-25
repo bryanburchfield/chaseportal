@@ -70,7 +70,7 @@ class ReportController extends Controller
         Auth::user()->group_id = $request->group_id;
         Auth::user()->save();
 
-        return $this->index($request);
+        return redirect()->action('ReportController@index', ['report' => $request->report]);
     }
 
     private function getSsoTz()
