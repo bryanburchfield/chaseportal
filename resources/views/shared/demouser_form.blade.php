@@ -1,4 +1,4 @@
-{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form demo_user '. $mode .'_demo_user' ]) !!}
+{!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'fc_style form demo_user '. $mode .'_demo_user' ]) !!}
 
 	<div class="form-group">
 	    {!! Form::label('name', 'Name') !!}
