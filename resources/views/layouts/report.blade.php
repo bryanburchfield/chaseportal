@@ -106,6 +106,10 @@
             $('.btn-notifications, .close_nots_bar').on('click', function () {
                 $('#sidebar_nots').toggleClass('active');
             });
+
+            $(document).keyup(function(e) {
+                if (e.keyCode === 27) $('#sidebar_nots').removeClass('active');
+            });
         });
     </script>
   </body>

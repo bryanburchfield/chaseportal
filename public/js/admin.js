@@ -673,7 +673,7 @@ var Admin = {
         });
 
         $.ajax({
-            url:'/dashboards/admin/publish_notification',
+            url:'/admin/publish_notification',
             type:'POST',
             data:{
                 id:id,
@@ -704,14 +704,14 @@ var Admin = {
     	});
 
     	$.ajax({
-    		url: '/dashboards/admin/delete_msg',
+    		url: '/admin/delete_msg',
     		type: 'POST',
     		dataType: 'json',
     		data: {
     			id: id
     		},
     		success: function (response) {
-    			window.location= "/dashboards/admin/notifications";
+    			window.location= "/admin/notifications";
     		}
     	});
     },
