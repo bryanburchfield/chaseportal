@@ -24,6 +24,15 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/process_file', 'DncController@processFile');
             });
 
+            // CDR Lookup
+            Route::get('cdr_lookup', 'AdminController@loadCdrLookup');
+            Route::post('cdr_lookup', 'AdminController@cdrLookup');
+
+            // Webook Generator
+            Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+                Route::get('webhook_generator', 'AdminController@webhookGenerator');
+            });
+
             // Playbook
             Route::prefix('playbook')->group(function () {
 
