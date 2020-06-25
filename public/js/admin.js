@@ -516,7 +516,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'get_client_tables',
+			url: '/admin/get_client_tables',
 			type: 'POST',
 			dataType: 'json',
 			data: { group_id: group_id, database: database },
@@ -547,7 +547,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: 'get_table_fields',
+			url: '/admin/get_table_fields',
 			type: 'POST',
 			dataType: 'json',
 			data: { table_name: table_name, database: database },
@@ -673,7 +673,7 @@ var Admin = {
         });
 
         $.ajax({
-            url:'/dashboards/admin/publish_notification',
+            url:'/admin/publish_notification',
             type:'POST',
             data:{
                 id:id,
@@ -704,14 +704,14 @@ var Admin = {
     	});
 
     	$.ajax({
-    		url: '/dashboards/admin/delete_msg',
+    		url: '/admin/delete_msg',
     		type: 'POST',
     		dataType: 'json',
     		data: {
     			id: id
     		},
     		success: function (response) {
-    			window.location= "/dashboards/admin/notifications";
+    			window.location= "/admin/notifications";
     		}
     	});
     },

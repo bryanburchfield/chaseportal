@@ -131,7 +131,7 @@ var KPI = {
         var group_id = $('#group_id').val();
         var kpi = $(this).parent().parent().parent().data('kpi');
 
-
+        
         if($(this).is(':checked')){
             $(this).attr('Checked','Checked');
             checked=1;

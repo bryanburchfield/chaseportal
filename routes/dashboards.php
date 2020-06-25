@@ -43,43 +43,10 @@ Route::prefix('dashboards')->group(function () {
         Route::post('campaign_search', 'MasterDashController@campaignSearch');
         Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
 
-        // Admin only
-        // prefix('admin') isn't working for some reason
-        Route::group(['middleware' => 'can:accessAdmin'], function () {
-            Route::post('admin/add_user', 'AdminController@addUser');
-            Route::post('admin/delete_user', 'AdminController@deleteUser');
-            Route::post('admin/get_user', 'AdminController@getUser');
-            Route::post('admin/update_user', 'AdminController@updateUser');
-            Route::get('admin/cdr_lookup', 'AdminController@loadCdrLookup');
-            Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
-            Route::post('admin/get_client_tables', 'AdminController@getClientTables');
-            Route::post('admin/get_table_fields', 'AdminController@getTableFields');
-            Route::get('admin/manage_users', 'AdminController@manageUsers');
-            Route::post('admin/load_admin_nav', 'AdminController@loadAdminNav');
-            Route::post('admin/load_sidenav', 'AdminController@loadSideNav');
-            Route::post('admin/load_tools_nav', 'AdminController@loadToolsNav');
-        });
-
+        // Super Admin only dashboards
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
-            Route::post('admin/add_demo_user', 'AdminController@addDemoUser');
-            Route::post('admin/update_demo_user', 'AdminController@updateDemoUser');
-            Route::get('admin/webhook_generator', 'AdminController@webhookGenerator');
-            Route::post('admin/edit_myself', 'AdminController@editMyself');
-            Route::get('admin/settings', 'AdminController@settings');
-            Route::get('admin/notifications', 'FeatureMessageController@index');
-            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
-            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
-            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
-            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
-
-            // Super Admin only dashboards
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
-            Route::get('admin/notifications', 'FeatureMessageController@index');
-            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
-            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
-            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
-            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
         });
     });
 });

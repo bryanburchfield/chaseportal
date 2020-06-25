@@ -107,6 +107,10 @@
                 $('#sidebar_nots').toggleClass('active');
             });
 
+            $(document).keyup(function(e) {
+                if (e.keyCode === 27) $('#sidebar_nots').removeClass('active');
+            });
+
             @isset($summernote)
                 $('#summernote').summernote({
                     height: 200
