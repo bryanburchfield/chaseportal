@@ -40,7 +40,7 @@
 							</div>
 
 							@if(!empty($feature_message->id))
-								<a href="{{url('/admin/notifications/')}}" class="cancel btn btn-secondary">Cancel</a>
+								<a href="{{action('FeatureMessageController@index')}}" class="cancel btn btn-secondary">Cancel</a>
 							@endif
 
 							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
