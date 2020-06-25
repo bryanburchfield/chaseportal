@@ -42,9 +42,31 @@ trait ReportTraits
 
     public function setDates()
     {
+        $start = '09:00';
+        $end = '20:00';
+
+        // If SSO, default times from SQL Server
+        if (session('isSso', 0)) {
+            $sql = "SET NOCOUNT ON;
+SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '01-01-1900 09:00:00'),
+'End' = dbo.GetSettingEx (:group2, '', 'ReportingEndTime', '01-01-1900 18:00:00')";
+
+            $bind = [
+                'group1' => Auth::user()->group_id,
+                'group2' => Auth::user()->group_id,
+            ];
+
+            $results = $this->runSql($sql, $bind);
+
+            if (!empty($results)) {
+                $start = $results[0]['Start'];
+                $end = $results[0]['End'];
+            }
+        }
+
         if (empty($this->params['datesOptional'])) {
-            $this->params['fromdate'] = Carbon::parse('today 09:00')->isoFormat('L LT');
-            $this->params['todate'] = Carbon::parse('today 20:00')->isoFormat('L LT');
+            $this->params['fromdate'] = Carbon::parse('today ' . $start)->isoFormat('L LT');
+            $this->params['todate'] = Carbon::parse('today ' . $end)->isoFormat('L LT');
         } else {
             $this->params['fromdate'] = '';
             $this->params['todate'] = '';
@@ -97,22 +119,27 @@ trait ReportTraits
 
     public function getAllReps($rollups = false)
     {
-        $bind = [];
+        if (session('ssoRelativeReps', 0)) {
+            $sql = "SELECT RepName as Campaign FROM dbo.GetAllRelativeReps(:username)";
+            $bind = ['username' => session('ssoUsername')];
+        } else {
+            $bind = [];
 
-        $sql = '';
-        $union = '';
+            $sql = '';
+            $union = '';
 
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
+            foreach (Auth::user()->getDatabaseList() as $i => $db) {
+                $bind['groupid' . $i] = Auth::user()->group_id;
 
-            $sql .= " $union SELECT RepName
+                $sql .= " $union SELECT RepName
             FROM [$db].[dbo].[Reps]
             WHERE isActive = 1
             AND GroupId = :groupid$i";
 
-            $union = ' UNION';
+                $union = ' UNION';
+            }
+            $sql .= " ORDER BY RepName";
         }
-        $sql .= " ORDER BY RepName";
 
         $results = resultsToList($this->runSql($sql, $bind));
 

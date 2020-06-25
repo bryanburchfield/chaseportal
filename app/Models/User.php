@@ -191,7 +191,6 @@ class User extends Authenticatable implements Auditable
             empty($details['name']) ||
             empty($details['group_id']) ||
             empty($details['type']) ||
-            empty($details['timezone']) ||
             empty($details['reporting_db'])
         ) {
             return false;

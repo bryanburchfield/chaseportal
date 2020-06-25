@@ -97,6 +97,17 @@ h6 {
   background-position: center;
 }
 
+.fc_style .form-control,
+.fc_style button.multiselect,
+.fc_style select.form-control,
+.fc_style textarea.form-control,
+.tools .form-control,
+.tools button.multiselect,
+.tools select.form-control,
+.tools textarea.form-control {
+  background: #eee !important;
+}
+
 .container-fluid.bg.dashboard.p20 {
   border-top: 1px solid #fff;
 }

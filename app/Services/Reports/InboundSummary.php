@@ -136,6 +136,16 @@ class InboundSummary
                 AND dr.Date >= :startdate$i
                 AND dr.Date < :enddate$i";
 
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
             $union = 'UNION ALL';
         }
 

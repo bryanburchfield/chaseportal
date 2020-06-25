@@ -121,6 +121,16 @@ class BwrCampaignCallLog
                 $sql .= " AND AA.Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps$i, '!#!'))";
             }
 
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND AA.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND AA.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
             $sql .= "GROUP BY AA.Rep";
 
             $union = 'UNION ALL';
@@ -222,6 +232,16 @@ class BwrCampaignCallLog
             if (!empty($reps)) {
                 $bind['reps1' . $i] = $reps;
                 $sql .= " AND DR.Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM [dbo].SPLIT(:reps1$i, '!#!'))";
+            }
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
             }
 
             $union = 'UNION ALL';

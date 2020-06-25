@@ -112,6 +112,16 @@ class ProductionReport
                 $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
             }
 
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
             $union = 'UNION ALL';
         }
 
@@ -190,6 +200,16 @@ class ProductionReport
             if (!empty($campaigns)) {
                 $bind['campaigns1' . $i] = $campaigns;
                 $sql .= " AND DR.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns1$i, '!#!'))";
+            }
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
+                $bind['ssousercamp2' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
             }
 
             $union = 'UNION ALL';

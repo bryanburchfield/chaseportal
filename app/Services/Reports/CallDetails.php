@@ -357,6 +357,16 @@ class CallDetails
             $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
         }
 
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
+            $bind['ssousercamp'] = session('ssoUsername');
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
+            $bind['ssouserrep'] = session('ssoUsername');
+        }
+
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
             $sort = '';

@@ -155,7 +155,14 @@ class AgentSummary
             $sql .= "
                 WHERE r.GroupId = :group_id1$i
                 AND r.Date >= :startdate1$i
-                AND r.Date < :enddate1$i
+                AND r.Date < :enddate1$i";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND r.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             ) a
             WHERE [Type] > 0
             GROUP BY Rep, [Type]";
@@ -190,7 +197,14 @@ class AgentSummary
             WHERE aa.GroupId = :group_id2$i
             AND aa.Date >= :startdate2$i
             AND aa.Date < :enddate2$i
-            AND aa.Duration > 0
+            AND aa.Duration > 0";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND aa.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
+                $bind['ssousercamp2' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY aa.Rep, [Action]";
 
             $union = 'UNION ALL';
