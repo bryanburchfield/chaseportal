@@ -35,6 +35,11 @@
 									'required'=>true]) !!}
 								</div>
 
+								<div class="form-group">
+								    {!! Form::label('tz', __('users.timezone')) !!}
+								    {!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
+								</div>
+
 								{!! Form::hidden('id', null, ['class'=>'user_id']) !!}
 
 								<button type="submit" class="btn btn-primary mt30 add_btn_loader">{{__('general.update')}}</button>
