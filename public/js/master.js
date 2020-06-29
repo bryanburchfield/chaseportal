@@ -2603,7 +2603,6 @@ var Master = {
 
     set_group:function(){
         var group_id = $(this).val();
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2617,6 +2616,7 @@ var Master = {
                 group_id:group_id,
             },
             success:function(response){
+                console.log(response);
                 window.location.reload();
             }
         });
