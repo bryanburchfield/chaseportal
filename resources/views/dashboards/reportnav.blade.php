@@ -6,7 +6,7 @@
     </div>
 @elseif(session()->has('isSsoSuperadmin'))
     <div class="btn-group flt_rgt">
-        <div class="form-group sso">
+        <div class="form-group">
             <select name="tz" id="tz" class="form-control">
                 @foreach ($timezone_array as $key => $name)
                     <option {{ Auth::user()->tz == $key ? 'selected' : '' }} value="{{$key}}">{{$name}}</option>
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="btn-group flt_rgt">
-        <div class="form-group">
+        <div class="form-group sso">
             <select name="group_id" id="group_id" class="form-control">
                 @foreach ($groups as $group)
                     <option {{ Auth::user()->group_id == $group->GroupId ? 'selected' : '' }} value="{{$group->GroupId}}">{{$group->GroupId}} : {{$group->GroupName}}</option>
