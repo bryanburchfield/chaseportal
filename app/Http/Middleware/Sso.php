@@ -20,6 +20,15 @@ class Sso
      */
     public function handle($request, Closure $next)
     {
+        // Check if logged in and token changed, then log out
+        if (Auth::check()) {
+            if ($request->has('Token')) {
+                if ($request->query('Token') !== session('ssoToken', '')) {
+                    Auth::logout();
+                }
+            }
+        }
+
         // if already logged in, don't bother
         if (Auth::guest()) {
             // Make sure token and server are passed
@@ -98,9 +107,12 @@ class Sso
                 abort(403, 'Unauthorized');
             }
 
-            // set 'sso' on session and save original name
-            session(['isSso' => 1]);
-            session(['ssoUsername' => $api_user->Username]);
+            // set 'sso' on session and save original name & token
+            session([
+                'isSso' => 1,
+                'ssoUsername' => $api_user->Username,
+                'ssoToken' => $request->query('Token'),
+            ]);
 
             // set var if superadmin
             if ($api_user->GroupId == -1) {
