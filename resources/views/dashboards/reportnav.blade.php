@@ -9,7 +9,7 @@
         <div class="form-group">
             <select name="group_id" id="group_id" class="form-control">
                 @foreach ($groups as $group)
-                    <option value="{{$group->GroupId}}">{{$group->GroupId}} : {{$group->GroupName}}</option>
+                    <option {{ Auth::user()->group_id == $group->GroupId ? 'selected' : '' }} value="{{$group->GroupId}}">{{$group->GroupId}} : {{$group->GroupName}}</option>
                 @endforeach
             </select>
         </div>
