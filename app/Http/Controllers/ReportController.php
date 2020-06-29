@@ -70,6 +70,10 @@ class ReportController extends Controller
         Auth::user()->group_id = $request->group_id;
         Auth::user()->save();
 
+        if ($request->ajax()) {
+            return ['status' => 'success'];
+        }
+
         return redirect()->action('ReportController@index', ['report' => $request->report]);
     }
 
