@@ -168,6 +168,7 @@ class ReportController extends Controller
         return view($view)
             ->with(array_merge(
                 ['filters' => $filters],
+                ['groups' => Group::allGroups()],
                 $pagedata,
                 $params,
                 ['results' => $results]
