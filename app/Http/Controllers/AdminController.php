@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
-use App\Models\System;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +22,46 @@ class AdminController extends Controller
 {
     use TimeTraits;
     use SqlServerTraits;
+
+    /**
+     * Index
+     * 
+     * @param Request $request 
+     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
+     */
+    public function manageUsers(Request $request)
+    {
+        $groupId = Auth::user()->group_id;
+        $this->setDb();
+
+        $page['menuitem'] = 'manage_users';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'timezone_array' => $this->timezones(),
+            'group_id' => $groupId,
+            'dbs' => $this->dbs(),
+            'user_types' => $this->userTypes(),
+            'jsfile' => [],
+            'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
+        ];
+
+        return view('admin.index')->with($data);
+    }
+
+    public function settings()
+    {
+        $page['menuitem'] = 'settings';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'timezone_array' => $this->timezones(),
+            'dbs'  => $this->dbs(),
+            'jsfile' => [],
+        ];
+
+        return view('admin.settings')->with($data);
+    }
 
     /**
      * Return admin sidenav
@@ -44,6 +83,38 @@ class AdminController extends Controller
         return view('shared.sidenav');
     }
 
+    public function loadCdrLookup()
+    {
+        $page['menuitem'] = 'cdr_lookup';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+        ];
+
+        return view('admin.cdr_lookup')->with($data);
+    }
+
+    public function webhookGenerator()
+    {
+        $dbs = ['' => trans('general.select_one')];
+
+        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
+            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+        }
+
+        $page['menuitem'] = 'webhook_generator';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'dbs'  => $dbs,
+            'jsfile' => [],
+            'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('admin.webhook_generator')->with($data);
+    }
+
     /**
      * Set DB
      *  
@@ -59,120 +130,15 @@ class AdminController extends Controller
         config(['database.connections.sqlsrv.database' => $db]);
     }
 
-    /**
-     * Index
-     * 
-     * @param Request $request 
-     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
-     */
-    public function manageUsers(Request $request)
+    private function dbs()
     {
-        $groupId = Auth::user()->group_id;
-        $this->setDb();
-
-        $timezone_array = ['' => trans('general.select_one')];
-
-        // Get US timezones first
-        $timezones = System::whereIn(
-            'name',
-            [
-                'Eastern Standard Time',
-                'Central Standard Time',
-                'Mountain Standard Time',
-                'Pacific Standard Time',
-                'Alaskan Standard Time',
-                'Hawaiian Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // Now UTC for the UK
-        $timezones = System::whereIn(
-            'name',
-            [
-                'Greenwich Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // And Australia
-        $timezones = System::whereIn(
-            'name',
-            [
-                'W. Australia Standard Time',
-                'Aus Central W. Standard Time',
-                'AUS Central Standard Time',
-                'E. Australia Standard Time',
-                'Cen. Australia Standard Time',
-                'AUS Eastern Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // And then the rest
-        $timezones = System::whereNotIn(
-            'name',
-            [
-                'Eastern Standard Time',
-                'Central Standard Time',
-                'Mountain Standard Time',
-                'Pacific Standard Time',
-                'Alaskan Standard Time',
-                'Hawaiian Standard Time',
-                'Greenwich Standard Time',
-                'W. Australia Standard Time',
-                'Aus Central W. Standard Time',
-                'AUS Central Standard Time',
-                'E. Australia Standard Time',
-                'Cen. Australia Standard Time',
-                'AUS Eastern Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
         $dbs = ['' => trans('general.select_one')];
 
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'manage_users';
-        $page['type'] = 'page';
-        $data = [
-            'page' => $page,
-            'timezone_array' => $timezone_array,
-            'group_id' => $groupId,
-            'dbs' => $dbs,
-            'user_types' => $this->userTypes(),
-            'jsfile' => [],
-            'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
-        ];
-
-        return view('admin.index')->with($data);
+        return $dbs;
     }
 
     public function userTypes()
@@ -394,56 +360,6 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
-    public function loadCdrLookup()
-    {
-        $page['menuitem'] = 'cdr_lookup';
-        $page['type'] = 'page';
-        $data = [
-            'page' => $page,
-            'jsfile' => [],
-        ];
-
-        return view('admin.cdr_lookup')->with($data);
-    }
-
-    public function webhookGenerator()
-    {
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-
-        $page['menuitem'] = 'webhook_generator';
-        $page['type'] = 'page';
-        $data = [
-            'page' => $page,
-            'dbs'  => $dbs,
-            'jsfile' => [],
-            'default_lead_fields' => $this->defaultLeadFields(),
-        ];
-
-        return view('admin.webhook_generator')->with($data);
-    }
-
-    public function settings()
-    {
-
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-        $page['menuitem'] = 'settings';
-        $page['type'] = 'page';
-        $data = [
-            'page' => $page,
-            'dbs'  => $dbs,
-            'jsfile' => [],
-        ];
-
-        return view('admin.settings')->with($data);
-    }
     /**
      * CDR Lookup
      * 

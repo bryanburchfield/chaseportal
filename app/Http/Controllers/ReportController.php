@@ -173,6 +173,7 @@ class ReportController extends Controller
             ->with(array_merge(
                 ['filters' => $filters],
                 ['groups' => Group::allGroups()],
+                ['timezone_array' => $this->timezones()],
                 $pagedata,
                 $params,
                 ['results' => $results]
