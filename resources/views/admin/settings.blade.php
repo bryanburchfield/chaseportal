@@ -37,7 +37,7 @@
 
 								<div class="form-group">
 								    {!! Form::label('tz', __('users.timezone')) !!}
-								    {!! Form::select("tz", $timezone_array, null, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
+								    {!! Form::select("tz", $timezone_array, Auth::user()->tz, ["class" => "form-control", 'id'=> 'tz', 'required'=>true]) !!}
 								</div>
 
 								{!! Form::hidden('id', null, ['class'=>'user_id']) !!}
