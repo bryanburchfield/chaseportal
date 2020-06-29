@@ -77,6 +77,18 @@ class ReportController extends Controller
         return redirect()->action('ReportController@index', ['report' => $request->report]);
     }
 
+    public function setTimezone(Request $request)
+    {
+        Auth::user()->tz = $request->tz;
+        Auth::user()->save();
+
+        if ($request->ajax()) {
+            return ['status' => 'success'];
+        }
+
+        return redirect()->action('ReportController@index', ['report' => $request->report]);
+    }
+
     private function getSsoTz()
     {
         $sql = "SET NOCOUNT ON;
