@@ -103,6 +103,7 @@ var Master = {
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
         $('.sso #group_id').on('change', this.set_group);
+        $('.sso #tz').on('change', this.set_timezone);
     },
 
     preventDefault:function(e){
@@ -2615,6 +2616,29 @@ var Master = {
             type:'POST',
             data:{
                 group_id:group_id,
+                report:report
+            },
+            success:function(response){
+                window.location.reload();
+            }
+        });
+    },
+
+    set_timezone:function(){
+        var tz = $(this).val();
+        var report = $('#report').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/sso/set_timezone',
+            type:'POST',
+            data:{
+                tz:tz,
                 report:report
             },
             success:function(response){
