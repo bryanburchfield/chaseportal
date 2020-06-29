@@ -9,7 +9,7 @@
 			<div class="container mt20 p20">
 				<div class="row">
 					<div class="col-sm-6 card">
-						<form method="POST" action="{{action('ReportController@setGroup')}}" class="form fc_style">
+						<form method="POST" action="{{action('ReportController@setGroup')}}" class="form fc_style sso">
 						    @csrf
 						    <input type="hidden" name="report" value="{{$report}}">
 
