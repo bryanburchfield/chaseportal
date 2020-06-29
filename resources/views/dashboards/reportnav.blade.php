@@ -5,7 +5,7 @@
         </button>
     </div>
 @elseif(session()->has('isSsoSuperadmin'))
-    <div class="btn-group flt_rgt col-sm-4">
+    <div class="btn-group flt_rgt col-sm-4 p0">
         <div class="form-group sso">
             <select name="tz" id="tz" class="form-control">
                 @foreach ($timezone_array as $key => $name)
