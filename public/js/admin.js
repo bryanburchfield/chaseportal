@@ -361,8 +361,9 @@ var Admin = {
 		var form = $('form.edit_myself');
 		var group_id = form.find('.group_id').val(),
 			user_id = form.find('.user_id').val(),
-			db = form.find('#db').val()
-			;
+			db = form.find('#db').val(),
+			tz = form.find('#tz').val()
+		;
 
 		$.ajaxSetup({
 			headers: {
@@ -378,6 +379,7 @@ var Admin = {
 				id: user_id,
 				group_id: group_id,
 				db: db,
+				tz:tz
 			},
 
 			success: function (response) {
