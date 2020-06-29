@@ -2603,6 +2603,7 @@ var Master = {
 
     set_group:function(){
         var group_id = $(this).val();
+        var report = $('#report').val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2610,13 +2611,13 @@ var Master = {
         });
 
         $.ajax({
-            url:'set_group',
+            url:'/sso/set_group',
             type:'POST',
             data:{
                 group_id:group_id,
+                report:report
             },
             success:function(response){
-                console.log(response);
                 window.location.reload();
             }
         });
