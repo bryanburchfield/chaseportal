@@ -94,6 +94,7 @@ class Sso
                     abort(403, 'Unauthorized');
                 }
 
+
                 $sso_user = [
                     'name' => $api_user->Username,
                     'type' => $api_user->Role,
@@ -103,6 +104,11 @@ class Sso
                 ];
             } catch (\Throwable $th) {
                 abort(403, 'Unauthorized');
+            }
+
+            // Default TZ if superuser
+            if ($api_user->GroupId == -1) {
+                $sso_user['timezone'] = 'Eastern Standard Time';
             }
 
             // Find or create the SSO user
