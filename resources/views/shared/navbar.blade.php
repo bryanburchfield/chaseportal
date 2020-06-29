@@ -51,7 +51,7 @@
                     @endif
 
                      @if(!session()->has('isSso'))
-                        <li class="notifications btn-group">
+                        <li class="notifications btn-group flt_rgt">
                             <button type="button" class="btn btn-notifications">
                                 <span>
                                     <i class="fas fa-bell"></i>
