@@ -126,7 +126,19 @@ class CampaignSummary
         AND dr.Date < :enddate$i
         AND dr.Campaign <> '_MANUAL_CALL_'
         AND IsNull(CallStatus, '') <> ''
-        AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+        AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
         GROUP BY dr.Campaign, dr.CallStatus, dr.GroupId";
 
             $union = 'UNION ALL';

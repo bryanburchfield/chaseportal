@@ -179,8 +179,15 @@ class AgentSummarySubcampaign
             $sql .= " INNER JOIN #SelectedCampaign sc ON sc.CampaignName = r.Campaign
                 WHERE r.GroupId = :group_id$i
                 AND r.Date >= :startdate$i
-                AND r.Date < :enddate$i
-                ) a
+                AND r.Date < :enddate$i";
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND r.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
+            ) a
             WHERE [Type] > 0
             GROUP BY Campaign, Subcampaign, Rep, [Type]";
 
@@ -216,7 +223,14 @@ class AgentSummarySubcampaign
             WHERE aa.GroupId = :group_id1$i
             AND aa.Date >= :startdate1$i
             AND aa.Date < :enddate1$i
-            AND aa.Duration > 0
+            AND aa.Duration > 0";
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND aa.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep, [Action]";
 
             $union = 'UNION ALL';

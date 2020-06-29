@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\AutomatedReport;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\ReportService;
+use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    use SqlServerTraits;
+    use TimeTraits;
 
     protected $reportName;
     protected $reportservice;
@@ -25,13 +30,95 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
+        // SSO Checks
+        if (session('isSso', 0)) {
+            // Check if group_id = -1 then force user to select
+            if (Auth::user()->group_id == -1) {
+                return $this->setGroupForm();
+            } else {
+                // see if they have relative camps/reps
+                $this->getSsoRestrictions();
+            }
+
+            // Set timezone if not already
+            if (empty(Auth::user()->tz)) {
+                Auth::user()->tz = $this->getSsoTz();
+                Auth::user()->save();
+            }
+        }
+
         $this->reportservice->report->setDates();
 
-        $results = [];
         // Push old input to form
         $request->flash();
 
-        return $this->returnView($results);
+        return $this->returnView();
+    }
+
+    private function setGroupForm()
+    {
+        $data = [
+            'report' => $this->reportName,
+            'groups' => Group::allGroups(),
+        ];
+
+        return view('reports.choose_group')->with($data);
+    }
+
+    public function setGroup(Request $request)
+    {
+        Auth::user()->group_id = $request->group_id;
+        Auth::user()->save();
+
+        return redirect()->action('ReportController@index', ['report' => $request->report]);
+    }
+
+    private function getSsoTz()
+    {
+        $sql = "SET NOCOUNT ON;
+
+    DECLARE 
+    @TimeZoneStr varchar(3),
+    @TimeZone int
+
+	SET @TimeZone = dbo.GetSettingEx (:group, '', 'TimeZone', 2)
+
+	SET @TimeZoneStr='EST'	
+
+	SELECT @TimeZoneStr = timezone
+	FROM StateTimeZones
+	WHERE id = @TimeZone
+
+    SELECT @TimeZoneStr as TZ";
+
+        $bind = ['group' => Auth::user()->group_id];
+
+        $results = $this->runSql($sql, $bind);
+
+        if (empty($results)) {
+            $tz = 'EST';
+        } else {
+            $tz = $results[0]['TZ'];
+        }
+
+        return $this->abbrToText($tz);
+    }
+
+    private function getSsoRestrictions()
+    {
+        $sql = "SET NOCOUNT ON;
+      SELECT 'Camps' = dbo.UseRelativeCampaigns(:username1, 1);
+      SELECT 'Reps' = dbo.UseRelativeReps(:username2);";
+
+        $bind = [
+            'username1' => session('ssoUsername'),
+            'username2' => session('ssoUsername'),
+        ];
+
+        list($camps, $reps) = $this->runMultiSql($sql, $bind);
+
+        session(['ssoRelativeCampaigns' => $camps[0]['Camps']]);
+        session(['ssoRelativeReps' => $reps[0]['Reps']]);
     }
 
     public function info()
@@ -71,7 +158,7 @@ class ReportController extends Controller
         return $this->reportservice->report->emailReport($request);
     }
 
-    public function returnView($results, MessageBag $errors = null)
+    public function returnView($results = [], MessageBag $errors = null)
     {
         $view = $this->reportservice->viewName();
         $pagedata = $this->reportservice->getPageData();

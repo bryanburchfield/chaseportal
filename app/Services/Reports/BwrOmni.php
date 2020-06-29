@@ -243,7 +243,19 @@ class BwrOmni
         $sql .= "
                 WHERE DR.GroupId = :group_id2
                 AND DR.Date >= :startdate
-                AND DR.Date < :enddate
+                AND DR.Date < :enddate";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
+            $bind['ssousercamp'] = session('ssoUsername');
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
+            $bind['ssouserrep'] = session('ssoUsername');
+        }
+
+        $sql .= "
             ) tmp
             GROUP BY Campaign, Subcampaign, Data_Source_Primary, Data_Source_Secondary, Program;
 

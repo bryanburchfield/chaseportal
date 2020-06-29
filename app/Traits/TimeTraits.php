@@ -8,6 +8,35 @@ use Illuminate\Support\Facades\Auth;
 
 trait TimeTraits
 {
+    public function abbrToText($abbr)
+    {
+        $timezones = [
+            'AST' => 'Atlantic Standard Time',
+            'EST' => 'Eastern Standard Time',
+            'EDT' => 'Eastern Daylight Time',
+            'CST' => 'Central Standard Time',
+            'CDT' => 'Central Daylight Time',
+            'MST' => 'Mountain Standard Time',
+            'MDT' => 'Mountain Daylight Time',
+            'PST' => 'Pacific Standard Time',
+            'PDT' => 'Pacific Daylight Time',
+            'AKST' => 'Alaska Time',
+            'AKDT' => 'Alaska Daylight Time',
+            'HST' => 'Hawaii Standard Time',
+            'HAST' => 'Hawaii-Aleutian Standard Time',
+            'HADT' => 'Hawaii-Aleutian Daylight Time',
+            'SST' => 'Samoa Standard Time',
+            'SDT' => 'Samoa Daylight Time',
+            'CHST' => 'Chamorro Standard Time',
+        ];
+
+        if (!empty($timezones[$abbr])) {
+            return $timezones[$abbr];
+        }
+
+        return '';
+    }
+
     public function windowsToUnixTz($windowsTz)
     {
         return \IntlTimeZone::getIDForWindowsID($windowsTz);

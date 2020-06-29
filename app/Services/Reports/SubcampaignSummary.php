@@ -141,7 +141,19 @@ class SubcampaignSummary
             AND dr.Date < :enddate$i
             AND dr.Campaign <> '_MANUAL_CALL_'
             AND IsNull(dr.CallStatus, '') <> ''
-            AND dr.CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+            AND dr.CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';
@@ -216,7 +228,19 @@ class SubcampaignSummary
               WHERE aa.GroupId = :group_id1$i
               AND aa.Date >= :startdate1$i
               AND aa.Date < :enddate1$i
-              AND [Action] <> 'Paused'
+              AND [Action] <> 'Paused'";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND aa.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
+                $bind['ssousercamp2' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND aa.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
               GROUP BY Campaign, IsNull(Subcampaign, ''), CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';

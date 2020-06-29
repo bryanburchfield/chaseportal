@@ -15,7 +15,10 @@ trait CampaignTraits
         $sql = '';
         $bind = [];
 
-        if (empty($fromDate) || empty($toDate)) {
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql = "SELECT CampaignName as Campaign FROM dbo.GetAllRelativeCampaigns(:username, 1)";
+            $bind = ['username' => session('ssoUsername')];
+        } elseif (empty($fromDate) || empty($toDate)) {
             $union = '';
             foreach (array_values(Auth::user()->getDatabaseArray()) as $i => $db) {
                 $bind['groupid' . $i] = Auth::user()->group_id;

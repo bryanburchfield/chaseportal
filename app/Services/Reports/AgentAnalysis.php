@@ -150,7 +150,19 @@ class AgentAnalysis
             $sql .= "
             WHERE AA.GroupId = :group_id1$i
             AND	AA.Date >= :startdate1$i
-            AND AA.Date < :enddate1$i
+            AND AA.Date < :enddate1$i";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND AA.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $bind['ssousercamp1' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND AA.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $bind['ssouserrep1' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY CAST(CONVERT(datetimeoffset, AA.Date) AT TIME ZONE '$tz' as date), Campaign, Rep, [Action]";
 
             $union = 'UNION ALL';
@@ -202,7 +214,19 @@ class AgentAnalysis
             WHERE r.GroupId = :group_id2$i
             AND r.Date >= :startdate2$i
             AND r.Date < :enddate2$i
-            AND d.Type > 0
+            AND d.Type > 0";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND r.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND r.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date), r.Campaign, r.Rep, d.Type";
 
             $union = 'UNION ALL';

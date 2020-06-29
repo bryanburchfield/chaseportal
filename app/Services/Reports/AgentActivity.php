@@ -121,6 +121,16 @@ class AgentActivity
     AND	(:reps1$i = '' OR Rep in (SELECT value COLLATE SQL_Latin1_General_CP1_CS_AS FROM dbo.SPLIT(:reps2$i, '!#!')))
     AND	(([Action] = 'Paused' AND Duration > 30) OR ([Action] <> 'Paused'))";
 
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
             $union = 'UNION ALL';
         }
 

@@ -5,7 +5,6 @@ namespace App\Services\Reports;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use \App\Traits\ReportTraits;
 
 class CampaignUsage

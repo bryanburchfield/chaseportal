@@ -103,7 +103,19 @@ class MissedCalls
             AND Duration > 0
             AND DR.Date >= :startdate$i
             AND DR.Date < :enddate$i
-            AND DR.GroupId = :group_id$i
+            AND DR.GroupId = :group_id$i";
+
+            if (session('ssoRelativeCampaigns', 0)) {
+                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
+                $bind['ssousercamp' . $i] = session('ssoUsername');
+            }
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
+                $bind['ssouserrep' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY DR.Phone, LD.FirstName, LD.LastName";
 
             $union = 'UNION';
