@@ -25,6 +25,12 @@ class Sso
             if ($request->has('Token')) {
                 if ($request->query('Token') !== session('ssoToken', '')) {
                     Auth::logout();
+                    $request->session()->forget([
+                        'isSso',
+                        'ssoUsername',
+                        'ssoToken',
+                        'isSsoSuperadmin',
+                    ]);
                 }
             }
         }
