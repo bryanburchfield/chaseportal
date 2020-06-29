@@ -70,6 +70,22 @@ class ReportController extends Controller
         Auth::user()->group_id = $request->group_id;
         Auth::user()->save();
 
+        if ($request->ajax()) {
+            return ['status' => 'success'];
+        }
+
+        return redirect()->action('ReportController@index', ['report' => $request->report]);
+    }
+
+    public function setTimezone(Request $request)
+    {
+        Auth::user()->tz = $request->tz;
+        Auth::user()->save();
+
+        if ($request->ajax()) {
+            return ['status' => 'success'];
+        }
+
         return redirect()->action('ReportController@index', ['report' => $request->report]);
     }
 
@@ -168,6 +184,8 @@ class ReportController extends Controller
         return view($view)
             ->with(array_merge(
                 ['filters' => $filters],
+                ['groups' => Group::allGroups()],
+                ['timezone_array' => $this->timezones()],
                 $pagedata,
                 $params,
                 ['results' => $results]

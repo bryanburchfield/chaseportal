@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\AutomatedReport;
 use App\Models\Dialer;
 use App\Models\Recipient;
-use App\Models\System;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -139,95 +138,6 @@ class AdminController extends Controller
             $db = Auth::user()->db;
         }
         config(['database.connections.sqlsrv.database' => $db]);
-    }
-
-    private function timezones()
-    {
-        $timezone_array = ['' => trans('general.select_one')];
-
-        // Get US timezones first
-        $timezones = System::whereIn(
-            'name',
-            [
-                'Eastern Standard Time',
-                'Central Standard Time',
-                'Mountain Standard Time',
-                'Pacific Standard Time',
-                'Alaskan Standard Time',
-                'Hawaiian Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // Now UTC for the UK
-        $timezones = System::whereIn(
-            'name',
-            [
-                'Greenwich Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // And Australia
-        $timezones = System::whereIn(
-            'name',
-            [
-                'W. Australia Standard Time',
-                'Aus Central W. Standard Time',
-                'AUS Central Standard Time',
-                'E. Australia Standard Time',
-                'Cen. Australia Standard Time',
-                'AUS Eastern Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        // And then the rest
-        $timezones = System::whereNotIn(
-            'name',
-            [
-                'Eastern Standard Time',
-                'Central Standard Time',
-                'Mountain Standard Time',
-                'Pacific Standard Time',
-                'Alaskan Standard Time',
-                'Hawaiian Standard Time',
-                'Greenwich Standard Time',
-                'W. Australia Standard Time',
-                'Aus Central W. Standard Time',
-                'AUS Central Standard Time',
-                'E. Australia Standard Time',
-                'Cen. Australia Standard Time',
-                'AUS Eastern Standard Time',
-            ]
-        )
-            ->orderBy('current_utc_offset')
-            ->get()
-            ->toArray();
-
-        foreach ($timezones as $tz) {
-            $timezone_array[$tz['name']] = '[' . $tz['current_utc_offset'] . '] ' . $tz['name'];
-        }
-
-        return $timezone_array;
     }
 
     private function dbs()

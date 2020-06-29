@@ -79,6 +79,8 @@ var Master = {
         $('#sidebar').on('click', '.admin_link', this.update_sidenav);
         $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        $('.sso #group_id').on('change', this.set_group);
+        $('.sso #tz').on('change', this.set_timezone);
 	},
 
     update_sidenav:function(e){
@@ -121,10 +123,6 @@ var Master = {
                     }
                 });
             }
-        });
-
-        $("body").bind("DOMNodeInserted", function() {
-            $('.page_menuitem').val(Master.page_menuitem);
         });
     },
 
@@ -1861,6 +1859,289 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
+    add_esp:function(e){
+        e.preventDefault();
+
+        var form_data = $(this).serialize();
+
+        $('.alert').empty().hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_esp',
+            type: 'POST',
+            data: form_data,
+            success: function (response) {
+                location.reload();
+            },error: function (data) {
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.add_esp .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.add_esp .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    edit_server_modal:function(e){
+        e.preventDefault();
+
+        var id = $(this).data('serverid');
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/get_esp',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+
+                $('#editESPModal .name').val(response.name);
+                $('#editESPModal .provider_type').val(response.provider_type);
+                $('#editESPModal .id').val(response.id);
+                $('#editESPModal .properties').empty();
+                var property_inputs='';
+
+                const entries = Object.entries(response.properties)
+                for (const [key, value] of entries) {
+                    var label = key.charAt(0).toUpperCase() + key.slice(1);
+                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+key+'" name="properties['+key+']" value="'+value+'" required></div>';
+                }
+
+                $('#editESPModal .properties').append(property_inputs);
+            }
+        });
+    },
+
+    update_esp:function(e){
+        e.preventDefault();
+        var form_data = $(this).serialize();
+
+        $('.alert').empty().hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/update_esp',
+            type: 'POST',
+            data:form_data,
+            success: function (response) {
+                $(this).find('i').remove();
+                location.reload();
+            },error: function (data) {
+                $(this).find('i').remove();
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.edit_smtp_server .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.edit_smtp_server .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    test_connection:function(e){
+        e.preventDefault();
+
+        $('.alert').empty().hide();
+
+        var that = $(this).parent();
+        var form_data = $(that).serialize();
+        $.ajax({
+            url: '/tools/email_drip/test_connection ',
+            type: 'POST',
+            data: form_data,
+            success: function (response) {
+
+                $(that).find('.test_connection').find('i').remove();
+                $(that).find('.connection_msg').removeClass('alert-danger alert-success');
+                $(that).find('.connection_msg').addClass('alert-success').text(response.message).show();
+            },error: function (data) {
+                $('.test_connection').find('i').remove();
+
+                if (data.status === 422) {
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $(that).find('.connection_msg').append('<li>'+value+'</li>');
+                                $(that).find('.connection_msg').addClass('alert-danger').show();
+                            });
+                        }
+                    });
+                }
+            },statusCode: {
+                500: function(response) {
+                    $(that).find('.alert-danger').text('Connection Failed').show();
+                }
+            }
+        });
+    },
+
+    update_sidenav:function(e){
+        e.preventDefault();
+        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
+            Master.page_menuitem = $('.page_menuitem').val();
+        }else{
+            $('.page_menuitem').each(function(){
+                $(this).val(Master.page_menuitem);
+            });
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $('#sidebar').empty();
+
+        if($(this).hasClass('back_to_sidenav')){
+            var path = '/dashboards/admin/load_sidenav';
+        }else{
+            var path = '/dashboards/admin/load_admin_nav';
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+
+        $.ajax({
+            url: path,
+            type: 'POST',
+            dataType: 'html',
+            data: { },
+            success: function (response) {
+                $('#sidebar').append(response);
+                $('ul.list-unstyled.components').find('li').each(function(){
+                    if($(this).data('page') == Master.page_menuitem){
+                        $(this).addClass('active');
+                    }
+                });
+            }
+        });
+
+        $("body").bind("DOMNodeInserted", function() {
+            $('.page_menuitem').val(Master.page_menuitem);
+        });
+    },
+
+    populate_delete_modal:function(e){
+        e.preventDefault();
+        var id = $(this).data('id'),
+            name = $(this).data('name'),
+            sel = $(this).data('target')
+        ;
+
+        $(sel+' h3').find('span').text(name);
+        $(sel+' #id').val(id);
+    },
+
+    delete_esp:function(e){
+        e.preventDefault();
+        var id = $('#deleteESPModal').find('#id').val();
+        $('#deleteESPModal .alert-danger').hide();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/delete_esp',
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                location.reload();
+            },error: function (data) {
+                $('#deleteESPModal .btn').find('i').remove();
+                if (data.status === 422) {
+                    $('#deleteESPModal .alert-danger').empty();
+                    // $('#deleteESPModal .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('#deleteESPModal .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+                        $('#deleteESPModal .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
+    create_email_campaign:function(e){
+        e.preventDefault();
+
+        var form_data = $(this).serialize();
+        ;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '/tools/email_drip/add_campaign',
+            type: 'POST',
+            data:form_data,
+            success: function (response) {
+                $('.create_campaign ').find('i').remove();
+                window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
+            },error: function (data) {
+                $('.create_campaign ').find('i').remove();
+                if (data.status === 422) {
+                    $('.create_campaign_form .alert').empty();
+                    $('.create_campaign_form .btn').find('i').remove();
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (key, value) {
+
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                $('.create_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                            });
+                        }
+
+                        $('.create_campaign_form .alert-danger').show();
+                    });
+                }
+            }
+        });
+    },
+
     edit_campaign_modal:function(e){
         e.preventDefault();
         var id = $(this).data('campaignid');
@@ -1977,8 +2258,57 @@ var Master = {
         if($(that).data('name')){
             $(modal).find('h3 span').html($(that).data('name'));
         }
-    }
+    },
 
+    cancel_modal_form:function(e){
+        e.preventDefault();
+        $(this).parent().parent().find('.form')[0].reset()
+    },
+
+    set_group:function(){
+        var group_id = $(this).val();
+        var report = $('#report').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/sso/set_group',
+            type:'POST',
+            data:{
+                group_id:group_id,
+                report:report
+            },
+            success:function(response){
+                window.location.reload();
+            }
+        });
+    },
+
+    set_timezone:function(){
+        var tz = $(this).val();
+        var report = $('#report').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/sso/set_timezone',
+            type:'POST',
+            data:{
+                tz:tz,
+                report:report
+            },
+            success:function(response){
+                window.location.reload();
+            }
+        });
+    }
 }
 
 $(document).ready(function () {
