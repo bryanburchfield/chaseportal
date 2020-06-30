@@ -3254,6 +3254,14 @@ a.add_filter i {
   color: #33A09B;
 }
 
+a.add_subcampaign {
+  font-weight: 600;
+}
+
+a.add_subcampaign i {
+  color: #33A09B;
+}
+
 .toggle_all_switch {
   margin-bottom: 40px;
 }

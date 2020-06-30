@@ -2774,6 +2774,13 @@ a.add_action, a.add_filter{
     }
 }
 
+a.add_subcampaign{
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+}
+
 .toggle_all_switch{
     margin-bottom: 40px;
 
