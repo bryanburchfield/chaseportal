@@ -33,9 +33,7 @@ class ReportController extends Controller
         // SSO Checks
         if (session('isSso', 0)) {
             // Check if group_id = -1 then force user to select
-            if (Auth::user()->group_id == -1) {
-                return $this->setGroupForm();
-            } else {
+            if (Auth::user()->group_id !== -1) {
                 // see if they have relative camps/reps
                 $this->getSsoRestrictions();
             }
@@ -53,16 +51,6 @@ class ReportController extends Controller
         $request->flash();
 
         return $this->returnView();
-    }
-
-    private function setGroupForm()
-    {
-        $data = [
-            'report' => $this->reportName,
-            'groups' => Group::allGroups(),
-        ];
-
-        return view('reports.choose_group')->with($data);
     }
 
     public function setGroup(Request $request)
