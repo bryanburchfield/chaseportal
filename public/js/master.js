@@ -2221,6 +2221,7 @@ var Master = {
     set_group:function(){
         var group_id = $(this).val();
         var report = $('#report').val();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2301,6 +2302,10 @@ $(document).ready(function () {
     $('.notification_msg').find('img').each(function(){
         $(this).addClass('img-responsive');
     });
+
+    if($('.sso #group_id').val() == '-1'){
+        $('.sso #group_id').parent().addClass('has-error');
+    }
 
 });
 
