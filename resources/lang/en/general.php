@@ -20,6 +20,7 @@ return [
 	'dashboard'					=> 'Dashboard',
 	'database'					=> 'Database',
 	'date'						=> 'Date',
+	'date_range_optional'		=> 'Date Range Optional',
 	'display_language'			=> 'Display Language Menu in navbar',
 	'download'					=> 'Download',
 	'download_report'			=> 'Download Report',

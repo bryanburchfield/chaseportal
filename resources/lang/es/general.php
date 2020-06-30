@@ -20,6 +20,7 @@ return [
 	'dashboard'					=> 'Tablero',
 	'database'					=> 'Base de Datos',
 	'date'						=> 'Fecha',
+	'date_range_optional'		=> 'Rango de Fechas Opcional',
 	'display_language'			=> 'Mostrar Menú de Idioma en la Barra de Navegación',
 	'download'					=> 'Descargar',
 	'download_report'			=> 'Descargar Informe',

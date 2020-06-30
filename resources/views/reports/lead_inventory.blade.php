@@ -16,7 +16,7 @@
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
-							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => false, 'autocomplete'=> 'off']) !!}
+							{!! Form::text('fromdate', $date = isset($_POST['fromdate']) ? $_POST['fromdate'] : $params['fromdate'], ['class'=>'form-control datetimepicker', 'required' => false, 'autocomplete'=> 'off', 'placeholder' =>  __('general.date_range_optional') ]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						{!! Form::label('todate',  __('reports.to')) !!}
 						<div class="input-group date">
-							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => false,  'autocomplete'=> 'off']) !!}
+							{!! Form::text('todate', $date = isset($_POST['todate']) ? $_POST['todate'] : $params['todate'], ['class'=>'form-control datetimepicker', 'required' => false,  'autocomplete'=> 'off', 'placeholder' =>  __('general.date_range_optional')]) !!}
 							<span class="input-group-addon">
 			                    <span class="glyphicon glyphicon-calendar">
 			                    </span>

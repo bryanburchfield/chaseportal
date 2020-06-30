@@ -18,6 +18,7 @@
     <div class="btn-group flt_rgt col-sm-4">
         <div class="form-group sso">
             <select name="group_id" id="group_id" class="form-control">
+                <option {{ Auth::user()->group_id == -1 ? 'selected' : '' }} value="-1">Select Group</option>
                 @foreach ($groups as $group)
                     <option {{ Auth::user()->group_id == $group->GroupId ? 'selected' : '' }} value="{{$group->GroupId}}">{{$group->GroupId}} : {{$group->GroupName}}</option>
                 @endforeach
