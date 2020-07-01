@@ -119,7 +119,15 @@ class PlaybookController extends Controller
      */
     public function getPlaybook(Request $request)
     {
-        return $this->findPlaybook($request->id);
+        $contacts_playbook = $this->findPlaybook($request->id);
+
+        $playbook = $contacts_playbook->toArray();
+
+        $playbook['subcampaigns'] = $contacts_playbook->playbook_subcampaigns
+            ->sortBy('subcampaign')
+            ->pluck('subcampaign');
+
+        return $playbook;
     }
 
     /**
