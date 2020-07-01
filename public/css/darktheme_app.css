@@ -3615,6 +3615,11 @@ a.add_subcampaign i {
   color: #33A09B;
 }
 
+a.add_subcampaign:hover,
+a.add_subcampaign:focus {
+  color: #eee;
+}
+
 .toggle_all_switch {
   margin-bottom: 40px;
 }

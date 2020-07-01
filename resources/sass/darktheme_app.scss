@@ -2995,6 +2995,10 @@ a.add_subcampaign{
     i{
         color: $green;
     }
+
+    &:hover, &:focus{
+        color:#eee;
+    }
 }
 
 .toggle_all_switch{

@@ -42,6 +42,7 @@ var Contacts_Playbook = {
         $('.delete_playbook').on('click', this.delete_playbook);
         $('a.delete_touch').on('click', this.delete_touch);
         $('.menu').on('click', this.preventDefault);
+        $('body').on('click', '.add_subcampaign ', this.add_subcampaign_select);
 	},
 
 	preventDefault:function(e){
@@ -192,7 +193,9 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-
+	        	
+	        	$('#'+modal).find('.subcampaigns').parent().not(':first').remove();
+	        	
                 var response = Object.entries(response.subcampaigns);
                 var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
                 for(var i=0;i<response.length;i++){
@@ -203,12 +206,33 @@ var Contacts_Playbook = {
                 $('.subcampaigns ').append(sub_camps);
                 Master.subcampaigns_count = response.length;
 
-                if(Master.subcampaigns_count > $('#'+modal).find('.subcampaigns').length){
-                	$('.add_subcampaign').show()
+                if(Master.subcampaigns_count >= $('#'+modal).find('.subcampaigns').length){
+                	$('.add_subcampaign').show();
+                }else{
+                	$('.add_subcampaign').hide();
                 }
-                console.log(Master.subcampaigns_count +' '+ $('#'+modal).find('.subcampaigns').length);
+                
 	        }
 	    });
+	},
+
+	add_subcampaign_select:function(e){
+		e.preventDefault();
+		$('.alert-danger').hide();
+
+		if($(this).prev().find('.subcampaigns').val() !=''){
+			$('.subcampaigns').last().parent().clone().insertBefore('.modal-body .add_subcampaign ');
+		}else{
+			$('.alert-danger').text('pick a subcamp asshole').show();
+			return false;
+		}
+
+		if(Master.subcampaigns_count > $('#addPlaybookModal').find('.subcampaigns').length ){
+			$('.add_subcampaign').show();
+		}else{
+			$('.add_subcampaign').hide();
+		}
+		console.log(Master.subcampaigns_count +' '+ $('#addPlaybookModal').find('.subcampaigns').length );
 	},
 
 	add_playbook:function(e){
