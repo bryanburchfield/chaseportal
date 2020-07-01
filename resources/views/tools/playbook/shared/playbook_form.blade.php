@@ -13,6 +13,8 @@
     <select name="subcampaign" class="form-control subcampaigns"></select>
 </div>
 
+<a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
+
 <div class="alert alert-success hidetilloaded mb0"></div>
 <div class="alert alert-danger hidetilloaded mb0"></div>
 <div class="alert connection_msg hidetilloaded mb0"></div>

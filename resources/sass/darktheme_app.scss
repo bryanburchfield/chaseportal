@@ -2987,6 +2987,10 @@ a.playbook_actions_modal, a.playbook_filters_modal{
 a.add_action, a.add_filter{
     margin-top: 10px;
     display: inline-block;
+    
+}
+
+a.add_subcampaign{
     font-weight: 600;
     i{
         color: $green;

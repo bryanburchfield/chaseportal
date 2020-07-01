@@ -3605,11 +3605,13 @@ a.add_action,
 a.add_filter {
   margin-top: 10px;
   display: inline-block;
+}
+
+a.add_subcampaign {
   font-weight: 600;
 }
 
-a.add_action i,
-a.add_filter i {
+a.add_subcampaign i {
   color: #33A09B;
 }
 

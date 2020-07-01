@@ -16,6 +16,7 @@ var Contacts_Playbook = {
     leadrule_filters: $('.filter_type').first().find('option').length -1,
     leadrule_filters_used: $('.leadfilter_row').length,
     flowchart_vline_height:$('.add_filter').parent().parent().parent().find('.vertical-line').height,
+    subcampaigns_count:0,
 
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
@@ -169,7 +170,15 @@ var Contacts_Playbook = {
 			var campaign = $(this).val();
 		}
 
+
 		var that = $(this);
+		var modal;
+
+		$('div.modal').each(function(){
+			if($(this).hasClass('in')){
+				modal = $(this).attr('id');
+			}
+		})
 
 		$.ajaxSetup({
 	        headers: {
@@ -192,6 +201,12 @@ var Contacts_Playbook = {
 
                 $('.subcampaigns ').empty();
                 $('.subcampaigns ').append(sub_camps);
+                Master.subcampaigns_count = response.length;
+
+                if(Master.subcampaigns_count > $('#'+modal).find('.subcampaigns').length){
+                	$('.add_subcampaign').show()
+                }
+                console.log(Master.subcampaigns_count +' '+ $('#'+modal).find('.subcampaigns').length);
 	        }
 	    });
 	},
