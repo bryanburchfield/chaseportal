@@ -238,7 +238,18 @@ var Contacts_Playbook = {
 	add_playbook:function(e){
 		e.preventDefault();
 
-		var form_data = $(this).serialize();
+		// var form_data = $(this).serialize();
+		var name = $(this).find('.name').val(),
+			campaign = $(this).find('#campaign_select').val(),
+			subcampaigns = []
+		;
+
+		$('.subcampaigns').each(function(){
+			if($(this).val() != ''){
+				subcampaigns.push($(this).val());
+			}
+		});
+
 		$('.loader_hor').show();
 
 		$.ajaxSetup({
@@ -251,7 +262,11 @@ var Contacts_Playbook = {
 	        url: '/tools/playbook/playbooks' ,
 	        type: 'POST',
 	        dataType: 'json',
-	        data: form_data,
+	        data: {
+	        	name:name,
+	        	campaign:campaign,
+	        	subcampaigns:subcampaigns
+	        },
 	        success:function(response){
 
 	            if(response.status == 'success'){
