@@ -126,7 +126,6 @@ var Contacts_Playbook = {
 
 	        },
 	        success:function(response){
-	        	console.log(response);
 	        	Contacts_Playbook.toggle_checked(that, checked, 0);
 	        }, error: function (data) {
 	        	Contacts_Playbook.toggle_checked(that, checked, 1);
@@ -181,7 +180,7 @@ var Contacts_Playbook = {
 			if($(this).hasClass('in')){
 				Contacts_Playbook.current_modal = $(this).attr('id');
 			}
-		})
+		});
 
 		$.ajaxSetup({
 	        headers: {
@@ -856,7 +855,6 @@ var Contacts_Playbook = {
             },
 
             success:function(response){
-            	console.log(response);
                 window.location.href = '/tools/playbook/touches/'+playbook_id;
             },
             error :function( data ) {
@@ -917,7 +915,6 @@ var Contacts_Playbook = {
     	    },
 
     	    success:function(response){
-    	    	console.log(response);
     	        window.location.href = '/tools/playbook/touches/'+playbook_id;
     	    },
     	    error :function( data ) {
@@ -1011,7 +1008,6 @@ var Contacts_Playbook = {
     	if(Contacts_Playbook.actions_used < Contacts_Playbook.actions){
     		$('.alert.action_error').hide();
     		var selected_action = $(this).parent().find('.action_type').val();
-    		console.log(selected_action);
     		if(selected_action){
     			var new_action = $(this).parent().parent().parent().clone();
     			$(new_action).insertAfter('.action_row:last');
