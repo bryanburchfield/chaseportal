@@ -16,13 +16,20 @@ class ContactsPlaybook extends Model
         'group_id',
         'name',
         'campaign',
-        'subcampaign',
         'last_run_from',
         'last_run_to',
         'active',
     ];
 
-    protected $cascadeDeletes = ['playbook_touches'];
+    protected $cascadeDeletes = [
+        'playbook_touches',
+        'playbook_subcampaigns',
+    ];
+
+    public function playbook_subcampaigns()
+    {
+        return $this->hasMany('App\Models\PlaybookSubcampaign');
+    }
 
     public function playbook_touches()
     {
