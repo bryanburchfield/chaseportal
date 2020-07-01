@@ -193,7 +193,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-	        	
+
 	        	$('#'+modal).find('.subcampaigns').parent().not(':first').remove();
 	        	
                 var response = Object.entries(response.subcampaigns);
@@ -223,7 +223,7 @@ var Contacts_Playbook = {
 		if($(this).prev().find('.subcampaigns').val() !=''){
 			$('.subcampaigns').last().parent().clone().insertBefore('.modal-body .add_subcampaign ');
 		}else{
-			$('.alert-danger').text('pick a subcamp asshole').show();
+			$('.alert-danger').text('pick a subcamp').show();
 			return false;
 		}
 
