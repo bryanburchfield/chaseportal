@@ -57,7 +57,7 @@ class ValidPlaybook extends FormRequest
                 }),
             ],
             'campaign' => 'required',
-            'subcampaign' => 'nullable',
+            'subcampaigns' => 'nullable|array',
         ];
     }
 }

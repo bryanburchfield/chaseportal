@@ -77,7 +77,7 @@ class PlaybookController extends Controller
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
 
-        ContactsPlaybook::create($data);
+        $contacts_playbook = ContactsPlaybook::create($data);
 
         return ['status' => 'success'];
     }
@@ -91,6 +91,7 @@ class PlaybookController extends Controller
     public function updatePlaybook(ValidPlaybook $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
+
         $contacts_playbook->update($request->all());
 
         return ['status' => 'success'];

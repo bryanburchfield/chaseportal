@@ -153,7 +153,7 @@ class PlaybookTouchController extends Controller
 
         DB::beginTransaction();
 
-        $playbook_touch->update($request->all());
+        $playbook_touch->update($data);
 
         $playbook_touch->saveFilters($data['filters']);
         $playbook_touch->saveActions($data['actions']);
