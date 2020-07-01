@@ -9,7 +9,8 @@
 </div>
 
 <div class="form-group">
-    <label>{{__('tools.subcampaign')}}</label>
+    <label class="flt_lft">{{__('tools.subcampaign')}} </label>
+    <a href="#" class="remove_subcamp flt_rgt mt0 hidetilloaded"><i class="fa fa-trash-alt"></i> Remove</a>
     <select name="subcampaign" class="form-control subcampaigns"></select>
 </div>
 

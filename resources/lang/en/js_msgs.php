@@ -74,6 +74,7 @@ return [
 	'select_inbound_source' 	=> 'Select Inbound Source',
 	'select_rep'				=> 'Select Rep',
 	'select_report'				=> 'Select Report',
+	'select_subcamp'			=> 'Select a Subcampaign',
 	'select_one'				=> 'Select One',
 	'service_level'				=> 'Service Level',
 	'sorted_in'					=> 'Sorted in',

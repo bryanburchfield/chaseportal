@@ -17,6 +17,7 @@ var Contacts_Playbook = {
     leadrule_filters_used: $('.leadfilter_row').length,
     flowchart_vline_height:$('.add_filter').parent().parent().parent().find('.vertical-line').height,
     subcampaigns_count:0,
+    current_modal:'',
 
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
@@ -43,6 +44,7 @@ var Contacts_Playbook = {
         $('a.delete_touch').on('click', this.delete_touch);
         $('.menu').on('click', this.preventDefault);
         $('body').on('click', '.add_subcampaign ', this.add_subcampaign_select);
+        $('body').on('click', '.remove_subcamp', this.remove_subcamp_select);
 	},
 
 	preventDefault:function(e){
@@ -167,17 +169,17 @@ var Contacts_Playbook = {
 	get_subcampaigns:function(e, campaign){
 		e.preventDefault();
 
+		$('.loader_hor').show();
+
 		if(!campaign){
 			var campaign = $(this).val();
 		}
 
-
 		var that = $(this);
-		var modal;
 
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
-				modal = $(this).attr('id');
+				Contacts_Playbook.current_modal = $(this).attr('id');
 			}
 		})
 
@@ -193,8 +195,8 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-
-	        	$('#'+modal).find('.subcampaigns').parent().not(':first').remove();
+	        	$('.loader_hor').hide();
+	        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().not(':first').remove();
 	        	
                 var response = Object.entries(response.subcampaigns);
                 var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
@@ -206,7 +208,7 @@ var Contacts_Playbook = {
                 $('.subcampaigns ').append(sub_camps);
                 Master.subcampaigns_count = response.length;
 
-                if(Master.subcampaigns_count >= $('#'+modal).find('.subcampaigns').length){
+                if(Master.subcampaigns_count >= $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').length){
                 	$('.add_subcampaign').show();
                 }else{
                 	$('.add_subcampaign').hide();
@@ -218,21 +220,35 @@ var Contacts_Playbook = {
 
 	add_subcampaign_select:function(e){
 		e.preventDefault();
-		$('.alert-danger').hide();
+		$('#'+Contacts_Playbook.current_modal).find('.alert-danger').hide();
 
 		if($(this).prev().find('.subcampaigns').val() !=''){
-			$('.subcampaigns').last().parent().clone().insertBefore('.modal-body .add_subcampaign ');
+			var new_subcamp = $('.subcampaigns').last().parent().clone();
+			$(new_subcamp).find('a').removeClass('hidetilloaded');
+			$(new_subcamp).insertBefore('.modal-body .add_subcampaign');
+			
 		}else{
-			$('.alert-danger').text('pick a subcamp').show();
+			$('#'+Contacts_Playbook.current_modal).find('.alert-danger').text(Lang.get('js_msgs.select_subcamp')).show();
 			return false;
 		}
 
-		if(Master.subcampaigns_count > $('#addPlaybookModal').find('.subcampaigns').length ){
+		if(Master.subcampaigns_count > $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').length){
 			$('.add_subcampaign').show();
 		}else{
 			$('.add_subcampaign').hide();
 		}
-		console.log(Master.subcampaigns_count +' '+ $('#addPlaybookModal').find('.subcampaigns').length );
+
+		$('.subcampaigns').last().parent().find('a.remove_subcamp').removeClass('hidetilloaded');
+	},
+
+	remove_subcamp_select:function(e){
+		e.preventDefault();
+		$(this).parent().remove();
+		if(Master.subcampaigns_count > $('#addPlaybookModal').find('.subcampaigns').length){
+			$('.add_subcampaign').show();
+		}else{
+			$('.add_subcampaign').hide();
+		}
 	},
 
 	add_playbook:function(e){

@@ -74,6 +74,7 @@ return [
 	'select_inbound_source'		=> 'Seleccionar Fuente de Entrantes',
 	'select_rep'   				=> 'Seleccionar Agente',
 	'select_report'     		=> 'Seleccionar Informe',
+	'select_subcamp'			=> 'Seleccione una Subcampaña',
 	'select_one'				=> 'Seleccione uno',
 	'service_level'				=> 'Nivel de Servicio',
 	'sorted_in'					=> 'Ordenados por',

@@ -30,7 +30,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 mt30">
                                             @foreach($contacts_playbooks as $contacts_playbook)
-                                                <div class="playbook col-sm-2" data-playbook="{{$contacts_playbook->id}}">
+                                                <div class="playbook col-sm-2 mb30" data-playbook="{{$contacts_playbook->id}}">
                                                     <a href="#"
                                                         class="menu"
                                                         data-toggle="popover"

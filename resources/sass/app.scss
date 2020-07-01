@@ -2405,12 +2405,14 @@ div.vertical-line{
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter, a.remove_action{
+a.remove_filter, a.remove_action, a.remove_subcamp{
     color: #d9534f;
     float: right;
     font-size: 14px;
     margin-top: 10px;
 }
+
+a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
 
 .leadfilter_row .card, .action_row .card{overflow: auto;}
 
