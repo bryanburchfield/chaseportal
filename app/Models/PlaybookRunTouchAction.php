@@ -9,6 +9,10 @@ class PlaybookRunTouchAction extends Model
     protected $fillable = [
         'playbook_run_touch_id',
         'playbook_action_id',
+        'process_started_at',
+        'processed_at',
+        'reverse_started_at',
+        'reversed_at',
     ];
 
     public function playbook_run_touch()

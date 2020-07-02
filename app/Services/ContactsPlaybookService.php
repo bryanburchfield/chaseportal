@@ -116,7 +116,8 @@ class ContactsPlaybookService
             foreach ($playbook_touch->playbook_touch_actions as $playbook_touch_action) {
                 $playbook_run_touch_action = PlaybookRunTouchAction::create([
                     'playbook_run_touch_id' => $playbook_run_touch->id,
-                    'playbook_action_id' => $playbook_touch_action->playbook_action_id
+                    'playbook_action_id' => $playbook_touch_action->playbook_action_id,
+                    'process_started_at' => now(),
                 ]);
 
                 foreach ($results as $rec) {
@@ -128,6 +129,9 @@ class ContactsPlaybookService
                         'lead_id' => $rec['lead_id'],
                     ]);
                 }
+
+                $playbook_run_touch_action->processd_at = now();
+                $playbook_run_touch_action->save();
             }
         }
     }
@@ -204,15 +208,17 @@ class ContactsPlaybookService
             $sql .= " INNER JOIN [$db].[dbo].[ADVANCED_" . $campaign->advancedTable->TableName . "] A ON A.LeadId = L.IdGuid";
         }
 
-        $sql .= " WHERE GroupId = :group_id
-        AND Campaign = :campaign";
+        $sql .= " WHERE L.GroupId = :group_id
+        AND L.Campaign = :campaign";
 
-        if (!empty($playbook_touch->contacts_playbook->subcampaign)) {
-            $subcampaign = ($playbook_touch->contacts_playbook->subcampaign == '!!none!!') ? '' : $playbook_touch->contacts_playbook->subcampaign;
+        if ($playbook_touch->contacts_playbook->playbook_subcampaigns()->exists()) {
+            $subcamp_in = '';
+            foreach ($playbook_touch->contacts_playbook->playbook_subcampaigns as $sidx => $playbook_subcampaign) {
+                $bind['subcampaign' . $sidx] = $playbook_subcampaign->subcampaign;
+                $subcamp_in .= ",:subcampaign$sidx";
+            }
 
-            $bind['subcampaign'] = $subcampaign;
-
-            $sql .= " AND Subcampaign = :subcampaign";
+            $sql .= " AND L.Subcampaign IN (" . substr($subcamp_in, 1) . ")";
         }
 
         $sql .= ' ' . $where . "
