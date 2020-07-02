@@ -18,6 +18,7 @@ var Contacts_Playbook = {
     flowchart_vline_height:$('.add_filter').parent().parent().parent().find('.vertical-line').height,
     subcampaigns_count:0,
     current_modal:'',
+    subcampaigns : [],
 
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
@@ -167,7 +168,7 @@ var Contacts_Playbook = {
 
 	get_subcampaigns:function(e, campaign){
 		e.preventDefault();
-
+		console.log('Get SUbs');
 		$('.loader_hor').show();
 
 		if(!campaign){
@@ -187,7 +188,7 @@ var Contacts_Playbook = {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
-
+		
 	    return $.ajax({
 	        url: '/tools/playbook/get_subcampaigns',
 	        type: 'POST',
@@ -195,24 +196,39 @@ var Contacts_Playbook = {
 	        data: {campaign: campaign,},
 	        success:function(response){
 	        	$('.loader_hor').hide();
-	        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().not(':first').remove();
-	        	
-                var response = Object.entries(response.subcampaigns);
-                var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-                for(var i=0;i<response.length;i++){
-                	sub_camps+='<option value="'+response[i][0]+'">'+response[i][1]+'</option>';
-                }
+	        	console.log(response);
+	        	var subcamps_response = Object.entries(response.subcampaigns);
+	        	console.log(response);
+	        	var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
+	        	for(var i=0;i<response.length;i++){
+	        		sub_camps+='<option value="'+subcamps_response[i][0]+'">'+subcamps_response[i][1]+'</option>';
+	        	}
 
-                $('.subcampaigns ').empty();
-                $('.subcampaigns ').append(sub_camps);
-                Master.subcampaigns_count = response.length;
+	        	if(Contacts_Playbook.current_modal == 'addPlaybookModal'){
+		        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().not(':first').remove();
+		        	
+	                $('.subcampaigns').empty();
+	                $('.subcampaigns').append(sub_camps);
+	                Master.subcampaigns_count = subcamps_response.length;
 
-                if(Master.subcampaigns_count >= $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').length){
-                	$('.add_subcampaign').show();
-                }else{
-                	$('.add_subcampaign').hide();
-                }
-                
+	                if(Master.subcampaigns_count >= $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').length){
+	                	$('.add_subcampaign').show();
+	                }else{
+	                	$('.add_subcampaign').hide();
+	                }
+	        	}else if(Contacts_Playbook.current_modal == 'editPlaybookModal'){
+	        		Contacts_Playbook.subcampaigns=[];
+
+	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+	        		var selected;
+
+	        		for(var i=0; i<response.subcampaign_list.length;i++){
+	        		    selected =  response.subcampaign_list[i].selected ? 'checked' : '';
+	        		    subcampaign_list+='<div class="checkbox mb20"><label><input name="subcampaign_list[]" '+selected+' type="checkbox" value="'+response.subcampaign_list[i].id+'"><b>'+response.subcampaign_list[i].name+'</b></label></div>';
+	        		}
+	        		console.log(subcampaign_list);
+	        		Contacts_Playbook.current_modal.find('.subcampaign_list').append(subcampaign_list);
+	        	}
 	        }
 	    });
 	},
@@ -706,6 +722,7 @@ var Contacts_Playbook = {
 	},
 
 	get_playbook:function(id){
+		console.log(id);
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -722,12 +739,15 @@ var Contacts_Playbook = {
 
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('#campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
+                console.log(response.subcampaigns);
 
-                $.when(
-					Contacts_Playbook.get_subcampaigns(event, response.campaign)
-				).done(function() {
-					edit_modal.find('.subcampaigns option[value="'+response.subcampaign+'"]').prop('selected', true);
-				});
+                for(let val in response.subcampaigns){
+	                $.when(
+						Contacts_Playbook.get_subcampaigns(event, response.campaign)
+					).done(function() {
+						edit_modal.find('.subcampaigns option[value="'+response.subcampaigns[val]+'"]').prop('selected', true);
+					});
+                }
 	        }
 	    });
 	},
