@@ -22,11 +22,17 @@ class PlaybookAction extends Model
         'playbook_lead_action',
         'playbook_sms_action',
         'playbook_email_action',
+        'playbook_touch_actions',
     ];
 
     public function playbook_touch_actions()
     {
         return $this->hasMany('App\Models\PlaybookTouchAction');
+    }
+
+    public function playbook_run_touch_actions()
+    {
+        return $this->hasMany('App\Models\PlaybookRunTouchAction');
     }
 
     public function playbook_lead_action()

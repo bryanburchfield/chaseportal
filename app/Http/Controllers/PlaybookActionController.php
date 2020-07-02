@@ -13,6 +13,7 @@ use App\Models\PlaybookAction;
 use App\Models\PlaybookEmailAction;
 use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookSmsAction;
+use App\Models\PlaybookTouchAction;
 use App\Models\SmsFromNumber;
 use App\Models\Script;
 use App\Traits\CampaignTraits;
@@ -150,10 +151,27 @@ class PlaybookActionController extends Controller
         // transaction since we're doing a bunch of updates/deletes/inserts
         DB::beginTransaction();
 
-        // update action
-        $playbook_action->update($data);
+        // If action is of type lead and has been run, we need to
+        // (soft) delete and insert as a new action so history
+        // is preserved.
+        if ($playbook_action->action_type == 'lead' && $playbook_action->playbook_run_touch_actions()->exists()) {
+            $old_touches = $playbook_action->playbook_touch_actions;
 
-        // delete any off-type actions - use find/delete so audit trail works
+            $playbook_action->delete();
+            $playbook_action = PlaybookAction::create($data);
+
+            // Now insert any playbook touch actions that used to be linked to deleted action
+            foreach ($old_touches as $touch) {
+                PlaybookTouchAction::create([
+                    'playbook_touch_id' => $touch->playbook_touch_id,
+                    'playbook_action_id' => $playbook_action->id,
+                ]);
+            }
+        } else {
+            $playbook_action->update($data);
+        }
+
+        // delete any off-type actions - use find/delete so audit trail & soft delete works
         if ($data['action_type'] != 'email') {
             $subaction = PlaybookEmailAction::where('playbook_action_id', $data['id'])->first();
             if ($subaction) {
@@ -175,7 +193,7 @@ class PlaybookActionController extends Controller
 
         // update/create action type
         $model::updateOrCreate(
-            ['playbook_action_id' => $data['id']],
+            ['playbook_action_id' => $playbook_action->id],
             $data
         );
 
