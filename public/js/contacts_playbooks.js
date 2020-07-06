@@ -205,17 +205,18 @@ var Contacts_Playbook = {
 	        	}
 
 	        	if(Contacts_Playbook.current_modal == 'addPlaybookModal'){
-		        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().not(':first').remove();
-		        	
-	                $('.subcampaigns').empty();
-	                $('.subcampaigns').append(sub_camps);
-	                Master.subcampaigns_count = subcamps_response.length;
+		        	Contacts_Playbook.subcampaigns=[];
+	        		var subcamps_response = Object.keys(response.subcampaigns);
 
-	                if(Master.subcampaigns_count >= $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').length){
-	                	$('.add_subcampaign').show();
-	                }else{
-	                	$('.add_subcampaign').hide();
-	                }
+	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+	        		var selected;
+	        		
+	        		for(var i=0; i<subcamps_response.length;i++){
+	        		    selected =  subcamps_response[i].selected ? 'checked' : '';
+	        		    subcampaign_list+='<div class="checkbox mb10 cb"><label><input class="subcamps" name="subcampaign_list[]" '+selected+' type="checkbox" value="'+subcamps_response[i]+'"><b>'+subcamps_response[i]+'</b></label></div>';
+	        		}
+	        		console.log(subcamps_response);
+	        		$('#'+Contacts_Playbook.current_modal).find('.subcampaign_list').append(subcampaign_list);
 	        	}else if(Contacts_Playbook.current_modal == 'editPlaybookModal'){
 	        		Contacts_Playbook.subcampaigns=[];
 	        		var subcamps_response = Object.keys(response.subcampaigns);
@@ -276,10 +277,8 @@ var Contacts_Playbook = {
 			subcampaigns = []
 		;
 
-		$('.subcampaigns').each(function(){
-			if($(this).val() != ''){
-				subcampaigns.push($(this).val());
-			}
+		$('input.subcamps[type="checkbox"]:checked').each(function () {
+		    subcampaigns.push($(this).val());
 		});
 
 		$('.loader_hor').show();
