@@ -28,12 +28,12 @@ class ValidPlaybook extends FormRequest
     {
         // if id not passed (adding), insert id=0
         // otherwise, check that it belongs to user's group_id, 404 if not
-        if ($this->filled('id')) {
+        if (empty($this->id)) {
+            $this->merge(['id' => 0]);
+        } else {
             $contacts_playbook = ContactsPlaybook::where('id', $this->id)
                 ->where('group_id', Auth::user()->group_id)
                 ->firstOrFail();
-        } else {
-            $this->merge(['id' => 0]);
         }
     }
 
