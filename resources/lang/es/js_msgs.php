@@ -86,7 +86,7 @@ return [
 	'total'						=> 'Total',
 	'total_calls'				=> 'Total de Llamadas',
 	'total_leads'				=> 'Total de Contactos',
-	'undo_selection'			=> 'Deshacer Selección',
+	'undo_selection'			=> 'Restablecer Selecciones',
 	'unselect_all'				=> 'Desmarcar Todo',
 	'view_quarterly'			=> 'Ver Trimestralmente',
 	'voicemails'				=> 'Mensajes de Voz',

@@ -86,7 +86,7 @@ return [
 	'total'						=> 'Total',
 	'total_calls'				=> 'Total Calls',
 	'total_leads'				=> 'Total Leads',
-	'undo_selection'			=> 'Undo Selection',
+	'undo_selection'			=> 'Reset Selection',
 	'unselect_all'				=> 'Unselect All',
 	'view_quarterly'			=> 'View Quarterly',
 	'voicemails'				=> 'Voicemails',
