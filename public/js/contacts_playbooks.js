@@ -196,31 +196,12 @@ var Contacts_Playbook = {
 	        data: {campaign: campaign,},
 	        success:function(response){
 	        	$('.loader_hor').hide();
-	        	
-	        	var subcamps_response = Object.entries(response.subcampaigns);
+	        	$('.subcampaign_list').empty();
+	        	var subcamps_response = Object.keys(response.subcampaigns);
 
-	        	var sub_camps='<option value="">'+Lang.get('js_msgs.select_one')+'</option>';
-	        	for(var i=0;i<response.length;i++){
-	        		sub_camps+='<option value="'+subcamps_response[i][0]+'">'+subcamps_response[i][1]+'</option>';
-	        	}
-
-	        	if(Contacts_Playbook.current_modal == 'addPlaybookModal'){
+	        	if(subcamps_response.length){
 		        	Contacts_Playbook.subcampaigns=[];
-	        		var subcamps_response = Object.keys(response.subcampaigns);
-
-	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
-	        		var selected;
 	        		
-	        		for(var i=0; i<subcamps_response.length;i++){
-	        		    selected =  subcamps_response[i].selected ? 'checked' : '';
-	        		    subcampaign_list+='<div class="checkbox mb10 cb"><label><input class="subcamps" name="subcampaign_list[]" '+selected+' type="checkbox" value="'+subcamps_response[i]+'"><b>'+subcamps_response[i]+'</b></label></div>';
-	        		}
-	        		console.log(subcamps_response);
-	        		$('#'+Contacts_Playbook.current_modal).find('.subcampaign_list').append(subcampaign_list);
-	        	}else if(Contacts_Playbook.current_modal == 'editPlaybookModal'){
-	        		Contacts_Playbook.subcampaigns=[];
-	        		var subcamps_response = Object.keys(response.subcampaigns);
-
 	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
 	        		var selected;
 	        		
@@ -231,6 +212,7 @@ var Contacts_Playbook = {
 	        		console.log(subcamps_response);
 	        		$('#'+Contacts_Playbook.current_modal).find('.subcampaign_list').append(subcampaign_list);
 	        	}
+	        	
 	        }
 	    });
 	},
