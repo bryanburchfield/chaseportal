@@ -26,5 +26,9 @@
         @can('accessAdmin')
             <li data-page="admin" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'admin' ? 'class="active"' : ''?>><a href="#" class="admin_link" data-path="load_admin_nav"><i class="fas fa-user-shield"></i>{{__('sidenav.admin')}}</a></li>
         @endcan
+
+        @can('accessSuperAdmin')
+            <li><a href="https://contactflow.chasedatacorp.com/" target="_blank"><i class="fas fa-pencil-ruler"></i> Flow Builder</a></li>
+        @endcan
     </ul>
 </nav>
