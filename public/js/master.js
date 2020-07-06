@@ -104,7 +104,8 @@ var Master = {
         if($(this).hasClass('back_to_sidenav')){
             var path = '/admin/load_sidenav';
         }else{
-            var path = '/admin/load_admin_nav';
+            var path = $(this).data('path');
+            path = '/admin/'+path;
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
 
