@@ -91,7 +91,7 @@
             });
 
             $('.btn-notifications, .close_nots_bar').on('click', function () {
-                $('#sidebar_nots').toggleClass('active');
+                $('#sidebar_nots').toggleClass('sb_open');
             });
         });
     </script>

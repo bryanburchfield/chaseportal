@@ -94,7 +94,7 @@
     <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('sb_open');
+                $('#sidebar').toggleClass('active');
             });
 
             $('.btn-notifications, .close_nots_bar').on('click', function () {
