@@ -94,11 +94,11 @@
     <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
+                $('#sidebar').toggleClass('sb_open');
             });
 
             $('.btn-notifications, .close_nots_bar').on('click', function () {
-                $('#sidebar_nots').toggleClass('active');
+                $('#sidebar_nots').toggleClass('sb_open');
             });
 
             @isset($summernote)

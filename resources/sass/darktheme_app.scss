@@ -292,7 +292,7 @@ i, span {
     @include base_style(#0f131f, #aaa, left, 1px solid darken(#23354e,10%));
     @include transition(all, ease, 0.3s);
 
-    &.active {
+    &.sb_open {
         min-width: 300px;
         max-width: 300px;
     }

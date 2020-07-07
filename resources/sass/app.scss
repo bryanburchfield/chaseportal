@@ -289,7 +289,7 @@ i, span {
     @include base_style(#efefef, #fff, left, 1px solid #ccc);
     @include transition(all, ease, 0.3s);
 
-    &.active {
+    &.sb_open {
         min-width: 300px;
         max-width: 300px;
     }

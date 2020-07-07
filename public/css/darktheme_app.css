@@ -425,7 +425,7 @@ span {
   transition: all, ease, 0.3s;
 }
 
-#sidebar_nots.active {
+#sidebar_nots.sb_open {
   min-width: 300px;
   max-width: 300px;
 }
