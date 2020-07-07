@@ -48,8 +48,8 @@ trait ReportTraits
         // If SSO, default times from SQL Server
         if (session('isSso', 0)) {
             $sql = "SET NOCOUNT ON;
-SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', TRIM(CAST(CONVERT(DATE, CURRENT_TIMESTAMP) AS CHAR)) + ' 09:00:00'),
-'End' = dbo.GetSettingEx (:group2, '', 'ReportingEndTime', TRIM(CAST(CONVERT(DATE, CURRENT_TIMESTAMP) AS CHAR)) + ' 18:00:00')";
+SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'),
+'End' = dbo.GetSettingEx (:group2, '', 'ReportingEndTime', '18:00:00')";
 
             $bind = [
                 'group1' => Auth::user()->group_id,
