@@ -84,17 +84,6 @@ class Sso
                     abort(403, 'Unauthorized');
                 }
 
-                // check role
-                $api_user->Role = strtolower($api_user->Role);
-                if (
-                    $api_user->Role != 'client' &&
-                    $api_user->Role != 'administrator' &&
-                    $api_user->Role != 'superadmin'
-                ) {
-                    abort(403, 'Unauthorized');
-                }
-
-
                 $sso_user = [
                     'name' => $api_user->Username,
                     'type' => $api_user->Role,
