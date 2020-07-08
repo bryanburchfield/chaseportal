@@ -22,17 +22,17 @@
                     <table border="1">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Playbook</th>
+                                <th>Touch</th>
+                                <th>Action</th>
                                 <th>Clicky</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($history as $item)
                             <tr>
-                                <td>{{$item->created_at}}</td>
-                                <td>{{$item->name}}</td>
-                                <td><a href="{{ action('PlaybookHistoryController@runIndex', [$item->id]) }}">Details</a></td>
+                                <td>{{ $item['touch_name'] }}</td>
+                                <td>{{ $item['action_name'] }}</td>
+                                <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
                             </tr>
                             @endforeach
                         </tbody>

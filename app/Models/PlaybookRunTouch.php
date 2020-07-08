@@ -18,7 +18,7 @@ class PlaybookRunTouch extends Model
 
     public function playbook_touch()
     {
-        return $this->belongsTo('App\Models\PlaybookTouch');
+        return $this->belongsTo('App\Models\PlaybookTouch')->withTrashed();
     }
 
     public function playbook_run_touch_actions()
