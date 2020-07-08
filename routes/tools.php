@@ -83,6 +83,11 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                 Route::post('/delete_esp', 'PlaybookEmailProviderController@deleteEmailServiceProvider');
                 Route::post('/update_esp', 'PlaybookEmailProviderController@updateEmailServiceProvider');
 
+                // History
+                Route::prefix('history')->group(function () {
+                    Route::get('/', 'PlaybookHistoryController@index');  // history index
+                });
+
                 // Shared ajax
                 Route::post('/get_filters', 'PlaybookController@getFilters');  // get all available filters: pass in 'campaign' (optional)
                 Route::post('/get_actions', 'PlaybookController@getActions');  // get all available actions: pass in 'campaign' (optional)

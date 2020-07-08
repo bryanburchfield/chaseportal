@@ -6,4 +6,5 @@
     @if (Auth::user()->isType('superadmin'))
         <li @if ($playbook_page == 'sms_numbers') class="active" @endif><a href="{{action('SmsFromNumberController@index')}}">SMS Numbers</a></li>
     @endif
+    <li @if ($playbook_page == 'history') class="active" @endif><a href="{{action('PlaybookHistoryController@index')}}">{{__('tools.history')}}</a></li>
 </ul>
