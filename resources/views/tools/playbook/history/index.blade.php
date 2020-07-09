@@ -24,7 +24,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Playbook</th>
-                                <th>Clicky</th>
+                                <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -19,7 +19,28 @@
 			    	</div>
                 </div>
                 <div>
-
+                    <a href="{{ action('PlaybookHistoryController@index') }}">History</a>
+                    -><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">Playbook</a>
+                    ->Action
+                    <hr>
+                    {{ $playbook_run->contacts_playbook->name }} :
+                    {{ $playbook_run->created_at }} :
+                    {{ $playbook_run_touch_action->playbook_run_touch->playbook_touch->name }} : 
+                    {{ $playbook_run_touch_action->playbook_action->name }} : 
+                    <hr>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Lead#</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($details as $detail)
+                                
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
 			</div>
 		</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
+use App\Models\PlaybookRunTouchAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,8 @@ class PlaybookHistoryController extends Controller
 
     public function runActionIndex(Request $request)
     {
+        $playbook_run_touch_action = $this->findPlaybookRunTouchAction($request->id);
+
         $page = [
             'menuitem' => 'playbook',
             'menu' => 'tools',
@@ -62,8 +65,9 @@ class PlaybookHistoryController extends Controller
             'jsfile' => ['playbook_history.js'],
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
-            'playbook_run' => $this->findPlaybookRun($request->id),
-            'history' => $this->getRunHistory($request->id),
+            'playbook_run' => $playbook_run_touch_action->playbook_run_touch->playbook_run,
+            'playbook_run_touch_action' => $playbook_run_touch_action,
+            'details' => $this->getActionDetails($playbook_run_touch_action),
         ];
 
         return view('tools.playbook.history.run_action_index')->with($data);
@@ -79,6 +83,18 @@ class PlaybookHistoryController extends Controller
         }
 
         return $playbook_run;
+    }
+
+    private function findPlaybookRunTouchAction($id)
+    {
+        $playbook_run_touch_action = PlaybookRunTouchAction::with('playbook_action', 'playbook_run_touch.playbook_run')
+            ->findOrFail($id);
+
+        if ($playbook_run_touch_action->playbook_action->group_id != Auth::user()->group_id) {
+            abort(404);
+        }
+
+        return $playbook_run_touch_action;
     }
 
     private function getHistory()
@@ -107,10 +123,22 @@ class PlaybookHistoryController extends Controller
                     'id' => $playbook_run_touch_action->id,
                     'touch_name' => $playbook_run_touch->playbook_touch->name,
                     'action_name' => $playbook_run_touch_action->playbook_action->name,
+                    'processed_at' => $playbook_run_touch_action->processed_at,
+                    'reversed_at' => $playbook_run_touch_action->reversed_at,
                 ];
             }
         }
 
         return $touches;
+    }
+
+    private function getActionDetails(PlaybookRunTouchAction $playbook_run_touch_action)
+    {
+        $details = [];
+        foreach ($playbook_run_touch_action->playbook_run_touch_action_details as $playbook_run_touch_action_detail) {
+            //
+        }
+
+        return $details;
     }
 }

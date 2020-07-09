@@ -19,12 +19,19 @@
 			    	</div>
                 </div>
                 <div>
+                    <a href="{{action('PlaybookHistoryController@index')}}">History</a>
+                    ->Playbook
+                    <hr>
+                    {{ $playbook_run->contacts_playbook->name }} : {{ $playbook_run->created_at }}
+                    <hr>
                     <table border="1">
                         <thead>
                             <tr>
                                 <th>Touch</th>
                                 <th>Action</th>
-                                <th>Clicky</th>
+                                <th>Processed</th>
+                                <th>Reversed</th>
+                                <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,6 +39,8 @@
                             <tr>
                                 <td>{{ $item['touch_name'] }}</td>
                                 <td>{{ $item['action_name'] }}</td>
+                                <td>{{ $item['processed_at'] }}</td>
+                                <td>{{ $item['reversed_at'] }}</td>
                                 <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
                             </tr>
                             @endforeach
