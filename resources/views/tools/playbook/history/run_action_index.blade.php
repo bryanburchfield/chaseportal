@@ -32,12 +32,17 @@
                         <thead>
                             <tr>
                                 <th>Lead#</th>
-                                <th>Name</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($details as $detail)
-                                
+                                <tr>
+                                    <td>{{ $detail['id'] }}</td>
+                                    <td>{{ $detail['FirstName'] }}</td>
+                                    <td>{{ $detail['LastName'] }}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

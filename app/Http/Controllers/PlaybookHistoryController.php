@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
 use App\Models\PlaybookRunTouchAction;
+use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookHistoryController extends Controller
 {
+    use SqlServerTraits;
+    use TimeTraits;
+
     public function index()
     {
         $page = [
@@ -99,18 +103,25 @@ class PlaybookHistoryController extends Controller
 
     private function getHistory()
     {
-        return DB::table('playbook_runs')
+        $history = DB::table('playbook_runs')
             ->join('contacts_playbooks', 'contacts_playbooks.id', '=', 'playbook_runs.contacts_playbook_id')
             ->where('contacts_playbooks.group_id', Auth::user()->group_id)
             ->select(['playbook_runs.*', 'contacts_playbooks.name'])
             ->orderBy('playbook_runs.created_at', 'desc')
             ->get();
+
+        // Convert times to local
+        $history->transform(function ($item) {
+            $item->created_at = $this->utcToLocal($item->created_at, Auth::user()->iana_tz);
+            return $item;
+        });
+
+        return $history;
     }
 
     private function getRunHistory($playbook_run_id)
     {
         $touches = [];
-        $i = 0;
 
         $playbook_run_touches = PlaybookRunTouch::where('playbook_run_id', $playbook_run_id)
             ->with(['playbook_run_touch_actions.playbook_action', 'playbook_touch'])
@@ -118,12 +129,22 @@ class PlaybookHistoryController extends Controller
 
         foreach ($playbook_run_touches as $playbook_run_touch) {
             foreach ($playbook_run_touch->playbook_run_touch_actions as $playbook_run_touch_action) {
-                $i++;
-                $touches[$i] = [
+                // Convert times to local
+                if (!empty($playbook_run_touch_action->processed_at)) {
+                    $playbook_run_touch_action->processed_at = $this->utcToLocal($playbook_run_touch_action->processed_at, Auth::user()->iana_tz);
+                }
+                if (!empty($playbook_run_touch_action->reversed_at)) {
+                    $playbook_run_touch_action->reversed_at = $this->utcToLocal($playbook_run_touch_action->reversed_at, Auth::user()->iana_tz);
+                }
+
+                $touches[] = [
                     'id' => $playbook_run_touch_action->id,
                     'touch_name' => $playbook_run_touch->playbook_touch->name,
                     'action_name' => $playbook_run_touch_action->playbook_action->name,
+                    'action_type' => $playbook_run_touch_action->playbook_action->action_type,
+                    'process_started_at' => $playbook_run_touch_action->process_started_at,
                     'processed_at' => $playbook_run_touch_action->processed_at,
+                    'reverse_started_at' => $playbook_run_touch_action->reverse_started_at,
                     'reversed_at' => $playbook_run_touch_action->reversed_at,
                 ];
             }
@@ -134,11 +155,23 @@ class PlaybookHistoryController extends Controller
 
     private function getActionDetails(PlaybookRunTouchAction $playbook_run_touch_action)
     {
-        $details = [];
+        $lead_list = [];
         foreach ($playbook_run_touch_action->playbook_run_touch_action_details as $playbook_run_touch_action_detail) {
-            //
+            if (!isset($lead_list[$playbook_run_touch_action_detail->reporting_db])) {
+                $lead_list[$playbook_run_touch_action_detail->reporting_db] = '';
+            }
+            $lead_list[$playbook_run_touch_action_detail->reporting_db] .= ',' . $playbook_run_touch_action_detail->lead_id;
         }
 
-        return $details;
+        $sql = '';
+        $union = '';
+        foreach ($lead_list as $db => $list) {
+            $sql .= "$union SELECT * FROM [$db].[dbo].[Leads] L
+            WHERE L.id IN (" . substr($list, 1) . ')';
+
+            $union = 'UNION ALL ';
+        }
+
+        return $this->runSql($sql);
     }
 }

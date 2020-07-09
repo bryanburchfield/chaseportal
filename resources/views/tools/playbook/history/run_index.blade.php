@@ -39,8 +39,28 @@
                             <tr>
                                 <td>{{ $item['touch_name'] }}</td>
                                 <td>{{ $item['action_name'] }}</td>
-                                <td>{{ $item['processed_at'] }}</td>
-                                <td>{{ $item['reversed_at'] }}</td>
+                                <td>
+                                    @if (empty($item['process_started_at']))
+                                        <button class="btn btn-success" name="action" value="process:{{$item['id']}}">{{__('tools.process')}}</button>
+                                    @elseif (empty($item['processed_at']))
+                                        {{__('tools.in_process')}}
+                                    @else
+                                        {{$item['processed_at']}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($item['action_type'] !== 'lead')
+                                        {{$item['reversed_at']}}
+                                    @else
+                                        @if (!empty($item['processed_at']) && empty($item['reverse_started_at']))
+                                            <a class="btn btn-danger reverse_action" data-toggle="modal" data-target="#reverseActionModal" href="#" data-id="{{$item['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
+                                        @elseif (!empty($item['processed_at']) && empty($item['reversed_at']))
+                                            {{__('tools.in_process')}}
+                                        @else
+                                            {{$item['reversed_at']}}
+                                        @endif
+                                    @endif
+                                </td>
                                 <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
                             </tr>
                             @endforeach
