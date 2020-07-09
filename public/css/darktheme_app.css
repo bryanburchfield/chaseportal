@@ -849,6 +849,7 @@ input[type=file] {
   padding: 20px;
   margin-bottom: 30px;
   transition: 0.3s;
+  position: relative;
 }
 
 .card.card_table,
@@ -3254,6 +3255,11 @@ span.numb_notifications {
 .dt-buttons button {
   background: #33A09B;
   color: #fff;
+}
+
+.col-sm-12.w99 {
+  width: 98% !important;
+  margin-left: 1%;
 }
 
 /* ---------------------------------------------------

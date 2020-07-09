@@ -621,6 +621,7 @@ input[type='file'] {
     padding: 20px; 
     margin-bottom: 30px;
     transition: 0.3s;
+    position: relative;
 
     &.card_table, &.card_table2 {
         @include gradient(#101824, #090d14, top, 0%, 52%);
@@ -2681,6 +2682,11 @@ span.numb_notifications{
     button{
         @include base_style($green, #fff);
     }
+}
+
+.col-sm-12.w99{    
+    width: 98% !important;
+    margin-left: 1%;
 }
 
 /* ---------------------------------------------------
