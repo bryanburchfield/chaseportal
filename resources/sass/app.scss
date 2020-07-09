@@ -2877,6 +2877,17 @@ a.add_subcampaign{
     color:#333;
 }
 
+.playbooks_history_table{
+
+    a{
+        color:$orange;
+        &:hover{
+            color:darken($orange, 12%);
+        }
+    }
+}
+
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

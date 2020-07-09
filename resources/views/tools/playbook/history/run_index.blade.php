@@ -18,54 +18,62 @@
                         @include('tools.playbook.shared.topnav', ['playbook_page' => 'history'])
 			    	</div>
                 </div>
-                <div>
-                    <a href="{{action('PlaybookHistoryController@index')}}">History</a>
-                    ->Playbook
-                    <hr>
-                    {{ $playbook_run->contacts_playbook->name }} : {{ $playbook_run->created_at }}
-                    <hr>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Touch</th>
-                                <th>Action</th>
-                                <th>Processed</th>
-                                <th>Reversed</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($history as $item)
-                            <tr>
-                                <td>{{ $item['touch_name'] }}</td>
-                                <td>{{ $item['action_name'] }}</td>
-                                <td>
-                                    @if (empty($item['process_started_at']))
-                                        <button class="btn btn-success" name="action" value="process:{{$item['id']}}">{{__('tools.process')}}</button>
-                                    @elseif (empty($item['processed_at']))
-                                        {{__('tools.in_process')}}
-                                    @else
-                                        {{$item['processed_at']}}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($item['action_type'] !== 'lead')
-                                        {{$item['reversed_at']}}
-                                    @else
-                                        @if (!empty($item['processed_at']) && empty($item['reverse_started_at']))
-                                            <a class="btn btn-danger reverse_action" data-toggle="modal" data-target="#reverseActionModal" href="#" data-id="{{$item['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
-                                        @elseif (!empty($item['processed_at']) && empty($item['reversed_at']))
-                                            {{__('tools.in_process')}}
-                                        @else
-                                            {{$item['reversed_at']}}
-                                        @endif
-                                    @endif
-                                </td>
-                                <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+
+                <div class="row mt30">
+                    <div class="col-sm-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{action('PlaybookHistoryController@index')}}">History</a></li>
+                                <li class="breadcrumb-item"><a href="#">Playbook</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ $playbook_run->contacts_playbook->name }} : {{ $playbook_run->created_at }}</li>
+                            </ol>
+                        </nav>
+
+                        <div class="table-responsive nobdr playbooks_history_table">
+                            <table class="table mt20 table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{{__('tools.touch')}}</th>
+                                        <th>{{__('tools.action')}}</th>
+                                        <th>{{__('tools.processed')}}</th>
+                                        <th>{{__('tools.reversed')}}</th>
+                                        <th>{{__('tools.details')}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($history as $item)
+                                    <tr>
+                                        <td>{{ $item['touch_name'] }}</td>
+                                        <td>{{ $item['action_name'] }}</td>
+                                        <td>
+                                            @if (empty($item['process_started_at']))
+                                                <button class="btn btn-success" name="action" value="process:{{$item['id']}}">{{__('tools.process')}}</button>
+                                            @elseif (empty($item['processed_at']))
+                                                {{__('tools.in_process')}}
+                                            @else
+                                                {{$item['processed_at']}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item['action_type'] !== 'lead')
+                                                {{$item['reversed_at']}}
+                                            @else
+                                                @if (!empty($item['processed_at']) && empty($item['reverse_started_at']))
+                                                    <a class="btn btn-danger reverse_action" data-toggle="modal" data-target="#reverseActionModal" href="#" data-id="{{$item['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
+                                                @elseif (!empty($item['processed_at']) && empty($item['reversed_at']))
+                                                    {{__('tools.in_process')}}
+                                                @else
+                                                    {{$item['reversed_at']}}
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 			</div>
 		</div>

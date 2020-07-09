@@ -18,6 +18,7 @@
                         @include('tools.playbook.shared.topnav', ['playbook_page' => 'history'])
 			    	</div>
                 </div>
+
                 <div>
                     <a href="{{ action('PlaybookHistoryController@index') }}">History</a>
                     -><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">Playbook</a>
@@ -28,24 +29,27 @@
                     {{ $playbook_run_touch_action->playbook_run_touch->playbook_touch->name }} : 
                     {{ $playbook_run_touch_action->playbook_action->name }} : 
                     <hr>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Lead#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($details as $detail)
+                    
+                    <div class="table-responsive nobdr playbooks_history_table">
+                        <table class="table mt20 table-striped">
+                            <thead>
                                 <tr>
-                                    <td>{{ $detail['id'] }}</td>
-                                    <td>{{ $detail['FirstName'] }}</td>
-                                    <td>{{ $detail['LastName'] }}</td>
+                                    <th>Lead#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($details as $detail)
+                                    <tr>
+                                        <td>{{ $detail['id'] }}</td>
+                                        <td>{{ $detail['FirstName'] }}</td>
+                                        <td>{{ $detail['LastName'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 			</div>
 		</div>

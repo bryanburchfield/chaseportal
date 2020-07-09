@@ -3756,6 +3756,14 @@ a.add_subcampaign:focus {
   color: #aaa;
 }
 
+.playbooks_history_table a {
+  color: #33A09B;
+}
+
+.playbooks_history_table a:hover {
+  color: #24726e;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

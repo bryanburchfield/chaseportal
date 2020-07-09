@@ -3111,6 +3111,16 @@ a.add_subcampaign{
     color:#aaa;
 }
 
+.playbooks_history_table{
+
+    a{
+        color:$green;
+        &:hover{
+            color:darken($green, 12%);
+        }
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

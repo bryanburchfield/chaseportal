@@ -3387,6 +3387,14 @@ a.add_subcampaign i {
   color: #333;
 }
 
+.playbooks_history_table a {
+  color: #E15B23;
+}
+
+.playbooks_history_table a:hover {
+  color: #af4418;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

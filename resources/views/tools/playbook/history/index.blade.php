@@ -18,21 +18,23 @@
                         @include('tools.playbook.shared.topnav', ['playbook_page' => 'history'])
 			    	</div>
                 </div>
-                <div>
-                    <table border="1">
+
+                <div class="table-responsive nobdr playbooks_history_table mt30">
+                    <table class="table mt20 table-striped">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Playbook</th>
-                                <th>Details</th>
+                                <th>{{__('tools.date')}}</th>
+                                <th>{{__('tools.playbooks')}}</th>
+                                <th>{{__('tools.details')}}</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($history as $item)
                             <tr>
                                 <td>{{$item->created_at}}</td>
                                 <td>{{$item->name}}</td>
-                                <td><a href="{{ action('PlaybookHistoryController@runIndex', [$item->id]) }}">Details</a></td>
+                                <td><a href="{{ action('PlaybookHistoryController@runIndex', [$item->id]) }}"><i class="fas fa-external-link-alt"></i> {{__('tools.details')}}</a></td>
                             </tr>
                             @endforeach
                         </tbody>
