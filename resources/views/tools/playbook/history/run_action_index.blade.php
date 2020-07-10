@@ -37,7 +37,7 @@
                             <table class="table mt20 table-striped">
                                 <thead>
                                     <tr>
-                                        <th>{{__('tools.lead')}}} #</th>
+                                        <th>{{__('tools.lead')}} #</th>
                                         <th>{{__('tools.first_name')}}</th>
                                         <th>{{__('tools.last_name')}}</th>
                                     </tr>

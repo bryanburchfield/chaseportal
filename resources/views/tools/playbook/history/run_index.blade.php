@@ -57,7 +57,7 @@
                                                 {{$item['reversed_at']}}
                                             @else
                                                 @if (!empty($item['processed_at']) && empty($item['reverse_started_at']))
-                                                    <a class="btn btn-danger reverse_action" data-toggle="modal" data-target="#reverseActionModal" href="#" data-id="{{$item['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
+                                                    <a class="btn btn-danger reverse_action table_btns" data-toggle="modal" data-target="#reverseActionModal" href="#" data-id="{{$item['id']}}"><i class="fas fa-history"></i> {{__('tools.reverse')}}</a>
                                                 @elseif (!empty($item['processed_at']) && empty($item['reversed_at']))
                                                     {{__('tools.in_process')}}
                                                 @else
