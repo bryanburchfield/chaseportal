@@ -46,9 +46,7 @@
                                         <td>{{ $item['touch_name'] }}</td>
                                         <td>{{ $item['action_name'] }}</td>
                                         <td>
-                                            @if (empty($item['process_started_at']))
-                                                <button class="btn btn-success" name="action" value="process:{{$item['id']}}">{{__('tools.process')}}</button>
-                                            @elseif (empty($item['processed_at']))
+                                            @if (empty($item['processed_at']))
                                                 {{__('tools.in_process')}}
                                             @else
                                                 {{$item['processed_at']}}
