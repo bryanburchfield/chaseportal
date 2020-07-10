@@ -666,4 +666,9 @@ class ContactsPlaybookService
         echo date('Y-m-d H:i:s') . ': ' . $msg . "\n";
         Log::debug($msg);
     }
+
+    public function reverseAction(PlaybookRunTouchAction $playbook_run_touch_action, $user_id);
+    {
+        # code...
+    }
 }

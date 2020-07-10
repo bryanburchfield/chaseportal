@@ -187,10 +187,16 @@ class PlaybookHistoryController extends Controller
     {
         $playbook_run_touch_action = $this->findPlaybookRunTouchAction($request->id);
 
+        if (!empty($playbook_run_touch_action->reverse_started_at)) {
+            return ['status' => 'error'];
+        }
+
         $playbook_run_touch_action->reverse_started_at = now();
         $playbook_run_touch_action->save();
 
         // Dispatch job to run in the background
         // ReversePlaybookAction::dispatch($playbook_run_touch_action, Auth::user()->id);
+
+        return ['status' => 'success'];
     }
 }
