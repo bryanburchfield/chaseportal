@@ -3785,7 +3785,7 @@ a.add_subcampaign:focus {
 }
 
 .reverse_action {
-  color: #fff;
+  color: #fff !important;
 }
 
 /* ---------------------------------------------------

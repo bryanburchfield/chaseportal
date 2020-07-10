@@ -3416,7 +3416,7 @@ a.add_subcampaign i {
 }
 
 .reverse_action {
-  color: #fff;
+  color: #fff !important;
 }
 
 /* ---------------------------------------------------
