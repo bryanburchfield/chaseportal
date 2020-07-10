@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ReversePlaybookAction;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
 use App\Models\PlaybookRunTouchAction;
@@ -195,7 +196,7 @@ class PlaybookHistoryController extends Controller
         $playbook_run_touch_action->save();
 
         // Dispatch job to run in the background
-        // ReversePlaybookAction::dispatch($playbook_run_touch_action, Auth::user()->id);
+        ReversePlaybookAction::dispatch($playbook_run_touch_action);
 
         return ['status' => 'success'];
     }

@@ -15,17 +15,15 @@ class ReversePlaybookAction implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $playbook_run_touch_action;
-    protected $user_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(PlaybookRunTouchAction $playbook_run_touch_action, $user_id)
+    public function __construct(PlaybookRunTouchAction $playbook_run_touch_action)
     {
         $this->playbook_run_touch_action = $playbook_run_touch_action;
-        $this->user_id = $user_id;
     }
 
     /**
@@ -36,6 +34,10 @@ class ReversePlaybookAction implements ShouldQueue
     public function handle()
     {
         $service = new ContactsPlaybookService();
-        $service->reverseAction($this->playbook_run_touch_action, $this->user_id);
+
+        // can only reverse lead actions
+        if ($this->playbook_run_touch_action->playbook_action->action_type == 'lead') {
+            $service->reverseLeadAction($this->playbook_run_touch_action);
+        }
     }
 }

@@ -14,6 +14,7 @@ use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
 use App\Models\EmailServiceProvider;
 use App\Models\PlaybookFilter;
+use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookOptout;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
@@ -127,6 +128,9 @@ class ContactsPlaybookService
                         'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
                         'reporting_db' => $db,
                         'lead_id' => $rec['lead_id'],
+                        'old_campaign' => $rec['Campaign'],
+                        'old_subcampaign' => $rec['Subcampaign'],
+                        'old_callstatus' => $rec['CallStatus'],
                     ]);
                 }
 
@@ -661,14 +665,43 @@ class ContactsPlaybookService
         }
     }
 
+    public function reverseLeadAction(PlaybookRunTouchAction $playbook_run_touch_action)
+    {
+        $playbook_lead_action = $playbook_run_touch_action->playbook_action->playbook_lead_action;
+
+        $playbook_run_touch_action->playbook_run_touch_action_details->each(function ($playbook_run_touch_action_detail) use ($playbook_lead_action) {
+            $this->reverseLeadUpdate($playbook_run_touch_action_detail, $playbook_lead_action);
+        });
+
+        $playbook_run_touch_action->reversed_at = now();
+        $playbook_run_touch_action->save();
+    }
+
+    private function reverseLeadUpdate(PlaybookRunTouchActionDetail $playbook_run_touch_action_detail, PlaybookLeadAction $playbook_lead_action)
+    {
+        $this->echo('Reversing Lead: ' . $playbook_run_touch_action_detail->lead_id);
+
+        $api = $this->initApi($playbook_run_touch_action_detail->reporting_db);
+
+        $data = [];
+
+        // reset any fields that were updated
+        if (!empty($playbook_lead_action->to_campaign)) {
+            $data['Campaign'] = $playbook_run_touch_action_detail->old_campaign;
+        }
+        if (!empty($playbook_lead_action->to_subcampaign)) {
+            $data['Subcampaign'] = $playbook_run_touch_action_detail->old_subcampaign;
+        }
+        if (!empty($playbook_lead_action->to_callstatus)) {
+            $data['CallStatus'] = $playbook_run_touch_action_detail->old_callstatus;
+        }
+
+        $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $playbook_run_touch_action_detail->lead_id);
+    }
+
     private function echo($msg = null)
     {
         echo date('Y-m-d H:i:s') . ': ' . $msg . "\n";
         Log::debug($msg);
-    }
-
-    public function reverseAction(PlaybookRunTouchAction $playbook_run_touch_action, $user_id);
-    {
-        # code...
     }
 }
