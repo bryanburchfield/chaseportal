@@ -65,7 +65,7 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">Details</a></td>
+                                        <td><a href="{{ action('PlaybookHistoryController@runActionIndex', [$item['id']]) }}">{{__('tools.details')}}</a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
