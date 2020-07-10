@@ -88,6 +88,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
                     Route::get('/', 'PlaybookHistoryController@index');  // history index
                     Route::get('/run/{id}', 'PlaybookHistoryController@runIndex');  // run index
                     Route::get('/run/action/{id}', 'PlaybookHistoryController@runActionIndex');  // run action index
+                    Route::post('/reverse/action/{id}', 'PlaybookHistoryController@reverseAction');  // reverse an action
                 });
 
                 // Shared ajax

@@ -107,6 +107,7 @@ return [
 	'operator'		=> 'Operator',
 	'password'		=> 'Password',
 	'phone'			=> 'Phone',
+	'playbook'	=> 'Playbook',
 	'playbooks'	=> 'Playbooks',
 	'playbook_actions'	=> 'Playbook Actions',
 	'playbook_filters'	=> 'Playbook Filters',

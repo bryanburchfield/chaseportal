@@ -23,8 +23,8 @@
                     <div class="col-sm-12">
                         <nav aria-label="breadcrumb" class="mb20">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{action('PlaybookHistoryController@index')}}">History</a></li>
-                                <li class="breadcrumb-item"><a href="#">Playbook</a></li>
+                            <li class="breadcrumb-item"><a href="{{action('PlaybookHistoryController@index')}}">{{__('tools.history')}}</a></li>
+                                <li class="breadcrumb-item">{{__('tools.playbook')}}</li>
                                 <li class="breadcrumb-item active" aria-current="page">{{ $playbook_run->contacts_playbook->name }} : {{ $playbook_run->created_at }}</li>
                             </ol>
                         </nav>

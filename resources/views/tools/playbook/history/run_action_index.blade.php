@@ -23,9 +23,9 @@
                     <div class="col-sm-12">
                         <nav aria-label="breadcrumb" class="mb20">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@index') }}">History</a></li>
-                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">Playbook</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Action
+                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@index') }}">{{__('tools.history')}}</a></li>
+                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">{{__('tools.playbook')}}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{__('tools.action')}}
                                     {{ $playbook_run->contacts_playbook->name }} :
                                     {{ $playbook_run->created_at }} :
                                     {{ $playbook_run_touch_action->playbook_run_touch->playbook_touch->name }} : 
