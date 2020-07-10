@@ -6,15 +6,14 @@ use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
 use App\Models\PlaybookRunTouchAction;
 use App\Traits\SqlServerTraits;
-use App\Traits\TimeTraits;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PlaybookHistoryController extends Controller
 {
     use SqlServerTraits;
-    use TimeTraits;
 
     public function index()
     {
@@ -111,8 +110,12 @@ class PlaybookHistoryController extends Controller
             ->get();
 
         // Convert times to local
-        $history->transform(function ($item) {
-            $item->created_at = $this->utcToLocal($item->created_at, Auth::user()->iana_tz);
+        $tz = Auth::user()->iana_tz;
+        $history->transform(function ($item) use ($tz) {
+            $item->created_at = Carbon::parse($item->created_at)
+                ->tz($tz)
+                ->isoFormat('L LT');
+
             return $item;
         });
 
@@ -121,6 +124,7 @@ class PlaybookHistoryController extends Controller
 
     private function getRunHistory($playbook_run_id)
     {
+        $tz = Auth::user()->iana_tz;
         $touches = [];
 
         $playbook_run_touches = PlaybookRunTouch::where('playbook_run_id', $playbook_run_id)
@@ -131,10 +135,14 @@ class PlaybookHistoryController extends Controller
             foreach ($playbook_run_touch->playbook_run_touch_actions as $playbook_run_touch_action) {
                 // Convert times to local
                 if (!empty($playbook_run_touch_action->processed_at)) {
-                    $playbook_run_touch_action->processed_at = $this->utcToLocal($playbook_run_touch_action->processed_at, Auth::user()->iana_tz);
+                    $playbook_run_touch_action->processed_at = Carbon::parse($playbook_run_touch_action->processed_at)
+                        ->tz($tz)
+                        ->isoFormat('L LT');
                 }
                 if (!empty($playbook_run_touch_action->reversed_at)) {
-                    $playbook_run_touch_action->reversed_at = $this->utcToLocal($playbook_run_touch_action->reversed_at, Auth::user()->iana_tz);
+                    $playbook_run_touch_action->reversed_at = Carbon::parse($playbook_run_touch_action->reversed_at)
+                        ->tz($tz)
+                        ->isoFormat('L LT');
                 }
 
                 $touches[] = [
