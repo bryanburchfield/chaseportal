@@ -3395,6 +3395,26 @@ a.add_subcampaign i {
   color: #af4418;
 }
 
+.breadcrumb {
+  background: #ffffff;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#e2e2e0", GradientType=0);
+  /* IE6-9 */
+  border: 1px solid #ddd;
+}
+
+.breadcrumb .breadcrumb-item {
+  font-weight: 600;
+}
+
+.breadcrumb .breadcrumb-item a:hover {
+  color: #33A09B;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

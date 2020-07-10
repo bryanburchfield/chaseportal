@@ -3764,6 +3764,26 @@ a.add_subcampaign:focus {
   color: #24726e;
 }
 
+.breadcrumb {
+  background: #263854;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#263854", endColorstr="#171f33",GradientType=0 );
+  /* IE6-9 */
+  color: #eee;
+}
+
+.breadcrumb .breadcrumb-item {
+  font-weight: 600;
+}
+
+.breadcrumb .breadcrumb-item a:hover {
+  color: #33A09B;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

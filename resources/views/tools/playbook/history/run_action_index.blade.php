@@ -19,36 +19,40 @@
 			    	</div>
                 </div>
 
-                <div>
-                    <a href="{{ action('PlaybookHistoryController@index') }}">History</a>
-                    -><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">Playbook</a>
-                    ->Action
-                    <hr>
-                    {{ $playbook_run->contacts_playbook->name }} :
-                    {{ $playbook_run->created_at }} :
-                    {{ $playbook_run_touch_action->playbook_run_touch->playbook_touch->name }} : 
-                    {{ $playbook_run_touch_action->playbook_action->name }} : 
-                    <hr>
-                    
-                    <div class="table-responsive nobdr playbooks_history_table">
-                        <table class="table mt20 table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Lead#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($details as $detail)
+                <div class="row mt30">                    
+                    <div class="col-sm-12">
+                        <nav aria-label="breadcrumb" class="mb20">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@index') }}">History</a></li>
+                                <li class="breadcrumb-item"><a href="{{ action('PlaybookHistoryController@runIndex', [$playbook_run->id]) }}">Playbook</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Action
+                                    {{ $playbook_run->contacts_playbook->name }} :
+                                    {{ $playbook_run->created_at }} :
+                                    {{ $playbook_run_touch_action->playbook_run_touch->playbook_touch->name }} : 
+                                    {{ $playbook_run_touch_action->playbook_action->name }} </li>
+                            </ol>
+                        </nav>
+
+                        <div class="table-responsive nobdr playbooks_history_table">
+                            <table class="table mt20 table-striped">
+                                <thead>
                                     <tr>
-                                        <td>{{ $detail['id'] }}</td>
-                                        <td>{{ $detail['FirstName'] }}</td>
-                                        <td>{{ $detail['LastName'] }}</td>
+                                        <th>Lead#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($details as $detail)
+                                        <tr>
+                                            <td>{{ $detail['id'] }}</td>
+                                            <td>{{ $detail['FirstName'] }}</td>
+                                            <td>{{ $detail['LastName'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 			</div>

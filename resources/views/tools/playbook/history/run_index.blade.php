@@ -21,7 +21,7 @@
 
                 <div class="row mt30">
                     <div class="col-sm-12">
-                        <nav aria-label="breadcrumb">
+                        <nav aria-label="breadcrumb" class="mb20">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{action('PlaybookHistoryController@index')}}">History</a></li>
                                 <li class="breadcrumb-item"><a href="#">Playbook</a></li>
