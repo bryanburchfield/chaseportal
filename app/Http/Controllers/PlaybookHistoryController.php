@@ -164,8 +164,11 @@ class PlaybookHistoryController extends Controller
 
     private function getActionDetails(PlaybookRunTouchAction $playbook_run_touch_action)
     {
+        $leads = [];
         $lead_list = [];
+
         foreach ($playbook_run_touch_action->playbook_run_touch_action_details as $playbook_run_touch_action_detail) {
+            $leads[$playbook_run_touch_action_detail->lead_id] = $playbook_run_touch_action_detail->toArray();
             if (!isset($lead_list[$playbook_run_touch_action_detail->reporting_db])) {
                 $lead_list[$playbook_run_touch_action_detail->reporting_db] = '';
             }
@@ -181,7 +184,13 @@ class PlaybookHistoryController extends Controller
             $union = 'UNION ALL ';
         }
 
-        return $this->runSql($sql);
+        $results = $this->runSql($sql);
+
+        foreach ($results as $rec) {
+            $leads[$rec['id']] += $rec;
+        }
+
+        return $leads;
     }
 
     public function reverseAction(Request $request)

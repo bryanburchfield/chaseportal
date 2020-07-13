@@ -17,6 +17,8 @@ class AlterPlaybookRunTouchActionDetails extends Migration
             $table->string('old_campaign')->nullable();
             $table->string('old_subcampaign')->nullable();
             $table->string('old_callstatus')->nullable();
+            $table->string('old_email')->nullable();
+            $table->string('old_phone')->nullable();
         });
     }
 
@@ -31,6 +33,8 @@ class AlterPlaybookRunTouchActionDetails extends Migration
             $table->dropColumn('old_campaign');
             $table->dropColumn('old_subcampaign');
             $table->dropColumn('old_callstatus');
+            $table->dropColumn('old_email');
+            $table->dropColumn('old_phone');
         });
     }
 }

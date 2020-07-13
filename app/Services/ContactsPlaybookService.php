@@ -1,9 +1,5 @@
 <?php
 
-/////////////////////////////
-// look for TODO's!!!!
-/////////////////////////////
-
 namespace App\Services;
 
 use App\Includes\PowerImportAPI;
@@ -31,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Twilio\Rest\Client as Twilio;
 use Exception;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
@@ -122,19 +119,38 @@ class ContactsPlaybookService
                 ]);
 
                 foreach ($results as $rec) {
-                    $this->runAction($playbook_touch_action, $rec);
+                    if ($this->runAction($playbook_touch_action, $rec)) {
+                        $playbook_run_touch_action_detail = [
+                            'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
+                            'reporting_db' => $db,
+                            'lead_id' => $rec['lead_id'],
+                        ];
 
-                    PlaybookRunTouchActionDetail::create([
-                        'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
-                        'reporting_db' => $db,
-                        'lead_id' => $rec['lead_id'],
-                        'old_campaign' => $rec['Campaign'],
-                        'old_subcampaign' => $rec['Subcampaign'],
-                        'old_callstatus' => $rec['CallStatus'],
-                    ]);
+                        switch ($playbook_touch_action->playbook_action->action_type) {
+                            case 'email':
+                                $playbook_run_touch_action_detail += [
+                                    'old_email' => $rec[$playbook_touch_action->playbook_action->playbook_email_action->email_field],
+                                ];
+                                break;
+                            case 'lead':
+                                $playbook_run_touch_action_detail += [
+                                    'old_campaign' => $rec['Campaign'],
+                                    'old_subcampaign' => $rec['Subcampaign'],
+                                    'old_callstatus' => $rec['CallStatus'],
+                                ];
+                                break;
+                            case 'sms':
+                                $playbook_run_touch_action_detail += [
+                                    'old_phone' => $rec['PrimaryPhone'],
+                                ];
+                                break;
+                        }
+                    }
+
+                    PlaybookRunTouchActionDetail::create($playbook_run_touch_action_detail);
                 }
 
-                $playbook_run_touch_action->processd_at = now();
+                $playbook_run_touch_action->processed_at = now();
                 $playbook_run_touch_action->save();
             }
         }
@@ -412,9 +428,14 @@ class ContactsPlaybookService
             $data['CallStatus'] = $playbook_action->playbook_lead_action->to_callstatus;
         }
 
-        $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+        // TESTING
+        if (App::environment('production')) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+        } else {
+            $result = true;
+        }
 
-        return true;
+        return $result;
     }
 
     private function actionEmail(PlaybookTouchAction $playbook_touch_action, $rec)
@@ -501,13 +522,10 @@ class ContactsPlaybookService
             $this->initTwilio();
         }
 
-
-
-        // TODO:  REMOVE AFTER TESTING
-        $rec['PrimaryPhone'] = '4076175882';
-
-
-
+        // TESTING
+        if (!App::environment('production')) {
+            $rec['PrimaryPhone'] = '4076175882';
+        }
 
         try {
             $message = $this->twilio->messages->create(
@@ -551,19 +569,16 @@ class ContactsPlaybookService
         // build payload
         $payload = [
             'from' => $playbook_touch_action->playbook_action->playbook_email_action->from,
-
-
-
-            // TODO: REMOVE AFTER TESTING
-            // 'to' => $email,
-            'to' => 'brandon.b@chasedatacorp.com',
-
-
-
+            'to' => $email,
             'subject' => $subject,
             'body' => $body,
             'tag' => $playbook_touch_action->playbook_touch->contacts_playbook->name,
         ];
+
+        // TESTING
+        if (!App::environment('production')) {
+            $payload['to'] = 'brandon.b@chasedatacorp.com';
+        }
 
         // find ESP model
         $email_service_provider = EmailServiceProvider::find($playbook_touch_action->playbook_action->playbook_email_action->email_service_provider_id);
@@ -696,7 +711,10 @@ class ContactsPlaybookService
             $data['CallStatus'] = $playbook_run_touch_action_detail->old_callstatus;
         }
 
-        $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $playbook_run_touch_action_detail->lead_id);
+        // TESTING
+        if (App::environment('production')) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $playbook_run_touch_action_detail->lead_id);
+        }
     }
 
     private function echo($msg = null)

@@ -13,6 +13,8 @@ class PlaybookRunTouchActionDetail extends Model
         'old_campaign',
         'old_subcampaign',
         'old_callstatus',
+        'old_email',
+        'old_phone',
     ];
 
     public function playbook_run_touch_action()

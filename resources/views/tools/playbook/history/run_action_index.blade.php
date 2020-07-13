@@ -40,6 +40,22 @@
                                         <th>{{__('tools.lead')}} #</th>
                                         <th>{{__('tools.first_name')}}</th>
                                         <th>{{__('tools.last_name')}}</th>
+                                        @switch($playbook_run_touch_action->playbook_action->action_type)
+                                            @case('lead')
+                                                <th>{{__('tools.old_campaign')}}</th>
+                                                <th>{{__('tools.old_subcampaign')}}</th>
+                                                <th>{{__('tools.old_callstatus')}}</th>
+                                                <th>{{__('tools.current_campaign')}}</th>
+                                                <th>{{__('tools.current_subcampaign')}}</th>
+                                                <th>{{__('tools.current_callstatus')}}</th>
+                                                @break
+                                            @case('email')
+                                                <th>{{__('tools.email')}}</th>
+                                                @break
+                                            @case('sms')
+                                                <th>{{__('tools.phone')}}</th>
+                                                @break
+                                        @endswitch
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,6 +64,22 @@
                                             <td>{{ $detail['id'] }}</td>
                                             <td>{{ $detail['FirstName'] }}</td>
                                             <td>{{ $detail['LastName'] }}</td>
+                                            @switch($playbook_run_touch_action->playbook_action->action_type)
+                                                @case('lead')
+                                                    <td>{{ $detail['old_campaign'] }}</td>
+                                                    <td>{{ $detail['old_subcampaign'] }}</td>
+                                                    <td>{{ $detail['old_callstatus'] }}</td>
+                                                    <td>{{ $detail['Campaign'] }}</td>
+                                                    <td>{{ $detail['Subcampaign'] }}</td>
+                                                    <td>{{ $detail['CallStatus'] }}</td>
+                                                    @break
+                                                @case('email')
+                                                    <td>{{ $detail['old_email'] }}</td>
+                                                    @break
+                                                @case('sms')
+                                                    <td>{{ $detail['old_phone'] }}</td>
+                                                    @break
+                                            @endswitch
                                         </tr>
                                     @endforeach
                                 </tbody>
