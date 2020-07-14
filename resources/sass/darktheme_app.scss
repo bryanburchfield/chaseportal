@@ -307,7 +307,7 @@ i, span {
     @include base_style(#0f131f, #aaa, left, 1px solid darken(#23354e,10%));
     @include transition(all, ease, 0.3s);
 
-    &.active {
+    &.sb_open {
         min-width: 300px;
         max-width: 300px;
     }
@@ -636,6 +636,7 @@ input[type='file'] {
     padding: 20px; 
     margin-bottom: 30px;
     transition: 0.3s;
+    position: relative;
 
     &.card_table, &.card_table2 {
         @include gradient(#101824, #090d14, top, 0%, 52%);
@@ -2865,6 +2866,11 @@ a.add_action, a.add_filter{
     button{
         @include base_style($green, #fff);
     }
+}
+
+.col-sm-12.w99{    
+    width: 98% !important;
+    margin-left: 1%;
 }
 
 /* ---------------------------------------------------

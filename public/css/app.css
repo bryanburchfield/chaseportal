@@ -433,7 +433,7 @@ span {
   transition: all, ease, 0.3s;
 }
 
-#sidebar_nots.active {
+#sidebar_nots.sb_open {
   min-width: 300px;
   max-width: 300px;
 }
@@ -3264,6 +3264,11 @@ a.add_filter i {
 .note-toolbar.panel-heading {
   background: #eee;
   height: 45px;
+}
+
+.col-sm-12.w99 {
+  width: 98% !important;
+  margin-left: 1%;
 }
 
 /* ---------------------------------------------------

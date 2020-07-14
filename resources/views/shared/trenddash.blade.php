@@ -80,7 +80,7 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-12 ">
+	<div class="col-sm-12 w99">
 		<div class="card card-12">
 			<h1 class="title mb0">{{__('widgets.agent_call_times')}}</h1><br>
 			<div class="avgs_rgt flt_rgt">
@@ -97,7 +97,7 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-12 w99 ">
 		<div class="card card-12">
 			<h1 class="title">{{__('widgets.max_hold_time')}}</h1>
 			<div class="inbound inandout cb" style="height:300px">

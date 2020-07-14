@@ -296,7 +296,7 @@ i, span {
     @include base_style(#efefef, #fff, left, 1px solid #ccc);
     @include transition(all, ease, 0.3s);
 
-    &.active {
+    &.sb_open {
         min-width: 300px;
         max-width: 300px;
     }
@@ -2700,6 +2700,11 @@ a.add_action, a.add_filter{
 .note-toolbar.panel-heading {
   background: #eee;
   height: 45px;
+}
+
+.col-sm-12.w99{    
+    width: 98% !important;
+    margin-left: 1%;
 }
 
 /* ---------------------------------------------------
