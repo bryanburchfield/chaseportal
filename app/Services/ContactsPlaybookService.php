@@ -84,12 +84,15 @@ class ContactsPlaybookService
         $contacts_playbook->last_run_to = $now;
         $contacts_playbook->save();
 
-        // Log the run
-        $playbook_run = PlaybookRun::create(['contacts_playbook_id' => $contacts_playbook->id]);
-
         // Set SqlSrv database
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
+
+        // Log the run
+        $playbook_run = PlaybookRun::create(['contacts_playbook_id' => $contacts_playbook->id]);
+
+        // track touch count
+        $touch_count = 0;
 
         foreach ($contacts_playbook->playbook_touches as $playbook_touch) {
 
@@ -111,12 +114,18 @@ class ContactsPlaybookService
 
             $playbook_run_touch = PlaybookRunTouch::create(['playbook_run_id' => $playbook_run->id, 'playbook_touch_id' => $playbook_touch->id]);
 
+            // track action count
+            $action_count = 0;
+
             foreach ($playbook_touch->playbook_touch_actions as $playbook_touch_action) {
                 $playbook_run_touch_action = PlaybookRunTouchAction::create([
                     'playbook_run_touch_id' => $playbook_run_touch->id,
                     'playbook_action_id' => $playbook_touch_action->playbook_action_id,
                     'process_started_at' => now(),
                 ]);
+
+                // track record count
+                $record_count = 0;
 
                 foreach ($results as $rec) {
                     if ($this->runAction($playbook_touch_action, $rec)) {
@@ -145,14 +154,31 @@ class ContactsPlaybookService
                                 ];
                                 break;
                         }
-                    }
 
-                    PlaybookRunTouchActionDetail::create($playbook_run_touch_action_detail);
+                        $record_count++;
+                        PlaybookRunTouchActionDetail::create($playbook_run_touch_action_detail);
+                    }
                 }
 
-                $playbook_run_touch_action->processed_at = now();
-                $playbook_run_touch_action->save();
+                // save or delete run_touch_action
+                if ($record_count) {
+                    $action_count++;
+                    $playbook_run_touch_action->processed_at = now();
+                    $playbook_run_touch_action->save();
+                } else {
+                    $playbook_run_touch_action->delete();
+                }
             }
+
+            if ($action_count) {
+                $touch_count++;
+            } else {
+                $playbook_run_touch->delete();
+            }
+        }
+
+        if (!$touch_count) {
+            $playbook_run->delete();
         }
     }
 

@@ -7,10 +7,12 @@ use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
 use App\Models\PlaybookRunTouchAction;
 use App\Traits\SqlServerTraits;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PlaybookHistoryController extends Controller
 {
@@ -103,29 +105,17 @@ class PlaybookHistoryController extends Controller
 
     private function getHistory()
     {
-        $history = DB::table('playbook_runs')
-            ->join('contacts_playbooks', 'contacts_playbooks.id', '=', 'playbook_runs.contacts_playbook_id')
-            ->where('contacts_playbooks.group_id', Auth::user()->group_id)
-            ->select(['playbook_runs.*', 'contacts_playbooks.name'])
-            ->orderBy('playbook_runs.created_at', 'desc')
+        $playbook_runs = PlaybookRun::whereHas('contacts_playbook', function (Builder $query) {
+            $query->where('group_id', Auth::user()->group_id);
+        })
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        // Convert times to local
-        $tz = Auth::user()->iana_tz;
-        $history->transform(function ($item) use ($tz) {
-            $item->created_at = Carbon::parse($item->created_at)
-                ->tz($tz)
-                ->isoFormat('L LT');
-
-            return $item;
-        });
-
-        return $history;
+        return $playbook_runs;
     }
 
     private function getRunHistory($playbook_run_id)
     {
-        $tz = Auth::user()->iana_tz;
         $touches = [];
 
         $playbook_run_touches = PlaybookRunTouch::where('playbook_run_id', $playbook_run_id)
@@ -134,23 +124,12 @@ class PlaybookHistoryController extends Controller
 
         foreach ($playbook_run_touches as $playbook_run_touch) {
             foreach ($playbook_run_touch->playbook_run_touch_actions as $playbook_run_touch_action) {
-                // Convert times to local
-                if (!empty($playbook_run_touch_action->processed_at)) {
-                    $playbook_run_touch_action->processed_at = Carbon::parse($playbook_run_touch_action->processed_at)
-                        ->tz($tz)
-                        ->isoFormat('L LT');
-                }
-                if (!empty($playbook_run_touch_action->reversed_at)) {
-                    $playbook_run_touch_action->reversed_at = Carbon::parse($playbook_run_touch_action->reversed_at)
-                        ->tz($tz)
-                        ->isoFormat('L LT');
-                }
-
                 $touches[] = [
                     'id' => $playbook_run_touch_action->id,
                     'touch_name' => $playbook_run_touch->playbook_touch->name,
                     'action_name' => $playbook_run_touch_action->playbook_action->name,
                     'action_type' => $playbook_run_touch_action->playbook_action->action_type,
+                    'record_count' => $playbook_run_touch_action->playbook_run_touch_action_details->count(),
                     'process_started_at' => $playbook_run_touch_action->process_started_at,
                     'processed_at' => $playbook_run_touch_action->processed_at,
                     'reverse_started_at' => $playbook_run_touch_action->reverse_started_at,

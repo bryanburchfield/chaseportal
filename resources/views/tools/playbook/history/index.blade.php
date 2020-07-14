@@ -24,7 +24,8 @@
                         <thead>
                             <tr>
                                 <th>{{__('tools.date')}}</th>
-                                <th>{{__('tools.playbooks')}}</th>
+                                <th>{{__('tools.playbook')}}</th>
+                                <th>{{__('tools.records')}}</th>
                                 <th>{{__('tools.details')}}</th>
                             </tr>
                         </thead>
@@ -33,7 +34,8 @@
                             @foreach ($history as $item)
                             <tr>
                                 <td>{{$item->created_at}}</td>
-                                <td>{{$item->name}}</td>
+                                <td>{{$item->contacts_playbook->name}}</td>
+                                <td>{{$item->record_count()}}</td>
                                 <td><a href="{{ action('PlaybookHistoryController@runIndex', [$item->id]) }}"><i class="fas fa-external-link-alt"></i> {{__('tools.details')}}</a></td>
                             </tr>
                             @endforeach

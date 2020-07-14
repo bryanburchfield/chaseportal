@@ -35,6 +35,7 @@
                                     <tr>
                                         <th>{{__('tools.touch')}}</th>
                                         <th>{{__('tools.action')}}</th>
+                                        <th>{{__('tools.records')}}</th>
                                         <th>{{__('tools.processed')}}</th>
                                         <th>{{__('tools.reversed')}}</th>
                                         <th>{{__('tools.details')}}</th>
@@ -45,6 +46,7 @@
                                     <tr>
                                         <td>{{ $item['touch_name'] }}</td>
                                         <td>{{ $item['action_name'] }}</td>
+                                        <td>{{ $item['record_count'] }}</td>
                                         <td>
                                             @if (empty($item['processed_at']))
                                                 {{__('tools.in_process')}}

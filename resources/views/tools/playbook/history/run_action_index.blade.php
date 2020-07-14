@@ -61,7 +61,7 @@
                                 <tbody>
                                     @foreach ($details as $detail)
                                         <tr>
-                                            <td>{{ $detail['id'] }}</td>
+                                            <td>{{ $detail['lead_id'] }}</td>
                                             <td>{{ $detail['FirstName'] }}</td>
                                             <td>{{ $detail['LastName'] }}</td>
                                             @switch($playbook_run_touch_action->playbook_action->action_type)

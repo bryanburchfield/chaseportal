@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PlaybookRunTouchAction extends Model
 {
@@ -29,5 +31,31 @@ class PlaybookRunTouchAction extends Model
     public function playbook_run_touch_action_details()
     {
         return $this->hasMany('App\Models\PlaybookRunTouchActionDetail');
+    }
+
+    public function getProcessedAtAttribute($date)
+    {
+        if (empty($date)) {
+            return $date;
+        }
+
+        if (Auth::check()) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $date)->copy()->tz(Auth::user()->iana_tz)->isoFormat('L LT');
+        } else {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $date)->copy()->tz('America/New_York')->isoFormat('L LT');
+        }
+    }
+
+    public function getReversedAtAttribute($date)
+    {
+        if (empty($date)) {
+            return $date;
+        }
+
+        if (Auth::check()) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $date)->copy()->tz(Auth::user()->iana_tz)->isoFormat('L LT');
+        } else {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $date)->copy()->tz('America/New_York')->isoFormat('L LT');
+        }
     }
 }
