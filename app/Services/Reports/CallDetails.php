@@ -130,6 +130,11 @@ class CallDetails
 
     private function executeReport($all = false)
     {
+        // Add Route col for superadmins
+        if (Auth::user()->user_type == 'superadmin') {
+            $this->params['columns'] += ['Route' => 'Route'];
+        }
+
         list($sql, $bind) = $this->makeQuery($all);
 
         $results = $this->runSql($sql, $bind);
@@ -320,7 +325,13 @@ class CallDetails
                     ELSE 'Unknown'
                 END as CallType,
                 DR.Details,
-                AA.Details as AgentHangup
+                AA.Details as AgentHangup";
+
+        if (Auth::user()->user_type == 'superadmin') {
+            $sql .= ",DR.Route";
+        }
+
+        $sql .= "
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
             FROM [DialingResults] DR WITH(NOLOCK)
