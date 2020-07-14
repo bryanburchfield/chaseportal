@@ -14,11 +14,11 @@ class AlterPlaybookRunTouchActionDetails extends Migration
     public function up()
     {
         Schema::table('playbook_run_touch_action_details', function (Blueprint $table) {
-            $table->string('old_campaign')->nullable();
-            $table->string('old_subcampaign')->nullable();
-            $table->string('old_callstatus')->nullable();
+            $table->string('old_campaign', 50)->nullable();
+            $table->string('old_subcampaign', 50)->nullable();
+            $table->string('old_callstatus', 50)->nullable();
             $table->string('old_email')->nullable();
-            $table->string('old_phone')->nullable();
+            $table->string('old_phone', 50)->nullable();
         });
     }
 
