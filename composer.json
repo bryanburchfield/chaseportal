@@ -20,6 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "mariuzzo/laravel-js-localization": "^1.5",
         "owen-it/laravel-auditing": "^10.0",
+        "sendgrid/sendgrid": "^7.7",
         "shiftonelabs/laravel-cascade-deletes": "^1.0",
         "twilio/sdk": "^5.31",
         "wildbit/postmark-php": "^2.10"

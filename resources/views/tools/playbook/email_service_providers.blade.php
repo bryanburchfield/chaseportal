@@ -40,7 +40,7 @@
                                                         @foreach($email_service_providers as $provider)
                                                             <tr>
                                                                 <td>{{$provider->name}}</td>
-                                                                <td>{{$provider->provider_type}}</td>
+                                                                <td>{{Str::studly($provider->provider_type)}}</td>
                                                                 <?php $mode='edit';?>
                                                                 <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_provider_modal btn btn-sm btn-info fw600 table_btns" data-providerid="{{$provider->id}}"><i class="fas fa-edit"></i> {{__('tools.edit')}}</a></td>
                                                                 <td><a class="remove_email_service_provider_modal btn btn-sm btn-danger fw600 table_btns" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$provider->name}}" data-id="{{$provider->id}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a></td>
