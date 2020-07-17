@@ -41,7 +41,7 @@ class SendGrid implements \App\Interfaces\EmailServiceProvider
             $this->connect();
 
             $email = new \SendGrid\Mail\Mail();
-            $email->setFrom($this->sendgrid_server->properties['from_address']);
+            $email->setFrom($this->sendgrid_server->properties['default_from_address']);
             $email->setSubject("Testing");
             $email->addTo("test@example.com", "Example User");
             $email->addContent("text/plain", "Just testing SendGrid API");
@@ -101,7 +101,7 @@ class SendGrid implements \App\Interfaces\EmailServiceProvider
     {
         return [
             'api_key',
-            'from_address',
+            'default_from_address',
         ];
     }
 
