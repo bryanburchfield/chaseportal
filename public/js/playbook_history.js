@@ -3,6 +3,7 @@ var Playbook_History = {
 	playbooks_history_dataTable: $('#playbooks_history_table').DataTable({
 		responsive: true,
 		fixedHeader: true,
+		aaSorting: [[0, 'asc']],
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {
