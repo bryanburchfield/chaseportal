@@ -1,6 +1,7 @@
 var Contacts_Playbook = {
 	playbooks_datatable: $('#playbooks_datatable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {

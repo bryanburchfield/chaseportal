@@ -2,6 +2,7 @@ var Playbook_Filters = {
 
 	filters_dataTable: $('#filters_dataTable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {

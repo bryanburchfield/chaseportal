@@ -12,6 +12,7 @@
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
     @if(Auth::user()->theme == 'dark')
         <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
     @else
@@ -20,6 +21,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    @isset($cssfile)
+        @foreach($cssfile as $css)
+            <link href="{{ $css }}" rel="stylesheet">
+        @endforeach
+    @endisset
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.min.js"></script>
@@ -87,6 +93,7 @@
     <script src="/js/color-hash.js"></script>
     <script src="/js/master.js"></script>
     <script src="/js/nav.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)

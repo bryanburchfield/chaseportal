@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="table-responsive nobdr playbooks_history_table mt30">
-                    <table class="table mt20 table-striped">
+                    <table class="table mt20 table-striped" id="dataTable">
                         <thead>
                             <tr>
                                 <th>{{__('tools.date')}}</th>

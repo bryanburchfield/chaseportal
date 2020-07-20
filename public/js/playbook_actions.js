@@ -4,6 +4,7 @@ var Playbook_Actions = {
 
 	actions_dataTable: $('#actions_dataTable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {

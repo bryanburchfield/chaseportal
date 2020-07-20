@@ -2,6 +2,7 @@ var Playbook = {
 
 	emails_dataTable: $('#emails_dataTable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {

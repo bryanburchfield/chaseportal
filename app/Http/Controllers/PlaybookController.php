@@ -32,7 +32,7 @@ class PlaybookController extends Controller
         $data = [
             'page' => $page,
             'jsfile' => ['contacts_playbooks.js'],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'contacts_playbooks' => $this->getPlaybooks(),

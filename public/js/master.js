@@ -25,6 +25,7 @@ var Master = {
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
+        fixedHeader: true
 	}),
 	cdr_dataTable: $('#cdr_dataTable').DataTable({
 		responsive: true,

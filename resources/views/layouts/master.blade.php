@@ -32,6 +32,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
     @isset($summernote)
         <link href="{{ asset('/css/summernote.min.css') }}" rel="stylesheet">
     @endisset
@@ -72,6 +73,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
 
     @isset($summernote)
         <script src="{{ asset('/js/summernote.min.js') }}"></script>
