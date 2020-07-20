@@ -38,7 +38,7 @@ class PlaybookFilterController extends Controller
             'playbook_filters' => $this->getPlaybookFilters(),
         ];
 
-        return view('tools.playbook.filters')->with($data);
+        return view('playbook.filters')->with($data);
     }
 
     /**
@@ -125,7 +125,7 @@ class PlaybookFilterController extends Controller
         $playbook_filter = $this->findPlaybookFilter($request->id);
 
         if ($playbook_filter->playbook_touch_filters->isNotEmpty()) {
-            abort(response()->json(['errors' => ['1' => trans('tools.filter_in_use')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('filter_in_use')]], 422));
         }
 
         $playbook_filter->delete();

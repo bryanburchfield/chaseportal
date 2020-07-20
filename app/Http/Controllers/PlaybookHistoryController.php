@@ -33,7 +33,7 @@ class PlaybookHistoryController extends Controller
             'history' => $this->getHistory(),
         ];
 
-        return view('tools.playbook.history.index')->with($data);
+        return view('playbook.history.index')->with($data);
     }
 
     public function runIndex(Request $request)
@@ -53,7 +53,7 @@ class PlaybookHistoryController extends Controller
             'history' => $this->getRunHistory($request->id),
         ];
 
-        return view('tools.playbook.history.run_index')->with($data);
+        return view('playbook.history.run_index')->with($data);
     }
 
     public function runActionIndex(Request $request)
@@ -76,7 +76,7 @@ class PlaybookHistoryController extends Controller
             'details' => $this->getActionDetails($playbook_run_touch_action),
         ];
 
-        return view('tools.playbook.history.run_action_index')->with($data);
+        return view('playbook.history.run_action_index')->with($data);
     }
 
     private function findPlaybookRun($id)

@@ -32,7 +32,7 @@ class PlaybookEmailProviderController extends Controller
             'provider_types' => EmailServiceProvider::providerTypes(),
         ];
 
-        return view('tools.playbook.email_service_providers')->with($data);
+        return view('playbook.email_service_providers')->with($data);
     }
 
     /**

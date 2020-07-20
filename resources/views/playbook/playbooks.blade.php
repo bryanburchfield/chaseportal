@@ -20,7 +20,7 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'playbooks'])
+                                @include('playbook.shared.topnav', ['playbook_page' => 'playbooks'])
 
 								<div class="tab-pane mt30" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
@@ -73,7 +73,7 @@
 </div>
 
 @include('shared.reportmodal')
-@include('tools.playbook.shared.playbook_modals')
+@include('playbook.shared.playbook_modals')
 
 <!-- Playbook Actions Modal -->
 <div class="modal fade" id="actionPlaybookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

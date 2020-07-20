@@ -32,7 +32,7 @@ class SmsFromNumberController extends Controller
             'sms_from_numbers' => $sms_from_numbers,
         ];
 
-        return view('tools.playbook.from_number.index')->with($data);
+        return view('playbook.from_number.index')->with($data);
     }
 
     /**

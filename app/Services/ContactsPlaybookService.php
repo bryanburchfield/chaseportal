@@ -667,7 +667,7 @@ class ContactsPlaybookService
     {
         $optouturl = Url::signedRoute('playbook.optout', ['group_id' => Auth::user()->group_id, 'email' => $email]);
 
-        return view('tools.playbook.optout')->with(['optouturl' => $optouturl])->render();
+        return view('playbook.optout')->with(['optouturl' => $optouturl])->render();
     }
 
     private function getHistory(PlaybookTouchAction $playbook_touch_action, $lead_id)

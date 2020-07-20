@@ -15,7 +15,7 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
                         <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                        @include('tools.playbook.shared.topnav', ['playbook_page' => 'history'])
+                        @include('playbook.shared.topnav', ['playbook_page' => 'history'])
 			    	</div>
                 </div>
 

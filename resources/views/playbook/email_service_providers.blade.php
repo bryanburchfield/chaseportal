@@ -19,7 +19,7 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'providers'])
+                                @include('playbook.shared.topnav', ['playbook_page' => 'providers'])
 
                                 <div class="tab-pane mt30" id="email_service_providers">
                                     <div class="col-sm-12 nopad">
@@ -76,7 +76,7 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form add_esp fc_style">
-                    @include('tools.playbook.shared.email_service_provider_form')
+                    @include('playbook.shared.email_service_provider_form')
                     <button type="submit" class="btn btn-primary add_esp add_btn_loader">{{__('tools.add_provider')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
@@ -101,7 +101,7 @@
 
             <div class="modal-body">
                 <form action="#" method="post" class="form edit_esp fc_style">
-                    @include('tools.playbook.shared.email_service_provider_form')
+                    @include('playbook.shared.email_service_provider_form')
                     <input type="hidden" name="id" class="id" value="">
                     <button type="submit" class="btn btn-primary edit_esp add_btn_loader">{{__('tools.save_changes')}}</button>
                     <button type="submit" class="btn btn-info test_connection btn_flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>

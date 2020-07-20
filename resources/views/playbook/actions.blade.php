@@ -18,7 +18,7 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'actions'])
+                                @include('playbook.shared.topnav', ['playbook_page' => 'actions'])
 
 								<div class="tab-pane mt30" id="playbook_actions">
                                     <div class="col-sm-12 nopad">
@@ -77,7 +77,7 @@
 
             <form action="#" method="post" class="form add_action fc_style">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.action_form')
+                    @include('playbook.shared.action_form')
                     <input type="hidden" name="id" class="id" value="">
                 </div>
 
@@ -102,7 +102,7 @@
 
             <form action="#" method="post" class="form edit_action fc_style">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.action_form')
+                    @include('playbook.shared.action_form')
                     <input type="hidden" name="id" class="id" value="">
                 </div>
 

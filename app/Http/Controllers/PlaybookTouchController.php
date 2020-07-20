@@ -50,7 +50,7 @@ class PlaybookTouchController extends Controller
             'playbook_touches' => $this->getPlaybookTouches(),
         ];
 
-        return view('tools.playbook.touches')->with($data);
+        return view('playbook.touches')->with($data);
     }
 
     public function playbookTouchForm(PlaybookTouch $playbook_touch = null)
@@ -72,7 +72,7 @@ class PlaybookTouchController extends Controller
             'playbook_actions' => $this->actions(),
         ];
 
-        return view('tools.playbook.shared.touch_form')->with($data);
+        return view('playbook.shared.touch_form')->with($data);
     }
 
     public function addPlaybookTouchForm()
@@ -317,7 +317,7 @@ class PlaybookTouchController extends Controller
     public function toggleActive(Request $request)
     {
         if (!$this->updateActive($request->id, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('tools.playbook_touch_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('playbook_touch_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];

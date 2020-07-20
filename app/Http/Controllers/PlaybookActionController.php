@@ -53,7 +53,7 @@ class PlaybookActionController extends Controller
             'sms_from_numbers' => $this->smsFromNumbers(),
         ];
 
-        return view('tools.playbook.actions')->with($data);
+        return view('playbook.actions')->with($data);
     }
 
     /**
@@ -215,7 +215,7 @@ class PlaybookActionController extends Controller
         $playbook_action = $this->findPlaybookAction($request->id);
 
         if ($playbook_action->playbook_touch_actions->isNotEmpty()) {
-            abort(response()->json(['errors' => ['1' => trans('tools.action_in_use')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('action_in_use')]], 422));
         }
 
         $playbook_action->delete();

@@ -16,7 +16,7 @@
                    
 			    	<div class="col-sm-12">
                         <h2 class="bbnone">{{__('tools.playbook_touches')}}</h2>
-                        @include('tools.playbook.shared.topnav', ['playbook_page' => 'touches'])
+                        @include('playbook.shared.topnav', ['playbook_page' => 'touches'])
 
                         <div class="col-sm-6 mt30 p0 mb30 card tab-pane">
                             <h3 class="playbook_name">{{$contacts_playbook->name}}</h3>
@@ -64,7 +64,7 @@
 </div>
 
 @include('shared.reportmodal')
-@include('tools.playbook.shared.playbook_modals')
+@include('playbook.shared.playbook_modals')
 
 
 @endsection

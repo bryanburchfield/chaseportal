@@ -19,7 +19,7 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'sms_numbers'])
+                                @include('playbook.shared.topnav', ['playbook_page' => 'sms_numbers'])
 
 								<div class="tab-pane mt30" id="sms_numbers">
                                     <div class="col-sm-12 nopad">
@@ -78,7 +78,7 @@
             
             <form action="#" method="post" class="form add_sms_number">
                 <div class="modal-body">
-                    @include('tools.playbook.from_number.shared.sms_form')
+                    @include('playbook.from_number.shared.sms_form')
                 </div>
 
                 <div class="modal-footer">
@@ -102,7 +102,7 @@
             
             <form action="#" method="post" class="form edit_sms_number">
                 <div class="modal-body">
-                    @include('tools.playbook.from_number.shared.sms_form')
+                    @include('playbook.from_number.shared.sms_form')
                 </div>
 
                 <div class="modal-footer">

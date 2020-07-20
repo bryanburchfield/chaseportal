@@ -38,7 +38,7 @@ class PlaybookController extends Controller
             'contacts_playbooks' => $this->getPlaybooks(),
         ];
 
-        return view('tools.playbook.playbooks')->with($data);
+        return view('playbook.playbooks')->with($data);
     }
 
     /**
@@ -153,7 +153,7 @@ class PlaybookController extends Controller
     public function toggleActive(Request $request)
     {
         if (!$this->updateActive($request->id, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('tools.playbook_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('playbook_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];
@@ -249,6 +249,6 @@ class PlaybookController extends Controller
             'email' => $request->email
         ]);
 
-        return view('tools.playbook.unsubscribed');
+        return view('playbook.unsubscribed');
     }
 }
