@@ -29,8 +29,8 @@
                             </ol>
                         </nav>
 
-                        <div class="table-responsive nobdr playbooks_history_table">
-                            <table class="table mt20 table-striped">
+                        <div class="table-responsive nobdr playbooks_history_table" >
+                            <table class="table mt20 table-striped" id="run_playbooks_history_table">
                                 <thead>
                                     <tr>
                                         <th>{{__('tools.touch')}}</th>
