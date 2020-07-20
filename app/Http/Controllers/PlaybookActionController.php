@@ -36,7 +36,7 @@ class PlaybookActionController extends Controller
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 

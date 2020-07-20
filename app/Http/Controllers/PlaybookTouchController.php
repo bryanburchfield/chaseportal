@@ -36,7 +36,7 @@ class PlaybookTouchController extends Controller
 
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
@@ -57,7 +57,7 @@ class PlaybookTouchController extends Controller
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 

@@ -1,5 +1,5 @@
-@if (isset($page['menu']))
-    @switch ($page['menu'])
+@if (isset($page['sidenav']))
+    @switch ($page['sidenav'])
         @case ('admin')
             @include('shared.admin_sidenav')
             @break

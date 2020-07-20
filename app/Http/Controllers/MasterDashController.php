@@ -36,7 +36,7 @@ class MasterDashController extends Controller
             $page['type'] = 'kpi_page';
         }
 
-        $page['menu'] = $this->pageMenu($this->currentDash);
+        $page['sidenav'] = $this->sideNav($this->currentDash);
 
         $dashbody = 'dashboards.' . $this->currentDash;
 
@@ -57,14 +57,14 @@ class MasterDashController extends Controller
         return view('masterdash')->with($data);
     }
 
-    private function pageMenu($page)
+    private function sideNav($page)
     {
-        $pagemenus = [
+        $sidenav = [
             'admindurationdash' => 'admin',
             'admindistinctagentdash' => 'admin',
         ];
 
-        return (isset($pagemenus[$page])) ? $pagemenus[$page] : 'dashboard';
+        return (isset($sidenav[$page])) ? $sidenav[$page] : 'dashboard';
     }
 
     public function demoLogin(Request $request)

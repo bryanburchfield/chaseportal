@@ -31,7 +31,7 @@ class DncController extends Controller
     {
         $jsfile[] = 'dncuploader.js';
         $page['menuitem'] = 'dnc_importer';
-        $page['menu'] = 'tools';
+        $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'jsfile' => $jsfile,
@@ -244,7 +244,7 @@ class DncController extends Controller
             ->firstOrFail();
 
         $page['menuitem'] = 'dnc_importer';
-        $page['menu'] = 'tools';
+        $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
@@ -268,7 +268,7 @@ class DncController extends Controller
             ->firstOrFail();
 
         $page['menuitem'] = 'dnc_importer';
-        $page['menu'] = 'tools';
+        $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
