@@ -75,7 +75,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/toggle_playbook',
+	        url: '/playbook/toggle_playbook',
 	        dataType: 'json',
 	        type:'POST',
 	        data:{
@@ -123,7 +123,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/toggle_playbook_touch',
+	        url: '/playbook/toggle_playbook_touch',
 	        type:'POST',
 	        data:{
 	            id:id,
@@ -194,7 +194,7 @@ var Contacts_Playbook = {
 	    });
 		
 	    return $.ajax({
-	        url: '/tools/playbook/get_subcampaigns',
+	        url: '/playbook/get_subcampaigns',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: {campaign: campaign,},
@@ -300,7 +300,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/playbooks' ,
+	        url: '/playbook/playbooks' ,
 	        type: 'POST',
 	        dataType: 'json',
 	        data: {
@@ -369,7 +369,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/playbooks/'+id,
+	        url: '/playbook/playbooks/'+id,
 	        type: 'DELETE',
 	        dataType: 'json',
 	        success:function(response){
@@ -411,7 +411,7 @@ var Contacts_Playbook = {
 			    });
 
 			    $.ajax({
-			        url: '/tools/playbook/playbooks/filters/'+playbookid,
+			        url: '/playbook/playbooks/filters/'+playbookid,
 			        type: 'GET',
 			        dataType: 'json',
 			        success:function(response){
@@ -462,7 +462,7 @@ var Contacts_Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/playbooks/'+id,
+			url: '/playbook/playbooks/'+id,
 			type: 'PATCH',
 			dataType: 'json',
 			data: {
@@ -504,7 +504,7 @@ var Contacts_Playbook = {
 	    });
 
 	    return $.ajax({
-	        url: '/tools/playbook/get_filters',
+	        url: '/playbook/get_filters',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: {
@@ -524,7 +524,7 @@ var Contacts_Playbook = {
 	    });
 
 	    return $.ajax({
-	        url: '/tools/playbook/get_actions',
+	        url: '/playbook/get_actions',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: {
@@ -544,7 +544,7 @@ var Contacts_Playbook = {
 	    });
 
 	    return $.ajax({
-	        url: '/tools/playbook/playbook/actions/'+playbookid,
+	        url: '/playbook/playbook/actions/'+playbookid,
 	        type: 'GET',
 	        async:false,
 	        dataType: 'json',
@@ -561,7 +561,7 @@ var Contacts_Playbook = {
 	    });
 
 	    return $.ajax({
-	        url: '/tools/playbook/playbooks/filters/'+playbookid,
+	        url: '/playbook/playbooks/filters/'+playbookid,
 	        type: 'GET',
 	        async:false,
 	        dataType: 'json',
@@ -592,7 +592,7 @@ var Contacts_Playbook = {
 			    });
 
 			    $.ajax({
-			        url: '/tools/playbook/playbook/actions/'+playbookid,
+			        url: '/playbook/playbook/actions/'+playbookid,
 			        type: 'GET',
 			        dataType: 'json',
 			        success:function(response){
@@ -676,7 +676,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/playbooks/actions/'+playbookid,
+	        url: '/playbook/playbooks/actions/'+playbookid,
 	        type: 'PATCH',
 	        dataType: 'json',
 	        data:{
@@ -719,7 +719,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/playbooks/filters/'+playbookid,
+	        url: '/playbook/playbooks/filters/'+playbookid,
 	        type: 'PATCH',
 	        dataType: 'json',
 	        data:{
@@ -750,7 +750,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/playbooks/'+id,
+	        url: '/playbook/playbooks/'+id,
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
@@ -807,7 +807,7 @@ var Contacts_Playbook = {
         });
 
         $.ajax({
-            url:'/tools/playbook/activate_all_playbooks',
+            url:'/playbook/activate_all_playbooks',
             type:'POST',
             data:{
                 checked:checked,
@@ -860,7 +860,7 @@ var Contacts_Playbook = {
         });
 
         $.ajax({
-            url:'/tools/playbook/deactivate_all_playbooks',
+            url:'/playbook/deactivate_all_playbooks',
             type:'POST',
             data:{
                 checked:checked,
@@ -896,7 +896,7 @@ var Contacts_Playbook = {
         });
 
         $.ajax({
-            url: '/tools/playbook/touches/'+playbook_id,
+            url: '/playbook/touches/'+playbook_id,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -906,7 +906,7 @@ var Contacts_Playbook = {
             },
 
             success:function(response){
-                window.location.href = '/tools/playbook/touches/'+playbook_id;
+                window.location.href = '/playbook/touches/'+playbook_id;
             },
             error :function( data ) {
                 $('.add_rule_error.alert').empty();
@@ -956,7 +956,7 @@ var Contacts_Playbook = {
     	});
 
     	$.ajax({
-    	    url: '/tools/playbook/touches/touch/'+playbook_touch_id,
+    	    url: '/playbook/touches/touch/'+playbook_touch_id,
     	    type: 'PATCH',
     	    dataType: 'json',
     	    data: {
@@ -966,7 +966,7 @@ var Contacts_Playbook = {
     	    },
 
     	    success:function(response){
-    	        window.location.href = '/tools/playbook/touches/'+playbook_id;
+    	        window.location.href = '/playbook/touches/'+playbook_id;
     	    },
     	    error :function( data ) {
     	        $('.edit_rule_error.alert').empty();
@@ -1000,12 +1000,12 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/tools/playbook/touches/touch/'+playbook_touch_id,
+	        url: '/playbook/touches/touch/'+playbook_touch_id,
 	        type: 'DELETE',
 	        dataType: 'json',
 	        success:function(response){
                 if (response.status == 'success') {
-					window.location.href = '/tools/playbook/touches/'+Contacts_Playbook.playbook_id;
+					window.location.href = '/playbook/touches/'+Contacts_Playbook.playbook_id;
 				}
 	        }
 	    });

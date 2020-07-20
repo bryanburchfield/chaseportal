@@ -3611,6 +3611,7 @@ a.add_action,
 a.add_filter {
   margin-top: 10px;
   display: inline-block;
+  color: #33A09B;
 }
 
 a.add_subcampaign {

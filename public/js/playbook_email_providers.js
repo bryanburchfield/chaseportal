@@ -39,7 +39,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/add_esp',
+			url: '/playbook/add_esp',
 			type: 'POST',
 			data: form_data,
 			success: function (response) {
@@ -74,7 +74,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/get_esp',
+			url: '/playbook/get_esp',
 			type: 'POST',
 			data: {
 				id: id,
@@ -111,7 +111,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/update_esp',
+			url: '/playbook/update_esp',
 			type: 'POST',
 			data: form_data,
 			success: function (response) {
@@ -145,7 +145,7 @@ var Playbook = {
 		var that = $(this).parent();
 		var form_data = $(that).serialize();
 		$.ajax({
-			url: '/tools/playbook/test_connection ',
+			url: '/playbook/test_connection ',
 			type: 'POST',
 			data: form_data,
 			success: function (response) {
@@ -193,7 +193,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/delete_esp',
+			url: '/playbook/delete_esp',
 			type: 'POST',
 			data: {
 				id: id,
@@ -235,7 +235,7 @@ var Playbook = {
 			}
 		}
 
-		var subcamp_response = Master.get_subcampaigns(campaign, '/tools/playbook/get_subcampaigns');
+		var subcamp_response = Master.get_subcampaigns(campaign, '/playbook/get_subcampaigns');
 		$('.drip_campaigns_subcampaign').empty();
 		$(sel).find('.email').empty();
 		console.log(subcamp_response);
@@ -268,7 +268,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/get_table_fields',
+			url: '/playbook/get_table_fields',
 			type: 'POST',
 			dataType: 'json',
 			async: false,
@@ -299,7 +299,7 @@ var Playbook = {
 
 		if (provider_type != '') {
 			$.ajax({
-				url: '/tools/playbook/get_provider_properties',
+				url: '/playbook/get_provider_properties',
 				type: 'POST',
 				data: {
 					provider_type: provider_type,
@@ -331,7 +331,7 @@ var Playbook = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/get_operators',
+			url: '/playbook/get_operators',
 			type: 'POST',
 			data: {
 				type: type,
