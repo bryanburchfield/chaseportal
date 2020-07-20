@@ -374,7 +374,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        success:function(response){
                 if (response.status == 'success') {
-					window.location.href = '/tools/playbook';
+					window.location.href = '/playbook';
 				}
 	        }
 	    });

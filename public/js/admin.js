@@ -741,7 +741,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/sms_number',
+			url: '/playbook/sms_number',
 			type: 'POST',
 			dataType: 'json',
 			data: form_data,
@@ -785,7 +785,7 @@ var Admin = {
     	});
 
     	$.ajax({
-    		url: '/tools/playbook/sms_number/'+id,
+    		url: '/playbook/sms_number/'+id,
     		type: 'GET',
     		dataType: 'json',
     		success: function (response) {
@@ -810,7 +810,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/sms_number/'+id,
+			url: '/playbook/sms_number/'+id,
 			type: 'PATCH',
 			dataType: 'json',
 			data: form_data,
@@ -853,7 +853,7 @@ var Admin = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/sms_number/'+id,
+			url: '/playbook/sms_number/'+id,
 			type: 'DELETE',
 			data: {
 				id:id
