@@ -80,8 +80,8 @@ var Master = {
         $('.filter_campaign').on('click', '.campaign_group', this.adjust_campaign_filters);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
-        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
-        $('#sidebar').on('click', '.tools_link', this.update_sidenav);
+        $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
+        // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
@@ -103,20 +103,14 @@ var Master = {
 
         $('#sidebar').empty();
 
-        if($(this).hasClass('back_to_sidenav')){
-            var path = '/admin/load_sidenav';
-        }else{
-            var path = $(this).data('path');
-            path = '/admin/'+path;
-            console.log(path);
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-        }
+        var sidenav = $(this).data('path');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
 
         $.ajax({
-            url: path,
+            url: '/admin/load_sidenav',
             type: 'POST',
             dataType: 'html',
-            data: { },
+            data: {sidenav:sidenav },
             success: function (response) {
                 $('#sidebar').append(response);
                 $('ul.list-unstyled.components').find('li').each(function(){
