@@ -1,4 +1,5 @@
 @if (isset($page['sidenav']))
+<<<<<<< HEAD
     @switch ($page['sidenav'])
         @case ('dashboards')
             @include('shared.dashboard_sidenav')
@@ -13,5 +14,7 @@
             @include('shared.default_sidenav')
     @endswitch
 @else
-    @include('shared.default_sidenav')
+    @include('shared.sidenav.' . $page['sidenav'])
+@else
+    @include('shared.sidenav.main')
 @endif

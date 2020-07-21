@@ -3,7 +3,7 @@
 return [
 	'admin' => 'Configuración',
 	'cdr_lookup' => 'Búsqueda de CDR',
-	'dashboards'	=> 'Panels',
+	'dashboards' => 'Panels',
 	'distinct_agent' => 'Agente Distinto',
 	'duration_dashboard' => 'Panel de Duración',
 	'inbound' => 'Panel de Entrada',
