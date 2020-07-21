@@ -292,7 +292,7 @@ class CallDetails
                 ORDER BY [id] Desc
                 ), 0)";
 
-        $sql .= " SELECT
+        $sql .= " SELECT * FROM (SELECT
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
@@ -353,10 +353,6 @@ class CallDetails
             $sql .= " AND $is_callable_sql = :is_callable";
         }
 
-        if (strlen($this->params['calltype']) !== 0) {
-            $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
-        }
-
         if (session('ssoRelativeCampaigns', 0)) {
             $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
             $bind['ssousercamp'] = session('ssoUsername');
@@ -365,6 +361,12 @@ class CallDetails
         if (session('ssoRelativeReps', 0)) {
             $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
             $bind['ssouserrep'] = session('ssoUsername');
+        }
+
+        $sql .= ") tmptable";
+
+        if (strlen($this->params['calltype']) !== 0) {
+            $sql .= " WHERE CallType = '" . $this->params['calltype'] . "'";
         }
 
         // Check params
