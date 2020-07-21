@@ -2,6 +2,7 @@
 // Admin only
 Route::prefix('admin')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::post('load_sidenav', 'AdminController@loadSidenav');
 
     Route::group(['middleware' => 'can:accessAdmin'], function () {
         Route::post('add_user', 'AdminController@addUser');
@@ -11,7 +12,6 @@ Route::prefix('admin')->group(function () {
         Route::post('get_client_tables', 'AdminController@getClientTables');
         Route::post('get_table_fields', 'AdminController@getTableFields');
         Route::get('manage_users', 'AdminController@manageUsers');
-        Route::post('load_sidenav', 'AdminController@loadSidenav');
     });
 
     Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
