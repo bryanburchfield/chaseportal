@@ -63,6 +63,7 @@ class MasterDashController extends Controller
         $sidenav = [
             'admindurationdash' => 'admin',
             'admindistinctagentdash' => 'admin',
+            'leaderdash' => 'main',
             'kpidash' => 'main',
         ];
 

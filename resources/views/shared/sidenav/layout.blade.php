@@ -5,7 +5,7 @@
     </div>
 
     <ul class="list-unstyled components">
-        <input type="hidden" class="page_menuitem" value="<?php echo !empty($page['menuitem']) ? $page['menuitem'] : '';?>">
+        <input type="hidden" class="page_menuitem" value="@isset($page['menuitem']){{$page['menuitem']}}@endisset">
         @yield('sidenav')
     </ul>
 </nav>
