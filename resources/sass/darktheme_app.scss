@@ -2390,12 +2390,14 @@ table.dataTable tbody tr:nth-of-type(even){
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter, a.remove_action{
+a.remove_filter, a.remove_action, a.remove_subcamp{
     color: #d9534f;
     float: right;
     font-size: 14px;
     margin-top: 10px;
 }
+
+a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
 
 .leadfilter_row .card, .action_row .card{overflow: auto;}
 
@@ -2725,9 +2727,17 @@ a.playbook_actions_modal, a.playbook_filters_modal{
 a.add_action, a.add_filter{
     margin-top: 10px;
     display: inline-block;
+    color:$green;
+}
+
+a.add_subcampaign{
     font-weight: 600;
     i{
         color: $green;
+    }
+
+    &:hover, &:focus{
+        color:#eee;
     }
 }
 
@@ -2838,6 +2848,36 @@ a.add_action, a.add_filter{
     text-transform: uppercase;
     color:#aaa;
 }
+
+.playbooks_history_table{
+
+    a{
+        color:$green;
+        &:hover{
+            color:darken($green, 12%);
+        }
+    }
+}
+
+.breadcrumb{
+    background: #263854; /* Old browsers */
+    background: -moz-linear-gradient(top,  #263854 0%, #171f33 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
+    color:#eee;
+
+    .breadcrumb-item{
+        font-weight: 600;
+        a{
+            &:hover{
+                color:$green;
+            }
+        }
+    }
+}
+
+.reverse_action{color:#fff !important;}
 
 
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}

@@ -1,14 +1,5 @@
-@if (isset($page['menu']))
-    @switch ($page['menu'])
-        @case ('admin')
-            @include('shared.admin_sidenav')
-            @break
-        @case ('tools')
-            @include('shared.tools_sidenav')
-            @break
-        @default
-            @include('shared.dashboard_sidenav')
-    @endswitch
+@if (isset($page['sidenav']))
+    @include('shared.sidenav.' . $page['sidenav'])
 @else
-    @include('shared.dashboard_sidenav')
+    @include('shared.sidenav.main')
 @endif

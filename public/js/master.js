@@ -25,6 +25,7 @@ var Master = {
 	activeTab: localStorage.getItem('activeTab'),
 	dataTable: $('#dataTable').DataTable({
 		responsive: true,
+        fixedHeader: true
 	}),
 	cdr_dataTable: $('#cdr_dataTable').DataTable({
 		responsive: true,
@@ -76,8 +77,8 @@ var Master = {
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
-        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
-        $('#sidebar').on('click', '.tools_link', this.update_sidenav);
+        $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
+        // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
@@ -101,19 +102,14 @@ var Master = {
 
         $('#sidebar').empty();
 
-        if($(this).hasClass('back_to_sidenav')){
-            var path = '/admin/load_sidenav';
-        }else{
-            var path = $(this).data('path');
-            path = '/admin/'+path;
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-        }
+        var sidenav = $(this).data('path');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
 
         $.ajax({
-            url: path,
+            url: '/admin/load_sidenav',
             type: 'POST',
             dataType: 'html',
-            data: { },
+            data: {sidenav:sidenav },
             success: function (response) {
                 $('#sidebar').append(response);
                 $('ul.list-unstyled.components').find('li').each(function(){

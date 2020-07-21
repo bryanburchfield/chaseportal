@@ -25,20 +25,20 @@ class PlaybookController extends Controller
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
         $data = [
             'page' => $page,
             'jsfile' => ['contacts_playbooks.js'],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'contacts_playbooks' => $this->getPlaybooks(),
         ];
 
-        return view('tools.playbook.playbooks')->with($data);
+        return view('playbook.playbooks')->with($data);
     }
 
     /**
@@ -77,7 +77,7 @@ class PlaybookController extends Controller
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
 
-        ContactsPlaybook::create($data);
+        $contacts_playbook = ContactsPlaybook::create($data);
 
         return ['status' => 'success'];
     }
@@ -91,6 +91,7 @@ class PlaybookController extends Controller
     public function updatePlaybook(ValidPlaybook $request)
     {
         $contacts_playbook = $this->findPlaybook($request->id);
+
         $contacts_playbook->update($request->all());
 
         return ['status' => 'success'];
@@ -118,7 +119,15 @@ class PlaybookController extends Controller
      */
     public function getPlaybook(Request $request)
     {
-        return $this->findPlaybook($request->id);
+        $contacts_playbook = $this->findPlaybook($request->id);
+
+        $playbook = $contacts_playbook->toArray();
+
+        $playbook['subcampaigns'] = $contacts_playbook->playbook_subcampaigns
+            ->sortBy('subcampaign')
+            ->pluck('subcampaign');
+
+        return $playbook;
     }
 
     /**
@@ -144,7 +153,7 @@ class PlaybookController extends Controller
     public function toggleActive(Request $request)
     {
         if (!$this->updateActive($request->id, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('tools.playbook_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('playbook_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];
@@ -240,6 +249,6 @@ class PlaybookController extends Controller
             'email' => $request->email
         ]);
 
-        return view('tools.playbook.unsubscribed');
+        return view('playbook.unsubscribed');
     }
 }

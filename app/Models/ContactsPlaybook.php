@@ -16,13 +16,20 @@ class ContactsPlaybook extends Model
         'group_id',
         'name',
         'campaign',
-        'subcampaign',
         'last_run_from',
         'last_run_to',
         'active',
     ];
 
-    protected $cascadeDeletes = ['playbook_touches'];
+    protected $cascadeDeletes = [
+        'playbook_touches',
+        'playbook_subcampaigns',
+    ];
+
+    public function playbook_subcampaigns()
+    {
+        return $this->hasMany('App\Models\PlaybookSubcampaign');
+    }
 
     public function playbook_touches()
     {
@@ -41,17 +48,57 @@ class ContactsPlaybook extends Model
         return $this->playbook_touches->where('active', 1)->count() > 0;
     }
 
+    public static function create(array $attributes = [])
+    {
+        DB::beginTransaction();
+
+        $contacts_playbook = static::query()->create($attributes);
+
+        if (!isset($attributes['subcampaigns'])) {
+            $attributes['subcampaigns'] = [];
+        }
+
+        $contacts_playbook->saveSubcampaigns($attributes['subcampaigns']);
+
+        DB::commit();
+
+        return $contacts_playbook;
+    }
+
     public function update(array $attributes = [], array $options = [])
     {
         DB::beginTransaction();
 
         parent::update($attributes, $options);
 
-        foreach ($this->playbook_touches as $playbook_touch) {
-            $playbook_touch->cleanFiltersAndActions();
-            $playbook_touch->save();
+        if (!isset($attributes['subcampaigns'])) {
+            $attributes['subcampaigns'] = [];
         }
 
+        $this->saveSubcampaigns($attributes['subcampaigns']);
+
         DB::commit();
+    }
+
+    public function saveSubcampaigns($subcampaigns = [])
+    {
+        $subcampaigns = collect(array_values((array) $subcampaigns));
+        $existing_subcampaigns = collect();
+
+        $this->playbook_subcampaigns->each(function ($playbook_subcampaign) use (&$existing_subcampaigns) {
+            $existing_subcampaigns->push($playbook_subcampaign->subcampaign);
+        });
+
+        // insert any not already there
+        $subcampaigns->diff($existing_subcampaigns)->each(function ($subcampaign) {
+            PlaybookSubcampaign::create(['contacts_playbook_id' => $this->id, 'subcampaign' => $subcampaign]);
+        });
+
+        // delete any not submitted
+        $existing_subcampaigns->diff($subcampaigns)->each(function ($subcampaign) {
+            PlaybookSubcampaign::where('contacts_playbook_id', $this->id)
+                ->where('subcampaign', $subcampaign)
+                ->delete();
+        });
     }
 }

@@ -4,6 +4,7 @@ var Playbook_Actions = {
 
 	actions_dataTable: $('#actions_dataTable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {
@@ -74,7 +75,7 @@ var Playbook_Actions = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/actions',
+			url: '/playbook/actions',
 			type: 'POST',
 			dataType: 'json',
 			data: form_data,
@@ -143,7 +144,7 @@ var Playbook_Actions = {
 		});
 
 		return $.ajax({
-			url: '/tools/playbook/get_dispos',
+			url: '/playbook/get_dispos',
 			type: 'POST',
 			dataType: 'json',
 			data: { campaign: campaign },
@@ -169,7 +170,7 @@ var Playbook_Actions = {
 		});
 
 		return $.ajax({
-			url: '/tools/playbook/get_subcampaigns',
+			url: '/playbook/get_subcampaigns',
 			type: 'POST',
 			dataType: 'json',
 			data: { campaign: campaign },
@@ -207,7 +208,7 @@ var Playbook_Actions = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/actions/'+id,
+			url: '/playbook/actions/'+id,
 			type: 'GET',
 			dataType: 'json',
 			data: { id: id },
@@ -307,7 +308,7 @@ var Playbook_Actions = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/actions/'+id,
+			url: '/playbook/actions/'+id,
 			type: 'PATCH',
 			dataType: 'json',
 			data: form_data,
@@ -350,7 +351,7 @@ var Playbook_Actions = {
 		});
 
 		return $.ajax({
-			url: '/tools/playbook/get_table_fields',
+			url: '/playbook/get_table_fields',
 			type: 'POST',
 			dataType: 'json',
 			data: { campaign: campaign },
@@ -381,7 +382,7 @@ var Playbook_Actions = {
 		});
 		console.log(id);
 		$.ajax({
-			url: '/tools/playbook/actions/'+id,
+			url: '/playbook/actions/'+id,
 			type: 'DELETE',
 			dataType: 'json',
 			data: { id: id },

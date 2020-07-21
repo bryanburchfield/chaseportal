@@ -1,9 +1,5 @@
 <?php
 
-/////////////////////////////
-// look for TODO's!!!!
-/////////////////////////////
-
 namespace App\Services;
 
 use App\Includes\PowerImportAPI;
@@ -14,6 +10,7 @@ use App\Models\ContactsPlaybookAction;
 use App\Models\Dialer;
 use App\Models\EmailServiceProvider;
 use App\Models\PlaybookFilter;
+use App\Models\PlaybookLeadAction;
 use App\Models\PlaybookOptout;
 use App\Models\PlaybookRun;
 use App\Models\PlaybookRunTouch;
@@ -30,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Twilio\Rest\Client as Twilio;
 use Exception;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
@@ -86,12 +84,15 @@ class ContactsPlaybookService
         $contacts_playbook->last_run_to = $now;
         $contacts_playbook->save();
 
-        // Log the run
-        $playbook_run = PlaybookRun::create(['contacts_playbook_id' => $contacts_playbook->id]);
-
         // Set SqlSrv database
         $db = Auth::user()->db;
         config(['database.connections.sqlsrv.database' => $db]);
+
+        // Log the run
+        $playbook_run = PlaybookRun::create(['contacts_playbook_id' => $contacts_playbook->id]);
+
+        // track touch count
+        $touch_count = 0;
 
         foreach ($contacts_playbook->playbook_touches as $playbook_touch) {
 
@@ -113,22 +114,71 @@ class ContactsPlaybookService
 
             $playbook_run_touch = PlaybookRunTouch::create(['playbook_run_id' => $playbook_run->id, 'playbook_touch_id' => $playbook_touch->id]);
 
+            // track action count
+            $action_count = 0;
+
             foreach ($playbook_touch->playbook_touch_actions as $playbook_touch_action) {
                 $playbook_run_touch_action = PlaybookRunTouchAction::create([
                     'playbook_run_touch_id' => $playbook_run_touch->id,
-                    'playbook_action_id' => $playbook_touch_action->playbook_action_id
+                    'playbook_action_id' => $playbook_touch_action->playbook_action_id,
+                    'process_started_at' => now(),
                 ]);
 
-                foreach ($results as $rec) {
-                    $this->runAction($playbook_touch_action, $rec);
+                // track record count
+                $record_count = 0;
 
-                    PlaybookRunTouchActionDetail::create([
-                        'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
-                        'reporting_db' => $db,
-                        'lead_id' => $rec['lead_id'],
-                    ]);
+                foreach ($results as $rec) {
+                    if ($this->runAction($playbook_touch_action, $rec)) {
+                        $playbook_run_touch_action_detail = [
+                            'playbook_run_touch_action_id' => $playbook_run_touch_action->id,
+                            'reporting_db' => $db,
+                            'lead_id' => $rec['lead_id'],
+                        ];
+
+                        switch ($playbook_touch_action->playbook_action->action_type) {
+                            case 'email':
+                                $playbook_run_touch_action_detail += [
+                                    'old_email' => $rec[$playbook_touch_action->playbook_action->playbook_email_action->email_field],
+                                ];
+                                break;
+                            case 'lead':
+                                $playbook_run_touch_action_detail += [
+                                    'old_campaign' => $rec['Campaign'],
+                                    'old_subcampaign' => $rec['Subcampaign'],
+                                    'old_callstatus' => $rec['CallStatus'],
+                                ];
+                                break;
+                            case 'sms':
+                                $playbook_run_touch_action_detail += [
+                                    'old_phone' => $rec['PrimaryPhone'],
+                                ];
+                                break;
+                        }
+
+                        $record_count++;
+                        PlaybookRunTouchActionDetail::create($playbook_run_touch_action_detail);
+                    }
+                }
+
+                // save or delete run_touch_action
+                if ($record_count) {
+                    $action_count++;
+                    $playbook_run_touch_action->processed_at = now();
+                    $playbook_run_touch_action->save();
+                } else {
+                    $playbook_run_touch_action->delete();
                 }
             }
+
+            if ($action_count) {
+                $touch_count++;
+            } else {
+                $playbook_run_touch->delete();
+            }
+        }
+
+        if (!$touch_count) {
+            $playbook_run->delete();
         }
     }
 
@@ -204,15 +254,17 @@ class ContactsPlaybookService
             $sql .= " INNER JOIN [$db].[dbo].[ADVANCED_" . $campaign->advancedTable->TableName . "] A ON A.LeadId = L.IdGuid";
         }
 
-        $sql .= " WHERE GroupId = :group_id
-        AND Campaign = :campaign";
+        $sql .= " WHERE L.GroupId = :group_id
+        AND L.Campaign = :campaign";
 
-        if (!empty($playbook_touch->contacts_playbook->subcampaign)) {
-            $subcampaign = ($playbook_touch->contacts_playbook->subcampaign == '!!none!!') ? '' : $playbook_touch->contacts_playbook->subcampaign;
+        if ($playbook_touch->contacts_playbook->playbook_subcampaigns()->exists()) {
+            $subcamp_in = '';
+            foreach ($playbook_touch->contacts_playbook->playbook_subcampaigns as $sidx => $playbook_subcampaign) {
+                $bind['subcampaign' . $sidx] = $playbook_subcampaign->subcampaign;
+                $subcamp_in .= ",:subcampaign$sidx";
+            }
 
-            $bind['subcampaign'] = $subcampaign;
-
-            $sql .= " AND Subcampaign = :subcampaign";
+            $sql .= " AND L.Subcampaign IN (" . substr($subcamp_in, 1) . ")";
         }
 
         $sql .= ' ' . $where . "
@@ -402,9 +454,14 @@ class ContactsPlaybookService
             $data['CallStatus'] = $playbook_action->playbook_lead_action->to_callstatus;
         }
 
-        $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+        // TESTING
+        if (App::environment('production')) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $rec['lead_id']);
+        } else {
+            $result = true;
+        }
 
-        return true;
+        return $result;
     }
 
     private function actionEmail(PlaybookTouchAction $playbook_touch_action, $rec)
@@ -491,13 +548,10 @@ class ContactsPlaybookService
             $this->initTwilio();
         }
 
-
-
-        // TODO:  REMOVE AFTER TESTING
-        $rec['PrimaryPhone'] = '4076175882';
-
-
-
+        // TESTING
+        if (!App::environment('production')) {
+            $rec['PrimaryPhone'] = '4076175882';
+        }
 
         try {
             $message = $this->twilio->messages->create(
@@ -541,19 +595,16 @@ class ContactsPlaybookService
         // build payload
         $payload = [
             'from' => $playbook_touch_action->playbook_action->playbook_email_action->from,
-
-
-
-            // TODO: REMOVE AFTER TESTING
-            // 'to' => $email,
-            'to' => 'brandon.b@chasedatacorp.com',
-
-
-
+            'to' => $email,
             'subject' => $subject,
             'body' => $body,
             'tag' => $playbook_touch_action->playbook_touch->contacts_playbook->name,
         ];
+
+        // TESTING
+        if (!App::environment('production')) {
+            $payload['to'] = 'brandon.b@chasedatacorp.com';
+        }
 
         // find ESP model
         $email_service_provider = EmailServiceProvider::find($playbook_touch_action->playbook_action->playbook_email_action->email_service_provider_id);
@@ -616,7 +667,7 @@ class ContactsPlaybookService
     {
         $optouturl = Url::signedRoute('playbook.optout', ['group_id' => Auth::user()->group_id, 'email' => $email]);
 
-        return view('tools.playbook.optout')->with(['optouturl' => $optouturl])->render();
+        return view('playbook.optout')->with(['optouturl' => $optouturl])->render();
     }
 
     private function getHistory(PlaybookTouchAction $playbook_touch_action, $lead_id)
@@ -652,6 +703,43 @@ class ContactsPlaybookService
             $this->twilio = new Twilio($sid, $token);
         } catch (ConfigurationException $e) {
             $this->echo('FAILED ' . $e->getMessage());
+        }
+    }
+
+    public function reverseLeadAction(PlaybookRunTouchAction $playbook_run_touch_action)
+    {
+        $playbook_lead_action = $playbook_run_touch_action->playbook_action->playbook_lead_action;
+
+        $playbook_run_touch_action->playbook_run_touch_action_details->each(function ($playbook_run_touch_action_detail) use ($playbook_lead_action) {
+            $this->reverseLeadUpdate($playbook_run_touch_action_detail, $playbook_lead_action);
+        });
+
+        $playbook_run_touch_action->reversed_at = now();
+        $playbook_run_touch_action->save();
+    }
+
+    private function reverseLeadUpdate(PlaybookRunTouchActionDetail $playbook_run_touch_action_detail, PlaybookLeadAction $playbook_lead_action)
+    {
+        $this->echo('Reversing Lead: ' . $playbook_run_touch_action_detail->lead_id);
+
+        $api = $this->initApi($playbook_run_touch_action_detail->reporting_db);
+
+        $data = [];
+
+        // reset any fields that were updated
+        if (!empty($playbook_lead_action->to_campaign)) {
+            $data['Campaign'] = $playbook_run_touch_action_detail->old_campaign;
+        }
+        if (!empty($playbook_lead_action->to_subcampaign)) {
+            $data['Subcampaign'] = $playbook_run_touch_action_detail->old_subcampaign;
+        }
+        if (!empty($playbook_lead_action->to_callstatus)) {
+            $data['CallStatus'] = $playbook_run_touch_action_detail->old_callstatus;
+        }
+
+        // TESTING
+        if (App::environment('production')) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $playbook_run_touch_action_detail->lead_id);
         }
     }
 

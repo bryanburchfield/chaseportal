@@ -4,6 +4,7 @@ return [
 	'admin' => 'Admin',
 	'cdr_lookup' => 'CDR Lookup',
 	'compliance_dashboard'	=> 'Compliance Dashboard',
+	'dashboards' => 'Dashboards',
 	'distinct_agent' => 'Distinct Agent',
 	'duration_dashboard' => 'Duration Dashboard',
 	'inbound' => 'Inbound Dashboard',
@@ -14,5 +15,5 @@ return [
 	'reports' => 'Reports',
 	'settings' => 'Settings',
 	'tools' => 'Tools',
-	'trend_dashboard' => 'Trend Dashboard',
+	'trend_dashboard' => 'Trend Dashboard'
 ];

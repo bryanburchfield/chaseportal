@@ -19,20 +19,20 @@ class PlaybookEmailProviderController extends Controller
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_email_providers.js'],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'email_service_providers' => $this->getEmailServiceProviders(),
             'provider_types' => EmailServiceProvider::providerTypes(),
         ];
 
-        return view('tools.playbook.email_service_providers')->with($data);
+        return view('playbook.email_service_providers')->with($data);
     }
 
     /**

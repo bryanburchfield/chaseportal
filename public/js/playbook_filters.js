@@ -2,6 +2,7 @@ var Playbook_Filters = {
 
 	filters_dataTable: $('#filters_dataTable').DataTable({
 		responsive: true,
+		fixedHeader: true,
 		dom: 'Bfrtip',
 		buttons: [],
 		fnDrawCallback: function(oSettings) {
@@ -41,7 +42,7 @@ var Playbook_Filters = {
 
 			$('.filter_fields').empty();
 			return $.ajax({
-				url: '/tools/playbook/get_filter_fields',
+				url: '/playbook/get_filter_fields',
 				type: 'POST',
 				data: { campaign: campaign },
 			}).done(function(response){
@@ -73,7 +74,7 @@ var Playbook_Filters = {
 		});
 
 		return $.ajax({
-			url: '/tools/playbook/get_operators',
+			url: '/playbook/get_operators',
 			type: 'POST',
 			data: {type: type},
 		}).done(function(response){
@@ -98,7 +99,7 @@ var Playbook_Filters = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/filters',
+			url: '/playbook/filters',
 			type: 'POST',
 			data: form,
 			success: function (response) {
@@ -145,7 +146,7 @@ var Playbook_Filters = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/filters/'+id,
+			url: '/playbook/filters/'+id,
 			type: 'GET',
 			data: {
 				id:id
@@ -185,7 +186,7 @@ var Playbook_Filters = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/filters/'+id,
+			url: '/playbook/filters/'+id,
 			type: 'PATCH',
 			dataType: 'json',
 			data: form_data,
@@ -222,7 +223,7 @@ var Playbook_Filters = {
 		});
 
 		$.ajax({
-			url: '/tools/playbook/filters/'+id,
+			url: '/playbook/filters/'+id,
 			type: 'DELETE',
 			data: {
 				id:id

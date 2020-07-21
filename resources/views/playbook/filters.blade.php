@@ -19,7 +19,7 @@
 			    		<div class="tab-content">
                             <div class="tab-pane active">
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
-                                @include('tools.playbook.shared.topnav', ['playbook_page' => 'filters'])
+                                @include('playbook.shared.topnav', ['playbook_page' => 'filters'])
 
 								<div class="tab-pane mt30" id="playbook_filters">
                                     <div class="col-sm-12 nopad">
@@ -81,7 +81,7 @@
             </div>
             <form method="post" class="form add_filter fc_style">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.filter_form')
+                    @include('playbook.shared.filter_form')
                 </div>
 
                 <div class="modal-footer">
@@ -107,7 +107,7 @@
                 <h3><span></span></h3><br>
                 <form action="#" method="post" class="form edit_filter fc_style">
                     @method('PATCH')
-                    @include('tools.playbook.shared.filter_form')
+                    @include('playbook.shared.filter_form')
                     <input type="hidden" name="id" class="id" value="{{old('id')}}">
                 </form>
             </div>

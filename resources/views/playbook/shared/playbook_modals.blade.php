@@ -9,10 +9,27 @@
 
             <form action="#" method="post" class="form add_playbook fc_style">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.playbook_form')
+                    <div class="form-group">
+                        <label>{{__('tools.name')}}</label>
+                        <input type="text" class="form-control name" name="name" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{__('tools.campaign')}}</label>
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                    </div>
+
+                    <div class="subcampaign_list"></div>
+
+                    <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
+
+                    <div class="alert alert-success hidetilloaded mb0 mt20"></div>
+                    <div class="alert alert-danger hidetilloaded mb0 mt20"></div>
+                    <div class="alert connection_msg hidetilloaded mb0 mt20"></div>
                 </div>
 
                 <div class="modal-footer">
+                    <img src="/img/loader_hor.gif" alt="" class="img-responsive loader_hor hidetilloaded mt10">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
                     <button type="submit" class="btn btn-primary add_playbook add_btn_loader">{{__('tools.add_playbook')}}</button>
                 </div>
@@ -32,7 +49,23 @@
 
             <form action="#" method="post" class="form edit_playbook fc_style">
                 <div class="modal-body">
-                    @include('tools.playbook.shared.playbook_form')
+                    <div class="form-group">
+                        <label>{{__('tools.name')}}</label>
+                        <input type="text" class="form-control name" name="name" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{__('tools.campaign')}}</label>
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                    </div>
+
+                    <div class="subcampaign_list"></div>
+
+                    <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
+
+                    <div class="alert alert-success hidetilloaded mb0 mt20"></div>
+                    <div class="alert alert-danger hidetilloaded mb0 mt20"></div>
+                    <div class="alert connection_msg hidetilloaded mb0 mt20"></div>
                     <input type="hidden" name="id" class="id" value="">
                 </div>
 

@@ -36,28 +36,28 @@ class PlaybookTouchController extends Controller
 
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
         $data = [
             'page' => $page,
             'jsfile' => ['contacts_playbooks.js'],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
             'campaigns' => $this->getAllCampaigns(),
             'playbook_touches' => $this->getPlaybookTouches(),
         ];
 
-        return view('tools.playbook.touches')->with($data);
+        return view('playbook.touches')->with($data);
     }
 
     public function playbookTouchForm(PlaybookTouch $playbook_touch = null)
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
@@ -72,7 +72,7 @@ class PlaybookTouchController extends Controller
             'playbook_actions' => $this->actions(),
         ];
 
-        return view('tools.playbook.shared.touch_form')->with($data);
+        return view('playbook.shared.touch_form')->with($data);
     }
 
     public function addPlaybookTouchForm()
@@ -153,7 +153,7 @@ class PlaybookTouchController extends Controller
 
         DB::beginTransaction();
 
-        $playbook_touch->update($request->all());
+        $playbook_touch->update($data);
 
         $playbook_touch->saveFilters($data['filters']);
         $playbook_touch->saveActions($data['actions']);
@@ -317,7 +317,7 @@ class PlaybookTouchController extends Controller
     public function toggleActive(Request $request)
     {
         if (!$this->updateActive($request->id, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('tools.playbook_touch_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('playbook_touch_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];

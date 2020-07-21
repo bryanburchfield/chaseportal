@@ -24,21 +24,21 @@ class PlaybookFilterController extends Controller
     {
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
         $data = [
             'page' => $page,
             'jsfile' => ['playbook_filters.js'],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
             'campaigns' => $this->getAllCampaigns(),
             'fields' => (new Campaign)->getFilterFields(true),
             'playbook_filters' => $this->getPlaybookFilters(),
         ];
 
-        return view('tools.playbook.filters')->with($data);
+        return view('playbook.filters')->with($data);
     }
 
     /**
@@ -125,7 +125,7 @@ class PlaybookFilterController extends Controller
         $playbook_filter = $this->findPlaybookFilter($request->id);
 
         if ($playbook_filter->playbook_touch_filters->isNotEmpty()) {
-            abort(response()->json(['errors' => ['1' => trans('tools.filter_in_use')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('filter_in_use')]], 422));
         }
 
         $playbook_filter->delete();

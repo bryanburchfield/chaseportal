@@ -2235,12 +2235,14 @@ div.vertical-line{
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter, a.remove_action{
+a.remove_filter, a.remove_action, a.remove_subcamp{
     color: #d9534f;
     float: right;
     font-size: 14px;
     margin-top: 10px;
 }
+
+a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
 
 .leadfilter_row .card, .action_row .card{overflow: auto;}
 
@@ -2587,6 +2589,13 @@ a.add_action, a.add_filter{
     }
 }
 
+a.add_subcampaign{
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+}
+
 .toggle_all_switch{
     margin-bottom: 40px;
 
@@ -2706,6 +2715,36 @@ a.add_action, a.add_filter{
     width: 98% !important;
     margin-left: 1%;
 }
+
+.playbooks_history_table{
+
+    a{
+        color:$orange;
+        &:hover{
+            color:darken($orange, 12%);
+        }
+    }
+}
+
+.breadcrumb{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
+    border:1px solid #ddd;
+
+    .breadcrumb-item{
+        font-weight: 600;
+        a{
+            &:hover{
+                color:$green;
+            }
+        }
+    }
+}
+
+.reverse_action{color:#fff !important;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

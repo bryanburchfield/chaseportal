@@ -2706,11 +2706,17 @@ div.vertical-line.hidetilloaded {
 }
 
 a.remove_filter,
-a.remove_action {
+a.remove_action,
+a.remove_subcamp {
   color: #d9534f;
   float: right;
   font-size: 14px;
   margin-top: 10px;
+}
+
+a.remove_subcamp {
+  font-size: 13px;
+  margin-top: 0 !important;
 }
 
 .leadfilter_row .card,
@@ -3126,6 +3132,14 @@ a.add_filter i {
   color: #33A09B;
 }
 
+a.add_subcampaign {
+  font-weight: 600;
+}
+
+a.add_subcampaign i {
+  color: #33A09B;
+}
+
 .toggle_all_switch {
   margin-bottom: 40px;
 }
@@ -3269,6 +3283,38 @@ a.add_filter i {
 .col-sm-12.w99 {
   width: 98% !important;
   margin-left: 1%;
+}
+
+.playbooks_history_table a {
+  color: #E15B23;
+}
+
+.playbooks_history_table a:hover {
+  color: #af4418;
+}
+
+.breadcrumb {
+  background: #ffffff;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#e2e2e0", GradientType=0);
+  /* IE6-9 */
+  border: 1px solid #ddd;
+}
+
+.breadcrumb .breadcrumb-item {
+  font-weight: 600;
+}
+
+.breadcrumb .breadcrumb-item a:hover {
+  color: #33A09B;
+}
+
+.reverse_action {
+  color: #fff !important;
 }
 
 /* ---------------------------------------------------

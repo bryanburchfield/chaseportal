@@ -5,7 +5,6 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        Route::redirect('/', 'dashboards/inbounddashboard');
         Route::get('/inbounddashboard', 'MasterDashController@inboundDashboard');
         Route::get('/outbounddashboard', 'MasterDashController@outboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
@@ -48,5 +47,7 @@ Route::prefix('dashboards')->group(function () {
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
         });
+
+        Route::redirect('/', action('MasterDashController@inboundDashboard'));
     });
 });

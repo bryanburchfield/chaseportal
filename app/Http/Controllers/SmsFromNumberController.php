@@ -21,18 +21,18 @@ class SmsFromNumberController extends Controller
 
         $page = [
             'menuitem' => 'playbook',
-            'menu' => 'tools',
+            'sidenav' => 'main',
             'type' => 'other',
         ];
 
         $data = [
             'page' => $page,
             'jsfile' => [],
-            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'],
+            'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'sms_from_numbers' => $sms_from_numbers,
         ];
 
-        return view('tools.playbook.from_number.index')->with($data);
+        return view('playbook.from_number.index')->with($data);
     }
 
     /**

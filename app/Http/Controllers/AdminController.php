@@ -24,6 +24,22 @@ class AdminController extends Controller
     use SqlServerTraits;
 
     /**
+     * Return admin sidenav
+     * return a sidenav
+     * 
+     * @return View|Factory 
+     */
+    public function loadSidenav(Request $request)
+    {
+        $sidenav = '';
+
+        if ($request->has('sidenav')) {
+            $sidenav = '.' . $request->sidenav;
+        }
+        return view('shared.sidenav' . $sidenav);
+    }
+
+    /**
      * Index
      * 
      * @param Request $request 
@@ -34,10 +50,12 @@ class AdminController extends Controller
         $groupId = Auth::user()->group_id;
         $this->setDb();
 
-        $page['menuitem'] = 'manage_users';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'manage_users',
+                'type' => 'page',
+                'sidenav' => 'admin',
+            ],
             'timezone_array' => $this->timezones(),
             'group_id' => $groupId,
             'dbs' => $this->dbs(),
@@ -51,10 +69,12 @@ class AdminController extends Controller
 
     public function settings()
     {
-        $page['menuitem'] = 'settings';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'settings',
+                'type' => 'page',
+                'sidenav' => 'admin',
+            ],
             'timezone_array' => $this->timezones(),
             'dbs'  => $this->dbs(),
             'jsfile' => [],
@@ -63,42 +83,14 @@ class AdminController extends Controller
         return view('admin.settings')->with($data);
     }
 
-    /**
-     * Return admin sidenav
-     * 
-     * @return View|Factory 
-     */
-    public function loadAdminNav()
-    {
-        return view('shared.admin_sidenav');
-    }
-
-    /**
-     * Return tools sidenav
-     * 
-     * @return View|Factory 
-     */
-    public function loadToolsNav()
-    {
-        return view('shared.tools_sidenav');
-    }
-
-    /**
-     * return regular sidenav
-     * 
-     * @return View|Factory 
-     */
-    public function loadSideNav()
-    {
-        return view('shared.sidenav');
-    }
-
     public function loadCdrLookup()
     {
-        $page['menuitem'] = 'cdr_lookup';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'cdr_lookup',
+                'type' => 'page',
+                'sidenav' => 'tools',
+            ],
             'jsfile' => [],
         ];
 
@@ -113,10 +105,12 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'webhook_generator';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'webhook_generator',
+                'type' => 'page',
+                'sidenav' => 'tools',
+            ],
             'dbs'  => $dbs,
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
@@ -417,17 +411,17 @@ class AdminController extends Controller
         array_unshift($field_array, 'Server');
 
         $sql = "DECLARE @phone varchar(50) = :phone;
-		DECLARE @fromdate datetime = :fromdate;
-		DECLARE @todate datetime = :todate;
+        DECLARE @fromdate datetime = :fromdate;
+        DECLARE @todate datetime = :todate;
 
-		SELECT [Server], $fields
-		FROM (";
+        SELECT [Server], $fields
+        FROM (";
 
         $union = '';
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $sql .= " $union
             SELECT " . $dialer->dialer_numb . " as [Server], $fields
-			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
+            FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
 
             $union = "UNION";
         }
