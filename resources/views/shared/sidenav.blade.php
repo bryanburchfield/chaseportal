@@ -1,5 +1,8 @@
 @if (isset($page['sidenav']))
     @switch ($page['sidenav'])
+        @case ('dashboards')
+            @include('shared.dashboard_sidenav')
+            @break
         @case ('admin')
             @include('shared.admin_sidenav')
             @break
@@ -7,8 +10,8 @@
             @include('shared.tools_sidenav')
             @break
         @default
-            @include('shared.dashboard_sidenav')
+            @include('shared.default_sidenav')
     @endswitch
 @else
-    @include('shared.dashboard_sidenav')
+    @include('shared.default_sidenav')
 @endif

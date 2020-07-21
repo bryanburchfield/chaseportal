@@ -3,6 +3,7 @@
 return [
 	'admin' => 'Admin',
 	'cdr_lookup' => 'CDR Lookup',
+	'dashboards'	=> 'Dashboards',
 	'distinct_agent' => 'Distinct Agent',
 	'duration_dashboard' => 'Duration Dashboard',
 	'inbound' => 'Inbound Dashboard',
