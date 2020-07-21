@@ -32,6 +32,7 @@ class MasterDashController extends Controller
         $page['menuitem'] = $this->currentDash;
 
         $page['type'] = 'dash';
+
         if ($this->currentDash == 'kpidash') {
             $page['type'] = 'kpi_page';
         }
@@ -62,9 +63,10 @@ class MasterDashController extends Controller
         $sidenav = [
             'admindurationdash' => 'admin',
             'admindistinctagentdash' => 'admin',
+            'kpidash' => 'main',
         ];
 
-        return (isset($sidenav[$page])) ? $sidenav[$page] : 'dashboard';
+        return (isset($sidenav[$page])) ? $sidenav[$page] : 'dashboards';
     }
 
     public function demoLogin(Request $request)
