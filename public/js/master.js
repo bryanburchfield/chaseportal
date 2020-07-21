@@ -103,19 +103,8 @@ var Master = {
 
         $('#sidebar').empty();
 
-        // if($(this).hasClass('back_to_sidenav')){
-        //     var path = '/admin/load_sidenav';
-        // }else{
-        //     var sidenav = $(this).data('path');
-        //     path = '/admin/'+path;
-        //     console.log(path);
-        //     $("html, body").animate({ scrollTop: 0 }, "slow");
-        // }
-
         var sidenav = $(this).data('path');
-        console.log(sidenav);
         $("html, body").animate({ scrollTop: 0 }, "slow");
-        //tools, admin, dashboards
 
         $.ajax({
             url: '/admin/load_sidenav',
@@ -123,7 +112,6 @@ var Master = {
             dataType: 'html',
             data: {sidenav:sidenav },
             success: function (response) {
-                console.log(response);
                 $('#sidebar').append(response);
                 $('ul.list-unstyled.components').find('li').each(function(){
                     if($(this).data('page') == Master.page_menuitem){
