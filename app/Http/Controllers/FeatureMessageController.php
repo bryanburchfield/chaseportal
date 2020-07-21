@@ -19,10 +19,12 @@ class FeatureMessageController extends Controller
 			$feature_message = new FeatureMessage();
 		}
 
-		$page['menuitem'] = 'notifications';
-		$page['type'] = 'page';
 		$data = [
-			'page' => $page,
+			'page' => [
+				'menuitem' => 'notifications',
+				'type' => 'page',
+				'sidenav' => 'admin',
+			],
 			'feature_messages' => Auth()->User()->getFeatureMessages(),
 			'feature_message' => $feature_message,
 		];
@@ -37,10 +39,12 @@ class FeatureMessageController extends Controller
 		// Set message as read ($request->id is the message id)
 		$this->readMessage($request);
 
-		$page['menuitem'] = 'notifications';
-		$page['type'] = 'page';
 		$data = [
-			'page' => $page,
+			'page' => [
+				'menuitem' => 'notifications',
+				'type' => 'page',
+				'sidenav' => 'admin',
+			],
 			'feature_messages' => Auth()->User()->getFeatureMessages(),
 			'feature_message' => $feature_message,
 		];

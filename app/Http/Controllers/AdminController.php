@@ -25,33 +25,18 @@ class AdminController extends Controller
     use SqlServerTraits;
 
     /**
-     * Return admin sidenav
+     * return a sidenav
      * 
      * @return View|Factory 
      */
-    public function loadAdminNav()
+    public function loadSidenav(Request $request)
     {
-        return view('shared.admin_sidenav');
-    }
+        $sidenav = '';
 
-    /**
-     * Return tools sidenav
-     * 
-     * @return View|Factory 
-     */
-    public function loadToolsNav()
-    {
-        return view('shared.tools_sidenav');
-    }
-
-    /**
-     * return regular sidenav
-     * 
-     * @return View|Factory 
-     */
-    public function loadSideNav()
-    {
-        return view('shared.sidenav');
+        if ($request->has('sidenav')) {
+            $sidenav = '.' . $request->sidenav;
+        }
+        return view('shared.sidenav' . $sidenav);
     }
 
     /**
@@ -170,10 +155,12 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'manage_users';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'manage_users',
+                'type' => 'page',
+                'sidenav' => 'admin',
+            ],
             'timezone_array' => $timezone_array,
             'group_id' => $groupId,
             'dbs' => $dbs,
@@ -403,10 +390,12 @@ class AdminController extends Controller
 
     public function loadCdrLookup()
     {
-        $page['menuitem'] = 'cdr_lookup';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'cdr_lookup',
+                'type' => 'page',
+                'sidenav' => 'tools',
+            ],
             'jsfile' => [],
         ];
 
@@ -421,10 +410,12 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-        $page['menuitem'] = 'webhook_generator';
-        $page['type'] = 'page';
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'webhook_generator',
+                'type' => 'page',
+                'sidenav' => 'tools',
+            ],
             'dbs'  => $dbs,
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
@@ -441,10 +432,13 @@ class AdminController extends Controller
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
-        $page['menuitem'] = 'settings';
-        $page['type'] = 'page';
+
         $data = [
-            'page' => $page,
+            'page' => [
+                'menuitem' => 'settings',
+                'type' => 'page',
+                'sidenav' => 'admin',
+            ],
             'dbs'  => $dbs,
             'jsfile' => [],
         ];

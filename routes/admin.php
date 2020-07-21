@@ -11,9 +11,7 @@ Route::prefix('admin')->group(function () {
         Route::post('get_client_tables', 'AdminController@getClientTables');
         Route::post('get_table_fields', 'AdminController@getTableFields');
         Route::get('manage_users', 'AdminController@manageUsers');
-        Route::post('load_admin_nav', 'AdminController@loadAdminNav');
-        Route::post('load_sidenav', 'AdminController@loadSideNav');
-        Route::post('load_tools_nav', 'AdminController@loadToolsNav');
+        Route::post('load_sidenav', 'AdminController@loadSidenav');
     });
 
     Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
