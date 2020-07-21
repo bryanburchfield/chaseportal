@@ -262,10 +262,10 @@ class CallDetails
             $bind['callerid'] = $this->params['callerid'];
             $where .= " AND DR.CallerId = :callerid";
         }
-        if (!empty($this->params['durationfrom'])) {
+        if (strlen($this->params['durationfrom'])) {
             $where .= " AND DR.Duration >= " . $this->params['durationfrom'];
         }
-        if (!empty($this->params['durationto'])) {
+        if (strlen($this->params['durationto'])) {
             $where .= " AND DR.Duration <= " . $this->params['durationto'];
         }
         if (!empty($this->params['showonlyterm'])) {
@@ -439,23 +439,23 @@ class CallDetails
             $this->params['call_statuses'] = $request->call_statuses;
         }
 
-        if (empty($request->durationfrom)) {
-            $this->params['durationfrom'] = '';
-            $from = 0;
-        } else {
+        if (!empty($request->durationfrom) || $request->durationfrom == 0) {
             $this->params['durationfrom'] = $request->durationfrom;
-            $from = $request->durationfrom;
         }
 
-        if (empty($request->durationto)) {
-            $this->params['durationto'] = '';
-            $to = 0;
-        } else {
+        if (!empty($request->durationto) || $request->durationto == 0) {
             $this->params['durationto'] = $request->durationto;
-            $to = $request->durationto;
         }
 
-        if ($from > $to) {
+        // If one is filled but not the other, then fake it
+        if (strlen($this->params['durationfrom']) && !strlen($this->params['durationto'])) {
+            $this->params['durationto'] = 999999;
+        }
+        if (strlen($this->params['durationto']) && !strlen($this->params['durationfrom'])) {
+            $this->params['durationfrom'] = -999;
+        }
+
+        if ($this->params['durationfrom'] > $this->params['durationto']) {
             $this->errors->add('duration', trans('reports.errduration'));
         }
 
