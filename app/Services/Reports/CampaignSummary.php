@@ -15,6 +15,7 @@ class CampaignSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.campaign_summary';
+        $this->params['skills'] = [];
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Total' => 'reports.total_leads',
@@ -36,6 +37,7 @@ class CampaignSummary
     public function getFilters()
     {
         $filters = [
+            'skills' => $this->getAllSkills(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -85,8 +87,16 @@ class CampaignSummary
 
         $bind['group_id'] =  Auth::user()->group_id;
 
-        $sql = "SET NOCOUNT ON;
+        $sql = "SET NOCOUNT ON;";
 
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
+        $sql .= "
     CREATE TABLE #CampaignSummary(
         Campaign varchar(50),
         Total int DEFAULT 0,
@@ -120,7 +130,15 @@ class CampaignSummary
         dr.CallStatus as CallStatus,
         IsNull((SELECT TOP 1 [Type]	FROM [$db].[dbo].Dispos WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
         count(dr.CallStatus) as [Count]
-        FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = dr.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
         WHERE dr.GroupId = :group_id$i
         AND dr.Date >= :startdate$i
         AND dr.Date < :enddate$i
@@ -346,6 +364,10 @@ class CampaignSummary
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
+        }
 
         // Save params to session
         $this->saveSessionParams();
