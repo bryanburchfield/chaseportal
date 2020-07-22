@@ -2689,6 +2689,41 @@ span.numb_notifications{
     margin-left: 1%;
 }
 
+////////////////////////////////////////////////////////////////
+                              
+div.report_table.table-responsive {
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+html>body div.report_table {
+    overflow: hidden;
+}
+
+thead.fixedHeader tr {
+    position: relative;
+}
+
+html>body thead.fixedHeader tr {
+    display: inline-block;
+}
+
+table.reports_table{
+    thead{background: $green;}
+
+    tbody {
+        display: inline-block;
+        height: 350px;
+        overflow: auto;
+        width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+
+
+////////////////////////////////////////////
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
