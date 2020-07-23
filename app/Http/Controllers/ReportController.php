@@ -212,6 +212,7 @@ class ReportController extends Controller
         $data = array_merge(['results' => $results], $this->reportservice->getPageData());
 
         return [
+            'results' => $results,
             'table' => view('shared.reporttable')->with($data)->render(),
             'pag' => view('shared.reportpagination')->with($data)->render(),
             'errors' => $errors,
