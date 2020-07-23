@@ -24,6 +24,7 @@ class CampaignSummary
             'Available' => 'reports.available',
             'AvAttempt' => 'reports.avattempt',
             'ManHours' => 'reports.manhours',
+            'LoggedInSecs' => 'reports.loggedintime',
             'Connects' => 'reports.connects',
             'CPH' => 'reports.cph',
             'ConversionRate' => 'reports.conversionrate',
@@ -105,6 +106,7 @@ class CampaignSummary
         Available numeric(18,2) DEFAULT 0,
         AvAttempt int DEFAULT 0,
         ManHours numeric(18,2) DEFAULT 0,
+        LoggedInSecs numeric(18,2) DEFAULT 0,
         Connects int DEFAULT 0,
         CPH numeric(18,2) DEFAULT 0,
         ConversionRate numeric(18,2) DEFAULT 0,
@@ -200,19 +202,62 @@ class CampaignSummary
 
         foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id1' . $i] =  Auth::user()->group_id;
+            $bind['group_id4' . $i] =  Auth::user()->group_id;
             $bind['group_id11' . $i] =  Auth::user()->group_id;
             $bind['startdate1' . $i] = $startDate;
+            $bind['startdate4' . $i] = $startDate;
             $bind['enddate1' . $i] = $endDate;
+            $bind['enddate4' . $i] = $endDate;
 
             $sql .= "
-        UPDATE #CampaignSummary
-        SET ManHours += IsNull(a.ManHours/3600, 0)
-        FROM (SELECT Campaign, SUM(Duration) as ManHours
-            FROM  [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)
+            UPDATE #CampaignSummary
+            SET ManHours += IsNull(a.ManHours/3600, 0)
+            FROM (SELECT Campaign, SUM(Duration) as ManHours
+            FROM [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
             WHERE aa.GroupId = :group_id1$i
             AND aa.Date >= :startdate1$i
             AND aa.Date < :enddate1$i
-            AND [Action] <> 'Paused'
+            AND [Action] <> 'Paused'";
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND aa.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep2$i))";
+                $bind['ssouserrep2' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
+            GROUP BY Campaign) a
+        WHERE #CampaignSummary.Campaign = a.Campaign;
+
+        UPDATE #CampaignSummary
+        SET LoggedInSecs += IsNull(a.LoggedInSecs, 0)
+        FROM (SELECT Campaign, SUM(Duration) as LoggedInSecs
+            FROM [$db].[dbo].[AgentActivity] aa WITH(NOLOCK)";
+
+            if (!empty($this->params['skills'])) {
+                $sql .= "
+                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+            }
+
+            $sql .= "
+            WHERE aa.GroupId = :group_id4$i
+            AND aa.Date >= :startdate4$i
+            AND aa.Date < :enddate4$i";
+
+            if (session('ssoRelativeReps', 0)) {
+                $sql .= " AND aa.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep3$i))";
+                $bind['ssouserrep3' . $i] = session('ssoUsername');
+            }
+
+            $sql .= "
             GROUP BY Campaign) a
         WHERE #CampaignSummary.Campaign = a.Campaign;
 
@@ -315,6 +360,7 @@ class CampaignSummary
         Available,
         AvAttempt,
         ManHours,
+        LoggedInSecs,
         Connects,
         CPH,
         ConversionRate,
@@ -350,6 +396,7 @@ class CampaignSummary
         $rec['Available'] .= '%';
         $rec['ConversionRate'] .= '%';
         $rec['DropCallsPercentage'] .= '%';
+        $rec['LoggedInSecs'] = $this->secondsToHms($rec['LoggedInSecs']);
 
         return $rec;
     }

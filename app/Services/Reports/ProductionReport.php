@@ -43,7 +43,9 @@ class ProductionReport
         // Columns are mostly dynamic, so here are the static ones
         $columns = [
             'Rep' => 'reports.rep',
+            'Skill' => 'reports.skill',
             'ManHours' => 'reports.manhours',
+            'LoggedInTime' => 'reports.loggedintime',
             'Connects' => 'reports.connects',
             'Contacts' => 'reports.contacts',
             'ContsPerHour' => 'reports.contacts_per_manhour',
@@ -83,7 +85,7 @@ class ProductionReport
         }
 
         $sql .= "
-        SELECT Rep, SUM(Duration) ManHours FROM (";
+        SELECT Rep, Skill, SUM(ManHourSecs) ManHours, SUM(LoggedInSecs) LoggedInTime FROM (";
 
         $bind = [];
         $union = '';
@@ -92,33 +94,35 @@ class ProductionReport
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT Rep, Duration
-            FROM [$db].[dbo].[AgentActivity]";
+            $sql .= " $union SELECT AA.Rep, RR.Skill,
+            AA.Duration as LoggedInSecs,
+            CASE WHEN [Action] NOT IN ('Paused','Login','Logout') THEN AA.Duration ELSE 0
+            END as ManHourSecs 
+            FROM [$db].[dbo].[AgentActivity] AA
+            LEFT JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
-                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
                 INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
             }
 
             $sql .= "
-            WHERE GroupId = :group_id$i
-            AND date >= :startdate$i
-            AND date < :enddate$i
-            AND [Action] NOT IN ('Paused','Login','Logout')";
+            WHERE AA.GroupId = :group_id$i
+            AND AA.date >= :startdate$i
+            AND AA.date < :enddate$i";
 
             if (!empty($campaigns)) {
                 $bind['campaigns' . $i] = $campaigns;
-                $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
+                $sql .= " AND AA,Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
             }
 
             if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
+                $sql .= " AND AA.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
                 $bind['ssousercamp1' . $i] = session('ssoUsername');
             }
 
             if (session('ssoRelativeReps', 0)) {
-                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
+                $sql .= " AND AA.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";
                 $bind['ssouserrep1' . $i] = session('ssoUsername');
             }
 
@@ -126,14 +130,16 @@ class ProductionReport
         }
 
         $sql .= ") tmp
-            GROUP BY Rep";
+            GROUP BY Rep, Skill";
 
         $results = $this->runSql($sql, $bind);
 
         foreach ($results as $rec) {
             $reps[$rec['Rep']] = [
                 'Rep' => $rec['Rep'],
+                'Skill' => $rec['Skill'],
                 'ManHours' => $rec['ManHours'],
+                'LoggedInTime' => $rec['LoggedInTime'],
                 'Stats' => [],
                 'Connects' => 0,
                 'Contacts' => 0,
@@ -155,7 +161,7 @@ class ProductionReport
         }
 
         $sql .= "
-        SELECT Rep, CallStatus,
+        SELECT Rep, Skill, CallStatus,
             'Calls' = SUM(Calls),
             'Connects' = SUM(Connects),
             'Contacts' = SUM(Contacts),
@@ -169,16 +175,16 @@ class ProductionReport
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT DR.Rep, DR.CallStatus,
+            $sql .= " $union SELECT DR.Rep, RR.Skill, DR.CallStatus,
             'Calls' = 1,
             'Connects' = CASE WHEN DI.Type > 0 THEN 1 ELSE 0 END,
             'Contacts' = CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END,
             'Sales' = CASE WHEN DI.Type = 3 THEN 1 ELSE 0 END
-            FROM [$db].[dbo].[DialingResults] DR";
+            FROM [$db].[dbo].[DialingResults] DR
+            LEFT JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
-                INNER JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
                 INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
             }
 
@@ -216,7 +222,7 @@ class ProductionReport
         }
 
         $sql .= ") tmp
-        GROUP BY Rep, CallStatus";
+        GROUP BY Rep, Skill, CallStatus";
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
             if (!count($rec)) {
@@ -230,7 +236,9 @@ class ProductionReport
             if (!isset($reps[$rec['Rep']])) {
                 $reps[$rec['Rep']] = [
                     'Rep' => $rec['Rep'],
+                    'Skill' => $rec['Skill'],
                     'ManHours' => 0,
+                    'LoggedInTime' => 0,
                     'Stats' => [],
                     'Connects' => 0,
                     'Contacts' => 0,
@@ -281,13 +289,17 @@ class ProductionReport
         // start to set up blank row
         $zerorec = [
             'Rep' => '',
+            'Skill' => '',
             'ManHours' => 0,
+            'LoggedInTime' => 0,
         ];
 
         // Columns are variable, so set them now
         $this->params['columns'] = [
             'Rep' => trans('reports.rep'),
+            'Skill' => trans('reports.skill'),
             'ManHours' => trans('reports.manhours'),
+            'LoggedInTime' => trans('reports.loggedintime'),
         ];
 
         foreach ($stats as $call_status) {
@@ -316,13 +328,16 @@ class ProductionReport
             $row = $zerorec;
 
             $row['Rep'] = $rep;
+            $row['Skill'] = $reprec['Skill'];
             $row['ManHours'] = $reprec['ManHours'];
+            $row['LoggedInTime'] = $reprec['LoggedInTime'];
             $row['Connects'] = $reprec['Connects'];
             $row['Contacts'] = $reprec['Contacts'];
             $row['Sales'] = $reprec['Sales'];
 
             // Add to totals
             $total['ManHours'] += $reprec['ManHours'];
+            $total['LoggedInTime'] += $reprec['LoggedInTime'];
             $total['Connects'] += $reprec['Connects'];
             $total['Contacts'] += $reprec['Contacts'];
             $total['Sales'] += $reprec['Sales'];
@@ -334,6 +349,7 @@ class ProductionReport
 
             // Do calcs
             $row['ManHours'] = number_format($row['ManHours'] / 60 / 60, 2);
+            $row['LoggedInTime'] = $this->secondsToHms($row['LoggedInTime']);
 
             if ($row['ManHours'] == 0) {
                 $row['ContsPerHour'] = 0;
@@ -348,6 +364,7 @@ class ProductionReport
 
         // Do calcs
         $total['ManHours'] = number_format($total['ManHours'] / 60 / 60, 2);
+        $total['LoggedInTime'] = $this->secondsToHms($total['LoggedInTime']);
 
         if ($total['ManHours'] == 0) {
             $total['ContsPerHour'] = 0;
