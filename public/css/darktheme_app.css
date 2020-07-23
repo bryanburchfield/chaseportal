@@ -2795,6 +2795,7 @@ table.dataTable tbody tr:nth-of-type(even) {
   background: #203047;
   color: #aaa !important;
   max-height: 260px;
+  max-width: 270px;
   overflow-y: scroll;
 }
 
