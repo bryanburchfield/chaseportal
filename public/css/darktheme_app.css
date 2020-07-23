@@ -3262,10 +3262,40 @@ span.numb_notifications {
   margin-left: 1%;
 }
 
+<<<<<<< HEAD
 .bootstrap-table .fixed-table-container .table td,
 .bootstrap-table .fixed-table-container .table th,
 .bootstrap-table .fixed-table-container .table {
   border: none;
+=======
+div.report_table.table-responsive {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+html > body div.report_table {
+  overflow: hidden;
+}
+
+thead.fixedHeader tr {
+  position: relative;
+}
+
+html > body thead.fixedHeader tr {
+  display: inline-block;
+}
+
+table.reports_table thead {
+  background: #33A09B;
+}
+
+table.reports_table tbody {
+  display: inline-block;
+  height: 350px;
+  overflow: auto;
+  width: 100%;
+  overflow-x: hidden;
+>>>>>>> c9fb5c34ef88b821eaa11e40d41b5eef2178e13d
 }
 
 /* ---------------------------------------------------

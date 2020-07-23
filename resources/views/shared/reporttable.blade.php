@@ -1,6 +1,6 @@
 @if(count($results) > 0)
-    <table class="table table-hover reports_table">
-        <thead>
+    <table class="table table-hover reports_table scrollTable">
+        <thead class="fixedHeader">
             <tr>
                 @foreach($params['columns'] as $field => $col)
                 <th>
