@@ -3052,6 +3052,12 @@ span.numb_notifications {
   margin-left: 1%;
 }
 
+.bootstrap-table .fixed-table-container .table td,
+.bootstrap-table .fixed-table-container .table th,
+.bootstrap-table .fixed-table-container .table {
+  border: none;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

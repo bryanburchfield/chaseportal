@@ -1127,6 +1127,8 @@ var Master = {
         $('.preloader').show();
 
         var sortedby_parent = $(this).parent().parent();
+        console.log(sortedby_parent);
+        
         this.th_sort = $(sortedby_parent).text();
         $(sortedby_parent).siblings().find('a span').show();
         $(sortedby_parent).siblings().find('a span').removeClass('active');
@@ -1229,6 +1231,7 @@ var Master = {
             },
 
             success: function (response) {
+                console.log(response);
 
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
@@ -1287,6 +1290,14 @@ var Master = {
                         $('.reset_sorting').show();
                     }
                 }
+
+                $('.reports_table').bootstrapTable('destroy').bootstrapTable({
+                    showFullscreen: false,
+                    search: false,
+                    stickyHeader: true,
+                    stickyHeaderOffsetLeft: '20px',
+                    stickyHeaderOffsetRight: '20px',
+                });
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
