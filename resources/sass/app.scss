@@ -563,6 +563,11 @@ div.container-fluid.bg {
     background: none;
 }
 
+.multiselect-container.dropdown-menu{
+    max-height: 260px;
+    overflow-y: scroll;
+}
+
 .dropdown-menu li a {
     padding: 12px 16px;
 }
