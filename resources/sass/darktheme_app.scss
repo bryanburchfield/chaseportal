@@ -2258,6 +2258,10 @@ table.dataTable tbody tr:nth-of-type(even){
 
 .multiselect-container.dropdown-menu{
     @include base_style($blue, #aaa !important);
+    background: $blue;
+    color: #aaa !important;
+    max-height: 260px;
+    overflow-y: scroll;
 }
 
 .dropdown-menu li:nth-child(even){
