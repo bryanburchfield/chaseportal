@@ -2215,6 +2215,8 @@ div.vertical-line{
 
 .multiselect-container.dropdown-menu{
     @include base_style($blue, #aaa !important);
+    max-height: 260px;
+    overflow-y: scroll;
 }
 
 .dropdown-menu li:nth-child(even){
