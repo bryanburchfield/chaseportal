@@ -1161,7 +1161,7 @@ p.descrip.top14 {
 }
 
 thead.fixedHeader th{
-    padding: 10px !important;
+    padding: 10px 5px !important;
 }
 
 .reports_table.table{width: 99%;}
@@ -1311,17 +1311,6 @@ th a, td a {
     position: relative;
 }
 
-a.sort-by span {
-    border: 5px solid transparent;
-    content: "";
-    display: block;
-    height: 20px;
-    right: 10px;
-    top: 0;
-    position: absolute;
-    width: 0;
-}
-
 div.reset_sorting {
     display: none;
     position: relative;
@@ -1336,6 +1325,17 @@ a.reset_sorting_btn {
 
 th.active_column a span:not(.active) {
     display: none;
+}
+
+a.sort-by span {
+    border: 5px solid transparent;
+    content: "";
+    display: block;
+    height: 20px;
+    right: 10px !important;
+    top: 0;
+    position: absolute;
+    width: 0;
 }
 
 a.sort-by span.asc {
@@ -2699,39 +2699,6 @@ span.numb_notifications{
 
 .fix-sticky table thead{background: $green;}
 
-////////////////////////////////////////////////////////////////
-                              
-// div.report_table.table-responsive {
-//     overflow: auto;
-//     overflow-x: hidden;
-// }
-
-// html>body div.report_table {
-//     overflow: hidden;
-// }
-
-// thead.fixedHeader tr {
-//     position: relative;
-// }
-
-// html>body thead.fixedHeader tr {
-//     display: inline-block;
-// }
-
-// table.reports_table{
-//     thead{background: $green;}
-
-//     tbody {
-//         display: inline-block;
-//         height: 350px;
-//         overflow: auto;
-//         width: 100%;
-//         overflow-x: hidden;
-//     }
-// }
-
-
-////////////////////////////////////////////
 
 /* ---------------------------------------------------
 MEDIAQUERIES

@@ -1470,7 +1470,7 @@ p.descrip.top14 {
 }
 
 thead.fixedHeader th {
-  padding: 10px !important;
+  padding: 10px 5px !important;
 }
 
 .reports_table.table {
@@ -1651,17 +1651,6 @@ td a {
   position: relative;
 }
 
-a.sort-by span {
-  border: 5px solid transparent;
-  content: "";
-  display: block;
-  height: 20px;
-  right: 10px;
-  top: 0;
-  position: absolute;
-  width: 0;
-}
-
 div.reset_sorting {
   display: none;
   position: relative;
@@ -1676,6 +1665,17 @@ a.reset_sorting_btn {
 
 th.active_column a span:not(.active) {
   display: none;
+}
+
+a.sort-by span {
+  border: 5px solid transparent;
+  content: "";
+  display: block;
+  height: 20px;
+  right: 10px !important;
+  top: 0;
+  position: absolute;
+  width: 0;
 }
 
 a.sort-by span.asc {

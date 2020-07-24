@@ -1231,7 +1231,6 @@ var Master = {
             },
 
             success: function (response) {
-                console.log(response);
 
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
