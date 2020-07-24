@@ -1633,7 +1633,8 @@ h3.heading {
 .reports_table th.active_column,
 .reports_table th:hover,
 .uploader_table th.active_column,
-.uploader_table th:hover {
+.uploader_table th:hover,
+.fixedHeader th.active_column {
   background: #2c8985;
 }
 

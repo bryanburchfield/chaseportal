@@ -1243,7 +1243,7 @@ h3.heading {
     float: left;
 }
 
-.reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover {
+.reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover, .fixedHeader th.active_column {
     background: darken($green, 6%);
 }
 
