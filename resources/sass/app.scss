@@ -1113,6 +1113,10 @@ p.descrip.top14 {
     padding: 10px 4px;
 }
 
+thead.fixedHeader th{
+    padding: 10px !important;
+}
+
 .reports_table.table{width: 99%;}
 
 .report_download {
@@ -2555,6 +2559,8 @@ span.numb_notifications{
 .bootstrap-table .fixed-table-container .table td, .bootstrap-table .fixed-table-container .table th, .bootstrap-table .fixed-table-container .table{
     border: none;
 }
+
+.fix-sticky table thead{background: $green;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

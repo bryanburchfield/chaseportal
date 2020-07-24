@@ -4,9 +4,8 @@
             <tr>
                 @foreach($params['columns'] as $field => $col)
                 <th>
-                    {{$col}}
-                    {{-- <span>{{ $col }}</span>
-                    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a> --}}
+                    <span>{{ $col }}</span>
+                    <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
                 </th>
                 @endforeach
             </tr>
