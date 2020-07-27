@@ -1357,6 +1357,10 @@ p.descrip.top14 {
   padding: 10px !important;
 }
 
+.reports_table th {
+  font-size: 12px;
+}
+
 #reports_modal .modal-body {
   overflow: auto;
 }
@@ -1389,6 +1393,10 @@ p.descrip.top14 {
 .reports_table.table > thead > tr > th {
   min-width: 125px;
   padding: 10px 4px;
+}
+
+thead.fixedHeader th {
+  padding: 10px 5px !important;
 }
 
 .reports_table.table {
@@ -1540,7 +1548,8 @@ h3.heading {
 .reports_table th.active_column,
 .reports_table th:hover,
 .uploader_table th.active_column,
-.uploader_table th:hover {
+.uploader_table th:hover,
+.fixedHeader th.active_column {
   background: #2c8985;
 }
 
@@ -3320,6 +3329,16 @@ a.add_subcampaign i {
 
 .reverse_action {
   color: #fff !important;
+}
+
+.bootstrap-table .fixed-table-container .table td,
+.bootstrap-table .fixed-table-container .table th,
+.bootstrap-table .fixed-table-container .table {
+  border: none;
+}
+
+.fix-sticky table thead {
+  background: #33A09B;
 }
 
 /* ---------------------------------------------------

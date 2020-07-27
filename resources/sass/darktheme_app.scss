@@ -1138,6 +1138,10 @@ p.descrip.top14 {
     border-top: 1px solid $blue;
 }
 
+.reports_table th{
+    font-size: 12px;
+}
+
 #reports_modal .modal-body {
     overflow: auto;
 }
@@ -1173,6 +1177,10 @@ p.descrip.top14 {
 .reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
     min-width: 125px;
     padding: 10px 4px;
+}
+
+thead.fixedHeader th{
+    padding: 10px 5px !important;
 }
 
 .reports_table.table{width: 99%;}
@@ -1307,7 +1315,7 @@ h3.heading {
     float: left;
 }
 
-.reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover {
+.reports_table th.active_column, .reports_table th:hover, .uploader_table th.active_column, .uploader_table th:hover, .fixedHeader th.active_column  {
     background: darken($green, 6%);
 }
 
@@ -1320,17 +1328,6 @@ th a, td a {
     display: block;
     width: 100%;
     position: relative;
-}
-
-a.sort-by span {
-    border: 5px solid transparent;
-    content: "";
-    display: block;
-    height: 20px;
-    right: 10px;
-    top: 0;
-    position: absolute;
-    width: 0;
 }
 
 div.reset_sorting {
@@ -1347,6 +1344,17 @@ a.reset_sorting_btn {
 
 th.active_column a span:not(.active) {
     display: none;
+}
+
+a.sort-by span {
+    border: 5px solid transparent;
+    content: "";
+    display: block;
+    height: 20px;
+    right: 10px !important;
+    top: 0 !important;
+    position: absolute !important;
+    width: 0;
 }
 
 a.sort-by span.asc {
@@ -2916,6 +2924,13 @@ a.add_subcampaign{
     width: 98% !important;
     margin-left: 1%;
 }
+
+.bootstrap-table .fixed-table-container .table td, .bootstrap-table .fixed-table-container .table th, .bootstrap-table .fixed-table-container .table{
+    border: none;
+}
+
+.fix-sticky table thead{background: $green;}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

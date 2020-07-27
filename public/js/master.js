@@ -57,7 +57,7 @@ var Master = {
         $('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
         $('form.report_filter_form').on('submit', this.submit_report_filter_form);
         $('.pag').on('click', '.pagination li a', this.click_pag_btn);
-        $('body').on('click', '.reports_table thead th a span', this.sort_table);
+        $('body').on('click', '.fixedHeader th a span', this.sort_table);
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
@@ -1031,6 +1031,8 @@ var Master = {
         $('.preloader').show();
 
         var sortedby_parent = $(this).parent().parent();
+        console.log(sortedby_parent);
+        
         this.th_sort = $(sortedby_parent).text();
         $(sortedby_parent).siblings().find('a span').show();
         $(sortedby_parent).siblings().find('a span').removeClass('active');
@@ -1139,7 +1141,7 @@ var Master = {
                 }
 
                 // hide / empty everything and run report
-                $('.table-responsive, .pag, .report_errors').empty();
+                $('.report_table, .pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
                 // check for errors
@@ -1154,8 +1156,6 @@ var Master = {
                     return false;
                 }
 
-                $('.table-responsive.report_table').show();
-
                 // check for result by counting total page
                 if (response.params.totrows) {
 
@@ -1165,7 +1165,7 @@ var Master = {
                     this.sort_direction = response.params.orderby.Campaign;
 
                     // append table
-                    $('.table-responsive').append(response.table);
+                    $('.table-responsive').append(response.table).show();
 
                     // show download options
                     $('.report_download').show();
@@ -1191,6 +1191,16 @@ var Master = {
                         $('.reset_sorting').show();
                     }
                 }
+
+                $('.reports_table').bootstrapTable('destroy').bootstrapTable({
+                    showFullscreen: false,
+                    search: false,
+                    stickyHeader: true,
+                    stickyHeaderOffsetLeft: '20px',
+                    stickyHeaderOffsetRight: '20px',
+                });
+
+                $('.table-responsive.report_table').show();
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
