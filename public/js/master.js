@@ -1237,7 +1237,7 @@ var Master = {
                 }
 
                 // hide / empty everything and run report
-                $('.table-responsive, .pag, .report_errors').empty();
+                $('.pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
                 // check for errors
@@ -1246,12 +1246,14 @@ var Master = {
                         $('.report_errors').show();
                         $('.report_errors').append(response.errors[i] + '<br>');
                     }
-                    $('.table-responsive.report_table').hide();
-                    $('.hidetilloaded').hide();
+                    // $('.table-responsive.report_table').hide();
+                    // $('.hidetilloaded').hide();
 
                     return false;
                 }
 
+                console.log(response);
+                console.log(response.table);
                 // check for result by counting total page
                 if (response.params.totrows) {
 
@@ -1261,7 +1263,7 @@ var Master = {
                     this.sort_direction = response.params.orderby.Campaign;
 
                     // append table
-                    $('.table-responsive').append(response.table);
+                    $('.table-responsive').append(response.table).show();
 
                     // show download options
                     $('.report_download').show();
@@ -1288,13 +1290,13 @@ var Master = {
                     }
                 }
 
-                $('.reports_table').bootstrapTable('destroy').bootstrapTable({
-                    showFullscreen: false,
-                    search: false,
-                    stickyHeader: true,
-                    stickyHeaderOffsetLeft: '20px',
-                    stickyHeaderOffsetRight: '20px',
-                });
+                // $('.reports_table').bootstrapTable('destroy').bootstrapTable({
+                //     showFullscreen: false,
+                //     search: false,
+                //     stickyHeader: true,
+                //     stickyHeaderOffsetLeft: '20px',
+                //     stickyHeaderOffsetRight: '20px',
+                // });
 
                 $('.table-responsive.report_table').show();
 

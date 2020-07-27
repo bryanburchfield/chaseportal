@@ -1424,6 +1424,10 @@ p.descrip.top14 {
   border-top: 1px solid #203047;
 }
 
+.reports_table th {
+  font-size: 12px;
+}
+
 #reports_modal .modal-body {
   overflow: auto;
 }
@@ -1673,8 +1677,8 @@ a.sort-by span {
   display: block;
   height: 20px;
   right: 10px !important;
-  top: 0;
-  position: absolute;
+  top: 0 !important;
+  position: absolute !important;
   width: 0;
 }
 

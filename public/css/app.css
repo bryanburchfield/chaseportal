@@ -1332,6 +1332,10 @@ p.descrip.top14 {
   padding: 10px !important;
 }
 
+.reports_table th {
+  font-size: 12px;
+}
+
 #reports_modal .modal-body {
   overflow: auto;
 }
