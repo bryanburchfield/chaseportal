@@ -1252,8 +1252,6 @@ var Master = {
                     return false;
                 }
 
-                console.log(response);
-                console.log(response.table);
                 // check for result by counting total page
                 if (response.params.totrows) {
 
@@ -1290,13 +1288,13 @@ var Master = {
                     }
                 }
 
-                // $('.reports_table').bootstrapTable('destroy').bootstrapTable({
-                //     showFullscreen: false,
-                //     search: false,
-                //     stickyHeader: true,
-                //     stickyHeaderOffsetLeft: '20px',
-                //     stickyHeaderOffsetRight: '20px',
-                // });
+                $('.reports_table').bootstrapTable('destroy').bootstrapTable({
+                    showFullscreen: false,
+                    search: false,
+                    stickyHeader: true,
+                    stickyHeaderOffsetLeft: '20px',
+                    stickyHeaderOffsetRight: '20px',
+                });
 
                 $('.table-responsive.report_table').show();
 
