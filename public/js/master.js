@@ -1237,7 +1237,7 @@ var Master = {
                 }
 
                 // hide / empty everything and run report
-                $('.pag, .report_errors').empty();
+                $('.report_table, .pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
                 // check for errors
@@ -1246,8 +1246,8 @@ var Master = {
                         $('.report_errors').show();
                         $('.report_errors').append(response.errors[i] + '<br>');
                     }
-                    // $('.table-responsive.report_table').hide();
-                    // $('.hidetilloaded').hide();
+                    $('.table-responsive.report_table').hide();
+                    $('.hidetilloaded').hide();
 
                     return false;
                 }
