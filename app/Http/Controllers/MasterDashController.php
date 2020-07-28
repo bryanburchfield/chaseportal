@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 class MasterDashController extends Controller
 {
     public $currentDash;
+    public $cssfile = [];
 
     use DashTraits;
 
@@ -27,9 +28,6 @@ class MasterDashController extends Controller
         session(['currentDash' => $this->currentDash]);
 
         $jsfile[] = $this->currentDash . ".js";
-
-        $cssfile[] = $this->currentDash . ".css";
-        $cssfile[] = "master.css";
 
         $page['menuitem'] = $this->currentDash;
 
@@ -49,7 +47,7 @@ class MasterDashController extends Controller
             'campaign_list' => $campaigns,
             'currentDash' => $this->currentDash,
             'jsfile' => $jsfile,
-            'cssfile' => $cssfile,
+            'cssfile' => $this->cssfile,
             'page' => $page,
             'dashbody' => $dashbody,
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
@@ -103,6 +101,8 @@ class MasterDashController extends Controller
         $request->merge(['dashboard' => 'admindistinctagentdash']);
         $this->setDashboard($request);
 
+        $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
+
         return $this->index($request);
     }
 
@@ -142,6 +142,16 @@ class MasterDashController extends Controller
     {
         $request->merge(['dashboard' => 'leaderdash']);
         $this->setDashboard($request);
+
+        return $this->index($request);
+    }
+
+    public function complianceDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'compliancedash']);
+        $this->setDashboard($request);
+
+        $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
 
         return $this->index($request);
     }

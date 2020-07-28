@@ -82,6 +82,7 @@ return [
 	'view_quarterly'			=> 'Ver Trimestralmente',
 	'voicemails'				=> 'Mensajes de Voz',
 	'waiting'					=> 'Esperando',
+	'worked'					=> 'Trabajado',
 	'wrapup'					=> 'Finalizando',
 	'top_ten_calls_by_camp' => 'Los 10 Mejores Recuentos de Llamada por Campaña',
 

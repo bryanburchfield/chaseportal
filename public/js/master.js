@@ -234,6 +234,7 @@ var Master = {
 
     filter_date: function () {
         var that = $(this);
+
         that.parent().siblings().removeClass('active');
         that.parent().addClass('active');
         datefilter = that.data('datefilter');
