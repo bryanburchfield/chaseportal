@@ -145,7 +145,7 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
 
         if ($rollups) {
             array_unshift($results, ['RepName' => '[All Unanswered]', 'isActive' => 1]);
-            array_unshift($results, ['RepName' => '[All Aswered]', 'isActive' => 1]);
+            array_unshift($results, ['RepName' => '[All Answered]', 'isActive' => 1]);
         }
 
         Log::debug($results);
