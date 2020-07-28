@@ -263,7 +263,7 @@ class AgentSummary
         UPDATE #AgentSummary
         SET TalkTimeSec = a.TalkTime,
             TalkTimeCount = a.tot
-        FROM (SELECT aa.Rep, SUM(Duration) as TalkTime, COUNT(*) as tot
+        FROM (SELECT aa.Rep, SUM(Duration) as TalkTime,  SUM([Count]) as tot
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Action in ('Call', 'ManualCall', 'InboundCall')
               GROUP BY aa.Rep) a
@@ -280,7 +280,7 @@ class AgentSummary
         UPDATE #AgentSummary
         SET WaitTimeSec = a.WaitTime,
             WaitTimeCount = a.tot
-        FROM (SELECT aa.Rep, SUM(Duration) as WaitTime, COUNT(*) as tot
+        FROM (SELECT aa.Rep, SUM(Duration) as WaitTime,  SUM([Count]) as tot
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Action = 'Waiting'
               GROUP BY aa.Rep) a
@@ -289,7 +289,7 @@ class AgentSummary
         UPDATE #AgentSummary
         SET DispositionTimeSec = a.DispositionTime,
             DispositionTimeCount = a.tot
-        FROM (SELECT aa.Rep, SUM(Duration) as DispositionTime, COUNT(*) as tot
+        FROM (SELECT aa.Rep, SUM(Duration) as DispositionTime,  SUM([Count]) as tot
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Action = 'Disposition'
               GROUP BY aa.Rep) a
