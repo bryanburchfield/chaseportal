@@ -29,7 +29,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-12 w99">
     	<div class="card card-12 mt30">
 	    	<h1 class="title">{{__('widgets.adherence')}}</h1>
 	    	<div class="inbound" style="height:350px;">
