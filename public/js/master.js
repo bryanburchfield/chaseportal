@@ -104,6 +104,7 @@ var Master = {
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
+        $('.toggle_active_reps').on('click', this.toggle_active_reps);
     },
 
     preventDefault:function(e){

@@ -42,6 +42,7 @@
 					<div class="form-group">
 						{!! Form::label('reps',  __('reports.rep')) !!}
 						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+						<label class="checkbox toggle_active_reps"><input type="checkbox"> Toggle Active Reps</label>
 					</div>
 				</div>
 			</div>
