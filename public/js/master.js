@@ -2650,9 +2650,21 @@ var Master = {
         });
     },
 
-    toggle_active_reps:function(e){
-        e.preventDefault();
-        
+    toggle_active_reps:function(){
+        var checked=0;
+        if($('.toggle_active_reps').is(':checked')){
+            checked=1;
+        }else{
+            checked=0;
+        }
+        console.log('clicked');
+        console.log(checked);
+
+        $(this).prev().find('.dropdown-menu').find('li').each(function(){
+            if(!$(this).hasClass('active_rep')){
+                $(this).hide();
+            }
+        })
     }
 }
 
