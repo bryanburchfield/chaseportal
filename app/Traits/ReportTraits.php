@@ -8,6 +8,7 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -120,7 +121,7 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
     public function getAllReps($rollups = false)
     {
         if (session('ssoRelativeReps', 0)) {
-            $sql = "SELECT RepName as Campaign FROM dbo.GetAllRelativeReps(:username)";
+            $sql = "SELECT RepName, 1 as IsActive FROM dbo.GetAllRelativeReps(:username)";
             $bind = ['username' => session('ssoUsername')];
         } else {
             $bind = [];
@@ -131,22 +132,23 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
             foreach (Auth::user()->getDatabaseList() as $i => $db) {
                 $bind['groupid' . $i] = Auth::user()->group_id;
 
-                $sql .= " $union SELECT RepName
+                $sql .= " $union SELECT RepName, isActive
             FROM [$db].[dbo].[Reps]
-            WHERE isActive = 1
-            AND GroupId = :groupid$i";
+            WHERE GroupId = :groupid$i";
 
                 $union = ' UNION';
             }
             $sql .= " ORDER BY RepName";
         }
 
-        $results = resultsToList($this->runSql($sql, $bind));
+        $results = $this->runSql($sql, $bind);
 
         if ($rollups) {
-            array_unshift($results, '[All Unanswered]');
-            array_unshift($results, '[All Answered]');
+            array_unshift($results, ['RepName' => '[All Unanswered]', 'isActive' => 1]);
+            array_unshift($results, ['RepName' => '[All Aswered]', 'isActive' => 1]);
         }
+
+        Log::debug($results);
 
         return $results;
     }
