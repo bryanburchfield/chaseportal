@@ -2648,6 +2648,11 @@ var Master = {
                 window.location.reload();
             }
         });
+    },
+
+    toggle_active_reps:function(e){
+        e.preventDefault();
+        
     }
 }
 
