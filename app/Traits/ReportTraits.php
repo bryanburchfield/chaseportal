@@ -8,7 +8,6 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 trait ReportTraits
@@ -147,8 +146,6 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
             array_unshift($results, ['RepName' => '[All Unanswered]', 'isActive' => 1]);
             array_unshift($results, ['RepName' => '[All Answered]', 'isActive' => 1]);
         }
-
-        Log::debug($results);
 
         return $results;
     }
