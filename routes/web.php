@@ -7,9 +7,7 @@ Route::redirect('/raw', '/raw');
 Route::get('lang/{locale}', 'LocalizationController@lang');
 
 // Route to landing page
-Route::get('/', function(){
-	return view("index");
-});
+Route::get('/', 'MasterDashController@landingPage');
 
 // This is for user logins
 Auth::routes(['register' => false]);

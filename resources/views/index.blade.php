@@ -4,20 +4,23 @@
 
 @section('content')
 
-<div class="container-fluid lp_bg">
+<div class="wrapper">
 
-	<div class="lp_grad">
-		<div class="nav_holder">@extends('shared.sidenav.main')</div>
+    @include('shared.sidenav')
 
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12">
-					<img src="img/logo_white.png" alt="" class="img-responsive">
-					<p>Portal for tools and reporting on your call center needs</p>
-				</div>
+    <div id="content">
+        @include('shared.navbar')
+
+        <div class="container-fluid bg dashboard p20">
+			<div class="col-sm-12">
+				<img src="img/logo_white.png" alt="" class="img-responsive">
+				<p>Portal for tools and reporting on your call center needs</p>
 			</div>
-		</div>
-	</div>
+        </div>
+    </div>
+	@include('shared.notifications_bar')
 </div>
+
+@include('shared.reportmodal')
 
 @endsection
