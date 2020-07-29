@@ -47,6 +47,7 @@ return [
 	'rep'                => 'Rep',
 	'reps'               => 'Reps',
 	'run_report'         => 'Run Report',
+	'show_active_reps'	=> 'Show Only Active Reps',
 	'skill'              => 'Skill',
 	'start'              => 'Start',
 	'subcampaign'        => 'Subcampaign',
