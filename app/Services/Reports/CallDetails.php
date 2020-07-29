@@ -185,8 +185,6 @@ class CallDetails
 
         $answered = 0;
         $unanswered = 0;
-        $answered = 0;
-        $unanswered = 0;
 
         $bind['group_id'] =  Auth::user()->group_id;
         $bind['startdate'] = $startDate;
@@ -229,10 +227,10 @@ class CallDetails
 
         if (!empty($this->params['reps']) && $this->params['reps'] != '*') {
 
-            if (isset($this->params['reps']['[ All Answered'])) {
+            if (array_search('[All Answered]', $this->params['reps']) !== false) {
                 $answered = 1;
             }
-            if (isset($this->params['reps']['[ All Unanswered'])) {
+            if (array_search('[All Unanswered]', $this->params['reps']) !== false) {
                 $unanswered = 1;
             }
             if ($answered && $unanswered) {

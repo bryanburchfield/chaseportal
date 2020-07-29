@@ -31,7 +31,7 @@ class AgentActivity
     public function getFilters()
     {
         $filters = [
-            'reps' => $this->getAllReps(true),
+            'reps' => $this->getAllReps(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
