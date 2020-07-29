@@ -2666,7 +2666,9 @@ var Master = {
             }else{
                 $(this).show();
             }
-        })
+        });
+
+        $('.multiselect-search').parent().parent().show();
     }
 }
 
