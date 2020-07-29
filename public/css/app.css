@@ -289,6 +289,10 @@ span {
   overflow-x: hidden;
 }
 
+.lp_wrapper {
+  overflow-y: hidden;
+}
+
 #sidebar {
   min-width: 250px;
   max-width: 250px;
@@ -3454,6 +3458,12 @@ a.add_subcampaign i {
   font-size: 16px;
   font-weight: 600;
   color: #fff;
+}
+
+.lp_grad .nav_holder {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* ---------------------------------------------------

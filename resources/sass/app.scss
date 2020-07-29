@@ -213,6 +213,8 @@ i, span {
     overflow-x: hidden;
 }
 
+.lp_wrapper{overflow-y: hidden;}
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -2935,6 +2937,8 @@ a.add_subcampaign{
     }
 
     p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
+
+    .nav_holder{position: absolute;top:0;left:0;}
 }
 
 
