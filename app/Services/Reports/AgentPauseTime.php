@@ -38,7 +38,7 @@ class AgentPauseTime
     public function getFilters()
     {
         $filters = [
-            'reps' => $this->getAllReps(true),
+            'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
