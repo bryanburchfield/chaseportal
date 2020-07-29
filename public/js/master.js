@@ -2658,17 +2658,17 @@ var Master = {
             checked=0;
         }
 
-        $(this).parent().prev().find('.dropdown-menu').find('li').each(function(){
-            if(checked){
-                if(!$(this).hasClass('active_rep')){
-                    $(this).hide();
+        $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
+            if(index>2){
+                if(checked){
+                    if(!$(this).hasClass('active_rep')){
+                        $(this).hide();
+                    }
+                }else{
+                    $(this).show();
                 }
-            }else{
-                $(this).show();
             }
         });
-
-        $('.multiselect-search').parent().parent().show();
     }
 }
 
