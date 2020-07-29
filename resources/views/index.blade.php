@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="wrapper">
+<div class="wrapper lp_wrapper">
 
     @include('shared.sidenav')
 
