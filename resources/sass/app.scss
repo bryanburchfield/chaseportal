@@ -30,7 +30,6 @@ body {
     color: #595C63;
     font-size: 13px;
     font-family: 'Helvetica', 'Arial', sans-serif;
-    padding-bottom: 50px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -2913,6 +2912,30 @@ a.add_subcampaign{
 }
 
 .reverse_action{color:#fff !important;}
+
+.lp_bg{
+    background: url('/img/background-image2.jpg');
+    background-size: cover;
+    height: 100%;
+}
+
+.lp_grad{
+    padding-top: 50px;
+    height: 100%;
+    background: -moz-linear-gradient(top,  rgba(9,20,25,1) 0%, rgba(21,46,58,0.75) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(9,20,25,1) 0%,rgba(21,46,58,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(9,20,25,1) 0%,rgba(21,46,58,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#091419', endColorstr='#bf152e3a',GradientType=0 ); /* IE6-9 */
+
+
+    img{
+        margin: 0 auto;
+        display: block;
+        padding-left: 20px;
+    }
+
+    p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
+}
 
 
 /* ---------------------------------------------------

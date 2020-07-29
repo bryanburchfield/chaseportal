@@ -1,5 +1,6 @@
 @extends('shared.sidenav.layout')
-@section('sidenav')
+@include('shared.sidenav.main');
+
     <li><a class="update_nav_link" data-path="main" href="#"><i class="fas fa-arrow-circle-left"></i>{{__('widgets.go_back')}}</a></li>
 
     @can('accessSuperAdmin')

@@ -6,8 +6,10 @@ Route::redirect('/raw', '/raw');
 // Language setter
 Route::get('lang/{locale}', 'LocalizationController@lang');
 
-// Redirect root to /dashboards
-Route::redirect('/', '/dashboards');
+// Route to landing page
+Route::get('/', function(){
+	return view("index");
+});
 
 // This is for user logins
 Auth::routes(['register' => false]);
