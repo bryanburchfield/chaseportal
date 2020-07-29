@@ -8,4 +8,4 @@
     @if(Auth::user()->email != 'btmarketing@chasedatacorp.com')
         <li data-page="trenddash" <?php echo !empty($page['menuitem']) &&  $page['menuitem'] == 'trenddash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@trendDashboard') }}"><i class="fas fa-chart-area"></i>{{__('sidenav.trend_dashboard')}}</a></li>
     @endif
-@endsection()
+@endsection

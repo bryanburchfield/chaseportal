@@ -1,6 +1,5 @@
 @extends('shared.sidenav.layout')
-@include('shared.sidenav.main');
-
+@section('sidenav')
     <li><a class="update_nav_link" data-path="main" href="#"><i class="fas fa-arrow-circle-left"></i>{{__('widgets.go_back')}}</a></li>
 
     @can('accessSuperAdmin')
@@ -16,4 +15,4 @@
         <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'settings' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@settings') }}"><i class="fas fa-user-edit"></i> Edit Myself</a></li>
         <li data-page="notifications" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'notifications' ? 'class="active"' : ''; ?>><a href="{{ action('FeatureMessageController@index') }}"><i class="fas fa-bell"></i> Notifications</a></li>
     @endcan
-@endsection()
+@endsection
