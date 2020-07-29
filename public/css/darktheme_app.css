@@ -185,6 +185,10 @@ h6 {
   text-align: center;
 }
 
+.cb {
+  clear: both;
+}
+
 .flt_lft {
   float: left;
 }
@@ -203,18 +207,6 @@ h6 {
 
 .table > tbody > tr.p10 td {
   padding: 10px 8px;
-}
-
-.cb {
-  clear: both;
-}
-
-.flt_rgt {
-  float: right;
-}
-
-.flt_lft {
-  float: left;
 }
 
 .carb_mb30_mb {
@@ -1431,6 +1423,7 @@ p.descrip.top14 {
 .rules_table th,
 .dnc_table th,
 .demo_user_table th,
+.agent_compliance_table th,
 .audit_table th {
   background: #33A09B;
   color: #fff;
@@ -1495,8 +1488,12 @@ p.descrip.top14 {
   font-weight: 600;
 }
 
+#reports_modal .modal-footer .btn {
+  float: left;
+}
+
 .reports_table.table > tbody > tr > td,
-.reports_table.table > tbody > tr > th,
+.reports_table.table > thead > tr > th,
 .reports_table.table > tfoot > tr > td,
 .reports_table.table > tfoot > tr > th,
 .reports_table.table > thead > tr > td,
@@ -3585,6 +3582,10 @@ a.add_subcampaign:focus {
 
 .fix-sticky table thead {
   background: #33A09B;
+}
+
+label.checkbox.toggle_active_reps {
+  margin-left: 20px;
 }
 
 /* ---------------------------------------------------

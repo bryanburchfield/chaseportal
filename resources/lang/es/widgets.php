@@ -104,7 +104,6 @@ return [
 	'total_talk_time'	=> 'Tiempo Total de Conversación',
 	'view_day_details'	=> 'Ver Detalles Del Día',
 	'voicemails'		=> 'Mensajes de Voz',
-	'voicemails'		=> 'Mensajes de Voz',
 	'agent_details'		=> 'Detalles del Agent',
 	'agent_dash'		=> 'Tablero de Agentes',
 	'avg_handle_time'	=> 'Tiempo Promedio de Manejo',

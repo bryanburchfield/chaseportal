@@ -82,6 +82,7 @@ var Master = {
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
+        $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
 	},
 
     update_sidenav:function(e){
@@ -2267,6 +2268,27 @@ var Master = {
             },
             success:function(response){
                 window.location.reload();
+            }
+        });
+    },
+
+    toggle_active_reps:function(){
+        var checked=0;
+        if($(this).is(':checked')){
+            checked=1;
+        }else{
+            checked=0;
+        }
+
+        $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
+            if(index>2){
+                if(checked){
+                    if(!$(this).hasClass('active_rep')){
+                        $(this).hide();
+                    }
+                }else{
+                    $(this).show();
+                }
             }
         });
     }

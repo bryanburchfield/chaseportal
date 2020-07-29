@@ -116,16 +116,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
-
 .tac{text-align: center;}
-
+.cb{clear: both;}
 .flt_lft{float: left;}
 .flt_rgt{float: right;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
-.cb{clear: both;}
-.flt_rgt {float: right;}
-.flt_lft {float: left;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -1091,7 +1087,7 @@ p.descrip.top14 {
     top: 15%;
 }
 
-.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .demo_user_table th, .dnc_table th, .audit_table th{
+.reports_table th, .rm_rptble_class table th, .uploader_table th, .cdr_results_table th, .rules_table th, .dnc_table th, .demo_user_table th, .agent_compliance_table th, .audit_table th {
     @include base_style($blue, #fff, top, 0);
     padding: 10px !important;
 }
@@ -1124,7 +1120,11 @@ p.descrip.top14 {
     font-weight: 600;
 }
 
-.reports_table.table>tbody>tr>td, .reports_table.table>tbody>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
+#reports_modal .modal-footer .btn {
+    float: left;
+}
+
+.reports_table.table>tbody>tr>td, .reports_table.table>thead>tr>th, .reports_table.table>tfoot>tr>td, .reports_table.table>tfoot>tr>th, .reports_table.table>thead>tr>td, .reports_table.table>thead>tr>th {
     min-width: 125px;
     padding: 10px 4px;
 }
@@ -2724,7 +2724,7 @@ a.add_subcampaign{
   height: 45px;
 }
 
-.col-sm-12.w99{    
+.col-sm-12.w99 {
     width: 98% !important;
     margin-left: 1%;
 }
@@ -2763,6 +2763,7 @@ a.add_subcampaign{
 }
 
 .fix-sticky table thead{background: $green;}
+label.checkbox.toggle_active_reps{margin-left: 20px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
