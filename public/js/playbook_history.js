@@ -57,7 +57,7 @@ var Playbook_History = {
 		$("html, body").animate({ scrollTop: 0 }, "slow");
 
 		$.ajax({
-		    url: '/reverse/action/'+id,
+		    url: '/playbook/history/reverse/action/'+id,
 		    type: 'POST',
 		    dataType: 'html',
 		    data: {id:id },
