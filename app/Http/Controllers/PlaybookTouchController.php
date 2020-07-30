@@ -21,18 +21,11 @@ class PlaybookTouchController extends Controller
     use CampaignTraits;
     use SqlServerTraits;
 
-    private $contacts_playbook_id;
     private $contacts_playbook;
 
-    public function __construct(Request $request)
+    public function index(ContactsPlaybook $contacts_playbook)
     {
-        $this->contacts_playbook_id = $request->contacts_playbook_id;
-        $this->id = $request->id;
-    }
-
-    public function index()
-    {
-        $this->setPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($contacts_playbook);
 
         $page = [
             'menuitem' => 'playbook',
@@ -47,7 +40,7 @@ class PlaybookTouchController extends Controller
             'group_id' => Auth::user()->group_id,
             'contacts_playbook' => $this->contacts_playbook,
             'campaigns' => $this->getAllCampaigns(),
-            'playbook_touches' => $this->getPlaybookTouches(),
+            'playbook_touches' => $this->contacts_playbook->playbook_touches->sortBy('name'),
         ];
 
         return view('playbook.touches')->with($data);
@@ -75,17 +68,18 @@ class PlaybookTouchController extends Controller
         return view('playbook.shared.touch_form')->with($data);
     }
 
-    public function addPlaybookTouchForm()
+    public function addPlaybookTouchForm(ContactsPlaybook $contacts_playbook)
     {
-        $this->setPlaybook($this->contacts_playbook_id);
+        $this->setPlaybook($contacts_playbook);
 
         return $this->playbookTouchForm(new PlaybookTouch());
     }
 
-    public function updatePlaybookTouchForm()
+    public function updatePlaybookTouchForm(PlaybookTouch $playbook_touch)
     {
-        $playbook_touch = $this->findPlaybookTouch($this->id);
-        $this->setPlaybook($playbook_touch->contacts_playbook_id);
+        $this->checkPlaybookGroup($playbook_touch);
+
+        $this->setPlaybook($playbook_touch->contacts_playbook);
 
         return $this->playbookTouchForm($playbook_touch);
     }
@@ -96,18 +90,13 @@ class PlaybookTouchController extends Controller
      * @param mixed $id 
      * @return mixed 
      */
-    private function setPlaybook($id)
+    private function setPlaybook(ContactsPlaybook $contacts_playbook)
     {
-        $this->contacts_playbook = ContactsPlaybook::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
-    }
+        if ($contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
 
-    private function getPlaybookTouches()
-    {
-        return PlaybookTouch::where('contacts_playbook_id', $this->contacts_playbook_id)
-            ->orderBy('name')
-            ->get();
+        $this->contacts_playbook = $contacts_playbook;
     }
 
     private function findPlaybookTouch($id)
@@ -117,18 +106,25 @@ class PlaybookTouchController extends Controller
             ->firstOrFail();
 
         if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
-            abort(404);
+            abort(403, 'Unauthorized');
         }
 
         return $playbook_touch;
     }
 
-    public function addPlaybookTouch(ValidPlaybookTouch $request)
+    private function checkPlaybookGroup(PlaybookTouch $playbook_touch)
     {
-        $this->setPlaybook($this->contacts_playbook_id);
+        if ($playbook_touch->contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    public function addPlaybookTouch(ValidPlaybookTouch $request, ContactsPlaybook $contacts_playbook)
+    {
+        $this->setPlaybook($contacts_playbook);
 
         $data = $request->all();
-        $data['contacts_playbook_id'] = $this->contacts_playbook_id;
+        $data['contacts_playbook_id'] = $this->contacts_playbook->id;
         $data['group_id'] = Auth::user()->group_id;
 
         DB::beginTransaction();
@@ -145,9 +141,9 @@ class PlaybookTouchController extends Controller
         return ['status' => 'success'];
     }
 
-    public function updatePlaybookTouch(ValidPlaybookTouch $request)
+    public function updatePlaybookTouch(ValidPlaybookTouch $request, PlaybookTouch $playbook_touch)
     {
-        $playbook_touch = $this->findPlaybookTouch($request->id);
+        $this->checkPlaybookGroup($playbook_touch);
 
         $data = $request->all();
 
@@ -172,17 +168,20 @@ class PlaybookTouchController extends Controller
         return ['status' => 'success'];
     }
 
-    public function deletePlaybookTouch(Request $request)
+    public function deletePlaybookTouch(PlaybookTouch $playbook_touch)
     {
-        $playbook_touch = $this->findPlaybookTouch($request->id);
+        $this->checkPlaybookGroup($playbook_touch);
+
         $playbook_touch->delete();
 
         return ['status' => 'success'];
     }
 
-    public function getPlaybookTouch(Request $request)
+    public function getPlaybookTouch(PlaybookTouch $playbook_touch)
     {
-        return $this->findPlaybookTouch($request->id);
+        $this->checkPlaybookGroup($playbook_touch);
+
+        return $playbook_touch;
     }
 
     /**
@@ -344,7 +343,7 @@ class PlaybookTouchController extends Controller
     {
         // get all inactive playbooks
         $playbook_touches = PlaybookTouch::where('group_id', Auth::user()->group_id)
-            ->where('contacts_playbook_id', $this->contacts_playbook_id)
+            ->where('contacts_playbook_id', $this->contacts_playbook->id)
             ->where('active', 0)
             ->get();
 
@@ -380,7 +379,7 @@ class PlaybookTouchController extends Controller
     {
         // get all active touches
         $playbook_touchess = PlaybookTouch::where('group_id', Auth::user()->group_id)
-            ->where('contacts_playbook_id', $this->contacts_playbook_id)
+            ->where('contacts_playbook_id', $this->contacts_playbook->id)
             ->where('active', 1)
             ->get();
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
 use App\Models\PlaybookTouch;
@@ -28,50 +29,35 @@ class ValidPlaybookTouch extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // Playbook id might come from the url, not in $request->all()
-        if (!empty($this->contacts_playbook_id)) {
-            $this->merge(['contacts_playbook_id' => $this->contacts_playbook_id]);
+        // We pass in a touch for update, or a playbook for add
+        // check that it belongs to user's group_id, 403 if not
+        if (!empty($this->playbook_touch)) {
+            $this->contacts_playbook = $this->playbook_touch->contacts_playbook;
+        } elseif (empty($this->contacts_playbook)) {
+            abort(404);
+        } else {
+            $this->playbook_touch = new PlaybookTouch();
         }
 
-        // if id not passed (adding), insert id=0
-        // otherwise, check that it belongs to user's group_id, 404 if not
-        if (!empty($this->id)) {
-            $playbook_touch = PlaybookTouch::where('id', $this->id)
-                ->with('contacts_playbook')
-                ->firstOrFail();
-            if ($playbook_touch->contacts_playbook->group_id != Auth::user()->group_id) {
-                abort(404);
-            }
-            $this->merge(['contacts_playbook_id' => $playbook_touch->contacts_playbook_id]);
-        } else {
-            $this->merge(['id' => 0]);
+        if ($this->contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
         }
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * TODO:  'filters' and 'actions'
      *
      * @return array
      */
     public function rules()
     {
-        $group_id = Auth::user()->group_id;
-
         return [
-            'contacts_playbook_id' => [
-                'required',
-                Rule::exists('contacts_playbooks', 'id')
-                    ->where(function ($query) use ($group_id) {
-                        $query->where('group_id', $group_id);
-                    }),
-            ],
             'name' => [
                 'required',
                 Rule::unique('playbook_touches')->where(function ($query) {
                     return $query
-                        ->where('id', '!=', $this->id)
-                        ->where('contacts_playbook_id', $this->contacts_playbook_id)
+                        ->where('id', '!=', $this->playbook_touch->id)
+                        ->where('contacts_playbook_id', $this->contacts_playbook->id)
                         ->whereNull('deleted_at');
                 }),
             ],

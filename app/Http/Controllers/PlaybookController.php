@@ -88,9 +88,9 @@ class PlaybookController extends Controller
      * @param ValidPlaybook $request 
      * @return string[] 
      */
-    public function updatePlaybook(ValidPlaybook $request)
+    public function updatePlaybook(ValidPlaybook $request, ContactsPlaybook $contacts_playbook)
     {
-        $contacts_playbook = $this->findPlaybook($request->id);
+        $this->checkPlaybookGroup($contacts_playbook);
 
         $contacts_playbook->update($request->all());
 
@@ -103,9 +103,10 @@ class PlaybookController extends Controller
      * @param Request $request 
      * @return string[] 
      */
-    public function deletePlaybook(Request $request)
+    public function deletePlaybook(ContactsPlaybook $contacts_playbook)
     {
-        $contacts_playbook = $this->findPlaybook($request->id);
+        $this->checkPlaybookGroup($contacts_playbook);
+
         $contacts_playbook->delete();
 
         return ['status' => 'success'];
@@ -117,9 +118,9 @@ class PlaybookController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getPlaybook(Request $request)
+    public function getPlaybook(ContactsPlaybook $contacts_playbook)
     {
-        $contacts_playbook = $this->findPlaybook($request->id);
+        $this->checkPlaybookGroup($contacts_playbook);
 
         $playbook = $contacts_playbook->toArray();
 
@@ -130,17 +131,11 @@ class PlaybookController extends Controller
         return $playbook;
     }
 
-    /**
-     * Return playbook if group_id matches user
-     * 
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function findPlaybook($id)
+    private function checkPlaybookGroup($contacts_playbook)
     {
-        return ContactsPlaybook::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
+        if ($contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
     }
 
     /**
