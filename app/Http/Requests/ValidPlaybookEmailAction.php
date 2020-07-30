@@ -25,8 +25,6 @@ class ValidPlaybookEmailAction extends FormRequest
      */
     public function rules()
     {
-        $group_id = Auth::User()->group_id;
-
         return [
             'subject' => 'required',
             'from' => 'required',
@@ -35,8 +33,8 @@ class ValidPlaybookEmailAction extends FormRequest
             'email_service_provider_id' => [
                 'required',
                 Rule::exists('email_service_providers', 'id')
-                    ->where(function ($query) use ($group_id) {
-                        $query->where('group_id', $group_id);
+                    ->where(function ($query) {
+                        $query->where('group_id', Auth::User()->group_id);
                     }),
             ],
             'days_between_emails' => 'required|integer',

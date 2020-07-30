@@ -26,14 +26,14 @@ class ValidPlaybook extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // if id not passed (adding), insert id=0
-        // otherwise, check that it belongs to user's group_id, 404 if not
-        if (empty($this->id)) {
-            $this->merge(['id' => 0]);
+        // if model not passed (adding), insert new model
+        // otherwise, check that it belongs to user's group_id, 403 if not
+        if (empty($this->contacts_playbook)) {
+            $this->contacts_playbook = new ContactsPlaybook();
         } else {
-            $contacts_playbook = ContactsPlaybook::where('id', $this->id)
-                ->where('group_id', Auth::user()->group_id)
-                ->firstOrFail();
+            if ($this->contacts_playbook->group_id !== Auth::user()->group_id) {
+                abort(403, 'Unauthorized');
+            }
         }
     }
 
@@ -44,15 +44,13 @@ class ValidPlaybook extends FormRequest
      */
     public function rules()
     {
-        $group_id = Auth::user()->group_id;
-
         return [
             'name' => [
                 'required',
-                Rule::unique('contacts_playbooks')->where(function ($query) use ($group_id) {
+                Rule::unique('contacts_playbooks')->where(function ($query) {
                     return $query
-                        ->where('group_id', $group_id)
-                        ->where('id', '!=', $this->id)
+                        ->where('group_id', Auth::user()->group_id)
+                        ->where('id', '!=', $this->contacts_playbook->id)
                         ->whereNull('deleted_at');
                 }),
             ],

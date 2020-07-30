@@ -74,9 +74,9 @@ class PlaybookActionController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getAction(Request $request)
+    public function getAction(PlaybookAction $playbook_action)
     {
-        $playbook_action = $this->findPlaybookAction($request->id);
+        $this->checkActionGroup($playbook_action);
 
         switch ($playbook_action->action_type) {
             case 'email':
@@ -93,16 +93,11 @@ class PlaybookActionController extends Controller
         return $playbook_action->toArray() + $record->toArray();
     }
 
-    /**
-     * Find plabook_actions record by id for user's group
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function findPlaybookAction($id)
+    private function checkActionGroup(PlaybookAction $playbook_action)
     {
-        return PlaybookAction::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
+        if ($playbook_action->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
     }
 
     /**
@@ -138,10 +133,10 @@ class PlaybookActionController extends Controller
      * @param ValidPlaybookAction $request 
      * @return string[] 
      */
-    public function updateAction(ValidPlaybookAction $request)
+    public function updateAction(ValidPlaybookAction $request, PlaybookAction $playbook_action)
     {
         // first, make sure it's the correct group
-        $playbook_action = $this->findPlaybookAction($request->id);
+        $this->checkActionGroup($playbook_action);
 
         // validate fields based on action_type
         $model = $this->validateActionType($request);
@@ -209,10 +204,10 @@ class PlaybookActionController extends Controller
      * @return string[] 
      * @throws HttpResponseException 
      */
-    public function deleteAction(Request $request)
+    public function deleteAction(PlaybookAction $playbook_action)
     {
         // on delete cascade takes care of the sub-table records
-        $playbook_action = $this->findPlaybookAction($request->id);
+        $this->checkActionGroup($playbook_action);
 
         if ($playbook_action->playbook_touch_actions->isNotEmpty()) {
             abort(response()->json(['errors' => ['1' => trans('action_in_use')]], 422));

@@ -25,14 +25,12 @@ class ValidPlaybookSmsAction extends FormRequest
      */
     public function rules()
     {
-        $group_id = Auth::user()->group_id;
-
         return [
             'sms_from_number_id' => [
                 'required',
                 Rule::exists('sms_from_numbers', 'id')
-                    ->where(function ($query) use ($group_id) {
-                        $query->whereIn('group_id', [0, $group_id]);
+                    ->where(function ($query) {
+                        $query->whereIn('group_id', [0, Auth::user()->group_id]);
                     }),
             ],
             'template_id' => 'required|integer',
