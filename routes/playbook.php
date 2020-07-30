@@ -75,9 +75,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('sms_numbers', 'SmsFromNumberController@index');
                 Route::post('/sms_number', 'SmsFromNumberController@store');
-                Route::patch('/sms_number/{id}', 'SmsFromNumberController@update');
-                Route::delete('/sms_number/{id}', 'SmsFromNumberController@destroy');
-                Route::get('/sms_number/{id}', 'SmsFromNumberController@getSmsFromNumber');
+                Route::patch('/sms_number/{sms_from_number}', 'SmsFromNumberController@update');
+                Route::delete('/sms_number/{sms_from_number}', 'SmsFromNumberController@destroy');
+                Route::get('/sms_number/{sms_from_number}', 'SmsFromNumberController@getSmsFromNumber');
             });
         });
     });
