@@ -68,7 +68,6 @@ body {
   color: #aaa;
   font-size: 13px;
   font-family: "Helvetica", "Arial", sans-serif;
-  padding-bottom: 50px;
 }
 
 h1,
@@ -336,6 +335,10 @@ span {
   display: flex;
   align-items: stretch;
   overflow-x: hidden;
+}
+
+.lp_wrapper {
+  overflow-y: hidden;
 }
 
 #sidebar {
@@ -3536,6 +3539,43 @@ a.add_subcampaign:focus {
 
 .reverse_action {
   color: #fff !important;
+}
+
+.lp_bg {
+  background: url("/img/background-image2.jpg");
+  background-size: cover;
+  height: 100%;
+}
+
+.lp_grad {
+  padding-top: 50px;
+  height: 100%;
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #091419 0%, rgba(12, 18, 27, 0.75) 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#091419", endColorstr="#bf0c121b",GradientType=0 );
+  /* IE6-9 */
+}
+
+.lp_grad img {
+  margin: 0 auto;
+  display: block;
+  padding-left: 20px;
+}
+
+.lp_grad p {
+  text-align: center;
+  margin-top: 35px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.lp_grad .nav_holder {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .calls_per_hour table tbody tr:last-of-type td {

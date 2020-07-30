@@ -236,4 +236,26 @@ class MasterDashController extends Controller
 
         return $this->showSettings($success);
     }
+
+    public function landingPage(Request $request)
+    {
+        if (Auth::guest()) {
+            return view('auth.login');
+        }
+
+        $this->getSession($request);
+
+        $page = [
+            'menuitem' => '',
+            'type' => 'main',
+            'sidenav' => 'main',
+        ];
+
+        $data = [
+            'cssfile' => $this->cssfile,
+            'page' => $page,
+        ];
+
+        return view('index')->with($data);
+    }
 }
