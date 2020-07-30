@@ -152,7 +152,7 @@ class PlaybookController extends Controller
             ->firstOrFail();
 
         if (!$this->updateActive($contacts_playbook, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('playbook_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('tools.playbook_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];
