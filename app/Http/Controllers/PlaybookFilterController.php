@@ -59,9 +59,11 @@ class PlaybookFilterController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getFilter(Request $request)
+    public function getFilter(PlaybookFilter $playbook_filter)
     {
-        return $this->findPlaybookFilter($request->id);
+        $this->checkFilterGroup($playbook_filter);
+
+        return $playbook_filter;
     }
 
     /**
@@ -106,9 +108,10 @@ class PlaybookFilterController extends Controller
      * @param ValidPlaybookFilter $request 
      * @return string[] 
      */
-    public function updateFilter(ValidPlaybookFilter $request)
+    public function updateFilter(ValidPlaybookFilter $request, PlaybookFilter $playbook_filter)
     {
-        $playbook_filter = $this->findPlaybookFilter($request->id);
+        $this->checkFilterGroup($playbook_filter);
+
         $playbook_filter->update($request->all());
 
         return ['status' => 'success'];
@@ -120,9 +123,9 @@ class PlaybookFilterController extends Controller
      * @param Request $request 
      * @return string[] 
      */
-    public function deleteFilter(Request $request)
+    public function deleteFilter(PlaybookFilter $playbook_filter)
     {
-        $playbook_filter = $this->findPlaybookFilter($request->id);
+        $this->checkFilterGroup($playbook_filter);
 
         if ($playbook_filter->playbook_touch_filters->isNotEmpty()) {
             abort(response()->json(['errors' => ['1' => trans('filter_in_use')]], 422));
@@ -146,15 +149,10 @@ class PlaybookFilterController extends Controller
         return PlaybookFilter::getOperators($type);
     }
 
-    /**
-     * Find plabook_filters record by id for user's group
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function findPlaybookFilter($id)
+    private function checkFilterGroup(PlaybookFilter $playbook_filter)
     {
-        return PlaybookFilter::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
+        if ($playbook_filter->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
     }
 }

@@ -56,9 +56,10 @@ class SmsFromNumberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ValidSmsFromNumber $request, $id)
+    public function update(ValidSmsFromNumber $request, SmsFromNumber $sms_from_number)
     {
-        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number = SmsFromNumber::findOrFail($sms_from_number->id);
+
         $sms_from_number->update($request->all());
         $sms_from_number->save();
 
@@ -71,9 +72,9 @@ class SmsFromNumberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SmsFromNumber $sms_from_number)
     {
-        $sms_from_number = SmsFromNumber::findOrFail($id);
+        $sms_from_number = SmsFromNumber::findOrFail($sms_from_number->id);
         $sms_from_number->delete();
 
         return ['status' => 'success'];
@@ -85,8 +86,8 @@ class SmsFromNumberController extends Controller
      * @param Request $request 
      * @return mixed 
      */
-    public function getSmsFromNumber(Request $request)
+    public function getSmsFromNumber(SmsFromNumber $sms_from_number)
     {
-        return SmsFromNumber::findOrFail($request->id);
+        return SmsFromNumber::findOrFail($sms_from_number->id);
     }
 }

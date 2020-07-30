@@ -28,10 +28,9 @@ class ValidSmsFromNumber extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if (empty($this->id)) {
-            $this->sms_from_number = new SmsFromNumber;
-        } else {
-            $this->sms_from_number = SmsFromNumber::findOrFail($this->id);
+        // if model not passed (adding), insert new model
+        if (empty($this->sms_from_number)) {
+            $this->sms_from_number = new SmsFromNumber();
         }
     }
 
@@ -42,16 +41,14 @@ class ValidSmsFromNumber extends FormRequest
      */
     public function rules()
     {
-        $group_id = Auth::user()->group_id;
-
         return [
             'group_id' => 'required|integer',
             'from_number' => [
                 'required',
                 'regex:/^\+1\d{10}$/',
-                Rule::unique('sms_from_numbers')->where(function ($query) use ($group_id) {
+                Rule::unique('sms_from_numbers')->where(function ($query) {
                     return $query
-                        ->where('group_id', $group_id)
+                        ->where('group_id', Auth::user()->group_id)
                         ->where('id', '!=', $this->sms_from_number->id);
                 }),
             ],

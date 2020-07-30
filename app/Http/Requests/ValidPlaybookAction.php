@@ -34,14 +34,14 @@ class ValidPlaybookAction extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // if id not passed (adding), insert id=0
-        // otherwise, check that filter belongs to user's group_id, 404 if not
-        if ($this->filled('id')) {
-            $this->playbook_action = PlaybookAction::where('id', $this->id)
-                ->where('group_id', Auth::user()->group_id)
-                ->firstOrFail();
+        // if model not passed (adding), insert new model
+        // otherwise, check that it belongs to user's group_id, 403 if not
+        if (empty($this->playbook_action)) {
+            $this->playbook_action = new PlaybookAction();
         } else {
-            $this->playbook_action = new PlaybookAction;
+            if ($this->playbook_action->group_id !== Auth::user()->group_id) {
+                abort(403, 'Unauthorized');
+            }
         }
     }
 
@@ -52,14 +52,12 @@ class ValidPlaybookAction extends FormRequest
      */
     public function rules()
     {
-        $group_id = Auth::user()->group_id;
-
         return [
             'name' => [
                 'required',
-                Rule::unique('playbook_actions')->where(function ($query) use ($group_id) {
+                Rule::unique('playbook_actions')->where(function ($query) {
                     return $query
-                        ->where('group_id', $group_id)
+                        ->where('group_id', Auth::user()->group_id)
                         ->where('id', '!=', $this->playbook_action->id)
                         ->whereNull('deleted_at');
                 }),

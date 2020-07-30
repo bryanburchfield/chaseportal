@@ -14,40 +14,32 @@ Route::group(['middleware' => 'auth'], function () {
             // Playbooks
             Route::get('/', 'PlaybookController@index');  // playbooks index
             Route::post('/playbooks', 'PlaybookController@addPlaybook');  // add a playbook
-            Route::get('/playbooks/{id}', 'PlaybookController@getPlaybook');  // get a playbook by id
-            Route::patch('/playbooks/{id}', 'PlaybookController@updatePlaybook');  // update a playbook by id
-            Route::delete('/playbooks/{id}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
+            Route::get('/playbooks/{contacts_playbook}', 'PlaybookController@getPlaybook');  // get a playbook by id
+            Route::patch('/playbooks/{contacts_playbook}', 'PlaybookController@updatePlaybook');  // update a playbook by id
+            Route::delete('/playbooks/{contacts_playbook}', 'PlaybookController@deletePlaybook');  // delete a playbook by id
 
             // Touches
-            Route::get('/touches/{contacts_playbook_id}', 'PlaybookTouchController@index');  // touches index
-            Route::get('/add_touch/{contacts_playbook_id}', 'PlaybookTouchController@addPlaybookTouchForm');  // add touch form
-            Route::get('/update_touch/{id}', 'PlaybookTouchController@updatePlaybookTouchForm');  // update touch form
-            Route::post('/touches/{contacts_playbook_id}', 'PlaybookTouchController@addPlaybookTouch');  // add a touch
-            Route::get('/touches/touch/{id}', 'PlaybookTouchController@getPlaybookTouch');  // get a touch by id
-            Route::patch('/touches/touch/{id}', 'PlaybookTouchController@updatePlaybookTouch');  // update a touch by id
-            Route::delete('/touches/touch/{id}', 'PlaybookTouchController@deletePlaybookTouch');  // delete a touch by id
-
-            // Playbook filters
-            Route::get('/playbooks/filters/{id}', 'PlaybookController@getPlaybookFilters');  // get filters on a playbook by id
-            Route::patch('/playbooks/filters/{id}', 'PlaybookController@saveFilters');  // add/update filters on a playbook by id
-
-            // Playbook actions
-            Route::get('/playbook/actions/{id}', 'PlaybookController@getPlaybookActions');  // get actions on a playbook by id
-            Route::patch('/playbooks/actions/{id}', 'PlaybookController@saveActions');  // add/update filters on a playbook by id
+            Route::get('/touches/{contacts_playbook}', 'PlaybookTouchController@index');  // touches index
+            Route::get('/add_touch/{contacts_playbook}', 'PlaybookTouchController@addPlaybookTouchForm');  // add touch form
+            Route::get('/update_touch/{playbook_touch}', 'PlaybookTouchController@updatePlaybookTouchForm');  // update touch form
+            Route::post('/touches/{contacts_playbook}', 'PlaybookTouchController@addPlaybookTouch');  // add a touch
+            Route::get('/touches/touch/{playbook_touch}', 'PlaybookTouchController@getPlaybookTouch');  // get a touch by id
+            Route::patch('/touches/touch/{playbook_touch}', 'PlaybookTouchController@updatePlaybookTouch');  // update a touch by id
+            Route::delete('/touches/touch/{playbook_touch}', 'PlaybookTouchController@deletePlaybookTouch');  // delete a touch by id
 
             // Filters
             Route::get('/filters', 'PlaybookFilterController@index');  // filters index
             Route::post('/filters', 'PlaybookFilterController@addFilter');  // add a filter
-            Route::get('/filters/{id}', 'PlaybookFilterController@getFilter');  // get a filter by id
-            Route::patch('/filters/{id}', 'PlaybookFilterController@updateFilter');  // update a filter by id
-            Route::delete('/filters/{id}', 'PlaybookFilterController@deleteFilter');  // delete a filter by id
+            Route::get('/filters/{playbook_filter}', 'PlaybookFilterController@getFilter');  // get a filter by id
+            Route::patch('/filters/{playbook_filter}', 'PlaybookFilterController@updateFilter');  // update a filter by id
+            Route::delete('/filters/{playbook_filter}', 'PlaybookFilterController@deleteFilter');  // delete a filter by id
 
             // Actions
             Route::get('/actions', 'PlaybookActionController@index');  // actions index
             Route::post('/actions', 'PlaybookActionController@addAction');  // add an action
-            Route::get('/actions/{id}', 'PlaybookActionController@getAction');  // get an action by id
-            Route::patch('/actions/{id}', 'PlaybookActionController@updateAction');  // update an action by id
-            Route::delete('/actions/{id}', 'PlaybookActionController@deleteAction');  // delete an action by id
+            Route::get('/actions/{playbook_action}', 'PlaybookActionController@getAction');  // get an action by id
+            Route::patch('/actions/{playbook_action}', 'PlaybookActionController@updateAction');  // update an action by id
+            Route::delete('/actions/{playbook_action}', 'PlaybookActionController@deleteAction');  // delete an action by id
 
             // Email Serivce Providers
             Route::get('/email_service_providers', 'PlaybookEmailProviderController@index');
@@ -61,9 +53,9 @@ Route::group(['middleware' => 'auth'], function () {
             // History
             Route::prefix('history')->group(function () {
                 Route::get('/', 'PlaybookHistoryController@index');  // history index
-                Route::get('/run/{id}', 'PlaybookHistoryController@runIndex');  // run index
-                Route::get('/run/action/{id}', 'PlaybookHistoryController@runActionIndex');  // run action index
-                Route::post('/reverse/action/{id}', 'PlaybookHistoryController@reverseAction');  // reverse an action
+                Route::get('/run/{playbook_run}', 'PlaybookHistoryController@runIndex');  // run index
+                Route::get('/run/action/{playbook_run_touch_action}', 'PlaybookHistoryController@runActionIndex');  // run action index
+                Route::post('/reverse/action/{playbook_run_touch_action}', 'PlaybookHistoryController@reverseAction');  // reverse an action
             });
 
             // Shared ajax
@@ -83,9 +75,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('sms_numbers', 'SmsFromNumberController@index');
                 Route::post('/sms_number', 'SmsFromNumberController@store');
-                Route::patch('/sms_number/{id}', 'SmsFromNumberController@update');
-                Route::delete('/sms_number/{id}', 'SmsFromNumberController@destroy');
-                Route::get('/sms_number/{id}', 'SmsFromNumberController@getSmsFromNumber');
+                Route::patch('/sms_number/{sms_from_number}', 'SmsFromNumberController@update');
+                Route::delete('/sms_number/{sms_from_number}', 'SmsFromNumberController@destroy');
+                Route::get('/sms_number/{sms_from_number}', 'SmsFromNumberController@getSmsFromNumber');
             });
         });
     });

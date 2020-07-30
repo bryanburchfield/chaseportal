@@ -9,10 +9,7 @@ use App\Models\PlaybookRunTouchAction;
 use App\Traits\SqlServerTraits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PlaybookHistoryController extends Controller
 {
@@ -36,8 +33,10 @@ class PlaybookHistoryController extends Controller
         return view('playbook.history.index')->with($data);
     }
 
-    public function runIndex(Request $request)
+    public function runIndex(PlaybookRun $playbook_run)
     {
+        $this->checkPlaybookGroup($playbook_run);
+
         $page = [
             'menuitem' => 'playbook',
             'sidenav' => 'main',
@@ -49,16 +48,16 @@ class PlaybookHistoryController extends Controller
             'jsfile' => ['playbook_history.js'],
             'cssfile' => ['https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css', 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css'],
             'group_id' => Auth::user()->group_id,
-            'playbook_run' => $this->findPlaybookRun($request->id),
-            'history' => $this->getRunHistory($request->id),
+            'playbook_run' => $playbook_run,
+            'history' => $this->getRunHistory($playbook_run->id),
         ];
 
         return view('playbook.history.run_index')->with($data);
     }
 
-    public function runActionIndex(Request $request)
+    public function runActionIndex(PlaybookRunTouchAction $playbook_run_touch_action)
     {
-        $playbook_run_touch_action = $this->findPlaybookRunTouchAction($request->id);
+        $this->checkPlaybookGroup($playbook_run_touch_action->playbook_run_touch->playbook_run);
 
         $page = [
             'menuitem' => 'playbook',
@@ -79,28 +78,11 @@ class PlaybookHistoryController extends Controller
         return view('playbook.history.run_action_index')->with($data);
     }
 
-    private function findPlaybookRun($id)
+    private function checkPlaybookGroup(PlaybookRun $playbook_run)
     {
-        $playbook_run = PlaybookRun::with('contacts_playbook')
-            ->findOrFail($id);
-
-        if ($playbook_run->contacts_playbook->group_id != Auth::user()->group_id) {
-            abort(404);
+        if ($playbook_run->contacts_playbook->group_id !== Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
         }
-
-        return $playbook_run;
-    }
-
-    private function findPlaybookRunTouchAction($id)
-    {
-        $playbook_run_touch_action = PlaybookRunTouchAction::with('playbook_action', 'playbook_run_touch.playbook_run')
-            ->findOrFail($id);
-
-        if ($playbook_run_touch_action->playbook_action->group_id != Auth::user()->group_id) {
-            abort(404);
-        }
-
-        return $playbook_run_touch_action;
     }
 
     private function getHistory()
@@ -172,9 +154,9 @@ class PlaybookHistoryController extends Controller
         return $leads;
     }
 
-    public function reverseAction(Request $request)
+    public function reverseAction(PlaybookRunTouchAction $playbook_run_touch_action)
     {
-        $playbook_run_touch_action = $this->findPlaybookRunTouchAction($request->id);
+        $this->checkPlaybookGroup($playbook_run_touch_action->playbook_run_touch->playbook_run);
 
         if (!empty($playbook_run_touch_action->reverse_started_at)) {
             return ['status' => 'error'];
