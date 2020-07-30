@@ -147,16 +147,20 @@ class PlaybookController extends Controller
      */
     public function toggleActive(Request $request)
     {
-        if (!$this->updateActive($request->id, $request->checked)) {
+        $contacts_playbook = ContactsPlaybook::where('id', $request->id)
+            ->where('group_id', Auth::user()->group_id)
+            ->firstOrFail();
+
+        if (!$this->updateActive($contacts_playbook, $request->checked)) {
             abort(response()->json(['errors' => ['1' => trans('playbook_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];
     }
 
-    private function updateActive($id, $active)
+    private function updateActive(ContactsPlaybook $contacts_playbook, $active)
     {
-        $contacts_playbook = $this->findPlaybook($id);
+        $this->checkPlaybookGroup($contacts_playbook);
 
         if ($active && !$contacts_playbook->allowActive()) {
             return false;
@@ -192,7 +196,7 @@ class PlaybookController extends Controller
         $ids = [];
         $names = [];
         foreach ($playbooks as $playbook) {
-            if (!$this->updateActive($playbook->id, 1)) {
+            if (!$this->updateActive($playbook, 1)) {
                 $ids[] = $playbook->id;
                 $names[] = $playbook->name;
             }
@@ -225,7 +229,7 @@ class PlaybookController extends Controller
             ->get();
 
         foreach ($playbooks as $playbook) {
-            $this->updateActive($playbook->id, 0);
+            $this->updateActive($playbook, 0);
         }
 
         return ['status' => 'success'];
