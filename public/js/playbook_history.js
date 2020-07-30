@@ -38,12 +38,37 @@ var Playbook_History = {
 	}),
 
 	init: function () {
-		
+		$('.reverse_action').on('click', this.reverse_action);
 	},
 
+	reverse_action:function(e){
+		e.preventDefault();
+		var id = $(this).data('id');
+
+		$.ajaxSetup({
+		    headers: {
+		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+		    }
+		});
+
+		$('#sidebar').empty();
+
+		var sidenav = $(this).data('path');
+		$("html, body").animate({ scrollTop: 0 }, "slow");
+
+		$.ajax({
+		    url: '/reverse/action/'+id,
+		    type: 'POST',
+		    dataType: 'html',
+		    data: {id:id },
+		    success: function (response) {
+		        console.log(response);
+		        location.reload();
+		    }
+		});
+	}
 }
 
 $(document).ready(function () {
 	Playbook_History.init();
-
 });
