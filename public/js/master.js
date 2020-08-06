@@ -962,7 +962,7 @@ var Master = {
             });
 
             $.ajax({
-                url: 'get_campaigns',
+                url: '/dashboards/reports/get_campaigns',
                 type: 'POST',
                 dataType: 'json',
                 async: false, /////////////////////// use async when rebuilding multi select menus
