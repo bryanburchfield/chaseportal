@@ -25,6 +25,9 @@
                                     <div class="col-sm-12 nopad">
                                         <div class="table-responsive nobdr sms_numbers mt20">
                                             <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal"><i class="fas fa-plus-circle"></i> Add Number</a>
+                                            <div>
+                                                NOTE: Number must exist in Twilio account
+                                            </div>
 
                                             <table class="table mt20 table-striped" id="sms_numbers_datatable">
                                                 <thead>
