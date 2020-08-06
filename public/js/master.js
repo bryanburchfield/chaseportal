@@ -1206,6 +1206,7 @@ var Master = {
         if (report == '') { report = $('#report').val(); }
         if (curpage != pag_link && pag_link != '') { curpage = pag_link; }
         if (th_sort == pag_link) { th_sort = ''; }
+        alert(form_data);
 
         $.ajaxSetup({
             headers: {
