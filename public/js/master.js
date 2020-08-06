@@ -63,7 +63,7 @@ var Master = {
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
         $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
         $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
-        $('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
+        $('body').on('change', '.query_dates_first .datetimepicker', this.query_dates_for_camps);
         $('#uploader_camp_info').on('submit', this.uploader_details);
         $('#settingsForm').on('submit', this.update_uploader_info);
         $('#file_upload').on('submit', this.upload_file);
@@ -602,7 +602,6 @@ var Master = {
 
             },
             success:function(response){
-                console.log(response);
             }
         });
     },
@@ -974,7 +973,6 @@ var Master = {
                 },
 
                 success: function (response) {
-
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {
