@@ -890,6 +890,10 @@ var Master = {
         report = $('form.report_filter_form').attr('id')
             ;
 
+        alert('This method ran');
+        alert(todate +' '+ fromdate);
+
+
         if (todate != '' && fromdate != '') {
 
             $.ajaxSetup({
@@ -1145,7 +1149,6 @@ var Master = {
         if (report == '') { report = $('#report').val(); }
         if (curpage != pag_link && pag_link != '') { curpage = pag_link; }
         if (th_sort == pag_link) { th_sort = ''; }
-        alert(form_data);
 
         $.ajaxSetup({
             headers: {
