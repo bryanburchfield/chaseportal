@@ -63,7 +63,7 @@ var Master = {
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
         $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
         $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
-        $('.query_dates_first .datetimepicker').on('change', this.query_dates_for_camps);
+        $('body').on('change', '.query_dates_first .datetimepicker', this.query_dates_for_camps);
         $('#uploader_camp_info').on('submit', this.uploader_details);
         $('#settingsForm').on('submit', this.update_uploader_info);
         $('#file_upload').on('submit', this.upload_file);
@@ -511,6 +511,38 @@ var Master = {
         });
     },
 
+    toggle_email_campaign:function(e,campaign_id){
+
+        var checked;
+        // var campaign_id = $(campaign_id).data('id');
+
+        if($(campaign_id).is(':checked')){
+            $(campaign_id).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(campaign_id).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/tools/email_drip/toggle_email_campaign',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:campaign_id
+
+            },
+            success:function(response){
+            }
+        });
+    },
+
     get_leadrule_filter_menu:function(){
         var filters = [];
         $('.lead_rule_filter_type option').each(function(){
@@ -878,7 +910,6 @@ var Master = {
                 },
 
                 success: function (response) {
-
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {
@@ -1114,6 +1145,7 @@ var Master = {
         if (report == '') { report = $('#report').val(); }
         if (curpage != pag_link && pag_link != '') { curpage = pag_link; }
         if (th_sort == pag_link) { th_sort = ''; }
+        alert(form_data);
 
         $.ajaxSetup({
             headers: {
