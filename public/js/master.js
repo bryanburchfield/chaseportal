@@ -973,9 +973,6 @@ var Master = {
                 },
 
                 success: function (response) {
-                    alert(response);
-                    alert(response.campaigns);
-                    alert('Length: ' + response.campaigns.length );
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {
@@ -1217,7 +1214,7 @@ var Master = {
         });
 
         $.ajax({
-            url: 'update_report',
+            url: '/dashboards/reports/update_report',
             type: 'POST',
             dataType: 'json',
             timeout:600000,
