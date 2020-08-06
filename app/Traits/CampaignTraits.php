@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 trait CampaignTraits
 {
@@ -12,6 +13,9 @@ trait CampaignTraits
 
     public function getAllCampaigns($fromDate = null, $toDate = null)
     {
+        Log::debug($fromDate);
+        Log::debug($toDate);
+
         $sql = '';
         $bind = [];
 
