@@ -2281,7 +2281,7 @@ var Master = {
         }
 
         $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
-            if(index>2){
+            if(index>1){
                 if(checked){
                     if(!$(this).hasClass('active_rep')){
                         $(this).hide();
