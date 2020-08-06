@@ -363,9 +363,6 @@ class ProductionReport
         }
 
         // Do calcs
-        $total['ManHours'] = number_format($total['ManHours'] / 60 / 60, 2);
-        $total['LoggedInTime'] = $this->secondsToHms($total['LoggedInTime']);
-
         if ($total['ManHours'] == 0) {
             $total['ContsPerHour'] = 0;
             $total['APH'] = 0;
@@ -373,6 +370,9 @@ class ProductionReport
             $total['ContsPerHour'] = round($total['Contacts'] / $total['ManHours'], 2);
             $total['APH'] = round($total['Sales'] / $total['ManHours'], 2);
         }
+
+        $total['ManHours'] = number_format($total['ManHours'] / 60 / 60, 2);
+        $total['LoggedInTime'] = $this->secondsToHms($total['LoggedInTime']);
 
         // Tack on the totals row
         $results[] = $total;
