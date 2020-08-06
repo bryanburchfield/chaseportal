@@ -953,10 +953,6 @@ var Master = {
         report = $('form.report_filter_form').attr('id')
             ;
 
-        alert('This method ran');
-        alert(todate +' '+ fromdate);
-
-
         if (todate != '' && fromdate != '') {
 
             $.ajaxSetup({
@@ -977,6 +973,9 @@ var Master = {
                 },
 
                 success: function (response) {
+                    alert(response);
+                    alert(response.campaigns);
+                    alert('Length: ' + response.campaigns.length );
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {
