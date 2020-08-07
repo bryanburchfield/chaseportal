@@ -44,19 +44,24 @@ class PlaybookFilter extends Model
     {
         $mathops_detail = self::mathopsDetail();
         $dateops_detail = self::dateopsDetail();
+        $stringops_detail = self::stringopsDetail();
 
         $mathops = [];
         $dateops = [];
+        $stringops = [];
         foreach ($mathops_detail as $key => $array) {
             $mathops[$key] = $array['description'];
         }
         foreach ($dateops_detail as $key => $array) {
             $dateops[$key] = $array['description'];
         }
+        foreach ($stringops_detail as $key => $array) {
+            $stringops[$key] = $array['description'];
+        }
 
         $return = [
             'integer' => $mathops,
-            'string' => $mathops,
+            'string' => $stringops,
             'date' => array_merge($mathops, $dateops),
             'text' => $mathops,
             'phone' => $mathops,
@@ -160,6 +165,32 @@ class PlaybookFilter extends Model
                 'description' => trans('tools.greater_than_days_from_now'),
                 'allow_nulls' => false,
                 'value_type' => 'integer',
+            ],
+        ];
+    }
+
+    private static function stringopsDetail()
+    {
+        return [
+            '=' => [
+                'description' => trans('tools.equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            '!=' => [
+                'description' => trans('tools.not_equals'),
+                'allow_nulls' => false,
+                'value_type' => 'string',
+            ],
+            'blank' => [
+                'description' => trans('tools.is_blank'),
+                'allow_nulls' => true,
+                'value_type' => null,
+            ],
+            'not_blank' => [
+                'description' => trans('tools.is_not_blank'),
+                'allow_nulls' => true,
+                'value_type' => null,
             ],
         ];
     }
