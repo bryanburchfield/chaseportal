@@ -4,7 +4,7 @@
 </div>
 
 <div class="form-group">
-    <label for="group_id">Group:</label>
+    <label for="group_id">Group (0 for global):</label>
     <input type="text" class="form-control group_id" name="group_id"/>
 </div>
 
