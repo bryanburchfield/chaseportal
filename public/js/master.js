@@ -1228,7 +1228,7 @@ var Master = {
             },
 
             success: function (response) {
-
+                console.log(response);
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
                 }
@@ -1278,6 +1278,8 @@ var Master = {
                         $('.pag').append(response.pag).show();
                         $('.pagination').find('li').removeClass('active');
                         $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
+                    }else{
+                        $('.pag').append('<br><br><br><h4 class="mt50">'+response.pag+'</h4>').show();
                     }
 
                     // show sort order and reset button if sorting is active
