@@ -1279,7 +1279,8 @@ var Master = {
                         $('.pagination').find('li').removeClass('active');
                         $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
                     }else{
-                        $('.pag').append('<br><br><br><h4 class="mt50">'+response.pag+'</h4>').show();
+                        $('.pag').append('<br><br><br>'+response.pag).show();
+                        $('.pag').first().find('.pag_dets').addClass('mt50');
                     }
 
                     // show sort order and reset button if sorting is active
