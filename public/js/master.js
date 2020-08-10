@@ -2314,17 +2314,21 @@ var Master = {
             checked=0;
         }
 
+        var active_cnt=0;
         $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
             if(index>1){
                 if(checked){
                     if(!$(this).hasClass('active_rep')){
                         $(this).hide();
+                        active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length -2;
                     }
                 }else{
+                    active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active.active_rep').length -2;
                     $(this).show();
                 }
             }
         });
+
     }
 }
 
