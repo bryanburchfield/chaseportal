@@ -2673,7 +2673,6 @@ var Master = {
             }
         });
 
-        $('.multiselect-selected-text').text('All Selected ('+active_cnt+')');
     }
 }
 
