@@ -134,11 +134,11 @@ return [
 	'processing_file_numb' => 'Procesando archivo #',
 	'reversing_file_numb' => 'Invertir archivo #',
 
-	'dnc_instruc1'	=> 'Sube un archivo al portal. Esto solo organiza el archivo sin insertar los números DNC en el servidor.',
+	'dnc_instruc1'	=> 'Sube un archivo al portal. Esto solo organiza el archivo.',
 	'dnc_instruc2'	=> 'Revise el contenido para asegurarse de que tenga la cantidad de registros que esperaba y vea los errores.',
 	'dnc_instruc3'	=> 'En este punto, eliminará el archivo (para poder corregirlo y volver a cargarlo) o Procesar el archivo.',
-	'dnc_instruc4'	=> 'El procesamiento inserta los registros DNC en el servidor. Esto se ejecutará en segundo plano y puede tardar un tiempo en completarse.',
-	'dnc_instruc5'	=> 'Una vez procesado el archivo, aún puede optar por revertirlo, lo que eliminará los registros DNC del servidor. Esto también se ejecuta en segundo plano y puede llevar algo de tiempo.',
+	'dnc_instruc4'	=> 'El procesamiento inserta o elimina los registros DNC en el servidor. Esto se ejecutará en segundo plano y puede tardar un tiempo en completarse.',
+	'dnc_instruc5'	=> 'Una vez procesado el archivo, aún puede optar por revertirlo. Esto también se ejecuta en segundo plano y puede llevar algo de tiempo.',
 
 	'dnc_upload1'	=> 'El archivo debe estar en formato CSV, XLS o XLSX.',
 	'dnc_upload2'	=> "Si el archivo tiene una fila de encabezado, debe haber una columna 'Teléfono'.",
