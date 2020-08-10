@@ -34,17 +34,15 @@
 									    {{__('tools.upload_a_file')}} <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
 									</label>
 
-									<p class="filename">{{__('tools.no_file')}}</p>
+									<p class="filename mb20">{{__('tools.no_file')}}</p>
 
-									<div>
-										<label><b>{{__('tools.action')}}</b></label><br>
-										<input type="radio" name="action" value="add">
-										<label for="add">{{ __('tools.add') }}</label><br>
-										<input type="radio" name="action" value="remove">
-										<label for="remove">{{ __('tools.remove') }}</label><br>
+									<div class="cb mb20 mt30">
+										<h4 class="mb10 green-text fw600">{{__('tools.action')}}</h4>
+										<label class="radio-inline"><input type="radio" name="action" value="add">{{ __('tools.add') }}</label>
+										<label class="radio-inline"><input type="radio" name="action" value="remove">{{ __('tools.remove') }}</label>
 									</div>
 									
-									<div class="checkbox cb">
+									<div class="checkbox cb mb20">
 										<label><input type="checkbox" name="has_headers"><b>{{__('tools.has_header')}}</b></label>
 									</div>
 
