@@ -36,6 +36,14 @@
 
 									<p class="filename">{{__('tools.no_file')}}</p>
 
+									<div>
+										<label><b>{{__('tools.action')}}</b></label><br>
+										<input type="radio" name="action" value="add">
+										<label for="add">{{ __('tools.add') }}</label><br>
+										<input type="radio" name="action" value="remove">
+										<label for="remove">{{ __('tools.remove') }}</label><br>
+									</div>
+									
 									<div class="checkbox cb">
 										<label><input type="checkbox" name="has_headers"><b>{{__('tools.has_header')}}</b></label>
 									</div>

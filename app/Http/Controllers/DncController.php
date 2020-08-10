@@ -29,11 +29,11 @@ class DncController extends Controller
      */
     public function index()
     {
-        $jsfile[]='tools.js';
+        $jsfile[] = 'tools.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
-            'jsfile'=> $jsfile,
+            'jsfile' => $jsfile,
             'page' => $page,
             'files' => $this->paginateCollection($this->getFiles()),
         ];
@@ -54,6 +54,7 @@ class DncController extends Controller
         $files = DncFile::select(
             'id',
             'filename',
+            'action',
             'description',
             'uploaded_at',
             'process_started_at',
@@ -125,12 +126,12 @@ class DncController extends Controller
      * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
      */
     public function uploadIndex()
-    {   
-        $jsfile[]='tools.js';
+    {
+        $jsfile[] = 'tools.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
-            'jsfile'=>$jsfile,
+            'jsfile' => $jsfile,
             'page' => $page,
         ];
 
@@ -166,6 +167,7 @@ class DncController extends Controller
             'group_id' => Auth::user()->group_id,
             'user_id' => Auth::user()->id,
             'filename' => $request->file('dncfile')->getClientOriginalName(),
+            'action' => $request->action,
             'description' => $request->description,
             'uploaded_at' => now(),
             'processed_at' => null,

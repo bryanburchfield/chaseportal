@@ -30,9 +30,15 @@ class DncService
      */
     public function processFile(DncFile $dnc_file)
     {
-        $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
-            $this->insertDnc($dnc_file_detail);
-        });
+        if ($dnc_file->action == 'add') {
+            $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
+                $this->insertDnc($dnc_file_detail);
+            });
+        } else {
+            $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
+                $this->deleteDnc($dnc_file_detail);
+            });
+        }
 
         $dnc_file->processed_at = now();
         $dnc_file->save();
@@ -46,9 +52,15 @@ class DncService
      */
     public function reverseFile(DncFile $dnc_file)
     {
-        $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
-            $this->reverseDnc($dnc_file_detail);
-        });
+        if ($dnc_file->action == 'add') {
+            $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
+                $this->deleteDnc($dnc_file_detail);
+            });
+        } else {
+            $dnc_file->dncFileDetails->each(function ($dnc_file_detail) {
+                $this->insertDnc($dnc_file_detail);
+            });
+        }
 
         $dnc_file->reversed_at = now();
         $dnc_file->save();
@@ -62,7 +74,7 @@ class DncService
      */
     private function insertDnc($dnc_file_detail)
     {
-        // No need to insert if it failed on load
+        // No need to insert if it failed on load, or reverse if it failed insert
         if ($dnc_file_detail->succeeded === 0) {
             return;
         }
@@ -76,10 +88,10 @@ class DncService
      * @param mixed $dnc_file_detail 
      * @return void 
      */
-    private function reverseDnc($dnc_file_detail)
+    private function deleteDnc($dnc_file_detail)
     {
-        // No need to reverse if it failed original insert
-        if ($dnc_file_detail->succeeded !== 1) {
+        // No need to delete if it failed on load, or reverse if it failed delete
+        if ($dnc_file_detail->succeeded === 0) {
             return;
         }
 
