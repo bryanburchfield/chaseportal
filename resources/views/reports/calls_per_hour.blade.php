@@ -46,7 +46,12 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('reps', __('reports.rep')) !!}
-						{!! Form::select("reps[]", $filters['reps'], null, ["class" => "form-control multiselect", 'id'=> 'rep_select','multiple'=>true]) !!}
+						<select class="form-control multiselect" id="rep_select" multiple name="reps[]">
+							@foreach($filters['reps'] as $rep)
+								<option class="{{ $rep['isActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['isActive']}}">{{$rep['RepName']}}</option>
+							@endforeach
+						</select>
+						<label class="checkbox toggle_active_reps"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 				</div>
 

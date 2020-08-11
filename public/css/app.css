@@ -3074,6 +3074,10 @@ span.numb_notifications {
   margin-left: 1%;
 }
 
+label.checkbox.toggle_active_reps {
+  margin-left: 20px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

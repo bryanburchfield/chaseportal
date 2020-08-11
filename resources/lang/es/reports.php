@@ -47,6 +47,7 @@ return [
      'rep'                => 'Agente',
      'reps'               => 'Agentes',
      'run_report'         => 'Generar Informe',
+     'show_active_reps'   => 'Mostrar solo representantes activos',
      'skill'              => 'Habilidad',
      'start'              => 'Comienzo',
      'subcampaign'        => 'Sub-campaña',
