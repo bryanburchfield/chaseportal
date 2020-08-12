@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
+use App\Services\Broadcaster;
 use App\Services\CallerIdService;
 use App\Services\DemoClientService;
 use App\Services\EmailDripService;
