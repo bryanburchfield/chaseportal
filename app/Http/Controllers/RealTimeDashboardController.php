@@ -15,11 +15,11 @@ class RealTimeDashboardController extends Controller
     {
         // set channel name
         // this will execute query{$Channel}()   eg. queryHome()
-        $channel = App::environment() . '-home';
+        $channel = App::environment() . '-agent';
 
         $data = [
             'channel' => $channel,
-            'data' => $this->queryHome(),
+            'data' => $this->queryAgent(),
         ];
 
         // create db rec so cron will pick it up
@@ -30,10 +30,10 @@ class RealTimeDashboardController extends Controller
             StartBroadcast::dispatch($channel, true);
         }
 
-        return view('rt_agent_dash')->with($data);
+        return view('test.rt_agent_dash')->with($data);
     }
 
-    public function queryHome()
+    public function queryAgent()
     {
         $sql = "SELECT 
             Login,
