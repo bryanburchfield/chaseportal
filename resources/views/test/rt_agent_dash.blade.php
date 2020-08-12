@@ -68,38 +68,53 @@
         <div class="flex-center position-ref full-height">
             <div class="content">
                     <div class="col-sm-offset-10 col-sm-2 mb20"><div id="txt"></div></div>
-                <table border="1">
-                    <tr>
-                        <th>Login</th>
-                        <th>Campaign</th>
-                        <th>Subcampaign</th>
-                        <th>Skill</th>
-                        <th>TimeInStatus</th>
-                        <th>BreakCode</th>
-                        <th>State</th>
-                        <th>Status</th>
-                        </th>
-                    </tr>
-                    @foreach ($data['results'] as $row)
-                        <tr>
-                            <td>{{ $row['Login']}}</td>
-                            <td>{{ $row['Campaign']}}</td>
-                            <td>{{ $row['Subcampaign']}}</td>
-                            <td>{{ $row['Skill']}}</td>
-                            <td>{{ $row['TimeInStatus']}}</td>
-                            <td>{{ $row['BreakCode']}}</td>
-                            <td>{{ $row['State']}}</td>
-                            <td>{{ $row['Status']}}</td>
-                        </tr>
-                        @endforeach
-                </table>
+                <div class="responsive-table">
+                        <table border="1" class="table realtime_table">
+                            <thead>
+                                <tr>
+                                    <th>Login</th>
+                                    <th>Campaign</th>
+                                    <th>Subcampaign</th>
+                                    <th>Skill</th>
+                                    <th>TimeInStatus</th>
+                                    <th>BreakCode</th>
+                                    <th>State</th>
+                                    <th>Status</th>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($data['results'] as $row)
+                                    <tr>
+                                        <td>{{ $row['Login']}}</td>
+                                        <td>{{ $row['Campaign']}}</td>
+                                        <td>{{ $row['Subcampaign']}}</td>
+                                        <td>{{ $row['Skill']}}</td>
+                                        <td>{{ $row['TimeInStatus']}}</td>
+                                        <td>{{ $row['BreakCode']}}</td>
+                                        <td>{{ $row['State']}}</td>
+                                        <td>{{ $row['Status']}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                </div>
             </div>
         </div>
         <script src="{{asset('js/app.js')}}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
         <script>
             Echo.channel('{{ $channel }}')
                 .listen('NewMessage', (e) => {
                     console.log(e.message);
+                    $('.realtime_table tbody').empty();
+                    var trs;
+                    for(var i=0;i<e.message.results.length;i++){
+                        trs+='<tr><td>'+e.message.results[i].Login+'</td><td>'+e.message.results[i].Campaign+'</td><td>'+e.message.results[i].Subcampaign+'</td><td>'+e.message.results[i].Skill+'</td><td>'+e.message.results[i].TimeInStatus+'</td><td>'+e.message.results[i].BreakCode+'</td><td>'+e.message.results[i].State+'</td><td>'+e.message.results[i].Status+'</td>';
+                    }
+
+                    $('.realtime_table tbody').append(trs);
                 })
         </script>
     </body>
