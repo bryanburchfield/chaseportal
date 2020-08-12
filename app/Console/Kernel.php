@@ -31,6 +31,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // Run broadcasts
+        $schedule->call(function () {
+            Broadcaster::run();
+        })
+            ->everyMinute();
+
         // Run KPIs
         $schedule->call(function () {
             foreach (KpiController::cronDue() as $rec) {
