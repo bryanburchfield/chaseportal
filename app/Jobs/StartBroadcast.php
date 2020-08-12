@@ -24,7 +24,7 @@ class StartBroadcast implements ShouldQueue
         $this->channel = $channel;
 
         if ($delay) {
-            sleep(1);
+            sleep(3);
         }
     }
 

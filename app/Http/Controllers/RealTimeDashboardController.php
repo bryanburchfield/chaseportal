@@ -6,6 +6,7 @@ use App\Models\Broadcast;
 use App\Jobs\StartBroadcast;
 use App\Traits\SqlServerTraits;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class RealTimeDashboardController extends Controller
 {
@@ -14,12 +15,12 @@ class RealTimeDashboardController extends Controller
     public function index()
     {
         // set channel name
-        // this will execute query{$Channel}()   eg. queryHome()
-        $channel = App::environment() . '-agent';
+        // 
+        $channel = App::environment() . '.agent.' . Auth::user()->group_id . '.' . Auth::user()->db;
 
         $data = [
             'channel' => $channel,
-            'data' => $this->queryAgent(),
+            'data' => $this->runqueryAgent(Auth::user()->group_id, Auth::user()->db),
         ];
 
         // create db rec so cron will pick it up
@@ -33,7 +34,18 @@ class RealTimeDashboardController extends Controller
         return view('test.rt_agent_dash')->with($data);
     }
 
-    public function queryAgent()
+    public function __call($function, $args)
+    {
+        $method = 'run' . $function;
+
+        if (!method_exists($this, "{$method}")) {
+            abort(404);
+        }
+
+        return $this->$method($args[0], $args[1]);
+    }
+
+    public function runqueryAgent($group_id, $db)
     {
         $sql = "SELECT 
             Login,
@@ -44,16 +56,17 @@ class RealTimeDashboardController extends Controller
             BreakCode,
             RTS.Caption as State,
             RTZ.Caption as Status
-            FROM RealtimeStatistics_Agents RTA WITH (SNAPSHOT)
-            JOIN RealtimeStatistics_Agents_State RTS ON RTS.State = RTA.State
-            JOIN RealtimeStatistics_Agents_Status RTZ ON RTZ.Status = RTA.Status
-            WHERE RTA.GroupId = :groupid";
+            FROM [$db].[dbo].[RealtimeStatistics_Agents] RTA WITH (SNAPSHOT)
+            JOIN [$db].[dbo].[RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
+            JOIN [$db].[dbo].[RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
+            WHERE RTA.GroupId = :groupid
+            ORDER BY Login";
 
         $bind = [
-            'groupid' => 777,
+            'groupid' => $group_id,
         ];
 
-        $results = $this->runSql($sql, $bind, 'PowerV2_Reporting_Dialer-07');
+        $results = $this->runSql($sql, $bind, $db);
 
         foreach ($results as &$result) {
             $result['TimeInStatus'] = gmdate("H:i:s", $result['SecondsInStatus']);

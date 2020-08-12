@@ -46,7 +46,9 @@ class Broadcaster
 
         $thisMinute = $this->getMinute();
 
-        $queryMethod = 'query' . Str::title(substr($channel, strpos($channel, "-") + 1));
+        list($env, $queryMethod, $group_id, $db) = explode('.', $channel);
+
+        $queryMethod = 'query' . Str::title($queryMethod);
 
         $i = 0;
         while ($this->isOccupied($channel)) {
@@ -58,7 +60,7 @@ class Broadcaster
             }
 
             // get data
-            $data = $controller->$queryMethod();
+            $data = $controller->$queryMethod($group_id, $db);
 
             event(new NewMessage($channel, $data));
 
