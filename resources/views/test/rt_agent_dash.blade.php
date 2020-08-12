@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{csrf_token()}}" />
 
         <title>Laravel</title>
-
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
@@ -62,16 +62,22 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .timer{
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
             <div class="content">
-                    <div class="col-sm-offset-10 col-sm-2 mb20"><div id="txt"></div></div>
+                    <div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>
                 <div class="responsive-table">
-                        <table border="1" class="table realtime_table">
+                        <table border="1" class="table realtime_table table-striped table-hover table-bordered">
                             <thead>
-                                <tr>
+                                <tr class="success">
                                     <th>Login</th>
                                     <th>Campaign</th>
                                     <th>Subcampaign</th>
