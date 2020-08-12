@@ -67,7 +67,7 @@
     <body>
         <div class="flex-center position-ref full-height">
             <div class="content">
-
+                    <div class="col-sm-offset-10 col-sm-2 mb20"><div id="txt"></div></div>
                 <table border="1">
                     <tr>
                         <th>Login</th>

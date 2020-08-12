@@ -25160,7 +25160,30 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); /// clock
+
+
+function startTime() {
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+  var t = setTimeout(startTime, 500);
+}
+
+function checkTime(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+
+  ;
+  return i;
+}
+
+startTime();
 
 /***/ }),
 
@@ -25231,9 +25254,9 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\code\chasedata\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! D:\code\chasedata\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! D:\code\chasedata\resources\sass\darktheme_app.scss */"./resources/sass/darktheme_app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\portal\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\xampp\htdocs\portal\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\portal\resources\sass\darktheme_app.scss */"./resources/sass/darktheme_app.scss");
 
 
 /***/ })
