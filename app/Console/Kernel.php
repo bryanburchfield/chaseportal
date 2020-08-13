@@ -32,11 +32,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // // Run broadcasts
-        // $schedule->call(function () {
-        //     Broadcaster::run();
-        // })
-        //     ->everyMinute();
+        // Run broadcasts
+        $schedule->call(function () {
+            Broadcaster::run();
+        })
+            ->everyMinute()
+            ->runInBackground();
 
         // Run KPIs
         $schedule->call(function () {

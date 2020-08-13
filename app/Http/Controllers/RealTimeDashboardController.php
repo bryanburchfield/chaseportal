@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Broadcast;
-use App\Jobs\StartBroadcast;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\App;
@@ -27,11 +26,6 @@ class RealTimeDashboardController extends Controller
 
         // create db rec so cron will pick it up
         $broadcast = Broadcast::firstOrCreate(['channel' => $channel]);
-
-        // if this is the first listener, start broadcasting the query - with a delay
-        if ($broadcast->wasRecentlyCreated) {
-            StartBroadcast::dispatch($channel, true)->onQueue($channel);
-        }
 
         return view('test.rt_agent_dash')->with($data);
     }

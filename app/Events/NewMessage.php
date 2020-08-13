@@ -35,7 +35,6 @@ class NewMessage implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        echo '==== NewMessage ' . $this->channel . "====\n";
         return new Channel($this->channel);
     }
 }

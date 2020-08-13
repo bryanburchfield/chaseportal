@@ -22,52 +22,32 @@ class Broadcaster
     public static function run()
     {
         $self = new self();
-        $self->checkForChannels();
+        $self->loopForMinute();
     }
 
-    public static function runChannel($channel)
-    {
-        $self = new self();
-        $self->startBroadcasting($channel);
-    }
-
-    public function checkForChannels()
-    {
-        $channels = Broadcast::all();
-
-        echo "==== Foreach loop ====\n";
-        foreach ($channels as $channel) {
-            echo "'==== Foreach found " . $channel->channel . " ====\n";
-
-            StartBroadcast::dispatch($channel->channel);
-        }
-    }
-
-    private function startBroadcasting($channel)
+    public function loopForMinute()
     {
         $controller = new RealTimeDashboardController();
 
         $thisMinute = $this->getMinute();
 
-        list($env, $queryMethod, $group_id, $db) = explode('.', $channel);
+        while ($thisMinute == $this->getMinute()) {
 
-        $queryMethod = 'query' . Str::title($queryMethod);
+            foreach (Broadcast::all() as $channel) {
+                list($env, $queryMethod, $group_id, $db) = explode('.', $channel->channel);
 
-        $i = 0;
-        while ($this->isOccupied($channel)) {
-            $i++;
+                $queryMethod = 'query' . Str::title($queryMethod);
 
-            // bail if minute changes
-            if ($thisMinute !== $this->getMinute()) {
-                echo "'==== REQUE " . $channel . " ====\n";
-                StartBroadcast::dispatch($channel)->onQueue($channel);
-                break;
+                if ($this->isOccupied($channel->channel)) {
+                    $data = $controller->$queryMethod($group_id, $db);
+                    event(new NewMessage($channel->channel, $data));
+                } else {
+                    // delete if older than 10 secs
+                    if (now()->diffInSeconds($channel->created_at) > 5) {
+                        $channel->delete();
+                    }
+                }
             }
-
-            // get data
-            $data = $controller->$queryMethod($group_id, $db);
-
-            event(new NewMessage($channel, $data));
 
             sleep(3);
         }
@@ -99,11 +79,6 @@ class Broadcaster
         }
 
         $occupied = isset($result['result']['occupied']) ? $result['result']['occupied'] : false;
-
-        // delete record if not occupied
-        if (!$occupied) {
-            Broadcast::where('channel', $channel)->delete();
-        }
 
         return $occupied;
     }
