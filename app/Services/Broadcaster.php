@@ -29,9 +29,9 @@ class Broadcaster
     {
         $controller = new RealTimeDashboardController();
 
-        $thisMinute = $this->getMinute();
+        $startMinute = $this->getMinute();
 
-        while ($thisMinute == $this->getMinute()) {
+        while ($startMinute == $this->getMinute()) {
 
             foreach (Broadcast::all() as $channel) {
                 list($env, $queryMethod, $group_id, $db) = explode('.', $channel->channel);
@@ -42,7 +42,7 @@ class Broadcaster
                     $data = $controller->$queryMethod($group_id, $db);
                     event(new NewMessage($channel->channel, $data));
                 } else {
-                    // delete if older than 10 secs
+                    // delete if older than 5 secs
                     if (now()->diffInSeconds($channel->created_at) > 5) {
                         $channel->delete();
                     }
