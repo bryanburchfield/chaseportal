@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Broadcast;
 use App\Jobs\StartBroadcast;
 use App\Traits\SqlServerTraits;
+use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class RealTimeDashboardController extends Controller
 {
     use SqlServerTraits;
+    use TimeTraits;
 
     public function index()
     {
@@ -28,7 +30,7 @@ class RealTimeDashboardController extends Controller
 
         // if this is the first listener, start broadcasting the query - with a delay
         if ($broadcast->wasRecentlyCreated) {
-            StartBroadcast::dispatch($channel, true);
+            StartBroadcast::dispatch($channel, true)->onQueue($channel);
         }
 
         return view('test.rt_agent_dash')->with($data);
@@ -69,7 +71,7 @@ class RealTimeDashboardController extends Controller
         $results = $this->runSql($sql, $bind, $db);
 
         foreach ($results as &$result) {
-            $result['TimeInStatus'] = gmdate("H:i:s", $result['SecondsInStatus']);
+            $result['TimeInStatus'] = $this->secondsToHms($result['SecondsInStatus']);
         }
 
         return [

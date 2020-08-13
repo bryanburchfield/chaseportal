@@ -24,7 +24,7 @@ class StartBroadcast implements ShouldQueue
         $this->channel = $channel;
 
         if ($delay) {
-            sleep(3);
+            sleep(5);
         }
     }
 
@@ -35,6 +35,7 @@ class StartBroadcast implements ShouldQueue
      */
     public function handle()
     {
+        echo '==== StartBroadcast ' . $this->channel . "====\n";
         Broadcaster::runChannel($this->channel);
     }
 }

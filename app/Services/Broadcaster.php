@@ -35,7 +35,10 @@ class Broadcaster
     {
         $channels = Broadcast::all();
 
+        echo "==== Foreach loop ====\n";
         foreach ($channels as $channel) {
+            echo "'==== Foreach found " . $channel->channel . " ====\n";
+
             StartBroadcast::dispatch($channel->channel);
         }
     }
@@ -56,6 +59,8 @@ class Broadcaster
 
             // bail if minute changes
             if ($thisMinute !== $this->getMinute()) {
+                echo "'==== REQUE " . $channel . " ====\n";
+                StartBroadcast::dispatch($channel)->onQueue($channel);
                 break;
             }
 
