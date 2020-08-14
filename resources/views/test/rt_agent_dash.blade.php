@@ -172,7 +172,7 @@
             Echo.channel('{{ $channel }}')
                 .listen('NewMessage', (e) => {
                     console.log(typeof(e.message));
-
+                    console.log(e.message);
                     Object.size = function(obj) {
                         var size = 0, key;
                         for (key in obj) {
