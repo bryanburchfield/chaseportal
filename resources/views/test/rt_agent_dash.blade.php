@@ -1,5 +1,5 @@
 @php
-    dd($data);
+    // dd($data);
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -74,15 +74,91 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>
-                    <div class="responsive-table">
-                            
+                <div class="col-sm-2 rep_status talking">
+                    <h2>Talking</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['talking'])}}</div>
+                        <p>Agents</p>
                     </div>
+
+                    @foreach($data['talking'] as $talking)
+                        <p class="rep_name mb0">{{$talking['Login']}}</p>
+                        <p class="campaign">{{$talking['Campaign']}}</p>
+                    @endforeach
+                </div>
+
+                <div class="col-sm-2 rep_status wrapping">
+                    <h2>Wrapping Up</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['wrapping'])}}</div>
+                        <p>Agents</p>
+                    </div>
+
+                    @foreach($data['wrapping'] as $wrapping)
+                        <p class="rep_name mb0">{{$wrapping['Login']}}</p>
+                        <p class="campaign">{{$wrapping['Campaign']}}</p>
+                    @endforeach
+                </div>
+
+                <div class="col-sm-2 rep_status waiting">
+                    <h2>Waiting</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['waiting'])}}</div>
+                        <p>Agents</p>
+                    </div>
+
+                    @foreach($data['waiting'] as $waiting)
+                        <p class="rep_name mb0">{{$waiting['Login']}}</p>
+                        <p class="campaign">{{$waiting['Campaign']}}</p>
+                    @endforeach
+                </div>
+
+                <div class="col-sm-2 rep_status paused">
+                    <h2>Paused</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['paused'])}}</div>
+                        <p>Agents</p>
+                    </div>
+
+                    @foreach($data['paused'] as $paused)
+                        <p class="rep_name mb0">{{$paused['Login']}}</p>
+                        <p class="campaign">{{$paused['Campaign']}}</p>
+                    @endforeach
+                </div>
+
+                <div class="col-sm-2 rep_status manual">
+                    <h2>Manual Calls</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['manual'])}}</div>
+                        <p>Agents</p>
+                    </div>
+
+                    @foreach($data['manual'] as $manual)
+                        <p class="rep_name mb0">{{$manual['Login']}}</p>
+                        <p class="campaign">{{$manual['Campaign']}}</p>
+                    @endforeach
+                </div>
+
+                <div class="col-sm-2 rep_status break">
+                    <h2>Break</h2>
+                    <div class="num_agents">
+                        <div class="inner">{{count($data['break'])}}</div>
+                        <p>Agents</p>
+                    </div>
+
+                    @foreach($data['break'] as $break)
+                        <p class="rep_name mb0">{{$break['Login']}}</p>
+                        <p class="campaign">{{$break['Campaign']}}</p>
+                    @endforeach
                 </div>
             </div>
+        </div>
+
+        <div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>
+        <div class="responsive-table">
+
         </div>
         <script src="{{asset('js/app.js')}}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
@@ -95,42 +171,79 @@
 
             Echo.channel('{{ $channel }}')
                 .listen('NewMessage', (e) => {
+                    console.log(typeof(e.message));
 
-                    $('.realtime_table tbody').empty();
-                    var start_time=0;
-                    console.log(e.message); // 506
-
-                    function start_timer(start_time, row){
-                        const zeroPad = (num, places) => String(num).padStart(places, '0');
-                        start_time = parseInt(start_time);
-
-                        var x = setInterval(function () {
-
-                            start_time = start_time + 1;
-                            var hours = Math.floor(start_time / 3600);
-                            var minutes = Math.floor((start_time / 60) % 60);
-                            var seconds = start_time % 60;
-
-                            $('.realtime_table tbody tr:eq('+row+')').find('td.instatus_timer').empty();
-                            $('.realtime_table tbody tr:eq('+row+')').find('td.instatus_timer').text(zeroPad(hours, 2) + ":" + zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2));
-                        }, 1000);
-                    }
-
-                    trs='';
-
-                    for(var i=0;i<e.message.results.length;i++){
-
-                        if(!ran){
-                            start_timer(e.message.results[i].SecondsInStatus, i);
+                    Object.size = function(obj) {
+                        var size = 0, key;
+                        for (key in obj) {
+                            if (obj.hasOwnProperty(key)) size++;
                         }
+                        return size;
+                    };
 
-                        trs+='<tr><td>'+e.message.results[i].Login+'</td><td>'+e.message.results[i].Campaign+'</td><td>'+e.message.results[i].Subcampaign+'</td><td>'+e.message.results[i].Skill+'</td><td class="instatus_timer">'+e.message.results[i].TimeInStatus+'</td><td>'+e.message.results[i].BreakCode+'</td><td>'+e.message.results[i].State+'</td><td>'+e.message.results[i].Status+'</td></tr>';
+                    var obj_length = Object.size(e.message);
+
+                    // const keys = Object.keys(e.message)
+                    // for (const key of keys) {
+                    //     console.log(key)
+                    // }
+
+                    var result_obj = e.message;
+                    var result_obj_length = Object.keys(result_obj).length;
+                    const result_obj_keys = Object.getOwnPropertyNames(result_obj);
+                    let test = [];
+                    test.push(Object.values(result_obj));
+                    console.log(result_obj_keys);
+                    for (var i = 0; i < test[0].length; i++) {
+                        console.log(test[0][i]);
                     }
 
-                    ran = true;
 
-                    $('.realtime_table tbody').append(trs);
-                })
+                    // $('.realtime_table tbody').empty();
+                    // var start_time=0;
+                    // console.log(e.message); // 506
+
+                    // const status_types = Object.keys(e.message);
+                    // console.log(status_types);
+
+                    // function start_timer(start_time, row){
+                    //     const zeroPad = (num, places) => String(num).padStart(places, '0');
+                    //     start_time = parseInt(start_time);
+
+                    //     var x = setInterval(function () {
+
+                    //         start_time = start_time + 1;
+                    //         var hours = Math.floor(start_time / 3600);
+                    //         var minutes = Math.floor((start_time / 60) % 60);
+                    //         var seconds = start_time % 60;
+
+                    //         $('.realtime_table tbody tr:eq('+row+')').find('td.instatus_timer').empty();
+                    //         $('.realtime_table tbody tr:eq('+row+')').find('td.instatus_timer').text(zeroPad(hours, 2) + ":" + zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2));
+                    //     }, 1000);
+                    // }
+
+                    // trs='';
+
+                    // for(var i=0;i<e.message.results.length;i++){
+
+                    //     if(!ran){
+                    //         start_timer(e.message.results[i].SecondsInStatus, i);
+                    //     }
+
+                    //     trs+='<tr><td>'+e.message.results[i].Login+'</td><td>'+e.message.results[i].Campaign+'</td><td>'+e.message.results[i].Subcampaign+'</td><td>'+e.message.results[i].Skill+'</td><td class="instatus_timer">'+e.message.results[i].TimeInStatus+'</td><td>'+e.message.results[i].BreakCode+'</td><td>'+e.message.results[i].State+'</td><td>'+e.message.results[i].Status+'</td></tr>';
+                    // }
+
+                    // ran = true;
+
+                    // $('.realtime_table tbody').append(trs);
+                });
+
+
+                // "talking" => array:1 [▶]
+                // "wrapping" => []
+                // "waiting" => []
+                // "manual" => []
+                // "paused"
         </script>
     </body>
 </html>
