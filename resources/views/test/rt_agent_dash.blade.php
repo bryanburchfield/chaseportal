@@ -83,10 +83,10 @@
                         <p>Agents</p>
                     </div>
 
-                    @foreach($data['talking'] as $talking)
+                   {{--  @foreach($data['talking'] as $talking)
                         <p class="rep_name mb0">{{$talking['Login']}}</p>
                         <p class="campaign">{{$talking['Campaign']}}</p>
-                    @endforeach
+                    @endforeach --}}
                 </div>
 
                 <div class="col-sm-2 rep_status wrapping">
@@ -96,10 +96,10 @@
                         <p>Agents</p>
                     </div>
 
-                    @foreach($data['wrapping'] as $wrapping)
+                    {{-- @foreach($data['wrapping'] as $wrapping)
                         <p class="rep_name mb0">{{$wrapping['Login']}}</p>
                         <p class="campaign">{{$wrapping['Campaign']}}</p>
-                    @endforeach
+                    @endforeach --}}
                 </div>
 
                 <div class="col-sm-2 rep_status waiting">
@@ -172,30 +172,18 @@
             Echo.channel('{{ $channel }}')
                 .listen('NewMessage', (e) => {
                     console.log(typeof(e.message));
-                    console.log(e.message);
-                    Object.size = function(obj) {
-                        var size = 0, key;
-                        for (key in obj) {
-                            if (obj.hasOwnProperty(key)) size++;
+
+                    var result = Object.entries(e.message);
+                    console.log(result);
+
+                    for (var i=0; i < result.length; i++) {
+                        var column = result[i][0];
+                        var agents='';
+                        for(j=0;j<result[i][1].length;j++){
+                            agents += '<p class="rep_name mb0">'+result[i][1][j]['Login']+'</p><p class="campaign">'+result[i][1][j]['Campaign']+'</p>';
                         }
-                        return size;
-                    };
-
-                    var obj_length = Object.size(e.message);
-
-                    // const keys = Object.keys(e.message)
-                    // for (const key of keys) {
-                    //     console.log(key)
-                    // }
-
-                    var result_obj = e.message;
-                    var result_obj_length = Object.keys(result_obj).length;
-                    const result_obj_keys = Object.getOwnPropertyNames(result_obj);
-                    let test = [];
-                    test.push(Object.values(result_obj));
-                    console.log(result_obj_keys);
-                    for (var i = 0; i < test[0].length; i++) {
-                        console.log(test[0][i]);
+                        console.log('AGENTS: '+agents);
+                        $('.rep_status.'+column).append(agents);
                     }
 
 
