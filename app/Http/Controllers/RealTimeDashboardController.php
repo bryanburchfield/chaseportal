@@ -72,6 +72,7 @@ class RealTimeDashboardController extends Controller
         $waiting = [];
         $manual = [];
         $paused = [];
+        $break = [];
 
         foreach ($results as $result) {
             $result['TimeInStatus'] = $this->secondsToHms($result['SecondsInStatus']);
@@ -89,7 +90,11 @@ class RealTimeDashboardController extends Controller
                     $waiting[] = $result;
                     break;
                 case 1:
-                    $paused[] = $result;
+                    if (empty($result['BreakCode'])) {
+                        $paused[] = $result;
+                    } else {
+                        $break[] = $result;
+                    }
                     break;
                 case 2:
                     $wrapping[] = $result;
@@ -112,6 +117,7 @@ class RealTimeDashboardController extends Controller
             'waiting' => $waiting,
             'manual' => $manual,
             'paused' => $paused,
+            'break' => $break,
         ];
     }
 }
