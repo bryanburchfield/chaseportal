@@ -1,40 +1,18 @@
 <script src="{{asset('js/app.js')}}"></script>
 <script>
+
+    $('.preloader').hide();
+
     var ran=false,
         trs,
         timers=[],
         time = '12:05:14'
     ;
-
+    
     Echo.channel('{{ $data['channel'] }}')
         .listen('NewMessage', (e) => {
-            console.log(typeof(e.message));
-            console.log(e.message);
-            Object.size = function(obj) {
-                var size = 0, key;
-                for (key in obj) {
-                    if (obj.hasOwnProperty(key)) size++;
-                }
-                return size;
-            };
-
-            var obj_length = Object.size(e.message);
-
-            // const keys = Object.keys(e.message)
-            // for (const key of keys) {
-            //     console.log(key)
-            // }
-
-            var result_obj = e.message;
-            var result_obj_length = Object.keys(result_obj).length;
-            const result_obj_keys = Object.getOwnPropertyNames(result_obj);
-            let test = [];
-            test.push(Object.values(result_obj));
-            console.log(result_obj_keys);
-            for (var i = 0; i < test[0].length; i++) {
-                console.log(test[0][i]);
-            }
-
+            var result = Object.entries(e.message);
+            RealTime.init(result);
 
             // $('.realtime_table tbody').empty();
             // var start_time=0;

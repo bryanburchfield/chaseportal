@@ -69,12 +69,6 @@
     <script src="/js/color-hash.js"></script>
     <script src="/js/campaign_search.js"></script>
 
-    @isset($includescriptfile)
-        @foreach($includescriptfile as $script)
-            @include($script)
-        @endforeach
-    @endisset
-
     @isset($summernote)
         <script src="{{ asset('/js/summernote.min.js') }}"></script>
     @endisset
@@ -82,6 +76,12 @@
     @isset($jsfile)
         @foreach($jsfile as $js)
             <script src="/js/{{ $js }}" type="text/javascript"></script>
+        @endforeach
+    @endisset
+
+    @isset($includescriptfile)
+        @foreach($includescriptfile as $script)
+            @include($script)
         @endforeach
     @endisset
     
