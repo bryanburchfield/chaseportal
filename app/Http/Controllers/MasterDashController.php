@@ -13,7 +13,9 @@ use Illuminate\Support\Carbon;
 class MasterDashController extends Controller
 {
     public $currentDash;
+    public $data;
     public $cssfile = [];
+    public $includescriptfile = [];
 
     use DashTraits;
 
@@ -48,7 +50,9 @@ class MasterDashController extends Controller
             'currentDash' => $this->currentDash,
             'jsfile' => $jsfile,
             'cssfile' => $this->cssfile,
+            'includescriptfile' => $this->includescriptfile,
             'page' => $page,
+            'data' => $this->data,
             'dashbody' => $dashbody,
             'has_multiple_dbs' => Auth::user()->isMultiDb(),
             'db_list' => $db_list,
@@ -152,6 +156,20 @@ class MasterDashController extends Controller
         $this->setDashboard($request);
 
         $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
+
+        return $this->index($request);
+    }
+
+    public function realtimeAgentDashboard(Request $request)
+    {
+        $request->merge(['dashboard' => 'realtimeagentdash']);
+        $this->setDashboard($request);
+
+        $controller = new RealTimeDashboardController();
+
+        $this->data = $controller->index();
+
+        $this->includescriptfile[] = 'shared.realtimeagentdashscript';
 
         return $this->index($request);
     }

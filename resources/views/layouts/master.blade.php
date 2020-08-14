@@ -45,6 +45,13 @@
     <input type="hidden" class="theme" value="{{(Auth::check()) ? Auth::user()->theme : ''}}">
 
     @yield('content')
+
+    @isset($includescriptfile)
+        @foreach($includescriptfile as $script)
+            @include($script)
+        @endforeach
+    @endisset
+
     <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>

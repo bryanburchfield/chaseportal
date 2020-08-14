@@ -27,7 +27,7 @@ class RealTimeDashboardController extends Controller
         // create db rec so cron will pick it up
         $broadcast = Broadcast::firstOrCreate(['channel' => $channel]);
 
-        return view('test.rt_agent_dash')->with($data);
+        return $data;
     }
 
     public function __call($function, $args)
