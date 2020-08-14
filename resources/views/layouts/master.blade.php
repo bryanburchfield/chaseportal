@@ -68,26 +68,26 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
     <script src="/js/campaign_search.js"></script>
+    
+    @isset($summernote)
+    <script src="{{ asset('/js/summernote.min.js') }}"></script>
+    @endisset
+    
+    @isset($jsfile)
+    @foreach($jsfile as $js)
+    <script src="/js/{{ $js }}" type="text/javascript"></script>
+    @endforeach
+    @endisset
+    
+    <script src="/js/master.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/nav.js"></script>
 
     @isset($includescriptfile)
         @foreach($includescriptfile as $script)
             @include($script)
         @endforeach
     @endisset
-
-    @isset($summernote)
-        <script src="{{ asset('/js/summernote.min.js') }}"></script>
-    @endisset
-
-    @isset($jsfile)
-        @foreach($jsfile as $js)
-            <script src="/js/{{ $js }}" type="text/javascript"></script>
-        @endforeach
-    @endisset
-    
-    <script src="/js/master.js"></script>
-    <script src="/js/admin.js"></script>
-    <script src="/js/nav.js"></script>
     
     @isset($page)
         @if($page['type'] !='dash')
