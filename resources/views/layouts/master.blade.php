@@ -46,12 +46,6 @@
 
     @yield('content')
 
-    @isset($includescriptfile)
-        @foreach($includescriptfile as $script)
-            @include($script)
-        @endforeach
-    @endisset
-
     <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
@@ -74,6 +68,13 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
     <script src="/js/color-hash.js"></script>
     <script src="/js/campaign_search.js"></script>
+
+    @isset($includescriptfile)
+        @foreach($includescriptfile as $script)
+            @include($script)
+        @endforeach
+    @endisset
+
     @isset($summernote)
         <script src="{{ asset('/js/summernote.min.js') }}"></script>
     @endisset
