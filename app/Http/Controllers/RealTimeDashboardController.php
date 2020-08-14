@@ -44,19 +44,21 @@ class RealTimeDashboardController extends Controller
     public function runqueryAgent($group_id, $db)
     {
         $sql = "SELECT 
-            Login,
-            Campaign,
-            Subcampaign,
-            Skill,
-            SecondsInStatus,
-            BreakCode,
+            RTA.Login,
+            RTA.Campaign,
+            RTA.Subcampaign,
+            RTA.Skill,
+            RTA.SecondsInStatus,
+            RTA.BreakCode,
+            RTA.State as StateCode,
+            RTA.Status as StatusCode,
             RTS.Caption as State,
             RTZ.Caption as Status
             FROM [$db].[dbo].[RealtimeStatistics_Agents] RTA WITH (SNAPSHOT)
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
             WHERE RTA.GroupId = :groupid
-            ORDER BY Login";
+            ORDER BY RTA.Login";
 
         $bind = [
             'groupid' => $group_id,
@@ -64,13 +66,52 @@ class RealTimeDashboardController extends Controller
 
         $results = $this->runSql($sql, $bind, $db);
 
-        foreach ($results as &$result) {
+        // split into different tables
+        $talking = [];
+        $wrapping = [];
+        $waiting = [];
+        $manual = [];
+        $paused = [];
+
+        foreach ($results as $result) {
             $result['TimeInStatus'] = $this->secondsToHms($result['SecondsInStatus']);
+            $result['checksum'] = sprintf("%u", crc32(
+                $result['Campaign'] .
+                    $result['Subcampaign'] .
+                    $result['Skill'] .
+                    $result['BreakCode'] .
+                    $result['State'] .
+                    $result['Status']
+            ));
+
+            switch ($result['StatusCode']) {
+                case 0:
+                    $waiting[] = $result;
+                    break;
+                case 1:
+                    $paused[] = $result;
+                    break;
+                case 2:
+                    $wrapping[] = $result;
+                    break;
+                case 3:
+                    $talking[] = $result;
+                    break;
+                case 4:
+                    $manual[] = $result;
+                    break;
+                case 5:
+                    $talking[] = $result;
+                    break;
+            }
         }
 
         return [
-            'time' => now()->isoFormat('MMMM Do YYYY, h:mm:ss a'),
-            'results' => $results,
+            'talking' => $talking,
+            'wrapping' => $wrapping,
+            'waiting' => $waiting,
+            'manual' => $manual,
+            'paused' => $paused,
         ];
     }
 }

@@ -1,3 +1,6 @@
+@php
+    dd($data);
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -76,36 +79,7 @@
                 <div class="col-sm-12">
                     <div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>
                     <div class="responsive-table">
-                            <table border="1" class="table realtime_table table-striped table-hover table-bordered">
-                                <thead>
-                                    <tr class="success">
-                                        <th>Login</th>
-                                        <th>Campaign</th>
-                                        <th>Subcampaign</th>
-                                        <th>Skill</th>
-                                        <th>TimeInStatus</th>
-                                        <th>BreakCode</th>
-                                        <th>State</th>
-                                        <th>Status</th>
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($data['results'] as $row)
-                                        <tr>
-                                            <td>{{ $row['Login']}}</td>
-                                            <td>{{ $row['Campaign']}}</td>
-                                            <td>{{ $row['Subcampaign']}}</td>
-                                            <td>{{ $row['Skill']}}</td>
-                                            <td>{{ $row['TimeInStatus']}}</td>
-                                            <td>{{ $row['BreakCode']}}</td>
-                                            <td>{{ $row['State']}}</td>
-                                            <td>{{ $row['Status']}}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            
                     </div>
                 </div>
             </div>
