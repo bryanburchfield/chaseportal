@@ -11,6 +11,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
         Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
+        Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
 
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
