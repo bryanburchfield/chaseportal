@@ -131,7 +131,7 @@ class CallDetails
     private function executeReport($all = false)
     {
         // Add Route col for superadmins
-        if (Auth::user()->user_type == 'superadmin') {
+        if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
             $this->params['columns'] += ['Route' => 'Route'];
         }
 
@@ -325,7 +325,7 @@ class CallDetails
                 DR.Details,
                 AA.Details as AgentHangup";
 
-        if (Auth::user()->user_type == 'superadmin') {
+        if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
             $sql .= ",DR.Route";
         }
 
