@@ -1,64 +1,95 @@
 var RealTime = {
+	init: function (result) {
+		// if first iteration
+		if (!ran) {
+			status_arrays = new Array();
 
-	init:function(result){
-        console.log(result);
+			console.log('length ' + result.length);
 
-        var first_result=[];
-        let inmem_array = new Array();
+			// load each returned array
+			for (var i = 0; i < result.length; i++) {
+				let status_type = result[i][0];
+				status_arrays[status_type] = [];
+				this.load_array(status_type, status_arrays[status_type], result[i][1]);
+			}
+		} else {
+			// process each returned list
+			for (var i = 0; i < result.length; i++) {
+				let status_type = result[i][0];
+				this.process_array(status_type, status_arrays[status_type], result[i][1]);
+			}
+		}
 
-        // if first iteration
-        if(!ran){
-        	/// delete all li from on screen
-        	this.delete_agents();
-
-        	/// loop through returned array
-        	for (var i=0; i < result.length; i++) {
-        	    var column = result[i][0];
-        	    inmem_array[result[i][0]] = new Array();
-
-        	    for(j=0;j<result[i][1].length;j++){
-        	    	var agent='';
-        	    	// insert into in-mem arrays
-        	        inmem_array[result[i][0]].push({[result[i][1][j]['Login']] : result[i][1][j]['checksum']});
-        	        // append li to status column
-        	        agent+='<li class="list-group-item"><p data-checksum="'+result[i][1][j]['checksum']+'" class="rep_name mb0">'+result[i][1][j]['Login']+'</p><p class="campaign">'+result[i][1][j]['Campaign']+'</p></li>';
-
-        	        $('.rep_status.'+column).append(agent);
-        	    }
-        	}
-        }else{
-        	for (var i=0; i < result.length; i++) {
-        		if(!result[i][1].length){
-        			/// if in-mem array is not empty
-        			if(inmem_array[0][1].length){
-        				this.delete_agents();
-        				inmem_array[0][1]=[];
-        			}
-        		}else{
-        			// search in memory array for that login
-        			for(var i=0;i<inmem_array.length;i++){
-        				//seach returned array for that login
-        			}
-        		}
-        	}
-        }
-
-        console.log(inmem_array);
-
-        //// if not ran yet
-        // else{
-        // 	// console.log('VALUE: '+first_result[i]);
-        // 	if(result[i][1][j]['checksum'] == first_result[i]){
-
-        // 	}
-        // }
-
-        ran=true;
+		console.log(status_arrays);
+		ran = true;
 	},
 
-	delete_agents(){
-		$('.rep_status').each(function(){
-			$(this).find('ul.list-group').empty();
-		});
+	load_array(list_id, array_data, result_data) {
+		this.delete_all_rows(list_id);
+
+		for (var i = 0; i < result_data.length; i++) {
+			array_data.push({ 'Login': result_data[i]['Login'], 'checksum': result_data[i]['checksum'] });
+			this.add_row(list_id, result_data[i]);
+		}
+	},
+
+	delete_all_rows(list_id) {
+		console.log('delete all ' + list_id)
+		// TODO: delete all the <li>s from <ul> with id of list_id
+	},
+
+	add_row(list_id, data) {
+		console.log('add row ' + list_id)
+		// TODO: add <li> of data to <ul> with id of list_id
+	},
+
+	update_row(list_id, data) {
+		console.log('update row ' + list_id)
+		// TODO: update <li> where data.Login list_id
+	},
+
+	delete_row(list_id, login) {
+		console.log('delete row ' + list_id)
+		//  TODO: delete <li> of list_id where Login = login
+	},
+
+	process_array(list_id, array_data, result_data) {
+		// first, check that there's anything in the returned list
+		if (result_data.length == 0) {
+			if (array_data.length > 0) {
+				this.delete_all_rows(list_id);
+				array_data = [];
+			}
+		} else {
+			// loop thru in-memory list and update or delete as necc
+			// have to do deletes after the loop or things get crazy
+			let delete_list = [];
+			for (var i = 0; i < array_data.length; i++) {
+				// look for login in results
+				let row_obj = result_data.find(row => row.Login === array_data[i].Login);
+				if (row_obj) {
+					if (row_obj.checksum != array_data[i].checksum) {
+						array_data[i].checksum = row_obj.checksum;
+						this.update_row(list_id, row_obj);
+					}
+				} else {
+					delete_list.push(array_data[i].Login);
+				}
+			}
+
+			// now delete the ones that need it
+			for (var i = 0; i < delete_list.length; i++) {
+				array_data = array_data.filter(row => row.Login != delete_list[i]);
+				this.delete_row(list_id, delete_list[i]);
+			}
+
+			// now go thru the returned list and insert if necc
+			for (var i = 0; i < result_data.length; i++) {
+				if (!array_data.find(row => row.Login === result_data[i]['Login'])) {
+					array_data.push({ 'Login': result_data[i]['Login'], 'checksum': result_data[i]['checksum'] });
+					this.add_row(list_id, result_data[i]);
+				}
+			}
+		}
 	}
 }
