@@ -43,10 +43,12 @@ var RealTime = {
 			}
 		}
 
+		// delete all <li>s
 		$('#' + list_id).empty();
 	},
 
 	add_row(list_id, data) {
+		// add new <li> to bottom of list
 		$('#' + list_id).append(this.build_li(list_id, data));
 
 		// Start a timer
@@ -54,10 +56,11 @@ var RealTime = {
 	},
 
 	update_row(list_id, data) {
+		// update <li>
 		$('#' + login_id(list_id, data.Login)).replaceWith(this.build_li(list_id, data));
 
 		// Kill the running timer, start a new one
-		this.stop_timer(data.Login);
+		this.stop_timer(list_id, data.Login);
 		timers[list_id + data.Login] = this.start_timer(list_id, data.Login, data.SecondsInStatus);
 	},
 
@@ -65,6 +68,7 @@ var RealTime = {
 		// stop timer
 		this.stop_timer(list_id, login);
 
+		// Delete <li>
 		$('#' + login_id(list_id, login)).remove();
 	},
 
