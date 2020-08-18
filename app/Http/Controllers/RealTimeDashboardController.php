@@ -58,7 +58,7 @@ class RealTimeDashboardController extends Controller
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
             WHERE RTA.GroupId = :groupid
-            ORDER BY RTA.Login";
+            ORDER BY RTA.SecondsInStatus DESC";
 
         $bind = [
             'groupid' => $group_id,
