@@ -2,7 +2,7 @@ var RealTime = {
 	init: function (result) {
 		// if first iteration
 		if (!ran) {
-			status_arrays = new Array();
+			status_arrays = [];
 
 			// load each returned array
 			for (var i = 0; i < result.length; i++) {
@@ -40,17 +40,17 @@ var RealTime = {
 	},
 
 	add_row(list_id, data) {
-		console.log('add row ' + list_id)
+		console.log('add row ' + list_id + ' ' + data.Login)
 		// TODO: add <li> of data to <ul> with id of list_id
 	},
 
 	update_row(list_id, data) {
-		console.log('update row ' + list_id)
+		console.log('update row ' + list_id + ' ' + data.Login)
 		// TODO: update <li> where data.Login list_id
 	},
 
 	delete_row(list_id, login) {
-		console.log('delete row ' + list_id)
+		console.log('delete row ' + list_id + ' ' + login)
 		//  TODO: delete <li> of list_id where Login = login
 	},
 
