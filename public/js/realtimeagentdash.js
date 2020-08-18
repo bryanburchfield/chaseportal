@@ -36,12 +36,10 @@ var RealTime = {
 	},
 
 	delete_all_rows(list_id) {
-		console.log('delete all ' + list_id)
-
 		// stop all the timers in that list
 		if (status_arrays[list_id] != null) {
 			for (var i = 0; i < status_arrays[list_id].length; i++) {
-				this.stop_timer(status_arrays[list_id][i].Login);
+				this.stop_timer(list_id, status_arrays[list_id][i].Login);
 			}
 		}
 
@@ -49,31 +47,25 @@ var RealTime = {
 	},
 
 	add_row(list_id, data) {
-		console.log('add row ' + list_id + ' ' + data.Login)
-
-		$('#' + list_id).append(this.build_li(data));
+		$('#' + list_id).append(this.build_li(list_id, data));
 
 		// Start a timer
-		timers[data.Login] = this.start_timer(data.Login, data.SecondsInStatus);
+		timers[list_id + data.Login] = this.start_timer(list_id, data.Login, data.SecondsInStatus);
 	},
 
 	update_row(list_id, data) {
-		console.log('update row ' + list_id + ' ' + data.Login)
-
-		$('#' + data.Login.replace(/ /g, "_")).replaceWith(this.build_li(data));
+		$('#' + login_id(list_id, data.Login)).replaceWith(this.build_li(list_id, data));
 
 		// Kill the running timer, start a new one
 		this.stop_timer(data.Login);
-		timers[data.Login] = this.start_timer(data.Login, data.SecondsInStatus);
+		timers[list_id + data.Login] = this.start_timer(list_id, data.Login, data.SecondsInStatus);
 	},
 
 	delete_row(list_id, login) {
-		console.log('delete row ' + list_id + ' ' + login)
-
 		// stop timer
-		this.stop_timer(login);
+		this.stop_timer(list_id, login);
 
-		$('#' + login.replace(/ /g, "_")).remove();
+		$('#' + login_id(list_id, login)).remove();
 	},
 
 	process_array(list_id, array_data, result_data) {
@@ -118,16 +110,16 @@ var RealTime = {
 		return array_data;
 	},
 
-	start_timer(login, numSecs) {
-		// this runs once per second
-		console.log('start timer ' + login + ' ' + numSecs + ' = ' + seconds_to_hms(numSecs));
+	start_timer(list_id, login, numSecs) {
 
+		// convert to int
+		numSecs = parseInt(numSecs);
+
+		// this runs once per second
 		return setInterval(function () {
 
 			// Format and output the result
-			$('#' + login.replace(/ /g, "_") + 'Timer').html = seconds_to_hms(numSecs);
-
-			// console.log('tick timer ' + login + ' ' + numSecs + ' = ' + seconds_to_hms(numSecs));
+			$('#' + login_id(list_id, login) + 'Timer').text(seconds_to_hms(numSecs));
 
 			// tick the timer
 			numSecs = numSecs + 1;
@@ -135,19 +127,23 @@ var RealTime = {
 		}, 1000);
 	},
 
-	stop_timer(login) {
-		if (timers[login] != null) {
-			clearInterval(timers[login]);
+	stop_timer(list_id, login) {
+		if (timers[list_id + login] != null) {
+			clearInterval(timers[list_id + login]);
 		}
 	},
 
-	build_li(data) {
-		return '<li id="' + data.Login.replace(/ /g, "_") + '" class="list-group-item"> ' +
+	build_li(list_id, data) {
+		return '<li id="' + login_id(list_id, data.Login) + '" class="list-group-item"> ' +
 			'<p data-checksum="' + data.checksum + '" class="rep_name mb0">' + data.Login + '</p>' +
 			'<p class="campaign">' + data.Campaign + '</p>' +
-			'<p id="' + data.Login.replace(/ /g, "_") + 'Timer"></p>' +
+			'<p id="' + login_id(list_id, data.Login) + 'Timer"></p>' +
 			'</li>';
 	}
+}
+
+function login_id(list_id, login) {
+	return list_id + '-' + login.replace(/ /g, "_");
 }
 
 function seconds_to_hms(numSecs) {
