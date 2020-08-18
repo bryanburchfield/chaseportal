@@ -6,7 +6,7 @@
                 <p>Agents</p>
             </div>
 
-            <ul class="talking list-group">
+            <ul id="talking" class="talking list-group">
                 @foreach($data['data']['talking'] as $talking)
                     <li class="list-group-item">
                         <p data-checksum="{{$talking['checksum']}}" class="rep_name mb0">{{$talking['Login']}}</p>
@@ -23,7 +23,7 @@
                 <p>Agents</p>
             </div>
 
-            <ul class="wrapping list-group">
+            <ul id="wrapping" class="wrapping list-group">
                 @foreach($data['data']['wrapping'] as $wrapping)
                     <li class="list-group-item">
                         <p data-checksum="{{$wrapping['checksum']}}" class="rep_name mb0">{{$wrapping['Login']}}</p>
@@ -40,28 +40,11 @@
                 <p>Agents</p>
             </div>
 
-            <ul class="waiting list-group">
+            <ul id="waiting" class="waiting list-group">
                 @foreach($data['data']['waiting'] as $waiting)
                     <li class="list-group-item">
                         <p data-checksum="{{$waiting['checksum']}}" class="rep_name mb0">{{$waiting['Login']}}</p>
                         <p class="campaign">{{$waiting['Campaign']}}</p>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-
-        <div class="col-sm-2 rep_status paused">
-            <h2>Paused</h2>
-            <div class="num_agents">
-                <div class="inner">{{count($data['data']['paused'])}}</div>
-                <p>Agents</p>
-            </div>
-
-            <ul class="paused list-group">
-                @foreach($data['data']['paused'] as $paused)
-                    <li class="list-group-item">
-                        <p data-checksum="{{$paused['checksum']}}" class="rep_name mb0">{{$paused['Login']}}</p>
-                        <p class="campaign">{{$paused['Campaign']}}</p>
                     </li>
                 @endforeach
             </ul>
@@ -74,7 +57,7 @@
                 <p>Agents</p>
             </div>
 
-            <ul class="manual list-group">
+            <ul id="manual" class="manual list-group">
                 @foreach($data['data']['manual'] as $manual)
                     <li class="list-group-item">
                         <p data-checksum="{{$manual['checksum']}}" class="rep_name mb0">{{$manual['Login']}}</p>
@@ -91,7 +74,7 @@
                 <p>Agents</p>
             </div>
 
-            <ul class="break list-group">
+            <ul id="break" class="break list-group">
                 @foreach($data['data']['break'] as $break)
                     <li class="list-group-item">
                         <p data-checksum="{{$break['checksum']}}" class="rep_name mb0">{{$break['Login']}}</p>
@@ -100,6 +83,24 @@
                 @endforeach
             </ul>
         </div>
+
+        <div class="col-sm-2 rep_status paused">
+            <h2>Paused</h2>
+            <div class="num_agents">
+                <div class="inner">{{count($data['data']['paused'])}}</div>
+                <p>Agents</p>
+            </div>
+
+            <ul id="paused" class="paused list-group">
+                @foreach($data['data']['paused'] as $paused)
+                    <li class="list-group-item">
+                        <p data-checksum="{{$paused['checksum']}}" class="rep_name mb0">{{$paused['Login']}}</p>
+                        <p class="campaign">{{$paused['Campaign']}}</p>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
     </div>
 
     <div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>

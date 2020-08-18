@@ -3,6 +3,7 @@ var RealTime = {
 		// if first iteration
 		if (!ran) {
 			status_arrays = [];
+			timers = [];
 
 			// load each returned array
 			for (var i = 0; i < result.length; i++) {
@@ -36,22 +37,43 @@ var RealTime = {
 
 	delete_all_rows(list_id) {
 		console.log('delete all ' + list_id)
-		// TODO: delete all the <li>s from <ul> with id of list_id
+
+		// stop all the timers in that list
+		if (status_arrays[list_id] != null) {
+			for (var i = 0; i < status_arrays[list_id].length; i++) {
+				this.stop_timer(status_arrays[list_id][i].Login);
+			}
+		}
+
+		$('#' + list_id).empty();
 	},
 
 	add_row(list_id, data) {
 		console.log('add row ' + list_id + ' ' + data.Login)
-		// TODO: add <li> of data to <ul> with id of list_id
+
+		$('#' + list_id).append(this.build_li(data));
+
+		// Start a timer
+		timers[data.Login] = this.start_timer(data.Login, data.SecondsInStatus);
 	},
 
 	update_row(list_id, data) {
 		console.log('update row ' + list_id + ' ' + data.Login)
-		// TODO: update <li> where data.Login list_id
+
+		$('#' + data.Login.replace(/ /g, "_")).replaceWith(this.build_li(data));
+
+		// Kill the running timer, start a new one
+		this.stop_timer(data.Login);
+		timers[data.Login] = this.start_timer(data.Login, data.SecondsInStatus);
 	},
 
 	delete_row(list_id, login) {
 		console.log('delete row ' + list_id + ' ' + login)
-		//  TODO: delete <li> of list_id where Login = login
+
+		// stop timer
+		this.stop_timer(login);
+
+		$('#' + login.replace(/ /g, "_")).remove();
 	},
 
 	process_array(list_id, array_data, result_data) {
@@ -94,5 +116,51 @@ var RealTime = {
 		}
 
 		return array_data;
+	},
+
+	start_timer(login, numSecs) {
+		// this runs once per second
+		console.log('start timer ' + login + ' ' + numSecs + ' = ' + seconds_to_hms(numSecs));
+
+		return setInterval(function () {
+
+			// Format and output the result
+			$('#' + login.replace(/ /g, "_") + 'Timer').html = seconds_to_hms(numSecs);
+
+			// console.log('tick timer ' + login + ' ' + numSecs + ' = ' + seconds_to_hms(numSecs));
+
+			// tick the timer
+			numSecs = numSecs + 1;
+
+		}, 1000);
+	},
+
+	stop_timer(login) {
+		if (timers[login] != null) {
+			clearInterval(timers[login]);
+		}
+	},
+
+	build_li(data) {
+		return '<li id="' + data.Login.replace(/ /g, "_") + '" class="list-group-item"> ' +
+			'<p data-checksum="' + data.checksum + '" class="rep_name mb0">' + data.Login + '</p>' +
+			'<p class="campaign">' + data.Campaign + '</p>' +
+			'<p id="' + data.Login.replace(/ /g, "_") + 'Timer"></p>' +
+			'</li>';
 	}
+}
+
+function seconds_to_hms(numSecs) {
+
+	// Time calculations for hours, minutes and seconds
+	var hours = Math.floor(numSecs / 3600);
+	var minutes = Math.floor((numSecs / 60) % 60);
+	var seconds = numSecs % 60;
+
+	// format leading zeros
+	hours = hours.toString().padStart(2, 0);
+	minutes = minutes.toString().padStart(2, 0);
+	seconds = seconds.toString().padStart(2, 0);
+
+	return hours + ":" + minutes + ":" + seconds;
 }
