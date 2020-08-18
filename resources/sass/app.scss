@@ -2246,7 +2246,7 @@ p.name i{margin-right: 5px;}
      &.action{
         width: 220px;
         height: 120px;
-        @include border-radius(25px);
+        @include border-radius(3px);
     }
 
     &.mt0{margin-top: 0;}

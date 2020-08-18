@@ -39,7 +39,8 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                         <div class="row leadfilter_row">
 
                             <div class="col-sm-3 pr0">
-                                <div class="flowchart_element condition mb30 mt10"><span>{{$loop->index ?__('general.and') : __('general.when')}}</span></div>
+                                <div class="flowchart_element condition mb30 mt10 {{$loop->index ? 'and' : 'when' }}"><span>{{$loop->index ?__('general.and') : __('general.when')}}</span></div>
+                                <div class="horizontal-line"></div>
                                 <div class="vertical-line"></div>
                             </div>
 
@@ -68,7 +69,8 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                 @else
                     <div class="row leadfilter_row">
                         <div class="col-sm-3 pr0">
-                            <div class="flowchart_element condition mb30 mt0"><span>{{__('general.when')}}</span></div>
+                            <div class="flowchart_element condition mb30 mt0 when"><span>{{__('general.when')}}</span></div>
+                            <div class="horizontal-line"></div>
                             <div class="vertical-line"></div>
                         </div>
 
@@ -126,6 +128,7 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     <div class="row action_row">
                         <div class="col-sm-3 pr0">
                             <div class="flowchart_element action mb30 mt0"><span>{{__('general.actiontaken')}}</span></div>
+                            <div class="horizontal-line"></div>
                             <div class="vertical-line hidetilloaded"></div>
                         </div>
 

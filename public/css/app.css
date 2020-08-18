@@ -2636,7 +2636,7 @@ p.name i {
 .flowchart_element.action {
   width: 220px;
   height: 120px;
-  border-radius: 25px;
+  border-radius: 3px;
 }
 
 .flowchart_element.mt0 {
