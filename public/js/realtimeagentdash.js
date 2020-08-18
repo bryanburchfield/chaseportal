@@ -2,7 +2,10 @@ var RealTime = {
 	init: function (result) {
 		// if first iteration
 		if (!ran) {
+			// keep track of all the in-memory lists
 			status_arrays = [];
+
+			// keep track of all the running timers
 			timers = [];
 
 			// load each returned array
@@ -115,7 +118,6 @@ var RealTime = {
 	},
 
 	start_timer(list_id, login, numSecs) {
-
 		// convert to int
 		numSecs = parseInt(numSecs);
 
@@ -147,11 +149,11 @@ var RealTime = {
 }
 
 function login_id(list_id, login) {
+	// Build the id for the list/login - replace spaces with underscores
 	return list_id + '-' + login.replace(/ /g, "_");
 }
 
 function seconds_to_hms(numSecs) {
-
 	// Time calculations for hours, minutes and seconds
 	var hours = Math.floor(numSecs / 3600);
 	var minutes = Math.floor((numSecs / 60) % 60);
