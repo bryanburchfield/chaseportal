@@ -2708,43 +2708,8 @@ p.name i {
   margin: 0 auto;
   margin-top: 20px;
   z-index: 2;
+  position: relative;
   padding: 10px;
-}
-
-.flowchart_element.condition {
-  width: 200px;
-  height: 110px;
-  border-radius: 0;
-}
-
-.flowchart_element.action {
-  width: 220px;
-  height: 120px;
-  border-radius: 25px;
-}
-
-.flowchart_element.mt0 {
-  margin-top: 0;
-}
-
-.flowchart_element.mt10 {
-  margin-top: 10px;
-}
-
-.flowchart_element.mt35 {
-  margin-top: 35px;
-}
-
-.flowchart_element:after {
-  background: #33A09B;
-  min-height: 2px;
-  width: 45%;
-  position: absolute;
-  right: 0%;
-  top: 55%;
-  display: inline-block;
-  content: "";
-  z-index: 1;
 }
 
 .flowchart_element span {
@@ -2759,13 +2724,75 @@ p.name i {
   z-index: 999;
 }
 
+.flowchart_element.condition.when {
+  width: 130px;
+  height: 130px;
+  border-radius: 100px;
+}
+
+.flowchart_element.condition.when:after {
+  background: #33A09B;
+}
+
+.flowchart_element.condition.and {
+  border-radius: 0;
+  display: inherit;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 120px solid #19A6F7;
+  background: none;
+  padding: 0;
+  margin-top: 18px;
+}
+
+.flowchart_element.condition.and span {
+  bottom: 90px !important;
+  right: 18px;
+}
+
+.flowchart_element.action {
+  width: 220px;
+  height: 120px;
+  border-radius: 3px;
+  background: #E15B23;
+}
+
+.flowchart_element.action:after {
+  background: #E15B23;
+}
+
+.flowchart_element.mt0 {
+  margin-top: 0;
+}
+
+.flowchart_element.mt10 {
+  margin-top: 10px;
+}
+
+.flowchart_element.mt35 {
+  margin-top: 35px;
+}
+
+div.horizontal-line {
+  background: #999;
+  min-height: 2px;
+  width: 45%;
+  position: absolute;
+  z-index: 1;
+  right: 0%;
+  top: 55%;
+  display: inline-block;
+}
+
 div.vertical-line {
   width: 2px;
-  background-color: #33A09B;
+  background-color: #999;
   height: 145px;
   position: absolute;
   margin: 0 auto;
-  left: 51.5%;
+  left: 52%;
   display: block;
 }
 

@@ -1029,6 +1029,8 @@ var Contacts_Playbook = {
                     var i = Contacts_Playbook.leadrule_filters_used;
                     $(new_filter).find('.filter_type').val('');
                     $(new_filter).find('.flowchart_element span').text(Lang.get('js_msgs.and'));
+                    $(new_filter).find('.flowchart_element').removeClass('when');
+                    $(new_filter).find('.flowchart_element').addClass('and');
                     $(new_filter).find('.filter_type').attr('id', 'filter_type'+i).attr('name', 'filter_type'+i);
 
                     if(Contacts_Playbook.leadrule_filters_used!=Contacts_Playbook.leadrule_filters){
