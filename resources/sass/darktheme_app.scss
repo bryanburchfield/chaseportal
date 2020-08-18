@@ -2407,19 +2407,6 @@ p.name i{margin-right: 5px;}
         z-index: 999;
     }
 
-
-    // &:after{
-    //     background: $green;
-    //     min-height: 2px;
-    //     width: 45%;
-    //     position: absolute;
-    //     right: 0%;
-    //     top: 55%;
-    //     display: inline-block;
-    //     content: "";
-    //     z-index: 1;
-    // }
-
     &.condition.when{
         width: 130px;
         height: 130px;
@@ -2447,7 +2434,7 @@ p.name i{margin-right: 5px;}
         }
     }
 
-     &.action{
+    &.action{
         width: 220px;
         height: 120px;
         @include border-radius(3px);

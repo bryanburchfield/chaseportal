@@ -2235,18 +2235,56 @@ p.name i{margin-right: 5px;}
     margin: 0 auto;
     margin-top: 20px;
     z-index: 2;
+    position: relative;
     padding: 10px;
 
-    &.condition{
-        width: 200px;
-        height: 110px;
-        @include border-radius(0);
+    span{
+        display: table-cell;
+        vertical-align: middle;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 18px;
+        position: relative;
+        z-index: 999;
     }
 
-     &.action{
+    &.condition.when{
+        width: 130px;
+        height: 130px;
+        @include border-radius(100px);
+        &:after{
+            background: $green;
+        }
+    }
+
+    &.condition.and{
+        @include border-radius(0);
+        display: inherit;
+        width: 0 !important;
+        height: 0 !important;
+        border-left: 60px solid transparent;
+        border-right: 60px solid transparent;
+        border-top: 120px solid #19A6F7;
+        background: none;
+        padding: 0;
+        margin-top: 18px;
+
+        span{
+            bottom: 90px !important;
+            right: 18px;
+        }
+    }
+
+    &.action{
         width: 220px;
         height: 120px;
         @include border-radius(3px);
+        background: $orange;
+        &:after{
+            background: $orange;
+        }
     }
 
     &.mt0{margin-top: 0;}
@@ -2278,9 +2316,20 @@ p.name i{margin-right: 5px;}
     }
 }
 
+div.horizontal-line{
+    background: #999;
+    min-height: 2px;
+    width: 45%;
+    position: absolute;
+    z-index: 1;
+    right: 0%;
+    top: 55%;
+    display: inline-block;
+}
+
 div.vertical-line{
     width: 2px;
-    background-color: $green;
+    background-color: #999;
     height: 145px;
     position: absolute;
     margin: 0 auto;
