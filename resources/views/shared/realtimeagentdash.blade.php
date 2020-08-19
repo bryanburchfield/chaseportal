@@ -5,10 +5,8 @@
 <div class="row">
 
     @foreach ($statuses as $status)
-        @if(!$loop->index)
-            <div class="col-sm-7 five-three p0">
-        @elseif($loop->index == 3)
-            <div class="col-sm-5 five-two p0">
+        @if($loop->first || $loop->index == 3)
+            <div class="col-sm-{{$loop->first ? '7 five-three': '5 five-two'}} p0">
         @endif
         <div class="col-sm-{{$loop->index < 3 ? '4': '6'}} rep_status {{$status}}">
             <h2 class="mb0">{{__('general.' . $status)}}</h2>
