@@ -18,9 +18,8 @@
             <ul id="{{$status}}" class="{{$status}} list-group cb">
                 @foreach($data['data'][$status] as $record)
                     <li class="list-group-item">
-                        <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">{{$record['Login']}}</p>
+                        <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">{{$record['Login']}} <span class="timer">{{$record['TimeInStatus']}}</span></p>
                         <p class="campaign">{{$record['Campaign']}}</p>
-                        <p>{{$record['TimeInStatus']}}</p>
                     </li>
                 @endforeach
             </ul>

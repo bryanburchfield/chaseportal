@@ -2700,6 +2700,14 @@ span.numb_notifications{
 label.checkbox.toggle_active_reps{margin-left: 20px;}
 
 .rep_status{
+
+    span.timer{float: right;}
+    ul.list-group{
+        li:nth-child(2){
+            background: lighten(#eee,2%);
+        }
+    }
+
     h2{
         float: left;
         font-size: 21px;

@@ -3285,6 +3285,14 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
+.rep_status span.timer {
+  float: right;
+}
+
+.rep_status ul.list-group li:nth-child(2) {
+  background: #f3f3f3;
+}
+
 .rep_status h2 {
   float: left;
   font-size: 21px;

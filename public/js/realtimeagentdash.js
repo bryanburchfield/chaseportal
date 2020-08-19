@@ -1,6 +1,7 @@
 var RealTime = {
 	init: function (result) {
 		// if first iteration
+		console.log(result);
 		if (!ran) {
 			// keep track of all the in-memory lists
 			status_arrays = [];
@@ -141,9 +142,8 @@ var RealTime = {
 
 	build_li(list_id, data) {
 		return '<li id="' + login_id(list_id, data.Login) + '" class="list-group-item"> ' +
-			'<p data-checksum="' + data.checksum + '" class="rep_name mb0">' + data.Login + '</p>' +
+			'<p class="rep_name mb0">' + data.Login + '<span id="' + login_id(list_id, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
 			'<p class="campaign">' + data.Campaign + '</p>' +
-			'<p id="' + login_id(list_id, data.Login) + 'Timer">' + data.TimeInStatus + '</p>' +
 			'</li>';
 	}
 }
@@ -166,3 +166,21 @@ function seconds_to_hms(numSecs) {
 
 	return hours + ":" + minutes + ":" + seconds;
 }
+
+//add
+//breakcode for paused column
+
+
+// StatusCode:
+// case 0: // Waiting
+// case 1: // Paused
+// case 2: // WrapUp
+// case 3: // OnCall
+// case 4: // OnManualCall
+// case 5: // OnInboundCall
+
+// State
+// 0	None
+// 1	Unavailable
+// 2	Idle
+// 3	Available
