@@ -143,7 +143,7 @@ var RealTime = {
 		return '<li id="' + login_id(list_id, data.Login) + '" class="list-group-item"> ' +
 			'<p data-checksum="' + data.checksum + '" class="rep_name mb0">' + data.Login + '</p>' +
 			'<p class="campaign">' + data.Campaign + '</p>' +
-			'<p id="' + login_id(list_id, data.Login) + 'Timer"></p>' +
+			'<p id="' + login_id(list_id, data.Login) + 'Timer">' + data.TimeInStatus + '</p>' +
 			'</li>';
 	}
 }
