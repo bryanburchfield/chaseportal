@@ -1,5 +1,5 @@
 @php
-    $statuses = ['talking','wrapping','waiting','manual','break','paused'];
+    $statuses = ['talking','wrapping','waiting','manual','paused'];
 @endphp
 
 <div class="row">
