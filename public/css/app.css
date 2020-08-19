@@ -2547,7 +2547,7 @@ p.name i {
   height: 0 !important;
   border-left: 60px solid transparent;
   border-right: 60px solid transparent;
-  border-top: 120px solid #19A6F7;
+  border-top: 120px solid #203047;
   background: none;
   padding: 0;
   margin-top: 18px;
@@ -2559,8 +2559,9 @@ p.name i {
 }
 
 .flowchart_element.action {
-  width: 220px;
-  height: 120px;
+  margin-bottom: 50px;
+  width: 200px;
+  height: 110px;
   border-radius: 3px;
   background: #E15B23;
 }
@@ -2606,7 +2607,7 @@ p.name i {
 }
 
 div.horizontal-line {
-  background: #999;
+  background: #b3b3b3;
   min-height: 2px;
   width: 45%;
   position: absolute;
@@ -2616,9 +2617,13 @@ div.horizontal-line {
   display: inline-block;
 }
 
+.action ~ div.horizontal-line {
+  top: 35%;
+}
+
 div.vertical-line {
   width: 2px;
-  background-color: #999;
+  background-color: #b3b3b3;
   height: 145px;
   position: absolute;
   margin: 0 auto;
@@ -2628,6 +2633,10 @@ div.vertical-line {
 
 div.vertical-line.hidetilloaded {
   display: none;
+}
+
+div.vertical-line.mvup100 {
+  bottom: 100px;
 }
 
 .table > thead > tr > th {

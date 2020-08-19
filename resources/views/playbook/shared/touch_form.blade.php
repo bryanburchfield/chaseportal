@@ -128,8 +128,8 @@ $mode = empty($playbook_touch->id) ? 'add' : 'edit';
                     <div class="row action_row">
                         <div class="col-sm-3 pr0">
                             <div class="flowchart_element action mb30 mt0"><span>{{__('general.actiontaken')}}</span></div>
+                            <div class="vertical-line mvup100"></div>
                             <div class="horizontal-line"></div>
-                            <div class="vertical-line hidetilloaded"></div>
                         </div>
 
                         <div class="col-sm-9 pl0 mbp0">
