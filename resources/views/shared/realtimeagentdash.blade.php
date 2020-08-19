@@ -17,6 +17,7 @@
                     <li class="list-group-item">
                         <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">{{$record['Login']}}</p>
                         <p class="campaign">{{$record['Campaign']}}</p>
+                        <p>{{$record['TimeInStatus']}}</p>
                     </li>
                 @endforeach
             </ul>
