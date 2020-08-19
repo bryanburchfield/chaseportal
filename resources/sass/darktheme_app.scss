@@ -2423,7 +2423,7 @@ p.name i{margin-right: 5px;}
         height: 0 !important;
         border-left: 60px solid transparent;
         border-right: 60px solid transparent;
-        border-top: 120px solid #19A6F7;
+        border-top: 120px solid #ddd;
         background: none;
         padding: 0;
         margin-top: 18px;
@@ -2431,17 +2431,21 @@ p.name i{margin-right: 5px;}
         span{
             bottom: 90px !important;
             right: 18px;
+            color:$green !important;
         }
     }
 
     &.action{
-        width: 220px;
-        height: 120px;
+        margin-bottom: 50px;
+        width: 200px;
+        height: 110px;
         @include border-radius(3px);
         background: $orange;
         &:after{
             background: $orange;
         }
+
+        div.horizontal-line{top:45%;}
     }
 
     &.mt0{margin-top: 0;}
@@ -2450,7 +2454,7 @@ p.name i{margin-right: 5px;}
 }
 
 div.horizontal-line{
-    background: #999;
+    background: darken(#999, 10%);
     min-height: 2px;
     width: 45%;
     position: absolute;
@@ -2460,9 +2464,11 @@ div.horizontal-line{
     display: inline-block;
 }
 
+.action ~ div.horizontal-line{top:35%;}
+
 div.vertical-line{
     width: 2px;
-    background-color: #999;
+    background-color: darken(#999, 10%);
     height: 145px;
     position: absolute;
     margin: 0 auto;
@@ -2471,6 +2477,10 @@ div.vertical-line{
 
     &.hidetilloaded{
         display: none;
+    }
+
+    &.mvup100{
+        bottom:100px;
     }
 }
 

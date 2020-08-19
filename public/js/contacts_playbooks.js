@@ -1071,16 +1071,16 @@ var Contacts_Playbook = {
     			        $(new_action).find('.card').append('<a href="#" class="remove_action"><i class="fas fa-trash-alt"></i> '+Lang.get('js_msgs.remove_action')+'</a>');
     			    }
     			}
-
     			Contacts_Playbook.actions_used=Contacts_Playbook.actions_used+1;
 
     			if(Contacts_Playbook.actions == Contacts_Playbook.actions_used){
     			    $(new_action).find('a.add_action').remove();
     			}
 
-    			$(this).hide();
+    			
 
-    			$(this).first().parent().parent().parent().find('.vertical-line').show();
+    			$(this).parent().parent().prev().find('.vertical-line').removeClass('hidetilloaded').show();
+    			$(this).hide();
     		}else{
     			$(this).parent().find('.alert').show();
     		}

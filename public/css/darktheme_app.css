@@ -2959,7 +2959,7 @@ p.name i {
   height: 0 !important;
   border-left: 60px solid transparent;
   border-right: 60px solid transparent;
-  border-top: 120px solid #19A6F7;
+  border-top: 120px solid #ddd;
   background: none;
   padding: 0;
   margin-top: 18px;
@@ -2968,17 +2968,23 @@ p.name i {
 .flowchart_element.condition.and span {
   bottom: 90px !important;
   right: 18px;
+  color: #33A09B !important;
 }
 
 .flowchart_element.action {
-  width: 220px;
-  height: 120px;
+  margin-bottom: 50px;
+  width: 200px;
+  height: 110px;
   border-radius: 3px;
   background: #E15B23;
 }
 
 .flowchart_element.action:after {
   background: #E15B23;
+}
+
+.flowchart_element.action div.horizontal-line {
+  top: 45%;
 }
 
 .flowchart_element.mt0 {
@@ -2994,7 +3000,7 @@ p.name i {
 }
 
 div.horizontal-line {
-  background: #999;
+  background: gray;
   min-height: 2px;
   width: 45%;
   position: absolute;
@@ -3004,9 +3010,13 @@ div.horizontal-line {
   display: inline-block;
 }
 
+.action ~ div.horizontal-line {
+  top: 35%;
+}
+
 div.vertical-line {
   width: 2px;
-  background-color: #999;
+  background-color: gray;
   height: 145px;
   position: absolute;
   margin: 0 auto;
@@ -3016,6 +3026,10 @@ div.vertical-line {
 
 div.vertical-line.hidetilloaded {
   display: none;
+}
+
+div.vertical-line.mvup100 {
+  bottom: 100px;
 }
 
 table.table.table-striped > tbody > tr:nth-of-type(odd) {
