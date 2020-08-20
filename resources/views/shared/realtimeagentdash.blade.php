@@ -48,5 +48,3 @@
 
 </div>
 
-<div class="col-sm-offset-5 col-sm-2 mb20"><div id="txt" class="timer"></div></div>
-
