@@ -3080,13 +3080,14 @@ label.checkbox.toggle_active_reps {
 
 .rep_status {
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e8edef+0,f2f2f2+100 */
-  background: #e8edef;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e3e7e8+0,f2f2f2+100 */
+  background: #e3e7e8;
   /* Old browsers */
   /* FF3.6-15 */
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right, #e8edef 0%, #f2f2f2 100%);
+  background: linear-gradient(to right, #e3e7e8 0%, #f2f2f2 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#e8edef", endColorstr="#f2f2f2",GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#e3e7e8", endColorstr="#f2f2f2",GradientType=1 );
   /* IE6-9 */
 }
 
