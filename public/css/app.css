@@ -3119,17 +3119,15 @@ label.checkbox.toggle_active_reps {
 
 .rep_status .num_agents p {
   text-align: center;
+  font-size: 12px;
+  font-style: italic;
 }
 
 .rep_status .num_agents .inner {
-  background: #203047;
-  color: #eee;
-  border-radius: 50px;
-  height: 50px;
-  width: 50px;
+  color: #203047;
   text-align: center;
-  padding-top: 15px;
-  font-size: 15px;
+  padding-top: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 
