@@ -3291,7 +3291,7 @@ label.checkbox.toggle_active_reps {
   background: #152130;
 }
 
-.rep_status li.list-group-item:nth-child(2) {
+.rep_status li.list-group-item:nth-child(odd) {
   background: #1a283b;
 }
 

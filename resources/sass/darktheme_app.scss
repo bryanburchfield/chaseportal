@@ -2706,7 +2706,7 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
         border:1px solid darken(#152130,8%);
         background: #152130;
 
-        &:nth-child(2){
+        &:nth-child(odd){
             background: lighten(#152130,3%);
         }
     }

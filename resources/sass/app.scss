@@ -2587,7 +2587,7 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
 
     span.timer{float: right;}
     ul.list-group{
-        li:nth-child(2){
+        li:nth-child(odd){
             background: lighten(#eee,2%);
         }
     }
