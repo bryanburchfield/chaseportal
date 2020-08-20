@@ -12,7 +12,7 @@ class Group extends SqlSrvModel
     public static function allGroups()
     {
         return self::where('GroupId', '>', -1)
-            ->where('isActive', 1)
+            ->where('IsActive', 1)
             ->orderBy('GroupName')
             ->get();
     }
