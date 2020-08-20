@@ -3079,6 +3079,7 @@ label.checkbox.toggle_active_reps {
 }
 
 .rep_status {
+  padding-top: 20px;
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e8edef+0,f2f2f2+100 */
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e3e7e8+0,f2f2f2+100 */
   background: #e3e7e8;
