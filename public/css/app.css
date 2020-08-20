@@ -3078,6 +3078,25 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
+.rep_status li.list-group-item {
+  overflow: auto !important;
+}
+
+.rep_status .call_type {
+  float: left;
+  position: relative;
+  right: 7px;
+}
+
+.rep_status .agent_call_details {
+  float: left;
+  width: 100%;
+}
+
+.rep_status .agent_call_details.has_icon {
+  width: 93%;
+}
+
 .rep_status span.timer {
   float: right;
 }

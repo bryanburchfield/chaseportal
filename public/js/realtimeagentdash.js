@@ -26,61 +26,61 @@ var RealTime = {
 		ran = true;
 	},
 
-	load_array(list_id, result_data) {
+	load_array(status_type, result_data) {
 		var return_array = [];
 
-		this.delete_all_rows(list_id);
+		this.delete_all_rows(status_type);
 
 		for (var i = 0; i < result_data.length; i++) {
 			return_array.push({ 'Login': result_data[i]['Login'], 'checksum': result_data[i]['checksum'] });
-			this.add_row(list_id, result_data[i]);
+			this.add_row(status_type, result_data[i]);
 		}
 
 		return return_array;
 	},
 
-	delete_all_rows(list_id) {
+	delete_all_rows(status_type) {
 		// stop all the timers in that list
-		if (status_arrays[list_id] != null) {
-			for (var i = 0; i < status_arrays[list_id].length; i++) {
-				this.stop_timer(list_id, status_arrays[list_id][i].Login);
+		if (status_arrays[status_type] != null) {
+			for (var i = 0; i < status_arrays[status_type].length; i++) {
+				this.stop_timer(status_type, status_arrays[status_type][i].Login);
 			}
 		}
 
 		// delete all <li>s
-		$('#' + list_id).empty();
+		$('#' + status_type).empty();
 	},
 
-	add_row(list_id, data) {
+	add_row(status_type, data) {
 		// add new <li> to bottom of list
-		$('#' + list_id).append(this.build_li(list_id, data));
+		$('#' + status_type).append(this.build_li(status_type, data));
 
 		// Start a timer
-		timers[list_id + data.Login] = this.start_timer(list_id, data.Login, data.SecondsInStatus);
+		timers[status_type + data.Login] = this.start_timer(status_type, data.Login, data.SecondsInStatus);
 	},
 
-	update_row(list_id, data) {
+	update_row(status_type, data) {
 		// update <li>
-		$('#' + login_id(list_id, data.Login)).replaceWith(this.build_li(list_id, data));
+		$('#' + login_id(status_type, data.Login)).replaceWith(this.build_li(status_type, data));
 
 		// Kill the running timer, start a new one
-		this.stop_timer(list_id, data.Login);
-		timers[list_id + data.Login] = this.start_timer(list_id, data.Login, data.SecondsInStatus);
+		this.stop_timer(status_type, data.Login);
+		timers[status_type + data.Login] = this.start_timer(status_type, data.Login, data.SecondsInStatus);
 	},
 
-	delete_row(list_id, login) {
+	delete_row(status_type, login) {
 		// stop timer
-		this.stop_timer(list_id, login);
+		this.stop_timer(status_type, login);
 
 		// Delete <li>
-		$('#' + login_id(list_id, login)).remove();
+		$('#' + login_id(status_type, login)).remove();
 	},
 
-	process_array(list_id, array_data, result_data) {
+	process_array(status_type, array_data, result_data) {
 		// first, check that there's anything in the returned list
 		if (result_data.length == 0) {
 			if (array_data.length > 0) {
-				this.delete_all_rows(list_id);
+				this.delete_all_rows(status_type);
 				array_data = [];
 			}
 		} else {
@@ -93,7 +93,7 @@ var RealTime = {
 				if (row_obj) {
 					if (row_obj.checksum != array_data[i].checksum) {
 						array_data[i].checksum = row_obj.checksum;
-						this.update_row(list_id, row_obj);
+						this.update_row(status_type, row_obj);
 					}
 				} else {
 					delete_list.push(array_data[i].Login);
@@ -103,14 +103,14 @@ var RealTime = {
 			// now delete the ones that need it
 			for (var i = 0; i < delete_list.length; i++) {
 				array_data = array_data.filter(row => row.Login != delete_list[i]);
-				this.delete_row(list_id, delete_list[i]);
+				this.delete_row(status_type, delete_list[i]);
 			}
 
 			// now go thru the returned list and insert if necc
 			for (var i = 0; i < result_data.length; i++) {
 				if (!array_data.find(row => row.Login === result_data[i]['Login'])) {
 					array_data.push({ 'Login': result_data[i]['Login'], 'checksum': result_data[i]['checksum'] });
-					this.add_row(list_id, result_data[i]);
+					this.add_row(status_type, result_data[i]);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ var RealTime = {
 		return array_data;
 	},
 
-	start_timer(list_id, login, numSecs) {
+	start_timer(status_type, login, numSecs) {
 		// convert to int
 		numSecs = parseInt(numSecs);
 
@@ -126,7 +126,7 @@ var RealTime = {
 		return setInterval(function () {
 
 			// Format and output the result
-			$('#' + login_id(list_id, login) + 'Timer').text(seconds_to_hms(numSecs));
+			$('#' + login_id(status_type, login) + 'Timer').text(seconds_to_hms(numSecs));
 
 			// tick the timer
 			numSecs = numSecs + 1;
@@ -134,23 +134,36 @@ var RealTime = {
 		}, 1000);
 	},
 
-	stop_timer(list_id, login) {
-		if (timers[list_id + login] != null) {
-			clearInterval(timers[list_id + login]);
+	stop_timer(status_type, login) {
+		if (timers[status_type + login] != null) {
+			clearInterval(timers[status_type + login]);
 		}
 	},
 
-	build_li(list_id, data) {
-		return '<li id="' + login_id(list_id, data.Login) + '" class="list-group-item"> ' +
-			'<p class="rep_name mb0">' + data.Login + '<span id="' + login_id(list_id, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
-			'<p class="campaign">' + data.Campaign + '</p>' +
+	build_li(status_type, data) {
+		let call_icon='';
+		let has_icon='';
+		if(data.StatusCode == 5){
+        	call_icon = '<i class="fa fa-sign-in-alt"></i>';
+        	has_icon='has_icon';
+        }else if (data.StatusCode == 3 || data.StatusCode == 4) {
+            call_icon = '<i class="fa fa-sign-out-alt"></i>';
+            has_icon='has_icon';
+        }
+
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item"> ' +
+			'<span class="call_type">'+
+				call_icon+
+			'</span>'+
+			'<div class="agent_call_details '+has_icon+'"><p class="rep_name mb0">' + data.Login + '<span id="' + login_id(status_type, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
+			'<p class="campaign">' + data.Campaign + '</p></div>' +
 			'</li>';
 	}
 }
 
-function login_id(list_id, login) {
+function login_id(status_type, login) {
 	// Build the id for the list/login - replace spaces with underscores
-	return list_id + '-' + login.replace(/ /g, "_");
+	return status_type + '-' + login.replace(/ /g, "_");
 }
 
 function seconds_to_hms(numSecs) {

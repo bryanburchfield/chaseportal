@@ -18,8 +18,23 @@
             <ul id="{{$status}}" class="{{$status}} list-group cb">
                 @foreach($data['data'][$status] as $record)
                     <li class="list-group-item">
-                        <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">{{$record['Login']}} <span class="timer">{{$record['TimeInStatus']}}</span></p>
-                        <p class="campaign">{{$record['Campaign']}}</p>
+                        <span class="call_type">
+                            @php
+                                $has_icon='';
+                                if($record['StatusCode'] == 5){
+                                    echo '<i class="fa fa-sign-in-alt"></i>';
+                                    $has_icon='has_icon';
+                                }elseif ($record['StatusCode'] == 3 || $record['StatusCode'] == 4) {
+                                    echo '<i class="fa fa-sign-out-alt"></i>';
+                                    $has_icon='has_icon';
+                                }
+                            @endphp
+                        </span>
+                        <div class="agent_call_details {{$has_icon}}">
+                            <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">
+                                {{$record['Login']}} <span class="timer">{{$record['TimeInStatus']}}</span></p>
+                            <p class="campaign">{{$record['Campaign']}}</p>
+                        </div>
                     </li>
                 @endforeach
             </ul>

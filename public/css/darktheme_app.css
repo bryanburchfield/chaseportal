@@ -3285,12 +3285,33 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
-.rep_status span.timer {
-  float: right;
+.rep_status li.list-group-item {
+  overflow: auto !important;
+  border: 1px solid #090d14;
+  background: #152130;
 }
 
-.rep_status ul.list-group li:nth-child(2) {
-  background: #f3f3f3;
+.rep_status li.list-group-item:nth-child(2) {
+  background: #1a283b;
+}
+
+.rep_status .call_type {
+  float: left;
+  position: relative;
+  right: 7px;
+}
+
+.rep_status .agent_call_details {
+  float: left;
+  width: 100%;
+}
+
+.rep_status .agent_call_details.has_icon {
+  width: 93%;
+}
+
+.rep_status span.timer {
+  float: right;
 }
 
 .rep_status h2 {

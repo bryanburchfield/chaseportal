@@ -2567,6 +2567,24 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
 
 .rep_status{
 
+    li.list-group-item{
+        overflow: auto !important;
+    }
+
+    .call_type{
+        float:left;
+        position: relative;
+        right:7px;
+    }
+
+    .agent_call_details{
+        float: left;
+        width: 100%;
+        &.has_icon{
+            width: 93%;
+        }
+    }
+
     span.timer{float: right;}
     ul.list-group{
         li:nth-child(2){
@@ -2584,7 +2602,7 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
         float: right;
         position: relative;
         bottom: 27px;
-        
+
         p{text-align: center;}
 
         .inner{
@@ -2610,6 +2628,7 @@ div.col-sm-7.five-three {
 div.col-sm-5.five-two {
     width: 40% !important;
 }
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
