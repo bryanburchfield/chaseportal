@@ -2706,10 +2706,12 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
         border:1px solid darken(#152130,8%);
         background: #152130;
 
-        &:nth-child(odd){
+        &:nth-child(even){
             background: lighten(#152130,3%);
         }
     }
+
+    .break_code{color:$orange;font-weight: 600;}
 
     .call_type{
         float:left;
@@ -2737,7 +2739,7 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
         float: right;
         position: relative;
         bottom: 27px;
-        
+
         p{text-align: center;font-size: 12px;font-style: italic;}
 
         .inner{

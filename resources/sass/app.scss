@@ -2566,10 +2566,16 @@ span.numb_notifications{
 label.checkbox.toggle_active_reps{margin-left: 20px;}
 
 .rep_status{
-    
+
     li.list-group-item{
         overflow: auto !important;
+
+        &:nth-child(even){
+            background: lighten(#eee,2%);
+        }
     }
+
+    .break_code{color:$orange;font-weight: 600;}
 
     .call_type{
         float:left;
@@ -2586,11 +2592,6 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     }
 
     span.timer{float: right;}
-    ul.list-group{
-        li:nth-child(odd){
-            background: lighten(#eee,2%);
-        }
-    }
 
     h2{
         float: left;

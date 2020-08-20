@@ -3082,6 +3082,15 @@ label.checkbox.toggle_active_reps {
   overflow: auto !important;
 }
 
+.rep_status li.list-group-item:nth-child(even) {
+  background: #f3f3f3;
+}
+
+.rep_status .break_code {
+  color: #E15B23;
+  font-weight: 600;
+}
+
 .rep_status .call_type {
   float: left;
   position: relative;
@@ -3099,10 +3108,6 @@ label.checkbox.toggle_active_reps {
 
 .rep_status span.timer {
   float: right;
-}
-
-.rep_status ul.list-group li:nth-child(odd) {
-  background: #f3f3f3;
 }
 
 .rep_status h2 {

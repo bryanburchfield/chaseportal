@@ -158,7 +158,8 @@ var RealTime = {
 				call_icon+
 			'</span>'+
 			'<div class="agent_call_details '+has_icon+'"><p class="rep_name mb0">' + data.Login + '<span id="' + login_id(status_type, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
-			'<p class="campaign">' + data.Campaign + '</p></div>' +
+			'<p class="campaign">' + data.Campaign + '</p>' +
+			'<p class="break_code">'+data.BreakCode+'</p></div>'+
 			'</li>';
 	},
 

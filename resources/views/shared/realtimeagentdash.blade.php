@@ -34,6 +34,7 @@
                             <p data-checksum="{{$record['checksum']}}" class="rep_name mb0">
                                 {{$record['Login']}} <span class="timer">{{$record['TimeInStatus']}}</span></p>
                             <p class="campaign">{{$record['Campaign']}}</p>
+                            <p class="break_code">{{$record['BreakCode']}}</p>
                         </div>
                     </li>
                 @endforeach

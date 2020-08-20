@@ -3291,8 +3291,13 @@ label.checkbox.toggle_active_reps {
   background: #152130;
 }
 
-.rep_status li.list-group-item:nth-child(odd) {
+.rep_status li.list-group-item:nth-child(even) {
   background: #1a283b;
+}
+
+.rep_status .break_code {
+  color: #E15B23;
+  font-weight: 600;
 }
 
 .rep_status .call_type {
