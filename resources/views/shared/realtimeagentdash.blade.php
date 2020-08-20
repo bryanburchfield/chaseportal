@@ -2,7 +2,7 @@
     $statuses = ['talking','wrapping','waiting','manual','paused'];
 @endphp
 
-<div class="row">
+<div class="row mt50">
 
     @foreach ($statuses as $status)
         @if($loop->first || $loop->index == 3)
