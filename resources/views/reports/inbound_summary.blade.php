@@ -44,6 +44,14 @@
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
+						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
