@@ -18,6 +18,7 @@ class InboundSummary
 
         $this->params['reportName'] = 'reports.inbound_summary';
         $this->params['campaigns'] = [];
+        $this->params['callerids'] = [];
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
@@ -40,6 +41,7 @@ class InboundSummary
                 $this->params['fromdate'],
                 $this->params['todate']
             ),
+            'inbound_sources' => $this->getAllInboundSources(),
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -88,11 +90,25 @@ class InboundSummary
 
         $bind['campaigns'] = $campaigns;
 
-        $sql = "SET NOCOUNT ON;
+        $where = "";
 
+        $sql =
+            "SET NOCOUNT ON;
+
+            CREATE TABLE #SelectedSource(SourceName varchar(50) Primary Key);
             CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
-            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');
+            INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
 
+        if (!empty($this->params['callerids']) && $this->params['callerids'] != '*') {
+            $callerids = str_replace("'", "''", implode('!#!', $this->params['callerids']));
+            $bind['callerids'] = $callerids;
+
+            $where .= " AND S.SourceName IS NOT NULL";
+            $sql .= "
+            INSERT INTO #SelectedSource SELECT DISTINCT [value] from dbo.SPLIT(:callerids, '!#!');";
+        }
+
+        $sql .= "
             CREATE TABLE #CampaignSummary(
                 Source varchar(50),
                 Campaign varchar(50),
@@ -131,10 +147,12 @@ class InboundSummary
                     dr.Duration as Duration
                 FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
                 INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign
+                LEFT JOIN #SelectedSource S on S.SourceName = dr.CallerId
                 WHERE dr.GroupId = :group_id$i
                 AND dr.CallType = 1
                 AND dr.Date >= :startdate$i
-                AND dr.Date < :enddate$i";
+                AND dr.Date < :enddate$i
+                $where";
 
             if (session('ssoRelativeCampaigns', 0)) {
                 $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
@@ -352,48 +370,8 @@ class InboundSummary
             $this->params['campaigns'] = $request->campaigns;
         }
 
-        if (!empty($request->reps)) {
-            $this->params['reps'] = $request->reps;
-        }
-
-        if (!empty($request->calltype)) {
-            $this->params['calltype'] = $request->calltype;
-        }
-
-        if (!empty($request->phone)) {
-            $this->params['phone'] = $request->phone;
-        }
-
         if (!empty($request->callerids)) {
             $this->params['callerids'] = $request->callerids;
-        }
-
-        if (!empty($request->callstatuses)) {
-            $this->params['callstatuses'] = $request->callstatuses;
-        }
-
-        if (empty($request->durationfrom)) {
-            $this->params['durationfrom'] = '';
-            $from = 0;
-        } else {
-            $this->params['durationfrom'] = $request->durationfrom;
-            $from = $request->durationfrom;
-        }
-
-        if (empty($request->durationto)) {
-            $this->params['durationto'] = '';
-            $to = 0;
-        } else {
-            $this->params['durationto'] = $request->durationto;
-            $to = $request->durationto;
-        }
-
-        if ($from > $to) {
-            $this->errors->add('duration', trans('reports.errduration'));
-        }
-
-        if (!empty($request->showonlyterm)) {
-            $this->params['showonlyterm'] = $request->showonlyterm;
         }
 
         // Save params to session
