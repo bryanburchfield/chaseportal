@@ -3285,6 +3285,19 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
+.rep_status {
+  padding-top: 20px;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0b1019+1,1c293d+100 */
+  background: #0b1019;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #0b1019 1%, #1c293d 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#0b1019", endColorstr="#1c293d",GradientType=1 );
+  /* IE6-9 */
+}
+
 .rep_status li.list-group-item {
   overflow: auto !important;
   border: 1px solid #090d14;
