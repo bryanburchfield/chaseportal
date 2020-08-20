@@ -25,7 +25,7 @@ trait CampaignTraits
 
                 $sql .= "$union SELECT CampaignName AS Campaign
                 FROM [$db].[dbo].[Campaigns]
-                WHERE isActive = 1
+                WHERE IsActive = 1
                 AND GroupId = :groupid$i
                 AND CampaignName != ''";
 

@@ -131,7 +131,7 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
             foreach (Auth::user()->getDatabaseList() as $i => $db) {
                 $bind['groupid' . $i] = Auth::user()->group_id;
 
-                $sql .= " $union SELECT RepName, isActive
+                $sql .= " $union SELECT RepName, IsActive
             FROM [$db].[dbo].[Reps]
             WHERE GroupId = :groupid$i";
 
@@ -143,8 +143,8 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
         $results = $this->runSql($sql, $bind);
 
         if ($rollups) {
-            array_unshift($results, ['RepName' => '[All Unanswered]', 'isActive' => 1]);
-            array_unshift($results, ['RepName' => '[All Answered]', 'isActive' => 1]);
+            array_unshift($results, ['RepName' => '[All Unanswered]', 'IsActive' => 1]);
+            array_unshift($results, ['RepName' => '[All Answered]', 'IsActive' => 1]);
         }
 
         return $results;
