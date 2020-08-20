@@ -26,6 +26,7 @@ class CallDetails
         $this->params['campaigns'] = [];
         $this->params['custom_table'] = '';
         $this->params['reps'] = [];
+        $this->params['skills'] = [];
         $this->params['is_callable'] = '';
         $this->params['calltype'] = '';
         $this->params['phone'] = '';
@@ -61,6 +62,7 @@ class CallDetails
             'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
+            'skills' => $this->getAllSkills(),
             'call_statuses' => $this->getAllCallStatuses(),
             'call_types' => $this->getAllCallTypes(),
             'is_callable' => [
@@ -200,18 +202,33 @@ class CallDetails
         CREATE TABLE #SelectedCallStatus(CallStatusName varchar(50) Primary Key);
         CREATE TABLE #SelectedSource(SourceName varchar(50) Primary Key);";
 
+        if (!empty($this->params['skills'])) {
+            $list = str_replace("'", "''", implode('!#!', $this->params['skills']));
+            $sql .= "
+            CREATE TABLE #SelectedSkill(SkillName varchar(50) Primary Key);
+            INSERT INTO #SelectedSkill SELECT DISTINCT [value] from dbo.SPLIT('$list', '!#!');";
+        }
+
         $where = '';
         // load temp tables
 
         // Load all hangup AA recs +/- 1 hour of date range
         $sql .= "
-        SELECT ActivityId, Rep
+        SELECT AA.ActivityId, AA.Rep
         INTO #tmphangups
-        FROM AgentActivity WITH(NOLOCK)
-        WHERE  GroupId = :group_id_aa
-        AND Details = 'Agent Hangup Call'
-        AND Date >= DATEADD(hour,-1,:startdate_aa)
-        AND Date <= DATEADD(hour,1,:enddate_aa)
+        FROM AgentActivity AA WITH(NOLOCK)";
+
+        if (!empty($this->params['skills'])) {
+            $sql .= "
+                INNER JOIN Reps RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = AA.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+        }
+
+        $sql .= "
+        WHERE  AA.GroupId = :group_id_aa
+        AND AA.Details = 'Agent Hangup Call'
+        AND AA.Date >= DATEADD(hour,-1,:startdate_aa)
+        AND AA.Date <= DATEADD(hour,1,:enddate_aa)
 
         CREATE INDEX IX_tmphangup ON #tmphangups (ActivityId, Rep);
         ";
@@ -332,7 +349,15 @@ class CallDetails
         $sql .= "
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
-            FROM [DialingResults] DR WITH(NOLOCK)
+            FROM [DialingResults] DR WITH(NOLOCK)";
+
+        if (!empty($this->params['skills'])) {
+            $sql .= "
+                INNER JOIN Reps RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
+                INNER JOIN #SelectedSkill SS on SS.SkillName COLLATE SQL_Latin1_General_CP1_CS_AS = RR.Skill";
+        }
+
+        $sql .= "
             OUTER APPLY (SELECT TOP 1 'Agent Hangup' as Details
                 FROM #tmphangups AA
                 WHERE AA.ActivityId = DR.ActivityId
@@ -422,6 +447,10 @@ class CallDetails
 
         if (!empty($request->reps)) {
             $this->params['reps'] = $request->reps;
+        }
+
+        if (!empty($request->skills)) {
+            $this->params['skills'] = $request->skills;
         }
 
         if (!empty($request->is_callable)) {
