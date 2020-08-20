@@ -13,12 +13,14 @@ var RealTime = {
 			for (var i = 0; i < result.length; i++) {
 				let status_type = result[i][0];
 				status_arrays[status_type] = this.load_array(status_type, result[i][1]);
+				this.update_agent_count(status_type, status_arrays[status_type]);
 			}
 		} else {
 			// process each returned list
 			for (var i = 0; i < result.length; i++) {
 				let status_type = result[i][0];
 				status_arrays[status_type] = this.process_array(status_type, status_arrays[status_type], result[i][1]);
+				this.update_agent_count(status_type, status_arrays[status_type]);
 			}
 		}
 
@@ -158,6 +160,11 @@ var RealTime = {
 			'<div class="agent_call_details '+has_icon+'"><p class="rep_name mb0">' + data.Login + '<span id="' + login_id(status_type, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
 			'<p class="campaign">' + data.Campaign + '</p></div>' +
 			'</li>';
+	},
+
+	update_agent_count(status_type, status_array){
+		let count = status_array.length;
+		$('.' + status_type).find('.num_agents .inner').text(count);
 	}
 }
 
