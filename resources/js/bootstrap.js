@@ -28,6 +28,6 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
     wsPort: process.env.MIX_LARAVEL_WEBSOCKETS_PORT,
     wssPort: process.env.MIX_LARAVEL_WEBSOCKETS_PORT,
-    disableStats: true,
+    disableStats: false,
     forceTLS: true
 });
