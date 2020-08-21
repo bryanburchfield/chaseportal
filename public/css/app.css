@@ -3409,7 +3409,6 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
-<<<<<<< HEAD
 .lp_bg {
   background: url("/img/background-image2.jpg");
   background-size: cover;
@@ -3445,7 +3444,8 @@ label.checkbox.toggle_active_reps {
   position: absolute;
   top: 0;
   left: 0;
-=======
+}
+
 .rep_status {
   padding-top: 20px;
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e8edef+0,f2f2f2+100 */
@@ -3528,7 +3528,6 @@ div.col-sm-7.five-three {
 
 div.col-sm-5.five-two {
   width: 40% !important;
->>>>>>> real_time_dashes
 }
 
 /* ---------------------------------------------------

@@ -4,11 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "969295c5d890f4a2836bf6433c853b8b",
-=======
+
     "content-hash": "63a52903de4b02f0b1bae0e0cb698581",
->>>>>>> real_time_dashes
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -792,8 +789,7 @@
             "time": "2019-08-13T17:33:27+00:00"
         },
         {
-<<<<<<< HEAD
-=======
+
             "name": "erusev/parsedown",
             "version": "1.7.4",
             "source": {
@@ -927,7 +923,6 @@
             "time": "2019-08-30T14:06:08+00:00"
         },
         {
->>>>>>> real_time_dashes
             "name": "fideloper/proxy",
             "version": "4.3.0",
             "source": {
@@ -1046,9 +1041,7 @@
                 "laravel",
                 "markdown"
             ],
-<<<<<<< HEAD
-            "time": "2020-04-14T14:37:09+00:00"
-=======
+
             "funding": [
                 {
                     "url": "https://github.com/GrahamCampbell",
@@ -1064,7 +1057,6 @@
                 }
             ],
             "time": "2020-03-01T11:40:45+00:00"
->>>>>>> real_time_dashes
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1694,9 +1686,7 @@
                 "md",
                 "parser"
             ],
-<<<<<<< HEAD
-            "time": "2020-04-13T20:52:18+00:00"
-=======
+
             "funding": [
                 {
                     "url": "https://github.com/colinodell",
@@ -1712,7 +1702,6 @@
                 }
             ],
             "time": "2020-02-28T18:53:50+00:00"
->>>>>>> real_time_dashes
         },
         {
             "name": "league/flysystem",
