@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
+use App\Services\Broadcaster;
 use App\Services\CallerIdService;
 use App\Services\ContactsPlaybookService;
 use App\Services\DemoClientService;
@@ -30,6 +31,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // Run broadcasts
+        $schedule->call(function () {
+            Broadcaster::run();
+        })
+            ->everyMinute()
+            ->runInBackground();
+
         // Run KPIs
         $schedule->call(function () {
             foreach (KpiController::cronDue() as $rec) {

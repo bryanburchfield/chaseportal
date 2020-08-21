@@ -26,3 +26,5 @@ mix.sass('resources/sass/darktheme_app.scss', 'public/css/darktheme_app.css');
 //     'resources/js/master.js',
 
 // ], 'public/js/master.js');
+
+mix.js('resources/js/app.js', 'public/js');

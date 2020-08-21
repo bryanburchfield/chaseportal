@@ -52,6 +52,7 @@
     <input type="hidden" class="theme" value="{{(Auth::check()) ? Auth::user()->theme : ''}}">
 
     @yield('content')
+
     <script src="/messages.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
@@ -77,18 +78,30 @@
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
 
     @isset($summernote)
-        <script src="{{ asset('/js/summernote.min.js') }}"></script>
+    <script src="{{ asset('/js/summernote.min.js') }}"></script>
+    @endisset
+    
+    @isset($jsfile)
+    @foreach($jsfile as $js)
+    <script src="/js/{{ $js }}" type="text/javascript"></script>
+    @endforeach
     @endisset
 
-    @isset($jsfile)
-        @foreach($jsfile as $js)
-            <script src="/js/{{ $js }}" type="text/javascript"></script>
+    @isset($includescriptfile)
+        @foreach($includescriptfile as $script)
+            @include($script)
         @endforeach
     @endisset
     
     <script src="/js/master.js"></script>
     <script src="/js/admin.js"></script>
     <script src="/js/nav.js"></script>
+
+    @isset($includescriptfile)
+        @foreach($includescriptfile as $script)
+            @include($script)
+        @endforeach
+    @endisset
     
     @isset($page)
         @if($page['type'] !='dash')

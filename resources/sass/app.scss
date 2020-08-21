@@ -2847,6 +2847,77 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
 
     .nav_holder{position: absolute;top:0;left:0;}
+
+.rep_status{
+    
+    padding-top: 20px;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e8edef+0,f2f2f2+100 */
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e3e7e8+0,f2f2f2+100 */
+    background: rgb(227,231,232); /* Old browsers */
+    background: -moz-linear-gradient(left,  rgba(227,231,232,1) 0%, rgba(242,242,242,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  rgba(227,231,232,1) 0%,rgba(242,242,242,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  rgba(227,231,232,1) 0%,rgba(242,242,242,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e3e7e8', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
+
+
+
+    li.list-group-item{
+        overflow: auto !important;
+
+        &:nth-child(even){
+            background: lighten(#eee,2%);
+        }
+    }
+
+    .break_code{color:$orange;font-weight: 600;}
+
+    .call_type{
+        float:left;
+        position: relative;
+        right:7px;
+    }
+
+    .agent_call_details{
+        float: left;
+        width: 100%;
+        &.has_icon{
+            width: 93%;
+        }
+    }
+
+    span.timer{float: right;}
+
+    h2{
+        float: left;
+        font-size: 21px;
+        border-bottom: none;
+    }
+
+    .num_agents{
+        float: right;
+        position: relative;
+        bottom: 27px;
+
+        p{text-align: center;font-size: 12px;font-style: italic;}
+
+        .inner{
+            color:$blue;
+            text-align: center;
+            padding-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
+    p.rep_name {font-weight: 600;}
+}
+
+div.col-sm-7.five-three {
+    width: 60% !important;
+}
+
+div.col-sm-5.five-two {
+    width: 40% !important;
 }
 
 
