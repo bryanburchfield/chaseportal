@@ -3736,6 +3736,7 @@ label.checkbox.toggle_active_reps {
   text-align: center;
   font-size: 12px;
   font-style: italic;
+  color: #888;
 }
 
 .rep_status .num_agents .inner {
