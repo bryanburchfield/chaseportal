@@ -1308,7 +1308,7 @@ var Master = {
                         $('.report_errors').append(response.errors[i] + '<br>');
                     }
                     $('.table-responsive.report_table').hide();
-                    $('.hidetilloaded').hide();
+                    $('alert.hidetilloaded').hide();
 
                     return false;
                 }
