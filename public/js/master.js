@@ -404,6 +404,7 @@ var Master = {
                 }
             });
         }else{
+            $('#subcampaign_select').empty();
             $('#subcampaign_select').parent().parent().hide();
         }
     },
