@@ -41,6 +41,7 @@ class CallDetails
             'Date' => 'reports.date',
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
+            'Subcampaign' => 'reports.subcampaign',
             'Phone' => 'reports.phone',
             'Attempt' => 'reports.attempt',
             'CallerId' => 'reports.callerid',
@@ -200,6 +201,7 @@ class CallDetails
         // create temp tables for joins
         $sql = "SET NOCOUNT ON;
         CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
+        CREATE TABLE #SelectedSubcampaign(SubcampaignName varchar(50) Primary Key);
         CREATE TABLE #SelectedRep(RepName varchar(50) Primary Key);
         CREATE TABLE #SelectedCallStatus(CallStatusName varchar(50) Primary Key);
         CREATE TABLE #SelectedSource(SourceName varchar(50) Primary Key);";
@@ -244,10 +246,15 @@ class CallDetails
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
         }
 
-        if (!empty($this->params['subcampaign'])) {
-            $bind['subcampaign'] =  $this->params['subcampaign'];
-            $where .= " AND C.Subcampaign = :subcampaign";
+        if (!empty($this->params['subcampaigns'])) {
+            $subcampaigns = str_replace("'", "''", implode('!#!', $this->params['subcampaigns']));
+            $bind['subcampaigns'] = $subcampaigns;
+
+            $where .= " AND SC.SubcampaignName IS NOT NULL";
+            $sql .= "
+            INSERT INTO #SelectedSubcampaign SELECT DISTINCT [value] from dbo.SPLIT(:subcampaigns, '!#!');";
         }
+
 
         if (!empty($this->params['reps']) && $this->params['reps'] != '*') {
 
@@ -323,6 +330,7 @@ class CallDetails
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
+                DR.Subcampaign,
                 DR.Phone,
                 DR.Attempt,
                 DR.CallerId,
@@ -379,6 +387,7 @@ class CallDetails
 
         $sql .= "
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
+            LEFT JOIN #SelectedSubcampaign SC on SC.SubcampaignName = DR.Subcampaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
             LEFT JOIN #SelectedSource S on S.SourceName = DR.CallerId
@@ -452,7 +461,7 @@ class CallDetails
             $this->params['campaigns'] = $request->campaigns;
         }
 
-        if (!empty($request->subcampaign)) {
+        if (!empty($request->subcampaigns)) {
             $this->params['subcampaigns'] = $request->subcampaigns;
         }
 
