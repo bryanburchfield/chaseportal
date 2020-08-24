@@ -45,6 +45,13 @@
 					</div>
 				</div>
 
+				<div class="col-sm-4 hidetilloaded">
+					<div class="form-group">
+						{!! Form::label('subcampaigns', __('reports.subcampaigns')) !!}
+						{!! Form::select("subcampaigns[]", $filters['subcampaigns'], null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select',  'multiple'=>true]) !!}
+					</div>
+				</div>
+
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}

@@ -61,6 +61,7 @@ var Master = {
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
+        $('#call_details #campaign_select').on('change', this.toggle_subcamps);
         $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
         $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
         $('body').on('change', '.query_dates_first .datetimepicker', this.query_dates_for_camps);
@@ -362,6 +363,67 @@ var Master = {
         });
     },
 
+    toggle_subcamps:function(e){
+        e.preventDefault();
+
+        if($(this).find('option:selected').length == 1 && $(this).find('option:selected').val() != undefined){
+            var campaign = $(this).val();
+            campaign=campaign[0];
+            var report = $('form.report_filter_form').attr('id');
+        }
+
+        if(campaign){
+            $('#subcampaign_select').parent().parent().show();
+
+            ///// build subcamps menu
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/dashboards/reports/get_subcampaigns' ,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    report:report,
+                    campaign: campaign,
+                },
+
+                success:function(response){
+
+                    var subcamp_response = Master.get_subcampaigns(campaign);
+                    var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
+                    var subcamp_obj_length = Object.keys(subcamp_obj).length;
+                    const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
+                    let subcampaigns_array = [];
+                    subcampaigns_array.push(Object.values(subcamp_obj));
+
+                    $('#subcampaign_select').empty();
+
+                    var subcampaigns='';
+                    for (var i = 0; i < subcampaigns_array[0].length; i++) {
+                        subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+                    }
+
+                    $('#subcampaign_select').append(subcampaigns);
+                    $("#subcampaign_select").multiselect('rebuild');
+                    $("#subcampaign_select").multiselect('refresh');
+
+                    $('#subcampaign_select')
+                        .multiselect({ nonSelectedText: '', })
+                        .multiselect('selectAll', true)
+                        .multiselect('updateButtonText');
+
+                }
+            });
+        }else{
+            $('#subcampaign_select').empty();
+            $('#subcampaign_select').parent().parent().hide();
+        }
+    },
+
     get_subcampaigns:function(campaign, path=''){
 
         if(!path){
@@ -384,6 +446,7 @@ var Master = {
             },
 
             success: function(response) {
+                console.log(response);
                 return response;
             },
             error: function () {}
@@ -1183,7 +1246,7 @@ var Master = {
                         $('.report_errors').append(response.errors[i] + '<br>');
                     }
                     $('.table-responsive.report_table').hide();
-                    $('.hidetilloaded').hide();
+                    $('alert.hidetilloaded').hide();
 
                     return false;
                 }

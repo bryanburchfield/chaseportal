@@ -149,6 +149,7 @@ return [
      'source'              => 'Fuente de Entrada',
      'stat'                => 'Estado',
      'subcampaign'         => 'Sub-campaña',
+     'subcampaigns'       => 'Subcampañas',
      'talktimesec'         => 'Duración de Conversación',
      'total'               => 'Total',
      'totalcalls'          => 'Llamadas Totales',

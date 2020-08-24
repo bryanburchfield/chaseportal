@@ -51,6 +51,7 @@ return [
 	'skill'              => 'Skill',
 	'start'              => 'Start',
 	'subcampaign'        => 'Subcampaign',
+	'subcampaigns'        => 'Subcampaigns',
 	'termination_status' => 'Show only termination status',
 	'to'                 => 'To',
 
