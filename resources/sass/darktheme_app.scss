@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
 }
 
-.btn {
+.filters .btn {
     @include border-radius(0);
 }
 
@@ -386,6 +386,12 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
+button.btn.btn-default.dropdown-toggle{
+    border:1px solid #030508;
+}
+
+.bl_none{border-left: none !important;}
+
 // .dropdown-toggle::after {
 //     display: block;
 //     position: absolute;
@@ -532,7 +538,7 @@ div.container-fluid.bg {
     color: #fff;
 }
 
-.dropdown-menu li:nth-child(even) {
+.dropdown-menu a:nth-child(even) {
     background: $blue !important;
 }
 
@@ -540,7 +546,7 @@ div.container-fluid.bg {
     background: $green !important;
     &:hover{background:$green !important;}
 }
-.dropdown-menu li:hover {
+.dropdown-menu a:hover {
     background-color: #e4e4e4;
 }
 

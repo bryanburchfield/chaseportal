@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
 }
 
-.btn {
+.filters .btn {
     @include border-radius(0);
 }
 
@@ -396,13 +396,19 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+button.btn.btn-default.dropdown-toggle{
+    border:1px solid #aaa;
 }
+
+.bl_none{border-left: none !important;}
+
+// .dropdown-toggle::after {
+//     display: block;
+//     position: absolute;
+//     top: 50%;
+//     right: 20px;
+//     transform: translateY(-50%);
+// }
 
 ul ul a {
     font-size: 0.9em !important;
@@ -536,11 +542,11 @@ div.container-fluid.bg {
     color: #fff;
 }
 
-.dropdown-menu li:nth-child(even) {
+.dropdown-menu a:nth-child(even) {
     background-color: #ececec;
 }
 
-.dropdown-menu li:hover {
+.dropdown-menu a:hover {
     background-color: #e4e4e4;
 }
 
@@ -803,13 +809,13 @@ p.total {
     display: block;
 }
 
-.dropdown a:nth-child(even) {
-    background-color: #ececec;
-}
+// .dropdown a:nth-child(even) {
+//     background-color: #ececec;
+// }
 
-.dropdown a:hover {
-    background-color: #e4e4e4;
-}
+// .dropdown a:hover {
+//     background-color: #e4e4e4;
+// }
 
 .show {
     display: block;
@@ -860,9 +866,9 @@ input.form-control {
     height: 40px;
 }
 
-a.dropdown-toggle {
-    text-align: right;
-}
+// a.dropdown-toggle {
+//     text-align: right;
+// }
 
 .dd_trigger .active, .filter_campaign .active {
     @include base_style($blue !important, #fff !important);
@@ -905,11 +911,11 @@ ul.dropdown-menu.filter_campaign {
     -ms-overflow-style: none;
 }
 
-.dropdown-menu {
-    right: 0;
-    left: auto;
-    padding: 0;
-}
+// .dropdown-menu {
+//     right: 0;
+//     left: auto;
+//     padding: 0;
+// }
 
 #startDate, #endDate {
     width: 49%;

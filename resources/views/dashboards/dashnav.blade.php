@@ -2,12 +2,12 @@
 @if($page['type'] =='dash')
     @if($has_multiple_dbs)
 
-        <div class="btn-group flt_rgt">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <div class="dropdown float-right d-flex"">
+            <button type="button" class="btn btn-default dropdown-toggle bl_none" data-toggle="dropdown">
                 <span>{{__('general.database')}}</span>
             </button>
 
-            <ul class="dropdown-menu db_select flt_rgt stop-propagation">
+            <ul class="dropdown-menu db_select float-right stop-propagation">
                 @foreach ($db_list as $db)
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
                     <div class="checkbox">
@@ -23,19 +23,19 @@
 @endif
 
 @if($page['type']=='report')
-    <div class="btn-group flt_rgt">
+    <div class="dropdown d-flex float-right">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="window.location.href = 'reportsettings.php';">
             <span>Report Settings</span>
         </button>
     </div>
 @endif
 
-<div class="btn-group flt_rgt">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+<div class="dropdown float-right">
+    <button type="button" class="btn btn-default dropdown-toggle bl_none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span>{{__('general.interaction')}}</span>
     </button>
 
-    <ul class="dropdown-menu filter_campaign stop-propagation">
+    <div class="dropdown-menu py-0 filter_campaign stop-propagation">
         <div class="form-group mb0">
             <input type="text" class="form-control campaign_search" placeholder="{{__('general.search')}}">
             <input type="hidden" class="campaign_search_url" value="/dashboards/campaign_search">
@@ -52,11 +52,11 @@
                 </label>
             </div>
         @endforeach
-    </ul>
+    </div>
 </div>
 
-<div class="btn-group flt_rgt">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+<div class="dropdown float-right">
+    <button type="button" class="btn btn-default dropdown-toggle bl_none" data-toggle="dropdown">
         <span>{{__('general.date')}}</span>
     </button>
 
@@ -66,15 +66,13 @@
             $selected_date_filter = 'custom';
         }
     ?>
-    <ul class="dropdown-menu date_filters">
-        <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">{{__('general.today')}}</a></li>
-        <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a></li>
-        <li {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">{{__('general.this_week')}}</a></li>
-        <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">{{__('general.last_week')}}</a></li>
-        <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">{{__('general.this_month')}}</a></li>
-        <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">{{__('general.last_month')}}</a></li>
-        <li {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a></li>
-    </ul>
+    <div class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}"  href="#" data-datefilter="today">{{__('general.today')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}" href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}" href="#" data-datefilter="week">{{__('general.this_week')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}" href="#" data-datefilter="last_week">{{__('general.last_week')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}" href="#" data-datefilter="month">{{__('general.this_month')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}" href="#" data-datefilter="last_month">{{__('general.last_month')}}</a>
+        <a class="dropdown-item {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}" href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a>
+    </div>
 </div>
-
-

@@ -80,7 +80,7 @@ h6 {
   font-family: "Open Sans", sans-serif;
 }
 
-.btn {
+.filters .btn {
   border-radius: 0;
 }
 
@@ -567,6 +567,14 @@ a[data-toggle=collapse] {
   position: relative;
 }
 
+button.btn.btn-default.dropdown-toggle {
+  border: 1px solid #030508;
+}
+
+.bl_none {
+  border-left: none !important;
+}
+
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
@@ -742,7 +750,7 @@ div.container-fluid.bg {
   color: #fff;
 }
 
-.dropdown-menu li:nth-child(even) {
+.dropdown-menu a:nth-child(even) {
   background: #203047 !important;
 }
 
@@ -754,7 +762,7 @@ div.container-fluid.bg {
   background: #33A09B !important;
 }
 
-.dropdown-menu li:hover {
+.dropdown-menu a:hover {
   background-color: #e4e4e4;
 }
 
