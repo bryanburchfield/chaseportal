@@ -59,6 +59,7 @@ class CallDetails
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
+            'subcampaign' => $this->getAllSubcampaigns(),
             'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
@@ -240,6 +241,11 @@ class CallDetails
             $where .= " AND C.CampaignName IS NOT NULL";
             $sql .= "
             INSERT INTO #SelectedCampaign SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
+        }
+
+        if (!empty($this->params['subcampaign'])) {
+            $bind['subcampaign'] =  $this->params['subcampaign'];
+            $where .= " AND C.Subcampaign = :subcampaign";
         }
 
         if (!empty($this->params['reps']) && $this->params['reps'] != '*') {
@@ -443,6 +449,10 @@ class CallDetails
             $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         } else {
             $this->params['campaigns'] = $request->campaigns;
+        }
+
+        if (!empty($request->subcampaign)) {
+            $this->params['subcampaign'] = $request->subcampaign;
         }
 
         if (!empty($request->reps)) {

@@ -47,6 +47,13 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
+						{!! Form::label('subcampaign', __('reports.subcampaign')) !!}
+						{!! Form::select("subcampaign", $filters['subcampaign'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
 						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 					</div>
