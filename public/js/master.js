@@ -353,12 +353,13 @@ var Master = {
 
         if($(this).find('option:selected').length == 1 && $(this).find('option:selected').val() != undefined){
             var campaign = $(this).val();
+            campaign=campaign[0];
             var report = $('form.report_filter_form').attr('id');
         }
 
         if(campaign){
             $('#subcampaign_select').parent().parent().show();
-            console.log(report +' '+ campaign);
+
             ///// build subcamps menu
             $.ajaxSetup({
                 headers: {
@@ -367,7 +368,7 @@ var Master = {
             });
 
             $.ajax({
-                url: '/dashboards/reports/get_subcampaigns',
+                url: '/dashboards/reports/get_subcampaigns' ,
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -376,7 +377,6 @@ var Master = {
                 },
 
                 success:function(response){
-                    console.log(response);
 
                     var subcamp_response = Master.get_subcampaigns(campaign);
                     var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
@@ -385,15 +385,27 @@ var Master = {
                     let subcampaigns_array = [];
                     subcampaigns_array.push(Object.values(subcamp_obj));
 
-                    console.log(subcampaigns_array);
+                    $('#subcampaign_select').empty();
+
+                    var subcampaigns='';
+                    for (var i = 0; i < subcampaigns_array[0].length; i++) {
+                        subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+                    }
+
+                    $('#subcampaign_select').append(subcampaigns);
+                    $("#subcampaign_select").multiselect('rebuild');
+                    $("#subcampaign_select").multiselect('refresh');
+
+                    $('#subcampaign_select')
+                        .multiselect({ nonSelectedText: '', })
+                        .multiselect('selectAll', true)
+                        .multiselect('updateButtonText');
+
                 }
             });
         }else{
             $('#subcampaign_select').parent().parent().hide();
-             ///// destroy & hide subcamps menu
         }
-
-
     },
 
     get_subcampaigns:function(campaign, path=''){
