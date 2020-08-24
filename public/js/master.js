@@ -346,7 +346,7 @@ var Master = {
             },
 
             success:function(response){
-
+                console.log('ran');
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -393,8 +393,7 @@ var Master = {
 
                 success:function(response){
 
-                    var subcamp_response = Master.get_subcampaigns(campaign);
-                    var subcamp_obj = subcamp_response.responseJSON.subcampaigns;
+                    var subcamp_obj = response.subcampaigns;
                     var subcamp_obj_length = Object.keys(subcamp_obj).length;
                     const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
                     let subcampaigns_array = [];
