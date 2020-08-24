@@ -24,6 +24,7 @@ class CallDetails
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['campaigns'] = [];
+        $this->params['subcampaigns'] = [];
         $this->params['custom_table'] = '';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
@@ -59,7 +60,7 @@ class CallDetails
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
-            'subcampaign' => $this->getAllSubcampaigns(),
+            'subcampaigns' => [],
             'custom_table' => $this->getAllCustomTables(),
             'inbound_sources' => $this->getAllInboundSources(),
             'reps' => $this->getAllReps(true),
@@ -452,7 +453,7 @@ class CallDetails
         }
 
         if (!empty($request->subcampaign)) {
-            $this->params['subcampaign'] = $request->subcampaign;
+            $this->params['subcampaigns'] = $request->subcampaigns;
         }
 
         if (!empty($request->reps)) {
