@@ -45,7 +45,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 hidetilloaded">
 					<div class="form-group">
 						{!! Form::label('subcampaign', __('reports.subcampaign')) !!}
 						{!! Form::select("subcampaign", $filters['subcampaign'], null, ["class" => "form-control", 'id'=> 'subcampaign_select']) !!}
