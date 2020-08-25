@@ -192,8 +192,8 @@ var Contacts_Playbook = {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
-		
-	    return $.ajax({
+
+	    $.ajax({
 	        url: '/playbook/get_subcampaigns',
 	        type: 'POST',
 	        dataType: 'json',
@@ -218,6 +218,16 @@ var Contacts_Playbook = {
 	        	}
 	        }
 	    });
+
+        $.ajax({
+            url: '/playbook/get_extra_campaigns',
+            type: 'POST',
+            dataType: 'json',
+            data: {campaign: campaign,},
+            success:function(response){
+            	console.log(response);
+            }
+        });
 	},
 
 	toggle_all_subcamps:function(){

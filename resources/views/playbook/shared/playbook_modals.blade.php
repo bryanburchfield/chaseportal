@@ -19,7 +19,17 @@
                         {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
                     </div>
 
-                    <div class="subcampaign_list"></div>
+                    <div class="form-group">
+                        {!! Form::label('reps', 'Extra Camps') !!}
+                        {!! Form::select("extra_campaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'extra_campaigns','multiple'=>true]) !!}
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::label('reps', 'Subcampaigns') !!}
+                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'subcampaigns','multiple'=>true]) !!}
+                    </div>
+
+                    {{-- <div class="subcampaign_list"></div> --}}
 
                     <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
 
