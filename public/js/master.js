@@ -2709,7 +2709,7 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({ trigger: "click" });
 
     $('.notification_msg').find('img').each(function(){
-        $(this).addClass('img-responsive');
+        $(this).addClass('img-fluid');
     });
 
     if($('.sso #group_id').val() == '-1'){

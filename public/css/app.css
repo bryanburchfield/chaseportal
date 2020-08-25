@@ -568,7 +568,7 @@ a[data-toggle=collapse] {
   position: relative;
 }
 
-button.btn.btn-default.dropdown-toggle {
+button.btn.btn-default {
   border: 1px solid #aaa;
 }
 

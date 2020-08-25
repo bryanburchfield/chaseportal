@@ -2,20 +2,20 @@
     <div class="container-fluid">
        <div class="col-xs-2 col-sm-6 brand pl0">
            @if(!session()->has('isSso'))
-            <button type="button" id="sidebarCollapse" class="btn flt_lft">
+            <button type="button" id="sidebarCollapse" class="btn float-left">
                 <i class="fas fa-align-left"></i>
             </button>
            @endif
 
            @if(Auth::user()->theme == 'dark')
-               <img src="/img/text_logo_light.png" alt="" class="img-responsive text_logo flt_lft">
+               <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
            @else
-               <img src="/img/chase_text_logo.png" alt="" class="img-responsive text_logo flt_lft">
+               <img src="/img/chase_text_logo.png" alt="" class="img-fluid text_logo float-left">
            @endif
        </div>
 
         <div class="filters col-xs-10 col-sm-6">
-            
+
             @if(!session()->has('isSso'))
                 {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
                     @csrf
