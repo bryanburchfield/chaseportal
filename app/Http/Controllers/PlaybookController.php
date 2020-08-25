@@ -70,13 +70,19 @@ class PlaybookController extends Controller
         // Get all subcamps
         $subcampaigns = $this->getAllSubcampaigns($request->campaign);
 
-        // Get related campaigns by AdvancedTable
-        $extra_campaigns = $campaign->advancedTable->campaigns;
+        $extra_campaigns = [];
 
-        // Filter out passed campaign and return only names
-        $extra_campaigns = $extra_campaigns->map->only('CampaignName')->reject(function ($rec) use ($campaign) {
-            return $rec['CampaignName'] == $campaign->CampaignName;
-        });
+        // check that campaign has related campaigns
+        if (!empty($campaign->advancedTable->campaigns)) {
+
+            // Get related campaigns by AdvancedTable
+            $extra_campaigns = $campaign->advancedTable->campaigns;
+
+            // Filter out passed campaign and return only names
+            $extra_campaigns = $extra_campaigns->map->only('CampaignName')->reject(function ($rec) use ($campaign) {
+                return $rec['CampaignName'] == $campaign->CampaignName;
+            });
+        }
 
         return [
             'extra_campaigns' => resultsToList($extra_campaigns->toArray()),
