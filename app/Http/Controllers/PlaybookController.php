@@ -55,10 +55,9 @@ class PlaybookController extends Controller
     }
 
     /**
-     * Get Subcampaigns (ajax)
-     * 
+     * Get extra campaigns and subcampaigns (ajax)
      * @param Request $request 
-     * @return array[] 
+     * @return array 
      */
     public function getExtraCampaigns(Request $request)
     {
@@ -67,8 +66,22 @@ class PlaybookController extends Controller
             ->where('GroupId', Auth::user()->group_id)
             ->firstOrFail();
 
-        // Get all subcamps
         $subcampaigns = $this->getAllSubcampaigns($request->campaign);
+
+        $extra_campaigns = $this->extraCampaigns($request->campaign);
+
+        return [
+            'extra_campaigns' => $extra_campaigns,
+            'subcampaigns' => $subcampaigns,
+        ];
+    }
+
+    public function extraCampaigns($campaign)
+    {
+        // Find the campaign
+        $campaign = Campaign::where('CampaignName', $campaign)
+            ->where('GroupId', Auth::user()->group_id)
+            ->firstOrFail();
 
         $extra_campaigns = [];
 
@@ -82,12 +95,10 @@ class PlaybookController extends Controller
             $extra_campaigns = $extra_campaigns->map->only('CampaignName')->reject(function ($rec) use ($campaign) {
                 return $rec['CampaignName'] == $campaign->CampaignName;
             });
+            $extra_campaigns = resultsToList($extra_campaigns->toArray());
         }
 
-        return [
-            'extra_campaigns' => resultsToList($extra_campaigns->toArray()),
-            'subcampaigns' => $subcampaigns,
-        ];
+        return $extra_campaigns;
     }
 
     /**
