@@ -159,6 +159,10 @@ class PlaybookController extends Controller
 
         $playbook = $contacts_playbook->toArray();
 
+        $playbook['extra_campaigns'] = $contacts_playbook->playbook_campaigns
+            ->sortBy('campaign')
+            ->pluck('campaign');
+
         $playbook['subcampaigns'] = $contacts_playbook->playbook_subcampaigns
             ->sortBy('subcampaign')
             ->pluck('subcampaign');
