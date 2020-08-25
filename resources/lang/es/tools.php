@@ -72,6 +72,7 @@ return [
 	'emails_per_lead'	=> 'Correos Electrónicos por Cliente Potencial',
 	'error'			=> 'Error',
 	'errors'		=> 'Errores',
+	'extra_campaigns'=> 'Campañas Extra',
 	'field'			=> 'Campo',
 	'file'			=> 'Archivo',
 	'file_name'		=> 'Nombre del Archivo',

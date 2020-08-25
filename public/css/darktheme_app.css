@@ -3171,6 +3171,10 @@ table.dataTable tbody tr:nth-of-type(even) {
   overflow: auto;
 }
 
+.add_playbook .modal-body {
+  overflow: revert;
+}
+
 .oauto {
   overflow: auto;
 }

@@ -2409,6 +2409,10 @@ div.vertical-line{
     overflow: auto;
 }
 
+.add_playbook .modal-body{
+    overflow: revert;
+}
+
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{
     margin-bottom: 20px !important;

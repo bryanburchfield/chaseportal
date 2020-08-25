@@ -24,6 +24,7 @@ var Contacts_Playbook = {
 
 	init:function(){
 		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
+		$('body').on('change', '#extra_campaigns', this.check_extra_camp_selection);
 		$('.add_playbook').on('submit', this.add_playbook);
 		$('body').on('click', '.delete_playbook_modal', this.delete_playbook_modal);
 		$('.edit_playbook').on('submit', this.update_playbook);
@@ -226,8 +227,59 @@ var Contacts_Playbook = {
             data: {campaign: campaign,},
             success:function(response){
             	console.log(response);
+
+            	$('#extra_campaigns, #subcampaigns').empty();
+            	var extra_campaigns_obj = response.extra_campaigns;
+            	var extra_campaigns_obj_length = Object.keys(extra_campaigns_obj).length;
+            	const extra_campaigns_obj_keys = Object.getOwnPropertyNames(extra_campaigns_obj);
+            	let extra_campaigns_array = [];
+            	extra_campaigns_array.push(Object.values(extra_campaigns_obj));
+
+            	var extra_campaigns = '';
+            	for (var i = 0; i < extra_campaigns_array[0].length; i++) {
+            		extra_campaigns += '<option value="' + extra_campaigns_array[0][i] + '">' + extra_campaigns_array[0][i] + '</option>';
+            	}
+
+            	$('#extra_campaigns').append(extra_campaigns);
+            	$("#extra_campaigns").multiselect('rebuild');
+            	$("#extra_campaigns").multiselect('refresh');
+
+            	$('#extra_campaigns')
+            		.multiselect({ nonSelectedText: '', })
+            		.multiselect('selectAll', true)
+            		.multiselect('updateButtonText');
+
+            	/////////////////////////////////////////////////////////////////////////////////
+
+            	var subcampaigns_obj = response.subcampaigns;
+            	var subcampaigns_obj_length = Object.keys(subcampaigns_obj).length;
+            	const subcampaigns_obj_keys = Object.getOwnPropertyNames(subcampaigns_obj);
+            	let subcampaigns_array = [];
+            	subcampaigns_array.push(Object.values(subcampaigns_obj));
+
+            	var subcampaigns = '';
+            	for (var i = 0; i < subcampaigns_array[0].length; i++) {
+            		subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+            	}
+
+            	$('#subcampaigns').append(subcampaigns);
+            	$("#subcampaigns").multiselect('rebuild');
+            	$("#subcampaigns").multiselect('refresh');
+
+            	$('#subcampaigns')
+            		.multiselect({ nonSelectedText: '', })
+            		.multiselect('selectAll', true)
+            		.multiselect('updateButtonText');
             }
         });
+	},
+
+	check_extra_camp_selection:function(){
+		if($(this).find('option:selected').length){
+        	$('#subcampaigns').parent().hide();
+        }else{
+        	$('#subcampaigns').parent().show();
+        }
 	},
 
 	toggle_all_subcamps:function(){
@@ -764,12 +816,12 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
-
+	        	console.log(response);
                 var edit_modal = $('#editPlaybookModal');
-
+                
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('#campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
-
+                
                 $.when(
 					Contacts_Playbook.get_subcampaigns(event, response.campaign)
 				).done(function() {

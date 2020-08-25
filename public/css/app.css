@@ -2814,6 +2814,10 @@ div.vertical-line.mvup100 {
   overflow: auto;
 }
 
+.add_playbook .modal-body {
+  overflow: revert;
+}
+
 .oauto {
   overflow: auto;
 }
