@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidPlaybook;
+use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookOptout;
 use App\Traits\CampaignTraits;
@@ -59,11 +60,28 @@ class PlaybookController extends Controller
      * @param Request $request 
      * @return array[] 
      */
-    public function getSubcampaigns(Request $request)
+    public function getExtraCampaigns(Request $request)
     {
-        $results = $this->getAllSubcampaigns($request->campaign);
+        // Find the campaign
+        $campaign = Campaign::where('CampaignName', $request->campaign)
+            ->where('GroupId', Auth::user()->group_id)
+            ->firstOrFail();
 
-        return ['subcampaigns' => $results];
+        // Get all subcamps
+        $subcampaigns = $this->getAllSubcampaigns($request->campaign);
+
+        // Get related campaigns by AdvancedTable
+        $extra_campaigns = $campaign->advancedTable->campaigns;
+
+        // Filter out passed campaign and return only names
+        $extra_campaigns = $extra_campaigns->map->only('CampaignName')->reject(function ($rec) use ($campaign) {
+            return $rec['CampaignName'] == $campaign->CampaignName;
+        });
+
+        return [
+            'extra_campaigns' => resultsToList($extra_campaigns),
+            'subcampaigns' => $subcampaigns,
+        ];
     }
 
     /**

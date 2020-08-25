@@ -13,4 +13,9 @@ class AdvancedTableField extends SqlSrvModel
     {
         return $this->belongsTo('App\Models\FieldType', 'FieldType');
     }
+
+    public function campaigns()
+    {
+        return $this->hasMany('App\Models\Campaign', 'AdvancedTable');
+    }
 }
