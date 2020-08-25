@@ -26,6 +26,11 @@ class ContactsPlaybook extends Model
         'playbook_subcampaigns',
     ];
 
+    public function playbook_campaigns()
+    {
+        return $this->hasMany('App\Models\PlaybookCampaign');
+    }
+
     public function playbook_subcampaigns()
     {
         return $this->hasMany('App\Models\PlaybookSubcampaign');
