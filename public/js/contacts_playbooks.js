@@ -23,14 +23,14 @@ var Contacts_Playbook = {
     org_subcampaigns : [],
 
 	init:function(){
-		$('#campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
-		$('body').on('change', '#extra_campaigns', this.check_extra_camp_selection);
+		$('.campaign_select, #destination_campaign').on('change', this.get_subcampaigns);
+		$('body').on('change', '.extra_campaigns', this.check_extra_camp_selection);
 		$('.add_playbook').on('submit', this.add_playbook);
 		$('body').on('click', '.delete_playbook_modal', this.delete_playbook_modal);
 		$('.edit_playbook').on('submit', this.update_playbook);
 		$('.update_actions').on('click', this.update_playbook_actions);
 		$('.update_filters').on('click', this.update_playbook_filters);
-		$('.edit_playbook').on('change', '#campaign_select', this.campaign_warning);
+		$('.edit_playbook').on('change', '.campaign_select', this.campaign_warning);
 		$('a.activate_all_playbooks').on('click', this.activate_all_playbooks);
 		$('a.deactivate_all_playbooks').on('click', this.deactivate_all_playbooks);
 		$('.playbook').on('click', '.switch input', this.toggle_playbook);
@@ -175,6 +175,7 @@ var Contacts_Playbook = {
 		e.preventDefault();
 
 		$('.loader_hor').show();
+		$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().show();
 
 		if(!campaign){
 			var campaign = $(this).val();
@@ -228,7 +229,16 @@ var Contacts_Playbook = {
             success:function(response){
             	console.log(response);
 
-            	$('#extra_campaigns, #subcampaigns').empty();
+            	console.log(response.extra_campaigns.length);
+
+            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns, .subcampaigns').empty();
+
+            	if(!response.extra_campaigns.length){
+            		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').parent().hide();
+            	}else{
+            		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').parent().show();
+            	}
+
             	var extra_campaigns_obj = response.extra_campaigns;
             	var extra_campaigns_obj_length = Object.keys(extra_campaigns_obj).length;
             	const extra_campaigns_obj_keys = Object.getOwnPropertyNames(extra_campaigns_obj);
@@ -240,11 +250,11 @@ var Contacts_Playbook = {
             		extra_campaigns += '<option value="' + extra_campaigns_array[0][i] + '">' + extra_campaigns_array[0][i] + '</option>';
             	}
 
-            	$('#extra_campaigns').append(extra_campaigns);
-            	$("#extra_campaigns").multiselect('rebuild');
-            	$("#extra_campaigns").multiselect('refresh');
+            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_campaigns);
+            	$('#'+Contacts_Playbook.current_modal).find(".extra_campaigns").multiselect('rebuild');
+            	$('#'+Contacts_Playbook.current_modal).find(".extra_campaigns").multiselect('refresh');
 
-            	$('#extra_campaigns')
+            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns')
             		.multiselect({ nonSelectedText: '', })
             		.multiselect('selectAll', true)
             		.multiselect('updateButtonText');
@@ -262,11 +272,11 @@ var Contacts_Playbook = {
             		subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
             	}
 
-            	$('#subcampaigns').append(subcampaigns);
-            	$("#subcampaigns").multiselect('rebuild');
-            	$("#subcampaigns").multiselect('refresh');
+            	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').append(subcampaigns);
+            	$('#'+Contacts_Playbook.current_modal).find(".subcampaigns").multiselect('rebuild');
+            	$('#'+Contacts_Playbook.current_modal).find(".subcampaigns").multiselect('refresh');
 
-            	$('#subcampaigns')
+            	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns')
             		.multiselect({ nonSelectedText: '', })
             		.multiselect('selectAll', true)
             		.multiselect('updateButtonText');
@@ -276,9 +286,9 @@ var Contacts_Playbook = {
 
 	check_extra_camp_selection:function(){
 		if($(this).find('option:selected').length){
-        	$('#subcampaigns').parent().hide();
+        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().hide();
         }else{
-        	$('#subcampaigns').parent().show();
+        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').parent().show();
         }
 	},
 
@@ -345,11 +355,16 @@ var Contacts_Playbook = {
 
 		// var form_data = $(this).serialize();
 		var name = $(this).find('.name').val(),
-			campaign = $(this).find('#campaign_select').val(),
+			campaign = $(this).find('.campaign_select').val(),
+			campaigns=[],
 			subcampaigns = []
 		;
 
-		$('input.subcamps[type="checkbox"]:checked').each(function () {
+		$('input.extra_campaigns[type="checkbox"]:checked').each(function () {
+		    campaigns.push($(this).val());
+		});
+
+		$('input.subcampaigns[type="checkbox"]:checked').each(function () {
 		    subcampaigns.push($(this).val());
 		});
 
@@ -368,6 +383,7 @@ var Contacts_Playbook = {
 	        data: {
 	        	name:name,
 	        	campaign:campaign,
+	        	campaigns:campaigns,
 	        	subcampaigns:subcampaigns
 	        },
 	        success:function(response){
@@ -507,7 +523,7 @@ var Contacts_Playbook = {
 		e.preventDefault();
 
 		var name = $(this).find('.name').val();
-		var campaign = $(this).find('#campaign_select').val();
+		var campaign = $(this).find('.campaign_select').val();
 		var id = $(this).find('.id').val();
 		var subcampaigns = [];
 
@@ -818,28 +834,44 @@ var Contacts_Playbook = {
 	        success:function(response){
 	        	console.log(response);
                 var edit_modal = $('#editPlaybookModal');
-                
+
                 edit_modal.find('.name').val(response.name);
-                edit_modal.find('#campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
-                
+                edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
+                edit_modal.find('.subcampaigns').empty();
+
                 $.when(
 					Contacts_Playbook.get_subcampaigns(event, response.campaign)
 				).done(function() {
-					edit_modal.find('.subcampaign_list .checkbox input').each(function(){
-						for(var i=0;i<response.subcampaigns.length;i++){								
-							if($(this).val() == response.subcampaigns[i]){
-								$(this).prop('checked', true);
-							}
-						}
-					});
+
+					var subcampaigns_obj = response.subcampaigns;
+					var subcampaigns_obj_length = Object.keys(subcampaigns_obj).length;
+					const subcampaigns_obj_keys = Object.getOwnPropertyNames(subcampaigns_obj);
+					let subcampaigns_array = [];
+					subcampaigns_array.push(Object.values(subcampaigns_obj));
+
+					var subcampaigns = '';
+					for (var i = 0; i < subcampaigns_array[0].length; i++) {
+						subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+					}
+
+					$('.subcampaigns').append(subcampaigns);
+					$(".subcampaigns").multiselect('rebuild');
+					$(".subcampaigns").multiselect('refresh');
+
+					$('.subcampaigns')
+						.multiselect({ nonSelectedText: '', })
+						.multiselect('selectAll', true)
+						.multiselect('updateButtonText');
+
+					
 
 					// build array of originally selected subcamps
-					$('.subcampaign_list input.subcamps').each(function (i) {
-						if($(this).is(':checked') ){
-							Contacts_Playbook.org_subcampaigns.push(i);
-						}
+					// $('.subcampaign_list input.subcamps').each(function (i) {
+					// 	if($(this).is(':checked') ){
+					// 		Contacts_Playbook.org_subcampaigns.push(i);
+					// 	}
 					    
-					});
+					// });
 				});
 	        }
 	    });

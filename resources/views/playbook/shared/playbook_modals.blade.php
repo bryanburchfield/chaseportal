@@ -16,17 +16,17 @@
 
                     <div class="form-group">
                         <label>{{__('tools.campaign')}}</label>
-                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('reps', __('tools.extra_campaigns')) !!}
-                        {!! Form::select("extra_campaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'extra_campaigns','multiple'=>true]) !!}
+                        {!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect extra_campaigns", 'multiple'=>true]) !!}
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('reps', __('tools.subcampaign')) !!}
-                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'subcampaigns','multiple'=>true]) !!}
+                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect subcampaigns",'multiple'=>true]) !!}
                     </div>
 
                     {{-- <div class="subcampaign_list"></div> --}}
@@ -66,17 +66,17 @@
 
                     <div class="form-group">
                         <label>{{__('tools.campaign')}}</label>
-                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('reps', __('tools.extra_campaigns')) !!}
-                        {!! Form::select("extra_campaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'extra_campaigns','multiple'=>true]) !!}
+                        {!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect extra_campaigns", 'multiple'=>true]) !!}
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('reps', __('tools.subcampaign')) !!}
-                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'subcampaigns','multiple'=>true]) !!}
+                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect subcampaigns", 'multiple'=>true]) !!}
                     </div>
 
                     {{-- <div class="subcampaign_list"></div> --}}
