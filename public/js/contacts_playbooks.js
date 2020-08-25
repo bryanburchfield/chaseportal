@@ -353,20 +353,26 @@ var Contacts_Playbook = {
 	add_playbook:function(e){
 		e.preventDefault();
 
-		// var form_data = $(this).serialize();
-		var name = $(this).find('.name').val(),
-			campaign = $(this).find('.campaign_select').val(),
-			campaigns=[],
-			subcampaigns = []
-		;
+		var form_data = $(this).serialize();
+		console.log(form_data);
+		// return false;
+		// var name = $(this).find('.name').val(),
+		// 	campaign = $(this).find('.campaign_select').val(),
+		// 	campaigns=[],
+		// 	subcampaigns = []
+		// ;
 
-		$('input.extra_campaigns[type="checkbox"]:checked').each(function () {
-		    campaigns.push($(this).val());
-		});
+		// $('#'+Contacts_Playbook.current_modal+' .extra_campaigns [type="checkbox"]:checked').each(function () {
+		//     campaigns.push($(this).val());
+		// });
 
-		$('input.subcampaigns[type="checkbox"]:checked').each(function () {
-		    subcampaigns.push($(this).val());
-		});
+		// $('.filter_campaign .checkbox label input[name="campaigns"]:checked').each(function () {
+		//     campaigns.push(that.val());
+		// });
+
+		// $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').find('.dropdown-menu li[type="checkbox"]:checked').each(function () {
+		//     subcampaigns.push($(this).val());
+		// });
 
 		$('.loader_hor').show();
 
@@ -375,6 +381,11 @@ var Contacts_Playbook = {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	        }
 	    });
+
+		console.log(Contacts_Playbook.current_modal);
+	    console.log(campaigns);
+	    console.log(subcampaigns);
+	    return false;
 
 	    $.ajax({
 	        url: '/playbook/playbooks' ,
