@@ -23,6 +23,7 @@ class ContactsPlaybook extends Model
 
     protected $cascadeDeletes = [
         'playbook_touches',
+        'playbook_campaigns',
         'playbook_subcampaigns',
     ];
 
@@ -59,10 +60,15 @@ class ContactsPlaybook extends Model
 
         $contacts_playbook = static::query()->create($attributes);
 
+        if (!isset($attributes['campaigns'])) {
+            $attributes['campaigns'] = [];
+        }
+
         if (!isset($attributes['subcampaigns'])) {
             $attributes['subcampaigns'] = [];
         }
 
+        $contacts_playbook->saveCampaigns($attributes['campaigns']);
         $contacts_playbook->saveSubcampaigns($attributes['subcampaigns']);
 
         DB::commit();
@@ -80,9 +86,36 @@ class ContactsPlaybook extends Model
             $attributes['subcampaigns'] = [];
         }
 
+        if (!isset($attributes['campaigns'])) {
+            $attributes['campaigns'] = [];
+        }
+
+        $this->saveCampaigns($attributes['campaigns']);
         $this->saveSubcampaigns($attributes['subcampaigns']);
 
         DB::commit();
+    }
+
+    public function saveCampaigns($campaigns = [])
+    {
+        $campaigns = collect(array_values((array) $campaigns));
+        $existing_campaigns = collect();
+
+        $this->playbook_campaigns->each(function ($playbook_campaign) use (&$existing_campaigns) {
+            $existing_campaigns->push($playbook_campaign->campaign);
+        });
+
+        // insert any not already there
+        $campaigns->diff($existing_campaigns)->each(function ($campaign) {
+            PlaybookCampaign::create(['contacts_playbook_id' => $this->id, 'campaign' => $campaign]);
+        });
+
+        // delete any not submitted
+        $existing_campaigns->diff($campaigns)->each(function ($campaign) {
+            PlaybookCampaign::where('contacts_playbook_id', $this->id)
+                ->where('campaign', $campaign)
+                ->delete();
+        });
     }
 
     public function saveSubcampaigns($subcampaigns = [])

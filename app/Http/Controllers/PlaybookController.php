@@ -10,6 +10,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PlaybookController extends Controller
@@ -68,7 +69,7 @@ class PlaybookController extends Controller
 
         $subcampaigns = $this->getAllSubcampaigns($request->campaign);
 
-        $extra_campaigns = $this->extraCampaigns($request->campaign);
+        $extra_campaigns = $this->relatedCampaigns($request->campaign);
 
         return [
             'extra_campaigns' => $extra_campaigns,
@@ -76,22 +77,28 @@ class PlaybookController extends Controller
         ];
     }
 
-    public function extraCampaigns($campaign)
+    /**
+     * Return related campaigns that use same advanaced table
+     * 
+     * @param mixed $campaign 
+     * @return array 
+     */
+    public function relatedCampaigns($campaign)
     {
         // Find the campaign
         $campaign = Campaign::where('CampaignName', $campaign)
             ->where('GroupId', Auth::user()->group_id)
             ->firstOrFail();
 
-        $extra_campaigns = [];
+        $related_campaigns = [];
 
         // check that campaign has related campaigns
         if (!empty($campaign->advancedTable->campaigns)) {
             // Get related campaigns by AdvancedTable
-            $extra_campaigns = $campaign->advancedTable->campaigns;
+            $related_campaigns = $campaign->advancedTable->campaigns;
 
             // Filter out passed campaign and return only names
-            $extra_campaigns = $extra_campaigns
+            $related_campaigns = $related_campaigns
                 ->reject(function ($rec) use ($campaign) {
                     return $rec['CampaignName'] == $campaign->CampaignName;
                 })
@@ -100,10 +107,10 @@ class PlaybookController extends Controller
                 })
                 ->toArray();
 
-            $extra_campaigns = array_values($extra_campaigns);
+            $related_campaigns = array_values($related_campaigns);
         }
 
-        return $extra_campaigns;
+        return $related_campaigns;
     }
 
     /**
@@ -116,6 +123,8 @@ class PlaybookController extends Controller
     {
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
+
+        Log::debug($data);
 
         $contacts_playbook = ContactsPlaybook::create($data);
 
