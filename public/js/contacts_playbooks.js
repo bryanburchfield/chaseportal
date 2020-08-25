@@ -382,21 +382,12 @@ var Contacts_Playbook = {
 	        }
 	    });
 
-		console.log(Contacts_Playbook.current_modal);
-	    console.log(campaigns);
-	    console.log(subcampaigns);
-	    return false;
 
 	    $.ajax({
 	        url: '/playbook/playbooks' ,
 	        type: 'POST',
 	        dataType: 'json',
-	        data: {
-	        	name:name,
-	        	campaign:campaign,
-	        	campaigns:campaigns,
-	        	subcampaigns:subcampaigns
-	        },
+	        data: form_data,
 	        success:function(response){
 
 	            if(response.status == 'success'){
