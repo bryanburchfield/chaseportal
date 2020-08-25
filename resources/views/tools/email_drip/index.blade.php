@@ -22,8 +22,8 @@
                             <div class="tab-pane active mt30">
                                 <h2 class="bbnone">{{__('tools.email_drip_builder')}}</h2>
                                 <ul class="nav nav-tabs tabs tools_subnav">
-                                    <li class="active"><a href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
-                                    <li><a href="#email_service_providers" data-toggle="tab">{{__('tools.email_service_providers')}}</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#drip_campaigns" data-toggle="tab">{{__('tools.email_drip_campaigns')}}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#email_service_providers" data-toggle="tab">{{__('tools.email_service_providers')}}</a></li>
                                 </ul>
 
                                 <div class="tab-content">

@@ -29,9 +29,9 @@ if (Auth::user()->isType('demo')) {
                                 <h2 class="bbnone">{{__('tools.contact_flowbuilder')}}</h2>
 
                                 <ul class="nav nav-tabs tabs tools_subnav">
-                                    <li class="active"><a href="#lead_rules" data-toggle="tab">{{__('tools.lead_rules')}}</a></li>
-                                    <li><a href="#add_rule" data-toggle="tab">{{__('tools.add_new_rule')}}</a></li>
-                                    <li><a href="#move_history" data-toggle="tab">{{__('tools.move_history')}}</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#lead_rules" data-toggle="tab">{{__('tools.lead_rules')}}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#add_rule" data-toggle="tab">{{__('tools.add_new_rule')}}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#move_history" data-toggle="tab">{{__('tools.move_history')}}</a></li>
                                 </ul>
 
                                 <div class="tab-content">
