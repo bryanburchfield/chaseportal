@@ -79,7 +79,7 @@ class PlaybookController extends Controller
         });
 
         return [
-            'extra_campaigns' => resultsToList($extra_campaigns),
+            'extra_campaigns' => resultsToList($extra_campaigns->toArray()),
             'subcampaigns' => $subcampaigns,
         ];
     }
