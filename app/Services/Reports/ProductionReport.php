@@ -113,7 +113,7 @@ class ProductionReport
 
             if (!empty($campaigns)) {
                 $bind['campaigns' . $i] = $campaigns;
-                $sql .= " AND AA,Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
+                $sql .= " AND AA.Campaign in (SELECT value FROM dbo.SPLIT(:campaigns$i, '!#!'))";
             }
 
             if (session('ssoRelativeCampaigns', 0)) {
