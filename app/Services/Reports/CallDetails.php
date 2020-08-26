@@ -2,6 +2,7 @@
 
 namespace App\Services\Reports;
 
+use App\Models\Dialer;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -172,13 +173,18 @@ class CallDetails
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
 
         if (!empty($rec['Recording'])) {
-            $rec['Recording'] = '<p>player</p>';
-            // $rec['Recording'] = '
-            //     <audio controls>
-            // 		{{-- <source src="/audio/file_example_WAV_1MG.wav" type="audio/ogg"> --}}
-            // 		<source src="/audio/gtr-nylon22.wav" type="audio/wav">
-            // 		Your browser does not support the audio tag.
-            // 	</audio>';
+            if ($rec['Duration'] > 0) {
+                $server = Dialer::where('reporting_db', Auth::user()->db)->first()->dialer_fqdn;
+                $file_id = str_replace('-', '', $rec['Recording']);
+
+                $rec['Recording'] = '
+                <audio controls>
+                <source src="https:/' . $server . '/Agent/Recordings.aspx?id=' . $file_id . '" type="audio/wav">
+                Your browser does not support the audio tag.
+            	</audio>';
+            } else {
+                $rec['Recording'] = '';
+            }
         }
 
         if (!empty($rec['ImportDate'])) {
@@ -370,7 +376,7 @@ class CallDetails
                 AA.Details as AgentHangup";
 
         if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
-            $sql .= ",DR.Route, 'x' as Recording";
+            $sql .= ",DR.Route, DR.RecordId as Recording";
         }
 
         $sql .= "
