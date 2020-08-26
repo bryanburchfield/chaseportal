@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CallDetails
 {
@@ -138,6 +139,7 @@ class CallDetails
         // Add Route col for superadmins
         if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
             $this->params['columns'] += ['Route' => 'Route'];
+            $this->params['columns'] += ['Recording' => 'Recording'];
         }
 
         list($sql, $bind) = $this->makeQuery($all);
@@ -168,6 +170,16 @@ class CallDetails
         array_pop($rec);
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+
+        if (!empty($rec['Recording'])) {
+            $rec['Recording'] = '<p>player</p>';
+            // $rec['Recording'] = '
+            //     <audio controls>
+            // 		{{-- <source src="/audio/file_example_WAV_1MG.wav" type="audio/ogg"> --}}
+            // 		<source src="/audio/gtr-nylon22.wav" type="audio/wav">
+            // 		Your browser does not support the audio tag.
+            // 	</audio>';
+        }
 
         if (!empty($rec['ImportDate'])) {
             $rec['ImportDate'] = Carbon::parse($rec['ImportDate'])->isoFormat('L LT');
@@ -358,7 +370,7 @@ class CallDetails
                 AA.Details as AgentHangup";
 
         if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
-            $sql .= ",DR.Route";
+            $sql .= ",DR.Route, 'x' as Recording";
         }
 
         $sql .= "
