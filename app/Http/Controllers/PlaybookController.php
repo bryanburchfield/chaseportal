@@ -10,7 +10,6 @@ use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PlaybookController extends Controller
@@ -123,8 +122,6 @@ class PlaybookController extends Controller
     {
         $data = $request->all();
         $data['group_id'] = Auth::user()->group_id;
-
-        Log::debug($data);
 
         $contacts_playbook = ContactsPlaybook::create($data);
 
