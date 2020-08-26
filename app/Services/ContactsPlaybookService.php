@@ -230,9 +230,18 @@ class ContactsPlaybookService
         // Build WHERE clause from filters
         $where = '';
         $dr_where = '';  // for DialingResults subquery
+
+        // build list of campaigns
+        $campaigns = [$playbook_touch->contacts_playbook->campaign];
+
+        if ($playbook_touch->contacts_playbook->playbook_campaigns()->exists()) {
+            foreach ($playbook_touch->contacts_playbook->playbook_campaigns as $playbook_campaign) {
+                $campaigns[] = $playbook_campaign->campaign;
+            }
+        }
+
         $bind = [
             'group_id' => Auth::user()->group_id,
-            'campaign' => $playbook_touch->contacts_playbook->campaign,
         ];
 
         foreach ($playbook_touch->playbook_touch_filters as $playbook_touch_filter) {
@@ -255,7 +264,7 @@ class ContactsPlaybookService
         }
 
         $sql .= " WHERE L.GroupId = :group_id
-        AND L.Campaign = :campaign";
+        AND L.Campaign IN ('" . implode("','", $campaigns) . "')";
 
         if ($playbook_touch->contacts_playbook->playbook_subcampaigns()->exists()) {
             $subcamp_in = '';
