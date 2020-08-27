@@ -19,7 +19,7 @@
             style='word-break:break-all;'>
 
             @foreach($rec as $k => $v)
-                @if (strpos($v, '<audio controls>') !== false)
+                @if (strpos($v, '<audio controls') !== false)
                     <td>{!! $v !!}</td>
                 @else
                     <td>{{ $v }}</td>
