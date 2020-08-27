@@ -97,6 +97,7 @@ class Sso
 
             // Default TZ if superuser
             if ($api_user->GroupId == -1) {
+                session(['isSsoSuperadmin' => 1]);
                 $sso_user['timezone'] = 'Eastern Standard Time';
             }
 
@@ -114,11 +115,6 @@ class Sso
                 'ssoUsername' => $api_user->Username,
                 'ssoToken' => $request->query('Token'),
             ]);
-
-            // set var if superadmin
-            if ($api_user->GroupId == -1) {
-                session(['isSsoSuperadmin' => 1]);
-            }
 
             // Login as that user
             Auth::login($user);
