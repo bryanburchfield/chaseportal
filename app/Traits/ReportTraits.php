@@ -15,6 +15,7 @@ trait ReportTraits
     public $errors;
     public $params;
     public $extras;
+    public $export = false;
 
     use ReportExportTraits;
     use SqlServerTraits;
@@ -405,6 +406,8 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
         if (empty($request->has('export'))) {
             return $request;
         }
+
+        $this->export = true;
 
         $newrequest = $request->duplicate();
 

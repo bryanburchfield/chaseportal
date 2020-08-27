@@ -2,11 +2,13 @@
 
 namespace App\Services\Reports;
 
+use App\Models\Dialer;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CallDetails
 {
@@ -135,11 +137,6 @@ class CallDetails
 
     private function executeReport($all = false)
     {
-        // Add Route col for superadmins
-        if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
-            $this->params['columns'] += ['Route' => 'Route'];
-        }
-
         list($sql, $bind) = $this->makeQuery($all);
 
         $results = $this->runSql($sql, $bind);
@@ -168,6 +165,21 @@ class CallDetails
         array_pop($rec);
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+
+        if (!empty($rec['Recording'])) {
+            if ($rec['Duration'] > 0) {
+                $server = Dialer::where('reporting_db', Auth::user()->db)->first()->dialer_fqdn;
+                $file_id = str_replace('-', '', $rec['Recording']);
+
+                $rec['Recording'] = '
+                <audio controls preload="auto">
+                <source src="https:/' . $server . '/Agent/Recordings.aspx?id=' . $file_id . '" type="audio/wav">
+                Your browser does not support the audio tag.
+            	</audio>';
+            } else {
+                $rec['Recording'] = '';
+            }
+        }
 
         if (!empty($rec['ImportDate'])) {
             $rec['ImportDate'] = Carbon::parse($rec['ImportDate'])->isoFormat('L LT');
@@ -357,8 +369,16 @@ class CallDetails
                 DR.Details,
                 AA.Details as AgentHangup";
 
+        // add extra cols for superadmins
         if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
+            $this->params['columns'] += ['Route' => 'Route'];
             $sql .= ",DR.Route";
+
+            // Add audio player column if not doing an export
+            if (!$this->export) {
+                $this->params['columns'] += ['Recording' => 'Recording'];
+                $sql .= ", DR.RecordId as Recording";
+            }
         }
 
         $sql .= "

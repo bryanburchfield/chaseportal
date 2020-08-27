@@ -44,7 +44,7 @@ class ReportService
         $pagedata['report'] = Str::snake($this->reportName);
         $pagedata['page']['menuitem'] = 'reports';
         $pagedata['page']['type'] = 'report';
-        $pagedata['jsfile'] = [];
+        $pagedata['jsfile'] = ['reports.js'];
 
         return array_merge($pagedata, ['params' => $this->report->params]);
     }
