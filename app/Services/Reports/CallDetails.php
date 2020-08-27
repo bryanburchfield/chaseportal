@@ -173,7 +173,7 @@ class CallDetails
 
                 $rec['Recording'] = '
                 <audio controls>
-                <source src="https:/' . $server . '/Agent/Recordings.aspx?id=' . $file_id . '" type="audio/wav">
+                <source src="https://' . $server . '/Agent/Recordings.aspx?id=' . $file_id . '" type="audio/wav">
                 Your browser does not support the audio tag.
             	</audio>';
             } else {
