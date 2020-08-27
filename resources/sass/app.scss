@@ -556,10 +556,17 @@ div.container-fluid.bg {
 }
 
 .filters {
-    margin-bottom: 10px;
-    padding: 0;
+    // margin-bottom: 10px;
+    // padding: 0;
 
-    ul.dropdown-menu {right: -65px;}
+    ul.dropdown-menu {
+        // right: -65px;
+        &.active, &:active{
+            background: $blue;
+            color:#ddd;
+        }
+    }
+    
     .btn.btn-primary {
         margin-bottom: 0;
         background: none;

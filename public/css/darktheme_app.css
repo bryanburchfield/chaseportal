@@ -80,10 +80,6 @@ h6 {
   font-family: "Open Sans", sans-serif;
 }
 
-.filters .btn {
-  border-radius: 0;
-}
-
 .preloader {
   position: fixed;
   top: 0;
@@ -735,10 +731,6 @@ div.container-fluid.bg {
   color: #eee;
 }
 
-.dropdown-menu li a {
-  padding: 12px 16px;
-}
-
 .dropdown-menu li.active,
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:focus,
@@ -750,8 +742,34 @@ div.container-fluid.bg {
   color: #fff;
 }
 
-.dropdown-menu a:nth-child(even) {
-  background: #203047 !important;
+.filters .btn {
+  border-radius: 0;
+}
+
+.filters .dropdown-menu .dropdown-item,
+.filters .dropdown-menu .checkbox {
+  background: #203047;
+  color: #999;
+  padding-left: 15px;
+}
+
+.filters .dropdown-menu .dropdown-item:nth-child(even),
+.filters .dropdown-menu .checkbox:nth-child(even) {
+  background-color: #101824;
+}
+
+.filters .dropdown-menu .dropdown-item:hover,
+.filters .dropdown-menu .checkbox:hover {
+  background-color: #182435;
+  color: #999;
+}
+
+.filters .dropdown-menu .dropdown-item.active,
+.filters .dropdown-menu .dropdown-item:active,
+.filters .dropdown-menu .checkbox.active,
+.filters .dropdown-menu .checkbox:active {
+  background: #ddd;
+  color: #203047;
 }
 
 .dropdown-menu > .active > a {
@@ -1101,14 +1119,6 @@ p.total {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-}
-
-.dropdown a:nth-child(even) {
-  background-color: #ececec;
-}
-
-.dropdown a:hover {
-  background-color: #e4e4e4;
 }
 
 .show {

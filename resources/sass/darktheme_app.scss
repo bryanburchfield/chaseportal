@@ -63,10 +63,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
 }
 
-.filters .btn {
-    @include border-radius(0);
-}
-
 .preloader {
     position: fixed;
     top: 0;
@@ -529,17 +525,38 @@ div.container-fluid.bg {
     @include base_style(none, #eee);
 }
 
-.dropdown-menu li a {
-    padding: 12px 16px;
-}
-
 .dropdown-menu li.active, .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover, .dropdown-menu.filter_campaign .active >a {
     @include gradient(#263854, #1c273d, top, 0%, 100%);
     color: #fff;
 }
 
-.dropdown-menu a:nth-child(even) {
-    background: $blue !important;
+.filters {
+
+    .btn {
+        @include border-radius(0);
+    }
+
+    .dropdown-menu{
+        .dropdown-item, .checkbox {
+            background: $blue;
+            color:#999;
+            padding-left: 15px;
+
+            &:nth-child(even) {
+                background-color: darken($blue, 10%);
+            }
+
+            &:hover{
+                background-color: darken($blue, 5%);
+                color:#999;
+            }
+
+            &.active, &:active{
+                background: #ddd;
+                color:$blue;
+            }
+        }
+    }
 }
 
 .dropdown-menu > .active > a{
@@ -830,14 +847,6 @@ p.total {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-}
-
-.dropdown a:nth-child(even) {
-    background-color: #ececec;
-}
-
-.dropdown a:hover {
-    background-color: #e4e4e4;
 }
 
 .show {

@@ -73,7 +73,7 @@ var Master = {
         $('.select_database').on('click', this.select_database);
         $('.reports .switch input').on('click', this.toggle_automated_reports);
         $('a.getAppToken, textarea.url').on('click', this.copy_link);
-        $('.date_filters li a').on('click', this.filter_date);
+        $('.date_filters a').on('click', this.filter_date);
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
