@@ -167,7 +167,7 @@ class CallDetails
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
 
         if (!empty($rec['Recording'])) {
-            if ($rec['Duration'] > 0) {
+            if ($rec['Duration'] > 0 && !($rec['CallType'] == 'Inbound' && $rec['CallStatus'] == 'CR_HANGUP')) {
                 $server = Dialer::where('reporting_db', Auth::user()->db)->first()->dialer_fqdn;
                 $file_id = str_replace('-', '', $rec['Recording']);
 
