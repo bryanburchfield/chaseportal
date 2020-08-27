@@ -172,7 +172,7 @@ class CallDetails
                 $file_id = str_replace('-', '', $rec['Recording']);
 
                 $rec['Recording'] = '
-                <audio controls preload="metadata"
+                <audio controls preload="none"
                 src="https://' . $server . '/Agent/Recordings.aspx?id=' . $file_id . '" type="audio/wav">
                 Your browser does not support the audio tag.
             	</audio>';
@@ -370,14 +370,17 @@ class CallDetails
                 AA.Details as AgentHangup";
 
         // add extra cols for superadmins
-        if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
+        if (Auth::user()->istype('superadmin') || session('isSsoAdmin', 0) || session('isSsoSuperadmin', 0)) {
             $this->params['columns'] += ['Route' => 'Route'];
             $sql .= ",DR.Route";
+        }
 
+        // add extra cols for admins
+        if (Auth::user()->isType(['admin', 'superadmin']) || session('isSsoAdmin', 0)) {
             // Add audio player column if not doing an export
             if (!$this->export) {
                 $this->params['columns'] += ['Recording' => 'Recording'];
-                $sql .= ", DR.RecordId as Recording";
+                $sql .= ",DR.RecordId as Recording";
             }
         }
 
