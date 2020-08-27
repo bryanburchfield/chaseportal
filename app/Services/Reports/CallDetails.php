@@ -137,12 +137,6 @@ class CallDetails
 
     private function executeReport($all = false)
     {
-        // Add Route col for superadmins
-        if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
-            $this->params['columns'] += ['Route' => 'Route'];
-            $this->params['columns'] += ['Recording' => 'Recording'];
-        }
-
         list($sql, $bind) = $this->makeQuery($all);
 
         $results = $this->runSql($sql, $bind);
@@ -375,8 +369,16 @@ class CallDetails
                 DR.Details,
                 AA.Details as AgentHangup";
 
+        // add extra cols for superadmins
         if (Auth::user()->user_type == 'superadmin' || session('isSsoSuperadmin', 0)) {
-            $sql .= ",DR.Route, DR.RecordId as Recording";
+            $this->params['columns'] += ['Route' => 'Route'];
+            $sql .= ",DR.Route";
+
+            // Add audio player column if not doing an export
+            if (!$this->export) {
+                $this->params['columns'] += ['Recording' => 'Recording'];
+                $sql .= ", DR.RecordId as Recording";
+            }
         }
 
         $sql .= "
