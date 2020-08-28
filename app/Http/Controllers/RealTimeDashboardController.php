@@ -152,11 +152,13 @@ class RealTimeDashboardController extends Controller
         }
 
         return [
-            'talking' => $talking,
-            'wrapping' => $wrapping,
-            'waiting' => $waiting,
-            'manual' => $manual,
-            'paused' => $paused,
+            'statuses' => [
+                'talking' => $talking,
+                'wrapping' => $wrapping,
+                'waiting' => $waiting,
+                'manual' => $manual,
+                'paused' => $paused,
+            ],
             'queued' => $queued,
             'handled' => $handled,
             'maxhold' => $maxhold,
