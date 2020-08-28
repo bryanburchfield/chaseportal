@@ -43,6 +43,18 @@ class RealTimeDashboardController extends Controller
 
     public function runqueryAgent($group_id, $db)
     {
+        // Initialize all returns vals
+        $talking = [];
+        $wrapping = [];
+        $waiting = [];
+        $manual = [];
+        $paused = [];
+        $queued = 0;
+        $handled = 0;
+        $maxhold = 0;
+        $sales = 0;
+
+        // Get real-time agent stats
         $sql = "SELECT 
             RTA.Login,
             RTA.Campaign,
@@ -65,13 +77,6 @@ class RealTimeDashboardController extends Controller
         ];
 
         $results = $this->runSql($sql, $bind, $db);
-
-        // split into different tables
-        $talking = [];
-        $wrapping = [];
-        $waiting = [];
-        $manual = [];
-        $paused = [];
 
         foreach ($results as $result) {
             $result['TimeInStatus'] = $this->secondsToHms($result['SecondsInStatus']);
@@ -106,12 +111,67 @@ class RealTimeDashboardController extends Controller
             }
         }
 
+        // Get real-time inbound stats
+        $sql = "SELECT
+            SUM(CASE WHEN Agent = '' THEN 1 ELSE 0 END) as Handled,
+            SUM(CASE WHEN Agent != '' THEN 1 ELSE 0 END) as Queued,
+            MAX(CASE WHEN Agent = '' THEN HoldDuration ELSE 0 END) as MaxHold
+            FROM [RealtimeStatistics_Inbound] WITH (SNAPSHOT)
+            WHERE GroupId = :groupid
+            AND Status = 3";
+
+        unset($results);
+        $results = $this->runSql($sql, $bind, $db);
+
+        if (count($results)) {
+            $queued = $results[0]['Handled'];
+            $handled = $results[0]['Queued'];
+            $maxhold = $results[0]['MaxHold'];
+
+            // Change NULLs to 0s
+            $queued = ($queued == 'NULL') ? 0 : $queued;
+            $handled = ($handled == 'NULL') ? 0 : $handled;
+            $maxhold = ($maxhold == 'NULL') ? 0 : $maxhold;
+        }
+
+        // Get sales for the day
+        $bind['startdate'] = date('Y-m-d');
+
+        $sql = "SELECT
+            SUM(CASE WHEN DI.Type = '3' THEN 1 ELSE 0 END) as Sales
+            FROM [DialingResults] DR
+            CROSS APPLY (
+                SELECT TOP 1 [Type]
+                FROM  [Dispos]
+                WHERE Disposition = DR.CallStatus
+                AND (GroupId = DR.GroupId OR IsSystem=1)
+                AND (Campaign = DR.Campaign OR Campaign = '')
+                ORDER BY [id]) DI
+            WHERE DR.GroupId = :groupid
+            AND DR.Date >= :startdate";
+
+        unset($results);
+        $results = $this->runSql($sql, $bind, $db);
+
+        if (count($results)) {
+            $sales = $results[0]['Sales'];
+
+            // Change NULL to 0
+            $sales = ($sales == 'NULL') ? 0 : $sales;
+        }
+
         return [
-            'talking' => $talking,
-            'wrapping' => $wrapping,
-            'waiting' => $waiting,
-            'manual' => $manual,
-            'paused' => $paused,
+            'statuses' => [
+                'talking' => $talking,
+                'wrapping' => $wrapping,
+                'waiting' => $waiting,
+                'manual' => $manual,
+                'paused' => $paused,
+            ],
+            'queued' => $queued,
+            'handled' => $handled,
+            'maxhold' => $maxhold,
+            'sales' => $sales,
         ];
     }
 }

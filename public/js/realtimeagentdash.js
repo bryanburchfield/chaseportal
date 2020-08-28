@@ -1,7 +1,10 @@
 var RealTime = {
 	init: function (result) {
-		// if first iteration
 		console.log(result);
+
+		var incoming_arrays = Object.entries(result[0][1]);
+
+		// if first iteration
 		if (!ran) {
 			// keep track of all the in-memory lists
 			status_arrays = [];
@@ -10,21 +13,24 @@ var RealTime = {
 			timers = [];
 
 			// load each returned array
-			for (var i = 0; i < result.length; i++) {
-				let status_type = result[i][0];
-				status_arrays[status_type] = this.load_array(status_type, result[i][1]);
+			for (var i = 0; i < incoming_arrays.length; i++) {
+				let status_type = incoming_arrays[i][0];
+				status_arrays[status_type] = this.load_array(status_type, incoming_arrays[i][1]);
 				this.update_agent_count(status_type, status_arrays[status_type]);
 			}
 		} else {
 			// process each returned list
-			for (var i = 0; i < result.length; i++) {
-				let status_type = result[i][0];
-				status_arrays[status_type] = this.process_array(status_type, status_arrays[status_type], result[i][1]);
+			for (var i = 0; i < incoming_arrays.length; i++) {
+				let status_type = incoming_arrays[i][0];
+				status_arrays[status_type] = this.process_array(status_type, status_arrays[status_type], incoming_arrays[i][1]);
 				this.update_agent_count(status_type, status_arrays[status_type]);
 			}
 		}
 
-		console.log(status_arrays);
+		$('#total_calls_que').find('h4').html(result[1][1] !== null ? result[1][1] : '0');
+		$('#total_calls').find('h4').html(result[2][1]  !== null ? result[2][1] : '0');
+		$('#longest_hold_time').find('h4').html(result[3][1]!= null ? Master.convertSecsToHrsMinsSecs(result[3][1]) : '00:00:00');
+		$('#total_sales').find('h4').html(result[4][1]  !== null ? result[4][1] : '0');
 		ran = true;
 	},
 
@@ -128,7 +134,7 @@ var RealTime = {
 		return setInterval(function () {
 
 			// Format and output the result
-			$('#' + login_id(status_type, login) + 'Timer').text(seconds_to_hms(numSecs));
+			$('#' + login_id(status_type, login) + 'Timer').text(Master.convertSecsToHrsMinsSecs(numSecs));
 
 			// tick the timer
 			numSecs = numSecs + 1;
@@ -143,27 +149,27 @@ var RealTime = {
 	},
 
 	build_li(status_type, data) {
-		let call_icon='';
-		let has_icon='';
-		if(data.StatusCode == 5){
-        	call_icon = '<i class="fa fa-sign-in-alt"></i>';
-        	has_icon='has_icon';
-        }else if (data.StatusCode == 3 || data.StatusCode == 4) {
-            call_icon = '<i class="fa fa-sign-out-alt"></i>';
-            has_icon='has_icon';
-        }
+		let call_icon = '';
+		let has_icon = '';
+		if (data.StatusCode == 5) {
+			call_icon = '<i class="fa fa-sign-in-alt"></i>';
+			has_icon = 'has_icon';
+		} else if (data.StatusCode == 3 || data.StatusCode == 4) {
+			call_icon = '<i class="fa fa-sign-out-alt"></i>';
+			has_icon = 'has_icon';
+		}
 
 		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item"> ' +
-			'<span class="call_type">'+
-				call_icon+
-			'</span>'+
-			'<div class="agent_call_details '+has_icon+'"><p class="rep_name mb0">' + data.Login + '<span id="' + login_id(status_type, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
+			'<span class="call_type">' +
+			call_icon +
+			'</span>' +
+			'<div class="agent_call_details ' + has_icon + '"><p class="rep_name mb0">' + data.Login + '<span id="' + login_id(status_type, data.Login) + 'Timer"class="timer">' + data.TimeInStatus + '</span></p>' +
 			'<p class="campaign">' + data.Campaign + '</p>' +
-			'<p class="break_code">'+data.BreakCode+'</p></div>'+
+			'<p class="break_code">' + data.BreakCode + '</p></div>' +
 			'</li>';
 	},
 
-	update_agent_count(status_type, status_array){
+	update_agent_count(status_type, status_array) {
 		let count = status_array.length;
 		$('.' + status_type).find('.num_agents .inner').text(count);
 	}
@@ -171,21 +177,10 @@ var RealTime = {
 
 function login_id(status_type, login) {
 	// Build the id for the list/login - replace spaces with underscores
-	return status_type + '-' + login.replace(/ /g, "_");
-}
+	if (login != undefined && login != null) {
+		return status_type + '-' + login.replace(/ /g, "_");
+	}
 
-function seconds_to_hms(numSecs) {
-	// Time calculations for hours, minutes and seconds
-	var hours = Math.floor(numSecs / 3600);
-	var minutes = Math.floor((numSecs / 60) % 60);
-	var seconds = numSecs % 60;
-
-	// format leading zeros
-	hours = hours.toString().padStart(2, 0);
-	minutes = minutes.toString().padStart(2, 0);
-	seconds = seconds.toString().padStart(2, 0);
-
-	return hours + ":" + minutes + ":" + seconds;
 }
 
 //add
