@@ -79,12 +79,6 @@
     @endforeach
     @endisset
 
-    @isset($includescriptfile)
-        @foreach($includescriptfile as $script)
-            @include($script)
-        @endforeach
-    @endisset
-    
     <script src="/js/master.js"></script>
     <script src="/js/admin.js"></script>
     <script src="/js/nav.js"></script>
