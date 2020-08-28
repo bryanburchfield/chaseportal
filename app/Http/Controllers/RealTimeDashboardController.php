@@ -115,7 +115,7 @@ class RealTimeDashboardController extends Controller
         $sql = "SELECT
             SUM(CASE WHEN Agent = '' THEN 1 ELSE 0 END) as Handled,
             SUM(CASE WHEN Agent != '' THEN 1 ELSE 0 END) as Queued,
-            MAX(HoldDuration) as MaxHold
+            MAX(CASE WHEN Agent = '' THEN HoldDuration ELSE 0 END) as MaxHold
             FROM [RealtimeStatistics_Inbound] WITH (SNAPSHOT)
             WHERE GroupId = :groupid";
 
