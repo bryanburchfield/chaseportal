@@ -11,12 +11,12 @@
         <div class="col-sm-{{$loop->index < 3 ? '4': '6'}} rep_status {{$status}}">
             <h2 class="mb0">{{__('general.' . $status)}}</h2>
             <div class="num_agents">
-                <div class="inner">{{count($data['data'][$status])}}</div>
+                <div class="inner">{{count($data['data']['statuses'][$status])}}</div>
                 <p>{{__('general.agents')}}</p>
             </div>
 
             <ul id="{{$status}}" class="{{$status}} list-group cb">
-                @foreach($data['data'][$status] as $record)
+                @foreach($data['data']['statuses'][$status] as $record)
                     <li class="list-group-item">
                         <span class="call_type">
                             @php
