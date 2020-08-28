@@ -11,7 +11,7 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('tools.total_calls_in_que')}}</h1>
-            <h4 class="data total mt30 bg_rounded">0</h4>
+            <h4 class="data total mt20 mb20 bg_rounded">0</h4>
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -22,7 +22,7 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('tools.longest_hold_in_que')}}</h1>
-            <h4 class="data total mt30">00:00:00</h4>
+            <h4 class="data total mt20 mb20">00:00:00</h4>
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -33,7 +33,7 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('tools.total_calls')}}</h1>
-            <h4 class="data total mt30 bg_rounded">0</h4>
+            <h4 class="data total mt20 mb20 bg_rounded">0</h4>
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -44,12 +44,12 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('tools.total_sales')}}</h1>
-            <h4 class="data total mt30 bg_rounded">0</h4>
+            <h4 class="data total mt20 mb20 bg_rounded">0</h4>
         </div><!-- end card -->
     </div><!-- end column -->
 </div>
 
-<div class="row mt50">
+<div class="row mt30">
 
     @foreach ($statuses as $status)
         @if($loop->first || $loop->index == 3)
