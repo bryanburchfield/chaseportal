@@ -20,26 +20,21 @@ var RealTime = {
 			}
 		} else {
 			// process each returned list
-			// for (var i = 0; i < result.length; i++) {
-			// 	let status_type = result[i][0];
-			// 	status_arrays[status_type] = this.process_array(status_type, status_arrays[status_type], result[i][1]);
-			// 	this.update_agent_count(status_type, status_arrays[status_type]);
-			// }
+			for (var i = 0; i < incoming_arrays.length; i++) {
+				let status_type = incoming_arrays[i][0];
+				status_arrays[status_type] = this.process_array(status_type, status_arrays[status_type], incoming_arrays[i][1]);
+				this.update_agent_count(status_type, status_arrays[status_type]);
+			}
 		}
 
-		console.log(status_arrays);
-
 		$('#total_calls_que').find('h4').html(result[1][1]);
-		$('#longest_hold_time').find('h4').html(result[2][1]);
-		$('#total_calls').find('h4').html(result[3][1]);
+		$('#total_calls').find('h4').html(result[2][1]);
+		$('#longest_hold_time').find('h4').html(seconds_to_hms(result[3][1]));
 		$('#total_sales').find('h4').html(result[4][1]);
 		ran = true;
 	},
 
 	load_array(status_type, result_data) {
-		console.log('load ' + status_type);
-		console.log(result_data);
-
 		var return_array = [];
 
 		this.delete_all_rows(status_type);
