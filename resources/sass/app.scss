@@ -67,6 +67,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .filters .btn {
     @include border-radius(0);
+    font-size: 14px;
 }
 
 .preloader {
@@ -890,7 +891,7 @@ input.form-control {
     }
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
     max-height: 270px;
     min-width: 240px;
     max-width: 240px;
@@ -906,15 +907,15 @@ ul.dropdown-menu.filter_campaign {
     font-weight: 600;
 }
 
-ul.dropdown-menu.filter_campaign::-webkit-scrollbar {
+.dropdown-menu.filter_campaign::-webkit-scrollbar {
     width: 0 !important
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
     overflow: -moz-scrollbars-none;
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
     -ms-overflow-style: none;
 }
 
@@ -1076,6 +1077,8 @@ h2.avg_cc, h2.avg_ct {
     bottom: 0 !important;
     margin-bottom: 0;
 }
+
+i.fas.fa-bell{font-size: 17px;}
 
 // div#dataTable_filter label {
 //     float: right;

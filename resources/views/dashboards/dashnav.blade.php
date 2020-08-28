@@ -10,7 +10,7 @@
             <ul class="dropdown-menu db_select float-right stop-propagation">
                 @foreach ($db_list as $db)
                     @php $checked = $db['selected'] ? $checked = "checked" : $checked= " "; @endphp
-                    <div class="checkbox">
+                    <div class="checkbox list-item">
                     <label class="databases_label stop-propagation"><input class="database_group" required type="checkbox" {{$checked}} value="{{$db['database']}}" name="databases"><span>{{$db['name']}}</span></label>
                     </div>
                 @endforeach
@@ -43,7 +43,7 @@
         <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
 
         @foreach($campaign_list as $campaign)
-            <div class="checkbox p-2">
+            <div class="checkbox p-2 dropdown-item">
                 <label class="campaign_label">
                     <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
                     <span>

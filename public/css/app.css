@@ -82,6 +82,7 @@ h6 {
 
 .filters .btn {
   border-radius: 0;
+  font-size: 14px;
 }
 
 .preloader {
@@ -1099,14 +1100,14 @@ input.form-control {
   color: #277976;
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
   max-height: 270px;
   min-width: 240px;
   max-width: 240px;
   overflow-y: scroll;
 }
 
-ul.dropdown-menu.filter_campaign .checkbox {
+.dropdown-menu.filter_campaign .checkbox {
   padding: 5px 0 5px 10px;
   border-bottom: 1px solid #ddd;
 }
@@ -1115,15 +1116,15 @@ ul.dropdown-menu.filter_campaign .checkbox {
   font-weight: 600;
 }
 
-ul.dropdown-menu.filter_campaign::-webkit-scrollbar {
+.dropdown-menu.filter_campaign::-webkit-scrollbar {
   width: 0 !important;
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
   overflow: -moz-scrollbars-none;
 }
 
-ul.dropdown-menu.filter_campaign {
+.dropdown-menu.filter_campaign {
   -ms-overflow-style: none;
 }
 
@@ -1298,6 +1299,10 @@ h2.avg_cc,
 h2.avg_ct {
   bottom: 0 !important;
   margin-bottom: 0;
+}
+
+i.fas.fa-bell {
+  font-size: 17px;
 }
 
 h2.card_title {
