@@ -24,6 +24,11 @@ var RealTime = {
 			}
 		}
 
+		$('#total_calls_que').find('h4').html(result[1][1]);
+		$('#longest_hold_time').find('h4').html(result[2][1]);
+		$('#total_calls').find('h4').html(result[3][1]);
+		$('#total_sales').find('h4').html(result[4][1]);
+		console.log(result[1][1]);
 		console.log(status_arrays);
 		ran = true;
 	},
@@ -171,7 +176,10 @@ var RealTime = {
 
 function login_id(status_type, login) {
 	// Build the id for the list/login - replace spaces with underscores
-	return status_type + '-' + login.replace(/ /g, "_");
+	if(login != undefined && login != null){
+		return status_type + '-' + login.replace(/ /g, "_");
+	}
+	
 }
 
 function seconds_to_hms(numSecs) {

@@ -2,6 +2,60 @@
     $statuses = ['talking','wrapping','waiting','manual','paused'];
 @endphp
 
+<div class="row">
+
+    <div class="col-sm-3 col-xs-12">
+        <div class="card-3 card" id="total_calls_que">
+
+            <div class="trend_indicator">
+                <div class="trend_arrow"></div>
+                <span></span>
+            </div>
+            <h1 class="title">Total Calls in Que</h1>
+            <h4 class="data total mt30"></h4>
+
+        </div><!-- end card -->
+    </div><!-- end column -->
+
+    <div class="col-sm-3 col-xs-12">
+        <div class="card-3 card" id="longest_hold_time">
+
+            <div class="trend_indicator">
+                <div class="trend_arrow"></div>
+                <span></span>
+            </div>
+
+            <h1 class="title">Longest Hold Time in Que</h1>
+            <h4 class="data total mt30"></h4>
+
+        </div><!-- end card -->
+    </div><!-- end column -->
+
+    <div class="col-sm-3 col-xs-12">
+        <div class="card-3 card total_calls">
+
+            <div class="trend_indicator">
+                <div class="trend_arrow"></div>
+                <span></span>
+            </div>
+            <h1 class="title">Total Calls</h1>
+            <h4 class="data mt30" id="total_calls"></h4>
+        </div><!-- end card -->
+    </div><!-- end column -->
+
+    <div class="col-sm-3 col-xs-12">
+        <div class="card-3 card total_sales">
+
+            <div class="trend_indicator">
+                <div class="trend_arrow"></div>
+                <span></span>
+            </div>
+            <h1 class="title">Total Sales</h1>
+            <h4 class="data mt30" id="total_sales"></h4>
+        </div><!-- end card -->
+    </div><!-- end column -->
+</div>
+
 <div class="row mt50">
 
     @foreach ($statuses as $status)
