@@ -128,10 +128,11 @@ class RealTimeDashboardController extends Controller
             $handled = $results[0]['Queued'];
             $maxhold = $results[0]['MaxHold'];
 
+
             // Change NULLs to 0s
-            $queued = ($queued == 'NULL') ? 0 : $queued;
-            $handled = ($handled == 'NULL') ? 0 : $handled;
-            $maxhold = ($maxhold == 'NULL') ? 0 : $maxhold;
+            $queued = ($queued == null) ? 0 : $queued;
+            $handled = ($handled == null) ? 0 : $handled;
+            $maxhold = ($maxhold == null) ? 0 : $maxhold;
         }
 
         // Get sales for the day
@@ -157,7 +158,7 @@ class RealTimeDashboardController extends Controller
             $sales = $results[0]['Sales'];
 
             // Change NULL to 0
-            $sales = ($sales == 'NULL') ? 0 : $sales;
+            $sales = ($sales == null) ? 0 : $sales;
         }
 
         return [
