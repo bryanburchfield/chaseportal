@@ -45,6 +45,7 @@ class CallDetails
             'Phone' => 'reports.phone',
             'Attempt' => 'reports.attempt',
             'CallerId' => 'reports.callerid',
+            'InboundSource' => 'reports.source',
             'LastName' => 'reports.lastname',
             'FirstName' => 'reports.firstname',
             'ImportDate' => 'reports.import_date',
@@ -334,6 +335,7 @@ class CallDetails
                 DR.Phone,
                 DR.Attempt,
                 DR.CallerId,
+                SRC.Description,
                 L.LastName,
                 L.FirstName,
                 CONVERT(datetimeoffset, L.Date) AT TIME ZONE '$tz' as ImportDate,
@@ -364,7 +366,8 @@ class CallDetails
         $sql .= "
                 $this->extra_cols
                 , totRows = COUNT(*) OVER()
-            FROM [DialingResults] DR WITH(NOLOCK)";
+            FROM [DialingResults] DR WITH(NOLOCK)
+            LEFT JOIN InboundSources SRC on SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
 
         if (!empty($this->params['skills'])) {
             $sql .= "
