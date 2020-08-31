@@ -19,17 +19,21 @@
                         {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
-                    <div class="form-group extra_campaigns_group">
-                        {!! Form::label('reps', __('tools.extra_campaigns')) !!}
-                        {!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect extra_campaigns", 'multiple'=>true]) !!}
+                    <div class="dropdown mb20">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Extra Campaigns
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
                     </div>
 
-                    <div class="form-group subcampaigns_group">
-                        {!! Form::label('reps', __('tools.subcampaign')) !!}
-                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect subcampaigns",'multiple'=>true]) !!}
+                    <div class="dropdown mb20">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="subcampaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Subcampaigns
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu subcampaigns stop-propagation" aria-labelledby="subcampaigns_menu"></ul>
                     </div>
-
-                    {{-- <div class="subcampaign_list"></div> --}}
 
                     <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
 
@@ -74,9 +78,22 @@
                         {!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect extra_campaigns", 'multiple'=>true]) !!}
                     </div>
 
-                    <div class="form-group subcampaigns_group">
-                        {!! Form::label('reps', __('tools.subcampaign')) !!}
-                        {!! Form::select("subcampaigns[]", [], null, ["class" => "form-control multiselect subcampaigns", 'multiple'=>true]) !!}
+                    <div class="dropdown mb20">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Extra Campaigns
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
+                    </div>
+
+                   <div class="dropdown mb20">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="subcampaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Subcampaigns
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu subcampaigns" aria-labelledby="subcampaigns_menu">
+                            {{-- <li><a href="#">Action</a></li> --}}
+                        </ul>
                     </div>
 
                     {{-- <div class="subcampaign_list"></div> --}}

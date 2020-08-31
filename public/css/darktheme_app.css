@@ -1358,6 +1358,16 @@ ul.dropdown-menu.filter_campaign {
   padding: 0;
 }
 
+.dropdown-menu.extra_campaigns,
+.dropdown-menu.subcampaigns {
+  left: 0;
+  right: auto;
+}
+
+.myselect {
+  min-width: 200px;
+}
+
 #startDate,
 #endDate {
   width: 49%;

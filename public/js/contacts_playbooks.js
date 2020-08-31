@@ -195,33 +195,56 @@ var Contacts_Playbook = {
 	        }
 	    });
 
-	    $.ajax({
+	    return $.ajax({
 	        url: '/playbook/get_subcampaigns',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
+
 	        	$('.loader_hor').hide();
-	        	$('.subcampaign_list').empty();
+	        	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
 
 	        	if(subcamps_response.length){
 		        	Contacts_Playbook.subcampaigns=[];
-	        		
+
 	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
 	        		var selected;
-	        		
+
 	        		for(var i=0; i<subcamps_response.length;i++){
 	        		    selected =  subcamps_response[i].selected ? 'checked' : '';
 	        		    subcampaign_list+='<div class="checkbox mb10 cb"><label><input class="subcamps" name="subcampaign_list[]" '+selected+' type="checkbox" value="'+subcamps_response[i]+'"><b>'+subcamps_response[i]+'</b></label></div>';
 	        		}
-
-	        		$('#'+Contacts_Playbook.current_modal).find('.subcampaign_list').append(subcampaign_list);
+	        		console.log(subcampaign_list);
+	        		$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').append(subcampaign_list);
+	        		Contacts_Playbook.get_extracampaigns(campaign);
 	        	}
 	        }
 	    });
+	},
 
-        $.ajax({
+	get_extracampaigns:function(campaign){
+		console.log(campaign);
+		$('.loader_hor').show();
+
+		if(!campaign){
+			var campaign = $(this).val();
+		}
+
+		$('div.modal').each(function(){
+			if($(this).hasClass('in')){
+				Contacts_Playbook.current_modal = $(this).attr('id');
+			}
+		});
+
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+	        }
+	    });
+
+        return $.ajax({
             url: '/playbook/get_extra_campaigns',
             type: 'POST',
             dataType: 'json',
@@ -229,57 +252,23 @@ var Contacts_Playbook = {
             success:function(response){
             	console.log(response);
 
-            	console.log(response.extra_campaigns.length);
+            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').empty();
 
-            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns, .subcampaigns').empty();
+	        	var extra_camps_response = Object.keys(response.extra_campaigns);
 
-            	if(!response.extra_campaigns.length){
-            		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').parent().hide();
-            	}else{
-            		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').parent().show();
-            	}
+	        	if(extra_camps_response.length){
+		        	Contacts_Playbook.extra_camps=[];
 
-            	var extra_campaigns_obj = response.extra_campaigns;
-            	var extra_campaigns_obj_length = Object.keys(extra_campaigns_obj).length;
-            	const extra_campaigns_obj_keys = Object.getOwnPropertyNames(extra_campaigns_obj);
-            	let extra_campaigns_array = [];
-            	extra_campaigns_array.push(Object.values(extra_campaigns_obj));
+	        		var extra_camps_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+	        		var selected;
 
-            	var extra_campaigns = '';
-            	for (var i = 0; i < extra_campaigns_array[0].length; i++) {
-            		extra_campaigns += '<option value="' + extra_campaigns_array[0][i] + '">' + extra_campaigns_array[0][i] + '</option>';
-            	}
-
-            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_campaigns);
-            	$('#'+Contacts_Playbook.current_modal).find(".extra_campaigns").multiselect('rebuild');
-            	$('#'+Contacts_Playbook.current_modal).find(".extra_campaigns").multiselect('refresh');
-
-            	$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns')
-            		.multiselect({ nonSelectedText: '', })
-            		.multiselect('selectAll', true)
-            		.multiselect('updateButtonText');
-
-            	/////////////////////////////////////////////////////////////////////////////////
-
-            	var subcampaigns_obj = response.subcampaigns;
-            	var subcampaigns_obj_length = Object.keys(subcampaigns_obj).length;
-            	const subcampaigns_obj_keys = Object.getOwnPropertyNames(subcampaigns_obj);
-            	let subcampaigns_array = [];
-            	subcampaigns_array.push(Object.values(subcampaigns_obj));
-
-            	var subcampaigns = '';
-            	for (var i = 0; i < subcampaigns_array[0].length; i++) {
-            		subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
-            	}
-
-            	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').append(subcampaigns);
-            	$('#'+Contacts_Playbook.current_modal).find(".subcampaigns").multiselect('rebuild');
-            	$('#'+Contacts_Playbook.current_modal).find(".subcampaigns").multiselect('refresh');
-
-            	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns')
-            		.multiselect({ nonSelectedText: '', })
-            		.multiselect('selectAll', true)
-            		.multiselect('updateButtonText');
+	        		for(var i=0; i<extra_camps_response.length;i++){
+	        		    selected =  extra_camps_response[i].selected ? 'checked' : '';
+	        		    extra_camps_list+='<div class="checkbox mb10 cb"><label><input class="extra_camps" name="extra_camps_list[]" '+selected+' type="checkbox" value="'+extra_camps_response[i]+'"><b>'+extra_camps_response[i]+'</b></label></div>';
+	        		}
+	        		console.log(extra_camps_list);
+	        		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_camps_list);
+	        	}
             }
         });
 	},
@@ -835,46 +824,40 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        success:function(response){
 	        	console.log(response);
-                var edit_modal = $('#editPlaybookModal');
+                // var edit_modal = $('#editPlaybookModal');
 
-                edit_modal.find('.name').val(response.name);
-                edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
-                edit_modal.find('.subcampaigns').empty();
+                // edit_modal.find('.name').val(response.name);
+                // edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
+                // edit_modal.find('.subcampaigns').empty();
 
-                $.when(
-					Contacts_Playbook.get_subcampaigns(event, response.campaign)
-				).done(function() {
+    //             $.when(
+				// 	Contacts_Playbook.get_subcampaigns(event, response.campaign)
+				// ).done(function() {
 
-					var subcampaigns_obj = response.subcampaigns;
-					var subcampaigns_obj_length = Object.keys(subcampaigns_obj).length;
-					const subcampaigns_obj_keys = Object.getOwnPropertyNames(subcampaigns_obj);
-					let subcampaigns_array = [];
-					subcampaigns_array.push(Object.values(subcampaigns_obj));
+				// 	console.log(response.subcampaigns);
 
-					var subcampaigns = '';
-					for (var i = 0; i < subcampaigns_array[0].length; i++) {
-						subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
-					}
+				// 	edit_modal.find('.subcampaign_list .checkbox input').each(function(){
+				// 		for(var i=0;i<response.subcampaigns.length;i++){
+				// 			if($(this).val() == response.subcampaigns[i]){
+				// 				$(this).prop('checked', true);
+				// 			}
+				// 		}
+				// 	});
 
-					$('.subcampaigns').append(subcampaigns);
-					$(".subcampaigns").multiselect('rebuild');
-					$(".subcampaigns").multiselect('refresh');
+				// 	// <div class="checkbox">
+				// 	// 	<label>
+				// 	//     	<input type="checkbox" value="">
+				// 	//     	Option one is this and that&mdash;be sure to include why it's great
+				// 	// 	</label>
+				// 	// </div>
 
-					$('.subcampaigns')
-						.multiselect({ nonSelectedText: '', })
-						.multiselect('selectAll', true)
-						.multiselect('updateButtonText');
-
-					
-
-					// build array of originally selected subcamps
-					// $('.subcampaign_list input.subcamps').each(function (i) {
-					// 	if($(this).is(':checked') ){
-					// 		Contacts_Playbook.org_subcampaigns.push(i);
-					// 	}
-					    
-					// });
-				});
+				// 	// build array of originally selected subcamps
+				// 	$('.subcampaign_list input.subcamps').each(function (i) {
+				// 		if($(this).is(':checked') ){
+				// 			Contacts_Playbook.org_subcampaigns.push(i);
+				// 		}
+				// 	});
+				// });
 	        }
 	    });
 	},
@@ -1238,6 +1221,11 @@ $(document).ready(function(){
 
 	$('#editPlaybookModal, #addPlaybookModal').on('hidden.bs.modal', function () {
 		Master.reset_modal_form('#'+$(this).attr('id'));
+	});
+
+	$('.subcampaigns').on('click', '.stop-propagation', function (e) {
+		console.log('clicked');
+		e.stopPropagation();
 	});
 
 	$('.menu').popover({
