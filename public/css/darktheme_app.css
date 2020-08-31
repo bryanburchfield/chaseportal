@@ -636,7 +636,6 @@ h1.fw600 {
 .btn.btn-primary,
 input.btn.btn-primary {
   position: relative;
-  margin-bottom: 30px;
   background: #E15B23 !important;
   color: #fff;
   border: none;
@@ -963,9 +962,8 @@ input[type=file] {
   border-radius: 100px;
   width: 100px;
   height: 100px;
-  padding-top: 25px;
+  padding-top: 20px;
   margin: 0 auto;
-  margin-top: 20px;
 }
 
 .card.flipping_card {
@@ -1399,6 +1397,7 @@ h2.avg_cc {
   color: #E15B23;
   border-bottom: none;
   font-weight: 700;
+  clear: both;
 }
 
 h2.avg_sl,
@@ -3310,6 +3309,11 @@ span.numb_notifications {
 
 label.checkbox.toggle_active_reps {
   margin-left: 20px;
+}
+
+.btn-group,
+.btn-group-vertical {
+  max-height: 35px;
 }
 
 /* ---------------------------------------------------

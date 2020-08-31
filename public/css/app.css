@@ -653,7 +653,6 @@ h1.fw600 {
 
 .btn.btn-primary {
   position: relative;
-  margin-bottom: 30px;
   background: #e49831;
   color: #fff;
   border: 1px solid #f2ad4d;
@@ -763,7 +762,6 @@ div.container-fluid.bg {
 .filters .btn.btn-primary.select_database,
 .filters .btn.btn-primary.select_campaign {
   position: relative;
-  margin-bottom: 10px;
   background: #e49831;
   color: #fff;
   border: 1px solid #f2ad4d;
@@ -871,9 +869,8 @@ input[type=file] {
   border-radius: 100px;
   width: 100px;
   height: 100px;
-  padding-top: 25px;
+  padding-top: 20px;
   margin: 0 auto;
-  margin-top: 20px;
 }
 
 .card.flipping_card {
@@ -1286,6 +1283,7 @@ h2.avg_cc {
   color: #E15B23;
   border-bottom: none;
   font-weight: 700;
+  clear: both;
 }
 
 h2.avg_sl,
@@ -1448,10 +1446,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .create_recips .btn-group ul .checkbox {
   margin: 3px 0;
-}
-
-.report_filter_form .btn.btn-primary {
-  margin-top: 10px;
 }
 
 .add_user select {
@@ -3059,6 +3053,11 @@ span.numb_notifications {
 
 label.checkbox.toggle_active_reps {
   margin-left: 20px;
+}
+
+.btn-group,
+.btn-group-vertical {
+  max-height: 35px;
 }
 
 /* ---------------------------------------------------

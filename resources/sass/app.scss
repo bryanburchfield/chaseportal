@@ -478,7 +478,6 @@ h1.fw600 {
 
 .btn.btn-primary {
     position: relative;
-    margin-bottom: 30px;
     @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
 
     &:hover {
@@ -574,7 +573,6 @@ div.container-fluid.bg {
 
         &.select_database, &.select_campaign {
             position: relative;
-            margin-bottom: 10px;
             @include base_style(#e49831, #fff, null, 1px solid #f2ad4d, 600);
             @include border-radius(0);
         }
@@ -668,9 +666,8 @@ input[type='file'] {
             border-radius: 100px;
             width: 100px;
             height: 100px;
-            padding-top: 25px;
+            padding-top: 20px;
             margin: 0 auto;
-            margin-top: 20px;
         }
     }
 
@@ -1066,6 +1063,7 @@ h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     position: relative;
     bottom: 43px;
     @include base_style(null, $orange, bottom, none, 700);
+    clear: both;
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -1207,9 +1205,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     margin: 3px 0;
 }
 
-.report_filter_form .btn.btn-primary {
-    margin-top: 10px;
-}
 
 .add_user select {
     height: 40px;
@@ -2580,6 +2575,8 @@ span.numb_notifications{
 }
 
 label.checkbox.toggle_active_reps{margin-left: 20px;}
+
+.btn-group, .btn-group-vertical{max-height: 35px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

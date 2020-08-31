@@ -458,7 +458,6 @@ h1.fw600 {
 
 .btn.btn-primary, input.btn.btn-primary {
     position: relative;
-    margin-bottom: 30px;
     @include base_style($orange !important, #fff, null, none, 600);
 
     &:hover {
@@ -705,9 +704,8 @@ input[type='file'] {
             border-radius: 100px;
             width: 100px;
             height: 100px;
-            padding-top: 25px;
+            padding-top: 20px;
             margin: 0 auto;
-            margin-top: 20px;
         }
     }
 
@@ -1097,6 +1095,7 @@ h2.avg_sl, h2.avg_ht, h2.avg_tt, h2.avg_ct, h2.avg_cc {
     position: relative;
     bottom: 43px;
     @include base_style(null, $orange, bottom, none, 700);
+    clear: both;
 }
 
 h2.avg_sl, h2.avg_ht, h2.avg_tt {
@@ -2720,6 +2719,7 @@ span.numb_notifications{
 }
 
 label.checkbox.toggle_active_reps{margin-left: 20px;}
+.btn-group, .btn-group-vertical{max-height: 35px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
