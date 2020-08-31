@@ -66,7 +66,7 @@ class PlaybookController extends Controller
             ->where('GroupId', Auth::user()->group_id)
             ->firstOrFail();
 
-        $subcampaigns = array_values($this->getAllSubcampaigns($request->campaign));
+        $subcampaigns = $this->getAllSubcampaigns($request->campaign);
 
         $extra_campaigns = $this->relatedCampaigns($request->campaign);
 
@@ -105,6 +105,13 @@ class PlaybookController extends Controller
                     return $rec['CampaignName'];
                 })
                 ->toArray();
+
+            // convert to associative array
+            $result = [];
+            foreach ($related_campaigns as $k => $v) {
+                $result[$v] = $v;
+            }
+            $related_campaigns = $result;
         }
 
         return $related_campaigns;
