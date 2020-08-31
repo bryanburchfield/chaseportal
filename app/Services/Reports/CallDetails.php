@@ -327,7 +327,8 @@ class CallDetails
                 ORDER BY [id] Desc
                 ), 0)";
 
-        $sql .= " SELECT * FROM (SELECT
+        $sql .= " SELECT *, totRows = COUNT(*) OVER()
+                FROM (SELECT
                 CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
@@ -365,7 +366,6 @@ class CallDetails
 
         $sql .= "
                 $this->extra_cols
-                , totRows = COUNT(*) OVER()
             FROM [DialingResults] DR WITH(NOLOCK)
             LEFT JOIN InboundSources SRC on SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
 
