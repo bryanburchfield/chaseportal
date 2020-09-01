@@ -251,16 +251,21 @@ class AgentTimesheet
 
             // set min logintime and max logout time if summary
             if (!$this->params['detailed']) {
-                if ($reptotal['LogInTime'] == '') {
-                    $reptotal['LogInTime'] = $rec['LogInTime'];
-                } elseif (Carbon::parse($rec['LogInTime'])->lt(Carbon::parse($reptotal['LogInTime']))) {
-                    $reptotal['LogInTime'] = $rec['LogInTime'];
+
+                if ($rec['LogInTime'] != '') {
+                    if ($reptotal['LogInTime'] == '') {
+                        $reptotal['LogInTime'] = $rec['LogInTime'];
+                    } elseif (Carbon::parse($rec['LogInTime'])->lt(Carbon::parse($reptotal['LogInTime']))) {
+                        $reptotal['LogInTime'] = $rec['LogInTime'];
+                    }
                 }
 
-                if ($reptotal['LogOutTime'] == '') {
-                    $reptotal['LogOutTime'] = $rec['LogOutTime'];
-                } elseif (Carbon::parse($rec['LogOutTime'])->gt(Carbon::parse($reptotal['LogOutTime']))) {
-                    $reptotal['LogOutTime'] = $rec['LogOutTime'];
+                if ($rec['LogOutTime'] != '') {
+                    if ($reptotal['LogOutTime'] == '') {
+                        $reptotal['LogOutTime'] = $rec['LogOutTime'];
+                    } elseif (Carbon::parse($rec['LogOutTime'])->gt(Carbon::parse($reptotal['LogOutTime']))) {
+                        $reptotal['LogOutTime'] = $rec['LogOutTime'];
+                    }
                 }
             }
 
