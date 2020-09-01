@@ -26,6 +26,7 @@ class AgentTimesheet
             'Campaign' => 'reports.campaign',
             'LogInTime' => 'reports.logintime',
             'LogOutTime' => 'reports.logouttime',
+            'LoggedInSec' => 'reports.loggedintime',
             'ManHourSec' => 'reports.manhoursec',
             'PausedTimeSec' => 'reports.pausedtimesec',
         ];
@@ -152,9 +153,15 @@ class AgentTimesheet
                 $tmpsheet[$i]['Campaign'] = '';
                 $tmpsheet[$i]['LogInTime'] = '';
                 $tmpsheet[$i]['LogOutTime'] = '';
+                $tmpsheet[$i]['LoggedInSec'] = 0;
                 $tmpsheet[$i]['ManHourSec'] = 0;
                 $tmpsheet[$i]['PausedTimeSec'] = 0;
             }
+
+            if ($rec['Duration'] > 0) {
+                $tmpsheet[$i]['LoggedInSec'] += $rec['Duration'];
+            }
+
             switch ($rec['Action']) {
                 case 'Login':
                     if (!$loggedin) {
@@ -204,21 +211,30 @@ class AgentTimesheet
         }
 
         $total['Date'] = 'Total:';
+        $total['LoggedInSec'] = 0;
         $total['ManHourSec'] = 0;
         $total['PausedTimeSec'] = 0;
 
         foreach ($results as &$rec) {
+            $total['LoggedInSec'] += $rec['LoggedInSec'];
             $total['ManHourSec'] += $rec['ManHourSec'];
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
 
+            if ($rec['LogInTime'] != '') {
+                $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            }
+            if ($rec['LogOutTime'] != '') {
+                $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            }
+
             $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            $rec['LoggedInSec'] = $this->secondsToHms($rec['LoggedInSec']);
             $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
         }
 
         // format totals
+        $total['LoggedInSec'] = $this->secondsToHms($total['LoggedInSec']);
         $total['ManHourSec'] = $this->secondsToHms($total['ManHourSec']);
         $total['PausedTimeSec'] = $this->secondsToHms($total['PausedTimeSec']);
 
