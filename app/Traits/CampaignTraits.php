@@ -102,8 +102,10 @@ trait CampaignTraits
 
     private function makeCarbon($datetime)
     {
+        $tz = Auth::check() ? Auth::user()->iana_tz : null;
+
         if (!is_a($datetime, 'Illuminate\Support\Carbon')) {
-            $datetime = Carbon::createFromIsoFormat('L LT', $datetime, null, App::getLocale());
+            $datetime = Carbon::createFromIsoFormat('L LT', $datetime, $tz, App::getLocale());
         }
         return $datetime;
     }
