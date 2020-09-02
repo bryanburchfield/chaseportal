@@ -95,28 +95,28 @@ class CallerIdService
             }
 
             // check if this number is still active
-            if ($this->activeNumber($rec['CallerId'])) {
+            // if ($this->activeNumber($rec['CallerId'])) {
 
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
+            $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+            unset($rec['Contacts']);
 
-                // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+            // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                $all_results[] = $rec;
+            $all_results[] = $rec;
 
-                // Send email on change of group
-                if ($group_id != '' && $group_id != $rec['GroupId']) {
-                    if ($this->setGroup($group_id)) {
-                        $csvfile = $this->makeCsv($results);
-                        $this->emailReport($csvfile);
-                    }
-
-                    $results = [];
+            // Send email on change of group
+            if ($group_id != '' && $group_id != $rec['GroupId']) {
+                if ($this->setGroup($group_id)) {
+                    $csvfile = $this->makeCsv($results);
+                    $this->emailReport($csvfile);
                 }
 
-                $results[] = $rec;
-                $group_id = $rec['GroupId'];
+                $results = [];
             }
+
+            $results[] = $rec;
+            $group_id = $rec['GroupId'];
+            // }  // active check
         }
 
         if (!empty($results)) {
@@ -133,10 +133,10 @@ class CallerIdService
             $this->emailReport($csvfile);
         }
 
-        // Now run report for >15.5k calls yesterday
+        // Now run report for >15.5k calls over 30 days
 
         $this->enddate = Carbon::parse('midnight');
-        $this->startdate = $this->enddate->copy()->subDay(1);
+        $this->startdate = $this->enddate->copy()->subDay(30);
         $this->maxcount = 15500;
 
         $all_results = [];
@@ -147,14 +147,14 @@ class CallerIdService
             }
 
             // check if this number is still active
-            if ($this->activeNumber($rec['CallerId'])) {
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
+            // if ($this->activeNumber($rec['CallerId'])) {
+            $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+            unset($rec['Contacts']);
 
-                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+            list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                $all_results[] = $rec;
-            }
+            $all_results[] = $rec;
+            // } // active check
         }
 
         if (!empty($all_results)) {
@@ -226,7 +226,8 @@ class CallerIdService
                 'GroupID',
                 'GroupName',
                 'CallerID',
-                'Dials Yesterday',
+                // 'Dials Yesterday',
+                'Dials in Last 30 Days',
                 'Contact Rate',
                 'Flagged',
                 'Flagged By',

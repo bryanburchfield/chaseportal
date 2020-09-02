@@ -38,14 +38,15 @@
                     if(Auth::User()->group_id == 224500) {
                         unset($reports['production_report']);
                         unset($reports['campaign_call_log']);
-
+                        
                         $reports['bwr_omni'] = __('reports.bwr_omni');
                         $reports['bwr_production_report'] = __('reports.production_report');
                         $reports['bwr_campaign_call_log'] = __('reports.campaign_call_log');
                     }
-
-                    if(Auth::User()->group_id == 224500) {
-                        $reports['bwr_omni'] = __('reports.bwr_omni');
+                    
+                    if(Auth::User()->group_id == 224802) {
+                        unset($reports['agent_summary']);
+                        $reports['apn_agent_summary'] = __('reports.agent_summary');
                     }
 
                     if(!Auth::User()->isDemo()) {
