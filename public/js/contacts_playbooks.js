@@ -247,15 +247,15 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-            	console.log(response);
+
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
-	        	// console.log(subcamps_response);
+
 	        	if(subcamps_response.length){
 		        	Contacts_Playbook.subcampaigns=[];
 
-	        		var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+	        		var subcampaign_list='';
 	        		var selected;
 
 	        		for(var i=0; i<subcamps_response.length;i++){
@@ -273,7 +273,7 @@ var Contacts_Playbook = {
 	        	if(extra_camps_response.length){
 		        	Contacts_Playbook.extra_camps=[];
 
-	        		var extra_camps_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+	        		var extra_camps_list='';
 	        		var selected;
 
 	        		for(var i=0; i<extra_camps_response.length;i++){
@@ -291,7 +291,7 @@ var Contacts_Playbook = {
 		var extras_checked=0;
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    extras_checked++;
-		    console.log(extras_checked);
+
 		    if(extras_checked>1){
 		    	$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').hide();
 		    	return false;
@@ -302,7 +302,6 @@ var Contacts_Playbook = {
 	},
 
 	toggle_all_subcamps:function(){
-		console.log($(this));
 	    if($(this).prop("checked")){
 	        $(".subcampaign_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.unselect_all'));
 	        $(this).parent().parent().siblings().find('label input').prop( "checked", true );
@@ -373,7 +372,7 @@ var Contacts_Playbook = {
 		    campaigns.push($(this).val());
 		});
 
-		if($(".subcampaigns").is(":visible")){
+		if($('#'+Contacts_Playbook.current_modal).find("#subcampaigns_menu").is(":visible")){
 			$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 			    subcampaigns.push($(this).val());
 			});
@@ -1250,7 +1249,6 @@ $(document).ready(function(){
 	});
 
 	$('.subcampaigns').on('click', '.stop-propagation', function (e) {
-		console.log('clicked');
 		e.stopPropagation();
 	});
 

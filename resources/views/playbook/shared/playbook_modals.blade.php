@@ -86,7 +86,7 @@
                         Subcampaigns
                         <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu subcampaigns" aria-labelledby="subcampaigns_menu">
+                        <ul class="dropdown-menu subcampaigns stop-propagation" aria-labelledby="subcampaigns_menu">
                             {{-- <li><a href="#">Action</a></li> --}}
                         </ul>
                     </div>
