@@ -73,11 +73,6 @@
                         {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
-                    <div class="form-group extra_campaigns_group">
-                        {!! Form::label('reps', __('tools.extra_campaigns')) !!}
-                        {!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect extra_campaigns", 'multiple'=>true]) !!}
-                    </div>
-
                     <div class="dropdown mb20">
                         <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Extra Campaigns
