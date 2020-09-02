@@ -182,7 +182,7 @@ var Contacts_Playbook = {
 		}
 
 		var that = $(this);
-
+		console.log('get_subcampaigns');
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
 				Contacts_Playbook.current_modal = $(this).attr('id');
@@ -535,14 +535,24 @@ var Contacts_Playbook = {
 	update_playbook:function(e){
 		e.preventDefault();
 
-		var name = $(this).find('.name').val();
-		var campaign = $(this).find('.campaign_select').val();
-		var id = $(this).find('.id').val();
-		var subcampaigns = [];
-
-		$('.subcampaign_list input[type="checkbox"]:checked').each(function () {
-		    subcampaigns.push($(this).val());
+		var id = $('#'+Contacts_Playbook.current_modal).find(".id").val(),
+			name = $(this).find('.name').val(),
+			campaign = $(this).find('.campaign_select').val(),
+			campaigns=[],
+			subcampaigns = []
+		;
+		console.log(id);
+		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
+		    campaigns.push($(this).val());
 		});
+
+		if($('#'+Contacts_Playbook.current_modal).find("#subcampaigns_menu").is(":visible")){
+			$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
+			    subcampaigns.push($(this).val());
+			});
+		}else{
+			subcampaigns=[];
+		}
 
 		$('.loader_hor').show();
 
@@ -558,8 +568,9 @@ var Contacts_Playbook = {
 			dataType: 'json',
 			data: {
 				name:name,
-				campaign:campaign,
-				subcampaigns:subcampaigns
+	        	campaign:campaign,
+	        	campaigns:campaigns,
+	        	subcampaigns:subcampaigns
 			},
 			success: function (response) {
 				if (response.status == 'success') {
@@ -834,6 +845,7 @@ var Contacts_Playbook = {
 	},
 
 	get_playbook:function(id){
+
 		$.ajaxSetup({
 	        headers: {
 	            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -845,18 +857,23 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
-	        	console.log(response);
                 var edit_modal = $('#editPlaybookModal');
 
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
                 edit_modal.find('.subcampaigns').empty();
 
+                var campaigns = response.extra_campaigns.length;
+
+                if(campaigns){
+                	edit_modal.find('#subcampaigns_menu').hide();
+                }else{
+                	edit_modal.find('#subcampaigns_menu').show();
+                }
+
                 $.when(
 					Contacts_Playbook.get_extracampaigns(event, response.campaign)
 				).done(function() {
-
-					console.log(response);
 
 					edit_modal.find('.extra_campaigns .checkbox input').each(function(){
 						for(var i=0;i<response.extra_campaigns .length;i++){
@@ -875,13 +892,6 @@ var Contacts_Playbook = {
 							}
 						}
 					});
-
-					// build array of originally selected subcamps
-					// $('.subcampaign_list input.subcamps').each(function (i) {
-					// 	if($(this).is(':checked') ){
-					// 		Contacts_Playbook.org_subcampaigns.push(i);
-					// 	}
-					// });
 				});
 	        }
 	    });
