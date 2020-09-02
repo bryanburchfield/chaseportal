@@ -291,14 +291,14 @@ var Contacts_Playbook = {
 		var extras_checked=0;
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    extras_checked++;
-
-		    if(extras_checked){
-		    	$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').hide();
-		    	return false;
-		    }else{
-		    	$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').show();
-		    }
 		});
+
+		if(extras_checked){
+			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').hide();
+			return false;
+		}else{
+			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').show();
+		}
 	},
 
 	toggle_all_subcamps:function(){
