@@ -292,7 +292,7 @@ var Contacts_Playbook = {
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    extras_checked++;
 
-		    if(extras_checked>1){
+		    if(extras_checked){
 		    	$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').hide();
 		    	return false;
 		    }else{
