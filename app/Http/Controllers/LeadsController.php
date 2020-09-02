@@ -56,7 +56,7 @@ class LeadsController extends Controller
             'type' => 'other',
         ];
 
-        $jsfile[]='tools.js';
+        $jsfile[] = 'tools.js';
 
         $data = [
             'jsfile' => $jsfile,
@@ -140,10 +140,10 @@ class LeadsController extends Controller
             'type' => 'other',
         ];
 
-        $jsfile[]='tools.js';
+        $jsfile[] = 'tools.js';
 
         $data = [
-            'jsfile'=>$jsfile,
+            'jsfile' => $jsfile,
             'lead_rule' => $lead_rule,
             'source_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->source_campaign),
             'destination_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->destination_campaign),
@@ -456,13 +456,17 @@ class LeadsController extends Controller
             fputcsv($file, array_values($rec));
         }
 
-        // If there are recs, FTP the file
-        if ($totalrecs) {
-            $yesterday = Carbon::parse('yesterday', $request->tz)->format('Ymd');
-
-            $targetfile = 'leads_' . $yesterday . '.csv';
-            Storage::disk('ftp_' . $request->group_id)->put($targetfile, $file);
+        // Bail if no leads found
+        if (!$totalrecs) {
+            return;
         }
+
+        // FTP the file
+        $yesterday = Carbon::parse('yesterday', $request->tz)->format('Ymd');
+
+        $targetfile = 'leads_' . $yesterday . '.csv';
+        Storage::disk('ftp_' . $request->group_id)->put($targetfile, $file);
+
         fclose($file);
 
         // Send email with filename and total recs
