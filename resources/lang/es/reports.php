@@ -69,6 +69,7 @@ return [
      'errpagesize'          => 'El tamaño de página es inválido',
      'errrepsrequired'      => 'Se requiere por lo menos un agente',
      'errresults'           => 'No se encontraron resultados',
+     'errthresholdrequired' => 'Umbral requerido',
      'errtodateinvalid'     => 'La fecha final no es una fecha/hora válida',
      'errtodaterequired'    => 'La fecha final es requerida',
 

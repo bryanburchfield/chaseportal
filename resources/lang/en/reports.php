@@ -69,6 +69,7 @@ return [
 	'errpagesize'          => 'Invalid page size',
 	'errrepsrequired'      => 'At least 1 Rep required',
 	'errresults'           => 'No results found',
+	'errthresholdrequired' => 'Threshold required',
 	'errtodateinvalid'     => 'To date not a valid date/time',
 	'errtodaterequired'    => 'To date required',
 

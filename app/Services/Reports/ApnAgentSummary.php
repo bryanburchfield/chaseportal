@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Facades\Log;
 
 class ApnAgentSummary
 {
@@ -400,6 +401,9 @@ class ApnAgentSummary
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
+        Log::debug($sql);
+        Log::debug($bind);
+
         return [$sql, $bind];
     }
 
@@ -460,6 +464,8 @@ class ApnAgentSummary
         $total['ThresholdRatio'] = number_format($total['TalkTimeCount'] == 0 ? 0 : $total['ThresholdCalls'] / $total['TalkTimeCount'] * 100, 2) . '%';
         $total['ThresholdClosingPct'] = number_format($total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100, 2) . '%';
 
+        Log::debug($total);
+
         // remove count cols
         unset($total['TalkTimeCount']);
         unset($total['WaitTimeCount']);
@@ -501,6 +507,7 @@ class ApnAgentSummary
 
         $rec['ConversionRate'] .= '%';
         $rec['ConversionFactor'] .= '%';
+        $rec['ThresholdRatio'] .= '%';
         $rec['ThresholdClosingPct'] .= '%';
 
         return $rec;
@@ -528,7 +535,7 @@ class ApnAgentSummary
         }
 
         if (empty($request->threshold_secs)) {
-            $this->errors->add('threshold_secs.required', trans('reports.threshold_required'));
+            $this->errors->add('threshold_secs.required', trans('reports.errthresholdrequired'));
         } else {
             $this->params['threshold_secs'] = $request->threshold_secs;
         }
