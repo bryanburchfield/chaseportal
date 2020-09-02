@@ -2218,12 +2218,11 @@ a[aria-expanded=true] {
   color: #33A09B;
 }
 
-.panel-default > .panel-heading {
+.card-header {
   background: #263854;
   background: linear-gradient(to bottom, #263854 0%, #171f33 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#171f33,GradientType=0 );
   color: #fff;
-  height: 40px;
 }
 
 .note-editor.note-airframe .note-status-output,
@@ -2242,7 +2241,7 @@ a[aria-expanded=true] {
   border: 1px solid #ccc !important;
 }
 
-.note-toolbar.panel-heading {
+.note-toolbar.card-header {
   background: #eee;
   height: 45px;
 }
@@ -2747,21 +2746,9 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
-.panel-title a:after {
-  font-family: "Glyphicons Halflings";
-  content: "\E114";
-  float: right;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  position: relative;
-  top: 3px;
-}
-
-.panel-title a.collapsed:after {
-  content: "\E113";
-  position: relative;
-  top: 3px;
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .webhook_fields .field {
@@ -3041,7 +3028,7 @@ span.numb_notifications {
   border: 1px solid #ccc !important;
 }
 
-.note-toolbar.panel-heading {
+.note-toolbar.card-header {
   background: #eee;
   height: 45px;
 }
@@ -3058,6 +3045,14 @@ label.checkbox.toggle_active_reps {
 .btn-group,
 .btn-group-vertical {
   max-height: 35px;
+}
+
+.users .accordion .table-responsive {
+  display: table;
+}
+
+.users .accordion a {
+  display: block;
 }
 
 /* ---------------------------------------------------

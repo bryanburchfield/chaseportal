@@ -1,11 +1,11 @@
 <!-- Edit Recipient Modal -->
 <div class="modal fade" id="editRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
 
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('general.edit_recip')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('general.edit_recip')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -36,7 +36,7 @@
                 @endif
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
-                {!! Form::submit(__('general.save'), ['class'=>'btn btn-warning btn-md mb0']) !!}
+                {!! Form::submit(__('general.save'), ['class'=>'btn btn-primary btn-md mb0']) !!}
 
                 <div class="alert alert-danger mt20 hidetilloaded"></div>
                 {!! Form::close() !!}

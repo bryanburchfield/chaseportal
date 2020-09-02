@@ -16,19 +16,21 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="mt20">
-							<ul class="nav nav-tabs tabs">
+							<ul class="nav nav-tabs">
 
-								<li class="active"><a  href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
-								<li><a href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
+								<li class="nav-item active"><a class="nav-link" href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
+								<li class="nav-item"><a class="nav-link" href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
 								@can('accessSuperAdmin')
-									<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
+									<li class="nav-item"><a class="nav-link" href="#demo_user" data-toggle="tab">Demo Users</a></li>
 								@endcan
 							</ul>
 
 							<div class="tab-content">
 								<div class="tab-pane active mt30" id="new_user">
-									@include('shared.clientform', ['mode' => 'add'])
-									@include('shared.dialerlist', ['mode' => 'add'])
+									<div class="row">
+										@include('shared.clientform', ['mode' => 'add'])
+										@include('shared.dialerlist', ['mode' => 'add'])
+									</div>
 								</div>
 
 								@can('accessSuperAdmin')
@@ -97,8 +99,8 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">Edit Demo User</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Edit Demo User</h4>
 				</div>
 				<div class="modal-body">
 					@include('shared.demouser_form', ['mode' => 'edit'])

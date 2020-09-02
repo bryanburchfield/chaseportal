@@ -77,6 +77,7 @@ var Master = {
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
+        $('.users .accordion').on('click', 'a', this.toggle_users_accordion);
 
         /// tool handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
@@ -231,6 +232,19 @@ var Master = {
     add_btn_loader:function(){
         $(this).find('i').remove();
         $(this).prepend('<i class="fa fa-spinner fa-spin mr10"></i>');
+    },
+
+    toggle_users_accordion:function(){
+
+        // opening accordion
+        if($(this).hasClass('collapsed')){
+            $(this).find('span i').remove();
+            $(this).find('span').append('<i class="fas fa-chevron-down"></i>');
+        }else{
+            $(this).find('span i').remove();
+            $(this).find('span').append('<i class="fas fa-chevron-up"></i>');
+        }
+        
     },
 
     filter_date: function () {

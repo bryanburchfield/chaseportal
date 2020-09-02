@@ -1959,10 +1959,9 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     @include base_style(none, $green);
 }
 
-.panel-default>.panel-heading{
+.card-header{
     @include gradient(#263854, #171f33,top, 0%, 100%);
     color:#fff;
-    height: 40px;
 }
 
 .note-editor.note-airframe .note-status-output, .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
@@ -1973,17 +1972,17 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border:1px solid #1b293c !important;
 }
 
-.note-toolbar.panel-heading{
+.note-toolbar.card-header{
     background: darken(#263854, 13%);
     height: 45px;
 }
 
 .panel-default{border: none;}
-.panel-default>.panel-heading{
+.panel-default>.card-header{
     border: 1px solid darken($blue, 10%);
 }
 
-.panel-default>.panel-heading+.panel-collapse>.panel-body{
+.panel-default>.card-header+.panel-collapse>.panel-body{
     @include base_style(darken($blue, 10%), null, 1px solid lighten($blue, 10%));
 }
 
@@ -2464,22 +2463,6 @@ a.toggle_instruc {
     color: #d9534f;
 }
 
-.panel-title a:after {
-    font-family: 'Glyphicons Halflings';
-    content: "\e114";
-    float: right;
-    color: $green;
-    font-size: 12px;
-    font-weight: 500;
-    position: relative;
-    top: 3px;
-}
-.panel-title a.collapsed:after {
-    content: "\e113";
-    position: relative;
-    top: 3px;
-}
-
 .webhook_fields{
 
     .field{
@@ -2702,7 +2685,7 @@ span.numb_notifications{
     border: 1px solid #1b293c !important;
 }
 
-.note-toolbar.panel-heading {
+.note-toolbar.card-header {
     background: #111a26;
     height: 45px;
 }
@@ -2720,6 +2703,16 @@ span.numb_notifications{
 
 label.checkbox.toggle_active_reps{margin-left: 20px;}
 .btn-group, .btn-group-vertical{max-height: 35px;}
+
+.users .accordion{
+    .table-responsive {
+        display: table;
+    }
+
+    a{
+        display: block;
+    }
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
