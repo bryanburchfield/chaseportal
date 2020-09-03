@@ -2463,6 +2463,11 @@ a.toggle_instruc {
     color: #d9534f;
 }
 
+.card-title{
+    font-size: 17px;
+    font-weight: 600;
+}
+
 .webhook_fields{
 
     .field{
@@ -2706,10 +2711,14 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
 
 .users .accordion{
 
+    .card{
+        border-top: none;
+    }
+
     .card-header{
         &:hover{cursor: pointer;}
     }
-    
+
     .table-responsive {
         display: table;
     }

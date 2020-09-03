@@ -2747,7 +2747,7 @@ a.toggle_instruc {
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
 }
 
@@ -3045,6 +3045,10 @@ label.checkbox.toggle_active_reps {
 .btn-group,
 .btn-group-vertical {
   max-height: 35px;
+}
+
+.users .accordion .card {
+  border-top: none;
 }
 
 .users .accordion .card-header:hover {

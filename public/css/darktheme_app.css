@@ -3025,6 +3025,11 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
 .webhook_fields .field {
   border-bottom: 1px solid #1b293c;
   padding-top: 15px;
@@ -3296,6 +3301,10 @@ label.checkbox.toggle_active_reps {
 .btn-group,
 .btn-group-vertical {
   max-height: 35px;
+}
+
+.users .accordion .card {
+  border-top: none;
 }
 
 .users .accordion .card-header:hover {

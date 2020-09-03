@@ -18,7 +18,7 @@
 						<div class="mt20">
 							<ul class="nav nav-tabs">
 
-								<li class="nav-item active"><a class="nav-link" href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
+								<li class="nav-item"><a class="nav-link active" href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
 								<li class="nav-item"><a class="nav-link" href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
 								@can('accessSuperAdmin')
 									<li class="nav-item"><a class="nav-link" href="#demo_user" data-toggle="tab">Demo Users</a></li>
@@ -78,8 +78,10 @@
 								@endcan
 
 								<div class="tab-pane mt30" id="edit_user">
-									@include('shared.clientform', ['mode' => 'edit'])
-									@include('shared.dialerlist', ['mode' => 'edit'])
+									<div class="row">
+										@include('shared.clientform', ['mode' => 'edit'])
+										@include('shared.dialerlist', ['mode' => 'edit'])
+									</div>
 								</div>
 							</div>
 						</div>

@@ -58,7 +58,7 @@
                             $groups = $users->unique('group_id')->pluck('group_id')->sort()->values();
                         @endphp
 
-                        <div class="accordion nested p-2" id="{{$mode}}_group_accordion{{$db}}" role="tablist" aria-multiselectable="false">
+                        <div class="accordion nested p-3" id="{{$mode}}_group_accordion{{$db}}" role="tablist" aria-multiselectable="false">
                             @foreach($groups as $id)
                             <div class="card mb-0 p-0">
                                 <div class="card-header p-2" id="group_heading{{$id}}">
