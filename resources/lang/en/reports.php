@@ -14,7 +14,8 @@ return [
 	'agent_summary_campaign'        => 'Agent Summary By Camp',
 	'agent_summary_subcampaign'     => 'Agent Summary By Sub',
 	'agent_timesheet'               => 'Agent Time Sheet',
-	'apn_agent_summary'                 => 'Agent Summary',
+	'apn_agent_summary' => 'Agent Summary',
+	'apn_subcampaign_summary' => 'Subcampaign Summary',
 	'bwr_campaign_call_log'         => 'Campaign Call Log',
 	'bwr_production_report'         => 'Production Report',
 	'call_details'                  => 'Call Details',
@@ -69,6 +70,7 @@ return [
 	'errpagesize'          => 'Invalid page size',
 	'errrepsrequired'      => 'At least 1 Rep required',
 	'errresults'           => 'No results found',
+	'errthresholdrequired' => 'Threshold required',
 	'errtodateinvalid'     => 'To date not a valid date/time',
 	'errtodaterequired'    => 'To date required',
 

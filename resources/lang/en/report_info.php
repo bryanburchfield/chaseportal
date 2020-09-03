@@ -141,4 +141,5 @@ return [
     'shift_report_1' => 'This report summarizes outbound calls by campaign for the specified date range.',
     'shift_report_2' => 'It totals the call dispositions and whether they made a connection or contact.',
     'subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
+    'apn_subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
 ];

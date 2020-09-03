@@ -73,10 +73,10 @@ class ApnAgentSummary
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
+            $results = $this->processResults($results);
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
         }
 
         return $this->getPage($results, $all);
@@ -379,8 +379,8 @@ class ApnAgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(Leads as numeric(18,2)) * 100
-        WHERE Leads > 0;
+        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(ThresholdCalls as numeric(18,2)) * 100
+        WHERE ThresholdCalls > 0;
 
         SELECT * FROM #AgentSummary WHERE Hours > 0";
 
@@ -501,6 +501,7 @@ class ApnAgentSummary
 
         $rec['ConversionRate'] .= '%';
         $rec['ConversionFactor'] .= '%';
+        $rec['ThresholdRatio'] .= '%';
         $rec['ThresholdClosingPct'] .= '%';
 
         return $rec;
@@ -528,7 +529,7 @@ class ApnAgentSummary
         }
 
         if (empty($request->threshold_secs)) {
-            $this->errors->add('threshold_secs.required', trans('reports.threshold_required'));
+            $this->errors->add('threshold_secs.required', trans('reports.errthresholdrequired'));
         } else {
             $this->params['threshold_secs'] = $request->threshold_secs;
         }
