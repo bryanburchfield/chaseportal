@@ -3298,6 +3298,10 @@ label.checkbox.toggle_active_reps {
   max-height: 35px;
 }
 
+.users .accordion .card-header:hover {
+  cursor: pointer;
+}
+
 .users .accordion .table-responsive {
   display: table;
 }

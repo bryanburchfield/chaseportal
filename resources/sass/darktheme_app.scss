@@ -2705,6 +2705,11 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
 .btn-group, .btn-group-vertical{max-height: 35px;}
 
 .users .accordion{
+
+    .card-header{
+        &:hover{cursor: pointer;}
+    }
+    
     .table-responsive {
         display: table;
     }

@@ -244,7 +244,11 @@ var Master = {
             $(this).find('span i').remove();
             $(this).find('span').append('<i class="fas fa-chevron-up"></i>');
         }
-        
+
+        if($(this).parent().parent().parent().siblings().find('div.collapse').hasClass('show')){
+            $(this).parent().parent().parent().siblings().find('span i').remove();
+            $(this).parent().parent().parent().siblings().find('span').append('<i class="fas fa-chevron-up"></i>');
+        }
     },
 
     filter_date: function () {
