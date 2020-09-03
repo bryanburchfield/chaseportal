@@ -16,7 +16,6 @@ class ApnSubcampaignSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.subcampaign_summary';
-        $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Date' => 'reports.date',
             'Campaign' => 'reports.campaign',
@@ -218,7 +217,9 @@ class ApnSubcampaignSummary
             $bind['startdate_dur' . $i] = $startDate;
             $bind['enddate_dur' . $i] = $endDate;
 
-            $sql .= " $union SELECT aa.Rep, [Action], aa.Duration, aa.ActivityId, aa.Campaign, aa.Subcampaign
+            $sql .= " $union SELECT
+            CAST(CONVERT(datetimeoffset, aa.Date) AT TIME ZONE '$tz' as date) as Date,
+            aa.Rep, [Action], aa.Duration, aa.ActivityId, aa.Campaign, aa.Subcampaign
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
             WHERE aa.GroupId = :group_id_dur$i
             AND aa.Date >= :startdate_dur$i
@@ -235,7 +236,7 @@ class ApnSubcampaignSummary
 
         $sql .= ") tmp;
 
-        CREATE INDEX IX_ASCampaignType ON #AgentSummaryDuration (Campaign, Subcampaign);
+        CREATE INDEX IX_ASCampaignType ON #AgentSummaryDuration (Date, Campaign, Subcampaign);
 
         INSERT #SubcampaignSummary(Campaign, Subcampaign, Date)
         SELECT Campaign, Subcampaign, Date
@@ -275,12 +276,13 @@ class ApnSubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET Cepts = a.Cepts
-        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Cepts
+        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Cepts, Date
               FROM #DialingResultsStats
               WHERE CallStatus = 'CR_CEPT'
-              GROUP BY Campaign, Subcampaign) a
+              GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date
 
         UPDATE #SubcampaignSummary
         SET ManHours = a.ManHours/3600 FROM (
@@ -331,12 +333,13 @@ class ApnSubcampaignSummary
 
             $sql .= "UPDATE #SubcampaignSummary
             SET Total += a.Total
-            FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total
+            FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total, Date
                 FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                 WHERE l.GroupId = :group_id2$i
-                GROUP BY l.Campaign, IsNull(l.Subcampaign, '')) a
+                GROUP BY l.Campaign, IsNull(l.Subcampaign, ''), Date) a
             WHERE #SubcampaignSummary.Campaign = a.Campaign
-            AND #SubcampaignSummary.Subcampaign = a.Subcampaign;";
+            AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+            AND #SubcampaignSummary.Date = a.Date;";
         }
 
         $sql .= "
@@ -435,22 +438,24 @@ class ApnSubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET TalkTimeCount = a.tot
-        FROM (SELECT aa.Campaign, aa.Subcampaign, COUNT(*) as tot
+        FROM (SELECT aa.Campaign, aa.Subcampaign, COUNT(*) as tot, Date
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Action in ('Call', 'ManualCall', 'InboundCall')
-              GROUP BY aa.Campaign, aa.Subcampaign) a
+              GROUP BY aa.Campaign, aa.Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
-        AND #SubcampaignSummary.Subcampaign = a.Subcampaign;
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date;
 
         UPDATE #SubcampaignSummary
         SET ThresholdCalls = a.tot
-        FROM (SELECT aa.Campaign, aa.Subcampaign, Count(*) as tot
+        FROM (SELECT aa.Campaign, aa.Subcampaign, Count(*) as tot, Date
               FROM #AgentSummaryDuration aa WITH(NOLOCK)
               WHERE aa.Duration >= :threshold_secs1
               AND aa.Action in ('Call', 'ManualCall', 'InboundCall')
-              GROUP BY aa.Campaign, aa.Subcampaign) a
+              GROUP BY aa.Campaign, aa.Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
-        AND #SubcampaignSummary.Subcampaign = a.Subcampaign;
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date;
 
         UPDATE #SubcampaignSummary
         SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(TalkTimeCount as numeric(18,2))) * 100
@@ -458,13 +463,14 @@ class ApnSubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET ThresholdSales = a.cnt
-        FROM (SELECT D.Campaign, D.Subcampaign, COUNT(*) as cnt
+        FROM (SELECT D.Campaign, D.Subcampaign, COUNT(*) as cnt, Date
             FROM #AgentSummaryDuration D
             INNER JOIN #Sales S on S.Rep = D.Rep AND S.ActivityId = D.ActivityId
             AND D.Duration >= :threshold_secs2
-            GROUP BY D.Campaign, D.Subcampaign) a
+            GROUP BY D.Campaign, D.Subcampaign, D.Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
-        AND #SubcampaignSummary.Subcampaign = a.Subcampaign;
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date;
 
         UPDATE #SubcampaignSummary
         SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(ThresholdCalls as numeric(18,2)) * 100
@@ -481,20 +487,15 @@ class ApnSubcampaignSummary
     {
         // this sets the order of the columns
         foreach ($this->params['columns'] as $k => $v) {
-            $total[$k] = '';
             $subtotal[$k] = '';
         }
 
-        $total = $this->zeroRec($total);
         $subtotal = $this->zeroRec($subtotal);
 
         $oldate = '';
 
         $final = [];
         foreach ($results as $rec) {
-
-            $total = $this->addTotals($total, $rec);
-
             if ($rec['Date'] != $oldate && $oldate != '') {
                 $final[] = $this->processTotal($subtotal);
                 $subtotal = $this->zeroRec($subtotal);
@@ -509,9 +510,6 @@ class ApnSubcampaignSummary
         if (count($final)) {
             $final[] = $this->processTotal($subtotal);
         }
-
-        // Tack on the totals row
-        $final[] = $this->processTotal($total);
 
         return $final;
     }

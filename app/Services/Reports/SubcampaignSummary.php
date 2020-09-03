@@ -202,12 +202,13 @@ class SubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET Cepts = a.Cepts
-        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Cepts
+        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Cepts, Date
               FROM #DialingResultsStats
               WHERE CallStatus = 'CR_CEPT'
-              GROUP BY Campaign, Subcampaign) a
+              GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date
 
         UPDATE #SubcampaignSummary
         SET ManHours = a.ManHours/3600 FROM (
