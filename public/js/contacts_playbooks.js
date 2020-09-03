@@ -182,7 +182,6 @@ var Contacts_Playbook = {
 		}
 
 		var that = $(this);
-		console.log('get_subcampaigns');
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
 				Contacts_Playbook.current_modal = $(this).attr('id');
@@ -201,24 +200,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-	        	console.log(response.subcampaigns)
-	        	// $('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
-	        	// var subcamps_response = Object.keys(response.subcampaigns);
-	        	// // console.log(subcamps_response);
-	        	// if(subcamps_response.length){
-		        // 	Contacts_Playbook.subcampaigns=[];
-
-	        	// 	var subcampaign_list='<div class="checkbox mb20 select_all fltlft"><label><input id="select_all" name="select_all" type="checkbox"> <b>'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
-	        	// 	var selected;
-
-	        	// 	for(var i=0; i<subcamps_response.length;i++){
-	        	// 	    selected =  subcamps_response[i].selected ? 'checked' : '';
-	        	// 	    subcampaign_list+='<div class="checkbox mb10 cb"><label><input class="subcamps" name="subcampaign_list[]" '+selected+' type="checkbox" value="'+subcamps_response[i]+'"><b>'+subcamps_response[i]+'</b></label></div>';
-	        	// 	}
-
-	        	// 	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').append(subcampaign_list);
-	        		// Contacts_Playbook.get_extracampaigns(campaign);
-	        	// }
+	        	console.log(response)
 	        }
 	    });
 	},
@@ -294,10 +276,10 @@ var Contacts_Playbook = {
 		});
 
 		if(extras_checked){
-			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').hide();
+			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').parent().hide();
 			return false;
 		}else{
-			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').show();
+			$('#'+Contacts_Playbook.current_modal).find('#subcampaigns_menu').parent().show();
 		}
 	},
 
@@ -541,7 +523,7 @@ var Contacts_Playbook = {
 			campaigns=[],
 			subcampaigns = []
 		;
-		console.log(id);
+
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    campaigns.push($(this).val());
 		});
@@ -613,7 +595,6 @@ var Contacts_Playbook = {
 	            campaign : campaign,
 	        },
 	        success:function(response){
-                console.log(response);
 	        }
 	    });
 	},
@@ -866,9 +847,9 @@ var Contacts_Playbook = {
                 var campaigns = response.extra_campaigns.length;
 
                 if(campaigns){
-                	edit_modal.find('#subcampaigns_menu').hide();
+                	edit_modal.find('#subcampaigns_menu').parent().hide();
                 }else{
-                	edit_modal.find('#subcampaigns_menu').show();
+                	edit_modal.find('#subcampaigns_menu').parent().show();
                 }
 
                 $.when(
@@ -878,7 +859,6 @@ var Contacts_Playbook = {
 					edit_modal.find('.extra_campaigns .checkbox input').each(function(){
 						for(var i=0;i<response.extra_campaigns .length;i++){
 							if($(this).val() == response.extra_campaigns [i]){
-								console.log(response.extra_campaigns [i]);
 								$(this).prop('checked', true);
 							}
 						}
@@ -887,7 +867,6 @@ var Contacts_Playbook = {
 					edit_modal.find('.subcampaigns .checkbox input').each(function(){
 						for(var i=0;i<response.subcampaigns.length;i++){
 							if($(this).val() == response.subcampaigns[i]){
-								console.log(response.subcampaigns[i]);
 								$(this).prop('checked', true);
 							}
 						}
