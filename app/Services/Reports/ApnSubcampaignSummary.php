@@ -474,11 +474,6 @@ class ApnSubcampaignSummary
         FROM #SubcampaignSummary
         ORDER BY Date, Campaign, Subcampaign";
 
-        if (!$all) {
-            $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
-            $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
-        }
-
         return [$sql, $bind];
     }
 
@@ -487,105 +482,38 @@ class ApnSubcampaignSummary
         // this sets the order of the columns
         foreach ($this->params['columns'] as $k => $v) {
             $total[$k] = '';
+            $subtotal[$k] = '';
         }
 
-        $total['APH'] = 0;
-        $total['AvAttempt'] = 0;
-        $total['Available'] = 0;
-        $total['AvailablePct'] = 0;
-        $total['CPH'] = 0;
-        $total['Cepts'] = 0;
-        $total['ConnectRate'] = 0;
-        $total['Connects'] = 0;
-        $total['ConversionFactor'] = 0;
-        $total['ConversionRate'] = 0;
-        $total['CountAttempt'] = 0;
-        $total['DPH'] = 0;
-        $total['Dialed'] = 0;
-        $total['ManHours'] = 0;
-        $total['SaleRateValue'] = 0;
-        $total['Sales'] = 0;
-        $total['TalkTimeCount'] = 0;
-        $total['ThresholdCalls'] = 0;
-        $total['ThresholdClosingPct'] = 0;
-        $total['ThresholdRatio'] = 0;
-        $total['ThresholdSales'] = 0;
-        $total['TotAttempt'] = 0;
-        $total['Total'] = 0;
+        $total = $this->zeroRec($total);
+        $subtotal = $this->zeroRec($subtotal);
 
-        foreach ($results as &$rec) {
-            $total['Available'] += $rec['Available'];
-            $total['Cepts'] += $rec['Cepts'];
-            $total['Connects'] += $rec['Connects'];
-            $total['CountAttempt'] += $rec['CountAttempt'];
-            $total['Dialed'] += $rec['Dialed'];
-            $total['ManHours'] += $rec['ManHours'];
-            $total['Sales'] += $rec['Sales'];
-            $total['TalkTimeCount'] += $rec['TalkTimeCount'];
-            $total['ThresholdCalls'] += $rec['ThresholdCalls'];
-            $total['ThresholdSales'] += $rec['ThresholdSales'];
-            $total['TotAttempt'] += $rec['TotAttempt'];
-            $total['Total'] += $rec['Total'];
+        $oldate = '';
 
-            $rec = $this->processRow($rec);
-        }
+        $final = [];
+        foreach ($results as $rec) {
 
-        // Do total calcs
-        if ($total['Total'] > 0) {
-            $total['AvailablePct'] = $total['Available'] / $total['Total'] * 100;
-        }
+            $total = $this->addTotals($total, $rec);
 
-        if ($total['ManHours'] > 0) {
-            $total['CPH'] = $total['Connects'] / $total['ManHours'];
-            $total['APH'] = $total['Sales'] / $total['ManHours'];
-            $total['DPH'] = $total['Dialed'] / $total['ManHours'];
-
-            if ($total['Dialed'] > 0) {
-                $total['ConversionFactor'] = $total['Sales'] / $total['Dialed'] / $total['ManHours'];
+            if ($rec['Date'] != $oldate && $oldate != '') {
+                $final[] = $this->processTotal($subtotal);
+                $subtotal = $this->zeroRec($subtotal);
             }
+
+            $subtotal = $this->addTotals($subtotal, $rec);
+            $oldate = $rec['Date'];
+
+            $final[] = $this->processRow($rec);
         }
 
-        if ($total['Dialed'] > 0) {
-            $total['ConnectRate'] = $total['Connects'] / $total['Dialed'] * 100;
-            $total['ConversionRate'] = $total['Sales'] / $total['Dialed'] * 100;
+        if (count($final)) {
+            $final[] = $this->processTotal($subtotal);
         }
-
-        if ($total['Sales'] > 0) {
-            $total['SaleRateValue'] = $total['Dialed'] / $total['Sales'];
-        }
-
-        if ($total['CountAttempt'] > 0) {
-            $total['AvAttempt'] = $total['TotAttempt'] / $total['CountAttempt'];
-        }
-
-        $total['ThresholdRatio'] = $total['TalkTimeCount'] == 0 ? 0 : $total['ThresholdCalls'] / $total['TalkTimeCount'] * 100;
-        $total['ThresholdClosingPct'] = $total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100;
-
-        // format cols
-        $total['APH'] = number_format($total['APH'], 2);
-        $total['AvAttempt'] = number_format($total['AvAttempt'], 0);
-        $total['AvailablePct'] = number_format($total['AvailablePct'], 2) . '%';
-        $total['CPH'] = number_format($total['CPH'], 2);
-        $total['ConnectRate'] = number_format($total['ConnectRate'], 2);
-        $total['ConversionFactor'] = number_format($total['ConversionFactor'], 2);
-        $total['ConversionRate'] = number_format($total['ConversionRate'], 2);
-        $total['DPH'] = number_format($total['DPH'], 2);
-        $total['SaleRateValue'] = number_format($total['SaleRateValue'], 2);
-        $total['ThresholdClosingPct'] = number_format($total['ThresholdClosingPct'], 2) . '%';
-        $total['ThresholdRatio'] = number_format($total['ThresholdRatio'], 2) . '%';
-
-        // remove count cols
-        unset($total['Available']);
-        unset($total['CountAttempt']);
-        unset($total['DispositionTimeCount']);
-        unset($total['TalkTimeCount']);
-        unset($total['ThresholdSales']);
-        unset($total['TotAttempt']);
 
         // Tack on the totals row
-        $results[] = $total;
+        $final[] = $this->processTotal($total);
 
-        return $results;
+        return $final;
     }
 
     public function processRow($rec)
@@ -596,6 +524,109 @@ class ApnSubcampaignSummary
         $rec['ThresholdRatio'] .= '%';
         $rec['ThresholdClosingPct'] .= '%';
         $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
+
+        // remove count cols
+        unset($rec['Available']);
+        unset($rec['CountAttempt']);
+        unset($rec['DispositionTimeCount']);
+        unset($rec['TalkTimeCount']);
+        unset($rec['ThresholdSales']);
+        unset($rec['TotAttempt']);
+
+        return $rec;
+    }
+
+    private function zeroRec($rec)
+    {
+        $rec['APH'] = 0;
+        $rec['AvAttempt'] = 0;
+        $rec['Available'] = 0;
+        $rec['AvailablePct'] = 0;
+        $rec['CPH'] = 0;
+        $rec['Cepts'] = 0;
+        $rec['ConnectRate'] = 0;
+        $rec['Connects'] = 0;
+        $rec['ConversionFactor'] = 0;
+        $rec['ConversionRate'] = 0;
+        $rec['CountAttempt'] = 0;
+        $rec['DPH'] = 0;
+        $rec['Dialed'] = 0;
+        $rec['ManHours'] = 0;
+        $rec['SaleRateValue'] = 0;
+        $rec['Sales'] = 0;
+        $rec['TalkTimeCount'] = 0;
+        $rec['ThresholdCalls'] = 0;
+        $rec['ThresholdClosingPct'] = 0;
+        $rec['ThresholdRatio'] = 0;
+        $rec['ThresholdSales'] = 0;
+        $rec['TotAttempt'] = 0;
+        $rec['Total'] = 0;
+
+        return $rec;
+    }
+
+    private function addTotals($total, $rec)
+    {
+        $total['Available'] += $rec['Available'];
+        $total['Cepts'] += $rec['Cepts'];
+        $total['Connects'] += $rec['Connects'];
+        $total['CountAttempt'] += $rec['CountAttempt'];
+        $total['Dialed'] += $rec['Dialed'];
+        $total['ManHours'] += $rec['ManHours'];
+        $total['Sales'] += $rec['Sales'];
+        $total['TalkTimeCount'] += $rec['TalkTimeCount'];
+        $total['ThresholdCalls'] += $rec['ThresholdCalls'];
+        $total['ThresholdSales'] += $rec['ThresholdSales'];
+        $total['TotAttempt'] += $rec['TotAttempt'];
+        $total['Total'] += $rec['Total'];
+
+        return $total;
+    }
+
+    private function processTotal($rec)
+    {
+        if ($rec['Total'] > 0) {
+            $rec['AvailablePct'] = $rec['Available'] / $rec['Total'] * 100;
+        }
+
+        if ($rec['ManHours'] > 0) {
+            $rec['CPH'] = $rec['Connects'] / $rec['ManHours'];
+            $rec['APH'] = $rec['Sales'] / $rec['ManHours'];
+            $rec['DPH'] = $rec['Dialed'] / $rec['ManHours'];
+
+            if ($rec['Dialed'] > 0) {
+                $rec['ConversionFactor'] = $rec['Sales'] / $rec['Dialed'] / $rec['ManHours'];
+            }
+        }
+
+        if ($rec['Dialed'] > 0) {
+            $rec['ConnectRate'] = $rec['Connects'] / $rec['Dialed'] * 100;
+            $rec['ConversionRate'] = $rec['Sales'] / $rec['Dialed'] * 100;
+        }
+
+        if ($rec['Sales'] > 0) {
+            $rec['SaleRateValue'] = $rec['Dialed'] / $rec['Sales'];
+        }
+
+        if ($rec['CountAttempt'] > 0) {
+            $rec['AvAttempt'] = $rec['TotAttempt'] / $rec['CountAttempt'];
+        }
+
+        $rec['ThresholdRatio'] = $rec['TalkTimeCount'] == 0 ? 0 : $rec['ThresholdCalls'] / $rec['TalkTimeCount'] * 100;
+        $rec['ThresholdClosingPct'] = $rec['ThresholdCalls'] == 0 ? 0 : $rec['ThresholdSales'] / $rec['ThresholdCalls'] * 100;
+
+        // format cols
+        $rec['APH'] = number_format($rec['APH'], 2);
+        $rec['AvAttempt'] = number_format($rec['AvAttempt'], 0);
+        $rec['AvailablePct'] = number_format($rec['AvailablePct'], 2) . '%';
+        $rec['CPH'] = number_format($rec['CPH'], 2);
+        $rec['ConnectRate'] = number_format($rec['ConnectRate'], 2);
+        $rec['ConversionFactor'] = number_format($rec['ConversionFactor'], 2);
+        $rec['ConversionRate'] = number_format($rec['ConversionRate'], 2);
+        $rec['DPH'] = number_format($rec['DPH'], 2);
+        $rec['SaleRateValue'] = number_format($rec['SaleRateValue'], 2);
+        $rec['ThresholdClosingPct'] = number_format($rec['ThresholdClosingPct'], 2) . '%';
+        $rec['ThresholdRatio'] = number_format($rec['ThresholdRatio'], 2) . '%';
 
         // remove count cols
         unset($rec['Available']);
