@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class ApnSubcampaignSummary
 {
@@ -17,6 +16,7 @@ class ApnSubcampaignSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.subcampaign_summary';
+        $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Date' => 'reports.date',
             'Campaign' => 'reports.campaign',
@@ -24,7 +24,7 @@ class ApnSubcampaignSummary
             'Total' => 'reports.total_leads',
             'Dialed' => 'reports.dialed',
             'DPH' => 'reports.dph',
-            'Available' => 'reports.available',
+            'AvailablePct' => 'reports.available',
             'AvAttempt' => 'reports.avattempt',
             'ManHours' => 'reports.manhours',
             'Connects' => 'reports.connects',
@@ -71,16 +71,13 @@ class ApnSubcampaignSummary
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
-            $this->params['totrows'] = $results[0]['totRows'];
-
-            foreach ($results as &$rec) {
-                $rec = $this->processRow($rec);
-            }
+            $results = $this->processResults($results);
+            $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $results;
+        return $this->getPage($results, $all);
     }
 
     public function makeQuery($all)
@@ -108,8 +105,11 @@ class ApnSubcampaignSummary
             Total int DEFAULT 0,
             Dialed int DEFAULT 0,
             DPH numeric(18,2) DEFAULT 0,
-            Available numeric(18,2) DEFAULT 0,
+            Available int DEFAULT 0,
+            AvailablePct numeric(18,2) DEFAULT 0,
             AvAttempt int DEFAULT 0,
+            TotAttempt int DEFAULT 0,
+            CountAttempt int DEFAULT 0,
             ManHours numeric(18,2) DEFAULT 0,
             Connects int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
@@ -120,7 +120,6 @@ class ApnSubcampaignSummary
             ConversionRate numeric(18,2) DEFAULT 0,
             ConversionFactor numeric(18,2) DEFAULT 0,
             Cepts int DEFAULT 0,
-            CeptsPercentage numeric(18,2) DEFAULT 0,
             TalkTimeCount int DEFAULT 0,
             ThresholdCalls int DEFAULT 0,
             ThresholdSales int DEFAULT 0,
@@ -342,11 +341,16 @@ class ApnSubcampaignSummary
 
         $sql .= "
         UPDATE #SubcampaignSummary
-        SET AvAttempt = a.AvAttempt FROM (
+        SET AvAttempt = a.AvAttempt,
+          TotAttempt = a.TotAttempt,
+          CountAttempt = a.CountAttempt
+        FROM (
             SELECT
               Campaign,
               Subcampaign,
               AVG(Attempt) as AvAttempt,
+              SUM(Attempt) as TotAttempt,
+              COUNT(Attempt) as CountAttempt,
               Date
             FROM (";
 
@@ -372,7 +376,8 @@ class ApnSubcampaignSummary
         AND #SubcampaignSummary.Date = a.Date
 
         UPDATE #SubcampaignSummary
-        SET Available = (a.Available/CAST(#SubcampaignSummary.Total as numeric(18,2))) * 100
+        SET AvailablePct = (a.Available/CAST(#SubcampaignSummary.Total as numeric(18,2))) * 100,
+          Available = a.Available
         FROM (
             SELECT Campaign, Subcampaign, SUM(Available) as Available FROM (";
 
@@ -421,8 +426,7 @@ class ApnSubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100,
-            ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100,
-            CeptsPercentage = (CAST(Cepts as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
+            ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
         WHERE Dialed > 0
 
         UPDATE #SubcampaignSummary
@@ -463,10 +467,10 @@ class ApnSubcampaignSummary
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign;
 
         UPDATE #SubcampaignSummary
-        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(Sales as numeric(18,2)) * 100
-        WHERE Sales > 0;
+        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(ThresholdCalls as numeric(18,2)) * 100
+        WHERE ThresholdCalls > 0;
 
-        SELECT *, totRows = COUNT(*) OVER()
+        SELECT *
         FROM #SubcampaignSummary
         ORDER BY Date, Campaign, Subcampaign";
 
@@ -475,25 +479,131 @@ class ApnSubcampaignSummary
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
 
-        Log::debug($sql);
-        Log::debug($bind);
-
         return [$sql, $bind];
+    }
+
+    private function processResults($results)
+    {
+        // this sets the order of the columns
+        foreach ($this->params['columns'] as $k => $v) {
+            $total[$k] = '';
+        }
+
+        $total['APH'] = 0;
+        $total['AvAttempt'] = 0;
+        $total['Available'] = 0;
+        $total['AvailablePct'] = 0;
+        $total['CPH'] = 0;
+        $total['Cepts'] = 0;
+        $total['ConnectRate'] = 0;
+        $total['Connects'] = 0;
+        $total['ConversionFactor'] = 0;
+        $total['ConversionRate'] = 0;
+        $total['CountAttempt'] = 0;
+        $total['DPH'] = 0;
+        $total['Dialed'] = 0;
+        $total['ManHours'] = 0;
+        $total['SaleRateValue'] = 0;
+        $total['Sales'] = 0;
+        $total['TalkTimeCount'] = 0;
+        $total['ThresholdCalls'] = 0;
+        $total['ThresholdClosingPct'] = 0;
+        $total['ThresholdRatio'] = 0;
+        $total['ThresholdSales'] = 0;
+        $total['TotAttempt'] = 0;
+        $total['Total'] = 0;
+
+        foreach ($results as &$rec) {
+            $total['Available'] += $rec['Available'];
+            $total['Cepts'] += $rec['Cepts'];
+            $total['Connects'] += $rec['Connects'];
+            $total['CountAttempt'] += $rec['CountAttempt'];
+            $total['Dialed'] += $rec['Dialed'];
+            $total['ManHours'] += $rec['ManHours'];
+            $total['Sales'] += $rec['Sales'];
+            $total['TalkTimeCount'] += $rec['TalkTimeCount'];
+            $total['ThresholdCalls'] += $rec['ThresholdCalls'];
+            $total['ThresholdSales'] += $rec['ThresholdSales'];
+            $total['TotAttempt'] += $rec['TotAttempt'];
+            $total['Total'] += $rec['Total'];
+
+            $rec = $this->processRow($rec);
+        }
+
+        // Do total calcs
+        if ($total['Total'] > 0) {
+            $total['AvailablePct'] = $total['Available'] / $total['Total'] * 100;
+        }
+
+        if ($total['ManHours'] > 0) {
+            $total['CPH'] = $total['Connects'] / $total['ManHours'];
+            $total['APH'] = $total['Sales'] / $total['ManHours'];
+            $total['DPH'] = $total['Dialed'] / $total['ManHours'];
+
+            if ($total['Dialed'] > 0) {
+                $total['ConversionFactor'] = $total['Sales'] / $total['Dialed'] / $total['ManHours'];
+            }
+        }
+
+        if ($total['Dialed'] > 0) {
+            $total['ConnectRate'] = $total['Connects'] / $total['Dialed'] * 100;
+            $total['ConversionRate'] = $total['Sales'] / $total['Dialed'] * 100;
+        }
+
+        if ($total['Sales'] > 0) {
+            $total['SaleRateValue'] = $total['Dialed'] / $total['Sales'];
+        }
+
+        if ($total['CountAttempt'] > 0) {
+            $total['AvAttempt'] = $total['TotAttempt'] / $total['CountAttempt'];
+        }
+
+        $total['ThresholdRatio'] = $total['TalkTimeCount'] == 0 ? 0 : $total['ThresholdCalls'] / $total['TalkTimeCount'] * 100;
+        $total['ThresholdClosingPct'] = $total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100;
+
+        // format cols
+        $total['APH'] = number_format($total['APH'], 2);
+        $total['AvAttempt'] = number_format($total['AvAttempt'], 0);
+        $total['AvailablePct'] = number_format($total['AvailablePct'], 2) . '%';
+        $total['CPH'] = number_format($total['CPH'], 2);
+        $total['ConnectRate'] = number_format($total['ConnectRate'], 2);
+        $total['ConversionFactor'] = number_format($total['ConversionFactor'], 2);
+        $total['ConversionRate'] = number_format($total['ConversionRate'], 2);
+        $total['DPH'] = number_format($total['DPH'], 2);
+        $total['SaleRateValue'] = number_format($total['SaleRateValue'], 2);
+        $total['ThresholdClosingPct'] = number_format($total['ThresholdClosingPct'], 2) . '%';
+        $total['ThresholdRatio'] = number_format($total['ThresholdRatio'], 2) . '%';
+
+        // remove count cols
+        unset($total['Available']);
+        unset($total['CountAttempt']);
+        unset($total['DispositionTimeCount']);
+        unset($total['TalkTimeCount']);
+        unset($total['ThresholdSales']);
+        unset($total['TotAttempt']);
+
+        // Tack on the totals row
+        $results[] = $total;
+
+        return $results;
     }
 
     public function processRow($rec)
     {
-        array_pop($rec);
-        $rec['Available'] .= '%';
+        $rec['AvailablePct'] .= '%';
         $rec['ConnectRate'] .= '%';
         $rec['ConversionRate'] .= '%';
         $rec['ThresholdRatio'] .= '%';
         $rec['ThresholdClosingPct'] .= '%';
         $rec['Date'] = Carbon::parse(($rec['Date']))->isoFormat('L');
 
-        unset($rec['CeptsPercentage']);
+        // remove count cols
+        unset($rec['Available']);
+        unset($rec['CountAttempt']);
+        unset($rec['DispositionTimeCount']);
         unset($rec['TalkTimeCount']);
         unset($rec['ThresholdSales']);
+        unset($rec['TotAttempt']);
 
         return $rec;
     }

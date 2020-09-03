@@ -5,7 +5,6 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Facades\Log;
 
 class ApnAgentSummary
 {
@@ -74,10 +73,10 @@ class ApnAgentSummary
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
+            $results = $this->processResults($results);
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
-            $results = $this->processResults($results);
         }
 
         return $this->getPage($results, $all);
@@ -380,8 +379,8 @@ class ApnAgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(Leads as numeric(18,2)) * 100
-        WHERE Leads > 0;
+        SET ThresholdClosingPct = CAST(ThresholdSales as numeric(18,2)) / CAST(ThresholdCalls as numeric(18,2)) * 100
+        WHERE ThresholdCalls > 0;
 
         SELECT * FROM #AgentSummary WHERE Hours > 0";
 
@@ -400,9 +399,6 @@ class ApnAgentSummary
             $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
             $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
         }
-
-        Log::debug($sql);
-        Log::debug($bind);
 
         return [$sql, $bind];
     }
@@ -463,8 +459,6 @@ class ApnAgentSummary
 
         $total['ThresholdRatio'] = number_format($total['TalkTimeCount'] == 0 ? 0 : $total['ThresholdCalls'] / $total['TalkTimeCount'] * 100, 2) . '%';
         $total['ThresholdClosingPct'] = number_format($total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100, 2) . '%';
-
-        Log::debug($total);
 
         // remove count cols
         unset($total['TalkTimeCount']);
