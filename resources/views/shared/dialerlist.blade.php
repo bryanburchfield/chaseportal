@@ -18,7 +18,7 @@
 </h2>
 
     <div class="users">
-        <div class="accordion" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
+        <div class="accordion" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="false">
 
         @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
             @php
@@ -35,7 +35,7 @@
             <div class="card mb-0 p-0">
                 <div class="card-header p-2" id="{{$mode}}_heading{{$db}}">
                     <h5 class="card-title mb-0">
-                        <a class="collapsed"  data-toggle="collapse" data-parent="#{{$mode}}_accordion" href="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
+                        <a class="collapsed" data-toggle="collapse" data-target="#{{$mode}}_dialer{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_dialer{{$db}}">
                         {{__('users.dialer')}} {{$db}}
 
                         @if($users->count())
@@ -50,24 +50,24 @@
                         </a>
                     </h5>
                 </div>
-
-                <div id="{{$mode}}_dialer{{$db}}" class="card-collapse {{Auth::User()->isType('superadmin') ? 'collapse' : ''}}" role="tabcard" aria-labelledby="{{$mode}}_heading{{$db}}">
+                {{-- {{Auth::User()->isType('superadmin') ? 'collapse' : ''}} --}}
+                <div id="{{$mode}}_dialer{{$db}}" class="collapse" role="tablist" aria-labelledby="{{$mode}}_heading{{$db}}" data-parent="#{{$mode}}_accordion">
 
                     @can('accessSuperAdmin')
                         @php
                             $groups = $users->unique('group_id')->pluck('group_id')->sort()->values();
                         @endphp
 
-                        <div class="accordion nested p-2" id="{{$mode}}_group_accordion{{$db}}">
+                        <div class="accordion nested p-2" id="{{$mode}}_group_accordion{{$db}}" role="tablist" aria-multiselectable="false">
                             @foreach($groups as $id)
                             <div class="card mb-0 p-0">
                                 <div class="card-header p-2" id="group_heading{{$id}}">
                                     <h5 class="card-title mb-0">
-                                        <a class="collapsed"  data-toggle="collapse" href="#{{$mode}}_group_{{$db}}_{{$id}}" data-toggle="collapse" data-parent="#{{$mode}}_group_accordion{{$db}}" aria-expanded="false" aria-controls="{{$mode}}_group_{{$db}}_{{$id}}">{{$id}} <span class="float-right"><i class="fas fa-chevron-up"></i></span></a>
+                                        <a class="collapsed" data-toggle="collapse" data-target="#{{$mode}}_group_{{$db}}_{{$id}}" aria-expanded="false" aria-controls="{{$mode}}_group_{{$db}}_{{$id}}">{{$id}} <span class="float-right"><i class="fas fa-chevron-up"></i></span></a>
                                     </h5>
                                 </div>
 
-                                <div id="{{$mode}}_group_{{$db}}_{{$id}}" class="card-collapse collapse" role="tabcard" aria-labelledby="group_heading{{$id}}">
+                                <div id="{{$mode}}_group_{{$db}}_{{$id}}" class="collapse" role="tablist" aria-labelledby="group_heading{{$id}}" data-parent="#{{$mode}}_dialer{{$db}}">
                                     <div class="card-body">
                                         <table class="table table-responsive table-striped nobdr">
                                             <thead>
