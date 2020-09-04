@@ -840,6 +840,7 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
+	        	console.log(response);
                 var edit_modal = $('#editPlaybookModal');
 
                 edit_modal.find('.name').val(response.name);
