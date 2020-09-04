@@ -353,7 +353,7 @@ class ContactsPlaybookService
         } elseif ($playbook_filter->field == 'Call Status') {
             $where = 'DR.CallStatus ' . $compare;
         } elseif ($playbook_filter->field == 'Attempts') {
-            $where = "Attempt >= $compare";
+            $where = "Attempt $compare";
         } elseif ($playbook_filter->field == 'Days Called') {
             $where = $this->sqlDay($i);
         } elseif ($playbook_filter->field == 'Ring Group') {
