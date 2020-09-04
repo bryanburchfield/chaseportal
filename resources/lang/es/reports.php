@@ -113,6 +113,7 @@ return [
      'cph'                 => 'LPH',
      'date'                => 'Fecha',
      'description'         => 'Descripción',
+     'detailed'            => 'Mostrar Detalles',
      'details'             => 'Detalles',
      'dialed'              => 'Marcadas',
      'dispositiontimesec'  => 'Tiempo de Finalización',

@@ -55,6 +55,13 @@
 						{!! Form::label('skills', __('reports.skill')) !!}
 						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
 					</div>
+					
+					<div class="checkbox">
+						<label>
+							{!! Form::checkbox('detailed', null, $filters['detailed'], ['id'=>'detailed']) !!}
+							{{__('reports.detailed')}}
+						</label>
+					</div>
 				</div>
 
 			</div>

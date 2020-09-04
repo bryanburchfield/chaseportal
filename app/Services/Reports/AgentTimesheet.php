@@ -19,13 +19,14 @@ class AgentTimesheet
         $this->params['nostreaming'] = 1;
         $this->params['reps'] = [];
         $this->params['skills'] = [];
+        $this->params['detailed'] = 0;
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
-            'Date' => 'reports.date',
             'Rep' => 'reports.rep',
             'Campaign' => 'reports.campaign',
             'LogInTime' => 'reports.logintime',
             'LogOutTime' => 'reports.logouttime',
+            'LoggedInSec' => 'reports.loggedintime',
             'ManHourSec' => 'reports.manhoursec',
             'PausedTimeSec' => 'reports.pausedtimesec',
         ];
@@ -36,6 +37,7 @@ class AgentTimesheet
         $filters = [
             'reps' => $this->getAllReps(),
             'skills' => $this->getAllSkills(),
+            'detailed' => 0,
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -93,7 +95,8 @@ class AgentTimesheet
             $sql .= "
             WHERE AA.GroupId = :group_id$i
             AND AA.Date >= :startdate$i
-            AND AA.Date < :enddate$i";
+            AND AA.Date < :enddate$i
+            AND (AA.Duration > 0 OR AA.Action IN ('Login','Logout'))";
 
             if (!empty($reps)) {
                 $bind['reps' . $i] = $reps;
@@ -113,7 +116,7 @@ class AgentTimesheet
 
             $union = 'UNION';
         }
-        $sql .= " ORDER BY Rep, Date";
+        $sql .= " ORDER BY Rep, Campaign, Date";
 
         $results = $this->processResults($sql, $bind);
 
@@ -140,26 +143,32 @@ class AgentTimesheet
 
         $tmpsheet = [];
 
-        $oldrep = '';
+        $oldrow = '';
         $i = 0;
         foreach ($this->yieldSql($sql, $bind) as $rec) {
-            if ($rec['Rep'] != $oldrep) {
+            $currow = $rec['Rep'] . $rec['Campaign'];
+
+            if ($currow != $oldrow) {
                 $i++;
-                $oldrep = $rec['Rep'];
+                $oldrow = $currow;
                 $loggedin = false;
-                $tmpsheet[$i]['Date'] = $rec['Date'];
                 $tmpsheet[$i]['Rep'] = $rec['Rep'];
-                $tmpsheet[$i]['Campaign'] = '';
+                $tmpsheet[$i]['Campaign'] = $rec['Campaign'];
                 $tmpsheet[$i]['LogInTime'] = '';
                 $tmpsheet[$i]['LogOutTime'] = '';
+                $tmpsheet[$i]['LoggedInSec'] = 0;
                 $tmpsheet[$i]['ManHourSec'] = 0;
                 $tmpsheet[$i]['PausedTimeSec'] = 0;
             }
+
+            if ($rec['Duration'] > 0) {
+                $tmpsheet[$i]['LoggedInSec'] += $rec['Duration'];
+            }
+
             switch ($rec['Action']) {
                 case 'Login':
                     if (!$loggedin) {
                         $tmpsheet[$i]['LogInTime'] = $rec['Date'];
-                        $tmpsheet[$i]['Campaign'] = $rec['Campaign'];
                         $loggedin = true;
                     }
                     break;
@@ -167,65 +176,138 @@ class AgentTimesheet
                     if ($loggedin) {
                         $tmpsheet[$i]['LogOutTime'] = $rec['Date'];
                         $loggedin = false;
-                        $oldrep = '';  // force a new record
+                        $oldrow = '';  // force a new record
                     }
                     break;
                 case 'Paused':
-                    if ($loggedin) {
-                        $tmpsheet[$i]['PausedTimeSec'] += $rec['Duration'];
-                    }
+                    $tmpsheet[$i]['PausedTimeSec'] += $rec['Duration'];
                     break;
                 default:
-                    if ($loggedin) {
-                        $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
-                    }
+                    $tmpsheet[$i]['ManHourSec'] += $rec['Duration'];
             }
         }
 
         // remove any rows that don't have login and logout times
         $results = [];
         foreach ($tmpsheet as $rec) {
-            if ($rec['LogInTime'] != '' || $rec['LogOutTime'] != '') {
-                $results[] = $rec;
-            }
-        }
-
-        // now sort
-        if (!empty($this->params['orderby'])) {
-            $field = key($this->params['orderby']);
-            $dir = $this->params['orderby'][$field] == 'desc' ? SORT_DESC : SORT_ASC;
-            $col = array_column($results, $field);
-            array_multisort($col, $dir, $results);
+            // if ($rec['LogInTime'] != '' || $rec['LogOutTime'] != '') {
+            $results[] = $rec;
+            // }
         }
 
         // this sets the order of the columns
         foreach ($this->params['columns'] as $k => $v) {
+            $reptotal[$k] = '';
             $total[$k] = '';
         }
 
-        $total['Date'] = 'Total:';
+        // final results
+        $final = [];
+
+        $total['Rep'] = 'Total:';
+        $total['LoggedInSec'] = 0;
         $total['ManHourSec'] = 0;
         $total['PausedTimeSec'] = 0;
 
-        foreach ($results as &$rec) {
+        // Subtotal by Rep
+        $oldrep = '';
+
+        foreach ($results as $rec) {
+            if ($oldrep != $rec['Rep']) {
+                if ($oldrep != '') {
+                    // format totals
+                    if ($reptotal['LogInTime'] != '') {
+                        $reptotal['LogInTime'] = Carbon::parse($reptotal['LogInTime'])->isoFormat('L LT');
+                    }
+                    if ($reptotal['LogOutTime'] != '') {
+                        $reptotal['LogOutTime'] = Carbon::parse($reptotal['LogOutTime'])->isoFormat('L LT');
+                    }
+                    $reptotal['LoggedInSec'] = $this->secondsToHms($reptotal['LoggedInSec']);
+                    $reptotal['ManHourSec'] = $this->secondsToHms($reptotal['ManHourSec']);
+                    $reptotal['PausedTimeSec'] = $this->secondsToHms($reptotal['PausedTimeSec']);
+                    $final[] = $reptotal;
+                }
+
+                $oldrep = $rec['Rep'];
+
+                if (!$this->params['detailed']) {
+                    $reptotal['Rep'] = $rec['Rep'];
+                }
+
+                $reptotal['LoggedInSec'] = 0;
+                $reptotal['ManHourSec'] = 0;
+                $reptotal['PausedTimeSec'] = 0;
+                $reptotal['LogInTime'] = '';
+                $reptotal['LogOutTime'] = '';
+            }
+
+            $total['LoggedInSec'] += $rec['LoggedInSec'];
             $total['ManHourSec'] += $rec['ManHourSec'];
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
 
-            $rec['Date'] = Carbon::parse($rec['Date'])->format('m/d/Y');
-            $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
-            $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            $reptotal['LoggedInSec'] += $rec['LoggedInSec'];
+            $reptotal['ManHourSec'] += $rec['ManHourSec'];
+            $reptotal['PausedTimeSec'] += $rec['PausedTimeSec'];
+
+            // set min logintime and max logout time if summary
+            if (!$this->params['detailed']) {
+
+                if ($rec['LogInTime'] != '') {
+                    if ($reptotal['LogInTime'] == '') {
+                        $reptotal['LogInTime'] = $rec['LogInTime'];
+                    } elseif (Carbon::parse($rec['LogInTime'])->lt(Carbon::parse($reptotal['LogInTime']))) {
+                        $reptotal['LogInTime'] = $rec['LogInTime'];
+                    }
+                }
+
+                if ($rec['LogOutTime'] != '') {
+                    if ($reptotal['LogOutTime'] == '') {
+                        $reptotal['LogOutTime'] = $rec['LogOutTime'];
+                    } elseif (Carbon::parse($rec['LogOutTime'])->gt(Carbon::parse($reptotal['LogOutTime']))) {
+                        $reptotal['LogOutTime'] = $rec['LogOutTime'];
+                    }
+                }
+            }
+
+            if ($rec['LogInTime'] != '') {
+                $rec['LogInTime'] = Carbon::parse($rec['LogInTime'])->isoFormat('L LT');
+            }
+            if ($rec['LogOutTime'] != '') {
+                $rec['LogOutTime'] = Carbon::parse($rec['LogOutTime'])->isoFormat('L LT');
+            }
+
+            $rec['LoggedInSec'] = $this->secondsToHms($rec['LoggedInSec']);
             $rec['ManHourSec'] = $this->secondsToHms($rec['ManHourSec']);
             $rec['PausedTimeSec'] = $this->secondsToHms($rec['PausedTimeSec']);
+
+            if ($this->params['detailed']) {
+                $final[] = $rec;
+            }
+        }
+
+        if ($oldrep != '') {
+            // format totals
+            if ($reptotal['LogInTime'] != '') {
+                $reptotal['LogInTime'] = Carbon::parse($reptotal['LogInTime'])->isoFormat('L LT');
+            }
+            if ($reptotal['LogOutTime'] != '') {
+                $reptotal['LogOutTime'] = Carbon::parse($reptotal['LogOutTime'])->isoFormat('L LT');
+            }
+            $reptotal['LoggedInSec'] = $this->secondsToHms($reptotal['LoggedInSec']);
+            $reptotal['ManHourSec'] = $this->secondsToHms($reptotal['ManHourSec']);
+            $reptotal['PausedTimeSec'] = $this->secondsToHms($reptotal['PausedTimeSec']);
+            $final[] = $reptotal;
         }
 
         // format totals
+        $total['LoggedInSec'] = $this->secondsToHms($total['LoggedInSec']);
         $total['ManHourSec'] = $this->secondsToHms($total['ManHourSec']);
         $total['PausedTimeSec'] = $this->secondsToHms($total['PausedTimeSec']);
 
         // Tack on the totals row
-        $results[] = $total;
+        $final[] = $total;
 
-        return $results;
+        return $final;
     }
 
     private function processInput(Request $request)
@@ -248,6 +330,8 @@ class AgentTimesheet
         if (!empty($request->skills)) {
             $this->params['skills'] = $request->skills;
         }
+
+        $this->params['detailed'] = !empty($request->detailed);
 
         // Save params to session
         $this->saveSessionParams();
