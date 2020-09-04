@@ -229,7 +229,7 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-
+            	console.log(response);
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
