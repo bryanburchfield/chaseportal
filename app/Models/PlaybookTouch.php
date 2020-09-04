@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
@@ -120,13 +121,16 @@ class PlaybookTouch extends Model
         $actions = collect(array_values((array) $actions));
         $existing_actions = collect();
 
-        $this->playbook_touch_actions->each(function ($playbook_touch_action) use (&$existing_actions) {
+        $this->refresh();
+
+        $this->playbook_touch_actions->each(function ($playbook_touch_action) use ($existing_actions) {
             $existing_actions->push($playbook_touch_action->playbook_action_id);
         });
 
         // insert any not already there
-        $actions->diff($existing_actions)->each(function ($playbook_action_id) {
+        $actions->diff($existing_actions)->each(function ($playbook_action_id) use ($existing_actions) {
             PlaybookTouchAction::create(['playbook_touch_id' => $this->id, 'playbook_action_id' => $playbook_action_id]);
+            $existing_actions->push($playbook_action_id);
         });
 
         // delete any not submitted
@@ -141,15 +145,75 @@ class PlaybookTouch extends Model
 
     public function cleanFiltersAndActions()
     {
-        // remove any filters and actions that don't match the campaign
+        // get adv table of playbook
+        $playbook_table = '';
+        $playbook_campaign = Campaign::where('GroupId', Auth::user()->group_id)
+            ->where('CampaignName', $this->contacts_playbook->campaign)
+            ->first();
+
+        if ($playbook_campaign) {
+            if ($playbook_campaign->advancedTable) {
+                $playbook_table = $playbook_campaign->advancedTable->TableName;
+            }
+        }
+
+        // remove any filters that don't match the advanced table
         foreach ($this->playbook_touch_filters as $playbook_touch_filter) {
-            if ($playbook_touch_filter->playbook_filter->campaign !== null && $playbook_touch_filter->playbook_filter->campaign !== $this->contacts_playbook->campaign) {
+            // if both null that's fine
+            if ($playbook_touch_filter->playbook_filter->campaign === null && $this->contacts_playbook->campaign === null) {
+                continue;
+            }
+
+            // get adv table of filter
+            $filter_table = '';
+            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
+                ->where('CampaignName', $playbook_touch_filter->playbook_filter->campaign)
+                ->first();
+
+            if ($campaign) {
+                if ($campaign->advancedTable) {
+                    $filter_table = $campaign->advancedTable->TableName;
+                }
+            }
+
+            // blank filter table works for all
+            if ($filter_table == '') {
+                continue;
+            }
+
+            // if they don't match, delete the playbook_touch_filter
+            if ($filter_table != $playbook_table) {
                 $playbook_touch_filter->delete();
             }
         }
+
+        // remove any actions that don't match the advanced table
         foreach ($this->playbook_touch_actions as $playbook_touch_action) {
-            if ($playbook_touch_action->playbook_action->campaign !== null && $playbook_touch_action->playbook_action->campaign !== $this->contacts_playbook->campaign) {
-                $playbook_touch_action->delete();
+            // if both null that's fine
+            if ($playbook_touch_action->playbook_action->campaign === null && $this->contacts_playbook->campaign === null) {
+                continue;
+            }
+
+            // get adv table of action
+            $action_table = '';
+            $campaign = Campaign::where('GroupId', Auth::user()->group_id)
+                ->where('CampaignName', $playbook_touch_action->playbook_action->campaign)
+                ->first();
+
+            if ($campaign) {
+                if ($campaign->advancedTable) {
+                    $action_table = $campaign->advancedTable->TableName;
+                }
+
+                // blank action table works for all
+                if ($action_table == '') {
+                    continue;
+                }
+
+                // if they don't match, delete the playbook_touch_action
+                if ($action_table != $playbook_table) {
+                    $playbook_touch_action->delete();
+                }
             }
         }
 
