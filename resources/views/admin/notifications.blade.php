@@ -11,79 +11,76 @@
 
 		@include('shared.navbar')
 
-		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
-				<div class="row">
-					<div class="col-sm-12 mt30">
+		<div class="container-fluid bg dashboard pt-3 px-3">
+			<div class="container-full mt-5">
+				<div class="row ">
+					<div class="col-sm-8 mb-2 card">
+						<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
 
-						<div class="col-sm-8 mb20 card">
-							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>
-
-							{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form fc_style
-							create_notification']) !!}
-							<div class="form-group">
-								{!! Form::label('title', 'Title') !!}
-								{!! Form::text('title', $feature_message->title, ['class'=>'form-control
-								notification_title', 'required'=>true]) !!}
-							</div>
-
-							{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
-
-							<div class="form-group">
-								{!! Form::textarea("body", $feature_message->body, ["id" => "summernote", "class" => "form-control notification_body", 'required'=>true]) !!}
-							</div>
-
-							<div class="form-group">
-								<label class="checkbox-inline">
-									<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
-								</label>
-							</div>
-
-							@if(!empty($feature_message->id))
-								<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary flt_lft">Cancel</a>
-							@endif
-
-							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
-
-							<br><br>
-
-							@if($errors->any())
-							<div class="alert alert-danger">
-								@foreach($errors->all() as $e)
-								{{ $e }}
-								@endforeach
-							</div>
-							@endif
-
-							{!! Form::close() !!}
+						{!! Form::open(['method'=>'POST', 'action' => 'FeatureMessageController@saveMessage', 'class'=>'form fc_style
+						create_notification']) !!}
+						<div class="form-group">
+							{!! Form::label('title', 'Title') !!}
+							{!! Form::text('title', $feature_message->title, ['class'=>'form-control
+							notification_title', 'required'=>true]) !!}
 						</div>
 
-						<div class="col-sm-4">
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Published</th>
-											<th>ID</th>
-											<th>Title</th>
-											<th>Edit</th>
-											<th>Delete</th>
-										</tr>
-									</thead>
+						{!! Form::hidden('id', $feature_message->id, ['class'=>'form-control id']) !!}
 
-									<tbody>
-										@foreach($feature_messages as $msg)
-											<tr>
-												<td><input type="checkbox" class="checkbox published" name="published" data-id="{{$msg->id}}" {{$msg->active ? 'checked' : ''}}></td>
-												<td>{{$msg->id}}</td>
-												<td>{{$msg->title}}</td>
-												<td><a class="edit_msg" href="{{action('FeatureMessageController@editMessage', [$msg->id])}}"><i class="fas fa-edit"></i></a></td>
-												<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
-											</tr>
-										@endforeach
-									</tbody>
-								</table>
-							</div>
+						<div class="form-group">
+							{!! Form::textarea("body", $feature_message->body, ["id" => "summernote", "class" => "form-control notification_body", 'required'=>true]) !!}
+						</div>
+
+						<div class="form-group">
+							<label class="checkbox-inline">
+								<input type="checkbox" name="active" value="1" {{ $feature_message->active ? 'checked' : '' }}> Publish Now?
+							</label>
+						</div>
+
+						@if(!empty($feature_message->id))
+							<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary flt_lft">Cancel</a>
+						@endif
+
+						<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
+
+						<br><br>
+
+						@if($errors->any())
+						<div class="alert alert-danger">
+							@foreach($errors->all() as $e)
+							{{ $e }}
+							@endforeach
+						</div>
+						@endif
+
+						{!! Form::close() !!}
+					</div>
+
+					<div class="col-sm-4">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Published</th>
+										<th>ID</th>
+										<th>Title</th>
+										<th>Edit</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									@foreach($feature_messages as $msg)
+										<tr>
+											<td><input type="checkbox" class="checkbox published" name="published" data-id="{{$msg->id}}" {{$msg->active ? 'checked' : ''}}></td>
+											<td>{{$msg->id}}</td>
+											<td>{{$msg->title}}</td>
+											<td><a class="edit_msg" href="{{action('FeatureMessageController@editMessage', [$msg->id])}}"><i class="fas fa-edit"></i></a></td>
+											<td><a data-toggle="modal" data-target="#deleteMsgModal" class="remove_msg remove_msg_modal" href="#" data-title="{{$msg->title}}" data-id="{{$msg->id}}"><i class="fa fa-trash-alt"></i></a></td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

@@ -2734,5 +2734,7 @@ $(document).ready(function () {
         $('.sso #group_id').parent().addClass('has-error');
     }
 
+    $('.wrap_table').wrapAll( "<div class='table-responsive'></div>" );
+
 });
 
