@@ -113,6 +113,7 @@ return [
 	'cph'                 => 'CPH',
 	'date'                => 'Date',
 	'description'         => 'Description',
+	'detailed'            => 'Show Details',
 	'details'             => 'Details',
 	'dialed'              => 'Dialed',
 	'dispositiontimesec'  => 'Wrap Up Time',
