@@ -3788,7 +3788,7 @@ div.col-sm-5.five-two {
 #addPlaybookModal .dropdown-menu.extra_campaigns,
 #editPlaybookModal .dropdown-menu.subcampaigns,
 #editPlaybookModal .dropdown-menu.extra_campaigns {
-  position: relative;
+  position: absolute;
   z-index: 99999;
 }
 
