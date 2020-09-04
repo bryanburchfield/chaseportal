@@ -2991,7 +2991,7 @@ a.add_subcampaign{
     }
 
     .dropdown-menu.subcampaigns, .dropdown-menu.extra_campaigns{
-        position: relative;
+        position: absolute;
         z-index: 99999;
     }
 }

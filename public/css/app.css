@@ -3515,7 +3515,7 @@ a.add_subcampaign i {
 #addPlaybookModal .dropdown-menu.extra_campaigns,
 #editPlaybookModal .dropdown-menu.subcampaigns,
 #editPlaybookModal .dropdown-menu.extra_campaigns {
-  position: relative;
+  position: absolute;
   z-index: 99999;
 }
 
