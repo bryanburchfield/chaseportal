@@ -525,6 +525,8 @@ var Contacts_Playbook = {
 			subcampaigns = []
 		;
 
+		console.log(id);
+
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    campaigns.push($(this).val());
 		});
