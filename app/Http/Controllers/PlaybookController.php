@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidPlaybook;
+use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookOptout;
 use App\Traits\CampaignTraits;
@@ -54,16 +55,66 @@ class PlaybookController extends Controller
     }
 
     /**
-     * Get Subcampaigns (ajax)
-     * 
+     * Get extra campaigns and subcampaigns (ajax)
      * @param Request $request 
-     * @return array[] 
+     * @return array 
      */
-    public function getSubcampaigns(Request $request)
+    public function getExtraCampaigns(Request $request)
     {
-        $results = $this->getAllSubcampaigns($request->campaign);
+        // Find the campaign
+        $campaign = Campaign::where('CampaignName', $request->campaign)
+            ->where('GroupId', Auth::user()->group_id)
+            ->firstOrFail();
 
-        return ['subcampaigns' => $results];
+        $subcampaigns = $this->getAllSubcampaigns($request->campaign);
+
+        $extra_campaigns = $this->relatedCampaigns($request->campaign);
+
+        return [
+            'extra_campaigns' => $extra_campaigns,
+            'subcampaigns' => $subcampaigns,
+        ];
+    }
+
+    /**
+     * Return related campaigns that use same advanaced table
+     * 
+     * @param mixed $campaign 
+     * @return array 
+     */
+    public function relatedCampaigns($campaign)
+    {
+        // Find the campaign
+        $campaign = Campaign::where('CampaignName', $campaign)
+            ->where('GroupId', Auth::user()->group_id)
+            ->firstOrFail();
+
+        $related_campaigns = [];
+
+        // check that campaign has related campaigns
+        if (!empty($campaign->advancedTable->campaigns)) {
+            // Get related campaigns by AdvancedTable
+            $related_campaigns = $campaign->advancedTable->campaigns;
+
+            // Filter out passed campaign and return only names
+            $related_campaigns = $related_campaigns
+                ->reject(function ($rec) use ($campaign) {
+                    return $rec['CampaignName'] == $campaign->CampaignName;
+                })
+                ->map(function ($rec) {
+                    return $rec['CampaignName'];
+                })
+                ->toArray();
+
+            // convert to associative array
+            $result = [];
+            foreach ($related_campaigns as $k => $v) {
+                $result[$v] = $v;
+            }
+            $related_campaigns = $result;
+        }
+
+        return $related_campaigns;
     }
 
     /**
@@ -123,6 +174,10 @@ class PlaybookController extends Controller
         $this->checkPlaybookGroup($contacts_playbook);
 
         $playbook = $contacts_playbook->toArray();
+
+        $playbook['extra_campaigns'] = $contacts_playbook->playbook_campaigns
+            ->sortBy('campaign')
+            ->pluck('campaign');
 
         $playbook['subcampaigns'] = $contacts_playbook->playbook_subcampaigns
             ->sortBy('subcampaign')

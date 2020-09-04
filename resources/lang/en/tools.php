@@ -77,6 +77,7 @@ return [
 	'emails_per_lead'	=> 'Emails Per Lead',
 	'error'			=> 'Error',
 	'errors'		=> 'Errors',
+	'extra_campaigns'=> 'Extra Campaigns',
 	'field'			=> 'Field',
 	'file'			=> 'File',
 	'file_name'		=> 'File Name',

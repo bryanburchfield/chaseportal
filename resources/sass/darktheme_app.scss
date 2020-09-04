@@ -947,6 +947,16 @@ ul.dropdown-menu.filter_campaign {
     right: 0;
     left: auto;
     padding: 0;
+
+    &.extra_campaigns, &.subcampaigns{
+        left:0;
+        right:auto;
+    }
+}
+
+.myselect{min-width: 100%;background:#eee !important; }
+.extra_campaigns, .subcampaigns{
+    padding-left: 10px;
 }
 
 #startDate, #endDate {
@@ -2401,6 +2411,11 @@ table.dataTable tbody tr:nth-of-type(even){
 #demoUserModal .modal-body, #campaignFilterModal .modal-body{
     overflow: auto;
 }
+
+.add_playbook .modal-body{
+    overflow: revert;
+}
+
 
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{

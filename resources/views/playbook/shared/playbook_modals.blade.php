@@ -16,10 +16,26 @@
 
                     <div class="form-group">
                         <label>{{__('tools.campaign')}}</label>
-                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
-                    <div class="subcampaign_list"></div>
+                    <div class="dropdown mb20">
+                        <label>{{__('tools.extra_campaigns')}}</label>
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{__('tools.extra_campaigns')}}
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
+                    </div>
+
+                    <div class="dropdown mb20">
+                        <label>{{__('tools.subcampaigns')}}</label>
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="subcampaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{__('tools.subcampaigns')}}
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu subcampaigns stop-propagation" aria-labelledby="subcampaigns_menu"></ul>
+                    </div>
 
                     <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
 
@@ -56,10 +72,26 @@
 
                     <div class="form-group">
                         <label>{{__('tools.campaign')}}</label>
-                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control", 'id'=> 'campaign_select', 'required'=>true]) !!}
+                        {!! Form::select("campaign", [null=>__('general.select_one')] + $campaigns, null, ["class" => "form-control campaign_select", 'required'=>true]) !!}
                     </div>
 
-                    <div class="subcampaign_list"></div>
+                    <div class="dropdown mb20">
+                        <label>{{__('tools.extra_campaigns')}}</label>
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{__('tools.extra_campaigns')}}
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
+                    </div>
+
+                   <div class="dropdown mb20">
+                        <label>{{__('tools.subcampaigns')}}</label>
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="subcampaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{__('tools.subcampaigns')}}
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu subcampaigns stop-propagation" aria-labelledby="subcampaigns_menu"></ul>
+                    </div>
 
                     <a href="#" class="btn add_subcampaign hidetilloaded pl0"><i class="fas fa-plus-circle"></i> Add Subcampaign</a>
 

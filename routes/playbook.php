@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/get_operators', 'PlaybookFilterController@getOperators');  // get all available operators: pass in 'type' (optional)
             Route::post('/get_dispos', 'PlaybookActionController@getDispos');  // get all available dispos (call statuses): pass in 'campaign' (optional)
             Route::post('/get_subcampaigns', 'PlaybookActionController@getSubcampaigns'); // get all subcampaigns: pass in 'campaign' (required)
+            Route::post('/get_extra_campaigns', 'PlaybookController@getExtraCampaigns'); // get all subcampaigns and related campaigns: pass in 'campaign' (required)
             Route::post('/get_table_fields', 'PlaybookActionController@getTableFields');  // get all custom table fields: pass in 'campaign' (required)
             Route::post('/toggle_playbook', 'PlaybookController@toggleActive');  // toggles a playbook active/inactive: pass in 'id' (required)
             Route::post('/toggle_playbook_touch', 'PlaybookTouchController@toggleActive');  // toggles a touch active/inactive: pass in 'id' (required)

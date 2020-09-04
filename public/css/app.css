@@ -1156,6 +1156,22 @@ ul.dropdown-menu.filter_campaign {
   padding: 0;
 }
 
+.dropdown-menu.extra_campaigns,
+.dropdown-menu.subcampaigns {
+  left: 0;
+  right: auto;
+}
+
+.myselect {
+  min-width: 100%;
+  background: #eee !important;
+}
+
+.extra_campaigns,
+.subcampaigns {
+  padding-left: 10px;
+}
+
 #startDate,
 #endDate {
   width: 49%;
@@ -2702,6 +2718,10 @@ div.vertical-line.mvup100 {
 
 #demoUserModal .modal-body {
   overflow: auto;
+}
+
+.add_playbook .modal-body {
+  overflow: revert;
 }
 
 .oauto {

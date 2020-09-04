@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidPlaybookTouch;
 use App\Http\Requests\ValidPlaybookTouchAction;
 use App\Http\Requests\ValidPlaybookTouchFilter;
+use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
@@ -262,10 +263,17 @@ class PlaybookTouchController extends Controller
     {
         $campaign = $request->has('campaign') ? $request->campaign : null;
 
+        $related_campaigns = [];
+
+        if (!empty($campaign)) {
+            $related_campaigns = (new PlaybookController)->relatedCampaigns($campaign);
+        }
+
         return PlaybookFilter::where('group_id', Auth::user()->group_id)
-            ->where(function ($q) use ($campaign) {
+            ->where(function ($q) use ($campaign, $related_campaigns) {
                 $q->where('campaign', $campaign)
-                    ->orWhereNull('campaign');
+                    ->orWhereNull('campaign')
+                    ->orWhereIn('campaign', $related_campaigns);
             })
             ->orderBy('name')
             ->get();
@@ -281,10 +289,17 @@ class PlaybookTouchController extends Controller
     {
         $campaign = $request->has('campaign') ? $request->campaign : null;
 
+        $related_campaigns = [];
+
+        if (!empty($campaign)) {
+            $related_campaigns = (new PlaybookController)->relatedCampaigns($campaign);
+        }
+
         return PlaybookAction::where('group_id', Auth::user()->group_id)
-            ->where(function ($q) use ($campaign) {
+            ->where(function ($q) use ($campaign, $related_campaigns) {
                 $q->where('campaign', $campaign)
-                    ->orWhereNull('campaign');
+                    ->orWhereNull('campaign')
+                    ->orWhereIn('campaign', $related_campaigns);
             })
             ->orderBy('name')
             ->get();
