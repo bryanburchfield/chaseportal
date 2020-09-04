@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidPlaybookTouch;
 use App\Http\Requests\ValidPlaybookTouchAction;
 use App\Http\Requests\ValidPlaybookTouchFilter;
-use App\Models\Campaign;
 use App\Models\ContactsPlaybook;
 use App\Models\PlaybookAction;
 use App\Models\PlaybookFilter;
@@ -331,7 +330,7 @@ class PlaybookTouchController extends Controller
     public function toggleActive(Request $request)
     {
         if (!$this->updateActive($request->id, $request->checked)) {
-            abort(response()->json(['errors' => ['1' => trans('playbook_touch_cant_activate')]], 422));
+            abort(response()->json(['errors' => ['1' => trans('tools.playbook_touch_cant_activate')]], 422));
         }
 
         return ['status' => 'success'];
