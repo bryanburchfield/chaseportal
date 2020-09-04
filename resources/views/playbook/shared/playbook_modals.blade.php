@@ -21,11 +21,11 @@
 
                     <div class="dropdown mb20">
                         <label>{{__('tools.extra_campaigns')}}</label>
-                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="add_extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         {{__('tools.extra_campaigns')}}
                         <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="add_extra_campaigns_menu"></ul>
                     </div>
 
                     <div class="dropdown mb20">
@@ -77,11 +77,11 @@
 
                     <div class="dropdown mb20">
                         <label>{{__('tools.extra_campaigns')}}</label>
-                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="edit_extra_campaigns_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         {{__('tools.extra_campaigns')}}
                         <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="extra_campaigns_menu"></ul>
+                        <ul class="dropdown-menu extra_campaigns stop-propagation" aria-labelledby="edit_extra_campaigns_menu"></ul>
                     </div>
 
                    <div class="dropdown mb20">
