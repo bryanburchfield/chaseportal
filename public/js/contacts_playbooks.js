@@ -206,7 +206,7 @@ var Contacts_Playbook = {
 	},
 
 	get_extracampaigns:function(e, campaign){
-
+		console.log('get_extracampaigns');
 		if(!campaign){
 			var campaign = $(this).val();
 		}
@@ -229,7 +229,7 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-
+            	console.log(response);
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
@@ -460,7 +460,7 @@ var Contacts_Playbook = {
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
 		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
-		console.log(Contacts_Playbook.playbook_id);
+		console.log(id);
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -819,6 +819,7 @@ var Contacts_Playbook = {
 	},
 
 	campaign_warning:function(){
+		console.log('campaign_warning');
 		$('.edit_playbook .modal-body .alert').remove();
 		var warning = '<div class="alert alert-warning">'+Lang.get('js_msgs.campaign_warning')+'</div>';
 		$('.edit_playbook .modal-body').append(warning);
@@ -839,6 +840,7 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
+	        	console.log(response);
                 var edit_modal = $('#editPlaybookModal');
 
                 edit_modal.find('.name').val(response.name);
