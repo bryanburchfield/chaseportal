@@ -2935,6 +2935,17 @@ div.col-sm-5.five-two {
     width: 40% !important;
 }
 
+#addPlaybookModal, #editPlaybookModal{
+
+    .modal-body {
+        overflow: inherit;
+    }
+
+    .dropdown-menu.subcampaigns, .dropdown-menu.extra_campaigns{
+        position: relative;
+        z-index: 99999;
+    }
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

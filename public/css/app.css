@@ -3550,6 +3550,19 @@ div.col-sm-5.five-two {
   width: 40% !important;
 }
 
+#addPlaybookModal .modal-body,
+#editPlaybookModal .modal-body {
+  overflow: inherit;
+}
+
+#addPlaybookModal .dropdown-menu.subcampaigns,
+#addPlaybookModal .dropdown-menu.extra_campaigns,
+#editPlaybookModal .dropdown-menu.subcampaigns,
+#editPlaybookModal .dropdown-menu.extra_campaigns {
+  position: relative;
+  z-index: 99999;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
