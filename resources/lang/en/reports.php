@@ -14,6 +14,8 @@ return [
 	'agent_summary_campaign'        => 'Agent Summary By Camp',
 	'agent_summary_subcampaign'     => 'Agent Summary By Sub',
 	'agent_timesheet'               => 'Agent Time Sheet',
+	'apn_agent_summary' => 'Agent Summary',
+	'apn_subcampaign_summary' => 'Subcampaign Summary',
 	'bwr_campaign_call_log'         => 'Campaign Call Log',
 	'bwr_production_report'         => 'Production Report',
 	'call_details'                  => 'Call Details',
@@ -53,6 +55,7 @@ return [
 	'subcampaign'        => 'Subcampaign',
 	'subcampaigns'        => 'Subcampaigns',
 	'termination_status' => 'Show only termination status',
+	'threshold_secs' => 'Threshold Duration in Seconds',
 	'to'                 => 'To',
 
 	// error messages
@@ -67,6 +70,7 @@ return [
 	'errpagesize'          => 'Invalid page size',
 	'errrepsrequired'      => 'At least 1 Rep required',
 	'errresults'           => 'No results found',
+	'errthresholdrequired' => 'Threshold required',
 	'errtodateinvalid'     => 'To date not a valid date/time',
 	'errtodaterequired'    => 'To date required',
 
@@ -113,10 +117,10 @@ return [
 	'dialed'              => 'Dialed',
 	'dispositiontimesec'  => 'Wrap Up Time',
 	'download'            => 'Download',
-	'dropped'             => 'Dropped',
-	'droprate'            => 'Drop Rate',
 	'dph'                 => 'Dials per Hr',
 	'dropcallspercentage' => 'Drop Rate (Connected Calls)',
+	'dropped'             => 'Dropped',
+	'droprate'            => 'Drop Rate',
 	'duration'            => 'Duration',
 	'event'               => 'Event',
 	'firstname'           => 'First',
@@ -151,6 +155,9 @@ return [
 	'stat'                => 'Status',
 	'subcampaign'         => 'Subcampaign',
 	'talktimesec'         => 'Talk Time',
+	'threshold_calls' => 'Threshold Calls',
+	'threshold_closing_pct' => 'Threshold Closing%',
+	'threshold_ratio' => 'Threshold Ratio',
 	'total'               => 'Total',
 	'totalcalls'          => 'Total Calls',
 	'totmanhours'         => 'Total Man Hours',
@@ -160,8 +167,6 @@ return [
 	'unpausedtime'        => 'UnPause Time',
 	'voicemail'           => 'Voice Mail',
 	'waittimesec'         => 'Wait Time',
-
-
 
 
 	// BWR Omni Report - no Spanish needed
