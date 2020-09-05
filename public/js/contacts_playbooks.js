@@ -516,7 +516,7 @@ var Contacts_Playbook = {
 
 	update_playbook:function(e){
 		e.preventDefault();
-
+		console.log(Contacts_Playbook.current_modal);
 		var id = $('#'+Contacts_Playbook.current_modal).find(".id").val(),
 			name = $(this).find('.name').val(),
 			campaign = $(this).find('.campaign_select').val(),
@@ -538,8 +538,8 @@ var Contacts_Playbook = {
 
 		$('.loader_hor').show();
 
-		console.log(Contacts_Playbook.current_modal+ - + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
-
+		console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
+		return false;
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
