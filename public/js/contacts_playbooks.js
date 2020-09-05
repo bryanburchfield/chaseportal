@@ -206,14 +206,19 @@ var Contacts_Playbook = {
 	},
 
 	get_extracampaigns:function(e, campaign){
-		console.log('get_extracampaigns');
+		
 		if(!campaign){
 			var campaign = $(this).val();
 		}
 
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
+				console.log('Sets which modal is opened');
+				console.log($(this).attr('id'));
+
 				Contacts_Playbook.current_modal = $(this).attr('id');
+
+				console.log(Contacts_Playbook.current_modal);
 			}
 		});
 
