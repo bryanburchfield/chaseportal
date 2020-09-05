@@ -468,6 +468,7 @@ var Contacts_Playbook = {
 
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
+				console.log(Contacts_Playbook.current_modal' - '+ $(this).attr('id'));
 				Contacts_Playbook.current_modal = $(this).attr('id');
 			}
 		});
