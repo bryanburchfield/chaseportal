@@ -460,7 +460,6 @@ var Contacts_Playbook = {
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
 		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
-		console.log(id);
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -524,8 +523,6 @@ var Contacts_Playbook = {
 			campaigns=[],
 			subcampaigns = []
 		;
-		console.log(Contacts_Playbook.current_modal);
-		console.log(id);
 
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    campaigns.push($(this).val());
@@ -540,6 +537,8 @@ var Contacts_Playbook = {
 		}
 
 		$('.loader_hor').show();
+
+		console.log(Contacts_Playbook.current_modal+ - + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
 
 		$.ajaxSetup({
 			headers: {
@@ -762,7 +761,7 @@ var Contacts_Playbook = {
 	    });
 
 	    $.ajax({
-	        url: '/playbook/playbooks/actions/'+playbookid,
+	        url: '/playbook/actions/'+playbookid,
 	        type: 'PATCH',
 	        dataType: 'json',
 	        data:{
