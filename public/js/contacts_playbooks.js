@@ -465,6 +465,12 @@ var Contacts_Playbook = {
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
 		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
+
+		$('div.modal').each(function(){
+			if($(this).hasClass('in')){
+				Contacts_Playbook.current_modal = $(this).attr('id');
+			}
+		});
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
