@@ -461,17 +461,18 @@ var Contacts_Playbook = {
 	// pass id to edit and delete modals
 	pass_id_to_modal:function(e){
 		e.preventDefault();
+
 		var id = $(this).data('id');
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
 		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
 
-		$('div.modal').each(function(){
-			if($(this).hasClass('in')){
-				console.log(Contacts_Playbook.current_modal +' - '+ $(this).attr('id'));
-				Contacts_Playbook.current_modal = $(this).attr('id');
-			}
-		});
+		// $('div.modal').each(function(){
+		// 	if($(this).hasClass('in')){
+		// 		console.log(Contacts_Playbook.current_modal +' - '+ $(this).attr('id'));
+		// 		Contacts_Playbook.current_modal = $(this).attr('id');
+		// 	}
+		// });
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -551,7 +552,7 @@ var Contacts_Playbook = {
 		$('.loader_hor').show();
 
 		console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
-		return false;
+		// return false;
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
