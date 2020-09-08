@@ -531,12 +531,11 @@ var Master = {
         for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
             subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
         }
-        console.log('HERE'+campaign);
+
         if(selector == 'campaign_select' || selector == 'update_campaign_select'){
             $('#subcamps').empty();
             $('#subcamps').append(subcampaigns);
         }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
-            console.log("HERE");
             $('#destination_subcampaign').empty();
             $('#destination_subcampaign').append(subcampaigns);
         }
@@ -842,8 +841,10 @@ var Master = {
 
     update_uploader_info: function (e) {
         e.preventDefault();
+
         var form_data = $(this).serialize();
         $('#settingModal').modal('toggle');
+        var id = $(this).data('campaignid');
 
         $.ajaxSetup({
             headers: {
@@ -2311,7 +2312,7 @@ var Master = {
     pass_id_to_modal:function(that, id){
         var modal = $(that).data('target');
         $(modal).find('.id').val(id);
-        console.log(modal +' '+ id);
+
         if($(that).data('name')){
             $(modal).find('h3 span').html($(that).data('name'));
         }
