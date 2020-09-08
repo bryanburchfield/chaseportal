@@ -53,12 +53,12 @@
                 <div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('closers',  __('reports.closer')) !!}
-						<select class="form-control multiselect" id="rep_select" multiple name="closers[]">
+						<select class="form-control multiselect" id="closer_select" multiple name="closers[]">
 							@foreach($filters['closers'] as $closer)
 								<option class="{{ $closer['IsActive'] ? 'active_closer' : ''}}" value="{{$closer['RepName']}}" data-active="{{$closer['IsActive']}}">{{$closer['RepName']}}</option>
 							@endforeach
 						</select>
-						<label class="pl20 checkbox toggle_active_closers"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+						<label class="pl20 checkbox toggle_active_reps"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
                 </div>
                 
