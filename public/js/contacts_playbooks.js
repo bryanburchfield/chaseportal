@@ -206,18 +206,14 @@ var Contacts_Playbook = {
 	},
 
 	get_extracampaigns:function(e, campaign){
-		
+
 		if(!campaign){
 			var campaign = $(this).val();
 		}
 
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
-				console.log('Sets which modal is opened');
-				console.log($(this).attr('id'));
-
 				Contacts_Playbook.current_modal = $(this).attr('id');
-
 				console.log(Contacts_Playbook.current_modal);
 			}
 		});
@@ -529,7 +525,7 @@ var Contacts_Playbook = {
 
 	update_playbook:function(e){
 		e.preventDefault();
-		console.log(Contacts_Playbook.current_modal);
+
 		var id = $('#'+Contacts_Playbook.current_modal).find(".id").val(),
 			name = $(this).find('.name').val(),
 			campaign = $(this).find('.campaign_select').val(),
@@ -552,7 +548,7 @@ var Contacts_Playbook = {
 		$('.loader_hor').show();
 
 		console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
-		// return false;
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -833,7 +829,6 @@ var Contacts_Playbook = {
 	},
 
 	campaign_warning:function(){
-		console.log('campaign_warning');
 		$('.edit_playbook .modal-body .alert').remove();
 		var warning = '<div class="alert alert-warning">'+Lang.get('js_msgs.campaign_warning')+'</div>';
 		$('.edit_playbook .modal-body').append(warning);
