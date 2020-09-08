@@ -461,7 +461,7 @@ var Contacts_Playbook = {
 		var id = $(this).data('id');
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
-		Contacts_Playbook.playbook_id=$(this).data('playbook_id') ? $(this).data('playbook_id'): '' ;
+		Contacts_Playbook.playbook_id=$(this).data('id') ? $(this).data('id'): '' ;
 
 		// $('div.modal').each(function(){
 		// 	if($(this).hasClass('in')){
@@ -536,6 +536,8 @@ var Contacts_Playbook = {
 		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 		    campaigns.push($(this).val());
 		});
+
+		console.log(campaigns);
 
 		if($('#'+Contacts_Playbook.current_modal).find("#subcampaigns_menu").is(":visible")){
 			$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
