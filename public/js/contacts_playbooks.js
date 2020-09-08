@@ -217,16 +217,16 @@ var Contacts_Playbook = {
 			}
 		});
 
-		if(Contacts_Playbook.current_modal ==''){
+		// if(Contacts_Playbook.current_modal ==''){
 
-			$('#addPlaybookModal').on('shown.bs.modal', function () {
-				Contacts_Playbook.current_modal = $(this).attr('id');
-			});
+		// 	$('#addPlaybookModal').on('shown.bs.modal', function () {
+		// 		Contacts_Playbook.current_modal = $(this).attr('id');
+		// 	});
 
-			$('#editPlaybookModal').on('shown.bs.modal', function () {
-				Contacts_Playbook.current_modal = $(this).attr('id');
-			});
-		}
+		// 	$('#editPlaybookModal').on('shown.bs.modal', function () {
+		// 		Contacts_Playbook.current_modal = $(this).attr('id');
+		// 	});
+		// }
 
 		$.ajaxSetup({
 	        headers: {
@@ -240,7 +240,7 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-            	console.log(Contacts_Playbook.current_modal);
+
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
@@ -274,7 +274,6 @@ var Contacts_Playbook = {
 	        		    extra_camps_list+='<div class="checkbox mb10 cb"><label><input class="extra_camps" name="extra_camps_list[]" '+selected+' type="checkbox" value="'+extra_camps_response[i]+'"><b>'+extra_camps_response[i]+'</b></label></div>';
 	        		}
 
-	        		console.log('Modal: '+Contacts_Playbook.current_modal);
 	        		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_camps_list);
 	        	}
             }
@@ -550,8 +549,6 @@ var Contacts_Playbook = {
 		}
 
 		$('.loader_hor').show();
-
-		// console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
 
 		$.ajaxSetup({
 			headers: {
@@ -856,7 +853,7 @@ var Contacts_Playbook = {
 	        	// console.log(response);
                 var edit_modal = $('#editPlaybookModal');
                 Contacts_Playbook.current_modal=$(edit_modal).attr('id');
-                console.log(Contacts_Playbook.current_modal);
+
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
                 edit_modal.find('.subcampaigns').empty();
