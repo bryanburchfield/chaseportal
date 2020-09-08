@@ -200,7 +200,7 @@ var Contacts_Playbook = {
 	        dataType: 'json',
 	        data: {campaign: campaign,},
 	        success:function(response){
-	        	console.log(response)
+	        	// console.log(response)
 	        }
 	    });
 	},
@@ -237,7 +237,7 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-            	console.log(response);
+            	// console.log(response);
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
@@ -271,6 +271,8 @@ var Contacts_Playbook = {
 	        		    extra_camps_list+='<div class="checkbox mb10 cb"><label><input class="extra_camps" name="extra_camps_list[]" '+selected+' type="checkbox" value="'+extra_camps_response[i]+'"><b>'+extra_camps_response[i]+'</b></label></div>';
 	        		}
 
+	        		console.log('Modal: '+Contacts_Playbook.current_modal);
+	        		console.log(extra_camps_list);
 	        		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_camps_list);
 	        	}
             }
@@ -537,8 +539,6 @@ var Contacts_Playbook = {
 		    campaigns.push($(this).val());
 		});
 
-		console.log(campaigns);
-
 		if($('#'+Contacts_Playbook.current_modal).find("#subcampaigns_menu").is(":visible")){
 			$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').find('.checkbox input[type="checkbox"]:checked').each(function () {
 			    subcampaigns.push($(this).val());
@@ -549,7 +549,7 @@ var Contacts_Playbook = {
 
 		$('.loader_hor').show();
 
-		console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
+		// console.log(Contacts_Playbook.current_modal + '-' + $('#'+Contacts_Playbook.current_modal).find(".id").val() +' ID: '+ id);
 
 		$.ajaxSetup({
 			headers: {
@@ -851,7 +851,7 @@ var Contacts_Playbook = {
 	        type: 'GET',
 	        dataType: 'json',
 	        success:function(response){
-	        	console.log(response);
+	        	// console.log(response);
                 var edit_modal = $('#editPlaybookModal');
 
                 edit_modal.find('.name').val(response.name);
@@ -869,7 +869,8 @@ var Contacts_Playbook = {
                 $.when(
 					Contacts_Playbook.get_extracampaigns(event, response.campaign)
 				).done(function() {
-					console.log(response);
+
+					// check matching extra camps checkboxes from record
 					edit_modal.find('.extra_campaigns .checkbox input').each(function(){
 						for(var i=0;i<response.extra_campaigns .length;i++){
 							if($(this).val() == response.extra_campaigns [i]){
@@ -878,6 +879,7 @@ var Contacts_Playbook = {
 						}
 					});
 
+					// check matching subcampaigns checkboxes from record
 					edit_modal.find('.subcampaigns .checkbox input').each(function(){
 						for(var i=0;i<response.subcampaigns.length;i++){
 							if($(this).val() == response.subcampaigns[i]){
