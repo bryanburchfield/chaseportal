@@ -1395,7 +1395,7 @@ span.selected_campaign {
 }
 
 //prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a {display: none;}
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a, .transfer_agent table thead th a {display: none;}
 
 .report_totals td{
     background:#33A09B;
