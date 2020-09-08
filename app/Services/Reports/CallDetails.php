@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class CallDetails
 {
@@ -166,6 +165,8 @@ class CallDetails
         array_pop($rec);
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+
+        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
 
         if (!empty($rec['Recording'])) {
             if ($rec['Duration'] > 0 && !($rec['CallType'] == 'Inbound' && $rec['CallStatus'] == 'CR_HANGUP')) {
