@@ -58,7 +58,7 @@
 								<option class="{{ $closer['IsActive'] ? 'active_closer' : ''}}" value="{{$closer['RepName']}}" data-active="{{$closer['IsActive']}}">{{$closer['RepName']}}</option>
 							@endforeach
 						</select>
-						<label class="checkbox toggle_active_closers"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+						<label class="pl20 checkbox toggle_active_closers"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
                 </div>
                 
