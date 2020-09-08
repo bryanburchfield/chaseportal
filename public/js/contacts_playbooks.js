@@ -265,7 +265,7 @@ var Contacts_Playbook = {
 
 	        		var extra_camps_list='';
 	        		var selected;
-
+	        		console.log(extra_camps_response);
 	        		for(var i=0; i<extra_camps_response.length;i++){
 	        		    selected =  extra_camps_response[i].selected ? 'checked' : '';
 	        		    extra_camps_list+='<div class="checkbox mb10 cb"><label><input class="extra_camps" name="extra_camps_list[]" '+selected+' type="checkbox" value="'+extra_camps_response[i]+'"><b>'+extra_camps_response[i]+'</b></label></div>';
@@ -469,13 +469,6 @@ var Contacts_Playbook = {
 		Master.pass_id_to_modal(this, id);
 		Contacts_Playbook.get_playbook(id);
 		Contacts_Playbook.playbook_id=$(this).data('id') ? $(this).data('id'): '' ;
-
-		// $('div.modal').each(function(){
-		// 	if($(this).hasClass('in')){
-		// 		console.log(Contacts_Playbook.current_modal +' - '+ $(this).attr('id'));
-		// 		Contacts_Playbook.current_modal = $(this).attr('id');
-		// 	}
-		// });
 	},
 
 	get_playbook_filters:function(campaign, playbookid, modal, is_empty){
@@ -876,7 +869,7 @@ var Contacts_Playbook = {
                 $.when(
 					Contacts_Playbook.get_extracampaigns(event, response.campaign)
 				).done(function() {
-
+					console.log(response);
 					edit_modal.find('.extra_campaigns .checkbox input').each(function(){
 						for(var i=0;i<response.extra_campaigns .length;i++){
 							if($(this).val() == response.extra_campaigns [i]){
