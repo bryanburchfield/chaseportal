@@ -214,8 +214,15 @@ var Contacts_Playbook = {
 		$('div.modal').each(function(){
 			if($(this).hasClass('in')){
 				Contacts_Playbook.current_modal = $(this).attr('id');
-				console.log(Contacts_Playbook.current_modal);
 			}
+		});
+
+		$('#addPlaybookModal').on('shown.bs.modal', function () {
+			Contacts_Playbook.current_modal = $(this).attr('id');
+		});
+
+		$('#editPlaybookModal').on('shown.bs.modal', function () {
+			Contacts_Playbook.current_modal = $(this).attr('id');
 		});
 
 		$.ajaxSetup({
