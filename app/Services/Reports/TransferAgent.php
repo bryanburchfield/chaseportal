@@ -226,9 +226,9 @@ class TransferAgent
         $total['ClosingPct'] = $total['Calls'] == 0 ? 0 : number_format($total['Sales'] / $total['Calls'] * 100, 2) . '%';
 
         // format totals
-        $total['Date'] = 'Count: ' . $total['Calls'];
-        $total['Phone'] = 'Sales: ' . $total['Sales'];
-        $total['CallStatus'] = 'Closing Pct: ' . $total['ClosingPct'];
+        $total['Date'] = trans('reports.count') . ': ' . $total['Calls'];
+        $total['Phone'] = trans('reports.sales') . ': ' . $total['Sales'];
+        $total['CallStatus'] = trans('reports.closing_pct') . ': ' . $total['ClosingPct'];
 
         // unset unused cols
         unset($total['Calls']);
