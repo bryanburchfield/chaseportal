@@ -41,6 +41,7 @@ return [
 	'call_type'          => 'Call Type',
 	'callerid'           => 'Caller ID',
 	'campaign'           => 'Campaign',
+	'closer'			=> 'Closer',
 	'custom_table'		 => 'Custom Table',
 	'duration_secs'      => 'Duration ( seconds )',
 	'end'                => 'End',

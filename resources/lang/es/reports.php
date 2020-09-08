@@ -42,6 +42,7 @@ return [
      'callerid'           => 'Identificador de Llamadas',
      'campaign'           => 'Campaña',
      'custom_table'       => 'Mesa Personalizada',
+     'closer'            => 'Cerca',
      'duration_secs'      => 'Duración (segundos)',
      'end'                => 'Final',
      'from'               => 'Desde',

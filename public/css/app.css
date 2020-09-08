@@ -184,6 +184,10 @@ h6 {
   padding-left: 10px;
 }
 
+.pl20 {
+  padding-left: 20px;
+}
+
 .pb20 {
   padding-bottom: 20px;
 }
@@ -1713,10 +1717,12 @@ span.selected_campaign {
 
 .report_totals td {
   background: #33A09B;
+  color: #000;
+  font-weight: 600;
 }
 
-.report_totals td {
-  color: #000;
+.report_subtotals td {
+  background: #dddddd;
   font-weight: 600;
 }
 
