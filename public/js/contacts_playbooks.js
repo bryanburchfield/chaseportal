@@ -217,13 +217,16 @@ var Contacts_Playbook = {
 			}
 		});
 
-		$('#addPlaybookModal').on('shown.bs.modal', function () {
-			Contacts_Playbook.current_modal = $(this).attr('id');
-		});
+		if(Contacts_Playbook.current_modal ==''){
 
-		$('#editPlaybookModal').on('shown.bs.modal', function () {
-			Contacts_Playbook.current_modal = $(this).attr('id');
-		});
+			$('#addPlaybookModal').on('shown.bs.modal', function () {
+				Contacts_Playbook.current_modal = $(this).attr('id');
+			});
+
+			$('#editPlaybookModal').on('shown.bs.modal', function () {
+				Contacts_Playbook.current_modal = $(this).attr('id');
+			});
+		}
 
 		$.ajaxSetup({
 	        headers: {
@@ -237,7 +240,7 @@ var Contacts_Playbook = {
             dataType: 'json',
             data: {campaign: campaign,},
             success:function(response){
-            	// console.log(response);
+            	console.log(Contacts_Playbook.current_modal);
             	$('.loader_hor').hide();
             	$('#'+Contacts_Playbook.current_modal).find('.subcampaigns').empty();
 	        	var subcamps_response = Object.keys(response.subcampaigns);
