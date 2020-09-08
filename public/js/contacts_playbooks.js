@@ -268,14 +268,13 @@ var Contacts_Playbook = {
 
 	        		var extra_camps_list='';
 	        		var selected;
-	        		console.log(extra_camps_response);
+
 	        		for(var i=0; i<extra_camps_response.length;i++){
 	        		    selected =  extra_camps_response[i].selected ? 'checked' : '';
 	        		    extra_camps_list+='<div class="checkbox mb10 cb"><label><input class="extra_camps" name="extra_camps_list[]" '+selected+' type="checkbox" value="'+extra_camps_response[i]+'"><b>'+extra_camps_response[i]+'</b></label></div>';
 	        		}
 
 	        		console.log('Modal: '+Contacts_Playbook.current_modal);
-	        		console.log(extra_camps_list);
 	        		$('#'+Contacts_Playbook.current_modal).find('.extra_campaigns').append(extra_camps_list);
 	        	}
             }
@@ -856,7 +855,8 @@ var Contacts_Playbook = {
 	        success:function(response){
 	        	// console.log(response);
                 var edit_modal = $('#editPlaybookModal');
-
+                Contacts_Playbook.current_modal=$(edit_modal).attr('id');
+                console.log(Contacts_Playbook.current_modal);
                 edit_modal.find('.name').val(response.name);
                 edit_modal.find('.campaign_select option[value="'+response.campaign+'"]').prop('selected', true);
                 edit_modal.find('.subcampaigns').empty();
