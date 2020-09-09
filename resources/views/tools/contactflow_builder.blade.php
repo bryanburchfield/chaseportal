@@ -105,7 +105,7 @@ if (Auth::user()->isType('demo')) {
 
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
+                                                <div class="col-sm-9 offset-sm-3 pl0 mbp0">
                                                     <h2 class="page_heading"><i class="fa fa-plus-circle"></i> {{__('tools.add_new_rule')}}</h2>
                                                     {!! Form::open(['method'=>'POST', 'url'=>'#', 'class'=>'form mt20 fc_style add_rule']) !!}
 
@@ -218,7 +218,7 @@ if (Auth::user()->isType('demo')) {
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-sm-9 col-sm-offset-3 pl0 mbp0">
+                                                <div class="col-sm-9 offset-sm-3 pl0 mbp0">
                                                     <div class="card">
                                                         <div class="form-group">
                                                             {!! Form::label('description', __('tools.description')) !!}

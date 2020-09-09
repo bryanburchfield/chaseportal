@@ -9,7 +9,7 @@
 	<div class="container-fluid hero_bg">
         <div class="container">
             <div class="row">
-            	<div class="col-md-8 col-md-offset-2">
+            	<div class="col-md-8 offset-md-2">
             		<div class="form-holder welcome_box">
 						<h1 class="mb20">Welcome to the Chase Data Portal! </h1>
 					    <div class="alert alert-info demo_expiration">Your demo account will expire {{ $user->expires_in }}.</div>
