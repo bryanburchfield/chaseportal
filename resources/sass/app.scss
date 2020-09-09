@@ -1987,8 +1987,6 @@ h4.panel-title a{
 
 .undoselection_btn{
     @include base_style(null, #d9534f, $fw:600);
-    position: relative;
-    top:9px;
 }
 
 p.name span.name{width: 150px;}

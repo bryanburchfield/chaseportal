@@ -142,8 +142,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.add_provider')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.add_provider')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -156,9 +156,7 @@
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
             </div>
 
-            <div class="modal-footer">
-                
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
@@ -168,8 +166,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.edit_provider')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_provider')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -182,9 +180,7 @@
                 </form>
             </div>
 
-            <div class="modal-footer">
-                
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
@@ -194,8 +190,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.delete_provider')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_provider')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -217,8 +213,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.create_drip_campaign')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.create_drip_campaign')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -229,13 +225,10 @@
                     <div class="alert alert-danger hidetilloaded"></div>
                      <button type="button" class="btn btn-secondary cancel_modal_form mt10 mr10 flt_lft" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
                     <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0 flt_lft">{{__('tools.create_campaign')}}</button>
-                   
                 </form>
             </div>
 
-	        <div class="modal-footer">
-                
-	        </div>
+	        <div class="modal-footer"></div>
 	    </div>
     </div>
 </div>
@@ -245,8 +238,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.edit_drip_campaign')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.edit_drip_campaign')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -272,8 +265,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.delete_campaign')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_campaign')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -294,8 +287,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Error</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Error</h4>
             </div>
 
             <div class="modal-body">
@@ -313,6 +306,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection

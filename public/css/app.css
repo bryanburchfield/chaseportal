@@ -2362,8 +2362,6 @@ h4.panel-title a {
 .undoselection_btn {
   color: #d9534f;
   font-weight: 600;
-  position: relative;
-  top: 9px;
 }
 
 p.name span.name {

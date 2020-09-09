@@ -224,7 +224,7 @@ var KPI = {
                 $('#editRecipModal .modal-body form .kpi_list').empty();
                 $('#editRecipModal .modal-body form .user_id').val(id);
 
-                var kpi_list='<div class="checkbox mb20 select_all flt_lft mr20"><label><input id="select_all" name="select_all" type="checkbox"> <b class="pl-2">'+Lang.get('js_msgs.select_all')+'</b></label></div><a href="#" class=" undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a>';
+                var kpi_list='<div class="d-flex flex-row bd-highlight mb-3"><div class="bd-highlight checkbox mb-2 select_all float-left mr-2"><label><input id="select_all" name="select_all" type="checkbox"> <b class="pl-2">'+Lang.get('js_msgs.select_all')+'</b></label></div><div class="bd-highlight"><a href="#" class="undoselection_btn"> '+Lang.get('js_msgs.undo_selection')+'</a></div></div>';
                 var selected;
 
                 for(var i=0; i<response.kpi_list.length;i++){
@@ -322,10 +322,10 @@ var KPI = {
     toggle_all_kpis:function(){
         if($(this).prop("checked")){
             $(".kpi_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.unselect_all'));
-            $(this).parent().parent().siblings().find('label input').prop( "checked", true );
+            $(this).parent().parent().parent().siblings().find('label input').prop( "checked", true );
         }else{
             $(".kpi_list").find('div.checkbox.select_all b').text(Lang.get('js_msgs.select_all'));
-            $(this).parent().parent().siblings().find('label input').prop( "checked", false );
+            $(this).parent().parent().parent().siblings().find('label input').prop( "checked", false );
         }
     },
 

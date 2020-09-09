@@ -2094,10 +2094,7 @@ h4.panel-title a{
 }
 
 .undoselection_btn{
-    color: #d9534f;
-    font-weight: 600;
-    position: relative;
-    top:9px;
+    @include base_style(null, #d9534f, $fw:600);
 }
 
 #editRecipModal .btn.btn-warning{background: $orange;border:none;}

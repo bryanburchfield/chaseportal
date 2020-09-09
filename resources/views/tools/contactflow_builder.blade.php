@@ -291,8 +291,8 @@ if (Auth::user()->isType('demo')) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.rule_details')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.rule_details')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="rule_id" name="rule_id" value="">
@@ -309,8 +309,8 @@ if (Auth::user()->isType('demo')) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.delete_rule')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.delete_rule')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="lead_rule_id" name="lead_rule_id" value="">
@@ -330,8 +330,8 @@ if (Auth::user()->isType('demo')) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('tools.reverse_lead_move')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.reverse_lead_move')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="lead_move_id" name="lead_move_id" value="">
@@ -344,7 +344,6 @@ if (Auth::user()->isType('demo')) {
 	    </div>
     </div>
 </div>
-
 
 @include('shared.reportmodal')
 
