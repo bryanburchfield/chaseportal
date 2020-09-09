@@ -13,6 +13,10 @@
         <tbody>
         @foreach($results as $rec)
             <tr 
+            @if(isset($rec['isSubtotal']))
+                @unset($rec['isSubtotal'])
+                class="report_subtotals"
+            @endif
             @if($params['hasTotals'] && $loop->last)
                 class="report_totals"
             @endif

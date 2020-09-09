@@ -26,6 +26,7 @@ return [
     'calltype' => 'Type of Call',
     'campaign' => 'Dialer Campaign',
     'cepts' => 'Calls with a CR_CEPT status',
+    'closer' => 'Rep that made the sale',
     'cnt' => 'Total Count',
     'connectedtimesec' => 'Total Time Spent in Calls',
     'connectpct' => 'Percentage of Calls Connected',
@@ -142,4 +143,5 @@ return [
     'shift_report_2' => 'It totals the call dispositions and whether they made a connection or contact.',
     'subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
     'apn_subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
+    'transfer_agent_1' => 'This report looks at all calls that were transferred from a Rep to a Closer, and how many turned into sales.',
 ];

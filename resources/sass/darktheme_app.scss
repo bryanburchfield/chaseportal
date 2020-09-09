@@ -104,6 +104,7 @@ h1, h2, h3, h4, h5, h6 {
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
 .pl10{padding-left: 10px;}
+.pl20{padding-left: 20px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
@@ -1496,14 +1497,16 @@ span.selected_campaign {
 }
 
 //prevent sorting
-.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a {display: none;}
-
-.report_totals td{
-    background: #33A09B;
-}
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .production_report table thead th a, .bwr_production_report table thead th a, .calls_per_hour table thead th a, .transfer_agent table thead th a  {display: none;}
 
 .report_totals td {
+    background: #33A09B;
     color: #fff;
+    font-weight: 600;
+}
+
+.report_subtotals td{
+    background: darken(#0f131f, 7%);
     font-weight: 600;
 }
 

@@ -13,26 +13,27 @@
 
                 @php
                     $reports = [
+                        'agent_activity' =>  __('reports.agent_activity'),
                         'agent_analysis' =>  __('reports.agent_analysis'),
+                        'agent_pause_time' =>  __('reports.agent_pause_time'),
                         'agent_summary' =>  __('reports.agent_summary'),
                         'agent_summary_campaign' =>  __('reports.agent_summary_campaign'),
                         'agent_summary_subcampaign' =>  __('reports.agent_summary_subcampaign'),
-                        'agent_pause_time' =>  __('reports.agent_pause_time'),
-                        'agent_activity' =>  __('reports.agent_activity'),
                         'agent_timesheet' =>  __('reports.agent_timesheet'),
-                        'campaign_usage' =>  __('reports.campaign_usage'),
                         'caller_id' =>  __('reports.caller_id'),
                         'calls_per_hour' =>  __('reports.calls_per_hour'),
-                        'inbound_summary' =>  __('reports.inbound_summary'),
-                        'campaign_summary' =>  __('reports.campaign_summary'),
-                        'subcampaign_summary' =>  __('reports.subcampaign_summary'),
                         'campaign_call_log' => __('reports.campaign_call_log'),
-                        'missed_calls' =>   __('reports.missed_calls'),
-                        'shift_report' =>  __('reports.shift_report'),
-                        'production_report' =>  __('reports.production_report'),
-                        'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
+                        'campaign_summary' =>  __('reports.campaign_summary'),
+                        'campaign_usage' =>  __('reports.campaign_usage'),
+                        'inbound_summary' =>  __('reports.inbound_summary'),
                         'lead_inventory' =>  __('reports.lead_inventory'),
                         'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
+                        'missed_calls' =>   __('reports.missed_calls'),
+                        'production_report' =>  __('reports.production_report'),
+                        'production_report_subcampaign' =>  __('reports.production_report_subcampaign'),
+                        'shift_report' =>  __('reports.shift_report'),
+                        'subcampaign_summary' =>  __('reports.subcampaign_summary'),
+                        'transfer_agent' =>  __('reports.transfer_agent'),
                     ];
 
                     if(Auth::User()->group_id == 224500) {

@@ -183,6 +183,10 @@ h6 {
   padding-left: 10px;
 }
 
+.pl20 {
+  padding-left: 20px;
+}
+
 .pb20 {
   padding-bottom: 20px;
 }
@@ -1739,16 +1743,19 @@ span.selected_campaign {
 .agent_pause_time table thead th a,
 .production_report table thead th a,
 .bwr_production_report table thead th a,
-.calls_per_hour table thead th a {
+.calls_per_hour table thead th a,
+.transfer_agent table thead th a {
   display: none;
 }
 
 .report_totals td {
   background: #33A09B;
+  color: #000;
+  font-weight: 600;
 }
 
-.report_totals td {
-  color: #000;
+.report_subtotals td {
+  background: #dddddd;
   font-weight: 600;
 }
 
