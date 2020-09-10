@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="reports_modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reportModalLabel">{{__('general.select_report')}}</h5>

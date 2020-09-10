@@ -43,7 +43,7 @@
                             </div>
 
                             {!! Form::hidden('redirect_url', 'recipients', ['class'=>'redirect_url']) !!}
-                            {!! Form::submit(__('general.submit'), ['class'=>'btn btn-primary btn-md mb0']) !!}
+                            {!! Form::submit(__('general.submit'), ['class'=>'btn btn-primary btn-md mb0 mt-2']) !!}
 
                             @if($errors->any())
                                 <div class="alert alert-danger mt20">

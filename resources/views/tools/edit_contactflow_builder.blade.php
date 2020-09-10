@@ -158,14 +158,16 @@
 			    <div class="row">
 			        <div class="col-sm-9 offset-sm-3 pl0">
 			            <div class="card">
-			                <div class="form-group">
-			                    {!! Form::label('description', __('tools.description')) !!}
-			                    {!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
-			                </div>
+			                <div class="card-body p-0">
+			                	<div class="form-group">
+			                	    {!! Form::label('description', __('tools.description')) !!}
+			                	    {!! Form::textarea("description", $lead_rule['description'], ["class" => "form-control", 'id'=> 'description', 'rows' => 4]) !!}
+			                	</div>
 
-			                <a href="{{url('/tools/contactflow_builder')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
-			                {!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
-			                <div class="alert alert-danger edit_rule_error hidetilloaded mt20"></div>
+			                	<a href="{{url('/tools/contactflow_builder')}}" class="btn btn-default btn-reset">{{__('general.cancel')}}</a>
+			                	{!! Form::submit(__('tools.save_changes'), ['class'=>'btn btn-primary mb0'] ) !!}
+			                	<div class="alert alert-danger edit_rule_error hidetilloaded mt20"></div>
+			                </div>
 			            </div>
 			        {!! Form::close() !!}
 			        </div>
