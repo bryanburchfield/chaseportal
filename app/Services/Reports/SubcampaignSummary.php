@@ -27,6 +27,7 @@ class SubcampaignSummary
             'AvAttempt' => 'reports.avattempt',
             'ManHours' => 'reports.manhours',
             'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'CPH' => 'reports.cph',
             'Sales' => 'reports.sales',
             'APH' => 'reports.aph',
@@ -104,6 +105,7 @@ class SubcampaignSummary
             AvAttempt int DEFAULT 0,
             ManHours numeric(18,2) DEFAULT 0,
             Connects int DEFAULT 0,
+            Contacts int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
             Sales int DEFAULT 0,
             APH numeric(18,2) DEFAULT 0,
@@ -185,6 +187,16 @@ class SubcampaignSummary
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Connects, Date
               FROM #DialingResultsStats
               WHERE [Type] > 0
+              GROUP BY Campaign, Subcampaign, Date) a
+        WHERE #SubcampaignSummary.Campaign = a.Campaign
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date
+
+        UPDATE #SubcampaignSummary
+        SET Contacts = a.Contacts
+        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Contacts, Date
+              FROM #DialingResultsStats
+              WHERE [Type] > 1
               GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
@@ -347,10 +359,13 @@ class SubcampaignSummary
         WHERE ManHours > 0 AND Dialed > 0
 
         UPDATE #SubcampaignSummary
-        SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100,
-            ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100,
-            CeptsPercentage = (CAST(Cepts as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
+        SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100
         WHERE Dialed > 0
+
+        UPDATE #SubcampaignSummary
+        SET ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100,
+            CeptsPercentage = (CAST(Cepts as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100
+        WHERE Contacts > 0
 
         UPDATE #SubcampaignSummary
         SET SaleRateValue = CAST(Dialed as numeric(18,2))/CAST(Sales as numeric(18,2))
@@ -367,6 +382,7 @@ class SubcampaignSummary
             AvAttempt,
             ManHours,
             Connects,
+            Contacts,
             CPH,
             Sales,
             APH,
