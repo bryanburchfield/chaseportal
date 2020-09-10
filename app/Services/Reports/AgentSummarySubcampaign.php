@@ -26,9 +26,9 @@ class AgentSummarySubcampaign
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
             'Rep' => 'reports.rep',
-            'Calls' => 'reports.calls',
-            'Contacts' => 'reports.contacts',
+            'Dials' => 'reports.dials',
             'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'Hours' => 'reports.hours',
             'Leads' => 'reports.leads',
             'CPH' => 'reports.cph',
@@ -119,9 +119,9 @@ class AgentSummarySubcampaign
             Campaign varchar(50),
             Subcampaign varchar(50),
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-            Calls int DEFAULT 0,
-            Contacts int DEFAULT 0,
+            Dials int DEFAULT 0,
             Connects int DEFAULT 0,
+            Contacts int DEFAULT 0,
             Hours numeric(18,2) DEFAULT 0,
             Leads int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
@@ -160,11 +160,9 @@ class AgentSummarySubcampaign
             $sql .= " $union SELECT Campaign, Subcampaign, Rep, [Type], COUNT(id) as [Count]
             FROM
             (SELECT r.Campaign, r.Subcampaign, r.Rep,
-                    IsNull((SELECT TOP 1 [Type]
-                    FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition=r.CallStatus AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
-                    r.id
-                FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)";
+                    IsNull(DI.Type,0) as [Type], r.id
+                FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
+                LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = r.DispositionId";
 
             if (!empty($reps)) {
                 $sql .= " INNER JOIN #SelectedRep sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
@@ -188,7 +186,6 @@ class AgentSummarySubcampaign
 
             $sql .= "
             ) a
-            WHERE [Type] > 0
             GROUP BY Campaign, Subcampaign, Rep, [Type]";
 
             $union = 'UNION ALL';
@@ -240,16 +237,21 @@ class AgentSummarySubcampaign
 
         CREATE INDEX IX_Rep ON #AgentSummaryDuration (Campaign, Subcampaign, Rep);
 
-        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Contacts)
+        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Dials)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
-        WHERE [Type] > 1
         GROUP BY Campaign, Subcampaign, Rep
 
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Connects)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
         WHERE [Type] > 0
+        GROUP BY Campaign, Subcampaign, Rep
+
+        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Contacts)
+        SELECT Campaign, Subcampaign, Rep, SUM([Count])
+        FROM #DialingResultsStats
+        WHERE [Type] > 1
         GROUP BY Campaign, Subcampaign, Rep
 
         INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Hours)
@@ -294,9 +296,9 @@ class AgentSummarySubcampaign
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
 
         SELECT Campaign, Subcampaign, Rep,
-        SUM(TalkTimeCount) AS Calls,
-        SUM(Contacts) AS Contacts,
+        SUM(Dials) AS Dials,
         SUM(Connects) AS Connects,
+        SUM(Contacts) AS Contacts,
         SUM(Hours) AS Hours,
         SUM(Leads) AS Leads,
         SUM(CPH) AS CPH,
@@ -348,9 +350,9 @@ class AgentSummarySubcampaign
          Campaign,
          Subcampaign,
          Rep,
-         Calls,
-         Contacts,
+         Dials,
          Connects,
+         Contacts,
          Hours,
          Leads,
          CPH,
@@ -397,7 +399,7 @@ class AgentSummarySubcampaign
         }
 
         $total['Campaign'] = 'Total:';
-        $total['Calls'] = 0;
+        $total['Dials'] = 0;
         $total['Contacts'] = 0;
         $total['Connects'] = 0;
         $total['Hours'] = 0;
@@ -420,7 +422,7 @@ class AgentSummarySubcampaign
         $total['DispositionTimeCount'] = 0;
 
         foreach ($results as &$rec) {
-            $total['Calls'] += $rec['Calls'];
+            $total['Dials'] += $rec['Dials'];
             $total['Contacts'] += $rec['Contacts'];
             $total['Connects'] += $rec['Connects'];
             $total['Hours'] += $rec['Hours'];
