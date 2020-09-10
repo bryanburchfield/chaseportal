@@ -295,6 +295,7 @@ var Dashboard = {
 
 	            // fade out preloader here because .done is not working
 	            $('.preloader').fadeOut('slow');
+	            Dashboard.resizeDivs();
 			}
 		});
 	},
@@ -306,6 +307,11 @@ var Dashboard = {
 	            Master.check_reload();
 	        });
 	},
+
+	resizeDivs:function(){
+		var outer_height = $('#callstatus_by_minutes_graph').outerHeight();
+		$('#calls_minutes_per_day_graph').css({'min-height' : outer_height + 25});
+	}
 }
 
 $(document).ready(function(){
