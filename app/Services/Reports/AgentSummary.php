@@ -20,9 +20,9 @@ class AgentSummary
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
-            'Calls' => 'reports.calls',
-            'Contacts' => 'reports.contacts',
+            'Dialed' => 'reports.dialed',
             'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'Hours' => 'reports.hours',
             'Leads' => 'reports.leads',
             'CPH' => 'reports.cph',
@@ -104,9 +104,9 @@ class AgentSummary
         $sql .= "
         CREATE TABLE #AgentSummary(
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-            Calls int DEFAULT 0,
-            Contacts int DEFAULT 0,
+            Dialed int DEFAULT 0,
             Connects int DEFAULT 0,
+            Contacts int DEFAULT 0,
             Hours numeric(18,2) DEFAULT 0,
             Leads int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
@@ -139,11 +139,9 @@ class AgentSummary
 
             $sql .= " $union SELECT Rep, [Type], COUNT(id) as [Count]
             FROM
-            (SELECT r.Rep, IsNull((SELECT TOP 1 [Type]
-                    FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition=r.CallStatus AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
-                    r.id
+            (SELECT r.Rep, IsNull(DI.Type,0) as [Type], r.id
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
+                LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = r.DispositionId
                 INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
 
             if (!empty($this->params['skills'])) {
@@ -164,7 +162,6 @@ class AgentSummary
 
             $sql .= "
             ) a
-            WHERE [Type] > 0
             GROUP BY Rep, [Type]";
 
             $union = 'UNION ALL';
@@ -218,10 +215,9 @@ class AgentSummary
         CREATE INDEX IX_RepAction ON #AgentSummaryDuration (Rep, Duration, [Action]);
 
         UPDATE #AgentSummary
-        SET Contacts = a.Contacts
-        FROM (SELECT Rep, SUM([Count]) as Contacts
+        SET Dialed = a.Dialed
+        FROM (SELECT Rep, SUM([Count]) as Dialed
               FROM #DialingResultsStats
-              WHERE [Type] > 1
               GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
@@ -230,6 +226,14 @@ class AgentSummary
         FROM (SELECT Rep, SUM([Count]) as Connects
               FROM #DialingResultsStats
               WHERE [Type] > 0
+              GROUP BY Rep) a
+        WHERE #AgentSummary.Rep = a.Rep;
+
+        UPDATE #AgentSummary
+        SET Contacts = a.Contacts
+        FROM (SELECT Rep, SUM([Count]) as Contacts
+              FROM #DialingResultsStats
+              WHERE [Type] > 1
               GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
@@ -345,7 +349,6 @@ class AgentSummary
         }
 
         $total['Rep'] = 'Total:';
-        $total['Calls'] = 0;
         $total['TalkTimeSec'] = 0;
         $total['TalkTimeCount'] = 0;
         $total['PausedTimeSec'] = 0;
@@ -354,13 +357,13 @@ class AgentSummary
         $total['DispositionTimeSec'] = 0;
         $total['DispositionTimeCount'] = 0;
         $total['LoggedInTime'] = 0;
-        $total['Contacts'] = 0;
+        $total['Dialed'] = 0;
         $total['Connects'] = 0;
+        $total['Contacts'] = 0;
         $total['Hours'] = 0;
         $total['Leads'] = 0;
 
         foreach ($results as &$rec) {
-            $total['Calls'] += $rec['Calls'];
             $total['TalkTimeSec'] += $rec['TalkTimeSec'];
             $total['TalkTimeCount'] += $rec['TalkTimeCount'];
             $total['PausedTimeSec'] += $rec['PausedTimeSec'];
@@ -369,8 +372,9 @@ class AgentSummary
             $total['DispositionTimeSec'] += $rec['DispositionTimeSec'];
             $total['DispositionTimeCount'] += $rec['DispositionTimeCount'];
             $total['LoggedInTime'] += $rec['LoggedInTime'];
-            $total['Contacts'] += $rec['Contacts'];
+            $total['Dialed'] += $rec['Dialed'];
             $total['Connects'] += $rec['Connects'];
+            $total['Contacts'] += $rec['Contacts'];
             $total['Hours'] += $rec['Hours'];
             $total['Leads'] += $rec['Leads'];
 
