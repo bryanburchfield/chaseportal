@@ -320,20 +320,8 @@ class ApnAgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ThresholdCalls = a.tot
-        FROM (SELECT Rep, SUM([OverThreshold]) as tot
-              FROM #DialingResultsStats
-              WHERE Type > 1
-              GROUP BY Rep) a
-        WHERE #AgentSummary.Rep = a.Rep;
-
-        UPDATE #AgentSummary
         SET AvWaitTime = WaitTimeSec / WaitTimeCount
         WHERE WaitTimeCount > 0;
-
-        UPDATE #AgentSummary
-        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Connects as numeric(18,2))) * 100
-        WHERE Connects > 0;
 
         UPDATE #AgentSummary
         SET AvTalkTime = TalkTimeSec / TalkTimeCount
@@ -342,6 +330,18 @@ class ApnAgentSummary
         UPDATE #AgentSummary
         SET AvDispoTime = DispositionTimeSec / DispositionTimeCount
         WHERE DispositionTimeCount > 0;
+
+        UPDATE #AgentSummary
+        SET ThresholdCalls = a.tot
+        FROM (SELECT Rep, SUM([OverThreshold]) as tot
+              FROM #DialingResultsStats
+              WHERE Type > 1
+              GROUP BY Rep) a
+        WHERE #AgentSummary.Rep = a.Rep;
+
+        UPDATE #AgentSummary
+        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Connects as numeric(18,2))) * 100
+        WHERE Connects > 0;
 
         UPDATE #AgentSummary
         SET ThresholdSales = a.tot
