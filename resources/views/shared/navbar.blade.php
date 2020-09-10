@@ -1,7 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-       <div class="col-xs-2 col-sm-6 brand pl0">
-
+       <div class="col-xs-1 col-sm-5 brand pl0">
            @if(!session()->has('isSso'))
             <button type="button" id="sidebarCollapse" class="btn flt_lft">
                 <i class="fas fa-align-left"></i>
@@ -15,7 +14,7 @@
            @endif
        </div>
 
-        <div class="filters col-xs-10 col-sm-6">
+        <div class="filters col-xs-11 col-sm-7">
             <div class="input-group">
                 <div class="input-group-btn">
 
