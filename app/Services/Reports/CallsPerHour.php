@@ -26,6 +26,8 @@ class CallsPerHour
         $this->params['columns'] = [
             'Date' => 'reports.hour',
             'TotalCalls' => 'reports.totalcalls',
+            'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'Sales' => 'reports.sales',
             'ConversionRate' => 'reports.conversionrate',
             'Inbound' => 'reports.inbound',
@@ -148,17 +150,14 @@ class CallsPerHour
                     'Inbound' = SUM(CASE WHEN DR.CallType IN (1,11) THEN 1 ELSE 0 END),
                     'Abandoned' = SUM(CASE WHEN DR.CallStatus = 'CR_HANGUP' AND DR.CallType IN (1,11) THEN 1 ELSE 0 END),
                     'Dropped' = SUM(CASE WHEN DR.CallStatus = 'CR_DROPPED' AND DR.CallType NOT IN (1,11) THEN 1 ELSE 0 END),
+                    'Connects' = SUM(ISNULL(CASE WHEN DI.Type > 0 THEN 1 ELSE NULL END, 0)),
+                    'Contacts' = SUM(ISNULL(CASE WHEN DI.Type > 1 THEN 1 ELSE NULL END, 0)),
                     'Sales' = SUM(ISNULL(CASE WHEN DI.Type = 3 THEN 1 ELSE NULL END, 0)),
                     'TalkTime' = SUM(CASE WHEN DI.Type > 1 THEN DR.Duration ELSE 0 END),
                     'Contacts' = SUM(ISNULL(CASE WHEN DI.Type > 1 THEN 1 ELSE NULL END, 0))
                 FROM [DialingResults] DR
+                LEFT JOIN [Dispos] DI ON DI.id = DR.DispositionId
                 $join
-                OUTER APPLY (SELECT TOP 1 [Type]
-                    FROM  [Dispos]
-                    WHERE Disposition = DR.CallStatus
-                    AND (GroupId = DR.GroupId OR IsSystem=1)
-                    AND (Campaign = DR.Campaign OR Campaign = '')
-                    ORDER BY [id]) DI
                 WHERE $call_type_where
                 AND DR.CallStatus NOT IN ('CR_CEPT', 'CR_CNCT/CON_PAMD', 'CR_NOANS',
                     'CR_NORB', 'CR_BUSY', 'CR_FAXTONE',
@@ -180,6 +179,8 @@ class CallsPerHour
         $totals = [
             'Date' => strtoupper(trans('reports.total')),
             'TotalCalls' => 0,
+            'Connects' => 0,
+            'Contacts' => 0,
             'Sales' => 0,
             'ConversionRate' => 0,
             'Inbound' => 0,
@@ -205,8 +206,10 @@ class CallsPerHour
             $data = [
                 'Date' => Carbon::parse($rec['Date'])->isoFormat('L ha'),
                 'TotalCalls' => $totalcalls,
+                'Connects' => $rec['Connects'],
+                'Contacts' => $rec['Contacts'],
                 'Sales' => $rec['Sales'],
-                'ConversionRate' => number_format($rec['Sales'] / $totalcalls * 100, 2) . '%',
+                'ConversionRate' => number_format(($rec['Contacts'] > 0) ? $rec['Sales'] / $rec['Contacts'] * 100 : 0, 2) . '%',
                 'Inbound' => $rec['Inbound'],
                 'InboundPct' => number_format($rec['Inbound'] / $totalcalls * 100, 2) . '%',
                 'Abandoned' => $rec['Abandoned'],
@@ -228,6 +231,8 @@ class CallsPerHour
             $final[] = $data;
 
             $totals['TotalCalls'] += $data['TotalCalls'];
+            $totals['Connects'] += $data['Connects'];
+            $totals['Contacts'] += $data['Contacts'];
             $totals['Sales'] += $data['Sales'];
             $totals['Abandoned'] += $data['Abandoned'];
             $totals['Dropped'] += $data['Dropped'];
@@ -239,14 +244,13 @@ class CallsPerHour
 
         if ($totals['TotalCalls'] > 0) {
             $totals['TalkTime'] = $this->secondsToHms($totals['TalkTime']);
-            $totals['ConversionRate'] = number_format($totals['Sales'] / $totals['TotalCalls'] * 100, 2) . '%';
+            $totals['ConversionRate'] = number_format(($totals['Contacts'] > 0) ? $totals['Sales'] / $totals['Contacts'] * 100 : 0, 2) . '%';
             $totals['AbandonRate'] = number_format($totals['Inbound'] == 0 ? 0 : $totals['Abandoned'] / $totals['Inbound'] * 100, 2) . '%';
             $totals['DropRate'] = number_format($totals['Outbound'] == 0 ? 0 : $totals['Dropped'] / $totals['Outbound'] * 100, 2) . '%';
             $totals['InboundPct'] = number_format($totals['Inbound'] / $totals['TotalCalls'] * 100, 2) . '%';
             $totals['OutboundPct'] = number_format($totals['Outbound'] / $totals['TotalCalls'] * 100, 2) . '%';
             $totals['ContactRatio'] = number_format($totals['Contacts'] / $totals['TotalCalls'] * 100, 2) . '%';
 
-            unset($totals['Contacts']);
             $final[] = $totals;
         }
 

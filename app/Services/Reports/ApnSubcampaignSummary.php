@@ -27,6 +27,7 @@ class ApnSubcampaignSummary
             'AvAttempt' => 'reports.avattempt',
             'ManHours' => 'reports.manhours',
             'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'CPH' => 'reports.cph',
             'Sales' => 'reports.sales',
             'APH' => 'reports.aph',
@@ -92,8 +93,6 @@ class ApnSubcampaignSummary
         $tz =  Auth::user()->tz;
 
         $bind['group_id'] = Auth::user()->group_id;
-        $bind['threshold_secs1'] = $this->params['threshold_secs'];
-        $bind['threshold_secs2'] = $this->params['threshold_secs'];
 
         $sql = "SET NOCOUNT ON;
 
@@ -111,6 +110,7 @@ class ApnSubcampaignSummary
             CountAttempt int DEFAULT 0,
             ManHours numeric(18,2) DEFAULT 0,
             Connects int DEFAULT 0,
+            Contacts int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
             Sales int DEFAULT 0,
             APH numeric(18,2) DEFAULT 0,
@@ -135,17 +135,18 @@ class ApnSubcampaignSummary
             $bind['group_id' . $i] = Auth::user()->group_id;
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
+            $bind['threshold' . $i] = $this->params['threshold_secs'];
 
-            $sql .= " $union SELECT
-            CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
-            dr.Campaign,
-            IsNull(dr.Subcampaign, '') as Subcampaign,
-            dr.CallStatus as CallStatus,
-            IsNull((SELECT TOP 1 [Type]
-              FROM [$db].[dbo].[Dispos]
-              WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
-            count(dr.CallStatus) as [Count]
+            $sql .= " $union SELECT Date, Campaign, Subcampaign, CallStatus, [Type], SUM(OverThreshold) as OverThreshold, COUNT(*) as [Count]
+            FROM ( SELECT
+              CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
+              dr.Campaign,
+              IsNull(dr.Subcampaign, '') as Subcampaign,
+              dr.CallStatus as CallStatus,
+              IsNull(Di.Type,0) as [Type],
+              CASE WHEN dr.Duration >= :threshold$i THEN 1 ELSE 0 END as OverThreshold
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
@@ -163,8 +164,8 @@ class ApnSubcampaignSummary
                 $bind['ssouserrep1' . $i] = session('ssoUsername');
             }
 
-            $sql .= "
-            GROUP BY dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
+            $sql .= ") a
+            GROUP BY Date, Campaign, Subcampaign, CallStatus, [Type]";
 
             $union = 'UNION ALL';
         }
@@ -174,40 +175,6 @@ class ApnSubcampaignSummary
 
         CREATE INDEX IX_CampaignType ON #DialingResultsStats (Campaign, Subcampaign, [Type], Date);
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type], Date);
-
-        SELECT * INTO #Sales FROM (";
-
-        $union = '';
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id_sales' . $i] =  Auth::user()->group_id;
-            $bind['startdate_sales' . $i] = $startDate;
-            $bind['enddate_sales' . $i] = $endDate;
-
-            $sql .= " $union SELECT DR.Rep, DR.ActivityId
-            FROM [$db].[dbo].[DialingResults] as DR WITH(NOLOCK)
-            CROSS APPLY (SELECT TOP 1 [Type]
-                FROM  [Dispos] DI
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI";
-
-            $sql .= "
-            WHERE DR.GroupId = :group_id_sales$i
-            AND DR.Date >= :startdate_sales$i
-            AND DR.Date < :enddate_sales$i
-            AND DI.Type = 3";
-
-            if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp_sales$i, 1))";
-                $bind['ssousercamp_sales' . $i] = session('ssoUsername');
-            }
-
-            $union = 'UNION ALL';
-        }
-
-        $sql .=
-            ") tmp;
 
         SELECT * INTO #AgentSummaryDuration FROM (";
 
@@ -259,6 +226,16 @@ class ApnSubcampaignSummary
         FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Connects, Date
               FROM #DialingResultsStats
               WHERE [Type] > 0
+              GROUP BY Campaign, Subcampaign, Date) a
+        WHERE #SubcampaignSummary.Campaign = a.Campaign
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign
+        AND #SubcampaignSummary.Date = a.Date
+
+        UPDATE #SubcampaignSummary
+        SET Contacts = a.Contacts
+        FROM (SELECT Campaign, Subcampaign, SUM([Count]) as Contacts, Date
+              FROM #DialingResultsStats
+              WHERE [Type] > 1
               GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
@@ -428,12 +405,15 @@ class ApnSubcampaignSummary
         WHERE ManHours > 0 AND Dialed > 0
 
         UPDATE #SubcampaignSummary
-        SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100,
-            ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
+        SET ConnectRate = (CAST(Connects as numeric(18,2))/CAST(Dialed as numeric(18,2))) * 100
         WHERE Dialed > 0
 
         UPDATE #SubcampaignSummary
-        SET SaleRateValue = CAST(Dialed as numeric(18,2))/CAST(Sales as numeric(18,2))
+        SET ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100
+        WHERE Contacts > 0
+
+        UPDATE #SubcampaignSummary
+        SET SaleRateValue = CAST(Contacts as numeric(18,2))/CAST(Sales as numeric(18,2))
         WHERE Sales > 0
 
         UPDATE #SubcampaignSummary
@@ -448,26 +428,24 @@ class ApnSubcampaignSummary
 
         UPDATE #SubcampaignSummary
         SET ThresholdCalls = a.tot
-        FROM (SELECT aa.Campaign, aa.Subcampaign, Count(*) as tot, Date
-              FROM #AgentSummaryDuration aa WITH(NOLOCK)
-              WHERE aa.Duration >= :threshold_secs1
-              AND aa.Action in ('Call', 'ManualCall', 'InboundCall')
-              GROUP BY aa.Campaign, aa.Subcampaign, Date) a
+        FROM (SELECT Campaign, Subcampaign, Date, SUM([OverThreshold]) as tot
+              FROM #DialingResultsStats
+              WHERE Type > 1
+              GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date;
 
         UPDATE #SubcampaignSummary
-        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(TalkTimeCount as numeric(18,2))) * 100
-        WHERE TalkTimeCount > 0;
+        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Connects as numeric(18,2))) * 100
+        WHERE Connects > 0;
 
         UPDATE #SubcampaignSummary
-        SET ThresholdSales = a.cnt
-        FROM (SELECT D.Campaign, D.Subcampaign, COUNT(*) as cnt, Date
-            FROM #AgentSummaryDuration D
-            INNER JOIN #Sales S on S.Rep = D.Rep AND S.ActivityId = D.ActivityId
-            AND D.Duration >= :threshold_secs2
-            GROUP BY D.Campaign, D.Subcampaign, D.Date) a
+        SET ThresholdSales = a.tot
+        FROM (SELECT Campaign, Subcampaign, Date, SUM([OverThreshold]) as tot
+              FROM #DialingResultsStats
+              WHERE Type = 3
+              GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date;
@@ -497,7 +475,7 @@ class ApnSubcampaignSummary
         $final = [];
         foreach ($results as $rec) {
             if ($rec['Date'] != $oldate && $oldate != '') {
-                $final[] = $this->processTotal($subtotal);
+                $final[] = $this->processSubTotal($subtotal);
                 $subtotal = $this->zeroRec($subtotal);
             }
 
@@ -508,7 +486,7 @@ class ApnSubcampaignSummary
         }
 
         if (count($final)) {
-            $final[] = $this->processTotal($subtotal);
+            $final[] = $this->processSubTotal($subtotal);
         }
 
         return $final;
@@ -544,6 +522,7 @@ class ApnSubcampaignSummary
         $rec['Cepts'] = 0;
         $rec['ConnectRate'] = 0;
         $rec['Connects'] = 0;
+        $rec['Contacts'] = 0;
         $rec['ConversionFactor'] = 0;
         $rec['ConversionRate'] = 0;
         $rec['CountAttempt'] = 0;
@@ -568,6 +547,7 @@ class ApnSubcampaignSummary
         $total['Available'] += $rec['Available'];
         $total['Cepts'] += $rec['Cepts'];
         $total['Connects'] += $rec['Connects'];
+        $total['Contacts'] += $rec['Contacts'];
         $total['CountAttempt'] += $rec['CountAttempt'];
         $total['Dialed'] += $rec['Dialed'];
         $total['ManHours'] += $rec['ManHours'];
@@ -581,7 +561,7 @@ class ApnSubcampaignSummary
         return $total;
     }
 
-    private function processTotal($rec)
+    private function processSubTotal($rec)
     {
         if ($rec['Total'] > 0) {
             $rec['AvailablePct'] = $rec['Available'] / $rec['Total'] * 100;
@@ -599,7 +579,10 @@ class ApnSubcampaignSummary
 
         if ($rec['Dialed'] > 0) {
             $rec['ConnectRate'] = $rec['Connects'] / $rec['Dialed'] * 100;
-            $rec['ConversionRate'] = $rec['Sales'] / $rec['Dialed'] * 100;
+        }
+
+        if ($rec['Contacts'] > 0) {
+            $rec['ConversionRate'] = $rec['Sales'] / $rec['Contacts'] * 100;
         }
 
         if ($rec['Sales'] > 0) {
@@ -610,7 +593,7 @@ class ApnSubcampaignSummary
             $rec['AvAttempt'] = $rec['TotAttempt'] / $rec['CountAttempt'];
         }
 
-        $rec['ThresholdRatio'] = $rec['TalkTimeCount'] == 0 ? 0 : $rec['ThresholdCalls'] / $rec['TalkTimeCount'] * 100;
+        $rec['ThresholdRatio'] = $rec['Connects'] == 0 ? 0 : $rec['ThresholdCalls'] / $rec['Connects'] * 100;
         $rec['ThresholdClosingPct'] = $rec['ThresholdCalls'] == 0 ? 0 : $rec['ThresholdSales'] / $rec['ThresholdCalls'] * 100;
 
         // format cols
@@ -618,9 +601,9 @@ class ApnSubcampaignSummary
         $rec['AvAttempt'] = number_format($rec['AvAttempt'], 0);
         $rec['AvailablePct'] = number_format($rec['AvailablePct'], 2) . '%';
         $rec['CPH'] = number_format($rec['CPH'], 2);
-        $rec['ConnectRate'] = number_format($rec['ConnectRate'], 2);
+        $rec['ConnectRate'] = number_format($rec['ConnectRate'], 2) . '%';
         $rec['ConversionFactor'] = number_format($rec['ConversionFactor'], 2);
-        $rec['ConversionRate'] = number_format($rec['ConversionRate'], 2);
+        $rec['ConversionRate'] = number_format($rec['ConversionRate'], 2) . '%';
         $rec['DPH'] = number_format($rec['DPH'], 2);
         $rec['SaleRateValue'] = number_format($rec['SaleRateValue'], 2);
         $rec['ThresholdClosingPct'] = number_format($rec['ThresholdClosingPct'], 2) . '%';
@@ -633,6 +616,8 @@ class ApnSubcampaignSummary
         unset($rec['TalkTimeCount']);
         unset($rec['ThresholdSales']);
         unset($rec['TotAttempt']);
+
+        $rec['isSubtotal'] = 1;
 
         return $rec;
     }

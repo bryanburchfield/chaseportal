@@ -108,6 +108,7 @@ class CampaignSummary
         ManHours numeric(18,2) DEFAULT 0,
         LoggedInSecs numeric(18,2) DEFAULT 0,
         Connects int DEFAULT 0,
+        Contacts int DEFAULT 0,
         CPH numeric(18,2) DEFAULT 0,
         ConversionRate numeric(18,2) DEFAULT 0,
         ConversionFactor numeric(18,2) DEFAULT 0,
@@ -130,9 +131,10 @@ class CampaignSummary
             $sql .= " $union SELECT
         dr.Campaign as Campaign,
         dr.CallStatus as CallStatus,
-        IsNull((SELECT TOP 1 [Type]	FROM [$db].[dbo].Dispos WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
-        count(dr.CallStatus) as [Count]
-        FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)";
+        IsNull(DI.Type, 0) as [Type],
+        COUNT(dr.CallStatus) as [Count]
+        FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
@@ -159,7 +161,7 @@ class CampaignSummary
             }
 
             $sql .= "
-        GROUP BY dr.Campaign, dr.CallStatus, dr.GroupId";
+        GROUP BY dr.Campaign, dr.CallStatus, [Type]";
 
             $union = 'UNION ALL';
         }
@@ -189,6 +191,14 @@ class CampaignSummary
     FROM (SELECT Campaign, SUM([Count]) as Connects
           FROM #DialingResultsStats
           WHERE [Type] > 0
+          GROUP BY Campaign) a
+    WHERE #CampaignSummary.Campaign = a.Campaign;
+
+    UPDATE #CampaignSummary
+    SET Contacts = a.Contacts
+    FROM (SELECT Campaign, SUM([Count]) as Contacts
+          FROM #DialingResultsStats
+          WHERE [Type] > 1
           GROUP BY Campaign) a
     WHERE #CampaignSummary.Campaign = a.Campaign;
 
@@ -345,8 +355,8 @@ class CampaignSummary
     WHERE Connects + Dropped > 0;
 
     UPDATE #CampaignSummary
-    SET ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
-    WHERE Dialed > 0;
+    SET ConversionRate = (CAST(Sales as numeric(18,2)) / CAST(Contacts as numeric(18,2))) * 100
+    WHERE Contacts > 0;
 
     UPDATE #CampaignSummary
     SET ConversionFactor = (CAST(Sales as numeric(18,2)) /CAST(Dialed as numeric(18,2))) / ManHours
