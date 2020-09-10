@@ -48,8 +48,10 @@
                     if(Auth::User()->group_id == 224802) {
                         unset($reports['agent_summary']);
                         unset($reports['subcampaign_summary']);
+                        unset($reports['production_report']);
                         $reports['apn_agent_summary'] = __('reports.agent_summary');
                         $reports['apn_subcampaign_summary'] = __('reports.subcampaign_summary');
+                        $reports['apn_production_report'] = __('reports.production_report');
                     }
 
                     if(!Auth::User()->isDemo()) {
