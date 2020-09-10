@@ -169,6 +169,10 @@ trait ReportExportTraits
             $request->request->add(['todate' => $todate->toDateTimeString()]);
         }
 
+        if (isset($this->params['reps'])) {
+            $request->request->add(['reps' => array_column($this->getAllReps(), 'RepName')]);
+        }
+
         $pdf = $this->pdfExport($request);
 
         // Bail if there's no report to be sent
