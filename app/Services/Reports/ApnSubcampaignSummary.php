@@ -11,15 +11,17 @@ class ApnSubcampaignSummary
 {
     use ReportTraits;
 
+    private $sameDay = false;
+
     public function __construct()
     {
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.subcampaign_summary';
         $this->params['columns'] = [
-            'Date' => 'reports.date',
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
+            'Date' => 'reports.date',
             'Total' => 'reports.total_leads',
             'Dialed' => 'reports.dialed',
             'DPH' => 'reports.dph',
@@ -62,6 +64,14 @@ class ApnSubcampaignSummary
 
     private function executeReport($all = false)
     {
+        // Check if we're running for a single day
+        $from = Carbon::parse($this->params['fromdate']);
+        $to = Carbon::parse($this->params['todate']);
+
+        if ($from->isSameDay($to)) {
+            $this->sameDay = true;
+        }
+
         list($sql, $bind) = $this->makeQuery($all);
 
         $results = $this->runSql($sql, $bind);
@@ -97,9 +107,9 @@ class ApnSubcampaignSummary
         $sql = "SET NOCOUNT ON;
 
         CREATE TABLE #SubcampaignSummary(
-            Date varchar(50),
             Campaign varchar(50),
             Subcampaign varchar(50),
+            Date varchar(50),
             Total int DEFAULT 0,
             Dialed int DEFAULT 0,
             DPH numeric(18,2) DEFAULT 0,
@@ -137,11 +147,11 @@ class ApnSubcampaignSummary
             $bind['enddate' . $i] = $endDate;
             $bind['threshold' . $i] = $this->params['threshold_secs'];
 
-            $sql .= " $union SELECT Date, Campaign, Subcampaign, CallStatus, [Type], SUM(OverThreshold) as OverThreshold, COUNT(*) as [Count]
+            $sql .= " $union SELECT Campaign, Subcampaign, Date, CallStatus, [Type], SUM(OverThreshold) as OverThreshold, COUNT(*) as [Count]
             FROM ( SELECT
-              CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
               dr.Campaign,
               IsNull(dr.Subcampaign, '') as Subcampaign,
+              CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
               dr.CallStatus as CallStatus,
               IsNull(Di.Type,0) as [Type],
               CASE WHEN dr.Duration >= :threshold$i THEN 1 ELSE 0 END as OverThreshold
@@ -165,7 +175,7 @@ class ApnSubcampaignSummary
             }
 
             $sql .= ") a
-            GROUP BY Date, Campaign, Subcampaign, CallStatus, [Type]";
+            GROUP BY Campaign, Subcampaign, Date, CallStatus, [Type]";
 
             $union = 'UNION ALL';
         }
@@ -310,13 +320,12 @@ class ApnSubcampaignSummary
 
             $sql .= "UPDATE #SubcampaignSummary
             SET Total += a.Total
-            FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total, Date
+            FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total
                 FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                 WHERE l.GroupId = :group_id2$i
-                GROUP BY l.Campaign, IsNull(l.Subcampaign, ''), Date) a
+                GROUP BY l.Campaign, IsNull(l.Subcampaign, '')) a
             WHERE #SubcampaignSummary.Campaign = a.Campaign
-            AND #SubcampaignSummary.Subcampaign = a.Subcampaign
-            AND #SubcampaignSummary.Date = a.Date;";
+            AND #SubcampaignSummary.Subcampaign = a.Subcampaign;";
         }
 
         $sql .= "
@@ -456,7 +465,7 @@ class ApnSubcampaignSummary
 
         SELECT *
         FROM #SubcampaignSummary
-        ORDER BY Date, Campaign, Subcampaign";
+        ORDER BY Campaign, Subcampaign, Date";
 
         return [$sql, $bind];
     }
@@ -470,23 +479,29 @@ class ApnSubcampaignSummary
 
         $subtotal = $this->zeroRec($subtotal);
 
-        $oldate = '';
+        $oldgroup = '';
 
         $final = [];
         foreach ($results as $rec) {
-            if ($rec['Date'] != $oldate && $oldate != '') {
-                $final[] = $this->processSubTotal($subtotal);
-                $subtotal = $this->zeroRec($subtotal);
-            }
+            if (!$this->sameDay) {
+                $thisgroup = $rec['Campaign'] . $rec['Subcampaign'];
 
-            $subtotal = $this->addTotals($subtotal, $rec);
-            $oldate = $rec['Date'];
+                if ($thisgroup != $oldgroup && $oldgroup != '') {
+                    $final[] = $this->processSubTotal($subtotal);
+                    $subtotal = $this->zeroRec($subtotal);
+                }
+
+                $subtotal = $this->addTotals($subtotal, $rec);
+                $oldgroup = $thisgroup;
+            }
 
             $final[] = $this->processRow($rec);
         }
 
-        if (count($final)) {
-            $final[] = $this->processSubTotal($subtotal);
+        if (!$this->sameDay) {
+            if (count($final)) {
+                $final[] = $this->processSubTotal($subtotal);
+            }
         }
 
         return $final;
@@ -544,7 +559,14 @@ class ApnSubcampaignSummary
 
     private function addTotals($total, $rec)
     {
-        $total['Available'] += $rec['Available'];
+        // Available and total leads never change, so only set once
+        if ($total['Available'] == 0) {
+            $total['Available'] = $rec['Available'];
+        }
+        if ($total['Total'] == 0) {
+            $total['Total'] = $rec['Total'];
+        }
+
         $total['Cepts'] += $rec['Cepts'];
         $total['Connects'] += $rec['Connects'];
         $total['Contacts'] += $rec['Contacts'];
@@ -556,7 +578,6 @@ class ApnSubcampaignSummary
         $total['ThresholdCalls'] += $rec['ThresholdCalls'];
         $total['ThresholdSales'] += $rec['ThresholdSales'];
         $total['TotAttempt'] += $rec['TotAttempt'];
-        $total['Total'] += $rec['Total'];
 
         return $total;
     }
