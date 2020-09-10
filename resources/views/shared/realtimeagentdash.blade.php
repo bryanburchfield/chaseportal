@@ -53,9 +53,9 @@
 
     @foreach ($statuses as $status)
         @if($loop->first || $loop->index == 3)
-            <div class="col-sm-{{$loop->first ? '7 five-three': '5 five-two'}} p0">
+            <div class="col-md-{{$loop->first ? '7 five-three': '5 five-two'}} p0">
         @endif
-        <div class="col-sm-{{$loop->index < 3 ? '4': '6'}} rep_status {{$status}}">
+        <div class="col-md-{{$loop->index < 3 ? '4': '6'}} rep_status {{$status}}">
             <h2 class="mb0">{{__('general.' . $status)}}</h2>
             <div class="num_agents">
                 <div class="inner">{{count($data['data']['statuses'][$status])}}</div>

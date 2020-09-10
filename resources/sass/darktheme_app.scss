@@ -3102,6 +3102,17 @@ div.col-sm-5.five-two {
 MEDIAQUERIES
 ----------------------------------------------------- */
 
+//// reatime agent dash
+@media handheld, only screen and (min-width: 920px) {
+    div.col-md-7.five-three {
+        width: 60% !important;
+    }
+
+    div.col-md-5.five-two {
+        width: 40% !important;
+    }
+}
+
 @media handheld, only screen and (min-width: 1800px) {
 
     .card.card-3, .card.card-3b, .card.card-3b2{
@@ -3151,6 +3162,10 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
     }
+
+    .rep_status h2{
+        font-size: 18px;
+    }
 }
 
 @media handheld, only screen and (max-width:1070px) {
@@ -3177,6 +3192,10 @@ MEDIAQUERIES
     .pag_total {
         clear: both;
         display: block;
+    }
+
+    .rep_status h2{
+        font-size: 21px;
     }
 }
 
