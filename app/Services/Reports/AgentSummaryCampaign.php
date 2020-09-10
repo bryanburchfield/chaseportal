@@ -23,7 +23,7 @@ class AgentSummaryCampaign
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
-            'Dials' => 'reports.dials',
+            'Dialed' => 'reports.dialed',
             'Connects' => 'reports.connects',
             'Contacts' => 'reports.contacts',
             'Hours' => 'reports.hours',
@@ -113,7 +113,7 @@ class AgentSummaryCampaign
         $sql .= "
                 CREATE TABLE #AgentSummary(
                     Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-                    Dials int DEFAULT 0,
+                    Dialed int DEFAULT 0,
                     Connects int DEFAULT 0,
                     Contacts int DEFAULT 0,
                     Hours numeric(18,2) DEFAULT 0,
@@ -217,8 +217,8 @@ class AgentSummaryCampaign
                 CREATE INDEX IX_RepAction ON #AgentSummaryDuration (Rep, Duration, [Action]);
 
                 UPDATE #AgentSummary
-                SET Dials = a.Dials
-                FROM (SELECT Rep, SUM([Count]) as Dials
+                SET Dialed = a.Dialed
+                FROM (SELECT Rep, SUM([Count]) as Dialed
                       FROM #DialingResultsStats
                       GROUP BY Rep) a
                 WHERE #AgentSummary.Rep = a.Rep;
@@ -360,7 +360,7 @@ class AgentSummaryCampaign
         $total['DispositionTimeSec'] = 0;
         $total['DispositionTimeCount'] = 0;
         $total['LoggedInTime'] = 0;
-        $total['Dials'] = 0;
+        $total['Dialed'] = 0;
         $total['Connects'] = 0;
         $total['Contacts'] = 0;
         $total['Hours'] = 0;
@@ -375,7 +375,7 @@ class AgentSummaryCampaign
             $total['DispositionTimeSec'] += $rec['DispositionTimeSec'];
             $total['DispositionTimeCount'] += $rec['DispositionTimeCount'];
             $total['LoggedInTime'] += $rec['LoggedInTime'];
-            $total['Dials'] += $rec['Dials'];
+            $total['Dialed'] += $rec['Dialed'];
             $total['Connects'] += $rec['Connects'];
             $total['Contacts'] += $rec['Contacts'];
             $total['Hours'] += $rec['Hours'];

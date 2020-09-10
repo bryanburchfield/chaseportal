@@ -26,7 +26,7 @@ class AgentSummarySubcampaign
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
             'Rep' => 'reports.rep',
-            'Dials' => 'reports.dials',
+            'Dialed' => 'reports.dialed',
             'Connects' => 'reports.connects',
             'Contacts' => 'reports.contacts',
             'Hours' => 'reports.hours',
@@ -119,7 +119,7 @@ class AgentSummarySubcampaign
             Campaign varchar(50),
             Subcampaign varchar(50),
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-            Dials int DEFAULT 0,
+            Dialed int DEFAULT 0,
             Connects int DEFAULT 0,
             Contacts int DEFAULT 0,
             Hours numeric(18,2) DEFAULT 0,
@@ -237,7 +237,7 @@ class AgentSummarySubcampaign
 
         CREATE INDEX IX_Rep ON #AgentSummaryDuration (Campaign, Subcampaign, Rep);
 
-        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Dials)
+        INSERT INTO #AgentSummary (Campaign, Subcampaign, Rep, Dialed)
         SELECT Campaign, Subcampaign, Rep, SUM([Count])
         FROM #DialingResultsStats
         GROUP BY Campaign, Subcampaign, Rep
@@ -296,7 +296,7 @@ class AgentSummarySubcampaign
         GROUP BY aa.Campaign, aa.Subcampaign, aa.Rep
 
         SELECT Campaign, Subcampaign, Rep,
-        SUM(Dials) AS Dials,
+        SUM(Dialed) AS Dialed,
         SUM(Connects) AS Connects,
         SUM(Contacts) AS Contacts,
         SUM(Hours) AS Hours,
@@ -350,7 +350,7 @@ class AgentSummarySubcampaign
          Campaign,
          Subcampaign,
          Rep,
-         Dials,
+         Dialed,
          Connects,
          Contacts,
          Hours,
@@ -399,7 +399,7 @@ class AgentSummarySubcampaign
         }
 
         $total['Campaign'] = 'Total:';
-        $total['Dials'] = 0;
+        $total['Dialed'] = 0;
         $total['Contacts'] = 0;
         $total['Connects'] = 0;
         $total['Hours'] = 0;
@@ -422,7 +422,7 @@ class AgentSummarySubcampaign
         $total['DispositionTimeCount'] = 0;
 
         foreach ($results as &$rec) {
-            $total['Dials'] += $rec['Dials'];
+            $total['Dialed'] += $rec['Dialed'];
             $total['Contacts'] += $rec['Contacts'];
             $total['Connects'] += $rec['Connects'];
             $total['Hours'] += $rec['Hours'];
