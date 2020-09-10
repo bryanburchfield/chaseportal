@@ -316,4 +316,10 @@ var Dashboard = {
 
 $(document).ready(function(){
 	Dashboard.init();
+
+	$(window).on('resize', function(){
+	    if ($(window).width() > 1010) {
+	    Dashboard.resizeDivs();
+	    }
+	});
 });
