@@ -8,6 +8,10 @@
         <input type="hidden" class="page_menuitem" value="<?php echo !empty($page['menuitem']) ? $page['menuitem'] : '';?>">
         <li data-page="inbounddash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'inbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@inboundDashboard') }}"><i class="fas fa-sign-in-alt"></i>{{__('sidenav.inbound')}}</a></li>
         <li data-page="outbounddash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'outbounddash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@outboundDashboard') }}"><i class="fas fa-sign-out-alt"></i>{{__('sidenav.outbound')}}</a></li>
+        
+        @if (Auth::user()->isType(['admin','superadmin']))
+        <li data-page="realtimedash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'realtimedash' ? 'class="active"' : ''; ?>><a href="{{ action('MasterDashController@realtimeAgentDashboard') }}"><i class="fas fa-file-medical-alt"></i>{{__('sidenav.realtimedash')}}</a></li>
+        @endif
 
         @if(Auth::user()->email != 'btmarketing@chasedatacorp.com')
           <li data-page="trenddash" <?php echo !empty($page['menuitem']) &&  $page['menuitem'] == 'trenddash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@trendDashboard') }}"><i class="fas fa-chart-area"></i>{{__('sidenav.trend_dashboard')}}</a></li>
