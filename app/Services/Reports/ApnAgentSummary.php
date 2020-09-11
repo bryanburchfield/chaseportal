@@ -340,8 +340,8 @@ class ApnAgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Connects as numeric(18,2))) * 100
-        WHERE Connects > 0;
+        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Calls as numeric(18,2))) * 100
+        WHERE Calls > 0;
 
         UPDATE #AgentSummary
         SET ThresholdSales = a.tot
@@ -432,7 +432,7 @@ class ApnAgentSummary
         $total['ConversionRate'] = $total['Contacts'] == 0 ? 0 : number_format($total['Leads'] / $total['Contacts'] * 100, 2) . '%';
         $total['ConversionFactor'] = ($total['Contacts'] == 0 || $total['Hours'] == 0) ? 0 : number_format($total['Leads'] / $total['Contacts'] / $total['Hours'], 2) . '%';
 
-        $total['ThresholdRatio'] = number_format($total['Connects'] == 0 ? 0 : $total['ThresholdCalls'] / $total['Connects'] * 100, 2) . '%';
+        $total['ThresholdRatio'] = number_format($total['Calls'] == 0 ? 0 : $total['ThresholdCalls'] / $total['Calls'] * 100, 2) . '%';
         $total['ThresholdClosingPct'] = number_format($total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100, 2) . '%';
 
         // remove count cols
