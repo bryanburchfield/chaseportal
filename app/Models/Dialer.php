@@ -16,10 +16,12 @@ class Dialer extends Model
                         ->orWhere('additional_dbs', $this->reporting_db);
                 }
             )
-                ->whereNotIn('user_type', ['demo', 'expired']);
+                ->whereNotIn('user_type', ['demo', 'expired'])
+                ->where('password', '!=', 'SSO');
         } else {
             $users = User::where('db', $this->reporting_db)
-                ->whereNotIn('user_type', ['demo', 'expired']);
+                ->whereNotIn('user_type', ['demo', 'expired'])
+                ->where('password', '!=', 'SSO');
         }
 
         if (Auth::User()->isType('superadmin')) {
@@ -39,11 +41,13 @@ class Dialer extends Model
                 }
             )
                 ->whereNotIn('user_type', ['demo', 'expired'])
+                ->where('password', '!=', 'SSO')
                 ->distinct('group_id')
                 ->count();
         } else {
             $count = User::where('db', $this->reporting_db)
                 ->whereNotIn('user_type', ['demo', 'expired'])
+                ->where('password', '!=', 'SSO')
                 ->distinct('group_id')
                 ->count();
         }
