@@ -28,9 +28,9 @@ var RealTime = {
 		}
 
 		$('#total_calls_que').find('h4').html(result[1][1] !== null ? result[1][1] : '0');
-		$('#total_calls').find('h4').html(result[2][1]  !== null ? result[2][1] : '0');
-		$('#longest_hold_time').find('h4').html(result[3][1]!= null ? Master.convertSecsToHrsMinsSecs(result[3][1]) : '00:00:00');
-		$('#total_sales').find('h4').html(result[4][1]  !== null ? result[4][1] : '0');
+		$('#total_calls').find('h4').html(result[2][1] !== null ? result[2][1] : '0');
+		$('#longest_hold_time').find('h4').html(result[3][1] != null ? Master.convertSecsToHrsMinsSecs(result[3][1]) : '00:00:00');
+		$('#total_sales').find('h4').html(result[4][1] !== null ? result[4][1] : '0');
 		ran = true;
 	},
 
@@ -159,7 +159,7 @@ var RealTime = {
 			has_icon = 'has_icon';
 		}
 
-		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item" ' + status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal" : "" +'> ' +
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item" ' + (status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal" : "") + '> ' +
 			'<span class="call_type">' +
 			call_icon +
 			'</span>' +
