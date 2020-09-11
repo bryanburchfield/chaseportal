@@ -6,6 +6,7 @@ use App\Traits\CampaignTraits;
 use App\Traits\ReportTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ApnProductionReport
 {
@@ -20,6 +21,7 @@ class ApnProductionReport
         $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['skills'] = [];
+        $this->params['threshold_secs'] = 0;
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [];  // columns are mostly dynamic
     }
@@ -65,6 +67,8 @@ class ApnProductionReport
 
     private function executeReport($all = false)
     {
+        Log::debug('exe');
+
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
