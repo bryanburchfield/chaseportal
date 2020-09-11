@@ -64,7 +64,7 @@
 
             <ul id="{{$status}}" class="{{$status}} list-group cb">
                 @foreach($data['data']['statuses'][$status] as $record)
-                    <li class="list-group-item">
+                    <li class="list-group-item" {{$status == 'talking' ? 'data-toggle=modal data-target=#leadInspectionModal' : ''}}>
                         <span class="call_type">
                             @php
                                 $has_icon='';
@@ -93,5 +93,27 @@
         @endif
     @endforeach
 
+</div>
+
+<!-- Lead Inspection Modal -->
+<div class="modal fade" id="leadInspectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('kpi.confirm_recipient_removal')}}</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="user_id" name="user_id" value="">
+                <input type="hidden" class="name" name="name" value="">
+                <input type="hidden" class="fromall" name="fromall" value="0">
+                <input type="hidden" class="kpi_id" name="kpi_id" value="">
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+            <button type="button" class="btn btn-danger remove_recip">{{__('kpi.remove_recipient')}}</button>
+        </div>
+    </div>
+    </div>
 </div>
 

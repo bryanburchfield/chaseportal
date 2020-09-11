@@ -159,7 +159,7 @@ var RealTime = {
 			has_icon = 'has_icon';
 		}
 
-		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item"> ' +
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item" ' + status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal" : "" +'> ' +
 			'<span class="call_type">' +
 			call_icon +
 			'</span>' +
