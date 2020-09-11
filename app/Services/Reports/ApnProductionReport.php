@@ -150,6 +150,7 @@ class ApnProductionReport
                 'ContsPerHour' => 0,
                 'Sales' => 0,
                 'APH' => 0,
+                'Calls' => 0,
                 'ThresholdSales' => 0,
                 'ThresholdCalls' => 0,
                 'ThresholdRatio' => 0,
@@ -189,9 +190,9 @@ class ApnProductionReport
 
             $sql .= " $union SELECT DR.Rep, RR.Skill, DR.CallStatus,
             'Calls' = 1,
-            'Connects' = CASE WHEN DI.Type > 0 THEN 1 ELSE 0 END,
-            'Contacts' = CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END,
-            'Sales' = CASE WHEN DI.Type = 3 THEN 1 ELSE 0 END,
+            'Connects' = CASE WHEN DI.Type > 0 AND DR.Duration > 0 THEN 1 ELSE 0 END,
+            'Contacts' = CASE WHEN DI.Type > 1 AND DR.Duration > 0 THEN 1 ELSE 0 END,
+            'Sales' = CASE WHEN DI.Type = 3 AND DR.Duration > 0 THEN 1 ELSE 0 END,
             'ThresholdCalls' = CASE WHEN DR.Duration >= :threshold1$i THEN 1 ELSE 0 END,
             'ThresholdSales' = CASE WHEN DR.Duration >= :threshold2$i AND DI.Type = 3 THEN 1 ELSE 0 END
             FROM [$db].[dbo].[DialingResults] DR
@@ -203,7 +204,7 @@ class ApnProductionReport
             }
 
             $sql .= "
-            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :group_id$i
             AND DR.Date >= :startdate$i
             AND DR.Date < :enddate$i
@@ -253,6 +254,7 @@ class ApnProductionReport
                     'ContsPerHour' => 0,
                     'Sales' => 0,
                     'APH' => 0,
+                    'Calls' => 0,
                     'ThresholdSales' => 0,
                     'ThresholdCalls' => 0,
                     'ThresholdRatio' => 0,
@@ -264,6 +266,7 @@ class ApnProductionReport
             $reps[$rec['Rep']]['Contacts'] += $rec['Contacts'];
             $reps[$rec['Rep']]['Sales'] += $rec['Sales'];
             $reps[$rec['Rep']]['ThresholdCalls'] += $rec['ThresholdCalls'];
+            $reps[$rec['Rep']]['Calls'] += $rec['Calls'];
             $reps[$rec['Rep']]['ThresholdSales'] += $rec['ThresholdSales'];
 
             // save rep stats
@@ -336,6 +339,7 @@ class ApnProductionReport
         $zerorec['ContsPerHour'] = 0;
         $zerorec['Sales'] = 0;
         $zerorec['APH'] = 0;
+        $zerorec['Calls'] = 0;
         $zerorec['ThresholdSales'] = 0;
         $zerorec['ThresholdCalls'] = 0;
         $zerorec['ThresholdRatio'] = 0;
@@ -356,6 +360,7 @@ class ApnProductionReport
             $row['Contacts'] = $reprec['Contacts'];
             $row['Sales'] = $reprec['Sales'];
             $row['ThresholdCalls'] = $reprec['ThresholdCalls'];
+            $row['Calls'] = $reprec['Calls'];
             $row['ThresholdSales'] = $reprec['ThresholdSales'];
 
             // Add to totals
@@ -365,6 +370,7 @@ class ApnProductionReport
             $total['Contacts'] += $reprec['Contacts'];
             $total['Sales'] += $reprec['Sales'];
             $total['ThresholdCalls'] += $reprec['ThresholdCalls'];
+            $total['Calls'] += $reprec['Calls'];
             $total['ThresholdSales'] += $reprec['ThresholdSales'];
 
             foreach ($reprec['Stats'] as $call_status => $count) {
@@ -376,7 +382,7 @@ class ApnProductionReport
             $row['ManHours'] = number_format($row['ManHours'] / 60 / 60, 2);
             $row['LoggedInTime'] = $this->secondsToHms($row['LoggedInTime']);
 
-            $row['ThresholdRatio'] = number_format($row['Connects'] == 0 ? 0 : $row['ThresholdCalls'] / $row['Connects'] * 100, 2) . '%';
+            $row['ThresholdRatio'] = number_format($row['Calls'] == 0 ? 0 : $row['ThresholdCalls'] / $row['Calls'] * 100, 2) . '%';
             $row['ThresholdClosingPct'] = number_format($row['ThresholdCalls'] == 0 ? 0 : $row['ThresholdSales'] / $row['ThresholdCalls'] * 100, 2) . '%';
 
             if ($row['ManHours'] == 0) {
@@ -387,13 +393,14 @@ class ApnProductionReport
                 $row['APH'] = round($row['Sales'] / $row['ManHours'], 2);
             }
 
+            unset($row['Calls']);
             unset($row['ThresholdSales']);
 
             $results[] = $row;
         }
 
         // Do calcs
-        $total['ThresholdRatio'] = number_format($total['Connects'] == 0 ? 0 : $total['ThresholdCalls'] / $total['Connects'] * 100, 2) . '%';
+        $total['ThresholdRatio'] = number_format($total['Calls'] == 0 ? 0 : $total['ThresholdCalls'] / $total['Calls'] * 100, 2) . '%';
         $total['ThresholdClosingPct'] = number_format($total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100, 2) . '%';
 
         if ($total['ManHours'] == 0) {
@@ -407,6 +414,7 @@ class ApnProductionReport
         $total['ManHours'] = number_format($total['ManHours'] / 60 / 60, 2);
         $total['LoggedInTime'] = $this->secondsToHms($total['LoggedInTime']);
 
+        unset($total['Calls']);
         unset($total['ThresholdSales']);
 
         // Tack on the totals row

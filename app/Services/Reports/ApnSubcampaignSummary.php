@@ -446,8 +446,8 @@ class ApnSubcampaignSummary
         AND #SubcampaignSummary.Date = a.Date;
 
         UPDATE #SubcampaignSummary
-        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Connects as numeric(18,2))) * 100
-        WHERE Connects > 0;
+        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Dialed as numeric(18,2))) * 100
+        WHERE Dialed > 0;
 
         UPDATE #SubcampaignSummary
         SET ThresholdSales = a.tot
@@ -614,7 +614,7 @@ class ApnSubcampaignSummary
             $rec['AvAttempt'] = $rec['TotAttempt'] / $rec['CountAttempt'];
         }
 
-        $rec['ThresholdRatio'] = $rec['Connects'] == 0 ? 0 : $rec['ThresholdCalls'] / $rec['Connects'] * 100;
+        $rec['ThresholdRatio'] = $rec['Dialed'] == 0 ? 0 : $rec['ThresholdCalls'] / $rec['Dialed'] * 100;
         $rec['ThresholdClosingPct'] = $rec['ThresholdCalls'] == 0 ? 0 : $rec['ThresholdSales'] / $rec['ThresholdCalls'] * 100;
 
         // format cols
