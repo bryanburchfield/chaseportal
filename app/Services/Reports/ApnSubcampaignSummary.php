@@ -18,6 +18,7 @@ class ApnSubcampaignSummary
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.subcampaign_summary';
+        $this->params['threshold_secs'] = 0;
         $this->params['columns'] = [
             'Campaign' => 'reports.campaign',
             'Subcampaign' => 'reports.subcampaign',
@@ -638,7 +639,9 @@ class ApnSubcampaignSummary
         unset($rec['ThresholdSales']);
         unset($rec['TotAttempt']);
 
-        $rec['isSubtotal'] = 1;
+        if (!$this->export) {
+            $rec['isSubtotal'] = 1;
+        }
 
         return $rec;
     }

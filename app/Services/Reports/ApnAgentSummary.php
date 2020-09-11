@@ -17,6 +17,7 @@ class ApnAgentSummary
         $this->params['reportName'] = 'reports.agent_summary';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
+        $this->params['threshold_secs'] = 0;
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'reports.rep',

@@ -16,6 +16,8 @@ class TransferAgent
 
         $this->params['reportName'] = 'reports.transfer_agent';
         $this->params['hasTotals'] = true;
+        $this->params['reps'] = [];
+        $this->params['closers'] = [];
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
             'Closer' => 'reports.closer',
@@ -215,7 +217,10 @@ class TransferAgent
     private function processSubTotal($total)
     {
         $total = $this->processTotal($total);
-        $total['isSubtotal'] = 1;
+
+        if (!$this->export) {
+            $total['isSubtotal'] = 1;
+        }
 
         return $total;
     }
