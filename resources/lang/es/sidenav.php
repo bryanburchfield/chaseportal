@@ -12,6 +12,7 @@ return [
 	'leaderboard' => 'Tabla de Posiciones',
 	'manage_users' => 'Administrar Usuarios',
 	'outbound' => 'Panel de Salida',
+	'realtimedash'	=> 'Panel de Control en Tiempo Real',
 	'reports' => 'Informes',
 	'settings' => 'Ajustes',
 	'tools' => 'Herramientas',

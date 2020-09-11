@@ -12,6 +12,10 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
         Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
 
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
+        });
+
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
         Route::post('/kpi/recipients', 'KpiController@addRecipient');
