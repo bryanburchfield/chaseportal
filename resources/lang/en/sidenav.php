@@ -11,6 +11,7 @@ return [
 	'leaderboard' => 'Leaderboard',
 	'manage_users' => 'Manage Users',
 	'outbound' => 'Outbound Dashboard',
+	'realtimedash'	=> 'RealTime Dashboard',
 	'reports' => 'Reports',
 	'settings' => 'Settings',
 	'tools' => 'Tools',
