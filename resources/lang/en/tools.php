@@ -66,6 +66,7 @@ return [
 	'lead_age'      => 'Lead Age',
 	'lead_attempts' => '# of Attempts on Lead',
 	'lead_details'	=> 'Lead Details',
+	'lead_id'		=> 'Lead ID',
 	'lead_move_history'	=> 'Lead Move History',
 	'lead_rules'	=> 'Lead Rules',
 	'leads_moved'	=> '# of Leads Moved',

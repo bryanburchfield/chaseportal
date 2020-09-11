@@ -66,6 +66,7 @@ return [
 	'lead_age'      => 'Edad de Plomo',
 	'lead_attempts' => '# de Intentos de Plomo',
 	'lead_details'	=> 'Detalles de Plomo',
+	'lead_id'		=> 'Identificación de Cliente Potencial',
 	'lead_move_history'	=> 'Historia de movimiento principal',
 	'lead_rules'	=> 'Reglas de Plomo',
 	'leads_moved'	=> '# De Conductores Movidos',
