@@ -104,8 +104,8 @@
                 <h4 class="modal-title" id="myModalLabel">{{__('tools.lead_details')}}</h4>
             </div>
             <div class="modal-body">
-                <p class="lead_dets_leadid fz15 mb10"><b>Lead ID:</b><span></span></p>
-                <p class="lead_dets_phone fz15"><b>Phone Number:</b> <span></span></p>
+                <p class="lead_dets_leadid fz15 mb10"><b>{{__('tools.lead_id')}}:</b> <span></span></p>
+                <p class="lead_dets_phone fz15"><b>{{__('tools.phone')}} #:</b> <span></span></p>
             </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
