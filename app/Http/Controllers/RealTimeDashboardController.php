@@ -65,7 +65,9 @@ class RealTimeDashboardController extends Controller
             RTA.State as StateCode,
             RTA.Status as StatusCode,
             RTS.Caption as State,
-            RTZ.Caption as Status
+            RTZ.Caption as Status,
+            RTA.Phone,
+            RTA.LeadId
             FROM [$db].[dbo].[RealtimeStatistics_Agents] RTA WITH (SNAPSHOT)
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
             JOIN [$db].[dbo].[RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
@@ -86,7 +88,9 @@ class RealTimeDashboardController extends Controller
                     $result['Skill'] .
                     $result['BreakCode'] .
                     $result['State'] .
-                    $result['Status']
+                    $result['Status'] .
+                    $result['Phone'] .
+                    $result['LeadId']
             ));
 
             switch ($result['StatusCode']) {
