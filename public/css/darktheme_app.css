@@ -3371,6 +3371,10 @@ div.col-sm-5.five-two {
   width: 40% !important;
 }
 
+.getleaddetails:hover {
+  cursor: pointer;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

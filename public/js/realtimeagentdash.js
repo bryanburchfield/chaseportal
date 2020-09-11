@@ -2,6 +2,8 @@ var RealTime = {
 	init: function (result) {
 		console.log(result);
 
+		$('body').on('click', '.getleaddetails', this.lead_dets_modal);
+
 		var incoming_arrays = Object.entries(result[0][1]);
 
 		// if first iteration
@@ -159,7 +161,7 @@ var RealTime = {
 			has_icon = 'has_icon';
 		}
 
-		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item" ' + (status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal" : "") + '> ' +
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item ' + (status_type == "talking" ? 'getleaddetails' : '') + '" ' + (status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal data-phone='"+data.Phone+"' data-leadid='"+data.LeadId+"' " : "") + '> ' +
 			'<span class="call_type">' +
 			call_icon +
 			'</span>' +
@@ -172,6 +174,11 @@ var RealTime = {
 	update_agent_count(status_type, status_array) {
 		let count = status_array.length;
 		$('.' + status_type).find('.num_agents .inner').text(count);
+	},
+
+	lead_dets_modal:function(){
+		$('.lead_dets_leadid ').find('span').text($(this).data('leadid'));
+		$('.lead_dets_phone').find('span').text($(this).data('phone'));
 	}
 }
 
