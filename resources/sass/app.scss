@@ -2930,6 +2930,11 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     p.rep_name {font-weight: 600;}
 }
 
+.getleaddetails{
+    &:hover{
+        cursor:pointer;
+    }
+}
 
 #addPlaybookModal, #editPlaybookModal{
 

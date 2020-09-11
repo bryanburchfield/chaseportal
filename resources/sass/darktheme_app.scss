@@ -3096,6 +3096,12 @@ div.col-sm-5.five-two {
         position: absolute;
         z-index: 99999;
     }
+
+}
+.getleaddetails{
+    &:hover{
+        cursor:pointer;
+    }
 }
 
 /* ---------------------------------------------------

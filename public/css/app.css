@@ -3550,6 +3550,10 @@ label.checkbox.toggle_active_reps {
   font-weight: 600;
 }
 
+.getleaddetails:hover {
+  cursor: pointer;
+}
+
 #addPlaybookModal .modal-body,
 #editPlaybookModal .modal-body {
   overflow: inherit;

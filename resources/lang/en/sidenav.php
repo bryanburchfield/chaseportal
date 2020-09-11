@@ -12,7 +12,7 @@ return [
 	'leaderboard' => 'Leaderboard',
 	'manage_users' => 'Manage Users',
 	'outbound' => 'Outbound Dashboard',
-	'realtimedash'	=> 'RealTime Dashboard',
+	'realtimedash'	=> 'Real Time Dashboard',
 	'reports' => 'Reports',
 	'settings' => 'Settings',
 	'tools' => 'Tools',

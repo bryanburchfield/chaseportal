@@ -64,7 +64,7 @@
 
             <ul id="{{$status}}" class="{{$status}} list-group cb">
                 @foreach($data['data']['statuses'][$status] as $record)
-                    <li class="list-group-item">
+                    <li class="list-group-item" {{$status == 'talking' ? 'data-toggle=modal data-target=#leadInspectionModal' : ''}}>
                         <span class="call_type">
                             @php
                                 $has_icon='';
@@ -93,5 +93,24 @@
         @endif
     @endforeach
 
+</div>
+
+<!-- Lead Inspection Modal -->
+<div class="modal fade" id="leadInspectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{__('tools.lead_details')}}</h4>
+            </div>
+            <div class="modal-body">
+                <p class="lead_dets_leadid fz15 mb10"><b>Lead ID:</b><span></span></p>
+                <p class="lead_dets_phone fz15"><b>Phone Number:</b> <span></span></p>
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+        </div>
+    </div>
+    </div>
 </div>
 
