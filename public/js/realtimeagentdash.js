@@ -177,6 +177,26 @@ var RealTime = {
 	},
 
 	lead_dets_modal:function(){
+
+		$.ajaxSetup({
+		    headers: {
+		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+		    }
+		});
+
+		return $.ajax({
+		    async: true,
+		    url: '/dashboards/get_lead_info/'+leadid,
+		    type: 'POST',
+		    dataType: 'json',
+		    data:{
+		        leadid:leadid,
+		    },
+		    success:function(response){
+				console.log(response);
+		    }
+		});
+
 		$('.lead_dets_leadid ').find('span').text($(this).data('leadid'));
 		$('.lead_dets_phone').find('span').text($(this).data('phone'));
 	}
