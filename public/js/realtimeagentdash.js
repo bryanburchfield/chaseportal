@@ -179,6 +179,8 @@ var RealTime = {
 	lead_dets_modal:function(){
 
 		var leadid = $(this).data('leadid');
+		var extra_fields='';
+		var extra_fields_string='';
 
 		$('#leadInspectionModal').find('.modal-body').empty();
 		$('.lead_dets_leadid ').find('span').text(leadid);
@@ -190,7 +192,7 @@ var RealTime = {
 		    }
 		});
 
-		return $.ajax({
+		$.ajax({
 		    url: '/dashboards/get_lead_info/'+leadid,
 		    type: 'GET',
 		    dataType: 'json',
@@ -199,9 +201,9 @@ var RealTime = {
 		    },
 		    success:function(response){
 		    	console.log(response);
-				var extra_fields ='';
+				
 				extra_fields= Object.entries(response.ExtraFields);
-				var extra_fields_string='';
+				
 
 				for(var i=0;i<extra_fields.length;i++){
 					extra_fields_string+='<p class="lead_dets_phone fz15 mb5"><b>'+extra_fields[i][0]+':</b> <span>'+extra_fields[i][1]+'</span></p>'
@@ -209,7 +211,7 @@ var RealTime = {
 
 				var lead_info =
 					'<div class="bb">'+
-					'<p class="lead_dets_phone fz15 mb5"><b>Full Name:</b> <span>'+response.FirstName+' '+ response.LastName+'</span></p>'+
+					(response.FirstName != null &&  response.FirstName.length && response.LastName != null &&  response.LastName.length ? '<p class="lead_dets_phone fz15 mb5"><b>Full Name:</b> <span>'+response.FirstName+' '+ response.LastName+'</span></p>' : " ") +
 					(response.Address != null &&  response.Address.length ? '<p class="lead_dets_phone fz15 mb5"><b>Address:</b> <span>'+response.Address+'</span></p>' : " ") +
 					(response.City != null &&  response.City.length ? '<p class="lead_dets_phone fz15 mb5"><b>City:</b> <span>'+response.City+'</span></p>' : " " )+
 					(response.State != null &&  response.State.length ? '<p class="lead_dets_phone fz15 mb5"><b>State:</b> <span>'+response.State+'</span></p>' : " " )+
