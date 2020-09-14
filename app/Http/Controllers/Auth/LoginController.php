@@ -61,6 +61,7 @@ class LoginController extends Controller
         // see if the entered password matches md5 and update if so
         $user = User::where('email', $request->email)->first();
 
+        // update old md5 passwords to hash
         if ($user && $user->password == md5($request->password)) {
             $user->password = Hash::make($request->password);
             $user->save();
