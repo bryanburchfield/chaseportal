@@ -178,6 +178,12 @@ var RealTime = {
 
 	lead_dets_modal:function(){
 
+		var leadid = $(this).data('leadid');
+
+		$('#leadInspectionModal').find('.modal-body').empty();
+		$('.lead_dets_leadid ').find('span').text(leadid);
+		$('.lead_dets_phone').find('span').text($(this).data('phone'));
+
 		$.ajaxSetup({
 		    headers: {
 		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -185,20 +191,56 @@ var RealTime = {
 		});
 
 		return $.ajax({
-		    async: true,
 		    url: '/dashboards/get_lead_info/'+leadid,
-		    type: 'POST',
+		    type: 'GET',
 		    dataType: 'json',
 		    data:{
 		        leadid:leadid,
 		    },
 		    success:function(response){
-				console.log(response);
+
+				var extra_fields = Object.entries(response.ExtraFields);
+				var extra_fields_string='';
+
+				for(var i=0;i<extra_fields.length;i++){
+					extra_fields_string+='<p class="lead_dets_phone fz15 mb5"><b>'+extra_fields[i][0]+':</b> <span>'+extra_fields[i][1]+'</span></p>'
+				}
+
+				var lead_info =
+					'<div class="bt"><p class="lead_dets_phone fz15 mb5"><b>Full Name:</b> <span>'+response.FirstName+' '+ response.LastName+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Address:</b> <span>'+response.Address+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>City:</b> <span>'+response.City+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>State:</b> <span>'+response.State+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Zip Code:</b> <span>'+response.ZipCode+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Primary Phone:</b> <span>'+response.PrimaryPhone+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Secondary Phone:</b> <span>'+response.SecondaryPhone+'</span></p></div>'+
+					'<br>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Attempt:</b> <span>'+response.Attempt+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Call Status:</b> <span>'+response.CallStatus+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Call Type:</b> <span>'+response.CallType+'</span></p>'+
+
+					'<p class="lead_dets_phone fz15 mb5"><b>Campaign:</b> <span>'+response.Campaign+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Subcampaign:</b> <span>'+response.Subcampaign+'</span></p>'+
+
+					'<p class="lead_dets_phone fz15 mb5"><b>ClientId:</b> <span>'+response.ClientId+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Date:</b> <span>'+response.Date+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>DispositionId:</b> <span>'+response.DispositionId+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Grou pId:</b> <span>'+response.GroupId+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Id Guid:</b> <span>'+response.IdGuid+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Last Updated:</b> <span>'+response.LastUpdated+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Reload Attempt:</b> <span>'+response.ReloadAttempt+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Reload Date:</b> <span>'+response.ReloadDate+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Rep:</b> <span>'+response.Rep+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Was Dialed:</b> <span>'+response.WasDialed+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>id:</b> <span>'+response.id+'</span></p>'+
+					'<p class="lead_dets_phone fz15 mb5"><b>Notes:</b> <span>'+response.Notes+'</span></p>'+
+					'<br>'
+				;
+
+				$('#leadInspectionModal').find('.modal-body').append(lead_info);
+				$('#leadInspectionModal').find('.modal-body').append(extra_fields_string);
 		    }
 		});
-
-		$('.lead_dets_leadid ').find('span').text($(this).data('leadid'));
-		$('.lead_dets_phone').find('span').text($(this).data('phone'));
 	}
 }
 
