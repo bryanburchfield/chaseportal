@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class SqlSrvModel extends Model
 {
+    protected $connection = 'sqlsrv';
+
     public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);
