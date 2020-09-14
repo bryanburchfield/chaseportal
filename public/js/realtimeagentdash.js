@@ -2,7 +2,7 @@ var RealTime = {
 	init: function (result) {
 		// console.log(result);
 
-		$('body').on('click', '.getleaddetails', this.lead_dets_modal);
+		
 
 		var incoming_arrays = Object.entries(result[0][1]);
 
@@ -253,8 +253,9 @@ function login_id(status_type, login) {
 	if (login != undefined && login != null) {
 		return status_type + '-' + login.replace(/ /g, "_");
 	}
-
 }
+
+$('body').on('click', '.getleaddetails', RealTime.lead_dets_modal);
 
 //add
 //breakcode for paused column
