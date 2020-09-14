@@ -5,8 +5,8 @@ namespace App\Models;
 class Group extends SqlSrvModel
 {
     // set db and actual table name
-    protected $connection = 'sqlsrv';
     protected $table = 'Groups';
+    protected $primaryKey = 'GroupId';
     public $timestamps = false;
 
     public static function allGroups()

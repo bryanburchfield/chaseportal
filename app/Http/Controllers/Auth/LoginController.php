@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
@@ -61,10 +62,25 @@ class LoginController extends Controller
         // see if the entered password matches md5 and update if so
         $user = User::where('email', $request->email)->first();
 
+        $group = null;
+
+        // update old md5 passwords to hash
         if ($user && $user->password == md5($request->password)) {
             $user->password = Hash::make($request->password);
             $user->save();
         }
+
+        if ($user) {
+            // set sqlsrv db and find group
+            config(['database.connections.sqlsrv.database' => $user->db]);
+            $group = Group::find($user->group_id);
+
+            // mung password if group not active to force failed login
+            if (!$group || $group->IsActive != 1) {
+                $request->merge(['password' => 'youshallnotpass']);
+            }
+        }
+
 
         // Continue as normal
         return $this->guard()->attempt(

@@ -1,14 +1,3 @@
-@php
-
-    if(Auth::User()->isType('superadmin')) {
-        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->count();
-        $tot_client_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->distinct('group_id')->count();
-    } else {
-        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])
-        ->where('group_id', Auth::User()->group_id)
-        ->count();
-    }
-@endphp
 <div class="col-sm-6 pr0 mbmt50 mbp0">
 <h2 class="page_heading mb0">
     @can('accessSuperAdmin')
@@ -20,13 +9,8 @@
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
 
-        @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
+        @foreach ($dialers as $dialer)
             @php
-
-                // Bail if not superadmin and not this user's dialer
-                if(!Auth::User()->isType('superadmin') && Auth::User()->db != $dialer->reporting_db) {
-                    continue;
-                }
                 $db = sprintf("%02d", $dialer->dialer_numb);
                 $users = $dialer->users(true);
                 $client_count = $dialer->group_count(true);

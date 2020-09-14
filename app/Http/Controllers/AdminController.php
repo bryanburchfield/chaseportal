@@ -50,6 +50,26 @@ class AdminController extends Controller
         $groupId = Auth::user()->group_id;
         $this->setDb();
 
+        $tot_client_count = 0;
+        $tot_user_count = User::whereNotIn('user_type', ['demo', 'expired'])
+            ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+            ->where('group_id', Auth::User()->group_id)
+            ->where('password', '!=', 'SSO')
+            ->count();
+
+        if (Auth::User()->isType('superadmin')) {
+            $tot_client_count = User::whereNotIn('user_type', ['demo', 'expired'])->distinct('group_id')
+                ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+                ->where('password', '!=', 'SSO')
+                ->count();
+            $tot_user_count = User::whereNotIn('user_type', ['demo', 'expired'])
+                ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+                ->where('password', '!=', 'SSO')
+                ->count();
+        }
+
+        $page['menuitem'] = 'manage_users';
+        $page['type'] = 'page';
         $data = [
             'page' => [
                 'menuitem' => 'manage_users',
@@ -58,7 +78,10 @@ class AdminController extends Controller
             ],
             'timezone_array' => $this->timezones(),
             'group_id' => $groupId,
+            'tot_client_count' => $tot_client_count,
+            'tot_user_count' => $tot_user_count,
             'dbs' => $this->dbs(),
+            'dialers' => $this->dialers(),
             'user_types' => $this->userTypes(),
             'jsfile' => [],
             'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
@@ -99,19 +122,13 @@ class AdminController extends Controller
 
     public function webhookGenerator()
     {
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-
         $data = [
             'page' => [
                 'menuitem' => 'webhook_generator',
                 'type' => 'page',
                 'sidenav' => 'tools',
             ],
-            'dbs'  => $dbs,
+            'dbs' => $this->dbs(),
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
         ];
@@ -143,6 +160,19 @@ class AdminController extends Controller
         }
 
         return $dbs;
+    }
+
+    private function dialers()
+    {
+        if (Auth::user()->isType('superadmin')) {
+            $dialers = Dialer::orderBy('dialer_numb')->get();
+        } else {
+            $dialers = Dialer::where('reporting_db', Auth::User()->db)
+                ->orderBy('dialer_numb')
+                ->get();
+        }
+
+        return $dialers;
     }
 
     public function userTypes()
