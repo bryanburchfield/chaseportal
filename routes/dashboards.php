@@ -42,6 +42,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('update_filters', 'MasterDashController@updateFilters');
         Route::post('campaign_search', 'MasterDashController@campaignSearch');
         Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
+        Route::get('get_lead_info/{lead}', 'RealTimeDashboardController@getLeadInfo');
 
         // Super Admin only dashboards
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {

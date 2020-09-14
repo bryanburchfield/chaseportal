@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Broadcast;
+use App\Models\Campaign;
+use App\Models\Lead;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Illuminate\Support\Facades\App;
@@ -178,5 +180,15 @@ class RealTimeDashboardController extends Controller
             'maxhold' => $maxhold,
             'sales' => $sales,
         ];
+    }
+
+    public function getLeadInfo(Lead $lead)
+    {
+        // Check that lead belongs to this group
+        if ($lead->GroupId != Auth::user()->group_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return  $lead->allFields();
     }
 }

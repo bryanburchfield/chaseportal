@@ -7,7 +7,6 @@ use App\Traits\SqlServerTraits;
 class Campaign extends SqlSrvModel
 {
     // set table stuff
-    protected $connection = 'sqlsrv';
     protected $table = 'Campaigns';
     protected $primaryKey = ['CampaignName', 'GroupId'];
     protected $keyType = 'string';

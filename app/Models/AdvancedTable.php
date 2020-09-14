@@ -5,7 +5,6 @@ namespace App\Models;
 class AdvancedTable extends SqlSrvModel
 {
     // set db and actual table name
-    protected $connection = 'sqlsrv';
     protected $table = 'AdvancedTables';
     public $timestamps = false;
 
@@ -17,5 +16,16 @@ class AdvancedTable extends SqlSrvModel
     public function advancedTableFields()
     {
         return $this->hasMany('App\Models\AdvancedTableField', 'AdvancedTable');
+    }
+
+    public function customFields()
+    {
+        $custom_fields = [];
+
+        foreach ($this->advancedTableFields as $field) {
+            $custom_fields[$field->FieldName] = $field->Description;
+        }
+
+        return $custom_fields;
     }
 }
