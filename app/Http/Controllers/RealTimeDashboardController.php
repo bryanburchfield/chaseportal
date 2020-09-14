@@ -189,43 +189,6 @@ class RealTimeDashboardController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $lead_array = $lead->toArray();
-        $lead_array['ExtraFields'] = [];
-
-        $campaign = Campaign::where('CampaignName', $lead->Campaign)
-            ->where('GroupId', $lead->GroupId)
-            ->first();
-
-        // Make sure we found a campaign
-        if (!$campaign) {
-            return $lead_array;
-        }
-
-        // If campaign has no advanced table, bail here
-        if (!$campaign->advancedTable) {
-            return $lead_array;
-        }
-
-        $tabname = 'ADVANCED_' . $campaign->advancedTable->TableName;
-
-        $sql = "SELECT TOP 1 * FROM $tabname WHERE LeadId = '" . $lead->IdGuid . "'";
-
-        $results = $this->runSql($sql);
-
-        // Bail if no record found
-        if (empty($results)) {
-            return $lead_array;
-        }
-
-        // Build array
-        foreach ($campaign->advancedTable->customFields() as $k => $v) {
-            $v = empty($v) ? $k : $v;
-
-            if (!empty($results[0][$k])) {
-                $lead_array['ExtraFields'][$v] = $results[0][$k];
-            }
-        }
-
-        return $lead_array;
+        return  $lead->allFields();
     }
 }
