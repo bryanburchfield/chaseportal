@@ -17,11 +17,13 @@ class ApnAgentSummary
         $this->params['reportName'] = 'reports.agent_summary';
         $this->params['reps'] = [];
         $this->params['skills'] = [];
+        $this->params['threshold_secs'] = 0;
         $this->params['hasTotals'] = true;
         $this->params['columns'] = [
             'Rep' => 'reports.rep',
-            'Contacts' => 'reports.contacts',
+            'Calls' => 'reports.calls',
             'Connects' => 'reports.connects',
+            'Contacts' => 'reports.contacts',
             'Hours' => 'reports.hours',
             'Leads' => 'reports.leads',
             'CPH' => 'reports.cph',
@@ -103,14 +105,13 @@ class ApnAgentSummary
         }
 
         $bind['reps'] = $reps;
-        $bind['threshold_secs1'] = $this->params['threshold_secs'];
-        $bind['threshold_secs2'] = $this->params['threshold_secs'];
 
         $sql .= "
         CREATE TABLE #AgentSummary(
             Rep varchar(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-            Contacts int DEFAULT 0,
+            Calls int DEFAULT 0,
             Connects int DEFAULT 0,
+            Contacts int DEFAULT 0,
             Hours numeric(18,2) DEFAULT 0,
             Leads int DEFAULT 0,
             CPH numeric(18,2) DEFAULT 0,
@@ -144,14 +145,14 @@ class ApnAgentSummary
             $bind['group_id1' . $i] =  Auth::user()->group_id;
             $bind['startdate1' . $i] = $startDate;
             $bind['enddate1' . $i] = $endDate;
+            $bind['threshold' . $i] = $this->params['threshold_secs'];
 
-            $sql .= " $union SELECT Rep, [Type], COUNT(id) as [Count]
+            $sql .= " $union SELECT Rep, [Type], SUM(OverThreshold) as OverThreshold, COUNT(*) as [Count]
             FROM
-            (SELECT r.Rep, IsNull((SELECT TOP 1 [Type]
-                    FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition=r.CallStatus AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='') ORDER BY [id]), 0) as [Type],
-                    r.id
+            (SELECT r.Rep, IsNull(DI.Type,0) as [Type],
+                CASE WHEN r.Duration >= :threshold$i THEN 1 ELSE 0 END as OverThreshold
                 FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
+                LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = r.DispositionId
                 INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep";
 
             if (!empty($this->params['skills'])) {
@@ -163,7 +164,8 @@ class ApnAgentSummary
             $sql .= "
                 WHERE r.GroupId = :group_id1$i
                 AND r.Date >= :startdate1$i
-                AND r.Date < :enddate1$i";
+                AND r.Date < :enddate1$i
+                AND r.Duration > 0";
 
             if (session('ssoRelativeCampaigns', 0)) {
                 $sql .= " AND r.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
@@ -172,8 +174,7 @@ class ApnAgentSummary
 
             $sql .= "
             ) a
-            WHERE [Type] > 0
-            GROUP BY Rep, [Type]";
+            GROUP BY Rep, [Type], OverThreshold";
 
             $union = 'UNION ALL';
         }
@@ -184,40 +185,6 @@ class ApnAgentSummary
         CREATE INDEX IX_RepType ON #DialingResultsStats (Rep, [Type]);
         CREATE INDEX IX_Type ON #DialingResultsStats ([Type]);
 
-        SELECT * INTO #Sales FROM (";
-
-        $union = '';
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id2' . $i] =  Auth::user()->group_id;
-            $bind['startdate2' . $i] = $startDate;
-            $bind['enddate2' . $i] = $endDate;
-
-            $sql .= " $union SELECT DR.Rep, DR.ActivityId
-            FROM [$db].[dbo].[DialingResults] as DR WITH(NOLOCK)
-            INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
-            CROSS APPLY (SELECT TOP 1 [Type]
-                FROM  [Dispos] DI
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI";
-
-            $sql .= "
-            WHERE DR.GroupId = :group_id2$i
-            AND DR.Date >= :startdate2$i
-            AND DR.Date < :enddate2$i
-            AND DI.Type = 3";
-
-            if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2$i, 1))";
-                $bind['ssousercamp2' . $i] = session('ssoUsername');
-            }
-
-            $union = 'UNION ALL';
-        }
-
-        $sql .= ") tmp;
-
         SELECT * INTO #AgentSummaryDuration FROM (";
 
         $union = '';
@@ -226,7 +193,7 @@ class ApnAgentSummary
             $bind['startdate3' . $i] = $startDate;
             $bind['enddate3' . $i] = $endDate;
 
-            $sql .= " $union SELECT aa.Rep, [Action], aa.Duration, aa.ActivityId, 1 as [Count]
+            $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
             INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
 
@@ -247,6 +214,8 @@ class ApnAgentSummary
                 $bind['ssousercamp3' . $i] = session('ssoUsername');
             }
 
+            $sql .= " GROUP BY aa.Rep, [Action]";
+
             $union = 'UNION ALL';
         }
 
@@ -258,18 +227,25 @@ class ApnAgentSummary
         CREATE INDEX IX_RepAction ON #AgentSummaryDuration (Rep, Duration, [Action]);
 
         UPDATE #AgentSummary
-        SET Contacts = a.Contacts
-        FROM (SELECT Rep, SUM([Count]) as Contacts
+        SET Calls = a.cnt
+        FROM (SELECT Rep, SUM([Count]) as cnt
               FROM #DialingResultsStats
-              WHERE [Type] > 1
               GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET Connects = a.Connects
-        FROM (SELECT Rep, SUM([Count]) as Connects
+        SET Connects = a.cnt
+        FROM (SELECT Rep, SUM([Count]) as cnt
               FROM #DialingResultsStats
               WHERE [Type] > 0
+              GROUP BY Rep) a
+        WHERE #AgentSummary.Rep = a.Rep;
+
+        UPDATE #AgentSummary
+        SET Contacts = a.cnt
+        FROM (SELECT Rep, SUM([Count]) as cnt
+              FROM #DialingResultsStats
+              WHERE [Type] > 1
               GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
@@ -345,19 +321,6 @@ class ApnAgentSummary
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
-        SET ThresholdCalls = a.tot
-        FROM (SELECT aa.Rep, SUM([Count]) as tot
-              FROM #AgentSummaryDuration aa WITH(NOLOCK)
-              WHERE aa.Duration >= :threshold_secs1
-              AND aa.Action in ('Call', 'ManualCall', 'InboundCall')
-              GROUP BY aa.Rep) a
-        WHERE #AgentSummary.Rep = a.Rep;
-
-        UPDATE #AgentSummary
-        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(TalkTimeCount as numeric(18,2))) * 100
-        WHERE TalkTimeCount > 0;
-
-        UPDATE #AgentSummary
         SET AvWaitTime = WaitTimeSec / WaitTimeCount
         WHERE WaitTimeCount > 0;
 
@@ -369,13 +332,24 @@ class ApnAgentSummary
         SET AvDispoTime = DispositionTimeSec / DispositionTimeCount
         WHERE DispositionTimeCount > 0;
 
-		UPDATE #AgentSummary
-        SET ThresholdSales = a.cnt
-        FROM (SELECT D.Rep, COUNT(*) as cnt
-            FROM #AgentSummaryDuration D
-            INNER JOIN #Sales S on S.Rep = D.Rep AND S.ActivityId = D.ActivityId
-            AND D.Duration >= :threshold_secs2
-            GROUP BY D.Rep) a
+        UPDATE #AgentSummary
+        SET ThresholdCalls = a.tot
+        FROM (SELECT Rep, SUM([OverThreshold]) as tot
+              FROM #DialingResultsStats
+              WHERE Type > 1
+              GROUP BY Rep) a
+        WHERE #AgentSummary.Rep = a.Rep;
+
+        UPDATE #AgentSummary
+        SET ThresholdRatio = (CAST(ThresholdCalls as numeric(18,2)) / CAST(Calls as numeric(18,2))) * 100
+        WHERE Calls > 0;
+
+        UPDATE #AgentSummary
+        SET ThresholdSales = a.tot
+        FROM (SELECT Rep, SUM([OverThreshold]) as tot
+              FROM #DialingResultsStats
+              WHERE Type = 3
+              GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
         UPDATE #AgentSummary
@@ -419,8 +393,9 @@ class ApnAgentSummary
         $total['DispositionTimeSec'] = 0;
         $total['DispositionTimeCount'] = 0;
         $total['LoggedInTime'] = 0;
-        $total['Contacts'] = 0;
+        $total['Calls'] = 0;
         $total['Connects'] = 0;
+        $total['Contacts'] = 0;
         $total['Hours'] = 0;
         $total['Leads'] = 0;
         $total['ThresholdCalls'] = 0;
@@ -437,8 +412,9 @@ class ApnAgentSummary
             $total['DispositionTimeSec'] += $rec['DispositionTimeSec'];
             $total['DispositionTimeCount'] += $rec['DispositionTimeCount'];
             $total['LoggedInTime'] += $rec['LoggedInTime'];
-            $total['Contacts'] += $rec['Contacts'];
+            $total['Calls'] += $rec['Calls'];
             $total['Connects'] += $rec['Connects'];
+            $total['Contacts'] += $rec['Contacts'];
             $total['Hours'] += $rec['Hours'];
             $total['Leads'] += $rec['Leads'];
             $total['ThresholdCalls'] += $rec['ThresholdCalls'];
@@ -457,7 +433,7 @@ class ApnAgentSummary
         $total['ConversionRate'] = $total['Contacts'] == 0 ? 0 : number_format($total['Leads'] / $total['Contacts'] * 100, 2) . '%';
         $total['ConversionFactor'] = ($total['Contacts'] == 0 || $total['Hours'] == 0) ? 0 : number_format($total['Leads'] / $total['Contacts'] / $total['Hours'], 2) . '%';
 
-        $total['ThresholdRatio'] = number_format($total['TalkTimeCount'] == 0 ? 0 : $total['ThresholdCalls'] / $total['TalkTimeCount'] * 100, 2) . '%';
+        $total['ThresholdRatio'] = number_format($total['Calls'] == 0 ? 0 : $total['ThresholdCalls'] / $total['Calls'] * 100, 2) . '%';
         $total['ThresholdClosingPct'] = number_format($total['ThresholdCalls'] == 0 ? 0 : $total['ThresholdSales'] / $total['ThresholdCalls'] * 100, 2) . '%';
 
         // remove count cols
