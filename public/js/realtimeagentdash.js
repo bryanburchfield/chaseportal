@@ -1,9 +1,6 @@
 var RealTime = {
 	init: function (result) {
-		// console.log(result);
-
 		
-
 		var incoming_arrays = Object.entries(result[0][1]);
 
 		// if first iteration
@@ -161,7 +158,7 @@ var RealTime = {
 			has_icon = 'has_icon';
 		}
 
-		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item ' + (status_type == "talking" ? 'getleaddetails' : '') + '" ' + (status_type == "talking" ? "data-toggle=modal data-target=#leadInspectionModal data-phone='"+data.Phone+"' data-leadid='"+data.LeadId+"' " : "") + '> ' +
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item ' + (status_type == "talking" || status_type == "wrapping" ? 'getleaddetails' : '') + '" ' + (status_type == "talking" || status_type == "wrapping" ? "data-toggle=modal data-target=#leadInspectionModal data-phone='"+data.Phone+"' data-leadid='"+data.LeadId+"' " : "") + '> ' +
 			'<span class="call_type">' +
 			call_icon +
 			'</span>' +
@@ -200,10 +197,8 @@ var RealTime = {
 		        leadid:leadid,
 		    },
 		    success:function(response){
-		    	console.log(response);
 				
 				extra_fields= Object.entries(response.ExtraFields);
-				
 
 				for(var i=0;i<extra_fields.length;i++){
 					extra_fields_string+='<p class="lead_dets_phone fz15 mb5"><b>'+extra_fields[i][0]+':</b> <span>'+extra_fields[i][1]+'</span></p>'
