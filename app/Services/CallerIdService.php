@@ -79,44 +79,51 @@ class CallerIdService
     {
         $this->initialize();
 
+        $tmpfname = tempnam("/tmp", "CID");
+
         // run report for >5.5k calls over 30 days
 
         $this->enddate = Carbon::parse('midnight');
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->maxcount = 5500;
 
+        // Save results to file
+        $this->saveToFile($tmpfname);
+
         $group_id = '';
         $results = [];
         $all_results = [];
 
-        foreach ($this->runQuery() as $rec) {
-            if (count($rec) == 0) {
-                continue;
-            }
+        // read results from file
+        if (($handle = fopen($tmpfname, "r")) !== false) {
+            while (($csv = fgetcsv($handle)) !== false) {
+                $rec = $this->csvToRec($csv);
 
-            // check if this number is still active
-            // if ($this->activeNumber($rec['CallerId'])) {
+                // check if this number is still active
+                // if ($this->activeNumber($rec['CallerId'])) {
 
-            $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-            unset($rec['Contacts']);
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
 
-            // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-            $all_results[] = $rec;
+                $all_results[] = $rec;
 
-            // Send email on change of group
-            if ($group_id != '' && $group_id != $rec['GroupId']) {
-                if ($this->setGroup($group_id)) {
-                    $csvfile = $this->makeCsv($results);
-                    $this->emailReport($csvfile);
+                // Send email on change of group
+                if ($group_id != '' && $group_id != $rec['GroupId']) {
+                    if ($this->setGroup($group_id)) {
+                        $csvfile = $this->makeCsv($results);
+                        $this->emailReport($csvfile);
+                    }
+
+                    $results = [];
                 }
 
-                $results = [];
+                $results[] = $rec;
+                $group_id = $rec['GroupId'];
+                // }  // active check
             }
-
-            $results[] = $rec;
-            $group_id = $rec['GroupId'];
-            // }  // active check
+            fclose($handle);
         }
 
         if (!empty($results)) {
@@ -139,22 +146,27 @@ class CallerIdService
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->maxcount = 15500;
 
+        // Save results to file
+        $this->saveToFile($tmpfname);
+
         $all_results = [];
 
-        foreach ($this->runQuery() as $rec) {
-            if (count($rec) == 0) {
-                continue;
+        // read results from file
+        if (($handle = fopen($tmpfname, "r")) !== false) {
+            while (($csv = fgetcsv($handle)) !== false) {
+                $rec = $this->csvToRec($csv);
+
+                // check if this number is still active
+                // if ($this->activeNumber($rec['CallerId'])) {
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
+
+                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+
+                $all_results[] = $rec;
+                // } // active check
             }
-
-            // check if this number is still active
-            // if ($this->activeNumber($rec['CallerId'])) {
-            $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-            unset($rec['Contacts']);
-
-            list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
-
-            $all_results[] = $rec;
-            // } // active check
+            fclose($handle);
         }
 
         if (!empty($all_results)) {
@@ -163,6 +175,37 @@ class CallerIdService
             $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
+
+        // Delete temp file
+        unlink($tmpfname);
+    }
+
+    private function csvToRec($csv)
+    {
+        $rec = [];
+
+        $rec['GroupId'] = $csv[0];
+        $rec['GroupName'] = $csv[1];
+        $rec['CallerId'] = $csv[2];
+        $rec['Dials'] = $csv[3];
+        $rec['Contacts'] = $csv[4];
+
+        return $rec;
+    }
+
+    private function saveToFile($tmpfname)
+    {
+        // Save results to file
+        $handle = fopen($tmpfname, "w");
+
+        foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
+            fputcsv($handle, $rec);
+        }
+
+        fclose($handle);
     }
 
     private function runQuery()
@@ -174,7 +217,7 @@ class CallerIdService
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
-            // foreach (Dialer::where('dialer_numb', 26)->get() as $i => $dialer) {
+            // foreach (Dialer::where('dialer_numb', 7)->get() as $i => $dialer) {
 
             $bind['startdate' . $i] = $this->startdate->toDateTimeString();
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
@@ -203,7 +246,7 @@ class CallerIdService
             HAVING SUM(cnt) >= :maxcount
             ORDER BY GroupName, Dials desc";
 
-        return $this->yieldSql($sql, $bind);
+        return $this->runSql($sql, $bind);
     }
 
     private function makeCsv($results)
