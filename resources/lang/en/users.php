@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'active' => 'Active',
     'add_users' => 'Add Users',
     'all_clients' => 'All Clients',
     'all_users' => 'All Users',

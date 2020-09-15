@@ -305,6 +305,37 @@ class AdminController extends Controller
     }
 
     /**
+     * Toggle User active/inactive (ajax)
+     * 
+     * @param Request $request 
+     * @param bool $keep 
+     * @return array
+     */
+    public function toggleUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        if ($user->active) {  // deactivate
+            // delete automated reports
+            AutomatedReport::where('user_id', $user->id)->delete();
+
+            // delete recipients if demo user
+            if ($user->isType('demo')) {
+                $this->deleteRecipients($user->id);
+            }
+
+            // deactivate user
+            $user->active = false;
+            $user->save();
+        } else {  // activate user
+            $user->active = true;
+            $user->save();
+        }
+
+        return ['status' => 'success'];
+    }
+
+    /**
      * Delete Recipients
      * 
      * @param Integer $user_id 

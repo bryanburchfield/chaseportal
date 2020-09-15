@@ -44,6 +44,23 @@ Route::prefix('dashboards')->group(function () {
         Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
         Route::get('get_lead_info/{lead}', 'RealTimeDashboardController@getLeadInfo');
 
+        // Admin only
+        // prefix('admin') isn't working for some reason
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::post('admin/add_user', 'AdminController@addUser');
+            Route::post('admin/delete_user', 'AdminController@deleteUser');
+            Route::post('admin/toggle_user', 'AdminController@toggleUser');
+            Route::post('admin/get_user', 'AdminController@getUser');
+            Route::post('admin/update_user', 'AdminController@updateUser');
+            Route::get('admin/cdr_lookup', 'AdminController@loadCdrLookup');
+            Route::post('admin/cdr_lookup', 'AdminController@cdrLookup');
+            Route::post('admin/get_client_tables', 'AdminController@getClientTables');
+            Route::post('admin/get_table_fields', 'AdminController@getTableFields');
+            Route::get('admin/manage_users', 'AdminController@manageUsers');
+            Route::post('admin/load_admin_nav', 'AdminController@loadAdminNav');
+            Route::post('admin/load_sidenav', 'AdminController@loadSideNav');
+        });
+        
         // Super Admin only dashboards
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');

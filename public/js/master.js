@@ -84,6 +84,8 @@ var Master = {
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
         $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
+        $('.switch.client_input input').on('click', this.toggle_active_client);
+
 	},
 
     update_sidenav:function(e){
@@ -2392,6 +2394,37 @@ var Master = {
             }
         });
 
+    },
+
+    toggle_active_client:function(){
+        var checked;
+        var id = $(this).parent().parent().parent().data('id');
+
+        if($(this).is(':checked')){
+            $(this).attr('Checked','Checked');
+            checked=1;
+        }else{
+            $(this).removeAttr('Checked');
+            checked=0;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url:'/dashboards/admin/toggle_user',
+            type:'POST',
+            data:{
+                checked:checked,
+                id:id,
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
     }
 }
 
