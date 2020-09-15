@@ -64,7 +64,7 @@
 
             <ul id="{{$status}}" class="{{$status}} list-group cb">
                 @foreach($data['data']['statuses'][$status] as $record)
-                    <li class="list-group-item" {{$status == 'talking' ? 'data-toggle=modal data-target=#leadInspectionModal' : ''}}>
+                    <li class="list-group-item" {{$status == 'talking' || $status == 'wrapping' ? 'data-toggle=modal data-target=#leadInspectionModal' : ''}}>
                         <span class="call_type">
                             @php
                                 $has_icon='';
