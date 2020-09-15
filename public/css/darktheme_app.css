@@ -3804,6 +3804,24 @@ div.col-sm-5.five-two {
   cursor: pointer;
 }
 
+.lead_detail_notes h4 {
+  background: #203047;
+  padding: 8px;
+  font-weight: 600;
+  color: #eee;
+  margin-top: 20px;
+}
+
+.lead_detail_notes h4:hover {
+  cursor: pointer;
+}
+
+.lead_detail_notes p {
+  background: #161b2d;
+  display: none;
+  padding: 10px 8px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

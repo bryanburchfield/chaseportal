@@ -217,27 +217,23 @@ var RealTime = {
 					(response.State != null &&  response.State.length ? '<p class="lead_dets_phone fz15 mb5"><b>State:</b> <span>'+response.State+'</span></p>' : " " )+
 					(response.ZipCode != null &&  response.ZipCode.length ? '<p class="lead_dets_phone fz15 mb5"><b>Zip Code:</b> <span>'+response.ZipCode+'</span></p>' : " " )+
 					(response.PrimaryPhone != null &&  response.PrimaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Primary Phone:</b> <span>'+response.PrimaryPhone+'</span></p>' : " " )+
-
 					(response.SecondaryPhone != null &&  response.SecondaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Secondary Phone:</b> <span>'+response.SecondaryPhone+'</span></p>' : " " )+
 					'</div>'+
 					'<br>'+
 					(response.Attempt != null &&  response.Attempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Attempt:</b> <span>'+response.Attempt+'</span></p>' : " " )+
-					(response.CallStatus != null &&  response.CallStatus.length ? '<p class="lead_dets_phone fz15 mb5"><b>Call Status:</b> <span>'+response.CallStatus+'</span></p>' : " " )+
 					(response.CallType != null &&  response.CallType.length ? '<p class="lead_dets_phone fz15 mb5"><b>Call Type:</b> <span>'+response.CallType+'</span></p>' : " " )+
 					(response.Campaign != null &&  response.Campaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Campaign:</b> <span>'+response.Campaign+'</span></p>' : " " )+
 					(response.Subcampaign != null &&  response.Subcampaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Subcampaign:</b> <span>'+response.Subcampaign+'</span></p>' : " " )+
 					(response.ClientId != null &&  response.ClientId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Client Id:</b> <span>'+response.ClientId+'</span></p>' : " " )+
 					(response.Date != null &&  response.Date.length ? '<p class="lead_dets_phone fz15 mb5"><b>Date:</b> <span>'+response.Date+'</span></p>' : " " )+
 					(response.DispositionId != null &&  response.DispositionId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Disposition Id:</b> <span>'+response.DispositionId+'</span></p>' : " " )+
-					(response.GroupId != null &&  response.GroupId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Group Id:</b> <span>'+response.GroupId+'</span></p>' : " " )+
-					(response.IdGuid != null &&  response.IdGuid.length ? '<p class="lead_dets_phone fz15 mb5"><b>Id Guid:</b> <span>'+response.IdGuid+'</span></p>' : " " )+
 					(response.LastUpdated != null &&  response.LastUpdated.length ? '<p class="lead_dets_phone fz15 mb5"><b>Last Updated:</b> <span>'+response.LastUpdated+'</span></p>' : " " )+
 					(response.ReloadAttempt != null &&  response.ReloadAttempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Attempt:</b> <span>'+response.ReloadAttempt+'</span></p>' : " " )+
 					(response.ReloadDate != null &&  response.ReloadDate.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Date:</b> <span>'+response.ReloadDate+'</span></p>' : " " )+
 					(response.Rep != null &&  response.Rep.length ? '<p class="lead_dets_phone fz15 mb5"><b>Rep:</b> <span>'+response.Rep+'</span></p>' : " " )+
 					(response.WasDialed != null &&  response.WasDialed.length ? '<p class="lead_dets_phone fz15 mb5"><b>Was Dialed:</b> <span>'+response.WasDialed+'</span></p>' : " " )+
 					(response.id != null &&  response.id.length ? '<p class="lead_dets_phone fz15 mb5"><b>ID:</b> <span>'+response.id+'</span></p>' : " " )+
-					(response.Notes != null &&  response.Notes.length ? '<p class="lead_dets_phone fz15 mb5"><b>Notes:</b> <span>'+response.Notes+'</span></p>' : " " )+
+					(response.Notes != null &&  response.Notes.length ? '<div class="lead_detail_notes"><h4><i class="fas fa-chevron-right"></i> Notes</h4><p class="lead_dets_phone fz15 mb5">'+response.Notes+'</p></div>' : " " )+
 					'<br>'
 				;
 
@@ -245,6 +241,10 @@ var RealTime = {
 				$('#leadInspectionModal').find('.modal-body').append(extra_fields_string);
 		    }
 		});
+	},
+
+	toggle_lead_notes:function(){
+		$(this).find('p').slideToggle();
 	}
 }
 
@@ -256,6 +256,7 @@ function login_id(status_type, login) {
 }
 
 $('body').on('click', '.getleaddetails', RealTime.lead_dets_modal);
+$('#leadInspectionModal .modal-body').on('click', '.lead_detail_notes', RealTime.toggle_lead_notes);
 
 //add
 //breakcode for paused column
