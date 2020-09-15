@@ -187,13 +187,8 @@ class CallerIdService
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
-                OUTER APPLY (SELECT TOP 1 [Type]
-                    FROM " . '[' . $dialer->reporting_db . ']' . ".[dbo].[Dispos]
-                    WHERE Disposition = DR.CallStatus
-                    AND (GroupId = DR.GroupId OR IsSystem=1)
-                    AND (Campaign = DR.Campaign OR Campaign = '')
-                    ORDER BY [id]) DI
-                WHERE DR.Date >= :startdate$i AND DR.Date < :enddate$i
+                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
+                WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 GROUP BY DR.GroupId, GroupName, CallerId
