@@ -56,25 +56,29 @@
                                             <table class="table table-responsive table-striped nobdr">
                                                 <thead>
                                                     <tr>
+                                                        <th>{{__('users.active')}}</th>
                                                         <th>{{__('users.name')}}</th>
                                                         <th>{{__('users.user_type')}}</th>
                                                         <th>{{__('users.links')}}</th>
                                                         <th>{{__('users.edit')}}</th>
                                                         <th>{{__('users.delete')}}</th>
-                                                        <th>{{__('users.active')}}</th>
                                                     </tr>
                                                 </thead>
 
                                                 <tbody>
                                                 @foreach($users->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE) as $user)
                                                     @if($id == $user->group_id)
+                                                        
                                                         <tr id="user{{$user->id}}" data-id="{{$user->id}}">
+                                                        <td><label class="switch flt_lft client_input">
+                                                            <input type="checkbox" {{ ($user->active) ? 'checked' : '' }} name="client_input">
+                                                            <span></span>
+                                                        </label></td>
                                                         <td>{{$user->name}}</td>
                                                         <td>{{$user->user_type}}</td>
                                                         <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
                                                         <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-                                                        <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
-                                                        <td>{{$user->active}}</td>
+                                                        <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td></tr>
                                                     @endif
                                                 @endforeach
                                                 </tbody>
