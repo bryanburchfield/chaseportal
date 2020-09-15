@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Broadcast;
-use App\Models\Campaign;
 use App\Models\Lead;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -189,6 +189,26 @@ class RealTimeDashboardController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return  $lead->allFields();
+        $info = $lead->allFields();
+
+        $tz = Auth::user()->ianaTz;
+
+        // Don't care to see these fields:
+        unset($info['DispositionId']);
+
+        // Format Dates:
+        $info['Date'] = Carbon::parse($info['Date'])
+            ->tz($tz)
+            ->isoFormat('L LT');
+
+        $info['LastUpdated'] = Carbon::parse($info['LastUpdated'])
+            ->tz($tz)
+            ->isoFormat('L LT');
+
+        $info['ReloadDate'] = Carbon::parse($info['ReloadDate'])
+            ->tz($tz)
+            ->isoFormat('L LT');
+
+        return $info;
     }
 }
