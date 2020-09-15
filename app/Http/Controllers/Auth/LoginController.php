@@ -81,10 +81,9 @@ class LoginController extends Controller
             }
         }
 
-
         // Continue as normal
         return $this->guard()->attempt(
-            $this->credentials($request),
+            ['email' => $request->email, 'password' => $request->password, 'active' => 1],
             $request->filled('remember')
         );
     }

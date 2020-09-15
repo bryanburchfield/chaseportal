@@ -61,6 +61,7 @@
                                                         <th>{{__('users.links')}}</th>
                                                         <th>{{__('users.edit')}}</th>
                                                         <th>{{__('users.delete')}}</th>
+                                                        <th>{{__('users.active')}}</th>
                                                     </tr>
                                                 </thead>
 
@@ -73,6 +74,7 @@
                                                         <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
                                                         <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
                                                         <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                        <td>{{$user->active}}</td>
                                                     @endif
                                                 @endforeach
                                                 </tbody>

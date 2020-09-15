@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'active' => 'Vigente',
     'add_users' => 'Agregar Usuarios',
     'all_clients' => 'Todos los Clientes',
     'all_users' => 'Todos los Usuarios',
