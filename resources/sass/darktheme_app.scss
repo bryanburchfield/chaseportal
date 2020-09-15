@@ -2777,6 +2777,27 @@ div.col-sm-5.five-two {
     }
 }
 
+.lead_detail_notes{
+
+    h4{
+        background: $blue;
+        padding: 8px;
+        font-weight: 600;
+        color: #eee;
+        margin-top: 20px;
+
+        &:hover{
+            cursor:pointer;
+        }
+    }
+
+    p{
+        background:lighten( #0f131f,4%);
+        display: none;
+        padding:10px  8px;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
