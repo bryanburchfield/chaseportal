@@ -221,7 +221,6 @@ var RealTime = {
 					(response.Subcampaign != null &&  response.Subcampaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Subcampaign:</b> <span>'+response.Subcampaign+'</span></p>' : " " )+
 					(response.ClientId != null &&  response.ClientId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Client Id:</b> <span>'+response.ClientId+'</span></p>' : " " )+
 					(response.Date != null &&  response.Date.length ? '<p class="lead_dets_phone fz15 mb5"><b>Date:</b> <span>'+response.Date+'</span></p>' : " " )+
-					(response.DispositionId != null &&  response.DispositionId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Disposition Id:</b> <span>'+response.DispositionId+'</span></p>' : " " )+
 					(response.LastUpdated != null &&  response.LastUpdated.length ? '<p class="lead_dets_phone fz15 mb5"><b>Last Updated:</b> <span>'+response.LastUpdated+'</span></p>' : " " )+
 					(response.ReloadAttempt != null &&  response.ReloadAttempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Attempt:</b> <span>'+response.ReloadAttempt+'</span></p>' : " " )+
 					(response.ReloadDate != null &&  response.ReloadDate.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Date:</b> <span>'+response.ReloadDate+'</span></p>' : " " )+
