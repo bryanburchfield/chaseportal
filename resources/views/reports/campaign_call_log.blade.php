@@ -84,7 +84,7 @@
 		<div class="col-sm-12 p0">
 			<div class="card card-6 hidetilloaded" >
 				<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
-				<div class="inbound inandout cb" style="min-height:300px;">
+				<div class="inbound inandout cb" style="min-height:318px;">
 					<canvas id="call_volume"></canvas>
 				</div>
 			</div>
