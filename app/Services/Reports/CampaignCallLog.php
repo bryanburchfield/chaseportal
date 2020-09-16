@@ -114,7 +114,7 @@ class CampaignCallLog
         $summ = $this->runSql($sql, $bind);
 
         $this->extras['summary']['TotReps'] = $summ[0]['TotReps'];
-        $this->extras['summary']['ManHours'] = round($summ[0]['ManHours'] / 60 / 60, 2);
+        $this->extras['summary']['ManHours'] = $this->secondsToHms($summ[0]['ManHours']);
 
         // do this as 2nd query since it needs a yield() statement
         $sql = '';
@@ -132,7 +132,7 @@ class CampaignCallLog
             DI.Description,
             DI.IsSystem
             FROM [$db].[dbo].[DialingResults] DR
-            LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :group_id1$i
             AND DR.Date >= :startdate1$i
             AND DR.Date < :enddate1$i

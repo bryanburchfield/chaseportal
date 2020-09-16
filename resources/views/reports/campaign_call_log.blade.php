@@ -79,28 +79,46 @@
 @endsection
 
 @section('extras')
-<div class="col-sm-7 col-xs-12 nopadright pl0">
-	<div class="col-sm-12 p0">
-		<div class="card card-6 hidetilloaded" >
-			<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
-			<div class="inbound inandout cb" style="min-height:300px;">
-				<canvas id="call_volume"></canvas>
+<div class="row">
+	<div class="col-sm-7 col-xs-12 nopadright pl0">
+		<div class="col-sm-12 p0">
+			<div class="card card-6 hidetilloaded" >
+				<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
+				<div class="inbound inandout cb" style="min-height:318px;">
+					<canvas id="call_volume"></canvas>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-6 nopadleft nopadright pl0">
+			<div class="card hidetilloaded">
+				<!-- count of callstatuses -->
+				<canvas id="callstatus"></canvas>
+			</div>
+		</div>
+
+		<div class="col-sm-6 nopadleft nopadright pr0">
+			<div class="card hidetilloaded">
+				<!-- agent calls vs system calls -->
+				<canvas id="agent_system_calls"></canvas>
 			</div>
 		</div>
 	</div>
-	
-	<div class="col-sm-6 nopadleft nopadright pl0">
-		<div class="card hidetilloaded">
-			<!-- count of callstatuses -->
-			<canvas id="callstatus"></canvas>
-		</div>
-	</div>
 
-	<div class="col-sm-6 nopadleft nopadright pr0">
-		<div class="card hidetilloaded">
-			<!-- agent calls vs system calls -->
-			<canvas id="agent_system_calls"></canvas>
+	<div class="col-sm-5">
+		<div class="col-sm-12">
+			<div class="card card-3 total_reps hidetilloaded">
+				<h1 class="title">Total Reps</h1>
+				<h4 class="data total mt20 mb20 bg_rounded"></h4>
+			</div>
+		</div>
+
+		<div class="col-sm-12">
+			<div class="card card-3 man_hours hidetilloaded">
+				<h1 class="title">Man Hours</h1>
+				<h4 class="data total mt20 mb20"></h4>
+			</div>
 		</div>
 	</div>
-</div>	
+</div>
 @endsection
