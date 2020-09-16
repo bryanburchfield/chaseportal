@@ -36,6 +36,10 @@
                         'transfer_agent' =>  __('reports.transfer_agent'),
                     ];
 
+                    if(Auth::User()->group_id == 224876) {
+                        $reports['ecoverme_lead_export'] = __('reports.ecoverme_lead_export');
+                    }
+
                     if(Auth::User()->group_id == 224500) {
                         unset($reports['production_report']);
                         unset($reports['campaign_call_log']);
