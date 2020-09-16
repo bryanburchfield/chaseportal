@@ -34,8 +34,6 @@ class EcovermeLeadExport
             'Attempt' => 'Attempt',
             'WasDialed' => 'WasDialed',
             'LastUpdated' => 'LastUpdated',
-            'ReloadDate' => 'ReloadDate',
-            'ReloadAttempt' => 'ReloadAttempt',
             'Notes' => 'Notes',
             'Subcampaign' => 'Subcampaign',
             'CallType' => 'CallType',
@@ -131,7 +129,6 @@ class EcovermeLeadExport
 
         // Convert dates to local
         $rec['Date'] = Carbon::parse($rec['Date'])->tz($tz)->isoFormat('L LT');
-        $rec['ReloadDate'] = Carbon::parse($rec['ReloadDate'])->tz($tz)->isoFormat('L LT');
 
         if (!empty($rec['LastUpdated'])) {
             $rec['LastUpdated'] = Carbon::parse($rec['LastUpdated'])->tz($tz)->isoFormat('L LT');
@@ -190,8 +187,6 @@ class EcovermeLeadExport
             L.[Attempt],
             L.[WasDialed],
             L.[LastUpdated],
-            L.[ReloadDate],
-            L.[ReloadAttempt],
             L.[Notes],
             L.[Subcampaign],
             L.[CallType],
