@@ -131,8 +131,11 @@ class EcovermeLeadExport
 
         // Convert dates to local
         $rec['Date'] = Carbon::parse($rec['Date'])->tz($tz)->isoFormat('L LT');
-        $rec['LastUpdated'] = Carbon::parse($rec['LastUpdated'])->tz($tz)->isoFormat('L LT');
         $rec['ReloadDate'] = Carbon::parse($rec['ReloadDate'])->tz($tz)->isoFormat('L LT');
+
+        if (!empty($rec['LastUpdated'])) {
+            $rec['LastUpdated'] = Carbon::parse($rec['LastUpdated'])->tz($tz)->isoFormat('L LT');
+        }
 
         return $rec;
     }
