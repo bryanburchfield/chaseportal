@@ -1678,9 +1678,15 @@ var Master = {
     },
 
     campaign_call_log: function (response) {
+        console.log(response);
+
         $('.rm_rptble_class').find('table').removeClass('reports_table');
         $('.rm_rptble_class table th').find('a').remove();
         $('.hidetilloaded').show();
+
+        $('.total_reps').find('h4').text(response.extras.summary.TotReps);
+        $('.man_hours').find('h4').text(response.extras.summary.ManHours);
+
         var chartColors = Master.chartColors;
 
         var xaxis_labels = [];
