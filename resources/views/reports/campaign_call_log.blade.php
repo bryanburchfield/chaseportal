@@ -80,7 +80,7 @@
 
 @section('extras')
 <div class="row">
-	<div class="col-sm-7 col-xs-12 nopadright pl0">
+	<div class="col-sm-7 col-xs-12 nopadright">
 		<div class="col-sm-12 p0">
 			<div class="card card-6 hidetilloaded" >
 				<h1 class="title fw600">{{__('reports.call_vol_per_int')}}</h1>
@@ -90,7 +90,7 @@
 			</div>
 		</div>
 		
-		<div class="col-sm-6 nopadleft nopadright pl0">
+		<div class="col-sm-6 nopadleft nopadright">
 			<div class="card hidetilloaded">
 				<!-- count of callstatuses -->
 				<canvas id="callstatus"></canvas>
