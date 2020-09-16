@@ -141,7 +141,7 @@ class BwrCampaignCallLog
         $summ = $this->runSql($sql, $bind);
 
         $this->extras['summary']['TotReps'] = $summ[0]['TotReps'];
-        $this->extras['summary']['ManHours'] = round($summ[0]['ManHours'] / 60 / 60, 2);
+        $this->extras['summary']['ManHours'] = $this->secondsToHms($summ[0]['ManHours']);
 
         $bind = [];
 
