@@ -197,7 +197,7 @@ class BwrCampaignCallLog
             FROM [$db].[dbo].[DialingResults] DR
             INNER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId 
             INNER JOIN [$db].[dbo].[ADVANCED_BWR_Master_Table] A ON A.LeadID = L.IdGuid
-            LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)";
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
