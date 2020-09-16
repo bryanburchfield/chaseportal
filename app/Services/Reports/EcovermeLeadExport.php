@@ -5,6 +5,7 @@ namespace App\Services\Reports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
+use Illuminate\Support\Carbon;
 
 class EcovermeLeadExport
 {
@@ -38,7 +39,6 @@ class EcovermeLeadExport
             'Notes' => 'Notes',
             'Subcampaign' => 'Subcampaign',
             'CallType' => 'CallType',
-            'DispositionId' => 'DispositionId',
             'FullName' => 'FullName',
             'HobbyColor' => 'HobbyColor',
             'TobaccoUse' => 'TobaccoUse',
@@ -124,7 +124,15 @@ class EcovermeLeadExport
 
     public function processRow($rec)
     {
+        $tz = Auth::user()->iana_tz;
+
+        // remove totRows col
         array_pop($rec);
+
+        // Convert dates to local
+        $rec['Date'] = Carbon::parse($rec['Date'])->tz($tz)->isoFormat('L LT');
+        $rec['LastUpdated'] = Carbon::parse($rec['LastUpdated'])->tz($tz)->isoFormat('L LT');
+        $rec['ReloadDate'] = Carbon::parse($rec['ReloadDate'])->tz($tz)->isoFormat('L LT');
 
         return $rec;
     }
@@ -184,7 +192,6 @@ class EcovermeLeadExport
             L.[Notes],
             L.[Subcampaign],
             L.[CallType],
-            L.[DispositionId],
             L.[FullName],
             A.[HobbyColor],
             A.[TobaccoUse],
