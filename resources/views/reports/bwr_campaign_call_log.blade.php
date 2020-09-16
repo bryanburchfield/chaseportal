@@ -119,7 +119,7 @@
 			</div>
 		</div>
 		
-		<div class="col-sm-6 nopadleft nopadright">
+		<div class="col-sm-6 nopadleft nopadright pl0">
 			<div class="card hidetilloaded">
 				<!-- count of callstatuses -->
 				<canvas id="callstatus"></canvas>
