@@ -128,6 +128,7 @@ return [
     'campaign_usage_1' => 'This report breaks down all leads in a campaign by the number of dialing attempts on each, and ' .
         'if the lead is marked as callable or not.',
     'campaign_usage_2' => 'Note that the charts will not be included when the report is exported.',
+    'ecoverme_lead_export_1' => 'This report gives a complete listing of all leads and fields for the specified Date Range and Call Status(es)',
     'inbound_summary_1' => 'This report summarizes inbound calls for the specified date range',
     'lead_inventory_1' => 'This report breaks down all of the leads in a campaign by Call Status.  It also totals ' .
         'the number of available leads remaining.',
