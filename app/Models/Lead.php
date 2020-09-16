@@ -31,7 +31,7 @@ class Lead extends SqlSrvModel
 
         $tabname = 'ADVANCED_' . $campaign->advancedTable->TableName;
 
-        $sql = "SELECT TOP 1 * FROM $tabname WHERE LeadId = '" . $this->IdGuid . "'";
+        $sql = "SELECT TOP 1 * FROM [$tabname] WHERE LeadId = '" . $this->IdGuid . "'";
 
         $results = $this->runSql($sql);
 
