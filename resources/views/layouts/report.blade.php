@@ -12,12 +12,14 @@
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap-material-datetimepicker.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @if(Auth::user()->theme == 'dark')
         <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
     @else
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endif
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
@@ -85,13 +87,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <script src="/js/moment.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/js/datetimepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
+    {{-- <script src="/js/datetimepicker.js"></script> --}}
     <script src="/js/multiselect_lib.js"></script>
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script>
     <script src="/js/master.js"></script>
     <script src="/js/nav.js"></script>
+    <script src="/js/bootstrap-material-datetimepicker.js"></script>
 
     @isset($jsfile)
     @foreach($jsfile as $js)
@@ -99,6 +102,9 @@
     @endforeach
     @endisset
     <script>
+
+        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY HH:mm', currentDate : new Date() });
+
         $(window).on('load', function() {
             $('.preloader').fadeOut('slow');
         });

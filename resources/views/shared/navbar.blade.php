@@ -14,7 +14,7 @@
            @endif
        </div>
 
-        <div class="filters col-xs-10 col-sm-6 mb-2">
+        <div class="filters col-xs-10 col-sm-6 mb-2 pr-0">
 
             @if(!session()->has('isSso'))
                 {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
