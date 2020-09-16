@@ -195,6 +195,8 @@ class RealTimeDashboardController extends Controller
 
         // Don't care to see these fields:
         unset($info['DispositionId']);
+        unset($info['ReloadDate']);
+        unset($info['ReloadAttempt']);
 
         // Format Dates:
         $info['Date'] = Carbon::parse($info['Date'])
@@ -202,10 +204,6 @@ class RealTimeDashboardController extends Controller
             ->isoFormat('L LT');
 
         $info['LastUpdated'] = Carbon::parse($info['LastUpdated'])
-            ->tz($tz)
-            ->isoFormat('L LT');
-
-        $info['ReloadDate'] = Carbon::parse($info['ReloadDate'])
             ->tz($tz)
             ->isoFormat('L LT');
 
