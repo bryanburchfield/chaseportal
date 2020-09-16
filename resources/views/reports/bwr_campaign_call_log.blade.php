@@ -135,14 +135,14 @@
 	</div>
 
 	<div class="col-sm-5">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<div class="card card-3 total_reps hidetilloaded">
 				<h1 class="title">Total Reps</h1>
 				<h4 class="data total mt20 mb20 bg_rounded"></h4>
 			</div>
 		</div>
 
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<div class="card card-3 man_hours hidetilloaded">
 				<h1 class="title">Man Hours</h1>
 				<h4 class="data total mt20 mb20"></h4>
