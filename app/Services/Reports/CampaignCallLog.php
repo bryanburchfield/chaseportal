@@ -132,7 +132,7 @@ class CampaignCallLog
             DI.Description,
             DI.IsSystem
             FROM [$db].[dbo].[DialingResults] DR
-            LEFT JOIN [$db].[dbo].[Dispos] DI on DI.Disposition = DR.CallStatus AND (DI.IsSystem = 1 or DI.Campaign = DR.Campaign)
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :group_id1$i
             AND DR.Date >= :startdate1$i
             AND DR.Date < :enddate1$i
