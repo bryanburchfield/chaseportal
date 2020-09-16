@@ -59,30 +59,34 @@
                     $list2 = array_slice($reports, $half);
                 @endphp
 
-                <div class="col-sm-6 p0">
-                    @foreach ($list1 as $key => $value)
-                        <div class="radio">
-                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="col-sm-6 p0">
-                    @foreach ($list2 as $key => $value)
-                        <div class="radio">
-                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
-                        </div>
-                    @endforeach
+                <div class="row">
+                    <div class="col-sm-6">
+                        @foreach ($list1 as $key => $value)
+                            <div class="radio">
+                                <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="col-sm-6">
+                        @foreach ($list2 as $key => $value)
+                            <div class="radio">
+                                <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-footer d-flex">
                 {{-- @csrf --}}
                 {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
-                <button type="button" class="btn btn-default mr10 flt_lft" data-dismiss="modal">{{__('general.close')}}</button>
-                <a href="#" class="mb0" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
+                
+                <button type="button" class="btn btn-default mr10 " data-dismiss="modal">{{__('general.close')}}</button>
+                <a href="#" class="view_report_btn btn-primary btn ">{{__('general.view_report')}}</a>
+
+                <a href="#" class="mb0 ml-auto" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
                     <span><i class="fa fa-cog"></i> {{__('general.auto_reports')}}</span>
                 </a>
-                <a href="#" class="view_report_btn btn-primary btn flt_lft">{{__('general.view_report')}}</a>
             </div>
             {!! Form::close() !!}
 
