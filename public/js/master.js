@@ -2696,6 +2696,11 @@ $(document).ready(function () {
 
     Master.init();
 
+    ///// reports
+
+    $('.dtp-btn-ok.btn.btn-flat').addClass('ml-2 btn-primary');
+    /// reports
+
     $('#addServerModal, #editESPModal, #deleteESPModal').on('hidden.bs.modal', function () {
         $(this).find('.alert').hide();
     });

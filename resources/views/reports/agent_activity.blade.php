@@ -8,11 +8,11 @@
 	<div class="report_filters card col-sm-12 fc_style">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
 
-			<div class="row">
+			<div class="row display-flex">
 
 				@include('shared.report_db_menu')
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('todate',  __('reports.to')) !!}
 						<div class="input-group date">
@@ -38,7 +38,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('reps',  __('reports.rep')) !!}
 						<select class="form-control multiselect" id="rep_select" multiple name="reps[]">
@@ -46,7 +46,7 @@
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
-						<label class="checkbox toggle_active_reps"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 				</div>
 			</div>

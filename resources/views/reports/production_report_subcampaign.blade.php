@@ -8,11 +8,11 @@
 	<div class="report_filters card col-sm-12 fc_style">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
-			<div class="row">
+			<div class="row display-flex">
 
 				@include('shared.report_db_menu')
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
@@ -38,14 +38,14 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('skills', __('reports.skill')) !!}
 						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}

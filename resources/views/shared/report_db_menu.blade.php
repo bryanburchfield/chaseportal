@@ -5,7 +5,7 @@
 	@php $show_multi_db = ''; @endphp
 @endif
 
-<div class="col-sm-4 multi_db {{ $show_multi_db }}">
+<div class="col-sm-4 multi_db {{ $show_multi_db }} mb-2">
 	<div class="form-group">
 		<label>{{__('general.database')}}</label>
         <select name="databases[]" id="database_select" multiple class="form-control multiselect" value="<?php if(isset($_POST['databases'])){echo $_POST['databases'];}?>">

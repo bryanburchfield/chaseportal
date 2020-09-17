@@ -3036,10 +3036,6 @@ span.numb_notifications {
   margin-left: 1%;
 }
 
-label.checkbox.toggle_active_reps {
-  margin-left: 20px;
-}
-
 .btn-group,
 .btn-group-vertical {
   max-height: 35px;
@@ -3081,6 +3077,20 @@ label.checkbox.toggle_active_reps {
 
 .dtp .p10 > a {
   color: #eee;
+}
+
+.dtp .dtp-buttons {
+  background: #fff;
+}
+
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.display-flex > [class*=col-] {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------------------------------------------------

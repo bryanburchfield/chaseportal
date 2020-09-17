@@ -2703,7 +2703,6 @@ span.numb_notifications{
     margin-left: 1%;
 }
 
-label.checkbox.toggle_active_reps{margin-left: 20px;}
 .btn-group, .btn-group-vertical{max-height: 35px;}
 
 .users .accordion{
@@ -2723,6 +2722,39 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     a{
         display: block;
     }
+}
+
+.table dtp-picker-days, .dtp div.dtp-date, .dtp div.dtp-time{
+    background: $blue;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header{
+    background: darken($blue, 5%);
+}
+
+.dtp table.dtp-picker-days tr > td > a.selected{
+    background: $orange;
+}
+
+.table.dtp-picker-days > thead > tr > th{
+    background:#ddd;
+}
+
+.dtp .p10 > a{
+    color:#eee;
+}
+
+.dtp .dtp-buttons{
+    background: #fff;
+}
+
+.row.display-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.row.display-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
 }
 
 /* ---------------------------------------------------

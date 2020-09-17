@@ -8,11 +8,11 @@
 	<div class="report_filters card col-sm-12">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form fc_style']) !!}
 
-			<div class="row">
+			<div class="row display-flex">
 
 				@include('shared.report_db_menu')
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
@@ -38,27 +38,27 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
 						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
 						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('callerid', __('reports.callerid')) !!}
 						{!! Form::tel('callerid', null, ['class'=>'form-control', 'required' => false]) !!}					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('reps', __('reports.rep')) !!}
 						<select class="form-control multiselect" id="rep_select" multiple name="reps[]">
@@ -66,39 +66,39 @@
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
-						<label class="checkbox toggle_active_reps"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('skills', __('reports.skill')) !!}
 						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('call_statuses', __('reports.call_statuses')) !!}
 						{!! Form::select("call_statuses[]", $filters['call_statuses'], null, ["class" => "form-control multiselect", 'id'=> 'call_status_select','multiple'=>true]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('is_callable', __('reports.is_callable')) !!}
 						{!! Form::select("is_callable", $filters['is_callable'], null, ["class" => "form-control", 'id'=> 'is_callable']) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('call_type', __('reports.call_type')) !!}
 						{!! Form::select("call_type", $filters['call_types'], null, ["class" => "form-control", 'id'=> 'call_type']) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('durationfrom', __('reports.duration_secs')) !!}
 						<div class="input-group">
@@ -109,14 +109,14 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('phone', __('general.phone')) !!}
 						{!! Form::tel('phone', null, ['class'=>'form-control', 'required' => false]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('custom_table', __('reports.custom_table')) !!}
 						{!! Form::select("custom_table", [null=>__('general.select_one')] + $filters['custom_table'], null, ["class" => "form-control", 'id'=> 'custom_table', 'required' => false]) !!}
