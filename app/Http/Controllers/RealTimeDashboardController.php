@@ -207,6 +207,16 @@ class RealTimeDashboardController extends Controller
             ->tz($tz)
             ->isoFormat('L LT');
 
+        if (!empty($info['Notes'])) {
+            $info['Notes'] = preg_replace(
+                '/(\d{2}-\d{2}-\d{4} \d{2}:\d{2} : )/',
+                "</p></div><div class=\"real_time_contact_note mb10\"><span class=\"fw600\">$1</span><p>",
+                $info['Notes']
+            ) . '</div>';
+
+            $info['Notes'] = substr($info['Notes'], 10);
+        }
+
         return $info;
     }
 }

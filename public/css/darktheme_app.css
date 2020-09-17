@@ -3395,9 +3395,8 @@ div.col-sm-5.five-two {
   cursor: pointer;
 }
 
-.lead_detail_notes p {
+.lead_detail_notes .real_time_contact_notes_inner {
   background: #161b2d;
-  display: none;
   padding: 10px 8px;
 }
 
