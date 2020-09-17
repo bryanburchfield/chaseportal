@@ -103,7 +103,7 @@
     @endisset
     <script>
 
-        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY HH:mm', currentDate : new Date() });
+        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY h:mm A', currentDate : new Date(), shortTime : true });
 
         $(window).on('load', function() {
             $('.preloader').fadeOut('slow');
