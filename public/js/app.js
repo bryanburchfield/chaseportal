@@ -25246,8 +25246,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   cluster: "mt1",
   wsHost: window.location.hostname,
   enabledTransports: ['ws', 'wss'],
-  wsPort:  false ? undefined : "6001",
-  wssPort:  false ? undefined : "6001",
+  wsPort: "6001",
+  wssPort: "6001",
   disableStats: false,
   forceTLS: true
 });
