@@ -25,6 +25,9 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
+    enabledTransports: ['ws', 'wss'],
     wsPort: process.env.MIX_LARAVEL_WEBSOCKETS_PORT,
-    forceTLS: false
+    wssPort: process.env.MIX_LARAVEL_WEBSOCKETS_PORT,
+    disableStats: false,
+    forceTLS: true
 });

@@ -32,5 +32,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('accessSuperAdmin', function ($user) {
             return $user->isType('superadmin');
         });
+
+        Gate::define('viewWebSocketsDashboard', function ($user = null) {
+            return $user->isType('superadmin');
+        });
     }
 }
