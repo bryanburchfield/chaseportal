@@ -8,7 +8,7 @@ return [
      * Set a custom dashboard configuration
      */
     'dashboard' => [
-        'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
+        'port' => env('APP_ENV') == 'production' ? env('LARAVEL_WEBSOCKETS_PORT_MASTER') : env('LARAVEL_WEBSOCKETS_PORT_BETA'),
     ],
 
     /*
