@@ -3579,9 +3579,8 @@ label.checkbox.toggle_active_reps {
   cursor: pointer;
 }
 
-.lead_detail_notes p {
+.lead_detail_notes .real_time_contact_notes_inner {
   background: #eee;
-  display: none;
   padding: 10px 8px;
 }
 
