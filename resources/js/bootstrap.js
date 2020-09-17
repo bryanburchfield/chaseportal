@@ -25,6 +25,9 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
-    wsPort: process.env.MIX_LARAVEL_WEBSOCKETS_PORT,
-    forceTLS: false
+    enabledTransports: ['ws', 'wss'],
+    wsPort: (process.env.MIX_APP_ENV == 'production' ? process.env.MIX_LARAVEL_WEBSOCKETS_PORT_MASTER : process.env.MIX_LARAVEL_WEBSOCKETS_PORT_BETA),
+    wssPort: (process.env.MIX_APP_ENV == 'production' ? process.env.MIX_LARAVEL_WEBSOCKETS_PORT_MASTER : process.env.MIX_LARAVEL_WEBSOCKETS_PORT_BETA),
+    disableStats: false,
+    forceTLS: true
 });
