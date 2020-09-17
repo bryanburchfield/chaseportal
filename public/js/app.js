@@ -25246,8 +25246,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   cluster: "mt1",
   wsHost: window.location.hostname,
   enabledTransports: ['ws', 'wss'],
-  wsPort: "6001",
-  wssPort: "6001",
+  wsPort:  false ? undefined : "6001",
+  wssPort:  false ? undefined : "6001",
   disableStats: false,
   forceTLS: true
 });
@@ -25283,9 +25283,9 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\portal\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\xampp\htdocs\portal\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\portal\resources\sass\darktheme_app.scss */"./resources/sass/darktheme_app.scss");
+__webpack_require__(/*! D:\code\chasedata\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! D:\code\chasedata\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! D:\code\chasedata\resources\sass\darktheme_app.scss */"./resources/sass/darktheme_app.scss");
 
 
 /***/ })
