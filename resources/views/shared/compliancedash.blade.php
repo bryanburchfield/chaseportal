@@ -8,9 +8,9 @@
 <div class="row">
     <div class="col-sm-12">
     	<a class="btn btn-default btn-primary flt_rgt" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
-
-    	<div class="table-responsive">
-    		<table class="table table-striped agent_compliance_table">
+        
+    	<div class="table-responsive-sm">
+    		<table class="table table-striped agent_compliance_table table-responsive w-100 d-block d-md-table">
     			<thead>
     				<tr>
                         <th></th>

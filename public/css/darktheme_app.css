@@ -1873,6 +1873,10 @@ span.selected_campaign {
   display: none;
 }
 
+.table-responsive {
+  display: table;
+}
+
 .bwr_omni table thead th a,
 .agent_pause_time table thead th a,
 .production_report table thead th a,

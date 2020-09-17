@@ -11,7 +11,7 @@
 			<div class="row display-flex">
 				@include('shared.report_db_menu')
 				
-				<div class=" mb-2col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
