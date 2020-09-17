@@ -1,14 +1,3 @@
-@php
-
-    if(Auth::User()->isType('superadmin')) {
-        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->count();
-        $tot_client_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])->distinct('group_id')->count();
-    } else {
-        $tot_user_count = App\Models\User::whereNotIn('user_type', ['demo','expired'])
-        ->where('group_id', Auth::User()->group_id)
-        ->count();
-    }
-@endphp
 <div class="col-sm-6 pr0 mbmt50 mbp0">
 <h2 class="page_heading mb0">
     @can('accessSuperAdmin')
@@ -20,13 +9,8 @@
     <div class="users">
         <div class="panel-group" id="{{$mode}}_accordion" role="tablist" aria-multiselectable="true">
 
-        @foreach (App\Models\Dialer::orderBy('dialer_numb')->get() as $dialer)
+        @foreach ($dialers as $dialer)
             @php
-
-                // Bail if not superadmin and not this user's dialer
-                if(!Auth::User()->isType('superadmin') && Auth::User()->db != $dialer->reporting_db) {
-                    continue;
-                }
                 $db = sprintf("%02d", $dialer->dialer_numb);
                 $users = $dialer->users(true);
                 $client_count = $dialer->group_count(true);
@@ -72,6 +56,7 @@
                                             <table class="table table-responsive table-striped nobdr">
                                                 <thead>
                                                     <tr>
+                                                        <th>{{__('users.active')}}</th>
                                                         <th>{{__('users.name')}}</th>
                                                         <th>{{__('users.user_type')}}</th>
                                                         <th>{{__('users.links')}}</th>
@@ -83,12 +68,17 @@
                                                 <tbody>
                                                 @foreach($users->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE) as $user)
                                                     @if($id == $user->group_id)
+                                                        
                                                         <tr id="user{{$user->id}}" data-id="{{$user->id}}">
+                                                        <td><label class="switch flt_lft client_input">
+                                                            <input type="checkbox" {{ ($user->active) ? 'checked' : '' }} name="client_input">
+                                                            <span></span>
+                                                        </label></td>
                                                         <td>{{$user->name}}</td>
                                                         <td>{{$user->user_type}}</td>
                                                         <td><a data-toggle="modal" data-target="#userLinksModal" class="user_links" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}" data-token="{{$user->app_token}}"><i class="fas fa-link"></i></a></td>
                                                         <td><a data-dialer="{{$db}}" href="{{$user->id}}" class="edit_user"><i class="fas fa-user-edit"></i></a></td>
-                                                        <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td>
+                                                        <td><a data-toggle="modal" data-target="#deleteUserModal" class="remove_user" href="#" data-name="{{$user->name}}" data-user="{{$user->id}}"><i class="fa fa-trash-alt"></i></a></td></tr>
                                                     @endif
                                                 @endforeach
                                                 </tbody>
