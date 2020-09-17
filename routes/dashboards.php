@@ -11,6 +11,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
         Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
+        Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
 
         Route::get('/kpi', 'MasterDashController@kpi');
         Route::get('/kpi/recipients', 'KpiController@recipients');
@@ -42,6 +43,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('update_filters', 'MasterDashController@updateFilters');
         Route::post('campaign_search', 'MasterDashController@campaignSearch');
         Route::post('feature_msg_read', 'FeatureMessageController@readMessage');
+        Route::get('get_lead_info/{lead}', 'RealTimeDashboardController@getLeadInfo');
 
         // Admin only
         // prefix('admin') isn't working for some reason

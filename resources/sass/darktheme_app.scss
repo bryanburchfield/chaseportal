@@ -2702,9 +2702,119 @@ span.numb_notifications{
 
 label.checkbox.toggle_active_reps{margin-left: 20px;}
 
+.rep_status{
+    
+    padding-top: 20px;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0b1019+1,1c293d+100 */
+background: rgb(11,16,25); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(11,16,25,1) 1%, rgba(28,41,61,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  rgba(11,16,25,1) 1%,rgba(28,41,61,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  rgba(11,16,25,1) 1%,rgba(28,41,61,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b1019', endColorstr='#1c293d',GradientType=1 ); /* IE6-9 */
+
+
+    li.list-group-item{
+        overflow: auto !important;
+        border:1px solid darken(#152130,8%);
+        background: #152130;
+
+        &:nth-child(even){
+            background: lighten(#152130,3%);
+        }
+    }
+
+    .break_code{color:$orange;font-weight: 600;}
+
+    .call_type{
+        float:left;
+        position: relative;
+        right:7px;
+    }
+
+    .agent_call_details{
+        float: left;
+        width: 100%;
+        &.has_icon{
+            width: 93%;
+        }
+    }
+
+    span.timer{float: right;}
+
+    h2{
+        float: left;
+        font-size: 21px;
+        border-bottom: none;
+    }
+
+    .num_agents{
+        float: right;
+        position: relative;
+        bottom: 27px;
+
+        p{text-align: center;font-size: 12px;font-style: italic;color:#888;}
+
+        .inner{
+            color:$green;
+            text-align: center;
+            padding-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
+    p.rep_name {font-weight: 600;}
+}
+
+div.col-sm-7.five-three {
+    width: 60% !important;
+}
+
+div.col-sm-5.five-two {
+    width: 40% !important;
+}
+
+.getleaddetails{
+    &:hover{
+        cursor:pointer;
+    }
+}
+
+.lead_detail_notes{
+
+    h4{
+        background: $blue;
+        padding: 8px;
+        font-weight: 600;
+        color: #eee;
+        margin-top: 20px;
+
+        &:hover{
+            cursor:pointer;
+        }
+    }
+
+    p{
+        background:lighten( #0f131f,4%);
+        display: none;
+        padding:10px  8px;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
+
+//// reatime agent dash
+@media handheld, only screen and (min-width: 920px) {
+    div.col-md-7.five-three {
+        width: 60% !important;
+    }
+
+    div.col-md-5.five-two {
+        width: 40% !important;
+    }
+}
 
 @media handheld, only screen and (min-width: 1800px) {
 
@@ -2755,6 +2865,10 @@ MEDIAQUERIES
     .total_calls_in p.total, .total_calls_out p.total {
         font-size: 45px;
     }
+
+    .rep_status h2{
+        font-size: 18px;
+    }
 }
 
 @media handheld, only screen and (max-width:1070px) {
@@ -2781,6 +2895,10 @@ MEDIAQUERIES
     .pag_total {
         clear: both;
         display: block;
+    }
+
+    .rep_status h2{
+        font-size: 21px;
     }
 }
 

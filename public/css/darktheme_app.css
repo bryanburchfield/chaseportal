@@ -3293,9 +3293,127 @@ label.checkbox.toggle_active_reps {
   margin-left: 20px;
 }
 
+.rep_status {
+  padding-top: 20px;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0b1019+1,1c293d+100 */
+  background: #0b1019;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #0b1019 1%, #1c293d 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#0b1019", endColorstr="#1c293d",GradientType=1 );
+  /* IE6-9 */
+}
+
+.rep_status li.list-group-item {
+  overflow: auto !important;
+  border: 1px solid #090d14;
+  background: #152130;
+}
+
+.rep_status li.list-group-item:nth-child(even) {
+  background: #1a283b;
+}
+
+.rep_status .break_code {
+  color: #E15B23;
+  font-weight: 600;
+}
+
+.rep_status .call_type {
+  float: left;
+  position: relative;
+  right: 7px;
+}
+
+.rep_status .agent_call_details {
+  float: left;
+  width: 100%;
+}
+
+.rep_status .agent_call_details.has_icon {
+  width: 93%;
+}
+
+.rep_status span.timer {
+  float: right;
+}
+
+.rep_status h2 {
+  float: left;
+  font-size: 21px;
+  border-bottom: none;
+}
+
+.rep_status .num_agents {
+  float: right;
+  position: relative;
+  bottom: 27px;
+}
+
+.rep_status .num_agents p {
+  text-align: center;
+  font-size: 12px;
+  font-style: italic;
+  color: #888;
+}
+
+.rep_status .num_agents .inner {
+  color: #33A09B;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.rep_status p.rep_name {
+  font-weight: 600;
+}
+
+div.col-sm-7.five-three {
+  width: 60% !important;
+}
+
+div.col-sm-5.five-two {
+  width: 40% !important;
+}
+
+.getleaddetails:hover {
+  cursor: pointer;
+}
+
+.lead_detail_notes h4 {
+  background: #203047;
+  padding: 8px;
+  font-weight: 600;
+  color: #eee;
+  margin-top: 20px;
+}
+
+.lead_detail_notes h4:hover {
+  cursor: pointer;
+}
+
+.lead_detail_notes p {
+  background: #161b2d;
+  display: none;
+  padding: 10px 8px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
+
+@media handheld, only screen and (min-width: 920px) {
+  div.col-md-7.five-three {
+    width: 60% !important;
+  }
+
+  div.col-md-5.five-two {
+    width: 40% !important;
+  }
+}
 
 @media handheld, only screen and (min-width: 1800px) {
   .card.card-3,
@@ -3355,6 +3473,10 @@ MEDIAQUERIES
   .total_calls_out p.total {
     font-size: 45px;
   }
+
+  .rep_status h2 {
+    font-size: 18px;
+  }
 }
 
 @media handheld, only screen and (max-width: 1070px) {
@@ -3382,6 +3504,10 @@ MEDIAQUERIES
   .pag_total {
     clear: both;
     display: block;
+  }
+
+  .rep_status h2 {
+    font-size: 21px;
   }
 }
 
