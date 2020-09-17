@@ -76,6 +76,7 @@ class EcovermeLeadExport
             'PhoneType1' => 'PhoneType1',
             'PhoneType2' => 'PhoneType2',
             'PolicyType' => 'PolicyType',
+            'DATE SOLD' => 'DATE SOLD',
         ];
     }
 
@@ -229,12 +230,13 @@ class EcovermeLeadExport
             A.[PhoneType1],
             A.[PhoneType2],
             A.[PolicyType],
+            A.[DATE SOLD],
             totRows = COUNT(*) OVER()
         FROM Leads L
         INNER JOIN [ADVANCED_Ecover Fields] A ON A.LeadId = L.IdGuid
         $join
         WHERE L.GroupId = :group_id
-        AND TRY_CAST(A.[Date_Of_Lead] as Date) BETWEEN :startdate AND :enddate";
+        AND TRY_CAST(A.[DATE SOLD] as Date) BETWEEN :startdate AND :enddate";
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
