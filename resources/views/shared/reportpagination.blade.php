@@ -1,9 +1,10 @@
+<?php $totrows = $params['totrows'];?>
+
 @if($params['totpages'] > 1)
 <?php
         $curpage = $params['curpage'];
         $lastpage = $params['totpages'];
         $pagesize = $params['pagesize'];
-        $totrows = $params['totrows'];
 
         // show at least 2 pages either side of current, but 5 total (if we have that many)
         if($curpage <= 2) {
@@ -53,4 +54,10 @@
         <input type="hidden" name="totrows" class="sm-input form-control pag_input totrows" data-prevval="{{ $totrows }}" value="{{ $totrows }}">
     </div>
     <div class="alert alert-danger errors pag_report_errors"></div>
+@else
+
+    <div class="pag_dets">
+        {{__('general.total_rows')}}: {{ $totrows }}
+    </div>
+
 @endif
