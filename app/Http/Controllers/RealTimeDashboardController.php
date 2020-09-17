@@ -207,6 +207,8 @@ class RealTimeDashboardController extends Controller
             ->tz($tz)
             ->isoFormat('L LT');
 
+        $info['Notes'] = preg_replace('/(\d{2}-\d{2}-\d{4} \d{2}:\d{2} : )/', "<br><b>$1</b>", $info['Notes']);
+
         return $info;
     }
 }
