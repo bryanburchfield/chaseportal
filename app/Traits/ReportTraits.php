@@ -255,6 +255,10 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
             }
             $this->params['pagesize'] = $request->pagesize;
         }
+
+        if (!empty($request->orderby)) {
+            $this->params['orderby'] = $request->orderby;
+        }
     }
 
     private function checkDateRangeFilters(Request $request)
@@ -431,6 +435,7 @@ SELECT 'Start' = dbo.GetSettingEx (:group1, '', 'ReportingStartTime', '09:00:00'
                 }
             }
         }
+
         return $newrequest;
     }
 }
