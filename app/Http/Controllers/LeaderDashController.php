@@ -202,13 +202,8 @@ class LeaderDashController extends Controller
 			'Cnt' = COUNT(DR.CallStatus),
 			'Duration' = SUM(DR.Duration),
 			'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE NULL END)
-			FROM [$db].[dbo].[DialingResults] DR
-			OUTER APPLY (SELECT TOP 1 [Type]
-				FROM  [$db].[dbo].[Dispos]
-				WHERE Disposition = DR.CallStatus
-				AND (GroupId = DR.GroupId OR IsSystem=1)
-				AND (Campaign = DR.Campaign OR Campaign = '')
-				ORDER BY [id]) DI
+            FROM [$db].[dbo].[DialingResults] DR
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :groupid$i
             AND DR.CallType NOT IN (7,8)
             AND DR.Rep != ''
@@ -315,12 +310,7 @@ class LeaderDashController extends Controller
             DR.Campaign,
             'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE NULL END)
             FROM [$db].[dbo].[DialingResults] DR
-            CROSS APPLY (SELECT TOP 1 [Type]
-                FROM  [$db].[dbo].[Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :groupid$i
             AND DR.CallType NOT IN (7,8)
             AND DR.Campaign != ''

@@ -125,27 +125,16 @@ class ShiftReport
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
          dr.CallStatus,
-         IsNull(
-            (SELECT TOP 1
-              CASE
-                WHEN [Description] = '' THEN dr.CallStatus
-                ELSE [Description]
-              END
-             FROM [$db].[dbo].[Dispos]
-             WHERE Disposition = dr.CallStatus
-             AND (GroupId=dr.GroupId OR IsSystem=1)
-            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
-         count(dr.CallStatus) as Calls,
-         IsNull(
-            (SELECT TOP 1
-              dt.TypeName
-             FROM [$db].[dbo].[Dispos] d
-             INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
-             WHERE d.Disposition = dr.CallStatus
-             AND (GroupId=dr.GroupId OR IsSystem=1)
-            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
+         IsNull(CASE
+                WHEN DI.Description = '' THEN dr.CallStatus
+                ELSE DI.Description
+              END, dr.CallStatus) as [Description],
+         COUNT(dr.CallStatus) as Calls,
+         IsNull(dt.TypeName, 'No Connect') as TypeName,
          0 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        LEFT JOIN [$db].[dbo].[Dispos] DI ON dr.id = dr.DispositionId
+        LEFT JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = DI.Type
         $join
         WHERE dr.GroupId = :group_id$i
         AND IsNull(CallStatus, '') <> ''
@@ -178,32 +167,22 @@ class ShiftReport
             }
 
             $sql .= "
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName
         UNION
         SELECT
          CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
          dr.CallStatus,
-         IsNull((SELECT TOP 1
-                  CASE
-                    WHEN [Description] = '' THEN dr.CallStatus
-                    ELSE [Description]
-                  END
-                 FROM [$db].[dbo].[Dispos]
-                 WHERE Disposition = dr.CallStatus
-                 AND (GroupId=dr.GroupId OR IsSystem=1)
-                 ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), dr.CallStatus) as [Description],
-         count(dr.CallStatus) as Calls,
-          IsNull(
-            (SELECT TOP 1
-              dt.TypeName
-             FROM [$db].[dbo].[Dispos] d
-             INNER JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = d.Type
-             WHERE d.Disposition = dr.CallStatus
-             AND (GroupId=dr.GroupId OR IsSystem=1)
-            ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as TypeName,
+         IsNull(CASE
+                WHEN [Description] = '' THEN dr.CallStatus
+                ELSE [Description]
+         END, dr.CallStatus) as [Description],
+         COUNT(dr.CallStatus) as Calls,
+         IsNull(dt.TypeName, 'No Connect') as TypeName,
          1 as SortOrder
         FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+        LEFT JOIN [$db].[dbo].[Dispos] DI ON dr.id = dr.DispositionId
+        LEFT JOIN [$db].[dbo].[DispositionTypes] dt ON dt.id = DI.Type
         $join
         WHERE dr.GroupId = :group_id1$i
         AND IsNull(CallStatus, '') <> ''
@@ -236,7 +215,7 @@ class ShiftReport
             }
 
             $sql .= "
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, dr.GroupId";
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName";
 
             $union = 'UNION ALL';
         }

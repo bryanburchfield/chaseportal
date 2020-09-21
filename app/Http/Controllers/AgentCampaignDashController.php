@@ -615,12 +615,7 @@ class AgentCampaignDashController extends Controller
 
             $sql .= " $union SELECT DR.Rep, 'Sales' = COUNT(id)
                 FROM [$db].[dbo].[DialingResults] DR
-                CROSS APPLY (SELECT TOP 1 [Type]
-                    FROM  [$db].[dbo].[Dispos] DI
-                    WHERE Disposition = DR.CallStatus
-                    AND (GroupId = DR.GroupId OR IsSystem=1)
-                    AND (Campaign = DR.Campaign OR Campaign = '')
-                    ORDER BY [id]) DI
+                INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
                 WHERE DR.GroupId = :groupid$i
                 AND DR.Date >= :fromdate$i
                 AND DR.Date < :todate$i

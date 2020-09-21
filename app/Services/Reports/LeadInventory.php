@@ -127,40 +127,25 @@ class LeadInventory
                 WHEN '' THEN '[ Not Called ]'
                 ELSE dr.CallStatus
             END as CallStatus,
-            IsNull((SELECT TOP 1 IsCallable
-                    FROM [$db].[dbo].[Dispos]
-                    INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
-                    WHERE Disposition = dr.CallStatus
-                    AND (GroupId = dr.GroupId OR IsSystem = 1)
-                ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc
-            ), 0) as IsCallable,
+            IsNull(DI.IsCallable, 0) as IsCallable,
             WasDialed,
-            (SELECT TOP 1 [Description]
-             FROM [$db].[dbo].[Dispos]
-             INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
-             WHERE Disposition = dr.CallStatus
-             AND (GroupId = dr.GroupId OR IsSystem = 1)
-             ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
-            IsNull((SELECT TOP 1
-                CASE [Type]
+            DI.Description,
+            IsNull(CASE DI.Type
                     WHEN 0 THEN 'No Connect'
                     WHEN 1 THEN 'Connect'
                     WHEN 2 THEN 'Contact'
                     WHEN 3 THEN 'Lead/Sale'
                 END
-                FROM [$db].[dbo].[Dispos]
-                INNER JOIN #SelectedCampaign c on c.CampaignName = Campaign
-                WHERE Disposition = dr.CallStatus AND (GroupId = dr.GroupId OR IsSystem = 1)
-                ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect'
-                ) as [Type],
-               count(dr.CallStatus) as Leads
+            , 'No Connect') as [Type],
+            COUNT(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
             INNER JOIN #SelectedCampaign c on c.CampaignName = dr.Campaign
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, dr.WasDialed, dr.GroupId";
+            GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type";
 
             $union = 'UNION ALL';
         }

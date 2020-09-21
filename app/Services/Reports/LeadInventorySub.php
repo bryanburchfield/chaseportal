@@ -123,44 +123,30 @@ class LeadInventorySub
             $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
-                CASE IsNull(dr.CallStatus, '')
-                    WHEN '' THEN '[ Not Called ]'
-                    ELSE dr.CallStatus
-                END as CallStatus,
-                IsNull((SELECT TOP 1 IsCallable
-                        FROM [$db].[dbo].[Dispos]
-                        WHERE Disposition = dr.CallStatus
-                        AND Campaign = dr.Campaign
-                        AND (GroupId = dr.GroupId OR IsSystem = 1)
-                    ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 0) as IsCallable,
-                WasDialed,
-                (SELECT TOP 1 [Description]
-                FROM [$db].[dbo].[Dispos]
-                WHERE Disposition = dr.CallStatus
-                AND Campaign = dr.Campaign
-                AND (GroupId = dr.GroupId OR IsSystem = 1)
-                ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
-                IsNull((SELECT TOP 1
-                    CASE [Type]
-                        WHEN 0 THEN 'No Connect'
-                        WHEN 1 THEN 'Connect'
-                        WHEN 2 THEN 'Contact'
-                        WHEN 3 THEN 'Lead/Sale'
-                    END
-                    FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition = dr.CallStatus
-                    AND Campaign = dr.Campaign
-                    AND (GroupId = dr.GroupId OR IsSystem = 1)
-                    ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as [Type],
-                count(dr.CallStatus) as Leads
+            CASE IsNull(dr.CallStatus, '')
+                WHEN '' THEN '[ Not Called ]'
+                ELSE dr.CallStatus
+            END as CallStatus,
+            IsNull(DI.IsCallable, 0) as IsCallable,
+            WasDialed,
+            DI.Description,
+            IsNull(
+                CASE [Type]
+                    WHEN 0 THEN 'No Connect'
+                    WHEN 1 THEN 'Connect'
+                    WHEN 2 THEN 'Contact'
+                    WHEN 3 THEN 'Lead/Sale'
+                END, 'No Connect') as [Type],
+            COUNT(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
             AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, dr.WasDialed, dr.Campaign, dr.GroupId";
+            GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type, dr.Campaign";
 
             $union = 'UNION ALL';
         }

@@ -418,13 +418,8 @@ class OutboundDashController extends Controller
 
             $sql .= " $union SELECT DR.Campaign,
 			'Cnt' = COUNT(DR.CallStatus)
-			FROM [$db].[dbo].[DialingResults] DR
-			CROSS APPLY (SELECT TOP 1 [Type]
-				FROM  [$db].[dbo].[Dispos]
-				WHERE Disposition = DR.CallStatus
-				AND (GroupId = DR.GroupId OR IsSystem=1)
-				AND (Campaign = DR.Campaign OR Campaign = '')
-				ORDER BY [id]) DI
+            FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
 			WHERE DR.GroupId = :groupid1_$i
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
@@ -643,12 +638,7 @@ class OutboundDashController extends Controller
             'Contacts' = COUNT(CASE WHEN DI.Type > 1 THEN 1 ELSE NULL END),
             'Sales' = COUNT(CASE WHEN DI.Type = 3 THEN 1 ELSE NULL END)
             FROM [$db].[dbo].[DialingResults] DR
-            CROSS APPLY (SELECT TOP 1 [Type]
-                FROM  [$db].[dbo].[Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :groupid$i
             AND DR.Rep != ''
             AND NOT ((ISNUMERIC(DR.Rep) = 1 AND LEN(DR.Rep) >= 10))
@@ -918,13 +908,9 @@ class OutboundDashController extends Controller
             $bind['todate' . $i] = $endDate;
 
             $sql .= " $union SELECT
-            IsNull((SELECT TOP 1 DI.[Type]
-            FROM [$db].[dbo].[Dispos] DI
-            WHERE Disposition=DR.CallStatus
-            AND (GroupId=DR.GroupId OR IsSystem=1)
-            AND (Campaign=DR.Campaign OR Campaign='')
-            ORDER BY [id]), 0) as [Type]
+            IsNull(DI.[Type],0) as [Type]
             FROM [$db].[dbo].[DialingResults] DR
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.CallType NOT IN (1,7,8,11)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','TRANSFERRED','PARKED','Inbound')
             AND DR.Date >= :fromdate$i

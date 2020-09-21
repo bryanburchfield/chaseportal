@@ -210,6 +210,7 @@ class BwrProductionReport
             'Contacts' = CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END,
             'Sales' = CASE WHEN DI.Type = 3 THEN 1 ELSE 0 END
             FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             INNER JOIN [$db].[dbo].[Leads] L ON L.id = DR.LeadId 
             INNER JOIN [$db].[dbo].[ADVANCED_BWR_Master_Table] A ON A.LeadID = L.IdGuid";
 
@@ -233,13 +234,6 @@ class BwrProductionReport
             }
 
             $sql .= "
-            CROSS APPLY (
-                SELECT TOP 1 [Type]
-                FROM [$db].[dbo].[Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem = 1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
             WHERE DR.GroupId = :group_id$i
             AND DR.Date >= :startdate$i
             AND DR.Date < :enddate$i
