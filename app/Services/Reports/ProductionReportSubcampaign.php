@@ -130,11 +130,11 @@ class ProductionReportSubcampaign
             }
 
             $sql .= "
-                LEFT JOIN [$db].[dbo].[Dispos] d on d.Disposition = dr.CallStatus
+                LEFT JOIN [$db].[dbo].[Dispos] d ON d.id = dr.DispositionId
                 WHERE dr.GroupId = :group_id$i
                 AND dr.Date >= :startdate$i
                 AND dr.Date < :enddate$i
-                AND (((d.GroupId=dr.GroupId OR d.IsSystem=1) AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0) OR dr.CallStatus = 'UNFINISHED')";
+                AND (d.Type > 0 OR dr.CallStatus = 'UNFINISHED')";
 
             if (session('ssoRelativeCampaigns', 0)) {
                 $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
@@ -168,7 +168,7 @@ class ProductionReportSubcampaign
 
             $sql .= " $union SELECT dr.CallStatus, dr.Subcampaign
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-            LEFT JOIN [$db].[dbo].[Dispos] d on d.Disposition = dr.CallStatus";
+            LEFT JOIN [$db].[dbo].[Dispos] d ON d.id = DR.DispositionId";
 
             if (!empty($campaigns)) {
                 $sql .= "
@@ -185,9 +185,7 @@ class ProductionReportSubcampaign
             WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+'''
             AND dr.Date >= '''+CAST(:startdate1$i as nvarchar)+'''
             AND dr.Date < '''+CAST(:enddate1$i as nvarchar)+'''
-            AND (((d.GroupId=dr.GroupId OR d.IsSystem=1)
-                AND (d.Campaign=dr.Campaign OR d.IsDefault=1) AND d.Type > 0)
-                OR dr.CallStatus = ''UNFINISHED'')";
+            AND (d.Type > 0 OR dr.CallStatus = ''UNFINISHED'')";
 
             if (session('ssoRelativeCampaigns', 0)) {
                 $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns('''+CAST(:ssousercamp2$i as varchar)+''', 1))";
@@ -232,11 +230,7 @@ class ProductionReportSubcampaign
 
             $sql .= " $union SELECT r.Subcampaign, d.Type, count(r.id) as [Count]
             FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                CROSS APPLY (SELECT TOP 1 [Type]
-                            FROM [$db].[dbo].[Dispos]
-                            WHERE Disposition=r.CallStatus
-                            AND (GroupId=r.GroupId OR IsSystem=1) AND (Campaign=r.Campaign OR Campaign='')
-                            ORDER BY [id]) d";
+            INNER JOIN [$db].[dbo].[Dispos] d ON d.id = r.DispositionId";
 
             if (!empty($campaigns)) {
                 $sql .= "

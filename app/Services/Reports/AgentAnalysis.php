@@ -196,7 +196,8 @@ class AgentAnalysis
                 r.Rep,
                 d.Type,
                 COUNT(r.id) as [Count]
-            FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)";
+            FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
+            INNER JOIN [$db].[dbo].[Dispos] d ON d.id = r.DispositionId";
 
             if (!empty($this->params['skills'])) {
                 $sql .= "
@@ -205,12 +206,6 @@ class AgentAnalysis
             }
 
             $sql .= "
-            CROSS APPLY (SELECT TOP 1 [Type]
-                        FROM [$db].[dbo].[Dispos]
-                        WHERE Disposition=r.CallStatus
-                        AND (GroupId=r.GroupId OR IsSystem=1)
-                        AND (Campaign=r.Campaign OR Campaign='')
-                        ORDER BY [id]) d
             WHERE r.GroupId = :group_id2$i
             AND r.Date >= :startdate2$i
             AND r.Date < :enddate2$i

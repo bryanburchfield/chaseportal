@@ -157,17 +157,10 @@ class BwrOmni
                     IsNull(L.Subcampaign, '') as Subcampaign,
                     L.Attempt,
                     D.Type,
-                    IsNull((
-                        SELECT TOP 1 D.IsCallable
-                        FROM [Dispos] D
-                        WHERE D.Disposition = L.CallStatus
-                        AND (GroupId = L.GroupId OR IsSystem=1)
-                        AND (Campaign = L.Campaign OR Campaign = '')
-                        ORDER BY [id] Desc
-                    ), 0) as IsCallable
+                    IsNull(D.IsCallable,0) as IsCallable
                 FROM Leads L
                 INNER JOIN #SelectedCampaign C on C.CampaignName = L.Campaign
-                LEFT OUTER JOIN Dispos D ON D.Disposition = L.CallStatus AND D.GroupId = L.GroupId
+                LEFT JOIN Dispos D ON D.id = D.DispositionId
                 INNER JOIN ADVANCED_BWR_Master_Table A ON A.LeadID = L.IdGuid";
 
         if (!empty($this->params['data_sources_primary'])) {
