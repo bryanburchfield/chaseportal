@@ -31,12 +31,12 @@
     <link href="/css/bootstrap-ie7.css" rel="stylesheet">
     <![endif]-->
     <!--[if IE]>
-    <script type="text/javascript" src="/js/css3-mediaqueries.js"></script>    
+    <script type="text/javascript" src="/js/css3-mediaqueries.js"></script>
     <![endif]-->
 </head>
 <body>
     <input type="hidden" class="theme" value="{{Auth::user()->theme}}">
-
+    <input type="hidden" class="language" value="{{Session::get('locale')}}">
     <div class="preloader"></div>
 
     <div class="wrapper">
@@ -101,9 +101,21 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
+
+    <?php
+        $lang = Session::get('locale');
+        $en='true';
+        if($lang == 'en'){
+            $en='true';
+            $date_format = 'MM/DD/YYYY h:mm A';
+        }else{
+            $en='false';
+            $date_format = 'DD/MM/YYYY HH:mm';
+        }
+    ?>
     <script>
 
-        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY h:mm A', currentDate : new Date(), shortTime : true });
+        $('.datetimepicker').bootstrapMaterialDatePicker({ format : '<?php echo $date_format;?>', shortTime : <?php echo $en;?> });
 
         $(window).on('load', function() {
             $('.preloader').fadeOut('slow');

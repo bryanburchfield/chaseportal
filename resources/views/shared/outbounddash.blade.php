@@ -6,7 +6,7 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('widgets.total_dials')}}</h1>
-            <h4 class="data total mt30"></h4>
+            <h4 class="data total mt-3"></h4>
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -19,7 +19,7 @@
                     <span></span>
                 </div>
                 <h1 class="title">{{__('widgets.total_contacts')}}</h1>
-                <h4 class="data mt30" id="total_contacts"></h4>
+                <h4 class="data mt-3" id="total_contacts"></h4>
             </div>
 
             <div class="back">
@@ -30,7 +30,7 @@
                 </div>
 
                 <h1 class="title">{{__('widgets.contact_rate')}}</h1>
-                <h4 class="data mt30" id="contact_rate"></h4>
+                <h4 class="data mt-3" id="contact_rate"></h4>
             </div>
         </div><!-- end card -->
     </div><!-- end column -->
@@ -96,7 +96,7 @@
         <div class="card-6 card outbound_default">
             <h1 class="title">{{__('widgets.call_volume')}}</h1>
 
-            <div class="outbound inandout cb mt60">
+            <div class="outbound inandout cb mt-4">
                 <canvas id="call_volume_outbound"></canvas>
             </div>
         </div>
@@ -104,9 +104,9 @@
 
     <div class="col-sm-6">
         <div class="card-6 card">
-            <h1 class="title">{{__('widgets.call_duration_minutes')}}</h1><br><br><br>
+            <h1 class="title">{{__('widgets.call_duration_minutes')}}</h1>
 
-            <div class="inandout">
+            <div class="inandout mt-4">
                 <canvas id="call_duration"></canvas>
             </div>
         </div>
@@ -171,8 +171,8 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-3 card_table_prt ">
-        <div class="card flipping_card card-3b ">
+    <div class="col-sm-3 card_table_prt">
+        <div class="card flipping_card card-3b">
             <div class="front ">
                 <div class="card_table2">
                     <h1 class="title">{{__('widgets.avg_wait_time')}}</h1>

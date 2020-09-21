@@ -5,12 +5,12 @@
     </div>
 @endif
 
-<div class="row">
-    <div class="col-sm-12">
+<div class="row w100">
+    <div class="col-sm-12 w100 p-0">
     	<a class="btn btn-default btn-primary flt_rgt" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
-        
-    	<div class="table-responsive-sm">
-    		<table class="table table-striped agent_compliance_table table-responsive w-100 d-block d-md-table">
+
+    	<div class="table-responsive">
+    		<table class="table table-striped agent_compliance_table w-100 d-block d-md-table" style="width:100%">
     			<thead>
     				<tr>
                         <th></th>

@@ -856,6 +856,7 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
+
         if(this.inorout != undefined){
             inorout = Dashboard.inorout;
         }else{
@@ -869,13 +870,13 @@ var Dashboard = {
                 $(this).addClass('btn-primary');
             }
         });
-        
+
         datefilter = $('#datefilter').val();
-        
-        Dashboard.inorout_toggled=true;  
-        
-        $('.callvolume_inorout').siblings('.inandout').hide();
-        $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
+
+        Dashboard.inorout_toggled=true;
+
+        $('.callvolume_inorout').parent().siblings('.inandout').hide();
+        $('.callvolume_inorout').parent().siblings('.inandout.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;
 

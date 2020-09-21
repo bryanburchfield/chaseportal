@@ -58,6 +58,11 @@ container {
   box-sizing: border-box;
 }
 
+.btn:focus {
+  box-shadow: none;
+  outline: none !important;
+}
+
 body,
 html {
   height: 100%;
@@ -155,10 +160,6 @@ h6 {
 
 .mb30 {
   margin-bottom: 30px;
-}
-
-.mb42 {
-  margin-bottom: 42px;
 }
 
 .mr10 {
@@ -733,14 +734,6 @@ div.container-fluid.bg {
   background: linear-gradient(to bottom, #263854 0%, #1c273d 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#263854, endColorstr=#1c273d,GradientType=0 );
   color: #fff;
-}
-
-.dropdown-menu a:nth-child(even) {
-  background-color: #ececec;
-}
-
-.dropdown-menu a:hover {
-  background-color: #e4e4e4;
 }
 
 .multiselect-container.dropdown-menu {
@@ -3093,30 +3086,15 @@ span.numb_notifications {
   flex-direction: column;
 }
 
+div.w100 {
+  width: 100%;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
 
 @media handheld, only screen and (min-width: 1800px) {
-  .card.card-3,
-  .card.card-3b,
-  .card.card-3b2 {
-    min-height: 215px;
-  }
-
-  .card.card-3 .title,
-  .card.card-3b .title,
-  .card.card-3b2 .title {
-    font-size: 20px;
-    margin-bottom: 30px;
-  }
-
-  .card.card-3 h4.data,
-  .card.card-3b h4.data,
-  .card.card-3b2 h4.data {
-    margin-top: 35px;
-  }
-
   .card.card-6,
   .card.card-12 {
     min-height: 450px;

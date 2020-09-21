@@ -10,17 +10,17 @@
 					<p class="total mb_hide"></p>
 				</div>
 
-				<div class="btn-group btn-group-sm" role="group">
+				<div class="btn-group btn-group-sm callvolume_inorout" role="group">
 					<button data-type="inbound" type="button" class="btn btn-sm btn-primary">{{__('widgets.inbound')}}</button>
-					<button type="button" class="btn btn-sm btn-default">Secondary</button>
+					<button data-type="outbound" type="button" class="btn btn-default">{{__('widgets.outbound')}}</button>
 				</div>
 			</div>
 
-			<div class="inbound inandout cb mt60">
+			<div class="inbound inandout cb mt-4">
 				<canvas id="call_volume_inbound"></canvas>
 			</div>
 
-			<div class="outbound inandout cb mt60">
+			<div class="outbound inandout cb mt-4">
 				<canvas id="call_volume_outbound"></canvas>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 				<h2 class="avg_tt flt_rgt mb_hide"></h2>
 			</div>
 
-			<div class="inbound inandout cb mt60">
+			<div class="inbound inandout cb mt-4">
 				<canvas id="call_details"></canvas>
 			</div>
 		</div>
@@ -106,7 +106,7 @@
 	<div class="col-sm-12 w99">
 		<div class="card card-12">
 			<h1 class="title">{{__('widgets.max_hold_time')}}</h1>
-			<div class="inbound inandout cb" style="height:300px">
+			<div class="inbound inandout cb mt-4" style="height:300px">
 				<canvas id="max_hold_time"></canvas>
 			</div>
 		</div>

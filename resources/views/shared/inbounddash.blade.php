@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row display-flex">
 
     <div class="col-sm-3 col-xs-12">
         <div class="card-3 card" id="calls_offered">
@@ -69,7 +69,7 @@
     </div><!-- end column -->
 </div>
 
-<div class="row">
+<div class="row display-flex">
 
     <div class="col-sm-3 col-xs-12">
         <div class="card-3 card" id="avg_talk_time">
@@ -176,16 +176,16 @@
         <div class="card-6 card">
             <h1 class="title">{{__('widgets.call_volume')}}</h1>
 
-            <div class="inbound inandout cb mt60">
+            <div class="inbound inandout cb mt-4">
                 <canvas id="call_volume_inbound"></canvas>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card-6 card">
-            <h1 class="title mb42">{{__('widgets.call_duration_minutes')}}</h1><br><br><br>
+            <h1 class="title">{{__('widgets.call_duration_minutes')}}</h1>
 
-            <div class="inandout">
+            <div class="inandout mt-4">
                 <canvas id="call_duration"></canvas>
             </div>
         </div>
