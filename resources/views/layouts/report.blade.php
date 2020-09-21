@@ -102,17 +102,11 @@
     @endforeach
     @endisset
 
-    <?php
-        $lang = Session::get('locale');
-        $en='true';
-        if($lang == 'en'){
-            $en='true';
-            $date_format = 'MM/DD/YYYY h:mm A';
-        }else{
-            $en='false';
-            $date_format = 'DD/MM/YYYY HH:mm';
-        }
-    ?>
+    @php
+        $date_format = Session::get('locale') == 'en' ? 'MM/DD/YYYY h:mm A' : 'DD/MM/YYYY HH:mm';
+        $en = Session::get('locale') == 'en' ? 'true' : 'false';
+    @endphp
+
     <script>
 
         $('.datetimepicker').bootstrapMaterialDatePicker({ format : '<?php echo $date_format;?>', shortTime : <?php echo $en;?> });
