@@ -21,9 +21,10 @@ $('#group_duration #dialer').on('change', function(){
 	        dialer: dialer,
 	    },
 	    success: function (response) {
+	    	console.log(response);
 	        $('.group_select').empty();
         	var groups_response = Object.entries(response);
-
+        	console.log(groups_response);
         	// build groups select menu
         	if(groups_response.length){
 
