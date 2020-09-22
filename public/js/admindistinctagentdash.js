@@ -363,4 +363,6 @@ var Dashboard = {
 
 $(document).ready(function(){
 	Dashboard.init();
+$('table.table ').parent().parent().addClass('w-100');
 });
+

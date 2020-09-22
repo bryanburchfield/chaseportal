@@ -12,13 +12,16 @@
 
 		@include('shared.navbar')
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
+			<div class="container-full mt-5">
 			    <div class="row">
-
 					<div class="col-sm-12">
 						<h2>{{__('general.my_settings')}}</h2>
+					</div>
+			    </div>
 
-						<div class="col-sm-6 card">
+			    <div class="row">
+					<div class="col-sm-6">
+						<div class="card">
 							{!! Form::open(['method'=>'POST', 'class'=>'form fc_style user_settings', 'name' => 'user_settings']) !!}
 
 								<div class="form-group">
@@ -62,11 +65,10 @@
 									@endif
 
 								{!! Form::close() !!}
-
 						</div>
-
-						@include('shared.settings')
 					</div>
+
+					@include('shared.settings')
 			    </div>
 			</div>
 		</div>

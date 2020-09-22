@@ -38,7 +38,7 @@
             <li class="page-item" {!! $prevpageclass !!}><a class="page-link" href="#" data-paglink="{{ $prevpage }}">&laquo;</a></li>
 
             @for($i = $startpage; $i <= $endpage; $i++)
-                <li 
+                <li
                 @if($i == $curpage)
                     class=" page-item active"
                 @else

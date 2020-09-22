@@ -12,7 +12,7 @@
 		@include('shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
+			<div class="container-full mt-5">
 				<div class="row mt-5" id="settings">
 					<div class="col-sm-6 mb-2">
 						<div class="card">

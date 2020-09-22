@@ -13,6 +13,7 @@
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     @auth
         @if(Auth::user()->theme == 'dark')
             <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
@@ -23,6 +24,7 @@
     @guest
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endguest
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
@@ -56,7 +58,6 @@
     <script src="/js/moment.js"></script> 
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/js/datetimepicker.js"></script>
     <script src="/js/multiselect_lib.js"></script> 
     <script src="/js/multiselect.js"></script> 
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script> 

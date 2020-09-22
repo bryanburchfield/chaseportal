@@ -76,27 +76,29 @@
                 <div class="card card-3b mbo" style="height: 345px">
                     <div class="card_table">
                         <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
-                        <table class="table table-condensed table-striped" id="actions">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <span>{{__('general.date')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-                                    </th>
+                        <div class="table-responsive table-responsive-sm">
+                            <table class="table table-condensed table-striped" id="actions">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span>{{__('general.date')}}</span>
+                                            <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        </th>
 
-                                    <th>
-                                        <span>{{__('widgets.rep')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-                                    </th>
+                                        <th>
+                                            <span>{{__('widgets.rep')}}</span>
+                                            <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        </th>
 
-                                    <th>
-                                        <span>{{__('widgets.actions')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                                        <th>
+                                            <span>{{__('widgets.actions')}}</span>
+                                            <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 		    </div><!-- end column -->

@@ -51,7 +51,7 @@ var Master = {
             $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
         }
 
-        $('.pag').clone().insertAfter('div.table-responsive');
+        $('.pag').clone().insertAfter('div.table-responsive').addClass('pl-0');
         $('.view_report_btn').on('click', this.view_report);
         $('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
         $('.users table tbody').on('click', 'a.user_links', this.pass_user_linkmodal);
