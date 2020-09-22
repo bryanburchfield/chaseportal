@@ -107,6 +107,8 @@ class GroupDuration
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
+        $groups = implode(',', $this->params['groups']);
+
         $bind = [];
         $bind['group_id1'] = Auth::user()->group_id;
         $bind['group_id2'] = Auth::user()->group_id;
@@ -133,13 +135,10 @@ CREATE TABLE #GroupStatistics
     RealAvgSeats int DEFAULT 0
 )
 
-INSERT #GroupStatistics
-    (GroupId, GroupName)
-SELECT
-    g.GroupId,
-    g.GroupName
+INSERT #GroupStatistics (GroupId, GroupName)
+SELECT g.GroupId, g.GroupName
 FROM Groups g
-WHERE g.GroupId = :group_id1
+WHERE g.GroupId IN ($groups)
 
 UPDATE #GroupStatistics
     SET InboundNumbers = t.Numbers
@@ -208,30 +207,22 @@ FROM
     FROM
         (SELECT t.CallTime, count(*) as Seats
         FROM
-            (SELECT
-                CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120) as CallTime,
-                dr.Rep
-            FROM
-                DialingResults dr WITH(NOLOCK)
-            WHERE
-			GroupId = :group_id2
-               and IsNull(dr.Rep, '') <> '' AND
-                IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP') AND
-                dr.CallDate >= :startdate4
-                AND dr.CallDate < :enddate4
-                AND dr.CallType NOT IN (6, 7, 8)
-            GROUP BY 
-                CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120),
-                dr.Rep) t
-        GROUP BY 
-            t.CallTime) s) j
+            (SELECT CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120) as CallTime, dr.Rep
+            FROM DialingResults dr WITH(NOLOCK)
+            WHERE GroupId = :group_id2
+            AND IsNull(dr.Rep, '') <> ''
+            AND IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP')
+            AND dr.CallDate >= :startdate4
+            AND dr.CallDate < :enddate4
+            AND dr.CallType NOT IN (6, 7, 8)
+            GROUP BY CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120), dr.Rep) t
+        GROUP BY t.CallTime) s) j
 WHERE #GroupStatistics.GroupId = j.GroupId
 
 UPDATE #GroupStatistics SET
     AvgSeats = (MaxSeats + RealAvgSeats) / 2
 
 SELECT * FROM #GroupStatistics";
-
 
         return [$sql, $bind];
     }
