@@ -82,6 +82,9 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
             Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
             Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
+
+            // Report ajax
+            Route::post('reports/get_groups', 'ReportController@getGroups');
         });
     });
 });
