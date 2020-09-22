@@ -96,6 +96,16 @@ return [
     'unpausedtime' => 'Time the Agent Ended a Pause',
     'voicemail' => 'Calls Sent to Voicemail',
     'waittimesec' => 'Total Time Spent Waiting',
+    'avg_seats' => 'Average Seats',
+    'conference' => 'Conference',
+    'group_id' => 'Group Id',
+    'inbound' => 'Inbound',
+    'inbound_numbers' => 'Inbound Numbers',
+    'manual' => 'Manual',
+    'max_seats' => 'Max Seats',
+    'name' => 'Name',
+    'real_avg_seats' => 'Real Average Seats',
+    'toll_free_numbers' => 'Toll Free Numbers',
 
     // Report descriptions
     'agent_activity_1' => 'This report lists all agent activity for the specified date range.',
@@ -129,6 +139,7 @@ return [
         'if the lead is marked as callable or not.',
     'campaign_usage_2' => 'Note that the charts will not be included when the report is exported.',
     'ecoverme_lead_export_1' => 'This report gives a complete listing of all leads and fields for the specified Date Range and Call Status(es)',
+    'group_duration_1' => 'This report lists dialing statistics for selected groups.',
     'inbound_summary_1' => 'This report summarizes inbound calls for the specified date range',
     'lead_inventory_1' => 'This report breaks down all of the leads in a campaign by Call Status.  It also totals ' .
         'the number of available leads remaining.',

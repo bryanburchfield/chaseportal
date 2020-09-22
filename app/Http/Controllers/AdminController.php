@@ -555,9 +555,7 @@ class AdminController extends Controller
 
     public function getGroups(Request $request)
     {
-        $g = $this->getAllGroups($request->dialer);
-
-        return $g;
+        return $this->getAllGroups($request->dialer);
     }
 
     private function getAllGroups($db)

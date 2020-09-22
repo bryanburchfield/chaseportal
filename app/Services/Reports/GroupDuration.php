@@ -19,6 +19,8 @@ class GroupDuration
         $this->params['dialer'] = '';
         $this->params['groups'] = [];
         $this->params['columns'] = [
+            'GroupId' => 'reports.group_id',
+            'GroupName' => 'reports.name',
             'Duration' => 'reports.duration',
             'InboundNumbers' => 'reports.inbound_numbers',
             'TollFreeNumbers' => 'reports.toll_free_numbers',
@@ -82,7 +84,7 @@ class GroupDuration
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
-            $this->params['totrows'] = $results[0]['totRows'];
+            $this->params['totrows'] = count($results);
 
             foreach ($results as &$rec) {
                 $rec = $this->processRow($rec);
@@ -103,6 +105,8 @@ class GroupDuration
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
+        $timeZoneName = Auth::user()->tz;
+
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
@@ -110,10 +114,8 @@ class GroupDuration
         $groups = implode(',', $this->params['groups']);
 
         $bind = [];
-        $bind['group_id1'] = Auth::user()->group_id;
-        $bind['group_id2'] = Auth::user()->group_id;
 
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
         }
@@ -162,7 +164,8 @@ UPDATE #GroupStatistics
 FROM
     (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
     FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate between @StartTime and @EndTime
+    WHERE dr.CallDate >= :startdate1
+    AND dr.CallDate < :enddate1
     GROUP BY dr.GroupId) t
 WHERE #GroupStatistics.GroupId = t.GroupId
 
@@ -171,8 +174,8 @@ UPDATE #GroupStatistics
 FROM
     (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
     FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate1
-    AND dr.CallDate < :enddate1
+    WHERE dr.CallDate >= :startdate2
+    AND dr.CallDate < :enddate2
     AND CallType = 1
     GROUP BY dr.GroupId) t
 WHERE #GroupStatistics.GroupId = t.GroupId
@@ -182,8 +185,8 @@ UPDATE #GroupStatistics
 FROM
     (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
     FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate2
-    AND dr.CallDate < :enddate2
+    WHERE dr.CallDate >= :startdate3
+    AND dr.CallDate < :enddate3
     AND CallType = 2
     GROUP BY dr.GroupId) t
 WHERE #GroupStatistics.GroupId = t.GroupId
@@ -193,8 +196,8 @@ UPDATE #GroupStatistics
 FROM
     (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
     FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate3
-    AND dr.CallDate < :enddate3
+    WHERE dr.CallDate >= :startdate4
+    AND dr.CallDate < :enddate4
     AND CallType = 4
     GROUP BY dr.GroupId) t
 WHERE #GroupStatistics.GroupId = t.GroupId
@@ -203,20 +206,24 @@ UPDATE #GroupStatistics SET
     MaxSeats = j.MaxSeats,
     RealAvgSeats = j.AvgSeats
 FROM
-    (SELECT MAX(s.Seats) as MaxSeats, AVG(s.Seats) as AvgSeats
+    (SELECT s.GroupId, MAX(s.Seats) as MaxSeats, AVG(s.Seats) as AvgSeats
     FROM
-        (SELECT t.CallTime, count(*) as Seats
+        (SELECT t.GroupId, t.CallTime, count(*) as Seats
         FROM
-            (SELECT CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120) as CallTime, dr.Rep
+            (SELECT
+                CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120) as CallTime,
+                dr.Rep, dr.GroupId
             FROM DialingResults dr WITH(NOLOCK)
-            WHERE GroupId = :group_id2
-            AND IsNull(dr.Rep, '') <> ''
+            WHERE IsNull(dr.Rep, '') <> ''
             AND IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP')
-            AND dr.CallDate >= :startdate4
-            AND dr.CallDate < :enddate4
+            AND dr.CallDate >= :startdate5
+            AND dr.CallDate < :enddate5
             AND dr.CallType NOT IN (6, 7, 8)
-            GROUP BY CONVERT(varchar(19), dateadd(minute, datediff(minute, 0, dateadd(mi, 4, dr.CallDate)) / 15 * 15, 0), 120), dr.Rep) t
-        GROUP BY t.CallTime) s) j
+            GROUP BY
+                CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120),
+                dr.Rep, dr.GroupId) t
+        GROUP BY t.GroupId, t.CallTime) s
+    GROUP BY s.GroupId) j
 WHERE #GroupStatistics.GroupId = j.GroupId
 
 UPDATE #GroupStatistics SET
