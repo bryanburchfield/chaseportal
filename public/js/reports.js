@@ -36,7 +36,7 @@ $('#group_duration #dialer').on('change', function(){
 
         		var groups_list='<div class="select_all checkbox mb10 cb"><label><input class="select_all_groups" name="select_all_groups" type="checkbox" value=""><b>Select All</b></label></div>';
         		for(var i=0; i<response.length;i++){
-        		    groups_list+='<div class="checkbox mb10 cb"><label><input class="groups" name="groups[]" type="checkbox" value="'+response[i]['GroupId']+'"><b>'+response[i]['GroupName']+'</b></label></div>';
+        		    groups_list+='<div class="checkbox mb10 cb"><label><input class="groups" name="groups[]" type="checkbox" value="'+response[i]['GroupId']+'"><b>'+response[i]['GroupId']+' '+response[i]['GroupName']+'</b></label></div>';
         		}
 
         		$('.group_select').append(groups_list);
