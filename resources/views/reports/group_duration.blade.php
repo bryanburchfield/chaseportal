@@ -40,7 +40,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						{!! Form::label('dialer', __('reports.dialer')) !!}
-						{!! Form::select("dialer", $filters['dialers'], null, ["class" => "form-control", 'id'=> 'dialer']) !!}
+						{!! Form::select("dialer", [null=>__('general.select_one')] + $filters['dialers'], null, ["class" => "form-control", 'id'=> 'dialer']) !!}
 					</div>
 				</div>
 				
