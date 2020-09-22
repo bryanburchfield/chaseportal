@@ -555,7 +555,9 @@ class AdminController extends Controller
 
     public function getGroups(Request $request)
     {
-        return $this->getAllGroups($request->dialer);
+        $g = $this->getAllGroups($request->dialer);
+
+        return $g;
     }
 
     private function getAllGroups($db)
@@ -568,16 +570,6 @@ class AdminController extends Controller
 
         $results = $this->runSql($sql);
 
-        if (empty($results)) {
-            return [];
-        }
-
-        $groups = [];
-
-        foreach ($results as $rec) {
-            $groups[$rec['GroupId']] = $rec['GroupName'];
-        }
-
-        return $groups;
+        return $results;
     }
 }
