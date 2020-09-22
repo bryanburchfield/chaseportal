@@ -39,8 +39,13 @@ class GroupDuration
             abort(404);
         }
 
+        $dialers = [];
+        foreach (Dialer::pluck('reporting_db')->all() as $dialer) {
+            $dialers[$dialer] = $dialer;
+        }
+
         $filters = [
-            'dialers' => Dialer::pluck('reporting_db')->all(),
+            'dialers' => $dialers,
             'groups' => [],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];

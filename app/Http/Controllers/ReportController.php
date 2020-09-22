@@ -192,29 +192,6 @@ class ReportController extends Controller
         return $request;
     }
 
-    private function getAllGroups($db)
-    {
-        $sql = "SELECT GroupId, GroupName
-            FROM [$db].[dbo].[Groups]
-            WHERE GroupId > -1
-            AND IsActive = 1
-            ORDER BY GroupName";
-
-        $results = $this->runSql($sql);
-
-        if (empty($results)) {
-            return [];
-        }
-
-        $groups = [];
-
-        foreach ($results as $rec) {
-            $groups[$rec['GroupId']] = $rec['GroupName'];
-        }
-
-        return $groups;
-    }
-
     //////////////////////
     // Ajax targets follow
     //////////////////////
@@ -311,10 +288,5 @@ class ReportController extends Controller
         $request->request->add(['form_data' => $automatedReport->filters]);
         $request->request->add(['email' => $user->email]);
         $report->emailReport($request);
-    }
-
-    public function getGroups(Request $request)
-    {
-        return $this->getAllGroups($request->dialer);
     }
 }
