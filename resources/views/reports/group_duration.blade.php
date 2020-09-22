@@ -46,8 +46,14 @@
 				
 				<div class="col-sm-4">
 					<div class="form-group">
-						{!! Form::label('groups', __('reports.group')) !!}
-						{!! Form::select("groups[]", $filters['groups'], null, ["class" => "form-control multiselect", 'id'=> 'group_select','multiple'=>true]) !!}
+						<div class="dropdown mb20">
+	                        <label>{{__('tools.group_select')}}</label>
+	                        <button class="btn btn-default dropdown-toggle myselect" type="button" id="group_select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+	                        {{__('tools.group_select')}}
+	                        <span class="caret"></span>
+	                        </button>
+	                        <ul class="dropdown-menu group_select stop-propagation" aria-labelledby="group_select"></ul>
+	                    </div>
 					</div>
 				</div>
 

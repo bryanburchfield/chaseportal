@@ -6,7 +6,6 @@ if($('#ecoverme_lead_export').length){
 
 $('#group_duration #dialer').on('change', function(){
 	var dialer = $(this).val();
-	console.log(dialer);
 
 	$.ajaxSetup({
 	    headers: {
@@ -15,30 +14,28 @@ $('#group_duration #dialer').on('change', function(){
 	});
 
 	$.ajax({
-	    url: '/dashboards/reports/get_groups/',
+	    url: '/dashboards/admin/get_groups',
 	    type: 'POST',
 	    dataType: 'json',
-	    // async: false, /////////////////////// use async when rebuilding multi select menus
 	    data: {
 	        dialer: dialer,
 	    },
-
 	    success: function (response) {
-	    	console.log(response);
-	        // $('#campaign_select').empty();
-	        // var camps_select;
-	        // for (var i = 0; i < response.campaigns.length; i++) {
-	        //     camps_select += '<option value="' + response.campaigns[i] + '">' + response.campaigns[i] + '</option>';
-	        // }
+	        $('.group_select').empty();
+        	var groups_response = Object.entries(response);
 
-	        // $('#campaign_select').append(camps_select);
-	        // $("#campaign_select").multiselect('rebuild');
-	        // $("#campaign_select").multiselect('refresh');
+        	// build groups select menu
+        	if(groups_response.length){
 
-	        // $('#' + report + ' #campaign_select')
-	        //     .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
-	        //     .multiselect('selectAll', true)
-	        //     .multiselect('updateButtonText');
+        		var groups_list='';
+        		var selected;
+
+        		for(var i=0; i<groups_response.length;i++){
+        		    groups_list+='<div class="checkbox mb10 cb"><label><input class="groups" name="groups[]" type="checkbox" value="'+groups_response[i][0]+'"><b>'+groups_response[i][1]+'</b></label></div>';
+        		}
+
+        		$('.group_select').append(groups_list);
+        	}
 	    }
 	});
 });

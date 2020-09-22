@@ -51,6 +51,7 @@ return [
 	'filters_required' => 'You must enter at least one filter',
 	'filter_type'	=> 'Filter Type',
 	'filter_value'	=> 'Filter Value',
+	'group_select'	=> 'Group Select',
 	'host'			=> 'Host',
 	'invalid_filter' => 'Invalid Filter(s)',
 	'error'			=> 'Error',
