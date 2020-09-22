@@ -21,18 +21,15 @@ $('#group_duration #dialer').on('change', function(){
 	        dialer: dialer,
 	    },
 	    success: function (response) {
-	    	console.log(response);
+
 	        $('.group_select').empty();
-        	var groups_response = Object.entries(response);
-        	console.log(groups_response);
+
         	// build groups select menu
-        	if(groups_response.length){
+        	if(response.length){
 
         		var groups_list='';
-        		var selected;
-
-        		for(var i=0; i<groups_response.length;i++){
-        		    groups_list+='<div class="checkbox mb10 cb"><label><input class="groups" name="groups[]" type="checkbox" value="'+groups_response[i][0]+'"><b>'+groups_response[i][1]+'</b></label></div>';
+        		for(var i=0; i<response.length;i++){
+        		    groups_list+='<div class="checkbox mb10 cb"><label><input class="groups" name="groups[]" type="checkbox" value="'+response[i]['GroupId']+'"><b>'+response[i]['GroupName']+'</b></label></div>';
         		}
 
         		$('.group_select').append(groups_list);
