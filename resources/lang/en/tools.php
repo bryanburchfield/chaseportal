@@ -89,6 +89,7 @@ return [
 	'first_name'	=> 'First Name',
 	'from'			=> 'From',
 	'from_number'	=> 'From Number',
+	'group_select'	=> 'Group Select',
 	'has_header'	=> 'Has Header Row',
 	'history'		=> 'History',
 	'host'			=> 'Host',
