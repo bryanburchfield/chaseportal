@@ -62,6 +62,10 @@
                         $reports['call_details'] = __('reports.call_details');
                     }
 
+                    if (Auth::User()->isType('superadmin')) {
+                        $reports['group_duration'] = __('reports.group_duration');
+                    }
+
                     asort($reports);
 
                     // split the list in half

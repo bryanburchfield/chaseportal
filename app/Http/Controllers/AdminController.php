@@ -558,4 +558,22 @@ class AdminController extends Controller
             'Subcampaign',
         ];
     }
+
+    public function getGroups(Request $request)
+    {
+        return $this->getAllGroups($request->dialer);
+    }
+
+    private function getAllGroups($db)
+    {
+        $sql = "SELECT GroupId, GroupName
+            FROM [$db].[dbo].[Groups]
+            WHERE GroupId > -1
+            AND IsActive = 1
+            ORDER BY GroupName";
+
+        $results = $this->runSql($sql);
+
+        return $results;
+    }
 }

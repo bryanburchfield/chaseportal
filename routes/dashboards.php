@@ -60,11 +60,19 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/load_admin_nav', 'AdminController@loadAdminNav');
             Route::post('admin/load_sidenav', 'AdminController@loadSideNav');
         });
-        
+
         // Super Admin only dashboards
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
+            Route::get('admin/notifications', 'FeatureMessageController@index');
+            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
+            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
+            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
+            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
+
+            // Report ajax
+            Route::post('admin/get_groups', 'AdminController@getGroups');
         });
 
         Route::redirect('/', action('MasterDashController@inboundDashboard'));

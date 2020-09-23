@@ -3584,6 +3584,15 @@ label.checkbox.toggle_active_reps {
   padding: 10px 8px;
 }
 
+.myselect {
+  min-width: 100%;
+  background: #eee !important;
+}
+
+ul.group_select {
+  padding-left: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
