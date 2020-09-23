@@ -62,7 +62,11 @@
                         $reports['call_details'] = __('reports.call_details');
                     }
 
-                    if (Auth::User()->isType('superadmin')) {
+                    // Group Duration report is for superusers and users in the report_permissions table
+                    if (
+                        Auth::User()->isType('superadmin') ||
+                        Auth::User()->reportPermissions()->where('report_name','group_duration')->exists()
+                    ) {
                         $reports['group_duration'] = __('reports.group_duration');
                     }
 

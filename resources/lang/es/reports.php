@@ -152,6 +152,7 @@ return [
      'manhoursec'          => 'Horas-Hombre',
      'manual' => 'A Mano',
      'max_seats' => 'Asientos máximos',
+     'minutes' => 'Minutos',
      'missedcalls'         => 'Llamadas Perdidas',
      'mostrecent'          => 'Más Reciente',
      'name' => 'Nombre',
