@@ -21,7 +21,7 @@ class GroupDuration
         $this->params['columns'] = [
             'GroupId' => 'reports.group_id',
             'GroupName' => 'reports.name',
-            'Duration' => 'reports.duration',
+            'Duration' => 'reports.minutes',
             'InboundNumbers' => 'reports.inbound_numbers',
             'TollFreeNumbers' => 'reports.toll_free_numbers',
             'Inbound' => 'reports.inbound',
@@ -35,9 +35,9 @@ class GroupDuration
 
     public function getFilters()
     {
-        // SuperAdmins only!
-        // This will bail on initial page load
-        if (!Auth::User()->isType('superadmin')) {
+        // Bail if user not allowed here
+        if (!(Auth::User()->isType('superadmin') ||
+            Auth::User()->reportPermissions()->where('report_name', 'group_duration')->exists())) {
             abort(404);
         }
 
@@ -65,9 +65,9 @@ class GroupDuration
 
     private function executeReport($all = false)
     {
-        // SuperAdmins only!
-        // This won't allow report to be run
-        if (!Auth::User()->isType('superadmin')) {
+        // Bail if user not allowed here (exports start here)
+        if (!(Auth::User()->isType('superadmin') ||
+            Auth::User()->reportPermissions()->where('report_name', 'group_duration')->exists())) {
             abort(404);
         }
 
@@ -236,7 +236,7 @@ SELECT * FROM #GroupStatistics";
 
     public function processRow($rec)
     {
-        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
+        $rec['Duration'] = round($rec['Duration'] / 60);
 
         return $rec;
     }
@@ -252,16 +252,21 @@ SELECT * FROM #GroupStatistics";
         // Check report filters
         $this->checkDateRangeFilters($request);
 
-        if (empty($request->dialer)) {
-            $this->errors->add('dialer.required', trans('reports.errdialerrequired'));
-        } else {
-            $this->params['dialer'] = $request->dialer;
-        }
+        if (Auth::User()->isType('superadmin')) {
+            if (empty($request->dialer)) {
+                $this->errors->add('dialer.required', trans('reports.errdialerrequired'));
+            } else {
+                $this->params['dialer'] = $request->dialer;
+            }
 
-        if (empty($request->groups)) {
-            $this->errors->add('groups.required', trans('reports.errgroupsrequired'));
+            if (empty($request->groups)) {
+                $this->errors->add('groups.required', trans('reports.errgroupsrequired'));
+            } else {
+                $this->params['groups'] = $request->groups;
+            }
         } else {
-            $this->params['groups'] = $request->groups;
+            $this->params['dialer'] = Auth::user()->db;
+            $this->params['groups'] = [Auth::user()->group_id];
         }
 
         // Save params to session

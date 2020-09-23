@@ -155,6 +155,7 @@ return [
 	'manhoursec'          => 'Man Hours',
 	'manual' => 'Manual',
 	'max_seats' => 'Max Seats',
+	'minutes' => 'Minutes',
 	'missedcalls'         => 'Missed Calls',
 	'mostrecent'          => 'Most Recent',
 	'name' => 'Name',
