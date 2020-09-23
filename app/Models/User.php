@@ -71,6 +71,11 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany('App\Models\UserAudit');
     }
 
+    public function reportPermissions()
+    {
+        return $this->hasMany('App\Models\ReportPermission');
+    }
+
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);

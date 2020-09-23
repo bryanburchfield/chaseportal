@@ -16,8 +16,7 @@ class SqlSrvModel extends Model
         // Set db based on logged in user if not already set
         if (empty(config('database.connections.sqlsrv.database'))) {
             if (Auth::check()) {
-                $db = Auth::user()->db;
-                config(['database.connections.sqlsrv.database' => $db]);
+                config(['database.connections.sqlsrv.database' => Auth::user()->db]);
             }
         }
     }

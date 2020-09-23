@@ -118,7 +118,7 @@ var Dashboard = {
                 dateFilter: datefilter
             },
             success: function (response) {
-
+                
                 $('#call_volume_inbound, #call_duration').parent().find('.no_data').remove();
 
                 ///////////////// CALLS ANSWERED CARD

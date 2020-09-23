@@ -51,6 +51,7 @@ return [
 	'filters_required' => 'Debe ingresar al menos un filtro',
 	'filter_type'	=> 'Tipo de Filtro',
 	'filter_value'	=> 'Valor del Filtro',
+	'group_select'	=> 'Seleccionar Grupo',
 	'from'			=> 'Desde',
 	'invalid_filter' => 'Filtro inválido',
 	'error'			=> 'Error',

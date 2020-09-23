@@ -2800,6 +2800,15 @@ div.col-sm-5.five-two {
     }
 }
 
+.myselect {
+    min-width: 100%;
+    background: $blue !important;
+}
+
+ul.group_select{
+    padding-left: 10px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
