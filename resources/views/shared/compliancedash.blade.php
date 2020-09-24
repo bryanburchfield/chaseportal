@@ -5,26 +5,30 @@
     </div>
 @endif
 
-<div class="row w100">
-    <div class="col-sm-12 w100 p-0">
-    	<a class="btn btn-default btn-primary flt_rgt" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
+<div class="row">
+    <div class="col-sm-12">
+        <a class="btn btn-default btn-primary float-right mb-3" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-sm-12 remove_flex100">
     	<div class="table-responsive">
-    		<table class="table table-striped agent_compliance_table w-100 d-block d-md-table" style="width:100%">
-    			<thead>
-    				<tr>
+            <table class="table table-striped agent_compliance_table d-block d-md-table">
+                <thead>
+                    <tr>
                         <th></th>
-    					<th class="th_mw100">{{__('widgets.rep')}}</th>
-    					<th>{{__('widgets.worked_time')}}</th>
-    					<th>{{__('widgets.paused_time')}}</th>
-    					<th>{{__('widgets.allowed_paused_time')}}</th>
-    					<th>{{__('widgets.total_time_worked')}}</th>
-    					<th>% {{__('widgets.worked')}}</th>
-    				</tr>
-    			</thead>
-    			<tbody></tbody>
-    		</table>
-    	</div>
+                        <th class="th_mw100">{{__('widgets.rep')}}</th>
+                        <th>{{__('widgets.worked_time')}}</th>
+                        <th>{{__('widgets.paused_time')}}</th>
+                        <th>{{__('widgets.allowed_paused_time')}}</th>
+                        <th>{{__('widgets.total_time_worked')}}</th>
+                        <th>% {{__('widgets.worked')}}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 

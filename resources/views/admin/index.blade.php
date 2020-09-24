@@ -123,8 +123,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+            	<h5 class="modal-title" id="myModalLabel">{{__('users.confirm_delete_user')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('users.confirm_delete_user')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
@@ -161,8 +161,8 @@
 				<h4><span class="dash_type">Outbound Campaign Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/outbounddashboard/api/<span class="url_token"></span></a></h4>
 				<h4><span class="dash_type">Leaderboard Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/leaderdashboard/api/<span class="url_token"></span></a></h4>
 				<h4><span class="dash_type">Trend Dashboard</span> -<a data-toggle="tooltip"  title={{__('users.link_copied')}} href="#" class="getAppToken">{{url('/')}}/trenddashboard/api/<span class="url_token"></span></a></h4>
-
             </div>
+
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	        </div>

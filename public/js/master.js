@@ -2740,6 +2740,6 @@ $(document).ready(function () {
     }
 
     $('.wrap_table').wrapAll( "<div class='table-responsive'></div>" );
-
 });
+
 

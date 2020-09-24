@@ -736,6 +736,10 @@ div.container-fluid.bg {
   color: #fff;
 }
 
+.dropdown a.dropdown-item {
+  border-bottom: 1px solid #ddd;
+}
+
 .multiselect-container.dropdown-menu {
   max-height: 260px;
   overflow-y: scroll;
@@ -3027,6 +3031,7 @@ span.numb_notifications {
 .col-sm-12.w99 {
   width: 98% !important;
   margin-left: 1%;
+  flex: none !important;
 }
 
 .btn-group,
@@ -3088,6 +3093,10 @@ span.numb_notifications {
 
 div.w100 {
   width: 100%;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+  background: #fff !important;
 }
 
 /* ---------------------------------------------------

@@ -549,6 +549,10 @@ div.container-fluid.bg {
     color: #fff;
 }
 
+.dropdown a.dropdown-item{
+    border-bottom: 1px solid #ddd;
+}
+
 // .dropdown-menu a:nth-child(even) {
 //     background-color: #ececec;
 // }
@@ -2569,6 +2573,7 @@ span.numb_notifications{
 .col-sm-12.w99 {
     width: 98% !important;
     margin-left: 1%;
+    flex: none !important;
 }
 
 .btn-group, .btn-group-vertical{max-height: 35px;}
@@ -2629,6 +2634,7 @@ div.w100 {
     width: 100%;
 }
 
+div.dataTables_wrapper div.dataTables_filter input{background:#fff !important;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

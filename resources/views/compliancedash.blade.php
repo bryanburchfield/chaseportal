@@ -13,8 +13,9 @@
 <div class="container-fluid bg">
     <div class="container mt50">
         @include('shared.filters')
-        @include('shared.compliancedash')
     </div>
+
+    @include('shared.compliancedash')
 </div>
 
 @include('shared.datepicker')

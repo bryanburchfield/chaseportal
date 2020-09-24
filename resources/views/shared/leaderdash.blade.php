@@ -13,7 +13,7 @@
 
     <div class="col-md-9 col-sm-8 get_ldr_ht mb-0 pl-0">
         <div class="card card-12">
-            <div class="call_volume_details flt_lft">
+            <div class="call_volume_details">
                 <h1 class="title tac">{{__('widgets.call_volume')}}</h1><br>
             </div>
 
