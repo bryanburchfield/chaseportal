@@ -105,8 +105,8 @@ h1, h2, h3, h4, h5, h6 {
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
 .cb{clear: both;}
-.flt_lft{float: left;}
-.flt_rgt{float: right;}
+// .flt_lft{float: left;}
+// .flt_rgt{float: right;}
 .cb{clear: both;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
@@ -550,6 +550,7 @@ div.container-fluid.bg {
             color:#999;
             padding-left: 15px;
 
+            &:active{color:#eee;}
             &:nth-child(even) {
                 background-color: darken($blue, 10%);
             }
@@ -559,9 +560,9 @@ div.container-fluid.bg {
                 color:#999;
             }
 
-            &.active, &:active{
-                background: #ddd;
-                color:$blue;
+            &.active{
+                background: #007bff;
+                color:#eee;
             }
         }
     }
@@ -2709,6 +2710,7 @@ span.numb_notifications{
 .col-sm-12.w99 {
     width: 98% !important;
     margin-left: 1%;
+    flex: none !important;
 }
 
 .btn-group, .btn-group-vertical{max-height: 35px;}

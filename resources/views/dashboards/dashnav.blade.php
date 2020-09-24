@@ -16,7 +16,7 @@
                 @endforeach
 
                 <input type="hidden" class="page_type" value="{{$page['type']}}">
-                <button type="submit" class="btn btn-primary btn-block select_database"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
+                <button type="submit" class="btn btn-primary btn-block select_database"><i class="fas fa-check"></i> {{__('general.submit')}}</button>
             </ul>
         </div>
     @endif
@@ -40,7 +40,7 @@
             <input type="text" class="form-control campaign_search" placeholder="{{__('general.search')}}">
             <input type="hidden" class="campaign_search_url" value="/dashboards/campaign_search">
         </div>
-        <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="glyphicon glyphicon-ok"></i> {{__('general.submit')}}</button>
+        <button type="submit" class="btn btn-primary btn-block select_campaign"><i class="fas fa-check"></i> {{__('general.submit')}}</button>
 
         @foreach($campaign_list as $campaign)
             <div class="checkbox p-2 dropdown-item">

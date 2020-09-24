@@ -202,14 +202,6 @@ h6 {
   clear: both;
 }
 
-.flt_lft {
-  float: left;
-}
-
-.flt_rgt {
-  float: right;
-}
-
 .cb {
   clear: both;
 }
@@ -745,10 +737,29 @@ div.container-fluid.bg {
   overflow-y: scroll;
 }
 
-.filters ul.dropdown-menu.active,
-.filters ul.dropdown-menu:active {
+.filters .dropdown-menu.active {
   background: #203047;
   color: #ddd;
+}
+
+.filters .dropdown-menu .dropdown-item:active,
+.filters .dropdown-menu .checkbox:active {
+  color: #212529;
+}
+
+.filters .dropdown-menu .dropdown-item:nth-child(even),
+.filters .dropdown-menu .checkbox:nth-child(even) {
+  background-color: #eee;
+}
+
+.filters .dropdown-menu .dropdown-item:hover,
+.filters .dropdown-menu .checkbox:hover {
+  background-color: #eee;
+}
+
+.filters .dropdown-menu .dropdown-item.active,
+.filters .dropdown-menu .checkbox.active {
+  background: #007bff;
 }
 
 .filters .btn.btn-primary {
@@ -1120,6 +1131,12 @@ input.form-control {
 
 .dropdown-menu.filter_campaign {
   -ms-overflow-style: none;
+}
+
+.dropdown-menu {
+  right: 0;
+  left: auto;
+  padding: 0;
 }
 
 #startDate,

@@ -45,6 +45,8 @@
         <input type="hidden" class="theme" value="light">
     @endguest
 
+    <input type="hidden" class="language" value="{{Session::get('locale')}}">
+    
     @yield('content')
 
     <script src="/messages.js"></script>

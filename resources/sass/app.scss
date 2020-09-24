@@ -124,8 +124,8 @@ h1, h2, h3, h4, h5, h6 {
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
 .cb{clear: both;}
-.flt_lft{float: left;}
-.flt_rgt{float: right;}
+// .flt_lft{float: left;}
+// .flt_rgt{float: right;}
 .cb{clear: both;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
@@ -553,31 +553,37 @@ div.container-fluid.bg {
     border-bottom: 1px solid #ddd;
 }
 
-// .dropdown-menu a:nth-child(even) {
-//     background-color: #ececec;
-// }
-
-// .dropdown-menu a:hover {
-//     background-color: #e4e4e4;
-// }
-
 .multiselect-container.dropdown-menu{
     max-height: 260px;
     overflow-y: scroll;
 }
 
 .filters {
-    // margin-bottom: 10px;
-    // padding: 0;
 
-    ul.dropdown-menu {
-        // right: -65px;
-        &.active, &:active{
+    .dropdown-menu {
+        &.active{
             background: $blue;
             color:#ddd;
         }
+
+        .dropdown-item, .checkbox {
+            &:active{color:#212529;}
+            &:nth-child(even) {
+                background-color: #eee;
+            }
+
+            &:hover{
+                background-color: #eee;
+            }
+
+            &.active{
+                background: #007bff;
+            }
+        }
     }
-    
+
+
+
     .btn.btn-primary {
         margin-bottom: 0;
         background: none;
@@ -927,11 +933,11 @@ input.form-control {
     -ms-overflow-style: none;
 }
 
-// .dropdown-menu {
-//     right: 0;
-//     left: auto;
-//     padding: 0;
-// }
+.dropdown-menu {
+    right: 0;
+    left: auto;
+    padding: 0;
+}
 
 #startDate, #endDate {
     width: 49%;

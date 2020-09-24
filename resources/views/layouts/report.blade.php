@@ -37,6 +37,7 @@
 <body>
     <input type="hidden" class="theme" value="{{Auth::user()->theme}}">
     <input type="hidden" class="language" value="{{Session::get('locale')}}">
+
     <div class="preloader"></div>
 
     <div class="wrapper">

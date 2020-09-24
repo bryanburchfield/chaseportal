@@ -45,7 +45,7 @@
 					</tbody>
 				</table>
 
-				<input type="submit" class="btn btn-default btn-cancel mr10 flt_lft" name="cancel" value="{{__('general.cancel')}}" />
+				<input type="submit" class="btn btn-default btn-cancel mr10 float-left" name="cancel" value="{{__('general.cancel')}}" />
 				<input type="submit" class="btn btn-primary" value="{{__('general.save')}}" />
 			</form>
 	    </div>

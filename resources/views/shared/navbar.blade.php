@@ -42,8 +42,8 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-right py-0 stop-propagation">
-                        <a class="dropdown-item py-2" href="{{url('lang/en')}}">English</a>
-                        <a class="dropdown-item py-2" href="{{url('lang/es')}}"> Español</a>
+                        <a class="dropdown-item py-2 {{Session::get('locale') == 'en' ? 'active' : ''}}" href="{{url('lang/en')}}">English</a>
+                        <a class="dropdown-item py-2 {{Session::get('locale') == 'es' ? 'active' : ''}}" href="{{url('lang/es')}}"> Español</a>
                     </div>
                 </div>
             @endif

@@ -3,19 +3,22 @@
 
 @section('content')
 
-    <a class="btn btn-primary flt_rgt" href="{{ action('ReportController@index', ['report' => $report]) }}">{{__('tools.back')}}</a>
+    <a class="btn btn-primary float-right" href="{{ action('ReportController@index', ['report' => $report]) }}">{{__('tools.back')}}</a>
     <h3 class="heading">{{__('reports.' . $report)}}</h3>
 
-	<div class="col-sm-4 card report_info_columns mt20">
-		@if (count($columns))
-		    <h4 class="mb10"><b>{{__('report_info.columns')}}</b></h4>
-		    @foreach ($columns as $column)
-		        <p class="mb5">
-		            <b>{{__($column)}}</b> : {{__('report_info.' . Str::after($column, '.'))}}
-		        </p>
-		    @endforeach
-		@endif
-	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="card report_info_columns">
+				@if (count($columns))
+				    <h4 class="mb10"><b>{{__('report_info.columns')}}</b></h4>
+				    @foreach ($columns as $column)
+				        <p class="mb5">
+				            <b>{{__($column)}}</b> : {{__('report_info.' . Str::after($column, '.'))}}
+				        </p>
+				    @endforeach
+				@endif
+			</div>
+		</div>
 
 		<div class="report_desc col-sm-8 ">
 
@@ -23,5 +26,6 @@
 	            <p class="mb10">{{__('report_info.' . $report . '_' . $i)}}</p>
 	        @endfor
 		</div><!-- end report_filters -->
+	</div>
 
 @endsection
