@@ -269,7 +269,7 @@ input.logout_btn:hover {
 }
 
 .navbar {
-  padding: 13px 20px 0;
+  padding: 13px 20px 5px;
   border: none;
   background: #fff;
   border-bottom: 1px solid #abbdd8;
@@ -547,15 +547,13 @@ button:focus {
   background: #33A09B;
   background: linear-gradient(to bottom, #33A09B 0%, #007f76 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#33A09B, endColorstr=#007f76,GradientType=0 );
-}
-
-#sidebarCollapse:hover {
-  background: #2d938f;
+  padding: 4px 12px;
 }
 
 #sidebarCollapse .fas,
 #sidebarCollapse .fa {
   color: #fff;
+  font-size: 14px;
 }
 
 a[data-toggle=collapse] {
@@ -737,14 +735,13 @@ div.container-fluid.bg {
   overflow-y: scroll;
 }
 
-.filters .dropdown-menu.active {
-  background: #203047;
-  color: #ddd;
+.filters .dropdown-menu {
+  background: #fff;
 }
 
-.filters .dropdown-menu .dropdown-item:active,
-.filters .dropdown-menu .checkbox:active {
-  color: #212529;
+.filters .dropdown-menu.active {
+  background: #fff;
+  color: #ddd;
 }
 
 .filters .dropdown-menu .dropdown-item:nth-child(even),
@@ -754,7 +751,7 @@ div.container-fluid.bg {
 
 .filters .dropdown-menu .dropdown-item:hover,
 .filters .dropdown-menu .checkbox:hover {
-  background-color: #eee;
+  background-color: #e9e9e9;
 }
 
 .filters .dropdown-menu .dropdown-item.active,
@@ -3114,6 +3111,10 @@ div.w100 {
 
 div.dataTables_wrapper div.dataTables_filter input {
   background: #fff !important;
+}
+
+.modal-content {
+  border: none;
 }
 
 /* ---------------------------------------------------

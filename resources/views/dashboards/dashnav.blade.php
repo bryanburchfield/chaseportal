@@ -46,9 +46,7 @@
             <div class="checkbox p-2 dropdown-item">
                 <label class="campaign_label">
                     <input class="campaign_group" required type="checkbox"  {{ $campaign['selected'] == 1 ? "checked" : '' }} value="{{$campaign['value']}}" name="campaigns">
-                    <span>
-                        {{$campaign['name']}}
-                    </span>
+                    <span> {{$campaign['name']}}</span>
                 </label>
             </div>
         @endforeach

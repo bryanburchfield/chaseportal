@@ -47,6 +47,13 @@ $green: #33A09B;
     color: lighten(#aaa, 5%);
 }
 
+.btn {
+    &:focus{
+        @include box-shadow(none);
+        outline:none !important;
+    }
+}
+
 body, html {
     height: 100%;
 }
@@ -159,7 +166,7 @@ input.btn.logout_btn {
 }
 
 .navbar {
-    padding: 13px 20px 0;
+    padding: 13px 20px 5px;
     border: none;
     @include base_style(#fff, null, bottom, 1px solid lighten($blue,2%));   
     @include border-radius(0);
@@ -374,14 +381,10 @@ button, button:active, button:focus {
 
 #sidebarCollapse {
     @include gradient($green, #007f76, top, 0%, 100%);
-    
-    &:hover {
-        background: #2d938f;
-    }
+    padding: 4px 12px;
 
-    .fas, .fa{color: #fff;}
+    .fas, .fa{color: #fff;font-size: 14px;}
 }
-
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -393,14 +396,10 @@ button.btn.btn-default{
 
 .bl_none{border-left: none !important;}
 
-// .dropdown-toggle::after {
-//     display: block;
-//     position: absolute;
-//     top: 50%;
-//     right: 20px;
-//     transform: translateY(-50%);
-//     border:1px solid yellow;
-// }
+input.datepicker_only.form-control{
+    background: $blue;
+    color: #eee;
+}
 
 ul ul a {
     font-size: 0.9em !important;
@@ -545,14 +544,16 @@ div.container-fluid.bg {
     }
 
     .dropdown-menu{
+
+        background: $blue;
+
         .dropdown-item, .checkbox {
             background: $blue;
             color:#999;
             padding-left: 15px;
 
-            &:active{color:#eee;}
             &:nth-child(even) {
-                background-color: darken($blue, 10%);
+                background-color: darken($blue, 5%);
             }
 
             &:hover{
@@ -913,9 +914,9 @@ a.dropdown-toggle {
     text-align: right;
 }
 
-.dd_trigger .active, .filter_campaign .active {
-    @include base_style($blue !important, #fff !important);
-}
+// .dd_trigger .active, .filter_campaign .active {
+//     @include base_style($blue !important, #fff !important);
+// }
 
 #reports_modal .modal-footer .btn_flgrgt{
     margin-right: 10px;
@@ -2765,6 +2766,25 @@ span.numb_notifications{
 .row.display-flex > [class*='col-'] {
     display: flex;
     flex-direction: column;
+}
+
+.modal-content{
+    border: none;
+
+    input.form-control{
+        border:1px solid darken($blue, 20%);
+    }
+
+    .input-group-text{
+        background: $blue;
+        i{
+            color:#ddd;
+        }
+    }
+
+    .input-group>.input-group-append>.btn, .input-group>.input-group-append>.input-group-text, .input-group>.input-group-prepend:first-child>.btn:not(:first-child), .input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child), .input-group>.input-group-prepend:not(:first-child)>.btn, .input-group>.input-group-prepend:not(:first-child)>.input-group-text{
+        border:1px solid darken($blue, 20%);
+    }
 }
 
 /* ---------------------------------------------------

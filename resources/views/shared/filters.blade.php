@@ -36,7 +36,6 @@
                         </ul>
                     </div>
 
-
                     <div class="btn-group flt_rgt">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span>{{__('general.date')}}</span>

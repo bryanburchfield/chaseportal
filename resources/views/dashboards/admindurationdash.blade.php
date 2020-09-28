@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row display-flex">
 	    <div class="col-sm-3 col-xs-12">
 	        <div class="card-3 card" id="connect">
 
@@ -20,7 +20,7 @@
 	                <span></span>
 	            </div>
 	            <h1 class="title">{{__('widgets.connect')}} %</h1>
-	            <h4 class="data total mt30"></h4>
+	            <h4 class="data total mt-3"></h4>
 
 	        </div><!-- end card -->
 	    </div><!-- end column -->
@@ -33,7 +33,7 @@
 	                <span></span>
 	            </div>
 	            <h1 class="title">{{__('widgets.system_calls')}} %</h1>
-	            <h4 class="data total mt30"></h4>
+	            <h4 class="data total mt-3"></h4>
 
 	        </div><!-- end card -->
 	    </div><!-- end column -->
@@ -46,7 +46,7 @@
 	                <span></span>
 	            </div>
 	            <h1 class="title">{{__('widgets.total_minutes')}}</h1>
-	            <h4 class="data total mt30"></h4>
+	            <h4 class="data total mt-3"></h4>
 
 	        </div><!-- end card -->
 	    </div><!-- end column -->
@@ -59,7 +59,7 @@
 	                <span></span>
 	            </div>
 	            <h1 class="title">{{__('widgets.total_calls')}}</h1>
-	            <h4 class="data total mt30"></h4>
+	            <h4 class="data total mt-3"></h4>
 
 	        </div><!-- end card -->
 	    </div><!-- end column -->

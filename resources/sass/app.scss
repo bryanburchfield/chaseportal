@@ -178,7 +178,7 @@ input.logout_btn:hover {
 }
 
 .navbar {
-    padding: 13px 20px 0;
+    padding: 13px 20px 5px;
     border: none;
     @include base_style(#fff, null, bottom, 1px solid #abbdd8);  
     @include border-radius(0);
@@ -391,14 +391,10 @@ button, button:active, button:focus {
 
 #sidebarCollapse {
     @include gradient($green, #007f76, top, 0%, 100%);
-    
-    &:hover {
-        background: #2d938f;
-    }
+    padding: 4px 12px;
 
-    .fas, .fa{color: #fff;}
+    .fas, .fa{color: #fff;font-size: 14px;}
 }
-
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -409,14 +405,6 @@ button.btn.btn-default{
 }
 
 .bl_none{border-left: none !important;}
-
-// .dropdown-toggle::after {
-//     display: block;
-//     position: absolute;
-//     top: 50%;
-//     right: 20px;
-//     transform: translateY(-50%);
-// }
 
 ul ul a {
     font-size: 0.9em !important;
@@ -561,28 +549,19 @@ div.container-fluid.bg {
 .filters {
 
     .dropdown-menu {
+        background: #fff;
+
         &.active{
-            background: $blue;
+            background: #fff;
             color:#ddd;
         }
 
         .dropdown-item, .checkbox {
-            &:active{color:#212529;}
-            &:nth-child(even) {
-                background-color: #eee;
-            }
-
-            &:hover{
-                background-color: #eee;
-            }
-
-            &.active{
-                background: #007bff;
-            }
+            &:nth-child(even){background-color: #eee;}
+            &:hover{background-color: darken(#eee,2%);}
+            &.active{background: #007bff;}
         }
     }
-
-
 
     .btn.btn-primary {
         margin-bottom: 0;
@@ -2641,6 +2620,11 @@ div.w100 {
 }
 
 div.dataTables_wrapper div.dataTables_filter input{background:#fff !important;}
+
+
+.modal-content{
+    border: none;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

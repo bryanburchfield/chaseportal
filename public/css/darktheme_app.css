@@ -58,6 +58,11 @@ container {
   box-sizing: border-box;
 }
 
+.btn:focus {
+  box-shadow: none;
+  outline: none !important;
+}
+
 body,
 html {
   height: 100%;
@@ -249,7 +254,7 @@ input.btn.logout_btn:hover {
 }
 
 .navbar {
-  padding: 13px 20px 0;
+  padding: 13px 20px 5px;
   border: none;
   background: #fff;
   border-bottom: 1px solid #23354e;
@@ -541,15 +546,13 @@ button:focus {
   background: #33A09B;
   background: linear-gradient(to bottom, #33A09B 0%, #007f76 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#33A09B, endColorstr=#007f76,GradientType=0 );
-}
-
-#sidebarCollapse:hover {
-  background: #2d938f;
+  padding: 4px 12px;
 }
 
 #sidebarCollapse .fas,
 #sidebarCollapse .fa {
   color: #fff;
+  font-size: 14px;
 }
 
 a[data-toggle=collapse] {
@@ -562,6 +565,11 @@ button.btn.btn-default {
 
 .bl_none {
   border-left: none !important;
+}
+
+input.datepicker_only.form-control {
+  background: #203047;
+  color: #eee;
 }
 
 ul ul a {
@@ -742,6 +750,10 @@ div.container-fluid.bg {
   border-radius: 0;
 }
 
+.filters .dropdown-menu {
+  background: #203047;
+}
+
 .filters .dropdown-menu .dropdown-item,
 .filters .dropdown-menu .checkbox {
   background: #203047;
@@ -749,14 +761,9 @@ div.container-fluid.bg {
   padding-left: 15px;
 }
 
-.filters .dropdown-menu .dropdown-item:active,
-.filters .dropdown-menu .checkbox:active {
-  color: #eee;
-}
-
 .filters .dropdown-menu .dropdown-item:nth-child(even),
 .filters .dropdown-menu .checkbox:nth-child(even) {
-  background-color: #101824;
+  background-color: #182435;
 }
 
 .filters .dropdown-menu .dropdown-item:hover,
@@ -1183,12 +1190,6 @@ input.form-control {
 
 a.dropdown-toggle {
   text-align: right;
-}
-
-.dd_trigger .active,
-.filter_campaign .active {
-  background: #203047 !important;
-  color: #fff !important;
 }
 
 #reports_modal .modal-footer .btn_flgrgt {
@@ -3347,6 +3348,31 @@ span.numb_notifications {
 .row.display-flex > [class*=col-] {
   display: flex;
   flex-direction: column;
+}
+
+.modal-content {
+  border: none;
+}
+
+.modal-content input.form-control {
+  border: 1px solid #000001;
+}
+
+.modal-content .input-group-text {
+  background: #203047;
+}
+
+.modal-content .input-group-text i {
+  color: #ddd;
+}
+
+.modal-content .input-group > .input-group-append > .btn,
+.modal-content .input-group > .input-group-append > .input-group-text,
+.modal-content .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+.modal-content .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
+.modal-content .input-group > .input-group-prepend:not(:first-child) > .btn,
+.modal-content .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+  border: 1px solid #000001;
 }
 
 /* ---------------------------------------------------

@@ -738,7 +738,7 @@ var Master = {
 
     toggle_automated_reports: function () {
         var active;
-        var report = $(this).parent().parent().parent().data('report');
+        var report = $(this).parent().parent().parent().parent().data('report');
 
         if ($(this).is(':checked')) {
             $(this).attr('Checked', 'Checked');
@@ -2740,6 +2740,8 @@ $(document).ready(function () {
     }
 
     $('.wrap_table').wrapAll( "<div class='table-responsive'></div>" );
+
+    $('.datepicker_only').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
 });
 
 

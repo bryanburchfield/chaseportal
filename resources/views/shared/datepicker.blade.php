@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="datefilter_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">{{__('general.custom_date_filter')}}</h5>
@@ -9,17 +9,17 @@
             <div class="modal-body">
                 <div class="form-group">
                 <!-- Date Picker -->
-                    <div class="input-group date " id="startDate">
+                    <div class="input-group date fc_style" id="startDate">
                         <input type='text' class="form-control datepicker_only startdate" name="startdate" placeholder="{{__('general.start_date')}}" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                        <span class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                         </span>
                     </div>
                 <!-- Time Picker -->
-                    <div class="input-group date" id="endDate">
+                    <div class="input-group date fc_style" id="endDate">
                             <input type='text' class="form-control datepicker_only enddate" name="enddate" placeholder="{{__('general.end_date')}}" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                             </span>
                     </div>
                 </div>

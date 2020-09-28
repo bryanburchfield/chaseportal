@@ -1,6 +1,6 @@
 <input type="hidden" class="open_kpi_id" name="open_kpi_id" value="{{ old('kpi_id') }}">
 
-<div class="container-full mt20">
+<div class="container-full mt-5">
     <div class="row">
         <div class="col-sm-12">
             <h2>{{__('kpi.kpi_notifications')}}</h2>
@@ -23,7 +23,7 @@
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
                 <div class="row mt30 options kpi_options_top">
                     <div class="col-sm-4">
-                        <h4 class="expand_dets float-left"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
+                        <h4 class="expand_dets float-left"><i class="fas fa-wrench"></i> {{__('kpi.options')}}</h4>
                         <div class="expanded_options clear card">
                             <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval fc_style">
                                 <div class="form-group">
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <h4 class="expand_dets float-left"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
+                        <h4 class="expand_dets float-left"><i class="fas fa-envelope"></i> {{__('kpi.recipients')}}</h4>
                         <div class="expanded_emails clear">
 
                         @forelse($kpi->recipients as $r)

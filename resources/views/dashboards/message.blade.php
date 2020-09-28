@@ -12,11 +12,11 @@
 
 		@include('shared.navbar')
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
+			<div class="container-full mt-5">
 			    <div class="row">
 
 					<div class="col-sm-12">
-						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="flt_rgt btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
+						<h2>{{$feature_message->title}} <a href="{{ URL::previous() }}" class="float-right btn btn-secondary"><i class="fas fa-arrow-circle-left"></i> Go Back</a></h2>
 					</div>
 
 					<div class="col-sm-12 notification_msg">
