@@ -2478,6 +2478,8 @@ a.toggle_instruc {
 .webhook_fields{
 
     .field{
+
+        &:nth-child(even){background: lighten(#090D14, 4%);}
         border-bottom: 1px solid #1b293c;
         padding-top: 15px;
         overflow: auto;

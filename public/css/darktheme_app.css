@@ -3034,6 +3034,10 @@ a.toggle_instruc {
   overflow: auto;
 }
 
+.webhook_fields .field:nth-child(even) {
+  background: #0f1622;
+}
+
 .webhook_fields .field p.active {
   color: #33A09B;
 }

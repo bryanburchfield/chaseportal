@@ -495,7 +495,7 @@ var Admin = {
 		var custom_field_name = $('.custom_field_name').val();
 		var custom_field_value = $('.custom_field_value').val();
 
-		var new_field_row = '<div class="field"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + custom_field_name + '">' + custom_field_name + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + custom_field_name + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
+		var new_field_row = '<div class="row field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + custom_field_name + '">' + custom_field_name + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + custom_field_name + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"><label class="checkbox-inline float-right"><input class="use_system_macro" type="checkbox" value=""> Use System Macro</label></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
@@ -554,7 +554,7 @@ var Admin = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
+						new_field_row += '<div class="row field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '"></div></div><div class="col-sm-2"><label class="checkbox-inline float-right"><input class="use_system_macro" type="checkbox" value=""> Use System Macro</label></div></div>';
 					}
 					$(new_field_row).insertAfter('.field:last');
 				}

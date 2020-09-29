@@ -2369,11 +2369,6 @@ a.toggle_instruc {
 
     .btn.h35{height: 35px;}
 
-    form{
-        padding: 20px;
-        border:1px solid #ddd;
-    }
-
     button.btn.generate_url{
         @include base_style($green, null, $bdr:1px solid $green);
         float: right;
@@ -2401,7 +2396,7 @@ a.toggle_instruc {
 .final_url_cnt{
     textarea.url.form-control{
         @include border-radius(5px);
-        @include base_style(lighten(#ddd, 1%) !important, $blue, $bdr:1px solid darken(#ddd, 3%));
+        @include base_style(lighten(#ddd, 1%) !important, $blue, $bdr:1px solid darken(#ddd, 5%));
         min-height: 100px;
         padding: 12px;
 

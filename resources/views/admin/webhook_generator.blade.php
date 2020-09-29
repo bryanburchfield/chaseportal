@@ -55,12 +55,12 @@
 										</div>
 
 										<div class="col-sm-2">
-											<label class="checkbox-inline flt_rgt"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
+											<label class="checkbox-inline float-right"><input class="checkall_system_macro" type="checkbox" value=""><span> Check All Macros</span></label>
 										</div>
 									</div>
 
 									@foreach($default_lead_fields as $val)
-										<div class="field">
+										<div class="row field">
 											<div class="col-sm-1">
 												<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 											</div>
@@ -75,30 +75,47 @@
 											</div>
 
 											<div class="col-sm-2">
-												<label class="checkbox-inline flt_rgt"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label>
+												<label class="checkbox-inline float-right"><input class="use_system_macro" type="checkbox" value=""> Use System Macro</label>
 											</div>
 										</div>
 									@endforeach
 								</div>
 
-								<div class="col-sm-7">
-									<form action="#" method="post" class="form-inline add_custom_field fc_style card">
-										<h3>Add Custom Field</h3>
-										<div class="form-group mr10">
-											<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
-										</div>
-										<div class="form-group mr10">
-											<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
-										</div>
-										<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
-									</form>
-								</div>
+								<div class="row">
+									<div class="col-sm-7">
+										<div class="card">
+											<div class="row">
+												<div class="col-sm-12">
+													<h2 class="mb-0">Add Custom Field</h2>
+												</div>
+											</div>
 
-								<div class="col-sm-5">
-									<div class="final_url_cnt">
-										<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
+											<form action="#" method="post" class="form-inline add_custom_field fc_style">
+												<div class="row mt-4 p-0">
+													<div class="col-sm-4">
+														<div class="form-group mr-2">
+															<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="form-group mr-2">
+															<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<input type="submit" class="btn btn-primary" value="Add Custom Field">
+													</div>
+												</div>
+											</form>
+										</div>
 									</div>
-									<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
+
+									<div class="col-sm-5">
+										<div class="final_url_cnt">
+											<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
+										</div>
+										<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
+									</div>
 								</div>
 
 							</div>
