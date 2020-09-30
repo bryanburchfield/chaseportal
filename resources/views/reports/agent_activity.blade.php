@@ -6,7 +6,7 @@
 	<h3 class="heading">{{__('reports.agent_activity')}}</h3>
 
 	<div class="report_filters card col-sm-12 fc_style">
-		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form']) !!}
+		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form fc_style']) !!}
 
 			<div class="row display-flex">
 
@@ -41,18 +41,12 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('reps',  __('reports.rep')) !!}
-						<select class="form-control multiselect" id="rep_select" multiple name="reps[]">
+
+						<select class="form-control selectpicker " id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true">
 							@foreach($filters['reps'] as $rep)
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
-
-						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true">
-							@foreach($filters['reps'] as $rep)
-								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
-							@endforeach
-						</select>
-
 
 						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>

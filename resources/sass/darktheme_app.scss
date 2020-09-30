@@ -1251,7 +1251,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .fc_style, .tools{
-    .form-control, button.multiselect, select.form-control, textarea.form-control{
+    .form-control, button.multiselect, select.form-control, textarea.form-control, button.btn.dropdown-toggle{
         @include form_control_style();
     }   
 }

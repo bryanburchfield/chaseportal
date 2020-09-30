@@ -2655,7 +2655,7 @@ var Master = {
         }else{
             checked=0;
         }
-
+        console.log(checked);
         var active_cnt=0;
         $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
             if(index>1){

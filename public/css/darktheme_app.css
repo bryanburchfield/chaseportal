@@ -1577,10 +1577,12 @@ input[type=number]::-webkit-outer-spin-button {
 .fc_style button.multiselect,
 .fc_style select.form-control,
 .fc_style textarea.form-control,
+.fc_style button.btn.dropdown-toggle,
 .tools .form-control,
 .tools button.multiselect,
 .tools select.form-control,
-.tools textarea.form-control {
+.tools textarea.form-control,
+.tools button.btn.dropdown-toggle {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
