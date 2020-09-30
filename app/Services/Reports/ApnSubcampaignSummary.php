@@ -440,7 +440,7 @@ class ApnSubcampaignSummary
         SET ThresholdCalls = a.tot
         FROM (SELECT Campaign, Subcampaign, Date, SUM([OverThreshold]) as tot
               FROM #DialingResultsStats
-              WHERE Type > 1
+              WHERE Type > 0
               GROUP BY Campaign, Subcampaign, Date) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign

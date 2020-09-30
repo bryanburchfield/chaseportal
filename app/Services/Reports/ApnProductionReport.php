@@ -194,8 +194,8 @@ class ApnProductionReport
             'Connects' = CASE WHEN DI.Type > 0 AND DR.Duration > 0 THEN 1 ELSE 0 END,
             'Contacts' = CASE WHEN DI.Type > 1 AND DR.Duration > 0 THEN 1 ELSE 0 END,
             'Sales' = CASE WHEN DI.Type = 3 AND DR.Duration > 0 THEN 1 ELSE 0 END,
-            'ThresholdCalls' = CASE WHEN DR.Duration >= :threshold1$i THEN 1 ELSE 0 END,
-            'ThresholdSales' = CASE WHEN DR.Duration >= :threshold2$i AND DI.Type = 3 THEN 1 ELSE 0 END
+            'ThresholdCalls' = CASE WHEN DI.Type > 0 AND DR.Duration >= :threshold1$i THEN 1 ELSE 0 END,
+            'ThresholdSales' = CASE WHEN DI.Type = 3 AND DR.Duration >= :threshold2$i THEN 1 ELSE 0 END
             FROM [$db].[dbo].[DialingResults] DR
             LEFT JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep";
 

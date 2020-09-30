@@ -336,7 +336,7 @@ class ApnAgentSummary
         SET ThresholdCalls = a.tot
         FROM (SELECT Rep, SUM([OverThreshold]) as tot
               FROM #DialingResultsStats
-              WHERE Type > 1
+              WHERE Type > 0
               GROUP BY Rep) a
         WHERE #AgentSummary.Rep = a.Rep;
 
