@@ -13,6 +13,7 @@ return [
 	'outbound' => 'Outbound Dashboard',
 	'realtimedash'	=> 'Real Time Dashboard',
 	'reports' => 'Reports',
+	'server_status'	=> 'Server Status',
 	'settings' => 'Settings',
 	'tools' => 'Tools',
 	'trend_dashboard' => 'Trend Dashboard',

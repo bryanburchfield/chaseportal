@@ -27,6 +27,7 @@
 
         @if (Auth::user()->isType(['admin','superadmin']))
             <li data-page="tools" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''?> ><a href="{{ action('LeadsController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
+            <li data-page="tools" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''?> ><a href="{{ action('DialerController@index') }}" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
         @endif
 
         <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-cog"></i>{{__('sidenav.settings')}}</a></li>
