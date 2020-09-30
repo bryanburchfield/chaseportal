@@ -29,9 +29,10 @@
 
 
 								<div class="form-group">
-
-									{!! Form::label('dialer_id', 'Database') !!}
-									{!! Form::select("dialer_id", $dbs, Auth::user()->dialer->id, ["class" => "form-control", 'id'=>'db', 'required'=>true]) !!}
+									{!! Form::label('db', 'Database') !!}
+									{!! Form::select("dialer_id", $dbs, Auth::user()->dialer->reporting_db, ["class" => "form-control", 'id'=>
+									'dialer_id',
+									'required'=>true]) !!}
 								</div>
 
 								<div class="form-group">
