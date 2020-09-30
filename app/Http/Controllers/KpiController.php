@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -333,7 +332,7 @@ class KpiController extends Controller
      */
     private function setDb()
     {
-        $db = Auth::user()->db;
+        $db = Auth::user()->dialer->reporting_db;
         config(['database.connections.sqlsrv.database' => $db]);
 
         $query = "USE [$db];";

@@ -87,7 +87,7 @@ class EmailDripService
         $email_drip_campaign->save();
 
         // Set SqlSrv database
-        $db = Auth::user()->db;
+        $db = Auth::user()->dialer->reporting_db;
         config(['database.connections.sqlsrv.database' => $db]);
 
         // We need to pass a request object later

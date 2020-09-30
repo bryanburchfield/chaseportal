@@ -29,7 +29,6 @@ class User extends Authenticatable implements Auditable
         'email',
         'password',
         'tz',
-        'db',
         'user_type',
         'group_id',
         'additional_dbs',
@@ -37,6 +36,11 @@ class User extends Authenticatable implements Auditable
         'language_displayed',
         'phone',
         'expiration',
+        'dialer_id',
+    ];
+
+    protected $attributes = [
+        'db' => '',
     ];
 
     /**
@@ -65,6 +69,11 @@ class User extends Authenticatable implements Auditable
     protected $appends = [
         'expires_in',
     ];
+
+    public function dialer()
+    {
+        return $this->belongsTo('App\Models\Dialer');
+    }
 
     public function userAudits()
     {
@@ -123,7 +132,7 @@ class User extends Authenticatable implements Auditable
 
     public function getDatabaseList()
     {
-        $dblist = (array) $this->db;
+        $dblist = (array) $this->dialer->reporting_db;
 
         if (!empty($this->additional_dbs)) {
             $dblist = array_merge($dblist, explode(',', $this->additional_dbs));
@@ -207,8 +216,8 @@ class User extends Authenticatable implements Auditable
         $user['group_id'] = $details['group_id'];
         $user['password'] = 'SSO';
         $user['tz'] = $details['timezone'];
-        $user['db'] = $details['reporting_db'];
         $user['user_type'] = 'client';
+        $user['dialer_id'] = Dialer::where('reporting_db', $details['reporting_db'])->first()->id;
 
         return self::updateOrCreate(
             ['email' => $user['email']],

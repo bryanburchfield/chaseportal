@@ -326,7 +326,7 @@ class EmailDripController extends Controller
     public function getTemplates()
     {
         // Set sqlsrv database
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+        config(['database.connections.sqlsrv.database' => Auth::user()->dialer->reporting_db]);
 
         // Find SQL Server for templates named "email_*"
         return Script::where('GroupId', Auth::User()->group_id)

@@ -31,7 +31,7 @@ trait SqlServerTraits
     {
         if ($db === null) {
             if (Auth::check()) {
-                $db = Auth::user()->db;
+                $db = Auth::user()->dialer->reporting_db;
             } else {
                 $db = $this->db;
             }
@@ -43,7 +43,7 @@ trait SqlServerTraits
     private function runMultiSql($sql, $bind = [])
     {
         if (Auth::check()) {
-            $db = Auth::user()->db;
+            $db = Auth::user()->dialer->reporting_db;
         } else {
             $db = $this->db;
         }
@@ -70,7 +70,7 @@ trait SqlServerTraits
     private function yieldSql($sql, $bind = [])
     {
         if (Auth::check()) {
-            $db = Auth::user()->db;
+            $db = Auth::user()->dialer->reporting_db;
         } else {
             $db = $this->db;
         }

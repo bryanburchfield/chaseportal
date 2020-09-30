@@ -1,7 +1,7 @@
 <?php
 
-// Anything in the /public/raw directory will get processed outside the framework
-Route::redirect('/raw', '/raw');
+// Dialer status page
+Route::get('/dialer/status', 'DialerController@showStatus');
 
 // Language setter
 Route::get('lang/{locale}', 'LocalizationController@lang');

@@ -67,7 +67,7 @@ class StandardUser extends FormRequest
             ],
             'phone' => 'required',
             'tz' => 'required',
-            'db' => 'required',
+            'dialer_id' => 'required',
         ];
     }
 }

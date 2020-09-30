@@ -40,12 +40,12 @@
 
             @can('accessSuperAdmin')
             <div class="form-group">
-                {!! Form::label('db', __('users.database')) !!}
-                {!! Form::select("db", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
+                {!! Form::label('dialer_id', __('users.database')) !!}
+                {!! Form::select("dialer_id", $dbs, null, ["class" => "form-control", 'id'=> 'db', 'required'=>true]) !!}
             </div>
             @endcan
             @cannot('accessSuperAdmin')
-                {!! Form::hidden('db', Auth::User()->db, ['db'=>Auth::User()->db]) !!}
+                {!! Form::hidden('dialer_id', Auth::user()->dialer_id, ['db'=>Auth::user()->dialer->reporting_db]) !!}
             @endcannot
 
             {{-- <div class="form-group">
