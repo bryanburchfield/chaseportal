@@ -1,6 +1,6 @@
 var RealTime = {
 	init: function (result) {
-		
+
 		var incoming_arrays = Object.entries(result[0][1]);
 
 		// if first iteration
@@ -158,7 +158,7 @@ var RealTime = {
 			has_icon = 'has_icon';
 		}
 
-		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item ' + (status_type == "talking" || status_type == "wrapping" ? 'getleaddetails' : '') + '" ' + (status_type == "talking" || status_type == "wrapping" ? "data-toggle=modal data-target=#leadInspectionModal data-phone='"+data.Phone+"' data-leadid='"+data.LeadId+"' " : "") + '> ' +
+		return '<li id="' + login_id(status_type, data.Login) + '" class="list-group-item ' + (status_type == "talking" || status_type == "wrapping" ? 'getleaddetails' : '') + '" ' + (status_type == "talking" || status_type == "wrapping" ? "data-toggle=modal data-target=#leadInspectionModal data-phone='" + data.Phone + "' data-leadid='" + data.LeadId + "' " : "") + '> ' +
 			'<span class="call_type">' +
 			call_icon +
 			'</span>' +
@@ -173,71 +173,71 @@ var RealTime = {
 		$('.' + status_type).find('.num_agents .inner').text(count);
 	},
 
-	lead_dets_modal:function(){
+	lead_dets_modal: function () {
 
 		var leadid = $(this).data('leadid');
-		var extra_fields='';
-		var extra_fields_string='';
+		var extra_fields = '';
+		var extra_fields_string = '';
 
 		$('#leadInspectionModal').find('.modal-body').empty();
 		$('.lead_dets_leadid ').find('span').text(leadid);
 		$('.lead_dets_phone').find('span').text($(this).data('phone'));
 
 		$.ajaxSetup({
-		    headers: {
-		        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-		    }
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+			}
 		});
 
 		$.ajax({
-		    url: '/dashboards/get_lead_info/'+leadid,
-		    type: 'GET',
-		    dataType: 'json',
-		    data:{
-		        leadid:leadid,
-		    },
-		    success:function(response){
+			url: '/dashboards/get_lead_info/' + leadid,
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				leadid: leadid,
+			},
+			success: function (response) {
 				console.log(response);
-				extra_fields= Object.entries(response.ExtraFields);
+				extra_fields = Object.entries(response.ExtraFields);
 
-				for(var i=0;i<extra_fields.length;i++){
-					extra_fields_string+='<p class="lead_dets_phone fz15 mb5"><b>'+extra_fields[i][0]+':</b> <span>'+extra_fields[i][1]+'</span></p>'
+				for (var i = 0; i < extra_fields.length; i++) {
+					extra_fields_string += '<p class="lead_dets_phone fz15 mb5"><b>' + extra_fields[i][0] + ':</b> <span>' + extra_fields[i][1] + '</span></p>'
 				}
 
 				var lead_info =
-					'<div class="bb">'+
-					(response.FirstName != null &&  response.FirstName.length && response.LastName != null &&  response.LastName.length ? '<p class="lead_dets_phone fz15 mb5"><b>Full Name:</b> <span>'+response.FirstName+' '+ response.LastName+'</span></p>' : " ") +
-					(response.Address != null &&  response.Address.length ? '<p class="lead_dets_phone fz15 mb5"><b>Address:</b> <span>'+response.Address+'</span></p>' : " ") +
-					(response.City != null &&  response.City.length ? '<p class="lead_dets_phone fz15 mb5"><b>City:</b> <span>'+response.City+'</span></p>' : " " )+
-					(response.State != null &&  response.State.length ? '<p class="lead_dets_phone fz15 mb5"><b>State:</b> <span>'+response.State+'</span></p>' : " " )+
-					(response.ZipCode != null &&  response.ZipCode.length ? '<p class="lead_dets_phone fz15 mb5"><b>Zip Code:</b> <span>'+response.ZipCode+'</span></p>' : " " )+
-					(response.PrimaryPhone != null &&  response.PrimaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Primary Phone:</b> <span>'+response.PrimaryPhone+'</span></p>' : " " )+
-					(response.SecondaryPhone != null &&  response.SecondaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Secondary Phone:</b> <span>'+response.SecondaryPhone+'</span></p>' : " " )+
-					'</div>'+
-					'<br>'+
-					(response.Attempt != null &&  response.Attempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Attempt:</b> <span>'+response.Attempt+'</span></p>' : " " )+
-					(response.CallType != null &&  response.CallType.length ? '<p class="lead_dets_phone fz15 mb5"><b>Call Type:</b> <span>'+response.CallType+'</span></p>' : " " )+
-					(response.Campaign != null &&  response.Campaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Campaign:</b> <span>'+response.Campaign+'</span></p>' : " " )+
-					(response.Subcampaign != null &&  response.Subcampaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Subcampaign:</b> <span>'+response.Subcampaign+'</span></p>' : " " )+
-					(response.ClientId != null &&  response.ClientId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Client Id:</b> <span>'+response.ClientId+'</span></p>' : " " )+
-					(response.Date != null &&  response.Date.length ? '<p class="lead_dets_phone fz15 mb5"><b>Date:</b> <span>'+response.Date+'</span></p>' : " " )+
-					(response.LastUpdated != null &&  response.LastUpdated.length ? '<p class="lead_dets_phone fz15 mb5"><b>Last Updated:</b> <span>'+response.LastUpdated+'</span></p>' : " " )+
-					(response.ReloadAttempt != null &&  response.ReloadAttempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Attempt:</b> <span>'+response.ReloadAttempt+'</span></p>' : " " )+
-					(response.ReloadDate != null &&  response.ReloadDate.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Date:</b> <span>'+response.ReloadDate+'</span></p>' : " " )+
-					(response.Rep != null &&  response.Rep.length ? '<p class="lead_dets_phone fz15 mb5"><b>Rep:</b> <span>'+response.Rep+'</span></p>' : " " )+
-					(response.WasDialed != null &&  response.WasDialed.length ? '<p class="lead_dets_phone fz15 mb5"><b>Was Dialed:</b> <span>'+response.WasDialed+'</span></p>' : " " )+
-					(response.id != null &&  response.id.length ? '<p class="lead_dets_phone fz15 mb5"><b>ID:</b> <span>'+response.id+'</span></p>' : " " )+
-					(response.Notes != null &&  response.Notes.length ? '<div class="lead_detail_notes"><h4><i class="fas fa-chevron-right"></i> Notes</h4><div class="real_time_contact_notes_inner hidetilloaded">'+response.Notes+'</div></div>' : " " )+
+					'<div class="bb">' +
+					(response.FirstName != null && response.FirstName.length && response.LastName != null && response.LastName.length ? '<p class="lead_dets_phone fz15 mb5"><b>Full Name:</b> <span>' + response.FirstName + ' ' + response.LastName + '</span></p>' : " ") +
+					(response.Address != null && response.Address.length ? '<p class="lead_dets_phone fz15 mb5"><b>Address:</b> <span>' + response.Address + '</span></p>' : " ") +
+					(response.City != null && response.City.length ? '<p class="lead_dets_phone fz15 mb5"><b>City:</b> <span>' + response.City + '</span></p>' : " ") +
+					(response.State != null && response.State.length ? '<p class="lead_dets_phone fz15 mb5"><b>State:</b> <span>' + response.State + '</span></p>' : " ") +
+					(response.ZipCode != null && response.ZipCode.length ? '<p class="lead_dets_phone fz15 mb5"><b>Zip Code:</b> <span>' + response.ZipCode + '</span></p>' : " ") +
+					(response.PrimaryPhone != null && response.PrimaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Primary Phone:</b> <span>' + response.PrimaryPhone + '</span></p>' : " ") +
+					(response.SecondaryPhone != null && response.SecondaryPhone.length ? '<p class="lead_dets_phone fz15 mb5"><b>Secondary Phone:</b> <span>' + response.SecondaryPhone + '</span></p>' : " ") +
+					'</div>' +
+					'<br>' +
+					(response.Attempt != null && response.Attempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Attempt:</b> <span>' + response.Attempt + '</span></p>' : " ") +
+					(response.CallType != null && response.CallType.length ? '<p class="lead_dets_phone fz15 mb5"><b>Call Type:</b> <span>' + response.CallType + '</span></p>' : " ") +
+					(response.Campaign != null && response.Campaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Campaign:</b> <span>' + response.Campaign + '</span></p>' : " ") +
+					(response.Subcampaign != null && response.Subcampaign.length ? '<p class="lead_dets_phone fz15 mb5"><b>Subcampaign:</b> <span>' + response.Subcampaign + '</span></p>' : " ") +
+					(response.ClientId != null && response.ClientId.length ? '<p class="lead_dets_phone fz15 mb5"><b>Client Id:</b> <span>' + response.ClientId + '</span></p>' : " ") +
+					(response.Date != null && response.Date.length ? '<p class="lead_dets_phone fz15 mb5"><b>Date:</b> <span>' + response.Date + '</span></p>' : " ") +
+					(response.LastUpdated != null && response.LastUpdated.length ? '<p class="lead_dets_phone fz15 mb5"><b>Last Updated:</b> <span>' + response.LastUpdated + '</span></p>' : " ") +
+					(response.ReloadAttempt != null && response.ReloadAttempt.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Attempt:</b> <span>' + response.ReloadAttempt + '</span></p>' : " ") +
+					(response.ReloadDate != null && response.ReloadDate.length ? '<p class="lead_dets_phone fz15 mb5"><b>Reload Date:</b> <span>' + response.ReloadDate + '</span></p>' : " ") +
+					(response.Rep != null && response.Rep.length ? '<p class="lead_dets_phone fz15 mb5"><b>Rep:</b> <span>' + response.Rep + '</span></p>' : " ") +
+					(response.WasDialed != null && response.WasDialed.length ? '<p class="lead_dets_phone fz15 mb5"><b>Was Dialed:</b> <span>' + response.WasDialed + '</span></p>' : " ") +
+					(response.id != null && response.id.length ? '<p class="lead_dets_phone fz15 mb5"><b>ID:</b> <span>' + response.id + '</span></p>' : " ") +
+					(response.Notes != null && response.Notes.length ? '<div class="lead_detail_notes"><h4><i class="fas fa-chevron-right"></i> Notes</h4><div class="real_time_contact_notes_inner hidetilloaded">' + response.Notes + '</div></div>' : " ") +
 					'<br>'
-				;
+					;
 
 				$('#leadInspectionModal').find('.modal-body').append(lead_info);
 				$('#leadInspectionModal').find('.modal-body').append(extra_fields_string);
-		    }
+			}
 		});
 	},
 
-	toggle_lead_notes:function(){
+	toggle_lead_notes: function () {
 		$(this).find('.real_time_contact_notes_inner').slideToggle();
 	}
 }
@@ -245,7 +245,7 @@ var RealTime = {
 function login_id(status_type, login) {
 	// Build the id for the list/login - replace spaces with underscores
 	if (login != undefined && login != null) {
-		return status_type + '-' + login.replace(/ /g, "_");
+		return status_type + '-' + login.replace(/ /g, "_").replace(/'/g, "_");
 	}
 }
 
