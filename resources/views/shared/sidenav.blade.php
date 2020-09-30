@@ -5,7 +5,7 @@
     </div>
 
     <ul class="list-unstyled components">
-        <input type="hidden" class="page_menuitem" value="<?@php echo !empty($page['menuitem']) ? $page['menuitem'] : '' @endphp">
+        <input type="hidden" class="page_menuitem" value="@php echo !empty($page['menuitem']) ? $page['menuitem'] : '' @endphp">
         <li data-page="inbounddash" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'inbounddash' ? 'class="active"' : '' @endphp><a href="{{ action('MasterDashController@inboundDashboard') }}"><i class="fas fa-sign-in-alt"></i>{{__('sidenav.inbound')}}</a></li>
         <li data-page="outbounddash" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'outbounddash' ? 'class="active"' : ''; @endphp><a href="{{ action('MasterDashController@outboundDashboard') }}"><i class="fas fa-sign-out-alt"></i>{{__('sidenav.outbound')}}</a></li>
         
@@ -24,7 +24,9 @@
 
         @if (Auth::user()->isType(['admin','superadmin']))
             <li data-page="tools" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''@endphp ><a href="{{ action('LeadsController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
-            <li data-page="tools" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ action('DialerController@statusUrl') }}" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
+            @if(!empty(Auth::user()->dialer->status_url))
+                <li data-page="tools" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ Auth::user()->dialer->status_url }}" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
+            @endif
         @endif
             
         <li data-page="settings" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''@endphp><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-cog"></i>{{__('sidenav.settings')}}</a></li>

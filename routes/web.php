@@ -1,8 +1,5 @@
 <?php
 
-// Dialer status page
-Route::get('/dialer/status', 'DialerController@statusUrl');
-
 // Language setter
 Route::get('lang/{locale}', 'LocalizationController@lang');
 
