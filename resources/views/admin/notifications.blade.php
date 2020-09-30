@@ -38,7 +38,7 @@
 						</div>
 
 						@if(!empty($feature_message->id))
-							<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary flt_lft">Cancel</a>
+							<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary float-left">Cancel</a>
 						@endif
 
 						<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>

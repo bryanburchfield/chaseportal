@@ -46,6 +46,14 @@
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
+
+						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true">
+							@foreach($filters['reps'] as $rep)
+								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
+							@endforeach
+						</select>
+
+
 						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 				</div>

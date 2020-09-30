@@ -184,7 +184,7 @@ h6 {
 }
 
 .cb {
-  clear: both;
+  clear: both !important;
 }
 
 .cb {
@@ -2523,16 +2523,15 @@ a[aria-expanded=true] {
   border-top: 6px solid #d9534f;
 }
 
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:focus,
-.nav-tabs > li.active > a:hover {
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
   background: #23354e;
   color: #fff;
   border: 1px solid #23354e;
   font-weight: 600;
 }
 
-.nav-tabs > li > a:hover {
+.nav-tabs .nav-link:hover {
   background: #334d71;
   border: 1px solid #334d71 !important;
 }
@@ -3131,8 +3130,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger {
-  background: #f2dede;
-  color: #a94442;
+  color: #f2dede;
 }
 
 [hidden] {
@@ -3377,6 +3375,10 @@ span.numb_notifications {
 .modal-content .input-group > .input-group-prepend:not(:first-child) > .btn,
 .modal-content .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
   border: 1px solid #000001;
+}
+
+.col-sm-12.opt.p-0 {
+  overflow-x: hidden;
 }
 
 /* ---------------------------------------------------

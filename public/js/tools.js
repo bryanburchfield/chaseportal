@@ -435,7 +435,7 @@ var Tools = {
             that.empty().append('<i class="fas fa-angle-down"></i>');
         }
 
-        that.parent().find('.instuc_div').slideToggle();
+        that.parent().parent().find('.instuc_div').slideToggle();
     },
 }
 

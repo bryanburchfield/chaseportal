@@ -24,13 +24,17 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label>Phone #</label>
-											<input type="tel" name="phone" id="phone" class="form-control"
-												required><br>
-											<label class="radio-inline"><input class="search_type" type="radio"
-													name="search_type" value="number_dialed" checked>Number
-												Dialed</label>
-											<label class="radio-inline"><input class="search_type" type="radio"
-													name="search_type" value="caller_id">Caller ID</label>
+											<input type="tel" name="phone" id="phone" class="form-control mb-2" required>
+
+											<div class="form-check-inline">
+												<input class="search_type form-check-input" type="radio" name="search_type" value="number_dialed" checked>
+												<label class="form-check-label">Number Dialed</label>
+											</div>
+
+											<div class="form-check-inline">
+												<input class="search_type form-check-input" type="radio" name="search_type" value="caller_id">
+												<label class="form-check-label">Caller ID</label>
+											</div>
 										</div>
 									</div>
 
@@ -39,7 +43,7 @@
 											<label>From</label>
 											<div class='input-group date '>
 												<input type='text' readonly="true" name="fromdate"
-													class="form-control datetimepicker fromdate" required
+													class="form-control datepicker_only fromdate" required
 													value="" />
 												<span class="input-group-addon">
 													<span class="glyphicon glyphicon-calendar">
@@ -54,7 +58,7 @@
 											<label>To</label>
 											<div class='input-group date '>
 												<input type='text' readonly="true" name="todate"
-													class="form-control datetimepicker todate" required value="" />
+													class="form-control datepicker_only todate" required value="" />
 												<span class="input-group-addon">
 													<span class="glyphicon glyphicon-calendar">
 													</span>

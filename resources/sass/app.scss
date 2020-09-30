@@ -2616,9 +2616,12 @@ div.w100 {
 
 div.dataTables_wrapper div.dataTables_filter input{background:#fff !important;}
 
-
 .modal-content{
     border: none;
+}
+
+.col-sm-12.opt.p-0{
+    overflow-x:hidden;
 }
 
 /* ---------------------------------------------------

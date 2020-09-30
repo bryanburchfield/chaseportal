@@ -26,7 +26,7 @@
 							</h2>
 
 							<form action="{{ action("DncController@index") }}" method="get">
-							<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-warning">{{__('tools.back')}}</a>
+							<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-secondary">{{__('tools.back')}}</a>
 
 							@if (count($records))
 								{{ $records->links() }}
@@ -51,7 +51,7 @@
 									</table>
 								</div>
 								{{ $records->links() }}
-								<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-warning">{{__('tools.back')}}</a>
+								<a href="{{url('tools/dnc_importer')}}" class="btn btn-sm btn-secondary">{{__('tools.back')}}</a>
 							@endif
 							</form>
 						</div>

@@ -1950,24 +1950,6 @@ var Master = {
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
     },
 
-    toggle_instructions:function(e){
-
-        if(e){
-            e.preventDefault();
-        }
-
-        that = $('a.toggle_instruc');
-        if(that.hasClass('collapsed')){
-            that.removeClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-up"></i>');
-        }else{
-            that.addClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-down"></i>');
-        }
-
-        that.parent().find('.instuc_div').slideToggle();
-    },
-
     add_esp:function(e){
         e.preventDefault();
 

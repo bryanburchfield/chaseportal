@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
-.cb{clear: both;}
+.cb{clear: both !important;}
 // .flt_lft{float: left;}
 // .flt_rgt{float: right;}
 .cb{clear: both;}
@@ -2053,11 +2053,11 @@ ul.db_select li.active>a, a[aria-expanded="true"] {
     border-top: 6px solid #d9534f;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
     @include base_style(#23354e, #fff, null, 1px solid #23354e, 600);
 }
 
-.nav-tabs > li > a:hover{
+.nav-tabs .nav-link:hover{
     @include base_style(lighten(#23354e, 10%), null, null, 1px solid lighten(#23354e, 10%)!important);
 }
 
@@ -2570,7 +2570,7 @@ a.toggle_instruc {
 }
 
 td.bg-danger{
-    @include base_style(#f2dede, #a94442);
+    color:#f2dede;
 }
 
 [hidden] {
@@ -2787,6 +2787,10 @@ span.numb_notifications{
     .input-group>.input-group-append>.btn, .input-group>.input-group-append>.input-group-text, .input-group>.input-group-prepend:first-child>.btn:not(:first-child), .input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child), .input-group>.input-group-prepend:not(:first-child)>.btn, .input-group>.input-group-prepend:not(:first-child)>.input-group-text{
         border:1px solid darken($blue, 20%);
     }
+}
+
+.col-sm-12.opt.p-0{
+    overflow-x:hidden;
 }
 
 /* ---------------------------------------------------

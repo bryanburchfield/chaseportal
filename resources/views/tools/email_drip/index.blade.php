@@ -149,9 +149,9 @@
             <div class="modal-body">
                 <form action="#" method="post" class="form add_esp fc_style">
                     @include('tools.email_drip.email_service_provider')
-                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <input type="submit" class="btn btn-primary add_esp flt_lft" value="{{__('tools.add_provider')}}">
-                    <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
+                    <button type="button" class="btn btn-secondary float-left mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <input type="submit" class="btn btn-primary add_esp float-left" value="{{__('tools.add_provider')}}">
+                    <button type="submit" class="btn btn-info test_connection float-right add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
                 <input type="hidden" name="email_service_provider_id" id="email_service_provider_id" value="">
             </div>
@@ -174,9 +174,9 @@
                 <form action="#" method="post" class="form edit_es fc_style">
                     @include('tools.email_drip.email_service_provider')
                     <input type="hidden" name="id" class="id" value="">
-                    <button type="button" class="btn btn-secondary flt_lft mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
-                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader flt_lft">{{__('tools.save_changes')}}</button>
-                    <button type="submit" class="btn btn-info test_connection flt_rgt add_btn_loader">{{__('tools.test_connection')}}</button>
+                    <button type="button" class="btn btn-secondary float-left mr10" data-dismiss="modal"><i class="fas fa-ban"></i>  {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary edit_esp add_btn_loader float-left">{{__('tools.save_changes')}}</button>
+                    <button type="submit" class="btn btn-info test_connection float-right add_btn_loader">{{__('tools.test_connection')}}</button>
                 </form>
             </div>
 
@@ -223,8 +223,8 @@
 
                     <div class="alert alert-success hidetilloaded"></div>
                     <div class="alert alert-danger hidetilloaded"></div>
-                     <button type="button" class="btn btn-secondary cancel_modal_form mt10 mr10 flt_lft" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
-                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0 flt_lft">{{__('tools.create_campaign')}}</button>
+                     <button type="button" class="btn btn-secondary cancel_modal_form mt10 mr10 float-left" data-dismiss="modal"><i class="fas fa-ban"></i> {{__('general.cancel')}}</button>
+                    <button type="submit" class="btn btn-primary create_campaign add_btn_loader mt10 mb0 float-left">{{__('tools.create_campaign')}}</button>
                 </form>
             </div>
 

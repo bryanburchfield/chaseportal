@@ -3112,6 +3112,10 @@ div.dataTables_wrapper div.dataTables_filter input {
   border: none;
 }
 
+.col-sm-12.opt.p-0 {
+  overflow-x: hidden;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

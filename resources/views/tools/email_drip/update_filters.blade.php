@@ -101,12 +101,12 @@
 
 					    	    <div class="row filters"></div>
 					    	</div>
-							<div class="alert alert-danger filter_error"></div>
+
+							<div class="alert alert-danger filter_error hidetilloaded"></div>
 							<input type="hidden" name="email_drip_campaign_id" id="email_drip_campaign_id" value="{{$email_drip_campaign->id}}">
 
-
-							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 btn_flt_lft mr10"><i class="fas fa-ban"></i> {{__('general.cancel')}}</a>
-							<a href="#" class="btn btn-info add_email_campaign_filter mt0 btn_flt_lft mr10"><i class="fas fa-plus-circle"></i> Add</a>
+							<a href="{{url('/tools/email_drip/')}}" class="btn btn-secondary mt0 float-left mr10"><i class="fas fa-ban"></i> {{__('general.cancel')}}</a>
+							<a href="#" class="btn btn-info add_email_campaign_filter mt0 float-left mr10"><i class="fas fa-plus-circle"></i> Add</a>
 
 							<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Filters</button>
 					    </form>

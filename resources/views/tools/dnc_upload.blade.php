@@ -36,8 +36,9 @@
 
 									<p class="filename">{{__('tools.no_file')}}</p>
 
-									<div class="checkbox cb">
-										<label><input type="checkbox" name="has_headers"><b>{{__('tools.has_header')}}</b></label>
+									<div class="form-check checkbox cb mb-4">
+										<input class="form-check-input" type="checkbox" id="has_headers" name="has_headers">
+										<label class="form-check-label" for="has_headers"><b>{{__('tools.has_header')}}</b></label>
 									</div>
 
 									<div class="form-group upload_desc">

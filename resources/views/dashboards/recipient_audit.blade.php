@@ -17,7 +17,7 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
                         <h2>Recipient Audit Trail</h2>
-                        <a class="btn btn-primary flt_rgt" href="{{ URL::previous() }}">Go Back</a>
+                        <a class="btn btn-primary float-right" href="{{ URL::previous() }}">Go Back</a>
 
                         <div class="col-sm-5 pl0">
                             <div class="card">
