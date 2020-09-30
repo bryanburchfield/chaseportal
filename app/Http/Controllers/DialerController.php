@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DialerController extends Controller
 {
-    public function showStatus()
+    public function statusUrl()
     {
-        return "blah";
+        return Auth::user()->dialer->status_url;
     }
 }
