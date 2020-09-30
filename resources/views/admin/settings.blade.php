@@ -30,8 +30,8 @@
 
 								<div class="form-group">
 									{!! Form::label('db', 'Database') !!}
-									{!! Form::select("db", $dbs, Auth::user()->dialer->reporting_db, ["class" => "form-control", 'id'=>
-									'db',
+									{!! Form::select("dialer_id", $dbs, Auth::user()->dialer->reporting_db, ["class" => "form-control", 'id'=>
+									'dialer_id',
 									'required'=>true]) !!}
 								</div>
 

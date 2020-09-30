@@ -357,7 +357,7 @@ var Admin = {
 		var form = $('form.edit_myself');
 		var group_id = form.find('.group_id').val(),
 			user_id = form.find('.user_id').val(),
-			db = form.find('#db').val(),
+			dialer_id  = form.find('#dialer_id ').val(),
 			tz = form.find('#tz').val()
 		;
 
@@ -374,7 +374,7 @@ var Admin = {
 			data: {
 				id: user_id,
 				group_id: group_id,
-				db: db,
+				dialer_id : dialer_id ,
 				tz:tz
 			},
 
