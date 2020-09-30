@@ -292,6 +292,7 @@ var Admin = {
 			dataType: 'json',
 			data: { id: user_id },
 			success: function (response) {
+				console.log(response);
 				$('html,body').scrollTop($('body').scrollTop());
 
 				$('#edit_dialer' + dialer).addClass('in');
@@ -306,7 +307,7 @@ var Admin = {
 				form.find('#phone').val(response.phone);
 				form.find('#user_type').val(response.user_type);
 				form.find('#user_type').val(response.user_type);
-				form.find('#db').val(response.db);
+				form.find('#db').val(response.dialer_id);
 				form.find('#additional_dbs').val(response.additional_dbs);
 				form.find('#user_id').val(response.id);
 			}
