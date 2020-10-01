@@ -4,6 +4,9 @@
 
     @can('accessAdmin')
         <li data-page="dnc_importer" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'dnc_importer' ? 'class="active"' : ''; ?>><a href="{{url('/tools/dnc_importer')}}"><i class="fas fa-user-check"></i>DNC Importer</a></li>
+          @if(!empty(Auth::user()->dialer->status_url))
+            <li data-page="tools" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ Auth::user()->dialer->status_url }}" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
+        @endif
     @endcan
 
     @can('accessSuperAdmin')
