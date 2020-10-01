@@ -25,5 +25,5 @@
 	@include('shared.notifications_bar')
 </div>
 
-
+@include('shared.reportmodal')
 @endsection
