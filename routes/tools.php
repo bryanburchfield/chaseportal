@@ -6,6 +6,8 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
 
         // must be logged in to access any of these
         Route::group(['middleware' => 'auth'], function () {
+            Route::get('server_status', 'DialerController@index');
+
             // DNC Import
             Route::prefix('dnc_importer')->group(function () {
                 Route::get('/', 'DncController@index');
