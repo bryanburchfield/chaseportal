@@ -52,18 +52,18 @@ class AdminController extends Controller
 
         $tot_client_count = 0;
         $tot_user_count = User::whereNotIn('user_type', ['demo', 'expired'])
-            ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+            ->join('dialers', 'users.dialer_id', '=', 'dialers.id')
             ->where('group_id', Auth::User()->group_id)
             ->where('password', '!=', 'SSO')
             ->count();
 
         if (Auth::User()->isType('superadmin')) {
             $tot_client_count = User::whereNotIn('user_type', ['demo', 'expired'])->distinct('group_id')
-                ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+                ->join('dialers', 'users.dialer_id', '=', 'dialers.id')
                 ->where('password', '!=', 'SSO')
                 ->count();
             $tot_user_count = User::whereNotIn('user_type', ['demo', 'expired'])
-                ->join('dialers', 'users.db', '=', 'dialers.reporting_db')
+                ->join('dialers', 'users.dialer_id', '=', 'dialers.id')
                 ->where('password', '!=', 'SSO')
                 ->count();
         }
@@ -146,7 +146,7 @@ class AdminController extends Controller
     private function setDb($db = null)
     {
         if (empty($db)) {
-            $db = Auth::user()->db;
+            $db = Auth::user()->dialer->reporting_db;
         }
         config(['database.connections.sqlsrv.database' => $db]);
     }
@@ -156,7 +156,7 @@ class AdminController extends Controller
         $dbs = ['' => trans('general.select_one')];
 
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
+            $dbs[$dialer->id] = $dialer->reporting_db;
         }
 
         return $dbs;
@@ -167,9 +167,7 @@ class AdminController extends Controller
         if (Auth::user()->isType('superadmin')) {
             $dialers = Dialer::orderBy('dialer_numb')->get();
         } else {
-            $dialers = Dialer::where('reporting_db', Auth::User()->db)
-                ->orderBy('dialer_numb')
-                ->get();
+            $dialers = Auth::user()->dialer;
         }
 
         return $dialers;

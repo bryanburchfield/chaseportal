@@ -43,6 +43,6 @@ class UniqueEmail implements Rule
      */
     public function message()
     {
-        return 'Email in use by ' . htmlspecialchars($this->dup->name) . ' on ' . $this->dup->db;
+        return 'Email in use by ' . htmlspecialchars($this->dup->name) . ' on ' . $this->dup->dialer->reporting_db;
     }
 }

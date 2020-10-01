@@ -7,19 +7,25 @@ use Illuminate\Support\Facades\Auth;
 
 class Dialer extends Model
 {
-    public function users($include_additional = false)
+
+    public function users()
+    {
+        return $this->hasMany('App\Models\User');
+    }
+
+    public function realUsers($include_additional = false)
     {
         if ($include_additional) {
             $users =  User::where(
                 function ($query) {
-                    $query->where('db', $this->reporting_db)
+                    $query->where('dialer_id', $this->id)
                         ->orWhere('additional_dbs', $this->reporting_db);
                 }
             )
                 ->whereNotIn('user_type', ['demo', 'expired'])
                 ->where('password', '!=', 'SSO');
         } else {
-            $users = User::where('db', $this->reporting_db)
+            $users = User::where('dialer_id', $this->id)
                 ->whereNotIn('user_type', ['demo', 'expired'])
                 ->where('password', '!=', 'SSO');
         }
@@ -36,7 +42,7 @@ class Dialer extends Model
         if ($include_additional) {
             $count = User::where(
                 function ($query) {
-                    $query->where('db', $this->reporting_db)
+                    $query->where('dialer_id', $this->id)
                         ->orWhere('additional_dbs', $this->reporting_db);
                 }
             )
@@ -45,7 +51,7 @@ class Dialer extends Model
                 ->distinct('group_id')
                 ->count();
         } else {
-            $count = User::where('db', $this->reporting_db)
+            $count = User::where('dialer_id', $this->id)
                 ->whereNotIn('user_type', ['demo', 'expired'])
                 ->where('password', '!=', 'SSO')
                 ->distinct('group_id')

@@ -72,7 +72,7 @@ class LoginController extends Controller
 
         if ($user) {
             // set sqlsrv db and find group
-            config(['database.connections.sqlsrv.database' => $user->db]);
+            config(['database.connections.sqlsrv.database' => $user->dialer->reporting_db]);
             $group = Group::find($user->group_id);
 
             // mung password if group not active to force failed login

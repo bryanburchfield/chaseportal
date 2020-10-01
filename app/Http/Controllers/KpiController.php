@@ -332,7 +332,7 @@ class KpiController extends Controller
      */
     private function setDb()
     {
-        $db = Auth::user()->db;
+        $db = Auth::user()->dialer->reporting_db;
         config(['database.connections.sqlsrv.database' => $db]);
 
         $query = "USE [$db];";

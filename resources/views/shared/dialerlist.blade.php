@@ -12,7 +12,7 @@
         @foreach ($dialers as $dialer)
             @php
                 $db = sprintf("%02d", $dialer->dialer_numb);
-                $users = $dialer->users(true);
+                $users = $dialer->realUsers(true);
                 $client_count = $dialer->group_count(true);
             @endphp
 

@@ -14,6 +14,7 @@ return [
 	'outbound' => 'Panel de Salida',
 	'realtimedash'	=> 'Panel de Control en Tiempo Real',
 	'reports' => 'Informes',
+	'server_status'	=> 'El Estado del Servidor',
 	'settings' => 'Ajustes',
 	'tools' => 'Herramientas',
 	'trend_dashboard' => 'Panel de Tendencias',

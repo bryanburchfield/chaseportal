@@ -2,7 +2,6 @@
 
 namespace App\Services\Reports;
 
-use App\Models\Dialer;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -170,7 +169,7 @@ class CallDetails
 
         if (!empty($rec['Recording'])) {
             if ($rec['Duration'] > 0 && !($rec['CallType'] == 'Inbound' && $rec['CallStatus'] == 'CR_HANGUP')) {
-                $server = Dialer::where('reporting_db', Auth::user()->db)->first()->dialer_fqdn;
+                $server = Auth::user()->dialer->dialer_fqdn;
                 $file_id = str_replace('-', '', $rec['Recording']);
 
                 $rec['Recording'] = '

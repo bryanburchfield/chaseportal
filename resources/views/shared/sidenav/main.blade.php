@@ -15,6 +15,9 @@
 
     @can('accessAdmin')
         <li data-page="tools" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''?> ><a href="#" class="update_nav_link" data-path="tools"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
+        @if(!empty(Auth::user()->dialer->status_url))
+            <li data-page="tools" <?@php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ Auth::user()->dialer->status_url }}" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
+        @endif
     @endif
 
     <li data-page="settings" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-cog"></i>{{__('sidenav.settings')}}</a></li>

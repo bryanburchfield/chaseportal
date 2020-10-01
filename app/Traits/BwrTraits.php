@@ -8,7 +8,7 @@ trait BwrTraits
 {
     private function getAllDataSourcePrimary()
     {
-        $db = Auth::User()->db;
+        $db = Auth::user()->dialer->reporting_db;
 
         $sql = '';
 
@@ -26,7 +26,7 @@ trait BwrTraits
 
     private function getAllDataSourceSecondary()
     {
-        $db = Auth::User()->db;
+        $db = Auth::user()->dialer->reporting_db;
 
         $sql = '';
 
@@ -44,7 +44,7 @@ trait BwrTraits
 
     private function getAllProgram()
     {
-        $db = Auth::User()->db;
+        $db = Auth::user()->dialer->reporting_db;
 
         $sql = '';
 
