@@ -23,7 +23,7 @@
     //// remove select all option
     $('#lead_inventory #campaign_select').next('div').find('ul li.multiselect-item.multiselect-all').remove();
 	
-	$('#inbound_sources_select').multiselect({nonSelectedText: Lang.get('js_msgs.select_inbound_source'),});
+	// $('#inbound_sources_select').multiselect({nonSelectedText: Lang.get('js_msgs.select_inbound_source'),});
 	// $('#rep_select').multiselect({nonSelectedText: Lang.get('js_msgs.select_rep'),});
-	$('#call_status_select').multiselect({nonSelectedText: Lang.get('js_msgs.select_call_status'),});
+	// $('#call_status_select').multiselect({nonSelectedText: Lang.get('js_msgs.select_call_status'),});
 // });

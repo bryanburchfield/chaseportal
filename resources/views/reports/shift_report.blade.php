@@ -12,7 +12,7 @@
 
 				@include('shared.report_db_menu')
 
-				<div class=" mb-2col-sm-4">
+				<div class="col-sm-4 mb-2 ">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
@@ -41,7 +41,7 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
-						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 					</div>
 				</div>
 

@@ -3383,6 +3383,10 @@ span.numb_notifications {
   overflow-x: hidden;
 }
 
+.dropdown-menu.inner {
+  overflow: hidden !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

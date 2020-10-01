@@ -41,7 +41,7 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('skills', __('reports.skill')) !!}
-						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
+						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control selectpicker", 'id'=> 'skill_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 					</div>
 				</div>
 

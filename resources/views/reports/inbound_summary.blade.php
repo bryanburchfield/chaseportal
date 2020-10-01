@@ -41,14 +41,14 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
-						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 					</div>
 				</div>
 
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
-						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control multiselect", 'id'=> 'inbound_sources_select','multiple'=>true]) !!}
+						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control selectpicker", 'id'=> 'inbound_sources_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 					</div>
 				</div>
 
