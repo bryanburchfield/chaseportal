@@ -25,7 +25,7 @@
         @if (Auth::user()->isType(['admin','superadmin']))
             <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''@endphp ><a href="{{ action('LeadsController@index') }}"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
             @if(!empty(Auth::user()->dialer->status_url))
-                <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a data-toggle="modal" data-target="#serverStatus" href="#" target="_blank"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
+                <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ action('DialerController@index') }}"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>
             @endif
         @endif
             
@@ -36,25 +36,3 @@
         @endcan
     </ul>
 </nav>
-
-    <!-- Modal -->
-    <div class="modal fade" id="serverStatus" tabindex="-1" role="dialog" aria-labelledby="serverStatusLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="serverStatusLabel">{{__('sidenav.server_status')}}</h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                      <iframe class="embed-responsive-item" src="{{ Auth::user()->dialer->status_url }}" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr10 flt_lft" data-dismiss="modal">{{__('general.close')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
