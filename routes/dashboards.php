@@ -61,7 +61,6 @@ Route::prefix('dashboards')->group(function () {
             Route::get('admin/manage_users', 'AdminController@manageUsers');
             Route::post('admin/load_admin_nav', 'AdminController@loadAdminNav');
             Route::post('admin/load_sidenav', 'AdminController@loadSideNav');
-            Route::get('server_status', 'DialerController@index');
         });
 
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {

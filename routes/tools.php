@@ -7,6 +7,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
         // must be logged in to access any of these
         Route::group(['middleware' => 'auth'], function () {
             Route::redirect('/', 'tools/contactflow_builder');
+            Route::get('server_status', 'DialerController@index');
 
             // Contact Flow (leads)
             Route::prefix('contactflow_builder')->group(function () {
