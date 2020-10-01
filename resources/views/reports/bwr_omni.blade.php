@@ -41,28 +41,28 @@
 		<div class="col-sm-4 mb-2">
 			<div class="form-group">
 				{!! Form::label('campaigns', __('reports.campaign')) !!}
-				{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true, 'required' => true,]) !!}
+				{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true", 'required' => true,]) !!}
 			</div>
 		</div>
 
 		<div class="col-sm-4 mb-2">
 			<div class="form-group">
 				{!! Form::label('data_sources_primary', __('reports.data_source_primary')) !!}
-				{!! Form::select("data_sources_primary[]", $filters['data_sources_primary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_primary_select','multiple'=>true]) !!}
+				{!! Form::select("data_sources_primary[]", $filters['data_sources_primary'], null, ["class" => "form-control selectpicker", 'id'=> 'data_source_primary_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 			</div>
 		</div>
 
 		<div class="col-sm-4 mb-2">
 			<div class="form-group">
 				{!! Form::label('data_sources_secondary', __('reports.data_source_secondary')) !!}
-				{!! Form::select("data_sources_secondary[]", $filters['data_sources_secondary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_secondary_select','multiple'=>true]) !!}
+				{!! Form::select("data_sources_secondary[]", $filters['data_sources_secondary'], null, ["class" => "form-control selectpicker", 'id'=> 'data_source_secondary_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 			</div>
 		</div>
 
 		<div class="col-sm-4 mb-2">
 			<div class="form-group">
 				{!! Form::label('programs', __('reports.program')) !!}
-				{!! Form::select("programs[]", $filters['programs'], null, ["class" => "form-control multiselect", 'id'=> 'program_select','multiple'=>true]) !!}
+				{!! Form::select("programs[]", $filters['programs'], null, ["class" => "form-control selectpicker", 'id'=> 'program_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 			</div>
 		</div>
 

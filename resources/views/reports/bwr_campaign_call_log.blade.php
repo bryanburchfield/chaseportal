@@ -41,53 +41,49 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
-						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
 					</div>
 				</div>
 
                 <div class="col-sm-4 mb-2">
                     <div class="form-group">
                         {!! Form::label('data_sources_primary', __('reports.data_source_primary')) !!}
-                        {!! Form::select("data_sources_primary[]", $filters['data_sources_primary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_primary_select','multiple'=>true]) !!}
+                        {!! Form::select("data_sources_primary[]", $filters['data_sources_primary'], null, ["class" => "form-control selectpicker", 'id'=> 'data_source_primary_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
                     </div>
                 </div>
 
                 <div class="col-sm-4 mb-2">
                     <div class="form-group">
                         {!! Form::label('data_sources_secondary', __('reports.data_source_secondary')) !!}
-                        {!! Form::select("data_sources_secondary[]", $filters['data_sources_secondary'], null, ["class" => "form-control multiselect", 'id'=> 'data_source_secondary_select','multiple'=>true]) !!}
+                        {!! Form::select("data_sources_secondary[]", $filters['data_sources_secondary'], null, ["class" => "form-control selectpicker", 'id'=> 'data_source_secondary_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
                     </div>
                 </div>
 
                 <div class="col-sm-4 mb-2">
                     <div class="form-group">
                         {!! Form::label('programs', __('reports.program')) !!}
-                        {!! Form::select("programs[]", $filters['programs'], null, ["class" => "form-control multiselect", 'id'=> 'program_select','multiple'=>true]) !!}
+                        {!! Form::select("programs[]", $filters['programs'], null, ["class" => "form-control selectpicker", 'id'=> 'program_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
                     </div>
                 </div>
-                
-			</div>
 
-			<div class="row">
-				<div class="col-sm-4 mb-2">
-					<div class="form-group">
-						{!! Form::label('reps', __('reports.rep')) !!}
-						<select class="form-control multiselect" id="rep_select" multiple name="reps[]">
-							@foreach($filters['reps'] as $rep)
-								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
-							@endforeach
-						</select>
-						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
-					</div>
-				</div>
+                <div class="col-sm-4 mb-2">
+                	<div class="form-group">
+                		{!! Form::label('reps', __('reports.rep')) !!}
+                		<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true">
+                			@foreach($filters['reps'] as $rep)
+                				<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
+                			@endforeach
+                		</select>
+                		<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+                	</div>
+                </div>
 
-				<div class="col-sm-4 mb-2">
-					<div class="form-group">
-						{!! Form::label('skills', __('reports.skill')) !!}
-						{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control multiselect", 'id'=> 'skill_select','multiple'=>true]) !!}
-					</div>
-				</div>
-
+                <div class="col-sm-4 mb-2">
+                	<div class="form-group">
+                		{!! Form::label('skills', __('reports.skill')) !!}
+                		{!! Form::select("skills[]", $filters['skills'], null, ["class" => "form-control selectpicker", 'id'=> 'skill_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
+                	</div>
+                </div>
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
