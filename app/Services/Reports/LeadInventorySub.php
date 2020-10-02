@@ -123,30 +123,29 @@ class LeadInventorySub
             $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
-            CASE IsNull(dr.CallStatus, '')
-                WHEN '' THEN '[ Not Called ]'
-                ELSE dr.CallStatus
-            END as CallStatus,
+                CASE IsNull(dr.CallStatus, '')
+                    WHEN '' THEN '[ Not Called ]'
+                    ELSE dr.CallStatus
+                END as CallStatus,
             IsNull(DI.IsCallable, 0) as IsCallable,
             WasDialed,
             DI.Description,
-            IsNull(
-                CASE [Type]
-                    WHEN 0 THEN 'No Connect'
-                    WHEN 1 THEN 'Connect'
-                    WHEN 2 THEN 'Contact'
-                    WHEN 3 THEN 'Lead/Sale'
-                END, 'No Connect') as [Type],
+            CASE IsNull(DI.[Type], 0)
+                WHEN 0 THEN 'No Connect'
+                WHEN 1 THEN 'Connect'
+                WHEN 2 THEN 'Contact'
+                WHEN 3 THEN 'Lead/Sale'
+            END as [Type],
             COUNT(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
-            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
+            LEFT JOIN  [$db].[dbo].[Dispos] DI on DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
             AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type, dr.Campaign";
+            GROUP BY dr.CallStatus, DI.isCallable, dr.WasDialed, DI.Description, DI.Type, dr.GroupId";
 
             $union = 'UNION ALL';
         }
@@ -173,7 +172,7 @@ class LeadInventorySub
                 FROM (SELECT COUNT(DISTINCT l.id) as Leads
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
-                        LEFT JOIN dialer_DialingSettings ds2 on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign
+                        LEFT JOIN dialer_DialingSettings ds2 on ds2.GroupId = l.GroupId and ds2.Campaign = l.Campaign
                         WHERE l.GroupId = :group_id1$i
                         AND l.Campaign = :campaign1$i
                         AND l.Subcampaign = :subcampaign1$i

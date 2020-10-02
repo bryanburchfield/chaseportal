@@ -93,6 +93,14 @@ class Kpi extends Model
                 $bind['group_id' . $i] = $group_id;
                 $snippet = str_replace('{{:group_id}}', ':group_id' . $i, $snippet);
             }
+            if (strpos($sql, '{:group_id1}') !== false) {
+                $bind['group_id1' . $i] = $group_id;
+                $snippet = str_replace('{{:group_id1}}', ':group_id1' . $i, $snippet);
+            }
+            if (strpos($sql, '{:group_id2}') !== false) {
+                $bind['group_id2' . $i] = $group_id;
+                $snippet = str_replace('{{:group_id2}}', ':group_id2' . $i, $snippet);
+            }
 
             $final .= " $union $snippet";
             $union = $this->union_all ? 'UNION ALL' : 'UNION';
