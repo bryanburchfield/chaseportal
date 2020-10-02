@@ -13,11 +13,11 @@ trait SqlServerTraits
     {
         $this->setSqlServer($db);
 
-        // try {
-        $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
-        // } catch (\Exception $e) {
-        //     $results = [];
-        // }
+        try {
+            $results = DB::connection('sqlsrv')->select(DB::raw($sql), $bind);
+        } catch (\Exception $e) {
+            $results = [];
+        }
 
         if (count($results)) {
             // convert array of objects to array of arrays
