@@ -6,7 +6,6 @@ use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
-use Illuminate\Support\Facades\Log;
 
 class LeadInventory
 {
@@ -48,9 +47,6 @@ class LeadInventory
     private function executeReport($all = false)
     {
         list($sql, $bind) = $this->makeQuery($all);
-
-        Log::debug($sql);
-        Log::debug($bind);
 
         $results = $this->runSql($sql, $bind);
 
