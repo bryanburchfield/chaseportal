@@ -35,7 +35,7 @@ SELECT * INTO #ShiftReport FROM (
 	LEFT JOIN  [{{db}}].[dbo].[Dispos] DI on DI.id = L.DispositionId
 	WHERE L.GroupId = {{:group_id1}}
 	AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-	GROUP BY L.Campaign, L.Subcampaign
+	GROUP BY isNull(L.Campaign, ''), isNull(L.Subcampaign, '')
 ) a;
 
 UPDATE #ShiftReport
@@ -52,7 +52,7 @@ UPDATE #ShiftReport
 		AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
 		AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
 		AND l.WasDialed = 0
-		GROUP BY l.Campaign, l.Subcampaign
+		GROUP BY isNull(l.Campaign, ''), isNull(l.Subcampaign, '')
 	) a
 	WHERE #ShiftReport.Campaign = isNull(a.Campaign, '')
 	AND #ShiftReport.Subcampaign = isNull(a.Subcampaign, '');
