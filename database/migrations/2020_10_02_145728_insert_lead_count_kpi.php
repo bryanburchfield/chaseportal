@@ -54,8 +54,8 @@ UPDATE #ShiftReport
 		AND l.WasDialed = 0
 		GROUP BY l.Campaign, l.Subcampaign
 	) a
-	WHERE #ShiftReport.Campaign = a.Campaign
-	AND #ShiftReport.Subcampaign = a.Subcampaign;
+	WHERE #ShiftReport.Campaign = isNull(a.Campaign, '')
+	AND #ShiftReport.Subcampaign = isNull(a.Subcampaign, '');
 
 SELECT
 	Campaign,
