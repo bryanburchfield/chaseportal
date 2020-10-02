@@ -17,6 +17,8 @@ class InsertLeadCountKpi extends Migration
         DB::table('kpis')->insert(
             [
                 'name' => 'lead_count',
+                'created_at' => now(),
+                'updated_at' => now(),
                 'outer_sql' => '{{inner_sql}}',
                 'inner_sql' => "SET NOCOUNT ON;
 
