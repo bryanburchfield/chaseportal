@@ -57,7 +57,9 @@ class RealTimeDashboardController extends Controller
         $sales = 0;
 
         // Get real-time agent stats
-        $sql = "SELECT 
+        $sql = "SET NOCOUNT ON;
+        USE [$db];
+        SELECT 
             RTA.Login,
             RTA.Campaign,
             RTA.Subcampaign,
@@ -70,9 +72,9 @@ class RealTimeDashboardController extends Controller
             RTZ.Caption as Status,
             RTA.Phone,
             RTA.LeadId
-            FROM [$db].[dbo].[RealtimeStatistics_Agents] RTA WITH (SNAPSHOT)
-            JOIN [$db].[dbo].[RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
-            JOIN [$db].[dbo].[RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
+            FROM [RealtimeStatistics_Agents] RTA WITH (SNAPSHOT)
+            JOIN [RealtimeStatistics_Agents_State] RTS ON RTS.State = RTA.State
+            JOIN [RealtimeStatistics_Agents_Status] RTZ ON RTZ.Status = RTA.Status
             WHERE RTA.GroupId = :groupid
             ORDER BY RTA.SecondsInStatus DESC";
 
