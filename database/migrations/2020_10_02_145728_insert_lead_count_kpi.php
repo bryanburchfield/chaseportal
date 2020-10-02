@@ -65,7 +65,7 @@ SELECT
 FROM #ShiftReport
 ORDER BY Campaign, Subcampaign;",
                 'union_all' => 1
-            ],
+            ]
         );
     }
 
