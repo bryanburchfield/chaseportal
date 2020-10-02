@@ -42,8 +42,8 @@ UPDATE #ShiftReport
 	SET AvailableLeads = a.Leads
 	FROM (
 		SELECT
-			l.Campaign,
-			l.Subcampaign,
+  		    isNull(l.Campaign, '') as Campaign,
+		    isNull(l.Subcampaign, '') as Subcampaign,
 			COUNT(DISTINCT l.id) as Leads
 		FROM [{{db}}].[dbo].[Leads] l WITH(NOLOCK)
 		LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
