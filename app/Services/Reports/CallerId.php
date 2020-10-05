@@ -113,7 +113,7 @@ FROM (
 	AND CallDate >= :startdate
 	AND CallDate < :enddate
 	AND CallerId != ''
-	AND CallType NOT IN (1,4,5,6,7,8,11,14)
+    AND CallType IN (0,2)
     AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')";
 
         if (!empty($this->params['caller_id'])) {
@@ -131,7 +131,8 @@ FROM (
             $bind['ssouserrep'] = session('ssoUsername');
         }
 
-        $sql .= ") tmp
+        $sql .= "
+) tmp
 GROUP BY CallerID
 
 UPDATE #Summary
@@ -143,7 +144,8 @@ FROM (
 	AND CallDate >= :prevstart
 	AND CallDate < :prevend
 	AND CallerId != ''
-	AND CallType IN (0,2)
+    AND CallType IN (0,2)
+    AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')
 	GROUP BY CallerId
 ) a
 WHERE #Summary.CallerId = a.CallerId 
@@ -171,15 +173,19 @@ SELECT * FROM #Summary";
             $total[$k] = '';
         }
 
-        $total['CallerId'] = 'Total:';
-        $total['Total'] = 0;
-        $total['Agent'] = 0;
-        $total['ConnectPct'] = 0;
+        $total = [
+            'CallerId' => 'Total:',
+            'Total' => 0,
+            'Agent' => 0,
+            'ConnectPct' => 0,
+            'PrevCalls' => 0,
+        ];
 
         foreach ($results as &$rec) {
             $rec = $this->processRow($rec);
             $total['Total'] += $rec['Total'];
             $total['Agent'] += $rec['Agent'];
+            $total['PrevCalls'] += $rec['PrevCalls'];
         }
 
         // format totals
