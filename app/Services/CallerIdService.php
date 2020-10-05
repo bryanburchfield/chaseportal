@@ -10,6 +10,7 @@ use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Twilio\Rest\Client as Twilio;
@@ -26,6 +27,9 @@ class CallerIdService
     private $maxcount;
     private $guzzleClient;
     private $calleridHeaders;
+
+    // Array of DIDs in thinq
+    private $thinqNumbers;
 
     // For tracking rate limiting
     private $apiRequests = [];
@@ -79,6 +83,9 @@ class CallerIdService
     {
         $this->initialize();
 
+        // Load Thinq numbers
+        $this->loadThinq();
+
         $tmpfname = tempnam("/tmp", "CID");
 
         // run report for >5.5k calls over 30 days
@@ -100,28 +107,28 @@ class CallerIdService
                 $rec = $this->csvToRec($csv);
 
                 // check if this number is still active
-                // if ($this->activeNumber($rec['CallerId'])) {
+                if ($this->activeNumber($rec['CallerId'])) {
 
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
+                    $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                    unset($rec['Contacts']);
 
-                // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                    list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                $all_results[] = $rec;
+                    $all_results[] = $rec;
 
-                // Send email on change of group
-                if ($group_id != '' && $group_id != $rec['GroupId']) {
-                    if ($this->setGroup($group_id)) {
-                        $csvfile = $this->makeCsv($results);
-                        $this->emailReport($csvfile);
+                    // Send email on change of group
+                    if ($group_id != '' && $group_id != $rec['GroupId']) {
+                        if ($this->setGroup($group_id)) {
+                            $csvfile = $this->makeCsv($results);
+                            $this->emailReport($csvfile);
+                        }
+
+                        $results = [];
                     }
 
-                    $results = [];
-                }
-
-                $results[] = $rec;
-                $group_id = $rec['GroupId'];
-                // }  // active check
+                    $results[] = $rec;
+                    $group_id = $rec['GroupId'];
+                }  // active check
             }
             fclose($handle);
         }
@@ -157,14 +164,14 @@ class CallerIdService
                 $rec = $this->csvToRec($csv);
 
                 // check if this number is still active
-                // if ($this->activeNumber($rec['CallerId'])) {
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
+                if ($this->activeNumber($rec['CallerId'])) {
+                    $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                    unset($rec['Contacts']);
 
-                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                    list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                $all_results[] = $rec;
-                // } // active check
+                    $all_results[] = $rec;
+                } // active check
             }
             fclose($handle);
         }
@@ -252,26 +259,25 @@ class CallerIdService
 
     private function makeCsv($results)
     {
-        if ($this->maxcount == 5500) {
-            $headers = [
-                'GroupID',
-                'GroupName',
-                'CallerID',
-                'Dials in Last 30 Days',
-                'Contact Rate',
-            ];
-        } else {
-            $headers = [
-                'GroupID',
-                'GroupName',
-                'CallerID',
-                // 'Dials Yesterday',
-                'Dials in Last 30 Days',
-                'Contact Rate',
-                'Flagged',
-                'Flagged By',
-            ];
-        }
+        // if ($this->maxcount == 5500) {
+        //     $headers = [
+        //         'GroupID',
+        //         'GroupName',
+        //         'CallerID',
+        //         'Dials in Last 30 Days',
+        //         'Contact Rate',
+        //     ];
+        // } else {
+        $headers = [
+            'GroupID',
+            'GroupName',
+            'CallerID',
+            'Dials in Last 30 Days',
+            'Contact Rate',
+            'Flagged',
+            'Flagged By',
+        ];
+        // }
 
         array_unshift($results, $headers);
 
@@ -298,13 +304,11 @@ class CallerIdService
             $cc = [
                 'g.sandoval@chasedatacorp.com',
                 'ahmed@chasedatacorp.com',
+                'dylan.farley@chasedatacorp.com'
             ];
         } else {
             $to = $this->email_to;
-            $cc = [
-                'jonathan.gryczka@chasedatacorp.com',
-                'ahmed@chasedatacorp.com',
-            ];
+            $cc = [];
         }
 
         // email report
@@ -472,5 +476,54 @@ class CallerIdService
         // Ok to send!
         $this->apiRequests[] = time();
         return true;
+    }
+
+    private function loadThinq()
+    {
+        $this->thinqNumbers = [];
+
+        $client = new Client(['base_uri' => 'https://api.thinq.com/']);
+
+        $page = 1;
+        while (true) {
+
+            echo "get page $page\n";
+
+            $response = $client->request(
+                'GET',
+                '/origination/did/search2/did/13446',
+                [
+                    'headers' => [
+                        'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
+                    ],
+                    'query' => [
+                        'page' => $page
+                    ]
+                ]
+            );
+
+            // Bail if we don't get a response
+            if (!$response->getBody()) {
+                break;
+            }
+
+            $results = json_decode($response->getBody()->getContents());
+
+            echo 'got' . count($results->rows) . "\n";
+
+            foreach ($results->rows as $rec) {
+                $this->thinqNumbers[] = $rec->id;
+            }
+
+            // bail if this was the last page
+            if (!$results->has_next_page) {
+                break;
+            }
+
+            $page++;
+        }
+
+        Log::debug($this->thinqNumbers);
+        die();
     }
 }
