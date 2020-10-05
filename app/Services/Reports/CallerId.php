@@ -22,6 +22,7 @@ class CallerId
             'Total' => 'reports.totalcalls',
             'Agent' => 'reports.agent',
             'ConnectPct' => 'reports.connectpct',
+            'PrevCalls' => 'reports.last_30_days',
         ];
     }
 
@@ -77,54 +78,79 @@ class CallerId
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $bind = [];
+        $bind = [
+            'group_id1' => Auth::user()->group_id,
+            'group_id2' => Auth::user()->group_id,
+            'startdate' => $startDate,
+            'enddate' => $endDate,
+            'prevstart' => now()->subDays(30)->format('Y-m-d H:i:s'),
+            'prevend' => now()->format('Y-m-d H:i:s'),
+        ];
 
         $sql = "SET NOCOUNT ON;
 
-        SELECT CallerId,
-        'Total' = COUNT(CallerId),
-        'Agent' = SUM(Agent),
-        'ConnectPct' = SUM(Agent) * 10000 / COUNT(CallerId)
-        FROM (";
+CREATE TABLE #Summary
+(
+  CallerId varchar(50),
+  Total int default 0,
+  Agent int default 0,
+  ConnectPct numeric(18,2) default 0,
+  PrevCalls int default 0
+)
 
-        $union = '';
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id' . $i] =  Auth::user()->group_id;
-            $bind['startdate' . $i] = $startDate;
-            $bind['enddate' . $i] = $endDate;
+INSERT INTO #Summary (CallerId, Total, Agent, ConnectPct)
+SELECT
+    [CallerId],
+	COUNT(CallerId) as [Total],
+	SUM(Agent) as Agent,
+	SUM(Agent) / COUNT(CallerId) * 100 as ConnectPct
+FROM (
+	SELECT
+		CallerId,
+		CASE WHEN CallStatus NOT LIKE 'CR_%' THEN 1.0 ELSE 0 END as Agent
+	FROM DialingResults
+	WHERE GroupId = :group_id1
+	AND CallDate >= :startdate
+	AND CallDate < :enddate
+	AND CallerId != ''
+    AND CallType IN (0,2)
+    AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')";
 
-            $sql .= " $union SELECT
-            CallerId,
-            'Agent' = CASE WHEN CallStatus NOT LIKE 'CR_%' THEN 1 ELSE 0 END,
-            'Total' = 1
-            FROM [$db].[dbo].[DialingResults]
-            WHERE GroupId = :group_id$i
-            AND Date >= :startdate$i
-            AND Date < :enddate$i
-            AND CallerId != ''
-            AND CallType NOT IN (1,4,5,6,7,8,11,14)
-            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')";
-
-            if (!empty($this->params['caller_id'])) {
-                $bind['caller_id' . $i] = $this->params['caller_id'] . '%';
-                $sql .= " AND CallerId LIKE :caller_id$i";
-            }
-
-            if (session('ssoRelativeCampaigns', 0)) {
-                $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp$i, 1))";
-                $bind['ssousercamp' . $i] = session('ssoUsername');
-            }
-
-            if (session('ssoRelativeReps', 0)) {
-                $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep$i))";
-                $bind['ssouserrep' . $i] = session('ssoUsername');
-            }
-
-            $union = 'UNION ALL';
+        if (!empty($this->params['caller_id'])) {
+            $bind['caller_id'] = $this->params['caller_id'] . '%';
+            $sql .= " AND CallerId LIKE :caller_id";
         }
 
-        $sql .= ") tmp
-        GROUP BY CallerID";
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
+            $bind['ssousercamp'] = session('ssoUsername');
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
+            $bind['ssouserrep'] = session('ssoUsername');
+        }
+
+        $sql .= "
+) tmp
+GROUP BY CallerID
+
+UPDATE #Summary
+SET PrevCalls = a.PrevCalls
+FROM (
+    SELECT CallerId, COUNT(*) as PrevCalls
+	FROM DialingResults
+	WHERE GroupId = :group_id2
+	AND CallDate >= :prevstart
+	AND CallDate < :prevend
+	AND CallerId != ''
+    AND CallType IN (0,2)
+    AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')
+	GROUP BY CallerId
+) a
+WHERE #Summary.CallerId = a.CallerId 
+
+SELECT * FROM #Summary";
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
@@ -134,7 +160,7 @@ class CallerId
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
-            $sql .= ' ORDER BY [Total] DESC';
+            $sql .= ' ORDER BY [Total] DESC, CallerId';
         }
 
         return [$sql, $bind];
@@ -147,15 +173,19 @@ class CallerId
             $total[$k] = '';
         }
 
-        $total['CallerId'] = 'Total:';
-        $total['Total'] = 0;
-        $total['Agent'] = 0;
-        $total['ConnectPct'] = 0;
+        $total = [
+            'CallerId' => 'Total:',
+            'Total' => 0,
+            'Agent' => 0,
+            'ConnectPct' => 0,
+            'PrevCalls' => 0,
+        ];
 
         foreach ($results as &$rec) {
             $rec = $this->processRow($rec);
             $total['Total'] += $rec['Total'];
             $total['Agent'] += $rec['Agent'];
+            $total['PrevCalls'] += $rec['PrevCalls'];
         }
 
         // format totals
@@ -185,8 +215,8 @@ class CallerId
         // Check report filters
         $this->checkDateRangeFilters($request);
 
-        if (!empty($request->callerid)) {
-            $this->params['callerid'] = $request->callerid;
+        if (!empty($request->caller_id)) {
+            $this->params['caller_id'] = $request->caller_id;
         }
 
         // Save params to session

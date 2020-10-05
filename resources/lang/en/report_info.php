@@ -62,6 +62,7 @@ return [
     'inbound' => 'Inbound',
     'inbound_numbers' => 'Inbound Numbers',
     'is_callable' => 'Dispostion \'Is Callable\'',
+    'last_30_days' => 'Number of times this CallerId has been used in the last 30 days',
     'lastname' => 'Lead Last Name',
     'leads' => 'Sales/Leads/App callstatus. This is determined by the disposition type on the wrap up code.',
     'loggedintime' => 'Total Time Logged In',

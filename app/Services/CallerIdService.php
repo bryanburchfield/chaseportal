@@ -234,6 +234,7 @@ class CallerIdService
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
+                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
