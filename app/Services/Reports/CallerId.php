@@ -199,7 +199,7 @@ SELECT * FROM #Summary";
 
     public function processRow($rec)
     {
-        $rec['ConnectPct'] = number_format($rec['ConnectPct'] / 100, 2);
+        $rec['ConnectPct'] = number_format($rec['ConnectPct'], 2);
 
         return $rec;
     }
