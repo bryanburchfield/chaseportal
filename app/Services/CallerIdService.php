@@ -10,7 +10,6 @@ use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Twilio\Rest\Client as Twilio;
@@ -27,9 +26,6 @@ class CallerIdService
     private $maxcount;
     private $guzzleClient;
     private $calleridHeaders;
-
-    // Array of DIDs in thinq
-    private $thinqNumbers;
 
     // For tracking rate limiting
     private $apiRequests = [];
@@ -83,9 +79,6 @@ class CallerIdService
     {
         $this->initialize();
 
-        // Load Thinq numbers
-        $this->loadThinq();
-
         $tmpfname = tempnam("/tmp", "CID");
 
         // run report for >5.5k calls over 30 days
@@ -107,28 +100,28 @@ class CallerIdService
                 $rec = $this->csvToRec($csv);
 
                 // check if this number is still active
-                if ($this->activeNumber($rec['CallerId'])) {
+                // if ($this->activeNumber($rec['CallerId'])) {
 
-                    $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                    unset($rec['Contacts']);
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
 
-                    list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                    $all_results[] = $rec;
+                $all_results[] = $rec;
 
-                    // Send email on change of group
-                    if ($group_id != '' && $group_id != $rec['GroupId']) {
-                        if ($this->setGroup($group_id)) {
-                            $csvfile = $this->makeCsv($results);
-                            $this->emailReport($csvfile);
-                        }
-
-                        $results = [];
+                // Send email on change of group
+                if ($group_id != '' && $group_id != $rec['GroupId']) {
+                    if ($this->setGroup($group_id)) {
+                        $csvfile = $this->makeCsv($results);
+                        $this->emailReport($csvfile);
                     }
 
-                    $results[] = $rec;
-                    $group_id = $rec['GroupId'];
-                }  // active check
+                    $results = [];
+                }
+
+                $results[] = $rec;
+                $group_id = $rec['GroupId'];
+                // }  // active check
             }
             fclose($handle);
         }
@@ -164,14 +157,14 @@ class CallerIdService
                 $rec = $this->csvToRec($csv);
 
                 // check if this number is still active
-                if ($this->activeNumber($rec['CallerId'])) {
-                    $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                    unset($rec['Contacts']);
+                // if ($this->activeNumber($rec['CallerId'])) {
+                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
+                unset($rec['Contacts']);
 
-                    list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
-                    $all_results[] = $rec;
-                } // active check
+                $all_results[] = $rec;
+                // } // active check
             }
             fclose($handle);
         }
@@ -478,52 +471,52 @@ class CallerIdService
         return true;
     }
 
-    private function loadThinq()
-    {
-        $this->thinqNumbers = [];
+    // private function loadThinq()
+    // {
+    //     $this->thinqNumbers = [];
 
-        $client = new Client(['base_uri' => 'https://api.thinq.com/']);
+    //     $client = new Client(['base_uri' => 'https://api.thinq.com/']);
 
-        $page = 1;
-        while (true) {
+    //     $page = 1;
+    //     while (true) {
 
-            echo "get page $page\n";
+    //         echo "get page $page\n";
 
-            $response = $client->request(
-                'GET',
-                '/origination/did/search2/did/13446',
-                [
-                    'headers' => [
-                        'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
-                    ],
-                    'query' => [
-                        'page' => $page
-                    ]
-                ]
-            );
+    //         $response = $client->request(
+    //             'GET',
+    //             '/origination/did/search2/did/13446',
+    //             [
+    //                 'headers' => [
+    //                     'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
+    //                 ],
+    //                 'query' => [
+    //                     'page' => $page
+    //                 ]
+    //             ]
+    //         );
 
-            // Bail if we don't get a response
-            if (!$response->getBody()) {
-                break;
-            }
+    //         // Bail if we don't get a response
+    //         if (!$response->getBody()) {
+    //             break;
+    //         }
 
-            $results = json_decode($response->getBody()->getContents());
+    //         $results = json_decode($response->getBody()->getContents());
 
-            echo 'got' . count($results->rows) . "\n";
+    //         echo 'got' . count($results->rows) . "\n";
 
-            foreach ($results->rows as $rec) {
-                $this->thinqNumbers[] = $rec->id;
-            }
+    //         foreach ($results->rows as $rec) {
+    //             $this->thinqNumbers[] = $rec->id;
+    //         }
 
-            // bail if this was the last page
-            if (!$results->has_next_page) {
-                break;
-            }
+    //         // bail if this was the last page
+    //         if (!$results->has_next_page) {
+    //             break;
+    //         }
 
-            $page++;
-        }
+    //         $page++;
+    //     }
 
-        Log::debug($this->thinqNumbers);
-        die();
-    }
+    //     Log::debug($this->thinqNumbers);
+    //     die();
+    // }
 }
