@@ -105,7 +105,7 @@
             </div>
             <div class="modal-body"></div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('general.close')}}</button>
         </div>
     </div>
     </div>

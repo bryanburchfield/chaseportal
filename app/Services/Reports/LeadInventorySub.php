@@ -127,40 +127,25 @@ class LeadInventorySub
                     WHEN '' THEN '[ Not Called ]'
                     ELSE dr.CallStatus
                 END as CallStatus,
-                IsNull((SELECT TOP 1 IsCallable
-                        FROM [$db].[dbo].[Dispos]
-                        WHERE Disposition = dr.CallStatus
-                        AND Campaign = dr.Campaign
-                        AND (GroupId = dr.GroupId OR IsSystem = 1)
-                    ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 0) as IsCallable,
-                WasDialed,
-                (SELECT TOP 1 [Description]
-                FROM [$db].[dbo].[Dispos]
-                WHERE Disposition = dr.CallStatus
-                AND Campaign = dr.Campaign
-                AND (GroupId = dr.GroupId OR IsSystem = 1)
-                ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc) as [Description],
-                IsNull((SELECT TOP 1
-                    CASE [Type]
-                        WHEN 0 THEN 'No Connect'
-                        WHEN 1 THEN 'Connect'
-                        WHEN 2 THEN 'Contact'
-                        WHEN 3 THEN 'Lead/Sale'
-                    END
-                    FROM [$db].[dbo].[Dispos]
-                    WHERE Disposition = dr.CallStatus
-                    AND Campaign = dr.Campaign
-                    AND (GroupId = dr.GroupId OR IsSystem = 1)
-                    ORDER BY GroupID Desc, IsSystem Desc, [Description] Desc), 'No Connect') as [Type],
-                count(dr.CallStatus) as Leads
+            IsNull(DI.IsCallable, 0) as IsCallable,
+            WasDialed,
+            DI.Description,
+            CASE IsNull(DI.[Type], 0)
+                WHEN 0 THEN 'No Connect'
+                WHEN 1 THEN 'Connect'
+                WHEN 2 THEN 'Contact'
+                WHEN 3 THEN 'Lead/Sale'
+            END as [Type],
+            COUNT(dr.CallStatus) as Leads
             FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
+            LEFT JOIN  [$db].[dbo].[Dispos] DI on DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
             AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-            GROUP BY dr.CallStatus, dr.WasDialed, dr.Campaign, dr.GroupId";
+            GROUP BY dr.CallStatus, DI.isCallable, dr.WasDialed, DI.Description, DI.Type, dr.GroupId";
 
             $union = 'UNION ALL';
         }
@@ -187,7 +172,7 @@ class LeadInventorySub
                 FROM (SELECT COUNT(DISTINCT l.id) as Leads
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
-                        LEFT JOIN dialer_DialingSettings ds2 on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign
+                        LEFT JOIN dialer_DialingSettings ds2 on ds2.GroupId = l.GroupId and ds2.Campaign = l.Campaign
                         WHERE l.GroupId = :group_id1$i
                         AND l.Campaign = :campaign1$i
                         AND l.Subcampaign = :subcampaign1$i
