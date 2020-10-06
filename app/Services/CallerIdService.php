@@ -105,7 +105,7 @@ class CallerIdService
                 $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
                 unset($rec['Contacts']);
 
-                // list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
 
                 $all_results[] = $rec;
 
@@ -252,26 +252,25 @@ class CallerIdService
 
     private function makeCsv($results)
     {
-        if ($this->maxcount == 5500) {
-            $headers = [
-                'GroupID',
-                'GroupName',
-                'CallerID',
-                'Dials in Last 30 Days',
-                'Contact Rate',
-            ];
-        } else {
-            $headers = [
-                'GroupID',
-                'GroupName',
-                'CallerID',
-                // 'Dials Yesterday',
-                'Dials in Last 30 Days',
-                'Contact Rate',
-                'Flagged',
-                'Flagged By',
-            ];
-        }
+        // if ($this->maxcount == 5500) {
+        //     $headers = [
+        //         'GroupID',
+        //         'GroupName',
+        //         'CallerID',
+        //         'Dials in Last 30 Days',
+        //         'Contact Rate',
+        //     ];
+        // } else {
+        $headers = [
+            'GroupID',
+            'GroupName',
+            'CallerID',
+            'Dials in Last 30 Days',
+            'Contact Rate',
+            'Flagged',
+            'Flagged By',
+        ];
+        // }
 
         array_unshift($results, $headers);
 
@@ -298,13 +297,11 @@ class CallerIdService
             $cc = [
                 'g.sandoval@chasedatacorp.com',
                 'ahmed@chasedatacorp.com',
+                'dylan.farley@chasedatacorp.com'
             ];
         } else {
             $to = $this->email_to;
-            $cc = [
-                'jonathan.gryczka@chasedatacorp.com',
-                'ahmed@chasedatacorp.com',
-            ];
+            $cc = [];
         }
 
         // email report
@@ -473,4 +470,53 @@ class CallerIdService
         $this->apiRequests[] = time();
         return true;
     }
+
+    // private function loadThinq()
+    // {
+    //     $this->thinqNumbers = [];
+
+    //     $client = new Client(['base_uri' => 'https://api.thinq.com/']);
+
+    //     $page = 1;
+    //     while (true) {
+
+    //         echo "get page $page\n";
+
+    //         $response = $client->request(
+    //             'GET',
+    //             '/origination/did/search2/did/13446',
+    //             [
+    //                 'headers' => [
+    //                     'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
+    //                 ],
+    //                 'query' => [
+    //                     'page' => $page
+    //                 ]
+    //             ]
+    //         );
+
+    //         // Bail if we don't get a response
+    //         if (!$response->getBody()) {
+    //             break;
+    //         }
+
+    //         $results = json_decode($response->getBody()->getContents());
+
+    //         echo 'got' . count($results->rows) . "\n";
+
+    //         foreach ($results->rows as $rec) {
+    //             $this->thinqNumbers[] = $rec->id;
+    //         }
+
+    //         // bail if this was the last page
+    //         if (!$results->has_next_page) {
+    //             break;
+    //         }
+
+    //         $page++;
+    //     }
+
+    //     Log::debug($this->thinqNumbers);
+    //     die();
+    // }
 }
