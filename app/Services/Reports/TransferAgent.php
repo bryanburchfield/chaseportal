@@ -131,6 +131,7 @@ class TransferAgent
             AND DR.Date >= :startdate$i
             AND DR.Date < :enddate$i
             AND DR.Rep != DR.PreviousRep
+            AND DR.LeadId != -1
             AND Duration > 0";
 
             if (session('ssoRelativeCampaigns', 0)) {
