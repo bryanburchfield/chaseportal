@@ -37,8 +37,6 @@ var Master = {
         ]
     }),
 
-    init:function(){
-=======
 	curpage: '',
 	pagesize: '',
 	pag_link: '',
@@ -135,7 +133,6 @@ var Master = {
         $('.sso #tz').on('change', this.set_timezone);
         $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
         $('.switch.client_input input').on('click', this.toggle_active_client);
-    },
 
         $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
         // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
