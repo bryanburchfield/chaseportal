@@ -9,7 +9,7 @@
         @foreach(\App\Models\Kpi::getKpis() as $kpi)
 
         <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">
-            <a href="#" class="kpi_trigger flt_lft"> {{  __('kpi.' . $kpi->name) }}</a>
+            <a href="#" class="kpi_trigger flt_lft"> {{ __('kpi.' . $kpi->name) }}</a>
 
             <div class="controls flt_rgt">
                 <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm flt_lft"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
