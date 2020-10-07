@@ -85,7 +85,9 @@ h1, h2, h3, h4, h5, h6 {
 .mt30 {margin-top: 30px;}
 .mt50 {margin-top: 50px;}
 .mt60{margin-top: 60px;}
+.mt100{margin-top: 100px;}
 .mb0 {margin-bottom: 0 !important;}
+
 .mb5{margin-bottom: 5px;}
 .mb10 {margin-bottom: 10px;}
 .mb15 {margin-bottom: 15px;}
@@ -111,9 +113,13 @@ h1, h2, h3, h4, h5, h6 {
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 
+.tac{text-align: center;}
 .carb_mb30_mb {
     margin-bottom: 0;
 }
+
+.flt_lft{float: left;}
+.flt_rgt{float: right;}
 
 a, a:hover, a:focus {
     color: inherit;
@@ -936,6 +942,16 @@ ul.dropdown-menu.filter_campaign {
     right: 0;
     left: auto;
     padding: 0;
+
+    &.extra_campaigns, &.subcampaigns{
+        left:0;
+        right:auto;
+    }
+}
+
+.myselect{min-width: 100%;background:#eee !important; }
+.extra_campaigns, .subcampaigns{
+    padding-left: 10px;
 }
 
 #startDate, #endDate {
@@ -1549,6 +1565,15 @@ label.switch > input[type="checkbox"]:checked ~ span:after {
     transform: translate3d(100%, -50%, 0);
 }
 
+label.switch > input.checked ~ span:before{
+    transform: scale(0);
+    @include opacity(0.7);
+}
+
+label.switch > input.checked ~ span:after {
+    transform: translate3d(100%, -50%, 0);
+}
+
 h2 {
     font-size: 26px;
     margin-bottom: 40px;
@@ -1679,10 +1704,15 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
+.users a.remove_user {
+    float: right;
+    margin-right: 10px;
+}
+
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
     position: relative;
     top: 2px;
-    color: $orange;
+    color: #d9534f;
 }
 
 .users td a.remove_user{float: none;margin-left: 10px;margin-right: 10px;}
@@ -2102,7 +2132,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i, .remove_email_service_provider_modal i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;
@@ -2154,33 +2184,8 @@ p.name i{margin-right: 5px;}
     margin: 0 auto;
     margin-top: 20px;
     z-index: 2;
+    position: relative;
     padding: 10px;
-
-    &.condition{
-        width: 200px;
-        height: 110px;
-        @include border-radius(0);
-    }
-
-     &.action{
-        width: 220px;
-        height: 120px;
-        @include border-radius(25px);
-    }
-
-    &.mt35{margin-top: 35px;}
-
-    &:after{
-        background: $green;
-        min-height: 2px;
-        width: 45%;
-        position: absolute;
-        right: 0%;
-        top: 55%;
-        display: inline-block;
-        content: "";
-        z-index: 1;
-    }
 
     span{
         display: table-cell;
@@ -2193,20 +2198,94 @@ p.name i{margin-right: 5px;}
         position: relative;
         z-index: 999;
     }
+
+    &.condition.when{
+        width: 130px;
+        height: 130px;
+        @include border-radius(100px);
+        &:after{
+            background: $green;
+        }
+    }
+
+    &.condition.and{
+        @include border-radius(0);
+        display: inherit;
+        width: 0 !important;
+        height: 0 !important;
+        border-left: 60px solid transparent;
+        border-right: 60px solid transparent;
+        border-top: 120px solid #ddd;
+        background: none;
+        padding: 0;
+        margin-top: 18px;
+
+        span{
+            bottom: 90px !important;
+            right: 18px;
+            color:$green !important;
+        }
+    }
+
+    &.action{
+        margin-bottom: 50px;
+        width: 200px;
+        height: 110px;
+        @include border-radius(3px);
+        background: $orange;
+        &:after{
+            background: $orange;
+        }
+
+        div.horizontal-line{top:45%;}
+    }
+
+    &.mt0{margin-top: 0;}
+    &.mt10{margin-top: 10px;}
+    &.mt35{margin-top: 35px;}
 }
+
+div.horizontal-line{
+    background: darken(#999, 10%);
+    min-height: 2px;
+    width: 45%;
+    position: absolute;
+    z-index: 1;
+    right: 0%;
+    top: 55%;
+    display: inline-block;
+}
+
+.action ~ div.horizontal-line{top:35%;}
 
 div.vertical-line{
     width: 2px;
-    background-color: $green;
+    background-color: darken(#999, 10%);
     height: 145px;
     position: absolute;
     margin: 0 auto;
-    left: 51.5%;
+    left: 52%;
     display: block;
+
+    &.hidetilloaded{
+        display: none;
+    }
+
+    &.mvup100{
+        bottom:100px;
+    }
 }
 
-.table-striped>tbody>tr:nth-of-type(odd){
-    background: darken($blue, 5%);
+table.table.table-striped>tbody>tr:nth-of-type(odd){
+    background: darken($blue, 5%) !important;
+}
+
+table.dataTable tbody tr:nth-of-type(even){
+    background: #101824 !important;
+}
+
+.dataTables_info, .dataTables_filter label{
+    color:#ddd !important;
 }
 
 .table>thead>tr>th{
@@ -2225,7 +2304,9 @@ div.vertical-line{
 .multiselect-container.dropdown-menu{
     @include base_style($blue, #aaa !important);
     max-height: 260px;
+    max-width: 270px;
     overflow-y: scroll;
+    overflow-x: hidden ;
 }
 
 .dropdown-menu li:nth-child(even){
@@ -2320,6 +2401,11 @@ div.vertical-line{
     overflow: auto;
 }
 
+.add_playbook .modal-body{
+    overflow: revert;
+}
+
+
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{
     margin-bottom: 20px !important;
@@ -2349,7 +2435,7 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign, .add_campaign{
     color: $green;
     font-size: 15px;
     font-weight: 600;
@@ -2358,12 +2444,16 @@ div.vertical-line{
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter{
+a.remove_filter, a.remove_action, a.remove_subcamp{
     color: #d9534f;
-    font-size: 15px;
+    float: right;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
-.leadfilter_row .card{overflow: auto;}
+a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
+
+.leadfilter_row .card, .action_row .card{overflow: auto;}
 
 .btn.btn-reset{
     @include base_style(#ccc, #333);
@@ -2601,6 +2691,8 @@ td.bg-danger{
     top:25px;
 }
 
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a, .calls_per_hour table thead th a {display: none;}
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
 }
@@ -2641,6 +2733,12 @@ span.numb_notifications{
     @include border-radius(20px);
     padding: 1px 0 0;
     font-size: 11px;
+}
+
+.btn-secondary.cancel{
+    float: left;
+    margin-top: 10px;
+    margin-right: 15px;
 }
 
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
@@ -2807,6 +2905,196 @@ div.col-sm-5.five-two {
 
 ul.group_select{
     padding-left: 10px;
+}
+
+.loader_hor{float: left;}
+.add_filter .alert{clear:both;}
+
+.lead.action_type_fields{font-size: 13px;}
+
+.alert.cb{clear: both;}
+
+a.playbook_actions_modal, a.playbook_filters_modal{
+    color:#ddd;
+    &:hover{
+        color:#999;
+    }
+}
+
+.modal_manage_fil_act {
+    margin-bottom: 10px;
+    
+    a{
+        position: relative;
+        top:3px;
+    }
+}
+
+a.add_action, a.add_filter{
+    margin-top: 10px;
+    display: inline-block;
+    color:$green;
+}
+
+a.add_subcampaign{
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+
+    &:hover, &:focus{
+        color:#eee;
+    }
+}
+
+.toggle_all_switch{
+    margin-bottom: 40px;
+
+    label.switch{
+        float: left;
+    }
+
+    span.toggle_all_label{
+        float: left;
+        font-weight: 600;
+        position: relative;
+        bottom:1px;
+        font-size: 15px;
+        margin-left: 10px;
+    }
+}
+
+.toggle_all_btns{
+    clear: both;
+    margin-bottom: 50px;
+    a{
+        float: left;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+}
+
+.paginate_button {padding: 0 !important;}
+
+.btn.table_btns{max-width: 110px;}
+
+.playbook, .touch{
+    a.menu{
+        margin:0 auto;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 100px;
+        width: 125px;
+        height: 125px;
+        padding-top: 28px;
+        border:6px solid $green;
+
+
+        i{
+            margin:0 auto;
+            display: block;
+            text-align: center;
+            font-size: 55px;
+
+            &:hover{
+                 @include transition(all, ease, 0.3s);
+                color:$green;
+            }
+        }
+    }
+
+    .name{
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .switch{
+        margin:0 auto;
+        display: block;
+    }
+
+    .popover{
+        min-width: 95px;
+        .popover-content{padding: 0;}
+
+        ul{
+            list-style: none;
+            li{
+                color:#555;
+                font-weight: 600;
+                background: #ddd;
+                
+                &:nth-child(odd){background: darken(#eee, 2%);}
+                &:hover{background: #fff;}
+
+                a{
+                    padding: 5px 10px;
+                    width: 100%;
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+
+.playbook_campaign, .playbook_subcampaign{
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+
+}
+
+.playbook_name{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color:#aaa;
+}
+
+.playbooks_history_table{
+
+    a{
+        color:$green;
+        &:hover{
+            color:darken($green, 12%);
+        }
+    }
+}
+
+.breadcrumb{
+    background: #263854; /* Old browsers */
+    background: -moz-linear-gradient(top,  #263854 0%, #171f33 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #263854 0%,#171f33 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #263854 0%,#171f33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263854', endColorstr='#171f33',GradientType=0 ); /* IE6-9 */
+    color:#eee;
+
+    .breadcrumb-item{
+        font-weight: 600;
+        a{
+            &:hover{
+                color:$green;
+            }
+        }
+    }
+}
+
+.reverse_action{color:#fff !important;}
+
+#addPlaybookModal, #editPlaybookModal{
+
+    .modal-body {
+        overflow: inherit;
+    }
+
+    .dropdown-menu.subcampaigns, .dropdown-menu.extra_campaigns{
+        position: absolute;
+        z-index: 99999;
+    }
 }
 
 /* ---------------------------------------------------

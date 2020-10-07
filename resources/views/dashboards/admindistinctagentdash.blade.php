@@ -80,18 +80,15 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <span>{{__('general.date')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        {{__('general.date')}}
                                     </th>
 
                                     <th>
-                                        <span>{{__('widgets.rep')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        {{__('widgets.rep')}}
                                     </th>
 
                                     <th>
-                                        <span>{{__('widgets.actions')}}</span>
-                                        <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
+                                        {{__('widgets.actions')}}
                                     </th>
                                 </tr>
                             </thead>

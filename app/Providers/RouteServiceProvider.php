@@ -83,6 +83,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
             ->group(base_path('routes/admindurationdashboard.php'));
 
         Route::middleware('web')
@@ -136,5 +140,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/sso.php'));
+            
+        Route::middleware('web')
+            ->group(base_path('routes/playbook.php'));
     }
 }

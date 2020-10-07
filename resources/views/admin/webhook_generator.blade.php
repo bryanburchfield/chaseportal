@@ -5,7 +5,7 @@
 <div class="preloader"></div>
 <div class="wrapper">
 
-	@include('shared.admin_sidenav')
+	@include('shared.sidenav')
 
 	<div id="content">
 

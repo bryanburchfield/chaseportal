@@ -5,12 +5,14 @@ Route::prefix('dashboards')->group(function () {
 
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
-        Route::redirect('/', 'dashboards/inbounddashboard');
         Route::get('/inbounddashboard', 'MasterDashController@inboundDashboard');
         Route::get('/outbounddashboard', 'MasterDashController@outboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
+<<<<<<< HEAD
         Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
+=======
+>>>>>>> contacts_playbook
         Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
 
         Route::get('/kpi', 'MasterDashController@kpi');
@@ -46,6 +48,7 @@ Route::prefix('dashboards')->group(function () {
         Route::get('get_lead_info/{lead}', 'RealTimeDashboardController@getLeadInfo');
         Route::post('admin/get_groups', 'AdminController@getGroups');
 
+<<<<<<< HEAD
         // Admin only
         // prefix('admin') isn't working for some reason
         Route::group(['middleware' => 'can:accessAdmin'], function () {
@@ -76,13 +79,14 @@ Route::prefix('dashboards')->group(function () {
             Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
 
             // Super Admin only dashboards
+=======
+        // Super Admin only dashboards
+        Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
+>>>>>>> contacts_playbook
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');
             Route::get('/admindurationdashboard', 'MasterDashController@adminDurationDashboard');
-            Route::get('admin/notifications', 'FeatureMessageController@index');
-            Route::get('admin/notifications/{id}', 'FeatureMessageController@editMessage');
-            Route::post('admin/save_message', 'FeatureMessageController@saveMessage');
-            Route::post('admin/publish_notification', 'FeatureMessageController@publishMessage');
-            Route::post('admin/delete_msg', 'FeatureMessageController@deleteMsg');
         });
+
+        Route::redirect('/', action('MasterDashController@inboundDashboard'));
     });
 });

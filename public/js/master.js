@@ -38,6 +38,34 @@ var Master = {
     }),
 
     init:function(){
+=======
+	curpage: '',
+	pagesize: '',
+	pag_link: '',
+	sort_direction: '',
+	th_sort: '',
+	totpages: '',
+	pdf_dl_link: '',
+	first_search: true,
+	active_camp_search: '',
+	tick_color: '#aaa',
+	gridline_color: '#1A2738',
+	activeTab: localStorage.getItem('activeTab'),
+	dataTable: $('#dataTable').DataTable({
+		responsive: true,
+        fixedHeader: true
+	}),
+	cdr_dataTable: $('#cdr_dataTable').DataTable({
+		responsive: true,
+		dom: 'Bfrtip',
+		buttons: [
+			'excelHtml5',
+			'csvHtml5',
+			'pdfHtml5'
+		]
+	}),
+
+	init:function(){
 
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
@@ -107,6 +135,52 @@ var Master = {
         $('.sso #tz').on('change', this.set_timezone);
         $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
         $('.switch.client_input input').on('click', this.toggle_active_client);
+    },
+
+        $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
+        // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
+        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+	},
+
+    update_sidenav:function(e){
+        e.preventDefault();
+        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
+            Master.page_menuitem = $('.page_menuitem').val();
+        }else{
+            $('.page_menuitem').each(function(){
+                $(this).val(Master.page_menuitem);
+            });
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $('#sidebar').empty();
+
+        var sidenav = $(this).data('path');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+
+        $.ajax({
+            url: '/admin/load_sidenav',
+            type: 'POST',
+            dataType: 'html',
+            data: {sidenav:sidenav },
+            success: function (response) {
+                $('#sidebar').append(response);
+                $('ul.list-unstyled.components').find('li').each(function(){
+                    if($(this).data('page') == Master.page_menuitem){
+                        $(this).addClass('active');
+                    }
+                });
+            }
+        });
+
+        $("body").bind("DOMNodeInserted", function() {
+            $('.page_menuitem').val(Master.page_menuitem);
+        });
     },
 
     preventDefault:function(e){
@@ -1962,6 +2036,16 @@ var Master = {
         $("#card_dropdown").toggle();
     },
 
+    get_leadrule_filter_menu:function(){
+        var filters = [];
+        $('.lead_rule_filter_type option').each(function(){
+            if($(this).val() != ''){
+                filters.push($(this).val());
+            }
+        });
+        return filters;
+    },
+
     set_percentages: function () {
         var val, name = $(this).attr('name');
         val = $(this).val();
@@ -2308,6 +2392,7 @@ var Master = {
     edit_campaign_modal:function(e){
         e.preventDefault();
         var id = $(this).data('campaignid');
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2341,59 +2426,6 @@ var Master = {
         });
     },
 
-    delete_campaign:function(e){
-        e.preventDefault();
-        var id = $('#deleteCampaignModal').find('#id').val();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: '/tools/email_drip/delete_campaign',
-            type: 'POST',
-            data: {
-                id: id,
-            },
-            success: function (response) {
-                location.reload();
-            }
-        });
-    },
-
-    get_provider_properties:function(e){
-        var provider_type = $(this).val();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        if(provider_type !=''){
-            $.ajax({
-                url: '/tools/email_drip/get_properties',
-                type: 'POST',
-                data: {
-                    provider_type: provider_type,
-                },
-                success: function (response) {
-                    $('.properties').empty();
-                    var properties='';
-
-                    response.forEach(function(item, index){
-                        var label = item.charAt(0).toUpperCase() + item.slice(1);
-                        properties+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+item+'" name="properties['+item+']" value="" required></div>';
-                    });
-
-                    $('.properties').append(properties);
-                }
-            });
-        }
-    },
-
     get_filter_fields:function(id){
 
         $('#campaignFilterModal .modal-body').find('.not_validated_filter').remove();
@@ -2423,161 +2455,6 @@ var Master = {
                 $('#campaignFilterModal .modal-body').find('.filter_fields_cnt').show();
             }
         });
-    },
-
-    validate_filter:function(e){
-        e.preventDefault();
-        $('.filter_error').empty().hide();
-        var filters = [];
-        var email_drip_campaign_id = $('#email_drip_campaign_id').val();
-        var ready_to_validate=false;
-
-        // filter value changed ! in last row
-        if(!$(this).parent().hasClass('not_validated_filter') && e.type == 'change' && $('.filter_fields_div').length > 1){
-            $(this).parent().parent().parent().find('.form-control').each(function(){
-                filters.push($(this).val());
-            });
-
-            if(filters.length >=2){
-                ready_to_validate=true;
-            }
-        }else if( e.type == 'click'){ // add filter was clicked
-            if($('.filter_fields_div').length == 1 && $('.filter_fields_div').is(":hidden")){
-                $('.filter_fields_div').show();
-            }else{
-                $('.filter_fields_div').each(function(){
-                    $(this).removeClass('not_validated_filter');
-                });
-
-                var new_filter_row = $(this).parent().parent().parent().find('.filter_fields_div').last().clone().addClass('not_validated_filter');
-
-                $('.filter_fields_div:last').find('.form-control').each(function(){
-                    filters.push($(this).val());
-                });
-                ready_to_validate=true;
-            }
-        }
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        if(ready_to_validate){
-            $.ajax({
-                url: '/tools/email_drip/validate_filter',
-                type: 'POST',
-                data: {
-                    email_drip_campaign_id:email_drip_campaign_id,
-                    filters: filters,
-                },
-                success: function (response) {
-                    $(new_filter_row).find('.form-control').each(function(){
-                        $(this).val('');
-                    });
-                    $(new_filter_row).find('.remove_camp_filter').show();
-                    $(new_filter_row).insertAfter('.filter_fields_div:last');
-                },error: function (data) {
-                    if (data.status === 422) {
-                        var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
-
-                            if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
-                                    $('.filter_error').append('<li>'+value+'</li>');
-                                });
-                            }
-
-                            $('.filter_error').show();
-                        });
-                    }
-                }
-            });
-        }
-    },
-
-    delete_camp_filter:function(e){
-        e.preventDefault();
-
-        var id = $(this).parent().parent().data('filterid');
-        var that = $(this);
-
-        if(!id){
-            if($('.filter_fields_div').length == 1){
-                $(this).parent().parent().find('.form-control').each(function(){
-                    $(this).val('');
-                });
-                $(this).parent().parent().hide();
-            }else{
-                $(this).parent().parent().remove();
-            }
-        }else{
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: '/tools/email_drip/delete_filter',
-                type: 'POST',
-                data: {
-                    id:id,
-                },
-                success: function (response) {
-                    $(that).parent().parent().remove();
-                }
-            });
-        }
-    },
-
-    goto_camp_filters:function(e){
-        e.preventDefault();
-        var id = $(this).next('.camp_id').val();
-        window.location.href = '/tools/email_drip/update_filters/'+id;
-    },
-
-    get_operators:function(){
-        var that = $(this);
-        var type = $(that).find('option:selected').data('type');
-        $('.filter_error').hide();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url:'/tools/email_drip/get_operators',
-            type:'POST',
-            data:{
-                type:type,
-            },
-            success:function(response){
-                $(that).parent().parent().next().find('.filter_operators').empty();
-                var operators='<option value="">Select One</option>';
-
-                for (let [key, value] of Object.entries(response[type])){
-                    operators+='<option value="'+key+'">'+value+'</option>';
-                }
-                $(that).parent().parent().next().find('.filter_operators').append(operators);
-
-                $('.filter_fields_cnt').show();
-            }
-        });
-    },
-
-    check_campaign_filters:function(e){
-        var campaign_id = $(this).data('id');
-        if($(this).parent().hasClass('needs_filters')){
-            $('#errorModal').modal('show');
-            $('#errorModal .modal-body .camp_id').val(campaign_id);
-            return false;
-        }else{
-            Master.toggle_email_campaign(e, campaign_id);
-        }
     },
 
     get_filters :function(e, that){
@@ -2617,56 +2494,18 @@ var Master = {
         });
     },
 
-    update_filters:function(e){
-        e.preventDefault();
+    reset_modal_form:function(modal){
+        $(modal).find('form.form').trigger("reset");
+        $(modal).find('.alert').empty().hide();
+    },
 
-        $('.update_filters .alert.filter_error').empty().hide();
-        var email_drip_campaign_id = $(this).find('#email_drip_campaign_id').val();
-        var filters=[];
-        var filter={};
+    pass_id_to_modal:function(that, id){
+        var modal = $(that).data('target');
+        $(modal).find('.id').val(id);
 
-        $('.filter_fields_div').each(function(){
-            $(this).find('.form-control').each(function(){
-                filter[$(this).data('type')] = $(this).val();
-            });
-
-            filters.push(filter);
-            filter={};
-        });
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url:'/tools/email_drip/update_filters',
-            type:'POST',
-            data:{
-                email_drip_campaign_id:email_drip_campaign_id,
-                filters:filters
-            },
-            success:function(response){
-                if(response.status=='success'){
-                    window.location.href = '/tools/email_drip/';
-                }
-            },error: function (data) {
-                if (data.status === 422) {
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (key, value) {
-
-                        if ($.isPlainObject(value)) {
-                            $.each(value, function (key, value) {
-                               $('.update_filters .alert.filter_error').append('<li>'+value+'</li>');
-                            });
-                        }
-
-                        $('.update_filters .alert.filter_error').show();
-                    });
-                }
-            }
-        });
+        if($(that).data('name')){
+            $(modal).find('h3 span').html($(that).data('name'));
+        }
     },
 
     cancel_modal_form:function(e){

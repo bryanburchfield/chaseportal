@@ -1,8 +1,7 @@
     <div class="col-sm-6 mb0 card">
         <h2 class="page_heading">{{ ($mode == 'edit') ? __('users.edit') : __('users.new') }} {{__('users.user')}}</h2>
 
-        {!! Form::open(['method'=>'POST', 'url'=>'/dashboards/' . $mode . '_user', 'class'=>'form fc_style ' . $mode . '_user']) !!}
-
+        {!! Form::open(['method'=>'POST', 'url'=>'/admin/' . $mode . '_user', 'class'=>'fc_style form ' . $mode . '_user']) !!}
             @can('accessSuperAdmin')
             <div class="form-group">
                 {!! Form::label('group_id', __('users.group_id')) !!}

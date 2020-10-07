@@ -5,6 +5,10 @@ namespace App\Models;
 class AdvancedTableField extends SqlSrvModel
 {
     // set db and actual table name
+<<<<<<< HEAD
+=======
+    protected $connection = 'sqlsrv';
+>>>>>>> contacts_playbook
     protected $table = 'AdvancedTableFields';
     public $timestamps = false;
 

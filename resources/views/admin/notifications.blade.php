@@ -5,7 +5,7 @@
 <div class="preloader"></div>
 <div class="wrapper">
 
-	@include('shared.admin_sidenav')
+	@include('shared.sidenav')
 
 	<div id="content">
 
@@ -40,7 +40,7 @@
 							</div>
 
 							@if(!empty($feature_message->id))
-								<a href="{{url('dashboards/admin/notifications/')}}" class="cancel btn btn-secondary flt_lft">Cancel</a>
+								<a href="{{action('FeatureMessageController@index')}}" class="cancel btn btn-secondary">Cancel</a>
 							@endif
 
 							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>

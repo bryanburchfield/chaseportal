@@ -92,6 +92,10 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 1px solid #fff;
 }
 
+.mt100 {
+    margin-top: 100px;
+}
+
 .mt10 {margin-top: 10px;}
 .mt20 {margin-top: 20px;}
 .mt30 {margin-top: 30px;}
@@ -116,12 +120,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .fz15{font-size: 15px;}
 .fw600{font-weight: 600;}
-.cb{clear: both;}
 .flt_lft{float: left;}
 .flt_rgt{float: right;}
 .cb{clear: both;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
+.tac{text-align: center;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -528,6 +532,13 @@ div.container-fluid.bg {
     @include base_style(none, #eee);
 }
 
+.multiselect-container.dropdown-menu{
+    max-height: 260px;
+    max-width: 270px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .dropdown-menu li a {
     padding: 12px 16px;
 }
@@ -910,6 +921,16 @@ ul.dropdown-menu.filter_campaign {
     right: 0;
     left: auto;
     padding: 0;
+
+    &.extra_campaigns, &.subcampaigns{
+        left:0;
+        right:auto;
+    }
+}
+
+.myselect{min-width: 100%;background:#eee !important; }
+.extra_campaigns, .subcampaigns{
+    padding-left: 10px;
 }
 
 #startDate, #endDate {
@@ -1412,6 +1433,7 @@ span.selected_campaign {
     margin-bottom: 150px;
 }
 
+
 /* IOS BUTTONS */
 label.switch {
     text-align: left;
@@ -1482,6 +1504,15 @@ label.switch > input[type="checkbox"]:checked ~ span:before {
 }
 
 label.switch > input[type="checkbox"]:checked ~ span:after {
+    transform: translate3d(100%, -50%, 0);
+}
+
+label.switch > input.checked ~ span:before{
+    transform: scale(0);
+    @include opacity(0.7);
+}
+
+label.switch > input.checked ~ span:after {
     transform: translate3d(100%, -50%, 0);
 }
 
@@ -1610,10 +1641,15 @@ a.kpi_change_details{
     background: #eee;
 }
 
-.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i {
+.users a.remove_user {
+    float: right;
+    margin-right: 10px;
+}
+
+.users a.remove_user i, .demo_user_modal_link.remove_user i, a.remove_msg i, a.remove_playbook_modal i, a.delete_action_from_pb i, a.delete_filter_from_pb i {
     position: relative;
     top: 2px;
-    color: $orange;
+    color: #d9534f;
 }
 
 .users td a.remove_user{float: none;margin-left: 10px; margin-right: 10px;}
@@ -2001,7 +2037,7 @@ p.name i{margin-right: 5px;}
 
 #editRulesModal .modal-header{margin-bottom: 0;}
 
-.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i, .remove_email_service_provider_modal i{color:#d9534f;}
+.remove_user i, .remove_smtp_server_modal i, .remove_campaign_modal i{color:#d9534f;}
 
 .avg_wait_time_min, .avg_wait_time_max{
     position:absolute;
@@ -2049,29 +2085,70 @@ p.name i{margin-right: 5px;}
     width: 160px;
     height: 160px;
     @include border-radius(100px);
-    background: $blue;
+    background: $green;
     display: table;
     margin: 0 auto;
     margin-top: 20px;
     z-index: 2;
+    position: relative;
     padding: 10px;
 
-    &.condition{
+    span{
+        display: table-cell;
+        vertical-align: middle;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 18px;
+        position: relative;
+        z-index: 999;
+    }
+
+    &.condition.when{
+        width: 130px;
+        height: 130px;
+        @include border-radius(100px);
+        &:after{
+            background: $green;
+        }
+    }
+
+    &.condition.and{
+        @include border-radius(0);
+        display: inherit;
+        width: 0 !important;
+        height: 0 !important;
+        border-left: 60px solid transparent;
+        border-right: 60px solid transparent;
+        border-top: 120px solid $blue;
+        background: none;
+        padding: 0;
+        margin-top: 18px;
+
+        span{
+            bottom: 90px !important;
+            right: 18px;
+        }
+    }
+
+    &.action{
+        margin-bottom: 50px;
         width: 200px;
         height: 110px;
-        @include border-radius(0);
+        @include border-radius(3px);
+        background: $orange;
+        &:after{
+            background: $orange;
+        }
     }
 
-     &.action{
-        width: 220px;
-        height: 120px;
-        @include border-radius(25px);
-    }
-
+    &.mt0{margin-top: 0;}
+    &.mt10{margin-top: 10px;}
     &.mt35{margin-top: 35px;}
 
     &:after{
-        background: $blue;
+        background: $green;
         min-height: 2px;
         width: 45%;
         position: absolute;
@@ -2095,14 +2172,35 @@ p.name i{margin-right: 5px;}
     }
 }
 
+div.horizontal-line{
+    background: lighten(#999,10%);
+    min-height: 2px;
+    width: 45%;
+    position: absolute;
+    z-index: 1;
+    right: 0%;
+    top: 55%;
+    display: inline-block;
+}
+
+.action ~ div.horizontal-line{top:35%;}
+
 div.vertical-line{
     width: 2px;
-    background-color: $blue;
+    background-color: lighten(#999,10%);
     height: 145px;
     position: absolute;
     margin: 0 auto;
     left: 51.5%;
     display: block;
+
+    &.hidetilloaded{
+        display: none;
+    }
+
+    &.mvup100{
+        bottom:100px;
+    }
 }
 
 .table>thead>tr>th{
@@ -2165,6 +2263,10 @@ div.vertical-line{
     overflow: auto;
 }
 
+.add_playbook .modal-body{
+    overflow: revert;
+}
+
 .oauto{overflow: auto;}
 .demo_user .btn.btn-primary{
     margin-bottom: 20px !important;
@@ -2214,19 +2316,23 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign,  .add_campaign{
     @include base_style(null, $green, $fw:600);
     font-size: 15px;
     &:hover{color: darken($green,10%);}
     &:focus{color: darken($green,10%);}
 }
 
-a.remove_filter{
+a.remove_filter, a.remove_action, a.remove_subcamp{
     color: #d9534f;
-    font-size: 15px;
+    float: right;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
-.leadfilter_row .card{overflow: auto;}
+a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
+
+.leadfilter_row .card, .action_row .card{overflow: auto;}
 
 .btn.btn-reset{
     @include base_style(#ccc, #333);
@@ -2458,6 +2564,9 @@ td.bg-danger{
     top:25px;
 }
 
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a {display: none;}
+
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
 }
@@ -2666,6 +2775,179 @@ ul.group_select{
     padding-left: 10px;
 }
 
+.loader_hor{float: left;}
+.add_filter .alert{clear:both;}
+
+.lead.action_type_fields{font-size: 13px;}
+
+.alert.cb{clear: both;}
+
+a.playbook_actions_modal, a.playbook_filters_modal{
+    &:hover{
+        color:#000;
+    }
+}
+
+.modal_manage_fil_act {
+    margin-bottom: 10px;
+    
+    a{
+        position: relative;
+        top:3px;
+    }
+}
+
+a.add_action, a.add_filter{
+    margin-top: 10px;
+    display: inline-block;
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+}
+
+a.add_subcampaign{
+    font-weight: 600;
+    i{
+        color: $green;
+    }
+}
+
+.toggle_all_switch{
+    margin-bottom: 40px;
+
+    label.switch{
+        float: left;
+    }
+
+    span.toggle_all_label{
+        float: left;
+        font-weight: 600;
+        position: relative;
+        bottom:1px;
+        font-size: 15px;
+        margin-left: 10px;
+    }
+}
+
+.paginate_button {padding: 0 !important;}
+.btn.table_btns{max-width: 110px;}
+
+.playbook, .touch{
+    a.menu{
+        margin:0 auto;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 100px;
+        width: 125px;
+        height: 125px;
+        padding-top: 28px;
+        border:6px solid #aaa;
+
+        i{
+            margin:0 auto;
+            display: block;
+            text-align: center;
+            font-size: 55px;
+
+            &:hover{
+                 @include transition(all, ease, 0.3s);
+                color:$green;
+            }
+        }
+    }
+
+    .name{
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .switch{
+        margin:0 auto;
+        display: block;
+    }
+
+    .popover{
+        min-width: 95px;
+        .popover-content{padding: 0;}
+
+        ul{
+            list-style: none;
+            li{
+                color:#555;
+                font-weight: 600;
+                background: #ddd;
+
+                &:nth-child(odd){background: darken(#eee, 2%);}
+                &:hover{background: #fff;}
+
+                a{
+                    padding: 5px 10px;
+                    width: 100%;
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.playbook_campaign, .playbook_subcampaign{
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.playbook_name{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color:#333;
+}
+
+.playbooks_history_table{
+
+    a{
+        color:$orange;
+        &:hover{
+            color:darken($orange, 12%);
+        }
+    }
+}
+
+.breadcrumb{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
+    border:1px solid #ddd;
+
+    .breadcrumb-item{
+        font-weight: 600;
+        a{
+            &:hover{
+                color:$green;
+            }
+        }
+    }
+}
+
+.reverse_action{color:#fff !important;}
+
+#addPlaybookModal, #editPlaybookModal{
+
+    .modal-body {
+        overflow: inherit;
+    }
+
+    .dropdown-menu.subcampaigns, .dropdown-menu.extra_campaigns{
+        position: absolute;
+        z-index: 99999;
+    }
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
