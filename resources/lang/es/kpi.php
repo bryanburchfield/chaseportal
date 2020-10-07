@@ -52,23 +52,25 @@ return [
     'wrap_up_time'         => 'Tiempo Administrativo Posterior',
 
     // titles
-    'lead_count'              => 'Recuento de Clientes Potenciales',
-    'idle_time'               => 'Tiempo Esperando',
-    'campaign_sales'          => 'Ventas de la Campaña',
-    'calls_and_sales_per_rep' => 'Llamadas y Ventas por Agente',
-    'agent_wrap_up_time'      => 'Tiempo Administrativo Posterior del Agente',
     'agent_occupancy'         => 'Ocupación de Agentes',
+    'agent_wrap_up_time'      => 'Tiempo Administrativo Posterior del Agente',
+    'calls_and_sales_per_rep' => 'Llamadas y Ventas por Agente',
+    'campaign_lead_count'     => 'Recuento de Clientes Potenciales de Campaña',
+    'campaign_sales'          => 'Ventas de la Campaña',
+    'idle_time'               => 'Tiempo Esperando',
+    'lead_count'              => 'Recuento de Clientes Potenciales de Subcampaña',
 
     // descriptions
+    'desc_abandon_rate'            => 'Porcentaje del total de llamadas entrantes que resultaron en desconexión por parte del cliente',
+    'desc_agent_occupancy'         => 'Recuento distintivo de agentes para el día actual',
     'desc_agent_wrap_up_time'      => 'Tiempo total dedicado al trabajo administrativo posterior',
     'desc_average_handle_time'     => 'Tiempo total de los agente dividido por el total de llamadas manejadas',
     'desc_average_hold_time'       => 'Tiempo total de espera dividido por el total de llamadas entrantes',
     'desc_calls_and_sales_per_rep' => 'Total de llamadas atendidas % Ventas hechas por agentes (entrantes y salientes)',
+    'desc_campaign_lead_count'     => 'Recuento de clientes potenciales totales y disponibles para todas las Campañas',
     'desc_campaign_sales'          => 'Ventas por Campaña',
     'desc_contact_rate'            => 'Total de llamadas, contactos, y tasa de contacto por Campaña',
     'desc_idle_time'               => 'Tiempo total esperando por agente',
     'desc_lead_count'              => 'Recuento de clientes potenciales totales y disponibles para todas las Campañas/Subcampañas',
     'desc_service_level'           => 'Esta es una medida de la cantidad de llamadas manejadas dividida por el total de llamadas entrantes. Una llamada manejada es una llamada entrante atendida por un agente que no estuvo en esperando en cola durante más de 20 segundos.',
-    'desc_agent_occupancy'         => 'Recuento distintivo de agentes para el día actual',
-    'desc_abandon_rate'            => 'Porcentaje del total de llamadas entrantes que resultaron en desconexión por parte del cliente',
 ];
