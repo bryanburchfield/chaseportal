@@ -9,7 +9,6 @@ Route::prefix('dashboards')->group(function () {
         Route::get('/outbounddashboard', 'MasterDashController@outboundDashboard');
         Route::get('/leaderdashboard', 'MasterDashController@leaderDashboard');
         Route::get('/trenddashboard', 'MasterDashController@trendDashboard');
-        Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
         Route::get('/realtimeagentdashboard', 'MasterDashController@realtimeAgentDashboard');
 
         Route::get('/kpi', 'MasterDashController@kpi');
@@ -45,6 +44,10 @@ Route::prefix('dashboards')->group(function () {
         Route::get('get_lead_info/{lead}', 'RealTimeDashboardController@getLeadInfo');
         Route::post('admin/get_groups', 'AdminController@getGroups');
 
+        // Admin only dashboards
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::get('/compliancedashboard', 'MasterDashController@complianceDashboard');
+        });
         // Super Admin only dashboards
         Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
             Route::get('/admindistinctagentdashboard', 'MasterDashController@adminDistinctAgentDashboard');

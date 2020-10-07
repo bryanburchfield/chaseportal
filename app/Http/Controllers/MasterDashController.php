@@ -65,10 +65,11 @@ class MasterDashController extends Controller
     private function sideNav($page)
     {
         $sidenav = [
-            'admindurationdash' => 'admin',
             'admindistinctagentdash' => 'admin',
-            'leaderdash' => 'main',
+            'admindurationdash' => 'admin',
+            'compliancedash' => 'admin',
             'kpidash' => 'main',
+            'leaderdash' => 'main',
         ];
 
         return (isset($sidenav[$page])) ? $sidenav[$page] : 'dashboards';
