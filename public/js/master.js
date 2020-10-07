@@ -127,15 +127,11 @@ var Master = {
         $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
         $('.cancel_modal_form').on('click', this.cancel_modal_form);
 
-        $('#sidebar').on('click', '.admin_link', this.update_sidenav);
-        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
         $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
         $('.switch.client_input input').on('click', this.toggle_active_client);
-
         $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
-        // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
@@ -159,6 +155,7 @@ var Master = {
 
         var sidenav = $(this).data('path');
         $("html, body").animate({ scrollTop: 0 }, "slow");
+        console.log(sidenav);
 
         $.ajax({
             url: '/admin/load_sidenav',
@@ -175,9 +172,9 @@ var Master = {
             }
         });
 
-        $("body").bind("DOMNodeInserted", function() {
-            $('.page_menuitem').val(Master.page_menuitem);
-        });
+        // $("body").bind("DOMNodeInserted", function() {
+        //     $('.page_menuitem').val(Master.page_menuitem);
+        // });
     },
 
     preventDefault:function(e){
@@ -2250,46 +2247,6 @@ var Master = {
                     $(that).find('.alert-danger').text('Connection Failed').show();
                 }
             }
-        });
-    },
-
-    update_sidenav:function(e){
-        e.preventDefault();
-        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
-            Master.page_menuitem = $('.page_menuitem').val();
-        }else{
-            $('.page_menuitem').each(function(){
-                $(this).val(Master.page_menuitem);
-            });
-        }
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-
-        $('#sidebar').empty();
-        var sidenav = $(this).data('path');
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        
-        $.ajax({
-            url: '/admin/load_sidenav',
-            type: 'POST',
-            dataType: 'html',
-            data: {sidenav:sidenav },
-            success: function (response) {
-                $('#sidebar').append(response);
-                $('ul.list-unstyled.components').find('li').each(function(){
-                    if($(this).data('page') == Master.page_menuitem){
-                        $(this).addClass('active');
-                    }
-                });
-            }
-        });
-
-        $("body").bind("DOMNodeInserted", function() {
-            $('.page_menuitem').val(Master.page_menuitem);
         });
     },
 
