@@ -2270,19 +2270,14 @@ var Master = {
         });
 
         $('#sidebar').empty();
-
-        if($(this).hasClass('back_to_sidenav')){
-            var path = '/dashboards/admin/load_sidenav';
-        }else{
-            var path = '/dashboards/admin/load_admin_nav';
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-        }
-
+        var sidenav = $(this).data('path');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        
         $.ajax({
-            url: path,
+            url: '/admin/load_sidenav',
             type: 'POST',
             dataType: 'html',
-            data: { },
+            data: {sidenav:sidenav },
             success: function (response) {
                 $('#sidebar').append(response);
                 $('ul.list-unstyled.components').find('li').each(function(){
