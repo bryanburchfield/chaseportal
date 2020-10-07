@@ -16,8 +16,17 @@ class Recipient extends Model implements Auditable
 
     public function kpiList()
     {
+        $kpis = Kpi::all();
+
+        $kpis->transform(function ($item, $key) {
+            $item['trans_name'] = trans('kpi.' . $item['name']);
+            return $item;
+        });
+
+        $kpis = $kpis->sortBy('trans_name');
+
         $list = [];
-        foreach (Kpi::orderBy('name')->get() as $kpi) {
+        foreach ($kpis as $kpi) {
             $list[] = [
                 'id' => $kpi->id,
                 'name' => trans('kpi.' . $kpi->name),
