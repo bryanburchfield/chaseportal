@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Kpi extends Model
 {
@@ -30,8 +31,16 @@ class Kpi extends Model
                 $join->on('kpis.id', '=', 'KG.kpi_id')
                     ->where('KG.group_id', '=', Auth::user()->group_id);
             })
-            ->orderby('name')
             ->get();
+
+        Log::debug($kpis);
+        $kpis->transform(function ($item, $key) {
+            $item['name'] = trans('kpi.' . $item['name']);
+            return $item;
+        });
+        Log::debug($kpis);
+        $kpis = $kpis->sortBy('name');
+        Log::debug($kpis);
 
         foreach ($kpis as &$k) {
             $k->{'recipients'} =

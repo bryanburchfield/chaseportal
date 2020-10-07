@@ -55,10 +55,10 @@ return [
     'agent_occupancy'         => 'Agent Occupancy',
     'agent_wrap_up_time'      => 'Agent Wrap Up Time',
     'calls_and_sales_per_rep' => 'Calls & Sales Per Rep',
-    'campaign_lead_count'     => 'Campaign Lead Count',
+    'campaign_lead_count'     => 'Lead Count by Campaign',
     'campaign_sales'          => 'Campaign Sales',
     'idle_time'               => 'Idle Time',
-    'lead_count'              => 'Subcampaign Lead Count',
+    'lead_count'              => 'Lead Count by Subcampaign',
 
     // descriptions
     'desc_abandon_rate'            => 'Percentage of total inbound calls that resulted in a customer hangup',
