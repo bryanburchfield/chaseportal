@@ -129,7 +129,6 @@ var Master = {
 
         var sidenav = $(this).data('path');
         $("html, body").animate({ scrollTop: 0 }, "slow");
-        console.log(sidenav);
 
         $.ajax({
             url: '/admin/load_sidenav',
@@ -146,9 +145,9 @@ var Master = {
             }
         });
 
-        // $("body").bind("DOMNodeInserted", function() {
-        //     $('.page_menuitem').val(Master.page_menuitem);
-        // });
+        $("body").bind("DOMNodeInserted", function() {
+            $('.page_menuitem').val(Master.page_menuitem);
+        });
     },
 
     preventDefault:function(e){
@@ -2526,14 +2525,14 @@ var Master = {
         });
 
         $.ajax({
-            url:'/dashboards/admin/toggle_user',
+            url:'/admin/toggle_user',
             type:'POST',
             data:{
                 checked:checked,
                 id:id,
             },
             success:function(response){
-                console.log(response);
+
             }
         });
     }
