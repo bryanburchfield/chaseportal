@@ -17,7 +17,6 @@ class AdvancedTable extends SqlSrvModel
     {
         return $this->hasMany('App\Models\AdvancedTableField', 'AdvancedTable');
     }
-<<<<<<< HEAD
 
     public function customFields()
     {
@@ -29,6 +28,4 @@ class AdvancedTable extends SqlSrvModel
 
         return $custom_fields;
     }
-=======
->>>>>>> contacts_playbook
 }

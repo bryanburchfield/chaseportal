@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-<<<<<<< HEAD
 use App\Traits\SqlServerTraits;
 
-=======
->>>>>>> contacts_playbook
 class Lead extends SqlSrvModel
 {
     use SqlServerTraits;

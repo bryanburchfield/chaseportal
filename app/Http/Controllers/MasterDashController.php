@@ -13,13 +13,9 @@ use Illuminate\Support\Carbon;
 class MasterDashController extends Controller
 {
     public $currentDash;
-<<<<<<< HEAD
     public $data;
     public $cssfile = [];
     public $includescriptfile = [];
-=======
-    public $cssfile = [];
->>>>>>> contacts_playbook
 
     use DashTraits;
 
@@ -55,10 +51,7 @@ class MasterDashController extends Controller
             'currentDash' => $this->currentDash,
             'jsfile' => $jsfile,
             'cssfile' => $this->cssfile,
-<<<<<<< HEAD
             'includescriptfile' => $this->includescriptfile,
-=======
->>>>>>> contacts_playbook
             'page' => $page,
             'data' => $this->data,
             'dashbody' => $dashbody,

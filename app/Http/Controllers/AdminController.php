@@ -24,7 +24,6 @@ class AdminController extends Controller
     use SqlServerTraits;
 
     /**
-<<<<<<< HEAD
      * Index
      * 
      * @param Request $request 
@@ -87,9 +86,6 @@ class AdminController extends Controller
 
     /**
      * Return admin sidenav
-=======
-     * return a sidenav
->>>>>>> contacts_playbook
      * 
      * @return View|Factory 
      */
@@ -152,24 +148,8 @@ class AdminController extends Controller
             $dbs[$dialer->reporting_db] = $dialer->reporting_db;
         }
 
-<<<<<<< HEAD
         return $dbs;
     }
-=======
-        $data = [
-            'page' => [
-                'menuitem' => 'manage_users',
-                'type' => 'page',
-                'sidenav' => 'admin',
-            ],
-            'timezone_array' => $timezone_array,
-            'group_id' => $groupId,
-            'dbs' => $dbs,
-            'user_types' => $this->userTypes(),
-            'jsfile' => [],
-            'demo_users' => User::whereIn('user_type', ['demo', 'expired'])->get()
-        ];
->>>>>>> contacts_playbook
 
     private function dialers()
     {
@@ -434,66 +414,6 @@ class AdminController extends Controller
         return ['success' => 1];
     }
 
-<<<<<<< HEAD
-=======
-    public function loadCdrLookup()
-    {
-        $data = [
-            'page' => [
-                'menuitem' => 'cdr_lookup',
-                'type' => 'page',
-                'sidenav' => 'tools',
-            ],
-            'jsfile' => [],
-        ];
-
-        return view('admin.cdr_lookup')->with($data);
-    }
-
-    public function webhookGenerator()
-    {
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-
-        $data = [
-            'page' => [
-                'menuitem' => 'webhook_generator',
-                'type' => 'page',
-                'sidenav' => 'tools',
-            ],
-            'dbs'  => $dbs,
-            'jsfile' => [],
-            'default_lead_fields' => $this->defaultLeadFields(),
-        ];
-
-        return view('admin.webhook_generator')->with($data);
-    }
-
-    public function settings()
-    {
-
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-
-        $data = [
-            'page' => [
-                'menuitem' => 'settings',
-                'type' => 'page',
-                'sidenav' => 'admin',
-            ],
-            'dbs'  => $dbs,
-            'jsfile' => [],
-        ];
-
-        return view('admin.settings')->with($data);
-    }
->>>>>>> contacts_playbook
     /**
      * CDR Lookup
      * 
