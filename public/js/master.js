@@ -37,32 +37,6 @@ var Master = {
         ]
     }),
 
-	curpage: '',
-	pagesize: '',
-	pag_link: '',
-	sort_direction: '',
-	th_sort: '',
-	totpages: '',
-	pdf_dl_link: '',
-	first_search: true,
-	active_camp_search: '',
-	tick_color: '#aaa',
-	gridline_color: '#1A2738',
-	activeTab: localStorage.getItem('activeTab'),
-	dataTable: $('#dataTable').DataTable({
-		responsive: true,
-        fixedHeader: true
-	}),
-	cdr_dataTable: $('#cdr_dataTable').DataTable({
-		responsive: true,
-		dom: 'Bfrtip',
-		buttons: [
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
-		]
-	}),
-
 	init:function(){
 
         if($('.theme').val() == 'dark'){
