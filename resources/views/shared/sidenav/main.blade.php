@@ -10,7 +10,7 @@
     @endif
 
     @can('accessSuperAdmin')
-        <li><a href="https://contactflow.chasedatacorp.com/" target="_blank"><i class="fas fa-pencil-ruler"></i> Flow Builder</a></li>
+        <li><a href="https://contactflow.chasedatacorp.com/" target="_blank"><i class="fas fa-pencil-ruler"></i>{{ __('sidenav.flowbuilder')}}</a></li>
     @endcan
 
     @can('accessAdmin')
