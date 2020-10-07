@@ -8,11 +8,11 @@
 	<div class="report_filters card col-sm-12 fc_style">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
-			<div class="row display-flex">
+			<div class="row">
 
 				@include('shared.report_db_menu')
 				
-				<div class="col-sm-4 mb-2">
+				<div class="col-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('fromdate', __('reports.from')) !!}
 						<div class="input-group date">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4 mb-2">
+				<div class="col-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('todate', __('reports.to')) !!}
 						<div class="input-group date">
@@ -38,17 +38,17 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4 mb-2">
+				<div class="col-4 mb-2 no_ovfl">
 					<div class="form-group">
 						{!! Form::label('campaigns', __('reports.campaign')) !!}
-						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
+						{!! Form::select("campaigns[]", $filters['campaigns'], null, ["class" => "form-control selectpicker", 'id'=> 'campaign_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true", 'maxlength'=>"5"]) !!}
 					</div>
 				</div>
 
-				<div class="col-sm-4 mb-2">
+				<div class="col-4 mb-2 no_ovfl">
 					<div class="form-group">
 						{!! Form::label('callerids', __('reports.inbound_sources')) !!}
-						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control selectpicker", 'id'=> 'inbound_sources_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true"]) !!}
+						{!! Form::select("callerids[]", $filters['inbound_sources'], null, ["class" => "form-control selectpicker", 'id'=> 'inbound_sources_select','multiple'=>"true", 'data-live-search'=>"true", 'data-actions-box'=>"true", 'maxlength'=>"5"]) !!}
 					</div>
 				</div>
 

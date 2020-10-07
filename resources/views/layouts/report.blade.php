@@ -14,16 +14,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/bootstrap-material-datetimepicker.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     @if(Auth::user()->theme == 'dark')
         <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
     @else
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endif
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}
     <!--[if lt IE 9]>
@@ -93,7 +92,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script> --}}
     <script src="/js/multiselect_lib.js"></script>
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script>
@@ -117,10 +116,11 @@
 
         $('.datetimepicker').bootstrapMaterialDatePicker({ format : '<?php echo $date_format;?>', shortTime : <?php echo $en;?> });
         $('.selectpicker').selectpicker();
-
-        $(window).on('load', function() {
-            $('.preloader').fadeOut('slow');
-        });
+        // var picker_width=$('.selectpicker').parent().parent().parent().width();
+        // $('.selectpicker').parent().parent().parent().css({'max-width': picker_width, 'border': '1px solid red'});
+        // $(window).on('load', function() {
+        //     $('.preloader').fadeOut('slow');
+        // });
 
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {

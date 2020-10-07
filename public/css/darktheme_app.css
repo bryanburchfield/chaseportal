@@ -199,6 +199,10 @@ h6 {
   padding: 10px 8px;
 }
 
+.no_ovfl {
+  overflow-x: none !important;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
