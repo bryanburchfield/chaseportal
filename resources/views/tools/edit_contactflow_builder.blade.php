@@ -4,10 +4,10 @@
 @section('content')
 
 <div class="preloader"></div>
-<?php
+@php
 	//dd($lead_rule);
 	//dd($source_subcampaign_list);
-?>
+@endphp
 <div class="wrapper">
 
 	@include('shared.sidenav')

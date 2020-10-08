@@ -42,7 +42,7 @@
                                                                 <td>{{$playbook_action->name}}</td>
                                                                 <td>{{$playbook_action->campaign}}</td>
                                                                 <td>{{$playbook_action->action_type}}</td>
-                                                                <?php $mode='edit';?>
+                                                                @php $mode='edit';@endphp
                                                                 <td><a href="#" data-toggle="modal" data-target="#editActionModal" class=" edit_playbook_action_modal btn btn-sm btn-info fw600 table_btns" data-id="{{$playbook_action->id}}"><i class="fas fa-edit"></i> {{__('tools.edit')}}</a></td>
                                                                 <td><a class="remove_playbook_action_modal  btn btn-sm btn-danger fw600 table_btns" data-toggle="modal" data-target="#deleteActionModal" href="#" data-name="{{$playbook_action->name}}" data-id="{{$playbook_action->id}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a></td>
                                                             </tr>
