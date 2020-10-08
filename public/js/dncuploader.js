@@ -7,7 +7,7 @@ var DNC_uploader = {
         $('#reverseLeadMoveModal').on('hidden.bs.modal', this.hide_modal_error);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
-        $('.toggle_instruc').on('click', this.toggle_instructions);
+        $('.toggle_instruc, .toggle_instruc + h3').on('click', this.toggle_instructions);
 	},
 
 	reverse_lead_move_modal: function (e) {

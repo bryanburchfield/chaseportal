@@ -373,7 +373,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log('ran');
+
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -472,7 +472,6 @@ var Master = {
             },
 
             success: function(response) {
-                console.log(response);
                 return response;
             },
             error: function () {}
@@ -1333,7 +1332,6 @@ var Master = {
             },
 
             success: function (response) {
-                console.log(response);
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
                 }
@@ -1723,7 +1721,6 @@ var Master = {
     },
 
     campaign_call_log: function (response) {
-        console.log(response);
 
         $('.rm_rptble_class').find('table').removeClass('reports_table');
         $('.rm_rptble_class table th').find('a').remove();
@@ -2053,24 +2050,6 @@ var Master = {
     populate_dnc_reversemodal:function(){
         var id = $(this).data('id');
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
-    },
-
-    toggle_instructions:function(e){
-
-        if(e){
-            e.preventDefault();
-        }
-
-        that = $('a.toggle_instruc');
-        if(that.hasClass('collapsed')){
-            that.removeClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-up"></i>');
-        }else{
-            that.addClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-down"></i>');
-        }
-
-        that.parent().find('.instuc_div').slideToggle();
     },
 
     add_esp:function(e){
