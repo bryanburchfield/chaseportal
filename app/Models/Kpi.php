@@ -30,8 +30,13 @@ class Kpi extends Model
                 $join->on('kpis.id', '=', 'KG.kpi_id')
                     ->where('KG.group_id', '=', Auth::user()->group_id);
             })
-            ->orderby('name')
             ->get();
+
+        $kpis->transform(function ($item, $key) {
+            $item['trans_name'] = trans('kpi.' . $item['name']);
+            return $item;
+        });
+        $kpis = $kpis->sortBy('trans_name');
 
         foreach ($kpis as &$k) {
             $k->{'recipients'} =

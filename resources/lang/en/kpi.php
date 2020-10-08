@@ -52,23 +52,25 @@ return [
     'wrap_up_time'         => 'Wrap Up Time',
 
     // titles
-    'lead_count'              => 'Lead Count',
-    'idle_time'               => 'Idle Time',
-    'campaign_sales'          => 'Campaign Sales',
-    'calls_and_sales_per_rep' => 'Calls & Sales Per Rep',
-    'agent_wrap_up_time'      => 'Agent Wrap Up Time',
     'agent_occupancy'         => 'Agent Occupancy',
+    'agent_wrap_up_time'      => 'Agent Wrap Up Time',
+    'calls_and_sales_per_rep' => 'Calls & Sales Per Rep',
+    'campaign_lead_count'     => 'Lead Count by Campaign',
+    'campaign_sales'          => 'Campaign Sales',
+    'idle_time'               => 'Idle Time',
+    'lead_count'              => 'Lead Count by Subcampaign',
 
     // descriptions
+    'desc_abandon_rate'            => 'Percentage of total inbound calls that resulted in a customer hangup',
+    'desc_agent_occupancy'         => 'Distinct Count of Reps for Current Day',
     'desc_agent_wrap_up_time'      => 'Total amount of time spent in after call work',
     'desc_average_handle_time'     => 'Total amount of agent time divided by total amount of handled calls',
     'desc_average_hold_time'       => 'A calculation of total hold time divided by number of inbound calls',
     'desc_calls_and_sales_per_rep' => 'Total Calls taken % Sales made by Reps (Inbound and Outbound)',
+    'desc_campaign_lead_count'     => 'Count of total and available leads for all Campaigns',
     'desc_campaign_sales'          => 'Sales per Campaign',
     'desc_contact_rate'            => 'Total calls, contacts, and contact rate by Campaign',
     'desc_idle_time'               => 'Total amount of time spent in waiting status per agent',
     'desc_lead_count'              => 'Count of total and available leads for all Campaigns/Subcampaigns',
     'desc_service_level'           => 'This is a measure of the amount of handled calls divided by the total amount of inbounds calls.  A handled call is a inbound call serviced by an agent that was not on hold in que for more then 20 seconds.',
-    'desc_agent_occupancy'         => 'Distinct Count of Reps for Current Day',
-    'desc_abandon_rate'            => 'Percentage of total inbound calls that resulted in a customer hangup',
 ];
