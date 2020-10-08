@@ -5,9 +5,9 @@
     <li data-page="kpidash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'kpidash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@kpi') }}"><i class="fas fa-paper-plane"></i>{{__('sidenav.kpis')}}</a></li>
     <li data-page="reports" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'reports' ? 'class="active"' : ''?> data-toggle="modal" data-target="#reports_modal"><a href="#"><i class="fas fa-file-contract"></i>{{__('sidenav.reports')}}</a></li>
 
-    @can('accessAdmin')
-<li data-page="playbook" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'playbook' ? 'class="active"' : ''; ?>><a href="{{action('PlaybookController@index')}}"><i class="fas fa-book"></i>{{ __('sidenav.playbooks')}}</a></li>
-    @endif
+    {{-- @can('accessAdmin')
+        <li data-page="playbook" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'playbook' ? 'class="active"' : ''; ?>><a href="{{action('PlaybookController@index')}}"><i class="fas fa-book"></i>{{ __('sidenav.playbooks')}}</a></li>
+    @endif --}}
 
     @can('accessSuperAdmin')
         <li><a href="https://contactflow.chasedatacorp.com/" target="_blank"><i class="fas fa-pencil-ruler"></i>{{ __('sidenav.flowbuilder')}}</a></li>
