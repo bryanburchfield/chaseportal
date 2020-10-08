@@ -9,6 +9,7 @@
 
     @can('accessAdmin')
         <li data-page="manage_users" <?php echo !empty($page['menuitem']) && $page['menuitem']== 'manage_users' ? 'class="active"' : ''; ?>><a href="{{ action('AdminController@manageUsers') }}"><i class="fas fa-users"></i>{{__('sidenav.manage_users')}}</a></li>
+        <li data-page="compliancedash" <?php echo !empty($page['menuitem']) && $page['menuitem'] == 'compliancedash' ? 'class="active"' : ''?>><a href="{{ action('MasterDashController@complianceDashboard') }}"><i class="fas fa-clipboard-check"></i>{{__('sidenav.compliance_dashboard')}}</a></li>
     @endcan
 
     @can('accessSuperAdmin')
