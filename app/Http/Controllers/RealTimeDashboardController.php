@@ -191,7 +191,7 @@ class RealTimeDashboardController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $info = $lead->allFields();
+        $info = $lead->filledFields();
 
         $tz = Auth::user()->ianaTz;
 

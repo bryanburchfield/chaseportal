@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LeadFilter;
-use App\Jobs\ReverseLeadMove;
-use App\Models\LeadMove;
-use App\Models\LeadMoveDetail;
-use App\Models\LeadRule;
 use App\Mail\LeadDumpMail;
-use App\Models\LeadRuleFilter;
+use App\Models\Lead;
 use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
 use App\Traits\TimeTraits;
@@ -31,341 +26,26 @@ class LeadsController extends Controller
     use TimeTraits;
 
     protected $db;
-    /**
-     * Rules index
-     * 
-     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
-     * @throws InvalidArgumentException 
-     * @throws Exception 
-     */
-    public function index()
-    {
-        $lead_rules = LeadRule::where('group_id', Auth::user()->group_id)
-            ->OrderBy('rule_name')
-            ->get();
 
-        // Translaste filter type
-        foreach ($lead_rules as &$lead_rule) {
-            foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
-                $lead_rule_filter->type = trans('tools.' . $lead_rule_filter->type);
+    public function leadDetail(Lead $lead = null)
+    {
+        if ($lead) {
+            if ($lead->GroupId != Auth::user()->group_id) {
+                abort(404);
             }
         }
 
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $jsfile[] = 'tools.js';
-
+        $jsfile[] = '';
+        $page['menuitem'] = 'lead_detail';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
-            'group_id' => Auth::user()->group_id,
-            'lead_rules' => $lead_rules,
-            'campaigns' => $this->getAllCampaigns(),
-            'history' => $this->getHistory(),
-            'inbound_sources' => $this->getAllInboundSources(),
-            'call_statuses' => $this->getAllCallStatuses(),
+            'lead' => $lead,
         ];
 
-        return view('tools.contactflow_builder')->with($data);
-    }
-
-    /**
-     * Get Rule
-     * 
-     * @param mixed $id 
-     * @return mixed 
-     */
-    private function getRule($id)
-    {
-        return LeadRule::where('id', $id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
-    }
-
-    /**
-     * View Rule (ajax)
-     * 
-     * @param Request $request 
-     * @return array[]
-     * @throws InvalidArgumentException 
-     * @throws ModelNotFoundException 
-     * @throws Exception 
-     */
-    public function viewRule(Request $request)
-    {
-        $lead_rule = LeadRule::withTrashed()
-            ->where('id', $request->id)
-            ->where('group_id', Auth::user()->group_id)
-            ->firstOrFail();
-
-        foreach ($lead_rule->leadRuleFilters as $lead_rule_filter) {
-            $lead_rule_filter->type = trans('tools.' . $lead_rule_filter->type);
-        }
-
-        $lead_rule = $lead_rule->toArray();
-
-        $tz = Auth::user()->iana_tz;
-        $lead_rule['created_at'] = Carbon::parse($lead_rule['created_at'])->tz($tz)->isoFormat('L LT');
-
-        if (!empty($lead_rule['deleted_at'])) {
-            $lead_rule['deleted_at'] = Carbon::parse($lead_rule['deleted_at'])->isoFormat('L LT');
-        }
-
-        // Converts NULL to ''
-        array_walk_recursive($lead_rule, function (&$item) {
-            $item = strval($item);
-        });
-
-        return $lead_rule;
-    }
-
-    /**
-     * Edit Lead Rule
-     * 
-     * @param Request $request 
-     * @return Illuminate\View\View|Illuminate\Contracts\View\Factory 
-     * @throws InvalidArgumentException 
-     */
-    public function editLeadRule(Request $request)
-    {
-        $lead_rule = $this->getRule($request->id);
-
-        $campaigns = $this->getAllCampaigns();
-
-        $page = [
-            'menuitem' => 'tools',
-            'type' => 'other',
-        ];
-
-        $jsfile[] = 'tools.js';
-
-        $data = [
-            'jsfile' => $jsfile,
-            'lead_rule' => $lead_rule,
-            'source_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->source_campaign),
-            'destination_subcampaign_list' => $this->getAllSubcampaigns($lead_rule->destination_campaign),
-            'page' => $page,
-            'campaigns' => $campaigns,
-            'inbound_sources' => $this->getAllInboundSources(),
-            'call_statuses' => $this->getAllCallStatuses(),
-        ];
-
-        return view('tools.edit_contactflow_builder')->with($data);
-    }
-
-    /**
-     * Create Rule
-     * 
-     * @param LeadFilter $request 
-     * @return array[]
-     * @throws JsonEncodingException 
-     * @throws MassAssignmentException 
-     */
-    public function createRule(LeadFilter $request)
-    {
-        $lead_rule = new LeadRule();
-        $lead_rule->fill($request->all());
-        $lead_rule->group_id = Auth::user()->group_id;
-        $lead_rule->active = true;
-        $lead_rule->save();
-
-        foreach ($request->filters as $type => $val) {
-            LeadRuleFilter::create([
-                'lead_rule_id' => $lead_rule->id,
-                'type' => $type,
-                'value' => $val,
-            ]);
-        }
-
-        return ['status' => 'success'];
-    }
-
-    /**
-     * Toggle Rule (ajax)
-     * 
-     * @param Request $request 
-     * @return array[]
-     */
-    public function toggleRule(Request $request)
-    {
-        $lead_rule = $this->getRule($request->id);
-
-        $lead_rule->active = !$lead_rule->active;
-        $lead_rule->save();
-
-        return ['status' => 'success'];
-    }
-
-    /**
-     * Update the rule in db
-     * 
-     * @param LeadFilter $request 
-     * @return Illuminate\Http\RedirectResponse 
-     * @throws JsonEncodingException 
-     * @throws MassAssignmentException 
-     * @throws InvalidArgumentException 
-     * @throws UrlGenerationException 
-     */
-    public function updateRule(LeadFilter $request)
-    {
-        // We don't actually update a rule, we'll (soft) delete
-        // and insert a new one
-        $lead_rule = $this->getRule($request->id);
-
-        $lead_rule->fill($request->all());
-
-        // If they hit submit without changing anything, don't bother
-        $is_dirty = false;
-
-        // See if they changed the lead_rule record
-        if ($lead_rule->isDirty()) {
-            $is_dirty = true;
-        } else {
-            // Loop thru new filters to see if they are already in the db
-            $filter_count = 0;
-            foreach ($request->filters as $type => $val) {
-                $filter_count++;
-                $lead_rule_filter = LeadRuleFilter::where('lead_rule_id', $lead_rule->id)
-                    ->where('type', $type)
-                    ->where('value', $val)
-                    ->first();
-
-                if (!$lead_rule_filter) {
-                    $is_dirty = true;
-                    break;
-                }
-            }
-
-            // finally, check number of new filters against existing
-            if ($filter_count != $lead_rule->leadRuleFilters->count()) {
-                $is_dirty = true;
-            }
-        }
-
-        if ($is_dirty) {
-            $lead_rule->delete();
-            $this->createRule($request);
-        }
-
-        return ['status' => 'success'];
-    }
-
-    /**
-     * Delete Rule (ajax)
-     * 
-     * @param Request $request 
-     * @return array[]
-     */
-    public function deleteRule(Request $request)
-    {
-        $lead_rule = $this->getRule($request->id);
-
-        if ($lead_rule->delete()) {
-            return ['status' => 'success'];
-        } else {
-            return ['status' => 'failed'];
-        }
-    }
-
-    /**
-     * Get History (ajax)
-     * @return array[]
-     * @throws Exception 
-     * @throws InvalidArgumentException 
-     */
-    public function getHistory()
-    {
-        $table = [];
-
-        $lead_moves = LeadMove::where('lead_moves.created_at', '>', Carbon::parse('30 days ago'))
-            ->join('lead_rules', 'lead_moves.lead_rule_id', '=', 'lead_rules.id')
-            ->where('lead_rules.group_id', Auth::user()->group_id)
-            ->select(
-                'lead_moves.*',
-                'lead_rules.rule_name'
-            )
-            ->OrderBy('lead_moves.id', 'desc')
-            ->get();
-
-        $tz = Auth::user()->iana_tz;
-        foreach ($lead_moves as $lead_move) {
-            $count = LeadMoveDetail::where('lead_move_id', $lead_move->id)->where('succeeded', true)->count();
-            if ($count) {
-                $table[] = [
-                    'lead_move_id' => $lead_move->id,
-                    'lead_rule_id' => $lead_move->lead_rule_id,
-                    'date' => Carbon::parse($lead_move->created_at)->tz($tz)->isoFormat('L LT'),
-                    'rule_name' => $lead_move->rule_name,
-                    'leads_moved' => $count,
-                    'reversed' => $lead_move->reversed,
-                ];
-            }
-        }
-
-        return $table;
-    }
-
-    /**
-     * Reverse Move (ajax)
-     * 
-     * @param Request $request 
-     * @return array[]
-     */
-    public function reverseMove(Request $request)
-    {
-        // Make sure we haven't already reversed it
-        $lead_move = LeadMove::find($request->lead_move_id);
-        if (!$lead_move || $lead_move->reversed) {
-            return ['error' => 'Already reversed'];
-        }
-
-        // Make sure the user is allowed to reverse it
-        $lead_rule = LeadRule::find($lead_move->lead_rule_id);
-        if (!$lead_rule || $lead_rule->group_id != Auth::user()->group_id) {
-            return ['error' => 'Not Authorized'];
-        }
-
-        // Set the record to reversed
-        $lead_move->reversed = true;
-        $lead_move->save();
-
-        // Dispatch job to run the reverse in the background
-        ReverseLeadMove::dispatch($lead_move);
-
-        return ['success' => true];
-    }
-
-    /**
-     * Get Campaigns (ajax)
-     * 
-     * @param Request $request 
-     * @return array[] 
-     * @throws InvalidArgumentException 
-     */
-    public function getCampaigns(Request $request)
-    {
-        $fromDate = $request->fromdate;
-        $toDate = $request->todate;
-
-        $results = $this->getAllCampaigns($fromDate, $toDate);
-
-        return ['campaigns' => array_values($results)];
-    }
-
-    /**
-     * Get Subcampaigns (ajax)
-     * 
-     * @param Request $request 
-     * @return array[] 
-     */
-    public function getSubcampaigns(Request $request)
-    {
-        $results = $this->getAllSubcampaigns($request->campaign);
-
-        return ['subcampaigns' => array_values($results)];
+        return view('tools.lead_detail')->with($data);
     }
 
     /**
@@ -518,44 +198,5 @@ AND Date < :to_date";
         ];
 
         return $this->yieldSql($sql, $bind);
-    }
-
-    private function getAllInboundSources()
-    {
-        $sql = '';
-        $union = '';
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-
-            $sql .= "$union SELECT DISTINCT Description
-            FROM [$db].[dbo].[InboundSources]
-            WHERE GroupId = :groupid$i
-            AND InboundSource != ''";
-
-            $union = ' UNION';
-        }
-        $sql .= " ORDER BY Description";
-
-        return resultsToList($this->runSql($sql, $bind));
-    }
-
-    private function getAllCallStatuses()
-    {
-        $bind = [];
-
-        $sql = '';
-        $union = '';
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-
-            $sql .= "$union SELECT DISTINCT Disposition
-            FROM [$db].[dbo].[Dispos]
-            WHERE (GroupId = :groupid$i OR GroupId = -1)";
-
-            $union = ' UNION';
-        }
-        $sql .= " ORDER BY Disposition";
-
-        return resultsToList($this->runSql($sql, $bind));
     }
 }
