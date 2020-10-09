@@ -61,6 +61,7 @@ return [
 	'manual'			=> 'Manual',
 	'max_handle_time'	=> 'Tiempo Máximo de Manejo',
 	'max_hold_time'		=> 'Tiempo Máximo de Espera',
+	'minutes'			=> 'Minutos',
 	'missed_calls'		=> 'Llamadas Perdidas',
 	'my_stats'			=> 'Mis Estadísticas',
 	'numb_of_calls'		=> 'Llamadas',

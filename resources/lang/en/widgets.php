@@ -63,6 +63,7 @@ return [
 	'manual'			=> 'Manual',
 	'max_handle_time'	=> 'Max Handle Time',
 	'max_hold_time'		=> 'Max Hold Time',
+	'minutes'			=> 'Minutes',
 	'missed_calls'		=> 'Missed Calls',
 	'my_stats'			=> 'My Stats',
 	'numb_of_calls'		=> 'Calls',
