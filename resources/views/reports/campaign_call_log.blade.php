@@ -1,6 +1,9 @@
 @extends('layouts.report')
 @section('title', __('general.reports'))
 
+<?php
+dd($filters['reps']);
+?>
 @section('content')
 	<a href="{{ action('ReportController@info', ['report' => $report]) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-info-circle"></i> Info</a>
 	<h3 class="heading">{{__('reports.campaign_call_log')}}</h3>
@@ -33,7 +36,7 @@
 				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('reps', __('reports.rep')) !!}
-						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true" >
+						<select class="form-control selectpicker" id="rep_select" multiple="true" name="reps[]" data-live-search="true" data-actions-box="true" >
 							@foreach($filters['reps'] as $rep)
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach

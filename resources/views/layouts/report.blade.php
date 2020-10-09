@@ -118,9 +118,9 @@
         $('.selectpicker').selectpicker();
         // var picker_width=$('.selectpicker').parent().parent().parent().width();
         // $('.selectpicker').parent().parent().parent().css({'max-width': picker_width, 'border': '1px solid red'});
-        // $(window).on('load', function() {
-        //     $('.preloader').fadeOut('slow');
-        // });
+        $(window).on('load', function() {
+            $('.preloader').fadeOut('slow');
+        });
 
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {

@@ -17,7 +17,7 @@
 
 	if(jQuery().selectpicker) {
 	    // preselect all
-	    $('#rep_select, #database_select, #call_details #campaign_select, #agent_summary_campaign #campaign_select, #agent_summary_subcampaign #campaign_select, #bwr_omni #campaign_select, #inbound_summary #campaign_select').selectpicker('selectAll');
+	    // $('#rep_select, #database_select, #call_details #campaign_select, #agent_summary_campaign #campaign_select, #agent_summary_subcampaign #campaign_select, #bwr_omni #campaign_select, #inbound_summary #campaign_select').selectpicker('selectAll');
 	}
 
     //// remove select all option
