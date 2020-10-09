@@ -1,10 +1,11 @@
 <?php
 // Tools: all urls start with /tools/
-Route::group(['middleware' => 'can:accessAdmin'], function () {
-    Route::prefix('tools')->group(function () {
-        Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::prefix('tools')->group(function () {
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-        Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
+    Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
+
+    Route::group(['middleware' => 'can:accessAdmin'], function () {
 
         // must be logged in to access any of these
         Route::group(['middleware' => 'auth'], function () {

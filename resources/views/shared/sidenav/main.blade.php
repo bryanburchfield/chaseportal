@@ -13,10 +13,7 @@
         <li><a href="https://contactflow.chasedatacorp.com/" target="_blank"><i class="fas fa-pencil-ruler"></i>{{ __('sidenav.flowbuilder')}}</a></li>
     @endcan --}}
 
-    @can('accessAdmin')
-        <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''@endphp ><a href="#" class="update_nav_link" data-path="tools"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
-    @endif
-
+    <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'tools' ? 'class="active"' : ''@endphp ><a href="#" class="update_nav_link" data-path="tools"><i class="fas fa-tools"></i>{{__('sidenav.tools')}}</a></li>
     <li data-page="settings" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'settings' ? 'class="active"' : ''@endphp><a href="{{ action('MasterDashController@showSettings') }}"><i class="fas fa-cog"></i>{{__('sidenav.settings')}}</a></li>
 
     @can('accessAdmin')
