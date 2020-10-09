@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
+use App\Models\PhoneFlag;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
@@ -27,9 +28,6 @@ class CallerIdService
     private $guzzleClient;
     private $calleridHeaders;
 
-    // for storing numbers' flags
-    private $numbers;
-
     // For tracking rate limiting
     private $apiRequests = [];
     private $apiLimitRequests = 60;
@@ -49,6 +47,9 @@ class CallerIdService
         $this->calleridHeaders = [
             'Authorization' => 'Bearer ' . $token,
         ];
+
+        // Empty phone_flags table
+        PhoneFlag::truncate();
     }
 
     private function setGroup($group_id = null)
@@ -345,11 +346,13 @@ class CallerIdService
 
     private function checkFlagged($phone)
     {
-        if (!isset($this->numbers[$phone])) {
-            $this->numbers[$phone] = $this->getFlags($phone);
+        $phoneFlag = PhoneFlag::find($phone);
+
+        if (!$phoneFlag) {
+            $phoneFlag = PhoneFlag::create(['phone' => $phone, 'flags' => $this->getFlags($phone)]);
         }
 
-        return $this->numbers[$phone];
+        return $phoneFlag->flags;
     }
 
     private function getFlags($phone)
