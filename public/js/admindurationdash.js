@@ -91,6 +91,8 @@ var Dashboard = {
 
 				$('#callstatus_by_minutes_graph, #calls_minutes_per_day_graph, #calls_by_campaign').parent().find('.no_data').remove();
 
+				$('#callstatus_by_minutes_graph').closest('.flipping_card').flip(true);
+
 				////////////////////////////////////////////////////////////
 				////    MINUTES BY CALLSTATUS DOUGNUT GRAPH
 				///////////////////////////////////////////////////////////
@@ -103,6 +105,21 @@ var Dashboard = {
 					const callstatuses_obj = response.call_volume.callstatuses
 	                const callstatuses_obj_keys = Object.getOwnPropertyNames(callstatuses_obj);
 	                var chart_colors_array = Master.return_chart_colors_hash(callstatuses_obj_keys);
+
+	                $('#call_status_table tbody').empty();
+
+	                if (callstatuses_obj_keys.length) {
+	                    var trs;
+	                    for (var i = 0; i < callstatuses_obj_keys.length; i++) {
+	                        if (callstatuses_obj_keys[i] != '') {
+	                            trs += '<tr><td>' + callstatuses_obj_keys[i] + '</td><td>'+Object.values(response.call_volume.callstatuses)[i].Minutes+'</td><td>'+Object.values(response.call_volume.callstatuses)[i].Count+'</td></tr>';
+	                        }
+	                    }
+	                    $('#call_status_table tbody').append(trs);
+	                } else {
+	                    $('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#call_status_table, #sales_per_hour_per_rep_graph');
+	                }
+
 
 					let callstatuses = [];
 
@@ -316,6 +333,11 @@ var Dashboard = {
 
 $(document).ready(function(){
 	Dashboard.init();
+
+	$(".flipping_card").flip({ trigger: 'manual', reverse: true });
+    $(".flip_card_btn").on('click', function () {
+        $(this).closest('.flipping_card').flip('toggle');
+    });
 
 	$(window).on('resize', function(){
 	    if ($(window).width() > 1010) {
