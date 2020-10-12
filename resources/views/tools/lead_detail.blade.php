@@ -26,7 +26,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Search" name="id">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                 </div>
                             </div>
                         </form>
@@ -35,7 +35,7 @@
                     @if ($lead)
                         <div class="col-sm-12 lead_details">
 
-                            <div class="bt bb mt50 mb30 pt10 pb10">
+                            <div class="bt bb mt30 mb30 pt10 pb10">
                                 <div class="col-sm-3">
                                     <h4 class="mb10">Lead ID</h4>
                                     <p>{{ $lead->id }}</p>
@@ -66,7 +66,7 @@
                                 <div class="tab-content">
                                 
                                     <div role="tabpanel" id="lead_fields" class="tab-pane fade in active">                
-                                        <div class="col-sm-8 mt50">
+                                        <div class="col-sm-8 mt50 p0">
                                             <div class="lead_fields">
                                                 
                                                 <div class="col-sm-6">
@@ -237,8 +237,7 @@
                                     </div>
 
                                     <div role="tabpanel" id="custom_fields" class="tab-pane fade">
-                                        <div class="col-sm-8 mt50">
-                                            <h4>Custom Fields</h4>
+                                        <div class="col-sm-8 mt50 p0">
                                             @foreach($lead->customFields() as $field)
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
