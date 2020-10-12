@@ -16,41 +16,220 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
+                    <div class="col-sm-8">
+                        <h3><i class="fas fa-id-card"></i> FullName</h3>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <form action="#" class="form">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="search">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    @if ($lead)
+                        <div class="col-sm-12 lead_details">
+                            <div class="bt bb mt50 mb30 pt10 pb10">
+                                <div class="col-sm-3">
+                                    <h4 class="mb10">Lead ID</h4>
+                                    <p>$leadID</p>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <h4 class="mb10">ClientId</h4>
+                                    <p>$ClientId</p>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <h4 class="mb10">Phone</h4>
+                                    <p>$phone</p>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <h4 class="mb10">Last Updated</h4>
+                                    <p>$LastUpdated</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <div class="lead_fields">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" name="FirstName" value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" name="LastName" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" name="Address" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control" name="City" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>State</label>
+                                        <input type="text" class="form-control" name="State" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Zip Code</label>
+                                        <input type="text" class="form-control" name="ZipCode" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Primary Phone</label>
+                                        <input type="text" class="form-control" name="PrimaryPhone" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Secondary Phone</label>
+                                        <input type="text" class="form-control" name="SecondaryPhone" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Rep</label>
+                                        <input type="text" class="form-control" name="Rep" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Call Status</label>
+                                        <input type="text" class="form-control" name="CallStatus" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control" name="Date" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Campaign</label>
+                                        <input type="text" class="form-control" name="Campaign" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Attempt</label>
+                                        <input type="text" class="form-control" name="Attempt" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Group Id</label>
+                                        <input type="text" class="form-control" name="GroupId" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Was Dialed</label>
+                                        <input type="text" class="form-control" name="WasDialed" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Last Updated</label>
+                                        <input type="text" class="form-control" name="LastUpdated" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Id Guid</label>
+                                        <input type="text" class="form-control" name="IdGuid" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Reload Date</label>
+                                        <input type="text" class="form-control" name="ReloadDate" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Reload Attempt</label>
+                                        <input type="text" class="form-control" name="ReloadAttempt" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Subcampaign</label>
+                                        <input type="text" class="form-control" name="Subcampaign" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Call Type</label>
+                                        <input type="text" class="form-control" name="CallType" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Disposition Id</label>
+                                        <input type="text" class="form-control" name="DispositionId" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Notes</label>
+                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control"></textarea>
+                                    </div>
+                                </div>
+
+                                {{-- @foreach($lead->customFields() as $field)
+                                    key = <b>{{ $field['key'] }}</b> description = <b>{{ $field['description'] }}</b> value = <b>{{ $field['value'] }}</b> <br>
+                                @endforeach --}}
+
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- Put lead# form field here --}}
                     {{-- GET http://chasedata.test/tools/lead_detail/143468 --}}
 
-@if ($lead)
-    {{ $lead->id }} <br>
-    {{ $lead->ClientId }} <br>
-    {{ $lead->FirstName }} <br>
-    {{ $lead->LastName }} <br>
-    {{ $lead->Address }} <br>
-    {{ $lead->City }} <br>
-    {{ $lead->State }} <br>
-    {{ $lead->ZipCode }} <br>
-    {{ $lead->PrimaryPhone }} <br>
-    {{ $lead->SecondaryPhone }} <br>
-    {{ $lead->Rep }} <br>
-    {{ $lead->CallStatus }} <br>
-    {{ $lead->Date }} <br>
-    {{ $lead->Campaign }} <br>
-    {{ $lead->Attempt }} <br>
-    {{ $lead->GroupId }} <br>
-    {{ $lead->WasDialed }} <br>
-    {{ $lead->LastUpdated }} <br>
-    {{ $lead->IdGuid }} <br>
-    {{ $lead->ReloadDate }} <br>
-    {{ $lead->ReloadAttempt }} <br>
-    {{ $lead->Notes }} <br>
-    {{ $lead->Subcampaign }} <br>
-    {{ $lead->CallType }} <br>
-    {{ $lead->DispositionId }} <br>
-    {{ $lead->FullName }} <br>
-
-    @foreach($lead->customFields() as $field)
-        key = <b>{{ $field['key'] }}</b> description = <b>{{ $field['description'] }}</b> value = <b>{{ $field['value'] }}</b> <br>
-    @endforeach
-@endif
 				</div>
 			</div>
 		</div>

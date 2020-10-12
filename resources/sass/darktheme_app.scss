@@ -99,8 +99,10 @@ h1, h2, h3, h4, h5, h6 {
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
+.pt10{padding-top: 10px;}
 .pl10{padding-left: 10px;}
 .pl20{padding-left: 20px;}
+.pb10{padding-bottom: 10px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
@@ -111,6 +113,9 @@ h1, h2, h3, h4, h5, h6 {
 .cb{clear: both;}
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
+
+.bt{border-top: 1px solid #1b293c;}
+.bb{border-bottom: 1px solid #1b293c;}
 
 .tac{text-align: center;}
 .carb_mb30_mb {
@@ -3122,6 +3127,10 @@ a.add_subcampaign{
     p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
 
     .nav_holder{position: absolute;top:0;left:0;}
+}
+
+.lead_details .pt10.bb{
+    overflow: auto;
 }
 
 /* ---------------------------------------------------
