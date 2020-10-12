@@ -4,6 +4,7 @@ Route::prefix('tools')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
+    Route::post('/get_lead', 'LeadsController@getLead');
 
     Route::group(['middleware' => 'can:accessAdmin'], function () {
 

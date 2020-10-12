@@ -29,6 +29,7 @@ class LeadsController extends Controller
 
         if ($lead) {
             if ($lead->GroupId != Auth::user()->group_id) {
+                $lead = null;
                 $errors['id'] = 'Lead not found';
             }
         }
@@ -55,7 +56,7 @@ class LeadsController extends Controller
         }
 
         return redirect()->action(
-            'LeaqdsController@leadDetail',
+            'LeadsController@leadDetail',
             ['lead' => $lead]
         );
     }

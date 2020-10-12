@@ -21,10 +21,11 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <form action="#" class="form">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="search">
-                                <div class="input-group-btn">
+                        <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
+                            @csrf
+                            <div class="input-groupx">
+                                <input type="text" class="form-control" placeholder="Search" name="id">
+                                <div class="input-groupx-btn">
                                     <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                                 </div>
                             </div>
@@ -215,7 +216,9 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Notes</label>
-                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control"></textarea>
+                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control">
+                                            {{ old('Notes', $lead->Notes) }}
+                                        </textarea>
                                     </div>
                                 </div>
 
