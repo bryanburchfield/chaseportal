@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <h4 class="mb10">ClientId</h4>
+                                    <h4 class="mb10">Client Id</h4>
                                     <p>{{ $lead->ClientId }}</p>
                                 </div>
 
@@ -231,7 +231,10 @@
                                                         </textarea>
                                                     </div>
                                                 </div>
-                                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                                                
+                                                <div class="col-sm-12">
+                                                    <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

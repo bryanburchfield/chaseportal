@@ -2982,6 +2982,21 @@ a.add_subcampaign{
 
 .lead_details .pt10.bb{
     overflow: auto;
+    background: #fff;
+}
+
+.lead_details{
+    h4{
+        color:$green;
+    }
+
+    .form-control, textarea.form-control{
+        background: #fff !important;
+    }
+}
+
+.fas.fa-id-card{
+    color:$green;
 }
 
 /* ---------------------------------------------------
