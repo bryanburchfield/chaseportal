@@ -16,9 +16,17 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
-                    <div class="col-sm-8">
-                        <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
-                    </div>
+                    @if ($lead)
+                        <div class="col-sm-8">
+                            <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
+                        </div>
+                    @endif
+
+                    @if($errors)
+                        @foreach ($errors as $k => $error)
+                            {{ $error }}    
+                        @endforeach
+                    @endif
 
                     <div class="col-sm-4">
                         <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
