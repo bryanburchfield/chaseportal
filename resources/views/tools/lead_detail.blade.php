@@ -36,22 +36,22 @@
                             <div class="bt bb mt50 mb30 pt10 pb10">
                                 <div class="col-sm-3">
                                     <h4 class="mb10">Lead ID</h4>
-                                    <p>$leadID</p>
+                                    <p>{{ $lead->id }}</p>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <h4 class="mb10">ClientId</h4>
-                                    <p>$ClientId</p>
+                                    <p>{{ $lead->ClientId }}</p>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <h4 class="mb10">Phone</h4>
-                                    <p>$phone</p>
+                                    <p>{{ $lead->PrimaryPhone }}</p>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <h4 class="mb10">Last Updated</h4>
-                                    <p>$LastUpdated</p>
+                                    <p>{{ $lead->LastUpdated }}</p>
                                 </div>
                             </div>
                         </div>
