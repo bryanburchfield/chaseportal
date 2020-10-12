@@ -61,7 +61,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>First Name</label>
-                                        <input type="text" class="form-control" name="FirstName" value="">
+                                        <input type="text" class="form-control" name="FirstName" value="{{ old('FirstName', $lead->FirstName) }}">
                                     </div>
                                 </div>
                                 
