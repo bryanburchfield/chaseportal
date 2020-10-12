@@ -3841,6 +3841,15 @@ a.add_subcampaign:focus {
 
 .lead_details .pt10.bb {
   overflow: auto;
+  background: #203047;
+}
+
+.lead_details h4 {
+  color: #33A09B;
+}
+
+.fas.fa-id-card {
+  color: #33A09B;
 }
 
 /* ---------------------------------------------------

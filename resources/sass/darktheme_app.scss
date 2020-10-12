@@ -3131,7 +3131,19 @@ a.add_subcampaign{
 
 .lead_details .pt10.bb{
     overflow: auto;
+    background: $blue;
 }
+
+.lead_details{
+    h4{
+        color:$green;
+    }
+}
+
+.fas.fa-id-card{
+    color:$green;
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
