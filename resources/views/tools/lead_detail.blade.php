@@ -241,8 +241,8 @@
                                             @foreach($lead->customFields() as $field)
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label>{{ $field['key'] }}</label>
-                                                        <input type="text" class="form-control" name="DispositionId" value="{{ old('DispositionId', $field['description']) }}">
+                                                        <label>{{ $field['description'] }}</label>
+                                                        <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}">
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -257,10 +257,6 @@
                             </form>
                         </div>
                     @endif
-
-                    {{-- Put lead# form field here --}}
-                    {{-- GET http://chasedata.test/tools/lead_detail/143468 --}}
-
 				</div>
 			</div>
 		</div>
