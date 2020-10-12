@@ -29,9 +29,11 @@ class LeadsController extends Controller
 
     public function leadDetail(Lead $lead = null)
     {
+        $errors = [];
+
         if ($lead) {
             if ($lead->GroupId != Auth::user()->group_id) {
-                abort(404);
+                $errors['id'] = 'Lead not found';
             }
         }
 
@@ -43,9 +45,24 @@ class LeadsController extends Controller
             'jsfile' => $jsfile,
             'page' => $page,
             'lead' => $lead,
+            'errors' => $errors,
         ];
 
         return view('tools.lead_detail')->with($data);
+    }
+
+    public function getLead(Request $request)
+    {
+        $lead = null;
+
+        if ($request->has('id')) {
+            $lead = Lead::find($request->id);
+        }
+
+        return redirect()->action(
+            'LeaqdsController@leadDetail',
+            ['lead' => $lead]
+        );
     }
 
     /**
