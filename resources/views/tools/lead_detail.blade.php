@@ -16,17 +16,12 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
-                    @if ($lead)
-                        <div class="col-sm-8">
+                    
+                    <div class="col-sm-8">
+                        @if ($lead)
                             <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
-                        </div>
-                    @endif
-
-                    @if($errors)
-                        @foreach ($errors as $k => $error)
-                            {{ $error }}    
-                        @endforeach
-                    @endif
+                        @endif
+                    </div>
 
                     <div class="col-sm-4">
                         <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
@@ -37,6 +32,14 @@
                                     <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                 </div>
                             </div>
+                            
+                            @if($errors)
+                                <div class="alert alert-danger">
+                                    @foreach ($errors as $k => $error)
+                                        {{ $error }}    
+                                    @endforeach
+                                </div>
+                            @endif
                         </form>
                     </div>
 
