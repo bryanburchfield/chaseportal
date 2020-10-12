@@ -2545,6 +2545,7 @@ $(document).ready(function () {
 
     $('.nav-tabs.tabs a').click(function (e) {
         $(this).tab('show');
+        console.log('clicked');
         window.location.hash = this.hash;
         $('html,body').scrollTop($('body').scrollTop());
     });
