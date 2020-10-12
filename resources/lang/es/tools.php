@@ -107,6 +107,7 @@ return [
 	'lead'			=> 'Dirigir',
 	'lead_age'      => 'Edad de Dirigir',
 	'lead_attempts' => '# de Intentos de Dirigir',
+	'lead_details'	=> 'Dirigir de Dirigir',
 	'lead_details'	=> 'Detalles de Dirigir',
 	'lead_update'	=> 'Actualización De Dirigir',
 	'leads'			=> 'Dirigir',

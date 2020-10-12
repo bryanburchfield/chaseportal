@@ -40,7 +40,6 @@ class LeadsController extends Controller
         $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
-            'jsfile' => $jsfile,
             'page' => $page,
             'lead' => $lead,
         ];

@@ -183,12 +183,20 @@ h6 {
   padding: 20px;
 }
 
+.pt10 {
+  padding-top: 10px;
+}
+
 .pl10 {
   padding-left: 10px;
 }
 
 .pl20 {
   padding-left: 20px;
+}
+
+.pb10 {
+  padding-bottom: 10px;
 }
 
 .pb20 {
@@ -225,6 +233,14 @@ h6 {
 
 .tac {
   text-align: center;
+}
+
+.bt {
+  border-top: 1px solid #d8d8d8;
+}
+
+.bb {
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .carb_mb30_mb {
@@ -3584,6 +3600,10 @@ a.add_subcampaign i {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.lead_details .pt10.bb {
+  overflow: auto;
 }
 
 /* ---------------------------------------------------

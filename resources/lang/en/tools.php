@@ -97,6 +97,7 @@ return [
 	'lead'			=> 'Lead',
 	'lead_age'      => 'Lead Age',
 	'lead_attempts' => '# of Attempts on Lead',
+	'lead_detail'	=> 'Lead Detail',
 	'lead_details'	=> 'Lead Details',
 	'lead_id'		=> 'Lead ID',
 	'lead_move_history'	=> 'Lead Move History',
