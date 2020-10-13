@@ -2,17 +2,19 @@
 
 namespace App\Services;
 
-use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
+use App\Models\ActiveNumber;
 use App\Models\Dialer;
 use App\Models\PhoneFlag;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
 use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
@@ -28,6 +30,9 @@ class CallerIdService
     private $guzzleClient;
     private $calleridHeaders;
 
+    // For stamping db
+    private $run_date;
+
     // For tracking rate limiting
     private $apiRequests = [];
     private $apiLimitRequests = 60;
@@ -35,6 +40,8 @@ class CallerIdService
 
     private function initialize()
     {
+        $this->run_date = now();
+
         $sid = config('twilio.did_sid');
         $did_token = config('twilio.did_token');
 
@@ -48,8 +55,14 @@ class CallerIdService
             'Authorization' => 'Bearer ' . $token,
         ];
 
-        // Empty phone_flags table
-        PhoneFlag::truncate();
+        // Clear out active_numbers table
+        ActiveNumber::truncate();
+
+        // Clear out our calleridrep.com db
+        $this->clearCallerIdRepPhones();
+
+        // Load Thinq numbers
+        $this->loadThinq();
     }
 
     private function setGroup($group_id = null)
@@ -83,51 +96,45 @@ class CallerIdService
     {
         $this->initialize();
 
-        $tmpfname = tempnam("/tmp", "CID");
-
         // run report for >5.5k calls over 30 days
 
         $this->enddate = Carbon::parse('midnight');
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->maxcount = 5500;
 
-        // Save results to file
-        $this->saveToFile($tmpfname);
+        echo "Pulling report\n";
+        $this->saveToDb();
+
+        echo "Checking actives\n";
+        $this->checkActive();
+
+        echo "Checking flags\n";
+        $this->checkFlags();
 
         $group_id = '';
         $results = [];
         $all_results = [];
 
-        // read results from file
-        if (($handle = fopen($tmpfname, "r")) !== false) {
-            while (($csv = fgetcsv($handle)) !== false) {
-                $rec = $this->csvToRec($csv);
+        echo "Creating reports\n";
 
-                // check if this number is still active
-                // if ($this->activeNumber($rec['CallerId'])) {
+        // read results from db
+        foreach (PhoneFlag::where('run_date', $this->run_date)->get() as $rec) {
+            $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
 
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
+            $all_results[] = $rec;
 
-                $rec['flagged_by'] = $this->checkFlagged($rec['CallerId']);
-
-                $all_results[] = $rec;
-
-                // Send email on change of group
-                if ($group_id != '' && $group_id != $rec['GroupId']) {
-                    if ($this->setGroup($group_id)) {
-                        $csvfile = $this->makeCsv($results);
-                        $this->emailReport($csvfile);
-                    }
-
-                    $results = [];
+            // Send email on change of group
+            if ($group_id != '' && $group_id != $rec['group_id']) {
+                if ($this->setGroup($group_id)) {
+                    $csvfile = $this->makeCsv($results);
+                    $this->emailReport($csvfile);
                 }
 
-                $results[] = $rec;
-                $group_id = $rec['GroupId'];
-                // }  // active check
+                $results = [];
             }
-            fclose($handle);
+
+            $results[] = $rec;
+            $group_id = $rec['group_id'];
         }
 
         if (!empty($results)) {
@@ -143,73 +150,44 @@ class CallerIdService
             $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
-
-        // Now run report for >15.5k calls over 30 days
-
-        $this->enddate = Carbon::parse('midnight');
-        $this->startdate = $this->enddate->copy()->subDay(30);
-        $this->maxcount = 15500;
-
-        // Save results to file
-        $this->saveToFile($tmpfname);
-
-        $all_results = [];
-
-        // read results from file
-        if (($handle = fopen($tmpfname, "r")) !== false) {
-            while (($csv = fgetcsv($handle)) !== false) {
-                $rec = $this->csvToRec($csv);
-
-                // check if this number is still active
-                // if ($this->activeNumber($rec['CallerId'])) {
-                $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
-                unset($rec['Contacts']);
-
-                $rec['flagged_by'] = $this->checkFlagged($rec['CallerId']);
-
-                $all_results[] = $rec;
-                // } // active check
-            }
-            fclose($handle);
-        }
-
-        if (!empty($all_results)) {
-            // clear group specific vars
-            $this->setGroup();
-            $csvfile = $this->makeCsv($all_results);
-            $this->emailReport($csvfile);
-        }
-
-        // Delete temp file
-        unlink($tmpfname);
     }
 
-    private function csvToRec($csv)
+    private function saveToDb()
     {
-        $rec = [];
-
-        $rec['GroupId'] = $csv[0];
-        $rec['GroupName'] = $csv[1];
-        $rec['CallerId'] = $csv[2];
-        $rec['Dials'] = $csv[3];
-        $rec['Contacts'] = $csv[4];
-
-        return $rec;
-    }
-
-    private function saveToFile($tmpfname)
-    {
-        // Save results to file
-        $handle = fopen($tmpfname, "w");
-
+        // Save results to database
         foreach ($this->runQuery() as $rec) {
             if (count($rec) == 0) {
                 continue;
             }
-            fputcsv($handle, $rec);
+
+            $phone = $this->formatPhone($rec['CallerId']);
+
+            try {
+                PhoneFlag::create([
+                    'run_date' => $this->run_date,
+                    'group_id' => $rec['GroupId'],
+                    'group_name' => $rec['GroupName'],
+                    'phone' => $phone,
+                    'calls' => $rec['Dials'],
+                    'contact_ratio' => $rec['Contacts'] / $rec['Dials'] * 100,
+                ]);
+            } catch (Exception $e) {
+                Log::error('Error creating PhoneFlag: ' . $phone);
+            }
+        }
+    }
+
+    private function formatPhone($phone)
+    {
+        // Strip non-digits
+        $phone = preg_replace("/[^0-9]/", '', $phone);
+
+        // Add leading '1' if 10 digits
+        if (strlen($phone) == 10) {
+            $phone = '1' . $phone;
         }
 
-        fclose($handle);
+        return $phone;
     }
 
     private function runQuery()
@@ -238,7 +216,7 @@ class CallerIdService
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
-                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')
+                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
                 GROUP BY DR.GroupId, GroupName, CallerId
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
@@ -261,26 +239,40 @@ class CallerIdService
             'GroupName',
             'CallerID',
             'Dials in Last 30 Days',
-            'Contact Rate',
-            'Flagged By',
+            'Contact Ratio',
+            'In System',
+            'Flagged',
+            // 'Replaced By',
         ];
 
-        array_unshift($results, $headers);
+        // write to file
+        $tempfile = tempnam("/tmp", "CID");
+        $handle = fopen($tempfile, "w");
 
-        // Create a uniquish filename
-        $tempfile = '/' . uniqid() . '.csv';
+        fputcsv($handle, $headers);
 
-        // this write to the directiory: storage_path('app')
-        Excel::store(new ReportExport($results), $tempfile);
+        foreach ($results as $rec) {
+            $row = [
+                $rec->group_id,
+                $rec->group_name,
+                $rec->phone,
+                $rec->calls,
+                $rec->contact_ratio,
+                $rec->in_system,
+                $rec->flagged,
+                // $rec->replaced_by,
+            ];
+
+            fputcsv($handle, $row);
+        }
+
+        fclose($handle);
 
         return $tempfile;
     }
 
     private function emailReport($csvfile)
     {
-        // path out file
-        $csvfile = storage_path('app' . $csvfile);
-
         // read file into variable, then delete file
         $csv = file_get_contents($csvfile);
         unlink($csvfile);
@@ -313,11 +305,68 @@ class CallerIdService
             ->send(new CallerIdMail($message));
     }
 
+    private function checkActive()
+    {
+        foreach (PhoneFlag::where('run_date', $this->run_date)->select('phone')->distinct()->get() as $rec) {
+            if ($this->activeNumber($rec->phone)) {
+                PhoneFlag::where('run_date', $this->run_date)
+                    ->where('phone', $rec->phone)
+                    ->update(['in_system' => 1]);
+            }
+        }
+    }
+
+    private function checkFlags()
+    {
+        $batch = [];
+
+        foreach (PhoneFlag::where('run_date', $this->run_date)
+            ->where('in_system', 1)
+            ->where('checked', 0)
+            ->select('phone')->distinct()
+            ->get() as $rec) {
+
+            $batch[] = $rec->phone;
+
+            // Check numbers in batches of 450
+            if (count($batch) >= 450) {
+                $this->checkBatch($batch);
+                $batch = [];
+            }
+        }
+
+        // Check what's left
+        if (count($batch)) {
+            $this->checkBatch($batch);
+        }
+    }
+
     private function activeNumber($phone)
     {
-        // strip non-digits from phone
-        $phone = preg_replace("/[^0-9]/", '', $phone);
+        if ($this->activeThinq($phone)) {
+            return true;
+        }
 
+        if ($this->activeTwilio($phone)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function activeThinq($phone)
+    {
+        $active_number = ActiveNumber::find($phone);
+
+        if ($active_number) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function activeTwilio($phone)
+    {
         // strip leading '1' if it's 11 digits
         if (strlen($phone) == 11) {
             if (substr($phone, 0, 1) == '1') {
@@ -325,9 +374,9 @@ class CallerIdService
             }
         }
 
-        // if it's not 10 digits, return it as active
+        // if it's not 10 digits, return it as inactive
         if (strlen($phone) !== 10) {
-            return true;
+            return false;
         }
 
         // Look it up
@@ -344,30 +393,38 @@ class CallerIdService
         return true;
     }
 
-    private function checkFlagged($phone)
+    private function checkBatch($batch)
     {
-        $phoneFlag = PhoneFlag::find($phone);
+        echo "check batch of " . count($batch) . "\n";
 
-        if (!$phoneFlag) {
-            $phoneFlag = PhoneFlag::create(['phone' => $phone, 'flags' => $this->getFlags($phone)]);
+        // upload batch to calleridrep
+        foreach ($batch as $phone) {
+            $this->addNumber($phone);
         }
 
-        return $phoneFlag->flags;
+        // wait for them to process the numbers
+        echo "Waiting 5min for them to process....\n";
+        sleep(300);
+
+        // Get list of all phones w/ flagged column
+        $phones = $this->getAllCallerIdRepPhones();
+
+        // Update db
+        foreach ($phones as $rec) {
+            $phone = $this->formatPhone($rec['number']);
+
+            PhoneFlag::where('run_date', $this->run_date)
+                ->where('phone', $phone)
+                ->update(['checked' => 1, 'flagged' => $rec['flagged']]);
+        }
+
+        // clear em out
+        $this->clearCallerIdRepPhones();
     }
 
-    private function getFlags($phone)
+    private function addNumber($phone)
     {
-        $flags = [];
-
-        // Strip non-digits
-        $phone = preg_replace("/[^0-9]/", '', $phone);
-
-        // Add leading '1' if 10 digits
-        if (strlen($phone) == 10) {
-            $phone = '1' . $phone;
-        }
-
-        // Add number
+        echo "add number $phone\n";
 
         if (!$this->waitToSend()) {
             return '';
@@ -384,57 +441,8 @@ class CallerIdService
                 ],
             ]);
         } catch (Exception $e) {
-            // don't care
+            Log::error('Error uploading number ' . $phone);
         }
-
-        // Check number
-
-        // Wait a while after adding - seems to improve results
-        sleep(10);
-
-        if (!$this->waitToSend()) {
-            return '';
-        }
-
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
-
-        try {
-            $response = $this->guzzleClient->request('GET', $endpoint, [
-                'headers' => $this->calleridHeaders,
-            ]);
-
-            $content = json_decode($response->getBody()->getContents(), true);
-        } catch (Exception $e) {
-            $content = '';
-        }
-
-        if (is_array($content)) {
-            foreach ($content as $key => $value) {
-                if (substr($key, -8) == '_flagged' && $value == true) {
-                    $flags[] = substr($key, 0, -8);
-                }
-            }
-        }
-
-        $flags = implode(',', $flags);
-
-        // Delete number
-
-        if (!$this->waitToSend()) {
-            return $flags;
-        }
-
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
-
-        try {
-            $response = $this->guzzleClient->request('DELETE', $endpoint, [
-                'headers' => $this->calleridHeaders,
-            ]);
-        } catch (Exception $e) {
-            // don't really care
-        }
-
-        return $flags;
     }
 
     private function waitToSend()
@@ -471,52 +479,118 @@ class CallerIdService
         return true;
     }
 
-    // private function loadThinq()
-    // {
-    //     $this->thinqNumbers = [];
+    private function getAllCallerIdRepPhones()
+    {
+        if (!$this->waitToSend()) {
+            return [];
+        }
 
-    //     $client = new Client(['base_uri' => 'https://api.thinq.com/']);
+        $endpoint = 'https://app.calleridrep.com/api/v1/phones';
 
-    //     $page = 1;
-    //     while (true) {
+        $content = '';
+        try {
+            $response = $this->guzzleClient->request('GET', $endpoint, [
+                'headers' => $this->calleridHeaders,
+            ]);
 
-    //         echo "get page $page\n";
+            $content = json_decode($response->getBody()->getContents(), true);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        } catch (ServerException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        }
 
-    //         $response = $client->request(
-    //             'GET',
-    //             '/origination/did/search2/did/13446',
-    //             [
-    //                 'headers' => [
-    //                     'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
-    //                 ],
-    //                 'query' => [
-    //                     'page' => $page
-    //                 ]
-    //             ]
-    //         );
+        return $content;
+    }
 
-    //         // Bail if we don't get a response
-    //         if (!$response->getBody()) {
-    //             break;
-    //         }
+    private function clearCallerIdRepPhones()
+    {
+        echo "delete all caller id rep phones\n";
 
-    //         $results = json_decode($response->getBody()->getContents());
+        $phones = $this->getAllCallerIdRepPhones();
 
-    //         echo 'got' . count($results->rows) . "\n";
+        if (is_array($phones)) {
+            foreach ($phones as $rec) {
+                $this->deletePhone($rec['number']);
+            }
+        }
+    }
 
-    //         foreach ($results->rows as $rec) {
-    //             $this->thinqNumbers[] = $rec->id;
-    //         }
+    private function deletePhone($phone)
+    {
+        echo "delete phone $phone\n";
 
-    //         // bail if this was the last page
-    //         if (!$results->has_next_page) {
-    //             break;
-    //         }
+        if (!$this->waitToSend()) {
+            return;
+        }
 
-    //         $page++;
-    //     }
+        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
 
-    //     Log::debug($this->thinqNumbers);
-    //     die();
-    // }
+        try {
+            $response = $this->guzzleClient->request('DELETE', $endpoint, [
+                'headers' => $this->calleridHeaders,
+            ]);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        } catch (ServerException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        }
+    }
+
+    private function loadThinq()
+    {
+        echo "loading thinq\n";
+
+        $client = new Client(['base_uri' => 'https://api.thinq.com/']);
+
+        $page = 1;
+        while (true) {
+            echo "...page $page\n";
+
+            $response = $client->request(
+                'GET',
+                '/origination/did/search2/did/13446',
+                [
+                    'headers' => [
+                        'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
+                    ],
+                    'query' => [
+                        'page' => $page
+                    ]
+                ]
+            );
+
+            // Bail if we don't get a response
+            if (!$response->getBody()) {
+                Log::error('Could not get Thinq numbers');
+                break;
+            }
+
+            $results = json_decode($response->getBody()->getContents());
+
+            foreach ($results->rows as $rec) {
+                $phone = $this->formatPhone($rec->id);
+                try {
+                    ActiveNumber::create(['phone' => $phone, 'vendor' => 'thinq']);
+                } catch (Exception $e) {
+                    Log::error('Number already exists: ' . $phone);
+                }
+            }
+
+            // bail if this was the last page
+            if (!$results->has_next_page) {
+                break;
+            }
+
+            $page++;
+        }
+    }
 }
