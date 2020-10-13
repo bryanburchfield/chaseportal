@@ -281,6 +281,7 @@ class CallerIdService
             $to = 'jonathan.gryczka@chasedatacorp.com';
             $cc = [
                 'g.sandoval@chasedatacorp.com',
+                'brandon.b@chasedatacorp.com',
                 'ahmed@chasedatacorp.com',
                 'dylan.farley@chasedatacorp.com'
             ];
