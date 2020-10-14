@@ -8,6 +8,7 @@ return [
     'distinct_agent' => 'Agente Distinto',
     'duration_dashboard' => 'Panel de Duración',
     'flowbuilder' => 'Generador de Flujo',
+    'form_builder' => 'Constructor de Formularios',
     'inbound' => 'Panel de Entrada',
     'kpis' => 'KPIs',
     'leaderboard' => 'Tabla de Posiciones',

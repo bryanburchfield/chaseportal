@@ -227,6 +227,10 @@ h6 {
   text-align: center;
 }
 
+.oa {
+  overflow: auto;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
@@ -3584,6 +3588,16 @@ a.add_subcampaign i {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.theme_selector {
+  border-bottom: 1px solid #ddd;
+}
+
+.user_created_form_element {
+  margin-bottom: 15px;
+  clear: both;
+  overflow: auto;
 }
 
 /* ---------------------------------------------------

@@ -8,6 +8,7 @@ return [
     'distinct_agent' => 'Distinct Agent',
     'duration_dashboard' => 'Duration Dashboard',
     'flowbuilder' => 'Flow Builder',
+    'form_builder' => 'Form Builder',
     'inbound' => 'Inbound Dashboard',
     'kpis' => 'KPIs',
     'leaderboard' => 'Leaderboard',

@@ -113,6 +113,8 @@ h1, h2, h3, h4, h5, h6 {
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 
 .tac{text-align: center;}
+.oa{overflow: auto;}
+
 .carb_mb30_mb {
     margin-bottom: 0;
 }
@@ -3122,6 +3124,16 @@ a.add_subcampaign{
     p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
 
     .nav_holder{position: absolute;top:0;left:0;}
+}
+
+.theme_selector{
+    border-bottom: 1px solid $blue;
+}
+
+.user_created_form_element{
+    margin-bottom: 15px;
+    clear: both;
+    overflow: auto;
 }
 
 /* ---------------------------------------------------
