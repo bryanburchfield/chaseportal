@@ -20,7 +20,9 @@ class NewPhoneFlagsTable extends Migration
             $table->dateTime('run_date');
             $table->integer('group_id');
             $table->string('group_name');
+            $table->smallInteger('dialer_numb');
             $table->string('phone', 15);
+            $table->string('ring_group')->nullable();
             $table->integer('calls');
             $table->decimal('contact_ratio');
             $table->boolean('in_system')->default(0);

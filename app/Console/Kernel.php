@@ -69,7 +69,7 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 CallerIdService::execute();
             })
-                ->dailyAt('8:00')
+                ->dailyAt('7:00')
                 ->timezone('America/New_York');
         }
 

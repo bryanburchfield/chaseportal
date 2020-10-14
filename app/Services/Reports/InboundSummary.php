@@ -89,6 +89,7 @@ class InboundSummary
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
 
         $bind['campaigns'] = $campaigns;
+        $bind['group_id_src'] = Auth::user()->group_id;
 
         $where = "";
 
@@ -278,7 +279,7 @@ class InboundSummary
              a.GAvTalkTime,
              a.GAvHoldTime
             FROM #Avgs a, #CampaignSummary cs
-            LEFT JOIN InboundSources s on s.InboundSource = cs.Source";
+            LEFT JOIN InboundSources s on s.GroupId = :group_id_src AND s.InboundSource = cs.Source";
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {

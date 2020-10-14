@@ -410,7 +410,7 @@ class ContactsPlaybookService
 
         return "EXISTS (SELECT I.id
             FROM [$db].[dbo].[DialingResults] DR
-            INNER JOIN [$db].[dbo].[InboundSources] I ON I.InboundSource = DR.CallerId AND I.Description = :bind$i
+            INNER JOIN [$db].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId AND I.Description = :bind$i
             WHERE DR.GroupId = Leads.GroupId
             AND DR.LeadId = Leads.Id
             AND DR.CallType = 1

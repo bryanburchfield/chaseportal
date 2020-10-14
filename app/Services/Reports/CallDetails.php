@@ -391,7 +391,7 @@ class CallDetails
         $sql .= "
                 $this->extra_cols
             FROM [DialingResults] DR WITH(NOLOCK)
-            LEFT JOIN InboundSources SRC on SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
+            LEFT JOIN InboundSources SRC on SRC.GroupId = DR.GroupId AND SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
 
         if (!empty($this->params['skills'])) {
             $sql .= "

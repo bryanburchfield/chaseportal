@@ -58,11 +58,12 @@ class CallerIdService
         // Clear out active_numbers table
         ActiveNumber::truncate();
 
-        // Clear out our calleridrep.com db
+        // // Clear out our calleridrep.com db
         $this->clearCallerIdRepPhones();
 
-        // Load Thinq numbers
+        // // Load numbers from vendors
         $this->loadThinq();
+        $this->loadVoipMs();
     }
 
     private function setGroup($group_id = null)
@@ -118,7 +119,11 @@ class CallerIdService
         echo "Creating reports\n";
 
         // read results from db
-        foreach (PhoneFlag::where('run_date', $this->run_date)->get() as $rec) {
+        foreach (PhoneFlag::where('run_date', $this->run_date)
+            ->orderBy('dialer_numb')
+            ->orderBy('group_id')
+            ->orderBy('phone')
+            ->get() as $rec) {
             $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
 
             $all_results[] = $rec;
@@ -167,7 +172,9 @@ class CallerIdService
                     'run_date' => $this->run_date,
                     'group_id' => $rec['GroupId'],
                     'group_name' => $rec['GroupName'],
+                    'dialer_numb' => $rec['DialerNumb'],
                     'phone' => $phone,
+                    'ring_group' => $rec['RingGroup'],
                     'calls' => $rec['Dials'],
                     'contact_ratio' => $rec['Contacts'] / $rec['Dials'] * 100,
                 ]);
@@ -195,7 +202,7 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, CallerId, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
+        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -205,7 +212,8 @@ class CallerIdService
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
             $bind['inner_maxcount' . $i] = $this->maxcount;
 
-            $sql .= " $union SELECT DR.GroupId, G.GroupName, DR.CallerId,
+            $sql .= " $union SELECT DR.GroupId, G.GroupName, " . $dialer->dialer_numb . " as DialerNumb,
+               DR.CallerId, I.Description as RingGroup,
               'cnt' = COUNT(*),
               'Contacts' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
              FROM " .
@@ -213,11 +221,12 @@ class CallerIdService
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
+                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
-                GROUP BY DR.GroupId, GroupName, CallerId
+                GROUP BY DR.GroupId, GroupName, CallerId, I.Description
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
@@ -225,9 +234,8 @@ class CallerIdService
         }
 
         $sql .= ") tmp
-            GROUP BY GroupId, GroupName, CallerId
-            HAVING SUM(cnt) >= :maxcount
-            ORDER BY GroupName, Dials desc";
+            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup
+            HAVING SUM(cnt) >= :maxcount";
 
         return $this->runSql($sql, $bind);
     }
@@ -235,9 +243,11 @@ class CallerIdService
     private function makeCsv($results)
     {
         $headers = [
+            'Dialer',
             'GroupID',
             'GroupName',
             'CallerID',
+            'RingGroup',
             'Dials in Last 30 Days',
             'Contact Ratio',
             'In System',
@@ -253,9 +263,11 @@ class CallerIdService
 
         foreach ($results as $rec) {
             $row = [
+                $rec->dialer_numb,
                 $rec->group_id,
                 $rec->group_name,
                 $rec->phone,
+                $rec->ring_group,
                 $rec->calls,
                 $rec->contact_ratio,
                 $rec->in_system,
@@ -322,29 +334,28 @@ class CallerIdService
         $batch = [];
 
         foreach (PhoneFlag::where('run_date', $this->run_date)
-            ->where('in_system', 1)
             ->where('checked', 0)
             ->select('phone')->distinct()
             ->get() as $rec) {
 
             $batch[] = $rec->phone;
 
-            // Check numbers in batches of 450
-            if (count($batch) >= 450) {
+            // Check numbers in batches of 490
+            if (count($batch) >= 490) {
                 $this->checkBatch($batch);
                 $batch = [];
             }
         }
 
         // Check what's left
-        if (count($batch)) {
+        if (!empty($batch)) {
             $this->checkBatch($batch);
         }
     }
 
     private function activeNumber($phone)
     {
-        if ($this->activeThinq($phone)) {
+        if ($this->activeOtherVendor($phone)) {
             return true;
         }
 
@@ -355,7 +366,7 @@ class CallerIdService
         return false;
     }
 
-    private function activeThinq($phone)
+    private function activeOtherVendor($phone)
     {
         $active_number = ActiveNumber::find($phone);
 
@@ -404,8 +415,8 @@ class CallerIdService
         }
 
         // wait for them to process the numbers
-        echo "Waiting 5min for them to process....\n";
-        sleep(300);
+        echo "Waiting 1 min for them to process....\n";
+        sleep(60);
 
         // Get list of all phones w/ flagged column
         $phones = $this->getAllCallerIdRepPhones();
@@ -582,7 +593,7 @@ class CallerIdService
                 try {
                     ActiveNumber::create(['phone' => $phone, 'vendor' => 'thinq']);
                 } catch (Exception $e) {
-                    Log::error('Number already exists: ' . $phone);
+                    Log::error('Cant insert thinq number: ' . $phone);
                 }
             }
 
@@ -592,6 +603,41 @@ class CallerIdService
             }
 
             $page++;
+        }
+    }
+
+    private function loadVoipMs()
+    {
+        echo "loading voip.ms\n";
+
+        $client = new Client(['base_uri' => 'https://voip.ms/']);
+
+        $response = $client->request(
+            'GET',
+            '/api/v1/rest.php',
+            [
+                'query' => [
+                    'api_username' => 'g.sandoval@chasedatacorp.com',
+                    'api_password' => 'bdyvAJbxgJf4Z',
+                    'method' => 'getDIDsInfo'
+                ]
+            ]
+        );
+
+        // Bail if we don't get a response
+        if (!$response->getBody()) {
+            Log::error('Could not get voip.ms numbers');
+        }
+
+        $results = json_decode($response->getBody()->getContents());
+
+        foreach ($results->dids as $rec) {
+            $phone = $this->formatPhone($rec->did);
+            try {
+                ActiveNumber::create(['phone' => $phone, 'vendor' => 'voip.ms']);
+            } catch (Exception $e) {
+                Log::error('Cant insert voip.ms number: ' . $phone);
+            }
         }
     }
 }
