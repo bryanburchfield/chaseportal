@@ -99,7 +99,7 @@ class CallerIdService
 
         $this->enddate = Carbon::parse('midnight');
         $this->startdate = $this->enddate->copy()->subDay(30);
-        $this->maxcount = 2500;
+        $this->maxcount = 5500;
 
         echo "Pulling report\n";
         $this->saveToDb();
@@ -112,9 +112,6 @@ class CallerIdService
 
         echo "Creating 5500 report\n";
         $this->report5500();
-
-        echo "Creating 2500 report\n";
-        $this->report2500();
     }
 
     private function report5500()
@@ -155,32 +152,6 @@ class CallerIdService
                 $csvfile = $this->makeCsv($results);
                 $this->emailReport($csvfile);
             }
-        }
-
-        if (!empty($all_results)) {
-            // clear group specific vars
-            $this->setGroup();
-            $csvfile = $this->makeCsv($all_results);
-            $this->emailReport($csvfile);
-        }
-    }
-
-    private function report2500()
-    {
-        $all_results = [];
-
-        $this->maxcount = 2500;
-
-        // read results from db
-        foreach (PhoneFlag::where('run_date', $this->run_date)
-            ->where('calls', '<', 5500)
-            ->orderBy('dialer_numb')
-            ->orderBy('group_id')
-            ->orderBy('phone')
-            ->get() as $rec) {
-            $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
-
-            $all_results[] = $rec;
         }
 
         if (!empty($all_results)) {
