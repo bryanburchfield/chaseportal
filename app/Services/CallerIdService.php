@@ -588,6 +588,11 @@ class CallerIdService
 
             $results = json_decode($response->getBody()->getContents());
 
+            if (!isset($results->rows)) {
+                Log::error('Thinq rows not found');
+                return;
+            }
+
             foreach ($results->rows as $rec) {
                 $phone = $this->formatPhone($rec->id);
                 try {
@@ -630,6 +635,11 @@ class CallerIdService
         }
 
         $results = json_decode($response->getBody()->getContents());
+
+        if (!isset($results->dids)) {
+            Log::error('voip.ms dids not found');
+            return;
+        }
 
         foreach ($results->dids as $rec) {
             $phone = $this->formatPhone($rec->did);
