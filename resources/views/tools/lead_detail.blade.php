@@ -16,8 +16,7 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
-                    
-                    <div class="col-sm-8">
+                    <div class="col-sm-8 mb20">
                         @if ($lead)
                             <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
                         @endif
@@ -27,11 +26,18 @@
                         <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
                             @csrf
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="id">
+                                <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
                                 <div class="input-group-btn">
                                     <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                 </div>
                             </div>
+
+                            <label class="radio-inline">
+                                <input type="radio" name="search_key" value="phone"> Phone
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="search_key" value="lead_id"> Lead ID
+                            </label>
                             
                             @if($errors)
                                 <div class="alert alert-danger">
@@ -47,22 +53,22 @@
                         <div class="col-sm-12 lead_details">
 
                             <div class="bt bb mt30 mb30 pt10 pb10">
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 mb10">
                                     <h4 class="mb10">Lead ID</h4>
                                     <p>{{ $lead->id }}</p>
                                 </div>
 
-                                <div class="col-sm-3">
-                                    <h4 class="mb10">Client Id</h4>
-                                    <p>{{ $lead->ClientId }}</p>
+                                <div class="col-sm-3 mb10">
+                                    <h4 class="mb10">Import Date</h4>
+                                    <p>{{ $lead->Date }}</p>
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 mb10">
                                     <h4 class="mb10">Phone</h4>
                                     <p>{{ $lead->PrimaryPhone }}</p>
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 mb10">
                                     <h4 class="mb10">Last Updated</h4>
                                     <p>{{ $lead->LastUpdated }}</p>
                                 </div>
@@ -77,7 +83,7 @@
                                 <div class="tab-content">
                                 
                                     <div role="tabpanel" id="lead_fields" class="tab-pane fade in active">                
-                                        <div class="col-sm-8 mt50 p0">
+                                        <div class="col-sm-12 mt50 p0">
                                             <div class="lead_fields">
                                                 
                                                 <div class="col-sm-6">
@@ -153,7 +159,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>Date</label>
-                                                        <input type="text" class="form-control" name="Date" value="{{ old('Date', $lead->Date) }}">
+                                                        <input type="text" class="form-control" disabled name="Date" value="{{ old('Date', $lead->Date) }}">
                                                     </div>
                                                 </div>
 
@@ -173,20 +179,6 @@
 
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label>Group Id</label>
-                                                        <input type="text" class="form-control" name="GroupId" value="{{ old('GroupId', $lead->GroupId) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Was Dialed</label>
-                                                        <input type="text" class="form-control" name="WasDialed" value="{{ old('WasDialed', $lead->WasDialed) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
                                                         <label>Last Updated</label>
                                                         <input type="text" class="form-control" name="LastUpdated" value="{{ old('LastUpdated', $lead->LastUpdated) }}">
                                                     </div>
@@ -194,43 +186,8 @@
 
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label>Id Guid</label>
-                                                        <input type="text" class="form-control" name="IdGuid" value="{{ old('IdGuid', $lead->IdGuid) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Reload Date</label>
-                                                        <input type="text" class="form-control" name="ReloadDate" value="{{ old('ReloadDate', $lead->ReloadDate) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Reload Attempt</label>
-                                                        <input type="text" class="form-control" name="ReloadAttempt" value="{{ old('ReloadAttempt', $lead->ReloadAttempt) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
                                                         <label>Subcampaign</label>
                                                         <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Call Type</label>
-                                                        <input type="text" class="form-control" name="CallType" value="{{ old('CallType', $lead->CallType) }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Disposition Id</label>
-                                                        <input type="text" class="form-control" name="DispositionId" value="{{ old('DispositionId', $lead->DispositionId) }}">
                                                     </div>
                                                 </div>
 
