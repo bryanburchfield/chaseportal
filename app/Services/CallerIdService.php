@@ -521,6 +521,18 @@ class CallerIdService
             $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
             $flags .= empty($content['telo_flagged']) ? '' : ',TELO';
 
+            // Robokiller is harder to find....
+            if (!empty($content['log_checks'])) {
+                foreach ($content['log_checks'] as $log_check) {
+                    if ($log_check['service'] == "ROBOKILLER") {
+                        if (!empty($log_check['content']['needFlagged'])) {
+                            $flags .= ',ROBOKILLER';
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (empty($flags)) {
                 $flags = null;
             } else {
