@@ -208,7 +208,7 @@
                                     </div>
 
                                     <div role="tabpanel" id="custom_fields" class="tab-pane fade">
-                                        <div class="col-sm-8 mt50 p0">
+                                        <div class="col-sm-12 mt50 p0">
                                             @foreach($lead->customFields() as $field)
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
