@@ -2986,6 +2986,65 @@ a.add_subcampaign{
     overflow: auto;
 }
 
+// form builder themes
+
+.form-control{
+
+    $placeholder_text:blue !important;
+
+    &.rounded_borders{
+        @include border-radius(50px);
+    }
+
+    &.clean{
+        background: none !important;
+        border:none;
+        border-bottom: 2px solid #ccc;
+        @include border-radius(0);
+        @include box-shadow(none);
+        outline:none;
+
+        $placeholder_text:red !important;
+
+        &:focus{
+            border-bottom: 2px solid darken(#00c2ff,3%);
+        }
+    }
+
+    ::-webkit-input-placeholder { /* WebKit browsers */
+        color:    $placeholder_text !important;
+    }
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+       color:    $placeholder_text !important;
+       opacity:  1;
+    }
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+       color:    $placeholder_text !important;
+       opacity:  1;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10+ */
+       color:    $placeholder_text !important;
+    }
+}
+
+textarea{
+    &.form-control{
+        &.rounded_borders{
+            padding: 10px 20px;
+        }
+    }
+
+    &.form-control{
+        &.clean{
+            background: none !important;
+        }
+    }
+}
+
+pre.p10{padding: 10px;}
+.add_element{color:$green;}
+.remove_form_element{color:#d9534f;}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

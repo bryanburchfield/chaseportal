@@ -22,7 +22,7 @@
 			    				<select name="theme_selector" class="form-control">
 			    					<option value="">Select One</option>
 			    					<option value="light">Light</option>
-			    					<option value="dark">Dark</option>
+			    					<option value="clean">Clean</option>
 			    					<option value="rounded_borders">Rounded Borders</option>
 			    					<option value="another_one">Something Else</option>
 			    				</select>
@@ -37,7 +37,7 @@
 			    					<div class="col-sm-10">
 			    						<div class="form-group">
 			    							<label>Label</label>
-			    							<input type="text" class="form-control default">
+			    							<input type="text" class="form-control default" placeholder="">
 			    						</div>
 			    					</div>
 			    				</div>
@@ -85,13 +85,21 @@
 				    				</div>
 				    			</div>
 
+				    			<a href="#" class="generate_form_code btn btn-primary btn-lg mt20">Generate Code</a>
+
 			    			</div>
 			    		</div>						
 					</div>
 
 					<div class="col-sm-8">
-						<div class="card form_preview oa">
+						<div class="card form_preview oa hidetilloaded">
 							
+						</div>
+
+						<div class="card hidetilloaded">
+							<div class="form_code">
+								<pre class="p10"><code class="codegoeshere p10"></code></pre>
+							</div>
 						</div>
 					</div>
 				</div>
