@@ -27,12 +27,12 @@
                         <span>{{__('general.date')}}</span>
                     </button>
 
-                    <?php
+                    @php
                         $selected_date_filter = $dateFilter;
                         if (!in_array($selected_date_filter, ['today', 'yesterday', 'week', 'last_week', 'month', 'last_month'])) {
                             $selected_date_filter = 'custom';
                         }
-                    ?>
+                    @endphp
                     <ul class="dropdown-menu date_filters">
                         <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">{{__('general.today')}}</a></li>
                         <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a></li>

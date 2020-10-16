@@ -5,7 +5,7 @@
         "This file is @generated automatically"
     ],
 
-    "content-hash": "63a52903de4b02f0b1bae0e0cb698581",
+    "content-hash": "969295c5d890f4a2836bf6433c853b8b",
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -923,6 +923,7 @@
             "time": "2019-08-30T14:06:08+00:00"
         },
         {
+
             "name": "fideloper/proxy",
             "version": "4.3.0",
             "source": {
@@ -1056,7 +1057,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-01T11:40:45+00:00"
+
+            "time": "2020-04-14T14:37:09+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1701,7 +1703,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-02-28T18:53:50+00:00"
+
+            "time": "2020-04-13T20:52:18+00:00"
         },
         {
             "name": "league/flysystem",

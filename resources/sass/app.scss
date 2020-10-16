@@ -91,6 +91,10 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 1px solid #fff;
 }
 
+.mt100 {
+    margin-top: 100px;
+}
+
 .mt10 {margin-top: 10px;}
 .mt20 {margin-top: 20px;}
 .mt30 {margin-top: 30px;}
@@ -110,8 +114,10 @@ h1, h2, h3, h4, h5, h6 {
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
+.pt10{padding-top: 10px;}
 .pl10{padding-left: 10px;}
 .pl20{padding-left: 20px;}
+.pb10{padding-bottom: 10px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
@@ -123,6 +129,9 @@ h1, h2, h3, h4, h5, h6 {
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 .green-text{color:$green;}
+.tac{text-align: center;}
+.bt{border-top: 1px solid #d8d8d8;}
+.bb{border-bottom: 1px solid #d8d8d8;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -2316,7 +2325,7 @@ div.vertical-line{
 
 .bbnone{border-bottom: none;}
 
-.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign, .add_campaign{
+.add_leadrule_filter, .add_new_subcampaign, .undo_new_subcampaign,  .add_campaign{
     @include base_style(null, $green, $fw:600);
     font-size: 15px;
     &:hover{color: darken($green,10%);}
@@ -2564,6 +2573,10 @@ td.bg-danger{
     top:25px;
 }
 
+
+//prevent sorting
+.bwr_omni table thead th a, .agent_pause_time table thead th a {display: none;}
+
 .dataTables_filter label input{
     margin:0 5px 10px 5px;
 }
@@ -2646,6 +2659,133 @@ span.numb_notifications{
 }
 .calls_per_hour table thead th a {display: none;}
 .calls_per_hour table tbody tr:last-of-type td{font-weight: 600;}
+
+.note-editor.note-airframe .note-status-output,
+.note-editor.note-frame .note-status-output,
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  background: #eee !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar .note-resizebar,
+.note-editor.note-frame .note-statusbar .note-resizebar {
+  border: 1px solid #ccc !important;
+}
+
+.note-toolbar.panel-heading {
+  background: #eee;
+  height: 45px;
+}
+
+.col-sm-12.w99 {
+    width: 98% !important;
+    margin-left: 1%;
+}
+
+label.checkbox.toggle_active_reps{margin-left: 20px;}
+
+.rep_status{
+    
+    padding-top: 20px;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e8edef+0,f2f2f2+100 */
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e3e7e8+0,f2f2f2+100 */
+    background: rgb(227,231,232); /* Old browsers */
+    background: -moz-linear-gradient(left,  rgba(227,231,232,1) 0%, rgba(242,242,242,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  rgba(227,231,232,1) 0%,rgba(242,242,242,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  rgba(227,231,232,1) 0%,rgba(242,242,242,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e3e7e8', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
+
+
+    li.list-group-item{
+        overflow: auto !important;
+
+        &:nth-child(even){
+            background: lighten(#eee,2%);
+        }
+    }
+
+    .break_code{color:$orange;font-weight: 600;}
+
+    .call_type{
+        float:left;
+        position: relative;
+        right:7px;
+    }
+
+    .agent_call_details{
+        float: left;
+        width: 100%;
+        &.has_icon{
+            width: 93%;
+        }
+    }
+
+    span.timer{float: right;}
+
+    h2{
+        float: left;
+        font-size: 21px;
+        border-bottom: none;
+    }
+
+    .num_agents{
+        float: right;
+        position: relative;
+        bottom: 27px;
+
+        p{text-align: center;font-size: 12px;font-style: italic;}
+
+        .inner{
+            color:$green;
+            text-align: center;
+            padding-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
+    p.rep_name {font-weight: 600;}
+}
+
+.getleaddetails{
+    &:hover{
+        cursor:pointer;
+    }
+}
+
+.lead_detail_notes{
+
+    h4{
+        background: $blue;
+        padding: 8px;
+        font-weight: 600;
+        color: #eee;
+        margin-top: 20px;
+
+        &:hover{
+            cursor:pointer;
+        }
+    }
+
+    .real_time_contact_notes_inner {
+        background: #eee;
+        padding:10px 8px;
+    }
+}
+
+.myselect {
+    min-width: 100%;
+    background: #eee !important;
+}
+
+ul.group_select{
+    padding-left: 10px;
+}
+
 .loader_hor{float: left;}
 .add_filter .alert{clear:both;}
 
@@ -2837,9 +2977,20 @@ a.add_subcampaign{
     border: none;
 }
 
-
 .fix-sticky table thead{background: $green;}
 label.checkbox.toggle_active_reps{margin-left: 20px;}
+
+#addPlaybookModal, #editPlaybookModal{
+
+    .modal-body {
+        overflow: inherit;
+    }
+
+    .dropdown-menu.subcampaigns, .dropdown-menu.extra_campaigns{
+        position: absolute;
+        z-index: 99999;
+    }
+}
 
 .lp_bg{
     background: url('/img/background-image2.jpg');
@@ -2864,7 +3015,6 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     p{text-align: center;margin-top: 35px;font-size: 16px;font-weight: 600;color:#fff;}
 
     .nav_holder{position: absolute;top:0;left:0;}
-
 }
 
 .rep_status{
@@ -2948,35 +3098,28 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
     }
 }
 
-.lead_detail_notes{
+.lead_details .pt10.bb{
+    overflow: auto;
+    background: #fff;
+}
 
+.lead_details{
     h4{
-        background: $blue;
-        padding: 8px;
-        font-weight: 600;
-        color: #eee;
-        margin-top: 20px;
-
-        &:hover{
-            cursor:pointer;
-        }
+        color:$green;
     }
 
-    .real_time_contact_notes_inner {
-        background: #eee;
-        padding:10px 8px;
+    .form-control, textarea.form-control{
+        background: #fff !important;
     }
 }
 
-.myselect {
-    min-width: 100%;
-    background: #eee !important;
+.fas.fa-id-card{
+    color:$green;
 }
 
 ul.group_select{
     padding-left: 10px;
 }
-
 
 /* ---------------------------------------------------
 MEDIAQUERIES

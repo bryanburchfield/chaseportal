@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exports\ReportExport;
 use App\Mail\CallerIdMail;
 use App\Models\Dialer;
+use App\Models\PhoneFlag;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
@@ -46,6 +47,9 @@ class CallerIdService
         $this->calleridHeaders = [
             'Authorization' => 'Bearer ' . $token,
         ];
+
+        // Empty phone_flags table
+        PhoneFlag::truncate();
     }
 
     private function setGroup($group_id = null)
@@ -105,7 +109,7 @@ class CallerIdService
                 $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
                 unset($rec['Contacts']);
 
-                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                $rec['flagged_by'] = $this->checkFlagged($rec['CallerId']);
 
                 $all_results[] = $rec;
 
@@ -161,7 +165,7 @@ class CallerIdService
                 $rec['ContactRate'] = round($rec['Contacts'] / $rec['Dials'] * 100, 2) . '%';
                 unset($rec['Contacts']);
 
-                list($rec['flagged'], $rec['flagged_by']) = $this->checkFlagged($rec['CallerId']);
+                $rec['flagged_by'] = $this->checkFlagged($rec['CallerId']);
 
                 $all_results[] = $rec;
                 // } // active check
@@ -252,25 +256,14 @@ class CallerIdService
 
     private function makeCsv($results)
     {
-        // if ($this->maxcount == 5500) {
-        //     $headers = [
-        //         'GroupID',
-        //         'GroupName',
-        //         'CallerID',
-        //         'Dials in Last 30 Days',
-        //         'Contact Rate',
-        //     ];
-        // } else {
         $headers = [
             'GroupID',
             'GroupName',
             'CallerID',
             'Dials in Last 30 Days',
             'Contact Rate',
-            'Flagged',
             'Flagged By',
         ];
-        // }
 
         array_unshift($results, $headers);
 
@@ -353,7 +346,17 @@ class CallerIdService
 
     private function checkFlagged($phone)
     {
-        $flagged = -1;
+        $phoneFlag = PhoneFlag::find($phone);
+
+        if (!$phoneFlag) {
+            $phoneFlag = PhoneFlag::create(['phone' => $phone, 'flags' => $this->getFlags($phone)]);
+        }
+
+        return $phoneFlag->flags;
+    }
+
+    private function getFlags($phone)
+    {
         $flags = [];
 
         // Strip non-digits
@@ -367,7 +370,7 @@ class CallerIdService
         // Add number
 
         if (!$this->waitToSend()) {
-            return [$flagged, $flags];
+            return '';
         }
 
         $endpoint = 'https://app.calleridrep.com/api/v1/phones/add';
@@ -390,7 +393,7 @@ class CallerIdService
         sleep(10);
 
         if (!$this->waitToSend()) {
-            return [$flagged, $flags];
+            return '';
         }
 
         $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
@@ -406,9 +409,6 @@ class CallerIdService
         }
 
         if (is_array($content)) {
-            if (isset($content['flagged'])) {
-                $flagged = $content['flagged'];
-            }
             foreach ($content as $key => $value) {
                 if (substr($key, -8) == '_flagged' && $value == true) {
                     $flags[] = substr($key, 0, -8);
@@ -421,7 +421,7 @@ class CallerIdService
         // Delete number
 
         if (!$this->waitToSend()) {
-            return [$flagged, $flags];
+            return $flags;
         }
 
         $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
@@ -434,7 +434,7 @@ class CallerIdService
             // don't really care
         }
 
-        return [$flagged, $flags];
+        return $flags;
     }
 
     private function waitToSend()

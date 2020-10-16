@@ -21,7 +21,6 @@ var Tools = {
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
-        $('.toggle_instruc').on('click', this.toggle_instructions);
 	},
 
 	get_leadrule_subcampaigns:function(){
@@ -419,32 +418,10 @@ var Tools = {
         var id = $(this).data('id');
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
     },
-
-    toggle_instructions:function(e){
-
-        if(e){
-            e.preventDefault();
-        }
-
-        that = $('a.toggle_instruc');
-        if(that.hasClass('collapsed')){
-            that.removeClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-up"></i>');
-        }else{
-            that.addClass('collapsed');
-            that.empty().append('<i class="fas fa-angle-down"></i>');
-        }
-
-        that.parent().find('.instuc_div').slideToggle();
-    },
 }
 
 $(document).ready(function(){
 	Tools.init();
-
-	if($('.dnc_table tbody tr').length){
-        Tools.toggle_instructions();
-    }
 
     // remove add filter button if max filters in use
     if(Tools.leadrule_filters_used == Tools.leadrule_filters){

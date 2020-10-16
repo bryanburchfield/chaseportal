@@ -69,6 +69,7 @@ class AdminController extends Controller
         }
 
         $page['menuitem'] = 'manage_users';
+        $page['sidenav'] = 'admin';
         $page['type'] = 'page';
         $data = [
             'page' => [
@@ -108,6 +109,9 @@ class AdminController extends Controller
 
     public function loadCdrLookup()
     {
+        $page['menuitem'] = 'cdr_lookup';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
         $data = [
             'page' => [
                 'menuitem' => 'cdr_lookup',

@@ -1,7 +1,7 @@
-<?php $totrows = $params['totrows'];?>
+@php $totrows = $params['totrows'];@endphp
 
 @if($params['totpages'] > 1)
-<?php
+@php
         $curpage = $params['curpage'];
         $lastpage = $params['totpages'];
         $pagesize = $params['pagesize'];
@@ -32,7 +32,7 @@
         // disable next/prev if we're at the beginning/end
         $prevpageclass = ($curpage == 1) ? 'class="disabled"' : '';
         $nextpageclass = ($curpage == $lastpage) ? 'class="disabled"' : '';
-?>
+@endphp
     <ul class="pagination pg-blue">
         <li {!! $prevpageclass !!}><a href="#" data-paglink="1">{{__('general.first')}}</a></li>
         <li {!! $prevpageclass !!}><a href="#" data-paglink="{{ $prevpage }}">&laquo;</a></li>

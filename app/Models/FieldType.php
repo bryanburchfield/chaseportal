@@ -4,8 +4,7 @@ namespace App\Models;
 
 class FieldType extends SqlSrvModel
 {
-    // set db and actual table name
-    protected $connection = 'sqlsrv';
+    // set actual table name
     protected $table = 'FieldTypes';
     public $timestamps = false;
 }

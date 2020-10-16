@@ -3,11 +3,11 @@
 
 @section('content')
 
-<?php
+@php
 
 	//dd($email_drip_campaign->emailDripCampaignFilters);
 	//dd($email_drip_campaign);
-?>
+@endphp
 <div class="preloader"></div>
 
 <div class="wrapper">

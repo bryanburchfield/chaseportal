@@ -1,4 +1,4 @@
-<?php
+@php
 $rss = new DOMDocument();
 $rss->load('https://blog.chasedatacorp.com/rss.xml');
 $list = array();
@@ -16,7 +16,7 @@ array_push($list, $item);
 
 $numberofresults = 4;
 
-?>
+@endphp
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -592,7 +592,7 @@ tr.bg_blue{
                                 </div>
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
 
-                                    <?php
+                                    @php
 
                                         for($i=0; $i<$numberofresults; $i++) {
 
@@ -623,7 +623,7 @@ tr.bg_blue{
                                             }
 
                                         }
-                                    ?>
+                                    @endphp
                                 </table>
                             </td>
                         </tr><!-- end: tr -->

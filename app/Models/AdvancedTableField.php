@@ -4,8 +4,7 @@ namespace App\Models;
 
 class AdvancedTableField extends SqlSrvModel
 {
-    // set db and actual table name
-    protected $connection = 'sqlsrv';
+    // set actual table name
     protected $table = 'AdvancedTableFields';
     public $timestamps = false;
 

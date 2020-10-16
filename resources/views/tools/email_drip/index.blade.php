@@ -112,7 +112,7 @@
                                                                 <tr>
                                                                     <td>{{$server->name}}</td>
                                                                     <td>{{$server->provider_type}}</td>
-                                                                    <?php $mode='edit';?>
+                                                                    @php $mode='edit';@endphp
                                                                     <td><a href="#" data-toggle="modal" data-target="#editESPModal" class=" edit_server_modal" data-serverid="{{$server->id}}"><i class="fas fa-edit"></i></a></td>
                                                                     <td><a class="remove_email_service_provider_modal" data-toggle="modal" data-target="#deleteESPModal" href="#" data-name="{{$server->name}}" data-id="{{$server->id}}"><i class="fa fa-trash-alt"></i></a></td>
                                                                 </tr>

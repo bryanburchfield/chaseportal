@@ -17,6 +17,7 @@ class ComplianceDashController extends Controller
         $page = [
             'menuitem' => 'compliancedash',
             'type' => 'page',
+            'sidenav' => 'admin',
         ];
 
         $data = [

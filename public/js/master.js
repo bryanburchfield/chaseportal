@@ -11,31 +11,31 @@ var Master = {
     },
 
     page_menuitem:$('#sidebar').find('.page_menuitem').val(),
-	curpage: '',
-	pagesize: '',
-	pag_link: '',
-	sort_direction: '',
-	th_sort: '',
-	totpages: '',
-	pdf_dl_link: '',
-	first_search: true,
-	active_camp_search: '',
-	tick_color: '#aaa',
-	gridline_color: '#1A2738',
-	activeTab: localStorage.getItem('activeTab'),
-	dataTable: $('#dataTable').DataTable({
-		responsive: true,
-        fixedHeader: true
-	}),
-	cdr_dataTable: $('#cdr_dataTable').DataTable({
-		responsive: true,
-		dom: 'Bfrtip',
-		buttons: [
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
-		]
-	}),
+    curpage: '',
+    pagesize: '',
+    pag_link: '',
+    sort_direction: '',
+    th_sort: '',
+    totpages: '',
+    pdf_dl_link: '',
+    first_search: true,
+    active_camp_search: '',
+    tick_color: '#aaa',
+    gridline_color: '#1A2738',
+    
+    activeTab: localStorage.getItem('activeTab'),
+    dataTable: $('#dataTable').DataTable({
+        responsive: true,
+    }),
+    cdr_dataTable: $('#cdr_dataTable').DataTable({
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ]
+    }),
 
 	init:function(){
 
@@ -78,14 +78,36 @@ var Master = {
         $('.submit_date_filter').on('click', this.custom_date_filter);
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
-        $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
-        // $('#sidebar').on('click', '.tools_link', this.update_sidenav);
-        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+
+        /// tool handlers
+        $('.save_leadrule_update').on('click', this.save_leadrule_update);
+        $('.add_esp').on('submit', this.add_esp);
+        $('.edit_server_modal').on('click', this.edit_server_modal);
+        $('.edit_esp').on('submit', this.update_esp);
+        $('.test_connection').on('click', this.test_connection);
+        $('.remove_email_service_provider_modal, .remove_campaign_modal').on('click', this.populate_delete_modal);
+        $('.delete_email_service_provider').on('click', this.delete_esp);
+        $('.create_campaign_form').on('submit', this.create_email_campaign);
+        $('.drip_campaigns_campaign_menu').on('change', this.get_email_drip_subcampaigns);
+        $('.delete_campaign ').on('click', this.delete_campaign);
+        $('.provider_type').on('change', this.get_provider_properties);
+
+        $('.add_email_campaign_filter').on('click', this.validate_filter);
+        $('.filter_fields_div .form-control').on('change', this.validate_filter);
+        $('.update_filters').on('submit', this.update_filters);
+        $('.switch.email_campaign_switch input').on('click', this.check_campaign_filters);
+        $('.filter_fields_cnt').on('click', '.remove_camp_filter', this.delete_camp_filter);
+        $('.camp_filters_link').on('click', this.goto_camp_filters);
+        $('.filter_fields_cnt').on('change', '.filter_fields', this.get_operators);
+        $('.cancel_modal_form').on('click', this.cancel_modal_form);
+
         $('.sso #group_id').on('change', this.set_group);
         $('.sso #tz').on('change', this.set_timezone);
         $('body').on('click', '.toggle_active_reps input', this.toggle_active_reps);
         $('.switch.client_input input').on('click', this.toggle_active_client);
 
+        $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
+        $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
 	},
 
     update_sidenav:function(e){
@@ -348,7 +370,7 @@ var Master = {
             },
 
             success:function(response){
-                console.log('ran');
+
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
@@ -447,7 +469,6 @@ var Master = {
             },
 
             success: function(response) {
-                console.log(response);
                 return response;
             },
             error: function () {}
@@ -1232,7 +1253,6 @@ var Master = {
             },
 
             success: function (response) {
-                console.log(response);
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
                 }
@@ -1630,7 +1650,6 @@ var Master = {
     },
 
     campaign_call_log: function (response) {
-        console.log(response);
 
         $('.rm_rptble_class').find('table').removeClass('reports_table');
         $('.rm_rptble_class table th').find('a').remove();
@@ -1908,6 +1927,7 @@ var Master = {
 
     toggle_dotmenu: function () {
         $("#card_dropdown").toggle();
+
     },
 
     set_percentages: function () {
@@ -2421,14 +2441,14 @@ var Master = {
         });
 
         $.ajax({
-            url:'/dashboards/admin/toggle_user',
+            url:'/admin/toggle_user',
             type:'POST',
             data:{
                 checked:checked,
                 id:id,
             },
             success:function(response){
-                console.log(response);
+
             }
         });
     }
@@ -2462,6 +2482,7 @@ $(document).ready(function () {
 
     $('.nav-tabs.tabs a').click(function (e) {
         $(this).tab('show');
+        console.log('clicked');
         window.location.hash = this.hash;
         $('html,body').scrollTop($('body').scrollTop());
     });
