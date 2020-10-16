@@ -22,8 +22,6 @@ class CallerIdService
     use SqlServerTraits;
     use TimeTraits;
 
-    private $group_id;
-    private $email_to;
     private $startdate;
     private $enddate;
     private $maxcount;
@@ -66,27 +64,6 @@ class CallerIdService
         $this->loadVoipMs();
     }
 
-    private function setGroup($group_id = null)
-    {
-        // hard-coded recips
-        $canned = [
-            235773  => [
-                'email_to' => 'g.sandoval@chasedatacorp.com',
-            ],
-        ];
-
-        if (!isset($canned[$group_id])) {
-            $this->group_id = null;
-            $this->email_to = null;
-            return false;
-        }
-
-        $this->group_id = $group_id;
-        $this->email_to = $canned[$group_id]['email_to'];
-
-        return true;
-    }
-
     public static function execute()
     {
         $caller_id_service = new CallerIdService();
@@ -116,47 +93,21 @@ class CallerIdService
 
     private function report5500()
     {
-        $group_id = '';
-        $results = [];
         $all_results = [];
-
-        $this->maxcount = 5500;
 
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('calls', '>=', 5500)
             ->orderBy('dialer_numb')
-            ->orderBy('group_id')
+            ->orderBy('group_name')
             ->orderBy('phone')
             ->get() as $rec) {
             $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
 
             $all_results[] = $rec;
-
-            // Send email on change of group
-            if ($group_id != '' && $group_id != $rec['group_id']) {
-                if ($this->setGroup($group_id)) {
-                    $csvfile = $this->makeCsv($results);
-                    $this->emailReport($csvfile);
-                }
-
-                $results = [];
-            }
-
-            $results[] = $rec;
-            $group_id = $rec['group_id'];
-        }
-
-        if (!empty($results)) {
-            if ($this->setGroup($group_id)) {
-                $csvfile = $this->makeCsv($results);
-                $this->emailReport($csvfile);
-            }
         }
 
         if (!empty($all_results)) {
-            // clear group specific vars
-            $this->setGroup();
             $csvfile = $this->makeCsv($all_results);
             $this->emailReport($csvfile);
         }
@@ -249,14 +200,15 @@ class CallerIdService
     {
         $headers = [
             'Dialer',
-            'GroupID',
             'GroupName',
+            'GroupID',
             'CallerID',
             'RingGroup',
             'Dials in Last 30 Days',
             'Contact Ratio',
             'In System',
             'Flagged',
+            'Flags',
             // 'Replaced By',
         ];
 
@@ -269,14 +221,15 @@ class CallerIdService
         foreach ($results as $rec) {
             $row = [
                 $rec->dialer_numb,
-                $rec->group_id,
                 $rec->group_name,
+                $rec->group_id,
                 $rec->phone,
                 $rec->ring_group,
                 $rec->calls,
                 $rec->contact_ratio,
                 $rec->in_system,
                 $rec->flagged,
+                $rec->flags,
                 // $rec->replaced_by,
             ];
 
@@ -294,18 +247,13 @@ class CallerIdService
         $csv = file_get_contents($csvfile);
         unlink($csvfile);
 
-        if ($this->email_to === null) {
-            $to = 'jonathan.gryczka@chasedatacorp.com';
-            $cc = [
-                'g.sandoval@chasedatacorp.com',
-                'brandon.b@chasedatacorp.com',
-                'ahmed@chasedatacorp.com',
-                'dylan.farley@chasedatacorp.com'
-            ];
-        } else {
-            $to = $this->email_to;
-            $cc = [];
-        }
+        $to = 'jonathan.gryczka@chasedatacorp.com';
+        $cc = [
+            'g.sandoval@chasedatacorp.com',
+            'brandon.b@chasedatacorp.com',
+            'ahmed@chasedatacorp.com',
+            'dylan.farley@chasedatacorp.com'
+        ];
 
         // email report
         $message = [
@@ -420,8 +368,8 @@ class CallerIdService
         }
 
         // wait for them to process the numbers
-        echo "Waiting 1 min for them to process....\n";
-        sleep(60);
+        echo "Waiting 10 secs for them to process....\n";
+        sleep(10);
 
         // Get list of all phones w/ flagged column
         $phones = $this->getAllCallerIdRepPhones();
@@ -433,6 +381,20 @@ class CallerIdService
             PhoneFlag::where('run_date', $this->run_date)
                 ->where('phone', $phone)
                 ->update(['checked' => 1, 'flagged' => $rec['flagged']]);
+        }
+
+        // Now get details for each number
+        foreach ($batch as $phone) {
+            echo "checking $phone\n";
+
+            $flags = $this->checkNumber($phone);
+
+            if (!empty($flags)) {
+                // Update db
+                PhoneFlag::where('run_date', $this->run_date)
+                    ->where('phone', $phone)
+                    ->update(['flags' => $flags]);
+            }
         }
 
         // clear em out
@@ -522,6 +484,51 @@ class CallerIdService
         }
 
         return $content;
+    }
+
+    private function checkNumber($phone)
+    {
+        if (!$this->waitToSend()) {
+            return null;
+        }
+
+        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
+
+        $content = null;
+        $flags = null;
+
+        try {
+            $response = $this->guzzleClient->request('GET', $endpoint, [
+                'headers' => $this->calleridHeaders,
+            ]);
+
+            $content = json_decode($response->getBody()->getContents(), true);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        } catch (ServerException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            Log::error($responseBodyAsString);
+        }
+
+        if (is_array($content)) {
+            $flags = '';
+            $flags .= empty($content['ftc_flagged']) ? '' : ',FTC';
+            $flags .= empty($content['nomorobo_flagged']) ? '' : ',NOMOROBO';
+            $flags .= empty($content['ihs_flagged']) ? '' : ',ICEHOOK';
+            $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
+            $flags .= empty($content['telo_flagged']) ? '' : ',TELO';
+
+            if (empty($flags)) {
+                $flags = null;
+            } else {
+                $flags = substr($flags, 1);
+            }
+        }
+
+        return $flags;
     }
 
     private function clearCallerIdRepPhones()
