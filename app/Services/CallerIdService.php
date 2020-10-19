@@ -276,6 +276,7 @@ class CallerIdService
             ->where('checked', 0)
             ->where('in_system', 1)
             ->select('phone')->distinct()
+            ->orderBy('phone')
             ->get() as $rec) {
 
             $batch[] = $rec->phone;
@@ -302,23 +303,7 @@ class CallerIdService
             $this->addNumber($phone);
         }
 
-        // wait for them to process the numbers
-        echo "Waiting 10 secs for them to process....\n";
-        sleep(10);
-
-        // Get list of all phones w/ flagged column
-        $phones = $this->getAllCallerIdRepPhones();
-
-        // Update db
-        foreach ($phones as $rec) {
-            $phone = $this->formatPhone($rec['number']);
-
-            PhoneFlag::where('run_date', $this->run_date)
-                ->where('phone', $phone)
-                ->update(['checked' => 1, 'flagged' => $rec['flagged']]);
-        }
-
-        // Now get details for each number
+        // get details for each number
         foreach ($batch as $phone) {
             echo "checking $phone\n";
 
