@@ -69,8 +69,8 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 CallerIdService::execute();
             })
-                ->dailyAt('5:00')
-                ->timezone('America/New_York');
+                ->dailyAt('0:30')
+                ->timezone('UTC');
         }
 
         // Run Contacts Playbooks

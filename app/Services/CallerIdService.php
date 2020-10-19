@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Mail\CallerIdMail;
-use App\Models\ActiveNumber;
 use App\Models\Dialer;
 use App\Models\PhoneFlag;
 use App\Traits\SqlServerTraits;
@@ -15,7 +14,6 @@ use GuzzleHttp\Exception\ServerException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
 {
@@ -40,11 +38,6 @@ class CallerIdService
     {
         $this->run_date = now();
 
-        $sid = config('twilio.did_sid');
-        $did_token = config('twilio.did_token');
-
-        $this->twilio = new Twilio($sid, $did_token);
-
         $this->guzzleClient = new Client();
 
         $token = config('calleridrep.token');
@@ -53,15 +46,8 @@ class CallerIdService
             'Authorization' => 'Bearer ' . $token,
         ];
 
-        // Clear out active_numbers table
-        ActiveNumber::truncate();
-
         // // Clear out our calleridrep.com db
         $this->clearCallerIdRepPhones();
-
-        // // Load numbers from vendors
-        $this->loadThinq();
-        $this->loadVoipMs();
     }
 
     public static function execute()
@@ -76,22 +62,19 @@ class CallerIdService
 
         $this->enddate = Carbon::parse('midnight');
         $this->startdate = $this->enddate->copy()->subDay(30);
-        $this->maxcount = 5500;
+        $this->maxcount = 1000;
 
         echo "Pulling report\n";
         $this->saveToDb();
 
-        echo "Checking actives\n";
-        $this->checkActive();
-
         echo "Checking flags\n";
         $this->checkFlags();
 
-        echo "Creating 5500 report\n";
-        $this->report5500();
+        echo "Creating report\n";
+        $this->mainReport();
     }
 
-    private function report5500()
+    private function mainReport()
     {
         $all_results = [];
 
@@ -131,6 +114,7 @@ class CallerIdService
                     'dialer_numb' => $rec['DialerNumb'],
                     'phone' => $phone,
                     'ring_group' => $rec['RingGroup'],
+                    'in_system' => $rec['Active'],
                     'calls' => $rec['Dials'],
                     'contact_ratio' => $rec['Contacts'] / $rec['Dials'] * 100,
                 ]);
@@ -140,14 +124,21 @@ class CallerIdService
         }
     }
 
-    private function formatPhone($phone)
+    private function formatPhone($phone, $strip1 = false)
     {
         // Strip non-digits
         $phone = preg_replace("/[^0-9]/", '', $phone);
 
-        // Add leading '1' if 10 digits
-        if (strlen($phone) == 10) {
-            $phone = '1' . $phone;
+        if ($strip1) {
+            // Strip leading '1' if 11 digits
+            if (strlen($phone) == 11 && substr($phone, 0, 1) == '1') {
+                $phone = substr($phone, 1);
+            }
+        } else {
+            // Add leading '1' if 10 digits
+            if (strlen($phone) == 10) {
+                $phone = '1' . $phone;
+            }
         }
 
         return $phone;
@@ -158,7 +149,7 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
+        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, Active, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -168,21 +159,27 @@ class CallerIdService
             $bind['enddate' . $i] = $this->enddate->toDateTimeString();
             $bind['inner_maxcount' . $i] = $this->maxcount;
 
-            $sql .= " $union SELECT DR.GroupId, G.GroupName, " . $dialer->dialer_numb . " as DialerNumb,
-               DR.CallerId, I.Description as RingGroup,
-              'cnt' = COUNT(*),
-              'Contacts' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
+            $sql .= " $union SELECT
+                DR.GroupId,
+                G.GroupName,
+                7 as DialerNumb,
+                DR.CallerId,
+                I.Description as RingGroup,
+                'Active' = CASE WHEN I.InboundSource IS NOT NULL and O.Active IS NOT NULL THEN 1 ELSE 0 END,
+                'cnt' = COUNT(*),
+                'Contacts' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
              FROM " .
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
+                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
-                GROUP BY DR.GroupId, GroupName, CallerId, I.Description
+                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, I.InboundSource, O.Active
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
@@ -190,7 +187,7 @@ class CallerIdService
         }
 
         $sql .= ") tmp
-            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup
+            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, Active
             HAVING SUM(cnt) >= :maxcount";
 
         return $this->runSql($sql, $bind);
@@ -271,23 +268,13 @@ class CallerIdService
             ->send(new CallerIdMail($message));
     }
 
-    private function checkActive()
-    {
-        foreach (PhoneFlag::where('run_date', $this->run_date)->select('phone')->distinct()->get() as $rec) {
-            if ($this->activeNumber($rec->phone)) {
-                PhoneFlag::where('run_date', $this->run_date)
-                    ->where('phone', $rec->phone)
-                    ->update(['in_system' => 1]);
-            }
-        }
-    }
-
     private function checkFlags()
     {
         $batch = [];
 
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
+            ->where('in_system', 1)
             ->select('phone')->distinct()
             ->get() as $rec) {
 
@@ -304,58 +291,6 @@ class CallerIdService
         if (!empty($batch)) {
             $this->checkBatch($batch);
         }
-    }
-
-    private function activeNumber($phone)
-    {
-        if ($this->activeOtherVendor($phone)) {
-            return true;
-        }
-
-        if ($this->activeTwilio($phone)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function activeOtherVendor($phone)
-    {
-        $active_number = ActiveNumber::find($phone);
-
-        if ($active_number) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function activeTwilio($phone)
-    {
-        // strip leading '1' if it's 11 digits
-        if (strlen($phone) == 11) {
-            if (substr($phone, 0, 1) == '1') {
-                $phone = substr($phone, 1);
-            }
-        }
-
-        // if it's not 10 digits, return it as inactive
-        if (strlen($phone) !== 10) {
-            return false;
-        }
-
-        // Look it up
-        $phones = $this->twilio->incomingPhoneNumbers
-            ->read(
-                array("phoneNumber" => $phone)
-            );
-
-        // Did we find it?
-        if (collect($phones)->isEmpty()) {
-            return false;
-        }
-
-        return true;
     }
 
     private function checkBatch($batch)
@@ -516,22 +451,11 @@ class CallerIdService
         if (is_array($content)) {
             $flags = '';
             $flags .= empty($content['ftc_flagged']) ? '' : ',FTC';
-            $flags .= empty($content['nomorobo_flagged']) ? '' : ',NOMOROBO';
             $flags .= empty($content['ihs_flagged']) ? '' : ',ICEHOOK';
-            $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
+            $flags .= empty($content['nomorobo_flagged']) ? '' : ',NOMOROBO';
+            $flags .= empty($content['robokiller_flagged']) ? '' : ',ROBOKILLER';
             $flags .= empty($content['telo_flagged']) ? '' : ',TELO';
-
-            // Robokiller is harder to find....
-            if (!empty($content['log_checks'])) {
-                foreach ($content['log_checks'] as $log_check) {
-                    if ($log_check['service'] == "ROBOKILLER") {
-                        if (!empty($log_check['content']['needFlagged'])) {
-                            $flags .= ',ROBOKILLER';
-                            break;
-                        }
-                    }
-                }
-            }
+            $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
 
             if (empty($flags)) {
                 $flags = null;
@@ -578,100 +502,6 @@ class CallerIdService
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
             Log::error($responseBodyAsString);
-        }
-    }
-
-    private function loadThinq()
-    {
-        echo "loading thinq\n";
-
-        $client = new Client(['base_uri' => 'https://api.thinq.com/']);
-
-        $page = 1;
-        while (true) {
-            echo "...page $page\n";
-
-            $response = $client->request(
-                'GET',
-                '/origination/did/search2/did/13446',
-                [
-                    'headers' => [
-                        'Authorization' => 'Basic ' . 'Z3NhbmRvdmFsOjVhYWM4ODM1MWJiNDIxMWRhNjZmMjVlMzg4MDI5NTVhNjhiMjgwNWM',
-                    ],
-                    'query' => [
-                        'page' => $page
-                    ]
-                ]
-            );
-
-            // Bail if we don't get a response
-            if (!$response->getBody()) {
-                Log::error('Could not get Thinq numbers');
-                break;
-            }
-
-            $results = json_decode($response->getBody()->getContents());
-
-            if (!isset($results->rows)) {
-                Log::error('Thinq rows not found');
-                return;
-            }
-
-            foreach ($results->rows as $rec) {
-                $phone = $this->formatPhone($rec->id);
-                try {
-                    ActiveNumber::create(['phone' => $phone, 'vendor' => 'thinq']);
-                } catch (Exception $e) {
-                    Log::error('Cant insert thinq number: ' . $phone);
-                }
-            }
-
-            // bail if this was the last page
-            if (!$results->has_next_page) {
-                break;
-            }
-
-            $page++;
-        }
-    }
-
-    private function loadVoipMs()
-    {
-        echo "loading voip.ms\n";
-
-        $client = new Client(['base_uri' => 'https://voip.ms/']);
-
-        $response = $client->request(
-            'GET',
-            '/api/v1/rest.php',
-            [
-                'query' => [
-                    'api_username' => 'g.sandoval@chasedatacorp.com',
-                    'api_password' => 'bdyvAJbxgJf4Z',
-                    'method' => 'getDIDsInfo'
-                ]
-            ]
-        );
-
-        // Bail if we don't get a response
-        if (!$response->getBody()) {
-            Log::error('Could not get voip.ms numbers');
-        }
-
-        $results = json_decode($response->getBody()->getContents());
-
-        if (!isset($results->dids)) {
-            Log::error('voip.ms dids not found');
-            return;
-        }
-
-        foreach ($results->dids as $rec) {
-            $phone = $this->formatPhone($rec->did);
-            try {
-                ActiveNumber::create(['phone' => $phone, 'vendor' => 'voip.ms']);
-            } catch (Exception $e) {
-                Log::error('Cant insert voip.ms number: ' . $phone);
-            }
         }
     }
 }
