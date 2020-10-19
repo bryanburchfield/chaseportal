@@ -80,7 +80,6 @@ class CallerIdService
 
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
-            ->where('calls', '>=', 5500)
             ->orderBy('dialer_numb')
             ->orderBy('group_name')
             ->orderBy('phone')
