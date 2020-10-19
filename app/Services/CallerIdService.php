@@ -203,7 +203,7 @@ class CallerIdService
             'RingGroup',
             'Dials in Last 30 Days',
             'Contact Ratio',
-            'In System',
+            'Active',
             'Flagged',
             'Flags',
             // 'Replaced By',
