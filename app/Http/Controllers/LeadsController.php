@@ -22,6 +22,7 @@ class LeadsController extends Controller
     use TimeTraits;
 
     protected $db;
+    public $currentDash;
 
     public function leadDetail(Lead $lead = null)
     {
@@ -34,9 +35,12 @@ class LeadsController extends Controller
             }
         }
 
+        $this->currentDash = session('currentDash', 'inbounddash');
+        session(['currentDash' => $this->currentDash]);
+
         $jsfile[] = '';
         $page['menuitem'] = 'lead_detail';
-        $page['sidenav'] = 'tools';
+        $page['sidenav'] = 'main';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
