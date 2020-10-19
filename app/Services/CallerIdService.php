@@ -309,12 +309,14 @@ class CallerIdService
 
             $flags = $this->checkNumber($phone);
 
-            if (!empty($flags)) {
-                // Update db
-                PhoneFlag::where('run_date', $this->run_date)
-                    ->where('phone', $phone)
-                    ->update(['flags' => $flags]);
-            }
+            // Update db
+            PhoneFlag::where('run_date', $this->run_date)
+                ->where('phone', $phone)
+                ->update([
+                    'checked' => 1,
+                    'flagged' => empty($flags) ? 0 : 1,
+                    'flags' => $flags
+                ]);
         }
 
         // clear em out
