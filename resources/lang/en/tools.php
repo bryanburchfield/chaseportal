@@ -185,6 +185,7 @@ return [
     'value'            => 'Value',
     'view'            => 'View',
     'view_details'    => 'View Details',
+    'views' => 'Views',
 
     'invalid_phone' => 'Invalid phone number',
     'no_valid_phones' => 'ERROR: No valid phone numbers could be found in that file',

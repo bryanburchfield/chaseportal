@@ -23,7 +23,7 @@ class LeadsController extends Controller
 
     protected $db;
     public $currentDash;
-    
+
     public function leadDetail(Lead $lead = null)
     {
         $errors = [];
@@ -40,7 +40,7 @@ class LeadsController extends Controller
 
         $jsfile[] = '';
         $page['menuitem'] = 'lead_detail';
-        $page['sidenav'] = $this->sideNav($this->currentDash);
+        $page['sidenav'] = 'main';
         $page['type'] = 'page';
         $data = [
             'page' => $page,

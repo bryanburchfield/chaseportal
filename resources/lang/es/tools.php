@@ -191,6 +191,7 @@ return [
     'view'            => 'Ver',
     'lead_detail' => 'Detalle de Dirigir',
     'view_details'    => 'Ver Detalles',
+    'views' => 'Vistas',
 
     'invalid_phone' => 'Numero de telefono invalido',
     'no_valid_phones' => 'ERROR: no se encontraron números de teléfono válidos en ese archivo',
