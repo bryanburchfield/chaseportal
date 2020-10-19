@@ -2,7 +2,7 @@
 @section('sidenav')
     <li><a class="update_nav_link" data-path="main" href="#"><i class="fas fa-arrow-circle-left"></i>{{__('widgets.go_back')}}</a></li>
 
-    <li data-page="lead_detail" @php echo !empty($page['menuitem']) && $page['menuitem']== 'lead_detail' ? 'class="active"' : ''; @endphp><a href="{{action('LeadsController@leadDetail')}}"><i class="fas fa-file-alt"></i>{{__('tools.lead_detail')}}</a></li>
+    {{-- <li data-page="lead_detail" @php echo !empty($page['menuitem']) && $page['menuitem']== 'lead_detail' ? 'class="active"' : ''; @endphp><a href="{{action('LeadsController@leadDetail')}}"><i class="fas fa-file-alt"></i>{{__('tools.lead_detail')}}</a></li> --}}
     
     @can('accessAdmin')
         <li data-page="dnc_importer" @php echo !empty($page['menuitem']) && $page['menuitem']== 'dnc_importer' ? 'class="active"' : ''; @endphp><a href="{{action('DncController@index')}}"><i class="fas fa-user-check"></i>DNC Importer</a></li>
