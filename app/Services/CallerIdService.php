@@ -170,8 +170,8 @@ class CallerIdService
 
             $sql .= " $union SELECT
                 DR.GroupId,
-                G.GroupName,
-                7 as DialerNumb,
+                G.GroupName, " .
+                $dialer->dialer_numb . " as DialerNumb,
                 DR.CallerId,
                 I.Description as RingGroup,
                 O.CallerIdCheck,
@@ -184,7 +184,10 @@ class CallerIdService
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
-                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+                OUTER APPLY (
+                    SELECT TOP 1 O.Active, O.CallerIdCheck
+                    FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
+                    WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId) as O
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
@@ -506,14 +509,13 @@ class CallerIdService
 
     private function swapNumbers()
     {
-        // $jar = new CookieJar();     may not need this
         $client = new Client();
 
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('flagged', 1)
             // ->where('callerid_check', 1)      future enhancement
-            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers
+            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
             ->whereIn('group_id', [236163])         // Supported groups
             ->orderBy('dialer_numb')
             ->orderBy('phone')
@@ -552,6 +554,8 @@ class CallerIdService
         if (empty($error)) {
             try {
                 $body = json_decode($response->getBody()->getContents());
+
+                dump($body);  // debug
 
                 if (!empty($body->NewDID)) {
                     $replaced_by = $body->NewDID;
