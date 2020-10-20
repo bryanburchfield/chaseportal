@@ -84,9 +84,6 @@
 				    					</div>
 				    				</div>
 				    			</div>
-
-				    			<a href="#" class="generate_form_code btn btn-primary btn-lg mt20">Generate Code</a>
-
 			    			</div>
 			    		</div>						
 					</div>
@@ -98,7 +95,10 @@
 
 						<div class="card hidetilloaded">
 							<div class="form_code">
-								<pre class="p10"><code class="codegoeshere p10"></code></pre>
+								<pre class="p10">
+									<code class="html codegoeshere p10">
+									</code>
+								</pre>
 							</div>
 						</div>
 					</div>

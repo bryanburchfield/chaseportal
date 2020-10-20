@@ -9,8 +9,8 @@ var FORMBUILDER = {
 	add_element:function(e){
 		e.preventDefault();
 		var element = $(this).parent().next().find('.form-group').html();
-
-		var appended_elem = $('<div class="user_created_form_element"><div class="col-sm-1"><a class="remove_form_element text-center" href="#"><i class="fas fa-trash-alt"></i></a></div><div class="col-sm-11 user_created_element">'+element+'</div></div>');
+		console.log(element);
+		var appended_elem = $('<div class="user_created_form_element"><div class="col-sm-1"><a class="remove_form_element text-center" href="#"><i class="fas fa-trash-alt"></i></a></div><div class="col-sm-11 user_created_element"><div class="form-group">'+element+'</div></div></div>');
 
 		$(appended_elem).appendTo('.form_preview');
 		$('.form_preview').show();
@@ -20,6 +20,7 @@ var FORMBUILDER = {
 	remove_element:function(e){
 		e.preventDefault();
 		$(this).parent().parent().remove();
+		FORMBUILDER.update_code();
 	},
 
 	apply_theme:function(){
@@ -42,23 +43,28 @@ var FORMBUILDER = {
 	},
 
 	update_code:function(){
-
-		var html='';
+		$('.codegoeshere').empty();
+		var html="";
 		$('.user_created_form_element').find('.user_created_element').each(function(){
-			html +=$(this).html();
+			html +=$(this).html().trim();
 
 		});
 
 		html = html.replace(/^\s*/gm, '');
 		html=html.replace(/</g, "&lt;");
 		html=html.replace(/>/g, "&gt;");
-		console.log(html);
+
 		$('.form_code').parent().show();
 		$('.codegoeshere').append(html);
+
+		$('pre').each(function(i, block) {
+		    hljs.highlightBlock(block);
+		});
 		
 	}
 }
 
 $(document).ready(function(){
 	FORMBUILDER.init();
+	
 });
