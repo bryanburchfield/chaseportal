@@ -143,6 +143,17 @@ class AdminDurationDashController extends Controller
         }
         $campaigns = $ret_camps;
 
+        // Convert rep array to numeric index
+        $ret_reps = [];
+        $i = 0;
+        foreach ($reps as $rec) {
+            $ret_reps[$i]['Rep'] = $rec['Rep'];
+            $ret_reps[$i]['Count'] = $rec['Count'];
+            $ret_reps[$i]['Seconds'] = $rec['Seconds'];
+            $i++;
+        }
+        $reps = $ret_reps;
+
         return ['call_volume' => [
             'campaigns' => $campaigns,
             'reps' => $reps,
