@@ -31,6 +31,7 @@ return [
 	'calls'				=> 'Llamadas',
 	'calls_answered'	=> 'Llamadas Contestadas',
 	'calls_by_campaign'	=> 'Llamadas Por Campaña',
+	'calls_by_rep'		=> 'Llamadas por Representante',
 	'calls_minutes_per_day'	=> 'Llamadas y Minutos Por Día',
 	'calls_offered'		=> 'Llamadas Ofrecidas',
 	'callstatus_by_minutes'	=> 'Estado de la Llamada Por Minutos',

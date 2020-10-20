@@ -569,10 +569,9 @@
                 <tr>
                     <td class="bg_dark email-section" style="text-align:center;">
                         <div class="heading-section heading-section-white">
-                            <p>Based on our findings we are giving you notice that the attached numbers could be flagged as Telemarketer
-                               or SPAM.  As a courtesy this month we will go ahead and replace these numbers for you. Moving forward
-                               there will be a $3 charge per number. If you do not want this please contact me asap.</p>
-                             <p>Support Manager</p>
+                            <p>
+                                The attached Caller Ids have been dialed more than {{ $data['maxcount'] }} times over the last 30 days.
+                            </p>
                         </div>
                     </td>
                 </tr><!-- end: tr -->
