@@ -74,9 +74,9 @@ class CallerIdService
         Log::info('Checking flags');
         $this->checkFlags();
 
-        // echo "Swap Numbers\n";
-        // Log::info('Swapping Numbers');
-        // $this->swapNumbers();
+        echo "Swap Numbers\n";
+        Log::info('Swapping Numbers');
+        $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -189,7 +189,7 @@ class CallerIdService
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
-                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, I.InboundSource, O.Active
+                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, O.CallerIdCheck, I.InboundSource, O.Active
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
@@ -197,7 +197,7 @@ class CallerIdService
         }
 
         $sql .= ") tmp
-            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, O.CallerIdCheck, Active
+            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active
             HAVING SUM(cnt) >= :maxcount";
 
         return $this->runSql($sql, $bind);
