@@ -158,7 +158,7 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, Active, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
+        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
