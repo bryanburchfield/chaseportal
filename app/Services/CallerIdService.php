@@ -82,7 +82,7 @@ class CallerIdService
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->orderBy('dialer_numb')
             ->orderBy('group_name')
-            ->orderBy('phone')
+            ->orderBy('calls', 'desc')
             ->get() as $rec) {
             $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
 
