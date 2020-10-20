@@ -112,7 +112,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-6">
 			<div class="card card-3b mbo" style="height: 330px">
                 <div class="card_table">
                     <h1 class="title">{{__('widgets.calls_by_campaign')}}</h1>
@@ -120,6 +120,24 @@
                         <thead>
                             <tr>
                                 <th>{{__('widgets.campaign')}}</th>
+                                <th>{{__('widgets.total_calls')}}</th>
+                                <th>{{__('widgets.duration')}}</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+		</div><!-- end column -->
+
+		<div class="col-sm-6">
+			<div class="card card-3b mbo" style="height: 330px">
+                <div class="card_table">
+                    <h1 class="title">{{__('widgets.calls_by_rep')}}</h1>
+                    <table class="table table-condensed table-striped" id="calls_by_rep">
+                        <thead>
+                            <tr>
+                                <th>{{__('widgets.rep')}}</th>
                                 <th>{{__('widgets.total_calls')}}</th>
                                 <th>{{__('widgets.duration')}}</th>
                             </tr>
