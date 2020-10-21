@@ -122,7 +122,7 @@ class CallerIdService
                     'dialer_numb' => $rec['DialerNumb'],
                     'phone' => $phone,
                     'ring_group' => $rec['RingGroup'],
-                    'in_system' => $rec['Active'],
+                    'owned' => $rec['Owned'],
                     'callerid_check' => $rec['CallerIdCheck'],
                     'calls' => $rec['Dials'],
                     'connect_ratio' => $rec['Connects'] / $rec['Dials'] * 100,
@@ -158,7 +158,7 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
+        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -175,7 +175,7 @@ class CallerIdService
                 DR.CallerId,
                 I.Description as RingGroup,
                 O.CallerIdCheck,
-                'Active' = CASE WHEN I.InboundSource IS NOT NULL and O.Active IS NOT NULL THEN 1 ELSE 0 END,
+                'Owned' = CASE WHEN I.InboundSource IS NOT NULL and O.Active IS NOT NULL THEN 1 ELSE 0 END,
                 'cnt' = COUNT(*),
                 'Connects' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
              FROM " .
@@ -187,11 +187,13 @@ class CallerIdService
                 OUTER APPLY (
                     SELECT TOP 1 O.Active, O.CallerIdCheck
                     FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
-                    WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId) as O
+                    WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+                    ORDER BY O.Active DESC) as O
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
+                AND O.Active = 1
                 GROUP BY DR.GroupId, GroupName, CallerId, I.Description, O.CallerIdCheck, I.InboundSource, O.Active
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
@@ -200,7 +202,7 @@ class CallerIdService
         }
 
         $sql .= ") tmp
-            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active
+            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned
             HAVING SUM(cnt) >= :maxcount";
 
         return $this->runSql($sql, $bind);
@@ -217,11 +219,11 @@ class CallerIdService
             'RingGroup',
             'Dials in Last 30 Days',
             'Connect Ratio',
-            'Active',
+            'Owned',
             'Flagged',
-            'Flags',
-            'Replaced By',
-            'Error',
+            // 'Flags',
+            // 'Replaced By',
+            // 'Error',
         ];
 
         // write to file
@@ -240,11 +242,11 @@ class CallerIdService
                 $rec->ring_group,
                 $rec->calls,
                 $rec->connect_ratio,
-                $rec->in_system,
+                $rec->owned,
                 $rec->flagged,
-                $rec->flags,
-                $rec->replaced_by,
-                $rec->swap_error,
+                // $rec->flags,
+                // $rec->replaced_by,
+                // $rec->swap_error,
             ];
 
             fputcsv($handle, $row);
@@ -291,7 +293,6 @@ class CallerIdService
 
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
-            ->where('in_system', 1)
             // ->where('callerid_check', 1)     uncomment when this is working
             ->select('phone')->distinct()
             ->orderBy('phone')
@@ -321,21 +322,40 @@ class CallerIdService
             $this->addNumber($phone);
         }
 
-        // get details for each number
-        foreach ($batch as $phone) {
-            echo "checking $phone\n";
+        // wait for them to process the numbers
+        echo "Waiting for them to process....\n";
+        sleep(10);
 
-            $flags = $this->checkNumber($phone);
+        // Get list of all phones w/ flagged column
+        $phones = $this->getAllCallerIdRepPhones();
 
-            // Update db
+        // Update db
+        foreach ($phones as $rec) {
+            $phone = $this->formatPhone($rec['number']);
+
             PhoneFlag::where('run_date', $this->run_date)
                 ->where('phone', $phone)
                 ->update([
                     'checked' => 1,
-                    'flagged' => empty($flags) ? 0 : 1,
-                    'flags' => $flags
+                    'flagged' => $rec['flagged']
                 ]);
         }
+
+        // // get details for each number
+        // foreach ($batch as $phone) {
+        //     echo "checking $phone\n";
+
+        //     $flags = $this->checkNumber($phone);
+
+        //     // Update db
+        //     PhoneFlag::where('run_date', $this->run_date)
+        //         ->where('phone', $phone)
+        //         ->update([
+        //             'checked' => 1,
+        //             'flagged' => empty($flags) ? 0 : 1,
+        //             'flags' => $flags
+        //         ]);
+        // }
 
         // clear em out
         $this->clearCallerIdRepPhones();
@@ -513,8 +533,8 @@ class CallerIdService
 
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
+            ->where('owned', 1)
             ->where('flagged', 1)
-            // ->where('callerid_check', 1)      future enhancement
             ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
             ->whereIn('group_id', [236163])         // Supported groups
             ->orderBy('dialer_numb')
