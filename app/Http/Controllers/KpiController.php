@@ -377,8 +377,8 @@ class KpiController extends Controller
 
         $sms = $this->getSms($kpi_name, $results);
 
-        $sid    = config('twilio.sid');
-        $token  = config('twilio.token');
+        $sid   = config('twilio.sid');
+        $token = config('twilio.token');
 
         $twilio = new Twilio($sid, $token);
 
@@ -421,7 +421,7 @@ class KpiController extends Controller
      * @param array $results
      * @return string
      */
-    private function getSms($kpi_name, $results)
+    public function getSms($kpi_name, $results)
     {
         $sms = ' -== ' . trans('kpi.' . $kpi_name) . ' ==-' . PHP_EOL . PHP_EOL;
 

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Http\Controllers\KpiController;
 use App\Traits\SqlServerTraits;
+use Twilio\Rest\Client as Twilio;
 
 class CustomKpiService
 {
@@ -16,6 +18,19 @@ class CustomKpiService
 
     private function runGroup211562()
     {
+        // recip phones
+
+        $phones = [
+            '13212629660',
+            // '18439950977',
+            // '18434216396',
+            // '18434576161',
+        ];
+
+        $kpi_controller = new KpiController;
+
+        config(['database.connections.sqlsrv.database' => 'PowerV2_Reporting_Dialer-24']);
+
         $bind = [
             'group_id1' => 211562,
             'group_id2' => 211562,
@@ -69,6 +84,32 @@ ORDER BY Campaign;";
 
         $results = $this->runSql($sql, $bind);
 
-        dump($results);
+        $sms = $kpi_controller->getSms('campaign_lead_count', $results);
+
+        $sid = config('twilio.sid');
+        $token = config('twilio.token');
+
+        $twilio = new Twilio($sid, $token);
+
+        foreach ($phones as $phone) {
+            $this->sendSms($twilio, $phone, $sms);
+        }
+    }
+
+    private function sendSms($twilio, $phone, $sms)
+    {
+        if (empty($phone)) {
+            return;
+        }
+
+        $twilio->messages->create(
+            $phone,
+            [
+                'from' => config('twilio.from'),
+                'body' => $sms
+            ]
+        );
+
+        return;
     }
 }
