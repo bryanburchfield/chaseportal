@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Services\Broadcaster;
 use App\Services\CallerIdService;
 use App\Services\ContactsPlaybookService;
+use App\Services\CustomKpiService;
 use App\Services\DemoClientService;
 use Illuminate\Support\Facades\App;
 
@@ -72,6 +73,15 @@ class Kernel extends ConsoleKernel
                 ->dailyAt('0:30')
                 ->timezone('UTC');
         }
+
+        // Custom KPI (production only)
+        // if (App::environment('production')) {
+        $schedule->call(function () {
+            CustomKpiService::group211562();
+        })
+            ->dailyAt('8:00')
+            ->timezone('America/New_York');
+        // }
 
         // Run Contacts Playbooks
         $schedule->call(function () {
