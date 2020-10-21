@@ -74,9 +74,9 @@ class CallerIdService
         Log::info('Checking flags');
         $this->checkFlags();
 
-        echo "Swap Numbers\n";
-        Log::info('Swapping Numbers');
-        $this->swapNumbers();
+        // echo "Swap Numbers\n";
+        // Log::info('Swapping Numbers');
+        // $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
