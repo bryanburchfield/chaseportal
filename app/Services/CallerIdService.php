@@ -58,6 +58,8 @@ class CallerIdService
 
     public function runReport()
     {
+        Log::info('Starting CallerID report');
+
         $this->initialize();
 
         $this->enddate = Carbon::parse('midnight');
@@ -65,12 +67,19 @@ class CallerIdService
         $this->maxcount = 1000;
 
         echo "Pulling report\n";
+        Log::info('Pulling report');
         $this->saveToDb();
 
         echo "Checking flags\n";
+        Log::info('Checking flags');
         $this->checkFlags();
 
+        echo "Swap Numbers\n";
+        Log::info('Swapping Numbers');
+        $this->swapNumbers();
+
         echo "Creating report\n";
+        Log::info('Creating report');
         $this->mainReport();
     }
 
@@ -82,9 +91,9 @@ class CallerIdService
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->orderBy('dialer_numb')
             ->orderBy('group_name')
-            ->orderBy('phone')
+            ->orderBy('calls', 'desc')
             ->get() as $rec) {
-            $rec['contact_ratio'] = round($rec['contact_ratio'], 2) . '%';
+            $rec['connect_ratio'] = round($rec['connect_ratio'], 2) . '%';
 
             $all_results[] = $rec;
         }
@@ -114,8 +123,9 @@ class CallerIdService
                     'phone' => $phone,
                     'ring_group' => $rec['RingGroup'],
                     'in_system' => $rec['Active'],
+                    'callerid_check' => $rec['CallerIdCheck'],
                     'calls' => $rec['Dials'],
-                    'contact_ratio' => $rec['Contacts'] / $rec['Dials'] * 100,
+                    'connect_ratio' => $rec['Connects'] / $rec['Dials'] * 100,
                 ]);
             } catch (Exception $e) {
                 Log::error('Error creating PhoneFlag: ' . $phone);
@@ -148,7 +158,7 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, Active, SUM(cnt) as Dials, SUM(Contacts) as Contacts FROM (";
+        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -160,25 +170,29 @@ class CallerIdService
 
             $sql .= " $union SELECT
                 DR.GroupId,
-                G.GroupName,
-                7 as DialerNumb,
+                G.GroupName, " .
+                $dialer->dialer_numb . " as DialerNumb,
                 DR.CallerId,
                 I.Description as RingGroup,
+                O.CallerIdCheck,
                 'Active' = CASE WHEN I.InboundSource IS NOT NULL and O.Active IS NOT NULL THEN 1 ELSE 0 END,
                 'cnt' = COUNT(*),
-                'Contacts' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
+                'Connects' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
              FROM " .
                 '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
                 INNER JOIN " . '[' . $dialer->reporting_db . ']' .
                 ".[dbo].[Groups] G on G.GroupId = DR.GroupId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
                 LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
-                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+                OUTER APPLY (
+                    SELECT TOP 1 O.Active, O.CallerIdCheck
+                    FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
+                    WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId) as O
                 WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
                 AND DR.CallerId != ''
                 AND DR.CallType IN (0,2)
                 AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
-                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, I.InboundSource, O.Active
+                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, O.CallerIdCheck, I.InboundSource, O.Active
                 HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
@@ -186,7 +200,7 @@ class CallerIdService
         }
 
         $sql .= ") tmp
-            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, Active
+            GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Active
             HAVING SUM(cnt) >= :maxcount";
 
         return $this->runSql($sql, $bind);
@@ -199,13 +213,15 @@ class CallerIdService
             'GroupName',
             'GroupID',
             'CallerID',
+            // 'CallerIdCheck',
             'RingGroup',
             'Dials in Last 30 Days',
-            'Contact Ratio',
+            'Connect Ratio',
             'Active',
             'Flagged',
             'Flags',
-            // 'Replaced By',
+            'Replaced By',
+            'Error',
         ];
 
         // write to file
@@ -220,13 +236,15 @@ class CallerIdService
                 $rec->group_name,
                 $rec->group_id,
                 $rec->phone,
+                // $rec->callerid_check,
                 $rec->ring_group,
                 $rec->calls,
-                $rec->contact_ratio,
+                $rec->connect_ratio,
                 $rec->in_system,
                 $rec->flagged,
                 $rec->flags,
-                // $rec->replaced_by,
+                $rec->replaced_by,
+                $rec->swap_error,
             ];
 
             fputcsv($handle, $row);
@@ -274,6 +292,7 @@ class CallerIdService
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
             ->where('in_system', 1)
+            // ->where('callerid_check', 1)     uncomment when this is working
             ->select('phone')->distinct()
             ->orderBy('phone')
             ->get() as $rec) {
@@ -435,7 +454,6 @@ class CallerIdService
         }
 
         if (is_array($content)) {
-            $flags = '';
             $flags .= empty($content['ftc_flagged']) ? '' : ',FTC';
             $flags .= empty($content['ihs_flagged']) ? '' : ',ICEHOOK';
             $flags .= empty($content['nomorobo_flagged']) ? '' : ',NOMOROBO';
@@ -443,9 +461,7 @@ class CallerIdService
             $flags .= empty($content['telo_flagged']) ? '' : ',TELO';
             $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
 
-            if (empty($flags)) {
-                $flags = null;
-            } else {
+            if (!empty($flags)) {
                 $flags = substr($flags, 1);
             }
         }
@@ -489,5 +505,72 @@ class CallerIdService
             $responseBodyAsString = $response->getBody()->getContents();
             Log::error($responseBodyAsString);
         }
+    }
+
+    private function swapNumbers()
+    {
+        $client = new Client();
+
+        // read results from db
+        foreach (PhoneFlag::where('run_date', $this->run_date)
+            ->where('flagged', 1)
+            // ->where('callerid_check', 1)      future enhancement
+            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereIn('group_id', [236163])         // Supported groups
+            ->orderBy('dialer_numb')
+            ->orderBy('phone')
+            ->get() as $rec) {
+
+            if ($rec->group_id == 236163 && ($rec->ring_group == 'Branson Nationwide' || $rec->ring_group == 'Springfield Nationwide')) {
+                $this->swapNumber($client, $rec);
+            }
+        }
+    }
+
+    private function swapNumber(Client $client, PhoneFlag $phoneFlag)
+    {
+        echo "Swapping " . $phoneFlag->phone . "\n";
+
+        $error = null;
+        $replaced_by = null;
+
+        try {
+            $response = $client->get(
+                'https://billing.chasedatacorp.com/DID.aspx',
+                [
+                    'query' => [
+                        'Token' => '3DCE9183-CA9C-4D1A-8B23-171DFA8C4D4B',
+                        'Server' => 'dialer-' . sprintf('%02d', $phoneFlag->dialer_numb, 2),
+                        'Number' => $this->formatPhone($phoneFlag->phone, 1),
+                        'GroupId' => $phoneFlag->group_id,
+                        'Action' => 'swap',
+                    ]
+                ]
+            );
+        } catch (Exception $e) {
+            $error = 'Swap API failed: ' . $e->getMessage();
+        }
+
+        if (empty($error)) {
+            try {
+                $body = json_decode($response->getBody()->getContents());
+
+                dump($body);  // debug
+
+                if (!empty($body->NewDID)) {
+                    $replaced_by = $body->NewDID;
+                }
+                if (!empty($body->Error)) {
+                    $error = $body->Error;
+                }
+            } catch (\Throwable $th) {
+                $error = 'Could not swap number: ' . $e->getMessage();
+            }
+        }
+
+        // update db
+        $phoneFlag->swap_error = $error;
+        $phoneFlag->replaced_by = $replaced_by;
+        $phoneFlag->save();
     }
 }

@@ -70,7 +70,7 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 CallerIdService::execute();
             })
-                ->dailyAt('0:30')
+                ->dailyAt('3:30')
                 ->timezone('UTC');
         }
 
