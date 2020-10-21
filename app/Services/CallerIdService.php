@@ -64,7 +64,7 @@ class CallerIdService
 
         $this->enddate = Carbon::parse('midnight');
         $this->startdate = $this->enddate->copy()->subDay(30);
-        $this->maxcount = 1000;
+        $this->maxcount = 0;
 
         echo "Pulling report\n";
         Log::info('Pulling report');
