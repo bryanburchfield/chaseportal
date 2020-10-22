@@ -89,9 +89,9 @@ class CallerIdService
 
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
-            ->orderBy('dialer_numb')
             ->orderBy('group_name')
             ->orderBy('calls', 'desc')
+            ->orderBy('phone')
             ->get() as $rec) {
             $rec['connect_ratio'] = round($rec['connect_ratio'], 2) . '%';
 
@@ -158,7 +158,24 @@ class CallerIdService
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
-        $sql = "SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
+        $sql = "SET NOCOUNT ON;
+        SELECT DISTINCT Phone, CallerIdCheck INTO #phones FROM (";
+
+        $union = '';
+        foreach (Dialer::all() as $i => $dialer) {
+
+            $sql .= " $union SELECT O.phone, MAX(CAST(CallerIdCheck as INT)) as CallerIdCheck
+                FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
+                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] S on S.InboundSource = O.phone
+                WHERE O.Active = 1
+                GROUP BY Phone";
+
+            $union = 'UNION';
+        }
+
+        $sql .= ") tmp
+        
+        SELECT GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned, SUM(cnt) as Dials, SUM(Connects) as Connects FROM (";
 
         $union = '';
         foreach (Dialer::all() as $i => $dialer) {
@@ -174,37 +191,38 @@ class CallerIdService
                 $dialer->dialer_numb . " as DialerNumb,
                 DR.CallerId,
                 I.Description as RingGroup,
-                O.CallerIdCheck,
-                'Owned' = CASE WHEN I.InboundSource IS NOT NULL and O.Active IS NOT NULL THEN 1 ELSE 0 END,
+                TP.CallerIdCheck,
+                'Owned' = CASE WHEN TP.Phone IS NOT NULL THEN 1 ELSE 0 END,
                 'cnt' = COUNT(*),
-                'Connects' = SUM(CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END)
-             FROM " .
-                '[' . $dialer->reporting_db . ']' . ".[dbo].[DialingResults] DR
-                INNER JOIN " . '[' . $dialer->reporting_db . ']' .
-                ".[dbo].[Groups] G on G.GroupId = DR.GroupId
-                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
-                LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
-                OUTER APPLY (
-                    SELECT TOP 1 O.Active, O.CallerIdCheck
-                    FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
-                    WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
-                    ORDER BY O.Active DESC) as O
-                WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
-                AND DR.CallerId != ''
-                AND DR.CallType IN (0,2)
-                AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
-                AND O.Active = 1
-                GROUP BY DR.GroupId, GroupName, CallerId, I.Description, O.CallerIdCheck, I.InboundSource, O.Active
-                HAVING COUNT(*) >= :inner_maxcount$i
+                'Connects' = SUM(CASE WHEN DI.Type > 0 THEN 1 ELSE 0 END)
+            FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[Groups] G on G.GroupId = DR.GroupId AND G.IsActive = 1
+            LEFT JOIN #phones TP ON TP.Phone = DR.CallerId
+            LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
+            LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
+            CROSS APPLY (
+                SELECT TOP 1 O.Active
+                FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
+                WHERE O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+                ORDER BY O.Active DESC) as O
+            WHERE DR.CallDate >= :startdate$i AND DR.CallDate < :enddate$i
+            AND DR.CallerId != ''
+            AND DR.CallType IN (0,2)
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
+            AND O.Active = 1
+            GROUP BY DR.GroupId, GroupName, CallerId, I.Description, TP.CallerIdCheck, I.InboundSource, O.Active, TP.Phone
+            HAVING COUNT(*) >= :inner_maxcount$i
                 ";
 
-            $union = 'UNION ALL';
+            $union = 'UNION';
         }
 
         $sql .= ") tmp
             GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned
             HAVING SUM(cnt) >= :maxcount";
 
+        Log::debug($sql);
+        Log::debug($bind);
         return $this->runSql($sql, $bind);
     }
 

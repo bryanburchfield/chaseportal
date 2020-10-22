@@ -20,12 +20,14 @@ class CallerIdMail extends Mailable implements ShouldQueue
 
     public function build()
     {
+        $filename = 'callerid-' . now()->timezone('America/New_York')->format('Y-m-d') . '.csv';
+
         return $this
             ->view('mail.callerid')
             ->subject($this->data['subject'])
             ->attachData(
                 base64_decode($this->data['csv']),
-                'callerid.csv',
+                $filename,
                 [
                     'mime' => 'text/csv',
                 ]
