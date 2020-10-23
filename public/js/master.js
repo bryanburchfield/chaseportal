@@ -33,8 +33,13 @@ var Master = {
         buttons: [
             'excelHtml5',
             'csvHtml5',
-            'pdfHtml5'
-        ]
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            }
+        ],
+
     }),
 
 	init:function(){

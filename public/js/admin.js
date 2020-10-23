@@ -408,7 +408,7 @@ var Admin = {
 			todate = $('.todate').val(),
 			search_type = $("input[name='search_type']:checked").val()
 			;
-			console.log('clicked');
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
