@@ -27,6 +27,7 @@ return [
 	'download'					=> 'Download',
 	'download_report'			=> 'Download Report',
 	'download_warning'			=> 'Download Warning',
+	'edit_field'				=> 'Edit Field',
 	'edit_recip'				=> 'Edit Recipient',
 	'email'						=> 'Email Address',
 	'enable_dark_theme' => 'Enable Dark Theme',

@@ -27,6 +27,7 @@ return [
 	'download'					=> 'Descargar',
 	'download_report'			=> 'Descargar Informe',
 	'download_warning'			=> 'Advertencia de Descarga',
+	'edit_field'				=> 'Editar Campo',
 	'edit_recip'				=> 'Revisar Destinatario',
 	'email'						=> 'Email',
 	'enable_dark_theme' => 'Enable Dark Theme',

@@ -148,6 +148,10 @@ h6 {
   margin-bottom: 42px;
 }
 
+.mr5 {
+  margin-right: 5px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -3832,7 +3836,6 @@ a.add_subcampaign:focus {
 }
 
 .user_created_form_element {
-  margin-bottom: 15px;
   clear: both;
   overflow: auto;
 }
