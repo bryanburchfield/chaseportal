@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', __('widgets.admin'))
+@section('title', __('widgets.cdr_lookup'))
 
 @section('content')
 <div class="preloader"></div>

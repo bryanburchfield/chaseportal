@@ -408,7 +408,7 @@ var Admin = {
 			todate = $('.todate').val(),
 			search_type = $("input[name='search_type']:checked").val()
 			;
-
+			console.log('clicked');
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -426,7 +426,7 @@ var Admin = {
 				search_type: search_type
 			},
 			success: function (response) {
-
+				
 				$('.report_filters.card').parent().find('.alert').remove();
 				$('.cdr_results_table tbody').empty();
 
