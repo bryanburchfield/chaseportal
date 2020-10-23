@@ -73,21 +73,22 @@
 							<table class="cdr_results_table table table-hover reports_table" id="cdr_dataTable">
 								<thead>
 									<tr role="row">
-										<th>ID</th>
+										
 										<th>Server</th>
-										<th>Attempt</th>
-										<th>Call Date</th>
-										<th>Call Status</th>
-										<th>Call Type</th>
-										<th>Caller ID</th>
-										<th>Campaign</th>
-										<th>Date</th>
-										<th>Duration</th>
-										<th>Group ID</th>
+										<th>ID</th>
 										<th>Lead ID</th>
 										<th>Phone</th>
 										<th>Rep</th>
+										<th>Date</th>
+										<th>Campaign</th>
+										<th>Group ID</th>
+										<th>Attempt</th>
+										<th>Duration</th>
+										<th>Call Status</th>
+										<th>Caller ID</th>
+										<th>Call Type</th>
 										<th>Subcampaign</th>
+										<th>Call Date</th>																														
 									</tr>
 								</thead>
 
