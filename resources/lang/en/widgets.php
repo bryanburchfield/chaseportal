@@ -38,6 +38,7 @@ return [
 	'calls_offered'		=> 'Calls Offered',
 	'callstatus_by_minutes'	=> 'Call Status by Minutes',
 	'campaign'			=> 'Campaign',
+	'cdr_lookup'		=> 'CDR Lookup',
 	'change_answered_time' => 'Change Answered Time',
 	'chart_avg_based'	=> 'The chart average is based on the max handle time.',
 	'connect'			=> 'Connect',
