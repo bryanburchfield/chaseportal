@@ -21,10 +21,9 @@ class CustomKpiService
         // recip phones
 
         $phones = [
-            '13212629660',
-            // '18439950977',
-            // '18434216396',
-            // '18434576161',
+            '18439950977',
+            '18434216396',
+            '18434576161',
         ];
 
         $kpi_controller = new KpiController;
