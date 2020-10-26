@@ -75,13 +75,13 @@ class Kernel extends ConsoleKernel
         }
 
         // Custom KPI (production only)
-        // if (App::environment('production')) {
-        $schedule->call(function () {
-            CustomKpiService::group211562();
-        })
-            ->dailyAt('8:00')
-            ->timezone('America/New_York');
-        // }
+        if (App::environment('production')) {
+            $schedule->call(function () {
+                CustomKpiService::group211562();
+            })
+                ->dailyAt('8:00')
+                ->timezone('America/New_York');
+        }
 
         // Run Contacts Playbooks
         $schedule->call(function () {
