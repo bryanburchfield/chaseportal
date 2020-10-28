@@ -74,9 +74,9 @@ class CallerIdService
         Log::info('Checking flags');
         $this->checkFlags();
 
-        // echo "Swap Numbers\n";
-        // Log::info('Swapping Numbers');
-        // $this->swapNumbers();
+        echo "Swap Numbers\n";
+        Log::info('Swapping Numbers');
+        $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -125,6 +125,7 @@ class CallerIdService
                     'owned' => $rec['Owned'],
                     'callerid_check' => $rec['CallerIdCheck'],
                     'calls' => $rec['Dials'],
+                    'connects' => $rec['Connects'],
                     'connect_ratio' => $rec['Connects'] / $rec['Dials'] * 100,
                 ]);
             } catch (Exception $e) {
@@ -155,6 +156,33 @@ class CallerIdService
 
     private function runQuery()
     {
+        // Have to hard-code what's considered 'system' for connect calculations
+        $system_codes = "'CR_BAD_NUMBER',
+'CR_BUSY',
+'CR_CEPT',
+'CR_CNCT/CON_CAD',
+'CR_CNCT/CON_PAMD',
+'CR_CNCT/CON_PVD',
+'CR_DISCONNECTED',
+'CR_DROPPED',
+'CR_ERROR',
+'CR_FAILED',
+'CR_FAXTONE',
+'CR_HANGUP',
+'CR_NOANS',
+'CR_NORB',
+'CR_UNFINISHED',
+'SYS_CALLBACK',
+'Inbound Voicemail',
+'Inbound Transfer',
+'UNKNOWN',
+'UNFINISHED',
+'Skip',
+'TRANSFERRED',
+'PARKED',
+'Answering Machine'
+        ";
+
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
@@ -194,11 +222,10 @@ class CallerIdService
                 TP.CallerIdCheck,
                 'Owned' = CASE WHEN TP.Phone IS NOT NULL THEN 1 ELSE 0 END,
                 'cnt' = COUNT(*),
-                'Connects' = SUM(CASE WHEN DI.Type > 0 THEN 1 ELSE 0 END)
+                SUM(CASE WHEN DR.CallStatus NOT IN ($system_codes) THEN 1 ELSE 0 END) as Connects
             FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
             INNER JOIN [" . $dialer->reporting_db . "].[dbo].[Groups] G on G.GroupId = DR.GroupId AND G.IsActive = 1
             LEFT JOIN #phones TP ON TP.Phone = DR.CallerId
-            LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             LEFT JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
             CROSS APPLY (
                 SELECT TOP 1 O.Active
@@ -237,9 +264,9 @@ class CallerIdService
             'Connect Ratio',
             'Owned',
             'Flagged',
-            // 'Flags',
-            // 'Replaced By',
-            // 'Error',
+            'Flags',
+            'Replaced By',
+            'Error',
         ];
 
         // write to file
@@ -260,9 +287,9 @@ class CallerIdService
                 $rec->connect_ratio,
                 $rec->owned,
                 $rec->flagged,
-                // $rec->flags,
-                // $rec->replaced_by,
-                // $rec->swap_error,
+                $rec->flags,
+                $rec->replaced_by,
+                $rec->swap_error,
             ];
 
             fputcsv($handle, $row);
@@ -550,16 +577,24 @@ class CallerIdService
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('owned', 1)
-            ->where('flagged', 1)
             ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
-            ->whereIn('group_id', [236163])         // Supported groups
+            ->where(function ($query) {
+                $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
+                    ->orWhere('ring_group', 'like', '%Nationwide%');
+            })
+            ->where(function ($query) {
+                $query->where('flagged', 1)
+                    ->orWhere(function ($query2) {
+                        $query2->where('flagged', 0)
+                            ->where('calls', '>=', 1000)
+                            ->where('connect_ratio', '<', 13);
+                    });
+            })
             ->orderBy('dialer_numb')
             ->orderBy('phone')
             ->get() as $rec) {
 
-            if ($rec->group_id == 236163 && ($rec->ring_group == 'Branson Nationwide' || $rec->ring_group == 'Springfield Nationwide')) {
-                $this->swapNumber($client, $rec);
-            }
+            $this->swapNumber($client, $rec);
         }
     }
 
@@ -591,8 +626,6 @@ class CallerIdService
             try {
                 $body = json_decode($response->getBody()->getContents());
 
-                dump($body);  // debug
-
                 if (!empty($body->NewDID)) {
                     $replaced_by = $body->NewDID;
                 }
@@ -605,8 +638,8 @@ class CallerIdService
         }
 
         // update db
-        $phoneFlag->swap_error = $error;
         $phoneFlag->replaced_by = $replaced_by;
+        $phoneFlag->swap_error = $error;
         $phoneFlag->save();
     }
 }
