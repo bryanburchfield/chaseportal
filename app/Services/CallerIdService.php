@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\CallerIdMail;
+use App\Models\AreaCode;
 use App\Models\Dialer;
 use App\Models\PhoneFlag;
 use App\Traits\SqlServerTraits;
@@ -264,7 +265,7 @@ class CallerIdService
             'Connect Ratio',
             'Owned',
             'Flagged',
-            'Flags',
+            // 'Flags',
             'Replaced By',
             'Error',
         ];
@@ -287,7 +288,7 @@ class CallerIdService
                 $rec->connect_ratio,
                 $rec->owned,
                 $rec->flagged,
-                $rec->flags,
+                // $rec->flags,
                 $rec->replaced_by,
                 $rec->swap_error,
             ];
@@ -600,7 +601,30 @@ class CallerIdService
 
     private function swapNumber(Client $client, PhoneFlag $phoneFlag)
     {
-        echo "Swapping " . $phoneFlag->phone . "\n";
+        // try to replace with same NPA
+        if (!$this->swapNumberNpa($client, $phoneFlag)) {
+
+            // Find area code record
+            $npa = substr($this->formatPhone($phoneFlag->phone, true), 0, 3);
+            $areaCode = AreaCode::find($npa);
+
+            if ($areaCode) {
+                // get list of nearby same state npas
+                $alternates = $areaCode->alternateNpas();
+
+                // loop through till swap succeeds or errors
+                foreach ($alternates as $alternate) {
+                    if ($this->swapNumberNpa($client, $phoneFlag, $alternate->npa)) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private function swapNumberNpa(Client $client, PhoneFlag $phoneFlag, $npa = null)
+    {
+        echo "Swapping " . $phoneFlag->phone . " $npa\n";
 
         $error = null;
         $replaced_by = null;
@@ -615,10 +639,12 @@ class CallerIdService
                         'Number' => $this->formatPhone($phoneFlag->phone, 1),
                         'GroupId' => $phoneFlag->group_id,
                         'Action' => 'swap',
+                        'NPA' => $npa
                     ]
                 ]
             );
         } catch (Exception $e) {
+            $return_code = -1;
             $error = 'Swap API failed: ' . $e->getMessage();
         }
 
@@ -626,13 +652,21 @@ class CallerIdService
             try {
                 $body = json_decode($response->getBody()->getContents());
 
-                if (!empty($body->NewDID)) {
-                    $replaced_by = $body->NewDID;
+                if (isset($body->NewDID)) {
+                    if (!empty($body->NewDID)) {
+                        $return_code = 1;
+                        $replaced_by = $body->NewDID;
+                    } else {
+                        $return_code = 0;
+                        $error = 'No repalcement available';
+                    }
                 }
                 if (!empty($body->Error)) {
+                    $return_code = -1;
                     $error = $body->Error;
                 }
             } catch (\Throwable $th) {
+                $return_code = -1;
                 $error = 'Could not swap number: ' . $e->getMessage();
             }
         }
@@ -641,5 +675,7 @@ class CallerIdService
         $phoneFlag->replaced_by = $replaced_by;
         $phoneFlag->swap_error = $error;
         $phoneFlag->save();
+
+        return $return_code;
     }
 }
