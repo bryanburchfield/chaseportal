@@ -25,7 +25,7 @@ class CallerIdMail extends Mailable implements ShouldQueue
         $mainfilename = 'callerid-' . $datepart;
         $autoswapfilename = 'callerid-autoswap-' . $datepart;
         $manualswapfilename = 'callerid-manualswap-' . $datepart;
-        $unswappablefilename = 'callerid-unswappable-' . $datepart;
+        $othersfilename = 'callerid-others-' . $datepart;
 
         return $this
             ->view('mail.callerid')
@@ -46,8 +46,8 @@ class CallerIdMail extends Mailable implements ShouldQueue
                 ['mime' => 'text/csv']
             )
             ->attachData(
-                base64_decode($this->data['unswappableCsv']),
-                $unswappablefilename,
+                base64_decode($this->data['othersCsv']),
+                $othersfilename,
                 ['mime' => 'text/csv']
             );
     }
