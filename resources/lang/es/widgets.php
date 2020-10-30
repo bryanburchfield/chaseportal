@@ -35,6 +35,7 @@ return [
 	'calls_offered'		=> 'Llamadas Ofrecidas',
 	'callstatus_by_minutes'	=> 'Estado de la Llamada Por Minutos',
 	'campaign'			=> 'Campaña',
+	'cdr_lookup'		=> 'CDR Buscar',
 	'change_answered_time' => 'Cambiar Tiempo de Respuesta',
 	'chart_avg_based'	=> 'El promedio del gráfico está basado en el Tiempo Operativo Máximo',
 	'connect'			=> 'Conectar',

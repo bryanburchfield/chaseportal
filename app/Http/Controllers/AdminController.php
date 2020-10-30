@@ -475,7 +475,10 @@ class AdminController extends Controller
         foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
             $sql .= " $union
             SELECT " . $dialer->dialer_numb . " as [Server], $fields
-			FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults] WHERE Date BETWEEN @fromdate AND @todate AND $search_field = @phone";
+            FROM [PowerV2_Reporting_Dialer-" . sprintf("%02d", $dialer->dialer_numb) . "].[dbo].[DialingResults]
+            WHERE CallDate BETWEEN @fromdate AND @todate
+            AND $search_field = @phone
+            AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')";
 
             $union = "UNION";
         }

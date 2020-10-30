@@ -426,7 +426,7 @@ var Admin = {
 				search_type: search_type
 			},
 			success: function (response) {
-
+				
 				$('.report_filters.card').parent().find('.alert').remove();
 				$('.cdr_results_table tbody').empty();
 
