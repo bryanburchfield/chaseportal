@@ -3840,6 +3840,14 @@ a.add_subcampaign:focus {
   overflow: auto;
 }
 
+.appended_code {
+  border-radius: 0;
+}
+
+pre.appended_code {
+  overflow: hidden;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -3136,6 +3136,12 @@ a.add_subcampaign{
     overflow: auto;
 }
 
+.appended_code{@include border-radius(0);}
+
+pre.appended_code{
+    overflow:hidden;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

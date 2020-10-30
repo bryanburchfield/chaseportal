@@ -2992,7 +2992,7 @@ a.add_subcampaign{
 
     $placeholder_text:blue !important;
 
-    &.rounded_borders{
+    &.rounded{
         @include border-radius(50px);
     }
 
@@ -3008,6 +3008,12 @@ a.add_subcampaign{
 
         &:focus{
             border-bottom: 2px solid darken(#00c2ff,3%);
+        }
+    }
+
+    &.focus{
+        &:focus{
+            background:red !important;
         }
     }
 
@@ -3029,7 +3035,7 @@ a.add_subcampaign{
 
 textarea{
     &.form-control{
-        &.rounded_borders{
+        &.rounded{
             padding: 10px 20px;
         }
     }
@@ -3044,6 +3050,25 @@ textarea{
 pre.p10{padding: 10px;}
 .add_element{color:$green;}
 .remove_form_element{color:#d9534f;}
+
+.appended_code{@include border-radius(0);}
+.form_preview{
+    .btn{
+        float: right;
+        margin-right: 15px;
+    }
+}
+
+pre.appended_code{
+    overflow:hidden;
+    word-wrap: break-word;
+}
+
+.form_code_preview{
+
+    .tooltip-arrow,
+    .form_code + .tooltip > .tooltip-inner {background-color: $orange;}
+}
 
 
 /* ---------------------------------------------------

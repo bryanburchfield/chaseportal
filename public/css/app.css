@@ -3603,7 +3603,7 @@ a.add_subcampaign i {
   overflow: auto;
 }
 
-.form-control.rounded_borders {
+.form-control.rounded {
   border-radius: 50px;
 }
 
@@ -3618,6 +3618,10 @@ a.add_subcampaign i {
 
 .form-control.clean:focus {
   border-bottom: 2px solid #00b6f0;
+}
+
+.form-control.focus:focus {
+  background: red !important;
 }
 
 .form-control ::-webkit-input-placeholder {
@@ -3642,7 +3646,7 @@ a.add_subcampaign i {
   color: red !important !important;
 }
 
-textarea.form-control.rounded_borders {
+textarea.form-control.rounded {
   padding: 10px 20px;
 }
 
@@ -3660,6 +3664,25 @@ pre.p10 {
 
 .remove_form_element {
   color: #d9534f;
+}
+
+.appended_code {
+  border-radius: 0;
+}
+
+.form_preview .btn {
+  float: right;
+  margin-right: 15px;
+}
+
+pre.appended_code {
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.form_code_preview .tooltip-arrow,
+.form_code_preview .form_code + .tooltip > .tooltip-inner {
+  background-color: #E15B23;
 }
 
 /* ---------------------------------------------------
