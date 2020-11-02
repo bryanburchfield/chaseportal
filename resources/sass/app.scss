@@ -3013,7 +3013,8 @@ a.add_subcampaign{
 
     &.focus{
         &:focus{
-            background:red !important;
+            background:#17A7F9 !important;
+            color:#fff !important;
         }
     }
 
@@ -3068,6 +3069,10 @@ pre.appended_code{
 
     .tooltip-arrow,
     .form_code + .tooltip > .tooltip-inner {background-color: $orange;}
+}
+
+.form_element_options{
+    label{font-weight: 600;}
 }
 
 

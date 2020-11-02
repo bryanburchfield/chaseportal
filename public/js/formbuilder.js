@@ -11,16 +11,19 @@ var FORMBUILDER = {
 		$('body').on('click', '.edit_form_element', this.populate_fields_form);
 		$('.form_code').on('click', this.copy_code);
 		$('.display_type').on('change', this.change_checked_type);
+		$('#db').on('change', this.get_client_tables);
+		$('#client_table').on('change', this.get_table_fields);
 	},
 
 	add_element:function(e){
 		e.preventDefault();
 		var type = $(this).data('type');
 		FORMBUILDER.element_type = type;
-		FORMBUILDER.show_numb_fields();
 
 		if(type=='radio' || type =='checkbox'){
 			$('#editFieldModal').modal('show');
+			$('.hidetilloaded.inline').show();
+			FORMBUILDER.show_numb_fields();
 		}else{
 			var element = $(this).parent().next().find('.form-group').html();
 
@@ -133,7 +136,9 @@ var FORMBUILDER = {
 	},
 
 	show_numb_fields:function(){
-		$('#editFieldModal').find('.modal-body .hidetilloaded').show();
+		$('#editFieldModal').find('.modal-body .numb_fields').show();
+		$('.edit_field').addClass('hidetilloaded');
+		$('.add_field').removeClass('hidetilloaded');
 	},
 
 	change_checked_type:function(){
@@ -141,12 +146,11 @@ var FORMBUILDER = {
 			$('.inline').hide();
 			$('.stacked').show();
 			// find radio with value of stacked and set that to checked
-			// $('.stacked').find('input').val('')
+			$('.stacked_radio').prop("checked", true);
 		}else{
 			$('.inline').show();
 			$('.stacked').hide();
-			// find radio with value of inline and set that to checked
-			// $('.inline').find('input').val('')
+			$('.inline_radio').prop("checked", true);
 		}
 	},
 
@@ -170,6 +174,69 @@ var FORMBUILDER = {
         console.log($temp);
         $temp.remove();
     },
+
+    get_client_tables: function () {
+
+    	$('.alert-danger').hide();
+    	var database = $(this).val();
+    	var group_id = $(this).parent().parent().find('#group_id').val();
+
+    	$.ajaxSetup({
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    		}
+    	});
+
+    	$.ajax({
+    		url: '/admin/get_client_tables',
+    		type: 'POST',
+    		dataType: 'json',
+    		data: { group_id: group_id, database: database },
+    		success: function (response) {
+    			console.log(response);
+    			$('#client_table').empty();
+    			if (response.tables.length) {
+    				var tables = '<option value="">Select One</option>';
+    				for (var i = 0; i < response.tables.length; i++) {
+    					tables += '<option value="' + response.tables[i].TableName + '">' + response.tables[i].TableName + ' - ' + response.tables[i].Description + '</option>';
+    				}
+
+    				$('#client_table').append(tables);
+    			} else {
+    				$('.alert-danger').text('No Tables Found').show();
+    			}
+    		}
+    	});
+    },
+
+    get_table_fields: function () {
+    	var table_name = $(this).val();
+    	var database = $(this).parent().parent().find('#db').val();
+
+    	$.ajaxSetup({
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    		}
+    	});
+
+    	$.ajax({
+    		url: '/admin/get_table_fields',
+    		type: 'POST',
+    		dataType: 'json',
+    		data: { table_name: table_name, database: database },
+    		success: function (response) {
+    			console.log(response);
+    			$('.field_from_table').remove();
+    			if (response.fields.length) {
+    				var new_field_row = '';
+    				for (var i = 0; i < response.fields.length; i++) {
+    					new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
+    				}
+    				$(new_field_row).insertAfter('.field:last');
+    			}
+    		}
+    	});
+    },
 }
 
 $(document).ready(function(){
@@ -179,5 +246,7 @@ $(document).ready(function(){
 	$('#editFieldModal').on("hide.bs.modal", function() {
 		$(this).find('.modal-body .form-control').val('');
 		$(this).find('.modal-body .hidetilloaded').hide();
+		$('.edit_field').removeClass('hidetilloaded');
+		$('.add_field').addClass('hidetilloaded');
 	})
 });

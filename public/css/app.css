@@ -3621,7 +3621,8 @@ a.add_subcampaign i {
 }
 
 .form-control.focus:focus {
-  background: red !important;
+  background: #17A7F9 !important;
+  color: #fff !important;
 }
 
 .form-control ::-webkit-input-placeholder {
@@ -3683,6 +3684,10 @@ pre.appended_code {
 .form_code_preview .tooltip-arrow,
 .form_code_preview .form_code + .tooltip > .tooltip-inner {
   background-color: #E15B23;
+}
+
+.form_element_options label {
+  font-weight: 600;
 }
 
 /* ---------------------------------------------------
