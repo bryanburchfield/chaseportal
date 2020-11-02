@@ -81,14 +81,14 @@ class CallerIdService
 
         echo "Creating report\n";
         Log::info('Creating report');
-        $this->mainReport();
+        $this->createReport();
     }
 
-    private function mainReport()
+    private function createReport()
     {
+        // big report
         $all_results = [];
 
-        // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->orderBy('group_name')
             ->orderBy('calls', 'desc')
@@ -99,10 +99,93 @@ class CallerIdService
             $all_results[] = $rec;
         }
 
-        if (!empty($all_results)) {
-            $csvfile = $this->makeCsv($all_results);
-            $this->emailReport($csvfile);
-        }
+        $mainCsv = $this->makeCsv($all_results);
+
+        // // autoswap report
+        // $all_results = [];
+
+        // foreach (PhoneFlag::where('run_date', $this->run_date)
+        //     ->where('owned', 1)
+        //     ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+        //     ->where(function ($query) {
+        //         $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
+        //             ->orWhere('ring_group', 'like', '%Nationwide%');
+        //     })
+        //     ->where(function ($query) {
+        //         $query->where('flagged', 1)
+        //             ->orWhere(function ($query2) {
+        //                 $query2->where('flagged', 0)
+        //                     ->where('calls', '>=', 1000)
+        //                     ->where('connect_ratio', '<', 13);
+        //             });
+        //     })
+        //     ->orderBy('dialer_numb')
+        //     ->orderBy('group_name')
+        //     ->orderBy('calls', 'desc')
+        //     ->orderBy('phone')
+        //     ->get() as $rec) {
+
+        //     $rec['connect_ratio'] = round($rec['connect_ratio'], 2) . '%';
+
+        //     $all_results[] = $rec;
+        // }
+
+        // $autoswapCsv = $this->makeCsv($all_results);
+
+        // // manual swap report
+        // $all_results = [];
+
+        // foreach (PhoneFlag::where('run_date', $this->run_date)
+        //     ->where('owned', 1)
+        //     ->whereNotIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+        //     ->where(function ($query) {
+        //         $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
+        //             ->orWhere('ring_group', 'like', '%Nationwide%');
+        //     })
+        //     ->where(function ($query) {
+        //         $query->where('flagged', 1)
+        //             ->orWhere(function ($query2) {
+        //                 $query2->where('flagged', 0)
+        //                     ->where('calls', '>=', 1000)
+        //                     ->where('connect_ratio', '<', 13);
+        //             });
+        //     })
+        //     ->orderBy('dialer_numb')
+        //     ->orderBy('group_name')
+        //     ->orderBy('calls', 'desc')
+        //     ->orderBy('phone')
+        //     ->get() as $rec) {
+
+        //     $rec['connect_ratio'] = round($rec['connect_ratio'], 2) . '%';
+
+        //     $all_results[] = $rec;
+        // }
+
+        // $manualswapCsv = $this->makeCsv($all_results);
+
+        // // others report
+        // $all_results = [];
+
+        // foreach (PhoneFlag::where('run_date', $this->run_date)
+        //     ->where('ring_group', 'not like', '%Caller%Id%Call%back%')
+        //     ->where('ring_group', 'not like', '%Nationwide%')
+        //     ->where('flagged', 1)
+        //     ->orderBy('dialer_numb')
+        //     ->orderBy('group_name')
+        //     ->orderBy('calls', 'desc')
+        //     ->orderBy('phone')
+        //     ->get() as $rec) {
+
+        //     $rec['connect_ratio'] = round($rec['connect_ratio'], 2) . '%';
+
+        //     $all_results[] = $rec;
+        // }
+
+        // $othersCsv = $this->makeCsv($all_results);
+
+        // $this->emailReport($mainCsv, $autoswapCsv, $manualswapCsv, $othersCsv);
+
+        $this->emailReport($mainCsv);
     }
 
     private function saveToDb()
@@ -301,11 +384,19 @@ class CallerIdService
         return $tempfile;
     }
 
-    private function emailReport($csvfile)
+    // private function emailReport($mainCsv, $autoswapCsv, $manualswapCsv, $othersCsv)
+    private function emailReport($mainCsv)
     {
-        // read file into variable, then delete file
-        $csv = file_get_contents($csvfile);
-        unlink($csvfile);
+        // read files into variables, then delete files
+        $mainData = file_get_contents($mainCsv);
+        // $autoswapData = file_get_contents($autoswapCsv);
+        // $manualswapData = file_get_contents($manualswapCsv);
+        // $othersData = file_get_contents($othersCsv);
+
+        unlink($mainCsv);
+        // unlink($autoswapCsv);
+        // unlink($manualswapCsv);
+        // unlink($othersCsv);
 
         $to = 'jonathan.gryczka@chasedatacorp.com';
         $cc = [
@@ -318,7 +409,10 @@ class CallerIdService
         // email report
         $message = [
             'subject' => 'Caller ID Report',
-            'csv' => base64_encode($csv),
+            'mainCsv' => base64_encode($mainData),
+            // 'autoswapCsv' => base64_encode($autoswapData),
+            // 'manualswapCsv' => base64_encode($manualswapData),
+            // 'othersCsv' => base64_encode($othersData),
             'url' => url('/') . '/',
             'startdate' => $this->startdate->toFormattedDateString(),
             'enddate' => $this->enddate->toFormattedDateString(),
@@ -583,14 +677,15 @@ class CallerIdService
                 $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
                     ->orWhere('ring_group', 'like', '%Nationwide%');
             })
-            ->where(function ($query) {
-                $query->where('flagged', 1)
-                    ->orWhere(function ($query2) {
-                        $query2->where('flagged', 0)
-                            ->where('calls', '>=', 1000)
-                            ->where('connect_ratio', '<', 13);
-                    });
-            })
+            ->where('flagged', 1)
+            // ->where(function ($query) {
+            //     $query->where('flagged', 1)
+            //         ->orWhere(function ($query2) {
+            //             $query2->where('flagged', 0)
+            //                 ->where('calls', '>=', 1000)
+            //                 ->where('connect_ratio', '<', 13);
+            //         });
+            // })
             ->orderBy('dialer_numb')
             ->orderBy('phone')
             ->get() as $rec) {
