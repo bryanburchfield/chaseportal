@@ -85,6 +85,7 @@ return [
 	'filters'		=> 'Filters',
 	'filters_required' => 'You must enter at least one filter',
 	'first_name'	=> 'First Name',
+	'form_builder' => 'Form Builder',
 	'from'			=> 'From',
 	'from_number'	=> 'From Number',
 	'has_header'	=> 'Has Header Row',

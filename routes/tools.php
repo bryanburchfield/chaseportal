@@ -25,6 +25,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
             // Webook Generator
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('webhook_generator', 'AdminController@webhookGenerator');
+                Route::get('form_builder', 'AdminController@formBuilder');
             });
 
             Route::redirect('/', action('DncController@index'));
