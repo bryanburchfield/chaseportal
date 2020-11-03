@@ -39,16 +39,16 @@ class CallerIdService
     {
         $this->run_date = now();
 
-        $this->guzzleClient = new Client();
+        // $this->guzzleClient = new Client();
 
-        $token = config('calleridrep.token');
+        // $token = config('calleridrep.token');
 
-        $this->calleridHeaders = [
-            'Authorization' => 'Bearer ' . $token,
-        ];
+        // $this->calleridHeaders = [
+        //     'Authorization' => 'Bearer ' . $token,
+        // ];
 
-        // // Clear out our calleridrep.com db
-        $this->clearCallerIdRepPhones();
+        // Clear out our calleridrep.com db
+        // $this->clearCallerIdRepPhones();
     }
 
     public static function execute()
@@ -71,9 +71,9 @@ class CallerIdService
         Log::info('Pulling report');
         $this->saveToDb();
 
-        echo "Checking flags\n";
-        Log::info('Checking flags');
-        $this->checkFlags();
+        // echo "Checking flags\n";
+        // Log::info('Checking flags');
+        // $this->checkFlags();
 
         echo "Swap Numbers\n";
         Log::info('Swapping Numbers');
@@ -214,6 +214,7 @@ class CallerIdService
                 ]);
             } catch (Exception $e) {
                 Log::error('Error creating PhoneFlag: ' . $phone);
+                Log::critical($e->getMessage());
             }
         }
     }
@@ -519,6 +520,7 @@ class CallerIdService
             ]);
         } catch (Exception $e) {
             Log::error('Error uploading number ' . $phone);
+            Log::critical($e->getMessage());
         }
     }
 
@@ -677,15 +679,17 @@ class CallerIdService
                 $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
                     ->orWhere('ring_group', 'like', '%Nationwide%');
             })
-            ->where('flagged', 1)
-            // ->where(function ($query) {
-            //     $query->where('flagged', 1)
-            //         ->orWhere(function ($query2) {
-            //             $query2->where('flagged', 0)
-            //                 ->where('calls', '>=', 1000)
-            //                 ->where('connect_ratio', '<', 13);
-            //         });
-            // })
+            ->where(function ($query) {
+                $query->where('flagged', 1)
+                    ->orWhere(function ($query2) {
+                        $query2->where('calls', '>=', 600)
+                            ->where('connect_ratio', '<', 10);
+                    })
+                    ->orWhere(function ($query2) {
+                        $query2->where('calls', '>=', 1000)
+                            ->where('connect_ratio', '<', 13);
+                    });
+            })
             ->orderBy('dialer_numb')
             ->orderBy('phone')
             ->get() as $rec) {
