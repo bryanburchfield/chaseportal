@@ -20,7 +20,7 @@ class CallerIdMail extends Mailable implements ShouldQueue
 
     public function build()
     {
-        $datepart = now()->timezone('America/New_York')->format('Y-m-d') . '.csv';
+        $datepart = now()->timezone('UTC')->format('Y-m-d') . '.csv';
 
         $mainfilename = 'callerid-' . $datepart;
         // $autoswapfilename = 'callerid-autoswap-' . $datepart;
