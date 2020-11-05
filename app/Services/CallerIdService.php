@@ -10,11 +10,11 @@ use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
 {
@@ -24,31 +24,21 @@ class CallerIdService
     private $startdate;
     private $enddate;
     private $maxcount;
-    private $guzzleClient;
-    private $calleridHeaders;
+
+    // For Twilio 
+    private $twilio;
 
     // For stamping db
     private $run_date;
-
-    // For tracking rate limiting
-    private $apiRequests = [];
-    private $apiLimitRequests = 60;
-    private $apiLimitSeconds = 60;
 
     private function initialize()
     {
         $this->run_date = now();
 
-        // $this->guzzleClient = new Client();
+        $sid = config('twilio.spam_sid');
+        $token = config('twilio.spam_token');
 
-        // $token = config('calleridrep.token');
-
-        // $this->calleridHeaders = [
-        //     'Authorization' => 'Bearer ' . $token,
-        // ];
-
-        // Clear out our calleridrep.com db
-        // $this->clearCallerIdRepPhones();
+        $this->twilio = new Twilio($sid, $token);
     }
 
     public static function execute()
@@ -71,9 +61,9 @@ class CallerIdService
         Log::info('Pulling report');
         $this->saveToDb();
 
-        // echo "Checking flags\n";
-        // Log::info('Checking flags');
-        // $this->checkFlags();
+        echo "Checking flags\n";
+        Log::info('Checking flags');
+        $this->checkFlags();
 
         echo "Swap Numbers\n";
         Log::info('Swapping Numbers');
@@ -410,243 +400,54 @@ class CallerIdService
 
     private function checkFlags()
     {
-        $batch = [];
-
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
+            ->where('calls', '>=', 500)
             // ->where('callerid_check', 1)     uncomment when this is working
             ->select('phone')->distinct()
             ->orderBy('phone')
             ->get() as $rec) {
 
-            $batch[] = $rec->phone;
+            $phone = $this->formatPhone($rec['phone']);
 
-            // Check numbers in batches of 490
-            if (count($batch) >= 490) {
-                $this->checkBatch($batch);
-                $batch = [];
-            }
-        }
+            $flagged = $this->checkNumber($phone);
 
-        // Check what's left
-        if (!empty($batch)) {
-            $this->checkBatch($batch);
-        }
-    }
-
-    private function checkBatch($batch)
-    {
-        echo "check batch of " . count($batch) . "\n";
-
-        // upload batch to calleridrep
-        foreach ($batch as $phone) {
-            $this->addNumber($phone);
-        }
-
-        // wait for them to process the numbers
-        echo "Waiting for them to process....\n";
-        sleep(10);
-
-        // Get list of all phones w/ flagged column
-        $phones = $this->getAllCallerIdRepPhones();
-
-        // Update db
-        foreach ($phones as $rec) {
-            $phone = $this->formatPhone($rec['number']);
-
+            // update all matching numbers
             PhoneFlag::where('run_date', $this->run_date)
                 ->where('phone', $phone)
                 ->update([
                     'checked' => 1,
-                    'flagged' => $rec['flagged']
+                    'flagged' => $flagged
                 ]);
         }
-
-        // // get details for each number
-        // foreach ($batch as $phone) {
-        //     echo "checking $phone\n";
-
-        //     $flags = $this->checkNumber($phone);
-
-        //     // Update db
-        //     PhoneFlag::where('run_date', $this->run_date)
-        //         ->where('phone', $phone)
-        //         ->update([
-        //             'checked' => 1,
-        //             'flagged' => empty($flags) ? 0 : 1,
-        //             'flags' => $flags
-        //         ]);
-        // }
-
-        // clear em out
-        $this->clearCallerIdRepPhones();
-    }
-
-    private function addNumber($phone)
-    {
-        echo "add number $phone\n";
-
-        if (!$this->waitToSend()) {
-            return '';
-        }
-
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones/add';
-
-        try {
-            $response = $this->guzzleClient->request('POST', $endpoint, [
-                'headers' => $this->calleridHeaders,
-                'form_params' => [
-                    'number' => $phone,
-                    'description' => 'Test phone number',
-                ],
-            ]);
-        } catch (Exception $e) {
-            Log::error('Error uploading number ' . $phone);
-            Log::critical($e->getMessage());
-        }
-    }
-
-    private function waitToSend()
-    {
-        // Check that we're not up against the API rate limit
-        $i = 0;
-        while (!$this->readyToSend()) {
-            // check for infinite loop
-            if ($i++ > ($this->apiLimitSeconds + 2)) {
-                return false;
-            }
-            sleep(1);
-        }
-
-        return true;
-    }
-
-    private function readyToSend()
-    {
-        // count recent requests
-        $count = 0;
-        foreach ($this->apiRequests as $time) {
-            if ($time >= (time() - $this->apiLimitSeconds)) {
-                $count++;
-            }
-        }
-
-        if ($count >= $this->apiLimitRequests) {
-            return false;
-        }
-
-        // Ok to send!
-        $this->apiRequests[] = time();
-        return true;
-    }
-
-    private function getAllCallerIdRepPhones()
-    {
-        if (!$this->waitToSend()) {
-            return [];
-        }
-
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones';
-
-        $content = '';
-        try {
-            $response = $this->guzzleClient->request('GET', $endpoint, [
-                'headers' => $this->calleridHeaders,
-            ]);
-
-            $content = json_decode($response->getBody()->getContents(), true);
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        } catch (ServerException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        }
-
-        return $content;
     }
 
     private function checkNumber($phone)
     {
-        if (!$this->waitToSend()) {
-            return null;
+        echo "Check $phone\n";
+
+        if ($this->checkNomorobo($phone)) {
+            return true;
         }
 
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
-
-        $content = null;
-        $flags = null;
-
-        try {
-            $response = $this->guzzleClient->request('GET', $endpoint, [
-                'headers' => $this->calleridHeaders,
-            ]);
-
-            $content = json_decode($response->getBody()->getContents(), true);
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        } catch (ServerException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        }
-
-        if (is_array($content)) {
-            $flags .= empty($content['ftc_flagged']) ? '' : ',FTC';
-            $flags .= empty($content['ihs_flagged']) ? '' : ',ICEHOOK';
-            $flags .= empty($content['nomorobo_flagged']) ? '' : ',NOMOROBO';
-            $flags .= empty($content['robokiller_flagged']) ? '' : ',ROBOKILLER';
-            $flags .= empty($content['telo_flagged']) ? '' : ',TELO';
-            $flags .= empty($content['tts_flagged']) ? '' : ',TrueSpam';
-
-            if (!empty($flags)) {
-                $flags = substr($flags, 1);
-            }
-        }
-
-        return $flags;
+        return false;
     }
 
-    private function clearCallerIdRepPhones()
+    private function checkNomorobo($phone)
     {
-        echo "delete all caller id rep phones\n";
+        $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
+        $result = @json_decode(json_encode($result->addOns), true);
 
-        $phones = $this->getAllCallerIdRepPhones();
+        $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
 
-        if (is_array($phones)) {
-            foreach ($phones as $rec) {
-                $this->deletePhone($rec['number']);
-            }
-        }
-    }
-
-    private function deletePhone($phone)
-    {
-        echo "delete phone $phone\n";
-
-        if (!$this->waitToSend()) {
-            return;
+        if (Arr::get($nomoroboData, 'status') == 'failed') {
+            Log::error(Arr::get($nomoroboData, 'message'));
+            return false;
         }
 
-        $endpoint = 'https://app.calleridrep.com/api/v1/phones/' . $phone;
+        $spamScore = (int)Arr::get($nomoroboData, 'result.score');
 
-        try {
-            $response = $this->guzzleClient->request('DELETE', $endpoint, [
-                'headers' => $this->calleridHeaders,
-            ]);
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        } catch (ServerException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            Log::error($responseBodyAsString);
-        }
+        return $spamScore >= 1;
     }
 
     private function swapNumbers()
