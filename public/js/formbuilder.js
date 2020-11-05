@@ -13,6 +13,8 @@ var FORMBUILDER = {
 		$('.display_type').on('change', this.change_checked_type);
 		$('#db').on('change', this.get_client_tables);
 		$('#client_table').on('change', this.get_table_fields);
+
+		FORMBUILDER.update_code();
 	},
 
 	add_element:function(e){
