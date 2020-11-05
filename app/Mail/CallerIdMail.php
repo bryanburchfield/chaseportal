@@ -20,12 +20,11 @@ class CallerIdMail extends Mailable implements ShouldQueue
 
     public function build()
     {
-        $datepart = now()->timezone('America/New_York')->format('Y-m-d') . '.csv';
+        $datepart = now()->timezone('UTC')->format('Y-m-d') . '.csv';
 
         $mainfilename = 'callerid-' . $datepart;
-        // $autoswapfilename = 'callerid-autoswap-' . $datepart;
-        // $manualswapfilename = 'callerid-manualswap-' . $datepart;
-        // $othersfilename = 'callerid-others-' . $datepart;
+        $autoswapfilename = 'callerid-autoswap-' . $datepart;
+        $manualswapfilename = 'callerid-manualswap-' . $datepart;
 
         return $this
             ->view('mail.callerid')
@@ -34,21 +33,16 @@ class CallerIdMail extends Mailable implements ShouldQueue
                 base64_decode($this->data['mainCsv']),
                 $mainfilename,
                 ['mime' => 'text/csv']
+            )
+            ->attachData(
+                base64_decode($this->data['autoswapCsv']),
+                $autoswapfilename,
+                ['mime' => 'text/csv']
+            )
+            ->attachData(
+                base64_decode($this->data['manualswapCsv']),
+                $manualswapfilename,
+                ['mime' => 'text/csv']
             );
-        // ->attachData(
-        //     base64_decode($this->data['autoswapCsv']),
-        //     $autoswapfilename,
-        //     ['mime' => 'text/csv']
-        // )
-        // ->attachData(
-        //     base64_decode($this->data['manualswapCsv']),
-        //     $manualswapfilename,
-        //     ['mime' => 'text/csv']
-        // )
-        // ->attachData(
-        //     base64_decode($this->data['othersCsv']),
-        //     $othersfilename,
-        //     ['mime' => 'text/csv']
-        // );
     }
 }

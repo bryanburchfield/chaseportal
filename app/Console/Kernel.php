@@ -70,8 +70,8 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 CallerIdService::execute();
             })
-                ->dailyAt('19:00')
-                ->timezone('America/New_York');
+                ->dailyAt('00:10')
+                ->timezone('UTC');
         }
 
         // Custom KPI (production only)
