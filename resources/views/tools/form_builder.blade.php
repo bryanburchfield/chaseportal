@@ -33,11 +33,6 @@
 									<select name="client_table" id="client_table" class="form-control"></select>
 								</div>
 
-								<div class="form-group">
-									<label>Posting URL</label>
-									<input type="text" class="form-control" name="posting_url" id="posting_url">
-								</div>
-
 								<div class="alert alert-danger hidetilloaded"></div>
 							</div>
 						</div>
@@ -51,11 +46,11 @@
 										</div>
 
 										<div class="col-sm-5">
-											<h3 class="mb30">Values</h3>
+											<h3 class="mb30">Field Labels</h3>
 										</div>
 
 										<div class="col-sm-2">
-											<label class="checkbox-inline flt_rgt"><input class="checkall_system_macro" type="checkbox" value=""><span>Check All Macros</span></label>
+											<label class="checkbox-inline flt_rgt"><input class="checkall_inputs" type="checkbox" value=""><span>Select All Inputs</span></label>
 										</div>
 									</div>
 
@@ -76,7 +71,7 @@
 
 											<div class="col-sm-2">
 												<div class="form-group">
-													<select name="field_type" id="field_type" class="form-control">
+													<select name="field_type" class="form-control field_type">
 														<option value="">Select One</option>
 														<option value="input">Input</option>
 														<option value="textarea">Textarea</option>
@@ -104,7 +99,7 @@
 									<div class="final_url_cnt">
 										<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
 									</div>
-									<button class="generate_url btn btn-primary btn-lg mt20">Generate URL</button>
+									<button class="generate_code btn btn-primary btn-lg mt20">Generate Code</button>
 								</div>
 
 							</div>
