@@ -402,7 +402,7 @@ class CallerIdService
     {
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
-            ->where('calls', '>=', 500)
+            // ->where('calls', '>=', 500)
             // ->where('callerid_check', 1)     uncomment when this is working
             ->select('phone')->distinct()
             ->orderBy('phone')
