@@ -435,7 +435,13 @@ class CallerIdService
 
     private function checkNomorobo($phone)
     {
-        $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
+        try {
+            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
+        } catch (Exception $e) {
+            Log::error('Twilio lookup failed: ' . $e->getMessage());
+            return false;
+        }
+
         $result = @json_decode(json_encode($result->addOns), true);
 
         $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
