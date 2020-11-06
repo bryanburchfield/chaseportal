@@ -28,24 +28,28 @@ var FORMBUILDER = {
 			FORMBUILDER.show_numb_fields();
 		}else{
 			var element = $(this).parent().next().find('.form-group').html();
-
+			console.log(element);
 			var id= $('.user_created_form_element').length;
 			var appended_elem = $('<div class="user_created_form_element" data-id="'+id+'"><div class="col-sm-1"><a class="remove_form_element text-center mr5" href="#"><i class="fas fa-trash-alt"></i></a><a class="edit_form_element text-center" href="#" data-toggle="modal" data-target="#editFieldModal"><i class="fas fa-edit"></i></a></div><div class="col-sm-11 user_created_element"><div class="form-group">'+element+'</div></div></div>');
 
 			$(appended_elem).appendTo('.form_preview');
 
-			// remove submit btn then append to bottom
-			$('.form_preview').find('.btn_div').remove();
-			var btn = $('<div class="user_created_form_element btn_div"><div class="col-sm-1"></div><div class="col-sm-11 user_created_element"><input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary"></div></div>');
-			$('.form_preview').find('.btn').remove();
-			$(btn).appendTo('.form_preview');
+			FORMBUILDER.append_submit_btn();
+			FORMBUILDER.update_code();
 
 			$('.form_preview').show();
 			$('.form_code').parent().show();
-			FORMBUILDER.update_code();
 		}
+	},
 
-		console.log(FORMBUILDER.element_type);
+	append_submit_btn:function(){
+		// remove submit btn then append to bottom
+		$('.form_preview').find('.btn_div').remove();
+
+		var btn = $('<div class="user_created_form_element btn_div"><div class="col-sm-1"></div><div class="col-sm-11 user_created_element"><input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary"></div></div>');
+		$('.form_preview').find('.btn').remove();
+
+		$(btn).appendTo('.form_preview');
 	},
 
 	remove_element:function(e){
@@ -82,29 +86,6 @@ var FORMBUILDER = {
 		if($('.user_created_form_element').length){
 			FORMBUILDER.update_code();
 		}
-	},
-
-	update_code:function(){
-		$('.form_code').empty();
-
-		$('.user_created_form_element').find('.user_created_element').each(function(){
-			var html=$(this).html();
-			// console.log(html);
-			// html = html.replace(/^\s*/gm, '');
-			html=html.replace(/</g, "&lt;");
-			html=html.replace(/>/g, "&gt;");
-
-			// $('.copy_code pre code').append(html);
-
-			var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
-			$('.form_code').append(new_code_block);
-		});
-
-		$('.form_code').parent().show();
-
-		$('pre').each(function(i, block) {
-		    hljs.highlightBlock(block);
-		});
 	},
 
 	pass_id:function(){
@@ -156,30 +137,8 @@ var FORMBUILDER = {
 		}
 	},
 
-	copy_code: function (e) {
-        e.preventDefault();
-        console.log('clicked');
-        $(this).tooltip({
-            animated: 'fade',
-            placement: 'left',
-            trigger: 'click'
-        });
-
-        setTimeout(function () {
-            $('.tooltip').fadeOut('slow');
-        }, 3500);
-
-        var $temp = $("<input>");
-        $(this).parent().append($temp);
-        $temp.val($(this).text()).select();
-        document.execCommand("copy");
-        console.log($temp);
-        $temp.remove();
-    },
-
     get_client_tables: function () {
-
-    	$('.alert-danger').hide();
+    	$('.alert').hide();
     	var database = $(this).val();
     	var group_id = $(this).parent().parent().find('#group_id').val();
 
@@ -195,7 +154,7 @@ var FORMBUILDER = {
     		dataType: 'json',
     		data: { group_id: group_id, database: database },
     		success: function (response) {
-    			console.log(response);
+
     			$('#client_table').empty();
     			if (response.tables.length) {
     				var tables = '<option value="">Select One</option>';
@@ -205,7 +164,7 @@ var FORMBUILDER = {
 
     				$('#client_table').append(tables);
     			} else {
-    				$('.alert-danger').text('No Tables Found').show();
+    				$('.alert').show();
     			}
     		}
     	});
@@ -232,12 +191,55 @@ var FORMBUILDER = {
     			if (response.fields.length) {
     				var new_field_row = '';
     				for (var i = 0; i < response.fields.length; i++) {
-    					new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
+    					var id= $('.user_created_form_element').length;
+						var appended_elem = $('<div class="user_created_form_element" data-id="'+id+'"><div class="col-sm-1"><a class="remove_form_element text-center mr5" href="#"><i class="fas fa-trash-alt"></i></a><a class="edit_form_element text-center" href="#" data-toggle="modal" data-target="#editFieldModal"><i class="fas fa-edit"></i></a></div><div class="col-sm-11 user_created_element"><div class="form-group"><label>'+response.fields[i]+'</label><input type="text" class="form-control" name="'+response.fields[i]+'" field-name="'+response.fields[i]+'" id="'+response.fields[i]+'" placeholder=""></div></div></div>');
+
+						$(appended_elem).appendTo('.form_preview');
+
+						FORMBUILDER.append_submit_btn();
+						FORMBUILDER.update_code();
     				}
-    				$(new_field_row).insertAfter('.field:last');
     			}
     		}
     	});
+    },
+
+    update_code:function(){
+    	$('.form_code').empty();
+
+    	$('.user_created_form_element').find('.user_created_element').each(function(){
+    		var html=$(this).html();
+    		html=html.replace(/</g, "&lt;");
+    		html=html.replace(/>/g, "&gt;");
+
+    		var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
+    		$('.form_code').append(new_code_block);
+    	});
+
+    	$('.form_code').parent().show();
+
+    	$('pre').each(function(i, block) {
+    	    hljs.highlightBlock(block);
+    	});
+    },
+
+	copy_code: function (e) {
+        e.preventDefault();
+        $(this).tooltip({
+            animated: 'fade',
+            placement: 'left',
+            trigger: 'click'
+        });
+
+        setTimeout(function () {
+            $('.tooltip').fadeOut('slow');
+        }, 3500);
+
+        var $temp = $("<input>");
+        $(this).parent().append($temp);
+        $temp.val($(this).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 }
 
