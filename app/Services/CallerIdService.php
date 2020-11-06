@@ -28,6 +28,13 @@ class CallerIdService
     // For Twilio 
     private $twilio;
 
+    // For Truespam 
+    private $truespam;
+    private $truespamScore = 40;          // min score to be considered spam
+    private $truespamRequests = [];       // rate limiting -- 600 per minute
+    private $truespamLimitRequests = 600;
+    private $truespamLimitSeconds = 60;
+
     // For stamping db
     private $run_date;
 
@@ -35,10 +42,22 @@ class CallerIdService
     {
         $this->run_date = now();
 
-        $sid = config('twilio.spam_sid');
-        $token = config('twilio.spam_token');
+        $this->twilio = new Twilio(
+            config('twilio.spam_sid'),
+            config('twilio.spam_token')
+        );
 
-        $this->twilio = new Twilio($sid, $token);
+        $this->truespam = new Client([
+            'base_uri' => 'https://api.truecnam.net',
+            'defaults' => [
+                'query' => [
+                    'username' => config('truespam.key'),
+                    'password' => config('truespam.password'),
+                    'resp_type' => 'extended',
+                    'resp_format' => 'json',
+                ]
+            ]
+        ]);
     }
 
     public static function execute()
@@ -426,7 +445,46 @@ class CallerIdService
     {
         echo "Check $phone\n";
 
+        // check from cheapest to most expensive
+
+        if ($this->checkTruespam($phone)) {
+            return true;
+        }
+
         if ($this->checkNomorobo($phone)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function checkTruespam($phone)
+    {
+        if (!$this->waitToSend($this->truespamRequests, $this->truespamLimitRequests, $this->truespamLimitSeconds)) {
+            return false;
+        }
+
+        $query = ['query' => ['calling_number' => $phone]];
+
+        try {
+            $response = $this->truespam->get(
+                '/api/v1',
+                array_merge_recursive($query, $this->truespam->getConfig('defaults'))
+            );
+        } catch (Exception $e) {
+            Log::error('TrueSpam error: ' . $e->getMessage());
+            return false;
+        }
+
+        // check response
+        $body = $this->objectToArray(json_decode($response->getBody()->getContents()));
+
+        if ((int)Arr::get($body, 'err') !== 0) {
+            Log::error('Truspam error: ' . Arr::get($body, 'error_msg'));
+            return false;
+        }
+
+        if ((int)Arr::get($body, 'spam_score') >= $this->truespamScore) {
             return true;
         }
 
@@ -442,12 +500,12 @@ class CallerIdService
             return false;
         }
 
-        $result = @json_decode(json_encode($result->addOns), true);
+        $result = $this->objectToArray($result->addOns);
 
         $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
 
         if (Arr::get($nomoroboData, 'status') == 'failed') {
-            Log::error(Arr::get($nomoroboData, 'message'));
+            Log::error('Nomorobo error: ' . Arr::get($nomoroboData, 'message'));
             return false;
         }
 
@@ -565,5 +623,44 @@ class CallerIdService
         $phoneFlag->save();
 
         return $return_code;
+    }
+
+    private function waitToSend($apiLog, $limitRequests, $limitSeconds)
+    {
+        // Check that we're not up against the API rate limit
+        $i = 0;
+        while (!$this->readyToSend($apiLog, $limitRequests, $limitSeconds)) {
+            // check for infinite loop
+            if ($i++ > ($limitSeconds + 1)) {
+                return false;
+            }
+            sleep(1);
+        }
+
+        return true;
+    }
+
+    private function readyToSend($apiLog, $limitRequests, $limitSeconds)
+    {
+        // count recent requests
+        $count = 0;
+        foreach ($apiLog as $time) {
+            if ($time >= (time() - $limitSeconds)) {
+                $count++;
+            }
+        }
+
+        if ($count >= $limitRequests) {
+            return false;
+        }
+
+        // Ok to send!
+        $apiLog[] = time();
+        return true;
+    }
+
+    private function objectToArray($obj)
+    {
+        return @json_decode(json_encode($obj), true);
     }
 }
