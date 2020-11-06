@@ -28,9 +28,10 @@ Route::prefix('tools')->group(function () {
             Route::get('cdr_lookup', 'AdminController@loadCdrLookup');
             Route::post('cdr_lookup', 'AdminController@cdrLookup');
 
-            // Webook Generator
+            // Webook Generator & Form Builder
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('webhook_generator', 'AdminController@webhookGenerator');
+                Route::get('form_builder', 'FormBuilderController@index');
             });
 
             Route::redirect('/', action('DncController@index'));

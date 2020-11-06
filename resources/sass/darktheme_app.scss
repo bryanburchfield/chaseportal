@@ -93,6 +93,7 @@ h1, h2, h3, h4, h5, h6 {
 .mb20 {margin-bottom: 20px;}
 .mb30 {margin-bottom: 30px;}
 .mb42 {margin-bottom: 42px;}
+.mr5{margin-right: 5px;}
 .mr10 {margin-right: 10px;}
 .mr20{margin-right: 20px;}
 
@@ -119,6 +120,8 @@ h1, h2, h3, h4, h5, h6 {
 .bt{border-top: 1px solid #1b293c;}
 .bb{border-bottom: 1px solid #1b293c;}
 .tac{text-align: center;}
+.oa{overflow: auto;}
+
 .carb_mb30_mb {
     margin-bottom: 0;
 }
@@ -3288,6 +3291,20 @@ ul.group_select{
 
 .modal-content{
     border:none;
+}
+.theme_selector{
+    border-bottom: 1px solid $blue;
+}
+
+.user_created_form_element{
+    clear: both;
+    overflow: auto;
+}
+
+.appended_code{@include border-radius(0);}
+
+pre.appended_code{
+    overflow:hidden;
 }
 
 /* ---------------------------------------------------

@@ -163,6 +163,10 @@ h6 {
   margin-bottom: 42px;
 }
 
+.mr5 {
+  margin-right: 5px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -249,6 +253,10 @@ h6 {
 
 .bb {
   border-bottom: 1px solid #d8d8d8;
+}
+
+.oa {
+  overflow: auto;
 }
 
 .carb_mb30_mb {
@@ -3765,6 +3773,102 @@ label.checkbox.toggle_active_reps {
 
 ul.group_select {
   padding-left: 10px;
+}
+
+.theme_selector {
+  border-bottom: 1px solid #ddd;
+}
+
+.user_created_form_element {
+  clear: both;
+  overflow: auto;
+}
+
+.form-control.rounded {
+  border-radius: 50px;
+}
+
+.form-control.clean {
+  background: none !important;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.form-control.clean:focus {
+  border-bottom: 2px solid #00b6f0;
+}
+
+.form-control.focus:focus {
+  background: #17A7F9 !important;
+  color: #fff !important;
+}
+
+.form-control ::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: red !important !important;
+}
+
+.form-control :-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: red !important !important;
+  opacity: 1;
+}
+
+.form-control ::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: red !important !important;
+  opacity: 1;
+}
+
+.form-control :-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: red !important !important;
+}
+
+textarea.form-control.rounded {
+  padding: 10px 20px;
+}
+
+textarea.form-control.clean {
+  background: none !important;
+}
+
+pre.p10 {
+  padding: 10px;
+}
+
+.add_element {
+  color: #33A09B;
+}
+
+.remove_form_element {
+  color: #d9534f;
+}
+
+.appended_code {
+  border-radius: 0;
+}
+
+.form_preview .btn {
+  float: right;
+  margin-right: 15px;
+}
+
+pre.appended_code {
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.form_code_preview .tooltip-arrow,
+.form_code_preview .form_code + .tooltip > .tooltip-inner {
+  background-color: #E15B23;
+}
+
+.form_element_options label {
+  font-weight: 600;
 }
 
 /* ---------------------------------------------------

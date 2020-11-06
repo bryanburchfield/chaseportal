@@ -148,6 +148,10 @@ h6 {
   margin-bottom: 42px;
 }
 
+.mr5 {
+  margin-right: 5px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -238,6 +242,10 @@ h6 {
 
 .tac {
   text-align: center;
+}
+
+.oa {
+  overflow: auto;
 }
 
 .carb_mb30_mb {
@@ -4027,6 +4035,23 @@ ul.group_select {
 
 .modal-content {
   border: none;
+}
+
+.theme_selector {
+  border-bottom: 1px solid #203047;
+}
+
+.user_created_form_element {
+  clear: both;
+  overflow: auto;
+}
+
+.appended_code {
+  border-radius: 0;
+}
+
+pre.appended_code {
+  overflow: hidden;
 }
 
 /* ---------------------------------------------------
