@@ -122,14 +122,14 @@ class CallerIdService
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
+                    // ->orWhere(function ($query2) {
+                    //     $query2->where('calls', '>=', 600)
+                    //         ->where('calls', '<', 1000)
+                    //         ->where('connect_ratio', '<', 10);
+                    // })
                     ->orWhere(function ($query2) {
                         $query2->where('calls', '>=', 1000)
                             ->where('connect_ratio', '<', 13);
-                    })
-                    ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 600)
-                            ->where('calls', '<', 1000)
-                            ->where('connect_ratio', '<', 10);
                     });
             })
             ->orderBy('dialer_numb')
@@ -157,14 +157,14 @@ class CallerIdService
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
+                    // ->orWhere(function ($query2) {
+                    //     $query2->where('calls', '>=', 600)
+                    //         ->where('calls', '<', 1000)
+                    //         ->where('connect_ratio', '<', 10);
+                    // })
                     ->orWhere(function ($query2) {
                         $query2->where('calls', '>=', 1000)
                             ->where('connect_ratio', '<', 13);
-                    })
-                    ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 600)
-                            ->where('calls', '<', 1000)
-                            ->where('connect_ratio', '<', 10);
                     });
             })
             ->orderBy('dialer_numb')
@@ -421,7 +421,6 @@ class CallerIdService
     {
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('checked', 0)
-            // ->where('calls', '>=', 500)
             // ->where('callerid_check', 1)     uncomment when this is working
             ->select('phone')->distinct()
             ->orderBy('phone')
@@ -528,10 +527,10 @@ class CallerIdService
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
-                    ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 600)
-                            ->where('connect_ratio', '<', 10);
-                    })
+                    // ->orWhere(function ($query2) {
+                    //     $query2->where('calls', '>=', 600)
+                    //         ->where('connect_ratio', '<', 10);
+                    // })
                     ->orWhere(function ($query2) {
                         $query2->where('calls', '>=', 1000)
                             ->where('connect_ratio', '<', 13);
