@@ -428,13 +428,15 @@ class CallerIdService
 
             $phone = $this->formatPhone($rec['phone']);
 
-            $flagged = $this->checkNumber($phone);
+            $flags = $this->checkNumber($phone);
+            $flagged = !empty($flags);
 
             // update all matching numbers
             PhoneFlag::where('run_date', $this->run_date)
                 ->where('phone', $phone)
                 ->update([
                     'checked' => 1,
+                    'flags' => $flags,
                     'flagged' => $flagged
                 ]);
         }
@@ -444,17 +446,25 @@ class CallerIdService
     {
         echo "Check $phone\n";
 
+        $flags = null;
+
         // check from cheapest to most expensive
 
         if ($this->checkTruespam($phone)) {
-            return true;
+            $flags .= ',Truespam';
+            return 'Truespam';  // bail early
         }
 
         if ($this->checkNomorobo($phone)) {
-            return true;
+            $flags .= ',Nomorobo';
+            return 'Nomorobo';  // bail early
         }
 
-        return false;
+        if (!empty($flags)) {
+            $flags = substr($flags, 1);
+        }
+
+        return $flags;
     }
 
     private function checkTruespam($phone)
