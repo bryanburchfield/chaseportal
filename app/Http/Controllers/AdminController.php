@@ -140,6 +140,22 @@ class AdminController extends Controller
         return view('admin.webhook_generator')->with($data);
     }
 
+    public function formBuilder()
+    {
+        $jsfile[] = 'formbuilder.js';
+        $page['menuitem'] = 'form_builder';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
+        $data = [
+           'jsfile' => $jsfile,
+           'page' => $page,
+           'dbs' => $this->dbs(),
+           'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('tools.form_builder')->with($data);
+    }
+
     /**
      * Set DB
      *  

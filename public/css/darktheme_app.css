@@ -4359,6 +4359,11 @@ MEDIAQUERIES
   color: #33A09B;
 }
 
+pre.appended_code {
+  overflow: hidden;
+  border-radius: 0;
+}
+
 @media handheld, only screen and (max-width: 556px) {
   .form-holder.welcome_box h1 {
     font-size: 30px;
