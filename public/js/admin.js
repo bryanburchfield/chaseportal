@@ -498,7 +498,7 @@ var Admin = {
 
 		var custom_field_name = $('.custom_field_name').val();
 		var custom_field_value = $('.custom_field_value').val();
-
+		console.log(custom_field_name);
 		var new_field_row = '<div class="field"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_name" data-field="' + custom_field_name + '">' + custom_field_name + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control" name="' + custom_field_name + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"><label class="checkbox-inline"><input class="use_system_macro" type="checkbox" value="">Use System Macro</label></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');

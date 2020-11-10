@@ -30,7 +30,7 @@
 
 								<div class="form-group">
 									<label>Table</label>
-									<select name="client_table" id="client_table" class="form-control"></select>
+									<select name="client_table" id="client_table_menu" class="form-control"></select>
 								</div>
 
 								<div class="alert alert-danger hidetilloaded"></div>
@@ -42,15 +42,15 @@
 								<div class="card">
 									<div class="row">
 										<div class="col-sm-5">
-											<h3 class="mb30">Field Names</h3>
-										</div>
-
-										<div class="col-sm-5">
 											<h3 class="mb30">Field Labels</h3>
 										</div>
 
+										<div class="col-sm-5">
+											<h3 class="mb30">Field Names</h3>
+										</div>
+
 										<div class="col-sm-2">
-											<label class="checkbox-inline flt_rgt"><input class="checkall_inputs" type="checkbox" value=""><span>Select All Inputs</span></label>
+											{{-- <label class="checkbox-inline flt_rgt"><input class="checkall_inputs" type="checkbox" value=""><span>Select All Inputs</span></label> --}}
 										</div>
 									</div>
 
@@ -60,31 +60,31 @@
 												<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 											</div>
 											<div class="col-sm-4">
-												<p class="field_name" data-field="{{$val}}">{{$val}}</p>
+												<p class="field_label" data-field="{{$val}}">{{$val}}</p>
 											</div>
 
 											<div class="col-sm-5">
 												<div class="form-group">
-													<input type="text" class="form-control" name="{{$val}}" placeholder="{{$val}}">
+													<input type="text" class="form-control field_name" name="{{$val}}" placeholder="{{$val}}" value="{{$val}}">
 												</div>
 											</div>
 
 											<div class="col-sm-2">
-												<div class="form-group">
+												{{-- <div class="form-group">
 													<select name="field_type" class="form-control field_type">
 														<option value="">Select One</option>
 														<option value="input">Input</option>
 														<option value="textarea">Textarea</option>
 													</select>
-												</div>
+												</div> --}}
 											</div>
 										</div>
 									@endforeach
 								</div>
 
-								<div class="col-sm-7">
-									<form action="#" method="post" class="form-inline add_custom_field fc_style card">
-										<h3>Add Custom Field</h3>
+								<div class="col-sm-5 p0">
+									<form action="#" method="post" class="form-inline add_custom_form_field fc_style card">
+										<h3 class="mb20">Add Custom Field</h3>
 										<div class="form-group mr10">
 											<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
 										</div>
@@ -95,9 +95,20 @@
 									</form>
 								</div>
 
-								<div class="col-sm-5">
-									<div class="final_url_cnt">
+<div class="hidetilloaded html_options">
+<div class="form-group">
+	<label>Label</label>
+	<input type="text" class="form-control" name="label" field-name="label" id="label">
+</div>
+</div>
+
+								<div class="col-sm-7">
+									{{-- <div class="final_url_cnt">
 										<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
+									</div> --}}
+
+									<div class="card form_code_preview hidetilloaded">
+										<div class="form_code" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!"></div>
 									</div>
 									<button class="generate_code btn btn-primary btn-lg mt20">Generate Code</button>
 								</div>

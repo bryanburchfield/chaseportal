@@ -77,6 +77,8 @@
     <script src="/js/color-hash.js"></script>
     <script src="/js/campaign_search.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+    <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/go.min.js"></script>
 
     @isset($summernote)
     <script src="{{ asset('/js/summernote.min.js') }}"></script>
