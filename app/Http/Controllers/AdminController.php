@@ -116,12 +116,18 @@ class AdminController extends Controller
 
     public function webhookGenerator()
     {
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
         $page['menuitem'] = 'webhook_generator';
         $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
-            'dbs' => $this->dbs(),
+            'dbs' => $dbs,
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
         ];

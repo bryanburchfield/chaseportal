@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Dialer;
 use Illuminate\Http\Request;
 
@@ -8,6 +9,12 @@ class FormBuilderController extends Controller
 {
     public function index()
     {
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
         $jsfile[] = 'formbuilder.js';
         $page['menuitem'] = 'form_builder';
         $page['sidenav'] = 'tools';
@@ -15,7 +22,7 @@ class FormBuilderController extends Controller
         $data = [
             'jsfile' => $jsfile,
             'page' => $page,
-            'dbs' => $this->dbs(),
+            'dbs' => $dbs,
         ];
 
         return view('tools.form_builder')->with($data);
