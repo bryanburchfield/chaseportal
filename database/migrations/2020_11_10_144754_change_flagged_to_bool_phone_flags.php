@@ -14,7 +14,7 @@ class ChangeFlaggedToBoolPhoneFlags extends Migration
     public function up()
     {
         Schema::connection('phoneflags')->table('phone_flags', function (Blueprint $table) {
-            $table->boolean('flagged')->change();
+            $table->boolean('flagged')->change()->charset(null)->collation(null);
         });
     }
 
