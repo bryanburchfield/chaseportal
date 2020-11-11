@@ -18,19 +18,34 @@
 
                     <div class="lead_details col-sm-12 mt20">
                             <a href="{{ action('LeadsController@leadDetail') }}" class="btn btn-danger mb20">{{ __('tools.back') }}</a>
+                            <table class="table table-responsive table-striped table-hover dup_lead_detail_recs">
+                                <thead>
+                                    <tr>
+                                        <th>View</th>
+                                        <th>Lead ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Date</th>
+                                        <th>Campaign</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                </thead>
 
-                            @foreach ($leads as $lead)
-                            <div class="bt bb mt0 mb5 pt10 pb10 p20 dup_lead_detail_recs">
-                                <a href="{{ action('LeadsController@leadDetail',['lead' => $lead]) }}" class="fas fa-external-link-alt">
-                                <span>{{ $lead->id }}
-                                {{ $lead->FirstName }}
-                                {{ $lead->LastName }}
-                                {{ $lead->Date }}
-                                {{ $lead->Campaign }}
-                                {{ $lead->LastUpdated }}</span>
-                                </a>
-                            </div>
-                            @endforeach
+                                <tbody>
+                                    @foreach ($leads as $lead)
+                                        <tr>
+                                            <td><a href="{{ action('LeadsController@leadDetail',['lead' => $lead]) }}" class="fas fa-external-link-alt"></a></td>
+                                            <td>{{ $lead->id }}</td>
+                                            <td>{{ $lead->FirstName }}</td>
+                                            <td>{{ $lead->LastName }}</td>
+                                            <td>{{ $lead->Date }}</td>
+                                            <td>{{ $lead->Campaign }}</td>
+                                            <td>{{ $lead->LastUpdated }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            
                     </div>
 				</div>
 			</div>

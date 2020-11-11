@@ -3602,12 +3602,7 @@ a.add_subcampaign i {
   color: #33A09B;
 }
 
-.dup_lead_detail_recs.pt10.bb span {
-  font-family: 'Helvetica', 'Arial', sans-serif !important;
-}
-
-.dup_lead_detail_recs.pt10.bb:hover {
-  background: #eee !important;
+.dup_lead_detail_recs tr:hover {
   color: #33A09B !important;
 }
 
