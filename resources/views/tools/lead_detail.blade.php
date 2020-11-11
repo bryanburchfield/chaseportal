@@ -1,3 +1,8 @@
+@if ($message = Session::get('flash'))
+    @php
+        $errors['id'] = $message;
+    @endphp
+@endif
 @extends('layouts.master')
 @section('title', __('tools.tools'))
 

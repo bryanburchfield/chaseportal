@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -31,7 +32,7 @@ class LeadsController extends Controller
         if ($lead) {
             if ($lead->GroupId != Auth::user()->group_id) {
                 $lead = null;
-                $errors['id'] = 'Lead not found';
+                $errors['id'] = trans('tools.lead_not_found');
             }
         }
 
@@ -51,18 +52,54 @@ class LeadsController extends Controller
         return view('tools.lead_detail')->with($data);
     }
 
+    private function pickLead($leads)
+    {
+        $this->currentDash = session('currentDash', 'inbounddash');
+        session(['currentDash' => $this->currentDash]);
+
+        $jsfile[] = '';
+        $page['menuitem'] = 'lead_detail';
+        $page['sidenav'] = 'main';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'leads' => $leads,
+        ];
+
+        return view('tools.pick_lead')->with($data);
+    }
+
     public function getLead(Request $request)
     {
         $lead = null;
 
         if ($request->has('id')) {
-            $lead = Lead::find($request->id);
+            if ($request->search_key == 'phone') {
+                $lead = Lead::where('PrimaryPhone', $this->formatPhone($request->id))
+                    ->where('GroupId', Auth::user()->group_id)
+                    ->get();
+            } else {
+                $lead = Lead::find($request->id);
+            }
+
+            if ($lead->count() > 1) {
+                return $this->pickLead($lead);
+            }
+
+            if (!$lead) {
+                session()->flash('flash', trans('tools.lead_not_found'));
+            }
         }
 
         return redirect()->action(
             'LeadsController@leadDetail',
             ['lead' => $lead]
         );
+    }
+
+    private function formatPhone($phone)
+    {
+        return preg_replace('/[^0-9]/', '', $phone);
     }
 
     /**
