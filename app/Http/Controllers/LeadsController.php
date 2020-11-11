@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -79,12 +78,14 @@ class LeadsController extends Controller
                     ->where('GroupId', Auth::user()->group_id)
                     ->get();
             } else {
-                $lead = Lead::find($request->id);
+                $lead = Lead::where('id', $request->id)->get();
             }
 
             if ($lead->count() > 1) {
                 return $this->pickLead($lead);
             }
+
+            $lead = $lead->first();
 
             if (!$lead) {
                 session()->flash('flash', trans('tools.lead_not_found'));
