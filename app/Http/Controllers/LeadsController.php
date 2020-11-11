@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Includes\PowerImportAPI;
 use App\Mail\LeadDumpMail;
+use App\Models\Dialer;
 use App\Models\Lead;
-use App\Traits\SqlServerTraits;
 use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
+
 
 class LeadsController extends Controller
 {
@@ -98,7 +102,7 @@ class LeadsController extends Controller
             }
 
             if (!$lead) {
-                session()->flash('flash', trans('tools.lead_not_found'));
+                session()->flash('flasherror', trans('tools.lead_not_found'));
             }
         }
 
@@ -106,6 +110,90 @@ class LeadsController extends Controller
             'LeadsController@leadDetail',
             ['lead' => $lead]
         );
+    }
+
+    public function updateLead(Lead $lead, Request $request)
+    {
+        // These two should never happen
+        if (!$lead) {
+            session()->flash('flasherror', trans('tools.lead_not_found'));
+            return redirect()->back()->withInput();
+        }
+
+        if ($lead->GroupId != Auth::user()->group_id) {
+            session()->flash('flasherror', trans('tools.lead_not_found'));
+            return redirect()->back()->withInput();
+        }
+
+        $fqdn = Dialer::where('id', Auth::user()->dialer_id)->pluck('dialer_fqdn')->first();
+        $api = new PowerImportAPI('http://' . $fqdn . '/PowerStudio/WebAPI');
+
+        // validation?
+
+        // update lead table first
+        $data = $this->getLeadUpdateFields($lead, $request);
+        if (!empty($data)) {
+            Log::info($data);
+            // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+        }
+
+        // update custom table next
+        $data = $this->getCustomUpdateFields($lead, $request);
+        if (!empty($data)) {
+            Log::info($data);
+            // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+        }
+
+        $lead->refresh();  // probably not updated yet, but wth
+
+        session()->flash('flashsuccess', trans('tools.lead_updated'));
+
+        return redirect()->action(
+            'LeadsController@leadDetail',
+            ['lead' => $lead]
+        );;
+    }
+
+    private function getLeadUpdateFields(Lead $lead, Request $request)
+    {
+        $data = [];
+
+        foreach ((new Lead)->getFillable() as $field) {
+            if ($request->exists($field)) {
+                if ($this->valueChange($lead->$field, $request->input($field))) {
+                    $data[$field] = $request->input($field);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    private function getCustomUpdateFields(Lead $lead, Request $request)
+    {
+        $data = [];
+
+        foreach ($lead->customFields() as $rec) {
+            if ($request->exists($rec['key'])) {
+                if ($this->valueChange($rec['value'], $request->input($rec['key']))) {
+                    $data[$rec['key']] = $request->input($rec['key']);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    private function valueChange($old, $new)
+    {
+        if (
+            (empty($old) && empty($new)) ||
+            ($new === $old)
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     private function formatPhone($phone)

@@ -1,6 +1,11 @@
-@if ($message = Session::get('flash'))
+@if ($message = Session::get('flasherror'))
     @php
         $errors['id'] = $message;
+    @endphp
+@endif
+@if ($message = Session::get('flashsuccess'))
+    @php
+        $success['id'] = $message;
     @endphp
 @endif
 @extends('layouts.master')
@@ -45,10 +50,17 @@
                                     <input type="radio" name="search_key" value="lead_id"> Lead ID
                                 </label>
                                 
+                                @if($success ?? '')
+                                    <div class="alert alert-success">
+                                        @foreach ($success as $k => $message)
+                                            {{ $message }}    
+                                        @endforeach
+                                    </div>
+                                @endif
                                 @if($errors)
                                     <div class="alert alert-danger">
-                                        @foreach ($errors as $k => $error)
-                                            {{ $error }}    
+                                        @foreach ($errors as $k => $message)
+                                            {{ $message }}    
                                         @endforeach
                                     </div>
                                 @endif
@@ -86,7 +98,8 @@
                                 <li role="presentation"><a data-toggle="tab" href="#custom_fields">Custom Fields</a></li>
                             </ul>
 
-                            <form action="#" method="POST" name="updateLead">
+                            <form action="{{ action('LeadsController@updateLead',['lead' => $lead]) }}" method="POST" name="updateLead">
+                                @csrf
                                 <div class="tab-content">
                                 
                                     <div role="tabpanel" id="lead_fields" class="tab-pane fade in active">                
@@ -201,9 +214,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label>Notes</label>
-                                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control">
-                                                            {{ old('Notes', $lead->Notes) }}
-                                                        </textarea>
+                                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control">{{ old('Notes', $lead->Notes) }}</textarea>
                                                     </div>
                                                 </div>
                                                 

@@ -11,6 +11,24 @@ class Lead extends SqlSrvModel
 
     protected $table = 'Leads';
 
+    protected $fillable = [
+        'FirstName',
+        'LastName',
+        'Address',
+        'City',
+        'State',
+        'ZipCode',
+        'PrimaryPhone',
+        'SecondaryPhone',
+        'Rep',
+        'CallStatus',
+        'Campaign',
+        'Attempt',
+        'Notes',
+        'Subcampaign',
+        'FullName',
+    ];
+
     public function filledFields()
     {
         $lead_array = $this->toArray();
