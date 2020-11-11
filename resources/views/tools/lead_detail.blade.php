@@ -28,30 +28,32 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
-                            @csrf
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                        <div class="card">
+                            <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
+                                @csrf
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <label class="radio-inline">
-                                <input type="radio" name="search_key" value="phone"> Phone
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="search_key" value="lead_id"> Lead ID
-                            </label>
-                            
-                            @if($errors)
-                                <div class="alert alert-danger">
-                                    @foreach ($errors as $k => $error)
-                                        {{ $error }}    
-                                    @endforeach
-                                </div>
-                            @endif
-                        </form>
+                                <label class="radio-inline">
+                                    <input type="radio" name="search_key" value="phone" checked> Phone
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="search_key" value="lead_id"> Lead ID
+                                </label>
+                                
+                                @if($errors)
+                                    <div class="alert alert-danger">
+                                        @foreach ($errors as $k => $error)
+                                            {{ $error }}    
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </form>
+                        </div>
                     </div>
 
                     @if ($lead)

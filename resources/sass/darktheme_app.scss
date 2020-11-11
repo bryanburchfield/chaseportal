@@ -3145,6 +3145,15 @@ a.add_subcampaign{
 }
 
 
+.dup_lead_detail_recs.pt10.bb{
+    span{font-family: 'Helvetica', 'Arial', sans-serif !important;}
+
+    &:hover{
+        background: darken($blue,5%) !important;
+        color:$green !important;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
