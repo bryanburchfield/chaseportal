@@ -14,7 +14,7 @@ var FORMBUILDER = {
 		$('.alert-danger').hide();
 		var database = $(this).val();
 		var group_id = $(this).parent().parent().find('#group_id').val();
-
+		console.log(database +' '+group_id);
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

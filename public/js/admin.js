@@ -24,7 +24,7 @@ var Admin = {
 		$('#client_table').on('change', this.get_table_fields);
 		$('body').on('click', '.use_system_macro', this.toggle_system_macro);
 		$('body').on('focusin', '.field .form-group .form-control', this.highlight_custom_field);
-		// $('.generate_url').on('click', this.generate_url);
+		$('.generate_url').on('click', this.generate_url);
 		$('.checkall_system_macro').on('click', this.toggleall_system_macro);
 		$('body').on('dblclick', '.field_name', this.edit_field_name);
 		$('.published').on('click', this.toggle_published_msg);
@@ -511,7 +511,7 @@ var Admin = {
 		$('.alert-danger').hide();
 		var database = $(this).val();
 		var group_id = $(this).parent().parent().find('#group_id').val();
-
+		console.log(database +' '+group_id);
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

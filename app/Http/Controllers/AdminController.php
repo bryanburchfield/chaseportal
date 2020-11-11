@@ -126,13 +126,19 @@ class AdminController extends Controller
 
     public function webhookGenerator()
     {
+
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
+        $page['menuitem'] = 'webhook_generator';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
         $data = [
-            'page' => [
-                'menuitem' => 'webhook_generator',
-                'type' => 'page',
-                'sidenav' => 'tools',
-            ],
-            'dbs' => $this->dbs(),
+            'page' => $page,
+            'dbs' => $dbs,
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
         ];
@@ -142,6 +148,13 @@ class AdminController extends Controller
 
     public function formBuilder()
     {
+
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
         $jsfile[] = 'formbuilder.js';
         $page['menuitem'] = 'form_builder';
         $page['sidenav'] = 'tools';
@@ -149,7 +162,7 @@ class AdminController extends Controller
         $data = [
            'jsfile' => $jsfile,
            'page' => $page,
-           'dbs' => $this->dbs(),
+           'dbs' => $dbs,
            'default_lead_fields' => $this->defaultLeadFields(),
         ];
 
