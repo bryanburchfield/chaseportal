@@ -74,18 +74,28 @@ class LeadsController extends Controller
 
         if ($request->has('id')) {
             if ($request->search_key == 'phone') {
-                $lead = Lead::where('PrimaryPhone', $this->formatPhone($request->id))
-                    ->where('GroupId', Auth::user()->group_id)
-                    ->get();
+                try {
+                    $lead = Lead::where('PrimaryPhone', $this->formatPhone($request->id))
+                        ->where('GroupId', Auth::user()->group_id)
+                        ->get();
+                } catch (Exception $e) {
+                    $lead = null;
+                }
             } else {
-                $lead = Lead::where('id', $request->id)->get();
+                try {
+                    $lead = Lead::where('id', $request->id)->get();
+                } catch (Exception $e) {
+                    $lead = null;
+                }
             }
 
-            if ($lead->count() > 1) {
-                return $this->pickLead($lead);
-            }
+            if ($lead) {
+                if ($lead->count() > 1) {
+                    return $this->pickLead($lead);
+                }
 
-            $lead = $lead->first();
+                $lead = $lead->first();
+            }
 
             if (!$lead) {
                 session()->flash('flash', trans('tools.lead_not_found'));
