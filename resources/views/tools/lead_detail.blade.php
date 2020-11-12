@@ -233,17 +233,18 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>{{ $field['description'] }}</label>
-                                                        <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}">
+                                                        <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
                                                     </div>
                                                 </div>
                                             @endforeach
 
-                                            <div class="col-sm-12">
-                                                <input type="submit" class="btn btn-primary cb" value="Save Changes">
-                                            </div>
+                                            @can('accessAdmin')
+                                                <div class="col-sm-12">
+                                                    <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                                </div>
+                                            @endcan
                                         </div>
                                     </div>
-                               
                                 </div>
                             </form>
                         </div>
