@@ -96,11 +96,14 @@
 								</div>
 
 <div class="hidetilloaded html_options">
+<div class="input">
 <div class="form-group">
 	<label>Label</label>
 	<input type="text" class="form-control" name="label" field-name="label" id="label">
 </div>
+</div>
 
+<div class="select_state">
 <div class="form-group">
 	<select name="state" id="state">
 		<option value="" selected="selected">Select a State</option>
@@ -156,6 +159,7 @@
 		<option value="WI">Wisconsin</option>
 		<option value="WY">Wyoming</option>
 	</select>
+</div>
 </div>
 </div>
 

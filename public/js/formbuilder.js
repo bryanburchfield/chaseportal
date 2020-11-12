@@ -7,6 +7,7 @@ var FORMBUILDER = {
 		$('#client_table_menu').on('change', this.get_table_fields);
 		$('.add_custom_form_field').on('submit', this.add_custom_form_field);
 		$('.form_code').on('click', this.copy_code);
+		$('body').on('dblclick', '.field_label', this.edit_field_label);
 	},
 
 	get_client_tables: function () {
@@ -93,15 +94,22 @@ var FORMBUILDER = {
 			if(!$(this).hasClass('field_removed')){
 				var field_label = $(this).find('.field_label').text();
 				var field_name = $(this).find('.field_name').val();
+				console.log(field_label);
+				if(field_label !== 'State' && field_label !== 'state' && field_label !== 'STATE'){
 
-				$('.html_options').find('.form-group label').text(field_label);
-				$('.html_options').find('.form-group input.form-control').attr('name', field_name);
-				$('.html_options').find('.form-group input.form-control').attr('field-name', field_name);
-				$('.html_options').find('.form-group input.form-control').attr('id', field_name);
+					$('.html_options').find('.form-group label').text(field_label);
+					$('.html_options').find('.form-group input.form-control').attr('name', field_name);
+					$('.html_options').find('.form-group input.form-control').attr('field-name', field_name);
+					$('.html_options').find('.form-group input.form-control').attr('id', field_name);
 
-				var html=$('.html_options').html();
+					var html=$('.html_options').find('.input').html();
+				}else{
+					console.log('field_label == state');
+					var html=$('.html_options').find('.select_state').html();
+				}
+
 				html = FORMBUILDER.remove_tags(html);
-				console.log(html);
+				// console.log(html);
 
 				var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
 				$('.form_code').append(new_code_block);
@@ -193,6 +201,26 @@ var FORMBUILDER = {
 
 		$('.field .use_system_macro').each(function () {
 			Admin.toggle_system_macro($(this));
+		});
+	},
+
+	edit_field_label: function () {
+
+		var edit_input = $('<input class="form-control" name="temp" type="text" />');
+		var elem = $(this);
+
+		elem.hide();
+		elem.after(edit_input);
+		edit_input.focus();
+
+		edit_input.blur(function () {
+
+			if ($(this).val() != '') {
+				elem.text($(this).val());
+			}
+
+			$(this).remove();
+			elem.show();
 		});
 	},
 }
