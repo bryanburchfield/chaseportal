@@ -64,7 +64,7 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						new_field_row += '<div class="field field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
 					}
 					$(new_field_row).insertAfter('.field:last');
 				}
@@ -101,7 +101,6 @@ var FORMBUILDER = {
 
 				var html=$('.html_options').html();
 				html = FORMBUILDER.remove_tags(html);
-
 				console.log(html);
 
 				var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
