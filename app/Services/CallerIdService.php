@@ -25,6 +25,12 @@ class CallerIdService
     private $enddate;
     private $maxcount;
 
+    // Groups to exclude
+    private $ignoreGroups =
+    [
+        212182,
+    ];
+
     // For Twilio 
     private $twilio;
 
@@ -263,6 +269,9 @@ class CallerIdService
 'Answering Machine'
         ";
 
+        // Make list of groups to ignore
+        $ignoreGroups = implode(',', $this->ignoreGroups);
+
         $bind = [];
         $bind['maxcount'] = $this->maxcount;
 
@@ -316,6 +325,7 @@ class CallerIdService
             AND DR.CallerId != ''
             AND DR.CallType IN (0,2)
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
+            AND DR.GroupId NOT IN ($ignoreGroups)
             AND O.Active = 1
             GROUP BY DR.GroupId, GroupName, CallerId, I.Description, TP.CallerIdCheck, I.InboundSource, O.Active, TP.Phone
             HAVING COUNT(*) >= :inner_maxcount$i
