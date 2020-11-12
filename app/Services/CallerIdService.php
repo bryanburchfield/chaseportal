@@ -6,6 +6,7 @@ use App\Mail\CallerIdMail;
 use App\Models\AreaCode;
 use App\Models\Dialer;
 use App\Models\PhoneFlag;
+use App\Models\PhoneReswap;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
@@ -91,8 +92,12 @@ class CallerIdService
         $this->checkFlags();
 
         echo "Swap Numbers\n";
-        Log::info('Swapping Numbers');
+        Log::info('Swapping numbers');
         $this->swapNumbers();
+
+        echo "Check and re-swap numbers\n";
+        Log::info('Swapping Numbers');
+        $this->checkSwapped();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -560,17 +565,20 @@ class CallerIdService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            $this->swapNumber($client, $rec);
+            list($rec->replaced_by, $rec->swap_error) = $this->swapNumber($client, $rec->phone, $rec->dialer_numb, $rec->group_id);
+            $rec->save();
         }
     }
 
-    private function swapNumber(Client $client, PhoneFlag $phoneFlag)
+    private function swapNumber(Client $client, $phone, $dialer_numb, $group_id)
     {
         // try to replace with same NPA
-        if (!$this->swapNumberNpa($client, $phoneFlag)) {
+        list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id);
+
+        if (empty($replaced_by)) {
 
             // Find area code record
-            $npa = substr($this->formatPhone($phoneFlag->phone, true), 0, 3);
+            $npa = substr($this->formatPhone($phone, true), 0, 3);
             $areaCode = AreaCode::find($npa);
 
             if ($areaCode) {
@@ -579,17 +587,20 @@ class CallerIdService
 
                 // loop through till swap succeeds or errors
                 foreach ($alternates as $alternate) {
-                    if ($this->swapNumberNpa($client, $phoneFlag, $alternate->npa)) {
+                    list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id, $alternate->npa);
+                    if (!empty($replaced_by)) {
                         break;
                     }
                 }
             }
         }
+
+        return [$replaced_by, $swap_error];
     }
 
-    private function swapNumberNpa(Client $client, PhoneFlag $phoneFlag, $npa = null)
+    private function swapNumberNpa(Client $client, $phone, $dialer_numb, $group_id, $npa = null)
     {
-        echo "Swapping " . $phoneFlag->phone . " $npa\n";
+        echo "Swapping $phone $npa\n";
 
         $error = null;
         $replaced_by = null;
@@ -600,16 +611,15 @@ class CallerIdService
                 [
                     'query' => [
                         'Token' => '3DCE9183-CA9C-4D1A-8B23-171DFA8C4D4B',
-                        'Server' => 'dialer-' . sprintf('%02d', $phoneFlag->dialer_numb, 2),
-                        'Number' => $this->formatPhone($phoneFlag->phone, 1),
-                        'GroupId' => $phoneFlag->group_id,
+                        'Server' => 'dialer-' . sprintf('%02d', $dialer_numb, 2),
+                        'Number' => $this->formatPhone($phone, 1),
+                        'GroupId' => $group_id,
                         'Action' => 'swap',
                         'NPA' => $npa
                     ]
                 ]
             );
         } catch (Exception $e) {
-            $return_code = -1;
             $error = 'Swap API failed: ' . $e->getMessage();
         }
 
@@ -619,29 +629,88 @@ class CallerIdService
 
                 if (isset($body->NewDID)) {
                     if (!empty($body->NewDID)) {
-                        $return_code = 1;
                         $replaced_by = $body->NewDID;
                     } else {
-                        $return_code = 0;
                         $error = 'No repalcement available';
                     }
                 }
                 if (!empty($body->Error)) {
-                    $return_code = -1;
                     $error = $body->Error;
                 }
-            } catch (\Throwable $th) {
-                $return_code = -1;
+            } catch (Exception $e) {
                 $error = 'Could not swap number: ' . $e->getMessage();
             }
         }
 
-        // update db
-        $phoneFlag->replaced_by = $replaced_by;
-        $phoneFlag->swap_error = $error;
-        $phoneFlag->save();
+        return [$replaced_by, $error];
+    }
 
-        return $return_code;
+    private function checkSwapped()
+    {
+        $client = new Client();
+
+        // make a list of new numbers
+        $replacements = PhoneFlag::where('run_date', $this->run_date)
+            ->whereNotNull('replaced_by')
+            ->orderBy('replaced_by')
+            ->get();
+
+        Log::info('Swapped: ' . $replacements->count());
+
+        $loop = 0;
+
+        while ($loop < 3) {
+            $loop++;
+
+            // Spam check them
+            $replacements->transform(function ($item, $key) {
+                $item->new_flags = $this->checkNumber($item->replaced_by);
+                return $item;
+            });
+
+            // Filter spammy numbers
+            $replacements = $replacements->filter(function ($item, $key) {
+                return !empty($item->new_flags);
+            });
+
+            Log::info('Swapped spammy: ' . $replacements->count());
+
+            // Replace them
+            $replacements->transform(function ($item, $key) use ($client) {
+                $item->new_flags = null;
+
+                list($replaced_by, $swap_error) = $this->swapNumber($client, $item->replaced_by, $item->dialer_numb, $item->group_id);
+
+                // save to db
+                try {
+                    PhoneReswap::create([
+                        'run_date' => $this->run_date,
+                        'group_id' => $item->group_id,
+                        'dialer_numb' => $item->dialer_numb,
+                        'phone' => $item->phone,
+                        'replaced_by' => $item->replaced_by,
+                        'replaced_again' => $replaced_by,
+                    ]);
+                } catch (Exception $e) {
+                    Log::error('Could not crate phone_reswap: ' . $item->id . ' ' . $e->getMessage());
+                }
+
+                $item->replaced_by = $replaced_by;
+                $item->swap_error = $swap_error;
+
+                // update phone_flags
+                try {
+                    $phone_flag = PhoneFlag::find($item->id);
+                    $phone_flag->replaced_by = $item->replaced_by;
+                    $phone_flag->swap_error = $item->swap_error;
+                    $phone_flag->save();
+                } catch (Exception $e) {
+                    Log::error('Could not update phone_flags: ' . $item->id . ' ' . $e->getMessage());
+                }
+
+                return $item;
+            });
+        }
     }
 
     private function waitToSend($apiLog, $limitRequests, $limitSeconds)
