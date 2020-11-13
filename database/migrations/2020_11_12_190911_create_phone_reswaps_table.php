@@ -21,6 +21,7 @@ class CreatePhoneReswapsTable extends Migration
             $table->string('phone', 15);
             $table->string('replaced_by', 15);
             $table->string('replaced_again', 15);
+            $table->smallInteger('attempt');
 
             $table->index('run_date');
         });
