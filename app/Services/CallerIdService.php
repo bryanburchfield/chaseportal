@@ -657,10 +657,10 @@ class CallerIdService
 
         Log::info('Swapped: ' . $replacements->count());
 
-        $loop = 0;
+        $attempt = 0;
 
-        while ($loop < 3) {
-            $loop++;
+        while ($attempt < 3) {
+            $attempt++;
 
             // Spam check them
             $replacements->transform(function ($item, $key) {
@@ -676,7 +676,7 @@ class CallerIdService
             Log::info('Swapped spammy: ' . $replacements->count());
 
             // Replace them
-            $replacements->transform(function ($item, $key) use ($client, $loop) {
+            $replacements->transform(function ($item, $key) use ($client, $attempt) {
                 $item->new_flags = null;
 
                 list($replaced_by, $swap_error) = $this->swapNumber($client, $item->replaced_by, $item->dialer_numb, $item->group_id);
@@ -690,7 +690,7 @@ class CallerIdService
                         'phone' => $item->phone,
                         'replaced_by' => $item->replaced_by,
                         'replaced_again' => $replaced_by,
-                        'attempt' => $loop,
+                        'attempt' => $attempt,
                     ]);
                 } catch (Exception $e) {
                     Log::error('Could not crate phone_reswap: ' . $item->id . ' ' . $e->getMessage());
@@ -701,10 +701,11 @@ class CallerIdService
 
                 // update phone_flags
                 try {
-                    $phone_flag = PhoneFlag::find($item->id);
-                    $phone_flag->replaced_by = $item->replaced_by;
-                    $phone_flag->swap_error = $item->swap_error;
-                    $phone_flag->save();
+                    PhoneFlag::where('id', $item->id)
+                        ->update([
+                            'replaced_by' => $item->replaced_by,
+                            'swap_error' => $item->swap_error,
+                        ]);
                 } catch (Exception $e) {
                     Log::error('Could not update phone_flags: ' . $item->id . ' ' . $e->getMessage());
                 }
