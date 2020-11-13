@@ -2976,6 +2976,60 @@ a.add_subcampaign{
 }
 
 
+.all-slides {
+  counter-reset: slides;
+  // position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.slide {
+  width: 100%;
+  // height: 60px;
+  position: relative;
+  user-select: none;
+  // margin: 0 0 0.75rem 0;
+  z-index: 5;
+  &:before {
+    position: absolute;
+    bottom: 0;
+    right: 100%;
+    counter-increment: slides;
+    content: counter(slides);
+    // padding-right: 0.35rem;
+  }
+}
+
+.ui-sortable-helper {
+  transition: none !important;
+  animation: pulse 0.4s alternate infinite;
+}
+
+.sortable-placeholder {
+  height: 60px;
+  width: 5px;
+  margin: 0 0 0.75rem 0;
+  position: relative;
+  z-index: 6;
+}
+
+@keyframes pulse {
+  100% { transform: scale(1.1); } 
+}
+
+.cloned-slides {
+  .slide {
+    position: absolute;
+    z-index: 1;
+    &:before {
+      content: attr(data-pos);
+    }
+  }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
