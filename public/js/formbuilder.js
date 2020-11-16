@@ -67,11 +67,16 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row += '<div class="field slide field_from_table"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						new_field_row = '<div class="field slide field_from_table ui-sortable-handle"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
+
+						var pos=$('.cloned-slides').find('.field:last').data('pos');
+						pos++;
+						new_field_row = '<div class="field slide field_from_table" data-pos="'+pos+'" style="visibility: hidden;"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						$(new_field_row).insertAfter('.cloned-slides .field:last');
 					}
-					
+
 					// var pos=$('.cloned-slides').find('.field:last').data('pos');
 					// pos++;
 					// $(new_field_row).attr('data',pos);
@@ -296,6 +301,7 @@ var FORMBUILDER = {
 		    $(".all-slides .slide").each(function() {
 				var item = $(this);
 				var clone = item.data("clone");
+				console.log(item.index());
 
 				clone.attr("data-pos", item.index());
 		    });
