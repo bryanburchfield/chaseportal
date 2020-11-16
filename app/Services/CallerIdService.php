@@ -32,8 +32,12 @@ class CallerIdService
         212182,
     ];
 
-    // For Twilio 
+    // For Twilio  (icehook)
     private $twilio;
+    private $icehookScore = 80;          // min score to be considered spam
+
+    // For Nomorobo
+    private $nomorobo;
 
     // For Truespam 
     private $truespam;
@@ -63,6 +67,14 @@ class CallerIdService
                     'resp_type' => 'extended',
                     'resp_format' => 'json',
                 ]
+            ]
+        ]);
+
+        $this->nomorobo = new Client([
+            'base_uri' => 'https://api.nomorobo.com',
+            'auth' => [
+                config('nomorobo.user'),
+                config('nomorobo.password')
             ]
         ]);
     }
@@ -475,6 +487,11 @@ class CallerIdService
             return 'Nomorobo';  // bail early
         }
 
+        if ($this->checkIcehook($phone)) {
+            $flags .= ',Icehook';
+            return 'Icehook';  // bail early
+        }
+
         if (!empty($flags)) {
             $flags = substr($flags, 1);
         }
@@ -508,17 +525,40 @@ class CallerIdService
             return false;
         }
 
-        if ((int)Arr::get($body, 'spam_score') >= $this->truespamScore) {
-            return true;
-        }
+        $spamScore = (int)Arr::get($body, 'spam_score');
 
-        return false;
+        return $spamScore >= $this->truespamScore;
     }
 
     private function checkNomorobo($phone)
     {
         try {
-            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
+            $response = $this->nomorobo->get(
+                '/v1/check',
+                ['query' => ['From' => $phone]]
+            );
+        } catch (Exception $e) {
+            Log::error('Nomorobo error: ' . $e->getMessage());
+            return false;
+        }
+
+        // check response
+        $body = $this->objectToArray(json_decode($response->getBody()->getContents()));
+
+        if (Arr::get($body, 'status') !== 'success') {
+            Log::error('Nomorobo error: ' . Arr::get($body, 'message'));
+            return false;
+        }
+
+        $spamScore = (int)Arr::get($body, 'score');
+
+        return $spamScore >= 1;
+    }
+
+    private function checkIcehook($phone)
+    {
+        try {
+            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['icehook_scout']]);
         } catch (Exception $e) {
             Log::error('Twilio lookup failed: ' . $e->getMessage());
             return false;
@@ -526,16 +566,16 @@ class CallerIdService
 
         $result = $this->objectToArray($result->addOns);
 
-        $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
+        $icehookData = Arr::get($result, 'results.icehook_scout');
 
-        if (Arr::get($nomoroboData, 'status') == 'failed') {
-            Log::error('Nomorobo error: ' . Arr::get($nomoroboData, 'message'));
+        if (Arr::get($icehookData, 'status') == 'failed') {
+            Log::error('Icehook error: ' . Arr::get($icehookData, 'message'));
             return false;
         }
 
-        $spamScore = (int)Arr::get($nomoroboData, 'result.score');
+        $spamScore = (int)Arr::get($icehookData, 'result.risk_level');
 
-        return $spamScore >= 1;
+        return $spamScore >= $this->icehookScore;
     }
 
     private function swapNumbers()
