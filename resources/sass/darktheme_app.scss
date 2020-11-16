@@ -3124,6 +3124,14 @@ a.add_subcampaign{
     .nav_holder{position: absolute;top:0;left:0;}
 }
 
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
+    width: 100% !important;
+}
+
+.field.slide.default.ui-sortable-handle {
+    padding-bottom: 20px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

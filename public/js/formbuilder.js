@@ -8,8 +8,6 @@ var FORMBUILDER = {
 		$('.add_custom_form_field').on('submit', this.add_custom_form_field);
 		$('.form_code').on('click', this.copy_code);
 		$('body').on('dblclick', '.field_label', this.edit_field_label);
-
-		FORMBUILDER.set_sortable();
 	},
 
 	get_client_tables: function () {
@@ -62,26 +60,15 @@ var FORMBUILDER = {
 			dataType: 'json',
 			data: { table_name: table_name, database: database },
 			success: function (response) {
-				console.log(response);
+
 				$('.field_from_table').remove();
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table ui-sortable-handle"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
-
-						var pos=$('.cloned-slides').find('.field:last').data('pos');
-						pos++;
-						new_field_row = '<div class="field slide field_from_table" data-pos="'+pos+'" style="visibility: hidden;"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
-						$(new_field_row).insertAfter('.cloned-slides .field:last');
 					}
-
-					// var pos=$('.cloned-slides').find('.field:last').data('pos');
-					// pos++;
-					// $(new_field_row).attr('data',pos);
-					// $(new_field_row).insertAfter('.cloned-slides .field:last');
-					// console.log(pos);
 				}
 			}
 		});
@@ -97,10 +84,6 @@ var FORMBUILDER = {
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
-
-		// $('.cloned-slides').find('.')
-
-		FORMBUILDER.set_sortable();
 	},
 
 	generate_code:function(e){
@@ -152,12 +135,8 @@ var FORMBUILDER = {
 		    hljs.highlightBlock(block);
 		});
 
-
 		$('.form_code_preview').show();
 		// console.log(input);
-		if ($(this).prop("checked") == true) {
-
-		}
 	},
 
 	remove_tags:function(html){
@@ -197,12 +176,8 @@ var FORMBUILDER = {
 
 		$('.user_created_form_element').find('.user_created_element').each(function(){
 			var html=$('.html_options').html();
-			console.log(html);
-			// html = html.replace(/^\s*/gm, '');
 			html=html.replace(/</g, "&lt;");
 			html=html.replace(/>/g, "&gt;");
-
-			// $('.copy_code pre code').append(html);
 
 			var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
 			$('.form_code').append(new_code_block);
@@ -253,81 +228,15 @@ var FORMBUILDER = {
 			elem.show();
 		});
 	},
-
-	set_sortable:function(){
-		$(".slide").each(function(i) {
-			var item = $(this);
-			var item_clone = item.clone();
-			item.data("clone", item_clone);
-			var position = item.position();
-			item_clone
-				.css({
-				left: position.left,
-				top: position.top,
-				visibility: "hidden"
-				})
-		    .attr("data-pos", i+1);
-			$("#cloned-slides").append(item_clone);
-		});
-
-		$(".all-slides").sortable({
-			axis: "y",
-			revert: true,
-			scroll: false,
-			placeholder: "sortable-placeholder",
-			cursor: "move",
-
-		 	start: function(e, ui) {
-		    	ui.helper.addClass("exclude-me");
-		    	$(".all-slides .slide:not(.exclude-me)")
-		      		.css("visibility", "hidden");
-		    		ui.helper.data("clone").hide();
-		    	$(".cloned-slides .slide").css("visibility", "visible");
-		  },
-
-			stop: function(e, ui) {
-				$(".all-slides .slide.exclude-me").each(function() {
-					var item = $(this);
-					var clone = item.data("clone");
-					var position = item.position();
-
-					clone.css("left", position.left);
-					clone.css("top", position.top);
-					clone.show();
-
-					item.removeClass("exclude-me");
-				});
-
-		    $(".all-slides .slide").each(function() {
-				var item = $(this);
-				var clone = item.data("clone");
-				console.log(item.index());
-
-				clone.attr("data-pos", item.index());
-		    });
-
-		    $(".all-slides .slide").css("visibility", "visible");
-		    $(".cloned-slides .slide").css("visibility", "hidden");
-		},
-
-			change: function(e, ui) {
-				$(".all-slides .slide:not(.exclude-me)").each(function() {
-					var item = $(this);
-					var clone = item.data("clone");
-					clone.stop(true, false);
-					var position = item.position();
-					clone.animate({
-					left: position.left,
-					top: position.top
-					}, 200);
-				});
-			}
-		});
-	}
 }
 
 $(document).ready(function () {
 	FORMBUILDER.init();
 
-	
+	$( ".all-slides" ).sortable({
+		revert: true,
+		cursor: "grabbing"
+	});
+
+	$( "ul, li" ).disableSelection();
 });
