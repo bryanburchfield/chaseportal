@@ -62,7 +62,7 @@
 
 									<div class="all-slides">
 										@foreach($default_lead_fields as $val)
-											<div class="field slide">
+											<div class="field slide default">
 												<div class="col-sm-1">
 													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 												</div>
@@ -71,9 +71,7 @@
 												</div>
 
 												<div class="col-sm-5">
-													<div class="form-group">
-														<input type="text" class="form-control field_name" name="{{$val}}" placeholder="{{$val}}" value="{{$val}}">
-													</div>
+													<p class="field_value" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
 												<div class="col-sm-2">

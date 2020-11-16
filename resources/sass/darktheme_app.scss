@@ -3307,6 +3307,14 @@ pre.appended_code{
     overflow:hidden;
 }
 
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
+    width: 100% !important;
+}
+
+.field.slide.default.ui-sortable-handle {
+    padding-bottom: 20px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
