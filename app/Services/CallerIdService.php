@@ -669,7 +669,7 @@ class CallerIdService
 
                 if (isset($body->NewDID)) {
                     if (!empty($body->NewDID)) {
-                        $replaced_by = $body->NewDID;
+                        $replaced_by = $this->formatPhone($body->NewDID);
                     } else {
                         $error = 'No repalcement available';
                     }
