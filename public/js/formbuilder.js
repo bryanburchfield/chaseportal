@@ -65,7 +65,7 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_value" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -77,10 +77,10 @@ var FORMBUILDER = {
 	add_custom_form_field: function (e) {
 		e.preventDefault();
 
-		var custom_field_name = $('.custom_field_name').val();
+		var custom_field_value = $('.custom_field_value').val();
 		var custom_field_value = $('.custom_field_value').val();
 
-		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + custom_field_name + '">' + custom_field_name + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_name" name="' + custom_field_name + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"></div></div>';
+		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + custom_field_value + '">' + custom_field_value + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_value" name="' + custom_field_value + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
@@ -91,20 +91,26 @@ var FORMBUILDER = {
 
 		$('.form_code').empty();
 
-		var html = '<form action="#" method="post" class="form">';
+		var html = $('.html_options .head textarea').val();
+		console.log(html);
+		// '<form action="#" method="post" class="form">';
 		FORMBUILDER.appended_code(html);
 
 		$('.all-slides .field').each(function(){
 			if(!$(this).hasClass('field_removed')){
 				var field_label = $(this).find('.field_label').text();
-				var field_name = $(this).find('.field_name').val();
+				if($(this).hasClass('default')){
+					var field_value = $(this).find('.field_value').text();
+				}else{
+					var field_value = $(this).find('.field_value').val();
+				}
 
 				if(field_label !== 'State' && field_label !== 'state' && field_label !== 'STATE'){
 
 					$('.html_options').find('.form-group label').text(field_label);
-					$('.html_options').find('.form-group input.form-control').attr('name', field_name);
-					$('.html_options').find('.form-group input.form-control').attr('field-name', field_name);
-					$('.html_options').find('.form-group input.form-control').attr('id', field_name);
+					$('.html_options').find('.form-group input.form-control').attr('name', field_value);
+					$('.html_options').find('.form-group input.form-control').attr('field-name', field_value);
+					$('.html_options').find('.form-group input.form-control').attr('id', field_value);
 
 					html=$('.html_options').find('.input').html();
 				}else{
@@ -128,7 +134,7 @@ var FORMBUILDER = {
 
 		$('.form_code').append(new_code_block);
 
-		html='</form>';
+		html = $('.html_options .bottom textarea').val();
 		FORMBUILDER.appended_code(html);
 
 		$('pre').each(function(i, block) {
@@ -219,7 +225,6 @@ var FORMBUILDER = {
 		edit_input.focus();
 
 		edit_input.blur(function () {
-
 			if ($(this).val() != '') {
 				elem.text($(this).val());
 			}
@@ -238,5 +243,5 @@ $(document).ready(function () {
 		cursor: "grabbing"
 	});
 
-	$( "ul, li" ).disableSelection();
+	// $( "ul, li" ).disableSelection();
 });
