@@ -104,6 +104,25 @@
 								</div>
 
 <div class="hidetilloaded html_options">
+
+<div class="head">
+<textarea name="head" id="head" cols="30" rows="10">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://www.chasedatacorp.com/assets/css/font-awesome.min.css" rel="stylesheet">
+	<link id="main-sheet" rel="stylesheet" href="https://www.chasedatacorp.com/assets/css/bootstrap.min.css">
+</head>
+<body>
+
+	<form action="#" method="post" class="form">
+</textarea>
+
+</div>
+
 <div class="input">
 	<div class="form-group">
 		<label>Label</label>
@@ -168,6 +187,15 @@
 			<option value="WY">Wyoming</option>
 		</select>
 	</div>
+</div>
+
+<div class="bottom">
+<textarea name="bottom" id="bottom" cols="30" rows="10">
+	</form>
+</body>
+</html>
+</textarea>
+
 </div>
 </div>
 
