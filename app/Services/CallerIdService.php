@@ -36,9 +36,6 @@ class CallerIdService
     private $twilio;
     private $icehookScore = 80;          // min score to be considered spam
 
-    // For Nomorobo
-    private $nomorobo;
-
     // For Truespam 
     private $truespam;
     private $truespamScore = 40;          // min score to be considered spam
@@ -67,14 +64,6 @@ class CallerIdService
                     'resp_type' => 'extended',
                     'resp_format' => 'json',
                 ]
-            ]
-        ]);
-
-        $this->nomorobo = new Client([
-            'base_uri' => 'https://api.nomorobo.com',
-            'auth' => [
-                config('nomorobo.user'),
-                config('nomorobo.password')
             ]
         ]);
     }
@@ -533,24 +522,22 @@ class CallerIdService
     private function checkNomorobo($phone)
     {
         try {
-            $response = $this->nomorobo->get(
-                '/v1/check',
-                ['query' => ['From' => $phone]]
-            );
+            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
         } catch (Exception $e) {
-            Log::error('Nomorobo error: ' . $e->getMessage());
+            Log::error('Twilio lookup failed: ' . $e->getMessage());
             return false;
         }
 
-        // check response
-        $body = $this->objectToArray(json_decode($response->getBody()->getContents()));
+        $result = $this->objectToArray($result->addOns);
 
-        if (Arr::get($body, 'status') !== 'success') {
-            Log::error('Nomorobo error: ' . Arr::get($body, 'message'));
+        $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
+
+        if (Arr::get($nomoroboData, 'status') == 'failed') {
+            Log::error('Nomorobo error: ' . Arr::get($nomoroboData, 'message'));
             return false;
         }
 
-        $spamScore = (int)Arr::get($body, 'score');
+        $spamScore = (int)Arr::get($nomoroboData, 'result.score');
 
         return $spamScore >= 1;
     }
