@@ -717,7 +717,6 @@ class CallerIdService
 
             // Replace them
             $replacements->transform(function ($item, $key) use ($client, $attempt) {
-                $item->new_flags = null;
 
                 list($replaced_by, $swap_error) = $this->swapNumber($client, $item->replaced_by, $item->dialer_numb, $item->group_id);
 
@@ -731,11 +730,13 @@ class CallerIdService
                         'replaced_by' => $item->replaced_by,
                         'replaced_again' => $replaced_by,
                         'attempt' => $attempt,
+                        'flags' => $item->new_flags,
                     ]);
                 } catch (Exception $e) {
                     Log::error('Could not crate phone_reswap: ' . $item->id . ' ' . $e->getMessage());
                 }
 
+                $item->new_flags = null;
                 $item->replaced_by = $replaced_by;
                 $item->swap_error = $swap_error;
 
