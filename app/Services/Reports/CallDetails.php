@@ -16,6 +16,7 @@ class CallDetails
 
     private $advanced_table;
     private $extra_cols;
+    private $sip_bye = false;
 
     public function __construct()
     {
@@ -111,12 +112,24 @@ class CallDetails
         $sql = "SELECT COLUMN_NAME
             FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_NAME = '$table'
-            and COLUMN_NAME != 'LeadId'
+            AND COLUMN_NAME != 'LeadId'
             ORDER BY ORDINAL_POSITION";
 
-        $results = $this->runSql($sql, []);
+        $results = $this->runSql($sql);
 
         return array_values(resultsToList($results));
+    }
+
+    private function hasSipBye()
+    {
+        $sql = "SELECT COUNT(*) cnt
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = 'DialingResults'
+            AND COLUMN_NAME = 'sip_bye'";
+
+        $results = $this->runSql($sql);
+
+        return !empty($results[0]['cnt']);
     }
 
     private function configCustomTable()
@@ -192,6 +205,12 @@ class CallDetails
 
     public function makeQuery($all)
     {
+        if ($this->sip_bye) {
+            $sip_bye = ", CASE WHEN DR.sip_bye = 1 THEN 'Remote Side' ELSE '' END as sip_bye";
+        } else {
+            $sip_bye = '';
+        }
+
         $this->setHeadings();
 
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
@@ -371,7 +390,8 @@ class CallDetails
                     ELSE 'Unknown'
                 END as CallType,
                 DR.Details,
-                AA.Details as AgentHangup";
+                AA.Details as AgentHangup
+                $sip_bye";
 
         // add extra cols for superadmins
         if (Auth::user()->istype('superadmin') || session('isSsoAdmin', 0) || session('isSsoSuperadmin', 0)) {
@@ -469,6 +489,12 @@ class CallDetails
     {
         // Get vals from session if not set (for exports)
         $request = $this->getSessionParams($request);
+
+        // check for sip_bye column in db 
+        if ($this->hasSipBye()) {
+            $this->sip_bye = true;
+            $this->params['columns']['sip_bye'] = trans('reports.hangup_source');
+        }
 
         // Get custom table first, so we can set cols, so sorting will work in checkPageFilters()
         if (!empty($request->custom_table)) {
