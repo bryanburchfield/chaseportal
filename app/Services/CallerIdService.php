@@ -56,7 +56,8 @@ class CallerIdService
         );
 
         $this->truespam = new Client([
-            'base_uri' => 'https://api.truecnam.net',
+            'base_uri' => 'https://chasedata-csp-useast1.truecnam.net',
+            // 'base_uri' => 'https://chasedata-csp-uswest2.truecnam.net',   // alternate
             'defaults' => [
                 'query' => [
                     'username' => config('truespam.key'),
