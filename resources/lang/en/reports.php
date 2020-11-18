@@ -139,6 +139,7 @@ return [
     'group_id' => 'Group',
     'handledbyivr'        => 'Handled By IVR',
     'handledbyrep'        => 'Handled By Rep',
+    'hangup_source' => 'Hangup Source',
     'hour' => 'Hour',
     'hours'               => 'Hours Worked',
     'import_date' => 'Import Date',
