@@ -458,7 +458,7 @@ class CallerIdService
         }
     }
 
-    private function checkNumber($phone)
+    private function checkNumber($phone, $check_all = false)
     {
         echo "Check $phone\n";
 
@@ -467,18 +467,24 @@ class CallerIdService
         // check from cheapest to most expensive
 
         if ($this->checkTruespam($phone)) {
+            if (!$check_all) {
+                return 'Truespam';
+            }
             $flags .= ',Truespam';
-            return 'Truespam';  // bail early
         }
 
         if ($this->checkNomorobo($phone)) {
+            if (!$check_all) {
+                return 'Nomorobo';
+            }
             $flags .= ',Nomorobo';
-            return 'Nomorobo';  // bail early
         }
 
         if ($this->checkIcehook($phone)) {
+            if (!$check_all) {
+                return 'Icehook';
+            }
             $flags .= ',Icehook';
-            return 'Icehook';  // bail early
         }
 
         if (!empty($flags)) {
@@ -691,7 +697,7 @@ class CallerIdService
 
             // Spam check them
             $replacements->transform(function ($item, $key) {
-                $item->new_flags = $this->checkNumber($item->replaced_by);
+                $item->new_flags = $this->checkNumber($item->replaced_by, true);
                 return $item;
             });
 
