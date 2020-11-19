@@ -3,15 +3,16 @@
 Route::prefix('tools')->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-    Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
-    Route::post('/get_lead', 'LeadsController@getLead');
-
-    Route::group(['middleware' => 'can:accessAdmin'], function () {
+    // must be logged in to access any of these
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
+        Route::post('/get_lead', 'LeadsController@getLead');
 
         // must be logged in to access any of these
-        Route::group(['middleware' => 'auth'], function () {
-            Route::get('server_status', 'DialerController@index');
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::post('/update_lead/{lead}', 'LeadsController@updateLead');
 
+            Route::get('server_status', 'DialerController@index');
             // DNC Import
             Route::prefix('dnc_importer')->group(function () {
                 Route::get('/', 'DncController@index');

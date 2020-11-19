@@ -3315,6 +3315,15 @@ pre.appended_code{
     padding-bottom: 20px;
 }
 
+.dup_lead_detail_recs{
+    tr{
+        &:hover{
+            background: darken($blue, 5%) !important;
+            color:$green !important;
+        }
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

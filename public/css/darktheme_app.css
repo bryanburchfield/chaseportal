@@ -4044,6 +4044,11 @@ pre.appended_code {
   padding-bottom: 20px;
 }
 
+.dup_lead_detail_recs tr:hover {
+  background: #182435 !important;
+  color: #33A09B !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
