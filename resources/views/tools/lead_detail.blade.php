@@ -165,7 +165,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>Rep</label>
-                                                        <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" disabled>
                                                     </div>
                                                 </div>
 
@@ -179,7 +179,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>Date</label>
-                                                        <input type="text" class="form-control" disabled name="Date" value="{{ old('Date', $lead->Date) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        <input type="text" class="form-control" disabled name="Date" value="{{ old('Date', $lead->Date) }}" disabled>
                                                     </div>
                                                 </div>
 
@@ -200,7 +200,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>Last Updated</label>
-                                                        <input type="text" class="form-control" name="LastUpdated" value="{{ old('LastUpdated', $lead->LastUpdated) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        <input type="text" class="form-control" name="LastUpdated" value="{{ old('LastUpdated', $lead->LastUpdated) }}" disabled>
                                                     </div>
                                                 </div>
 
