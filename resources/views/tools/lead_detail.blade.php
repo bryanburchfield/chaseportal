@@ -165,7 +165,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label>Rep</label>
-                                                        <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" disabled>
+                                                        <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
                                                     </div>
                                                 </div>
 
