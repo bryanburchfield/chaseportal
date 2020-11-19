@@ -7,7 +7,7 @@ var FORMBUILDER = {
 		$('#client_table_menu').on('change', this.get_table_fields);
 		$('.add_custom_form_field').on('submit', this.add_custom_form_field);
 		$('.form_code').on('click', this.copy_code);
-		$('body').on('dblclick', '.field_label', this.edit_field_label);
+		$('body').on('dblclick', '.field_label_fb', this.edit_field_label);
 	},
 
 	get_client_tables: function () {
@@ -28,7 +28,6 @@ var FORMBUILDER = {
 			dataType: 'json',
 			data: { group_id: group_id, database: database },
 			success: function (response) {
-				console.log(response);
 				$('#client_table_menu').empty();
 				if (response.tables.length) {
 					var tables = '<option value="">Select One</option>';
@@ -65,7 +64,7 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_value" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-2"></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_name_fb" name="' + response.fields[i] + '" placeholder="' + response.fields[i] + '" value="' + response.fields[i] + '"></div></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -77,10 +76,10 @@ var FORMBUILDER = {
 	add_custom_form_field: function (e) {
 		e.preventDefault();
 
-		var custom_field_value = $('.custom_field_value').val();
-		var custom_field_value = $('.custom_field_value').val();
+		var custom_field_name_fb = $('.custom_field_name_fb').val();
+		var custom_field_value_fb = $('.custom_field_value_fb').val();
 
-		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-4"><p class="field_label" data-field="' + custom_field_value + '">' + custom_field_value + '</p></div><div class="col-sm-5"><div class="form-group"><input type="text" class="form-control field_value" name="' + custom_field_value + '" value="' + custom_field_value + '"></div></div><div class="col-sm-2"></div></div>';
+		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_name_fb" name="' + custom_field_name_fb + '" value="' + custom_field_value_fb + '"></div></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_value_fb" name="" placeholder="Value" value=""></div></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
@@ -92,29 +91,30 @@ var FORMBUILDER = {
 		$('.form_code').empty();
 
 		var html = $('.html_options .head textarea').val();
-		console.log(html);
 		// '<form action="#" method="post" class="form">';
 		FORMBUILDER.appended_code(html);
 
 		$('.all-slides .field').each(function(){
 			if(!$(this).hasClass('field_removed')){
-				var field_label = $(this).find('.field_label').text();
+				var field_label_fb = $(this).find('.field_label_fb').text();
 				if($(this).hasClass('default')){
-					var field_value = $(this).find('.field_value').text();
+					var field_name_fb = $(this).find('.field_name_fb').text();
 				}else{
-					var field_value = $(this).find('.field_value').val();
-				}
+					var field_name_fb = $(this).find('.field_name_fb').val();
+				}field_value_fb
 
-				if(field_label !== 'State' && field_label !== 'state' && field_label !== 'STATE'){
+				var field_value_fb = $(this).find('.field_value_fb').val();
 
-					$('.html_options').find('.form-group label').text(field_label);
-					$('.html_options').find('.form-group input.form-control').attr('name', field_value);
-					$('.html_options').find('.form-group input.form-control').attr('field-name', field_value);
-					$('.html_options').find('.form-group input.form-control').attr('id', field_value);
+				if(field_label_fb !== 'State' && field_label_fb !== 'state' && field_label_fb !== 'STATE'){
+
+					$('.html_options').find('.form-group label').text(field_label_fb);
+					$('.html_options').find('.form-group input.form-control').attr('name', field_name_fb);
+					$('.html_options').find('.form-group input.form-control').attr('field-name', field_name_fb);
+					$('.html_options').find('.form-group input.form-control').attr('id', field_name_fb);
+					$('.html_options').find('.form-group input.form-control').attr('value', field_value_fb);
 
 					html=$('.html_options').find('.input').html();
 				}else{
-					console.log('field_label == state');
 					html=$('.html_options').find('.select_state').html();
 				}
 
@@ -142,7 +142,6 @@ var FORMBUILDER = {
 		});
 
 		$('.form_code_preview').show();
-		// console.log(input);
 	},
 
 	remove_tags:function(html){

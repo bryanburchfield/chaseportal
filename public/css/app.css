@@ -3576,6 +3576,11 @@ a.add_subcampaign i {
   padding-bottom: 20px;
 }
 
+.form_code {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

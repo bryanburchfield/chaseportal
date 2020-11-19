@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div id="webhook_generator">
-							<div class="col-sm-6 mt30 mb20 card fc_style">
+							<div class="col-sm-4 mt30 mb20 card fc_style">
 								<h2 class="page_heading">Form Builder</h2>
 								<div class="form-group">
 									<label>Group ID</label>
@@ -47,16 +47,16 @@
 							<div class="col-sm-12 webhook_fields">
 								<div class="card">
 									<div class="row">
-										<div class="col-sm-5">
+										<div class="col-sm-4">
 											<h3 class="mb30">Field Labels</h3>
 										</div>
 
-										<div class="col-sm-5">
+										<div class="col-sm-4">
 											<h3 class="mb30">Field Names</h3>
 										</div>
 
-										<div class="col-sm-2">
-											{{-- <label class="checkbox-inline flt_rgt"><input class="checkall_inputs" type="checkbox" value=""><span>Select All Inputs</span></label> --}}
+										<div class="col-sm-4">
+											<h3 class="mb30">Field Values</h3>
 										</div>
 									</div>
 
@@ -66,22 +66,16 @@
 												<div class="col-sm-1">
 													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 												</div>
+												<div class="col-sm-3">
+													<p class="field_label_fb" data-field="{{$val}}">{{$val}}</p>
+												</div>
+
 												<div class="col-sm-4">
-													<p class="field_label" data-field="{{$val}}">{{$val}}</p>
+													<p class="field_name_fb" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
-												<div class="col-sm-5">
-													<p class="field_value" data-field="{{$val}}">{{$val}}</p>
-												</div>
-
-												<div class="col-sm-2">
-													{{-- <div class="form-group">
-														<select name="field_type" class="form-control field_type">
-															<option value="">Select One</option>
-															<option value="input">Input</option>
-															<option value="textarea">Textarea</option>
-														</select>
-													</div> --}}
+												<div class="col-sm-4">
+													<p class="field_value_fb" data-field=""></p>
 												</div>
 											</div>
 										@endforeach
@@ -94,10 +88,10 @@
 									<form action="#" method="post" class="form add_custom_form_field fc_style card">
 										<h3 class="mb20">Add Custom Field</h3>
 										<div class="form-group col-sm-6 pl0">
-											<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
+											<input type="text" class="form-control custom_field_name_fb" name="custom_field_name" placeholder="Field Name" required>
 										</div>
 										<div class="form-group col-sm-6 pl0 pr0">
-											<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
+											<input type="text" class="form-control custom_field_value_fb" name="custom_field_value" placeholder="Field Value" required>
 										</div>
 										<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
 									</form>
@@ -199,7 +193,7 @@
 </div>
 </div>
 
-								<div class="col-sm-7">
+								<div class="col-sm-7 pr0">
 									{{-- <div class="final_url_cnt">
 										<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
 									</div> --}}
