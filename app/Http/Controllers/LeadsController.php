@@ -13,7 +13,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -133,15 +132,13 @@ class LeadsController extends Controller
         // update lead table first
         $data = $this->getLeadUpdateFields($lead, $request);
         if (!empty($data)) {
-            Log::info($data);
-            // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
         }
 
         // update custom table next
         $data = $this->getCustomUpdateFields($lead, $request);
         if (!empty($data)) {
-            Log::info($data);
-            // $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
         }
 
         $lead->refresh();  // probably not updated yet, but wth
