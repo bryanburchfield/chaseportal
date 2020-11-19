@@ -178,13 +178,6 @@
 
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label>Date</label>
-                                                        <input type="text" class="form-control" disabled name="Date" value="{{ old('Date', $lead->Date) }}" disabled>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
                                                         <label>Campaign</label>
                                                         <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}" @cannot('accessAdmin') disabled @endcannot>
                                                     </div>
@@ -194,13 +187,6 @@
                                                     <div class="form-group">
                                                         <label>Attempt</label>
                                                         <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}" @cannot('accessAdmin') disabled @endcannot>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Last Updated</label>
-                                                        <input type="text" class="form-control" name="LastUpdated" value="{{ old('LastUpdated', $lead->LastUpdated) }}" disabled>
                                                     </div>
                                                 </div>
 
