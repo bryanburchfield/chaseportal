@@ -227,7 +227,7 @@ var RealTime = {
 					(response.Rep != null && response.Rep.length ? '<p class="lead_dets_phone fz15 mb5"><b>Rep:</b> <span>' + response.Rep + '</span></p>' : " ") +
 					(response.WasDialed != null && response.WasDialed.length ? '<p class="lead_dets_phone fz15 mb5"><b>Was Dialed:</b> <span>' + response.WasDialed + '</span></p>' : " ") +
 					(response.id != null && response.id.length ? '<p class="lead_dets_phone fz15 mb5"><b>ID:</b> <span>' + response.id + '</span></p>' : " ") +
-					(response.Notes != null && response.Notes.length ? '<div class="lead_detail_notes"><h4><i class="fas fa-chevron-right"></i> Notes</h4><div class="real_time_contact_notes_inner hidetilloaded">' + response.Notes + '</div></div>' : " ") +
+					(response.Notes != null && response.Notes.length ? '<div class="lead_detail_notes"><h4><i class="fas fa-chevron-right"></i> Notes</h4><div class="real_time_contact_notes_inner">' + response.Notes + '</div></div>' : " ") +
 					'<br>'
 					;
 
