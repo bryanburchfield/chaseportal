@@ -242,5 +242,9 @@ $(document).ready(function () {
 		cursor: "grabbing"
 	});
 
+	$('pre').each(function(i, block) {
+	    hljs.highlightBlock(block);
+	});
+
 	// $( "ul, li" ).disableSelection();
 });

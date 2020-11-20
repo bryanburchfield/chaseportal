@@ -112,80 +112,84 @@
 </head>
 <body>
 
-	<form action="#" method="post" class="form">
+<div class="container">
+	<div class="row">
+		<form action="#" method="post" class="form">
 </textarea>
 
 </div>
 
-<div class="input">
-	<div class="form-group">
-		<label>Label</label>
-		<input type="text" class="form-control" name="label" field-name="label" id="label">
+	<div class="input">
+		<div class="form-group">
+			<label>Label</label>
+			<input type="text" class="form-control" name="label" field-name="label" id="label">
+		</div>
+	</div>
+
+	<div class="select_state">
+		<div class="form-group">
+			<select name="state" id="state">
+				<option value="" selected="selected">Select a State</option>
+				<option value="AL">Alabama</option>
+				<option value="AK">Alaska</option>
+				<option value="AZ">Arizona</option>
+				<option value="AR">Arkansas</option>
+				<option value="CA">California</option>
+				<option value="CO">Colorado</option>
+				<option value="CT">Connecticut</option>
+				<option value="DE">Delaware</option>
+				<option value="DC">District Of Columbia</option>
+				<option value="FL">Florida</option>
+				<option value="GA">Georgia</option>
+				<option value="HI">Hawaii</option>
+				<option value="ID">Idaho</option>
+				<option value="IL">Illinois</option>
+				<option value="IN">Indiana</option>
+				<option value="IA">Iowa</option>
+				<option value="KS">Kansas</option>
+				<option value="KY">Kentucky</option>
+				<option value="LA">Louisiana</option>
+				<option value="ME">Maine</option>
+				<option value="MD">Maryland</option>
+				<option value="MA">Massachusetts</option>
+				<option value="MI">Michigan</option>
+				<option value="MN">Minnesota</option>
+				<option value="MS">Mississippi</option>
+				<option value="MO">Missouri</option>
+				<option value="MT">Montana</option>
+				<option value="NE">Nebraska</option>
+				<option value="NV">Nevada</option>
+				<option value="NH">New Hampshire</option>
+				<option value="NJ">New Jersey</option>
+				<option value="NM">New Mexico</option>
+				<option value="NY">New York</option>
+				<option value="NC">North Carolina</option>
+				<option value="ND">North Dakota</option>
+				<option value="OH">Ohio</option>
+				<option value="OK">Oklahoma</option>
+				<option value="OR">Oregon</option>
+				<option value="PA">Pennsylvania</option>
+				<option value="RI">Rhode Island</option>
+				<option value="SC">South Carolina</option>
+				<option value="SD">South Dakota</option>
+				<option value="TN">Tennessee</option>
+				<option value="TX">Texas</option>
+				<option value="UT">Utah</option>
+				<option value="VT">Vermont</option>
+				<option value="VA">Virginia</option>
+				<option value="WA">Washington</option>
+				<option value="WV">West Virginia</option>
+				<option value="WI">Wisconsin</option>
+				<option value="WY">Wyoming</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="bottom">
+	<textarea name="bottom" id="bottom" cols="30" rows="10">
+		</form>
 	</div>
 </div>
-
-<div class="select_state">
-	<div class="form-group">
-		<select name="state" id="state">
-			<option value="" selected="selected">Select a State</option>
-			<option value="AL">Alabama</option>
-			<option value="AK">Alaska</option>
-			<option value="AZ">Arizona</option>
-			<option value="AR">Arkansas</option>
-			<option value="CA">California</option>
-			<option value="CO">Colorado</option>
-			<option value="CT">Connecticut</option>
-			<option value="DE">Delaware</option>
-			<option value="DC">District Of Columbia</option>
-			<option value="FL">Florida</option>
-			<option value="GA">Georgia</option>
-			<option value="HI">Hawaii</option>
-			<option value="ID">Idaho</option>
-			<option value="IL">Illinois</option>
-			<option value="IN">Indiana</option>
-			<option value="IA">Iowa</option>
-			<option value="KS">Kansas</option>
-			<option value="KY">Kentucky</option>
-			<option value="LA">Louisiana</option>
-			<option value="ME">Maine</option>
-			<option value="MD">Maryland</option>
-			<option value="MA">Massachusetts</option>
-			<option value="MI">Michigan</option>
-			<option value="MN">Minnesota</option>
-			<option value="MS">Mississippi</option>
-			<option value="MO">Missouri</option>
-			<option value="MT">Montana</option>
-			<option value="NE">Nebraska</option>
-			<option value="NV">Nevada</option>
-			<option value="NH">New Hampshire</option>
-			<option value="NJ">New Jersey</option>
-			<option value="NM">New Mexico</option>
-			<option value="NY">New York</option>
-			<option value="NC">North Carolina</option>
-			<option value="ND">North Dakota</option>
-			<option value="OH">Ohio</option>
-			<option value="OK">Oklahoma</option>
-			<option value="OR">Oregon</option>
-			<option value="PA">Pennsylvania</option>
-			<option value="RI">Rhode Island</option>
-			<option value="SC">South Carolina</option>
-			<option value="SD">South Dakota</option>
-			<option value="TN">Tennessee</option>
-			<option value="TX">Texas</option>
-			<option value="UT">Utah</option>
-			<option value="VT">Vermont</option>
-			<option value="VA">Virginia</option>
-			<option value="WA">Washington</option>
-			<option value="WV">West Virginia</option>
-			<option value="WI">Wisconsin</option>
-			<option value="WY">Wyoming</option>
-		</select>
-	</div>
-</div>
-
-<div class="bottom">
-<textarea name="bottom" id="bottom" cols="30" rows="10">
-	</form>
 </body>
 </html>
 </textarea>
@@ -194,12 +198,183 @@
 </div>
 
 								<div class="col-sm-7 pr0">
-									{{-- <div class="final_url_cnt">
-										<textarea data-toggle="tooltip"  title="Link Copied!" cols="30" rows="7" class="url form-control"></textarea>
-									</div> --}}
+									<ul class="nav nav-tabs">
+										<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
+										<li><a data-toggle="tab" href="#css">CSS</a></li>
+									</ul>
 
-									<div class="card form_code_preview hidetilloaded mb20">
-										<div class="form_code" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!"></div>
+									<div class="tab-content">
+										<div id="html" class="tab-pane fade in active">
+											<div class="card form_code_preview  mb20">
+												<div class="form_code" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!"></div>
+											</div>
+										</div>
+
+										<div id="css" class="tab-pane fade">
+										    <div class="card form_code_preview_css mb20">
+										    	<div class="form_code_css" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!">
+<pre class="hljs css">
+
+.dynamic-form > .panel-primary > .panel-body, .dynamic-form > .panel-primary > .panel-body > .form-group {
+	font-size: 14px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	margin: 10px 0px 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
+	margin: 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	margin: 10px 0px 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
+	margin: 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	margin: 10px 0px 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
+	margin: 10px 0px;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	margin: 10px 0px 10px 0px;
+}
+.panel-heading{
+	background:#2d3c5a!important;
+}
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	font-weight: 700;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	font-weight: 700;
+}
+
+.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
+	font-weight: 600;
+}
+
+.dynamic-form > .panel-primary > .panel-heading > h3 {
+	margin: 0px 0px 0px 0px;
+}
+
+@font-face {
+	font-family: myFont;
+	src: url('http://www.chasedatacorp.com/assets/fonts/segoeui.ttf');
+}
+
+body{
+	font-family:myFont;
+}
+
+.fname{
+	display:inline-block;
+	width:49.5%;
+	float:left;
+	margin-bottom :15px;
+}
+
+.lname{
+	display:inline-block;
+	width:49.5%;
+	float:right;
+	margin-bottom :15px;
+}
+
+.panel-body{
+	background-color:#eee;
+}
+
+input[type=submit]{
+	background: #2d3c5a;
+	color: white;
+	height: 40px;
+	font-size: 20px;
+	padding: 0px 0px;
+	letter-spacing: 2px;
+}
+
+input,
+	input::-webkit-input-placeholder {
+	font-size: 10px;
+}
+
+select:required:invalid {
+	color: #999;
+	padding-bottom: 0px!important;
+	font-size: 12px!important;
+}
+
+select{
+	padding-right: calc(24px);
+	background-size: .5em;
+	background-image: url("data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201000%201805.18%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M461.6%2C643.4L10.9%2C79.9C-14.9%2C47.7%2C8%2C0%2C49.3%2C0h901.5c41.2%2C0%2C64.1%2C47.7%2C38.4%2C79.9L538.4%2C643.4%09C518.7%2C668%2C481.3%2C668%2C461.6%2C643.4z%22%20transform%3D%22rotate%28180%20500%20902.59%29%20translate%280%201143.28%29%22%3E%3C%2Fpath%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M461.6%2C643.4L10.9%2C79.9C-14.9%2C47.7%2C8%2C0%2C49.3%2C0h901.5c41.2%2C0%2C64.1%2C47.7%2C38.4%2C79.9L538.4%2C643.4%09C518.7%2C668%2C481.3%2C668%2C461.6%2C643.4z%22%20transform%3D%22translate%280%201143.28%29%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E")!important;
+	background-repeat: no-repeat;
+	background-position: right 6px top 50%;
+	-webkit-appearance: none;
+}
+option[value=""]{
+display: none;
+}
+
+h4{
+letter-spacing:2px;
+}
+
+.first{
+display:inline-block!important;
+width:33%!important;
+margin-right:0.5%;
+float:left;
+padding-bottom: 15px;
+}
+.second{
+display:inline;
+width:33%!important;
+float:left;
+margin-right:0.5%;
+padding-bottom: 15px;
+}
+
+.third{
+display:inline;
+width:33%!important;
+float:right;
+padding-bottom: 15px;
+}
+
+
+.padding{
+padding-top:40px;
+}
+.hidden {
+display: none;   
+}
+}
+
+table.MsoNormalTable
+{
+line-height:107%;
+font-size:11.0pt;
+font-family:"Calibri",sans-serif;
+}
+table.MsoNormalTable
+{
+line-height:107%;
+font-size:11.0pt;
+font-family:"Calibri",sans-serif;
+}
+										    		</pre>
+										    	</div>
+										    </div>
+										</div>
 									</div>
 									<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
 								</div>
