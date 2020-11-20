@@ -31,6 +31,14 @@ class Lead extends SqlSrvModel
     public function filledFields()
     {
         $lead_array = $this->toArray();
+
+        // remove blanks
+        foreach ($lead_array as $k => $v) {
+            if (empty($v)) {
+                unset($lead_array[$k]);
+            }
+        }
+
         $lead_array['ExtraFields'] = [];
 
         $campaign = Campaign::where('CampaignName', $this->Campaign)
@@ -59,7 +67,7 @@ class Lead extends SqlSrvModel
         }
 
         // Build array
-        foreach ($results[0] as $k => $v) {
+        foreach ($campaign->advancedTable->customFields() as $k => $v) {
             $v = empty($v) ? $k : $v;
 
             if (!empty($results[0][$k])) {
