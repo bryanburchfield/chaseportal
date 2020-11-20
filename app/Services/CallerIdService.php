@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Mail\CallerIdMail;
 use App\Models\AreaCode;
+use App\Models\DailyPhoneFlag;
 use App\Models\Dialer;
 use App\Models\PhoneFlag;
 use App\Models\PhoneReswap;
@@ -24,6 +25,7 @@ class CallerIdService
 
     private $startdate;
     private $enddate;
+    private $yesterday;
     private $maxcount;
 
     // Groups to exclude
@@ -82,12 +84,20 @@ class CallerIdService
         $this->initialize();
 
         $this->enddate = Carbon::parse('midnight');
-        $this->startdate = $this->enddate->copy()->subDay(30);
+        $this->yesterday = $this->enddate->copy()->subDay(1);
         $this->maxcount = 0;
 
-        echo "Pulling report\n";
+        echo "Pulling 1 day report\n";
         Log::info('Pulling report');
-        $this->saveToDb();
+        $this->startdate = $this->yesterday;
+        $this->save1DayReport();
+
+        echo "Pulling 30 day report\n";
+        Log::info('Pulling report');
+        $this->startdate = $this->enddate->copy()->subDay(30);
+        $this->save30DayReport();
+
+        die(); // debug
 
         echo "Checking flags\n";
         Log::info('Checking flags');
@@ -196,7 +206,38 @@ class CallerIdService
         $this->emailReport($mainCsv, $autoswapCsv, $manualswapCsv);
     }
 
-    private function saveToDb()
+    private function save1DayReport()
+    {
+        // Save results to database
+        foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
+
+            $phone = $this->formatPhone($rec['CallerId']);
+
+            try {
+                DailyPhoneFlag::create([
+                    'call_date' => $this->yesterday,
+                    'group_id' => $rec['GroupId'],
+                    'group_name' => $rec['GroupName'],
+                    'dialer_numb' => $rec['DialerNumb'],
+                    'phone' => $phone,
+                    'ring_group' => $rec['RingGroup'],
+                    'owned' => $rec['Owned'],
+                    'callerid_check' => $rec['CallerIdCheck'],
+                    'calls' => $rec['Dials'],
+                    'connects' => $rec['Connects'],
+                    'connect_ratio' => $rec['Connects'] / $rec['Dials'] * 100,
+                ]);
+            } catch (Exception $e) {
+                Log::error('Error creating PhoneFlag: ' . $phone);
+                Log::critical($e->getMessage());
+            }
+        }
+    }
+
+    private function save30DayReport()
     {
         // Save results to database
         foreach ($this->runQuery() as $rec) {
@@ -456,6 +497,14 @@ class CallerIdService
                     'flags' => $flags,
                     'flagged' => $flagged
                 ]);
+
+            DailyPhoneFlag::where('call_date', $this->yesterday)
+                ->where('phone', $phone)
+                ->update([
+                    'checked' => 1,
+                    'flags' => $flags,
+                    'flagged' => $flagged
+                ]);
         }
     }
 
@@ -601,6 +650,20 @@ class CallerIdService
 
             list($rec->replaced_by, $rec->swap_error) = $this->swapNumber($client, $rec->phone, $rec->dialer_numb, $rec->group_id);
             $rec->save();
+
+            try {
+                DailyPhoneFlag::where('call_date', $this->yesterday)
+                    ->where('phone', $rec->phone)
+                    ->where('dialer_numb', $rec->dialer_numb)
+                    ->where('group_id', $rec->group_id)
+                    ->where('ring_group', $rec->ring_group)
+                    ->update([
+                        'replaced_by' => $rec->replaced_by,
+                        'swap_error' => $rec->swap_error,
+                    ]);
+            } catch (Exception $e) {
+                Log::error('Update DailyPhoneFlag Failed: ' . $e->getMessage());
+            }
         }
     }
 
@@ -743,6 +806,21 @@ class CallerIdService
                         ]);
                 } catch (Exception $e) {
                     Log::error('Could not update phone_flags: ' . $item->id . ' ' . $e->getMessage());
+                }
+
+                // update daily_phone_flags
+                try {
+                    DailyPhoneFlag::where('call_date', $this->yesterday)
+                        ->where('phone', $item->phone)
+                        ->where('dialer_numb', $item->dialer_numb)
+                        ->where('group_id', $item->group_id)
+                        ->where('ring_group', $item->ring_group)
+                        ->update([
+                            'replaced_by' => $item->replaced_by,
+                            'swap_error' => $item->swap_error,
+                        ]);
+                } catch (Exception $e) {
+                    Log::error('Could not update daily_phone_flags: ' . $item->id . ' ' . $e->getMessage());
                 }
 
                 return $item;
