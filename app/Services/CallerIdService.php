@@ -97,8 +97,6 @@ class CallerIdService
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->save30DayReport();
 
-        die(); // debug
-
         echo "Checking flags\n";
         Log::info('Checking flags');
         $this->checkFlags();
