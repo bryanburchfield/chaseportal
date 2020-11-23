@@ -282,7 +282,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Notes: <span>{{$lead->Notes}}</span></p>
+                                                    <p>Notes: <span>{!!nl2br(e($lead->Notes))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
