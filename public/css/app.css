@@ -3606,6 +3606,13 @@ a.add_subcampaign i {
   color: #33A09B !important;
 }
 
+.lead_fields_form input.form-control,
+.lead_fields_form button.multiselect,
+.lead_fields_form select.form-control,
+.lead_fields_form textarea.form-control {
+  background: #eee !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

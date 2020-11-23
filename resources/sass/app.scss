@@ -3007,6 +3007,16 @@ a.add_subcampaign{
     }
 }
 
+.lead_fields_accordion{
+
+}
+
+.lead_fields_form{
+    input.form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

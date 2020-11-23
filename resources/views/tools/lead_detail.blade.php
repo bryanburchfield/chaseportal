@@ -49,11 +49,11 @@
                                 <label class="radio-inline">
                                     <input type="radio" name="search_key" value="lead_id"> Lead ID
                                 </label>
-                                
+
                                 @if($success ?? '')
                                     <div class="alert alert-success">
                                         @foreach ($success as $k => $message)
-                                            {{ $message }}    
+                                            {{ $message }}
                                         @endforeach
                                     </div>
                                 @endif
@@ -93,146 +93,238 @@
                                 </div>
                             </div>
 
-                            <ul class="nav nav-tabs tabs lead_form_field_tabs" role="tablist">
-                                <li role="presentation" class="active"><a data-toggle="tab" href="#lead_fields" >Lead Fields</a></li>
-                                <li role="presentation"><a data-toggle="tab" href="#custom_fields">Custom Fields</a></li>
-                            </ul>
-
-                            <form action="{{ action('LeadsController@updateLead',['lead' => $lead]) }}" method="POST" name="updateLead">
+                            <div class="panel-group lead_fields_accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                                <form action="{{ action('LeadsController@updateLead',['lead' => $lead]) }}" method="POST" name="updateLead" class="form fc_style lead_fields_form">
                                 @csrf
-                                <div class="tab-content">
-                                
-                                    <div role="tabpanel" id="lead_fields" class="tab-pane fade in active">                
-                                        <div class="col-sm-12 mt50 p0">
-                                            <div class="lead_fields">
-                                                
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>First Name</label>
-                                                        <input type="text" class="form-control" name="FirstName" value="{{ old('FirstName', $lead->FirstName) }}" @cannot('accessAdmin') disabled @endcannot>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Last Name</label>
-                                                        <input type="text" class="form-control" name="LastName" value="{{ old('LastName', $lead->LastName) }}" @cannot('accessAdmin') disabled @endcannot>
-                                                    </div>
-                                                </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Lead Fields</a></h4>
+                                        </div>
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Address</label>
-                                                        <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}" @cannot('accessAdmin') disabled @endcannot>
-                                                    </div>
-                                                </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="lead_fields">
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>City</label>
-                                                        <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>First Name</label>
+                                                            <input type="text" class="form-control" name="FirstName" value="{{ old('FirstName', $lead->FirstName) }}">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>State</label>
-                                                        <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>First Name: <span>{{$lead->FirstName}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Last Name</label>
+                                                            <input type="text" class="form-control" name="LastName" value="{{ old('LastName', $lead->LastName) }}">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Zip Code</label>
-                                                        <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Last Name: <span>{{$lead->LastName}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Address</label>
+                                                            <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Primary Phone</label>
-                                                        <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Address: <span>{{$lead->Address}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>City</label>
+                                                            <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Secondary Phone</label>
-                                                        <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>City: <span>{{$lead->City}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>State</label>
+                                                            <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Rep</label>
-                                                        <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>State: <span>{{$lead->State}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Zip Code</label>
+                                                            <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Call Status</label>
-                                                        <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Zip Code: <span>{{$lead->ZipCode}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Primary Phone</label>
+                                                            <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Campaign</label>
-                                                        <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Primary Phone: <span>{{$lead->PrimaryPhone}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Secondary Phone</label>
+                                                            <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Attempt</label>
-                                                        <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Secondary Phone: <span>{{$lead->SecondaryPhone}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Rep</label>
+                                                            <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Subcampaign</label>
-                                                        <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                    @cannot('accessAdmin')
+                                                    <p>Rep: <span>{{$lead->Rep}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Call Status</label>
+                                                            <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <label>Notes</label>
-                                                        <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control" @cannot('accessAdmin') disabled @endcannot>{{ old('Notes', $lead->Notes) }}</textarea>
+                                                    @cannot('accessAdmin')
+                                                    <p>Call Status: <span>{{$lead->CallStatus}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Campaign</label>
+                                                            <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    @endcan
 
-                                                @can('accessAdmin')
+                                                    @cannot('accessAdmin')
+                                                    <p>Campaign: <span>{{$lead->Campaign}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Attempt</label>
+                                                            <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
+                                                    </div>
+                                                    @endcan
+
+                                                    @cannot('accessAdmin')
+                                                    <p>Attempt: <span>{{$lead->Attempt}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Subcampaign</label>
+                                                            <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                        </div>
+                                                    </div>
+                                                    @endcan
+
+                                                    @cannot('accessAdmin')
+                                                    <p>Subcampaign: <span>{{$lead->Subcampaign}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
                                                     <div class="col-sm-12">
-                                                        <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                                        <div class="form-group">
+                                                            <label>Notes</label>
+                                                            <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control" @cannot('accessAdmin') disabled @endcannot>{{ old('Notes', $lead->Notes) }}</textarea>
+                                                        </div>
                                                     </div>
-                                                @endcan
+                                                    @endcan
+
+                                                    @cannot('accessAdmin')
+                                                    <p>Notes: <span>{{$lead->Notes}}</span></p>
+                                                    @endcannot
+
+                                                    @can('accessAdmin')
+                                                        <div class="col-sm-12">
+                                                            <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                                        </div>
+                                                    @endcan
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div role="tabpanel" id="custom_fields" class="tab-pane fade">
-                                        <div class="col-sm-12 mt50 p0">
-                                            @foreach($lead->customFields() as $field)
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>{{ $field['description'] }}</label>
-                                                        <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingTwo">
+                                            <h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Custom Fields</a></h4>
+                                        </div>
 
-                                            @can('accessAdmin')
-                                                <div class="col-sm-12">
-                                                    <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                                            <div class="panel-body">
+                                                <div class="custom_fields">
+                                                    @foreach($lead->customFields() as $field)
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>{{ $field['description'] }}</label>
+                                                                <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+
+                                                    @can('accessAdmin')
+                                                        <div class="col-sm-12">
+                                                            <input type="submit" class="btn btn-primary cb" value="Save Changes">
+                                                        </div>
+                                                    @endcan
                                                 </div>
-                                            @endcan
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     @endif
 				</div>
