@@ -60,6 +60,9 @@ class LeadInventorySub
             $this->params['totrows'] = 0;
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
+            $this->params['totrows'] = 0;
+            $this->extras['TotalLeads'] = 0;
+            $this->extras['AvailableLeads'] = 0;
             $results = [];
         } else {
             $this->params['totrows'] = $results[0]['totRows'];
@@ -110,7 +113,7 @@ class LeadInventorySub
             AvailableLeads int default 0,
         )
 
-        CREATE UNIQUE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, WasDialed);
+        CREATE UNIQUE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
 
         SELECT * INTO #LeadCounts FROM (";
 
