@@ -122,11 +122,13 @@ class Lead extends SqlSrvModel
                 continue;
             }
 
-            $extra_fields[$k] = [
-                'key' => $k,
-                'description' => $descriptions[Str::studly($k)],
-                'value' => $v,
-            ];
+            if (isset($descriptions[Str::studly($k)])) {
+                $extra_fields[$k] = [
+                    'key' => $k,
+                    'description' => $descriptions[Str::studly($k)],
+                    'value' => $v,
+                ];
+            }
         }
 
         return $extra_fields;
