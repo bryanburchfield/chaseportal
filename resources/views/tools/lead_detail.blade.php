@@ -26,46 +26,44 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
-                    <div class="col-sm-8 mb20">
+                    <div class="col-sm-12 mb20">
                         @if ($lead)
                             <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
                         @endif
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <form action="{{ action('LeadsController@getLead') }}" class="form" method="POST">
-                                @csrf
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
-                                    </div>
+                    <div class="col-sm-4 mt20">
+                        <form action="{{ action('LeadsController@getLead') }}" class="form search_form" method="POST">
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary mb10" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                 </div>
+                            </div>
 
-                                <label class="radio-inline">
-                                    <input type="radio" name="search_key" value="phone" checked> Phone
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="search_key" value="lead_id"> Lead ID
-                                </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="search_key" value="phone" checked> Phone
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="search_key" value="lead_id"> Lead ID
+                            </label>
 
-                                @if($success ?? '')
-                                    <div class="alert alert-success">
-                                        @foreach ($success as $k => $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </div>
-                                @endif
-                                @if($errors)
-                                    <div class="alert alert-danger">
-                                        @foreach ($errors as $k => $message)
-                                            {{ $message }}    
-                                        @endforeach
-                                    </div>
-                                @endif
-                            </form>
-                        </div>
+                            @if($success ?? '')
+                                <div class="alert alert-success">
+                                    @foreach ($success as $k => $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if($errors)
+                                <div class="alert alert-danger">
+                                    @foreach ($errors as $k => $message)
+                                        {{ $message }}    
+                                    @endforeach
+                                </div>
+                            @endif
+                        </form>
                     </div>
 
                     @if ($lead)
@@ -306,12 +304,18 @@
                                             <div class="panel-body">
                                                 <div class="custom_fields">
                                                     @foreach($lead->customFields() as $field)
+                                                        @can('accessAdmin')
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <label>{{ $field['description'] }}</label>
                                                                 <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
                                                             </div>
                                                         </div>
+                                                        @endcan
+
+                                                        @cannot('accessAdmin')
+                                                        <p>{{$field['key']}}: <span>{{$field['value']}}</span></p>
+                                                        @endcannot
                                                     @endforeach
 
                                                     @can('accessAdmin')
