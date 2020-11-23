@@ -75,7 +75,7 @@ class LeadsController extends Controller
     {
         $lead = null;
 
-        if ($request->has('id')) {
+        if (!empty($request->id)) {
             if ($request->search_key == 'phone') {
                 try {
                     $lead = Lead::where('PrimaryPhone', $this->formatPhone($request->id))

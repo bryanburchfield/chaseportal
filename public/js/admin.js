@@ -888,6 +888,8 @@ var Admin = {
 $(document).ready(function () {
 	Admin.init();
 
+	// lead number 236441
+
 	$('#editSMSModal, #addSMSModal').on('hidden.bs.modal', function () {
 	    $(this).find('.alert').hide();
 	    $('.add_sms_number').trigger("reset");

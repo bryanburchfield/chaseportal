@@ -127,7 +127,7 @@ h6 {
 }
 
 .mb10 {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 
 .mb15 {
@@ -4047,6 +4047,25 @@ pre.appended_code {
 .dup_lead_detail_recs tr:hover {
   background: #182435 !important;
   color: #33A09B !important;
+}
+
+.lead_fields_accordion p {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 3px;
+}
+
+.lead_fields_accordion p span {
+  font-weight: 500;
+}
+
+.lead_fields_form input.form-control,
+.lead_fields_form button.multiselect,
+.lead_fields_form select.form-control,
+.lead_fields_form textarea.form-control {
+  background: #1d2b40 !important;
+  border: none;
+  color: #b7b7b7;
 }
 
 /* ---------------------------------------------------

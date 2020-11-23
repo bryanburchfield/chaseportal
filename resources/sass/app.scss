@@ -103,7 +103,7 @@ h1, h2, h3, h4, h5, h6 {
 .mb0 {margin-bottom: 0 !important;}
 
 .mb5{margin-bottom: 5px;}
-.mb10 {margin-bottom: 10px;}
+.mb10 {margin-bottom: 10px !important;;}
 .mb15 {margin-bottom: 15px;}
 .mb20 {margin-bottom: 20px;}
 .mb30 {margin-bottom: 30px;}
@@ -3234,6 +3234,30 @@ pre.appended_code{
     tr{
         &:hover{
             color:$green !important;
+        }
+    }
+}
+
+.lead_fields_accordion{
+    p{
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 3px;
+
+        span{font-weight: 500;}
+    }
+}
+
+.lead_fields_form{
+    input.form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }
+}
+
+.search_form{
+    .input-group{
+        .form-control{
+            background: #fff !important;
         }
     }
 }
