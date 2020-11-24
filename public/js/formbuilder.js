@@ -6,7 +6,6 @@ var FORMBUILDER = {
 		$('#db').on('change', this.get_client_tables);
 		$('#client_table_menu').on('change', this.get_table_fields);
 		$('.add_custom_form_field').on('submit', this.add_custom_form_field);
-		$('.form_code').on('click', this.copy_code);
 		$('body').on('dblclick', '.field_label_fb', this.edit_field_label);
 	},
 
@@ -91,17 +90,18 @@ var FORMBUILDER = {
 		$('.form_code').empty();
 
 		var html = $('.html_options .head textarea').val();
-		// '<form action="#" method="post" class="form">';
+
 		FORMBUILDER.appended_code(html);
 
-		$('.all-slides .field').each(function(){
+		$('.all-slides .field').each(function(index){
+
 			if(!$(this).hasClass('field_removed')){
 				var field_label_fb = $(this).find('.field_label_fb').text();
 				if($(this).hasClass('default')){
 					var field_name_fb = $(this).find('.field_name_fb').text();
 				}else{
 					var field_name_fb = $(this).find('.field_name_fb').val();
-				}field_value_fb
+				}
 
 				var field_value_fb = $(this).find('.field_value_fb').val();
 
@@ -119,6 +119,7 @@ var FORMBUILDER = {
 				}
 
 				FORMBUILDER.appended_code(html);
+
 			}
 		});
 
@@ -144,37 +145,17 @@ var FORMBUILDER = {
 		$('.form_code_preview').show();
 	},
 
-	remove_tags:function(html){
-		html=html.replace(/</g, "&lt;");
-		html=html.replace(/>/g, "&gt;");
-
-		return html;
-	},
-
 	appended_code:function(html){
 		html = FORMBUILDER.remove_tags(html);
 		var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
 		$('.form_code').append(new_code_block);
 	},
 
-	copy_code: function (e) {
-        e.preventDefault();
-        $(this).tooltip({
-            animated: 'fade',
-            placement: 'bottom',
-            trigger: 'click'
-        });
-
-        setTimeout(function () {
-            $('.tooltip').fadeOut('slow');
-        }, 3500);
-
-        var $temp = $("<input>");
-        $(this).parent().append($temp);
-        $temp.val($(this).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-    },
+	remove_tags:function(html){
+		html=html.replace(/</g, "&lt;");
+		html=html.replace(/>/g, "&gt;");
+		return html;
+	},
 
 	update_code:function(){
 		$('.form_code').empty();
@@ -245,6 +226,4 @@ $(document).ready(function () {
 	$('pre').each(function(i, block) {
 	    hljs.highlightBlock(block);
 	});
-
-	// $( "ul, li" ).disableSelection();
 });

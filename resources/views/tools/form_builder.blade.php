@@ -120,9 +120,11 @@
 </div>
 
 	<div class="input">
-		<div class="form-group">
-			<label>Label</label>
-			<input type="text" class="form-control" name="label" field-name="label" id="label">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Label</label>
+				<input type="text" class="form-control" name="label" field-name="label" id="label">
+			</div>
 		</div>
 	</div>
 
