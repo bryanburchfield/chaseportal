@@ -3340,6 +3340,11 @@ pre.appended_code{
     }
 }
 
+.form_code, .form_code_css {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -4068,6 +4068,12 @@ pre.appended_code {
   color: #b7b7b7;
 }
 
+.form_code,
+.form_code_css {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
