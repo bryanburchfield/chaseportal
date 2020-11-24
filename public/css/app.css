@@ -3578,7 +3578,7 @@ a.add_subcampaign i {
 
 .form_code,
 .form_code_css {
-  max-height: 400px;
+  max-height: 325px;
   overflow-y: scroll;
 }
 

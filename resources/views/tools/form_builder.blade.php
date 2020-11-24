@@ -41,181 +41,24 @@
 
 								<div class="alert alert-danger hidetilloaded"></div>
 							</div>
-						</div>
 
-						<div class="row">
-							<div class="col-sm-12 webhook_fields">
-								<div class="card">
-									<div class="row">
-										<div class="col-sm-4">
-											<h3 class="mb30">Field Labels</h3>
-										</div>
+									<div class="col-sm-8 mt30">
+										<ul class="nav nav-tabs">
+											<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
+											<li><a data-toggle="tab" href="#css">CSS</a></li>
+										</ul>
 
-										<div class="col-sm-4">
-											<h3 class="mb30">Field Names</h3>
-										</div>
-
-										<div class="col-sm-4">
-											<h3 class="mb30">Field Values</h3>
-										</div>
-									</div>
-
-									<div class="all-slides">
-										@foreach($default_lead_fields as $val)
-											<div class="field slide default">
-												<div class="col-sm-1">
-													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
-												</div>
-												<div class="col-sm-3">
-													<p class="field_label_fb" data-field="{{$val}}">{{$val}}</p>
-												</div>
-
-												<div class="col-sm-4">
-													<p class="field_name_fb" data-field="{{$val}}">{{$val}}</p>
-												</div>
-
-												<div class="col-sm-4">
-													<p class="field_value_fb" data-field=""></p>
+										<div class="tab-content">
+											<div id="html" class="tab-pane fade in active">
+												<div class="card form_code_preview  mb20">
+													<div class="form_code"></div>
 												</div>
 											</div>
-										@endforeach
-									</div>
 
-									<div class="cloned-slides" id="cloned-slides"></div>
-								</div>
-
-								<div class="col-sm-5 p0">
-									<form action="#" method="post" class="form add_custom_form_field fc_style card">
-										<h3 class="mb20">Add Custom Field</h3>
-										<div class="form-group col-sm-6 pl0">
-											<input type="text" class="form-control custom_field_name_fb" name="custom_field_name" placeholder="Field Name" required>
-										</div>
-										<div class="form-group col-sm-6 pl0 pr0">
-											<input type="text" class="form-control custom_field_value_fb" name="custom_field_value" placeholder="Field Value" required>
-										</div>
-										<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
-									</form>
-								</div>
-
-<div class="hidetilloaded html_options">
-
-<div class="head">
-<textarea name="head" id="head" cols="30" rows="10">
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://www.chasedatacorp.com/assets/css/font-awesome.min.css" rel="stylesheet">
-	<link id="main-sheet" rel="stylesheet" href="https://www.chasedatacorp.com/assets/css/bootstrap.min.css">
-</head>
-<body>
-
-<div class="container">
-	<div class="row">
-		<form action="#" method="post" class="form">
-</textarea>
-
-</div>
-
-	<div class="input">
-		<div class="col-sm-6">
-			<div class="form-group">
-				<label>Label</label>
-				<input type="text" class="form-control" name="label" field-name="label" id="label">
-			</div>
-		</div>
-	</div>
-
-	<div class="select_state">
-		<div class="form-group">
-			<select name="state" id="state">
-				<option value="" selected="selected">Select a State</option>
-				<option value="AL">Alabama</option>
-				<option value="AK">Alaska</option>
-				<option value="AZ">Arizona</option>
-				<option value="AR">Arkansas</option>
-				<option value="CA">California</option>
-				<option value="CO">Colorado</option>
-				<option value="CT">Connecticut</option>
-				<option value="DE">Delaware</option>
-				<option value="DC">District Of Columbia</option>
-				<option value="FL">Florida</option>
-				<option value="GA">Georgia</option>
-				<option value="HI">Hawaii</option>
-				<option value="ID">Idaho</option>
-				<option value="IL">Illinois</option>
-				<option value="IN">Indiana</option>
-				<option value="IA">Iowa</option>
-				<option value="KS">Kansas</option>
-				<option value="KY">Kentucky</option>
-				<option value="LA">Louisiana</option>
-				<option value="ME">Maine</option>
-				<option value="MD">Maryland</option>
-				<option value="MA">Massachusetts</option>
-				<option value="MI">Michigan</option>
-				<option value="MN">Minnesota</option>
-				<option value="MS">Mississippi</option>
-				<option value="MO">Missouri</option>
-				<option value="MT">Montana</option>
-				<option value="NE">Nebraska</option>
-				<option value="NV">Nevada</option>
-				<option value="NH">New Hampshire</option>
-				<option value="NJ">New Jersey</option>
-				<option value="NM">New Mexico</option>
-				<option value="NY">New York</option>
-				<option value="NC">North Carolina</option>
-				<option value="ND">North Dakota</option>
-				<option value="OH">Ohio</option>
-				<option value="OK">Oklahoma</option>
-				<option value="OR">Oregon</option>
-				<option value="PA">Pennsylvania</option>
-				<option value="RI">Rhode Island</option>
-				<option value="SC">South Carolina</option>
-				<option value="SD">South Dakota</option>
-				<option value="TN">Tennessee</option>
-				<option value="TX">Texas</option>
-				<option value="UT">Utah</option>
-				<option value="VT">Vermont</option>
-				<option value="VA">Virginia</option>
-				<option value="WA">Washington</option>
-				<option value="WV">West Virginia</option>
-				<option value="WI">Wisconsin</option>
-				<option value="WY">Wyoming</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="bottom">
-	<textarea name="bottom" id="bottom" cols="30" rows="10">
-		</form>
-	</div>
-</div>
-</body>
-</html>
-</textarea>
-
-</div>
-</div>
-
-								<div class="col-sm-7 pr0">
-									<ul class="nav nav-tabs">
-										<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
-										<li><a data-toggle="tab" href="#css">CSS</a></li>
-									</ul>
-
-									<div class="tab-content">
-										<div id="html" class="tab-pane fade in active">
-											<div class="card form_code_preview  mb20">
-												<div class="form_code" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!"></div>
-											</div>
-										</div>
-
-										<div id="css" class="tab-pane fade">
-										    <div class="card form_code_preview_css mb20">
-										    	<div class="form_code_css" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!">
-<pre class="hljs css">
+											<div id="css" class="tab-pane fade">
+											    <div class="card form_code_preview_css mb20">
+											    	<div class="form_code_css" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!">
+							<pre class="hljs css">
 
 .dynamic-form > .panel-primary > .panel-body, .dynamic-form > .panel-primary > .panel-body > .form-group {
 	font-size: 14px;
@@ -373,13 +216,175 @@ line-height:107%;
 font-size:11.0pt;
 font-family:"Calibri",sans-serif;
 }
-										    		</pre>
-										    	</div>
-										    </div>
+																	    		</pre>
+																	    	</div>
+																	    </div>
+																	</div>
+																</div>
+																<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
+															</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12 webhook_fields">
+								<div class="card">
+									<div class="row">
+										<div class="col-sm-4">
+											<h3 class="mb30">Field Labels</h3>
+										</div>
+
+										<div class="col-sm-4">
+											<h3 class="mb30">Field Names</h3>
+										</div>
+
+										<div class="col-sm-4">
+											<h3 class="mb30">Field Values</h3>
 										</div>
 									</div>
-									<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
+
+									<div class="all-slides">
+										@foreach($default_lead_fields as $val)
+											<div class="field slide default">
+												<div class="col-sm-1">
+													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
+												</div>
+												<div class="col-sm-3">
+													<p class="field_label_fb" data-field="{{$val}}">{{$val}}</p>
+												</div>
+
+												<div class="col-sm-4">
+													<p class="field_name_fb" data-field="{{$val}}">{{$val}}</p>
+												</div>
+
+												<div class="col-sm-4">
+													<p class="field_value_fb" data-field=""></p>
+												</div>
+											</div>
+										@endforeach
+									</div>
+
+									<div class="cloned-slides" id="cloned-slides"></div>
 								</div>
+
+								<div class="col-sm-12 p0">
+									<form action="#" method="post" class="form add_custom_form_field fc_style card">
+										<h3 class="mb20">Add Custom Field</h3>
+										<div class="form-group col-sm-4 pl0">
+											<input type="text" class="form-control custom_field_label_fb" name="custom_field_label" placeholder="Field Label" required>
+										</div>
+										<div class="form-group col-sm-4 pl0">
+											<input type="text" class="form-control custom_field_name_fb" name="custom_field_name" placeholder="Field Name" required>
+										</div>
+										<div class="form-group col-sm-4 pl0 pr0">
+											<input type="text" class="form-control custom_field_value_fb" name="custom_field_value" placeholder="Field Value">
+										</div>
+										<input type="submit" class="btn btn-primary mt10 mb0 " value="Add Custom Field">
+									</form>
+								</div>
+
+<div class="hidetilloaded html_options">
+
+<div class="head">
+<textarea name="head" id="head" cols="30" rows="10">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://www.chasedatacorp.com/assets/css/font-awesome.min.css" rel="stylesheet">
+	<link id="main-sheet" rel="stylesheet" href="https://www.chasedatacorp.com/assets/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+		<form action="#" method="post" class="form">
+</textarea>
+
+</div>
+
+	<div class="input">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Label</label>
+				<input type="text" class="form-control" name="label" field-name="label" id="label">
+			</div>
+		</div>
+	</div>
+
+	<div class="select_state">
+		<div class="form-group">
+			<select name="state" id="state">
+				<option value="" selected="selected">Select a State</option>
+				<option value="AL">Alabama</option>
+				<option value="AK">Alaska</option>
+				<option value="AZ">Arizona</option>
+				<option value="AR">Arkansas</option>
+				<option value="CA">California</option>
+				<option value="CO">Colorado</option>
+				<option value="CT">Connecticut</option>
+				<option value="DE">Delaware</option>
+				<option value="DC">District Of Columbia</option>
+				<option value="FL">Florida</option>
+				<option value="GA">Georgia</option>
+				<option value="HI">Hawaii</option>
+				<option value="ID">Idaho</option>
+				<option value="IL">Illinois</option>
+				<option value="IN">Indiana</option>
+				<option value="IA">Iowa</option>
+				<option value="KS">Kansas</option>
+				<option value="KY">Kentucky</option>
+				<option value="LA">Louisiana</option>
+				<option value="ME">Maine</option>
+				<option value="MD">Maryland</option>
+				<option value="MA">Massachusetts</option>
+				<option value="MI">Michigan</option>
+				<option value="MN">Minnesota</option>
+				<option value="MS">Mississippi</option>
+				<option value="MO">Missouri</option>
+				<option value="MT">Montana</option>
+				<option value="NE">Nebraska</option>
+				<option value="NV">Nevada</option>
+				<option value="NH">New Hampshire</option>
+				<option value="NJ">New Jersey</option>
+				<option value="NM">New Mexico</option>
+				<option value="NY">New York</option>
+				<option value="NC">North Carolina</option>
+				<option value="ND">North Dakota</option>
+				<option value="OH">Ohio</option>
+				<option value="OK">Oklahoma</option>
+				<option value="OR">Oregon</option>
+				<option value="PA">Pennsylvania</option>
+				<option value="RI">Rhode Island</option>
+				<option value="SC">South Carolina</option>
+				<option value="SD">South Dakota</option>
+				<option value="TN">Tennessee</option>
+				<option value="TX">Texas</option>
+				<option value="UT">Utah</option>
+				<option value="VT">Vermont</option>
+				<option value="VA">Virginia</option>
+				<option value="WA">Washington</option>
+				<option value="WV">West Virginia</option>
+				<option value="WI">Wisconsin</option>
+				<option value="WY">Wyoming</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="bottom">
+	<textarea name="bottom" id="bottom" cols="30" rows="10">
+		</form>
+	</div>
+</div>
+</body>
+</html>
+</textarea>
+
+</div>
+</div>
+
+								
 
 							</div>
 						</div>

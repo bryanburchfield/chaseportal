@@ -3815,7 +3815,7 @@ a.add_subcampaign:focus {
 
 .form_code,
 .form_code_css {
-  max-height: 400px;
+  max-height: 325px;
   overflow-y: scroll;
 }
 
