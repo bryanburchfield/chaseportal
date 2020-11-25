@@ -42,72 +42,40 @@
 								<div class="alert alert-danger hidetilloaded"></div>
 							</div>
 
-									<div class="col-sm-8 mt30">
-										<ul class="nav nav-tabs">
-											<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
-											<li><a data-toggle="tab" href="#css">CSS</a></li>
-										</ul>
+							<div class="col-sm-8 mt30">
+								<ul class="nav nav-tabs">
+									<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
+									<li><a data-toggle="tab" href="#css">CSS</a></li>
+								</ul>
 
-										<div class="tab-content">
-											<div id="html" class="tab-pane fade in active">
-												<div class="card form_code_preview  mb20">
-													<div class="form_code"></div>
-												</div>
-											</div>
+								<div class="tab-content">
+									<div id="html" class="tab-pane fade in active">
+										<div class="card form_code_preview  mb20">
+											<div class="form_code"></div>
+										</div>
+									</div>
 
-											<div id="css" class="tab-pane fade">
-											    <div class="card form_code_preview_css mb20">
-											    	<div class="form_code_css" data-toggle="tooltip" data-placement="bottom"  title="Code Copied!">
+									<div id="css" class="tab-pane fade">
+									    <div class="card form_code_preview_css mb20">
+									    	<div class="form_code_css">
 							<pre class="hljs css">
-
-.dynamic-form > .panel-primary > .panel-body, .dynamic-form > .panel-primary > .panel-body > .form-group {
+.form-group {
 	font-size: 14px;
 }
 
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	margin: 10px 0px 10px 0px;
+.card{
+	background: #eee;
 }
 
-.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
-	margin: 10px 0px;
+h2.heading{
+	background: #203047;
+	color:#fff;
+	padding: 3px 5px;
+	margin-bottom:20px;
 }
 
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	margin: 10px 0px 10px 0px;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
-	margin: 10px 0px;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	margin: 10px 0px 10px 0px;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > .locked {
-	margin: 10px 0px;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	margin: 10px 0px 10px 0px;
-}
-.panel-heading{
-	background:#2d3c5a!important;
-}
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	font-weight: 700;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	font-weight: 700;
-}
-
-.dynamic-form > .panel-primary > .panel-body > .form-group > h4 {
-	font-weight: 600;
-}
-
-.dynamic-form > .panel-primary > .panel-heading > h3 {
-	margin: 0px 0px 0px 0px;
+.card .form-control{
+	background:#fff;
 }
 
 @font-face {
@@ -115,31 +83,9 @@
 	src: url('http://www.chasedatacorp.com/assets/fonts/segoeui.ttf');
 }
 
-body{
-	font-family:myFont;
-}
-
-.fname{
-	display:inline-block;
-	width:49.5%;
-	float:left;
-	margin-bottom :15px;
-}
-
-.lname{
-	display:inline-block;
-	width:49.5%;
-	float:right;
-	margin-bottom :15px;
-}
-
-.panel-body{
-	background-color:#eee;
-}
-
 input[type=submit]{
-	background: #2d3c5a;
-	color: white;
+	background: #E15B23;
+	color: #fff;
 	height: 40px;
 	font-size: 20px;
 	padding: 0px 0px;
@@ -157,73 +103,19 @@ select:required:invalid {
 	font-size: 12px!important;
 }
 
-select{
-	padding-right: calc(24px);
-	background-size: .5em;
-	background-image: url("data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201000%201805.18%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M461.6%2C643.4L10.9%2C79.9C-14.9%2C47.7%2C8%2C0%2C49.3%2C0h901.5c41.2%2C0%2C64.1%2C47.7%2C38.4%2C79.9L538.4%2C643.4%09C518.7%2C668%2C481.3%2C668%2C461.6%2C643.4z%22%20transform%3D%22rotate%28180%20500%20902.59%29%20translate%280%201143.28%29%22%3E%3C%2Fpath%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M461.6%2C643.4L10.9%2C79.9C-14.9%2C47.7%2C8%2C0%2C49.3%2C0h901.5c41.2%2C0%2C64.1%2C47.7%2C38.4%2C79.9L538.4%2C643.4%09C518.7%2C668%2C481.3%2C668%2C461.6%2C643.4z%22%20transform%3D%22translate%280%201143.28%29%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E")!important;
-	background-repeat: no-repeat;
-	background-position: right 6px top 50%;
-	-webkit-appearance: none;
-}
-option[value=""]{
-display: none;
-}
-
-h4{
-letter-spacing:2px;
-}
-
-.first{
-display:inline-block!important;
-width:33%!important;
-margin-right:0.5%;
-float:left;
-padding-bottom: 15px;
-}
-.second{
-display:inline;
-width:33%!important;
-float:left;
-margin-right:0.5%;
-padding-bottom: 15px;
-}
-
-.third{
-display:inline;
-width:33%!important;
-float:right;
-padding-bottom: 15px;
-}
-
-
-.padding{
-padding-top:40px;
-}
 .hidden {
-display: none;   
-}
+	display: none;
 }
 
-table.MsoNormalTable
-{
-line-height:107%;
-font-size:11.0pt;
-font-family:"Calibri",sans-serif;
-}
-table.MsoNormalTable
-{
-line-height:107%;
-font-size:11.0pt;
-font-family:"Calibri",sans-serif;
-}
-																	    		</pre>
-																	    	</div>
-																	    </div>
-																	</div>
-																</div>
-																<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
-															</div>
-						</div>
+
+				    		</pre>
+				    	</div>
+				    </div>
+				</div>
+			</div>
+			<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
+		</div>
+	</div>
 
 						<div class="row">
 							<div class="col-sm-12 webhook_fields">
@@ -299,7 +191,8 @@ font-family:"Calibri",sans-serif;
 
 <div class="container">
 	<div class="row">
-		<form action="#" method="post" class="form">
+		<form action="#" method="post" class="form card fc_style">
+			<h2 class="heading">Contact Information</h2>
 </textarea>
 
 </div>
