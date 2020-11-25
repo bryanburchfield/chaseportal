@@ -3627,6 +3627,12 @@ a.add_subcampaign i {
   background: #fff !important;
 }
 
+textarea.nobg_txtarea.form-control {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -133,7 +133,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Address</label>
-                                                            <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -146,7 +146,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>City</label>
-                                                            <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -159,7 +159,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>State</label>
-                                                            <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -172,7 +172,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Zip Code</label>
-                                                            <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -185,7 +185,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Primary Phone</label>
-                                                            <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -198,7 +198,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Secondary Phone</label>
-                                                            <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -211,7 +211,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Rep</label>
-                                                            <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -224,7 +224,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Call Status</label>
-                                                            <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -237,7 +237,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Campaign</label>
-                                                            <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -250,7 +250,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Attempt</label>
-                                                            <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -263,7 +263,7 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Subcampaign</label>
-                                                            <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" >
                                                         </div>
                                                     </div>
                                                     @endcan
@@ -276,13 +276,14 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <label>Notes</label>
-                                                            <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control" @cannot('accessAdmin') disabled @endcannot>{{ old('Notes', $lead->Notes) }}</textarea>
+                                                            <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control">{{ old('Notes', $lead->Notes) }}</textarea>
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Notes: <span>{!!nl2br(e($lead->Notes))!!}</span></p>
+                                                    <p>Notes:</p>
+                                                    <span class="cb">{!!nl2br(e($lead->Notes))!!}</span>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -308,7 +309,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <label>{{ $field['description'] }}</label>
-                                                                <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                                <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}">
                                                             </div>
                                                         </div>
                                                         @endcan

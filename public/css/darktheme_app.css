@@ -3858,6 +3858,12 @@ a.add_subcampaign:focus {
   color: #b7b7b7;
 }
 
+textarea.nobg_txtarea.form-control {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
