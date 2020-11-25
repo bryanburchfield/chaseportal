@@ -315,7 +315,9 @@
                                                         @endcan
 
                                                         @cannot('accessAdmin')
-                                                        <p>{{$field['key']}}: <span>{{$field['value']}}</span></p>
+                                                            @if(!empty($field['value']))
+                                                                <p>{{$field['key']}}: <span>{!!nl2br(e($field['value']))!!}</span></p>
+                                                            @endif
                                                         @endcannot
                                                     @endforeach
 
