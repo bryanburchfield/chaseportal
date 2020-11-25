@@ -113,7 +113,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>First Name: <span>{{nl2br(e($lead->FirstName))}}</span></p>
+                                                    <p>First Name: <span>{!!nl2br(e($lead->FirstName))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -126,163 +126,164 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Last Name: <span>{{nl2br(e($lead->LastName))}}</span></p>
+                                                    <p>Last Name: <span>{!!nl2br(e($lead->LastName))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Address</label>
-                                                            <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Address" value="{{ old('Address', $lead->Address) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Address: <span>{{nl2br(e($lead->Address))}}</span></p>
+                                                    <p>Address: <span>{!!nl2br(e($lead->Address))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>City</label>
-                                                            <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="City" value="{{ old('City', $lead->City) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>City: <span>{{nl2br(e($lead->City))}}</span></p>
+                                                    <p>City: <span>{!!nl2br(e($lead->City))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>State</label>
-                                                            <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="State" value="{{ old('State', $lead->State) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>State: <span>{{nl2br(e($lead->State))}}</span></p>
+                                                    <p>State: <span>{!!nl2br(e($lead->State))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Zip Code</label>
-                                                            <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="ZipCode" value="{{ old('ZipCode', $lead->ZipCode) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Zip Code: <span>{{nl2br(e($lead->ZipCode))}}</span></p>
+                                                    <p>Zip Code: <span>{!!nl2br(e($lead->ZipCode))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Primary Phone</label>
-                                                            <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="PrimaryPhone" value="{{ old('PrimaryPhone', $lead->PrimaryPhone) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Primary Phone: <span>{{nl2br(e($lead->PrimaryPhone))}}</span></p>
+                                                    <p>Primary Phone: <span>{!!nl2br(e($lead->PrimaryPhone))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Secondary Phone</label>
-                                                            <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="SecondaryPhone" value="{{ old('SecondaryPhone', $lead->SecondaryPhone) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Secondary Phone: <span>{{nl2br(e($lead->SecondaryPhone))}}</span></p>
+                                                    <p>Secondary Phone: <span>{!!nl2br(e($lead->SecondaryPhone))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Rep</label>
-                                                            <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Rep" value="{{ old('Rep', $lead->Rep) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Rep: <span>{{nl2br(e($lead->Rep))}}</span></p>
+                                                    <p>Rep: <span>{!!nl2br(e($lead->Rep))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Call Status</label>
-                                                            <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="CallStatus" value="{{ old('CallStatus', $lead->CallStatus) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Call Status: <span>{{nl2br(e($lead->CallStatus))}}</span></p>
+                                                    <p>Call Status: <span>{!!nl2br(e($lead->CallStatus))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Campaign</label>
-                                                            <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Campaign" value="{{ old('Campaign', $lead->Campaign) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Campaign: <span>{{nl2br(e($lead->Campaign))}}</span></p>
+                                                    <p>Campaign: <span>{!!nl2br(e($lead->Campaign))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Attempt</label>
-                                                            <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Attempt" value="{{ old('Attempt', $lead->Attempt) }}">
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Attempt: <span>{{nl2br(e($lead->Attempt))}}</span></p>
+                                                    <p>Attempt: <span>{!!nl2br(e($lead->Attempt))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>Subcampaign</label>
-                                                            <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                            <input type="text" class="form-control" name="Subcampaign" value="{{ old('Subcampaign', $lead->Subcampaign) }}" >
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Subcampaign: <span>{{nl2br(e($lead->Subcampaign))}}</span></p>
+                                                    <p>Subcampaign: <span>{!!nl2br(e($lead->Subcampaign))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <label>Notes</label>
-                                                            <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control" @cannot('accessAdmin') disabled @endcannot>{{ old('Notes', $lead->Notes) }}</textarea>
+                                                            <textarea name="Notes" id="Notes" cols="30" rows="10" class="form-control">{{ old('Notes', $lead->Notes) }}</textarea>
                                                         </div>
                                                     </div>
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Notes: <span>{!!nl2br(e($lead->Notes))!!}</span></p>
+                                                    <p>Notes:</p>
+                                                    <span class="cb">{!!nl2br(e($lead->Notes))!!}</span>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -308,7 +309,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <label>{{ $field['description'] }}</label>
-                                                                <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}" @cannot('accessAdmin') disabled @endcannot>
+                                                                <input type="text" class="form-control" name="{{ $field['key'] }}" value="{{ old($field['key'], $field['value']) }}">
                                                             </div>
                                                         </div>
                                                         @endcan

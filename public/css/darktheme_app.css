@@ -4074,6 +4074,12 @@ pre.appended_code {
   overflow-y: scroll;
 }
 
+textarea.nobg_txtarea.form-control {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
