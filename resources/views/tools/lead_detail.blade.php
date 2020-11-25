@@ -113,7 +113,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>First Name: <span>{{nl2br(e($lead->FirstName))}}</span></p>
+                                                    <p>First Name: <span>{!!nl2br(e($lead->FirstName))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -126,7 +126,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Last Name: <span>{{nl2br(e($lead->LastName))}}</span></p>
+                                                    <p>Last Name: <span>{!!nl2br(e($lead->LastName))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -139,7 +139,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Address: <span>{{nl2br(e($lead->Address))}}</span></p>
+                                                    <p>Address: <span>{!!nl2br(e($lead->Address))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -152,7 +152,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>City: <span>{{nl2br(e($lead->City))}}</span></p>
+                                                    <p>City: <span>{!!nl2br(e($lead->City))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -165,7 +165,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>State: <span>{{nl2br(e($lead->State))}}</span></p>
+                                                    <p>State: <span>{!!nl2br(e($lead->State))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -178,7 +178,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Zip Code: <span>{{nl2br(e($lead->ZipCode))}}</span></p>
+                                                    <p>Zip Code: <span>{!!nl2br(e($lead->ZipCode))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -191,7 +191,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Primary Phone: <span>{{nl2br(e($lead->PrimaryPhone))}}</span></p>
+                                                    <p>Primary Phone: <span>{!!nl2br(e($lead->PrimaryPhone))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -204,7 +204,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Secondary Phone: <span>{{nl2br(e($lead->SecondaryPhone))}}</span></p>
+                                                    <p>Secondary Phone: <span>{!!nl2br(e($lead->SecondaryPhone))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -217,7 +217,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Rep: <span>{{nl2br(e($lead->Rep))}}</span></p>
+                                                    <p>Rep: <span>{!!nl2br(e($lead->Rep))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -230,7 +230,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Call Status: <span>{{nl2br(e($lead->CallStatus))}}</span></p>
+                                                    <p>Call Status: <span>{!!nl2br(e($lead->CallStatus))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -243,7 +243,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Campaign: <span>{{nl2br(e($lead->Campaign))}}</span></p>
+                                                    <p>Campaign: <span>{!!nl2br(e($lead->Campaign))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -256,7 +256,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Attempt: <span>{{nl2br(e($lead->Attempt))}}</span></p>
+                                                    <p>Attempt: <span>{!!nl2br(e($lead->Attempt))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
@@ -269,7 +269,7 @@
                                                     @endcan
 
                                                     @cannot('accessAdmin')
-                                                    <p>Subcampaign: <span>{{nl2br(e($lead->Subcampaign))}}</span></p>
+                                                    <p>Subcampaign: <span>{!!nl2br(e($lead->Subcampaign))!!}</span></p>
                                                     @endcannot
 
                                                     @can('accessAdmin')
