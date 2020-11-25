@@ -118,9 +118,7 @@ var FORMBUILDER = {
 				}else{
 					html=$('.html_options').find('.select_state').html();
 				}
-
 				FORMBUILDER.appended_code(html);
-
 			}
 		});
 
