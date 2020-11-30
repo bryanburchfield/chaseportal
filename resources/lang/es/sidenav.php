@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'accounting_reports' => 'Informes de Contabilidad',
     'admin' => 'Configuración',
     'cdr_lookup' => 'Búsqueda de CDR',
     'compliance_dashboard' => 'Panel de Cumplimiento',

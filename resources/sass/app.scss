@@ -2975,6 +2975,15 @@ a.add_subcampaign{
     .nav_holder{position: absolute;top:0;left:0;}
 }
 
+.accounting_reports{
+    .list-group{
+        a{
+            font-weight: 600;font-size: 16px;
+            i{color:#1896DE;margin-right: 13px;}
+        }
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

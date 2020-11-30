@@ -129,6 +129,20 @@ class AdminController extends Controller
         return view('admin.webhook_generator')->with($data);
     }
 
+    public function accountingReports()
+    {
+        $page['menuitem'] = 'accounting_reports';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'jsfile' => [],
+            'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('tools.accounting_reports')->with($data);
+    }
+
     /**
      * Set DB
      *  
