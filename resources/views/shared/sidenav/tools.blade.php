@@ -17,5 +17,6 @@
 
         <li data-page="form_builder" @php echo !empty($page['menuitem']) && $page['menuitem']== 'form_builder' ? 'class="active"' : ''; @endphp><a href="{{ action('AdminController@formBuilder') }}"><i class="fas fa-wrench"></i> {{__('sidenav.form_builder')}}</a></li>
         <li data-page="cdr_lookup" @php echo !empty($page['menuitem']) && $page['menuitem']== 'cdr_lookup' ? 'class="active"' : ''; @endphp><a href="{{ action('AdminController@cdrLookup') }}"><i class="fas fa-search"></i> {{__('sidenav.cdr_lookup')}}</a></li>
+        <li data-page="accounting_reports" @php echo !empty($page['menuitem']) && $page['menuitem']== 'accounting_reports' ? 'class="active"' : ''; @endphp><a href="{{ action('AdminController@accountingReports') }}"><i class="fas fa-file-invoice"></i> {{__('sidenav.accounting_reports')}}</a></li>
     @endcan
 @endsection

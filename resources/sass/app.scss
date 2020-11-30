@@ -3274,6 +3274,15 @@ textarea.nobg_txtarea.form-control{
     @include box-shadow(none !important);
 }
 
+.accounting_reports{
+    .list-group{
+        a{
+            font-weight: 600;font-size: 16px;
+            i{color:#1896DE;margin-right: 13px;}
+        }
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

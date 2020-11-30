@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'accounting_reports' => 'Accounting Reports',
     'admin' => 'Admin',
     'cdr_lookup' => 'CDR Lookup',
     'compliance_dashboard'    => 'Compliance Dashboard',
