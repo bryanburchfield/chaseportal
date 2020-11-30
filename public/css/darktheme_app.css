@@ -3805,6 +3805,26 @@ a.add_subcampaign:focus {
   left: 0;
 }
 
+.accounting_reports .list-group a {
+  background: #182435;
+  color: #eee;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.accounting_reports .list-group a:hover {
+  background: #131d2b;
+}
+
+.accounting_reports .list-group a.list-group-item {
+  border: 1px solid #080c12;
+}
+
+.accounting_reports .list-group a i {
+  color: #1896DE;
+  margin-right: 13px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

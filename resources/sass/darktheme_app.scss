@@ -3124,6 +3124,20 @@ a.add_subcampaign{
     .nav_holder{position: absolute;top:0;left:0;}
 }
 
+.accounting_reports{
+    .list-group{
+        a{
+            &:hover{background: darken($blue,8%);}
+            &.list-group-item{border:1px solid darken($blue,15%);}
+            background: darken($blue,5%);
+            color:#eee;
+            font-weight: 600;
+            font-size: 16px;
+            i{color:#1896DE;margin-right: 13px;}
+        }
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
