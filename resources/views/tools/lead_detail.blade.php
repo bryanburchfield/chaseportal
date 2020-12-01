@@ -17,7 +17,7 @@
 
 <div class="wrapper">
 
-	@include('shared.sidenav')
+    @includeWhen(!$isApi, 'shared.navbar')
 
 	<div id="content">
 		@include('shared.navbar')
