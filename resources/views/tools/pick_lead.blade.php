@@ -7,10 +7,10 @@
 
 <div class="wrapper">
 
-    @includeWhen(!$isApi, 'shared.navbar')
+    @includeWhen(!session('isApi'), 'shared.sidenav')
 
 	<div id="content">
-		@include('shared.navbar')
+        @includeWhen(!session('isApi'), 'shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt50 tools">
