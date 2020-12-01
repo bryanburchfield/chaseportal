@@ -6,6 +6,7 @@ use App\Includes\PowerImportAPI;
 use App\Mail\LeadDumpMail;
 use App\Models\Dialer;
 use App\Models\Lead;
+use App\Models\User;
 use App\Traits\CampaignTraits;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
@@ -26,6 +27,41 @@ class LeadsController extends Controller
 
     protected $db;
     public $currentDash;
+
+    public function apiLogin(Request $request)
+    {
+        if (
+            empty($request->token) ||
+            empty($request->search_key) ||
+            empty($request->id)
+        ) {
+            abort(403, 'missing params');  // debug
+            abort(404);
+        }
+
+        // find first user record with that token
+        $user = User::where('app_token', $request->token)
+            ->where('active', 1)
+            ->first();
+
+        if ($user === null) {
+            abort(403, 'Invalid token');
+        }
+
+        // Login that user and set session var so we know it's via API
+        session(['isApi' => 1]);
+        Auth::login($user);
+
+        if (strtoupper(substr($request->search_key, 0, 1)) == 'P') {
+            $search_key = 'phone';
+        } else {
+            $search_key = 'id';
+        }
+
+        $newrequest = new Request(['search_key' => $search_key, 'id' => $request->id]);
+
+        return $this->getLead($newrequest);
+    }
 
     public function leadDetail(Lead $lead = null)
     {
