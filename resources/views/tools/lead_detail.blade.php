@@ -17,10 +17,10 @@
 
 <div class="wrapper">
 
-	@include('shared.sidenav')
+    @includeWhen(!session('isApi'), 'shared.sidenav')
 
 	<div id="content">
-		@include('shared.navbar')
+        @includeWhen(!session('isApi'), 'shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt50 tools">
@@ -34,20 +34,22 @@
 
                     <div class="col-sm-4 mt20">
                         <form action="{{ action('LeadsController@getLead') }}" class="form search_form" method="POST">
-                            @csrf
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary mb10" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                            @if(!session('isApi'))
+                                @csrf
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary mb10" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <label class="radio-inline">
-                                <input type="radio" name="search_key" value="phone" checked> Phone
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="search_key" value="lead_id"> Lead ID
-                            </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="search_key" value="phone" checked> Phone
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="search_key" value="lead_id"> Lead ID
+                                </label>
+                            @endif
 
                             @if($success ?? '')
                                 <div class="alert alert-success">
@@ -315,7 +317,9 @@
                                                         @endcan
 
                                                         @cannot('accessAdmin')
-                                                        <p>{{$field['key']}}: <span>{{$field['value']}}</span></p>
+                                                            @if(!empty($field['value']))
+                                                                <p>{{$field['key']}}: <span>{!!nl2br(e($field['value']))!!}</span></p>
+                                                            @endif
                                                         @endcannot
                                                     @endforeach
 
