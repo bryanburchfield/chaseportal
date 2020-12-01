@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -32,10 +33,8 @@ class LeadsController extends Controller
     {
         if (
             empty($request->token) ||
-            empty($request->search_key) ||
             empty($request->id)
         ) {
-            abort(403, 'missing params');  // debug
             abort(404);
         }
 
@@ -52,13 +51,9 @@ class LeadsController extends Controller
         session(['isApi' => 1]);
         Auth::login($user);
 
-        if (strtoupper(substr($request->search_key, 0, 1)) == 'P') {
-            $search_key = 'phone';
-        } else {
-            $search_key = 'id';
-        }
+        Log::info(Auth::user()->user_type);
 
-        $newrequest = new Request(['search_key' => $search_key, 'id' => $request->id]);
+        $newrequest = new Request(['search_key' => 'id', 'id' => $request->id]);
 
         return $this->getLead($newrequest);
     }
