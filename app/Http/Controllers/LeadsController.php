@@ -14,7 +14,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
@@ -50,8 +49,6 @@ class LeadsController extends Controller
         // Login that user and set session var so we know it's via API
         session(['isApi' => 1]);
         Auth::login($user);
-
-        Log::info(Auth::user()->user_type);
 
         $newrequest = new Request(['search_key' => 'id', 'id' => $request->id]);
 
