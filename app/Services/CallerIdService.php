@@ -34,6 +34,10 @@ class CallerIdService
         212182,
     ];
 
+    // Non-flagged swap params
+    private $swap_dials = 1000;
+    private $swap_connectpct = 10.8;
+
     // For Twilio  (icehook)
     private $twilio;
     private $icehookScore = 80;          // min score to be considered spam
@@ -149,8 +153,8 @@ class CallerIdService
                     //         ->where('connect_ratio', '<', 10);
                     // })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 1000)
-                            ->where('connect_ratio', '<', 13);
+                        $query2->where('calls', '>=', $this->swap_dials)
+                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
             ->orderBy('dialer_numb')
@@ -184,8 +188,8 @@ class CallerIdService
                     //         ->where('connect_ratio', '<', 10);
                     // })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 1000)
-                            ->where('connect_ratio', '<', 13);
+                        $query2->where('calls', '>=', $this->swap_dials)
+                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
             ->orderBy('dialer_numb')
@@ -638,8 +642,8 @@ class CallerIdService
                     //         ->where('connect_ratio', '<', 10);
                     // })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', 1000)
-                            ->where('connect_ratio', '<', 13);
+                        $query2->where('calls', '>=', $this->swap_dials)
+                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
             ->orderBy('dialer_numb')
