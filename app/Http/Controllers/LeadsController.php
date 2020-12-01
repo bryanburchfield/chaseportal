@@ -82,6 +82,7 @@ class LeadsController extends Controller
         $page['sidenav'] = 'main';
         $page['type'] = 'page';
         $data = [
+            'isApi' => session('isApi'),
             'page' => $page,
             'lead' => $lead,
             'errors' => $errors,
@@ -100,6 +101,7 @@ class LeadsController extends Controller
         $page['sidenav'] = 'main';
         $page['type'] = 'page';
         $data = [
+            'isApi' => session('isApi'),
             'page' => $page,
             'leads' => $leads,
         ];
