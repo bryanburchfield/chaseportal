@@ -5,7 +5,7 @@ Route::prefix('tools')->group(function () {
 
     // Agent Lead Detail API login
     Route::prefix('agentleaddetail')->group(function () {
-        Route::get('api/{token}/{search_key}/{id}', 'LeadsController@apiLogin');
+        Route::get('api/{token}/{id}', 'LeadsController@apiLogin');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     });
 
