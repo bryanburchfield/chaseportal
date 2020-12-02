@@ -65,6 +65,7 @@
 
 .card{
 	background: #eee;
+	overflow:auto;
 }
 
 h2.heading{
@@ -76,6 +77,11 @@ h2.heading{
 
 .card .form-control{
 	background:#fff;
+}
+
+.btn.btn-primary{
+	margin: 0 auto;
+    display: block;
 }
 
 @font-face {
@@ -201,14 +207,14 @@ select:required:invalid {
 		<div class="col-sm-6">
 			<div class="form-group">
 				<label>Label</label>
-				<input type="text" class="form-control" name="label" field-name="label" id="label">
+				<input type="text" class="form-control control-input" name="label" control="input" field-name="label" id="label">
 			</div>
 		</div>
 	</div>
 
 	<div class="select_state">
 		<div class="form-group">
-			<select name="state" id="state">
+			<select name="state" id="state" class="form-control control-select" control="select">
 				<option value="" selected="selected">Select a State</option>
 				<option value="AL">Alabama</option>
 				<option value="AK">Alaska</option>
@@ -266,7 +272,7 @@ select:required:invalid {
 	</div>
 
 	<div class="bottom">
-	<textarea name="bottom" id="bottom" cols="30" rows="10">
+	<textarea name="bottom" id="bottom" cols="30" rows="10" class="form-control control-input" control="textarea">
 		</form>
 	</div>
 </div>

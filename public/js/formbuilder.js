@@ -64,7 +64,7 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -80,7 +80,7 @@ var FORMBUILDER = {
 		var custom_field_name_fb = $('.custom_field_name_fb').val();
 		var custom_field_value_fb = $('.custom_field_value_fb').val();
 
-		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control field_value_fb" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div></div>';
+		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control control-input field_value_fb" control="input" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
