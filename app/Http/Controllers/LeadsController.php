@@ -173,7 +173,8 @@ class LeadsController extends Controller
 
         session()->flash('flashsuccess', trans('tools.lead_updated'));
 
-        return redirect()->action('LeadsController@leadDetail');
+        // return to the form with their changes
+        return back()->withInput();
     }
 
     private function getLeadUpdateFields(Lead $lead, Request $request)
