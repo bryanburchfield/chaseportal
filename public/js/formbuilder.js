@@ -129,9 +129,9 @@ var FORMBUILDER = {
 
 		var btn_type = $("input[name='submit_btn_type']:checked").val();
 		if(btn_type == 'submit'){
-			var submit_btn = '	<input type="submit" value="Submit" class="btn btn-primary">';
+			var submit_btn = '	<div class="col-sm-12"><input type="submit" value="Submit" class="btn btn-primary btn-lg"></div>';
 		}else{
-			var submit_btn = '	<input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary">';
+			var submit_btn = '	<div class="col-sm-12"><input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary btn-lg"></div>';
 		}
 
 		submit_btn = FORMBUILDER.remove_tags(submit_btn);

@@ -79,25 +79,19 @@ h2.heading{
 
 .card .form-control{
 	background:#fff;
+	height:40px;
 }
 
 .btn.btn-primary{
-	margin: 0 auto;
+	margin: 20px auto;
     display: block;
+    background:#E15B23;
+    border:none;
 }
 
 @font-face {
 	font-family: myFont;
 	src: url('http://www.chasedatacorp.com/assets/fonts/segoeui.ttf');
-}
-
-input[type=submit]{
-	background: #E15B23;
-	color: #fff;
-	height: 40px;
-	font-size: 20px;
-	padding: 0px 0px;
-	letter-spacing: 2px;
 }
 
 input,
