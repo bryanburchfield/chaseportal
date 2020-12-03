@@ -223,7 +223,7 @@ select:required:invalid {
 		<div class="col-sm-4">
 			<div class="form-group">
 				<label>State</label>
-				<select name="state" id="state" class="form-control control-select" control="select">
+				<select name="state" id="state" class="form-control control-select">
 					<option value="" selected="selected">Select a State</option>
 					<option value="AL">Alabama</option>
 					<option value="AK">Alaska</option>
