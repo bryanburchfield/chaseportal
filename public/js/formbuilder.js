@@ -107,17 +107,22 @@ var FORMBUILDER = {
 				var field_value_fb = $(this).find('.field_value_fb').val();
 
 				if(field_label_fb !== 'State' && field_label_fb !== 'state' && field_label_fb !== 'STATE'){
-
 					$('.html_options').find('.form-group label').text(field_label_fb);
 					$('.html_options').find('.form-group input.form-control').attr('name', field_name_fb);
 					$('.html_options').find('.form-group input.form-control').attr('field-name', field_name_fb);
 					$('.html_options').find('.form-group input.form-control').attr('id', field_name_fb);
 					$('.html_options').find('.form-group input.form-control').attr('value', field_value_fb);
 
-					html=$('.html_options').find('.input').html();
+					if(field_label_fb == 'Address' || field_label_fb == 'City'){
+						html=$('.html_options').find('.input-4').html();
+					}else{
+						html=$('.html_options').find('.input').html();
+					}
 				}else{
+					$('.html_options').find('.form-group label').text(field_label_fb);
 					html=$('.html_options').find('.select_state').html();
 				}
+
 				FORMBUILDER.appended_code(html);
 			}
 		});
