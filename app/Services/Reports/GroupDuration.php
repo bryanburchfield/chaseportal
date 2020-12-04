@@ -86,9 +86,6 @@ class GroupDuration
         } else {
             $this->params['totrows'] = count($results);
 
-            foreach ($results as &$rec) {
-                $rec = $this->processRow($rec);
-            }
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
@@ -232,13 +229,6 @@ UPDATE #GroupStatistics SET
 SELECT * FROM #GroupStatistics";
 
         return [$sql, $bind];
-    }
-
-    public function processRow($rec)
-    {
-        $rec['Duration'] = round($rec['Duration'] / 60);
-
-        return $rec;
     }
 
     private function processInput(Request $request)
