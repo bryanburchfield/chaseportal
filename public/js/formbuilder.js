@@ -94,6 +94,10 @@ var FORMBUILDER = {
 		var html = $('.html_options .head textarea').val();
 
 		FORMBUILDER.appended_code(html);
+		var adv_fields = 0;
+		if($('.field_from_table').length){
+			adv_fields = 1;
+		}
 
 		$('.all-slides .field').each(function(index){
 
@@ -104,23 +108,34 @@ var FORMBUILDER = {
 					var field_name_fb = $(this).find('.field_name_fb').text();
 				}
 
+				if($(this).hasClass('field_from_table')){
+					if(adv_fields){
+						let html = '<div class="col-sm-12"><h4 class="subheading">Additional Information</h4></div>'
+						FORMBUILDER.appended_code(html);
+						console.log(field_label_fb);
+					}
+					adv_fields=0;
+				}
+
 				var field_value_fb = $(this).find('.field_value_fb').val();
 
-				if(field_label_fb !== 'State' && field_label_fb !== 'state' && field_label_fb !== 'STATE'){
-					$('.html_options').find('.form-group label').text(field_label_fb);
-					$('.html_options').find('.form-group input.form-control').attr('name', field_name_fb);
-					$('.html_options').find('.form-group input.form-control').attr('field-name', field_name_fb);
-					$('.html_options').find('.form-group input.form-control').attr('id', field_name_fb);
-					$('.html_options').find('.form-group input.form-control').attr('value', field_value_fb);
+				$('.html_options').find('.form-group label').text(field_label_fb);
+				$('.html_options').find('.form-group .form-control').attr('name', field_name_fb);
+				$('.html_options').find('.form-group .form-control').attr('field-name', field_name_fb);
+				$('.html_options').find('.form-group .form-control').attr('id', field_name_fb);
+				$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
 
-					if(field_label_fb == 'Address' || field_label_fb == 'City'){
-						html=$('.html_options').find('.input-4').html();
-					}else{
-						html=$('.html_options').find('.input').html();
-					}
-				}else{
-					$('.html_options').find('.form-group label').text(field_label_fb);
+				if(field_label_fb == 'City' || field_label_fb == 'ZipCode'){ /// wrap in 4 column div
+					html=$('.html_options').find('.input-4').html();
+				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
+					html=$('.html_options').find('.input-12').html();
+				}else if(field_label_fb == 'State'){	/// grab state select
 					html=$('.html_options').find('.select_state').html();
+				}else if(field_label_fb == 'Notes'){	/// wrap in 12 col textarea for notes
+					console.log(field_name_fb);
+					html=$('.html_options').find('.textarea-12').html();
+				}else{	/// default to 6 column div
+					html=$('.html_options').find('.input').html();
 				}
 
 				FORMBUILDER.appended_code(html);
@@ -221,6 +236,15 @@ var FORMBUILDER = {
 
 $(document).ready(function () {
 	FORMBUILDER.init();
+
+	var notes_row;
+	$('.field').each(function(){
+		if($(this).find('.col-sm-3 p').data('field') == 'Notes'){
+			notes_row=$(this).remove();
+		}
+	});
+	$('.all-slides').append(notes_row);
+	console.log(notes_row);
 
 	$( ".all-slides" ).sortable({
 		revert: true,

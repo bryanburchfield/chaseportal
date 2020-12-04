@@ -77,7 +77,16 @@ h2.heading{
 	margin-bottom:30px;
 }
 
-.card .form-control{
+h4.subheading {
+    font-weight: 600;
+    font-size: 17px;
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.card input.form-control, .card select.form-control{
 	background:#fff;
 	height:40px;
 }
@@ -193,12 +202,13 @@ select:required:invalid {
 
 <div class="container">
 	<div class="row">
-		<form action="#" method="post" class="form card fc_style">
-			<div class="col-sm-12">
-				<h2 class="heading">Contact Information</h2>
-			</div>
-</textarea>
+		{{-- <div class="col-sm-12"> --}}
+		<h2 class="heading">Contact Information</h2>
+		{{-- </div> --}}
 
+		<form action="#" method="post" class="form card fc_style">
+			<div class="col-sm-12"><h4 class="subheading">Contact Person</h4></div>
+</textarea>
 </div>
 
 	<div class="input">
@@ -212,6 +222,24 @@ select:required:invalid {
 
 	<div class="input-4">
 		<div class="col-sm-4">
+			<div class="form-group">
+				<label>Label</label>
+				<input type="text" class="form-control control-input" name="label" control="input" field-name="label" id="label">
+			</div>
+		</div>
+	</div>
+
+	<div class="textarea-12">
+		<div class="col-sm-12">
+			<div class="form-group">
+				<label>Notes</label>
+				<textarea name="label" id="label" field-name="label" cols="30" rows="10" class="form-control control-input" control="textarea"></textarea>
+			</div>
+		</div>
+	</div>
+
+	<div class="input-12">
+		<div class="col-sm-12">
 			<div class="form-group">
 				<label>Label</label>
 				<input type="text" class="form-control control-input" name="label" control="input" field-name="label" id="label">
