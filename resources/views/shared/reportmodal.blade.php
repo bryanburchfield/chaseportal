@@ -60,6 +60,7 @@
 
                     if(!Auth::User()->isDemo()) {
                         $reports['call_details'] = __('reports.call_details');
+                        $reports['text_details'] = __('reports.text_details');
                     }
 
                     // Group Duration report is for superusers and users in the report_permissions table
