@@ -58,73 +58,17 @@
 									<div id="css" class="tab-pane fade">
 									    <div class="card form_code_preview_css mb20">
 									    	<div class="form_code_css">
-							<pre class="hljs css">
-.form-group {
-	font-size: 14px;
-}
-
-.card{
-	background: #eee;
-	overflow:auto;
-}
-
-h2.heading{
-	background: #203047;
-	color:#fff;
-	font-weight: 600;
-    font-size: 24px;
-	padding: 3px 5px;
-	margin-bottom:30px;
-}
-
-h4.subheading {
-    font-weight: 600;
-    font-size: 17px;
-    text-transform: uppercase;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-}
-
-.card input.form-control, .card select.form-control{
-	background:#fff;
-	height:40px;
-}
-
-.btn.btn-primary{
-	margin: 20px auto;
-    display: block;
-    background:#E15B23;
-    border:none;
-}
-
-@font-face {
-	font-family: myFont;
-	src: url('http://www.chasedatacorp.com/assets/fonts/segoeui.ttf');
-}
-
-input,
-	input::-webkit-input-placeholder {
-	font-size: 10px;
-}
-
-select:required:invalid {
-	color: #999;
-	padding-bottom: 0px!important;
-	font-size: 12px!important;
-}
-
-.hidden {
-	display: none;
-}
+							{{-- <pre class="hljs css">
 
 
-				    		</pre>
+
+				    		</pre> --}}
 				    	</div>
 				    </div>
 				</div>
 			</div>
-			<button class="generate_code btn btn-primary btn-lg">Generate Code</button>
+			<button class="generate_code btn btn-primary btn-lg flt_lft mr20">Generate Code</button>
+			<button class="download_file btn btn-info btn-lg">Download File</button>
 		</div>
 	</div>
 
@@ -197,6 +141,67 @@ select:required:invalid {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://www.chasedatacorp.com/assets/css/font-awesome.min.css" rel="stylesheet">
 	<link id="main-sheet" rel="stylesheet" href="https://www.chasedatacorp.com/assets/css/bootstrap.min.css">
+	<style>
+		.form-group {
+			font-size: 14px;
+		}
+
+		.card{
+			background: #eee;
+			border: 1px solid #ddd;
+			overflow:auto;
+		}
+
+		h2.heading{
+			background: #203047;
+			color:#fff;
+			font-weight: 600;
+		    font-size: 22px;
+		    padding: 5px 8px;
+			margin-bottom:30px;
+		}
+
+		h4.subheading {
+		    font-weight: 600;
+		    font-size: 17px;
+		    text-transform: uppercase;
+		    margin-top: 20px;
+		    margin-bottom: 20px;
+		    border-bottom: 1px solid #ccc;
+		}
+
+		.card input.form-control, .card select.form-control{
+			background:#fff;
+			height:40px;
+		}
+
+		.btn.btn-primary{
+			margin: 20px auto;
+		    display: block;
+		    background:#E15B23;
+		    border:none;
+		}
+
+		@font-face {
+			font-family: myFont;
+			src: url('http://www.chasedatacorp.com/assets/fonts/segoeui.ttf');
+		}
+
+		input,
+			input::-webkit-input-placeholder {
+			font-size: 10px;
+		}
+
+		select:required:invalid {
+			color: #999;
+			padding-bottom: 0px!important;
+			font-size: 12px!important;
+		}
+
+		.hidden {
+			display: none;
+		}
+	</style>
 </head>
 <body>
 
