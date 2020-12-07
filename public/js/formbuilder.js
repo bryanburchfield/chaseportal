@@ -8,6 +8,18 @@ var FORMBUILDER = {
 		$('.add_custom_form_field').on('submit', this.add_custom_form_field);
 		$('body').on('dblclick', '.field_label_fb', this.edit_field_label);
 		$('body').on('dblclick', '.field_name_fb', this.edit_field_label);
+		$('.download_file').on('click', this.download_file);
+		this.move_notes_row(this.move_notes_row);
+	},
+
+	move_notes_row:function(){
+		var notes_row;
+		$('.field').each(function(){
+			if($(this).find('.col-sm-3 p').data('field') == 'Notes'){
+				notes_row=$(this).remove();
+			}
+		});
+		$('.all-slides').append(notes_row);
 	},
 
 	get_client_tables: function () {
@@ -112,7 +124,6 @@ var FORMBUILDER = {
 					if(adv_fields){
 						let html = '<div class="col-sm-12"><h4 class="subheading">Additional Information</h4></div>'
 						FORMBUILDER.appended_code(html);
-						console.log(field_label_fb);
 					}
 					adv_fields=0;
 				}
@@ -132,7 +143,6 @@ var FORMBUILDER = {
 				}else if(field_label_fb == 'State'){	/// grab state select
 					html=$('.html_options').find('.select_state').html();
 				}else if(field_label_fb == 'Notes'){	/// wrap in 12 col textarea for notes
-					console.log(field_name_fb);
 					html=$('.html_options').find('.textarea-12').html();
 				}else{	/// default to 6 column div
 					html=$('.html_options').find('.input').html();
@@ -177,6 +187,7 @@ var FORMBUILDER = {
 	},
 
 	update_code:function(){
+		alert('update_code func ran');
 		$('.form_code').empty();
 
 		$('.user_created_form_element').find('.user_created_element').each(function(){
@@ -232,19 +243,37 @@ var FORMBUILDER = {
 			elem.show();
 		});
 	},
+
+	download_file:function (e, filename){
+		e.preventDefault();
+		var text = FORMBUILDER.get_html();
+		// return false;
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		element.setAttribute('download', filename);
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
+	},
+
+	get_html:function(){
+		// var css = '<style>';
+		// css+=$('.form_code_css').text();
+		// css+='</style>';
+		// console.log(css);
+		// return false;
+		var html = $('.form_code').text();
+		// html+=css;
+		return html;
+	}
 }
 
 $(document).ready(function () {
 	FORMBUILDER.init();
-
-	var notes_row;
-	$('.field').each(function(){
-		if($(this).find('.col-sm-3 p').data('field') == 'Notes'){
-			notes_row=$(this).remove();
-		}
-	});
-	$('.all-slides').append(notes_row);
-	console.log(notes_row);
 
 	$( ".all-slides" ).sortable({
 		revert: true,
