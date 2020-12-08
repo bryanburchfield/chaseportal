@@ -2,7 +2,6 @@
 
 namespace App\Services\Reports;
 
-use App\Models\Dialer;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +27,6 @@ class TextDetails
         $this->params['phone'] = '';
         $this->params['columns'] = [
             'Date' => 'reports.date',
-            'Campaign' => 'reports.campaign',
-            'Subcampaign' => 'reports.subcampaign',
             'Phone' => 'reports.phone',
             'LastName' => 'reports.lastname',
             'FirstName' => 'reports.firstname',
@@ -52,7 +49,7 @@ class TextDetails
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 2,
+            'paragraphs' => 1,
         ];
     }
 
@@ -112,15 +109,13 @@ class TextDetails
         $where = '';
 
         if (!empty($this->params['phone'])) {
-            $bind['phone'] = $this->params['phone'];
-            $where .= " AND DR.Phone LIKE '1' + :phone + '%'";
+            $bind['phone'] = $this->add1ToPhone($this->params['phone']);
+            $where .= " AND DR.Phone = :phone";
         }
 
         $sql .= " SELECT *, totRows = COUNT(*) OVER()
                 FROM (SELECT
                 CONVERT(datetimeoffset, DR.CallDate) AT TIME ZONE '$tz' as Date,
-                DR.Campaign,
-                DR.Subcampaign,
                 DR.Phone,
                 L.LastName,
                 L.FirstName,

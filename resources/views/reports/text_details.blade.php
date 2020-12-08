@@ -42,6 +42,7 @@
 					<div class="form-group">
 						{!! Form::label('rep', __('reports.rep')) !!}
 						<select class="form-control multiselect required" id="rep_select" name="rep">
+
 							@foreach($filters['reps'] as $rep)
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
