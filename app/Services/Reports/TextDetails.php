@@ -28,8 +28,6 @@ class TextDetails
         $this->params['phone'] = '';
         $this->params['columns'] = [
             'Date' => 'reports.date',
-            'Campaign' => 'reports.campaign',
-            'Subcampaign' => 'reports.subcampaign',
             'Phone' => 'reports.phone',
             'LastName' => 'reports.lastname',
             'FirstName' => 'reports.firstname',
@@ -52,7 +50,7 @@ class TextDetails
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 2,
+            'paragraphs' => 1,
         ];
     }
 
@@ -119,8 +117,6 @@ class TextDetails
         $sql .= " SELECT *, totRows = COUNT(*) OVER()
                 FROM (SELECT
                 CONVERT(datetimeoffset, DR.CallDate) AT TIME ZONE '$tz' as Date,
-                DR.Campaign,
-                DR.Subcampaign,
                 DR.Phone,
                 L.LastName,
                 L.FirstName,
