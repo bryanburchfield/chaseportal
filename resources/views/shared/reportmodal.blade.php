@@ -23,6 +23,7 @@
                         'caller_id' =>  __('reports.caller_id'),
                         'calls_per_hour' =>  __('reports.calls_per_hour'),
                         'campaign_call_log' => __('reports.campaign_call_log'),
+                        'campaign_contact' =>  __('reports.campaign_contact'),
                         'campaign_summary' =>  __('reports.campaign_summary'),
                         'campaign_usage' =>  __('reports.campaign_usage'),
                         'inbound_summary' =>  __('reports.inbound_summary'),
