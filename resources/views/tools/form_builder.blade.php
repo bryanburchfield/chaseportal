@@ -125,7 +125,7 @@ select:required:invalid {
 				</div>
 			</div>
 			<button class="generate_code btn btn-primary btn-lg flt_lft mr20">Generate Code</button>
-			<button class="download_file btn btn-info btn-lg">Download File</button>
+			<button class="download_file btn btn-info btn-lg fw600">Download File</button>
 		</div>
 	</div>
 
@@ -182,7 +182,7 @@ select:required:invalid {
 										<div class="form-group col-sm-4 pl0 pr0">
 											<input type="text" class="form-control custom_field_value_fb" name="custom_field_value" placeholder="Field Value">
 										</div>
-										<input type="submit" class="btn btn-primary mt10 mb0 " value="Add Custom Field">
+										<input type="submit" class="btn btn-primary btn-lg mt10 mb0" value="Add Custom Field">
 									</form>
 								</div>
 
