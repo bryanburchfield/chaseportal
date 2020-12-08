@@ -154,9 +154,9 @@ var FORMBUILDER = {
 
 		var btn_type = $("input[name='submit_btn_type']:checked").val();
 		if(btn_type == 'submit'){
-			var submit_btn = '	<div class="col-sm-12"><input type="submit" value="Submit" class="btn btn-primary btn-lg"></div>';
+			var submit_btn = '		<div class="col-sm-12"><input type="submit" value="Submit" class="btn btn-primary btn-lg"></div>';
 		}else{
-			var submit_btn = '	<div class="col-sm-12"><input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary btn-lg"></div>';
+			var submit_btn = '		<div class="col-sm-12"><input type="submit" control="submit" action="submit_and_navigate" navigate-to="confirmation_page" value="Submit and Navigate" class="control-submit btn btn-primary btn-lg"></div>';
 		}
 
 		submit_btn = FORMBUILDER.remove_tags(submit_btn);
@@ -184,26 +184,6 @@ var FORMBUILDER = {
 		html=html.replace(/</g, "&lt;");
 		html=html.replace(/>/g, "&gt;");
 		return html;
-	},
-
-	update_code:function(){
-		alert('update_code func ran');
-		$('.form_code').empty();
-
-		$('.user_created_form_element').find('.user_created_element').each(function(){
-			var html=$('.html_options').html();
-			html=html.replace(/</g, "&lt;");
-			html=html.replace(/>/g, "&gt;");
-
-			var new_code_block = $('<pre class="p10 appended_code sh_html xml"></pre>').wrapInner(html);
-			$('.form_code').append(new_code_block);
-		});
-
-		$('.form_code').parent().show();
-
-		$('pre').each(function(i, block) {
-		    hljs.highlightBlock(block);
-		});
 	},
 
 	checkall_inputs: function () {
@@ -244,31 +224,20 @@ var FORMBUILDER = {
 		});
 	},
 
-	download_file:function (e, filename){
+	download_file:function (e){
 		e.preventDefault();
-		var text = FORMBUILDER.get_html();
-		// return false;
-		var element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
+		var elem = document.createElement('a');
+		elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(FORMBUILDER.get_html()));
+		elem.setAttribute('download', 'index.html');
 
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
+		elem.style.display = 'none';
+		document.body.appendChild(elem);
+		elem.click();
+		document.body.removeChild(elem);
 	},
 
 	get_html:function(){
-		// var css = '<style>';
-		// css+=$('.form_code_css').text();
-		// css+='</style>';
-		// console.log(css);
-		// return false;
-		var html = $('.form_code').text();
-		// html+=css;
-		return html;
+		return $('.form_code').text();
 	}
 }
 
