@@ -2,7 +2,6 @@
 
 namespace App\Services\Reports;
 
-use App\Models\Dialer;
 use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -110,8 +109,8 @@ class TextDetails
         $where = '';
 
         if (!empty($this->params['phone'])) {
-            $bind['phone'] = $this->params['phone'];
-            $where .= " AND DR.Phone LIKE '1' + :phone + '%'";
+            $bind['phone'] = $this->add1ToPhone($this->params['phone']);
+            $where .= " AND DR.Phone = :phone";
         }
 
         $sql .= " SELECT *, totRows = COUNT(*) OVER()
