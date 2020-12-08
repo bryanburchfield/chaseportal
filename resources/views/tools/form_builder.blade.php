@@ -59,6 +59,11 @@
 									    <div class="card form_code_preview_css mb20">
 									    	<div class="form_code_css">
 							<pre class="hljs css">
+
+form.form{
+	margin-top:25px;
+}
+
 .form-group {
 	font-size: 14px;
 }
@@ -75,6 +80,7 @@ h2.heading{
 	font-weight: 600;
     font-size: 22px;
     padding: 5px 8px;
+    margin-top:0;
 	margin-bottom:30px;
 }
 
@@ -199,6 +205,11 @@ select:required:invalid {
 	<link href="https://www.chasedatacorp.com/assets/css/font-awesome.min.css" rel="stylesheet">
 	<link id="main-sheet" rel="stylesheet" href="https://www.chasedatacorp.com/assets/css/bootstrap.min.css">
 	<style>
+
+		form.form{
+			margin-top:25px;
+		}
+
 		.form-group {
 			font-size: 14px;
 		}
@@ -215,6 +226,7 @@ select:required:invalid {
 			font-weight: 600;
 		    font-size: 22px;
 		    padding: 5px 8px;
+		    margin-top: 0;
 			margin-bottom:30px;
 		}
 
@@ -265,10 +277,11 @@ select:required:invalid {
 <div class="container">
 	<div class="row">
 		{{-- <div class="col-sm-12"> --}}
-		<h2 class="heading">Contact Information</h2>
+		{{-- <h2 class="heading">Contact Information</h2> --}}
 		{{-- </div> --}}
 
 		<form action="#" method="post" class="form card fc_style">
+			<h2 class="heading">Contact Information</h2>
 			<div class="col-sm-12"><h4 class="subheading">Contact Person</h4></div>
 </textarea>
 </div>

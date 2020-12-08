@@ -81,6 +81,8 @@ var FORMBUILDER = {
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
 				}
+
+				FORMBUILDER.move_notes_row();
 			}
 		});
 	},
@@ -96,6 +98,7 @@ var FORMBUILDER = {
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
+		FORMBUILDER.move_notes_row();
 	},
 
 	generate_code:function(e){
