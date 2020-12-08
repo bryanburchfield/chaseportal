@@ -1057,6 +1057,7 @@ var Master = {
 
     // populate campaign multi-select based on dates
     query_dates_for_camps: function () {
+
         var todate = $('.todate').val(),
             fromdate = $('.fromdate').val()
         report = $('form.report_filter_form').attr('id')
@@ -1082,6 +1083,7 @@ var Master = {
                 },
 
                 success: function (response) {
+
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {
