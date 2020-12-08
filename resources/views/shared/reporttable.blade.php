@@ -20,7 +20,7 @@
             @if($params['hasTotals'] && $loop->last)
                 class="report_totals"
             @endif
-            style='word-break:break-all;'>
+            style='word-break:normal;'>
 
             @foreach($rec as $k => $v)
                 @if (strpos($v, '<audio controls') !== false)

@@ -1203,6 +1203,12 @@ thead.fixedHeader th{
 
 .reports_table.table{width: 99%;}
 
+.text_details .reports_table{
+    tr td:first-child{
+        min-width: 150px;
+    }
+}
+
 .report_download {
     margin-bottom: 40px;
 }

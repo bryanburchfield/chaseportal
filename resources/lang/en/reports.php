@@ -34,6 +34,7 @@ return [
     'production_report_subcampaign' => 'Production By Sub',
     'shift_report'                  => 'Shift Report',
     'subcampaign_summary'           => 'Subcampaign Summary',
+    'text_details'                  => 'Text Details',
     'transfer_agent' => 'Transfer Agent',
 
     // Filter fields
@@ -73,6 +74,7 @@ return [
     'errgroupsrequired' => 'At least 1 Group required',
     'errpagenumb'          => 'Invalid page number',
     'errpagesize'          => 'Invalid page size',
+    'errreprequired'       => 'Rep required',
     'errrepsrequired'      => 'At least 1 Rep required',
     'errresults'           => 'No results found',
     'errthresholdrequired' => 'Threshold required',
@@ -126,6 +128,7 @@ return [
     'details'             => 'Details',
     'dialed'              => 'Dialed',
     'dialer'              => 'Dialer',
+    'direction' => 'Direction',
     'dispositiontimesec'  => 'Wrap Up Time',
     'download'            => 'Download',
     'dph'                 => 'Dials per Hr',
@@ -157,6 +160,7 @@ return [
     'manhoursec'          => 'Man Hours',
     'manual' => 'Manual',
     'max_seats' => 'Max Seats',
+    'message' => 'Message',
     'minutes' => 'Minutes',
     'missedcalls'         => 'Missed Calls',
     'mostrecent'          => 'Most Recent',
