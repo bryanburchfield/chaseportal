@@ -20,6 +20,7 @@ return [
     'campaign_usage'                => 'Utilización de Campañas',
     'campaign_summary'              => 'Resumen de Campañas',
     'campaign_call_log'             => 'Registros de Llamadas de Campañas',
+    'campaign_contact'              => 'Contacto de Campaña',
     'calls_per_hour'                => 'Llamadas por Hora',
     'caller_id'                     => 'Llamadas por Caller ID',
     'call_details'                  => 'Detalles de Llamadas',

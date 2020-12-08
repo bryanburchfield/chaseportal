@@ -22,6 +22,7 @@ return [
     'caller_id'                     => 'Caller ID Tracking',
     'calls_per_hour'                => 'Calls Per Hour',
     'campaign_call_log'             => 'Campaign Call Log',
+    'campaign_contact'              => 'Campaign Contact',
     'campaign_summary'              => 'Campaign Summary',
     'campaign_usage'                => 'Campaign Usage',
     'detailed_call_details'         => 'Call Details w/ Lead Data',

@@ -35,6 +35,7 @@ return [
     'connectrate' => 'Ratio of Connects per Dial',
     'connects' => 'Calls that connected. This is determined by the disposition type on the wrap up code.',
     'connects_per_manhour' => 'Number of Connects per ManHour',
+    'contactpct' => 'Percentage of Calls Contacted',
     'contactrate' => 'Ratio of Contacts per Dial',
     'contacts' => 'Calls where contact was made. This is determined by the disposition type on the wrap up code.',
     'contacts_per_manhour' => 'Number of Contacts per ManHour',
@@ -136,6 +137,8 @@ return [
     'campaign_call_log_2' => 'Charts break down the call volume by 15 minute intervals, as well as graphical depictions of ' .
         'agent vs system handled calls and call status distrubution.',
     'campaign_call_log_3' => 'Note that the charts will not be included when the report is exported.',
+    'campaign_contact_1' => 'This report summarizes outbound calls by Campaign.',
+    'campaign_contact_2' => 'Note that the graphical chart will not be included when the report is exported.',
     'campaign_summary_1' => 'This report summarizes campaign activity for the specified date range.',
     'campaign_usage_1' => 'This report breaks down all leads in a campaign by the number of dialing attempts on each, and ' .
         'if the lead is marked as callable or not.',

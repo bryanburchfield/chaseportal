@@ -23,6 +23,7 @@ class CampaignContact
             'Campaign' => 'reports.campaign',
             'Total' => 'reports.totalcalls',
             'Agent' => 'reports.agent',
+            'Contacts' => 'reports.contacts',
             'ConnectPct' => 'reports.connectpct',
             'ContactPct' => 'reports.contactpct',
         ];
@@ -84,12 +85,9 @@ class CampaignContact
         $endDate = $toDate->format('Y-m-d H:i:s');
 
         $bind = [
-            'group_id1' => Auth::user()->group_id,
-            'group_id2' => Auth::user()->group_id,
+            'group_id' => Auth::user()->group_id,
             'startdate' => $startDate,
             'enddate' => $endDate,
-            'prevstart' => now()->subDays(30)->format('Y-m-d H:i:s'),
-            'prevend' => now()->format('Y-m-d H:i:s'),
         ];
 
         $sql = "SET NOCOUNT ON;
@@ -99,36 +97,59 @@ CREATE TABLE #Summary
   Campaign varchar(50),
   Total int default 0,
   Agent int default 0,
+  Contacts int default 0,
   ConnectPct numeric(18,2) default 0,
   ContactPct numeric(18,2) default 0
-)
+);";
 
-INSERT INTO #Summary (Campaign, Total, Agent, ConnectPct, ContactPct)
+        if (!empty($this->params['campaigns'])) {
+            $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
+            $bind['campaigns'] = $campaigns;
+
+            $sql .= "
+CREATE TABLE #SelectedCampaign(CampaignName varchar(50) Primary Key);
+INSERT INTO #SelectedCampaign
+SELECT DISTINCT [value] from dbo.SPLIT(:campaigns, '!#!');";
+        }
+
+        $sql .= "
+
+INSERT INTO #Summary (Campaign, Total, Agent, Contacts, ConnectPct, ContactPct)
 SELECT
     [Campaign],
 	COUNT(Campaign) as [Total],
-	SUM(Agent) as Agent,
+    SUM(Agent) as Agent,
+    SUM(Contacts) as Contacts,
     SUM(Agent) / COUNT(Campaign) * 100 as ConnectPct,
-    0 as ContactPct
+    SUM(Contacts) / COUNT(Campaign) * 100 as ContactPct
 FROM (
 	SELECT
-		Campaign,
-		CASE WHEN CallStatus NOT LIKE 'CR_%' THEN 1.0 ELSE 0 END as Agent
-	FROM DialingResults
-	WHERE GroupId = :group_id1
-	AND CallDate >= :startdate
-	AND CallDate < :enddate
-	AND Campaign != ''
-    AND CallType IN (0,2)
-    AND CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')";
+		DR.Campaign,
+        CASE WHEN DR.CallStatus NOT LIKE 'CR_%' THEN 1.0 ELSE 0 END as Agent,
+        CASE WHEN DI.Type > 1 THEN 1.0 ELSE 0 END as Contacts
+    FROM DialingResults DR";
+
+        if (!empty($this->params['campaigns'])) {
+            $sql .= "
+    INNER JOIN #SelectedCampaign SC ON SC.CampaignName = DR.Campaign";
+        }
+
+        $sql .= "
+    LEFT JOIN Dispos DI ON DI.id = DR.DispositionId
+	WHERE DR.GroupId = :group_id
+	AND DR.CallDate >= :startdate
+	AND DR.CallDate < :enddate
+	AND DR.Campaign != ''
+    AND DR.CallType IN (0,2)
+    AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD', 'Inbound')";
 
         if (session('ssoRelativeCampaigns', 0)) {
-            $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
+            $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
             $bind['ssousercamp'] = session('ssoUsername');
         }
 
         if (session('ssoRelativeReps', 0)) {
-            $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
+            $sql .= " AND DR.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
             $bind['ssouserrep'] = session('ssoUsername');
         }
 
@@ -163,6 +184,7 @@ SELECT * FROM #Summary";
             'Campaign' => 'Total:',
             'Total' => 0,
             'Agent' => 0,
+            'Contacts' => 0,
             'ConnectPct' => 0,
             'ContactPct' => 0,
         ];
@@ -171,10 +193,12 @@ SELECT * FROM #Summary";
             $rec = $this->processRow($rec);
             $total['Total'] += $rec['Total'];
             $total['Agent'] += $rec['Agent'];
+            $total['Contacts'] += $rec['Contacts'];
         }
 
         // format totals
         $total['ConnectPct'] = number_format($total['Agent'] / $total['Total'] * 100, 2);
+        $total['ContactPct'] = number_format($total['Contacts'] / $total['Total'] * 100, 2);
 
         // Tack on the totals row
         $results[] = $total;
@@ -215,6 +239,7 @@ SELECT * FROM #Summary";
     {
         $this->extras['campaign'] = [];
         $this->extras['agent'] = [];
+        $this->extras['contacts'] = [];
         $this->extras['total'] = [];
         $this->extras['system'] = [];
 
@@ -227,6 +252,7 @@ SELECT * FROM #Summary";
         foreach ($results as $rec) {
             $this->extras['campaign'][] = $rec['Campaign'];
             $this->extras['agent'][] = (int) $rec['Agent'];
+            $this->extras['contacts'][] = (int) $rec['Contacts'];
             $this->extras['total'][] = (int) $rec['Total'];
             $this->extras['system'][] = $rec['Total'] - $rec['Agent'];
         }
