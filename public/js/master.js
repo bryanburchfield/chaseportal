@@ -1937,110 +1937,77 @@ var Master = {
 
         var chartColors = Master.chartColors;
 
-        var campaign_contact_data = {
-          labels: response.extras.campaign,
-                datasets: [
-                  {
-                    yAxisID: 'A',
-                    label: Lang.get('js_msgs.agent'),
-                    backgroundColor: chartColors.blue,
-                    data: response.extras.agent
-                  },
-                  {
-                    yAxisID: 'B',
-                    label: Lang.get('js_msgs.system'),
+        var campaign_data = {
+            labels: response.extras.campaign,
+            datasets: [
+                {
+                    label: Lang.get('js_msgs.agent_calls'),
                     backgroundColor: chartColors.green,
-                    fillOpacity: .5, 
-                    data: response.extras.system
-                  },
-                  {
-                    yAxisID: 'B',
-                    label: Lang.get('js_msgs.total'),
+                    data: response.extras.agent
+                },
+                {
+                    label: Lang.get('js_msgs.system_calls'),
                     backgroundColor: chartColors.orange,
-                    fillOpacity: .5, 
+                    fillOpacity: .5,
+                    data: response.extras.system
+                },
+                {
+                    label: Lang.get('js_msgs.total'),
+                    backgroundColor: chartColors.blue,
+                    fillOpacity: .5,
                     data: response.extras.total
-                  }
-                ]
+                }
+            ]
         };
 
-        var campaign_contact_options={
+        var show_decimal = Master.ylabel_format(response.extras.campaign);
+
+        var campaign_options = {
             responsive: true,
-            maintainAspectRatio:false,
-            legend: {  
+            maintainAspectRatio: false,
+            legend: {
                 position: 'bottom',
                 labels: {
-                    boxWidth: 12,
-                    fontColor: Master.tick_color,
-                } 
+                    boxWidth: 12
+                }
             },
             scales: {
-                xAxes: [{
-                    ticks: {
-                        fontColor: Master.tick_color,
-                    },
-                    gridLines: {
-                        color: Master.gridline_color,
-                    },
-                }],
-                yAxes: [
 
+                yAxes: [
                     {
-                        gridLines: {
-                            color: Master.gridline_color,
-                        },
-                        id:'A',
-                        type: 'linear',
-                        position:'left',
+                        stacked: true,
+                        // type: 'linear',
+                        position: 'left',
                         scalePositionLeft: true,
                         scaleLabel: {
-                            fontColor: Master.tick_color,
-                            display: true,
-                            // labelString: Lang.get('js_msgs.minutes')
-                        },
-                    },
-                    {
-                        id:'B',
-                        type: 'linear',
-                        position:'right',
-                        scalePositionLeft: false,
-                        scaleLabel: {
-                            fontColor: Master.tick_color,
                             display: true,
                             labelString: Lang.get('js_msgs.call_count')
                         },
                         ticks: {
-                            fontColor: Master.tick_color,
-                            beginAtZero: true,
+                            // display: false
                         }
                     }
-
-                ]
+                ],
+                xAxes: [{ stacked: true }],
             },
             tooltips: {
                 enabled: true,
-                mode: 'single',
-                callbacks: {
-                    // label: function(tooltipItems, data) { 
-                    //     if (tooltipItems.datasetIndex === 0) {
-                    //         return Master.convertSecsToHrsMinsSecs(tooltipItems.yLabel);
-                    //     }else{
-                    //         return tooltipItems.yLabel;
-                    //     }
-                    // }
-                }
+                mode: 'label',
             }
         }
 
+        $('.hidetilloaded').show();
+
         var ctx = document.getElementById('campaign_contact_graph').getContext('2d');
 
-        if(window.campaign_contact_chart != undefined){
-            window.campaign_contact_chart.destroy();
+        if (window.campaign_chart != undefined) {
+            window.campaign_chart.destroy();
         }
 
-        window.campaign_contact_chart = new Chart(ctx, {
+        window.campaign_chart = new Chart(ctx, {
             type: 'bar',
-            data: campaign_contact_data,
-            options: campaign_contact_options
+            data: campaign_data,
+            options: campaign_options
         });
 
         $('.campaign_contact').show();
@@ -2088,7 +2055,7 @@ var Master = {
                         scalePositionLeft: true,
                         scaleLabel: {
                             display: true,
-                            labelString: Lang.get('js_msgs.call_count')
+                            labelString: Lang.get('js_msgs.count')
                         },
                         ticks: {
                             // display: false
