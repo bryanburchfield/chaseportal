@@ -56,10 +56,10 @@
 
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="card card-6 hidetilloaded pb5" >
+			<div class="card card-6 hidetilloaded pb5 campaign_contact" >
 				<h1 class="title fw600">{{__('reports.calls_by_caller_ID')}}</h1>
 				<div class="inbound inandout cb" style="min-height:300px;">
-					<canvas id="campaign_graph"></canvas>
+					<canvas id="campaign_contact_graph"></canvas>
 				</div>
 			</div>
 		</div>
