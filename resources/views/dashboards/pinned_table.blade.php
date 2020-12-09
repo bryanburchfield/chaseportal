@@ -13,10 +13,10 @@
 		{{-- @include('shared.navbar') --}}
 
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt50 tools">
+			<div class="container-full mt50">
 			    <div class="row">
 			    	<div class="col-sm-12">
-                   		<table class="table">
+                   		<table class="table pinned_table">
                    			<thead>
                    				<tr>
                    					<th>adf</th>
