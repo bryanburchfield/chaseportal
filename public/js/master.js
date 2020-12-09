@@ -1952,10 +1952,10 @@ var Master = {
                     data: response.extras.system
                 },
                 {
-                    label: Lang.get('js_msgs.contacts'),
+                    label: Lang.get('js_msgs.total'),
                     backgroundColor: chartColors.blue,
                     fillOpacity: .5,
-                    data: response.extras.contacts
+                    data: response.extras.total
                 }
             ]
         };
@@ -2053,7 +2053,7 @@ var Master = {
                         scalePositionLeft: true,
                         scaleLabel: {
                             display: true,
-                            labelString: Lang.get('js_msgs.call_count')
+                            labelString: Lang.get('js_msgs.count')
                         },
                         ticks: {
                             // display: false
