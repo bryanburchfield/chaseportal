@@ -90,7 +90,7 @@ class MissedCalls
             $sql .= " $union SELECT DR.Phone, Max(DR.Date) as MaxDate, COUNT(DR.Phone) as MissedCalls,
             LD.FirstName, LD.LastName
             FROM [$db].[dbo].[DialingResults] DR
-            CROSS APPLY (
+            OUTER APPLY (
                 SELECT TOP 1 FirstName, LastName
                 FROM [$db].[dbo].[Leads]
                 WHERE PrimaryPhone = SUBSTRING(DR.Phone, 2, LEN(DR.Phone))
