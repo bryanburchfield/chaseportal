@@ -1418,6 +1418,10 @@ var Master = {
                     Master.caller_id(response);
                 }
 
+                if (response.params.report == 'campaign_contact') {
+                    Master.campaign_contact(response);
+                }
+
                 if (response.params.report == 'bwr_campaign_call_log') {
                     Master.campaign_call_log(response);
                 }
@@ -1927,6 +1931,84 @@ var Master = {
     lead_inventory: function (response) {
         $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
         $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
+    },
+
+    campaign_contact:function(response){
+
+        var chartColors = Master.chartColors;
+
+        var campaign_data = {
+            labels: response.extras.campaign,
+            datasets: [
+                {
+                    label: Lang.get('js_msgs.agent_calls'),
+                    backgroundColor: chartColors.green,
+                    data: response.extras.agent
+                },
+                {
+                    label: Lang.get('js_msgs.system_calls'),
+                    backgroundColor: chartColors.orange,
+                    fillOpacity: .5,
+                    data: response.extras.system
+                },
+                {
+                    label: Lang.get('js_msgs.contacts'),
+                    backgroundColor: chartColors.blue,
+                    fillOpacity: .5,
+                    data: response.extras.contacts
+                }
+            ]
+        };
+
+        var show_decimal = Master.ylabel_format(response.extras.campaign);
+
+        var campaign_options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12
+                }
+            },
+            scales: {
+
+                yAxes: [
+                    {
+                        stacked: true,
+                        // type: 'linear',
+                        position: 'left',
+                        scalePositionLeft: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: Lang.get('js_msgs.call_count')
+                        },
+                        ticks: {
+                            // display: false
+                        }
+                    }
+                ],
+                xAxes: [{ stacked: true }],
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'label',
+            }
+        }
+
+        $('.hidetilloaded').show();
+
+        var ctx = document.getElementById('campaign_graph').getContext('2d');
+
+        if (window.campaign_chart != undefined) {
+            window.campaign_chart.destroy();
+        }
+
+        window.campaign_chart = new Chart(ctx, {
+            type: 'bar',
+            data: campaign_data,
+            options: campaign_options
+        });
     },
 
     caller_id: function (response) {

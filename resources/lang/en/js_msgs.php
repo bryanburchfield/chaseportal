@@ -30,6 +30,7 @@ return [
 	'calls'						=> 'Calls',
 	'campaign_warning'			=> 'Note: If you change the Playbook Campaign you may lose filters and actions that are associated with it.',
 	'connection_failed'			=> 'Connection Failed',
+	'contacts'					=> 'Contacts',
 	'created'					=> 'Created',
 	'days_to_filter_by'			=> 'Days to Filter By',
 	'deleted'					=> 'Deleted',

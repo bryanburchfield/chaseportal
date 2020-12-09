@@ -59,7 +59,7 @@
 			<div class="card card-6 hidetilloaded pb5" >
 				<h1 class="title fw600">{{__('reports.calls_by_caller_ID')}}</h1>
 				<div class="inbound inandout cb" style="min-height:300px;">
-					<canvas id="caller_id_graph"></canvas>
+					<canvas id="campaign_graph"></canvas>
 				</div>
 			</div>
 		</div>
