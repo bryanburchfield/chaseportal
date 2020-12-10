@@ -11,7 +11,7 @@ return [
     'attempt' => 'Dialing Attempt Number',
     'available' => 'Callable Leads',
     'availtimesec' => 'Total Time Waiting',
-    'avattempt' => 'Average Number of Dial Attempts',
+    'avattempt' => 'Average Attempts on Leads in a campaign that has activity within the date range selected',
     'avdispotime' => 'Total Wrap Up Time divided by the amount of times the agent went into wrap up time status.',
     'avg_attempts' => 'Average Dial Attempts',
     'avg_seats' => 'Average Seats',
