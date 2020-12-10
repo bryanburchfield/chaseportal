@@ -156,6 +156,7 @@ return [
     'shift_report_1' => 'This report summarizes outbound calls by campaign for the specified date range.',
     'shift_report_2' => 'It totals the call dispositions and whether they made a connection or contact.',
     'subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
+    'text_details_1' => 'This report details each text message sent or received.',
     'apn_subcampaign_summary_1' => 'This report summarizes campaign/subcampaign activity for the specified date range ',
     'transfer_agent_1' => 'This report looks at all calls that were transferred from a Rep to a Closer, and how many turned into sales.',
 ];
