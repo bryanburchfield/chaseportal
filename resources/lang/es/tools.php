@@ -89,6 +89,7 @@ return [
 	'filters'		=> 'Filtros',
 	'filters_required' => 'Debe ingresar al menos un filtro',
 	'first_name'	=> 'Nombre de Pila',
+	'form_builder' => 'Constructor de Formularios',
 	'from'			=> 'Desde',
 	'from_number'	=> 'De Número',
 	'has_header'	=> 'Tiene fila de Encabezado',

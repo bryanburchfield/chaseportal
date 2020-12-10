@@ -26,6 +26,7 @@ Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('webhook_generator', 'AdminController@webhookGenerator');
                 Route::get('accounting_reports', 'AdminController@accountingReports');
+                Route::get('form_builder', 'AdminController@formBuilder');
             });
 
             Route::redirect('/', action('DncController@index'));

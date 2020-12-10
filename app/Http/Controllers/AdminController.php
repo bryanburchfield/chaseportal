@@ -116,12 +116,19 @@ class AdminController extends Controller
 
     public function webhookGenerator()
     {
+
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
         $page['menuitem'] = 'webhook_generator';
         $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'page' => $page,
-            'dbs' => $this->dbs(),
+            'dbs' => $dbs,
             'jsfile' => [],
             'default_lead_fields' => $this->defaultLeadFields(),
         ];
@@ -141,6 +148,29 @@ class AdminController extends Controller
         ];
 
         return view('tools.accounting_reports')->with($data);
+    }
+
+    public function formBuilder()
+    {
+
+        // Convert db list to value->value
+        $dbs = [];
+        foreach ($this->dbs() as $dialer_numb => $db) {
+            $dbs[$db] = $db;
+        }
+
+        $jsfile[] = 'formbuilder.js';
+        $page['menuitem'] = 'form_builder';
+        $page['sidenav'] = 'tools';
+        $page['type'] = 'page';
+        $data = [
+           'jsfile' => $jsfile,
+           'page' => $page,
+           'dbs' => $dbs,
+           'default_lead_fields' => $this->defaultLeadFields(),
+        ];
+
+        return view('tools.form_builder')->with($data);
     }
 
     /**

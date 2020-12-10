@@ -2984,6 +2984,18 @@ a.add_subcampaign{
     }
 }
 
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
+    width: 100% !important;
+}
+
+.field.slide.default.ui-sortable-handle {
+    padding-bottom: 20px;
+}
+
+.form_code, .form_code_css {
+    max-height: 325px;
+    overflow-y: scroll;
+}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
@@ -3249,6 +3261,11 @@ MEDIAQUERIES
     &:hover{
         color: $orange;
     }
+}
+
+pre.appended_code {
+    overflow: hidden;
+    @include border-radius(0);
 }
 
 @media handheld, only screen and (max-width:556px) {
