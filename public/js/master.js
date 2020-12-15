@@ -2564,5 +2564,23 @@ $(document).ready(function () {
         $('.sso #group_id').parent().addClass('has-error');
     }
 
+    /////////////////////////////////////////////////////////
+    // PINNED TABLE
+    /////////////////////////////////////////////////////////
+    $('.pinned_table thead').find('th').on('click', function(e){
+        var index = $(this).index();
+        if($(this).hasClass('sticky-col')){
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').removeClass('sticky-col');
+            });
+
+            $(this).removeClass('sticky-col');
+        }else{
+            $(this).addClass('sticky-col');
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').addClass('sticky-col');
+            });
+        }
+    });
 });
 
