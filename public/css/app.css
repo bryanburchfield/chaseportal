@@ -3584,8 +3584,31 @@ a.add_subcampaign i {
   white-space: nowrap;
 }
 
+.pinned_table thead {
+  background: #33A09B;
+}
+
+.pinned_table th {
+  min-width: 100px;
+  max-width: 100px;
+}
+
 .pinned_table th:hover {
   cursor: pointer;
+}
+
+.pinned_table th.sticky-col {
+  background-color: #2d8d88;
+}
+
+.pinned_table td {
+  min-width: 80px;
+  max-width: 80px;
+}
+
+.pinned_table td.sticky-col {
+  background-color: #fff;
+  color: #333;
 }
 
 .pinned_table .sticky-col {
@@ -3595,19 +3618,6 @@ a.add_subcampaign i {
   min-width: 100px;
   max-width: 100px;
   left: 0px;
-}
-
-.pinned_table .sticky-col:nth-of-type(2) {
-  left: 100px;
-}
-
-.pinned_table th.sticky-col {
-  background-color: #2d8d88;
-}
-
-.pinned_table td.sticky-col {
-  background-color: #fff;
-  color: #333;
 }
 
 /* ---------------------------------------------------

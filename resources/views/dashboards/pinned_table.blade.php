@@ -20,9 +20,9 @@
                          		<table class="table">
                          			<thead>
                          				<tr>
-                         					<th class="first-col">one</th>
+                         					<th>one</th>
                          					<th>two</th>
-                         					<th class="second-col">three</th>
+                         					<th>three</th>
                          					<th>adfasdf</th>
                          					<th>asdfasd</th>
                                                       <th>adfsdaf</th>
@@ -49,9 +49,9 @@
 
                          			<tbody>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -75,9 +75,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -101,9 +101,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -127,9 +127,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -153,9 +153,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -179,9 +179,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                          				<tr>
-                         					<td class="first-col">adskfjalksjf</td>
+                         					<td>adskfjalksjf</td>
                          					<td>jkasldf</td>
-                         					<td class="second-col">kljasdlkj</td>
+                         					<td>kljasdlkj</td>
                          					<td>lkjj</td>
                          					<td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -205,35 +205,9 @@
                                                       <td>porpoepeproeo</td>
                          				</tr>
                                                 <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
                                                       <td>adskfjalksjf</td>
                                                       <td>jkasldf</td>
                                                       <td>kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
-                                                      <td>adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td>kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
-                                                </tr>
-                                                <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
                                                       <td>lkjj</td>
                                                       <td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -257,35 +231,9 @@
                                                       <td>porpoepeproeo</td>
                                                 </tr>
                                                 <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
                                                       <td>adskfjalksjf</td>
                                                       <td>jkasldf</td>
                                                       <td>kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
-                                                      <td>adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td>kljasdlkj</td>
-                                                      <td>lkjj</td>
-                                                      <td>lkj</td>
-                                                      <td>adsfasdf</td>
-                                                      <td>asdf</td>
-                                                      <td>porpoepeproeo</td>
-                                                </tr>
-                                                <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
-                                                      <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
                                                       <td>lkjj</td>
                                                       <td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -309,9 +257,9 @@
                                                       <td>porpoepeproeo</td>
                                                 </tr>
                                                 <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
+                                                      <td>adskfjalksjf</td>
                                                       <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
+                                                      <td>kljasdlkj</td>
                                                       <td>lkjj</td>
                                                       <td>lkj</td>
                                                       <td>adsfasdf</td>
@@ -335,9 +283,61 @@
                                                       <td>porpoepeproeo</td>
                                                 </tr>
                                                 <tr>
-                                                      <td class="first-col">adskfjalksjf</td>
+                                                      <td>adskfjalksjf</td>
                                                       <td>jkasldf</td>
-                                                      <td class="second-col">kljasdlkj</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                </tr>
+                                                <tr>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
+                                                      <td>lkjj</td>
+                                                      <td>lkj</td>
+                                                      <td>adsfasdf</td>
+                                                      <td>asdf</td>
+                                                      <td>porpoepeproeo</td>
+                                                </tr>
+                                                <tr>
+                                                      <td>adskfjalksjf</td>
+                                                      <td>jkasldf</td>
+                                                      <td>kljasdlkj</td>
                                                       <td>lkjj</td>
                                                       <td>lkj</td>
                                                       <td>adsfasdf</td>

@@ -2986,8 +2986,30 @@ a.add_subcampaign{
 
 .pinned_table{
 
-    th:hover{
-        cursor: pointer;
+    thead{
+        background:$green;
+    }
+
+    th{
+        min-width: 100px;
+        max-width: 100px;
+        &:hover{
+            cursor: pointer;
+        }
+
+        &.sticky-col{
+            background-color: darken($green,5%);
+        }
+    }
+
+    td{
+        min-width: 80px;
+        max-width: 80px;
+
+        &.sticky-col{
+            background-color: #fff;
+            color:#333;
+        }
     }
 
     position: relative;
@@ -3001,35 +3023,7 @@ a.add_subcampaign{
         min-width: 100px;
         max-width: 100px;
         left: 0px;
-
-        &:nth-of-type(2){
-            left:100px;
-        }
     }
-
-    th.sticky-col{
-        background-color: darken($green,5%);
-    }
-
-    td.sticky-col{
-        background-color: #fff;
-        color:#333;
-    }
-
-    // .first-col {
-    //     width: 100px;
-    //     min-width: 100px;
-    //     max-width: 100px;
-    //     left: 0px;
-    // }
-
-    // .second-col {
-    //     width: 150px;
-    //     min-width: 150px;
-    //     max-width: 150px;
-    //     left: 100px;
-    // }
-
 }
 
 /* ---------------------------------------------------
