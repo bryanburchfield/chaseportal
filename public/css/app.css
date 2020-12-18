@@ -3585,7 +3585,11 @@ a.add_subcampaign i {
 }
 
 .pinned_table thead {
-  background: #33A09B;
+  background: #33A09B !important;
+}
+
+.pinned_table thead th {
+  padding: 10px !important;
 }
 
 .pinned_table th {
@@ -3604,6 +3608,7 @@ a.add_subcampaign i {
 .pinned_table td {
   min-width: 80px;
   max-width: 80px;
+  background: #eee;
 }
 
 .pinned_table td.sticky-col {
@@ -3614,6 +3619,7 @@ a.add_subcampaign i {
 .pinned_table .sticky-col {
   position: -webkit-sticky;
   position: sticky;
+  z-index: 9999;
   width: 100px;
   min-width: 100px;
   max-width: 100px;

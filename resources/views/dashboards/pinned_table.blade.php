@@ -17,33 +17,33 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
                               <div class="pinned_table table-responsive">
-                         		<table class="table">
+                         		<table class="table table-striped table-hover">
                          			<thead>
                          				<tr>
-                         					<th>one</th>
-                         					<th>two</th>
-                         					<th>three</th>
-                         					<th>adfasdf</th>
-                         					<th>asdfasd</th>
-                                                      <th>adfsdaf</th>
-                                                      <th>adfasdf</th>
-                                                      <th>asdfasd</th>
-                                                      <th>adf</th>
-                                                      <th>asdf</th>
-                                                      <th>adfsdaf</th>
-                                                      <th>adfasdf</th>
-                                                      <th>asdfasd</th>
-                                                      <th>adfsdaf</th>
-                                                      <th>adfasdf</th>
-                                                      <th>asdfasd</th>
-                                                      <th>adf</th>
-                                                      <th>asdf</th>
-                                                      <th>adfsdaf</th>
-                                                      <th>adfasdf</th>
-                                                      <th>asdfasd</th>
-                                                      <th>adfsdaf</th>
-                                                      <th>adfasdf</th>
-                                                      <th>asdfasd</th>
+                         					<th>one <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th>two <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th>three <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                                                      <th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
                          				</tr>
                          			</thead>
 

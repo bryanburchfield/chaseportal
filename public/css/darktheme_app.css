@@ -3832,7 +3832,7 @@ a.add_subcampaign:focus {
 }
 
 .pinned_table thead {
-  background: #33A09B;
+  background: #33A09B !important;
 }
 
 .pinned_table th {
@@ -3854,13 +3854,19 @@ a.add_subcampaign:focus {
 }
 
 .pinned_table td.sticky-col {
-  background-color: #fff;
-  color: #333;
+  background-color: #1d2b40;
+  color: #eee;
+}
+
+.pinned_table tr:hover {
+  background-color: #182435 !important;
+  color: #fff;
 }
 
 .pinned_table .sticky-col {
   position: -webkit-sticky;
   position: sticky;
+  z-index: 9999;
   width: 100px;
   min-width: 100px;
   max-width: 100px;

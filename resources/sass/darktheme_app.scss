@@ -3140,8 +3140,12 @@ a.add_subcampaign{
 
 .pinned_table{
 
+    position: relative;
+    overflow: auto;
+    white-space: nowrap;
+
     thead{
-        background:$green;
+        background:$green !important;
     }
 
     th{
@@ -3161,18 +3165,20 @@ a.add_subcampaign{
         max-width: 80px;
 
         &.sticky-col{
-            background-color: #fff;
-            color:#333;
+            background-color: darken($blue,2%);
+            color:#eee;
         }
     }
 
-    position: relative;
-    overflow: auto;
-    white-space: nowrap;
+    tr:hover{
+        background-color: darken($blue,5%) !important;
+        color:#fff;
+    }
 
     .sticky-col {
         position: -webkit-sticky;
         position: sticky;
+        z-index: 9999;
         width: 100px;
         min-width: 100px;
         max-width: 100px;
