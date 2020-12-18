@@ -64,5 +64,9 @@ Route::prefix('dashboards')->group(function () {
         });
 
         Route::redirect('/', action('MasterDashController@inboundDashboard'));
+
+        Route::get("/pinned_table", function(){
+           return View::make("dashboards.pinned_table");
+        });
     });
 });

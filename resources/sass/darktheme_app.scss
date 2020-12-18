@@ -3371,6 +3371,54 @@ textarea.nobg_txtarea.form-control{
     }
 }
 
+.pinned_table{
+
+    position: relative;
+    overflow: auto;
+    white-space: nowrap;
+
+    thead{
+        background:$green !important;
+    }
+
+    th{
+        min-width: 100px;
+        max-width: 100px;
+        &:hover{
+            cursor: pointer;
+        }
+
+        &.sticky-col{
+            background-color: darken($green,5%);
+        }
+    }
+
+    td{
+        min-width: 80px;
+        max-width: 80px;
+
+        &.sticky-col{
+            background-color: darken($blue,2%);
+            color:#eee;
+        }
+    }
+
+    tr:hover{
+        background-color: darken($blue,5%) !important;
+        color:#fff;
+    }
+
+    .sticky-col {
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 9999;
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+        left: 0px;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -4104,6 +4104,54 @@ textarea.nobg_txtarea.form-control {
   margin-right: 13px;
 }
 
+.pinned_table {
+  position: relative;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.pinned_table thead {
+  background: #33A09B !important;
+}
+
+.pinned_table th {
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.pinned_table th:hover {
+  cursor: pointer;
+}
+
+.pinned_table th.sticky-col {
+  background-color: #2d8d88;
+}
+
+.pinned_table td {
+  min-width: 80px;
+  max-width: 80px;
+}
+
+.pinned_table td.sticky-col {
+  background-color: #1d2b40;
+  color: #eee;
+}
+
+.pinned_table tr:hover {
+  background-color: #182435 !important;
+  color: #fff;
+}
+
+.pinned_table .sticky-col {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 9999;
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  left: 0px;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

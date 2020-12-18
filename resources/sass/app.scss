@@ -3289,6 +3289,53 @@ textarea.nobg_txtarea.form-control{
     }
 }
 
+.pinned_table{
+
+    position: relative;
+    overflow: auto;
+    white-space: nowrap;
+    
+    thead{
+        background:$green !important;
+        th{
+            padding: 10px !important;
+        }
+    }
+
+    th{
+        min-width: 100px;
+        max-width: 100px;
+        &:hover{
+            cursor: pointer;
+        }
+
+        &.sticky-col{
+            background-color: darken($green,5%);
+        }
+    }
+
+    td{
+        min-width: 80px;
+        max-width: 80px;
+        background: #eee;
+
+        &.sticky-col{
+            background-color: #fff;
+            color:#333;
+        }
+    }
+
+    .sticky-col {
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 9999;
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+        left: 0px;
+    }
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
