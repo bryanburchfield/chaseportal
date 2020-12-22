@@ -1185,7 +1185,6 @@ var Master = {
     /////////////////////////////////////////////////////////
     // PINNED TABLE
     pin_table_column:function(e){
-        console.log('clicked');
         var index = $(this).index();
         if($(this).hasClass('sticky-col')){
             $('tbody tr').each(function(){
