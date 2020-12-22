@@ -3294,7 +3294,13 @@ textarea.nobg_txtarea.form-control{
     position: relative;
     overflow: auto;
     white-space: nowrap;
-    
+
+    table.table.reports_table{
+        thead{
+            tr{background:$green !important;}
+        }
+    }
+
     thead{
         background:$green !important;
         th{

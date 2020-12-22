@@ -3918,6 +3918,10 @@ textarea.nobg_txtarea.form-control {
   white-space: nowrap;
 }
 
+.pinned_table table.table.reports_table thead tr {
+  background: #33A09B !important;
+}
+
 .pinned_table thead {
   background: #33A09B !important;
 }

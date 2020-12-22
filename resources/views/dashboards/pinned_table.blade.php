@@ -20,9 +20,9 @@
                          		<table class="table table-striped table-hover">
                          			<thead>
                          				<tr>
-                         					<th>one <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
-                         					<th>two <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
-                         					<th>three <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th><span>one</span> <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th><span>two</span> <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
+                         					<th><span>three</span> <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
                          					<th>adfasdf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
                          					<th>asdfasd <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
                                                       <th>adfsdaf <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>
