@@ -38,8 +38,8 @@ Route::prefix('tools')->group(function () {
             // Webook Generator & Form Builder
             Route::group(['middleware' => 'can:accessSuperAdmin'], function () {
                 Route::get('webhook_generator', 'AdminController@webhookGenerator');
-                Route::get('form_builder', 'AdminController@formBuilder');
                 Route::get('accounting_reports', 'AdminController@accountingReports');
+                Route::get('form_builder', 'AdminController@formBuilder');
             });
 
             Route::redirect('/', action('DncController@index'));

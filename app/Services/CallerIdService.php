@@ -631,6 +631,7 @@ class CallerIdService
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('owned', 1)
             ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereNull('replaced_by')
             ->where(function ($query) {
                 $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
                     ->orWhere('ring_group', 'like', '%Nationwide%');
@@ -739,6 +740,11 @@ class CallerIdService
             } catch (Exception $e) {
                 $error = 'Could not swap number: ' . $e->getMessage();
             }
+        }
+
+        // truncate error just in case
+        if (!empty($error)) {
+            $error = substr($error, 0, 190);
         }
 
         return [$replaced_by, $error];

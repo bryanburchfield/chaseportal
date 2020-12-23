@@ -3792,26 +3792,14 @@ ul.group_select {
   color: #fff !important;
 }
 
-.form-control ::-webkit-input-placeholder {
-  /* WebKit browsers */
-  color: red !important !important;
+.accounting_reports .list-group a {
+  font-weight: 600;
+  font-size: 16px;
 }
 
-.form-control :-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-  color: red !important !important;
-  opacity: 1;
-}
-
-.form-control ::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-  color: red !important !important;
-  opacity: 1;
-}
-
-.form-control :-ms-input-placeholder {
-  /* Internet Explorer 10+ */
-  color: red !important !important;
+.accounting_reports .list-group a i {
+  color: #1896DE;
+  margin-right: 13px;
 }
 
 textarea.form-control.rounded {

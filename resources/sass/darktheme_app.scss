@@ -3371,8 +3371,11 @@ textarea.nobg_txtarea.form-control{
     }
 }
 
-.pinned_table{
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
+    width: 100% !important;
+}
 
+.pinned_table{
     position: relative;
     overflow: auto;
     white-space: nowrap;
@@ -3424,6 +3427,7 @@ textarea.nobg_txtarea.form-control{
         left: 0px;
     }
 }
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

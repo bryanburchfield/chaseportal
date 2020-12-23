@@ -4104,6 +4104,10 @@ textarea.nobg_txtarea.form-control {
   margin-right: 13px;
 }
 
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle {
+  width: 100% !important;
+}
+
 .pinned_table {
   position: relative;
   overflow: auto;

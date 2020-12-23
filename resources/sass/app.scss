@@ -3140,7 +3140,6 @@ ul.group_select{
 }
 
 // form builder themes
-
 .form-control{
 
     $placeholder_text:blue !important;
@@ -3168,23 +3167,33 @@ ul.group_select{
         &:focus{
             background:#17A7F9 !important;
             color:#fff !important;
+
+        }
+    }
+}
+
+.accounting_reports{
+    .list-group{
+        a{
+            font-weight: 600;font-size: 16px;
+            i{color:#1896DE;margin-right: 13px;}
         }
     }
 
-    ::-webkit-input-placeholder { /* WebKit browsers */
-        color:    $placeholder_text !important;
-    }
-    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-       color:    $placeholder_text !important;
-       opacity:  1;
-    }
-    ::-moz-placeholder { /* Mozilla Firefox 19+ */
-       color:    $placeholder_text !important;
-       opacity:  1;
-    }
-    :-ms-input-placeholder { /* Internet Explorer 10+ */
-       color:    $placeholder_text !important;
-    }
+    // ::-webkit-input-placeholder { /* WebKit browsers */
+    //     color: $placeholder_text !important;
+    // }
+    // :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    //    color: $placeholder_text !important;
+    //    opacity:  1;
+    // }
+    // ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    //    color: $placeholder_text !important;
+    //    opacity:  1;
+    // }
+    // :-ms-input-placeholder { /* Internet Explorer 10+ */
+    //    color: $placeholder_text !important;
+    // }
 }
 
 textarea{
