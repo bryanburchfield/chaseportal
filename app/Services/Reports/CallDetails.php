@@ -342,7 +342,7 @@ class CallDetails
 
         $sql .= " SELECT *, totRows = COUNT(*) OVER()
                 FROM (SELECT
-                CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
+                CONVERT(datetimeoffset, DR.CallDate) AT TIME ZONE '$tz' as Date,
                 IsNull(DR.Rep, '') as Rep,
                 DR.Campaign,
                 DR.Subcampaign,
@@ -419,8 +419,8 @@ class CallDetails
             LEFT JOIN #SelectedCallStatus CS on CS.CallStatusName = DR.CallStatus
             LEFT JOIN #SelectedSource S on S.SourceName = DR.CallerId
             WHERE DR.GroupId = :group_id
-            AND dr.Date >= :startdate
-            AND DR.Date <= :enddate
+            AND DR.CallDate >= :startdate
+            AND DR.CallDate <= :enddate
             AND DR.CallType != 7
             $where";
 
