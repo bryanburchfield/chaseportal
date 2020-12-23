@@ -17,7 +17,7 @@
 			    <div class="row">
 			    	<div class="col-sm-12">
                               <div class="pinned_table table-responsive">
-                         		<table class="table table-striped table-hover">
+                         		<table class="table table-striped table-hover" id="pin_col_dataTable">
                          			<thead>
                          				<tr>
                          					<th><span>one</span> <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a></th>

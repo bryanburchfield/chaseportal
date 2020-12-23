@@ -63,7 +63,7 @@ var Master = {
         $('form.report_filter_form').on('submit', this.submit_report_filter_form);
         $('.pag').on('click', '.pagination li a', this.click_pag_btn);
         $('body').on('click', '.reports_table thead th a span, .pinned_table table thead th a span', this.sort_table);
-        $('body').on('dblclick', '.pinned_table thead th', this.pin_table_column);
+        // $('body').on('dblclick', '.pinned_table thead th', this.pin_table_column);
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
@@ -2583,6 +2583,16 @@ $(document).ready(function () {
     if($('.sso #group_id').val() == '-1'){
         $('.sso #group_id').parent().addClass('has-error');
     }
+
+
+    ///////////////////////////////////////////////////////////
+    $('#pin_col_dataTable').DataTable({
+        fixedColumns: true,
+        responsive: true,
+        dom: 'Bfrtip',
+        
+
+    });
 
 });
 
