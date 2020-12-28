@@ -22,6 +22,7 @@
                                           <label>Select # of Columns to Freeze</label>
                                           <select name="numb_pinned_cols" id="numb_pinned_cols" class="form-control numb_pinned_cols">
                                                 <option value="">Select One</option>
+                                                <option value="0">0</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
