@@ -332,13 +332,7 @@ class CallDetails
             $where .= " AND (IsNull(DR.CallStatus, '') NOT IN ('Inbound', 'Inbound Voicemail') AND IsNull(DR.Rep, '') <> '')";
         }
 
-        $is_callable_sql = "IsNull((SELECT TOP 1 D.IsCallable
-                FROM [Dispos] D
-                WHERE D.Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id] Desc
-                ), 0)";
+        $is_callable_sql = "IsNull(DI.IsCallable,0)";
 
         $sql .= " SELECT *, totRows = COUNT(*) OVER()
                 FROM (SELECT
@@ -391,7 +385,8 @@ class CallDetails
         $sql .= "
                 $this->extra_cols
             FROM [DialingResults] DR WITH(NOLOCK)
-            LEFT JOIN InboundSources SRC on SRC.GroupId = DR.GroupId AND SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
+            INNER JOIN [Dispos] DI ON DI.id = DR.DispositionId
+            LEFT JOIN InboundSources SRC on SRC.InboundSource = DR.CallerId AND DR.CallType = 1";
 
         if (!empty($this->params['skills'])) {
             $sql .= "

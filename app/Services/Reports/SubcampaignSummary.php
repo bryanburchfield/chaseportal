@@ -133,11 +133,10 @@ class SubcampaignSummary
             dr.Campaign,
             IsNull(dr.Subcampaign, '') as Subcampaign,
             dr.CallStatus as CallStatus,
-            IsNull((SELECT TOP 1 [Type]
-              FROM [$db].[dbo].[Dispos]
-              WHERE Disposition=dr.CallStatus AND (GroupId=dr.GroupId OR IsSystem=1) AND (Campaign=dr.Campaign OR IsDefault=1) AND (Campaign=dr.Campaign OR IsDefault=1) ORDER BY [id]), 0) as [Type],
-            count(dr.CallStatus) as [Count]
+            IsNull(DI.Type,0) as [Type],
+            COUNT(dr.CallStatus) as [Count]
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
+            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
@@ -156,7 +155,7 @@ class SubcampaignSummary
             }
 
             $sql .= "
-            GROUP BY dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
+            GROUP BY DI.Type, dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';
         }

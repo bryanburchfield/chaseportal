@@ -753,12 +753,7 @@ class InboundDashController extends Controller
             $sql .= " $union SELECT
             'Sales' = COUNT(CASE WHEN DI.Type = '3' THEN 1 ELSE NULL END)
             FROM [$db].[dbo].[DialingResults] DR
-            CROSS APPLY (SELECT TOP 1 [Type]
-                FROM  [$db].[dbo].[Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :groupid$i
             AND DR.CallType IN (1,11)
             AND DR.CallStatus NOT IN (

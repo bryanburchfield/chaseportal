@@ -149,13 +149,7 @@ class RealTimeDashboardController extends Controller
         $sql = "SELECT
             SUM(CASE WHEN DI.Type = '3' THEN 1 ELSE 0 END) as Sales
             FROM [DialingResults] DR
-            CROSS APPLY (
-                SELECT TOP 1 [Type]
-                FROM  [Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem=1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :groupid
             AND DR.Date >= :startdate";
 

@@ -181,6 +181,7 @@ class ProductionReport
             'Contacts' = CASE WHEN DI.Type > 1 THEN 1 ELSE 0 END,
             'Sales' = CASE WHEN DI.Type = 3 THEN 1 ELSE 0 END
             FROM [$db].[dbo].[DialingResults] DR
+            INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             LEFT JOIN [$db].[dbo].[Reps] RR on RR.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep";
 
             if (!empty($this->params['skills'])) {
@@ -189,13 +190,6 @@ class ProductionReport
             }
 
             $sql .= "
-            CROSS APPLY (
-                SELECT TOP 1 [Type]
-                FROM [$db].[dbo].[Dispos]
-                WHERE Disposition = DR.CallStatus
-                AND (GroupId = DR.GroupId OR IsSystem = 1)
-                AND (Campaign = DR.Campaign OR Campaign = '')
-                ORDER BY [id]) DI
             WHERE DR.GroupId = :group_id$i
             AND DR.Date >= :startdate$i
             AND DR.Date < :enddate$i
