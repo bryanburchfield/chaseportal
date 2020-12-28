@@ -68,5 +68,9 @@ Route::prefix('dashboards')->group(function () {
         Route::get("/pinned_table", function(){
            return View::make("dashboards.pinned_table");
         });
+
+        Route::get("/pinned_datatable", function(){
+           return View::make("dashboards.pinned_datatable");
+        });
     });
 });

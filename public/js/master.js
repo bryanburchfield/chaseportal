@@ -22,6 +22,7 @@ var Master = {
     active_camp_search: '',
     tick_color: '#aaa',
     gridline_color: '#1A2738',
+    pinned_columns:0,
     
     activeTab: localStorage.getItem('activeTab'),
     dataTable: $('#dataTable').DataTable({
@@ -56,6 +57,8 @@ var Master = {
             $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
         }
 
+        Master.draw_pinned_datatable(0);
+
         $('.pag').clone().insertAfter('div.table-responsive');
         $('.view_report_btn').on('click', this.view_report);
         $('.users table tbody, .rules_table tbody, .demo_user_table tbody').on('click', 'a.remove_user', this.pass_user_removemodal);
@@ -64,6 +67,8 @@ var Master = {
         $('.pag').on('click', '.pagination li a', this.click_pag_btn);
         $('body').on('click', '.reports_table thead th a span, .pinned_table table thead th a span', this.sort_table);
         $('body').on('dblclick', '.pinned_table thead th', this.pin_table_column);
+        $('.numb_pinned_cols').on('change', this.select_pinned_columns);
+
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
@@ -1185,6 +1190,7 @@ var Master = {
     /////////////////////////////////////////////////////////
     // PINNED TABLE
     pin_table_column:function(e){
+
         var index = $(this).index();
         if($(this).hasClass('sticky-col')){
             $('tbody tr').each(function(){
@@ -1199,6 +1205,13 @@ var Master = {
                 $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
             });
         }
+    },
+
+    select_pinned_columns:function(e){
+        e.preventDefault();
+        Master.pinned_columns=$(this).val();
+        Master.draw_pinned_datatable(Master.pinned_columns);
+        return false;
     },
 
     // check if pag input values have changed
@@ -2478,6 +2491,24 @@ var Master = {
 
             }
         });
+    },
+
+    draw_pinned_datatable:function(cols){
+        ///////////////////////////////////////////////////////////
+
+        var pinned_datatable = $('#pin_col_dataTable').DataTable({
+            destroy: true,
+            scrollY:        500,
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         true,
+            responsive: true,
+            fixedColumns:   {
+                leftColumns: cols
+            }
+        });
+
+        pinned_datatable.draw();
     }
 }
 
@@ -2523,6 +2554,5 @@ $(document).ready(function () {
     if($('.sso #group_id').val() == '-1'){
         $('.sso #group_id').parent().addClass('has-error');
     }
-
 });
 
