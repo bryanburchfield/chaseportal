@@ -33,7 +33,7 @@
 
                               <div class="table-responsive">
                                     <table class="table table-striped table-hover stripe row-border order-column" id="pin_col_dataTable" style="width:100%">
-                                          <thead class="fixedHeader">
+                                          <thead>
                                                 <tr>
                                                       <th><span>Date</span></th>
                                                       <th><span>Rep</span></th>
@@ -56,30 +56,30 @@
                                                       <th><span>Recording</span></th>
                                                 </tr>
                                           </thead>
-                          <tbody>
-                                      <tr style="word-break:break-all;">
 
-                                                                  <td>12/14/2020 9:10 AM</td>
-                                                                                  <td>Ken</td>
-                                                                                  <td>New Support</td>
-                                                                                  <td></td>
-                                                                                  <td>14022010541</td>
-                                                                                  <td>1</td>
-                                                                                  <td>8887398218</td>
-                                                                                  <td>Main Number</td>
-                                                                                  <td></td>
-                                                                                  <td></td>
-                                                                                  <td>12/14/2020 9:09 AM</td>
-                                                                                  <td>Wrong Number</td>
-                                                                                  <td>0</td>
-                                                                                  <td>00:02:00</td>
-                                                                                  <td>Inbound</td>
-                                                                                  <td></td>
-                                                                                  <td></td>
-                                                                                  <td>dialer07.pstn.twilio.com:5060</td>
-                                                                                  <td></td>
-                                                          </tr>
-                                      <tr style="word-break:break-all;">
+                                          <tbody>
+                                                <tr>
+                                                      <td>12/14/2020 9:10 AM</td>
+                                                      <td>Ken</td>
+                                                      <td>New Support</td>
+                                                      <td></td>
+                                                      <td>14022010541</td>
+                                                      <td>1</td>
+                                                      <td>8887398218</td>
+                                                      <td>Main Number</td>
+                                                      <td></td>
+                                                      <td></td>
+                                                      <td>12/14/2020 9:09 AM</td>
+                                                      <td>Wrong Number</td>
+                                                      <td>0</td>
+                                                      <td>00:02:00</td>
+                                                      <td>Inbound</td>
+                                                      <td></td>
+                                                      <td></td>
+                                                      <td>dialer07.pstn.twilio.com:5060</td>
+                                                      <td></td>
+                                                </tr>
+                                      <tr>
 
                                                                   <td>12/14/2020 9:16 AM</td>
                                                                                   <td>1 - 9542464086</td>
@@ -101,7 +101,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:21 AM</td>
                                                                                   <td>Dan Cleary</td>
@@ -123,7 +123,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:38 AM</td>
                                                                                   <td>Nick D</td>
@@ -145,7 +145,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:38 AM</td>
                                                                                   <td></td>
@@ -167,7 +167,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:38 AM</td>
                                                                                   <td></td>
@@ -189,7 +189,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:39 AM</td>
                                                                                   <td>Nick D</td>
@@ -211,7 +211,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:42 AM</td>
                                                                                   <td>Nick D</td>
@@ -233,7 +233,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:43 AM</td>
                                                                                   <td></td>
@@ -255,7 +255,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 9:57 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -277,7 +277,7 @@
                                                                                   <td>dialer07.pstn.twilio.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:00 AM</td>
                                                                                   <td>Dylan F</td>
@@ -299,7 +299,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:00 AM</td>
                                                                                   <td>danielle</td>
@@ -321,7 +321,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:00 AM</td>
                                                                                   <td></td>
@@ -343,7 +343,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:01 AM</td>
                                                                                   <td></td>
@@ -365,7 +365,7 @@
                                                                                   <td>dialer07.pstn.twilio.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:03 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -387,7 +387,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:11 AM</td>
                                                                                   <td>Dylan F</td>
@@ -409,7 +409,7 @@
                                                                                   <td>dialer07.pstn.twilio.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:20 AM</td>
                                                                                   <td>Ken</td>
@@ -431,7 +431,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:22 AM</td>
                                                                                   <td></td>
@@ -453,7 +453,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:23 AM</td>
                                                                                   <td></td>
@@ -475,7 +475,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:33 AM</td>
                                                                                   <td>Dylan F</td>
@@ -497,7 +497,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:34 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -519,7 +519,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:37 AM</td>
                                                                                   <td>danielle</td>
@@ -541,7 +541,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:39 AM</td>
                                                                                   <td>joec</td>
@@ -563,7 +563,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:40 AM</td>
                                                                                   <td></td>
@@ -585,7 +585,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:40 AM</td>
                                                                                   <td></td>
@@ -607,7 +607,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:47 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -629,7 +629,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:48 AM</td>
                                                                                   <td>Dan Cleary</td>
@@ -651,7 +651,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:53 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -673,7 +673,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:53 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -695,7 +695,7 @@
                                                                                   <td>51.81.31.121</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:55 AM</td>
                                                                                   <td>Ken</td>
@@ -717,7 +717,7 @@
                                                                                   <td>51.81.31.121</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:55 AM</td>
                                                                                   <td></td>
@@ -739,7 +739,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:57 AM</td>
                                                                                   <td></td>
@@ -761,7 +761,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 10:58 AM</td>
                                                                                   <td>Dylan F</td>
@@ -783,7 +783,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:00 AM</td>
                                                                                   <td></td>
@@ -805,7 +805,7 @@
                                                                                   <td>dialer07.pstn.twilio.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:00 AM</td>
                                                                                   <td>Nick D</td>
@@ -827,7 +827,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:03 AM</td>
                                                                                   <td></td>
@@ -849,7 +849,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:05 AM</td>
                                                                                   <td></td>
@@ -871,7 +871,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:05 AM</td>
                                                                                   <td></td>
@@ -893,7 +893,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:05 AM</td>
                                                                                   <td></td>
@@ -915,7 +915,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:05 AM</td>
                                                                                   <td></td>
@@ -937,7 +937,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:06 AM</td>
                                                                                   <td></td>
@@ -959,7 +959,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:08 AM</td>
                                                                                   <td></td>
@@ -981,7 +981,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:08 AM</td>
                                                                                   <td></td>
@@ -1003,7 +1003,7 @@
                                                                                   <td></td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:10 AM</td>
                                                                                   <td></td>
@@ -1025,7 +1025,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:16 AM</td>
                                                                                   <td>joec</td>
@@ -1047,7 +1047,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:16 AM</td>
                                                                                   <td>Dan Cleary</td>
@@ -1069,7 +1069,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:19 AM</td>
                                                                                   <td>Ken</td>
@@ -1091,7 +1091,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:19 AM</td>
                                                                                   <td>2 - 8559342537</td>
@@ -1113,7 +1113,7 @@
                                                                                   <td>dialer07.pstn.twilio.com:5060</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:26 AM</td>
                                                                                   <td>Dan Cleary</td>
@@ -1135,7 +1135,7 @@
                                                                                   <td>sip.telnyx.com</td>
                                                                                   <td></td>
                                                           </tr>
-                                      <tr style="word-break:break-all;">
+                                      <tr>
 
                                                                   <td>12/14/2020 11:28 AM</td>
                                                                                   <td>Ken</td>
