@@ -59,7 +59,7 @@ return [
             ]) : [],
         ],
 
-        'phoneflags' => [
+        'xphoneflags' => [
             'driver' => 'mysql',
             'host' => env('PFDB_HOST', '127.0.0.1'),
             'port' => env('PFDB_PORT', '3306'),
@@ -78,13 +78,13 @@ return [
             ]) : [],
         ],
 
-        'pgsql' => [
+        'phoneflags' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('PFDB_HOST', '127.0.0.1'),
+            'port' => env('PFDB_PORT', '5432'),
+            'database' => env('PFDB_DATABASE', 'forge'),
+            'username' => env('PFDB_USERNAME', 'forge'),
+            'password' => env('PFDB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
