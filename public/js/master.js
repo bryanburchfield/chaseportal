@@ -23,6 +23,20 @@ var Master = {
     tick_color: '#aaa',
     gridline_color: '#1A2738',
     pinned_columns:0,
+    // left_cols:0,
+    // right_cols:0,
+    report_pinned_datatable: $('.report_pinned_datatable').DataTable({
+        destroy: true,
+        scrollY:        500,
+        scrollX:        true,
+        scrollCollapse: true,
+        paging:         true,
+        responsive: true,
+        fixedColumns:   {
+            leftColumns: this.left_cols,
+            rightColumns: this.right_cols
+        }
+    }),
     
     activeTab: localStorage.getItem('activeTab'),
     dataTable: $('#dataTable').DataTable({
@@ -40,10 +54,12 @@ var Master = {
                 pageSize: 'LEGAL'
             }
         ],
-
     }),
 
 	init:function(){
+
+        Master.left_cols=0;
+        Master.right_cols=0;
 
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
@@ -56,8 +72,6 @@ var Master = {
         if(Master.activeTab){
             $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
         }
-
-        Master.draw_pinned_datatable(0);
 
         $('.pag').clone().insertAfter('div.table-responsive');
         $('.view_report_btn').on('click', this.view_report);
@@ -1347,6 +1361,8 @@ var Master = {
                     $('#sidebar').removeClass('active');
                 }
 
+                Master.draw_pinned_datatable(0);
+
                 // hide / empty everything and run report
                 $('.table-responsive, .pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
@@ -2564,31 +2580,28 @@ var Master = {
 
     draw_pinned_datatable:function(cols, dir='left'){
     ///////////////////////////////////////////////////////////
-        var left_cols,
-            right_cols
-        ;
+        Master.report_pinned_datatable.destroy();
+
         if(dir =='left'){
-            left_cols=cols;
-            right_cols=0;
+            Master.left_cols=cols;
+            Master.right_cols=0;
         }else{
-            right_cols=cols;
-            left_cols=0;
+            Master.right_cols=cols;
+            Master.left_cols=0;
         }
 
-        var pinned_datatable = $('#pin_col_dataTable').DataTable({
-            destroy: true,
-            scrollY:        500,
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         true,
-            responsive: true,
-            fixedColumns:   {
-                leftColumns: left_cols,
-                rightColumns: right_cols
-            }
-        });
-
-        pinned_datatable.draw();
+        Master.report_pinned_datatable=$('.report_pinned_datatable').DataTable({
+                destroy: true,
+                scrollY:        500,
+                scrollX:        true,
+                scrollCollapse: true,
+                paging:         true,
+                responsive: true,
+                fixedColumns:   {
+                    leftColumns: Master.left_cols,
+                    rightColumns: Master.right_cols
+                }
+            });
     }
 }
 

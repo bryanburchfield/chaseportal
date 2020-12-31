@@ -18,7 +18,7 @@
 			    	<div class="col-sm-12">
 
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="pin_col_dataTable">
+                            <table class="table table-striped table-hover report_pinned_datatable">
                                 <thead>
                                     <tr>
                                         <th><span>Date</span></th>
