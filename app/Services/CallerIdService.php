@@ -142,8 +142,8 @@ class CallerIdService
             ->where('owned', 1)
             ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
             ->where(function ($query) {
-                $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
-                    ->orWhere('ring_group', 'like', '%Nationwide%');
+                $query->where('ring_group', 'ilike', '%Caller%Id%Call%back%')
+                    ->orWhere('ring_group', 'ilike', '%Nationwide%');
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
@@ -177,8 +177,8 @@ class CallerIdService
             ->where('owned', 1)
             ->whereNotIn('dialer_numb', [7, 24, 26])   // Supported servers by API
             ->where(function ($query) {
-                $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
-                    ->orWhere('ring_group', 'like', '%Nationwide%');
+                $query->where('ring_group', 'ilike', '%Caller%Id%Call%back%')
+                    ->orWhere('ring_group', 'ilike', '%Nationwide%');
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
@@ -633,8 +633,8 @@ class CallerIdService
             ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
             ->whereNull('replaced_by')
             ->where(function ($query) {
-                $query->where('ring_group', 'like', '%Caller%Id%Call%back%')
-                    ->orWhere('ring_group', 'like', '%Nationwide%');
+                $query->where('ring_group', 'ilike', '%Caller%Id%Call%back%')
+                    ->orWhere('ring_group', 'ilike', '%Nationwide%');
             })
             ->where(function ($query) {
                 $query->where('flagged', 1)
