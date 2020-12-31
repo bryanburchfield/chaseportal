@@ -68,7 +68,7 @@ var Master = {
         $('body').on('click', '.reports_table thead th a span, .pinned_table table thead th a span', this.sort_table);
         $('body').on('dblclick', '.pinned_table thead th', this.pin_table_column);
         $('.numb_pinned_cols').on('change', this.select_pinned_columns);
-
+        $('.pin_direction').on('change', this.set_pinned_direction);
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
@@ -1262,33 +1262,6 @@ var Master = {
         }
 
         Master.update_report(this.th_sort, this.pagesize, this.curpage, '', this.sort_direction);
-    },
-
-    /////////////////////////////////////////////////////////
-    // PINNED TABLE
-    pin_table_column:function(e){
-
-        var index = $(this).index();
-        if($(this).hasClass('sticky-col')){
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').removeClass('sticky-col');
-            });
-            $(this).removeClass('sticky-col');
-        }else{
-            $(this).addClass('sticky-col');
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').addClass('sticky-col');
-                $(this).find('td:eq('+index+')').css({'left':+index+'00px'});
-                $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
-            });
-        }
-    },
-
-    select_pinned_columns:function(e){
-        e.preventDefault();
-        Master.pinned_columns=$(this).val();
-        Master.draw_pinned_datatable(Master.pinned_columns);
-        return false;
     },
 
     // check if pag input values have changed
@@ -2554,8 +2527,53 @@ var Master = {
         });
     },
 
-    draw_pinned_datatable:function(cols){
-        ///////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+    // PINNED TABLE - dbl click to freeze
+    /////////////////////////////////////////////////////////
+    pin_table_column:function(e){
+
+        var index = $(this).index();
+        if($(this).hasClass('sticky-col')){
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').removeClass('sticky-col');
+            });
+            $(this).removeClass('sticky-col');
+        }else{
+            $(this).addClass('sticky-col');
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').addClass('sticky-col');
+                $(this).find('td:eq('+index+')').css({'left':+index+'00px'});
+                $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
+            });
+        }
+    },
+
+    // set direction of table to freeze
+    set_pinned_direction:function(){
+        var dir = $(this).val();
+        var cols = $('#numb_pinned_cols').val();
+        Master.draw_pinned_datatable(cols, dir);
+    },
+
+    // change # of columns to freeze from select menu
+    select_pinned_columns:function(e){
+        e.preventDefault();
+        Master.pinned_columns=$(this).val();
+        Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
+    },
+
+    draw_pinned_datatable:function(cols, dir='left'){
+    ///////////////////////////////////////////////////////////
+        var left_cols,
+            right_cols
+        ;
+        if(dir =='left'){
+            left_cols=cols;
+            right_cols=0;
+        }else{
+            right_cols=cols;
+            left_cols=0;
+        }
 
         var pinned_datatable = $('#pin_col_dataTable').DataTable({
             destroy: true,
@@ -2565,7 +2583,8 @@ var Master = {
             paging:         true,
             responsive: true,
             fixedColumns:   {
-                leftColumns: cols
+                leftColumns: left_cols,
+                rightColumns: right_cols
             }
         });
 
