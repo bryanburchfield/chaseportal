@@ -21,25 +21,25 @@
                             <table class="table table-striped table-hover report_pinned_datatable">
                                 <thead>
                                     <tr>
-                                        <th><span>Date</span></th>
-                                        <th><span>Rep</span></th>
-                                        <th><span>Campaign</span></th>
-                                        <th><span>Subcampaign</span></th>
-                                        <th><span>Phone</span></th>
-                                        <th><span>Attempt</span></th>
-                                        <th><span>Caller ID</span></th>
-                                        <th><span>Inbound Source</span></th>
-                                        <th><span>Last</span></th>
-                                        <th><span>First</span></th>
-                                        <th><span>Import Date</span></th>
-                                        <th><span>Call Status</span></th>
-                                        <th><span>Is Callable</span></th>
-                                        <th><span>Duration</span></th>
-                                        <th><span>Call Type</span></th>
-                                        <th><span>Details</span></th>
-                                        <th><span>Hangup</span></th>
-                                        <th><span>Route</span></th>
-                                        <th><span>Recording</span></th>
+                                        <th>Date</th>
+                                        <th>Rep</th>
+                                        <th>Campaign</th>
+                                        <th>Subcampaign</th>
+                                        <th>Phone</th>
+                                        <th>Attempt</th>
+                                        <th>Caller ID</th>
+                                        <th>Inbound Source</th>
+                                        <th>Last</th>
+                                        <th>First</th>
+                                        <th>Import Date</th>
+                                        <th>Call Status</th>
+                                        <th>Is Callable</th>
+                                        <th>Duration</th>
+                                        <th>Call Type</th>
+                                        <th>Details</th>
+                                        <th>Hangup</th>
+                                        <th>Route</th>
+                                        <th>Recording</th>
                                     </tr>
                                 </thead>
 

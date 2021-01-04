@@ -1379,6 +1379,7 @@ var Master = {
                     return false;
                 }
 
+                console.log(response);
                 // check for result by counting total page
                 // if (response.params.totrows) {
 
@@ -1445,14 +1446,14 @@ var Master = {
                     var th_vals = Object.values(response.params.columns);
                     for (var key in th_vals) {
                         if (th_vals.hasOwnProperty(key)) {
-                            ths.push(th_vals[key]);
+                            ths.push("<th>" +th_vals[key]+"</th>");
                             console.log(key + " -> " + th_vals[key]);
                         }
                     }
 
-                    console.log(ths);
+                    // console.log(ths);
 
-                    $('.report_pinned_datatable thead').html(ths);
+                    $('.report_pinned_datatable thead tr').html(ths);
                 //     Master.report_pinned_datatable.clear();
                 //     Master.report_pinned_datatable.rows.add(trs);
                 //     Master.report_pinned_datatable.draw();
