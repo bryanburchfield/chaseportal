@@ -1379,46 +1379,85 @@ var Master = {
                     return false;
                 }
 
-                $('.table-responsive.report_table').show();
-
                 // check for result by counting total page
-                if (response.params.totrows) {
+                // if (response.params.totrows) {
 
-                    this.totpages = response.params.totpages;
-                    this.curpage = response.params.curpage;
-                    this.th_sort = th_sort;
-                    this.sort_direction = response.params.orderby.Campaign;
+                //     this.totpages = response.params.totpages;
+                //     this.curpage = response.params.curpage;
+                //     this.th_sort = th_sort;
+                //     this.sort_direction = response.params.orderby.Campaign;
 
-                    // append table
-                    $('.table-responsive').append(response.table);
+                //     // append table
+                //     $('.table-responsive').append(response.table);
 
-                    // show download options
-                    $('.report_download').show();
+                //     // show download options
+                //     $('.report_download').show();
 
-                    // set active class to the th that was sorted
-                    for (var i = 0; i < $('.reports_table thead th').length; i++) {
-                        if ($('.reports_table thead th:eq(' + i + ')').text() == this.th_sort) {
-                            $('.reports_table thead th:eq(' + i + ')').addClass('active_column');
-                            $('.reports_table thead th:eq(' + i + ')').find('span.' + sort_direction).addClass('active');
+                //     // set active class to the th that was sorted
+                //     for (var i = 0; i < $('.reports_table thead th').length; i++) {
+                //         if ($('.reports_table thead th:eq(' + i + ')').text() == this.th_sort) {
+                //             $('.reports_table thead th:eq(' + i + ')').addClass('active_column');
+                //             $('.reports_table thead th:eq(' + i + ')').find('span.' + sort_direction).addClass('active');
+                //         }
+                //     }
+
+                //     // pagination - show pag if more than one page
+                //     if (response.params.totpages > 1) {
+                //         $('.pag').append(response.pag).show();
+                //         $('.pagination').find('li').removeClass('active');
+                //         $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
+                //     }else{
+                //         $('.pag').append('<br><br><br>'+response.pag).show();
+                //         $('.pag').first().find('.pag_dets').addClass('mt50');
+                //     }
+
+                //     // show sort order and reset button if sorting is active
+                //     if (this.th_sort) {
+                //         $('.reset_sorting h3').html(Lang.get('js_msgs.sorted_in') + ' <span class="sort_direction">' + sort_direction + '</span> ' + Lang.get('js_msgs.sorted_in') + ' <span class="sorted_by">' + this.th_sort + '</span>');
+                //         $('.reset_sorting').show();
+                //     }
+                // }
+
+
+                // if (response.params.totrows) {
+                    $('.pinned_table.table-responsive').append(response.table).show();
+                    $('.pinned_table.table-responsive').show();
+
+                //     var _data = response.search_result;
+                //     var trs = [];
+                //     var array_keys = [], array_values = [];
+                //     for (i = 0; i < _data.length; i++) {
+                //         array_keys = [];
+                //         array_values = [];
+                //         for (var key in _data[i]) {
+                //             array_keys.push(key);
+                //             array_values.push(_data[i][key]);
+                //         }
+                //         trs.push(array_values);
+                //     }
+
+                    // var ths = "";
+                    // for (var i = 0; i < response.params.columns.length; i++) {
+                    //     ths += "<th>" + response.params.columns[i] + "</th>";
+                    // }
+
+                    var ths = [];
+                    var th_vals = Object.values(response.params.columns);
+                    for (var key in th_vals) {
+                        if (th_vals.hasOwnProperty(key)) {
+                            ths.push(th_vals[key]);
+                            console.log(key + " -> " + th_vals[key]);
                         }
                     }
 
-                    // pagination - show pag if more than one page
-                    if (response.params.totpages > 1) {
-                        $('.pag').append(response.pag).show();
-                        $('.pagination').find('li').removeClass('active');
-                        $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
-                    }else{
-                        $('.pag').append('<br><br><br>'+response.pag).show();
-                        $('.pag').first().find('.pag_dets').addClass('mt50');
-                    }
+                    console.log(ths);
 
-                    // show sort order and reset button if sorting is active
-                    if (this.th_sort) {
-                        $('.reset_sorting h3').html(Lang.get('js_msgs.sorted_in') + ' <span class="sort_direction">' + sort_direction + '</span> ' + Lang.get('js_msgs.sorted_in') + ' <span class="sorted_by">' + this.th_sort + '</span>');
-                        $('.reset_sorting').show();
-                    }
-                }
+                    $('.report_pinned_datatable thead').html(ths);
+                //     Master.report_pinned_datatable.clear();
+                //     Master.report_pinned_datatable.rows.add(trs);
+                //     Master.report_pinned_datatable.draw();
+
+                // }
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
