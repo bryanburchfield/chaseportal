@@ -213,8 +213,9 @@ class ReportController extends Controller
 
         return [
             'columns' => array_values($this->reportservice->report->params['columns']),
-            'table' => view('shared.reporttable')->with($data)->render(),
-            'pag' => view('shared.reportpagination')->with($data)->render(),
+            'results' => $results,
+            // 'table' => view('shared.reporttable')->with($data)->render(),
+            // 'pag' => view('shared.reportpagination')->with($data)->render(),
             'errors' => $errors,
             'extras' => $this->reportservice->report->extras,
             'params' => $this->reportservice->report->params,
