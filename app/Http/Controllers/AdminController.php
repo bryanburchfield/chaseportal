@@ -174,10 +174,10 @@ class AdminController extends Controller
         $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
-           'jsfile' => $jsfile,
-           'page' => $page,
-           'dbs' => $dbs,
-           'default_lead_fields' => $this->defaultLeadFields(),
+            'jsfile' => $jsfile,
+            'page' => $page,
+            'dbs' => $dbs,
+            'default_lead_fields' => $this->defaultLeadFields(),
         ];
 
         return view('tools.form_builder')->with($data);
@@ -214,7 +214,9 @@ class AdminController extends Controller
         if (Auth::user()->isType('superadmin')) {
             $dialers = Dialer::orderBy('dialer_numb')->get();
         } else {
-            $dialers = Auth::user()->dialer;
+            $dialers = Dialer::where('reporting_db', Auth::User()->db)
+                ->orderBy('dialer_numb')
+                ->get();
         }
 
         return $dialers;
