@@ -280,7 +280,7 @@ select:required:invalid {
 		{{-- <h2 class="heading">Contact Information</h2> --}}
 		{{-- </div> --}}
 
-		<form action="#" method="post" class="form card fc_style">
+		<form control="form" class="form card fc_style">
 			<h2 class="heading">Contact Information</h2>
 			<div class="col-sm-12"><h4 class="subheading">Contact Person</h4></div>
 </textarea>
