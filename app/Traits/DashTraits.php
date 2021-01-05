@@ -75,7 +75,7 @@ trait DashTraits
         }
 
         // set sqlsrv db up here too
-        config(['database.connections.sqlsrv.database' => Auth::user()->db]);
+        config(['database.connections.sqlsrv.database' => Auth::user()->dialer->reporting_db]);
 
         // Check if there's a 'campaign' session var
         // set from db if not

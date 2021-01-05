@@ -18,6 +18,7 @@ return [
     'playbooks' => 'Contacts Playbook',
     'realtimedash'    => 'RealTime Dashboard',
     'reports' => 'Reports',
+    'server_status' => 'Server Status',
     'settings' => 'Settings',
     'tools' => 'Tools',
     'trend_dashboard' => 'Trend Dashboard',

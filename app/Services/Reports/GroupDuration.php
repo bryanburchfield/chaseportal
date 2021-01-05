@@ -72,8 +72,8 @@ class GroupDuration
         }
 
         // set db based on input
-        $curr_db = Auth::user()->db;
-        Auth::user()->db = $this->params['dialer'];
+        $curr_db = Auth::user()->dialer->reporting_db;
+        Auth::user()->dialer->reporting_db = $this->params['dialer'];
 
         list($sql, $bind) = $this->makeQuery($all);
 
@@ -91,7 +91,7 @@ class GroupDuration
         }
 
         // set user's db back to what it was
-        Auth::user()->db = $curr_db;
+        Auth::user()->dialer->reporting_db = $curr_db;
 
         return $results;
     }
@@ -255,7 +255,7 @@ SELECT * FROM #GroupStatistics";
                 $this->params['groups'] = $request->groups;
             }
         } else {
-            $this->params['dialer'] = Auth::user()->db;
+            $this->params['dialer'] = Auth::user()->dialer->reporting_db;
             $this->params['groups'] = [Auth::user()->group_id];
         }
 

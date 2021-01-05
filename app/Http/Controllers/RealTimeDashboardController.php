@@ -19,11 +19,11 @@ class RealTimeDashboardController extends Controller
     {
         // set channel name
         // 
-        $channel = App::environment() . '.agent.' . Auth::user()->group_id . '.' . Auth::user()->db;
+        $channel = App::environment() . '.agent.' . Auth::user()->group_id . '.' . Auth::user()->dialer->reporting_db;
 
         $data = [
             'channel' => $channel,
-            'data' => $this->runqueryAgent(Auth::user()->group_id, Auth::user()->db),
+            'data' => $this->runqueryAgent(Auth::user()->group_id, Auth::user()->dialer->reporting_db),
         ];
 
         // create db rec so cron will pick it up

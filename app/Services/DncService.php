@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Includes\PowerImportAPI;
-use App\Models\Dialer;
 use App\Models\DncFile;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
@@ -16,10 +15,9 @@ class DncService
     public function __construct($user_id)
     {
         $user = User::findOrFail($user_id);
-        $dialer = Dialer::where('reporting_db', $user->db)->firstOrFail();
 
         $this->group_id = $user->group_id;
-        $this->api = new PowerImportAPI('http://' . $dialer->dialer_fqdn . '/PowerStudio/WebAPI');
+        $this->api = new PowerImportAPI('http://' . $user->dialer->dialer_fqdn . '/PowerStudio/WebAPI');
     }
 
     /**

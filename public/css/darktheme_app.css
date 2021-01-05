@@ -3843,6 +3843,10 @@ a.add_subcampaign:focus {
   overflow-y: scroll;
 }
 
+.modal-content {
+  border: none;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
