@@ -1421,42 +1421,37 @@ var Master = {
 
 
                 // if (response.params.totrows) {
-                    $('.pinned_table.table-responsive').append(response.table).show();
+                    // $('.pinned_table.table-responsive').append(response.table).show();
                     $('.pinned_table.table-responsive').show();
+                    $('.pinned_table.table-responsive table').show();
 
-                //     var _data = response.search_result;
-                //     var trs = [];
-                //     var array_keys = [], array_values = [];
-                //     for (i = 0; i < _data.length; i++) {
-                //         array_keys = [];
-                //         array_values = [];
-                //         for (var key in _data[i]) {
-                //             array_keys.push(key);
-                //             array_values.push(_data[i][key]);
-                //         }
-                //         trs.push(array_values);
-                //     }
-
-                    // var ths = "";
-                    // for (var i = 0; i < response.params.columns.length; i++) {
-                    //     ths += "<th>" + response.params.columns[i] + "</th>";
-                    // }
+                    var _data = response.results;
+                    var trs = [];
+                    var array_keys = [], array_values = [];
+                    for (i = 0; i < _data.length; i++) {
+                        array_keys = [];
+                        array_values = [];
+                        for (var key in _data[i]) {
+                            array_keys.push(key);
+                            array_values.push(_data[i][key]);
+                        }
+                        trs.push(array_values);
+                    }
 
                     var ths = [];
                     var th_vals = Object.values(response.params.columns);
                     for (var key in th_vals) {
                         if (th_vals.hasOwnProperty(key)) {
                             ths.push("<th>" +th_vals[key]+"</th>");
-                            console.log(key + " -> " + th_vals[key]);
                         }
                     }
 
-                    // console.log(ths);
+                    console.log(trs);
 
                     $('.report_pinned_datatable thead tr').html(ths);
-                //     Master.report_pinned_datatable.clear();
-                //     Master.report_pinned_datatable.rows.add(trs);
-                //     Master.report_pinned_datatable.draw();
+                    Master.report_pinned_datatable.clear();
+                    Master.report_pinned_datatable.rows.add(trs);
+                    Master.report_pinned_datatable.draw();
 
                 // }
 
