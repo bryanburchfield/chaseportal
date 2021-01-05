@@ -2,8 +2,10 @@
 @section('sidenav')
     <li><a class="update_nav_link" data-path="main" href="#"><i class="fas fa-arrow-circle-left"></i>{{__('widgets.go_back')}}</a></li>
 
+    {{-- <li data-page="lead_detail" @php echo !empty($page['menuitem']) && $page['menuitem']== 'lead_detail' ? 'class="active"' : ''; @endphp><a href="{{action('LeadsController@leadDetail')}}"><i class="fas fa-file-alt"></i>{{__('tools.lead_detail')}}</a></li> --}}
+
     @can('accessAdmin')
-        <li data-page="dnc_importer" @php echo !empty($page['menuitem']) && $page['menuitem']== 'dnc_importer' ? 'class="active"' : ''; @endphp><a href="{{url('/tools/dnc_importer')}}"><i class="fas fa-user-check"></i>DNC Importer</a></li>
+        <li data-page="dnc_importer" @php echo !empty($page['menuitem']) && $page['menuitem']== 'dnc_importer' ? 'class="active"' : ''; @endphp><a href="{{action('DncController@index')}}"><i class="fas fa-user-check"></i>DNC Importer</a></li>
 
         @if(!empty(Auth::user()->dialer->status_url))
             <li data-page="tools" @php echo !empty($page['menuitem']) && $page['menuitem'] == 'server_status' ? 'class="active"' : ''@endphp ><a href="{{ action('DialerController@index') }}"><i class="fas fa-server"></i>{{__('sidenav.server_status')}}</a></li>

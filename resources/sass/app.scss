@@ -102,7 +102,7 @@ h1, h2, h3, h4, h5, h6 {
 .mt60{margin-top: 60px;}
 .mb0 {margin-bottom: 0 !important;}
 .mb5{margin-bottom: 5px;}
-.mb10 {margin-bottom: 10px;}
+.mb10 {margin-bottom: 10px !important;;}
 .mb15 {margin-bottom: 15px;}
 .mb20 {margin-bottom: 20px;}
 .mb30 {margin-bottom: 30px;}
@@ -113,8 +113,10 @@ h1, h2, h3, h4, h5, h6 {
 .p0 {padding: 0;}
 .pl0{padding-left: 0;}
 .p20{padding: 20px;}
+.pt10{padding-top: 10px;}
 .pl10{padding-left: 10px;}
 .pl20{padding-left: 20px;}
+.pb10{padding-bottom: 10px;}
 .pb20 {padding-bottom: 20px;}
 
 .fz15{font-size: 15px;}
@@ -125,6 +127,9 @@ h1, h2, h3, h4, h5, h6 {
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 .tac{text-align: center;}
+
+.bt{border-top: 1px solid #d8d8d8;}
+.bb{border-bottom: 1px solid #d8d8d8;}
 
 .carb_mb30_mb {
     margin-bottom: 0;
@@ -2990,6 +2995,33 @@ a.add_subcampaign{
     }
 }
 
+.lead_details .pt10.bb{
+    overflow: auto;
+    background: #fff;
+}
+
+.lead_details{
+    h4{
+        color:$green;
+    }
+
+    .form-control, textarea.form-control{
+        background: #fff !important;
+    }
+}
+
+.fas.fa-id-card{
+    color:$green;
+}
+
+.dup_lead_detail_recs{
+    tr{
+        &:hover{
+            color:$green !important;
+        }
+    }
+}
+
 .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
     width: 100% !important;
 }
@@ -3001,6 +3033,36 @@ a.add_subcampaign{
 .form_code, .form_code_css {
     max-height: 325px;
     overflow-y: scroll;
+}
+
+.lead_fields_accordion{
+    p{
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 3px;
+
+        span{font-weight: 500;}
+    }
+}
+
+.lead_fields_form{
+    input.form-control, button.multiselect, select.form-control, textarea.form-control{
+        @include form_control_style();
+    }
+}
+
+.search_form{
+    .input-group{
+        .form-control{
+            background: #fff !important;
+        }
+    }
+}
+
+textarea.nobg_txtarea.form-control{
+    background: none !important;
+    border: none !important;
+    @include box-shadow(none !important);
 }
 
 /* ---------------------------------------------------

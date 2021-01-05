@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class SqlSrvModel extends Model
 {
     protected $connection = 'sqlsrv';
+    public $timestamps = false;
 
     public function __construct(array $attributes = array())
     {

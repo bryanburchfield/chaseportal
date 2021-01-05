@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LeadFilter;
-use App\Jobs\ReverseLeadMove;
-use App\Models\LeadMove;
-use App\Models\LeadMoveDetail;
-use App\Models\LeadRule;
+use App\Includes\PowerImportAPI;
 use App\Mail\LeadDumpMail;
-use App\Models\LeadRuleFilter;
-use App\Traits\SqlServerTraits;
+use App\Models\Dialer;
+use App\Models\Lead;
+use App\Models\User;
 use App\Traits\CampaignTraits;
+use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
-use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
+
 
 class LeadsController extends Controller
 {
@@ -32,102 +27,202 @@ class LeadsController extends Controller
 
     protected $db;
 
-    /**
-     * Get History (ajax)
-     * @return array[]
-     * @throws Exception 
-     * @throws InvalidArgumentException 
-     */
-    public function getHistory()
+    public $currentDash;
+
+    public function apiLogin(Request $request)
     {
-        $table = [];
+        if (
+            empty($request->token) ||
+            empty($request->id)
+        ) {
+            abort(404);
+        }
 
-        $lead_moves = LeadMove::where('lead_moves.created_at', '>', Carbon::parse('30 days ago'))
-            ->join('lead_rules', 'lead_moves.lead_rule_id', '=', 'lead_rules.id')
-            ->where('lead_rules.group_id', Auth::user()->group_id)
-            ->select(
-                'lead_moves.*',
-                'lead_rules.rule_name'
-            )
-            ->OrderBy('lead_moves.id', 'desc')
-            ->get();
+        // find first user record with that token
+        $user = User::where('app_token', $request->token)
+            ->where('active', 1)
+            ->first();
 
-        $tz = Auth::user()->iana_tz;
-        foreach ($lead_moves as $lead_move) {
-            $count = LeadMoveDetail::where('lead_move_id', $lead_move->id)->where('succeeded', true)->count();
-            if ($count) {
-                $table[] = [
-                    'lead_move_id' => $lead_move->id,
-                    'lead_rule_id' => $lead_move->lead_rule_id,
-                    'date' => Carbon::parse($lead_move->created_at)->tz($tz)->isoFormat('L LT'),
-                    'rule_name' => $lead_move->rule_name,
-                    'leads_moved' => $count,
-                    'reversed' => $lead_move->reversed,
-                ];
+        if ($user === null) {
+            abort(403, 'Invalid token');
+        }
+
+        // Login that user and set session var so we know it's via API
+        session(['isApi' => 1]);
+        Auth::login($user);
+
+        $newrequest = new Request(['search_key' => 'id', 'id' => $request->id]);
+
+        return $this->getLead($newrequest);
+    }
+
+    public function leadDetail(Lead $lead = null)
+    {
+        $errors = [];
+
+        if ($lead) {
+            if ($lead->GroupId != Auth::user()->group_id) {
+                $lead = null;
+                $errors['id'] = trans('tools.lead_not_found');
             }
         }
 
-        return $table;
+        $this->currentDash = session('currentDash', 'inbounddash');
+        session(['currentDash' => $this->currentDash]);
+
+        $jsfile[] = '';
+        $page['menuitem'] = 'lead_detail';
+        $page['sidenav'] = 'main';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'lead' => $lead,
+            'errors' => $errors,
+        ];
+
+        return view('tools.lead_detail')->with($data);
     }
 
-    /**
-     * Reverse Move (ajax)
-     * 
-     * @param Request $request 
-     * @return array[]
-     */
-    public function reverseMove(Request $request)
+    private function pickLead($leads)
     {
-        // Make sure we haven't already reversed it
-        $lead_move = LeadMove::find($request->lead_move_id);
-        if (!$lead_move || $lead_move->reversed) {
-            return ['error' => 'Already reversed'];
+        $this->currentDash = session('currentDash', 'inbounddash');
+        session(['currentDash' => $this->currentDash]);
+
+        $jsfile[] = '';
+        $page['menuitem'] = 'lead_detail';
+        $page['sidenav'] = 'main';
+        $page['type'] = 'page';
+        $data = [
+            'page' => $page,
+            'leads' => $leads,
+        ];
+
+        return view('tools.pick_lead')->with($data);
+    }
+
+    public function getLead(Request $request)
+    {
+        $lead = null;
+
+        if (!empty($request->id)) {
+            if ($request->search_key == 'phone') {
+                try {
+                    $lead = Lead::where('PrimaryPhone', $this->formatPhone($request->id))
+                        ->where('GroupId', Auth::user()->group_id)
+                        ->get();
+                } catch (Exception $e) {
+                    $lead = null;
+                }
+            } else {
+                try {
+                    $lead = Lead::where('id', $request->id)->get();
+                } catch (Exception $e) {
+                    $lead = null;
+                }
+            }
+
+            if ($lead) {
+                if ($lead->count() > 1) {
+                    return $this->pickLead($lead);
+                }
+
+                $lead = $lead->first();
+            }
+
+            if (!$lead) {
+                session()->flash('flasherror', trans('tools.lead_not_found'));
+            }
         }
 
-        // Make sure the user is allowed to reverse it
-        $lead_rule = LeadRule::find($lead_move->lead_rule_id);
-        if (!$lead_rule || $lead_rule->group_id != Auth::user()->group_id) {
-            return ['error' => 'Not Authorized'];
+        return redirect()->action(
+            'LeadsController@leadDetail',
+            ['lead' => $lead]
+        );
+    }
+
+    public function updateLead(Lead $lead, Request $request)
+    {
+        // These two should never happen
+        if (!$lead) {
+            session()->flash('flasherror', trans('tools.lead_not_found'));
+            return redirect()->back()->withInput();
         }
 
-        // Set the record to reversed
-        $lead_move->reversed = true;
-        $lead_move->save();
+        if ($lead->GroupId != Auth::user()->group_id) {
+            session()->flash('flasherror', trans('tools.lead_not_found'));
+            return redirect()->back()->withInput();
+        }
 
-        // Dispatch job to run the reverse in the background
-        ReverseLeadMove::dispatch($lead_move);
+        $fqdn = Dialer::where('id', Auth::user()->dialer_id)->pluck('dialer_fqdn')->first();
+        $api = new PowerImportAPI('http://' . $fqdn . '/PowerStudio/WebAPI');
 
-        return ['success' => true];
+        // validation?
+
+        // update lead table first
+        $data = $this->getLeadUpdateFields($lead, $request);
+        if (!empty($data)) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+        }
+
+        // update custom table next
+        $data = $this->getCustomUpdateFields($lead, $request);
+        if (!empty($data)) {
+            $result = $api->UpdateDataByLeadId($data, Auth::user()->group_id, '', '', $lead->id);
+        }
+
+        $lead->refresh();  // probably not updated yet, but wth
+
+        session()->flash('flashsuccess', trans('tools.lead_updated'));
+
+        // return to the form with their changes
+        return back()->withInput();
     }
 
-    /**
-     * Get Campaigns (ajax)
-     * 
-     * @param Request $request 
-     * @return array[] 
-     * @throws InvalidArgumentException 
-     */
-    public function getCampaigns(Request $request)
+    private function getLeadUpdateFields(Lead $lead, Request $request)
     {
-        $fromDate = $request->fromdate;
-        $toDate = $request->todate;
+        $data = [];
 
-        $results = $this->getAllCampaigns($fromDate, $toDate);
+        foreach ((new Lead)->getFillable() as $field) {
+            if ($request->exists($field)) {
+                if ($this->valueChange($lead->$field, $request->input($field))) {
+                    $data[$field] = $request->input($field);
+                }
+            }
+        }
 
-        return ['campaigns' => array_values($results)];
+        return $data;
     }
 
-    /**
-     * Get Subcampaigns (ajax)
-     * 
-     * @param Request $request 
-     * @return array[] 
-     */
-    public function getSubcampaigns(Request $request)
+    private function getCustomUpdateFields(Lead $lead, Request $request)
     {
-        $results = $this->getAllSubcampaigns($request->campaign);
+        $data = [];
 
-        return ['subcampaigns' => array_values($results)];
+        foreach ($lead->customFields() as $rec) {
+            if ($request->exists($rec['key'])) {
+                if ($this->valueChange($rec['value'], $request->input($rec['key']))) {
+                    $data[$rec['key']] = $request->input($rec['key']);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    private function valueChange($old, $new)
+    {
+        if (
+            (empty($old) && empty($new)) ||
+            ($new === $old)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function formatPhone($phone)
+    {
+        return preg_replace('/[^0-9]/', '', $phone);
     }
 
     /**
@@ -280,44 +375,5 @@ AND Date < :to_date";
         ];
 
         return $this->yieldSql($sql, $bind);
-    }
-
-    private function getAllInboundSources()
-    {
-        $sql = '';
-        $union = '';
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-
-            $sql .= "$union SELECT DISTINCT Description
-            FROM [$db].[dbo].[InboundSources]
-            WHERE GroupId = :groupid$i
-            AND InboundSource != ''";
-
-            $union = ' UNION';
-        }
-        $sql .= " ORDER BY Description";
-
-        return resultsToList($this->runSql($sql, $bind));
-    }
-
-    private function getAllCallStatuses()
-    {
-        $bind = [];
-
-        $sql = '';
-        $union = '';
-        foreach (Auth::user()->getDatabaseList() as $i => $db) {
-            $bind['groupid' . $i] = Auth::user()->group_id;
-
-            $sql .= "$union SELECT DISTINCT Disposition
-            FROM [$db].[dbo].[Dispos]
-            WHERE (GroupId = :groupid$i OR GroupId = -1)";
-
-            $union = ' UNION';
-        }
-        $sql .= " ORDER BY Disposition";
-
-        return resultsToList($this->runSql($sql, $bind));
     }
 }

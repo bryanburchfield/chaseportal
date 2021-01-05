@@ -142,7 +142,7 @@ h6 {
 }
 
 .mb10 {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 
 .mb15 {
@@ -181,12 +181,20 @@ h6 {
   padding: 20px;
 }
 
+.pt10 {
+  padding-top: 10px;
+}
+
 .pl10 {
   padding-left: 10px;
 }
 
 .pl20 {
   padding-left: 20px;
+}
+
+.pb10 {
+  padding-bottom: 10px;
 }
 
 .pb20 {
@@ -223,6 +231,14 @@ h6 {
 
 .tac {
   text-align: center;
+}
+
+.bt {
+  border-top: 1px solid #d8d8d8;
+}
+
+.bb {
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .carb_mb30_mb {
@@ -3582,6 +3598,28 @@ a.add_subcampaign i {
   margin-right: 13px;
 }
 
+.lead_details .pt10.bb {
+  overflow: auto;
+  background: #fff;
+}
+
+.lead_details h4 {
+  color: #33A09B;
+}
+
+.lead_details .form-control,
+.lead_details textarea.form-control {
+  background: #fff !important;
+}
+
+.fas.fa-id-card {
+  color: #33A09B;
+}
+
+.dup_lead_detail_recs tr:hover {
+  color: #33A09B !important;
+}
+
 .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle {
   width: 100% !important;
 }
@@ -3594,6 +3632,33 @@ a.add_subcampaign i {
 .form_code_css {
   max-height: 325px;
   overflow-y: scroll;
+}
+
+.lead_fields_accordion p {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 3px;
+}
+
+.lead_fields_accordion p span {
+  font-weight: 500;
+}
+
+.lead_fields_form input.form-control,
+.lead_fields_form button.multiselect,
+.lead_fields_form select.form-control,
+.lead_fields_form textarea.form-control {
+  background: #eee !important;
+}
+
+.search_form .input-group .form-control {
+  background: #fff !important;
+}
+
+textarea.nobg_txtarea.form-control {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* ---------------------------------------------------

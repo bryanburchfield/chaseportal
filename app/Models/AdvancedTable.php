@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
+
 class AdvancedTable extends SqlSrvModel
 {
     // set db and actual table name
@@ -15,7 +17,19 @@ class AdvancedTable extends SqlSrvModel
 
     public function advancedTableFields()
     {
-        return $this->hasMany('App\Models\AdvancedTableField', 'AdvancedTable');
+        // Hide some fields from non-admins
+        $callinfo = 1;
+
+        if (Auth::check()) {
+            if (Auth::user()->isType(['admin', 'superadmin'])) {
+                $callinfo = 0;
+            }
+        }
+
+        return $this->hasMany('App\Models\AdvancedTableField', 'AdvancedTable')
+            ->where('InCallInfo', '>=', $callinfo)
+            ->orderBy('FieldOrder', 'desc')
+            ->orderBy('FieldName');
     }
 
     public function customFields()

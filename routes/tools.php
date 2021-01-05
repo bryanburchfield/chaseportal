@@ -1,12 +1,21 @@
 <?php
 // Tools: all urls start with /tools/
-Route::group(['middleware' => 'can:accessAdmin'], function () {
-    Route::prefix('tools')->group(function () {
+Route::prefix('tools')->group(function () {
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+    // Agent Lead Detail API login
+    Route::prefix('agentleaddetail')->group(function () {
+        Route::get('api/{token}/{id}', 'LeadsController@apiLogin');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    });
 
-        // must be logged in to access any of these
-        Route::group(['middleware' => 'auth'], function () {
+    // must be logged in to access any of these
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
+        Route::post('/get_lead', 'LeadsController@getLead');
 
+        Route::group(['middleware' => 'can:accessAdmin'], function () {
+            Route::post('/update_lead/{lead}', 'LeadsController@updateLead');
             Route::get('server_status', 'DialerController@index');
 
             // DNC Import
