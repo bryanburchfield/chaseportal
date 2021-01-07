@@ -32,6 +32,7 @@ class CallerIdService
     private $ignoreGroups =
     [
         212182,
+        224195,
     ];
 
     // Non-flagged swap params
