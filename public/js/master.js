@@ -57,7 +57,11 @@ var Master = {
     }),
 
 	init:function(){
-
+        if (Master.report_pinned_datatable instanceof $.fn.dataTable.Api) {
+            console.log('its a datatable');
+        } else {
+           console.log('its NOT a datatable');
+        }
         Master.left_cols=0;
         Master.right_cols=0;
 
@@ -1361,14 +1365,16 @@ var Master = {
                     $('#sidebar').removeClass('active');
                 }
 
+                $('.report_table.pinned_table').show();
                 Master.draw_pinned_datatable(0);
 
                 // hide / empty everything and run report
-                $('.table-responsive, .pag, .report_errors').empty();
-                $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
+                // $('.table-responsive, .pag, .report_errors').empty();
+                // $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
                 // check for errors
                 if (response.errors.length >= 1) {
+                    console.log('if is hiding table');
                     for (var i = 0; i < response.errors.length; i++) {
                         $('.report_errors').show();
                         $('.report_errors').append(response.errors[i] + '<br>');
@@ -1380,50 +1386,12 @@ var Master = {
                 }
 
                 console.log(response);
-                // check for result by counting total page
-                // if (response.params.totrows) {
 
-                //     this.totpages = response.params.totpages;
-                //     this.curpage = response.params.curpage;
-                //     this.th_sort = th_sort;
-                //     this.sort_direction = response.params.orderby.Campaign;
-
-                //     // append table
-                //     $('.table-responsive').append(response.table);
-
-                //     // show download options
-                //     $('.report_download').show();
-
-                //     // set active class to the th that was sorted
-                //     for (var i = 0; i < $('.reports_table thead th').length; i++) {
-                //         if ($('.reports_table thead th:eq(' + i + ')').text() == this.th_sort) {
-                //             $('.reports_table thead th:eq(' + i + ')').addClass('active_column');
-                //             $('.reports_table thead th:eq(' + i + ')').find('span.' + sort_direction).addClass('active');
-                //         }
-                //     }
-
-                //     // pagination - show pag if more than one page
-                //     if (response.params.totpages > 1) {
-                //         $('.pag').append(response.pag).show();
-                //         $('.pagination').find('li').removeClass('active');
-                //         $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
-                //     }else{
-                //         $('.pag').append('<br><br><br>'+response.pag).show();
-                //         $('.pag').first().find('.pag_dets').addClass('mt50');
-                //     }
-
-                //     // show sort order and reset button if sorting is active
-                //     if (this.th_sort) {
-                //         $('.reset_sorting h3').html(Lang.get('js_msgs.sorted_in') + ' <span class="sort_direction">' + sort_direction + '</span> ' + Lang.get('js_msgs.sorted_in') + ' <span class="sorted_by">' + this.th_sort + '</span>');
-                //         $('.reset_sorting').show();
-                //     }
-                // }
-
-
-                // if (response.params.totrows) {
+                if (response.results) {
                     // $('.pinned_table.table-responsive').append(response.table).show();
                     $('.pinned_table.table-responsive').show();
                     $('.pinned_table.table-responsive table').show();
+                    $('.report_pinned_datatable thead tr').empty();
 
                     var _data = response.results;
                     var trs = [];
@@ -1447,13 +1415,15 @@ var Master = {
                     }
 
                     console.log(trs);
+                    console.log(ths);
+
 
                     $('.report_pinned_datatable thead tr').html(ths);
                     Master.report_pinned_datatable.clear();
                     Master.report_pinned_datatable.rows.add(trs);
                     Master.report_pinned_datatable.draw();
 
-                // }
+                }
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
@@ -2615,8 +2585,8 @@ var Master = {
 
     draw_pinned_datatable:function(cols, dir='left'){
     ///////////////////////////////////////////////////////////
-        Master.report_pinned_datatable.destroy();
-
+        // Master.report_pinned_datatable.destroy();
+        // console.log('destroy');
         if(dir =='left'){
             Master.left_cols=cols;
             Master.right_cols=0;
@@ -2625,18 +2595,19 @@ var Master = {
             Master.left_cols=0;
         }
 
-        Master.report_pinned_datatable=$('.report_pinned_datatable').DataTable({
-                destroy: true,
-                scrollY:        500,
-                scrollX:        true,
-                scrollCollapse: true,
-                paging:         true,
-                responsive: true,
-                fixedColumns:   {
-                    leftColumns: Master.left_cols,
-                    rightColumns: Master.right_cols
-                }
-            });
+        // Master.report_pinned_datatable=$('.report_pinned_datatable').DataTable({
+        //     // destroy: true,
+        //     // scrollY:        500,
+        //     // scrollX:        true,
+        //     // scrollCollapse: true,
+        //     // paging:         true,
+        //     responsive: true,
+        //     fixedColumns:   {
+        //         leftColumns: Master.left_cols,
+        //         rightColumns: Master.right_cols
+        //     }
+        // });
+
     }
 }
 

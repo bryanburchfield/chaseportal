@@ -456,6 +456,7 @@ var Admin = {
 						ths += "<th>" + array_keys[i] + "</th>";
 					}
 					console.log(trs);
+					console.log(ths);
 					
 					$('#cdr_dataTable thead').html(ths);
 					Master.cdr_dataTable.clear();

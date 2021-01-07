@@ -1,17 +1,18 @@
-@if(count($results) > 0)
+{{-- @if(count($results) > 0) --}}
     <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable">
-        <thead class="fixedHeader">
-            <tr>
-                @foreach($params['columns'] as $field => $col)
+        <thead>
+            <tr role="row">
+                <th></th>
+               {{--  @foreach($params['columns'] as $field => $col)
                 <th>
                     <span>{{ $col }}</span>
                     <a href="#" class="sort-by"> <span class="asc"></span><span class="desc"></span></a>
                 </th>
-                @endforeach
+                @endforeach --}}
             </tr>
         </thead>
         <tbody>
-        @foreach($results as $rec)
+        {{-- @foreach($results as $rec)
             <tr 
             @if(isset($rec['isSubtotal']))
                 @unset($rec['isSubtotal'])
@@ -30,7 +31,7 @@
                 @endif
             @endforeach
             </tr>
-        @endforeach
+        @endforeach --}}
         </tbody>
     </table>
 
@@ -51,4 +52,4 @@
         <label class="radio-inline"><input type="radio" class="pin_direction" name="pin_direction" value="left" checked>Freeze Left</label>
         <label class="radio-inline"><input type="radio" class="pin_direction" name="pin_direction" value="right">Freeze Right</label>
     </div>
-@endif
+{{-- @endif --}}
