@@ -444,7 +444,7 @@ class AgentInboundDashController extends Controller
             $bind['todate' . $i] = $toDate;
             $bind['rep' . $i] = $this->rep;
 
-            $sql .= " $union SELECT 'Sales' = COUNT(id)
+            $sql .= " $union SELECT 'Sales' = COUNT(DR.id)
                 FROM [$db].[dbo].[DialingResults] DR
                 INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
                 WHERE DR.GroupId = :groupid$i
