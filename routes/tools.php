@@ -17,8 +17,8 @@ Route::prefix('tools')->group(function () {
         // must be logged in to access any of these
         Route::group(['middleware' => 'can:accessAdmin'], function () {
             Route::post('/update_lead/{lead}', 'LeadsController@updateLead');
-
             Route::get('server_status', 'DialerController@index');
+
             // DNC Import
             Route::prefix('dnc_importer')->group(function () {
                 Route::get('/', 'DncController@index');

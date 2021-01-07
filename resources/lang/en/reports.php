@@ -120,6 +120,7 @@ return [
     'conversionfactor'    => 'Conversion Factor',
     'conversionrate'      => 'Conversion Rate',
     'count'               => 'Count',
+    'country'             => 'Country',
     'count_of_leads_by_attempt' => 'Count of Leads by Attempt',
     'cph'                 => 'CPH',
     'date'                => 'Date',

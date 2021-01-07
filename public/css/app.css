@@ -1,4 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);applet,
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);@charset "UTF-8";
+
+applet,
 object,
 iframe,
 body,
@@ -65,7 +67,7 @@ body {
   background: #efefef;
   color: #595C63;
   font-size: 13px;
-  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-family: "Helvetica", "Arial", sans-serif;
 }
 
 h1,
@@ -74,7 +76,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .btn {
@@ -308,7 +310,7 @@ input.logout_btn:hover {
   font-size: inherit;
   height: 1em;
   overflow: visible;
-  vertical-align: -.125em;
+  vertical-align: -0.125em;
 }
 
 .navbar {
@@ -379,7 +381,7 @@ span {
 }
 
 #sidebar ul li.active,
-#sidebar ul li a[aria-expanded="true"] {
+#sidebar ul li a[aria-expanded=true] {
   color: #e49831;
   background: #1c273d;
   background: linear-gradient(to right, #1c273d 0%, #263854 100%);
@@ -387,12 +389,12 @@ span {
 }
 
 #sidebar ul li.active > a i,
-#sidebar ul li a[aria-expanded="true"] > a i {
+#sidebar ul li a[aria-expanded=true] > a i {
   color: #ddd;
 }
 
 #sidebar ul li.active > a:hover,
-#sidebar ul li a[aria-expanded="true"] > a:hover {
+#sidebar ul li a[aria-expanded=true] > a:hover {
   color: #e49831;
 }
 
@@ -462,7 +464,7 @@ span {
   max-width: 300px;
   background: #efefef;
   color: #fff;
-  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
   transition: all, ease, 0.3s;
 }
 
@@ -498,7 +500,7 @@ span {
 }
 
 #sidebar_nots .not_header label {
-  color: #919090;
+  color: #919191;
 }
 
 #sidebar_nots .notifications .not {
@@ -605,7 +607,7 @@ button:focus {
   color: #fff;
 }
 
-a[data-toggle="collapse"] {
+a[data-toggle=collapse] {
   position: relative;
 }
 
@@ -614,7 +616,8 @@ a[data-toggle="collapse"] {
   position: absolute;
   top: 50%;
   right: 20px;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
 ul ul a {
@@ -836,7 +839,7 @@ div.container-fluid.bg {
   display: block;
 }
 
-input[type='file'] {
+input[type=file] {
   border: none !important;
   box-shadow: none !important;
   background: none !important;
@@ -845,7 +848,7 @@ input[type='file'] {
 .card {
   box-shadow: 0 2px 3px #ccd6dd;
   background: #fff;
-  border-bottom: 3px solid #acb4c1;
+  border-top: 3px solid #acb4c1;
   padding: 20px;
   margin-bottom: 30px;
   transition: 0.3s;
@@ -899,7 +902,7 @@ input[type='file'] {
   font-weight: 700;
   margin-bottom: 10px;
   color: #203047;
-  letter-spacing: -.015em;
+  letter-spacing: -0.015em;
 }
 
 .card h4.data {
@@ -944,7 +947,7 @@ input[type='file'] {
 
 .flip_card_btn:after,
 .card_drop_down:after {
-  content: '\2807';
+  content: "\2807";
   color: #4286f4;
   font-size: 35px;
   position: absolute;
@@ -1317,7 +1320,8 @@ p.descrip {
   top: 26%;
   left: 50%;
   width: 80%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 
 h2.card_title {
@@ -1401,7 +1405,7 @@ p.descrip.top14 {
 .audit_table th {
   background: #203047;
   color: #fff;
-  border-bottom: 0;
+  border-top: 0;
   padding: 10px !important;
 }
 
@@ -1815,7 +1819,7 @@ label.switch > span {
   height: 100%;
 }
 
-label.switch > input[type="checkbox"] {
+label.switch > input[type=checkbox] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   position: absolute;
@@ -1828,11 +1832,11 @@ label.switch > span:after {
   position: absolute;
 }
 
-label.switch > input[type="checkbox"]:focus ~ span {
+label.switch > input[type=checkbox]:focus ~ span {
   box-shadow: 0 0 0 2px #43b556;
 }
 
-label.switch > input[type="checkbox"]:checked:focus ~ span {
+label.switch > input[type=checkbox]:checked:focus ~ span {
   box-shadow: 0 0 0 2px #eee;
 }
 
@@ -1846,8 +1850,11 @@ label.switch > span:before {
   box-sizing: border-box;
   background-color: #cecece;
   border-radius: 60px;
-  transition: opacity .2s ease-out .1s, transform .2s ease-out .1s;
-  transform: scale(1);
+  transition: opacity 0.2s ease-out 0.1s, -webkit-transform 0.2s ease-out 0.1s;
+  transition: opacity 0.2s ease-out 0.1s, transform 0.2s ease-out 0.1s;
+  transition: opacity 0.2s ease-out 0.1s, transform 0.2s ease-out 0.1s, -webkit-transform 0.2s ease-out 0.1s;
+  -webkit-transform: scale(1);
+          transform: scale(1);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
@@ -1855,33 +1862,40 @@ label.switch > span:before {
 label.switch > span:after {
   top: 50%;
   z-index: 3;
+  transition: -webkit-transform 0.4s cubic-bezier(0.44, -0.12, 0.07, 1.15);
   transition: transform 0.4s cubic-bezier(0.44, -0.12, 0.07, 1.15);
+  transition: transform 0.4s cubic-bezier(0.44, -0.12, 0.07, 1.15), -webkit-transform 0.4s cubic-bezier(0.44, -0.12, 0.07, 1.15);
   width: calc(50px / 2);
   height: calc(50px / 2);
-  transform: translate3d(0, -50%, 0);
+  -webkit-transform: translate3d(0, -50%, 0);
+          transform: translate3d(0, -50%, 0);
   background-color: #fff;
   border-radius: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-label.switch > input[type="checkbox"]:checked ~ span:before {
-  transform: scale(0);
+label.switch > input[type=checkbox]:checked ~ span:before {
+  -webkit-transform: scale(0);
+          transform: scale(0);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
 }
 
-label.switch > input[type="checkbox"]:checked ~ span:after {
-  transform: translate3d(100%, -50%, 0);
+label.switch > input[type=checkbox]:checked ~ span:after {
+  -webkit-transform: translate3d(100%, -50%, 0);
+          transform: translate3d(100%, -50%, 0);
 }
 
 label.switch > input.checked ~ span:before {
-  transform: scale(0);
+  -webkit-transform: scale(0);
+          transform: scale(0);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
 }
 
 label.switch > input.checked ~ span:after {
-  transform: translate3d(100%, -50%, 0);
+  -webkit-transform: translate3d(100%, -50%, 0);
+          transform: translate3d(100%, -50%, 0);
 }
 
 h2 {
@@ -2085,21 +2099,25 @@ a.run_kpi.btn {
 
 @-webkit-keyframes spin {
   from {
-    transform: scale(1) rotate(0deg);
+    -webkit-transform: scale(1) rotate(0deg);
+            transform: scale(1) rotate(0deg);
   }
 
   to {
-    transform: scale(1) rotate(360deg);
+    -webkit-transform: scale(1) rotate(360deg);
+            transform: scale(1) rotate(360deg);
   }
 }
 
 @keyframes spin {
   from {
-    transform: scale(1) rotate(0deg);
+    -webkit-transform: scale(1) rotate(0deg);
+            transform: scale(1) rotate(0deg);
   }
 
   to {
-    transform: scale(1) rotate(360deg);
+    -webkit-transform: scale(1) rotate(360deg);
+            transform: scale(1) rotate(360deg);
   }
 }
 
@@ -2314,7 +2332,7 @@ a.run_kpi.btn {
 }
 
 ul.db_select li.active > a,
-a[aria-expanded="true"] {
+a[aria-expanded=true] {
   background: none;
   color: #33A09B;
 }
@@ -2649,7 +2667,7 @@ p.name i {
 }
 
 div.horizontal-line {
-  background: #b3b2b2;
+  background: #b3b3b3;
   min-height: 2px;
   width: 45%;
   position: absolute;
@@ -2665,7 +2683,7 @@ div.horizontal-line {
 
 div.vertical-line {
   width: 2px;
-  background-color: #b3b2b2;
+  background-color: #b3b3b3;
   height: 145px;
   position: absolute;
   margin: 0 auto;
@@ -2732,8 +2750,8 @@ div.vertical-line.mvup100 {
   margin-top: 30px;
 }
 
-.hide_lang input[type="checkbox"],
-.toggle_theme input[type="checkbox"] {
+.hide_lang input[type=checkbox],
+.toggle_theme input[type=checkbox] {
   width: 15px;
   height: 15px;
 }
@@ -2770,8 +2788,8 @@ div.vertical-line.mvup100 {
   background: #de8c1d;
 }
 
-.hide_lang input[type="checkbox"],
-.toggle_theme input[type="checkbox"] {
+.hide_lang input[type=checkbox],
+.toggle_theme input[type=checkbox] {
   width: 15px;
   height: 15px;
 }
@@ -2937,7 +2955,7 @@ a.toggle_instruc {
 }
 
 .panel-title a:after {
-  font-family: 'Glyphicons Halflings';
+  font-family: "Glyphicons Halflings";
   content: "\E114";
   float: right;
   color: #fff;
@@ -3259,7 +3277,7 @@ label.checkbox.toggle_active_reps {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #e3e7e8 0%, #f2f2f2 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e3e7e8', endColorstr='#f2f2f2',GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#e3e7e8", endColorstr="#f2f2f2",GradientType=1 );
   /* IE6-9 */
 }
 
@@ -3565,7 +3583,7 @@ a.add_subcampaign i {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#e2e2e0", GradientType=0);
   /* IE6-9 */
   border: 1px solid #ddd;
 }
@@ -3622,7 +3640,7 @@ label.checkbox.toggle_active_reps {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #091419 0%, rgba(12, 18, 27, 0.75) 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#091419', endColorstr='#bf0c121b',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#091419", endColorstr="#bf0c121b",GradientType=0 );
   /* IE6-9 */
 }
 
@@ -3656,7 +3674,7 @@ label.checkbox.toggle_active_reps {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #e3e7e8 0%, #f2f2f2 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e3e7e8', endColorstr='#f2f2f2',GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#e3e7e8", endColorstr="#f2f2f2",GradientType=1 );
   /* IE6-9 */
 }
 
@@ -3726,6 +3744,13 @@ label.checkbox.toggle_active_reps {
   cursor: pointer;
 }
 
+#addPlaybookModal,
+#editPlaybookModal {
+  /* ---------------------------------------------------
+  MEDIAQUERIES
+  ----------------------------------------------------- */
+}
+
 #addPlaybookModal .modal-body,
 #editPlaybookModal .modal-body {
   overflow: inherit;
@@ -3739,42 +3764,64 @@ label.checkbox.toggle_active_reps {
   z-index: 99999;
 }
 
-.lead_details .pt10.bb {
+#addPlaybookModal .accounting_reports .list-group a,
+#editPlaybookModal .accounting_reports .list-group a {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+#addPlaybookModal .accounting_reports .list-group a i,
+#editPlaybookModal .accounting_reports .list-group a i {
+  color: #1896DE;
+  margin-right: 13px;
+}
+
+#addPlaybookModal .lead_details .pt10.bb,
+#editPlaybookModal .lead_details .pt10.bb {
   overflow: auto;
   background: #fff;
 }
 
-.lead_details h4 {
+#addPlaybookModal .lead_details h4,
+#editPlaybookModal .lead_details h4 {
   color: #33A09B;
 }
 
-.lead_details .form-control,
-.lead_details textarea.form-control {
+#addPlaybookModal .lead_details .form-control,
+#addPlaybookModal .lead_details textarea.form-control,
+#editPlaybookModal .lead_details .form-control,
+#editPlaybookModal .lead_details textarea.form-control {
   background: #fff !important;
 }
 
-.fas.fa-id-card {
+#addPlaybookModal .fas.fa-id-card,
+#editPlaybookModal .fas.fa-id-card {
   color: #33A09B;
 }
 
-ul.group_select {
+#addPlaybookModal ul.group_select,
+#editPlaybookModal ul.group_select {
   padding-left: 10px;
 }
 
-.theme_selector {
+#addPlaybookModal .theme_selector,
+#editPlaybookModal .theme_selector {
   border-bottom: 1px solid #ddd;
 }
 
-.user_created_form_element {
+#addPlaybookModal .user_created_form_element,
+#editPlaybookModal .user_created_form_element {
   clear: both;
   overflow: auto;
 }
 
-.form-control.rounded {
+#addPlaybookModal .form-control.rounded,
+#editPlaybookModal .form-control.rounded {
   border-radius: 50px;
 }
 
-.form-control.clean {
+#addPlaybookModal .form-control.clean,
+#editPlaybookModal .form-control.clean {
   background: none !important;
   border: none;
   border-bottom: 2px solid #ccc;
@@ -3783,166 +3830,224 @@ ul.group_select {
   outline: none;
 }
 
-.form-control.clean:focus {
+#addPlaybookModal .form-control.clean:focus,
+#editPlaybookModal .form-control.clean:focus {
   border-bottom: 2px solid #00b6f0;
 }
 
-.form-control.focus:focus {
+#addPlaybookModal .form-control.focus:focus,
+#editPlaybookModal .form-control.focus:focus {
   background: #17A7F9 !important;
   color: #fff !important;
 }
 
-.accounting_reports .list-group a {
+#addPlaybookModal .accounting_reports .list-group a,
+#editPlaybookModal .accounting_reports .list-group a {
   font-weight: 600;
   font-size: 16px;
 }
 
-.accounting_reports .list-group a i {
+#addPlaybookModal .accounting_reports .list-group a i,
+#editPlaybookModal .accounting_reports .list-group a i {
   color: #1896DE;
   margin-right: 13px;
 }
 
-textarea.form-control.rounded {
+#addPlaybookModal textarea.form-control.rounded,
+#editPlaybookModal textarea.form-control.rounded {
   padding: 10px 20px;
 }
 
-textarea.form-control.clean {
+#addPlaybookModal textarea.form-control.clean,
+#editPlaybookModal textarea.form-control.clean {
   background: none !important;
 }
 
-pre.p10 {
+#addPlaybookModal pre.p10,
+#editPlaybookModal pre.p10 {
   padding: 10px;
 }
 
-.add_element {
+#addPlaybookModal .add_element,
+#editPlaybookModal .add_element {
   color: #33A09B;
 }
 
-.remove_form_element {
+#addPlaybookModal .remove_form_element,
+#editPlaybookModal .remove_form_element {
   color: #d9534f;
 }
 
-.appended_code {
+#addPlaybookModal .appended_code,
+#editPlaybookModal .appended_code {
   border-radius: 0;
 }
 
-.form_preview .btn {
+#addPlaybookModal .form_preview .btn,
+#editPlaybookModal .form_preview .btn {
   float: right;
   margin-right: 15px;
 }
 
-pre.appended_code {
+#addPlaybookModal pre.appended_code,
+#editPlaybookModal pre.appended_code {
   overflow: hidden;
   word-wrap: break-word;
 }
 
-.form_code_preview .tooltip-arrow,
-.form_code_preview .form_code + .tooltip > .tooltip-inner {
+#addPlaybookModal .form_code_preview .tooltip-arrow,
+#addPlaybookModal .form_code_preview .form_code + .tooltip > .tooltip-inner,
+#editPlaybookModal .form_code_preview .tooltip-arrow,
+#editPlaybookModal .form_code_preview .form_code + .tooltip > .tooltip-inner {
   background-color: #E15B23;
 }
 
-.form_element_options label {
+#addPlaybookModal .form_element_options label,
+#editPlaybookModal .form_element_options label {
   font-weight: 600;
 }
 
-.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle {
+#addPlaybookModal .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle,
+#editPlaybookModal .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle {
   width: 100% !important;
 }
 
-.field.slide.default.ui-sortable-handle {
+#addPlaybookModal .field.slide.default.ui-sortable-handle,
+#editPlaybookModal .field.slide.default.ui-sortable-handle {
   padding-bottom: 20px;
 }
 
-.dup_lead_detail_recs tr:hover {
+#addPlaybookModal .dup_lead_detail_recs tr:hover,
+#editPlaybookModal .dup_lead_detail_recs tr:hover {
   color: #33A09B !important;
 }
 
-.lead_fields_accordion p {
+#addPlaybookModal .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle,
+#editPlaybookModal .field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle {
+  width: 100% !important;
+}
+
+#addPlaybookModal .field.slide.default.ui-sortable-handle,
+#editPlaybookModal .field.slide.default.ui-sortable-handle {
+  padding-bottom: 20px;
+}
+
+#addPlaybookModal .form_code,
+#addPlaybookModal .form_code_css,
+#editPlaybookModal .form_code,
+#editPlaybookModal .form_code_css {
+  max-height: 325px;
+  overflow-y: scroll;
+}
+
+#addPlaybookModal .lead_fields_accordion p,
+#editPlaybookModal .lead_fields_accordion p {
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 3px;
 }
 
-.lead_fields_accordion p span {
+#addPlaybookModal .lead_fields_accordion p span,
+#editPlaybookModal .lead_fields_accordion p span {
   font-weight: 500;
 }
 
-.lead_fields_form input.form-control,
-.lead_fields_form button.multiselect,
-.lead_fields_form select.form-control,
-.lead_fields_form textarea.form-control {
+#addPlaybookModal .lead_fields_form input.form-control,
+#addPlaybookModal .lead_fields_form button.multiselect,
+#addPlaybookModal .lead_fields_form select.form-control,
+#addPlaybookModal .lead_fields_form textarea.form-control,
+#editPlaybookModal .lead_fields_form input.form-control,
+#editPlaybookModal .lead_fields_form button.multiselect,
+#editPlaybookModal .lead_fields_form select.form-control,
+#editPlaybookModal .lead_fields_form textarea.form-control {
   background: #eee !important;
 }
 
-.search_form .input-group .form-control {
+#addPlaybookModal .search_form .input-group .form-control,
+#editPlaybookModal .search_form .input-group .form-control {
   background: #fff !important;
 }
 
-.form_code,
-.form_code_css {
+#addPlaybookModal .form_code,
+#addPlaybookModal .form_code_css,
+#editPlaybookModal .form_code,
+#editPlaybookModal .form_code_css {
   max-height: 325px;
   overflow-y: scroll;
 }
 
-textarea.nobg_txtarea.form-control {
+#addPlaybookModal textarea.nobg_txtarea.form-control,
+#editPlaybookModal textarea.nobg_txtarea.form-control {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-.accounting_reports .list-group a {
+#addPlaybookModal .accounting_reports .list-group a,
+#editPlaybookModal .accounting_reports .list-group a {
   font-weight: 600;
   font-size: 16px;
 }
 
-.accounting_reports .list-group a i {
+#addPlaybookModal .accounting_reports .list-group a i,
+#editPlaybookModal .accounting_reports .list-group a i {
   color: #1896DE;
   margin-right: 13px;
 }
 
-.pinned_table {
+#addPlaybookModal .pinned_table,
+#editPlaybookModal .pinned_table {
   position: relative;
   overflow: auto;
   white-space: nowrap;
 }
 
-.pinned_table table.table.reports_table thead tr {
+#addPlaybookModal .pinned_table table.table.reports_table thead tr,
+#editPlaybookModal .pinned_table table.table.reports_table thead tr {
   background: #33A09B !important;
 }
 
-.pinned_table thead {
+#addPlaybookModal .pinned_table thead,
+#editPlaybookModal .pinned_table thead {
   background: #33A09B !important;
 }
 
-.pinned_table thead th {
+#addPlaybookModal .pinned_table thead th,
+#editPlaybookModal .pinned_table thead th {
   padding: 10px !important;
 }
 
-.pinned_table th {
+#addPlaybookModal .pinned_table th,
+#editPlaybookModal .pinned_table th {
   min-width: 100px;
   max-width: 100px;
 }
 
-.pinned_table th:hover {
+#addPlaybookModal .pinned_table th:hover,
+#editPlaybookModal .pinned_table th:hover {
   cursor: pointer;
 }
 
-.pinned_table th.sticky-col {
+#addPlaybookModal .pinned_table th.sticky-col,
+#editPlaybookModal .pinned_table th.sticky-col {
   background-color: #2d8d88;
 }
 
-.pinned_table td {
+#addPlaybookModal .pinned_table td,
+#editPlaybookModal .pinned_table td {
   min-width: 80px;
   max-width: 80px;
   background: #eee;
 }
 
-.pinned_table td.sticky-col {
+#addPlaybookModal .pinned_table td.sticky-col,
+#editPlaybookModal .pinned_table td.sticky-col {
   background-color: #fff;
   color: #333;
 }
 
-.pinned_table .sticky-col {
+#addPlaybookModal .pinned_table .sticky-col,
+#editPlaybookModal .pinned_table .sticky-col {
   position: -webkit-sticky;
   position: sticky;
   z-index: 99;
@@ -3952,278 +4057,341 @@ textarea.nobg_txtarea.form-control {
   left: 0px;
 }
 
-/* ---------------------------------------------------
-MEDIAQUERIES
------------------------------------------------------ */
-
 @media handheld, only screen and (min-width: 920px) {
-  div.col-md-7.five-three {
+  #addPlaybookModal div.col-md-7.five-three,
+  #editPlaybookModal div.col-md-7.five-three {
     width: 60% !important;
   }
 
-  div.col-md-5.five-two {
+  #addPlaybookModal div.col-md-5.five-two,
+  #editPlaybookModal div.col-md-5.five-two {
     width: 40% !important;
   }
 }
 
 @media handheld, only screen and (min-width: 1800px) {
-  .card.card-3,
-  .card.card-3b,
-  .card.card-3b2 {
+  #addPlaybookModal .card.card-3,
+  #addPlaybookModal .card.card-3b,
+  #addPlaybookModal .card.card-3b2,
+  #editPlaybookModal .card.card-3,
+  #editPlaybookModal .card.card-3b,
+  #editPlaybookModal .card.card-3b2 {
     min-height: 215px;
   }
 
-  .card.card-3 .title,
-  .card.card-3b .title,
-  .card.card-3b2 .title {
+  #addPlaybookModal .card.card-3 .title,
+  #addPlaybookModal .card.card-3b .title,
+  #addPlaybookModal .card.card-3b2 .title,
+  #editPlaybookModal .card.card-3 .title,
+  #editPlaybookModal .card.card-3b .title,
+  #editPlaybookModal .card.card-3b2 .title {
     font-size: 20px;
     margin-bottom: 30px;
   }
 
-  .card.card-3 h4.data,
-  .card.card-3b h4.data,
-  .card.card-3b2 h4.data {
+  #addPlaybookModal .card.card-3 h4.data,
+  #addPlaybookModal .card.card-3b h4.data,
+  #addPlaybookModal .card.card-3b2 h4.data,
+  #editPlaybookModal .card.card-3 h4.data,
+  #editPlaybookModal .card.card-3b h4.data,
+  #editPlaybookModal .card.card-3b2 h4.data {
     margin-top: 35px;
   }
 
-  .card.card-6,
-  .card.card-12 {
+  #addPlaybookModal .card.card-6,
+  #addPlaybookModal .card.card-12,
+  #editPlaybookModal .card.card-6,
+  #editPlaybookModal .card.card-12 {
     min-height: 450px;
   }
 
-  .card.card-6 .title,
-  .card.card-12 .title {
+  #addPlaybookModal .card.card-6 .title,
+  #addPlaybookModal .card.card-12 .title,
+  #editPlaybookModal .card.card-6 .title,
+  #editPlaybookModal .card.card-12 .title {
     font-size: 20px;
     margin-bottom: 25px;
   }
 }
 
 @media handheld, only screen and (max-width: 1300px) {
-  .flowchart_element {
+  #addPlaybookModal .flowchart_element,
+  #editPlaybookModal .flowchart_element {
     width: 120px;
     height: 120px;
   }
 
-  .flowchart_element.condition {
+  #addPlaybookModal .flowchart_element.condition,
+  #editPlaybookModal .flowchart_element.condition {
     width: 180px;
     height: 75px;
   }
 
-  .flowchart_element.action {
+  #addPlaybookModal .flowchart_element.action,
+  #editPlaybookModal .flowchart_element.action {
     width: 200px;
     height: 75px;
   }
 
-  div.vertical-line {
+  #addPlaybookModal div.vertical-line,
+  #editPlaybookModal div.vertical-line {
     height: 150px;
   }
 }
 
 @media handheld, only screen and (max-width: 1200px) {
-  .total_calls_in p.total,
-  .total_calls_out p.total {
+  #addPlaybookModal .total_calls_in p.total,
+  #addPlaybookModal .total_calls_out p.total,
+  #editPlaybookModal .total_calls_in p.total,
+  #editPlaybookModal .total_calls_out p.total {
     font-size: 45px;
   }
 
-  .rep_status h2 {
+  #addPlaybookModal .rep_status h2,
+  #editPlaybookModal .rep_status h2 {
     font-size: 18px;
   }
 }
 
 @media handheld, only screen and (max-width: 1070px) {
-  .flowchart_element {
+  #addPlaybookModal .flowchart_element,
+  #editPlaybookModal .flowchart_element {
     width: 120px;
     height: 120px;
   }
 
-  .flowchart_element span {
+  #addPlaybookModal .flowchart_element span,
+  #editPlaybookModal .flowchart_element span {
     font-size: 15px;
   }
 
-  .flowchart_element.condition {
+  #addPlaybookModal .flowchart_element.condition,
+  #editPlaybookModal .flowchart_element.condition {
     width: 80%;
     height: 75px;
   }
 
-  .flowchart_element.action {
+  #addPlaybookModal .flowchart_element.action,
+  #editPlaybookModal .flowchart_element.action {
     width: 80%;
     height: 75px;
   }
 }
 
 @media handheld, only screen and (max-width: 1010px) {
-  .pag_total {
+  #addPlaybookModal .pag_total,
+  #editPlaybookModal .pag_total {
     clear: both;
     display: block;
   }
 
-  .rep_status h2 {
+  #addPlaybookModal .rep_status h2,
+  #editPlaybookModal .rep_status h2 {
     font-size: 21px;
   }
 }
 
 @media handheld, only screen and (min-width: 991px) {
-  .pl0 {
+  #addPlaybookModal .pl0,
+  #editPlaybookModal .pl0 {
     padding-left: 0 !important;
   }
 
-  .pr0 {
+  #addPlaybookModal .pr0,
+  #editPlaybookModal .pr0 {
     padding-right: 0 !important;
   }
 
-  .card.plr0 {
+  #addPlaybookModal .card.plr0,
+  #editPlaybookModal .card.plr0 {
     padding-left: 0;
     padding-right: 0;
   }
 }
 
 @media handheld, only screen and (max-width: 991px) {
-  .match_height_4_gt,
-  .match_height_4_st {
+  #addPlaybookModal .match_height_4_gt,
+  #addPlaybookModal .match_height_4_st,
+  #editPlaybookModal .match_height_4_gt,
+  #editPlaybookModal .match_height_4_st {
     margin-bottom: 20px;
     padding: 0;
   }
 
-  .mb80 {
+  #addPlaybookModal .mb80,
+  #editPlaybookModal .mb80 {
     margin-bottom: 80px;
   }
 
-  .carb_mb30_mb {
+  #addPlaybookModal .carb_mb30_mb,
+  #editPlaybookModal .carb_mb30_mb {
     margin-bottom: 20px;
   }
 
-  .total_calls_in {
+  #addPlaybookModal .total_calls_in,
+  #editPlaybookModal .total_calls_in {
     margin-bottom: 0px;
   }
 
-  .card h4.data {
+  #addPlaybookModal .card h4.data,
+  #editPlaybookModal .card h4.data {
     font-size: 32px;
   }
 
-  .container {
+  #addPlaybookModal .container,
+  #editPlaybookModal .container {
     width: 98%;
   }
 
-  .match_height_4_st {
+  #addPlaybookModal .match_height_4_st,
+  #editPlaybookModal .match_height_4_st {
     height: auto !important;
     margin-bottom: 20px;
   }
 
-  .total_calls_in h2,
-  .total_calls_out h2 {
+  #addPlaybookModal .total_calls_in h2,
+  #addPlaybookModal .total_calls_out h2,
+  #editPlaybookModal .total_calls_in h2,
+  #editPlaybookModal .total_calls_out h2 {
     font-size: 23px;
     margin-bottom: 20px;
   }
 
-  .total_calls_in p.total,
-  .total_calls_out p.total {
+  #addPlaybookModal .total_calls_in p.total,
+  #addPlaybookModal .total_calls_out p.total,
+  #editPlaybookModal .total_calls_in p.total,
+  #editPlaybookModal .total_calls_out p.total {
     font-size: 55px;
   }
 }
 
 @media (min-width: 768px) {
-  .pl0 {
+  #addPlaybookModal .pl0,
+  #editPlaybookModal .pl0 {
     padding-left: 0;
   }
 }
 
 @media handheld, only screen and (max-width: 768px) {
-  .table-responsive.nobdr {
+  #addPlaybookModal .table-responsive.nobdr,
+  #editPlaybookModal .table-responsive.nobdr {
     border: none !important;
   }
 
-  .flowchart_element {
+  #addPlaybookModal .flowchart_element,
+  #editPlaybookModal .flowchart_element {
     width: 120px;
     height: 120px;
     margin-top: 0px;
     margin-bottom: 30px;
   }
 
-  .flowchart_element.condition {
+  #addPlaybookModal .flowchart_element.condition,
+  #editPlaybookModal .flowchart_element.condition {
     width: 180px;
     height: 75px;
     border-radius: 0;
   }
 
-  .flowchart_element.action {
+  #addPlaybookModal .flowchart_element.action,
+  #editPlaybookModal .flowchart_element.action {
     width: 200px;
     height: 85px;
     border-radius: 25px;
   }
 
-  .flowchart_element:after {
+  #addPlaybookModal .flowchart_element:after,
+  #editPlaybookModal .flowchart_element:after {
     content: none;
   }
 
-  .flowchart_element.mt35 {
+  #addPlaybookModal .flowchart_element.mt35,
+  #editPlaybookModal .flowchart_element.mt35 {
     margin-top: 0;
   }
 
-  .mbmt50 {
+  #addPlaybookModal .mbmt50,
+  #editPlaybookModal .mbmt50 {
     margin-top: 50px;
   }
 
-  .mbp0 {
+  #addPlaybookModal .mbp0,
+  #editPlaybookModal .mbp0 {
     padding: 0;
   }
 
-  .mbp35 {
+  #addPlaybookModal .mbp35,
+  #editPlaybookModal .mbp35 {
     padding-left: 35px;
     padding-right: 35px;
   }
 
-  .mbpb0 {
+  #addPlaybookModal .mbpb0,
+  #editPlaybookModal .mbpb0 {
     padding-bottom: 0 !important;
   }
 
-  a.kpi_trigger,
-  .opt h4 {
+  #addPlaybookModal a.kpi_trigger,
+  #addPlaybookModal .opt h4,
+  #editPlaybookModal a.kpi_trigger,
+  #editPlaybookModal .opt h4 {
     font-size: 15px;
   }
 
-  .opt.pl0 {
+  #addPlaybookModal .opt.pl0,
+  #editPlaybookModal .opt.pl0 {
     padding-left: 0;
   }
 
-  .tab-pane .mbp0 {
+  #addPlaybookModal .tab-pane .mbp0,
+  #editPlaybookModal .tab-pane .mbp0 {
     padding-left: 0;
     padding-right: 0;
   }
 
-  .mt70_mb {
+  #addPlaybookModal .mt70_mb,
+  #editPlaybookModal .mt70_mb {
     margin-top: 70px;
   }
 
-  .mt120_mb {
+  #addPlaybookModal .mt120_mb,
+  #editPlaybookModal .mt120_mb {
     margin-top: 120px;
   }
 
-  .col-sm-3.report_download {
+  #addPlaybookModal .col-sm-3.report_download,
+  #editPlaybookModal .col-sm-3.report_download {
     margin-top: 20px;
   }
 
-  .nopadleft {
+  #addPlaybookModal .nopadleft,
+  #editPlaybookModal .nopadleft {
     padding-left: 0;
   }
 
-  .nopadright {
+  #addPlaybookModal .nopadright,
+  #editPlaybookModal .nopadright {
     padding-right: 0;
   }
 
-  .col-xs-3.brand {
+  #addPlaybookModal .col-xs-3.brand,
+  #editPlaybookModal .col-xs-3.brand {
     padding-left: 0;
     width: 50px;
   }
 
-  .col-sm-3.report_download h3 {
+  #addPlaybookModal .col-sm-3.report_download h3,
+  #editPlaybookModal .col-sm-3.report_download h3 {
     margin-top: 0;
   }
 
-  a.report_dl_option {
+  #addPlaybookModal a.report_dl_option,
+  #editPlaybookModal a.report_dl_option {
     margin-top: 15px;
   }
 
-  a.reset_sorting_btn {
+  #addPlaybookModal a.reset_sorting_btn,
+  #editPlaybookModal a.reset_sorting_btn {
     bottom: 0;
     float: inherit;
     position: relative;
@@ -4231,21 +4399,26 @@ MEDIAQUERIES
     margin-top: 15px;
   }
 
-  img.text_logo {
+  #addPlaybookModal img.text_logo,
+  #editPlaybookModal img.text_logo {
     display: none;
   }
 
-  .col-md-4.col-sm-12.card_table_prt.get_hgt.pl0,
-  .col-md-4.col-sm-12.set_hgt {
+  #addPlaybookModal .col-md-4.col-sm-12.card_table_prt.get_hgt.pl0,
+  #addPlaybookModal .col-md-4.col-sm-12.set_hgt,
+  #editPlaybookModal .col-md-4.col-sm-12.card_table_prt.get_hgt.pl0,
+  #editPlaybookModal .col-md-4.col-sm-12.set_hgt {
     padding: 0;
   }
 
-  .card.plr0.leader_table_div.card_table.card-3.mb0 {
+  #addPlaybookModal .card.plr0.leader_table_div.card_table.card-3.mb0,
+  #editPlaybookModal .card.plr0.leader_table_div.card_table.card-3.mb0 {
     margin-bottom: 30px !important;
   }
 }
 
-.link {
+#addPlaybookModal .link,
+#editPlaybookModal .link {
   color: #203047;
   font-weight: 600;
   font-size: 15px;
@@ -4253,29 +4426,35 @@ MEDIAQUERIES
   margin-bottom: 10px;
 }
 
-.link:hover {
+#addPlaybookModal .link:hover,
+#editPlaybookModal .link:hover {
   color: #E15B23;
 }
 
-pre.appended_code {
+#addPlaybookModal pre.appended_code,
+#editPlaybookModal pre.appended_code {
   overflow: hidden;
   border-radius: 0;
 }
 
 @media handheld, only screen and (max-width: 556px) {
-  .form-holder.welcome_box h1 {
+  #addPlaybookModal .form-holder.welcome_box h1,
+  #editPlaybookModal .form-holder.welcome_box h1 {
     font-size: 30px;
   }
 
-  .form-holder.welcome_box .demo_expiration {
+  #addPlaybookModal .form-holder.welcome_box .demo_expiration,
+  #editPlaybookModal .form-holder.welcome_box .demo_expiration {
     font-size: 13px;
   }
 
-  .form-holder.welcome_box .btn_holder {
+  #addPlaybookModal .form-holder.welcome_box .btn_holder,
+  #editPlaybookModal .form-holder.welcome_box .btn_holder {
     width: 100%;
   }
 
-  .form-holder.welcome_box .btn_holder a {
+  #addPlaybookModal .form-holder.welcome_box .btn_holder a,
+  #editPlaybookModal .form-holder.welcome_box .btn_holder a {
     float: none;
     clear: both;
     font-size: 14px;
@@ -4285,104 +4464,132 @@ pre.appended_code {
     margin-bottom: 10px;
   }
 
-  .card h4.data.bg_rounded {
+  #addPlaybookModal .card h4.data.bg_rounded,
+  #editPlaybookModal .card h4.data.bg_rounded {
     padding-top: 32px;
   }
 
-  .card .back {
+  #addPlaybookModal .card .back,
+  #editPlaybookModal .card .back {
     padding-left: 35px;
     padding-right: 35px;
   }
 
-  .col-xs-6 .card .back {
+  #addPlaybookModal .col-xs-6 .card .back,
+  #editPlaybookModal .col-xs-6 .card .back {
     padding-left: 20px;
     padding-right: 20px;
   }
 
-  h2.page_heading {
+  #addPlaybookModal h2.page_heading,
+  #editPlaybookModal h2.page_heading {
     font-size: 22px;
   }
 
-  .pag_dets p {
+  #addPlaybookModal .pag_dets p,
+  #editPlaybookModal .pag_dets p {
     font-size: 12px;
   }
 
-  input.sm-input {
+  #addPlaybookModal input.sm-input,
+  #editPlaybookModal input.sm-input {
     max-width: 40px;
   }
 
-  .report_download h3,
-  .reset_sorting h3 {
+  #addPlaybookModal .report_download h3,
+  #addPlaybookModal .reset_sorting h3,
+  #editPlaybookModal .report_download h3,
+  #editPlaybookModal .reset_sorting h3 {
     font-size: 15px;
   }
 
-  div.reset_sorting,
-  .col-sm-3.report_download {
+  #addPlaybookModal div.reset_sorting,
+  #addPlaybookModal .col-sm-3.report_download,
+  #editPlaybookModal div.reset_sorting,
+  #editPlaybookModal .col-sm-3.report_download {
     padding: 0;
   }
 
-  header nav.navbar {
+  #addPlaybookModal header nav.navbar,
+  #editPlaybookModal header nav.navbar {
     padding: 5px 10px;
   }
 
-  .form-holder h4 {
+  #addPlaybookModal .form-holder h4,
+  #editPlaybookModal .form-holder h4 {
     margin-bottom: 10px;
   }
 
-  .btn {
+  #addPlaybookModal .btn,
+  #editPlaybookModal .btn {
     font-size: 12px;
   }
 
-  .container-fluid.bg.dashboard.p20 {
+  #addPlaybookModal .container-fluid.bg.dashboard.p20,
+  #editPlaybookModal .container-fluid.bg.dashboard.p20 {
     padding: 0 !important;
   }
 
-  #sidebarCollapse {
+  #addPlaybookModal #sidebarCollapse,
+  #editPlaybookModal #sidebarCollapse {
     float: left;
   }
 
-  .filters {
+  #addPlaybookModal .filters,
+  #editPlaybookModal .filters {
     margin-bottom: 10px;
   }
 
-  .filters button,
-  .filters .logout_btn {
+  #addPlaybookModal .filters button,
+  #addPlaybookModal .filters .logout_btn,
+  #editPlaybookModal .filters button,
+  #editPlaybookModal .filters .logout_btn {
     padding: 5px 8px;
   }
 
-  .filter_time_camp_dets p {
+  #addPlaybookModal .filter_time_camp_dets p,
+  #editPlaybookModal .filter_time_camp_dets p {
     font-size: 15px !important;
   }
 
-  .mb_hide {
+  #addPlaybookModal .mb_hide,
+  #editPlaybookModal .mb_hide {
     display: none;
   }
 
-  .filter_time_camp_dets p b {
+  #addPlaybookModal .filter_time_camp_dets p b,
+  #editPlaybookModal .filter_time_camp_dets p b {
     display: block;
     clear: both;
   }
 
-  .navbar {
-    padding: 20px 15px 0  15px;
+  #addPlaybookModal .navbar,
+  #editPlaybookModal .navbar {
+    padding: 20px 15px 0 15px;
   }
 
-  #content .navbar {
+  #addPlaybookModal #content .navbar,
+  #editPlaybookModal #content .navbar {
     height: 65px;
   }
 
-  .total_calls_in h2,
-  .total_calls_out h2 {
+  #addPlaybookModal .total_calls_in h2,
+  #addPlaybookModal .total_calls_out h2,
+  #editPlaybookModal .total_calls_in h2,
+  #editPlaybookModal .total_calls_out h2 {
     font-size: 18px;
     margin-bottom: 10px;
   }
 
-  .total_calls_in p.total,
-  .total_calls_out p.total {
+  #addPlaybookModal .total_calls_in p.total,
+  #addPlaybookModal .total_calls_out p.total,
+  #editPlaybookModal .total_calls_in p.total,
+  #editPlaybookModal .total_calls_out p.total {
     font-size: 38px;
   }
 
-  .col-xs-6 .card h1.title {
+  #addPlaybookModal .col-xs-6 .card h1.title,
+  #editPlaybookModal .col-xs-6 .card h1.title {
     font-size: 12px;
   }
 }

@@ -3105,6 +3105,13 @@ label.checkbox.toggle_active_reps{margin-left: 20px;}
         position: absolute;
         z-index: 99999;
     }
+.accounting_reports{
+    .list-group{
+        a{
+            font-weight: 600;font-size: 16px;
+            i{color:#1896DE;margin-right: 13px;}
+        }
+    }
 }
 
 .lead_details .pt10.bb{
@@ -3251,6 +3258,19 @@ pre.appended_code{
             color:$green !important;
         }
     }
+}
+
+.field.slide.draggable.ui-sortable-handle.ui-draggable.ui-draggable-handle{
+    width: 100% !important;
+}
+
+.field.slide.default.ui-sortable-handle {
+    padding-bottom: 20px;
+}
+
+.form_code, .form_code_css {
+    max-height: 325px;
+    overflow-y: scroll;
 }
 
 .lead_fields_accordion{
@@ -3735,4 +3755,4 @@ pre.appended_code {
         font-size: 12px;
     }
 }
-
+}

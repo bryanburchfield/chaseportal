@@ -26,6 +26,7 @@ class LeadsController extends Controller
     use TimeTraits;
 
     protected $db;
+
     public $currentDash;
 
     public function apiLogin(Request $request)
