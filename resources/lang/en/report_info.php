@@ -41,6 +41,7 @@ return [
     'conversionfactor' => 'Sales/Leads/App per Contact per hour.',
     'conversionrate' => 'Ratio of Sales/Leads/App disposition divided by total contacts.',
     'count' => 'Number of Calls',
+    'country' => 'Country Dialed',
     'cph' => 'This is the total amount of connects divided by the total hours worked.',
     'data_source_primary' => 'Primary Data Source',
     'data_source_secondary' => 'Secondary Data Source',
