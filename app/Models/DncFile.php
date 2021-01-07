@@ -10,6 +10,7 @@ class DncFile extends Model
         'group_id',
         'user_id',
         'filename',
+        'action',
         'description',
         'uploaded_at',
         'process_started_at',

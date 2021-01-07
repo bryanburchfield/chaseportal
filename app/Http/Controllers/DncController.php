@@ -29,9 +29,8 @@ class DncController extends Controller
      */
     public function index()
     {
-        $jsfile[] = 'dncuploader.js';
-        $page['menuitem'] = 'dnc_importer';
-        $page['sidenav'] = 'tools';
+        $jsfile[] = 'tools.js';
+        $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'jsfile' => $jsfile,
@@ -55,6 +54,7 @@ class DncController extends Controller
         $files = DncFile::select(
             'id',
             'filename',
+            'action',
             'description',
             'uploaded_at',
             'process_started_at',
@@ -127,7 +127,8 @@ class DncController extends Controller
      */
     public function uploadIndex()
     {
-        $jsfile[] = 'dncuploader.js';
+
+        $jsfile[] = 'tools.js';
         $page['menuitem'] = 'tools';
         $page['type'] = 'page';
         $data = [
@@ -167,6 +168,7 @@ class DncController extends Controller
             'group_id' => Auth::user()->group_id,
             'user_id' => Auth::user()->id,
             'filename' => $request->file('dncfile')->getClientOriginalName(),
+            'action' => $request->action,
             'description' => $request->description,
             'uploaded_at' => now(),
             'processed_at' => null,

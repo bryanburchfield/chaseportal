@@ -55,6 +55,7 @@
 										<tr>
 											<th class="text-center">{{__('tools.view')}}</th>
 											<th class="text-center">ID</th>
+											<th>{{ __('tools.action') }}</th>
 											<th>{{__('tools.description')}}</th>
 											<th>{{__('tools.file_name')}}</th>
 											<th>{{__('tools.uploaded')}}</th>
@@ -70,6 +71,7 @@
 											<tr>
 												<td><a class="btn btn-link" href="{{ action("DncController@showRecords", ["id" => $file['id']]) }}"><i class="far fa-eye"></i></a></td>
 												<td class="text-center">{{$file['id']}}</td>
+												<td>{{ __('tools.' . $file['action'])}}</td>
 												<td>{{$file['description']}}</td>
 												<td>{{$file['filename']}}</td>
 												<td>{{$file['uploaded_at']}}</td>

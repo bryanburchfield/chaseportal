@@ -89,7 +89,7 @@ return [
     'filters'        => 'Filtros',
     'filters_required' => 'Debe ingresar al menos un filtro',
     'first_name'    => 'Nombre de Pila',
-<<<<<<< HEAD
+
     'form_builder' => 'Constructor de Formularios',
     'from'            => 'Desde',
     'from_number'    => 'De Número',
@@ -214,12 +214,11 @@ return [
     'reversing_file_numb' => 'Invertir archivo #',
     'uploaded'        => 'Subido',
     'uploaded_records' => 'Subido :count registro|Subido :count registros',
-    'dnc_instruc1'    => 'Sube un archivo al portal. Esto solo organiza el archivo sin insertar los números DNC en el servidor.',
-    'dnc_instruc2'    => 'Revise el contenido para asegurarse de que tenga la cantidad de registros que esperaba y vea los errores.',
-    'dnc_instruc3'    => 'En este punto, eliminará el archivo (para poder corregirlo y volver a cargarlo) o Procesar el archivo.',
-    'dnc_instruc4'    => 'El procesamiento inserta los registros DNC en el servidor. Esto se ejecutará en segundo plano y puede tardar un tiempo en completarse.',
-    'dnc_instruc5'    => 'Una vez procesado el archivo, aún puede optar por revertirlo, lo que eliminará los registros DNC del servidor. Esto también se ejecuta en segundo plano y puede llevar algo de tiempo.',
-
+	'dnc_instruc1'	=> 'Sube un archivo al portal. Esto solo organiza el archivo.',
+	'dnc_instruc2'	=> 'Revise el contenido para asegurarse de que tenga la cantidad de registros que esperaba y vea los errores.',
+	'dnc_instruc3'	=> 'En este punto, eliminará el archivo (para poder corregirlo y volver a cargarlo) o Procesar el archivo.',
+	'dnc_instruc4'	=> 'El procesamiento inserta o elimina los registros DNC en el servidor. Esto se ejecutará en segundo plano y puede tardar un tiempo en completarse.',
+	'dnc_instruc5'	=> 'Una vez procesado el archivo, aún puede optar por revertirlo. Esto también se ejecuta en segundo plano y puede llevar algo de tiempo.',
     'dnc_upload1'    => 'El archivo debe estar en formato CSV, XLS o XLSX.',
     'dnc_upload2'    => "Si el archivo tiene una fila de encabezado, debe haber una columna 'Teléfono'.",
     'dnc_upload3'    => "Si el archivo no tiene una fila de encabezado, los números de teléfono deben estar en la primera columna.",

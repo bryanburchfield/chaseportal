@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DncFile extends FormRequest
 {
@@ -23,10 +24,19 @@ class DncFile extends FormRequest
      */
     public function rules()
     {
+        // Bail if they hit cancel
+        if (isset($this->cancel)) {
+            return [];
+        }
+
         return [
             'dncfile' => [
-                'required_without:cancel',
+                'required',
                 'mimes:txt,csv,xls,xlsx,ods,slk',
+            ],
+            'action' => [
+                'required',
+                Rule::in(['add', 'remove']),
             ],
             'has_headers' => 'nullable',
             'description' => 'nullable',

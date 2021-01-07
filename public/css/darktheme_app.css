@@ -218,6 +218,10 @@ h6 {
   padding: 10px 8px;
 }
 
+.green-text {
+  color: #33A09B;
+}
+
 .bt {
   border-top: 1px solid #1b293c;
 }

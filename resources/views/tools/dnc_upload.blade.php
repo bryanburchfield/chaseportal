@@ -33,10 +33,16 @@
 									    {{__('tools.upload_a_file')}} <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
 									</label>
 
-									<p class="filename">{{__('tools.no_file')}}</p>
+									<p class="filename mb20">{{__('tools.no_file')}}</p>
 
-									<div class="checkbox cb">
-										<label><input type="checkbox" name="has_headers"><b>{{__('tools.has_header')}}</b></label>
+									<div class="cb mb20 mt30">
+										<h4 class="mb10 green-text fw600">{{__('tools.action')}}</h4>
+										<label class="radio-inline"><input type="radio" name="action" value="add" {{ old('action') == 'add' ? 'checked' : '' }}>{{ __('tools.add') }}</label>
+										<label class="radio-inline"><input type="radio" name="action" value="remove" {{ old('action') == 'remove' ? 'checked' : '' }}>{{ __('tools.remove') }}</label>
+									</div>
+									
+									<div class="checkbox cb mb20">
+										<label><input type="checkbox" name="has_headers" {{ old('has_headers') == 'on' ? 'checked' : '' }}><b>{{__('tools.has_header')}}</b></label>
 									</div>
 
 									<div class="form-group upload_desc">

@@ -241,6 +241,10 @@ h6 {
   border-bottom: 1px solid #d8d8d8;
 }
 
+.green-text {
+  color: #33A09B;
+}
+
 .carb_mb30_mb {
   margin-bottom: 0;
 }
