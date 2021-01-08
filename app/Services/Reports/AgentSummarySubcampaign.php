@@ -176,8 +176,10 @@ class AgentSummarySubcampaign
 
             $sql .= " INNER JOIN #SelectedCampaign sc ON sc.CampaignName = r.Campaign
                 WHERE r.GroupId = :group_id$i
-                AND r.Date >= :startdate$i
-                AND r.Date < :enddate$i";
+                AND r.CallDate >= :startdate$i
+                AND r.CallDate < :enddate$i
+                AND r.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+                AND r.Duration > 0";
 
             if (session('ssoRelativeReps', 0)) {
                 $sql .= " AND r.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1$i))";

@@ -177,6 +177,8 @@ class AgentSummaryCampaign
                         WHERE r.GroupId = :group_id$i
                         AND r.CallDate >= :startdate$i
                         AND r.CallDate < :enddate$i
+                        AND r.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+                        AND r.Duration > 0
                     ) a
                     GROUP BY Rep, [Type]";
 
