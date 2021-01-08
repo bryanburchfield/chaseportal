@@ -316,7 +316,7 @@ class CallDetails
             $where .= " AND DR.Duration <= " . $this->params['durationto'];
         }
         if (!empty($this->params['showonlyterm'])) {
-            $where .= " AND DR.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+            $where .= " AND DR.CallStatus NOT IN ('CR_CEPT','CR_BAD_NUMBER','CR_BUSY','CR_CNCT/CON_PAMD','CR_DISCONNECTED','CR_DROPPED','CR_ERROR','CR_FAILED','CR_FAXTONE','CR_NOANS','CR_NORB','CR_UNFINISHED','UNKNOWN','UNFINISHED','PARKED')";
         }
         if (!empty($this->params['phone']) && $this->params['phone'] != '*') {
             $bind['phone'] = $this->params['phone'];
@@ -406,7 +406,8 @@ class CallDetails
                 LEFT OUTER JOIN [$this->advanced_table] A ON A.LeadId = L.IdGuid";
         }
 
-        $sql .= "
+        $sql .=
+            "
             LEFT JOIN #SelectedCampaign C on C.CampaignName = DR.Campaign
             LEFT JOIN #SelectedSubcampaign SC on SC.SubcampaignName = DR.Subcampaign
             LEFT JOIN #SelectedRep R on R.RepName COLLATE SQL_Latin1_General_CP1_CS_AS = DR.Rep
@@ -416,6 +417,7 @@ class CallDetails
             AND DR.CallDate >= :startdate
             AND DR.CallDate <= :enddate
             AND DR.CallType != 7
+            AND DR.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
             $where";
 
         // sql server goofyness
