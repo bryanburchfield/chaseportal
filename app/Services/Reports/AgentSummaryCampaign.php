@@ -171,12 +171,12 @@ class AgentSummaryCampaign
                     FROM
                     (SELECT r.Rep, IsNull(DI.Type,0) as [Type], r.id
                         FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
-                        INNER JOIN [$db].[dbo].[Dispos] DI ON DI.id = r.DispositionId
+                        LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = r.DispositionId
                         INNER JOIN #AgentSummary sr on sr.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = r.Rep
                         INNER JOIN #SelectedCampaign sc ON sc.CampaignName = r.Campaign
                         WHERE r.GroupId = :group_id$i
-                        AND r.Date >= :startdate$i
-                        AND r.Date < :enddate$i
+                        AND r.CallDate >= :startdate$i
+                        AND r.CallDate < :enddate$i
                     ) a
                     GROUP BY Rep, [Type]";
 
