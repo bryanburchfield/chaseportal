@@ -23,8 +23,8 @@ var Master = {
     tick_color: '#aaa',
     gridline_color: '#1A2738',
     pinned_columns:0,
-    // left_cols:0,
-    // right_cols:0,
+    activeTab: localStorage.getItem('activeTab'),
+
     report_pinned_datatable: $('.report_pinned_datatable').DataTable({
         destroy: true,
         scrollY:        500,
@@ -37,11 +37,7 @@ var Master = {
             rightColumns: this.right_cols
         }
     }),
-    
-    activeTab: localStorage.getItem('activeTab'),
-    dataTable: $('#dataTable').DataTable({
-        responsive: true,
-    }),
+
     cdr_dataTable: $('#cdr_dataTable').DataTable({
         responsive: true,
         dom: 'Bfrtip',
@@ -54,6 +50,10 @@ var Master = {
                 pageSize: 'LEGAL'
             }
         ],
+    }),
+
+    dataTable: $('#dataTable').DataTable({
+        responsive: true,
     }),
 
 	init:function(){
@@ -1373,17 +1373,17 @@ var Master = {
                 // $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
 
                 // check for errors
-                if (response.errors.length >= 1) {
-                    console.log('if is hiding table');
-                    for (var i = 0; i < response.errors.length; i++) {
-                        $('.report_errors').show();
-                        $('.report_errors').append(response.errors[i] + '<br>');
-                    }
-                    $('.table-responsive.report_table').hide();
-                    $('alert.hidetilloaded').hide();
+                // if (response.errors.length >= 1) {
+                //     console.log('if is hiding table');
+                //     for (var i = 0; i < response.errors.length; i++) {
+                //         $('.report_errors').show();
+                //         $('.report_errors').append(response.errors[i] + '<br>');
+                //     }
+                //     $('.table-responsive.report_table').hide();
+                //     $('alert.hidetilloaded').hide();
 
-                    return false;
-                }
+                //     return false;
+                // }
 
                 console.log(response);
 
@@ -1406,24 +1406,40 @@ var Master = {
                         trs.push(array_values);
                     }
 
-                    var ths = [];
-                    var th_vals = Object.values(response.params.columns);
-                    for (var key in th_vals) {
-                        if (th_vals.hasOwnProperty(key)) {
-                            ths.push("<th>" +th_vals[key]+"</th>");
-                        }
+                    var ths = "";
+                    for (var i = 0; i < array_keys.length; i++) {
+                        ths += "<th>" + array_keys[i] + "</th>";
                     }
 
-                    console.log(trs);
-                    console.log(ths);
+                    for(var i=0;i<array_keys.length;i++){
+                        $('.report_pinned_datatable thead tr').append('<th></th>');
+                    }
 
+                    console.log(array_keys.length);
 
                     $('.report_pinned_datatable thead tr').html(ths);
-                    Master.report_pinned_datatable.clear();
+                    Master.report_pinned_datatable.DataTable().clear();
+                    Master.report_pinned_datatable.DataTable().destroy();
+
+                    Master.report_pinned_datatable= $('.report_pinned_datatable').DataTable({
+                        destroy: true,
+                        scrollY:        500,
+                        scrollX:        true,
+                        scrollCollapse: true,
+                        paging:         true,
+                        responsive: true,
+                        fixedColumns:   {
+                            leftColumns: Master.left_cols,
+                            rightColumns: Master.right_cols
+                        }
+                    }),
+
                     Master.report_pinned_datatable.rows.add(trs);
                     Master.report_pinned_datatable.draw();
 
                 }
+
+                $('.preloader').fadeOut('slow');
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
@@ -2581,6 +2597,7 @@ var Master = {
         e.preventDefault();
         Master.pinned_columns=$(this).val();
         Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
+        console.log(Master.pinned_columns);
     },
 
     draw_pinned_datatable:function(cols, dir='left'){

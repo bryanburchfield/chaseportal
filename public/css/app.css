@@ -3578,49 +3578,49 @@ a.add_subcampaign i {
   margin-right: 13px;
 }
 
-.pinned_table {
+.pinned_table.table-responsive {
   position: relative;
   overflow: auto;
   white-space: nowrap;
 }
 
-.pinned_table table.table.reports_table thead tr {
+.pinned_table.table-responsive table.table.reports_table thead tr {
   background: #33A09B !important;
 }
 
-.pinned_table thead {
+.pinned_table.table-responsive thead {
   background: #33A09B !important;
 }
 
-.pinned_table thead th {
+.pinned_table.table-responsive thead th {
   padding: 10px !important;
 }
 
-.pinned_table th {
+.pinned_table.table-responsive th {
   min-width: 100px;
   max-width: 100px;
 }
 
-.pinned_table th:hover {
+.pinned_table.table-responsive th:hover {
   cursor: pointer;
 }
 
-.pinned_table th.sticky-col {
+.pinned_table.table-responsive th.sticky-col {
   background-color: #2d8d88;
 }
 
-.pinned_table td {
+.pinned_table.table-responsive td {
   min-width: 80px;
   max-width: 80px;
   background: #eee;
 }
 
-.pinned_table td.sticky-col {
+.pinned_table.table-responsive td.sticky-col {
   background-color: #fff;
   color: #333;
 }
 
-.pinned_table .sticky-col {
+.pinned_table.table-responsive .sticky-col {
   position: -webkit-sticky;
   position: sticky;
   z-index: 99;
