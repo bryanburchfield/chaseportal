@@ -1388,10 +1388,9 @@ var Master = {
                 console.log(response);
 
                 if (response.results) {
-                    // $('.pinned_table.table-responsive').append(response.table).show();
                     $('.pinned_table.table-responsive').show();
                     $('.pinned_table.table-responsive table').show();
-                    $('.report_pinned_datatable thead tr').empty();
+
 
                     var _data = response.results;
                     var trs = [];
@@ -1416,8 +1415,9 @@ var Master = {
                     }
 
                     console.log(trs);
-                    $('.report_pinned_datatable thead tr').empty();
-                    $('.report_pinned_datatable thead tr').html(ths);
+                    // $('.report_pinned_datatable thead tr').empty();
+                    // $('.report_pinned_datatable thead tr').html(ths);
+
                     // $('.report_pinned_datatable').DataTable().clear();
                     // $('.report_pinned_datatable').DataTable().destroy();
 
@@ -1427,6 +1427,11 @@ var Master = {
                         scrollX:        true,
                         scrollCollapse: true,
                         paging:         true,
+                        ordering: true,
+                        "columnDefs": [{
+                            "defaultContent": "-",
+                            "targets": "_all"
+                        }],
                         responsive: true,
                         data: trs, // add arrays of arrays for table rows
                         fixedColumns:   {
@@ -1434,6 +1439,12 @@ var Master = {
                             rightColumns: Master.right_cols
                         }
                     });
+
+                    if (report_datatable instanceof $.fn.dataTable.Api) {
+                        console.log('its a datatable');
+                    } else {
+                       console.log('its NOT a datatable');
+                    }
 
                     // report_datatable.DataTable().clear();
                     // report_datatable.DataTable().destroy();
