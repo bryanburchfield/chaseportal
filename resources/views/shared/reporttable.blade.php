@@ -1,6 +1,6 @@
     <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable">
         <thead>
-            <tr role="row">
+            <tr>
                 @foreach($params['columns'] as $key => $val)
                     <th>{{$key}}</th>
                 @endforeach

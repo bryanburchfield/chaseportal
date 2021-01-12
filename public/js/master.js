@@ -25,18 +25,18 @@ var Master = {
     pinned_columns:0,
     activeTab: localStorage.getItem('activeTab'),
 
-    report_pinned_datatable: $('.report_pinned_datatable').DataTable({
-        destroy: true,
-        scrollY:        500,
-        scrollX:        true,
-        scrollCollapse: true,
-        paging:         true,
-        responsive: true,
-        fixedColumns:   {
-            leftColumns: this.left_cols,
-            rightColumns: this.right_cols
-        }
-    }),
+    // report_pinned_datatable: $('.report_pinned_datatable').DataTable({
+    //     destroy: true,
+    //     scrollY:        500,
+    //     scrollX:        true,
+    //     scrollCollapse: true,
+    //     paging:         true,
+    //     responsive: true,
+    //     fixedColumns:   {
+    //         leftColumns: this.left_cols,
+    //         rightColumns: this.right_cols
+    //     }
+    // }),
 
     cdr_dataTable: $('#cdr_dataTable').DataTable({
         responsive: true,
@@ -1415,27 +1415,30 @@ var Master = {
                         $('.report_pinned_datatable thead tr').append('<th></th>');
                     }
 
-                    console.log(array_keys.length);
-
+                    console.log(trs);
+                    $('.report_pinned_datatable thead tr').empty();
                     $('.report_pinned_datatable thead tr').html(ths);
-                    Master.report_pinned_datatable.DataTable().clear();
-                    Master.report_pinned_datatable.DataTable().destroy();
+                    // $('.report_pinned_datatable').DataTable().clear();
+                    // $('.report_pinned_datatable').DataTable().destroy();
 
-                    Master.report_pinned_datatable= $('.report_pinned_datatable').DataTable({
+                    var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
                         scrollY:        500,
                         scrollX:        true,
                         scrollCollapse: true,
                         paging:         true,
                         responsive: true,
+                        data: trs, // add arrays of arrays for table rows
                         fixedColumns:   {
                             leftColumns: Master.left_cols,
                             rightColumns: Master.right_cols
                         }
-                    }),
+                    });
 
-                    Master.report_pinned_datatable.rows.add(trs);
-                    Master.report_pinned_datatable.draw();
+                    // report_datatable.DataTable().clear();
+                    // report_datatable.DataTable().destroy();
+                    // report_datatable.rows.add(trs);
+                    report_datatable.draw();
 
                 }
 
