@@ -1385,11 +1385,11 @@ var Master = {
                 //     return false;
                 // }
 
-                console.log(response);
+                console.log($('table thead').length);
 
                 if (response.results) {
-                    $('.pinned_table.table-responsive').show();
-                    $('.pinned_table.table-responsive table').show();
+                    // $('.pinned_table.table-responsive').show();
+                    // $('.pinned_table.table-responsive table').show();
 
 
                     var _data = response.results;
@@ -1405,32 +1405,33 @@ var Master = {
                         trs.push(array_values);
                     }
 
-                    var ths = "";
-                    for (var i = 0; i < array_keys.length; i++) {
-                        ths += "<th>" + array_keys[i] + "</th>";
-                    }
+                    // var ths = "";
+                    // for (var i = 0; i < array_keys.length; i++) {
+                    //     ths += "<th>" + array_keys[i] + "</th>";
+                    // }
 
-                    for(var i=0;i<array_keys.length;i++){
-                        $('.report_pinned_datatable thead tr').append('<th></th>');
-                    }
+                    // for(var i=0;i<array_keys.length;i++){
+                    //     $('.report_pinned_datatable thead tr').append('<th></th>');
+                    // }
 
-                    console.log(trs);
                     // $('.report_pinned_datatable thead tr').empty();
                     // $('.report_pinned_datatable thead tr').html(ths);
 
                     // $('.report_pinned_datatable').DataTable().clear();
                     // $('.report_pinned_datatable').DataTable().destroy();
 
+                    // console.log(ths);
+
                     var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
-                        scrollY:        500,
-                        scrollX:        true,
+                        // scrollY:        500,
+                        // scrollX:        true,
                         scrollCollapse: true,
                         paging:         true,
                         ordering: true,
-                        "columnDefs": [{
-                            "defaultContent": "-",
-                            "targets": "_all"
+                        columnDefs: [{
+                            defaultContent: "-",
+                            targets: "_all"
                         }],
                         responsive: true,
                         data: trs, // add arrays of arrays for table rows

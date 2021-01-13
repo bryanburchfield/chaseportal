@@ -2,7 +2,7 @@
         <thead>
             <tr>
                 @foreach($params['columns'] as $key => $val)
-                    <th>{{$key}}</th>
+                    <th><span>{{$key}}</span></th>
                 @endforeach
         </thead>
         <tbody>
