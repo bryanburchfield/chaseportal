@@ -117,6 +117,7 @@ return [
     'conversionfactor'    => 'Factor de Conversión',
     'conversionrate'      => 'Tasa de Conversión',
     'count'               => 'Recuento',
+    'country'             => 'País',
     'count_of_leads_by_attempt' => 'Conteo de Leads por Intento',
     'cph'                 => 'LPH',
     'date'                => 'Fecha',
