@@ -193,7 +193,7 @@ class ApnAgentSummary
             $bind['startdate3' . $i] = $startDate;
             $bind['enddate3' . $i] = $endDate;
 
-            $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(id) as [Count]
+            $sql .= " $union SELECT aa.Rep, [Action], SUM(aa.Duration) as Duration, COUNT(aa.id) as [Count]
             FROM [$db].[dbo].[AgentActivity] as aa WITH(NOLOCK)
             INNER JOIN #AgentSummary r on r.Rep COLLATE SQL_Latin1_General_CP1_CS_AS = aa.Rep";
 
