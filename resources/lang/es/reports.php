@@ -140,6 +140,7 @@ return [
     'group_id' => 'Grupo',
     'handledbyivr'        => 'Manejado por el IVR',
     'handledbyrep'        => 'Manejado por el Agente',
+    'hangup_source' => 'Fuente de Hangup',
     'hour' => 'Hora',
     'hours'               => 'Horas Trabajadas',
     'import_date' => 'Fecha de importación',
