@@ -25,19 +25,6 @@ var Master = {
     pinned_columns:0,
     activeTab: localStorage.getItem('activeTab'),
 
-    // report_pinned_datatable: $('.report_pinned_datatable').DataTable({
-    //     destroy: true,
-    //     scrollY:        500,
-    //     scrollX:        true,
-    //     scrollCollapse: true,
-    //     paging:         true,
-    //     responsive: true,
-    //     fixedColumns:   {
-    //         leftColumns: this.left_cols,
-    //         rightColumns: this.right_cols
-    //     }
-    // }),
-
     cdr_dataTable: $('#cdr_dataTable').DataTable({
         responsive: true,
         dom: 'Bfrtip',
@@ -57,13 +44,25 @@ var Master = {
     }),
 
 	init:function(){
-        if (Master.report_pinned_datatable instanceof $.fn.dataTable.Api) {
-            console.log('its a datatable');
-        } else {
-           console.log('its NOT a datatable');
-        }
         Master.left_cols=0;
         Master.right_cols=0;
+        Master.trs=[];
+        console.log(Master.left_cols);
+
+        //// demo table - /dashboards/pinned_datatable
+        var pinned_datatable = $('#pin_col_dataTable').DataTable({
+            destroy: true,
+            scrollY:        500,
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         true,
+            responsive: true,
+            fixedColumns:   {
+                leftColumns:  2,
+                rightColumns: 0
+            }
+        });
+        //// demo table - /dashboards/pinned_datatable
 
         if($('.theme').val() == 'dark'){
             Master.tick_color='#aaa';
@@ -1361,12 +1360,13 @@ var Master = {
             },
 
             success: function (response) {
+
+                console.log(response);
                 if ($('#sidebar').hasClass('active')) {
                     $('#sidebar').removeClass('active');
                 }
 
-                $('.report_table.pinned_table').show();
-                Master.draw_pinned_datatable(0);
+                // Master.draw_pinned_datatable(0);
 
                 // hide / empty everything and run report
                 // $('.table-responsive, .pag, .report_errors').empty();
@@ -1385,12 +1385,11 @@ var Master = {
                 //     return false;
                 // }
 
-                console.log($('table thead').length);
 
                 if (response.results) {
                     // $('.pinned_table.table-responsive').show();
-                    // $('.pinned_table.table-responsive table').show();
-
+                    $('.pinned_table.table-responsive').show();
+                    console.log('if ran');
 
                     var _data = response.results;
                     var trs = [];
@@ -1402,54 +1401,52 @@ var Master = {
                             array_keys.push(key);
                             array_values.push(_data[i][key]);
                         }
-                        trs.push(array_values);
+                        Master.trs.push(array_values);
                     }
 
+                    // empty thead and append th values from ajax response//////////
                     // var ths = "";
                     // for (var i = 0; i < array_keys.length; i++) {
                     //     ths += "<th>" + array_keys[i] + "</th>";
                     // }
 
-                    // for(var i=0;i<array_keys.length;i++){
-                    //     $('.report_pinned_datatable thead tr').append('<th></th>');
-                    // }
-
                     // $('.report_pinned_datatable thead tr').empty();
-                    // $('.report_pinned_datatable thead tr').html(ths);
+                    // $('.report_pinned_datatable thead tr').append(ths);
+                    // empty thead and append th values from ajax response//////////
 
                     // $('.report_pinned_datatable').DataTable().clear();
                     // $('.report_pinned_datatable').DataTable().destroy();
 
-                    // console.log(ths);
+                    // check if datatable is initated
+                    // if ($('.report_pinned_datatable') instanceof $.fn.dataTable.Api) {
+                    //     console.log('its a datatable');
+                    // } else {
+                    //    console.log('its NOT a datatable');
+                    // }
 
+                    // console.log($('table.report_pinned_datatable thead').html());
                     var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
-                        // scrollY:        500,
-                        // scrollX:        true,
+                        scrollY: 500,
+                        scrollX: true,
                         scrollCollapse: true,
-                        paging:         true,
+                        paging: true,
                         ordering: true,
                         columnDefs: [{
                             defaultContent: "-",
                             targets: "_all"
                         }],
                         responsive: true,
-                        data: trs, // add arrays of arrays for table rows
+                        data: Master.trs, // add arrays of arrays for table rows
                         fixedColumns:   {
                             leftColumns: Master.left_cols,
-                            rightColumns: Master.right_cols
+                            rightColumns:Master.right_cols
                         }
                     });
 
-                    if (report_datatable instanceof $.fn.dataTable.Api) {
-                        console.log('its a datatable');
-                    } else {
-                       console.log('its NOT a datatable');
-                    }
-
                     // report_datatable.DataTable().clear();
                     // report_datatable.DataTable().destroy();
-                    // report_datatable.rows.add(trs);
+                    // report_datatable.rows.add(Master.trs);
                     report_datatable.draw();
 
                 }
@@ -2612,13 +2609,12 @@ var Master = {
         e.preventDefault();
         Master.pinned_columns=$(this).val();
         Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
-        console.log(Master.pinned_columns);
     },
 
     draw_pinned_datatable:function(cols, dir='left'){
     ///////////////////////////////////////////////////////////
         // Master.report_pinned_datatable.destroy();
-        // console.log('destroy');
+        
         if(dir =='left'){
             Master.left_cols=cols;
             Master.right_cols=0;
@@ -2627,19 +2623,26 @@ var Master = {
             Master.left_cols=0;
         }
 
-        // Master.report_pinned_datatable=$('.report_pinned_datatable').DataTable({
-        //     // destroy: true,
-        //     // scrollY:        500,
-        //     // scrollX:        true,
-        //     // scrollCollapse: true,
-        //     // paging:         true,
-        //     responsive: true,
-        //     fixedColumns:   {
-        //         leftColumns: Master.left_cols,
-        //         rightColumns: Master.right_cols
-        //     }
-        // });
 
+        $('.report_pinned_datatable').DataTable().destroy();
+        var report_datatable = $('.report_pinned_datatable').DataTable({
+            destroy: true,
+            scrollY: 500,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            ordering: true,
+            columnDefs: [{
+                defaultContent: "-",
+                targets: "_all"
+            }],
+            responsive: true,
+            data: Master.trs, // add arrays of arrays for table rows
+            fixedColumns:   {
+                leftColumns: Master.left_cols,
+                rightColumns:Master.right_cols
+            }
+        });
     }
 }
 

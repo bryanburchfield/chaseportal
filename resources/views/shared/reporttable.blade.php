@@ -1,8 +1,8 @@
-    <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable">
+    <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable" >
         <thead>
             <tr>
                 @foreach($params['columns'] as $key => $val)
-                    <th><span>{{$key}}</span></th>
+                    <th>{{$key}}</th>
                 @endforeach
         </thead>
         <tbody>

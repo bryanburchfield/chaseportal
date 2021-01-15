@@ -96,9 +96,11 @@
     <script src="/js/multiselect_lib.js"></script>
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
     <script src="/js/master.js"></script>
     <script src="/js/nav.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    
 
     @isset($jsfile)
     @foreach($jsfile as $js)

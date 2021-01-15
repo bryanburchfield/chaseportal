@@ -2984,58 +2984,68 @@ a.add_subcampaign{
     }
 }
 
-.pinned_table.table-responsive{
-    
-    position: relative;
-    overflow: auto;
-    white-space: nowrap;
-
-    table.table.reports_table{
-        thead{
-            tr{background:$green !important;}
-        }
-    }
-
-    thead{
-        background:$green !important;
-        th{
-            padding: 10px !important;
-        }
-    }
-
-    th{
-        min-width: 100px;
-        max-width: 100px;
-        &:hover{
-            cursor: pointer;
-        }
-
-        &.sticky-col{
-            background-color: darken($green,5%);
-        }
-    }
-
-    td{
-        min-width: 80px;
-        max-width: 80px;
-        background: #eee;
-
-        &.sticky-col{
-            background-color: #fff;
-            color:#333;
-        }
-    }
-
-    .sticky-col {
-        position: -webkit-sticky;
-        position: sticky;
-        z-index: 99;
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
-        left: 0px;
-    }
+.dataTables_scrollBody > table > thead > tr {
+    visibility: collapse;
+    height: 0px !important;
 }
+
+// .pinned_table.table-responsive{
+    
+//     // th, td { white-space: nowrap; }
+//         // div.dataTables_wrapper {
+//         //     width: 800px;
+//         //     margin: 0 auto;
+//         // }
+//     position: relative;
+//     overflow: auto;
+//     // white-space: nowrap;
+
+//     table.table.reports_table{
+//         thead{
+//             tr{background:$green !important;}
+//         }
+//     }
+
+//     thead{
+//         background:$green !important;
+//         th{
+//             padding: 10px !important;
+//         }
+//     }
+
+//     th{
+//         min-width: 100px;
+//         max-width: 100px;
+//         &:hover{
+//             cursor: pointer;
+//         }
+
+//         &.sticky-col{
+//             background-color: darken($green,5%);
+//         }
+//     }
+
+//     td{
+//         min-width: 80px;
+//         max-width: 80px;
+//         background: #eee;
+
+//         &.sticky-col{
+//             background-color: #fff;
+//             color:#333;
+//         }
+//     }
+
+//     .sticky-col {
+//         position: -webkit-sticky;
+//         position: sticky;
+//         z-index: 99;
+//         width: 100px;
+//         min-width: 100px;
+//         max-width: 100px;
+//         left: 0px;
+//     }
+// }
 
 /* ---------------------------------------------------
 MEDIAQUERIES
