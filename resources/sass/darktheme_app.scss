@@ -3138,59 +3138,13 @@ a.add_subcampaign{
     }
 }
 
-.pinned_table{
-
-    position: relative;
-    overflow: auto;
-    white-space: nowrap;
-
-    table.table.reports_table{
-        thead{
-            tr{background:$green !important;}
-        }
-    }
-
-    thead{
-        background:$green !important;
-    }
-
-    th{
-        min-width: 100px;
-        max-width: 100px;
-        &:hover{
-            cursor: pointer;
-        }
-
-        &.sticky-col{
-            background-color: darken($green,5%);
-        }
-    }
-
-    td{
-        min-width: 80px;
-        max-width: 80px;
-
-        &.sticky-col{
-            background-color: darken($blue,2%);
-            color:#eee;
-        }
-    }
-
-    tr:hover{
-        background-color: darken($blue,5%) !important;
-        color:#fff;
-    }
-
-    .sticky-col {
-        position: -webkit-sticky;
-        position: sticky;
-        z-index: 99;
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
-        left: 0px;
-    }
+.dataTables_scrollBody > table > thead > tr {
+    visibility: collapse !important;
+    height: 0px !important;
 }
+
+.DTFC_LeftHeadWrapper table thead tr th, .DTFC_RightHeadWrapper table thead tr th{border:none !important;}
+.DTFC_LeftBodyWrapper table thead tr, .DTFC_RightBodyWrapper table thead tr{display: none !important;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

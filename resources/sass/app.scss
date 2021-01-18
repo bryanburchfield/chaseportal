@@ -1243,7 +1243,7 @@ h3.heading {
 
 .table-responsive.report_table, .table-responsive.cdr_table {
     overflow-x: scroll;
-    // display: none;
+    display: none;
 }
 
 .table-responsive.report_table.report_export_table{display: block;}
@@ -2984,74 +2984,14 @@ a.add_subcampaign{
     }
 }
 
-// .pinned_table.table-responsive{
-    
-//     // th, td { white-space: nowrap; }
-//         // div.dataTables_wrapper {
-//         //     width: 800px;
-//         //     margin: 0 auto;
-//         // }
-//     position: relative;
-//     overflow: auto;
-//     // white-space: nowrap;
-
-//     table.table.reports_table{
-//         thead{
-//             tr{background:$green !important;}
-//         }
-//     }
-
-//     thead{
-//         background:$green !important;
-//         th{
-//             padding: 10px !important;
-//         }
-//     }
-
-//     th{
-//         min-width: 100px;
-//         max-width: 100px;
-//         &:hover{
-//             cursor: pointer;
-//         }
-
-//         &.sticky-col{
-//             background-color: darken($green,5%);
-//         }
-//     }
-
-//     td{
-//         min-width: 80px;
-//         max-width: 80px;
-//         background: #eee;
-
-//         &.sticky-col{
-//             background-color: #fff;
-//             color:#333;
-//         }
-//     }
-
-//     .sticky-col {
-//         position: -webkit-sticky;
-//         position: sticky;
-//         z-index: 99;
-//         width: 100px;
-//         min-width: 100px;
-//         max-width: 100px;
-//         left: 0px;
-//     }
-// }
-
 .dataTables_scrollBody > table > thead > tr {
     visibility: collapse !important;
     height: 0px !important;
 }
 
-.DTFC_LeftHeadWrapper table thead tr th{border:none !important;}
-.DTFC_LeftBodyWrapper table thead tr{display: none !important;}
-// div.dataTables_scrollBody thead {
-//     display: none;
-// }
+.DTFC_LeftHeadWrapper table thead tr th, .DTFC_RightHeadWrapper table thead tr th{border:none !important;}
+.DTFC_LeftBodyWrapper table thead tr, .DTFC_RightBodyWrapper table thead tr{display: none !important;}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

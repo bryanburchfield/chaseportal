@@ -1362,35 +1362,19 @@ var Master = {
             success: function (response) {
 
                 console.log(response);
-                if ($('#sidebar').hasClass('active')) {
-                    $('#sidebar').removeClass('active');
-                }
-
-                // Master.draw_pinned_datatable(0);
+                // if ($('#sidebar').hasClass('active')) {
+                //     $('#sidebar').removeClass('active');
+                // }
 
                 // hide / empty everything and run report
                 // $('.table-responsive, .pag, .report_errors').empty();
                 // $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
-
-                // check for errors
-                // if (response.errors.length >= 1) {
-                //     console.log('if is hiding table');
-                //     for (var i = 0; i < response.errors.length; i++) {
-                //         $('.report_errors').show();
-                //         $('.report_errors').append(response.errors[i] + '<br>');
-                //     }
-                //     $('.table-responsive.report_table').hide();
-                //     $('alert.hidetilloaded').hide();
-
-                //     return false;
-                // }
 
 
                 if (response.results) {
                     $('.pinned_table.table-responsive').show();
 
                     var _data = response.results;
-                    // var trs = [];
                     var array_keys = [], array_values = [];
                     for (i = 0; i < _data.length; i++) {
                         array_keys = [];
@@ -1409,14 +1393,11 @@ var Master = {
                     for (var i = 0; i < array_keys.length; i++) {
                         Master.ths += "<th>" + array_keys[i] + "</th>";
                     }
-                    console.log(Master.ths);
 
+                    // empty and append thead data
                     $('.report_pinned_datatable thead tr').empty();
                     $('.report_pinned_datatable thead tr').append(Master.ths);
-                    // empty thead and append th values from ajax response//////////
 
-                    // $('.report_pinned_datatable').DataTable().clear();
-                    // $('.report_pinned_datatable').DataTable().destroy();
 
                     // check if datatable is initated
                     // if ($('.report_pinned_datatable') instanceof $.fn.dataTable.Api) {
@@ -1424,8 +1405,6 @@ var Master = {
                     // } else {
                     //    console.log('its NOT a datatable');
                     // }
-
-                    
 
                     var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
@@ -1447,7 +1426,17 @@ var Master = {
                     });
 
                     report_datatable.draw();
+                }else{
+                    // check for errors
+                    console.log('if is hiding table');
+                    for (var i = 0; i < response.errors.length; i++) {
+                        $('.report_errors').show();
+                        $('.report_errors').append(response.errors[i] + '<br>');
+                    }
+                    $('.table-responsive.report_table').hide();
+                    $('alert.hidetilloaded').hide();
 
+                    return false;
                 }
 
                 $('.preloader').fadeOut('slow');
@@ -1529,12 +1518,9 @@ var Master = {
             Master.left_cols=0;
         }
 
-        // console.log(Master.trs);
-        // console.log(Master.left_cols);
-        // console.log(Master.right_cols);
-
         $('.report_pinned_datatable').DataTable().destroy();
 
+        // empty and append thead data
         $('.report_pinned_datatable thead tr').empty();
         $('.report_pinned_datatable thead tr').append(Master.ths);
 
@@ -1557,9 +1543,8 @@ var Master = {
             }
         });
 
-        // $('.dataTable.DTFC_Cloned').eq(1).remove();
+        // hide second thead
         $('.DTFC_LeftBodyLiner table thead tr').css({'visibility':'collapse'});
-
     },
 
     calls_per_hour:function(response){

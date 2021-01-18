@@ -86,7 +86,7 @@
 
 	@include('reports.report_tools_inc')
 
-	<div class="table-responsive report_table {{$report}}">
+	<div class="pinned_table table-responsive report_table {{$report}}">
 		@include('shared.reporttable')
 	</div>
 

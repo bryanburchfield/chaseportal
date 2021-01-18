@@ -1528,6 +1528,7 @@ h3.heading {
 .table-responsive.report_table,
 .table-responsive.cdr_table {
   overflow-x: scroll;
+  display: none;
 }
 
 .table-responsive.report_table.report_export_table {
@@ -3582,11 +3583,13 @@ a.add_subcampaign i {
   height: 0px !important;
 }
 
-.DTFC_LeftHeadWrapper table thead tr th {
+.DTFC_LeftHeadWrapper table thead tr th,
+.DTFC_RightHeadWrapper table thead tr th {
   border: none !important;
 }
 
-.DTFC_LeftBodyWrapper table thead tr {
+.DTFC_LeftBodyWrapper table thead tr,
+.DTFC_RightBodyWrapper table thead tr {
   display: none !important;
 }
 
