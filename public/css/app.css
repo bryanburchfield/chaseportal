@@ -1528,7 +1528,6 @@ h3.heading {
 .table-responsive.report_table,
 .table-responsive.cdr_table {
   overflow-x: scroll;
-  display: none;
 }
 
 .table-responsive.report_table.report_export_table {
@@ -3579,8 +3578,16 @@ a.add_subcampaign i {
 }
 
 .dataTables_scrollBody > table > thead > tr {
-  visibility: collapse;
+  visibility: collapse !important;
   height: 0px !important;
+}
+
+.DTFC_LeftHeadWrapper table thead tr th {
+  border: none !important;
+}
+
+.DTFC_LeftBodyWrapper table thead tr {
+  display: none !important;
 }
 
 /* ---------------------------------------------------

@@ -47,7 +47,7 @@ var Master = {
         Master.left_cols=0;
         Master.right_cols=0;
         Master.trs=[];
-        console.log(Master.left_cols);
+        Master.ths='';
 
         //// demo table - /dashboards/pinned_datatable
         var pinned_datatable = $('#pin_col_dataTable').DataTable({
@@ -1387,12 +1387,10 @@ var Master = {
 
 
                 if (response.results) {
-                    // $('.pinned_table.table-responsive').show();
                     $('.pinned_table.table-responsive').show();
-                    console.log('if ran');
 
                     var _data = response.results;
-                    var trs = [];
+                    // var trs = [];
                     var array_keys = [], array_values = [];
                     for (i = 0; i < _data.length; i++) {
                         array_keys = [];
@@ -1404,14 +1402,17 @@ var Master = {
                         Master.trs.push(array_values);
                     }
 
-                    // empty thead and append th values from ajax response//////////
-                    // var ths = "";
-                    // for (var i = 0; i < array_keys.length; i++) {
-                    //     ths += "<th>" + array_keys[i] + "</th>";
-                    // }
+                    $('.report_pinned_datatable').DataTable().destroy();
 
-                    // $('.report_pinned_datatable thead tr').empty();
-                    // $('.report_pinned_datatable thead tr').append(ths);
+                    //empty thead and append th values from ajax response//////////
+                    Master.ths = "";
+                    for (var i = 0; i < array_keys.length; i++) {
+                        Master.ths += "<th>" + array_keys[i] + "</th>";
+                    }
+                    console.log(Master.ths);
+
+                    $('.report_pinned_datatable thead tr').empty();
+                    $('.report_pinned_datatable thead tr').append(Master.ths);
                     // empty thead and append th values from ajax response//////////
 
                     // $('.report_pinned_datatable').DataTable().clear();
@@ -1424,7 +1425,8 @@ var Master = {
                     //    console.log('its NOT a datatable');
                     // }
 
-                    // console.log($('table.report_pinned_datatable thead').html());
+                    
+
                     var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
                         scrollY: 500,
@@ -1444,9 +1446,6 @@ var Master = {
                         }
                     });
 
-                    // report_datatable.DataTable().clear();
-                    // report_datatable.DataTable().destroy();
-                    // report_datatable.rows.add(Master.trs);
                     report_datatable.draw();
 
                 }
@@ -1484,6 +1483,84 @@ var Master = {
         }); /// end ajax
     }, /// end update_report function
 
+    /////////////////////////////////////////////////////////
+    // PINNED TABLE - dbl click to freeze
+    /////////////////////////////////////////////////////////
+    pin_table_column:function(e){
+
+        var index = $(this).index();
+        if($(this).hasClass('sticky-col')){
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').removeClass('sticky-col');
+            });
+            $(this).removeClass('sticky-col');
+        }else{
+            $(this).addClass('sticky-col');
+            $('tbody tr').each(function(){
+                $(this).find('td:eq('+index+')').addClass('sticky-col');
+                $(this).find('td:eq('+index+')').css({'left':+index+'00px'});
+                $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
+            });
+        }
+    },
+
+    // set direction of table to freeze
+    set_pinned_direction:function(){
+        var dir = $(this).val();
+        var cols = $('#numb_pinned_cols').val();
+        Master.draw_pinned_datatable(cols, dir);
+    },
+
+    // change # of columns to freeze from select menu
+    select_pinned_columns:function(e){
+        e.preventDefault();
+        Master.pinned_columns=$(this).val();
+        Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
+    },
+
+    draw_pinned_datatable:function(cols, dir='left'){
+    ///////////////////////////////////////////////////////////
+
+        if(dir =='left'){
+            Master.left_cols=cols;
+            Master.right_cols=0;
+        }else{
+            Master.right_cols=cols;
+            Master.left_cols=0;
+        }
+
+        // console.log(Master.trs);
+        // console.log(Master.left_cols);
+        // console.log(Master.right_cols);
+
+        $('.report_pinned_datatable').DataTable().destroy();
+
+        $('.report_pinned_datatable thead tr').empty();
+        $('.report_pinned_datatable thead tr').append(Master.ths);
+
+        var report_datatable = $('.report_pinned_datatable').DataTable({
+            destroy: true,
+            scrollY: 500,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            ordering: true,
+            columnDefs: [{
+                defaultContent: "-",
+                targets: "_all"
+            }],
+            responsive: true,
+            data: Master.trs, // add arrays of arrays for table rows
+            fixedColumns:   {
+                leftColumns: Master.left_cols,
+                rightColumns:Master.right_cols
+            }
+        });
+
+        // $('.dataTable.DTFC_Cloned').eq(1).remove();
+        $('.DTFC_LeftBodyLiner table thead tr').css({'visibility':'collapse'});
+
+    },
 
     calls_per_hour:function(response){
 
@@ -2572,75 +2649,6 @@ var Master = {
             },
             success:function(response){
 
-            }
-        });
-    },
-
-    /////////////////////////////////////////////////////////
-    // PINNED TABLE - dbl click to freeze
-    /////////////////////////////////////////////////////////
-    pin_table_column:function(e){
-
-        var index = $(this).index();
-        if($(this).hasClass('sticky-col')){
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').removeClass('sticky-col');
-            });
-            $(this).removeClass('sticky-col');
-        }else{
-            $(this).addClass('sticky-col');
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').addClass('sticky-col');
-                $(this).find('td:eq('+index+')').css({'left':+index+'00px'});
-                $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
-            });
-        }
-    },
-
-    // set direction of table to freeze
-    set_pinned_direction:function(){
-        var dir = $(this).val();
-        var cols = $('#numb_pinned_cols').val();
-        Master.draw_pinned_datatable(cols, dir);
-    },
-
-    // change # of columns to freeze from select menu
-    select_pinned_columns:function(e){
-        e.preventDefault();
-        Master.pinned_columns=$(this).val();
-        Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
-    },
-
-    draw_pinned_datatable:function(cols, dir='left'){
-    ///////////////////////////////////////////////////////////
-        // Master.report_pinned_datatable.destroy();
-        
-        if(dir =='left'){
-            Master.left_cols=cols;
-            Master.right_cols=0;
-        }else{
-            Master.right_cols=cols;
-            Master.left_cols=0;
-        }
-
-
-        $('.report_pinned_datatable').DataTable().destroy();
-        var report_datatable = $('.report_pinned_datatable').DataTable({
-            destroy: true,
-            scrollY: 500,
-            scrollX: true,
-            scrollCollapse: true,
-            paging: true,
-            ordering: true,
-            columnDefs: [{
-                defaultContent: "-",
-                targets: "_all"
-            }],
-            responsive: true,
-            data: Master.trs, // add arrays of arrays for table rows
-            fixedColumns:   {
-                leftColumns: Master.left_cols,
-                rightColumns:Master.right_cols
             }
         });
     }
