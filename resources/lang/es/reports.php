@@ -37,7 +37,6 @@ return [
     'caller_id' => 'Llamadas por Caller ID',
     'callerid' => 'Identificador de Llamadas',
     'calls' => 'Llamadas',
-    'calls' => 'Total de Llamadas',
     'calls_by_caller_ID' => 'Llamadas por identificador de llamadas',
     'calls_per_hour' => 'Llamadas por Hora',
     'callstatus' => 'Disposición',

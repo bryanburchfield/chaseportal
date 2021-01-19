@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'abandon_rate' => 'Abandon Rate',
+    'abandoned_calls' => 'Abandoned Calls',
     'agent' => 'Agent',
     'agent_occupancy' => 'Agent Occupancy',
     'agent_wrap_up_time' => 'Agent Wrap Up Time',
@@ -62,8 +64,6 @@ return [
     'total_wait' => 'Total Wait',
     'twice_a_day' => 'Twice a Day',
     'unsub_text' => 'If you do not wish to receive KPI e-mails from Chase Data Corp, please click the link to be removed.',
-    'abandoned_calls' => 'Abandoned Calls',
-    'abandon_rate' => 'Abandon Rate',
     'unsubscribe' => 'Unsubscribe',
     'unsubscribed' => 'You have been unsubscribed',
     'wrap_up_time' => 'Wrap Up Time',
