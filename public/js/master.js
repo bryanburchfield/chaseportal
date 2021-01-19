@@ -1362,16 +1362,20 @@ var Master = {
             success: function (response) {
 
                 console.log(response);
+                $('.preloader').fadeOut('slow');
+
+                // close nav sidebar after filters are ran
                 // if ($('#sidebar').hasClass('active')) {
                 //     $('#sidebar').removeClass('active');
                 // }
 
                 // hide / empty everything and run report
-                // $('.table-responsive, .pag, .report_errors').empty();
-                // $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
+                $('.report_errors').empty().hide();
+                // $('.report_errors').hide();
 
 
-                if (response.results) {
+                if (response.results.length) {
+                    console.log('if ran');
                     $('.pinned_table.table-responsive').show();
 
                     var _data = response.results;
@@ -1413,6 +1417,7 @@ var Master = {
                         scrollCollapse: true,
                         paging: true,
                         ordering: true,
+                        autoWidth: false,
                         columnDefs: [{
                             defaultContent: "-",
                             targets: "_all"
@@ -1428,7 +1433,7 @@ var Master = {
                     report_datatable.draw();
                 }else{
                     // check for errors
-                    console.log('if is hiding table');
+                    console.log('error');
                     for (var i = 0; i < response.errors.length; i++) {
                         $('.report_errors').show();
                         $('.report_errors').append(response.errors[i] + '<br>');
@@ -1438,8 +1443,6 @@ var Master = {
 
                     return false;
                 }
-
-                $('.preloader').fadeOut('slow');
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
@@ -1531,6 +1534,7 @@ var Master = {
             scrollCollapse: true,
             paging: true,
             ordering: true,
+            autoWidth: false,
             columnDefs: [{
                 defaultContent: "-",
                 targets: "_all"

@@ -1,9 +1,17 @@
     <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable" >
         <thead>
             <tr>
-                @foreach($params['columns'] as $key => $val)
-                    <th>{{$key}}</th>
-                @endforeach
+                @if(!empty($params['columns']))
+                    @foreach($params['columns'] as $key => $val)
+                        <th>{{$key}}</th>
+                    @endforeach
+                @else
+                    <th>lorem</th>
+                    <th>lorem</th>
+                    <th>lorem</th>
+                    <th>lorem</th>
+                    <th>lorem</th>
+                @endif
         </thead>
         <tbody>
 
