@@ -1323,7 +1323,7 @@ var Master = {
         e.preventDefault();
         this.curpage = 1;
         this.pagesize = 50;
-        // $(this).prev('h3').text('Not sorted');
+
         Master.update_report('', this.pagesize, this.curpage, '', '');
     },
 
@@ -1361,21 +1361,12 @@ var Master = {
 
             success: function (response) {
 
-                console.log(response);
                 $('.preloader').fadeOut('slow');
-
-                // close nav sidebar after filters are ran
-                // if ($('#sidebar').hasClass('active')) {
-                //     $('#sidebar').removeClass('active');
-                // }
 
                 // hide / empty everything and run report
                 $('.report_errors').empty().hide();
-                // $('.report_errors').hide();
-
 
                 if (response.results.length) {
-                    console.log('if ran');
                     $('.pinned_table.table-responsive').show();
 
                     var _data = response.results;
@@ -1402,14 +1393,6 @@ var Master = {
                     $('.report_pinned_datatable thead tr').empty();
                     $('.report_pinned_datatable thead tr').append(Master.ths);
 
-
-                    // check if datatable is initated
-                    // if ($('.report_pinned_datatable') instanceof $.fn.dataTable.Api) {
-                    //     console.log('its a datatable');
-                    // } else {
-                    //    console.log('its NOT a datatable');
-                    // }
-
                     var report_datatable = $('.report_pinned_datatable').DataTable({
                         destroy: true,
                         scrollY: 500,
@@ -1433,7 +1416,6 @@ var Master = {
                     report_datatable.draw();
                 }else{
                     // check for errors
-                    console.log('error');
                     for (var i = 0; i < response.errors.length; i++) {
                         $('.report_errors').show();
                         $('.report_errors').append(response.errors[i] + '<br>');
