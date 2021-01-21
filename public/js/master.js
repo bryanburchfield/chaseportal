@@ -171,7 +171,7 @@ var Master = {
             return hash;
         };
 
-        var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
+        var colorHash = new ColorHash({hash: customHash});
 
         var new_hash;
         var new_rgb;
@@ -180,7 +180,7 @@ var Master = {
             new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
             chart_colors_array.push(new_rgb);
         }
-
+        console.log(chart_colors_array);
         return chart_colors_array;
     },
 
