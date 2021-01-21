@@ -86,7 +86,7 @@ var Master = {
         $('.pag').on('change', '.curpage, .pagesize', this.change_pag_inputs);
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
-        $('#call_details #campaign_select').on('change', this.toggle_subcamps);
+        $('#call_details #campaign_select, #lead_npa #campaign_select').on('change', this.toggle_subcamps);
         $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
         $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
         $('body').on('change', '.query_dates_first .datetimepicker', this.query_dates_for_camps);
