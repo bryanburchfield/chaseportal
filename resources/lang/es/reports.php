@@ -146,6 +146,8 @@ return [
     'production_report' => 'Reporte de Productividad',
     'production_report_subcampaign' => 'Productividad por Sub-campaña',
     'real_avg_seats' => 'Asientos promedio reales',
+    'rec_type' => 'Recomendar DID basados en',
+    'recommended_dids' => 'Recomendado DIDs',
     'rep' => 'Agente',
     'report' => 'Informe',
     'reps' => 'Agentes',
