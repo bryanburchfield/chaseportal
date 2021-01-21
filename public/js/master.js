@@ -190,16 +190,19 @@ var Master = {
         // old colorhash.js - keep just in case //////////////////////////////////////
 
         // new string to color hash w/o colorhash.js
+
         var stringToColor = function(str) {
-        var hash = 0;
-        for (var i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        var color = '#';
-        for (var i = 0; i < 3; i++) {
-            var value = (hash >> (i * 8)) & 0xFF;
-            color += ('00' + value.toString(16)).substr(-2);
-        }
+            var hash = 0;
+            for (var i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+
+            var color = '#';
+            for (var i = 0; i < 3; i++) {
+                var value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            if(color=='#000000'){color='#57D897';}
             return color;
         }
 
@@ -207,7 +210,6 @@ var Master = {
         var new_rgb;
         for (var i=0;i<reps.length;i++) {
             new_hash=stringToColor(reps[i]);
-            new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
             chart_colors_array.push(new_hash);
         }
         return chart_colors_array;
