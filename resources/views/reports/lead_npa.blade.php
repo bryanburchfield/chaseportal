@@ -50,6 +50,13 @@
 						{!! Form::label('subcampaigns', __('reports.subcampaigns')) !!}
 						{!! Form::select("subcampaigns[]", $filters['subcampaigns'], null, ["class" => "form-control multiselect", 'id'=> 'subcampaign_select',  'multiple'=>true]) !!}
 					</div>
+                </div>
+                
+                <div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('rec_type', __('reports.rec_type')) !!}
+						{!! Form::select("rec_type", $filters['rec_types'], null, ["class" => "form-control", 'id'=> 'rec_type']) !!}
+					</div>
 				</div>
 
 			</div>

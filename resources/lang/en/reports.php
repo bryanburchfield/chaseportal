@@ -159,6 +159,8 @@ return [
     'production_report_subcampaign' => 'Production By Sub',
     'program' => 'Program',
     'real_avg_seats' => 'Real Avg Seats',
+    'rec_type' => 'Recommend DIDs based on',
+    'recommended_dids' => 'Recommended DIDs',
     'rep' => 'Rep',
     'report' => 'Report',
     'reps' => 'Reps',

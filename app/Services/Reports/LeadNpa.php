@@ -21,6 +21,7 @@ class LeadNpa
         $this->params['nostreaming'] = 1;
         $this->params['campaigns'] = [];
         $this->params['subcampaigns'] = [];
+        $this->params['rec_type'] = '';
         $this->params['columns'] = [
             'State' => 'reports.state',
             'Npa' => 'reports.npa',
@@ -29,6 +30,7 @@ class LeadNpa
             'Leads' => 'reports.lead_count',
             'Calls' => 'reports.calls',
             'Pct' => 'reports.pct_of_total_calls',
+            'RecDids' => 'reports.recommended_dids',
         ];
     }
 
@@ -37,6 +39,7 @@ class LeadNpa
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
             'subcampaigns' => [],
+            'rec_types' => ['Calls' => 'Calls', 'Leads' => 'Leads'],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -79,6 +82,16 @@ class LeadNpa
                     $area_code = new AreaCode();
                 }
 
+                $source_number = $this->params['rec_type'] == 'Calls' ? $item['Calls'] : $item['Leads'];
+
+                // Recommend 3 dids per 1000
+                $rec_dids = (int) round($source_number / (1000 / 3));
+
+                // Don't recommend 0 unless 0
+                if ($rec_dids == 0 && $source_number > 0) {
+                    $rec_dids = 1;
+                }
+
                 return [
                     'State' => $area_code->state,
                     'Npa' => $item['Npa'],
@@ -87,6 +100,7 @@ class LeadNpa
                     'Leads' => (int) $item['Leads'],
                     'Calls' => (int) $item['Calls'],
                     'Pct' => $total_calls == 0 ? '0.00%' : number_format($item['Calls'] / $total_calls * 100, 2) . '%',
+                    'RecDids' => $rec_dids,
                 ];
             });
 
@@ -232,6 +246,12 @@ class LeadNpa
 
         if (!empty($request->subcampaigns)) {
             $this->params['subcampaigns'] = $request->subcampaigns;
+        }
+
+        if (empty($request->rec_type)) {
+            $this->errors->add('rec_type.required', trans('reports.errrec_typerequired'));
+        } else {
+            $this->params['rec_type'] = $request->rec_type;
         }
 
         // Save params to session
