@@ -162,25 +162,54 @@ var Master = {
     return_chart_colors_hash:function(reps){
 
         var chart_colors_array=[];
-        var customHash = function(str) {
-            var hash = 0;
-            for(var i = 0; i < str.length; i++) {
-                hash += str.charCodeAt(i);
-            }
 
-            return hash;
-        };
+        // old colorhash.js - keep just in case //////////////////////////////////////
+        // var chart_colors_array=[];
+        // var customHash = function(str) {
+        //     var hash = 0;
+        //     for(var i = 0; i < str.length; i++) {
+        //         hash += str.charCodeAt(i);
+        //     }
 
-        var colorHash = new ColorHash({hash: customHash});
+        //     return hash;
+        // };
+
+        // var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
+
+        // var new_hash;
+        // var new_rgb;
+        // for (var i=0;i<reps.length;i++) {
+        //     new_hash=colorHash.rgb(reps[i]);
+        //     new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
+        //     chart_colors_array.push(new_rgb);
+        // }
+
+        // return chart_colors_array;
+        // var colorHash = new ColorHash({lightness: [0.35, 0.5, 0.65]});
+
+        // old colorhash.js - keep just in case //////////////////////////////////////
+
+        // new string to color hash w/o colorhash.js
+        var stringToColor = function(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var color = '#';
+        for (var i = 0; i < 3; i++) {
+            var value = (hash >> (i * 8)) & 0xFF;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+            return color;
+        }
 
         var new_hash;
         var new_rgb;
         for (var i=0;i<reps.length;i++) {
-            new_hash=colorHash.rgb(reps[i]);
+            new_hash=stringToColor(reps[i]);
             new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
-            chart_colors_array.push(new_rgb);
+            chart_colors_array.push(new_hash);
         }
-        console.log(chart_colors_array);
         return chart_colors_array;
     },
 
