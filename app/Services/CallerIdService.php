@@ -40,6 +40,9 @@ class CallerIdService
     private $swap_dials = 1000;
     private $swap_connectpct = 10.8;
 
+    // Don't swap if flagged an connect pct greater than
+    private $dont_swap_connectpct = 11.0;
+
     // For Twilio  (icehook)
     private $twilio;
     private $icehookScore = 80;          // min score to be considered spam
@@ -94,12 +97,12 @@ class CallerIdService
         $this->maxcount = 0;
 
         echo "Pulling 1 day report\n";
-        Log::info('Pulling report');
+        Log::info('Pulling 1 day report');
         $this->startdate = $this->yesterday;
         $this->save1DayReport();
 
         echo "Pulling 30 day report\n";
-        Log::info('Pulling report');
+        Log::info('Pulling 30 day report');
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->save30DayReport();
 
@@ -148,14 +151,15 @@ class CallerIdService
                     ->orWhere('ring_group', 'ilike', '%nationwide%');
             })
             ->where(function ($query) {
-                $query->where('flagged', 1)
-                    // ->orWhere(function ($query2) {
-                    //     $query2->where('calls', '>=', 600)
-                    //         ->where('calls', '<', 1000)
-                    //         ->where('connect_ratio', '<', 10);
-                    // })
+                $query
+                    ->where(function ($query2) {
+                        $query2
+                            ->where('flagged', 1)
+                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                    })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', $this->swap_dials)
+                        $query2
+                            ->where('calls', '>=', $this->swap_dials)
                             ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
@@ -183,14 +187,15 @@ class CallerIdService
                     ->orWhere('ring_group', 'ilike', '%nationwide%');
             })
             ->where(function ($query) {
-                $query->where('flagged', 1)
-                    // ->orWhere(function ($query2) {
-                    //     $query2->where('calls', '>=', 600)
-                    //         ->where('calls', '<', 1000)
-                    //         ->where('connect_ratio', '<', 10);
-                    // })
+                $query
+                    ->where(function ($query2) {
+                        $query2
+                            ->where('flagged', 1)
+                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                    })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', $this->swap_dials)
+                        $query2
+                            ->where('calls', '>=', $this->swap_dials)
                             ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
@@ -389,6 +394,10 @@ class CallerIdService
         $sql .= ") tmp
             GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned
             HAVING SUM(cnt) >= :maxcount";
+
+        info($sql);
+        info($bind);
+        die();
 
         return $this->runSql($sql, $bind);
     }
@@ -639,13 +648,15 @@ class CallerIdService
                     ->orWhere('ring_group', 'ilike', '%nationwide%');
             })
             ->where(function ($query) {
-                $query->where('flagged', 1)
-                    // ->orWhere(function ($query2) {
-                    //     $query2->where('calls', '>=', 600)
-                    //         ->where('connect_ratio', '<', 10);
-                    // })
+                $query
+                    ->where(function ($query2) {
+                        $query2
+                            ->where('flagged', 1)
+                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                    })
                     ->orWhere(function ($query2) {
-                        $query2->where('calls', '>=', $this->swap_dials)
+                        $query2
+                            ->where('calls', '>=', $this->swap_dials)
                             ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
             })
