@@ -26,18 +26,16 @@ class LeadNpa
             'Npa' => 'reports.npa',
             'City' => 'reports.city',
             'Timezone' => 'reports.timezone',
+            'Leads' => 'reports.lead_count',
             'Calls' => 'reports.calls',
-            'Pct' => 'reports.pct',
+            'Pct' => 'reports.pct_of_total_calls',
         ];
     }
 
     public function getFilters()
     {
         $filters = [
-            'campaigns' => $this->getAllCampaigns(
-                $this->params['fromdate'],
-                $this->params['todate']
-            ),
+            'campaigns' => $this->getAllCampaigns(),
             'subcampaigns' => [],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
@@ -71,7 +69,7 @@ class LeadNpa
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
 
-            $total_calls = $results->sum('Cnt');
+            $total_calls = $results->sum('Calls');
 
             // get state and calc pct
             $results->transform(function ($item, $key) use ($total_calls) {
@@ -86,8 +84,9 @@ class LeadNpa
                     'Npa' => $item['Npa'],
                     'City' => $area_code->city,
                     'Timezone' => $area_code->timezone,
-                    'Calls' => (int) $item['Cnt'],
-                    'Pct' => number_format($item['Cnt'] / $total_calls * 100, 2) . '%',
+                    'Leads' => (int) $item['Leads'],
+                    'Calls' => (int) $item['Calls'],
+                    'Pct' => $total_calls == 0 ? '0.00%' : number_format($item['Calls'] / $total_calls * 100, 2) . '%',
                 ];
             });
 
@@ -133,7 +132,8 @@ class LeadNpa
         $campaigns = str_replace("'", "''", implode('!#!', $this->params['campaigns']));
         $subcampaigns = str_replace("'", "''", implode('!#!', $this->params['subcampaigns']));
 
-        $bind['group_id'] = Auth::user()->group_id;
+        $bind['group_id1'] = Auth::user()->group_id;
+        $bind['group_id2'] = Auth::user()->group_id;
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
 
@@ -141,9 +141,11 @@ class LeadNpa
 
     SELECT 
         SUBSTRING(Phone,2,3) as Npa,
-        COUNT(*) as Cnt
+        COUNT(*) as Calls,
+        0 as Leads
+    INTO #DRCounts
     FROM DialingResults WITH(NOLOCK)
-    WHERE GroupId = :group_id
+    WHERE GroupId = :group_id1
     AND	CallDate >= :startdate
     AND CallDate < :enddate
     AND CallType = 0
@@ -151,27 +153,64 @@ class LeadNpa
     AND CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'CR_BAD_NUMBER', 'CR_UNFINISHED')";
 
         if (!empty($campaigns)) {
-            $bind['campaigns'] = $campaigns;
-            $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns, '!#!'))";
+            $bind['campaigns1'] = $campaigns;
+            $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns1, '!#!'))";
         }
 
         if (!empty($subcampaigns)) {
-            $bind['subcampaigns'] = $subcampaigns;
-            $sql .= " AND Subcampaign in (SELECT value FROM dbo.SPLIT(:subcampaigns, '!#!'))";
+            $bind['subcampaigns1'] = $subcampaigns;
+            $sql .= " AND Subcampaign in (SELECT value FROM dbo.SPLIT(:subcampaigns1, '!#!'))";
         }
 
         if (session('ssoRelativeCampaigns', 0)) {
-            $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
-            $bind['ssousercamp'] = session('ssoUsername');
+            $bind['ssousercamp1'] = session('ssoUsername');
+            $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1, 1))";
         }
 
         if (session('ssoRelativeReps', 0)) {
-            $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep))";
-            $bind['ssouserrep'] = session('ssoUsername');
+            $bind['ssouserrep1'] = session('ssoUsername');
+            $sql .= " AND Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(:ssouserrep1))";
         }
 
         $sql .= "
-    GROUP BY SUBSTRING(Phone,2,3)";
+    GROUP BY SUBSTRING(Phone,2,3);
+        
+    INSERT INTO #DRCounts (Npa, Leads, Calls)
+    SELECT
+        CASE
+            WHEN PrimaryPhone LIKE '1__________' THEN SUBSTRING(PrimaryPhone,2,3)
+            ELSE SUBSTRING(PrimaryPhone,1,3)
+        END as Npa,
+        COUNT(*) as Leads,
+        0 as Calls
+    FROM Leads WITH(NOLOCK)
+    WHERE GroupId = :group_id2
+    AND (PrimaryPhone LIKE '1__________' OR PrimaryPhone LIKE '__________')";
+
+        if (!empty($campaigns)) {
+            $bind['campaigns2'] = $campaigns;
+            $sql .= " AND Campaign in (SELECT value FROM dbo.SPLIT(:campaigns2, '!#!'))";
+        }
+
+        if (!empty($subcampaigns)) {
+            $bind['subcampaigns2'] = $subcampaigns;
+            $sql .= " AND Subcampaign in (SELECT value FROM dbo.SPLIT(:subcampaigns2, '!#!'))";
+        }
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $bind['ssousercamp2'] = session('ssoUsername');
+            $sql .= " AND Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp2, 1))";
+        }
+
+        $sql .= "
+    GROUP BY CASE
+        WHEN PrimaryPhone LIKE '1__________' THEN SUBSTRING(PrimaryPhone,2,3)
+        ELSE SUBSTRING(PrimaryPhone,1,3)
+    END;
+    
+    SELECT Npa, SUM(Calls) as Calls, SUM(Leads) as Leads
+    FROM #DRCounts
+    GROUP BY Npa";
 
         return [$sql, $bind];
     }
