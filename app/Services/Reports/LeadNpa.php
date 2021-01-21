@@ -24,7 +24,7 @@ class LeadNpa
         $this->params['columns'] = [
             'State' => 'reports.state',
             'Npa' => 'reports.npa',
-            'City' => 'reports.city',
+            'City' => 'reports.npa_city',
             'Timezone' => 'reports.timezone',
             'Leads' => 'reports.lead_count',
             'Calls' => 'reports.calls',

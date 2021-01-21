@@ -135,6 +135,7 @@ return [
     'mostrecent' => 'Más Reciente',
     'name' => 'Nombre',
     'npa' => 'NPA',
+    'npa_city' => 'Ciudad',
     'outbound' => 'Saliente',
     'outbound_pct' => 'Saliente%',
     'pausedtime' => 'Inicio de Receso',
