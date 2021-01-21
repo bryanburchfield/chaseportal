@@ -149,7 +149,7 @@ class LeadNpa
     AND	CallDate >= :startdate
     AND CallDate < :enddate
     AND CallType = 0
-    AND Phone LIKE '1__________' 
+    AND Phone LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' 
     AND CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD', 'CR_BAD_NUMBER', 'CR_UNFINISHED')";
 
         if (!empty($campaigns)) {
@@ -178,14 +178,14 @@ class LeadNpa
     INSERT INTO #DRCounts (Npa, Leads, Calls)
     SELECT
         CASE
-            WHEN PrimaryPhone LIKE '1__________' THEN SUBSTRING(PrimaryPhone,2,3)
+            WHEN PrimaryPhone LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN SUBSTRING(PrimaryPhone,2,3)
             ELSE SUBSTRING(PrimaryPhone,1,3)
         END as Npa,
         COUNT(*) as Leads,
         0 as Calls
     FROM Leads WITH(NOLOCK)
     WHERE GroupId = :group_id2
-    AND (PrimaryPhone LIKE '1__________' OR PrimaryPhone LIKE '__________')";
+    AND (PrimaryPhone LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' OR PrimaryPhone LIKE '[2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')";
 
         if (!empty($campaigns)) {
             $bind['campaigns2'] = $campaigns;
@@ -204,7 +204,7 @@ class LeadNpa
 
         $sql .= "
     GROUP BY CASE
-        WHEN PrimaryPhone LIKE '1__________' THEN SUBSTRING(PrimaryPhone,2,3)
+        WHEN PrimaryPhone LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN SUBSTRING(PrimaryPhone,2,3)
         ELSE SUBSTRING(PrimaryPhone,1,3)
     END;
     

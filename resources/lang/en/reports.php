@@ -147,7 +147,7 @@ return [
     'mostrecent' => 'Most Recent',
     'name' => 'Name',
     'npa' => 'NPA',
-    'npa_city' => 'City',
+    'npa_city' => 'Major City',
     'outbound' => 'Outbound',
     'outbound_pct' => 'Outbound%',
     'pausedtime' => 'Pause Time',
