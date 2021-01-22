@@ -395,10 +395,6 @@ class CallerIdService
             GROUP BY GroupId, GroupName, DialerNumb, CallerId, RingGroup, CallerIdCheck, Owned
             HAVING SUM(cnt) >= :maxcount";
 
-        info($sql);
-        info($bind);
-        die();
-
         return $this->runSql($sql, $bind);
     }
 
