@@ -231,7 +231,7 @@ var Master = {
         var new_rgb;
         for (var i=0;i<reps.length;i++) {
             new_hash=stringToColor(reps[i]);
-            new_hash=ColorLuminance(new_hash, -0.2);
+            new_hash=ColorLuminance(new_hash, -0.3);
             chart_colors_array.push(new_hash);
         }
         return chart_colors_array;
