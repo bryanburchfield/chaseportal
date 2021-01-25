@@ -16,6 +16,7 @@ class CreateSpamCheckBatchDetailsTable extends Migration
         Schema::create('spam_check_batch_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('spam_check_batch_id');
+            $table->integer('line');
             $table->string('phone', 15);
             $table->boolean('checked')->default(0);
             $table->boolean('flagged')->nullable();
@@ -23,7 +24,8 @@ class CreateSpamCheckBatchDetailsTable extends Migration
             $table->timestamps();
 
             $table->foreign('spam_check_batch_id')
-                ->references('id')->on('spam_check_batches');
+                ->references('id')->on('spam_check_batches')
+                ->onDelete('cascade');
 
             $table->index('phone');
         });

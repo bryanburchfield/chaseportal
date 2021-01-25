@@ -8,6 +8,10 @@ class SpamCheckBatch extends Model
 {
     protected $fillable = [
         'user_id',
+        'description',
+        'uploaded_at',
+        'process_started_at',
+        'processed_at',
     ];
 
     public function spamCheckBatchDetails()

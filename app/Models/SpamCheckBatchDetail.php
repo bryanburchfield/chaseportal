@@ -8,6 +8,7 @@ class SpamCheckBatchDetail extends Model
 {
     protected $fillable = [
         'spam_check_batch_id',
+        'line',
         'phone',
         'checked',
         'flagged',
