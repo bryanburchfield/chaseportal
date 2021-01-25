@@ -7,12 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SpamCheckController extends Controller
 {
     public function index()
     {
         $jsfile[] = '';
+        $page['sidenav'] = 'admin';
         $page['menuitem'] = 'spam_check';
         $page['type'] = 'page';
         $data = [
@@ -75,5 +78,74 @@ class SpamCheckController extends Controller
         $paginatedItems->setPath(request()->url());
 
         return $paginatedItems;
+    }
+
+    public function uploadIndex()
+    {
+
+        $jsfile[] = '';
+        $page['sidenav'] = 'admin';
+        $page['menuitem'] = 'spam_check';
+        $page['type'] = 'page';
+        $data = [
+            'jsfile' => $jsfile,
+            'page' => $page,
+        ];
+
+        return view('admin.spam_check_upload')->with($data);
+    }
+
+    public function uploadFile(Request $request)
+    {
+        if ($request->has('cancel')) {
+            return redirect()->action('SpamCheckController@index');
+        }
+
+        if ($request->has_headers) {
+            $column = 'phone';
+        } else {
+            $column = 0;
+        }
+
+        // We have no control over what files the user throws at us
+        // so wrap this in a transaction in case it craps out
+        DB::beginTransaction();
+
+        // insert spam_check_batch record
+        $spam_check_batch = SpamCheckBatch::create([
+            'user_id' => Auth::user()->id,
+            'filename' => $request->file('dncfile')->getClientOriginalName(),
+            'description' => $request->description,
+            'uploaded_at' => now(),
+            'processed_at' => null,
+        ]);
+
+        // load file
+        if ($request->has_headers) {
+            $importer = new SpamImportWithHeaders($spam_check_batch->id, $column);
+        } else {
+            $importer = new SpamImportNoHeaders($spam_check_batch->id, $column);
+        }
+
+        Excel::import($importer, $request->file('spamfile'));
+
+        // Commit all the inserts
+        DB::commit();
+
+        $spam_check_batch->refresh();
+
+        $tot_recs = $spam_check_batch->spamFileDetails->count();
+
+        if (
+            $tot_recs == 0 ||
+            $tot_recs == $spam_check_batch->errorRecs()->count()
+        ) {
+            $spam_check_batch->delete();
+            session()->flash('flash', trans('tools.no_valid_phones'));
+        } else {
+            session()->flash('flash', trans_choice('tools.uploaded_records', $tot_recs));
+        }
+
+        return redirect()->action('SpamCheckController@index');
     }
 }

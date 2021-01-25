@@ -27,6 +27,8 @@
 
                             <h2 class="bbnone mb20">{{__('tools.spam_check_files')}}</h2>
 
+                            <a class="btn btn-primary" href="{{ action('SpamCheckController@uploadIndex') }}">{{__('tools.upload_new_file')}}</a>
+
                             @if (count($files))
                             {{ $files->links() }}
                             <div class="table-responsive nobdr">
@@ -40,6 +42,7 @@
                                                 <th>{{__('tools.description')}}</th>
                                                 <th>{{__('tools.uploaded')}}</th>
                                                 <th class="text-center">{{__('tools.records')}}</th>
+                                                <th class="text-center">{{__('tools.errors')}}</th>
                                                 <th>{{__('tools.processed')}}</th>
                                             </tr>
                                         </thead>
@@ -52,6 +55,11 @@
                                                 <td>{{$file['description']}}</td>
                                                 <td>{{$file['uploaded_at']}}</td>
                                                 <td class="text-center">{{$file['recs']}}</td>
+                                                @if ($file['errors'] > 0)
+													<td><a class="btn btn-link danger text-center" href="{{ action("SpamCheckController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+												@else
+													<td class="text-center">{{$file['errors']}}</td>
+												@endif
                                                 <td>
                                                     @if (empty($file['process_started_at']))
                                                         <button class="btn btn-success" name="action" value="process:{{$file['id']}}">{{__('tools.process')}}</button>

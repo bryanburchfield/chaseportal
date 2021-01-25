@@ -23,4 +23,11 @@ class SpamCheckBatch extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function errorRecs()
+    {
+        return SpamCheckBatchDetail::where('spam_check_batch_id', $this->id)
+            ->whereNotNull('succeeded')
+            ->where('succeeded', false);
+    }
 }

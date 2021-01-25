@@ -18,6 +18,8 @@ class CreateSpamCheckBatchDetailsTable extends Migration
             $table->unsignedBigInteger('spam_check_batch_id');
             $table->integer('line');
             $table->string('phone', 15);
+            $table->boolean('succeeded')->nullable();
+            $table->string('error')->nullable();
             $table->boolean('checked')->default(0);
             $table->boolean('flagged')->nullable();
             $table->string('flags')->nullable();

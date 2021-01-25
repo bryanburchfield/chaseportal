@@ -10,6 +10,8 @@ class SpamCheckBatchDetail extends Model
         'spam_check_batch_id',
         'line',
         'phone',
+        'succeeded',
+        'error',
         'checked',
         'flagged',
         'flags',
