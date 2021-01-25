@@ -13,6 +13,7 @@
     @endcan
 
     @can('accessSuperAdmin')
+        <li data-page="spam_check" @php echo !empty($page['menuitem']) && $page['menuitem']== 'spam_check' ? 'class="active"' : ''; @endphp><a href="{{ action('SpamCheckController@index') }}"><i class="fas fa-phone"></i> Spam Check</a></li>
         <li data-page="settings" @php echo !empty($page['menuitem']) && $page['menuitem']== 'settings' ? 'class="active"' : ''; @endphp><a href="{{ action('AdminController@settings') }}"><i class="fas fa-user-edit"></i> Edit Myself</a></li>
         <li data-page="notifications" @php echo !empty($page['menuitem']) && $page['menuitem']== 'notifications' ? 'class="active"' : ''; @endphp><a href="{{ action('FeatureMessageController@index') }}"><i class="fas fa-bell"></i> Notifications</a></li>
     @endcan

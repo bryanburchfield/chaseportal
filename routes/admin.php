@@ -25,5 +25,6 @@ Route::prefix('admin')->group(function () {
         Route::post('save_message', 'FeatureMessageController@saveMessage');
         Route::post('publish_notification', 'FeatureMessageController@publishMessage');
         Route::post('delete_msg', 'FeatureMessageController@deleteMsg');
+        Route::get('spam_check', 'SpamCheckController@index');
     });
 });
