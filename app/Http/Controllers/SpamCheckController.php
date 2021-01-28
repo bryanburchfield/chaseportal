@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SpamImportNoHeaders;
+use App\Imports\SpamImportWithHeaders;
 use App\Models\SpamCheckBatch;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
