@@ -2427,9 +2427,12 @@ a.toggle_instruc {
 }
 
 .webhook_fields{
+
+    h3{text-align: center;}
+
     .field{
         input.form-control, select{background: #eee !important;height: 40px;};
-        
+
         &:nth-child(even){background: lighten(#EDF3F5, 1%);}
 
         border-bottom: 1px solid darken(#E1E9EC, 2%);

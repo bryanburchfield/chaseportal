@@ -2915,6 +2915,10 @@ a.toggle_instruc {
   top: 3px;
 }
 
+.webhook_fields h3 {
+  text-align: center;
+}
+
 .webhook_fields .field {
   border-bottom: 1px solid #dbe4e8;
   padding-top: 15px;

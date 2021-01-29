@@ -139,16 +139,20 @@ select:required:invalid {
 							<div class="col-sm-12 webhook_fields">
 								<div class="card">
 									<div class="row">
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Labels</h3>
 										</div>
 
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Names</h3>
 										</div>
 
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Values</h3>
+										</div>
+
+										<div class="col-sm-3">
+											<h3 class="mb30">Field Type</h3>
 										</div>
 									</div>
 
@@ -158,16 +162,28 @@ select:required:invalid {
 												<div class="col-sm-1">
 													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 												</div>
-												<div class="col-sm-3">
+												<div class="col-sm-2">
 													<p class="field_label_fb" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
-												<div class="col-sm-4">
+												<div class="col-sm-3">
 													<p class="field_name_fb" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
-												<div class="col-sm-4">
+												<div class="col-sm-3">
 													<p class="field_value_fb" data-field=""></p>
+												</div>
+
+												<div class="col-sm-3">
+													<div class="form-group">
+														<select name="field_type" class="form-control field_type">
+															<option value="input" selected>Input</option>
+															<option value="textarea">Textarea</option>
+															<option value="select">Select</option>
+															<option value="radio">Radio</option>
+															<option value="checkboxes">Checkbox</option>
+														</select>
+													</div>
 												</div>
 											</div>
 										@endforeach
@@ -407,6 +423,23 @@ select:required:invalid {
 	</div>
 	@include('shared.notifications_bar')
 </div>
+
+<!-- Field Type Modal -->
+<div class="modal fade" id="filter_type_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Filter Type</h4>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>;
 
 @include('shared.reportmodal')
 @endsection

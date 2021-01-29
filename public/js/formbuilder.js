@@ -9,6 +9,7 @@ var FORMBUILDER = {
 		$('body').on('dblclick', '.field_label_fb', this.edit_field_label);
 		$('body').on('dblclick', '.field_name_fb', this.edit_field_label);
 		$('.download_file').on('click', this.download_file);
+		$('body').on('change', '.field_type', this.open_field_modal);
 		this.move_notes_row(this.move_notes_row);
 	},
 
@@ -76,7 +77,7 @@ var FORMBUILDER = {
 				if (response.fields.length) {
 					var new_field_row = '';
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -241,6 +242,12 @@ var FORMBUILDER = {
 
 	get_html:function(){
 		return $('.form_code').text();
+	},
+
+	open_field_modal:function(){
+		$('#filter_type_modal').modal('show');
+		var field_type = $(this).val();
+		console.log(field_type);
 	}
 }
 

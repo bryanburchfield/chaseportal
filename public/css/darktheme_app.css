@@ -3142,6 +3142,10 @@ a.toggle_instruc {
   top: 3px;
 }
 
+.webhook_fields h3 {
+  text-align: center;
+}
+
 .webhook_fields .field {
   border-bottom: 1px solid #1b293c;
   padding-top: 15px;
