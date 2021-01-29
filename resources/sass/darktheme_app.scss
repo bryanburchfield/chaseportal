@@ -1187,7 +1187,7 @@ p.descrip.top14 {
 .reports_table.table{width: 100%;}
 
 .report_download {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .report_download h3, .reset_sorting h3 {
@@ -1195,12 +1195,14 @@ p.descrip.top14 {
     color: $green;
     font-size: 18px;
     margin-top: 20px;
+    text-align: left;
 }
 
 a.report_dl_option {
     margin-right: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
     display: inline-block;
+    float: left;
 }
 
 a.report_dl_option:hover {
@@ -1281,11 +1283,11 @@ h3.heading {
 }
 
 .table-responsive {
-    overflow-x: inherit;
+    // overflow-x: inherit;
 }
 
 .table-responsive.report_table, .table-responsive.cdr_table {
-    overflow-x: scroll;
+    // overflow-x: scroll;
     display: none;
 }
 
@@ -3145,6 +3147,24 @@ a.add_subcampaign{
 
 .DTFC_LeftHeadWrapper table thead tr th, .DTFC_RightHeadWrapper table thead tr th{border:none !important;}
 .DTFC_LeftBodyWrapper table thead tr, .DTFC_RightBodyWrapper table thead tr{display: none !important;}
+
+.dataTables_wrapper .dataTables_paginate{
+    float:none !important;
+    text-align: left !important;
+}
+
+.dataTables_filter input, select#numb_pinned_cols{
+    background: #1d2b40 !important;
+    border:1px solid lighten(#1d2b40, 10%) !important;
+    color:#ddd;
+}
+
+#DataTables_Table_0_length {
+    position: relative;
+    top:30px;
+}
+
+.modal.fade .modal-dialog{border:1px solid darken(#1d2b40, 10%) !important;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

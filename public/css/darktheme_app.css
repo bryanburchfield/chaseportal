@@ -1527,7 +1527,7 @@ p.descrip.top14 {
 }
 
 .report_download {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .report_download h3,
@@ -1536,12 +1536,14 @@ p.descrip.top14 {
   color: #33A09B;
   font-size: 18px;
   margin-top: 20px;
+  text-align: left;
 }
 
 a.report_dl_option {
   margin-right: 10px;
-  margin-top: 30px;
+  margin-top: 20px;
   display: inline-block;
+  float: left;
 }
 
 a.report_dl_option:hover {
@@ -1636,13 +1638,8 @@ h3.heading {
   padding: 5px 0 !important;
 }
 
-.table-responsive {
-  overflow-x: inherit;
-}
-
 .table-responsive.report_table,
 .table-responsive.cdr_table {
-  overflow-x: scroll;
   display: none;
 }
 
@@ -3838,6 +3835,27 @@ a.add_subcampaign:focus {
 .DTFC_LeftBodyWrapper table thead tr,
 .DTFC_RightBodyWrapper table thead tr {
   display: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  float: none !important;
+  text-align: left !important;
+}
+
+.dataTables_filter input,
+select#numb_pinned_cols {
+  background: #1d2b40 !important;
+  border: 1px solid #2d4363 !important;
+  color: #ddd;
+}
+
+#DataTables_Table_0_length {
+  position: relative;
+  top: 30px;
+}
+
+.modal.fade .modal-dialog {
+  border: 1px solid #0d131d !important;
 }
 
 /* ---------------------------------------------------

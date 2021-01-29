@@ -1423,7 +1423,7 @@ p.descrip.top14 {
 }
 
 .report_download {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .report_download h3,
@@ -1432,12 +1432,14 @@ p.descrip.top14 {
   color: #33A09B;
   font-size: 18px;
   margin-top: 20px;
+  text-align: left;
 }
 
 a.report_dl_option {
   margin-right: 10px;
-  margin-top: 30px;
+  margin-top: 20px;
   display: inline-block;
+  float: left;
 }
 
 a.report_dl_option:hover {
@@ -2378,10 +2380,6 @@ a[aria-expanded="true"] {
 
 .cdr_results_table {
   margin-top: 20px;
-}
-
-div#cdr_dataTable_paginate {
-  float: left;
 }
 
 h4.panel-title a {
@@ -3591,6 +3589,20 @@ a.add_subcampaign i {
 .DTFC_LeftBodyWrapper table thead tr,
 .DTFC_RightBodyWrapper table thead tr {
   display: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  float: none !important;
+  text-align: left !important;
+}
+
+.dataTables_filter input {
+  background: #fff !important;
+}
+
+#DataTables_Table_0_length {
+  position: relative;
+  top: 30px;
 }
 
 /* ---------------------------------------------------

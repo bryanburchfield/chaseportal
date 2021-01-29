@@ -50,18 +50,18 @@ var Master = {
         Master.ths='';
 
         //// demo table - /dashboards/pinned_datatable
-        var pinned_datatable = $('#pin_col_dataTable').DataTable({
-            destroy: true,
-            scrollY:        500,
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         true,
-            responsive: true,
-            fixedColumns:   {
-                leftColumns:  2,
-                rightColumns: 0
-            }
-        });
+        // var pinned_datatable = $('#pin_col_dataTable').DataTable({
+        //     destroy: true,
+        //     scrollY:        500,
+        //     scrollX:        true,
+        //     scrollCollapse: true,
+        //     paging:         true,
+        //     responsive: true,
+        //     fixedColumns:   {
+        //         leftColumns:  2,
+        //         rightColumns: 0
+        //     }
+        // });
         //// demo table - /dashboards/pinned_datatable
 
         if($('.theme').val() == 'dark'){
@@ -1360,70 +1360,83 @@ var Master = {
             },
 
             success: function (response) {
-
+                console.log(response);
                 $('.preloader').fadeOut('slow');
 
                 // hide / empty everything and run report
                 $('.report_errors').empty().hide();
 
-                if (response.results.length) {
-                    $('.pinned_table.table-responsive').show();
-
-                    var _data = response.results;
-                    var array_keys = [], array_values = [];
-                    for (i = 0; i < _data.length; i++) {
-                        array_keys = [];
-                        array_values = [];
-                        for (var key in _data[i]) {
-                            array_keys.push(key);
-                            array_values.push(_data[i][key]);
-                        }
-                        Master.trs.push(array_values);
-                    }
-
-                    $('.report_pinned_datatable').DataTable().destroy();
-
-                    //empty thead and append th values from ajax response//////////
-                    Master.ths = "";
-                    for (var i = 0; i < array_keys.length; i++) {
-                        Master.ths += "<th>" + array_keys[i] + "</th>";
-                    }
-
-                    // empty and append thead data
-                    $('.report_pinned_datatable thead tr').empty();
-                    $('.report_pinned_datatable thead tr').append(Master.ths);
-
-                    var report_datatable = $('.report_pinned_datatable').DataTable({
-                        destroy: true,
-                        scrollY: 500,
-                        scrollX: true,
-                        scrollCollapse: true,
-                        paging: true,
-                        ordering: true,
-                        autoWidth: false,
-                        columnDefs: [{
-                            defaultContent: "-",
-                            targets: "_all"
-                        }],
-                        responsive: true,
-                        data: Master.trs, // add arrays of arrays for table rows
-                        fixedColumns:   {
-                            leftColumns: Master.left_cols,
-                            rightColumns:Master.right_cols
-                        }
-                    });
-
-                    report_datatable.draw();
+                if ( $.fn.DataTable.isDataTable($('#report_pinned_datatable')) ) {
+                    $('#report_pinned_datatable').dataTable().fnDestroy();
                 }else{
-                    // check for errors
-                    for (var i = 0; i < response.errors.length; i++) {
-                        $('.report_errors').show();
-                        $('.report_errors').append(response.errors[i] + '<br>');
-                    }
-                    $('.table-responsive.report_table').hide();
-                    $('alert.hidetilloaded').hide();
+                    if (response.results.length) {
+                        $('.pinned_table.table-responsive, .report_download').show();
 
-                    return false;
+                        var _data = response.results;
+                        var array_keys = [], array_values = [];
+                        for (i = 0; i < _data.length; i++) {
+                            array_keys = [];
+                            array_values = [];
+                            for (var key in _data[i]) {
+                                array_keys.push(key);
+                                array_values.push(_data[i][key]);
+                            }
+                            Master.trs.push(array_values);
+                        }
+
+                        //empty thead and append th values from ajax response//////////
+                        Master.ths = "";
+                        for (var i = 0; i < array_keys.length; i++) {
+                            Master.ths += "<th>" + array_keys[i] + "</th>";
+                        }
+
+                        // empty and append thead data
+                        $('#report_pinned_datatable thead tr').empty();
+                        $('#report_pinned_datatable thead tr').append(Master.ths);
+
+
+                        $('#report_pinned_datatable').DataTable({
+                            destroy: true,
+                            scrollY: 500,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            paging: true,
+                            ordering: true,
+                            autoWidth: false,
+                            columnDefs: [{
+                                defaultContent: "-",
+                                targets: "_all"
+                            }],
+                            buttons: [
+                                'excelHtml5',
+                                'csvHtml5',
+                                {
+                                    extend: 'pdfHtml5',
+                                    orientation: 'landscape',
+                                    pageSize: 'LEGAL'
+                                }
+                            ],
+                            dom:"<'row'<'col-sm-5'p><'col-sm-3' l> <'col-sm-6' f>>" +
+                                "<'row'<'col-sm-12'tr>>" +
+                                "<'row'<'col-sm-4'p><'col-sm-6'><'col-sm-2' i>>",
+                            responsive: true,
+                            data: Master.trs, // add arrays of arrays for table rows
+                            fixedColumns:   {
+                                leftColumns: Master.left_cols,
+                                rightColumns:Master.right_cols
+                            }
+                        });
+                    }else{
+                        // check for errors
+                        for (var i = 0; i < response.errors.length; i++) {
+                            $('.report_errors').show();
+                            $('.report_errors').append(response.errors[i] + '<br>');
+                        }
+                        $('.table-responsive.report_table').hide();
+                        $('alert.hidetilloaded').hide();
+
+                        return false;
+                    }
                 }
 
                 if (response.params.report == 'calls_per_hour') {
@@ -1503,13 +1516,17 @@ var Master = {
             Master.left_cols=0;
         }
 
-        $('.report_pinned_datatable').DataTable().destroy();
+        console.log('draw func ran');
+
+        if ( $.fn.DataTable.isDataTable($('#report_pinned_datatable')) ) {
+            $('#report_pinned_datatable').dataTable().fnDestroy();
+        }
 
         // empty and append thead data
-        $('.report_pinned_datatable thead tr').empty();
-        $('.report_pinned_datatable thead tr').append(Master.ths);
+        $('#report_pinned_datatable thead tr').empty();
+        $('#report_pinned_datatable thead tr').append(Master.ths);
 
-        var report_datatable = $('.report_pinned_datatable').DataTable({
+        $('#report_pinned_datatable').DataTable({
             destroy: true,
             scrollY: 500,
             scrollX: true,
@@ -1521,6 +1538,18 @@ var Master = {
                 defaultContent: "-",
                 targets: "_all"
             }],
+            buttons: [
+                'excelHtml5',
+                'csvHtml5',
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                }
+            ],
+            dom:"<'row'<'col-sm-5'p><'col-sm-3' l> <'col-sm-6' f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-4'p><'col-sm-6'><'col-sm-2' i>>",
             responsive: true,
             data: Master.trs, // add arrays of arrays for table rows
             fixedColumns:   {

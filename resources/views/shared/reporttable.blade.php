@@ -1,4 +1,4 @@
-    <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable" >
+    <table class="table table-hover reports_table table-striped scrollTable report_pinned_datatable" id="report_pinned_datatable">
         <thead>
             <tr>
                 @if(!empty($params['columns']))
@@ -18,7 +18,7 @@
         </tbody>
     </table>
 
-    <div class="col-sm-3 pl0">
+    <div class="col-sm-3 pl0 pb20">
         <div class="form-group">
               <label>Select # of Columns to Freeze</label>
               <select name="numb_pinned_cols" id="numb_pinned_cols" class="form-control numb_pinned_cols">
