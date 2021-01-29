@@ -12,16 +12,16 @@ use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Twilio\Rest\Client as Twilio;
 
 class CallerIdService
 {
     use SqlServerTraits;
     use TimeTraits;
+
+    private $spamCheckService;
 
     private $startdate;
     private $enddate;
@@ -43,47 +43,17 @@ class CallerIdService
     // Don't swap if flagged an connect pct greater than
     private $dont_swap_connectpct = 11.0;
 
-    // For Twilio  (icehook)
-    private $twilio;
-    private $icehookScore = 80;          // min score to be considered spam
-
-    // For Truespam 
-    private $truespam;
-    private $truespamScore = 40;          // min score to be considered spam
-    private $truespamRequests = [];       // rate limiting -- 600 per minute
-    private $truespamLimitRequests = 600;
-    private $truespamLimitSeconds = 60;
-
-    // For stamping db
-    private $run_date;
+    public static function execute()
+    {
+        $caller_id_service = new CallerIdService();
+        $caller_id_service->runReport();
+    }
 
     private function initialize()
     {
         $this->run_date = now();
 
-        $this->twilio = new Twilio(
-            config('twilio.spam_sid'),
-            config('twilio.spam_token')
-        );
-
-        $this->truespam = new Client([
-            'base_uri' => 'https://chasedata-csp-useast1.truecnam.net',
-            // 'base_uri' => 'https://chasedata-csp-uswest2.truecnam.net',   // alternate
-            'defaults' => [
-                'query' => [
-                    'username' => config('truespam.key'),
-                    'password' => config('truespam.password'),
-                    'resp_type' => 'extended',
-                    'resp_format' => 'json',
-                ]
-            ]
-        ]);
-    }
-
-    public static function execute()
-    {
-        $caller_id_service = new CallerIdService();
-        $caller_id_service->runReport();
+        $this->spamCheckService = new SpamCheckService;
     }
 
     public function runReport()
@@ -495,7 +465,9 @@ class CallerIdService
 
             $phone = $this->formatPhone($rec['phone']);
 
-            $flags = $this->checkNumber($phone);
+            echo "check $phone\n";
+
+            $flags = $this->spamCheckService->checkNumber($phone);
             $flagged = !empty($flags);
 
             // update all matching numbers
@@ -515,119 +487,6 @@ class CallerIdService
                     'flagged' => $flagged
                 ]);
         }
-    }
-
-    private function checkNumber($phone, $check_all = false)
-    {
-        echo "Check $phone\n";
-
-        $flags = null;
-
-        // check from cheapest to most expensive
-
-        if ($this->checkTruespam($phone)) {
-            if (!$check_all) {
-                return 'Truespam';
-            }
-            $flags .= ',Truespam';
-        }
-
-        if ($this->checkNomorobo($phone)) {
-            if (!$check_all) {
-                return 'Nomorobo';
-            }
-            $flags .= ',Nomorobo';
-        }
-
-        if ($this->checkIcehook($phone)) {
-            if (!$check_all) {
-                return 'Icehook';
-            }
-            $flags .= ',Icehook';
-        }
-
-        if (!empty($flags)) {
-            $flags = substr($flags, 1);
-        }
-
-        return $flags;
-    }
-
-    private function checkTruespam($phone)
-    {
-        if (!$this->waitToSend($this->truespamRequests, $this->truespamLimitRequests, $this->truespamLimitSeconds)) {
-            return false;
-        }
-
-        $query = ['query' => ['calling_number' => $phone]];
-
-        try {
-            $response = $this->truespam->get(
-                '/api/v1',
-                array_merge_recursive($query, $this->truespam->getConfig('defaults'))
-            );
-        } catch (Exception $e) {
-            Log::error('TrueSpam error: ' . $e->getMessage());
-            return false;
-        }
-
-        // check response
-        $body = $this->objectToArray(json_decode($response->getBody()->getContents()));
-
-        if ((int)Arr::get($body, 'err') !== 0) {
-            Log::error('Truspam error: ' . Arr::get($body, 'error_msg'));
-            return false;
-        }
-
-        $spamScore = (int)Arr::get($body, 'spam_score');
-
-        return $spamScore >= $this->truespamScore;
-    }
-
-    private function checkNomorobo($phone)
-    {
-        try {
-            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['nomorobo_spamscore']]);
-        } catch (Exception $e) {
-            Log::error('Twilio lookup failed: ' . $e->getMessage());
-            return false;
-        }
-
-        $result = $this->objectToArray($result->addOns);
-
-        $nomoroboData = Arr::get($result, 'results.nomorobo_spamscore');
-
-        if (Arr::get($nomoroboData, 'status') == 'failed') {
-            Log::error('Nomorobo error: ' . Arr::get($nomoroboData, 'message'));
-            return false;
-        }
-
-        $spamScore = (int)Arr::get($nomoroboData, 'result.score');
-
-        return $spamScore >= 1;
-    }
-
-    private function checkIcehook($phone)
-    {
-        try {
-            $result = $this->twilio->lookups->v1->phoneNumbers('+' . $phone)->fetch(['addOns' => ['icehook_scout']]);
-        } catch (Exception $e) {
-            Log::error('Twilio lookup failed: ' . $e->getMessage());
-            return false;
-        }
-
-        $result = $this->objectToArray($result->addOns);
-
-        $icehookData = Arr::get($result, 'results.icehook_scout');
-
-        if (Arr::get($icehookData, 'status') == 'failed') {
-            Log::error('Icehook error: ' . Arr::get($icehookData, 'message'));
-            return false;
-        }
-
-        $spamScore = (int)Arr::get($icehookData, 'result.risk_level');
-
-        return $spamScore >= $this->icehookScore;
     }
 
     private function swapNumbers()
@@ -778,7 +637,7 @@ class CallerIdService
 
             // Spam check them
             $replacements->transform(function ($item, $key) {
-                $item->new_flags = $this->checkNumber($item->replaced_by, true);
+                $item->new_flags = $this->spamCheckService->checkNumber($item->replaced_by);
                 return $item;
             });
 
@@ -843,44 +702,5 @@ class CallerIdService
                 return $item;
             });
         }
-    }
-
-    private function waitToSend($apiLog, $limitRequests, $limitSeconds)
-    {
-        // Check that we're not up against the API rate limit
-        $i = 0;
-        while (!$this->readyToSend($apiLog, $limitRequests, $limitSeconds)) {
-            // check for infinite loop
-            if ($i++ > ($limitSeconds + 1)) {
-                return false;
-            }
-            sleep(1);
-        }
-
-        return true;
-    }
-
-    private function readyToSend($apiLog, $limitRequests, $limitSeconds)
-    {
-        // count recent requests
-        $count = 0;
-        foreach ($apiLog as $time) {
-            if ($time >= (time() - $limitSeconds)) {
-                $count++;
-            }
-        }
-
-        if ($count >= $limitRequests) {
-            return false;
-        }
-
-        // Ok to send!
-        $apiLog[] = time();
-        return true;
-    }
-
-    private function objectToArray($obj)
-    {
-        return @json_decode(json_encode($obj), true);
     }
 }

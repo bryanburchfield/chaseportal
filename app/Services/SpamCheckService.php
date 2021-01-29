@@ -49,6 +49,7 @@ class SpamCheckService
     public function __destruct()
     {
         // Delete old api transaction records to keep the table slim
+
         // Truespam
         try {
             $api = Api::where('name', 'Truespam')->first();
@@ -107,16 +108,13 @@ class SpamCheckService
         }
 
         if (!empty($flags)) {
-            $flags = substr(
-                $flags,
-                1
-            );
+            $flags = substr($flags, 1);
         }
 
         return $flags;
     }
 
-    private  function formatPhone($phone)
+    private function formatPhone($phone)
     {
         // Strip non-digits
         $phone = preg_replace("/[^0-9]/", '', $phone);
