@@ -27,6 +27,7 @@
                         'campaign_usage' =>  __('reports.campaign_usage'),
                         'inbound_summary' =>  __('reports.inbound_summary'),
                         'lead_inventory' =>  __('reports.lead_inventory'),
+                        'lead_npa' =>  __('reports.lead_npa'),
                         'lead_inventory_sub' =>  __('reports.lead_inventory_sub'),
                         'missed_calls' =>   __('reports.missed_calls'),
                         'production_report' =>  __('reports.production_report'),
