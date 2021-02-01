@@ -40,7 +40,7 @@ class CallerIdService
     private $swap_dials = 1000;
     private $swap_connectpct = 10.8;
 
-    // Don't swap if flagged an connect pct greater than
+    // Don't swap if flagged and connect pct greater than
     private $dont_swap_connectpct = 11.0;
 
     public static function execute()
@@ -53,7 +53,7 @@ class CallerIdService
     {
         $this->run_date = now();
 
-        $this->spamCheckService = new SpamCheckService;
+        $this->spamCheckService = new SpamCheckService();
     }
 
     public function runReport()
@@ -91,6 +91,9 @@ class CallerIdService
         echo "Creating report\n";
         Log::info('Creating report');
         $this->createReport();
+
+        echo "Finished\n";
+        Log::info('Finished');
     }
 
     private function createReport()
