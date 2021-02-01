@@ -158,7 +158,7 @@ select:required:invalid {
 
 									<div class="all-slides">
 										@foreach($default_lead_fields as $val)
-											<div class="field slide default">
+											<div class="field slide default" data-id="{{ $loop->index + 1 }}">
 												<div class="col-sm-1">
 													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 												</div>
@@ -181,7 +181,7 @@ select:required:invalid {
 															<option value="textarea">Textarea</option>
 															<option value="select">Select</option>
 															<option value="radio">Radio</option>
-															<option value="checkboxes">Checkbox</option>
+															<option value="checkbox">Checkbox</option>
 														</select>
 													</div>
 												</div>
@@ -435,7 +435,30 @@ select:required:invalid {
             </div>
 
             <div class="modal-body">
+            	<div data-type="select" class="select_options hidetilloaded field_type_options">
+            		<div class="input-group fc_style mb20">
+            			<label>Add Select Option</label>
+            		    <input type="text" class="form-control select_option" placeholder="Add Option" name="add_option">
+            		    <div class="input-group-btn">
+            		    	<button class="btn btn-default add_select_option" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+            		    </div>
+            		    <div class="input-group-btn">
+            		    	<button class="btn btn-default remove_select_option" type="submit"><i class="glyphicon glyphicon-minus"></i></button>
+            		    </div>
+            		</div>
 
+            		<a href="#" class="btn btn-primary create_select_menu">Create Select Menu</a>
+            	</div>
+
+            	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
+            		<h5>Radio</h5>
+            	</div>
+
+            	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
+            		<h5>Checkbox</h5>
+            	</div>
+            	
+            	<div class="alert alert-danger hidetilloaded"></div>
             </div>
         </div>
     </div>

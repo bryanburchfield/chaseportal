@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
 .fc_style, .tools{
     .form-control, button.multiselect, select.form-control, textarea.form-control{
         @include form_control_style();
-    }   
+    }
 }
 
 .container-fluid.bg.dashboard.p20 {
@@ -2990,6 +2990,43 @@ a.add_subcampaign{
     max-height: 325px;
     overflow-y: scroll;
 }
+
+
+div.modal-body{
+    div.input-group.fc_style{
+
+        input.form-control{
+            @include form_control_style();
+        }
+
+        .input-group-btn{
+
+            position: relative;
+            top:9px;
+
+            button.btn{height: 40px;}
+
+            .btn.add_select_option{
+                background: $green;
+                color:#fff;
+
+                &:hover{
+                    background: darken($green,10%);
+                }
+            }
+
+            .btn.remove_select_option{
+                background: #d9534f;
+                color:#fff;
+
+                &:hover{
+                    background: darken(#d9534f,10%);
+                }
+            }
+        }
+    }
+}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES
