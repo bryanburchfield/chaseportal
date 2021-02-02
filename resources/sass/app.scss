@@ -2992,39 +2992,46 @@ a.add_subcampaign{
 }
 
 
-div.modal-body{
-    div.input-group.fc_style{
+#filter_type_modal{
+    div.modal-body{
+        div.input-group.fc_style{
 
-        input.form-control{
-            @include form_control_style();
+            input.form-control{
+                @include form_control_style();
+            }
+
+            .input-group-btn{
+
+                position: relative;
+                top:9px;
+
+                button.btn{height: 40px;}
+
+                .btn.add_select_option{
+                    background: $green;
+                    color:#fff;
+
+                    &:hover{
+                        background: darken($green,10%);
+                    }
+                }
+
+                .btn.remove_select_option{
+                    background: #d9534f;
+                    color:#fff;
+
+                    &:hover{
+                        background: darken(#d9534f,10%);
+                    }
+                }
+            }
         }
 
-        .input-group-btn{
-
-            position: relative;
-            top:9px;
-
-            button.btn{height: 40px;}
-
-            .btn.add_select_option{
-                background: $green;
-                color:#fff;
-
-                &:hover{
-                    background: darken($green,10%);
-                }
-            }
-
-            .btn.remove_select_option{
-                background: #d9534f;
-                color:#fff;
-
-                &:hover{
-                    background: darken(#d9534f,10%);
-                }
-            }
+        h3{
+            margin-bottom: 20px !important;
         }
     }
+    
 }
 
 

@@ -435,7 +435,9 @@ select:required:invalid {
             </div>
 
             <div class="modal-body">
+            	<!-- Select menu builder -->
             	<div data-type="select" class="select_options hidetilloaded field_type_options">
+            		<h3 class="mt0 mb20">Build Select Menu</h3>
             		<div class="input-group fc_style mb20">
             			<label>Add Select Option</label>
             		    <input type="text" class="form-control select_option" placeholder="Add Option" name="add_option">
@@ -449,14 +451,19 @@ select:required:invalid {
 
             		<a href="#" class="btn btn-primary create_select_menu">Create Select Menu</a>
             	</div>
+            	<!-- Select menu builder -->
 
+            	<!-- Radio menu builder -->
             	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
-            		<h5>Radio</h5>
+            		<h3 class="mt0 mb20">Build Radio Input Group</h3>
             	</div>
+            	<!-- Radio menu builder -->
 
+            	<!-- Checkbox menu builder -->
             	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
-            		<h5>Checkbox</h5>
+            		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
             	</div>
+            	<!-- Checkbox menu builder -->
             	
             	<div class="alert alert-danger hidetilloaded"></div>
             </div>
