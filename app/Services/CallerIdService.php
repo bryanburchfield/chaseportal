@@ -6,6 +6,7 @@ use App\Mail\CallerIdMail;
 use App\Models\AreaCode;
 use App\Models\DailyPhoneFlag;
 use App\Models\Dialer;
+use App\Models\OwnedDid;
 use App\Models\PhoneFlag;
 use App\Models\PhoneReswap;
 use App\Traits\SqlServerTraits;
@@ -22,6 +23,8 @@ class CallerIdService
     use TimeTraits;
 
     private $spamCheckService;
+
+    private $run_date;
 
     private $startdate;
     private $enddate;
@@ -53,6 +56,10 @@ class CallerIdService
     {
         $this->run_date = now();
 
+        $this->enddate = Carbon::parse('midnight');
+        $this->yesterday = $this->enddate->copy()->subDay(1);
+        $this->maxcount = 0;
+
         $this->spamCheckService = new SpamCheckService();
     }
 
@@ -62,9 +69,9 @@ class CallerIdService
 
         $this->initialize();
 
-        $this->enddate = Carbon::parse('midnight');
-        $this->yesterday = $this->enddate->copy()->subDay(1);
-        $this->maxcount = 0;
+        echo "Saving owned counts\n";
+        Log::info('Saving owned counts');
+        $this->saveOwnedCounts();
 
         echo "Pulling 1 day report\n";
         Log::info('Pulling 1 day report');
@@ -85,7 +92,7 @@ class CallerIdService
         $this->swapNumbers();
 
         echo "Check and re-swap numbers\n";
-        Log::info('Swapping Numbers');
+        Log::info('Check and Re-swap Numbers');
         $this->checkSwapped();
 
         echo "Creating report\n";
@@ -94,6 +101,47 @@ class CallerIdService
 
         echo "Finished\n";
         Log::info('Finished');
+    }
+
+    private function saveOwnedCounts()
+    {
+        // Make list of groups to ignore
+        $ignoreGroups = implode(',', $this->ignoreGroups);
+
+        $sql = "SET NOCOUNT ON;
+        SELECT GroupId, GroupName, SUM(OwnedDidCount) AS OwnedDidCount FROM (";
+
+        $union = '';
+        foreach (Dialer::all() as $i => $dialer) {
+
+            $sql .= " $union SELECT I.GroupId, G.GroupName, COUNT (DISTINCT I.InboundSource) AS OwnedDidCount 
+                FROM [" . $dialer->reporting_db . "].[dbo].[InboundSources] I
+                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[Groups] G ON G.GroupId = I.GroupId AND G.IsActive = 1
+                WHERE I.GroupId NOT IN ($ignoreGroups)
+                GROUP BY I.GroupId, G.GroupName";
+
+            $union = 'UNION';
+        }
+
+        $sql .= ") tmp
+        GROUP BY GroupId, GroupName";
+
+        $results = $this->runSql($sql);
+
+        if (count($results)) {
+            foreach ($results as $rec) {
+                try {
+                    OwnedDid::create([
+                        'run_date' => $this->run_date,
+                        'group_id' => $rec['GroupId'],
+                        'group_name' => $rec['GroupName'],
+                        'owned_did_count' => $rec['OwnedDidCount'],
+                    ]);
+                } catch (Exception $e) {
+                    Log::error('Could not create OwnedDid: ' . $e->getMessage());
+                }
+            }
+        }
     }
 
     private function createReport()
@@ -315,6 +363,7 @@ class CallerIdService
                 FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
                 INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] S on S.InboundSource = O.phone
                 WHERE O.Active = 1
+                AND O.GroupId NOT IN ($ignoreGroups)
                 GROUP BY Phone";
 
             $union = 'UNION';
