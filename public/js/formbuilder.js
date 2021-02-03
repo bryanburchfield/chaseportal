@@ -1,6 +1,7 @@
 var FORMBUILDER = {
 
 	current_row:0,
+	element_type:'',
 
 	init:function(){
 		$('.checkall_inputs').on('click', this.checkall_inputs);
@@ -262,6 +263,7 @@ var FORMBUILDER = {
 		$('#filter_type_modal').find('.field_type_options').hide();
 		var field_type = $(this).val();
 		if(field_type !== 'input'){
+			FORMBUILDER.element_type=field_type;
 			$('#filter_type_modal').modal('show');
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
@@ -317,9 +319,11 @@ var FORMBUILDER = {
 
 		if(valid){
 			var opts = [];
-			$('.select_option').each(function(){
+			$('div[data-type="' + FORMBUILDER.element_type + '"]').find('input.options').each(function(){
 				opts.push($(this).val());
 			})
+
+			console.log(opts);
 
 			$('#filter_type_modal').modal('hide');
 		}else{
