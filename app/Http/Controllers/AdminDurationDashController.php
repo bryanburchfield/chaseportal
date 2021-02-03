@@ -150,6 +150,7 @@ class AdminDurationDashController extends Controller
             $ret_reps[$i]['Seconds'] = $rec['Seconds'];
             $i++;
         }
+
         $reps = $ret_reps;
 
         return ['call_volume' => [
@@ -184,7 +185,7 @@ class AdminDurationDashController extends Controller
             'todate' => $endDate,
         ];
 
-        $sql = "SELECT CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
+        $sql = "SELECT CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date, Campaign, Rep, CallStatus, COUNT(*) cnt, SUM(Duration) secs
             FROM DialingResults DR
             WHERE GroupId = :groupid
             AND CallDate >= :fromdate
@@ -196,7 +197,7 @@ class AdminDurationDashController extends Controller
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
 
-        $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, CallStatus";
+        $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, Rep, CallStatus";
 
         return $this->runSql($sql, $bind);
     }
