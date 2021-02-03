@@ -30,7 +30,11 @@ Route::prefix('admin')->group(function () {
         Route::prefix('spam_check')->group(function () {
             Route::get('/', 'SpamCheckController@index');
             Route::get('/upload', 'SpamCheckController@uploadIndex');
+            Route::post('/', 'SpamCheckController@submitNumber');
             Route::post('/upload', 'SpamCheckController@uploadFile');
+            Route::get('/file/{id}', 'SpamCheckController@showRecords');
+            Route::get('/errors/{id}', 'SpamCheckController@showErrors');
+            Route::get('/flags/{id}', 'SpamCheckController@showFlags');
         });
     });
 });

@@ -27,6 +27,21 @@
 
                             <h2 class="bbnone mb20">{{__('tools.spam_check_files')}}</h2>
 
+                            <form method="POST">
+                                @csrf
+                                Check a single number:
+                                <input type="text" name="phone" value="{{old('phone')}}">
+                                <input class="btn btn-primary mb0" type="submit" value="{{__('general.submit')}}" />
+                            </form>
+
+                            @if($errors->any())
+                                <div class="alert alert-danger mt20">
+                                    @foreach ($errors->all() as $error)
+                                        <p>{{ $error }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             <a class="btn btn-primary" href="{{ action('SpamCheckController@uploadIndex') }}">{{__('tools.upload_new_file')}}</a>
 
                             @if (count($files))
@@ -43,6 +58,7 @@
                                                 <th>{{__('tools.uploaded')}}</th>
                                                 <th class="text-center">{{__('tools.records')}}</th>
                                                 <th class="text-center">{{__('tools.errors')}}</th>
+                                                <th class="text-center">{{__('tools.flagged')}}</th>
                                                 <th>{{__('tools.processed')}}</th>
                                             </tr>
                                         </thead>
@@ -59,6 +75,11 @@
 													<td><a class="btn btn-link danger text-center" href="{{ action("SpamCheckController@showErrors", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
 												@else
 													<td class="text-center">{{$file['errors']}}</td>
+                                                @endif
+                                                @if ($file['flags'] > 0)
+													<td><a class="btn btn-link danger text-center" href="{{ action("SpamCheckController@showFlags", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+												@else
+													<td class="text-center">{{$file['flags']}}</td>
 												@endif
                                                 <td>
                                                     @if (empty($file['process_started_at']))

@@ -30,4 +30,10 @@ class SpamCheckBatch extends Model
             ->whereNotNull('succeeded')
             ->where('succeeded', false);
     }
+
+    public function flaggedRecs()
+    {
+        return SpamCheckBatchDetail::where('spam_check_batch_id', $this->id)
+            ->where('flagged', true);
+    }
 }
