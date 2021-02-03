@@ -3003,11 +3003,10 @@ a.add_subcampaign{
             .input-group-btn{
 
                 position: relative;
-                top:9px;
 
                 button.btn{height: 40px;}
 
-                .btn.add_select_option{
+                .btn.add_option{
                     background: $green;
                     color:#fff;
 
@@ -3016,7 +3015,7 @@ a.add_subcampaign{
                     }
                 }
 
-                .btn.remove_select_option{
+                .btn.remove_option{
                     background: #d9534f;
                     color:#fff;
 

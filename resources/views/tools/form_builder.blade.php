@@ -438,16 +438,8 @@ select:required:invalid {
             	<!-- Select menu builder -->
             	<div data-type="select" class="select_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Select Menu</h3>
-            		<div class="input-group fc_style mb20">
-            			<label>Add Select Option</label>
-            		    <input type="text" class="form-control select_option" placeholder="Add Option" name="add_option">
-            		    <div class="input-group-btn">
-            		    	<button class="btn btn-default add_select_option" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
-            		    </div>
-            		    <div class="input-group-btn">
-            		    	<button class="btn btn-default remove_select_option" type="submit"><i class="glyphicon glyphicon-minus"></i></button>
-            		    </div>
-            		</div>
+
+            		@include('tools.shared.form_element_builder')
 
             		<a href="#" class="btn btn-primary create_select_menu">Create Select Menu</a>
             	</div>
@@ -456,12 +448,20 @@ select:required:invalid {
             	<!-- Radio menu builder -->
             	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Radio Input Group</h3>
+
+            		@include('tools.shared.form_element_builder')
+
+            		<a href="#" class="btn btn-primary create_select_menu">Create Radio Group</a>
             	</div>
             	<!-- Radio menu builder -->
 
             	<!-- Checkbox menu builder -->
             	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
+
+            		@include('tools.shared.form_element_builder')
+
+            		<a href="#" class="btn btn-primary create_select_menu">Create Checkbox Group</a>
             	</div>
             	<!-- Checkbox menu builder -->
             	

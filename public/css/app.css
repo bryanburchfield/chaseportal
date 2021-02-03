@@ -3592,28 +3592,27 @@ a.add_subcampaign i {
 
 #filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn {
   position: relative;
-  top: 9px;
 }
 
 #filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn button.btn {
   height: 40px;
 }
 
-#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.add_select_option {
+#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.add_option {
   background: #33A09B;
   color: #fff;
 }
 
-#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.add_select_option:hover {
+#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.add_option:hover {
   background: #277976;
 }
 
-#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.remove_select_option {
+#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.remove_option {
   background: #d9534f;
   color: #fff;
 }
 
-#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.remove_select_option:hover {
+#filter_type_modal div.modal-body div.input-group.fc_style .input-group-btn .btn.remove_option:hover {
   background: #c9302c;
 }
 

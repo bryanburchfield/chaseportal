@@ -1,5 +1,7 @@
 var FORMBUILDER = {
 
+	current_row:0,
+
 	init:function(){
 		$('.checkall_inputs').on('click', this.checkall_inputs);
 		$('.generate_code').on('click', this.generate_code);
@@ -10,8 +12,8 @@ var FORMBUILDER = {
 		$('body').on('dblclick', '.field_name_fb', this.edit_field_label);
 		$('.download_file').on('click', this.download_file);
 		$('body').on('change', '.field_type', this.open_field_modal);
-		$('#filter_type_modal').on('click', '.add_select_option', this.add_select_option);
-		$('#filter_type_modal').on('click', '.remove_select_option', this.remove_select_option);
+		$('#filter_type_modal').on('click', '.add_option', this.add_option);
+		$('#filter_type_modal').on('click', '.remove_option', this.remove_option);
 		$('#filter_type_modal').on('click', '.create_select_menu', this.create_select_menu);
 		this.move_notes_row(this.move_notes_row);
 	},
@@ -251,33 +253,39 @@ var FORMBUILDER = {
 		return $('.form_code').text();
 	},
 
-	open_field_modal:function(){
+	open_field_modal:function(e){
+		e.preventDefault();
+
+		var id = $(this).parent().parent().parent().data('id');
+		FORMBUILDER.current_row = id;
+
 		$('#filter_type_modal').find('.field_type_options').hide();
 		var field_type = $(this).val();
 		if(field_type !== 'input'){
 			$('#filter_type_modal').modal('show');
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();
+			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
 		}
 	},
 
-	add_select_option:function(){
+	add_option:function(){
 
 		$('#filter_type_modal').find('.alert').hide();
 
-		let valid = FORMBUILDER.validate_select_options();
+		let valid = FORMBUILDER.validate_options();
 
 		if(valid){
 			if($(this).is(':last-child')){
-			   $('#filter_type_modal').find('.input-group').last().clone().find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body a.btn');
+			   $('#filter_type_modal .field_type_options.active').find('.input-group').last().clone().find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
 			}else{
 				return false;
 			}
 		}else{
-			$('#filter_type_modal').find('.alert').html('Add a value before adding more fields').show();
+			$('#filter_type_modal').find('.alert').html('Add a name and value before adding another field group').show();
 		}
 	},
 
-	remove_select_option:function(){
+	remove_option:function(){
 
 		$('#filter_type_modal').find('.alert').hide();
 
@@ -289,10 +297,10 @@ var FORMBUILDER = {
 		}
 	},
 
-	validate_select_options:function(){
+	validate_options:function(){
 		let valid=true;
 
-		$('.select_options .input-group input').each(function(){
+		$('.field_type_options.active .input-group input').each(function(){
 			if($(this).val() == ''){
 				valid=false;
 				return false;
@@ -303,9 +311,9 @@ var FORMBUILDER = {
 	},
 
 	create_select_menu:function(){
-
+		console.log(FORMBUILDER.current_row);
 		$('#filter_type_modal').find('.alert').hide();
-		let valid = FORMBUILDER.validate_select_options();
+		let valid = FORMBUILDER.validate_options();
 
 		if(valid){
 			var opts = [];
@@ -330,5 +338,15 @@ $(document).ready(function () {
 
 	$('pre').each(function(i, block) {
 	    hljs.highlightBlock(block);
+	});
+
+	$("#filter_type_modal").on("hidden.bs.modal", function () {
+	    $('#filter_type_modal').find('.input-group').find("input:text").val("").end();
+	    $('.field_type_options.active .input-group').not('.input-group:first').remove();
+	    $('#filter_type_modal .modal-body').find('div').removeClass('active');
+
+	    if($('.field_type').val() !== 'input'){
+	    	$(this).addClass('selected');
+	    }
 	});
 });
