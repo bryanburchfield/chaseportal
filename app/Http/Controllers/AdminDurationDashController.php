@@ -198,12 +198,6 @@ class AdminDurationDashController extends Controller
 
         $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, CallStatus";
 
-        $results = [];
-
-        foreach ($this->yieldSql($sql, $bind) as $rec) {
-            $results[] = $rec;
-        }
-
-        return $results;
+        return $this->runSql($sql, $bind);
     }
 }
