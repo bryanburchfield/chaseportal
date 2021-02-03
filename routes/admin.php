@@ -25,5 +25,12 @@ Route::prefix('admin')->group(function () {
         Route::post('save_message', 'FeatureMessageController@saveMessage');
         Route::post('publish_notification', 'FeatureMessageController@publishMessage');
         Route::post('delete_msg', 'FeatureMessageController@deleteMsg');
+
+        // Spam check
+        Route::prefix('spam_check')->group(function () {
+            Route::get('/', 'SpamCheckController@index');
+            Route::get('/upload', 'SpamCheckController@uploadIndex');
+            Route::post('/upload', 'SpamCheckController@uploadFile');
+        });
     });
 });

@@ -56,7 +56,6 @@ class AdminDurationDashController extends Controller
         $connect_pct = 0;
         $system_pct = 0;
 
-
         // Loop thru results, buuld return vals
         foreach ($results as $rec) {
             $total_calls += $rec['cnt'];
@@ -93,7 +92,6 @@ class AdminDurationDashController extends Controller
             $callstatuses[$rec['CallStatus']]['Count'] += $rec['cnt'];
 
             $date = Carbon::parse($rec['Date'])
-                ->tz($tz)
                 ->isoFormat('MMM DD');
 
             if (!isset($dates[$date])) {
@@ -178,17 +176,19 @@ class AdminDurationDashController extends Controller
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
+        $tz =  Auth::user()->tz;
+
         $bind = [
             'groupid' => Auth::user()->group_id,
             'fromdate' => $startDate,
             'todate' => $endDate,
         ];
 
-        $sql = "SELECT Date, Campaign, Rep, CallStatus, COUNT(*) cnt, SUM(Duration) secs
+        $sql = "SELECT CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
             FROM DialingResults DR
             WHERE GroupId = :groupid
-            AND Date >= :fromdate
-            AND Date < :todate
+            AND CallDate >= :fromdate
+            AND CallDate < :todate
             AND CallType NOT IN (7,8)
             AND CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
 
@@ -196,8 +196,14 @@ class AdminDurationDashController extends Controller
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
 
-        $sql .= " GROUP BY Date, Campaign, Rep, CallStatus";
+        $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, CallStatus";
 
-        return $this->runSql($sql, $bind);
+        $results = [];
+
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+            $results[] = $rec;
+        }
+
+        return $results;
     }
 }

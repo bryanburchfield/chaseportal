@@ -85,6 +85,11 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany('App\Models\ReportPermission');
     }
 
+    public function spamCheckBatches()
+    {
+        return $this->hasMany('App\Models\SpamCheckBatch');
+    }
+
     public function getIanaTzAttribute()
     {
         return $this->windowsToUnixTz($this->tz);

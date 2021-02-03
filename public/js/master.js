@@ -179,25 +179,78 @@ var Master = {
     return_chart_colors_hash:function(reps){
 
         var chart_colors_array=[];
-        var customHash = function(str) {
-            var hash = 0;
-            for(var i = 0; i < str.length; i++) {
-                hash += str.charCodeAt(i);
+
+        // old colorhash.js - keep just in case //////////////////////////////////////
+        // var chart_colors_array=[];
+        // var customHash = function(str) {
+        //     var hash = 0;
+        //     for(var i = 0; i < str.length; i++) {
+        //         hash += str.charCodeAt(i);
+        //     }
+
+        //     return hash;
+        // };
+
+        // var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
+
+        // var new_hash;
+        // var new_rgb;
+        // for (var i=0;i<reps.length;i++) {
+        //     new_hash=colorHash.rgb(reps[i]);
+        //     new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
+        //     chart_colors_array.push(new_rgb);
+        // }
+
+        // return chart_colors_array;
+        // var colorHash = new ColorHash({lightness: [0.35, 0.5, 0.65]});
+
+        // old colorhash.js - keep just in case //////////////////////////////////////
+
+        // new string to color hash w/o colorhash.js
+
+        // desaturate color
+        function ColorLuminance(hex, lum) {
+
+            // validate hex string
+            hex = String(hex).replace(/[^0-9a-f]/gi, '');
+            if (hex.length < 6) {
+                hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+            }
+            lum = lum || 0;
+
+            // convert to decimal and change luminosity
+            var rgb = "#", c, i;
+            for (i = 0; i < 3; i++) {
+                c = parseInt(hex.substr(i*2,2), 16);
+                c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+                rgb += ("00"+c).substr(c.length);
             }
 
-            return hash;
-        };
+            return rgb;
+        }
 
-        var colorHash = new ColorHash({hue: [ {min: 200, max: 255}, {min: 90, max: 205}, {min: 70, max: 150} ]});
+        var stringToColor = function(str) {
+            var hash = 0;
+            for (var i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+
+            var color = '#';
+            for (var i = 0; i < 3; i++) {
+                var value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            if(color=='#000000'){color='#57D897';}
+            return color;
+        }
 
         var new_hash;
         var new_rgb;
         for (var i=0;i<reps.length;i++) {
-            new_hash=colorHash.rgb(reps[i]);
-            new_rgb="rgb("+new_hash[0]+","+new_hash[1]+","+new_hash[2]+")";
-            chart_colors_array.push(new_rgb);
+            new_hash=stringToColor(reps[i]);
+            new_hash=ColorLuminance(new_hash, -0.3);
+            chart_colors_array.push(new_hash);
         }
-
         return chart_colors_array;
     },
 

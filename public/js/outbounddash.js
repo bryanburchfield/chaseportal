@@ -850,7 +850,7 @@ var Dashboard = {
 
                 var response_length = response.top10_rep_dispos.dispositions.length;
                 var chart_colors_array2 = Master.return_chart_colors_hash(response.top10_rep_dispos.dispositions);
-
+                
                 var agent_dispositions_data = {
                     datasets: [{
                         data: response.top10_rep_dispos.counts,
