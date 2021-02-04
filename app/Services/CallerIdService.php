@@ -344,7 +344,12 @@ class CallerIdService
 'Skip',
 'TRANSFERRED',
 'PARKED',
-'Answering Machine'
+'Answering Machine',
+'Ans Mach',
+'ANS MACHINE',
+'Ans. Machine',
+'Answering Machine Detected',
+'AM - Answering Machine'
         ";
 
         // Make list of groups to ignore
