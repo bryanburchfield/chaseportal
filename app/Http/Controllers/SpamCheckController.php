@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\SpamImportNoHeaders;
 use App\Imports\SpamImportWithHeaders;
+use App\Jobs\ProcessSpamCheckFile;
 use App\Models\SpamCheckBatch;
 use App\Models\SpamCheckBatchDetail;
 use App\Services\SpamCheckService;
@@ -18,12 +19,10 @@ class SpamCheckController extends Controller
 {
     public function index()
     {
-        $jsfile[] = '';
         $page['sidenav'] = 'admin';
         $page['menuitem'] = 'spam_check';
         $page['type'] = 'page';
         $data = [
-            'jsfile' => $jsfile,
             'page' => $page,
             'files' => $this->paginateCollection($this->getFiles()),
         ];
@@ -160,12 +159,31 @@ class SpamCheckController extends Controller
 
         $spam_check_batch_detail->save();
 
-        // process batch
-        $this->processBatch($spam_check_batch);
+        // process batch immediately
+        $this->processFile($spam_check_batch, true);
 
         $spam_check_batch->refresh();
 
         return redirect()->action("SpamCheckController@showRecords", ["id" => $spam_check_batch->id]);
+    }
+
+    public function handleAction(Request $request)
+    {
+        list($action, $id) = explode(':', $request->action);
+        $spamCheckBatch = SpamCheckBatch::findOrFail($id);
+
+        switch ($action) {
+            case 'delete':
+                $this->deleteFile($spamCheckBatch);
+                break;
+            case 'process':
+                $this->processFile($spamCheckBatch);
+                break;
+            default:
+                abort(404);
+        }
+
+        return redirect()->action('SpamCheckController@index');
     }
 
     /**
@@ -192,25 +210,22 @@ class SpamCheckController extends Controller
         return false;
     }
 
-    public function processBatch(SpamCheckBatch $spamCheckBatch)
+    private function processFile(SpamCheckBatch $spamCheckBatch, $now = false)
     {
         $spamCheckBatch->process_started_at = now();
         $spamCheckBatch->save();
 
-        $spamCheckService = new SpamCheckService();
+        if (!$now) {
+            // Dispatch job to run in the background
+            ProcessSpamCheckFile::dispatch($spamCheckBatch);
 
-        foreach ($spamCheckBatch->spamCheckBatchDetails->all() as $detail) {
-            if ($detail->succeeded && !$detail->checked) {
-                $detail->flags = $spamCheckService->checkNumber($detail->phone);
-                $detail->flagged = !empty($detail->flags);
-                $detail->checked = 1;
-
-                $detail->save();
-            }
+            session()->flash('flash', trans('tools.processing_file_numb') . $spamCheckBatch->id);
+        } else {
+            $service = new SpamCheckService;
+            $service->processFile($spamCheckBatch);
         }
 
-        $spamCheckBatch->processed_at = now();
-        $spamCheckBatch->save();
+        return redirect()->action('SpamCheckController@index');
     }
 
     public function uploadIndex()
@@ -267,7 +282,7 @@ class SpamCheckController extends Controller
 
         $spam_check_batch->refresh();
 
-        $tot_recs = $spam_check_batch->spamFileDetails->count();
+        $tot_recs = $spam_check_batch->spamCheckBatchDetails()->count();
 
         if (
             $tot_recs == 0 ||
@@ -280,5 +295,16 @@ class SpamCheckController extends Controller
         }
 
         return redirect()->action('SpamCheckController@index');
+    }
+
+    private function deleteFile(SpamCheckBatch $spamCheckBatch)
+    {
+        if (!empty($spamCheckBatch->process_started_at)) {
+            abort(404);
+        }
+
+        $spamCheckBatch->delete();
+
+        session()->flash('flash', trans('tools.delete_file_numb') . $spamCheckBatch->id);
     }
 }

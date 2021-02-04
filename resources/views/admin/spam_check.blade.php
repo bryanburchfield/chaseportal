@@ -27,7 +27,7 @@
 
                             <h2 class="bbnone mb20">Spam Check Numbers</h2>
 
-                            <form method="POST">
+                            <form method="POST" action="{{action('SpamCheckController@submitNumber')}}">
                                 @csrf
                                 Check a single number:
                                 <input type="text" name="phone" value="{{old('phone')}}">
@@ -60,6 +60,7 @@
                                                 <th class="text-center">{{__('tools.errors')}}</th>
                                                 <th class="text-center">Flagged</th>
                                                 <th>{{__('tools.processed')}}</th>
+                                                <th class="text-center">Delete</th>
                                             </tr>
                                         </thead>
 
@@ -90,6 +91,11 @@
                                                         {{$file['processed_at']}}
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    @if (empty($file['process_started_at']))
+                                                    <a class="btn btn-danger delete_file" data-toggle="modal" data-target="#deleteFileModal" href="#" data-id="{{$file['id']}}"><i class="fa fa-trash-alt"></i> {{__('tools.delete')}}</a>
+                                                    @endif
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -108,13 +114,13 @@
     @include('shared.notifications_bar')
 </div>
 
-<!-- Delete DNC Modal -->
-<div class="modal fade" id="deleteDNCModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Delete File Modal -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('tools.confirm_dnc_removal')}}</h4>
+                <h4 class="modal-title" id="myModalLabel">Confirm File Removal</h4>
             </div>
             <div class="modal-body">
                 <h3>{{__('tools.confirm_delete')}}</h3>
