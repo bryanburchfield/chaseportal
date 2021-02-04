@@ -116,4 +116,42 @@ trait SqlServerTraits
 
         return $phone;
     }
+
+    public function systemCodes()
+    {
+        // goofy hard-coded list of call statuses used for calculating connects
+        return [
+            'Answering Machine',
+            'CR_BAD_NUMBER',
+            'CR_BUSY',
+            'CR_CEPT',
+            'CR_CNCT/CON_CAD',
+            'CR_CNCT/CON_CAD',
+            'CR_CNCT/CON_PAMD',
+            'CR_CNCT/CON_PVD',
+            'CR_CNCT/CON_PVD',
+            'CR_DISCONNECTED',
+            'CR_DROPPED',
+            'CR_ERROR',
+            'CR_FAILED',
+            'CR_FAXTONE',
+            'CR_HANGUP',
+            'CR_NOANS',
+            'CR_NORB',
+            'CR_UNFINISHED',
+            'Inbound Transfer',
+            'Inbound Voicemail',
+            'PARKED',
+            'SYS_CALLBACK',
+            'Skip',
+            'TRANSFERRED',
+            'UNFINISHED',
+            'UNKNOWN',
+        ];
+    }
+
+    public function systemCodeList()
+    {
+        return "'" . implode("','", $this->systemCodes()) . "'";
+    }
 }

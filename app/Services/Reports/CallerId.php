@@ -71,7 +71,6 @@ class CallerId
     {
         $this->setHeadings();
 
-
         list($fromDate, $toDate) = $this->dateRange($this->params['fromdate'], $this->params['todate']);
 
         // convert to datetime strings
@@ -86,6 +85,9 @@ class CallerId
             'prevstart' => now()->subDays(30)->format('Y-m-d H:i:s'),
             'prevend' => now()->format('Y-m-d H:i:s'),
         ];
+
+        // Have to hard-code what's considered 'system' for connect calculations
+        $system_codes = $this->systemCodeList();
 
         $sql = "SET NOCOUNT ON;
 
@@ -107,7 +109,7 @@ SELECT
 FROM (
 	SELECT
 		CallerId,
-		CASE WHEN CallStatus NOT LIKE 'CR_%' THEN 1.0 ELSE 0 END as Agent
+		CASE WHEN CallStatus NOT IN ($system_codes) THEN 1.0 ELSE 0 END as Agent
 	FROM DialingResults
 	WHERE GroupId = :group_id1
 	AND CallDate >= :startdate
