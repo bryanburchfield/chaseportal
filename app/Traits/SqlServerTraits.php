@@ -122,11 +122,24 @@ trait SqlServerTraits
         // goofy hard-coded list of call statuses used for calculating connects
         return [
             'AM - Answering Machine',
+            'ANS MACH',
             'ANS MACHINE',
+            'ANS',
+            'ANS. MAC. DAY',
             'Ans Mach',
+            'Ans Machine',
+            'Ans. Mach + VM left',
+            'Ans. Mach. / Not Avail.',
+            'Ans. Mach/Not Avail',
+            'Ans. Machine / Left Message',
             'Ans. Machine',
+            'Ans. Machine, VM not avail',
+            'Ans. Machine/Voicemail',
+            'Answer Machine',
+            'Answer. Machine',
             'Answering Machine Detected',
             'Answering Machine',
+            'Answering Service',
             'CR_BAD_NUMBER',
             'CR_BUSY',
             'CR_CEPT',
@@ -150,6 +163,12 @@ trait SqlServerTraits
             'TRANSFERRED',
             'UNFINISHED',
             'UNKNOWN',
+            'VM Full',
+            'VOICE MAIL',
+            'VoiceMail Message Delivered',
+            'Voicemail Box is full',
+            'Voicemail Full',
+            'voicemail',
         ];
     }
 
