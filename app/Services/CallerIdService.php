@@ -321,31 +321,7 @@ class CallerIdService
     private function runQuery()
     {
         // Have to hard-code what's considered 'system' for connect calculations
-        $system_codes = "'CR_BAD_NUMBER',
-'CR_BUSY',
-'CR_CEPT',
-'CR_CNCT/CON_CAD',
-'CR_CNCT/CON_PAMD',
-'CR_CNCT/CON_PVD',
-'CR_DISCONNECTED',
-'CR_DROPPED',
-'CR_ERROR',
-'CR_FAILED',
-'CR_FAXTONE',
-'CR_HANGUP',
-'CR_NOANS',
-'CR_NORB',
-'CR_UNFINISHED',
-'SYS_CALLBACK',
-'Inbound Voicemail',
-'Inbound Transfer',
-'UNKNOWN',
-'UNFINISHED',
-'Skip',
-'TRANSFERRED',
-'PARKED',
-'Answering Machine'
-        ";
+        $system_codes = $this->systemCodeList();
 
         // Make list of groups to ignore
         $ignoreGroups = implode(',', $this->ignoreGroups);

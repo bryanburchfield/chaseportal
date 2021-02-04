@@ -121,6 +121,11 @@ trait SqlServerTraits
     {
         // goofy hard-coded list of call statuses used for calculating connects
         return [
+            'AM - Answering Machine',
+            'ANS MACHINE',
+            'Ans Mach',
+            'Ans. Machine',
+            'Answering Machine Detected',
             'Answering Machine',
             'CR_BAD_NUMBER',
             'CR_BUSY',
