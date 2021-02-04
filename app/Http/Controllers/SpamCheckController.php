@@ -152,8 +152,13 @@ class SpamCheckController extends Controller
             'phone' => $validatedData['phone'],
         ]);
 
-        // error check batch
-        $this->errorCheckBatch($spam_check_batch);
+        // error check phone
+        if (!$this->validNaPhone($spam_check_batch_detail->phone)) {
+            $spam_check_batch_detail->error = 'Invalid phone number';
+        }
+        $spam_check_batch_detail->succeeded = empty($spam_check_batch_detail->error);
+
+        $spam_check_batch_detail->save();
 
         // process batch
         $this->processBatch($spam_check_batch);
@@ -163,22 +168,14 @@ class SpamCheckController extends Controller
         return redirect()->action("SpamCheckController@showRecords", ["id" => $spam_check_batch->id]);
     }
 
-    public function errorCheckBatch(SpamCheckBatch $spamCheckBatch)
-    {
-        foreach ($spamCheckBatch->spamCheckBatchDetails->all() as $detail) {
-
-            if ($detail->succeeded === null) {
-                if (!$this->validPhone($detail->phone)) {
-                    $detail->error = 'Invalid phone number';
-                }
-                $detail->succeeded = empty($detail->error);
-
-                $detail->save();
-            }
-        }
-    }
-
-    public function validPhone($phone)
+    /**
+     * Check for valid North American Phone
+     * 10 digits, optional leading '1'
+     * 
+     * @param mixed $phone 
+     * @return bool 
+     */
+    public function validNaPhone($phone)
     {
         // Strip non-digits
         $phone = preg_replace("/[^0-9]/", '', $phone);
