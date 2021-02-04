@@ -15,7 +15,7 @@ var FORMBUILDER = {
 		$('body').on('change', '.field_type', this.open_field_modal);
 		$('#filter_type_modal').on('click', '.add_option', this.add_option);
 		$('#filter_type_modal').on('click', '.remove_option', this.remove_option);
-		$('#filter_type_modal').on('click', '.create_select_menu', this.create_select_menu);
+		$('#filter_type_modal').on('click', '.create_form_element', this.create_form_element);
 		this.move_notes_row(this.move_notes_row);
 	},
 
@@ -86,7 +86,7 @@ var FORMBUILDER = {
 
 					for (var i = 0; i < response.fields.length; i++) {
 						fields_len++;
-						new_field_row = '<div class="field slide field_from_table draggable" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div></div></div>';
+						new_field_row = '<div class="field slide field_from_table draggable" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div><div class="custom_element" data-elementtype=""></div></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -105,7 +105,7 @@ var FORMBUILDER = {
 		var custom_field_value_fb = $('.custom_field_value_fb').val();
 		var fields_len = $('.field.slide').length;
 		fields_len++;
-		var new_field_row = '<div class="field slide" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" class="form-control control-input field_value_fb" control="input" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div></div></div>';
+		var new_field_row = '<div class="field slide" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" class="form-control control-input field_value_fb" control="input" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div><div class="custom_element" data-elementtype=""></div></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
@@ -312,8 +312,8 @@ var FORMBUILDER = {
 		return valid;
 	},
 
-	create_select_menu:function(){
-		console.log(FORMBUILDER.current_row);
+	create_form_element:function(e){
+		e.preventDefault();
 		$('#filter_type_modal').find('.alert').hide();
 		let valid = FORMBUILDER.validate_options();
 
@@ -323,12 +323,16 @@ var FORMBUILDER = {
 				opts.push($(this).val());
 			})
 
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-elementtype', FORMBUILDER.element_type);
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-assessments", JSON.stringify(opts));
 			console.log(opts);
 
 			$('#filter_type_modal').modal('hide');
 		}else{
 			$('#filter_type_modal').find('.alert').html('Fill out all fields before creating a menu').show();
 		}
+
+		var assessments = JSON.parse($('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-assessments"));
 	}
 }
 

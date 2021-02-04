@@ -184,6 +184,8 @@ select:required:invalid {
 															<option value="checkbox">Checkbox</option>
 														</select>
 													</div>
+
+													<div class="custom_element" data-elementtype="" data-assessments=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -441,7 +443,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_select_menu">Create Select Menu</a>
+            		<a href="#" class="btn btn-primary create_form_element">Create Select Menu</a>
             	</div>
             	<!-- Select menu builder -->
 
@@ -451,7 +453,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_select_menu">Create Radio Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Create Radio Group</a>
             	</div>
             	<!-- Radio menu builder -->
 
@@ -461,7 +463,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_select_menu">Create Checkbox Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Create Checkbox Group</a>
             	</div>
             	<!-- Checkbox menu builder -->
             	
