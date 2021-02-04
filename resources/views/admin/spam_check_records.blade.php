@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', __('tools.spam_check'))
+@section('title', 'Spam Check')
 
 @section('content')
 
@@ -35,9 +35,9 @@
 											<th>{{__('tools.line')}} #</th>
 											<th>{{__('tools.phone')}}</th>
 											<th>{{__('tools.error')}}</th>
-											<th>{{__('tools.checked')}}</th>
-											<th>{{__('tools.flagged')}}</th>
-											<th>{{__('tools.flags')}}</th>
+											<th>Checked</th>
+											<th>Flagged</th>
+											<th>Flags</th>
 										</tr>
 									</thead>
 									<tbody>

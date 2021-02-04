@@ -168,8 +168,9 @@ class SpamCheckController extends Controller
         foreach ($spamCheckBatch->spamCheckBatchDetails->all() as $detail) {
 
             if ($detail->succeeded === null) {
-                // check phone is valid
-                $detail->error = $this->validPhone($detail->phone);
+                if (!$this->validPhone($detail->phone)) {
+                    $detail->error = 'Invalid phone number';
+                }
                 $detail->succeeded = empty($detail->error);
 
                 $detail->save();
@@ -179,7 +180,19 @@ class SpamCheckController extends Controller
 
     public function validPhone($phone)
     {
-        return null;
+        // Strip non-digits
+        $phone = preg_replace("/[^0-9]/", '', $phone);
+
+        // should now be either 10 digits without a leading '1', or 11 digits with
+        if (strlen($phone) == 10 && substr($phone, 0, 1) != '1') {
+            return true;
+        }
+
+        if (strlen($phone) == 11 && substr($phone, 0, 1) == '1') {
+            return true;
+        }
+
+        return false;
     }
 
     public function processBatch(SpamCheckBatch $spamCheckBatch)
@@ -237,7 +250,7 @@ class SpamCheckController extends Controller
         // insert spam_check_batch record
         $spam_check_batch = SpamCheckBatch::create([
             'user_id' => Auth::user()->id,
-            'filename' => $request->file('dncfile')->getClientOriginalName(),
+            // 'filename' => $request->file('spamcheckfile')->getClientOriginalName(),
             'description' => $request->description,
             'uploaded_at' => now(),
             'processed_at' => null,
@@ -250,7 +263,7 @@ class SpamCheckController extends Controller
             $importer = new SpamImportNoHeaders($spam_check_batch->id, $column);
         }
 
-        Excel::import($importer, $request->file('spamfile'));
+        Excel::import($importer, $request->file('spamcheckfile'));
 
         // Commit all the inserts
         DB::commit();

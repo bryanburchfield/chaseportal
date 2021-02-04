@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', __('tools.spam_check'))
+@section('title', 'Spam Check')
 
 @section('content')
 
@@ -25,7 +25,7 @@
                             </div>
                             @endif
 
-                            <h2 class="bbnone mb20">{{__('tools.spam_check_files')}}</h2>
+                            <h2 class="bbnone mb20">Spam Check Numbers</h2>
 
                             <form method="POST">
                                 @csrf
@@ -58,7 +58,7 @@
                                                 <th>{{__('tools.uploaded')}}</th>
                                                 <th class="text-center">{{__('tools.records')}}</th>
                                                 <th class="text-center">{{__('tools.errors')}}</th>
-                                                <th class="text-center">{{__('tools.flagged')}}</th>
+                                                <th class="text-center">Flagged</th>
                                                 <th>{{__('tools.processed')}}</th>
                                             </tr>
                                         </thead>
@@ -77,7 +77,7 @@
 													<td class="text-center">{{$file['errors']}}</td>
                                                 @endif
                                                 @if ($file['flags'] > 0)
-													<td><a class="btn btn-link danger text-center" href="{{ action("SpamCheckController@showFlags", ["id" => $file['id']]) }}">{{$file['errors']}}</a></td>
+													<td><a class="btn btn-link danger text-center" href="{{ action("SpamCheckController@showFlags", ["id" => $file['id']]) }}">{{$file['flags']}}</a></td>
 												@else
 													<td class="text-center">{{$file['flags']}}</td>
 												@endif
