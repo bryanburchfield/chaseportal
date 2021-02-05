@@ -185,7 +185,7 @@ select:required:invalid {
 														</select>
 													</div>
 
-													<div class="custom_element" data-elementtype="" data-assessments=""></div>
+													<div class="custom_element" data-elementtype="" data-new_element_data=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -318,6 +318,15 @@ select:required:invalid {
 			<div class="form-group">
 				<label>Label</label>
 				<input type="text" class="form-control control-input" name="label" control="input" field-name="label" id="label">
+			</div>
+		</div>
+	</div>
+
+	<div class="select-4">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label>Label</label>
+				<select name="name" class="form-control control-select"></select>
 			</div>
 		</div>
 	</div>

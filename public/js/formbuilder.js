@@ -127,6 +127,8 @@ var FORMBUILDER = {
 
 		$('.all-slides .field').each(function(index){
 
+			let field_type = $(this).find('.custom_element').data('elementtype');
+
 			if(!$(this).hasClass('field_removed')){
 				var field_label_fb = $(this).find('.field_label_fb').text();
 				var field_name_fb = $(this).find('.field_name_fb').text();
@@ -152,6 +154,9 @@ var FORMBUILDER = {
 
 				if(field_label_fb == 'City' || field_label_fb == 'ZipCode'){ /// wrap in 4 column div
 					html=$('.html_options').find('.input-4').html();
+				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
+					console.log($(this).find('.custom_element').data('new_element_data'));
+					html=$('.html_options').find('.select-4').html();
 				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
 					html=$('.html_options').find('.input-12').html();
 				}else if(field_label_fb == 'State'){	/// grab state select
@@ -324,7 +329,7 @@ var FORMBUILDER = {
 			})
 
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-elementtype', FORMBUILDER.element_type);
-			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-assessments", JSON.stringify(opts));
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data", JSON.stringify(opts));
 			console.log(opts);
 
 			$('#filter_type_modal').modal('hide');
@@ -332,7 +337,7 @@ var FORMBUILDER = {
 			$('#filter_type_modal').find('.alert').html('Fill out all fields before creating a menu').show();
 		}
 
-		var assessments = JSON.parse($('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-assessments"));
+		var new_element_data = JSON.parse($('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data"));
 	}
 }
 
