@@ -231,12 +231,10 @@ class SpamCheckController extends Controller
     public function uploadIndex()
     {
 
-        $jsfile[] = '';
         $page['sidenav'] = 'admin';
         $page['menuitem'] = 'spam_check';
         $page['type'] = 'page';
         $data = [
-            'jsfile' => $jsfile,
             'page' => $page,
         ];
 

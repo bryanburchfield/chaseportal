@@ -42,6 +42,19 @@
                                 </div>
                             @endif
 
+                            <div class="card instructions">
+								<a href="#" class="toggle_instruc flt_rgt"><i class="fas fa-angle-up"></i></a>
+								<h3><b>{{__('tools.instructions')}}</b></h3>
+								<div class="mt20 instuc_div">
+									<ul class="pl10 paditem5">
+                                        <li>Upload a file to the portal. This only stages the file.</li>
+                                        <li>Review the contents to ensure it has the number of records you were expecting, and view any errors.</li>
+                                        <li>At this point, you will either Delete the file (so that you can correct and re-upload it) or Process the file.</li>
+                                        <li>Processing starts the spam checking process. This will run in the background and may take some time to complete.</li>
+									</ul>
+								</div>
+							</div>
+
                             <a class="btn btn-primary" href="{{ action('SpamCheckController@uploadIndex') }}">{{__('tools.upload_new_file')}}</a>
 
                             @if (count($files))
