@@ -323,14 +323,14 @@ var FORMBUILDER = {
 		let valid = FORMBUILDER.validate_options();
 
 		if(valid){
-			var opts = [];
-			$('div[data-type="' + FORMBUILDER.element_type + '"]').find('input.options').each(function(){
-				opts.push($(this).val());
+			var opts = {};
+			$('div[data-type="' + FORMBUILDER.element_type + '"]').find('.input-group').each(function(){
+				// opts.push($(this).val());
+				opts[$(this).find('.option_name').val()] = $(this).find('.option_value').val();
 			})
 
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-elementtype', FORMBUILDER.element_type);
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data", JSON.stringify(opts));
-			console.log(opts);
 
 			$('#filter_type_modal').modal('hide');
 		}else{
