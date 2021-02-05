@@ -22,6 +22,9 @@
 								#{{$file->id}}:
 								{{$file->description}}
 							</h2>
+                            <h3>
+                                Uploaded by: {{$file->user->name}} on {{\Carbon\Carbon::parse($file->uploaded_at)->toDayDateTimeString()}}
+                            </h3>
 
 							<form action="{{ action("SpamCheckController@index") }}" method="get">
 							<a href="{{url('admin/spam_check')}}" class="btn btn-sm btn-warning">{{__('tools.back')}}</a>
