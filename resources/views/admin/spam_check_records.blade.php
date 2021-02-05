@@ -18,16 +18,11 @@
 			    	<div class="col-sm-12">
 
 						<div class="tab-pane" id="spam_check">
-							<h2 class="bbnone">{{__('tools.file')}}
-								#{{$file->id}}:
-								{{$file->description}}
-							</h2>
-                            <h3>
-                                Uploaded by: {{$file->user->name}} on {{\Carbon\Carbon::parse($file->uploaded_at)->toDayDateTimeString()}}
-                            </h3>
+							<h2 class="bbnone mb0">{{__('tools.file')}} #{{$file->id}} : <span>{{$file->description}}</span></h2>
+                            <h4>Uploaded by: {{$file->user->name}} on {{\Carbon\Carbon::parse($file->uploaded_at)->toDayDateTimeString()}}</h4>
 
 							<form action="{{ action("SpamCheckController@index") }}" method="get">
-							<a href="{{url('admin/spam_check')}}" class="btn btn-sm btn-warning">{{__('tools.back')}}</a>
+							<a href="{{url('admin/spam_check')}}" class="btn btn-md btn-warning mt20">{{__('tools.back')}}</a>
 
 							@if (count($records))
 								{{ $records->links() }}
@@ -58,7 +53,7 @@
 									</table>
 								</div>
 								{{ $records->links() }}
-								<a href="{{url('admin/spam_check')}}" class="btn btn-sm btn-warning">{{__('tools.back')}}</a>
+								<a href="{{url('admin/spam_check')}}" class="btn btn-md btn-warning">{{__('tools.back')}}</a>
 							@endif
 							</form>
 						</div>

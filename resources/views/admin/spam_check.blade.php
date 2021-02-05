@@ -27,26 +27,28 @@
 
                             <h2 class="bbnone mb20">Spam Check Numbers</h2>
 
-                            <form method="POST" action="{{action('SpamCheckController@submitNumber')}}" class="form">
-                                @csrf
+                            <div class="col-sm-4">
+                                <form method="POST" action="{{action('SpamCheckController@submitNumber')}}" class="form">
+                                    @csrf
 
-                                <div class="form-group">
-                                    <label>Check a single number:</label>
-                                   <input type="text" name="phone" class="form-control" value="{{old('phone')}}">
-                                </div>
+                                    <div class="form-group">
+                                        <label>Check a single number:</label>
+                                       <input type="text" name="phone" class="form-control" value="{{old('phone')}}">
+                                    </div>
 
-                                <input class="btn btn-primary btn-md mb20" type="submit" value="{{__('general.submit')}}" />
-                            </form>
+                                    <input class="btn btn-primary btn-md mb20" type="submit" value="{{__('general.submit')}}" />
 
-                            @if($errors->any())
-                                <div class="alert alert-danger mt20">
-                                    @foreach ($errors->all() as $error)
-                                        <p>{{ $error }}</p>
-                                    @endforeach
-                                </div>
-                            @endif
+                                    @if($errors->any())
+                                        <div class="alert alert-danger mt20">
+                                            @foreach ($errors->all() as $error)
+                                                <p>{{ $error }}</p>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </form>
+                            </div>
 
-                            <div class="card instructions">
+                            <div class="card instructions cb">
 								<a href="#" class="toggle_instruc flt_rgt"><i class="fas fa-angle-up"></i></a>
 								<h3><b>{{__('tools.instructions')}}</b></h3>
 								<div class="mt20 instuc_div">
@@ -140,7 +142,7 @@
                 <h4 class="modal-title" id="myModalLabel">Confirm File Removal</h4>
             </div>
             <div class="modal-body">
-                <h3>{{__('tools.confirm_delete')}}</h3>
+                <h3>{{__('tools.confirm_delete')}} <span class="id"></span>?</h3>
             </div>
             <div class="modal-footer">
                 <form enctype="multipart/form-data" method="post">

@@ -35,7 +35,7 @@ var Admin = {
 		$('.add_sms_number').on('submit', this.add_sms_number);
 		$('.edit_sms_number').on('submit', this.update_sms_number);
 		$('.delete_sms_number').on('submit', this.delete_sms_number);
-
+		$('.delete_file').on('click', this.populate_delete_file_modal);
 	},
 
 	// add global user
@@ -882,7 +882,14 @@ var Admin = {
 				}
 			}
 		});
-    }
+    },
+
+    populate_delete_file_modal:function(){
+        var id = $(this).data('id');
+        $('#deleteFileModal .modal-body').find('h3 span').text(id);
+        $('#deleteFileModal .modal-footer').find('.btn-danger').val('delete:'+id);
+    },
+
 }
 
 $(document).ready(function () {
