@@ -68,7 +68,7 @@
                             <div class="table-responsive nobdr">
                                 <form enctype="multipart/form-data" method="post">
                                     @csrf
-                                    <table class="table dnc_table mt20">
+                                    <table class="table spam_check_table mt20">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">{{__('tools.view')}}</th>

@@ -2640,5 +2640,9 @@ $(document).ready(function () {
         $('.sso #group_id').parent().addClass('has-error');
     }
 
+    if($('.spam_check_table tbody tr, .dnc_table tbody tr').length){
+        Master.toggle_instructions();
+    }
+
 });
 
