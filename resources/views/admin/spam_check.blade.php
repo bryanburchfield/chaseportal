@@ -13,7 +13,7 @@
         @include('shared.navbar')
 
         <div class="container-fluid bg dashboard p20">
-            <div class="container-full mt50 tools">
+            <div class="container-full mt50">
                 <div class="row">
                     <div class="col-sm-12">
 
@@ -27,11 +27,15 @@
 
                             <h2 class="bbnone mb20">Spam Check Numbers</h2>
 
-                            <form method="POST" action="{{action('SpamCheckController@submitNumber')}}">
+                            <form method="POST" action="{{action('SpamCheckController@submitNumber')}}" class="form">
                                 @csrf
-                                Check a single number:
-                                <input type="text" name="phone" value="{{old('phone')}}">
-                                <input class="btn btn-primary mb0" type="submit" value="{{__('general.submit')}}" />
+
+                                <div class="form-group">
+                                    <label>Check a single number:</label>
+                                   <input type="text" name="phone" class="form-control" value="{{old('phone')}}">
+                                </div>
+
+                                <input class="btn btn-primary btn-md mb20" type="submit" value="{{__('general.submit')}}" />
                             </form>
 
                             @if($errors->any())
