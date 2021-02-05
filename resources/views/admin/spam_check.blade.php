@@ -103,7 +103,7 @@
                                                     @if (empty($file['process_started_at']))
                                                         <button class="btn btn-success" name="action" value="process:{{$file['id']}}">{{__('tools.process')}}</button>
                                                     @elseif (empty($file['processed_at']))
-                                                        {{__('tools.in_process')}}
+                                                        In process: {{$file->percentProcessed()}}%
                                                     @else
                                                         {{$file['processed_at']}}
                                                     @endif

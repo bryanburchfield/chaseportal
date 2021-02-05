@@ -36,4 +36,14 @@ class SpamCheckBatch extends Model
         return SpamCheckBatchDetail::where('spam_check_batch_id', $this->id)
             ->where('flagged', true);
     }
+
+    public function percentProcessed()
+    {
+        $total = $this->spamCheckBatchDetails()->where('succeeded', 1)->count();
+        $processed = $this->spamCheckBatchDetails()->where('checked', 1)->count();
+
+        $percent = ($total > 0) ? $processed / $total * 100 : 0;
+
+        return number_format($percent, 0);
+    }
 }
