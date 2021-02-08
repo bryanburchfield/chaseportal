@@ -50,7 +50,7 @@ return [
     'campaign_usage_1' => 'This report breaks down all leads in a campaign by the number of dialing attempts on each, and if the lead is marked as callable or not.',
     'campaign_usage_2' => 'Note that the charts will not be included when the report is exported.',
     'cepts' => 'Calls with a CR_CEPT status',
-    'closer' => 'Rep that made the sale',
+    'closer' => 'Rep who handled call last',
     'cnt' => 'Total Count',
     'columns' => 'Columns',
     'conference' => 'Conference',

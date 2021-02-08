@@ -112,8 +112,8 @@ class TransferAgent
 
             $sql .= " $union SELECT DR.Date, DR.PreviousRep as Rep, DR.Rep as Closer, DR.Phone, DR.CallStatus, DI.Type
             FROM [$db].[dbo].[DialingResults] DR
-            INNER JOIN Reps R ON R.RepName = DR.Rep
-            INNER JOIN Reps PR ON PR.RepName = DR.PreviousRep";
+            INNER JOIN Reps R ON R.GroupId = DR.GroupId AND R.RepName = DR.Rep
+            INNER JOIN Reps PR ON PR.GroupId = DR.GroupId AND PR.RepName = DR.PreviousRep";
 
             if (!empty($this->params['reps'])) {
                 $sql .= "
