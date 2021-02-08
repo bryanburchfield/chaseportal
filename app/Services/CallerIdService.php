@@ -34,7 +34,6 @@ class CallerIdService
     // Groups to exclude
     private $ignoreGroups =
     [
-        212182,
         224195,
         236163,
     ];
