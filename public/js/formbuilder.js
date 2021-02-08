@@ -127,7 +127,7 @@ var FORMBUILDER = {
 
 		$('.all-slides .field').each(function(index){
 
-			let field_type = $(this).find('.custom_element').data('elementtype');
+			let field_type = $(this).find('.field_type').val();
 
 			if(!$(this).hasClass('field_removed')){
 				var field_label_fb = $(this).find('.field_label_fb').text();
@@ -150,13 +150,27 @@ var FORMBUILDER = {
 				$('.html_options').find('.form-group .form-control').attr('name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('field-name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('id', field_name_fb);
-				$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
+				// add value attribute to inputs
+				if(field_type == 'input'){
+					$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
+				}
 
 				if(field_label_fb == 'City' || field_label_fb == 'ZipCode'){ /// wrap in 4 column div
 					html=$('.html_options').find('.input-4').html();
 				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
-					console.log($(this).find('.custom_element').data('new_element_data'));
+					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
+					var options='';
+
+					for (var key of Object.keys(new_element_obj)) {
+						options += '<option value="'+new_element_obj[key]+'">'+key+'</option>';
+					    console.log(options);
+					}
+
+					$('.html_options').find('.select-4').find('select.form-control').append(options);
 					html=$('.html_options').find('.select-4').html();
+					$('.html_options').find('.select-4 select').empty();
+					console.log(html);
+
 				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
 					html=$('.html_options').find('.input-12').html();
 				}else if(field_label_fb == 'State'){	/// grab state select
