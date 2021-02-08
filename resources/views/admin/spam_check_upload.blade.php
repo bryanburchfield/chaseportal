@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', __('tools.spam_check'))
+@section('title', 'Spam Check')
 
 @section('content')
 
@@ -18,11 +18,11 @@
 			    	<div class="col-sm-12">
 
 						<div class="tab-pane" id="spam_check">
-                            <h2 class="bbnone mb20">{{__('tools.upload_spam_file')}}</h2>
+                            <h2 class="bbnone mb20">Upload File</h2>
                             <ul class="pl10 paditem5">
-								<li>{{__('tools.spam_upload1')}}</li>
-								<li>{{__('tools.spam_upload2')}}</li>
-								<li>{{__('tools.spam_upload3')}}</li>
+								<li>File must be in CSV, XLS, or XLSX format.</li>
+								<li>If the file has a header row, there must be a 'Phone' column.</li>
+								<li>If the file doesn't have a header row, the phone numbers must be in the first column.</li>
 							</ul>
 
 							<div class="col-sm-4 p0">
@@ -30,7 +30,7 @@
 									@csrf
 
 									<label class="btn btn-info btn-file mb20">
-									    {{__('tools.upload_a_file')}} <input type="file" name="dncfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
+									    {{__('tools.upload_a_file')}} <input type="file" name="spamcheckfile" accept=".csv,.xls,.xlsx,.ods,.slk" style="display: none;">
 									</label>
 
 									<p class="filename mb20">{{__('tools.no_file')}}</p>

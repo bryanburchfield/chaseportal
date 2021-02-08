@@ -10,7 +10,7 @@ var Master = {
         grey: 'rgb(68,68,68)'
     },
 
-    page_menuitem:$('#sidebar').find('.page_menuitem').val(),
+    page_menuitem: $('#sidebar').find('.page_menuitem').val(),
     curpage: '',
     pagesize: '',
     pag_link: '',
@@ -22,22 +22,22 @@ var Master = {
     active_camp_search: '',
     tick_color: '#aaa',
     gridline_color: '#1A2738',
-    pinned_columns:0,
+    pinned_columns: 0,
     // left_cols:0,
     // right_cols:0,
     report_pinned_datatable: $('.report_pinned_datatable').DataTable({
         destroy: true,
-        scrollY:        500,
-        scrollX:        true,
+        scrollY: 500,
+        scrollX: true,
         scrollCollapse: true,
-        paging:         true,
+        paging: true,
         responsive: true,
-        fixedColumns:   {
+        fixedColumns: {
             leftColumns: this.left_cols,
             rightColumns: this.right_cols
         }
     }),
-    
+
     activeTab: localStorage.getItem('activeTab'),
     dataTable: $('#dataTable').DataTable({
         responsive: true,
@@ -56,20 +56,20 @@ var Master = {
         ],
     }),
 
-	init:function(){
+    init: function () {
 
-        Master.left_cols=0;
-        Master.right_cols=0;
+        Master.left_cols = 0;
+        Master.right_cols = 0;
 
-        if($('.theme').val() == 'dark'){
-            Master.tick_color='#aaa';
-            Master.gridline_color='#1A2738';
-        }else{
-            Master.tick_color='#777';
-            Master.gridline_color='#e0e0e0';
+        if ($('.theme').val() == 'dark') {
+            Master.tick_color = '#aaa';
+            Master.gridline_color = '#1A2738';
+        } else {
+            Master.tick_color = '#777';
+            Master.gridline_color = '#e0e0e0';
         }
 
-        if(Master.activeTab){
+        if (Master.activeTab) {
             $('.nav.nav-tabs a[href="' + Master.activeTab + '"]').tab('show');
         }
 
@@ -133,14 +133,15 @@ var Master = {
 
         $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
-	},
+        $('.toggle_instruc, .toggle_instruc + h3').on('click', this.toggle_instructions);
+    },
 
-    update_sidenav:function(e){
+    update_sidenav: function (e) {
         e.preventDefault();
-        if($('.page_menuitem').val() !='' && Master.page_menuitem != undefined){
+        if ($('.page_menuitem').val() != '' && Master.page_menuitem != undefined) {
             Master.page_menuitem = $('.page_menuitem').val();
-        }else{
-            $('.page_menuitem').each(function(){
+        } else {
+            $('.page_menuitem').each(function () {
                 $(this).val(Master.page_menuitem);
             });
         }
@@ -160,11 +161,11 @@ var Master = {
             url: '/admin/load_sidenav',
             type: 'POST',
             dataType: 'html',
-            data: {sidenav:sidenav },
+            data: { sidenav: sidenav },
             success: function (response) {
                 $('#sidebar').append(response);
-                $('ul.list-unstyled.components').find('li').each(function(){
-                    if($(this).data('page') == Master.page_menuitem){
+                $('ul.list-unstyled.components').find('li').each(function () {
+                    if ($(this).data('page') == Master.page_menuitem) {
                         $(this).addClass('active');
                     }
                 });
@@ -172,13 +173,13 @@ var Master = {
         });
     },
 
-    preventDefault:function(e){
+    preventDefault: function (e) {
         e.preventDefault();
     },
 
-    return_chart_colors_hash:function(reps){
+    return_chart_colors_hash: function (reps) {
 
-        var chart_colors_array=[];
+        var chart_colors_array = [];
 
         // old colorhash.js - keep just in case //////////////////////////////////////
         // var chart_colors_array=[];
@@ -214,22 +215,22 @@ var Master = {
             // validate hex string
             hex = String(hex).replace(/[^0-9a-f]/gi, '');
             if (hex.length < 6) {
-                hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
             }
             lum = lum || 0;
 
             // convert to decimal and change luminosity
             var rgb = "#", c, i;
             for (i = 0; i < 3; i++) {
-                c = parseInt(hex.substr(i*2,2), 16);
+                c = parseInt(hex.substr(i * 2, 2), 16);
                 c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-                rgb += ("00"+c).substr(c.length);
+                rgb += ("00" + c).substr(c.length);
             }
 
             return rgb;
         }
 
-        var stringToColor = function(str) {
+        var stringToColor = function (str) {
             var hash = 0;
             for (var i = 0; i < str.length; i++) {
                 hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -240,15 +241,15 @@ var Master = {
                 var value = (hash >> (i * 8)) & 0xFF;
                 color += ('00' + value.toString(16)).substr(-2);
             }
-            if(color=='#000000'){color='#57D897';}
+            if (color == '#000000') { color = '#57D897'; }
             return color;
         }
 
         var new_hash;
         var new_rgb;
-        for (var i=0;i<reps.length;i++) {
-            new_hash=stringToColor(reps[i]);
-            new_hash=ColorLuminance(new_hash, -0.3);
+        for (var i = 0; i < reps.length; i++) {
+            new_hash = stringToColor(reps[i]);
+            new_hash = ColorLuminance(new_hash, -0.3);
             chart_colors_array.push(new_hash);
         }
         return chart_colors_array;
@@ -311,7 +312,7 @@ var Master = {
         }
     },
 
-    trend_percentage:function(selector, change_perc, up_or_down, higher_is_better, not_comparable){
+    trend_percentage: function (selector, change_perc, up_or_down, higher_is_better, not_comparable) {
         // if there is data to compare
         if (!not_comparable) {
             selector.find('.trend_indicator').show();
@@ -322,21 +323,21 @@ var Master = {
             // if(change_perc == 0){selector.find('.trend_arrow').hide();}
 
             // if higher is positve
-            if(higher_is_better){
+            if (higher_is_better) {
                 // if percentage is up
-                if(up_or_down){
+                if (up_or_down) {
                     selector.find('.trend_indicator').addClass('positive');
                     selector.find('.trend_arrow').addClass('arrow_up positive');
-                }else{ // if percentage is down
+                } else { // if percentage is down
                     selector.find('.trend_indicator').addClass('negative');
                     selector.find('.trend_arrow').addClass('arrow_down negative');
                 }
-            }else{ // if higher is negative
+            } else { // if higher is negative
                 // if percentage is up
-                if(up_or_down){
+                if (up_or_down) {
                     selector.find('.trend_indicator').addClass('negative');
                     selector.find('.trend_arrow').addClass('arrow_up negative');
-                }else{ // if percentage is down
+                } else { // if percentage is down
                     selector.find('.trend_indicator').addClass('positive');
                     selector.find('.trend_arrow').addClass('arrow_down positive');
                 }
@@ -346,7 +347,7 @@ var Master = {
         }
     },
 
-    add_btn_loader:function(){
+    add_btn_loader: function () {
         $(this).find('i').remove();
         $(this).prepend('<i class="fa fa-spinner fa-spin mr10"></i>');
     },
@@ -422,14 +423,14 @@ var Master = {
         });
     },
 
-    get_report_subcampaigns:function(e, campaign=0, source=0){
-        if(!campaign){
-            $(this).find('option:selected').each(function() {
+    get_report_subcampaigns: function (e, campaign = 0, source = 0) {
+        if (!campaign) {
+            $(this).find('option:selected').each(function () {
                 campaign = $(this).val();
             });
         }
 
-        if(!source){var source = $(this).attr('id');}
+        if (!source) { var source = $(this).attr('id'); }
         var report = $('form.report_filter_form').attr('id');
 
         $.ajaxSetup({
@@ -439,25 +440,25 @@ var Master = {
         });
 
         $.ajax({
-            url: '/dashboards/reports/get_subcampaigns' ,
+            url: '/dashboards/reports/get_subcampaigns',
             type: 'POST',
             dataType: 'json',
             data: {
-                report:report,
+                report: report,
                 campaign: campaign,
             },
 
-            success:function(response){
+            success: function (response) {
 
-                var subcampaigns='<option value=""> Select One</option>';
-                for(var i=0; i<response.subcampaigns.length;i++){
-                    subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
+                var subcampaigns = '<option value=""> Select One</option>';
+                for (var i = 0; i < response.subcampaigns.length; i++) {
+                    subcampaigns += '<option value="' + response.subcampaigns[i] + '">' + response.subcampaigns[i] + '</option>';
                 }
 
-                if(source == 'destination_campaign' || source == 'update_destination_campaign'|| source == 'update_campaign_select'){
-                    $('#'+source).parent().next().find('select').empty();
-                    $('#'+source).parent().next().find('select').append(subcampaigns);
-                }else{
+                if (source == 'destination_campaign' || source == 'update_destination_campaign' || source == 'update_campaign_select') {
+                    $('#' + source).parent().next().find('select').empty();
+                    $('#' + source).parent().next().find('select').append(subcampaigns);
+                } else {
                     $('#subcampaign_select').empty();
                     $('#subcampaign_select').append(subcampaigns);
                 }
@@ -465,16 +466,16 @@ var Master = {
         });
     },
 
-    toggle_subcamps:function(e){
+    toggle_subcamps: function (e) {
         e.preventDefault();
 
-        if($(this).find('option:selected').length == 1 && $(this).find('option:selected').val() != undefined){
+        if ($(this).find('option:selected').length == 1 && $(this).find('option:selected').val() != undefined) {
             var campaign = $(this).val();
-            campaign=campaign[0];
+            campaign = campaign[0];
             var report = $('form.report_filter_form').attr('id');
         }
 
-        if(campaign){
+        if (campaign) {
             $('#subcampaign_select').parent().parent().show();
 
             ///// build subcamps menu
@@ -485,15 +486,15 @@ var Master = {
             });
 
             $.ajax({
-                url: '/dashboards/reports/get_subcampaigns' ,
+                url: '/dashboards/reports/get_subcampaigns',
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    report:report,
+                    report: report,
                     campaign: campaign,
                 },
 
-                success:function(response){
+                success: function (response) {
 
                     var subcamp_obj = response.subcampaigns;
                     var subcamp_obj_length = Object.keys(subcamp_obj).length;
@@ -503,7 +504,7 @@ var Master = {
 
                     $('#subcampaign_select').empty();
 
-                    var subcampaigns='';
+                    var subcampaigns = '';
                     for (var i = 0; i < subcampaigns_array[0].length; i++) {
                         subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
                     }
@@ -519,15 +520,15 @@ var Master = {
 
                 }
             });
-        }else{
+        } else {
             $('#subcampaign_select').empty();
             $('#subcampaign_select').parent().parent().hide();
         }
     },
 
-    get_subcampaigns:function(campaign, path=''){
+    get_subcampaigns: function (campaign, path = '') {
 
-        if(!path){
+        if (!path) {
             path = '/tools/contactflow_builder/get_subcampaigns';
         }
 
@@ -538,7 +539,7 @@ var Master = {
         });
 
         return $.ajax({
-            url: path ,
+            url: path,
             type: 'POST',
             dataType: 'json',
             async: false,
@@ -546,24 +547,24 @@ var Master = {
                 campaign: campaign,
             },
 
-            success: function(response) {
+            success: function (response) {
                 return response;
             },
-            error: function () {}
+            error: function () { }
         });
     },
 
-    get_email_drip_subcampaigns:function(e, campaign){
+    get_email_drip_subcampaigns: function (e, campaign) {
 
         var sel;
-        if(e.type=='click'){
+        if (e.type == 'click') {
             sel = $('.edit_campaign_form');
             campaign = $('.edit_campaign_form').find('.drip_campaigns_campaign_menu').val();
-        }else{
-            if($(e.target).parent().parent().hasClass('edit_campaign_form')){
+        } else {
+            if ($(e.target).parent().parent().hasClass('edit_campaign_form')) {
                 sel = $('.edit_campaign_form');
                 campaign = $(this).val();
-            }else{
+            } else {
                 campaign = $(this).val();
                 sel = $('.create_campaign_form');
             }
@@ -581,7 +582,7 @@ var Master = {
 
         $('.drip_campaigns_subcampaign').empty();
 
-        var subcampaigns='';
+        var subcampaigns = '';
         for (var i = 0; i < subcampaigns_array[0].length; i++) {
             subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
         }
@@ -602,19 +603,19 @@ var Master = {
         });
 
         $.ajax({
-            url: '/tools/email_drip/get_table_fields' ,
+            url: '/tools/email_drip/get_table_fields',
             type: 'POST',
             dataType: 'json',
-            async:false,
+            async: false,
             data: {
                 campaign: campaign,
             },
 
-            success: function(response) {
+            success: function (response) {
 
-                var emails='<option value="">Select One</option>';
-                for(var index in response) {
-                    emails+='<option value="'+index+'">'+index+'</option>';
+                var emails = '<option value="">Select One</option>';
+                for (var index in response) {
+                    emails += '<option value="' + index + '">' + index + '</option>';
                 }
 
                 $(sel).find('.email').append(emails);
@@ -622,36 +623,36 @@ var Master = {
         });
     },
 
-    get_leadrule_subcampaigns:function(){
+    get_leadrule_subcampaigns: function () {
 
         var campaign = $(this).val();
         var selector = $(this).attr('id');
         var subcamp_response = Master.get_subcampaigns(campaign);
 
-        var subcampaigns='<option value=""> Select One</option>';
-        for(var i=0; i<subcamp_response.responseJSON.subcampaigns.length;i++){
-            subcampaigns+='<option value="'+subcamp_response.responseJSON.subcampaigns[i]+'">'+subcamp_response.responseJSON.subcampaigns[i]+'</option>';
+        var subcampaigns = '<option value=""> Select One</option>';
+        for (var i = 0; i < subcamp_response.responseJSON.subcampaigns.length; i++) {
+            subcampaigns += '<option value="' + subcamp_response.responseJSON.subcampaigns[i] + '">' + subcamp_response.responseJSON.subcampaigns[i] + '</option>';
         }
 
-        if(selector == 'campaign_select' || selector == 'update_campaign_select'){
+        if (selector == 'campaign_select' || selector == 'update_campaign_select') {
             $('#subcamps').empty();
             $('#subcamps').append(subcampaigns);
-        }else if(selector == 'destination_campaign' || selector == 'update_destination_campaign'){
+        } else if (selector == 'destination_campaign' || selector == 'update_destination_campaign') {
             $('#destination_subcampaign').empty();
             $('#destination_subcampaign').append(subcampaigns);
         }
     },
 
-    toggle_leadrule:function(){
+    toggle_leadrule: function () {
         var checked;
         var ruleid = $(this).parent().parent().parent().data('ruleid');
 
-        if($(this).is(':checked')){
-            $(this).attr('Checked','Checked');
-            checked=1;
-        }else{
+        if ($(this).is(':checked')) {
+            $(this).attr('Checked', 'Checked');
+            checked = 1;
+        } else {
             $(this).removeAttr('Checked');
-            checked=0;
+            checked = 0;
         }
 
         $.ajaxSetup({
@@ -661,29 +662,29 @@ var Master = {
         });
 
         $.ajax({
-            url:'/tools/contactflow_builder/toggle_rule',
-            type:'POST',
-            data:{
-                checked:checked,
-                id:ruleid
+            url: '/tools/contactflow_builder/toggle_rule',
+            type: 'POST',
+            data: {
+                checked: checked,
+                id: ruleid
 
             },
-            success:function(response){
+            success: function (response) {
             }
         });
     },
 
-    toggle_email_campaign:function(e,campaign_id){
+    toggle_email_campaign: function (e, campaign_id) {
 
         var checked;
         // var campaign_id = $(campaign_id).data('id');
 
-        if($(campaign_id).is(':checked')){
-            $(campaign_id).attr('Checked','Checked');
-            checked=1;
-        }else{
+        if ($(campaign_id).is(':checked')) {
+            $(campaign_id).attr('Checked', 'Checked');
+            checked = 1;
+        } else {
             $(campaign_id).removeAttr('Checked');
-            checked=0;
+            checked = 0;
         }
 
         $.ajaxSetup({
@@ -693,22 +694,22 @@ var Master = {
         });
 
         $.ajax({
-            url:'/tools/email_drip/toggle_email_campaign',
-            type:'POST',
-            data:{
-                checked:checked,
-                id:campaign_id
+            url: '/tools/email_drip/toggle_email_campaign',
+            type: 'POST',
+            data: {
+                checked: checked,
+                id: campaign_id
 
             },
-            success:function(response){
+            success: function (response) {
             }
         });
     },
 
-    get_leadrule_filter_menu:function(){
+    get_leadrule_filter_menu: function () {
         var filters = [];
-        $('.lead_rule_filter_type option').each(function(){
-            if($(this).val() != ''){
+        $('.lead_rule_filter_type option').each(function () {
+            if ($(this).val() != '') {
                 filters.push($(this).val());
             }
         });
@@ -798,7 +799,7 @@ var Master = {
         campaign = $(campaign).find('a').text();
         var datefilter = $('#datefilter').val();
         $('.preloader').show();
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1230,7 +1231,7 @@ var Master = {
 
         var sortedby_parent = $(this).parent().parent();
         console.log(sortedby_parent);
-        
+
         this.th_sort = $(sortedby_parent).text();
         $(sortedby_parent).siblings().find('a span').show();
         $(sortedby_parent).siblings().find('a span').removeClass('active');
@@ -1322,7 +1323,7 @@ var Master = {
             url: '/dashboards/reports/update_report',
             type: 'POST',
             dataType: 'json',
-            timeout:600000,
+            timeout: 600000,
             data: {
                 curpage: curpage,
                 pagesize: pagesize,
@@ -1382,8 +1383,8 @@ var Master = {
                         $('.pag').append(response.pag).show();
                         $('.pagination').find('li').removeClass('active');
                         $('.pagination li a[data-paglink="' + this.curpage + '"]').parent().addClass('active');
-                    }else{
-                        $('.pag').append('<br><br><br>'+response.pag).show();
+                    } else {
+                        $('.pag').append('<br><br><br>' + response.pag).show();
                         $('.pag').first().find('.pag_dets').addClass('mt50');
                     }
 
@@ -1427,16 +1428,16 @@ var Master = {
                 if (response.params.report == 'bwr_campaign_call_log') {
                     Master.campaign_call_log(response);
                 }
-            }, error: function(jqXHR, textStatus){
-                if(textStatus === 'timeout'){     
-                     alert('Failed from timeout, please refresh your browser');         
+            }, error: function (jqXHR, textStatus) {
+                if (textStatus === 'timeout') {
+                    alert('Failed from timeout, please refresh your browser');
                 }
             },
         }); /// end ajax
     }, /// end update_report function
 
 
-    calls_per_hour:function(response){
+    calls_per_hour: function (response) {
 
         $('.hidetilloaded').show();
         var chartColors = Master.chartColors;
@@ -1445,38 +1446,38 @@ var Master = {
 
             labels: response.extras.Date,
             datasets: [
-            {
-                label: Lang.get('js_msgs.inbound'),
-                borderColor: chartColors.orange,
-                backgroundColor: chartColors.orange,
-                fill: false,
-                data: response.extras.Inbound,
-                yAxisID: 'y-axis-1'
-            },
-            {
-                label: Lang.get('js_msgs.abandoned'),
-                borderColor: chartColors.green,
-                backgroundColor: chartColors.green,
-                fill: false,
-                data: response.extras.Abandoned,
-                yAxisID: 'y-axis-1',
-            }, 
-            {
-                label: Lang.get('js_msgs.outbound'),
-                borderColor: chartColors.grey,
-                backgroundColor: chartColors.grey,
-                fill: false,
-                data: response.extras.Outbound,
-                yAxisID: 'y-axis-1'
-            },
-            {
-                label: Lang.get('js_msgs.dropped'),
-                borderColor: chartColors.blue,
-                backgroundColor: chartColors.blue,
-                fill: false,
-                data: response.extras.Dropped,
-                yAxisID: 'y-axis-1'
-            }
+                {
+                    label: Lang.get('js_msgs.inbound'),
+                    borderColor: chartColors.orange,
+                    backgroundColor: chartColors.orange,
+                    fill: false,
+                    data: response.extras.Inbound,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    label: Lang.get('js_msgs.abandoned'),
+                    borderColor: chartColors.green,
+                    backgroundColor: chartColors.green,
+                    fill: false,
+                    data: response.extras.Abandoned,
+                    yAxisID: 'y-axis-1',
+                },
+                {
+                    label: Lang.get('js_msgs.outbound'),
+                    borderColor: chartColors.grey,
+                    backgroundColor: chartColors.grey,
+                    fill: false,
+                    data: response.extras.Outbound,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    label: Lang.get('js_msgs.dropped'),
+                    borderColor: chartColors.blue,
+                    backgroundColor: chartColors.blue,
+                    fill: false,
+                    data: response.extras.Dropped,
+                    yAxisID: 'y-axis-1'
+                }
             ]
         };
 
@@ -1932,7 +1933,7 @@ var Master = {
 
     lead_inventory: function (response) {
         $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
-        $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
+        $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads + '</b>');
     },
 
     caller_id: function (response) {
@@ -2044,27 +2045,27 @@ var Master = {
         }
     },
 
-    populate_dnc_modal:function(){
+    populate_dnc_modal: function () {
         var id = $(this).data('id');
-        $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:'+id);
+        $('#deleteDNCModal .modal-footer').find('.btn-danger').val('delete:' + id);
     },
 
-    populate_dnc_reversemodal:function(){
+    populate_dnc_reversemodal: function () {
         var id = $(this).data('id');
-        $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
+        $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:' + id);
     },
 
-    toggle_instructions:function(e){
+    toggle_instructions: function (e) {
 
-        if(e){
+        if (e) {
             e.preventDefault();
         }
 
         that = $('a.toggle_instruc');
-        if(that.hasClass('collapsed')){
+        if (that.hasClass('collapsed')) {
             that.removeClass('collapsed');
             that.empty().append('<i class="fas fa-angle-up"></i>');
-        }else{
+        } else {
             that.addClass('collapsed');
             that.empty().append('<i class="fas fa-angle-down"></i>');
         }
@@ -2072,7 +2073,7 @@ var Master = {
         that.parent().find('.instuc_div').slideToggle();
     },
 
-    add_esp:function(e){
+    add_esp: function (e) {
         e.preventDefault();
 
         var form_data = $(this).serialize();
@@ -2091,14 +2092,14 @@ var Master = {
             data: form_data,
             success: function (response) {
                 location.reload();
-            },error: function (data) {
+            }, error: function (data) {
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (key, value) {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.add_esp .alert-danger').append('<li>'+value+'</li>');
+                                $('.add_esp .alert-danger').append('<li>' + value + '</li>');
                             });
                         }
 
@@ -2109,7 +2110,7 @@ var Master = {
         });
     },
 
-    edit_server_modal:function(e){
+    edit_server_modal: function (e) {
         e.preventDefault();
 
         var id = $(this).data('serverid');
@@ -2132,12 +2133,12 @@ var Master = {
                 $('#editESPModal .provider_type').val(response.provider_type);
                 $('#editESPModal .id').val(response.id);
                 $('#editESPModal .properties').empty();
-                var property_inputs='';
+                var property_inputs = '';
 
                 const entries = Object.entries(response.properties)
                 for (const [key, value] of entries) {
                     var label = key.charAt(0).toUpperCase() + key.slice(1);
-                    property_inputs+='<div class="form-group"><label>'+label+'</label><input type="text" class="form-control '+key+'" name="properties['+key+']" value="'+value+'" required></div>';
+                    property_inputs += '<div class="form-group"><label>' + label + '</label><input type="text" class="form-control ' + key + '" name="properties[' + key + ']" value="' + value + '" required></div>';
                 }
 
                 $('#editESPModal .properties').append(property_inputs);
@@ -2145,7 +2146,7 @@ var Master = {
         });
     },
 
-    update_esp:function(e){
+    update_esp: function (e) {
         e.preventDefault();
         var form_data = $(this).serialize();
 
@@ -2160,11 +2161,11 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/update_esp',
             type: 'POST',
-            data:form_data,
+            data: form_data,
             success: function (response) {
                 $(this).find('i').remove();
                 location.reload();
-            },error: function (data) {
+            }, error: function (data) {
                 $(this).find('i').remove();
                 if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
@@ -2172,7 +2173,7 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.edit_smtp_server .alert-danger').append('<li>'+value+'</li>');
+                                $('.edit_smtp_server .alert-danger').append('<li>' + value + '</li>');
                             });
                         }
 
@@ -2183,7 +2184,7 @@ var Master = {
         });
     },
 
-    test_connection:function(e){
+    test_connection: function (e) {
         e.preventDefault();
 
         $('.alert').empty().hide();
@@ -2199,7 +2200,7 @@ var Master = {
                 $(that).find('.test_connection').find('i').remove();
                 $(that).find('.connection_msg').removeClass('alert-danger alert-success');
                 $(that).find('.connection_msg').addClass('alert-success').text(response.message).show();
-            },error: function (data) {
+            }, error: function (data) {
                 $('.test_connection').find('i').remove();
 
                 if (data.status === 422) {
@@ -2208,32 +2209,32 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $(that).find('.connection_msg').append('<li>'+value+'</li>');
+                                $(that).find('.connection_msg').append('<li>' + value + '</li>');
                                 $(that).find('.connection_msg').addClass('alert-danger').show();
                             });
                         }
                     });
                 }
-            },statusCode: {
-                500: function(response) {
+            }, statusCode: {
+                500: function (response) {
                     $(that).find('.alert-danger').text('Connection Failed').show();
                 }
             }
         });
     },
 
-    populate_delete_modal:function(e){
+    populate_delete_modal: function (e) {
         e.preventDefault();
         var id = $(this).data('id'),
             name = $(this).data('name'),
             sel = $(this).data('target')
-        ;
+            ;
 
-        $(sel+' h3').find('span').text(name);
-        $(sel+' #id').val(id);
+        $(sel + ' h3').find('span').text(name);
+        $(sel + ' #id').val(id);
     },
 
-    delete_esp:function(e){
+    delete_esp: function (e) {
         e.preventDefault();
         var id = $('#deleteESPModal').find('#id').val();
         $('#deleteESPModal .alert-danger').hide();
@@ -2251,7 +2252,7 @@ var Master = {
             },
             success: function (response) {
                 location.reload();
-            },error: function (data) {
+            }, error: function (data) {
                 $('#deleteESPModal .btn').find('i').remove();
                 if (data.status === 422) {
                     $('#deleteESPModal .alert-danger').empty();
@@ -2260,7 +2261,7 @@ var Master = {
                     $.each(errors, function (key, value) {
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('#deleteESPModal .alert-danger').append('<li>'+value+'</li>');
+                                $('#deleteESPModal .alert-danger').append('<li>' + value + '</li>');
                             });
                         }
                         $('#deleteESPModal .alert-danger').show();
@@ -2270,7 +2271,7 @@ var Master = {
         });
     },
 
-    create_email_campaign:function(e){
+    create_email_campaign: function (e) {
         e.preventDefault();
 
         var form_data = $(this).serialize();
@@ -2285,11 +2286,11 @@ var Master = {
         $.ajax({
             url: '/tools/email_drip/add_campaign',
             type: 'POST',
-            data:form_data,
+            data: form_data,
             success: function (response) {
                 $('.create_campaign ').find('i').remove();
-                window.location.href = '/tools/email_drip/update_filters/'+response.email_drip_campaign_id;
-            },error: function (data) {
+                window.location.href = '/tools/email_drip/update_filters/' + response.email_drip_campaign_id;
+            }, error: function (data) {
                 $('.create_campaign ').find('i').remove();
                 if (data.status === 422) {
                     $('.create_campaign_form .alert').empty();
@@ -2299,7 +2300,7 @@ var Master = {
 
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {
-                                $('.create_campaign_form .alert-danger').append('<li>'+value+'</li>');
+                                $('.create_campaign_form .alert-danger').append('<li>' + value + '</li>');
                             });
                         }
 
@@ -2310,7 +2311,7 @@ var Master = {
         });
     },
 
-    edit_campaign_modal:function(e){
+    edit_campaign_modal: function (e) {
         e.preventDefault();
         var id = $(this).data('campaignid');
         $.ajaxSetup({
@@ -2336,7 +2337,7 @@ var Master = {
                 Master.get_email_drip_subcampaigns(e, response.campaign);
                 $('.edit_campaign_form .drip_campaigns_subcampaign').val(response.subcampaign);
                 $('.edit_campaign_form .email').val(response.email_field);
-                $(".edit_campaign_form .email option[value='"+response.email_field+"']").attr("selected", true);
+                $(".edit_campaign_form .email option[value='" + response.email_field + "']").attr("selected", true);
                 $('.edit_campaign_form .template_id ').val(response.template_id);
                 $('.edit_campaign_form .email_service_provider_id ').val(response.email_service_provider_id);
                 $('.edit_campaign_form .emails_per_lead ').val(response.emails_per_lead);
@@ -2346,7 +2347,7 @@ var Master = {
         });
     },
 
-    get_filter_fields:function(id){
+    get_filter_fields: function (id) {
 
         $('#campaignFilterModal .modal-body').find('.not_validated_filter').remove();
 
@@ -2363,12 +2364,12 @@ var Master = {
                 id: id,
             },
             success: function (response) {
-                var filters='<option value="">Select One</option>';
+                var filters = '<option value="">Select One</option>';
                 const filters_array = Object.keys(response)
 
                 const entries = Object.entries(response)
                 for (const [key, value] of entries) {
-                    filters+='<option data-type="'+value+'" value="'+key+'">'+key+'</option>';
+                    filters += '<option data-type="' + value + '" value="' + key + '">' + key + '</option>';
                 }
 
                 $('#campaignFilterModal .modal-body .filter_fields_cnt select.filter_fields').append(filters);
@@ -2377,10 +2378,10 @@ var Master = {
         });
     },
 
-    get_filters :function(e, that){
+    get_filters: function (e, that) {
         e.preventDefault();
         var email_drip_campaign_id = $(that).data('id');
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -2388,52 +2389,52 @@ var Master = {
         });
 
         $.ajax({
-            url:'/tools/email_drip/get_filters',
-            type:'POST',
-            data:{
-                email_drip_campaign_id:email_drip_campaign_id,
+            url: '/tools/email_drip/get_filters',
+            type: 'POST',
+            data: {
+                email_drip_campaign_id: email_drip_campaign_id,
             },
-            success:function(response){
+            success: function (response) {
 
-                if(response.length){
+                if (response.length) {
                     $('.filter_fields_cnt').empty().show();
-                    var filters='';
+                    var filters = '';
                     Master.get_filter_fields(email_drip_campaign_id)
-                    for(var i=0;i<response.length;i++){
+                    for (var i = 0; i < response.length; i++) {
 
-                        filters+='<div class="row filter_fields_div"><div class="col-sm-4"><label>Field</label><div class="form-group"><select class="form-control filter_fields" name="filter_fields" data-type="field"></select></div></div><div class="col-sm-3 filter_operators_div"><label>Operator</label><div class="form-group"><select class="form-control filter_operators" name="filter_operators" data-type="operator"></select></div></div><div class="col-sm-3 filter_values_div"><label>Value</label><input type="text" class="form-control filter_value" name="filter_value" data-type="value"></div><div class="col-sm-2"><a href="#" class="remove_camp_filter"><i class="fa fa-trash-alt"></i> Remove</a></div></div>';
+                        filters += '<div class="row filter_fields_div"><div class="col-sm-4"><label>Field</label><div class="form-group"><select class="form-control filter_fields" name="filter_fields" data-type="field"></select></div></div><div class="col-sm-3 filter_operators_div"><label>Operator</label><div class="form-group"><select class="form-control filter_operators" name="filter_operators" data-type="operator"></select></div></div><div class="col-sm-3 filter_values_div"><label>Value</label><input type="text" class="form-control filter_value" name="filter_value" data-type="value"></div><div class="col-sm-2"><a href="#" class="remove_camp_filter"><i class="fa fa-trash-alt"></i> Remove</a></div></div>';
                     }
 
                     $('.filter_fields_cnt').append(filters);
-                    for(var i=0;i<response.length;i++){
-                        $('.filter_fields_div:eq('+i+')').find('.filter_fields').css({'border':'1px solid red'});
-                        $(".filter_fields_div:eq("+i+") .filter_fields").find("option[value='"+response[i]['field']+"']").attr('selected','selected');
+                    for (var i = 0; i < response.length; i++) {
+                        $('.filter_fields_div:eq(' + i + ')').find('.filter_fields').css({ 'border': '1px solid red' });
+                        $(".filter_fields_div:eq(" + i + ") .filter_fields").find("option[value='" + response[i]['field'] + "']").attr('selected', 'selected');
                     }
                 }
             }
         });
     },
 
-    reset_modal_form:function(modal){
+    reset_modal_form: function (modal) {
         $(modal).find('form.form').trigger("reset");
         $(modal).find('.alert').empty().hide();
     },
 
-    pass_id_to_modal:function(that, id){
+    pass_id_to_modal: function (that, id) {
         var modal = $(that).data('target');
         $(modal).find('.id').val(id);
 
-        if($(that).data('name')){
+        if ($(that).data('name')) {
             $(modal).find('h3 span').html($(that).data('name'));
         }
     },
 
-    cancel_modal_form:function(e){
+    cancel_modal_form: function (e) {
         e.preventDefault();
         $(this).parent().parent().find('.form')[0].reset()
     },
 
-    set_group:function(){
+    set_group: function () {
         var group_id = $(this).val();
         var report = $('#report').val();
 
@@ -2444,19 +2445,19 @@ var Master = {
         });
 
         $.ajax({
-            url:'/sso/set_group',
-            type:'POST',
-            data:{
-                group_id:group_id,
-                report:report
+            url: '/sso/set_group',
+            type: 'POST',
+            data: {
+                group_id: group_id,
+                report: report
             },
-            success:function(response){
+            success: function (response) {
                 window.location.reload();
             }
         });
     },
 
-    set_timezone:function(){
+    set_timezone: function () {
         var tz = $(this).val();
         var report = $('#report').val();
 
@@ -2467,36 +2468,36 @@ var Master = {
         });
 
         $.ajax({
-            url:'/sso/set_timezone',
-            type:'POST',
-            data:{
-                tz:tz,
-                report:report
+            url: '/sso/set_timezone',
+            type: 'POST',
+            data: {
+                tz: tz,
+                report: report
             },
-            success:function(response){
+            success: function (response) {
                 window.location.reload();
             }
         });
     },
 
-    toggle_active_reps:function(){
-        var checked=0;
-        if($(this).is(':checked')){
-            checked=1;
-        }else{
-            checked=0;
+    toggle_active_reps: function () {
+        var checked = 0;
+        if ($(this).is(':checked')) {
+            checked = 1;
+        } else {
+            checked = 0;
         }
 
-        var active_cnt=0;
-        $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
-            if(index>1){
-                if(checked){
-                    if(!$(this).hasClass('active_rep')){
+        var active_cnt = 0;
+        $(this).parent().prev().find('.dropdown-menu').find('li').each(function (index) {
+            if (index > 1) {
+                if (checked) {
+                    if (!$(this).hasClass('active_rep')) {
                         $(this).hide();
-                        active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length -2;
+                        active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length - 2;
                     }
-                }else{
-                    active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active.active_rep').length -2;
+                } else {
+                    active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active.active_rep').length - 2;
                     $(this).show();
                 }
             }
@@ -2504,16 +2505,16 @@ var Master = {
 
     },
 
-    toggle_active_client:function(){
+    toggle_active_client: function () {
         var checked;
         var id = $(this).parent().parent().parent().data('id');
 
-        if($(this).is(':checked')){
-            $(this).attr('Checked','Checked');
-            checked=1;
-        }else{
+        if ($(this).is(':checked')) {
+            $(this).attr('Checked', 'Checked');
+            checked = 1;
+        } else {
             $(this).removeAttr('Checked');
-            checked=0;
+            checked = 0;
         }
 
         $.ajaxSetup({
@@ -2523,13 +2524,13 @@ var Master = {
         });
 
         $.ajax({
-            url:'/admin/toggle_user',
-            type:'POST',
-            data:{
-                checked:checked,
-                id:id,
+            url: '/admin/toggle_user',
+            type: 'POST',
+            data: {
+                checked: checked,
+                id: id,
             },
-            success:function(response){
+            success: function (response) {
 
             }
         });
@@ -2538,62 +2539,81 @@ var Master = {
     /////////////////////////////////////////////////////////
     // PINNED TABLE - dbl click to freeze
     /////////////////////////////////////////////////////////
-    pin_table_column:function(e){
+    pin_table_column: function (e) {
 
         var index = $(this).index();
-        if($(this).hasClass('sticky-col')){
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').removeClass('sticky-col');
+        if ($(this).hasClass('sticky-col')) {
+            $('tbody tr').each(function () {
+                $(this).find('td:eq(' + index + ')').removeClass('sticky-col');
             });
             $(this).removeClass('sticky-col');
-        }else{
+        } else {
             $(this).addClass('sticky-col');
-            $('tbody tr').each(function(){
-                $(this).find('td:eq('+index+')').addClass('sticky-col');
-                $(this).find('td:eq('+index+')').css({'left':+index+'00px'});
-                $('thead').find('th:eq('+index+')').css({'left':+index+'00px'});
+            $('tbody tr').each(function () {
+                $(this).find('td:eq(' + index + ')').addClass('sticky-col');
+                $(this).find('td:eq(' + index + ')').css({ 'left': +index + '00px' });
+                $('thead').find('th:eq(' + index + ')').css({ 'left': +index + '00px' });
             });
         }
     },
 
     // set direction of table to freeze
-    set_pinned_direction:function(){
+    set_pinned_direction: function () {
         var dir = $(this).val();
         var cols = $('#numb_pinned_cols').val();
         Master.draw_pinned_datatable(cols, dir);
     },
 
     // change # of columns to freeze from select menu
-    select_pinned_columns:function(e){
+    select_pinned_columns: function (e) {
         e.preventDefault();
-        Master.pinned_columns=$(this).val();
+        Master.pinned_columns = $(this).val();
         Master.draw_pinned_datatable(Master.pinned_columns, $(".pin_direction[name='pin_direction']:checked").val());
     },
 
-    draw_pinned_datatable:function(cols, dir='left'){
-    ///////////////////////////////////////////////////////////
+    draw_pinned_datatable: function (cols, dir = 'left') {
+        ///////////////////////////////////////////////////////////
         Master.report_pinned_datatable.destroy();
 
-        if(dir =='left'){
-            Master.left_cols=cols;
-            Master.right_cols=0;
-        }else{
-            Master.right_cols=cols;
-            Master.left_cols=0;
+        if (dir == 'left') {
+            Master.left_cols = cols;
+            Master.right_cols = 0;
+        } else {
+            Master.right_cols = cols;
+            Master.left_cols = 0;
         }
 
-        Master.report_pinned_datatable=$('.report_pinned_datatable').DataTable({
-                destroy: true,
-                scrollY:        500,
-                scrollX:        true,
-                scrollCollapse: true,
-                paging:         true,
-                responsive: true,
-                fixedColumns:   {
-                    leftColumns: Master.left_cols,
-                    rightColumns: Master.right_cols
-                }
-            });
+        Master.report_pinned_datatable = $('.report_pinned_datatable').DataTable({
+            destroy: true,
+            scrollY: 500,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            responsive: true,
+            fixedColumns: {
+                leftColumns: Master.left_cols,
+                rightColumns: Master.right_cols
+            }
+        })
+    },
+
+    // toggle instructions on tools/dnc_importer & admin/spam_check
+    toggle_instructions: function (e) {
+
+        if (e) {
+            e.preventDefault();
+        }
+
+        that = $('a.toggle_instruc');
+        if (that.hasClass('collapsed')) {
+            that.removeClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-up"></i>');
+        } else {
+            that.addClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-down"></i>');
+        }
+
+        that.parent().find('.instuc_div').slideToggle();
     }
 }
 
@@ -2632,12 +2652,17 @@ $(document).ready(function () {
 
     $('[data-toggle="tooltip"]').tooltip({ trigger: "click" });
 
-    $('.notification_msg').find('img').each(function(){
+    $('.notification_msg').find('img').each(function () {
         $(this).addClass('img-responsive');
     });
 
-    if($('.sso #group_id').val() == '-1'){
+    if ($('.sso #group_id').val() == '-1') {
         $('.sso #group_id').parent().addClass('has-error');
     }
+
+    if ($('.spam_check_table tbody tr, .dnc_table tbody tr').length) {
+        Master.toggle_instructions();
+    }
+
 });
 
