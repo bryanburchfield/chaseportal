@@ -39,7 +39,7 @@ class SpamCheckController extends Controller
             'description',
             'uploaded_at',
             'process_started_at',
-            'processed_at',
+            'processed_at'
         )
             ->orderBy('id', 'desc')
             ->get();
