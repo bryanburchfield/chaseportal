@@ -185,7 +185,7 @@ select:required:invalid {
 														</select>
 													</div>
 
-													<div class="custom_element" data-elementtype="" data-new_element_data=""></div>
+													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -331,6 +331,18 @@ select:required:invalid {
 		</div>
 	</div>
 
+	<div class="radio-4">
+		<div class="col-sm-4">
+
+		</div>
+	</div>
+
+	<div class="checkbox-4">
+		<div class="col-sm-4">
+
+		</div>
+	</div>
+
 	<div class="textarea-12">
 		<div class="col-sm-12">
 			<div class="form-group">
@@ -460,6 +472,11 @@ select:required:invalid {
             	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Radio Input Group</h3>
 
+            		<div class="form-group fc_style group_name">
+            			<label>Group Name</label>
+            			<input type="text" class="form-control group_name">
+            		</div>
+
             		@include('tools.shared.form_element_builder')
 
             		<a href="#" class="btn btn-primary create_form_element">Create Radio Group</a>
@@ -469,6 +486,11 @@ select:required:invalid {
             	<!-- Checkbox menu builder -->
             	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
+
+            		<div class="form-group fc_style group_name">
+            			<label>Group Name</label>
+            			<input type="text" class="form-control group_name">
+            		</div>
 
             		@include('tools.shared.form_element_builder')
 
