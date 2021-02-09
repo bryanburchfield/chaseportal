@@ -3186,6 +3186,10 @@ a.toggle_instruc {
   top: 3px;
 }
 
+.webhook_fields h3 {
+  text-align: center;
+}
+
 .webhook_fields .field {
   border-bottom: 1px solid #1b293c;
   padding-top: 15px;
@@ -3908,7 +3912,7 @@ label.checkbox.toggle_active_reps {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #0b1019 1%, #1c293d 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#0b1019", endColorstr="#1c293d",GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b1019', endColorstr='#1c293d',GradientType=1 );
   /* IE6-9 */
 }
 
@@ -4000,8 +4004,8 @@ div.col-sm-5.five-two {
 
 .getleaddetails {
   /* ---------------------------------------------------
-  MEDIAQUERIES
-  ----------------------------------------------------- */
+MEDIAQUERIES
+----------------------------------------------------- */
 }
 
 .getleaddetails:hover {
@@ -4612,7 +4616,7 @@ div.col-sm-5.five-two {
   }
 
   .getleaddetails .navbar {
-    padding: 20px 15px 0 15px;
+    padding: 20px 15px 0  15px;
   }
 
   .getleaddetails #content .navbar {

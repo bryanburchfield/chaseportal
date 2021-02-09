@@ -139,35 +139,53 @@ select:required:invalid {
 							<div class="col-sm-12 webhook_fields">
 								<div class="card">
 									<div class="row">
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Labels</h3>
 										</div>
 
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Names</h3>
 										</div>
 
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<h3 class="mb30">Field Values</h3>
+										</div>
+
+										<div class="col-sm-3">
+											<h3 class="mb30">Field Type</h3>
 										</div>
 									</div>
 
 									<div class="all-slides">
 										@foreach($default_lead_fields as $val)
-											<div class="field slide default">
+											<div class="field slide default" data-id="{{ $loop->index + 1 }}">
 												<div class="col-sm-1">
 													<a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a>
 												</div>
-												<div class="col-sm-3">
+												<div class="col-sm-2">
 													<p class="field_label_fb" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
-												<div class="col-sm-4">
+												<div class="col-sm-3">
 													<p class="field_name_fb" data-field="{{$val}}">{{$val}}</p>
 												</div>
 
-												<div class="col-sm-4">
+												<div class="col-sm-3">
 													<p class="field_value_fb" data-field=""></p>
+												</div>
+
+												<div class="col-sm-3">
+													<div class="form-group">
+														<select name="field_type" class="form-control field_type">
+															<option value="input" selected>Input</option>
+															<option value="textarea">Textarea</option>
+															<option value="select">Select</option>
+															<option value="radio">Radio</option>
+															<option value="checkbox">Checkbox</option>
+														</select>
+													</div>
+
+													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -276,9 +294,6 @@ select:required:invalid {
 
 <div class="container">
 	<div class="row">
-		{{-- <div class="col-sm-12"> --}}
-		{{-- <h2 class="heading">Contact Information</h2> --}}
-		{{-- </div> --}}
 
 		<form control="form" class="form card fc_style">
 			<h2 class="heading">Contact Information</h2>
@@ -300,6 +315,36 @@ select:required:invalid {
 			<div class="form-group">
 				<label>Label</label>
 				<input type="text" class="form-control control-input" name="label" control="input" field-name="label" id="label">
+			</div>
+		</div>
+	</div>
+
+	<div class="select-4">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label>Label</label>
+				<select name="name" class="form-control control-select"></select>
+			</div>
+		</div>
+	</div>
+
+	<div class="radio-4">
+		<div class="col-sm-4">
+
+		</div>
+	</div>
+
+	<div class="checkbox-4">
+		<div class="col-sm-4">
+
+		</div>
+	</div>
+
+	<div class="textarea-4">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label>Label</label>
+				<textarea name="label" id="label" field-name="label" cols="30" rows="10" class="form-control control-input" control="textarea"></textarea>
 			</div>
 		</div>
 	</div>
@@ -396,7 +441,6 @@ select:required:invalid {
 </div>
 </div>
 
-								
 
 							</div>
 						</div>
@@ -407,6 +451,63 @@ select:required:invalid {
 	</div>
 	@include('shared.notifications_bar')
 </div>
+
+<!-- Field Type Modal -->
+<div class="modal fade" id="filter_type_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Filter Type</h4>
+            </div>
+
+            <div class="modal-body">
+            	<!-- Select menu builder -->
+            	<div data-type="select" class="select_options hidetilloaded field_type_options">
+            		<h3 class="mt0 mb20">Build Select Menu</h3>
+
+            		@include('tools.shared.form_element_builder')
+
+            		<a href="#" class="btn btn-primary create_form_element">Create Select Menu</a>
+            	</div>
+            	<!-- Select menu builder -->
+
+            	<!-- Radio menu builder -->
+            	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
+            		<h3 class="mt0 mb20">Build Radio Input Group</h3>
+
+            		<div class="form-group fc_style group_name">
+            			<label>Group Name</label>
+            			<input type="text" class="form-control group_name">
+            		</div>
+
+            		@include('tools.shared.form_element_builder')
+
+            		<a href="#" class="btn btn-primary create_form_element">Create Radio Group</a>
+            	</div>
+            	<!-- Radio menu builder -->
+
+            	<!-- Checkbox menu builder -->
+            	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
+            		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
+
+            		<div class="form-group fc_style group_name">
+            			<label>Group Name</label>
+            			<input type="text" class="form-control group_name">
+            		</div>
+
+            		@include('tools.shared.form_element_builder')
+
+            		<a href="#" class="btn btn-primary create_form_element">Create Checkbox Group</a>
+            	</div>
+            	<!-- Checkbox menu builder -->
+            	
+            	<div class="alert alert-danger hidetilloaded"></div>
+            </div>
+        </div>
+    </div>
+</div>;
 
 @include('shared.reportmodal')
 @endsection

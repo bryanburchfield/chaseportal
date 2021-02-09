@@ -1,5 +1,8 @@
 var FORMBUILDER = {
 
+	current_row:0,
+	element_type:'',
+
 	init:function(){
 		$('.checkall_inputs').on('click', this.checkall_inputs);
 		$('.generate_code').on('click', this.generate_code);
@@ -9,6 +12,10 @@ var FORMBUILDER = {
 		$('body').on('dblclick', '.field_label_fb', this.edit_field_label);
 		$('body').on('dblclick', '.field_name_fb', this.edit_field_label);
 		$('.download_file').on('click', this.download_file);
+		$('body').on('change', '.field_type', this.open_field_modal);
+		$('#filter_type_modal').on('click', '.add_option', this.add_option);
+		$('#filter_type_modal').on('click', '.remove_option', this.remove_option);
+		$('#filter_type_modal').on('click', '.create_form_element', this.create_form_element);
 		this.move_notes_row(this.move_notes_row);
 	},
 
@@ -75,8 +82,11 @@ var FORMBUILDER = {
 				$('.field_from_table').remove();
 				if (response.fields.length) {
 					var new_field_row = '';
+					var fields_len = $('.field.slide').length;
+
 					for (var i = 0; i < response.fields.length; i++) {
-						new_field_row = '<div class="field slide field_from_table draggable"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div></div>';
+						fields_len++;
+						new_field_row = '<div class="field slide field_from_table draggable" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + response.fields[i] + '">' + response.fields[i] + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" control="input" class="form-control control-input field_value_fb" name="' + response.fields[i] + '" placeholder="Value" value=""></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div><div class="custom_element" data-elementtype=""></div></div></div>';
 
 						$(new_field_row).insertAfter('.all-slides .field:last');
 					}
@@ -93,8 +103,9 @@ var FORMBUILDER = {
 		var custom_field_label_fb = $('.custom_field_label_fb').val();
 		var custom_field_name_fb = $('.custom_field_name_fb').val();
 		var custom_field_value_fb = $('.custom_field_value_fb').val();
-
-		var new_field_row = '<div class="field slide"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-3"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-4"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-4"><div class="form-group"><input type="text" class="form-control control-input field_value_fb" control="input" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div></div>';
+		var fields_len = $('.field.slide').length;
+		fields_len++;
+		var new_field_row = '<div class="field slide" data-id="'+fields_len+'"><div class="col-sm-1"><a href="#" class="remove_field"><i class="fas fa-times-circle"></i></a></div><div class="col-sm-2"><p class="field_label_fb" data-field="' + custom_field_label_fb + '">' + custom_field_label_fb + '</p></div><div class="col-sm-3"><p class="field_name_fb" data-field="' + custom_field_name_fb + '">' + custom_field_name_fb + '</p></div><div class="col-sm-3"><div class="form-group"><input type="text" class="form-control control-input field_value_fb" control="input" name="" placeholder="Value" value="'+custom_field_value_fb+'"></div></div><div class="col-sm-3"><div class="form-group"><select name="field_type" class="form-control field_type"><option value="input" selected>Input</option><option value="textarea">Textarea</option><option value="select">Select</option><option value="radio">Radio</option><option value="checkboxes">Checkbox</option></select></div><div class="custom_element" data-elementtype=""></div></div></div>';
 
 		$(new_field_row).insertAfter('.field:last');
 		$(this).trigger("reset");
@@ -115,6 +126,8 @@ var FORMBUILDER = {
 		}
 
 		$('.all-slides .field').each(function(index){
+
+			let field_type = $(this).find('.field_type').val();
 
 			if(!$(this).hasClass('field_removed')){
 				var field_label_fb = $(this).find('.field_label_fb').text();
@@ -137,10 +150,56 @@ var FORMBUILDER = {
 				$('.html_options').find('.form-group .form-control').attr('name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('field-name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('id', field_name_fb);
-				$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
+
+				// add value attribute to inputs
+				if(field_type == 'input'){
+					$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
+				}
 
 				if(field_label_fb == 'City' || field_label_fb == 'ZipCode'){ /// wrap in 4 column div
 					html=$('.html_options').find('.input-4').html();
+				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
+					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
+					var options='';
+
+					for (var key of Object.keys(new_element_obj)) {
+						options += '<option value="'+new_element_obj[key]+'">'+key+'</option>';
+					}
+
+					$('.html_options').find('.select-4').find('select.form-control').append(options);
+					html=$('.html_options').find('.select-4').html();
+					$('.html_options').find('.select-4 select').empty();
+
+				}else if($(this).find('.field_type').val() == 'radio'){ /// wrap in a 4 column w/ radio menu
+					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
+					var group_name = $(this).find('.custom_element').data('groupname');
+					var radio_inputs='';
+
+					for (var key of Object.keys(new_element_obj)) {
+						radio_inputs += '<div class="radio"><label><input type="radio" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label></div>';
+					}
+
+					$('.html_options').find('.radio-4').find('.col-sm-4').append(radio_inputs);
+					html=$('.html_options').find('.radio-4').html();
+					$('.html_options').find('.radio-4 .col-sm-4').empty();
+
+				}else if($(this).find('.field_type').val() == 'checkbox'){ /// wrap in a 4 column w/ checkbox menu
+					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
+					var group_name = $(this).find('.custom_element').data('groupname');
+					var checkbox_inputs='';
+
+					for (var key of Object.keys(new_element_obj)) {
+						checkbox_inputs += '<div class="checkbox"><label><input type="checkbox" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label></div>';
+					}
+
+					$('.html_options').find('.checkbox-4').find('.col-sm-4').append(checkbox_inputs);
+					html=$('.html_options').find('.checkbox-4').html();
+					$('.html_options').find('.checkbox-4 .col-sm-4').empty();
+
+				}else if($(this).find('.field_type').val() == 'textarea'){ /// wrap in a 4 column w/ textarea menu
+					
+					html=$('.html_options').find('.textarea-4').html();
+					console.log(html);
 				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
 					html=$('.html_options').find('.input-12').html();
 				}else if(field_label_fb == 'State'){	/// grab state select
@@ -241,6 +300,92 @@ var FORMBUILDER = {
 
 	get_html:function(){
 		return $('.form_code').text();
+	},
+
+	open_field_modal:function(e){
+		e.preventDefault();
+
+		var id = $(this).parent().parent().parent().data('id');
+		FORMBUILDER.current_row = id;
+
+		$('#filter_type_modal').find('.field_type_options').hide();
+		var field_type = $(this).val();
+		if(field_type !== 'input' && field_type !== 'textarea'){
+			FORMBUILDER.element_type=field_type;
+			$('#filter_type_modal').modal('show');
+			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();
+			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
+		}
+	},
+
+	add_option:function(){
+
+		$('#filter_type_modal').find('.alert').hide();
+
+		let valid = FORMBUILDER.validate_options();
+
+		if(valid){
+			if($(this).is(':last-child')){
+			   $('#filter_type_modal .field_type_options.active').find('.input-group').last().clone().find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
+			}else{
+				return false;
+			}
+		}else{
+			$('#filter_type_modal').find('.alert').html('Add a name and value before adding another field group').show();
+		}
+	},
+
+	remove_option:function(){
+
+		$('#filter_type_modal').find('.alert').hide();
+
+		var options_len =$('.select_options .input-group').length;
+		if(options_len < 2){
+			return false;
+		}else{
+			$(this).parent().parent().remove();
+		}
+	},
+
+	validate_options:function(){
+		let valid=true;
+
+		$('.field_type_options.active .input-group input').each(function(){
+			if($(this).val() == ''){
+				valid=false;
+				return false;
+			}
+		});
+
+		return valid;
+	},
+
+	create_form_element:function(e){
+		e.preventDefault();
+		$('#filter_type_modal').find('.alert').hide();
+		let valid = FORMBUILDER.validate_options();
+
+		if(valid){
+
+			if($(this).parent().find('div.group_name').length){
+				var group_name = $(this).parent().find('input.group_name').val();
+			}
+
+			var opts = {};
+			$('div[data-type="' + FORMBUILDER.element_type + '"]').find('.input-group').each(function(){
+				opts[$(this).find('.option_name').val()] = $(this).find('.option_value').val();
+			})
+
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-elementtype', FORMBUILDER.element_type);
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data", JSON.stringify(opts));
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-groupname', group_name);
+
+			$('#filter_type_modal').modal('hide');
+		}else{
+			$('#filter_type_modal').find('.alert').html('Fill out all fields before creating a menu').show();
+		}
+
+		var new_element_data = JSON.parse($('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data"));
 	}
 }
 
@@ -254,5 +399,15 @@ $(document).ready(function () {
 
 	$('pre').each(function(i, block) {
 	    hljs.highlightBlock(block);
+	});
+
+	$("#filter_type_modal").on("hidden.bs.modal", function () {
+	    $('#filter_type_modal').find('.input-group').find("input:text").val("").end();
+	    $('.field_type_options.active .input-group').not('.input-group:first').remove();
+	    $('#filter_type_modal .modal-body').find('div').removeClass('active');
+
+	    if($('.field_type').val() !== 'input'){
+	    	$(this).addClass('selected');
+	    }
 	});
 });
