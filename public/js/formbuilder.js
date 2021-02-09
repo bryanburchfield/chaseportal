@@ -150,6 +150,7 @@ var FORMBUILDER = {
 				$('.html_options').find('.form-group .form-control').attr('name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('field-name', field_name_fb);
 				$('.html_options').find('.form-group .form-control').attr('id', field_name_fb);
+
 				// add value attribute to inputs
 				if(field_type == 'input'){
 					$('.html_options').find('.form-group .form-control').attr('value', field_value_fb);
@@ -181,6 +182,7 @@ var FORMBUILDER = {
 					$('.html_options').find('.radio-4').find('.col-sm-4').append(radio_inputs);
 					html=$('.html_options').find('.radio-4').html();
 					$('.html_options').find('.radio-4 .col-sm-4').empty();
+
 				}else if($(this).find('.field_type').val() == 'checkbox'){ /// wrap in a 4 column w/ checkbox menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
 					var group_name = $(this).find('.custom_element').data('groupname');
@@ -193,8 +195,12 @@ var FORMBUILDER = {
 					$('.html_options').find('.checkbox-4').find('.col-sm-4').append(checkbox_inputs);
 					html=$('.html_options').find('.checkbox-4').html();
 					$('.html_options').find('.checkbox-4 .col-sm-4').empty();
-				}
-				else if(field_label_fb == 'Address'){	/// wrap in 12 column div
+
+				}else if($(this).find('.field_type').val() == 'textarea'){ /// wrap in a 4 column w/ textarea menu
+					
+					html=$('.html_options').find('.textarea-4').html();
+					console.log(html);
+				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
 					html=$('.html_options').find('.input-12').html();
 				}else if(field_label_fb == 'State'){	/// grab state select
 					html=$('.html_options').find('.select_state').html();
@@ -304,7 +310,7 @@ var FORMBUILDER = {
 
 		$('#filter_type_modal').find('.field_type_options').hide();
 		var field_type = $(this).val();
-		if(field_type !== 'input'){
+		if(field_type !== 'input' && field_type !== 'textarea'){
 			FORMBUILDER.element_type=field_type;
 			$('#filter_type_modal').modal('show');
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();

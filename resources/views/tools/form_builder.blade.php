@@ -294,9 +294,6 @@ select:required:invalid {
 
 <div class="container">
 	<div class="row">
-		{{-- <div class="col-sm-12"> --}}
-		{{-- <h2 class="heading">Contact Information</h2> --}}
-		{{-- </div> --}}
 
 		<form control="form" class="form card fc_style">
 			<h2 class="heading">Contact Information</h2>
@@ -340,6 +337,15 @@ select:required:invalid {
 	<div class="checkbox-4">
 		<div class="col-sm-4">
 
+		</div>
+	</div>
+
+	<div class="textarea-4">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label>Label</label>
+				<textarea name="label" id="label" field-name="label" cols="30" rows="10" class="form-control control-input" control="textarea"></textarea>
+			</div>
 		</div>
 	</div>
 
@@ -435,7 +441,6 @@ select:required:invalid {
 </div>
 </div>
 
-								
 
 							</div>
 						</div>
