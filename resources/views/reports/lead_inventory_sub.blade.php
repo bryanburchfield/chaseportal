@@ -51,6 +51,24 @@
 					</div>
 				</div>
 
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        {!! Form::label('attemptsfrom', __('reports.attempts') . ' (' . __('reports.optional') . ')') !!}
+						<div class="input-group">
+                            {!! Form::text('attemptsfrom', null, ['class'=>'form-control', 'placeholder'=>__('reports.from')]) !!}
+						    <span class="input-group-addon">-</span>
+						    {!! Form::text('attemptsto', null, ['class'=>'form-control', 'placeholder'=>__('reports.to')]) !!}
+						</div>
+					</div>
+				</div>
+
+                <div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('is_callable', __('reports.is_callable') . ' (' . __('reports.optional') . ')') !!}
+						{!! Form::select("is_callable", $filters['is_callable'], null, ["class" => "form-control", 'id'=> 'is_callable']) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
