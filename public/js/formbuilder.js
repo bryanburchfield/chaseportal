@@ -306,6 +306,8 @@ var FORMBUILDER = {
 		var id = $(this).parent().parent().parent().data('id');
 		FORMBUILDER.current_row = id;
 
+		var new_element_data = $(this).parent().parent().find('div.custom_element').attr('data-new_element_data');
+
 		$('#filter_type_modal').find('.field_type_options').hide();
 		var field_type = $(this).val();
 		if(field_type !== 'input' && field_type !== 'textarea'){
@@ -313,6 +315,13 @@ var FORMBUILDER = {
 			$('#filter_type_modal').modal('show');
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
+		}
+
+		if(new_element_data){
+			for (var key of Object.keys(new_element_data)) {
+				console.log(typeof(key));
+				console.log(key+ ' ' + new_element_data[key]);
+			}
 		}
 	},
 
