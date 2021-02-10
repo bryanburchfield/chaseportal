@@ -1980,6 +1980,7 @@ var Master = {
     },
 
     lead_inventory: function (response) {
+        $('.total_leads, .available_leads').html('');
         $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
         $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
     },
