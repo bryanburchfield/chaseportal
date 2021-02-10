@@ -1343,6 +1343,7 @@ var Master = {
                 // hide / empty everything and run report
                 $('.report_table, .pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
+                $('.total_leads, .available_leads').html('');
 
                 // check for errors
                 if (response.errors.length >= 1) {
@@ -1395,15 +1396,20 @@ var Master = {
                     }
                 }
 
-                $('.reports_table').bootstrapTable('destroy').bootstrapTable({
-                    showFullscreen: false,
-                    search: false,
-                    stickyHeader: true,
-                    stickyHeaderOffsetLeft: '20px',
-                    stickyHeaderOffsetRight: '20px',
-                });
+                // $('.reports_table').bootstrapTable('destroy').bootstrapTable({
+                //     showFullscreen: false,
+                //     search: false,
+                //     stickyHeader: true,
+                //     stickyHeaderOffsetLeft: '20px',
+                //     stickyHeaderOffsetRight: '20px',
+                // });
 
                 $('.table-responsive.report_table').show();
+
+                if (response.params.report == 'lead_inventory' || response.params.report == 'lead_inventory_sub') {
+                    $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
+                    $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
+                }
 
                 if (response.params.report == 'calls_per_hour') {
                     Master.calls_per_hour(response);
@@ -1415,10 +1421,6 @@ var Master = {
 
                 if (response.params.report == 'campaign_call_log') {
                     Master.campaign_call_log(response);
-                }
-
-                if (response.params.report == 'lead_inventory' || response.params.report == 'lead_inventory_sub') {
-                    Master.lead_inventory(response);
                 }
 
                 if (response.params.report == 'caller_id') {
@@ -1929,11 +1931,6 @@ var Master = {
             data: callstatus_data,
             options: callstatus_options
         });
-    },
-
-    lead_inventory: function (response) {
-        $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
-        $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads + '</b>');
     },
 
     caller_id: function (response) {
