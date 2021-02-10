@@ -1399,11 +1399,7 @@ var Master = {
                 // hide / empty everything and run report
                 $('.table-responsive, .pag, .report_errors').empty();
                 $('.report_download, .reset_sorting, .pag, .preloader, .report_errors').hide();
-
-                if (response.params.report == 'lead_inventory' || response.params.report == 'lead_inventory_sub') {
-                    console.log(response);
-                    Master.lead_inventory(response);
-                }
+                $('.total_leads, .available_leads').html('');
 
                 // check for errors
                 if (response.errors.length >= 1) {
@@ -1456,6 +1452,11 @@ var Master = {
                         $('.reset_sorting h3').html(Lang.get('js_msgs.sorted_in') + ' <span class="sort_direction">' + sort_direction + '</span> ' + Lang.get('js_msgs.sorted_in') + ' <span class="sorted_by">' + this.th_sort + '</span>');
                         $('.reset_sorting').show();
                     }
+                }
+
+                if (response.params.report == 'lead_inventory' || response.params.report == 'lead_inventory_sub') {
+                    $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
+                    $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
                 }
 
                 if (response.params.report == 'calls_per_hour') {
@@ -1978,13 +1979,6 @@ var Master = {
             data: callstatus_data,
             options: callstatus_options
         });
-    },
-
-    lead_inventory: function (response) {
-        console.log(response);
-        $('.total_leads, .available_leads').html('');
-        $('.total_leads').html('<b>' + Lang.get('js_msgs.total_leads') + ': ' + response.extras.TotalLeads + '</b>');
-        $('.available_leads').html('<b>' + Lang.get('js_msgs.available_leads') + ': ' + response.extras.AvailableLeads  + '</b>');
     },
 
     caller_id: function (response) {
