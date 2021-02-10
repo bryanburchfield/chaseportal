@@ -179,8 +179,6 @@ class CallDetails
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
 
-        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
-
         if (!empty($rec['Recording'])) {
             if ($rec['Duration'] > 0 && !($rec['CallType'] == 'Inbound' && $rec['CallStatus'] == 'CR_HANGUP')) {
                 $server = Auth::user()->dialer->dialer_fqdn;
@@ -195,6 +193,8 @@ class CallDetails
                 $rec['Recording'] = '';
             }
         }
+
+        $rec['Duration'] = $this->secondsToHms($rec['Duration']);
 
         if (!empty($rec['ImportDate'])) {
             $rec['ImportDate'] = Carbon::parse($rec['ImportDate'])->isoFormat('L LT');
