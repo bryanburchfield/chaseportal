@@ -19,6 +19,9 @@ class LeadInventory
         $this->params['reportName'] = 'reports.lead_inventory';
         $this->params['datesOptional'] = true;
         $this->params['campaigns'] = [];
+        $this->params['attemptsfrom'] = '';
+        $this->params['attemptsto'] = '';
+        $this->params['is_callable'] = '';
         $this->params['columns'] = [
             'Description' => 'reports.resultcodes',
             'Type' => 'reports.type',
@@ -30,6 +33,11 @@ class LeadInventory
     {
         $filters = [
             'campaigns' => $this->getAllCampaigns(),
+            'is_callable' => [
+                '' => '',
+                'Y' => trans('general.yes'),
+                'N' => trans('general.no'),
+            ],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -112,7 +120,7 @@ class LeadInventory
             AvailableLeads int default 0,
         )
 
-        CREATE UNIQUE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
+        CREATE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
 
         SELECT * INTO #LeadCounts FROM (";
 
@@ -144,7 +152,16 @@ class LeadInventory
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
-            AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+            AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+
+            if (strlen($this->params['attemptsfrom'])) {
+                $sql .= " AND DR.Attempt >= " . $this->params['attemptsfrom'];
+            }
+            if (strlen($this->params['attemptsto'])) {
+                $sql .= " AND DR.Attempt <= " . $this->params['attemptsto'];
+            }
+
+            $sql .= "
             GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type";
 
             $union = 'UNION ALL';
@@ -156,7 +173,21 @@ class LeadInventory
 		SELECT CallStatus, IsCallable, WasDialed, [Description], [Type], SUM(Leads)
 		FROM #LeadCounts
 		GROUP BY CallStatus, IsCallable, WasDialed, [Description], [Type]
+        
+        UPDATE #ShiftReport
+        SET IsCallable = 1
+        WHERE CallStatus in ('[ Not Called ]', 'AGENTSPCB', 'SYS_CALLBACK')";
 
+        if ($this->params['is_callable'] == 'Y') {
+            $sql .= "
+            DELETE FROM #ShiftReport WHERE IsCallable = 0";
+        }
+        if ($this->params['is_callable'] == 'N') {
+            $sql .= "
+            DELETE FROM #ShiftReport WHERE IsCallable = 1";
+        }
+
+        $sql .= "       
         UPDATE #ShiftReport
         SET TotalLeads = a.Leads
         FROM (SELECT SUM(Leads) as Leads FROM #ShiftReport) a";
@@ -183,10 +214,6 @@ class LeadInventory
         UPDATE #ShiftReport
         SET [Description] = CallStatus
         WHERE IsNull([Description], '') = ''
-
-        UPDATE #ShiftReport
-        SET IsCallable = 1
-        WHERE CallStatus in ('[ Not Called ]', 'AGENTSPCB', 'SYS_CALLBACK')
 
         SELECT
             [Description],
@@ -241,6 +268,18 @@ class LeadInventory
             $this->params['campaigns'] = $request->campaigns;
         } else {
             $this->errors->add('campaigns.required', trans('reports.errcampaignrequired'));
+        }
+
+        if (!empty($request->attemptsfrom) || $request->attemptsfrom == 0) {
+            $this->params['attemptsfrom'] = $request->attemptsfrom;
+        }
+
+        if (!empty($request->attemptsto) || $request->attemptsto == 0) {
+            $this->params['attemptsto'] = $request->attemptsto;
+        }
+
+        if (!empty($request->is_callable)) {
+            $this->params['is_callable'] = $request->is_callable;
         }
 
         // Save params to session

@@ -20,6 +20,9 @@ class LeadInventorySub
         $this->params['datesOptional'] = true;
         $this->params['campaign'] = '';
         $this->params['subcampaign'] = '';
+        $this->params['attemptsfrom'] = '';
+        $this->params['attemptsto'] = '';
+        $this->params['is_callable'] = '';
         $this->params['columns'] = [
             'Description' => 'reports.resultcodes',
             'Type' => 'reports.type',
@@ -32,6 +35,11 @@ class LeadInventorySub
         $filters = [
             'campaign' => $this->getAllCampaigns(),
             'subcampaign' => $this->getAllSubcampaigns(),
+            'is_callable' => [
+                '' => '',
+                'Y' => trans('general.yes'),
+                'N' => trans('general.no'),
+            ],
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -148,7 +156,16 @@ class LeadInventorySub
             AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
             AND dr.Subcampaign = :subcampaign$i
-            AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+            AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+
+            if (strlen($this->params['attemptsfrom'])) {
+                $sql .= " AND DR.Attempt >= " . $this->params['attemptsfrom'];
+            }
+            if (strlen($this->params['attemptsto'])) {
+                $sql .= " AND DR.Attempt <= " . $this->params['attemptsto'];
+            }
+
+            $sql .= "
             GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type, dr.Campaign";
 
             $union = 'UNION ALL';
@@ -161,6 +178,20 @@ class LeadInventorySub
 		FROM #LeadCounts
 		GROUP BY CallStatus, IsCallable, WasDialed, [Description], [Type]
 
+        UPDATE #ShiftReport
+        SET IsCallable = 1
+        WHERE CallStatus in ('[ Not Called ]', 'AGENTSPCB', 'SYS_CALLBACK')";
+
+        if ($this->params['is_callable'] == 'Y') {
+            $sql .= "
+            DELETE FROM #ShiftReport WHERE IsCallable = 0";
+        }
+        if ($this->params['is_callable'] == 'N') {
+            $sql .= "
+            DELETE FROM #ShiftReport WHERE IsCallable = 1";
+        }
+
+        $sql .= "
         UPDATE #ShiftReport
         SET TotalLeads = a.Leads
         FROM (SELECT SUM(Leads) as Leads FROM #ShiftReport) a";
@@ -190,10 +221,6 @@ class LeadInventorySub
         UPDATE #ShiftReport
         SET [Description] = CallStatus
         WHERE IsNull([Description], '') = ''
-
-        UPDATE #ShiftReport
-        SET IsCallable = 1
-        WHERE CallStatus in ('[ Not Called ]', 'AGENTSPCB', 'SYS_CALLBACK')
 
         SELECT
             [Description],
@@ -252,6 +279,20 @@ class LeadInventorySub
 
         if (!empty($request->subcampaign)) {
             $this->params['subcampaign'] = $request->subcampaign;
+        }
+
+        if (!empty($request->attemptsfrom) || $request->attemptsfrom == 0) {
+            $this->params['attemptsfrom'] = $request->attemptsfrom;
+        }
+
+        if (
+            !empty($request->attemptsto) || $request->attemptsto == 0
+        ) {
+            $this->params['attemptsto'] = $request->attemptsto;
+        }
+
+        if (!empty($request->is_callable)) {
+            $this->params['is_callable'] = $request->is_callable;
         }
 
         // Save params to session
