@@ -319,8 +319,8 @@ select:required:invalid {
 		</div>
 	</div>
 
-	<div class="select-4">
-		<div class="col-sm-4">
+	<div class="select-6">
+		<div class="col-sm-6">
 			<div class="form-group">
 				<label>Label</label>
 				<select name="name" class="form-control control-select"></select>
@@ -328,20 +328,20 @@ select:required:invalid {
 		</div>
 	</div>
 
-	<div class="radio-4">
-		<div class="col-sm-4">
+	<div class="radio-6">
+		<div class="col-sm-6">
 
 		</div>
 	</div>
 
-	<div class="checkbox-4">
-		<div class="col-sm-4">
+	<div class="checkbox-6">
+		<div class="col-sm-6">
 
 		</div>
 	</div>
 
-	<div class="textarea-4">
-		<div class="col-sm-4">
+	<div class="textarea-6">
+		<div class="col-sm-6">
 			<div class="form-group">
 				<label>Label</label>
 				<textarea name="label" id="label" field-name="label" cols="30" rows="10" class="form-control control-input" control="textarea"></textarea>

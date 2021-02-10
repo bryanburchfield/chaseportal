@@ -160,15 +160,15 @@ var FORMBUILDER = {
 					html=$('.html_options').find('.input-4').html();
 				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
-					var options='';
+					var options='<option value="">Select One</option>';
 
 					for (var key of Object.keys(new_element_obj)) {
 						options += '<option value="'+new_element_obj[key]+'">'+key+'</option>';
 					}
 
-					$('.html_options').find('.select-4').find('select.form-control').append(options);
-					html=$('.html_options').find('.select-4').html();
-					$('.html_options').find('.select-4 select').empty();
+					$('.html_options').find('.select-6').find('select.form-control').append(options);
+					html=$('.html_options').find('.select-6').html();
+					$('.html_options').find('.select-6 select').empty();
 
 				}else if($(this).find('.field_type').val() == 'radio'){ /// wrap in a 4 column w/ radio menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
@@ -176,12 +176,12 @@ var FORMBUILDER = {
 					var radio_inputs='';
 
 					for (var key of Object.keys(new_element_obj)) {
-						radio_inputs += '<div class="radio"><label><input type="radio" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label></div>';
+						radio_inputs += '<label class="radio-inline"><input type="radio" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label>';
 					}
 
-					$('.html_options').find('.radio-4').find('.col-sm-4').append(radio_inputs);
-					html=$('.html_options').find('.radio-4').html();
-					$('.html_options').find('.radio-4 .col-sm-4').empty();
+					$('.html_options').find('.radio-6').find('.col-sm-6').append(radio_inputs);
+					html=$('.html_options').find('.radio-6').html();
+					$('.html_options').find('.radio-6 .col-sm-6').empty();
 
 				}else if($(this).find('.field_type').val() == 'checkbox'){ /// wrap in a 4 column w/ checkbox menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
@@ -189,17 +189,15 @@ var FORMBUILDER = {
 					var checkbox_inputs='';
 
 					for (var key of Object.keys(new_element_obj)) {
-						checkbox_inputs += '<div class="checkbox"><label><input type="checkbox" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label></div>';
+						checkbox_inputs += '<label class="checkbox-inline"><input type="checkbox" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label>';
 					}
 
-					$('.html_options').find('.checkbox-4').find('.col-sm-4').append(checkbox_inputs);
-					html=$('.html_options').find('.checkbox-4').html();
-					$('.html_options').find('.checkbox-4 .col-sm-4').empty();
+					$('.html_options').find('.checkbox-6').find('.col-sm-6').append(checkbox_inputs);
+					html=$('.html_options').find('.checkbox-6').html();
+					$('.html_options').find('.checkbox-6 .col-sm-6').empty();
 
 				}else if($(this).find('.field_type').val() == 'textarea'){ /// wrap in a 4 column w/ textarea menu
-					
-					html=$('.html_options').find('.textarea-4').html();
-					console.log(html);
+					html=$('.html_options').find('.textarea-6').html();
 				}else if(field_label_fb == 'Address'){	/// wrap in 12 column div
 					html=$('.html_options').find('.input-12').html();
 				}else if(field_label_fb == 'State'){	/// grab state select
@@ -339,7 +337,7 @@ var FORMBUILDER = {
 
 		$('#filter_type_modal').find('.alert').hide();
 
-		var options_len =$('.select_options .input-group').length;
+		var options_len = $('#filter_type_modal .field_type_options.active').find('.input-group').length;
 		if(options_len < 2){
 			return false;
 		}else{
