@@ -121,7 +121,7 @@ class LeadInventorySub
             AvailableLeads int default 0,
         )
 
-        CREATE UNIQUE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
+        CREATE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
 
         SELECT * INTO #LeadCounts FROM (";
 
