@@ -19,11 +19,12 @@ class LeadInventorySub
         $this->params['reportName'] = 'reports.lead_inventory_sub';
         $this->params['datesOptional'] = true;
         $this->params['campaign'] = '';
-        $this->params['subcampaign'] = '';
+        $this->params['subcampaigns'] = [];
         $this->params['attemptsfrom'] = '';
         $this->params['attemptsto'] = '';
         $this->params['is_callable'] = '';
         $this->params['columns'] = [
+            'Subcampaign' => 'reports.subcampaign',
             'Description' => 'reports.resultcodes',
             'Type' => 'reports.type',
             'Leads' => 'reports.count',
@@ -34,7 +35,7 @@ class LeadInventorySub
     {
         $filters = [
             'campaign' => $this->getAllCampaigns(),
-            'subcampaign' => $this->getAllSubcampaigns(),
+            'subcampaigns' => [],
             'is_callable' => [
                 '' => '',
                 'Y' => trans('general.yes'),
@@ -102,7 +103,10 @@ class LeadInventorySub
             $endDate = $toDate->format('Y-m-d H:i:s');
         }
 
+        $subcampaigns = str_replace("'", "''", implode('!#!', $this->params['subcampaigns']));
+
         $bind['group_id'] = Auth::user()->group_id;
+        $bind['subcampaigns'] = $subcampaigns;
 
         $sql = "SET NOCOUNT ON;
 
@@ -110,7 +114,11 @@ class LeadInventorySub
 
         SET @MaxDialingAttempts = dbo.GetGroupCampaignSetting(:group_id, '', 'MaxDialingAttempts', 0)
 
+        CREATE TABLE #SelectedSubcampaign(Subcampaign varchar(50) Primary Key);
+        INSERT INTO #SelectedSubcampaign SELECT DISTINCT [value] from dbo.SPLIT(:subcampaigns, '!#!');
+
         CREATE TABLE #ShiftReport(
+            Subcampaign varchar(50),
             CallStatus varchar(50),
             IsCallable bit DEFAULT 0,
             WasDialed bit,
@@ -121,7 +129,7 @@ class LeadInventorySub
             AvailableLeads int default 0,
         )
 
-        CREATE INDEX IX_CampaignRep ON #ShiftReport (CallStatus, Description, WasDialed);
+        CREATE INDEX IX_CampaignRep ON #ShiftReport (Subcampaign, CallStatus, Description, WasDialed);
 
         SELECT * INTO #LeadCounts FROM (";
 
@@ -134,6 +142,7 @@ class LeadInventorySub
             $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
+            ISNULL(dr.Subcampaign, '') as Subcampaign,
             CASE IsNull(dr.CallStatus, '')
                 WHEN '' THEN '[ Not Called ]'
                 ELSE dr.CallStatus
@@ -149,7 +158,14 @@ class LeadInventorySub
                     WHEN 3 THEN 'Lead/Sale'
                 END, 'No Connect') as [Type],
             COUNT(dr.CallStatus) as Leads
-            FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)
+            FROM [$db].[dbo].[Leads] dr WITH(NOLOCK)";
+
+            if (!empty($this->params['subcampaigns'])) {
+                $sql .= "
+                INNER JOIN #SelectedSubCampaign SC on SC.Subcampaign = dr.Subcampaign";
+            }
+
+            $sql .= "
             LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
@@ -166,17 +182,17 @@ class LeadInventorySub
             }
 
             $sql .= "
-            GROUP BY dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type, dr.Campaign";
+            GROUP BY dr.Subcampaign, dr.CallStatus, DI.IsCallable, dr.WasDialed, DI.Description, DI.Type, dr.Campaign";
 
             $union = 'UNION ALL';
         }
 
         $sql .= ") tmp
 
-        INSERT INTO #ShiftReport(CallStatus, IsCallable, WasDialed, [Description], [Type], Leads)
-		SELECT CallStatus, IsCallable, WasDialed, [Description], [Type], SUM(Leads)
+        INSERT INTO #ShiftReport(Subcampaign, CallStatus, IsCallable, WasDialed, [Description], [Type], Leads)
+		SELECT Subcampaign, CallStatus, IsCallable, WasDialed, [Description], [Type], SUM(Leads)
 		FROM #LeadCounts
-		GROUP BY CallStatus, IsCallable, WasDialed, [Description], [Type]
+		GROUP BY Subcampaign, CallStatus, IsCallable, WasDialed, [Description], [Type]
 
         UPDATE #ShiftReport
         SET IsCallable = 1
@@ -223,6 +239,7 @@ class LeadInventorySub
         WHERE IsNull([Description], '') = ''
 
         SELECT
+            Subcampaign,
             [Description],
             [Type],
             SUM(Leads) as Leads,
@@ -230,7 +247,7 @@ class LeadInventorySub
             AvailableLeads,
             totRows = COUNT(*) OVER()
         FROM #ShiftReport
-        GROUP BY [Description], [Type], TotalLeads, AvailableLeads, IsCallable";
+        GROUP BY Subcampaign, [Description], [Type], TotalLeads, AvailableLeads, IsCallable";
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
@@ -240,7 +257,7 @@ class LeadInventorySub
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
-            $sql .= ' ORDER BY IsCallable DESC, [Description]';
+            $sql .= ' ORDER BY IsCallable DESC, Subcamnpaign, [Description]';
         }
 
         if (!$all) {
@@ -277,8 +294,8 @@ class LeadInventorySub
             $this->errors->add('campaign.required', trans('reports.errcampaignrequired'));
         }
 
-        if (!empty($request->subcampaign)) {
-            $this->params['subcampaign'] = $request->subcampaign;
+        if (!empty($request->subcampaigns)) {
+            $this->params['subcampaigns'] = $request->subcampaigns;
         }
 
         if (!empty($request->attemptsfrom) || $request->attemptsfrom == 0) {
