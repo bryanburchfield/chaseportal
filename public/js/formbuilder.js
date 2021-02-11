@@ -161,7 +161,7 @@ var FORMBUILDER = {
 				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
 					var options='<option value="">Select One</option>';
-
+					console.log(typeof(new_element_obj));
 					for (var key of Object.keys(new_element_obj)) {
 						options += '<option value="'+new_element_obj[key]+'">'+key+'</option>';
 					}
@@ -307,7 +307,7 @@ var FORMBUILDER = {
 		FORMBUILDER.current_row = id;
 
 		var new_element_data = $(this).parent().parent().find('div.custom_element').attr('data-new_element_data');
-
+		console.log(FORMBUILDER.element_type);
 		$('#filter_type_modal').find('.field_type_options').hide();
 		var field_type = $(this).val();
 		if(field_type !== 'input' && field_type !== 'textarea'){
@@ -317,10 +317,21 @@ var FORMBUILDER = {
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
 		}
 
+		console.log(field_type);
+
 		if(new_element_data){
-			for (var key of Object.keys(new_element_data)) {
-				console.log(typeof(key));
-				console.log(key+ ' ' + new_element_data[key]);
+			var new_element_data_obj = JSON.parse(new_element_data);
+			var i=1;
+
+			for (var key of Object.keys(new_element_data_obj)) {
+				if(i<=Object.keys(new_element_data_obj).length){
+					$('#filter_type_modal .field_type_options.active').find('.input-group').last().find("input:text").first().val(key);
+					$('#filter_type_modal .field_type_options.active').find('.input-group').last().find("input:text").last().val(new_element_data_obj[key]);
+					if(i<Object.keys(new_element_data_obj).length){
+						$('#filter_type_modal .field_type_options.active').find('.input-group').last().clone().find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
+					}
+				}
+				i++;
 			}
 		}
 	},
