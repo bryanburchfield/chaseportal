@@ -304,12 +304,12 @@ var FORMBUILDER = {
 		e.preventDefault();
 
 		var new_element_data = $(this).parent().parent().find('div.custom_element').attr('data-new_element_data');
+		var new_element_type = $(this).parent().parent().find('div.custom_element').attr('data-elementtype');
+		var new_element_groupname = $(this).parent().parent().find('div.custom_element').attr('data-groupname');
 
 		$('#filter_type_modal').find('.field_type_options').hide();
 
 		var field_type = $(this).val();
-		console.log(FORMBUILDER.element_type +' '+ field_type);
-		console.log(new_element_data);
 
 		// open modal / show form of selected field type
 		if(field_type !== 'input' && field_type !== 'textarea'){
@@ -321,20 +321,23 @@ var FORMBUILDER = {
 
 		//&& FORMBUILDER.current_row !== id
 		if(FORMBUILDER.current_row !== id && new_element_data != ''){
-			console.log('ran');
-			$('#filter_type_modal .field_type_options.active').find('.input-group:not(:last)').find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
+			// console.log($('#filter_type_modal .field_type_options.active').find('.input-group').length);
+			// $('#filter_type_modal .field_type_options.active').find('.input-group').each(function(index, element){
+			// 	$(this).val('');
+			// });
+
+			// $('#filter_type_modal .field_type_options.active').find('.input-group:not(:last)').find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
 			// $('#filter_type_modal .field_type_options.active').find('.input-group').remove();
 		}
 
-		FORMBUILDER.element_type=field_type;
 		var id = $(this).parent().parent().parent().data('id');
 		FORMBUILDER.current_row = id;
 
-
-		// console.log('SELECTED: '+ field_type +' '+ id);
-
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
 		/// new element data already set by user
-		if(new_element_data && FORMBUILDER.element_type == field_type){
+		if(new_element_data && new_element_type == field_type){
 
 			var new_element_data_obj = JSON.parse(new_element_data);
 			var i=1;
@@ -351,6 +354,20 @@ var FORMBUILDER = {
 				i++;
 			}
 		}
+
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
+		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
+
+		// populate group name input from previously entered data
+		if(new_element_groupname){
+			$('#filter_type_modal .field_type_options.active').find('input.group_name').val(new_element_groupname);
+		}else{
+			$('#filter_type_modal .field_type_options.active').find('input.group_name').val('');
+		}
+
+		FORMBUILDER.element_type=field_type;
+
 	},
 
 	add_option:function(){
