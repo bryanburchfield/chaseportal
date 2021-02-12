@@ -87,6 +87,7 @@ var Master = {
         $('.reset_sorting_btn').on('click', this.reset_table_sorting);
         $('#campaign_usage #campaign_select, #lead_inventory_sub #campaign_select').on('change', this.get_report_subcampaigns);
         $('#call_details #campaign_select, #lead_npa #campaign_select').on('change', this.toggle_subcamps);
+        $('#lead_inventory_sub #campaign_select').on('change', this.multicamps_to_single_subs);
         $('.report_download').on('click', '.report_dl_option.pdf', this.pdf_download_warning);
         $('#report_dl_warning .dl_report').on('click', this.pdf_download2);
         $('body').on('change', '.query_dates_first .datetimepicker', this.query_dates_for_camps);
@@ -423,9 +424,10 @@ var Master = {
         });
     },
 
-    get_report_subcampaigns: function (e, campaign = 0, source = 0) {
-        if (!campaign) {
-            $(this).find('option:selected').each(function () {
+    get_report_subcampaigns:function(e, campaign=0, source=0){
+
+        if(!campaign){
+            $(this).find('option:selected').each(function() {
                 campaign = $(this).val();
             });
         }
@@ -466,7 +468,63 @@ var Master = {
         });
     },
 
-    toggle_subcamps: function (e) {
+    multicamps_to_single_subs:function(e){
+        e.preventDefault();
+
+        var campaign = $(this).val();
+        var report = $('form.report_filter_form').attr('id');
+
+        if(campaign){
+            $('#subcampaign_select').parent().parent().show();
+            ///// build subcamps menu
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/dashboards/reports/get_subcampaigns' ,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    report:report,
+                    campaign: campaign,
+                },
+
+                success:function(response){
+
+                    var subcamp_obj = response.subcampaigns;
+                    var subcamp_obj_length = Object.keys(subcamp_obj).length;
+                    const subcamp_obj_keys = Object.getOwnPropertyNames(subcamp_obj);
+                    let subcampaigns_array = [];
+                    subcampaigns_array.push(Object.values(subcamp_obj));
+
+                    $('#subcampaign_select').empty();
+
+                    var subcampaigns='';
+                    for (var i = 0; i < subcampaigns_array[0].length; i++) {
+                        subcampaigns += '<option value="' + subcampaigns_array[0][i] + '">' + subcampaigns_array[0][i] + '</option>';
+                    }
+
+                    $('#subcampaign_select').append(subcampaigns);
+                    $("#subcampaign_select").multiselect('rebuild');
+                    $("#subcampaign_select").multiselect('refresh');
+
+                    $('#subcampaign_select')
+                        .multiselect({ nonSelectedText: '', })
+                        .multiselect('selectAll', true)
+                        .multiselect('updateButtonText');
+
+                }
+            });
+        }else{
+            $('#subcampaign_select').empty();
+            $('#subcampaign_select').parent().parent().hide();
+        }
+    },
+
+    toggle_subcamps:function(e){
         e.preventDefault();
 
         if ($(this).find('option:selected').length == 1 && $(this).find('option:selected').val() != undefined) {
@@ -484,7 +542,7 @@ var Master = {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             });
-
+            console.log(campaign);
             $.ajax({
                 url: '/dashboards/reports/get_subcampaigns',
                 type: 'POST',
