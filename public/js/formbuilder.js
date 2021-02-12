@@ -303,26 +303,43 @@ var FORMBUILDER = {
 	open_field_modal:function(e){
 		e.preventDefault();
 
-		var id = $(this).parent().parent().parent().data('id');
-		FORMBUILDER.current_row = id;
-
 		var new_element_data = $(this).parent().parent().find('div.custom_element').attr('data-new_element_data');
-		console.log(FORMBUILDER.element_type);
+
 		$('#filter_type_modal').find('.field_type_options').hide();
+
 		var field_type = $(this).val();
+		console.log(FORMBUILDER.element_type +' '+ field_type);
+		console.log(new_element_data);
+
+		// open modal / show form of selected field type
 		if(field_type !== 'input' && field_type !== 'textarea'){
-			FORMBUILDER.element_type=field_type;
+			// FORMBUILDER.element_type=field_type;
 			$('#filter_type_modal').modal('show');
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').show();
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
 		}
 
-		console.log(field_type);
+		//&& FORMBUILDER.current_row !== id
+		if(FORMBUILDER.current_row !== id && new_element_data != ''){
+			console.log('ran');
+			$('#filter_type_modal .field_type_options.active').find('.input-group:not(:last)').find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
+			// $('#filter_type_modal .field_type_options.active').find('.input-group').remove();
+		}
 
-		if(new_element_data){
+		FORMBUILDER.element_type=field_type;
+		var id = $(this).parent().parent().parent().data('id');
+		FORMBUILDER.current_row = id;
+
+
+		// console.log('SELECTED: '+ field_type +' '+ id);
+
+		/// new element data already set by user
+		if(new_element_data && FORMBUILDER.element_type == field_type){
+
 			var new_element_data_obj = JSON.parse(new_element_data);
 			var i=1;
 
+			// populate form with previously entered data
 			for (var key of Object.keys(new_element_data_obj)) {
 				if(i<=Object.keys(new_element_data_obj).length){
 					$('#filter_type_modal .field_type_options.active').find('.input-group').last().find("input:text").first().val(key);

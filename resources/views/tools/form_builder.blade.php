@@ -469,7 +469,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Select Menu</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Select Menu</a>
             	</div>
             	<!-- Select menu builder -->
 
@@ -484,7 +484,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Radio Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Radio Group</a>
             	</div>
             	<!-- Radio menu builder -->
 
@@ -499,7 +499,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Checkbox Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Checkbox Group</a>
             	</div>
             	<!-- Checkbox menu builder -->
             	
