@@ -258,8 +258,13 @@ class LeadInventorySub
             'Description' => '',
             'Type' => '',
             'Leads' => 0,
-            'isSubtotal' => 1,
         ];
+
+        if (!$this->export) {
+            $subtotal_rec['isSubtotal'] = 1;
+        }
+
+        $unique_subcampaigns = 0;
 
         foreach ($this->yieldSql($sql, $bind) as $rec) {
             if (empty($rec)) {
@@ -281,8 +286,11 @@ class LeadInventorySub
             if ($subtotal_rec['Subcampaign'] != $rec['Subcampaign']) {
                 $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
                 $results[] = $subtotal_rec;
+
                 $subtotal_rec['Subcampaign'] = $rec['Subcampaign'];
                 $subtotal_rec['Leads'] = 0;
+
+                $unique_subcampaigns++;
             }
 
             $subtotal_rec['Leads'] += $rec['Leads'];
@@ -290,7 +298,7 @@ class LeadInventorySub
             $results[] = $rec;
         }
 
-        if ($subtotal_rec['Subcampaign'] !== null) {
+        if ($subtotal_rec['Subcampaign'] !== null && $unique_subcampaigns > 0) {
             $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
             $results[] = $subtotal_rec;
         }
