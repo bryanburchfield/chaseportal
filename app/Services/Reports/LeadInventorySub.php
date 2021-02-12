@@ -63,29 +63,20 @@ class LeadInventorySub
     {
         list($sql, $bind) = $this->makeQuery($all);
 
-        $results = $this->runSql($sql, $bind);
+        $results = $this->processResults($sql, $bind);
 
         if (empty($results)) {
             $this->params['totrows'] = 0;
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
-            $this->params['totrows'] = 0;
-            $this->extras['TotalLeads'] = 0;
-            $this->extras['AvailableLeads'] = 0;
             $results = [];
         } else {
-            $this->params['totrows'] = $results[0]['totRows'];
-            $this->extras['TotalLeads'] = $results[0]['TotalLeads'];
-            $this->extras['AvailableLeads'] = $results[0]['AvailableLeads'];
-
-            foreach ($results as &$rec) {
-                $rec = $this->processRow($rec);
-            }
+            $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $results;
+        return $this->getPage($results, $all);
     }
 
     public function makeQuery($all)
@@ -137,7 +128,6 @@ class LeadInventorySub
         foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id' . $i] = Auth::user()->group_id;
             $bind['campaign' . $i] = $this->params['campaign'];
-            $bind['subcampaign' . $i] = $this->params['subcampaign'];
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
@@ -171,7 +161,6 @@ class LeadInventorySub
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND dr.Campaign = :campaign$i
-            AND dr.Subcampaign = :subcampaign$i
             AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
 
             if (strlen($this->params['attemptsfrom'])) {
@@ -215,7 +204,6 @@ class LeadInventorySub
         foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id1' . $i] = Auth::user()->group_id;
             $bind['campaign1' . $i] = $this->params['campaign'];
-            $bind['subcampaign1' . $i] = $this->params['subcampaign'];
 
             $sql .= "
             UPDATE #ShiftReport
@@ -223,14 +211,20 @@ class LeadInventorySub
                 FROM (SELECT COUNT(DISTINCT l.id) as Leads
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
-                        LEFT JOIN dialer_DialingSettings ds2 on ds2.GroupId = l.GroupId and ds2.Campaign = l.Campaign
-                        WHERE l.GroupId = :group_id1$i
-                        AND l.Campaign = :campaign1$i
-                        AND l.Subcampaign = :subcampaign1$i
-                        AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
-                        AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
-                        AND l.WasDialed = 0
-                    ) a";
+                        LEFT JOIN dialer_DialingSettings ds2 on ds2.GroupId = l.GroupId and ds2.Campaign = l.Campaign";
+
+            if (!empty($this->params['subcampaigns'])) {
+                $sql .= "
+                INNER JOIN #SelectedSubCampaign SC on SC.Subcampaign = l.Subcampaign";
+            }
+
+            $sql .= "
+                WHERE l.GroupId = :group_id1$i
+                AND l.Campaign = :campaign1$i
+                AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
+                AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
+                AND l.WasDialed = 0
+            ) a";
         }
 
         $sql .= "
@@ -247,34 +241,61 @@ class LeadInventorySub
             AvailableLeads,
             totRows = COUNT(*) OVER()
         FROM #ShiftReport
-        GROUP BY Subcampaign, [Description], [Type], TotalLeads, AvailableLeads, IsCallable";
-
-        // Check params
-        if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
-            $sort = '';
-            foreach ($this->params['orderby'] as $col => $dir) {
-                $sort .= ",$col $dir";
-            }
-            $sql .= ' ORDER BY ' . substr($sort, 1);
-        } else {
-            $sql .= ' ORDER BY IsCallable DESC, Subcamnpaign, [Description]';
-        }
-
-        if (!$all) {
-            $offset = ($this->params['curpage'] - 1) * $this->params['pagesize'];
-            $sql .= " OFFSET $offset ROWS FETCH NEXT " . $this->params['pagesize'] . " ROWS ONLY";
-        }
+        GROUP BY Subcampaign, [Description], [Type], TotalLeads, AvailableLeads, IsCallable
+        ORDER BY Subcampaign, [Description]";
 
         return [$sql, $bind];
     }
 
-    public function processRow($rec)
+    private function processResults($sql, $bind)
     {
-        array_pop($rec);
-        array_pop($rec);
-        array_pop($rec);
+        $results = [];
+        $this->extras['TotalLeads'] = 0;
+        $this->extras['AvailableLeads'] = 0;
 
-        return $rec;
+        $subtotal_rec = [
+            'Subcampaign' => null,
+            'Description' => '',
+            'Type' => '',
+            'Leads' => 0,
+            'isSubtotal' => 1,
+        ];
+
+        foreach ($this->yieldSql($sql, $bind) as $rec) {
+            if (empty($rec)) {
+                continue;
+            }
+
+            $this->params['totrows'] = $rec['totRows'];
+            $this->extras['TotalLeads'] = $rec['TotalLeads'];
+            $this->extras['AvailableLeads'] = $rec['AvailableLeads'];
+
+            unset($rec['totRows']);
+            unset($rec['TotalLeads']);
+            unset($rec['AvailableLeads']);
+
+            if ($subtotal_rec['Subcampaign'] === null) {
+                $subtotal_rec['Subcampaign'] = $rec['Subcampaign'];
+            }
+
+            if ($subtotal_rec['Subcampaign'] != $rec['Subcampaign']) {
+                $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
+                $results[] = $subtotal_rec;
+                $subtotal_rec['Subcampaign'] = $rec['Subcampaign'];
+                $subtotal_rec['Leads'] = 0;
+            }
+
+            $subtotal_rec['Leads'] += $rec['Leads'];
+
+            $results[] = $rec;
+        }
+
+        if ($subtotal_rec['Subcampaign'] !== null) {
+            $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
+            $results[] = $subtotal_rec;
+        }
+
+        return $results;
     }
 
     private function processInput(Request $request)

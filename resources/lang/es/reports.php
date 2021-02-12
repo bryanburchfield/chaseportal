@@ -168,6 +168,7 @@ return [
     'subcampaign' => 'Sub-campaña',
     'subcampaign_summary' => 'Resumen de Sub-campañas',
     'subcampaigns' => 'Subcampañas',
+    'subtotal' => 'Total Parcial',
     'tablename' => 'Nombre de la Tabla',
     'talktimesec' => 'Duración de Conversación',
     'termination_status' => 'Mostrar solo la disposición final',

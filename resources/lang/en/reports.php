@@ -185,6 +185,7 @@ return [
     'subcampaign' => 'Subcampaign',
     'subcampaign_summary' => 'Subcampaign Summary',
     'subcampaigns' => 'Subcampaigns',
+    'subtotal' => 'Subtotal',
     'talktimesec' => 'Talk Time',
     'termination_status' => 'Show only termination status',
     'text_details' => 'Text Details',
