@@ -116,7 +116,6 @@ class LeadInventorySub
             [Description] varchar(255),
             [Type] varchar(50),
             Leads int default 0,
-            TotalLeads int default 0,
             AvailableLeads int default 0,
         )
 
@@ -196,11 +195,6 @@ class LeadInventorySub
             DELETE FROM #ShiftReport WHERE IsCallable = 1";
         }
 
-        $sql .= "
-        UPDATE #ShiftReport
-        SET TotalLeads = a.Leads
-        FROM (SELECT SUM(Leads) as Leads FROM #ShiftReport) a";
-
         foreach ($this->params['databases'] as $i => $db) {
             $bind['group_id1' . $i] = Auth::user()->group_id;
             $bind['campaign1' . $i] = $this->params['campaign'];
@@ -237,11 +231,9 @@ class LeadInventorySub
             [Description],
             [Type],
             SUM(Leads) as Leads,
-            TotalLeads,
-            AvailableLeads,
-            totRows = COUNT(*) OVER()
+            AvailableLeads
         FROM #ShiftReport
-        GROUP BY Subcampaign, [Description], [Type], TotalLeads, AvailableLeads, IsCallable
+        GROUP BY Subcampaign, [Description], [Type], AvailableLeads, IsCallable
         ORDER BY Subcampaign, [Description]";
 
         return [$sql, $bind];
@@ -271,12 +263,9 @@ class LeadInventorySub
                 continue;
             }
 
-            $this->params['totrows'] = $rec['totRows'];
-            $this->extras['TotalLeads'] = $rec['TotalLeads'];
             $this->extras['AvailableLeads'] = $rec['AvailableLeads'];
+            $this->extras['TotalLeads'] += $rec['Leads'];
 
-            unset($rec['totRows']);
-            unset($rec['TotalLeads']);
             unset($rec['AvailableLeads']);
 
             if ($subtotal_rec['Subcampaign'] === null) {
