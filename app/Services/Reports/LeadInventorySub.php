@@ -202,7 +202,7 @@ class LeadInventorySub
             $sql .= "
             UPDATE #ShiftReport
             SET AvailableLeads += a.Leads
-                FROM (SELECT COUNT(DISTINCT l.id) as Leads
+                FROM (SELECT l.Subcampaign, COUNT(DISTINCT l.id) as Leads
                         FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
                         LEFT JOIN dialer_DialingSettings ds on ds.GroupId = l.GroupId and ds.Campaign = l.Campaign and ds.Subcampaign = l.Subcampaign
                         LEFT JOIN dialer_DialingSettings ds2 on ds2.GroupId = l.GroupId and ds2.Campaign = l.Campaign";
@@ -218,7 +218,9 @@ class LeadInventorySub
                 AND (IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)) <> 0
                 AND l.Attempt < IsNull(ds.MaxDialingAttempts, IsNull(ds2.MaxDialingAttempts, @MaxDialingAttempts)))
                 AND l.WasDialed = 0
-            ) a";
+                GROUP BY l.Subcampaign
+            ) a
+            WHERE #ShiftReport.Subcampaign = a.Subcampaign";
         }
 
         $sql .= "
@@ -250,6 +252,7 @@ class LeadInventorySub
             'Description' => '',
             'Type' => '',
             'Leads' => 0,
+            'AvailableLeads' => 0,
         ];
 
         if (!$this->export) {
@@ -263,32 +266,40 @@ class LeadInventorySub
                 continue;
             }
 
-            $this->extras['AvailableLeads'] = $rec['AvailableLeads'];
             $this->extras['TotalLeads'] += $rec['Leads'];
-
-            unset($rec['AvailableLeads']);
 
             if ($subtotal_rec['Subcampaign'] === null) {
                 $subtotal_rec['Subcampaign'] = $rec['Subcampaign'];
             }
 
             if ($subtotal_rec['Subcampaign'] != $rec['Subcampaign']) {
+                $this->extras['AvailableLeads'] += $subtotal_rec['AvailableLeads'];
+
                 $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
+                $subtotal_rec['Type'] = trans('reports.available') . ': ' . $subtotal_rec['AvailableLeads'];
+                unset($subtotal_rec['AvailableLeads']);
                 $results[] = $subtotal_rec;
 
                 $subtotal_rec['Subcampaign'] = $rec['Subcampaign'];
                 $subtotal_rec['Leads'] = 0;
+                $subtotal_rec['AvailableLeads'] = 0;
 
                 $unique_subcampaigns++;
             }
 
             $subtotal_rec['Leads'] += $rec['Leads'];
+            $subtotal_rec['AvailableLeads'] = $rec['AvailableLeads'];
 
+            unset($rec['AvailableLeads']);
             $results[] = $rec;
         }
 
+        $this->extras['AvailableLeads'] += $subtotal_rec['AvailableLeads'];
+
         if ($subtotal_rec['Subcampaign'] !== null && $unique_subcampaigns > 0) {
             $subtotal_rec['Subcampaign'] .= ' ' . trans('reports.subtotal');
+            $subtotal_rec['Type'] = trans('reports.available') . ': ' . $subtotal_rec['AvailableLeads'];
+            unset($subtotal_rec['AvailableLeads']);
             $results[] = $subtotal_rec;
         }
 
