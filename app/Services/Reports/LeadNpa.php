@@ -22,6 +22,7 @@ class LeadNpa
         $this->params['campaigns'] = [];
         $this->params['subcampaigns'] = [];
         $this->params['rec_type'] = '';
+        $this->params['did_divisor'] = 0;
         $this->params['columns'] = [
             'State' => 'reports.state',
             'Npa' => 'reports.npa',
@@ -40,6 +41,7 @@ class LeadNpa
             'campaigns' => $this->getAllCampaigns(),
             'subcampaigns' => [],
             'rec_types' => ['Calls' => 'Calls', 'Leads' => 'Leads'],
+            'did_divisor' => 333,
             'db_list' => Auth::user()->getDatabaseArray(),
         ];
 
@@ -84,8 +86,7 @@ class LeadNpa
 
                 $source_number = $this->params['rec_type'] == 'Calls' ? $item['Calls'] : $item['Leads'];
 
-                // Recommend 3 dids per 1000
-                $rec_dids = (int) round($source_number / (1000 / 3));
+                $rec_dids = (int) round($source_number * (1 / $this->params['did_divisor']));
 
                 // Don't recommend 0 unless 0
                 if ($rec_dids == 0 && $source_number > 0) {
@@ -252,6 +253,12 @@ class LeadNpa
             $this->errors->add('rec_type.required', trans('reports.errrec_typerequired'));
         } else {
             $this->params['rec_type'] = $request->rec_type;
+        }
+
+        if (empty($request->did_divisor)) {
+            $this->errors->add('did_divisor.required', trans('reports.errdid_divisorrequired'));
+        } else {
+            $this->params['did_divisor'] = $request->did_divisor;
         }
 
         // Save params to session
