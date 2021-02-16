@@ -73,6 +73,13 @@ class LeadNpa
             $this->params['totrows'] = count($results);
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
+
+            // extract current page
+            if (!$all) {
+                $results = collect($results);
+                $results = $results->forPage($this->params['curpage'], $this->params['pagesize']);
+                $results = $results->toArray();
+            }
         }
 
         return $results;
