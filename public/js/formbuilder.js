@@ -161,7 +161,7 @@ var FORMBUILDER = {
 				}else if($(this).find('.field_type').val() == 'select'){ /// wrap in a 4 column w/ select menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
 					var options='<option value="">Select One</option>';
-					console.log(typeof(new_element_obj));
+
 					for (var key of Object.keys(new_element_obj)) {
 						options += '<option value="'+new_element_obj[key]+'">'+key+'</option>';
 					}
@@ -173,7 +173,11 @@ var FORMBUILDER = {
 				}else if($(this).find('.field_type').val() == 'radio'){ /// wrap in a 4 column w/ radio menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
 					var group_name = $(this).find('.custom_element').data('groupname');
+					var label_name = $(this).find('.custom_element').data('labelname');
 					var radio_inputs='';
+
+					var radio_label='<div><label>'+label_name+'</label></div>';
+					$('.html_options').find('.radio-6').find('.col-sm-6').append(radio_label);
 
 					for (var key of Object.keys(new_element_obj)) {
 						radio_inputs += '<label class="radio-inline"><input type="radio" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label>';
@@ -186,7 +190,11 @@ var FORMBUILDER = {
 				}else if($(this).find('.field_type').val() == 'checkbox'){ /// wrap in a 4 column w/ checkbox menu
 					var new_element_obj=$(this).find('.custom_element').data('new_element_data');
 					var group_name = $(this).find('.custom_element').data('groupname');
+					var label_name = $(this).find('.custom_element').data('labelname');
 					var checkbox_inputs='';
+
+					var checkbox_label='<div><label>'+label_name+'</label></div>';
+					$('.html_options').find('.checkbox-6').find('.col-sm-6').append(checkbox_label);
 
 					for (var key of Object.keys(new_element_obj)) {
 						checkbox_inputs += '<label class="checkbox-inline"><input type="checkbox" name="'+group_name+'" value="'+new_element_obj[key]+'">'+key+'</label>';
@@ -306,6 +314,7 @@ var FORMBUILDER = {
 		var new_element_data = $(this).parent().parent().find('div.custom_element').attr('data-new_element_data');
 		var new_element_type = $(this).parent().parent().find('div.custom_element').attr('data-elementtype');
 		var new_element_groupname = $(this).parent().parent().find('div.custom_element').attr('data-groupname');
+		var new_element_labelname = $(this).parent().parent().find('div.custom_element').attr('data-labelname');
 
 		$('#filter_type_modal').find('.field_type_options').hide();
 
@@ -319,23 +328,9 @@ var FORMBUILDER = {
 			$('#filter_type_modal .modal-body').find('div[data-type="' + field_type + '"]').addClass('active');
 		}
 
-		//&& FORMBUILDER.current_row !== id
-		if(FORMBUILDER.current_row !== id && new_element_data != ''){
-			// console.log($('#filter_type_modal .field_type_options.active').find('.input-group').length);
-			// $('#filter_type_modal .field_type_options.active').find('.input-group').each(function(index, element){
-			// 	$(this).val('');
-			// });
-
-			// $('#filter_type_modal .field_type_options.active').find('.input-group:not(:last)').find("input:text").val("").end().insertBefore('#filter_type_modal .modal-body .field_type_options.active a.btn');
-			// $('#filter_type_modal .field_type_options.active').find('.input-group').remove();
-		}
-
 		var id = $(this).parent().parent().parent().data('id');
 		FORMBUILDER.current_row = id;
 
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
 		/// new element data already set by user
 		if(new_element_data && new_element_type == field_type){
 
@@ -355,15 +350,17 @@ var FORMBUILDER = {
 			}
 		}
 
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
-		/// WHEN OPENING THE MODAL, SELECTS MENU OPTIONS ARE NOT SHOWING THE LAST ONE FROM WHAT WAS PREVIOUSLY ENTERED
-
 		// populate group name input from previously entered data
 		if(new_element_groupname){
 			$('#filter_type_modal .field_type_options.active').find('input.group_name').val(new_element_groupname);
 		}else{
 			$('#filter_type_modal .field_type_options.active').find('input.group_name').val('');
+		}
+
+		if(new_element_labelname){
+			$('#filter_type_modal .field_type_options.active').find('input.label_name').val(new_element_labelname);
+		}else{
+			$('#filter_type_modal .field_type_options.active').find('input.label_name').val('');
 		}
 
 		FORMBUILDER.element_type=field_type;
@@ -423,6 +420,10 @@ var FORMBUILDER = {
 				var group_name = $(this).parent().find('input.group_name').val();
 			}
 
+			if($(this).parent().find('div.label_name').length){
+				var label_name = $(this).parent().find('input.label_name').val();
+			}
+
 			var opts = {};
 			$('div[data-type="' + FORMBUILDER.element_type + '"]').find('.input-group').each(function(){
 				opts[$(this).find('.option_name').val()] = $(this).find('.option_value').val();
@@ -431,6 +432,7 @@ var FORMBUILDER = {
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-elementtype', FORMBUILDER.element_type);
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr("data-new_element_data", JSON.stringify(opts));
 			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-groupname', group_name);
+			$('div[data-id="' + FORMBUILDER.current_row + '"]').find('.custom_element').attr('data-labelname', label_name);
 
 			$('#filter_type_modal').modal('hide');
 		}else{

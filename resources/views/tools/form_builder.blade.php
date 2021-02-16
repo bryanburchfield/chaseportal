@@ -185,7 +185,7 @@ select:required:invalid {
 														</select>
 													</div>
 
-													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname=""></div>
+													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname="" data-labelname=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -477,6 +477,11 @@ select:required:invalid {
             	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Radio Input Group</h3>
 
+            		<div class="form-group fc_style label_name">
+            			<label>Label Name</label>
+            			<input type="text" class="form-control label_name">
+            		</div>
+
             		<div class="form-group fc_style group_name">
             			<label>Group Name</label>
             			<input type="text" class="form-control group_name">
@@ -491,6 +496,11 @@ select:required:invalid {
             	<!-- Checkbox menu builder -->
             	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
+
+            		<div class="form-group fc_style label_name">
+            			<label>Label Name</label>
+            			<input type="text" class="form-control label_name">
+            		</div>
 
             		<div class="form-group fc_style group_name">
             			<label>Group Name</label>
