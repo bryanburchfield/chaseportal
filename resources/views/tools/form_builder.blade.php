@@ -185,7 +185,7 @@ select:required:invalid {
 														</select>
 													</div>
 
-													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname=""></div>
+													<div class="custom_element" data-elementtype="" data-new_element_data="" data-groupname="" data-labelname=""></div>
 												</div>
 											</div>
 										@endforeach
@@ -319,8 +319,8 @@ select:required:invalid {
 		</div>
 	</div>
 
-	<div class="select-4">
-		<div class="col-sm-4">
+	<div class="select-6">
+		<div class="col-sm-6">
 			<div class="form-group">
 				<label>Label</label>
 				<select name="name" class="form-control control-select"></select>
@@ -328,20 +328,20 @@ select:required:invalid {
 		</div>
 	</div>
 
-	<div class="radio-4">
-		<div class="col-sm-4">
+	<div class="radio-6">
+		<div class="col-sm-6">
 
 		</div>
 	</div>
 
-	<div class="checkbox-4">
-		<div class="col-sm-4">
+	<div class="checkbox-6">
+		<div class="col-sm-6">
 
 		</div>
 	</div>
 
-	<div class="textarea-4">
-		<div class="col-sm-4">
+	<div class="textarea-6">
+		<div class="col-sm-6">
 			<div class="form-group">
 				<label>Label</label>
 				<textarea name="label" id="label" field-name="label" cols="30" rows="10" class="form-control control-input" control="textarea"></textarea>
@@ -469,7 +469,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Select Menu</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Select Menu</a>
             	</div>
             	<!-- Select menu builder -->
 
@@ -477,6 +477,11 @@ select:required:invalid {
             	<div data-type="radio" class="radio_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Radio Input Group</h3>
 
+            		<div class="form-group fc_style label_name">
+            			<label>Label Name</label>
+            			<input type="text" class="form-control label_name">
+            		</div>
+
             		<div class="form-group fc_style group_name">
             			<label>Group Name</label>
             			<input type="text" class="form-control group_name">
@@ -484,7 +489,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Radio Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Radio Group</a>
             	</div>
             	<!-- Radio menu builder -->
 
@@ -492,6 +497,11 @@ select:required:invalid {
             	<div data-type="checkbox" class="checkbox_options hidetilloaded field_type_options">
             		<h3 class="mt0 mb20">Build Checkbox Input Group</h3>
 
+            		<div class="form-group fc_style label_name">
+            			<label>Label Name</label>
+            			<input type="text" class="form-control label_name">
+            		</div>
+
             		<div class="form-group fc_style group_name">
             			<label>Group Name</label>
             			<input type="text" class="form-control group_name">
@@ -499,7 +509,7 @@ select:required:invalid {
 
             		@include('tools.shared.form_element_builder')
 
-            		<a href="#" class="btn btn-primary create_form_element">Create Checkbox Group</a>
+            		<a href="#" class="btn btn-primary create_form_element">Save Checkbox Group</a>
             	</div>
             	<!-- Checkbox menu builder -->
             	
