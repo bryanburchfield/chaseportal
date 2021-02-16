@@ -11,6 +11,12 @@
 	<a target="_blank" href="report_export/{{$report}}/xls" data-report="{{$report}}" data-format="xls" class="report_dl_option" title="{{__('reports.download')}} Excel" data-dl_option="excel"><i class="fas fa-file-excel"></i></a>
 	<a target="_blank" href="report_export/{{$report}}/pdf" data-report="{{$report}}" data-format="pdf" class="report_dl_option pdf" title="{{__('reports.download')}} PDF" data-dl_option="pdf"><i class="fas fa-file-pdf"></i></a>
 	<a target="_blank" href="report_export/{{$report}}/html" data-report="{{$report}}" data-format="html" class="report_dl_option" title="{{__('reports.download')}} HTML" data-dl_option="html"><i class="fas fa-file-code"></i></a>
+
+	@can('accessSuperAdmin')
+		@if($report == 'lead_npa')
+			<a target="_blank" href="report_export/{{$report}}/npalist" data-report="{{$report}}" data-format="html" class="report_dl_option" title="{{__('reports.download')}} NPA LIST" data-dl_option="npalist"><i class="fas fa-file-download"></i></a>
+		@endif
+	@endcan
 </div>
 <!-- end download options -->
 
