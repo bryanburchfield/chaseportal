@@ -136,13 +136,13 @@ class SubcampaignSummary
             IsNull(DI.Type,0) as [Type],
             COUNT(dr.CallStatus) as [Count]
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
-            LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
+            LEFT JOIN [$db].[dbo].[Dispos] DI WITH(NOLOCK) ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
             AND dr.Date >= :startdate$i
             AND dr.Date < :enddate$i
             AND dr.Campaign <> '_MANUAL_CALL_'
-            AND IsNull(dr.CallStatus, '') <> ''
-            AND dr.CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
+            AND dr.CallStatus IS NOT NULL
+            AND dr.CallStatus NOT IN ('', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
 
             if (session('ssoRelativeCampaigns', 0)) {
                 $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp1$i, 1))";
@@ -221,8 +221,7 @@ class SubcampaignSummary
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
 
-        UPDATE #SubcampaignSummary
-        SET ManHours = a.ManHours/3600 FROM (
+        SELECT * INTO #tmpmanhours FROM (
            SELECT Campaign, Subcampaign, Date, SUM(IsNull(ManHours, 0)) as ManHours FROM (";
 
         $union = '';
@@ -259,28 +258,18 @@ class SubcampaignSummary
         }
 
         $sql .= ") tmp
-            GROUP BY Campaign, Subcampaign, Date
-			) a
+        GROUP BY Campaign, Subcampaign, Date
+        ) tmpmanhours
+
+        UPDATE #SubcampaignSummary
+        SET ManHours = a.ManHours/3600 FROM (
+            SELECT * FROM #tmpmanhours
+        ) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
-        AND #SubcampaignSummary.Date = a.Date;";
+        AND #SubcampaignSummary.Date = a.Date
 
-        foreach ($this->params['databases'] as $i => $db) {
-            $bind['group_id2' . $i] = Auth::user()->group_id;
-
-            $sql .= "UPDATE #SubcampaignSummary
-            SET Total += a.Total
-            FROM (SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total
-                FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-                WHERE l.GroupId = :group_id2$i
-                GROUP BY l.Campaign, IsNull(l.Subcampaign, '')) a
-            WHERE #SubcampaignSummary.Campaign = a.Campaign
-            AND #SubcampaignSummary.Subcampaign = a.Subcampaign;";
-        }
-
-        $sql .= "
-        UPDATE #SubcampaignSummary
-        SET AvAttempt = a.AvAttempt FROM (
+        SELECT * INTO #tmpavgattempt FROM (
             SELECT
               Campaign,
               Subcampaign,
@@ -302,16 +291,53 @@ class SubcampaignSummary
 
             $union = 'UNION ALL';
         }
-        $sql .= ") tmp
+        $sql .=
+            ") tmp
         GROUP BY Campaign, Subcampaign, Date
+        ) tmpavgattempt
+
+        UPDATE #SubcampaignSummary
+        SET AvAttempt = a.AvAttempt FROM (
+            SELECT * FROM #tmpavgattempt
         ) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Date = a.Date
 
+        SELECT * INTO #tmptotal FROM (
+            SELECT
+              Campaign,
+              Subcampaign,
+              SUM(Total) as Total
+            FROM (";
+
+        $union = '';
+        foreach ($this->params['databases'] as $i => $db) {
+            $bind['group_id2' . $i] = Auth::user()->group_id;
+
+            $sql .= "$union SELECT l.Campaign, IsNull(l.Subcampaign, '') as Subcampaign, COUNT(l.id) as Total
+                FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
+                WHERE l.GroupId = :group_id2$i
+                GROUP BY l.Campaign, IsNull(l.Subcampaign, '')";
+
+            $union = 'UNION ALL';
+        }
+        $sql .= ") tmp
+        GROUP BY Campaign, Subcampaign
+        ) tmptotal
+        
         UPDATE #SubcampaignSummary
-        SET Available = (a.Available/CAST(#SubcampaignSummary.Total as numeric(18,2))) * 100
+        SET Total = a.Total
         FROM (
+            SELECT Campaign, Subcampaign, SUM(Total) as Total
+            FROM #tmptotal
+            GROUP BY Campaign, Subcampaign
+            ) a
+        WHERE #SubcampaignSummary.Campaign = a.Campaign
+        AND #SubcampaignSummary.Subcampaign = a.Subcampaign;";
+
+        $sql .= "
+        SELECT * INTO #tmpavailable FROM (
             SELECT Campaign, Subcampaign, SUM(Available) as Available FROM (";
 
         $union = '';
@@ -323,7 +349,7 @@ class SubcampaignSummary
                   IsNull(l.Subcampaign, '') as Subcampaign,
                   COUNT(l.id) as Available
                 FROM [$db].[dbo].[Leads] l WITH(NOLOCK)
-                LEFT JOIN #DialingSettings ds on ds.Campaign = l.Campaign
+                LEFT JOIN #DialingSettings ds WITH(NOLOCK) on ds.Campaign = l.Campaign
                 WHERE l.GroupId = :group_id4$i
                 AND l.WasDialed = 0
                 AND (ds.MaxDialingAttempts = 0 OR l.Attempt < ds.MaxDialingAttempts)
@@ -333,7 +359,14 @@ class SubcampaignSummary
         }
 
         $sql .= ") tmp
-          GROUP BY Campaign, Subcampaign) a
+        GROUP BY Campaign, Subcampaign
+        ) tmpavailable
+
+        UPDATE #SubcampaignSummary
+        SET Available = (a.Available/CAST(#SubcampaignSummary.Total as numeric(18,2))) * 100
+        FROM (
+            SELECT * FROM #tmpavailable
+        ) a
         WHERE #SubcampaignSummary.Campaign = a.Campaign
         AND #SubcampaignSummary.Subcampaign = a.Subcampaign
         AND #SubcampaignSummary.Total > 0
