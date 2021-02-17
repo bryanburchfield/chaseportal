@@ -155,7 +155,7 @@ class SubcampaignSummary
             }
 
             $sql .= "
-            GROUP BY DI.Type, dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, dr.GroupId, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
+            GROUP BY DI.Type, dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';
         }
