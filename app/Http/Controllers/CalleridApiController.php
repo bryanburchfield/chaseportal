@@ -26,6 +26,7 @@ class CalleridApiController extends Controller
         try {
             $calleridResult = new CalleridResult([
                 'client' => $this->clients[$clientid],
+                'ip' => $request->ip(),
                 'raw_phone' => $request->input('phone'),
                 'phone' => $this->formatPhone($request->input('phone')),
                 'result' => $request->input('result'),
