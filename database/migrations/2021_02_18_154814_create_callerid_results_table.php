@@ -16,6 +16,7 @@ class CreateCalleridResultsTable extends Migration
         Schema::create('callerid_results', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('client', 50);
+            $table->string('ip', 15);
             $table->string('phone', 11);
             $table->string('raw_phone', 20);
             $table->string('result');
