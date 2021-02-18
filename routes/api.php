@@ -14,3 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::post('deploy', 'UtilController@deploy');
+Route::post('callerid', 'CalleridApiController@post');
