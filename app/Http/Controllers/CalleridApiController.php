@@ -83,7 +83,7 @@ class CalleridApiController extends Controller
         }
 
         if (strlen($calleridResult->phone) != 11) {
-            $errs[] = 'Invalid phone';
+            $errs[] = 'Invalid North American phone number';
         }
 
         return implode(', ', $errs);
