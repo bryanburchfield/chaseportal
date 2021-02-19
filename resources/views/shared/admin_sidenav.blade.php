@@ -1,7 +1,7 @@
 <nav id="sidebar" class="active">
     <div class="sidebar-header">
-        <h3><img class="img-responsive" src="/img/ChaseData-Transparent-Large2.png" alt=""></h3>
-        <strong><img src="/img/ChaseData-Transparent-Large2.png" class="img-responsive mb_logo"></strong>
+        <h3><img class="img-fluid" src="/img/ChaseData-Transparent-Large2.png" alt=""></h3>
+        <strong><img src="/img/ChaseData-Transparent-Large2.png" class="img-fluid mb_logo"></strong>
     </div>
 
     <ul class="list-unstyled components">

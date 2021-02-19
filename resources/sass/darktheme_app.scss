@@ -570,6 +570,10 @@ ul.dropdown-menu.filter_campaign .checkbox{
     border-bottom: 1px solid lighten($blue,10%) !important;
 }
 
+button.btn.btn-default {
+    border: 1px solid #030508;
+}
+
 .filters .btn.btn-primary.select_campaign{border:none !important;}
 .filter_campaign .checkbox{margin: 0;}
 ul.dropdown-menu.filter_campaign .checkbox{padding: 10px;}

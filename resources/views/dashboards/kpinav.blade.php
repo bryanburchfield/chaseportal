@@ -1,5 +1,6 @@
-<div class="btn-group flt_rgt">
-	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="window.location.href = '{{ url('/dashboards/kpi/recipients') }}';">
+<div class="btn-group d-flex float-right">
+	<button type="button" class="btn btn-default bl_none" onclick="window.location.href = '{{ url('/dashboards/kpi/recipients') }}';">
         <span>{{__('general.recipients')}}</span>
     </button>
+</div>
 </div>

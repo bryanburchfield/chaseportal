@@ -811,6 +811,10 @@ ul.dropdown-menu.filter_campaign .checkbox {
   border-bottom: 1px solid #30486a !important;
 }
 
+button.btn.btn-default {
+  border: 1px solid #030508;
+}
+
 .filters .btn.btn-primary.select_campaign {
   border: none !important;
 }
