@@ -21,7 +21,7 @@
 
             <div class="kpi cb hidetilloaded">
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
-                <div class="row mt30 options kpi_options_top">
+                <div class="row mt-3 options kpi_options_top">
                     <div class="col-sm-4">
                         <h4 class="expand_dets flt_lft"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
                         <div class="expanded_options clear card">

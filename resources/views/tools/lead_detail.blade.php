@@ -71,7 +71,7 @@
                     @if ($lead)
                         <div class="col-sm-12 lead_details">
 
-                            <div class="bt bb mt30 mb30 pt10 pb10">
+                            <div class="bt bb mt-3 mb30 pt10 pb10">
                                 <div class="col-sm-3 mb10">
                                     <h4 class="mb10">Lead ID</h4>
                                     <p>{{ $lead->id }}</p>

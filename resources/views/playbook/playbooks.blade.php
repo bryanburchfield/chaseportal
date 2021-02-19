@@ -22,13 +22,13 @@
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('playbook.shared.topnav', ['playbook_page' => 'playbooks'])
 
-								<div class="tab-pane mt30" id="contact_playbooks">
+								<div class="tab-pane mt-3" id="contact_playbooks">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addPlaybookModal" class="btn btn-primary add_playbook_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_playbook')}}</a>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-12 mt30">
+                                        <div class="col-sm-12 mt-3">
                                             @foreach($contacts_playbooks as $contacts_playbook)
                                                 <div class="playbook col-sm-2 mb30" data-playbook="{{$contacts_playbook->id}}">
                                                     <a href="#"
@@ -56,7 +56,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-6 mt30">
+                                        <div class="col-sm-6 mt-3">
                                             <div class="alert alert-danger hidetilloaded cb"></div>
                                         </div>
                                     </div>

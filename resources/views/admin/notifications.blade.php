@@ -14,7 +14,7 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
-					<div class="col-sm-12 mt30">
+					<div class="col-sm-12 mt-3">
 
 						<div class="col-sm-8 mb20 card">
 							<h2 class="page_heading">{{ empty($feature_message->id) ? 'Create' : 'Edit' }} Notification</h2>

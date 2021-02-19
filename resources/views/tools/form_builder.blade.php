@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div id="webhook_generator">
-							<div class="col-sm-4 mt30 mb20 card fc_style">
+							<div class="col-sm-4 mt-3 mb20 card fc_style">
 								<h2 class="page_heading">Form Builder</h2>
 								<div class="form-group">
 									<label>Group ID</label>
@@ -42,7 +42,7 @@
 								<div class="alert alert-danger hidetilloaded"></div>
 							</div>
 
-							<div class="col-sm-8 mt30">
+							<div class="col-sm-8 mt-3">
 								<ul class="nav nav-tabs">
 									<li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
 									<li><a data-toggle="tab" href="#css">CSS</a></li>

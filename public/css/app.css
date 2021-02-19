@@ -793,8 +793,10 @@ button.btn.btn-default {
   padding: 0;
 }
 
-.filters ul.dropdown-menu {
-  right: -65px;
+.filters ul.dropdown-menu.active,
+.filters ul.dropdown-menu:active {
+  background: #203047;
+  color: #ddd;
 }
 
 .filters .btn.btn-primary {

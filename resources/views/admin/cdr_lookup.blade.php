@@ -14,7 +14,7 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 				<div class="row">
-					<div class="col-sm-12 mt30">
+					<div class="col-sm-12 mt-3">
 						<div class="report_filters card">
 							<h2 class="page_heading">CDR Lookup</h2>
 							<form action="#" method="POST" class="form fc_style cdr_lookup_form" name="cdr_lookup_form"

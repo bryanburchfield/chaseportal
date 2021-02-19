@@ -21,7 +21,7 @@
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('playbook.shared.topnav', ['playbook_page' => 'sms_numbers'])
 
-								<div class="tab-pane mt30" id="sms_numbers">
+								<div class="tab-pane mt-3" id="sms_numbers">
                                     <div class="col-sm-12 nopad">
                                         <div class="table-responsive nobdr sms_numbers mt20">
                                             <a href="#" data-toggle="modal" data-target="#addSMSModal" class="btn btn-primary add_sms_modal"><i class="fas fa-plus-circle"></i> Add Number</a>

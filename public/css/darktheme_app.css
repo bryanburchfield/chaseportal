@@ -847,6 +847,36 @@ ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
   padding: 0;
 }
 
+.filters .btn {
+  border-radius: 0;
+}
+
+.filters .dropdown-menu .dropdown-item,
+.filters .dropdown-menu .checkbox {
+  background: #203047;
+  color: #999;
+  padding-left: 15px;
+}
+
+.filters .dropdown-menu .dropdown-item:nth-child(even),
+.filters .dropdown-menu .checkbox:nth-child(even) {
+  background-color: #101824;
+}
+
+.filters .dropdown-menu .dropdown-item:hover,
+.filters .dropdown-menu .checkbox:hover {
+  background-color: #182435;
+  color: #999;
+}
+
+.filters .dropdown-menu .dropdown-item.active,
+.filters .dropdown-menu .dropdown-item:active,
+.filters .dropdown-menu .checkbox.active,
+.filters .dropdown-menu .checkbox:active {
+  background: #ddd;
+  color: #203047;
+}
+
 .filters ul.dropdown-menu {
   right: -65px;
 }

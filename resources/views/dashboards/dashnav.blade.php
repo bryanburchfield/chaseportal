@@ -66,15 +66,15 @@
             $selected_date_filter = 'custom';
         }
     @endphp
-    <ul class="dropdown-menu date_filters">
-        <li {!! ($selected_date_filter == 'today') ? 'class="active"' : '' !!}><a href="#" data-datefilter="today">{{__('general.today')}}</a></li>
-        <li {!! ($selected_date_filter == 'yesterday') ? 'class="active"' : '' !!}><a href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a></li>
-        <li {!! ($selected_date_filter == 'week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="week">{{__('general.this_week')}}</a></li>
-        <li {!! ($selected_date_filter == 'last_week') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_week">{{__('general.last_week')}}</a></li>
-        <li {!! ($selected_date_filter == 'month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="month">{{__('general.this_month')}}</a></li>
-        <li {!! ($selected_date_filter == 'last_month') ? 'class="active"' : '' !!}><a href="#" data-datefilter="last_month">{{__('general.last_month')}}</a></li>
-        <li {!! ($selected_date_filter == 'custom') ? 'class="active"' : '' !!}><a href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a></li>
-    </ul>
+    <div class="dropdown-menu py-0 date_filters" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'today') ? 'active' : '' !!}"  href="#" data-datefilter="today">{{__('general.today')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'yesterday') ? 'active' : '' !!}" href="#" data-datefilter="yesterday">{{__('general.yesterday')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'week') ? 'active' : '' !!}" href="#" data-datefilter="week">{{__('general.this_week')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'last_week') ? 'active' : '' !!}" href="#" data-datefilter="last_week">{{__('general.last_week')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'month') ? 'active' : '' !!}" href="#" data-datefilter="month">{{__('general.this_month')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'last_month') ? 'active' : '' !!}" href="#" data-datefilter="last_month">{{__('general.last_month')}}</a>
+        <a class="dropdown-item py-2 {!! ($selected_date_filter == 'custom') ? 'active' : '' !!}" href="#" data-datefilter="custom" data-toggle="modal" data-target="#datefilter_modal">{{__('general.custom')}}</a>
+    </div>
 </div>
 
 

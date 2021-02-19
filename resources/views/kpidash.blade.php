@@ -30,7 +30,7 @@
                 <div class="kpi">
                     <p>{{ $kpi->description }}</p>
 
-                    <div class="row mt30 options">
+                    <div class="row mt-3 options">
                         <div class="col-sm-6">
                             <a href="#" class="expand_dets"><i class="glyphicon glyphicon-wrench exp"></i> Options</a>
                             <div class="expanded_options clear">

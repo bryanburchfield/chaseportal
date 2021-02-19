@@ -49,7 +49,7 @@
     </div><!-- end column -->
 </div>
 
-<div class="row mt30">
+<div class="row mt-3">
 
     @foreach ($statuses as $status)
         @if($loop->first || $loop->index == 3)

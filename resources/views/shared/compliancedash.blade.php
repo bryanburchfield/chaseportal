@@ -30,7 +30,7 @@
 
 <div class="row">
     <div class="col-sm-12 w99">
-    	<div class="card card-12 mt30">
+    	<div class="card card-12 mt-3">
 	    	<h1 class="title">{{__('widgets.adherence')}}</h1>
 	    	<div class="inbound" style="height:350px;">
 	    		<canvas id="agent_worked_graph"></canvas>

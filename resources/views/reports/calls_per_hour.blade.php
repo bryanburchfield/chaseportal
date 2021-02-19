@@ -83,7 +83,7 @@
 @endsection
 
 @section('extras')
-<div class="col-sm-7 col-xs-12 nopadright pl0 mt30">
+<div class="col-sm-7 col-xs-12 nopadright pl0 mt-3">
 	<div class="card card-6 hidetilloaded" >
 		<h1 class="title fw600">{{__('widgets.count_of_calls_per_hour')}} </h1>
 		<div class="inbound inandout cb" style="min-height:300px;">

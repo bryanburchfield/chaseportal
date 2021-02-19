@@ -591,6 +591,32 @@ input.form-control.campaign_search{color:#aaa;}
     float: right;
     padding: 0;
 
+    .btn {
+        @include border-radius(0);
+    }
+
+    .dropdown-menu{
+        .dropdown-item, .checkbox {
+            background: $blue;
+            color:#999;
+            padding-left: 15px;
+
+            &:nth-child(even) {
+                background-color: darken($blue, 10%);
+            }
+
+            &:hover{
+                background-color: darken($blue, 5%);
+                color:#999;
+            }
+
+            &.active, &:active{
+                background: #ddd;
+                color:$blue;
+            }
+        }
+    }
+
     ul.dropdown-menu {right: -65px;}
 
     .btn.btn-primary {

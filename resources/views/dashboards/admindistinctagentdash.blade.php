@@ -20,7 +20,7 @@
     	    	        <span></span>
     	    	    </div>
     	    	    <h1 class="title">{{__('widgets.distinct_agent_count')}} </h1>
-    	    	    <h4 class="data total mt30"></h4>
+    	    	    <h4 class="data total mt-3"></h4>
     	    	</div><!-- end card -->
     	    </div><!-- end column -->
 
@@ -31,7 +31,7 @@
     	                <span></span>
     	            </div>
     	            <h1 class="title">{{__('widgets.avg_reps')}} </h1>
-    	            <h4 class="data total mt30"></h4>
+    	            <h4 class="data total mt-3"></h4>
     	        </div><!-- end card -->
     	    </div><!-- end column -->
 

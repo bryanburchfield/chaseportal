@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="card p0 mt30">
+        <div class="card p0 mt-3">
 			<form method="post" class="form compliance_settings">
 				@csrf
 				<table class="table">

@@ -21,7 +21,7 @@
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('playbook.shared.topnav', ['playbook_page' => 'providers'])
 
-                                <div class="tab-pane mt30" id="email_service_providers">
+                                <div class="tab-pane mt-3" id="email_service_providers">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addESPModal" class="btn btn-primary add_provider_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_provider')}}</a>
 

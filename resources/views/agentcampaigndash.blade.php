@@ -199,7 +199,7 @@
                             <div class="total"></div>
                         </div>
 
-                        <div class="stats_legend col-sm-12 mt30 pl0">
+                        <div class="stats_legend col-sm-12 mt-3 pl0">
                             <div class="stats_item"><span class="repstats"></span>{{__('widgets.my_stats')}}</div>
                             <div class="stats_item"><span class="teamstats"></span>{{__('widgets.team_stats')}}</div>
                         </div>

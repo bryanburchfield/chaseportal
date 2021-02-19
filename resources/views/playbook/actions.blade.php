@@ -20,7 +20,7 @@
                                 <h2 class="bbnone">{{__('tools.contacts_playbook')}}</h2>
                                 @include('playbook.shared.topnav', ['playbook_page' => 'actions'])
 
-								<div class="tab-pane mt30" id="playbook_actions">
+								<div class="tab-pane mt-3" id="playbook_actions">
                                     <div class="col-sm-12 nopad">
                                         <a href="#" data-toggle="modal" data-target="#addActionModal" class="btn btn-primary add_playbook_action_modal"><i class="fas fa-plus-circle"></i> {{__('tools.add_action')}}</a>
 

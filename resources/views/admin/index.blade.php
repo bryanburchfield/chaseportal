@@ -26,13 +26,13 @@
 							</ul>
 
 							<div class="tab-content">
-								<div class="tab-pane active mt30" id="new_user">
+								<div class="tab-pane active mt-3" id="new_user">
 									@include('shared.clientform', ['mode' => 'add'])
 									@include('shared.dialerlist', ['mode' => 'add'])
 								</div>
 
 								@can('accessSuperAdmin')
-									<div class="tab-pane mt30" id="demo_user">
+									<div class="tab-pane mt-3" id="demo_user">
 										<div class="col-sm-5 mb0 card">
 											<h2 class="page_heading">Add Demo User</h2>
 											@include('shared.demouser_form', ['mode' => 'add'])
@@ -75,7 +75,7 @@
 									</div>
 								@endcan
 
-								<div class="tab-pane mt30" id="edit_user">
+								<div class="tab-pane mt-3" id="edit_user">
 									@include('shared.clientform', ['mode' => 'edit'])
 									@include('shared.dialerlist', ['mode' => 'edit'])
 								</div>

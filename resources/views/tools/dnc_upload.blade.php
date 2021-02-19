@@ -35,7 +35,7 @@
 
 									<p class="filename mb20">{{__('tools.no_file')}}</p>
 
-									<div class="cb mb20 mt30">
+									<div class="cb mb20 mt-3">
 										<h4 class="mb10 green-text fw600">{{__('tools.action')}}</h4>
 										<label class="radio-inline"><input type="radio" name="action" value="add" {{ old('action') == 'add' ? 'checked' : '' }}>{{ __('tools.add') }}</label>
 										<label class="radio-inline"><input type="radio" name="action" value="remove" {{ old('action') == 'remove' ? 'checked' : '' }}>{{ __('tools.remove') }}</label>

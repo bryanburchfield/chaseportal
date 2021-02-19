@@ -15,7 +15,7 @@
 			<div class="container-full mt20">
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="mt30" id="settings">
+						<div class="mt-3" id="settings">
 							<div class="col-sm-6 mb20 card">
 								<h2 class="page_heading">Edit Myself</h2>
 
@@ -40,7 +40,7 @@
 
 								{!! Form::hidden('id', null, ['class'=>'user_id']) !!}
 
-								<button type="submit" class="btn btn-primary mt30 add_btn_loader">{{__('general.update')}}</button>
+								<button type="submit" class="btn btn-primary mt-3 add_btn_loader">{{__('general.update')}}</button>
 
 								<br><br>
 

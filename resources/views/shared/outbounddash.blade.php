@@ -6,7 +6,7 @@
                 <span></span>
             </div>
             <h1 class="title">{{__('widgets.total_dials')}}</h1>
-            <h4 class="data total mt30"></h4>
+            <h4 class="data total mt-3"></h4>
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -19,7 +19,7 @@
                     <span></span>
                 </div>
                 <h1 class="title">{{__('widgets.total_contacts')}}</h1>
-                <h4 class="data mt30" id="total_contacts"></h4>
+                <h4 class="data mt-3" id="total_contacts"></h4>
             </div>
 
             <div class="back">
@@ -30,7 +30,7 @@
                 </div>
 
                 <h1 class="title">{{__('widgets.contact_rate')}}</h1>
-                <h4 class="data mt30" id="contact_rate"></h4>
+                <h4 class="data mt-3" id="contact_rate"></h4>
             </div>
         </div><!-- end card -->
     </div><!-- end column -->

@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div id="webhook_generator">
-							<div class="col-sm-6 mt30 mb20 card fc_style">
+							<div class="col-sm-6 mt-3 mb20 card fc_style">
 								<h2 class="page_heading">Webhook Generator</h2>
 								<div class="form-group">
 									<label>Group ID</label>
@@ -90,7 +90,7 @@
 										<div class="form-group mr10">
 											<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
 										</div>
-										<input type="submit" class="btn btn-primary mt30 h35" value="Add Custom Field">
+										<input type="submit" class="btn btn-primary mt-3 h35" value="Add Custom Field">
 									</form>
 								</div>
 

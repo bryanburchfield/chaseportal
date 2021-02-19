@@ -19,7 +19,7 @@
 			    	</div>
                 </div>
 
-                <div class="table-responsive nobdr playbooks_history_table mt30">
+                <div class="table-responsive nobdr playbooks_history_table mt-3">
                     <table class="table mt20 table-striped" id="playbooks_history_table">
                         <thead>
                             <tr>
