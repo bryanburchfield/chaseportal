@@ -40,14 +40,16 @@
 
             <div class="divider"></div>
 
-            <div class="inbound flt_lft">
-                <p class="data abandoned"></p>
-                <p class="type">{{__('widgets.abandoned')}}</p>
-            </div>
+            <div class="d-flex justify-content-between">
+                <div class="inbound flt_lft">
+                    <p class="data abandoned"></p>
+                    <p class="type">{{__('widgets.abandoned')}}</p>
+                </div>
 
-            <div class="outbound flt_rgt">
-                <p class="data voicemails"></p>
-                <p class="type">{{__('widgets.voicemails')}}</p>
+                <div class="outbound flt_rgt">
+                    <p class="data voicemails"></p>
+                    <p class="type">{{__('widgets.voicemails')}}</p>
+                </div>
             </div>
 
         </div><!-- end card -->
@@ -82,16 +84,17 @@
 
             <div class="divider"></div>
 
-            <div class="inbound flt_lft">
-                <p class="data lowest"></p>
-                <p class="type">{{__('widgets.lowest')}}</p>
-            </div>
+            <div class="d-flex justify-content-between">
+                <div class="inbound flt_lft">
+                    <p class="data lowest"></p>
+                    <p class="type">{{__('widgets.lowest')}}</p>
+                </div>
 
-            <div class="outbound flt_rgt">
-                <p class="data highest"></p>
-                <p class="type">{{__('widgets.highest')}}</p>
+                <div class="outbound flt_rgt">
+                    <p class="data highest"></p>
+                    <p class="type">{{__('widgets.highest')}}</p>
+                </div>
             </div>
-
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -107,16 +110,17 @@
 
             <div class="divider"></div>
 
-            <div class="inbound flt_lft">
-                <p class="data lowest"></p>
-                <p class="type">{{__('widgets.lowest')}}</p>
-            </div>
+            <div class="d-flex justify-content-between">
+                <div class="inbound flt_lft">
+                    <p class="data lowest"></p>
+                    <p class="type">{{__('widgets.lowest')}}</p>
+                </div>
 
-            <div class="outbound flt_rgt">
-                <p class="data highest"></p>
-                <p class="type">{{__('widgets.highest')}}</p>
+                <div class="outbound flt_rgt">
+                    <p class="data highest"></p>
+                    <p class="type">{{__('widgets.highest')}}</p>
+                </div>
             </div>
-
         </div><!-- end card -->
     </div><!-- end column -->
 
@@ -133,16 +137,17 @@
 
             <div class="divider"></div>
 
-            <div class="inbound flt_lft">
-                <p class="data lowest"></p>
-                <p class="type">{{__('widgets.lowest')}}</p>
-            </div>
+            <div class="d-flex justify-content-between">
+                <div class="inbound flt_lft">
+                    <p class="data lowest"></p>
+                    <p class="type">{{__('widgets.lowest')}}</p>
+                </div>
 
-            <div class="outbound flt_rgt">
-                <p class="data highest"></p>
-                <p class="type">{{__('widgets.highest')}}</p>
+                <div class="outbound flt_rgt">
+                    <p class="data highest"></p>
+                    <p class="type">{{__('widgets.highest')}}</p>
+                </div>
             </div>
-
         </div><!-- end card -->
     </div><!-- end column -->
 

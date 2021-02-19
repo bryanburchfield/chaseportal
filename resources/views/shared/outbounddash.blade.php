@@ -96,7 +96,7 @@
         <div class="card-6 card outbound_default">
             <h1 class="title">{{__('widgets.call_volume')}}</h1>
 
-            <div class="outbound inandout cb mt60">
+            <div class="outbound inandout cb mt-4">
                 <canvas id="call_volume_outbound"></canvas>
             </div>
         </div>
@@ -104,9 +104,9 @@
 
     <div class="col-sm-6">
         <div class="card-6 card">
-            <h1 class="title">{{__('widgets.call_duration_minutes')}}</h1><br><br><br>
+            <h1 class="title">{{__('widgets.call_duration_minutes')}}</h1>
 
-            <div class="inandout">
+            <div class="inandout mt-4">
                 <canvas id="call_duration"></canvas>
             </div>
         </div>
@@ -171,8 +171,8 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-3 card_table_prt ">
-        <div class="card flipping_card card-3b ">
+    <div class="col-sm-3 card_table_prt">
+        <div class="card flipping_card card-3b">
             <div class="front ">
                 <div class="card_table2">
                     <h1 class="title">{{__('widgets.avg_wait_time')}}</h1>
