@@ -288,6 +288,10 @@ select:required:invalid {
 		.hidden {
 			display: none;
 		}
+
+		.mb20{
+			margin-bottom: 20px;
+		}
 	</style>
 </head>
 <body>
@@ -329,13 +333,13 @@ select:required:invalid {
 	</div>
 
 	<div class="radio-6">
-		<div class="col-sm-6">
+		<div class="col-sm-6 mb20">
 
 		</div>
 	</div>
 
 	<div class="checkbox-6">
-		<div class="col-sm-6">
+		<div class="col-sm-6 mb20">
 
 		</div>
 	</div>
