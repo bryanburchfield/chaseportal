@@ -92,8 +92,8 @@
 		<div class="card card-12">
 			<h1 class="title mb0">{{__('widgets.agent_call_times')}}</h1><br>
 			<div class="avgs_rgt float-right">
-				<h2 class="avg_cc float-right mb_hide pb-1"></h2><br>
-				<h2 class="avg_ct float-right mb_hide pb-2"></h2>
+				<h2 class="avg_cc float-right mb_hide pb-1"></h2>
+				<h2 class="avg_ct float-right mb_hide pb-2 cb"></h2>
 			</div>
 			<div class="inbound inandout cb" style="height: 300px">
 				<canvas id="rep_talktime"></canvas>

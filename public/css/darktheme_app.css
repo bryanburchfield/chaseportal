@@ -1075,6 +1075,10 @@ input[type='file'] {
   -ms-overflow-style: none;
 }
 
+.btn-group.btn-group-sm.callvolume_inorout button {
+  height: 35px;
+}
+
 .card-6 h1.title {
   text-align: left;
   float: left;

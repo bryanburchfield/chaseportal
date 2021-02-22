@@ -981,6 +981,16 @@ input[type='file'] {
   -ms-overflow-style: none;
 }
 
+.btn-group.btn-group-sm.callvolume_inorout button {
+  height: 35px;
+}
+
+.btn-group.btn-group-sm.callvolume_inorout button:focus,
+.btn-group.btn-group-sm.callvolume_inorout button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .card-6 h1.title {
   text-align: left;
   float: left;
