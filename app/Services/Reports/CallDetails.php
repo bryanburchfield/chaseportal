@@ -472,7 +472,7 @@ class CallDetails
             }
             $sql .= ' ORDER BY ' . substr($sort, 1);
         } else {
-            $sql .= ' ORDER BY Date';
+            $sql .= ' ORDER BY Date DESC';
         }
 
         if (!$all) {
