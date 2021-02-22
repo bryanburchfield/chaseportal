@@ -849,6 +849,7 @@ ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
 
 .filters .btn {
   border-radius: 0;
+  font-size: 14px;
 }
 
 .filters .dropdown-menu .dropdown-item,
@@ -856,6 +857,11 @@ ul.dropdown-menu.filter_campaign .checkbox:nth-child(odd) {
   background: #203047;
   color: #999;
   padding-left: 15px;
+}
+
+.filters .dropdown-menu .dropdown-item.active,
+.filters .dropdown-menu .checkbox.active {
+  background: #007bff;
 }
 
 .filters .dropdown-menu .dropdown-item:nth-child(even),
@@ -997,7 +1003,7 @@ input[type='file'] {
 
 .card h4.data {
   text-align: center;
-  font-size: 45px;
+  font-size: 40px;
   color: #a0a0a0;
 }
 
@@ -2310,13 +2316,6 @@ a.run_kpi.btn:hover {
   min-width: 0px;
   max-width: 0px;
   margin-right: 0px !important;
-}
-
-.dropdown-toggle::after {
-  top: auto;
-  bottom: 10px;
-  right: 50%;
-  transform: translateX(50%);
 }
 
 #sidebar.active {

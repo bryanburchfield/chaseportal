@@ -407,14 +407,6 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
-
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
@@ -575,12 +567,15 @@ button.btn.btn-default {
     margin-bottom: 10px;
     padding: 0;
 
-     ul.dropdown-menu {
-        // right: -65px;
-        &.active, &:active{
-            background: $blue;
-            color:#ddd;
+    .dropdown-menu {
+        .dropdown-item.active, .checkbox.active{
+            background: #007bff;
         }
+    }
+
+    .btn{
+        @include border-radius(0);
+        font-size: 14px;
     }
     
     .btn.btn-primary {
@@ -675,7 +670,7 @@ input[type='file'] {
 
     h4.data {
         text-align: center;
-        font-size: 45px;
+        font-size: 40px;
         color: $blue;
 
         &.bg_rounded {

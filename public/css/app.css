@@ -597,14 +597,6 @@ a[data-toggle="collapse"] {
   position: relative;
 }
 
-.dropdown-toggle::after {
-  display: block;
-  position: absolute;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-}
-
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
@@ -793,10 +785,14 @@ button.btn.btn-default {
   padding: 0;
 }
 
-.filters ul.dropdown-menu.active,
-.filters ul.dropdown-menu:active {
-  background: #203047;
-  color: #ddd;
+.filters .dropdown-menu .dropdown-item.active,
+.filters .dropdown-menu .checkbox.active {
+  background: #007bff;
+}
+
+.filters .btn {
+  border-radius: 0;
+  font-size: 14px;
 }
 
 .filters .btn.btn-primary {
@@ -905,7 +901,7 @@ input[type='file'] {
 
 .card h4.data {
   text-align: center;
-  font-size: 45px;
+  font-size: 40px;
   color: #203047;
 }
 

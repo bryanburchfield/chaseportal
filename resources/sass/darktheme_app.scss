@@ -593,10 +593,16 @@ input.form-control.campaign_search{color:#aaa;}
 
     .btn {
         @include border-radius(0);
+        font-size: 14px;
     }
 
     .dropdown-menu{
         .dropdown-item, .checkbox {
+
+            &.active{
+                background: #007bff;
+            }
+
             background: $blue;
             color:#999;
             padding-left: 15px;
@@ -713,7 +719,7 @@ input[type='file'] {
 
     h4.data {
         text-align: center;
-        font-size: 45px;
+        font-size: 40px;
         color: #a0a0a0;
 
         &.bg_rounded {
@@ -1840,15 +1846,6 @@ a.run_kpi.btn {
     min-width: 0px;
     max-width: 0px;
     margin-right: 0px !important;
-}
-
-.dropdown-toggle::after {
-    top: auto;
-    bottom: 10px;
-    right: 50%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
 }
 
 #sidebar.active {
