@@ -8,7 +8,7 @@
     <div class="container-fluid hero_bg">
         <div class="container">  
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-3 ">
+                <div class="col-sm-6 offset-sm-3 ">
                     <div class="form-holder">
 
                         <h4>{{__('general.reset_pw')}}</h4>

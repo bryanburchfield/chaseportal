@@ -12,16 +12,16 @@
 		@include('shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
-				<div class="row">
+			<div class="container-full mt-2">
+				<div class="row w-100">
 					<div class="col-sm-12">
-						<div class="mt20">
-							<ul class="nav nav-tabs tabs">
+						<div class="mt-2">
+							<ul class="nav nav-tabs">
 
-								<li class="active"><a  href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
-								<li><a href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
+								<li class="nav-item active"><a class="nav-link" href="#new_user" data-toggle="tab">{{__('users.add_users')}}</a></li>
+								<li class="nav-item"><a class="nav-link" href="#edit_user" data-toggle="tab">{{__('users.edit_users')}}</a></li>
 								@can('accessSuperAdmin')
-									<li><a href="#demo_user" data-toggle="tab">Demo Users</a></li>
+									<li class="nav-item"><a class="nav-link" href="#demo_user" data-toggle="tab">Demo Users</a></li>
 								@endcan
 							</ul>
 
