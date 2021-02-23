@@ -14,11 +14,11 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt50">
 			    <div class="row">
-
-					<div class="col-sm-12">
-						<h2>{{__('general.my_settings')}}</h2>
-
-						<div class="col-sm-6 card">
+						
+					<div class="col-sm-6">
+						<div class="card">
+							
+							<h2>{{__('general.my_settings')}}</h2>
 							{!! Form::open(['method'=>'POST', 'class'=>'form fc_style user_settings', 'name' => 'user_settings']) !!}
 
 								<div class="form-group">
@@ -61,12 +61,11 @@
 										<div class="alert alert-success mt20">User successfully updated</div>
 									@endif
 
-								{!! Form::close() !!}
-
+							{!! Form::close() !!}
 						</div>
-
-						@include('shared.settings')
 					</div>
+
+					@include('shared.settings')
 			    </div>
 			</div>
 		</div>

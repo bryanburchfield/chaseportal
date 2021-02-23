@@ -2629,6 +2629,8 @@ div#cdr_dataTable_paginate {
 h4.panel-title a {
   display: block;
   width: 100%;
+  font-size: 18px;
+  padding: 8px 15px;
 }
 
 .user_links_modal h4:nth-of-type(odd) {
@@ -3186,21 +3188,9 @@ a.toggle_instruc {
   color: #d9534f;
 }
 
-.panel-title a:after {
-  font-family: 'Glyphicons Halflings';
-  content: "\E114";
-  float: right;
-  color: #33A09B;
-  font-size: 12px;
+.panel-title a span {
+  font-size: 15px;
   font-weight: 500;
-  position: relative;
-  top: 3px;
-}
-
-.panel-title a.collapsed:after {
-  content: "\E113";
-  position: relative;
-  top: 3px;
 }
 
 .webhook_fields .field {
