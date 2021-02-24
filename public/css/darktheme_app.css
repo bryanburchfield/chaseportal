@@ -3243,7 +3243,11 @@ a.toggle_instruc {
 }
 
 .webhook_fields .btn.h35 {
-  height: 35px;
+  height: 40px;
+}
+
+.webhook_fields form {
+  padding: 0 20px;
 }
 
 .webhook_fields button.btn.generate_url {
@@ -3929,6 +3933,20 @@ a.add_subcampaign:focus {
   background: #1d2b40 !important;
   border: none;
   color: #b7b7b7;
+}
+
+.search_form .input-group .form-control {
+  font-size: 16px;
+  height: 50px;
+}
+
+.search_form .input-group-btn:last-child > .btn,
+.search_form .input-group-btn:last-child > .btn-group {
+  height: 50px;
+}
+
+.search_form .radio-inline {
+  margin-right: 15px;
 }
 
 textarea.nobg_txtarea.form-control {

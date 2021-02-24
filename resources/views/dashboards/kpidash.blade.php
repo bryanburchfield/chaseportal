@@ -5,7 +5,9 @@
         <div class="col-sm-12">
             <h2>{{__('kpi.kpi_notifications')}}</h2>
         </div>
+    </div>
 
+    <div class="row">
         @foreach(\App\Models\Kpi::getKpis() as $kpi)
 
         <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">

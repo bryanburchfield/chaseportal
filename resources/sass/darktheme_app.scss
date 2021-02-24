@@ -2636,7 +2636,11 @@ a.toggle_instruc {
         }
     }
 
-    .btn.h35{height: 35px;}
+    .btn.h35{height: 40px;}
+
+    form{
+        padding: 0 20px;
+    }
 
     button.btn.generate_url{
         background: $green;
@@ -3229,6 +3233,19 @@ a.add_subcampaign{
     input.form-control, button.multiselect, select.form-control, textarea.form-control{
         @include form_control_style();
     }
+}
+
+.search_form{
+    .input-group{
+        .form-control{
+            font-size: 16px;
+            height: 50px;
+        }
+    }
+
+    .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group{height: 50px;}
+
+    .radio-inline{margin-right: 15px;}
 }
 
 textarea.nobg_txtarea.form-control{

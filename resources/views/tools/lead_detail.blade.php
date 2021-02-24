@@ -26,13 +26,13 @@
 			<div class="container-full mt50 tools">
 			    <div class="row">
 
-                    <div class="col-sm-12 mb20">
+                    <div class="col-sm-12 mb-2">
                         @if ($lead)
                             <h3><i class="fas fa-id-card"></i> {{ $lead->FirstName }} {{ $lead->LastName }}</h3>
                         @endif
                     </div>
 
-                    <div class="col-sm-4 mt20">
+                    <div class="col-sm-12 mt-2">
                         <form action="{{ action('LeadsController@getLead') }}" class="form search_form" method="POST">
                             @if(!session('isApi'))
                                 @csrf
@@ -43,10 +43,10 @@
                                     </div>
                                 </div>
 
-                                <label class="radio-inline">
+                                <label class="radio-inline mt-1">
                                     <input type="radio" name="search_key" value="phone" checked> Phone
                                 </label>
-                                <label class="radio-inline">
+                                <label class="radio-inline mt-1">
                                     <input type="radio" name="search_key" value="lead_id"> Lead ID
                                 </label>
                             @endif

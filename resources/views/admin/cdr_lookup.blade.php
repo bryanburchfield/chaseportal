@@ -25,26 +25,20 @@
 										<div class="form-group">
 											<label>Phone #</label>
 											<input type="tel" name="phone" id="phone" class="form-control"
-												required><br>
-											<label class="radio-inline"><input class="search_type" type="radio"
-													name="search_type" value="number_dialed" checked>Number
-												Dialed</label>
-											<label class="radio-inline"><input class="search_type" type="radio"
-													name="search_type" value="caller_id">Caller ID</label>
+												required>											
 										</div>
 									</div>
 
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label>From</label>
-											<div class='input-group date '>
-												<input type='text' readonly="true" name="fromdate"
+											<div class="input-group date">
+											    <input type='text' readonly="true" name="fromdate"
 													class="form-control datetimepicker fromdate" required
 													value="" />
-												<span class="input-group-addon">
-													<span class="glyphicon glyphicon-calendar">
-													</span>
-												</span>
+											    <div class="input-group-append">
+											        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+											    </div>
 											</div>
 										</div>
 									</div>
@@ -55,12 +49,16 @@
 											<div class='input-group date '>
 												<input type='text' readonly="true" name="todate"
 													class="form-control datetimepicker todate" required value="" />
-												<span class="input-group-addon">
-													<span class="glyphicon glyphicon-calendar">
-													</span>
-												</span>
+												<div class="input-group-append">
+											        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+											    </div>
 											</div>
 										</div>
+									</div>
+
+									<div class="col-sm-4">
+										<label class="radio-inline mr-2 mb-2"><input class="search_type" type="radio" name="search_type" value="number_dialed" checked> Number Dialed</label>
+										<label class="radio-inline mr-2 mb-2"><input class="search_type" type="radio" name="search_type" value="caller_id"> Caller ID</label>
 									</div>
 								</div>
 

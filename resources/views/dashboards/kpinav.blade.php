@@ -3,4 +3,3 @@
         <span>{{__('general.recipients')}}</span>
     </button>
 </div>
-</div>

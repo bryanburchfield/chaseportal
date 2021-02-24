@@ -45,10 +45,6 @@ $green: #33A09B;
     background: #eee !important;
 }
 
-@mixin form_control_style(){
-    background: #eee !important;
-}
-
 body, html {
     height: 100%;
 }
@@ -2499,11 +2495,10 @@ a.toggle_instruc {
         }
     }
 
-    .btn.h35{height: 35px;}
+    .btn.h35{height: 40px;}
 
     form{
-        padding: 20px;
-        border:1px solid #ddd;
+        padding: 0 20px;
     }
 
     button.btn.generate_url{
@@ -3062,9 +3057,15 @@ a.add_subcampaign{
 .search_form{
     .input-group{
         .form-control{
+            font-size: 16px;
+            height: 50px;
             background: #fff !important;
         }
     }
+
+    .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group{height: 50px;}
+
+    .radio-inline{margin-right: 15px;}
 }
 
 textarea.nobg_txtarea.form-control{
