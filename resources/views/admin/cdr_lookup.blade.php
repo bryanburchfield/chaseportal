@@ -22,36 +22,36 @@
 								<div class="row">
 
 									<div class="col-sm-4">
-										<div class="form-group">
-											<label>Phone #</label>
-											<input type="tel" name="phone" id="phone" class="form-control"
-												required>											
+										<div class="input-group">
+											<div class="input-group-append">
+										        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+										    </div>			
+										    <input type="tel" name="phone" id="phone" class="form-control"
+												required placeholder="Phone #">								
 										</div>
 									</div>
 
 									<div class="col-sm-4">
 										<div class="form-group">
-											<label>From</label>
 											<div class="input-group date">
-											    <input type='text' readonly="true" name="fromdate"
-													class="form-control datetimepicker fromdate" required
-													value="" />
 											    <div class="input-group-append">
 											        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 											    </div>
+											    <input type='text' readonly="true" name="fromdate"
+													class="form-control datetimepicker fromdate" required
+													value=""placeholder="From Date" />
 											</div>
 										</div>
 									</div>
 
 									<div class="col-sm-4">
 										<div class="form-group">
-											<label>To</label>
-											<div class='input-group date '>
-												<input type='text' readonly="true" name="todate"
-													class="form-control datetimepicker todate" required value="" />
+											<div class='input-group date'>
 												<div class="input-group-append">
 											        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 											    </div>
+											    <input type='text' readonly="true" name="todate"
+													class="form-control datetimepicker todate" required value="" placeholder="To Date" />
 											</div>
 										</div>
 									</div>

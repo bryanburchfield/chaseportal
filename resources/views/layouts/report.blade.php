@@ -18,7 +18,7 @@
     @else
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endif
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     @isset($cssfile)
@@ -40,7 +40,7 @@
 </head>
 <body>
     <input type="hidden" class="theme" value="{{Auth::user()->theme}}">
-
+    <input type="hidden" class="language" value="{{Session::get('locale')}}">
     <div class="preloader"></div>
 
     <div class="wrapper">
@@ -91,13 +91,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <script src="/js/moment.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/js/datetimepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
+    {{-- <script src="/js/datetimepicker.js"></script> --}}
     <script src="/js/multiselect_lib.js"></script>
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script>
     <script src="/js/master.js"></script>
     <script src="/js/nav.js"></script>
+    <script src="/js/bootstrap-material-datetimepicker.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
 
     @isset($jsfile)
@@ -105,7 +106,23 @@
     <script src="/js/{{ $js }}" type="text/javascript"></script>
     @endforeach
     @endisset
+
+    <?php
+        $lang = Session::get('locale');
+        $en='true';
+        if($lang == 'en'){
+            $en='true';
+            $date_format = 'MM/DD/YYYY h:mm A';
+        }else{
+            $en='false';
+            $date_format = 'DD/MM/YYYY HH:mm';
+        }
+    ?>
+        
     <script>
+
+        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY h:mm A', currentDate : new Date(), shortTime : true });
+
         $(window).on('load', function() {
             $('.preloader').fadeOut('slow');
         });

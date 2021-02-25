@@ -3677,6 +3677,33 @@ textarea.nobg_txtarea.form-control {
   box-shadow: none !important;
 }
 
+.input-group-append,
+span.input-group-text {
+  background: #dddddd;
+}
+
+.table dtp-picker-days,
+.dtp div.dtp-date,
+.dtp div.dtp-time {
+  background: #203047;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+  background: #182435;
+}
+
+.dtp table.dtp-picker-days tr > td > a.selected {
+  background: #E15B23;
+}
+
+.table.dtp-picker-days > thead > tr > th {
+  background: #ddd;
+}
+
+.dtp .p10 > a {
+  color: #eee;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

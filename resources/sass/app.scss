@@ -3074,6 +3074,30 @@ textarea.nobg_txtarea.form-control{
     @include box-shadow(none !important);
 }
 
+.input-group-append, span.input-group-text{
+    background: darken(#efefef, 7%);
+}
+
+.table dtp-picker-days, .dtp div.dtp-date, .dtp div.dtp-time{
+    background: $blue;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header{
+    background: darken($blue, 5%);
+}
+
+.dtp table.dtp-picker-days tr > td > a.selected{
+    background: $orange;
+}
+
+.table.dtp-picker-days > thead > tr > th{
+    background:#ddd;
+}
+
+.dtp .p10 > a{
+    color:#eee;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

@@ -17,7 +17,7 @@
 					<div class="col-sm-12">
 						<div id="webhook_generator">
 							<div class="col-sm-6 mt-3 mb20 card fc_style">
-								<h2 class="page_heading">Webhook Generator</h2>
+								<h2 class="page_heading mb-4">Webhook Generator</h2>
 								<div class="form-group">
 									<label>Group ID</label>
 									<input type="text" class="form-control" name="group_id" id="group_id">
