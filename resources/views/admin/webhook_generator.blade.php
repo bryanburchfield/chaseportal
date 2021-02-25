@@ -86,17 +86,22 @@
 										<div class="card">											
 											<h3 class="mb-4">Add Custom Field</h3>
 
-											<form action="#" method="post" class="form-inline add_custom_field fc_style mb-4">
-												<div class="row">
-													<div class="form-group mr-2">
+											<div class="row w-100 m-0 p-0">
+												<form action="#" method="post" class="form-inline add_custom_field fc_style mb-4 col-sm-12 p-0">
+
+													<div class="form-group col-sm-4 p-0">
 														<input type="text" class="form-control custom_field_name" name="custom_field_name" placeholder="Field Name" required>
 													</div>
-													<div class="form-group mr-2">
+
+													<div class="form-group col-sm-4 p-0">
 														<input type="text" class="form-control custom_field_value" name="custom_field_value" placeholder="Field Value" required>
 													</div>
-													<input type="submit" class="btn btn-primary m-0 h35" value="Add Custom Field">
-												</div>
-											</form>
+
+													<div class="col-sm-4 p-0 w-100">
+														<input type="submit" class="btn btn-primary m-0 h35 w-100" value="Add Custom Field">
+													</div>
+												</form>
+											</div>
 										</div>
 										
 									</div>

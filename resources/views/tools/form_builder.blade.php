@@ -19,7 +19,7 @@
 						<div class="row">
 							<div class="col-sm-4 mt-3 mb20 fc_style">
 								<div class="card">
-									<h2 class="page_heading">Form Builder</h2>
+									<h2 class="page_heading mb-4">Form Builder</h2>
 									<div class="form-group">
 										<label>Group ID</label>
 										<input type="text" class="form-control" name="group_id" id="group_id">
@@ -36,9 +36,9 @@
 									</div>
 
 									<div class="form-group">
-										<h4 class="mb10">Submit Button Type</h4>
-										<label class="radio-inline"><input class="submit_btn_type" value="submit" type="radio" name="submit_btn_type" checked>Submit</label>
-										<label class="radio-inline"><input class="submit_btn_type" value="submit_navigate" type="radio" name="submit_btn_type">Submit and Navigate</label>
+										<h5 class="mb-2"><b>Submit Button Type</b></h5>
+										<label class="radio-inline mr-2"><input class="submit_btn_type" value="submit" type="radio" name="submit_btn_type" checked> Submit</label>
+										<label class="radio-inline"><input class="submit_btn_type" value="submit_navigate" type="radio" name="submit_btn_type"> Submit and Navigate</label>
 									</div>
 
 									<div class="alert alert-danger hidetilloaded"></div>
@@ -179,20 +179,31 @@ select:required:invalid {
 									<div class="cloned-slides" id="cloned-slides"></div>
 								</div>
 
-								<div class="col-sm-12 p0">
-									<form action="#" method="post" class="form add_custom_form_field fc_style card">
-										<h3 class="mb20">Add Custom Field</h3>
-										<div class="form-group col-sm-4 pl0">
-											<input type="text" class="form-control custom_field_label_fb" name="custom_field_label" placeholder="Field Label" required>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="card pb-5">
+											<h3 class="mb-4">Add Custom Field</h3>
+											<form action="#" method="post" class="form form-inline add_custom_form_field fc_style p-0">
+												<div class="row w-100 m-0">
+													<div class="form-group col-sm-3 pl-0">
+														<input type="text" class="form-control w-100 custom_field_label_fb" name="custom_field_label" placeholder="Field Label" required>
+													</div>
+
+													<div class="form-group col-sm-3">
+														<input type="text" class="form-control w-100 custom_field_name_fb" name="custom_field_name" placeholder="Field Name" required>
+													</div>
+													
+													<div class="form-group col-sm-3">
+														<input type="text" class="form-control w-100 custom_field_value_fb" name="custom_field_value" placeholder="Field Value">
+													</div>
+
+													<div class="col-sm-3 pr-0">
+														<input type="submit" class="btn btn-primary btn-lg mt-1 mb-1 w-100" value="Add Custom Field">
+													</div>
+												</div>
+											</form>
 										</div>
-										<div class="form-group col-sm-4 pl0">
-											<input type="text" class="form-control custom_field_name_fb" name="custom_field_name" placeholder="Field Name" required>
-										</div>
-										<div class="form-group col-sm-4 pl0 pr0">
-											<input type="text" class="form-control custom_field_value_fb" name="custom_field_value" placeholder="Field Value">
-										</div>
-										<input type="submit" class="btn btn-primary btn-lg mt10 mb0" value="Add Custom Field">
-									</form>
+									</div>
 								</div>
 
 <div class="hidetilloaded html_options">
