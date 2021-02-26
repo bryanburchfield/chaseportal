@@ -115,9 +115,21 @@
         @endif
     @endisset
 
+    <?php
+        $lang = Session::get('locale');
+        $en='true';
+        if($lang == 'en'){
+            $en='true';
+            $date_format = 'MM/DD/YYYY h:mm A';
+        }else{
+            $en='false';
+            $date_format = 'DD/MM/YYYY HH:mm';
+        }
+    ?>
+    
     <script>
 
-        $('.datetimepicker').bootstrapMaterialDatePicker({ format : 'MM/DD/YYYY h:mm A', currentDate : new Date(), shortTime : true });
+        $('.datetimepicker').bootstrapMaterialDatePicker({ format : '<?php echo $date_format;?>', currentDate : new Date(), shortTime : true });
         
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {

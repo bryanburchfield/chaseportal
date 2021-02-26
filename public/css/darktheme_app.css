@@ -56,6 +56,11 @@ container {
   box-sizing: border-box;
 }
 
+form label {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 body,
 html {
   height: 100%;
@@ -1663,9 +1668,12 @@ input[type=number]::-webkit-outer-spin-button {
 .tools button.multiselect,
 .tools select.form-control,
 .tools textarea.form-control {
-  background: #1d2b40 !important;
+  background: none !important;
   border: none;
+  border-bottom: 3px solid #1d2b40 !important;
+  border-radius: 0;
   color: #b7b7b7;
+  margin-top: 8px;
 }
 
 .nav-tabs {
@@ -3930,9 +3938,12 @@ a.add_subcampaign:focus {
 .lead_fields_form button.multiselect,
 .lead_fields_form select.form-control,
 .lead_fields_form textarea.form-control {
-  background: #1d2b40 !important;
+  background: none !important;
   border: none;
+  border-bottom: 3px solid #1d2b40 !important;
+  border-radius: 0;
   color: #b7b7b7;
+  margin-top: 8px;
 }
 
 .search_form .input-group .form-control {
@@ -3953,6 +3964,44 @@ textarea.nobg_txtarea.form-control {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+.input-group-append,
+span.input-group-text {
+  background: #dddddd;
+}
+
+.table dtp-picker-days,
+.dtp div.dtp-date,
+.dtp div.dtp-time {
+  background: #203047;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+  background: #182435;
+}
+
+.dtp table.dtp-picker-days tr > td > a.selected,
+.dtp .dtp-actual-meridien a.selected {
+  background: #E15B23;
+}
+
+.dtp .dtp-buttons {
+  background: #fff;
+}
+
+.table.dtp-picker-days > thead > tr > th {
+  background: #ddd;
+}
+
+.dtp .p10 > a {
+  color: #eee;
+}
+
+.dtp-btn-ok.btn.btn-flat {
+  background: #33A09B;
+  color: #fff;
+  margin-left: 10px;
 }
 
 /* ---------------------------------------------------

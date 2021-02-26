@@ -27,9 +27,13 @@
 
 							<h2 class="bbnone mb20">{{__('tools.dnc_files')}}</h2>
 
-							<div class="card instructions">
-								<a href="#" class="toggle_instruc flt_rgt"><i class="fas fa-angle-up"></i></a>
-								<h3><b>{{__('tools.instructions')}}</b></h3>
+							<div class="card instructions p-3">
+
+								<div class="d-flex justify-content-between">
+									<h3 class="float-right"><b>{{__('tools.instructions')}}</b></h3>
+									<a href="#" class="toggle_instruc float-right"><i class="fas fa-angle-up"></i></a>
+								</div>
+
 								<div class="mt20 instuc_div">
 									<ul class="pl10 paditem5">
 										<li>{{__('tools.dnc_instruc1')}}</li>

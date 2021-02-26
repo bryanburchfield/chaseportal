@@ -1,11 +1,10 @@
 <!-- Modal -->
 <div class="modal fade" id="reports_modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-
+                <h5 class="modal-title" id="reportModalLabel">{{__('general.select_report')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="reportModalLabel">{{__('general.select_report')}}</h4>
             </div>
 
             {!! Form::open(['method'=>'POST', 'action'=> 'MasterDashController@showReport' ]) !!}
@@ -80,30 +79,31 @@
                     $list2 = array_slice($reports, $half);
                 @endphp
 
-                <div class="col-sm-6 p0">
-                    @foreach ($list1 as $key => $value)
-                        <div class="radio">
-                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="col-sm-6 p0">
-                    @foreach ($list2 as $key => $value)
-                        <div class="radio">
-                            <label><input type="radio" name="report_option" class="report_option" value="{{$key}}">{{$value}}</label>
-                        </div>
-                    @endforeach
+                <div class="row">
+                    <div class="col-sm-6">
+                        @foreach ($list1 as $key => $value)
+                            <div class="radio">
+                                <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="col-sm-6">
+                        @foreach ($list2 as $key => $value)
+                            <div class="radio">
+                                <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
-            <div class="modal-footer">
-                {{-- @csrf --}}
-                {{-- <button type="button" class="btn btn-primary view_report_btn">View Report</button> --}}
-                <button type="button" class="btn btn-default mr10 flt_lft" data-dismiss="modal">{{__('general.close')}}</button>
-                <a href="#" class="mb0" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
+            <div class="modal-footer  d-flex">
+                <button type="button" class="btn btn-default mr10 " data-dismiss="modal">{{__('general.close')}}</button>
+                <a href="#" class="view_report_btn btn-primary btn ">{{__('general.view_report')}}</a>
+
+                <a href="#" class="mb0 ml-auto" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
                     <span><i class="fa fa-cog"></i> {{__('general.auto_reports')}}</span>
                 </a>
-                <a href="#" class="view_report_btn btn-primary btn flt_lft">{{__('general.view_report')}}</a>
             </div>
             {!! Form::close() !!}
 

@@ -41,11 +41,22 @@ $green: #33A09B;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#{$color1}, endColorstr=#{$color2},GradientType=#{$ie_type} );
 }
 
+// @mixin form_control_style(){
+//     background: darken($blue, 2%) !important;
+//     border: none;
+//     color: lighten(#aaa, 5%);
+// }
+
 @mixin form_control_style(){
-    background: darken($blue, 2%) !important;
-    border: none;
+    background: none !important;
+    border:none;
+    border-bottom:3px solid darken($blue, 2%) !important;
+    @include border-radius(0);
     color: lighten(#aaa, 5%);
+    margin-top: 8px;
 }
+
+form label{font-weight: 600;text-transform: uppercase;}
 
 body, html {
     height: 100%;
@@ -3253,6 +3264,15 @@ textarea.nobg_txtarea.form-control{
     border: none !important;
     @include box-shadow(none !important);
 }
+
+.input-group-append, span.input-group-text{background: darken(#efefef, 7%);}
+.table dtp-picker-days, .dtp div.dtp-date, .dtp div.dtp-time{background: $blue;}
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header{background: darken($blue, 5%);}
+.dtp table.dtp-picker-days tr > td > a.selected, .dtp .dtp-actual-meridien a.selected{background: $orange;}
+.dtp .dtp-buttons{background: #fff;}
+.table.dtp-picker-days > thead > tr > th{background:#ddd;}
+.dtp .p10 > a{color:#eee;}
+.dtp-btn-ok.btn.btn-flat{background: $green;color:#fff;margin-left: 10px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

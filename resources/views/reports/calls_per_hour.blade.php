@@ -4,7 +4,7 @@
 @section('content')
 	<h3 class="heading">{{__('reports.calls_per_hour')}}</h3>
 
-	<div class="report_filters card col-sm-12 fc_style">
+	<div class="report_filters card col-sm-12 fc_style py-4 px-3">
 		{!! Form::open(['method'=>'POST', 'url'=> '#', 'name'=>'report_filter_form', 'id'=>$report, 'class'=>'report_filter_form query_dates_first']) !!}
 
 			<div class="row">
@@ -68,7 +68,9 @@
 
 
 			{!! Form::hidden('report', $report, ['id'=>'report']) !!}
-			{!! Form::submit(__('reports.run_report'), ['class'=>'btn btn-primary mb0']) !!}
+			<div class="d-flex justify-content-center">
+				{!! Form::submit(__('reports.run_report'), ['class'=>'btn btn-primary btn-lg mb-0 mt-5 ']) !!}
+			</div>
 
 		{!! Form::close() !!}
 	</div><!-- end report_filters -->

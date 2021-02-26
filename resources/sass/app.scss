@@ -42,8 +42,14 @@ $green: #33A09B;
 }
 
 @mixin form_control_style(){
-    background: #eee !important;
+    background: none !important;
+    border:none;
+    border-bottom:3px solid #ddd;
+    @include border-radius(0);
+    margin-top: 8px;
 }
+
+form label{font-weight: 600;text-transform: uppercase;}
 
 body, html {
     height: 100%;
@@ -3074,29 +3080,14 @@ textarea.nobg_txtarea.form-control{
     @include box-shadow(none !important);
 }
 
-.input-group-append, span.input-group-text{
-    background: darken(#efefef, 7%);
-}
-
-.table dtp-picker-days, .dtp div.dtp-date, .dtp div.dtp-time{
-    background: $blue;
-}
-
-.dtp > .dtp-content > .dtp-date-view > header.dtp-header{
-    background: darken($blue, 5%);
-}
-
-.dtp table.dtp-picker-days tr > td > a.selected{
-    background: $orange;
-}
-
-.table.dtp-picker-days > thead > tr > th{
-    background:#ddd;
-}
-
-.dtp .p10 > a{
-    color:#eee;
-}
+.input-group-append, span.input-group-text{background: darken(#efefef, 7%);}
+.table dtp-picker-days, .dtp div.dtp-date, .dtp div.dtp-time{background: $blue;}
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header{background: darken($blue, 5%);}
+.dtp table.dtp-picker-days tr > td > a.selected, .dtp .dtp-actual-meridien a.selected{background: $orange;}
+.dtp .dtp-buttons{background: #fff;}
+.table.dtp-picker-days > thead > tr > th{background:#ddd;}
+.dtp .p10 > a{color:#eee;}
+.dtp-btn-ok.btn.btn-flat{background: $green;color:#fff;margin-left: 10px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES
