@@ -12,7 +12,8 @@
     <meta name="_token" content="{{csrf_token()}}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="/css/bootstrap-material-datetimepicker.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @auth
         @if(Auth::user()->theme == 'dark')
             <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
