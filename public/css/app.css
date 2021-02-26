@@ -3692,8 +3692,13 @@ span.input-group-text {
   background: #182435;
 }
 
-.dtp table.dtp-picker-days tr > td > a.selected {
+.dtp table.dtp-picker-days tr > td > a.selected,
+.dtp .dtp-actual-meridien a.selected {
   background: #E15B23;
+}
+
+.dtp .dtp-buttons {
+  background: #fff;
 }
 
 .table.dtp-picker-days > thead > tr > th {
@@ -3702,6 +3707,12 @@ span.input-group-text {
 
 .dtp .p10 > a {
   color: #eee;
+}
+
+.dtp-btn-ok.btn.btn-flat {
+  background: #33A09B;
+  color: #fff;
+  margin-left: 10px;
 }
 
 /* ---------------------------------------------------
