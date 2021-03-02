@@ -36,10 +36,10 @@
                         <form action="{{ action('LeadsController@getLead') }}" class="form search_form" method="POST">
                             @if(!session('isApi'))
                                 @csrf
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search" name="id" name="search_value">
+                                <div class="input-group ">
+                                    <input type="text" class="form-control mt-0" placeholder="Search" name="id" name="search_value">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-primary mb10" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                                        <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                     </div>
                                 </div>
 

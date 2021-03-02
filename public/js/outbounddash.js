@@ -1066,6 +1066,7 @@ $(document).ready(function () {
 
     function resizeTopFlippingCard() {
         var height_dt2 = $('.get_hgt2').outerHeight();
+        console.log(height_dt2);
         $('.set_hgt2').css({ 'min-height': height_dt2 });
         $('.set_hgt2').css({ 'max-height': height_dt2 });
 

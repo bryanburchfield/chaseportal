@@ -11,8 +11,8 @@
 				</div>
 
 				<div class="btn-group btn-group-sm callvolume_inorout" role="group">
-					<button data-type="inbound" type="button" class="btn btn-sm btn-primary">{{__('widgets.inbound')}}</button>
-					<button data-type="outbound" type="button" class="btn btn-default">{{__('widgets.outbound')}}</button>
+					<button data-type="inbound" type="button" class="btn btn-sm btn-primary mb-0">{{__('widgets.inbound')}}</button>
+					<button data-type="outbound" type="button" class="btn btn-default mb-0">{{__('widgets.outbound')}}</button>
 				</div>
 			</div>
 

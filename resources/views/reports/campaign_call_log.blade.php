@@ -55,7 +55,7 @@
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
-						<label class="checkbox toggle_active_reps"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
+						<label class="checkbox toggle_active_reps mt-4 ml-0"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 				</div>
 			</div>

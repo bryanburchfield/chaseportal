@@ -82,14 +82,14 @@
                 <div class="row">
                     <div class="col-sm-6">
                         @foreach ($list1 as $key => $value)
-                            <div class="radio">
+                            <div class="radio mb-1">
                                 <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
                             </div>
                         @endforeach
                     </div>
                     <div class="col-sm-6">
                         @foreach ($list2 as $key => $value)
-                            <div class="radio">
+                            <div class="radio mb-1">
                                 <label><input type="radio" name="report_option" class="report_option" value="{{$key}}"> {{$value}}</label>
                             </div>
                         @endforeach
@@ -98,10 +98,10 @@
             </div>
 
             <div class="modal-footer  d-flex">
-                <button type="button" class="btn btn-default mr10 " data-dismiss="modal">{{__('general.close')}}</button>
-                <a href="#" class="view_report_btn btn-primary btn ">{{__('general.view_report')}}</a>
+                <button type="button" class="btn btn-default mr-1" data-dismiss="modal">{{__('general.close')}}</button>
+                <a href="#" class="view_report_btn btn-primary btn mb-0">{{__('general.view_report')}}</a>
 
-                <a href="#" class="mb0 ml-auto" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
+                <a href="#" class="mb-0 ml-auto" onclick="window.location.href = '{{ url('dashboards/automatedreports') }}';">
                     <span><i class="fa fa-cog"></i> {{__('general.auto_reports')}}</span>
                 </a>
             </div>

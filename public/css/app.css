@@ -56,9 +56,25 @@ container {
   box-sizing: border-box;
 }
 
-form label {
+select.form-control:focus,
+select.form-control:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+form.fc_style label {
   font-weight: 600;
   text-transform: uppercase;
+}
+
+#reports_modal form label {
+  text-transform: none;
 }
 
 body,
@@ -929,6 +945,7 @@ input[type='file'] {
   background: #fff;
   overflow: hidden;
   padding: 1px;
+  min-height: 185px !important;
 }
 
 .card.flipping_card.card-3 {
@@ -1299,7 +1316,7 @@ p.ajax_error {
 }
 
 .card-3 {
-  min-height: 175px;
+  min-height: 185px;
   position: relative;
   overflow: visible;
 }
@@ -1525,6 +1542,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 .report_filters select.form-control {
   height: 40px;
+}
+
+.report_filters .form-group {
+  margin-bottom: 35px;
 }
 
 .fc_style .form-control,
@@ -2920,10 +2941,6 @@ a.remove_subcamp {
   background: white;
   cursor: inherit;
   display: block;
-}
-
-.upload_desc input.form-control {
-  background: #fff !important;
 }
 
 .btn-info.btn-file {

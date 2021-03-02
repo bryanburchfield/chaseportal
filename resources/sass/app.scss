@@ -49,7 +49,28 @@ $green: #33A09B;
     margin-top: 8px;
 }
 
-form label{font-weight: 600;text-transform: uppercase;}
+select.form-control{
+
+    &:focus, &:active{
+        outline:none !important;
+        box-shadow: none !important;
+    }
+}
+
+.btn{
+    &:focus, &:active{
+        outline:none !important;
+        box-shadow: none !important;
+    }
+}
+
+form.fc_style label{font-weight: 600;text-transform: uppercase;}
+
+#reports_modal{
+    form label{
+        text-transform: none;
+    }
+}
 
 body, html {
     height: 100%;
@@ -690,6 +711,7 @@ input[type='file'] {
         background: #fff;
         overflow: hidden;
         padding: 1px;
+        min-height: 185px !important;
 
         &.card-3 {
             padding: 0px;
@@ -1029,7 +1051,7 @@ p.ajax_error {
 }
 
 .card-3 {
-    min-height: 175px;
+    min-height: 185px;
     position: relative;
     overflow: visible;
 }
@@ -1230,6 +1252,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 .report_filters select.form-control {
     height: 40px;
+}
+
+.report_filters .form-group {
+    margin-bottom: 35px;
 }
 
 .fc_style, .tools{
@@ -2411,10 +2437,6 @@ a.remove_subcamp{font-size: 13px;margin-top: 0 !important;}
     background: white;
     cursor: inherit;
     display: block;
-}
-
-.upload_desc input.form-control{
-    background: #fff !important;
 }
 
 .btn-info.btn-file{
