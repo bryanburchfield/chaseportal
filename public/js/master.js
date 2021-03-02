@@ -1220,6 +1220,7 @@ var Master = {
             report = $('#report').val(),
             pagesize = $('.pagesize').val()
             ;
+        console.log(form_data);
 
         if (curpage == '') { curpage = $('.curpage').val(); }
         if (report == '') { report = $('#report').val(); }
@@ -2655,12 +2656,16 @@ var Master = {
         }else{
             checked=0;
         }
-        console.log(checked);
+
+        $('#active_reps').empty();
+
         var active_cnt=0;
         $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
             if(index>1){
                 if(checked){
                     if(!$(this).hasClass('active_rep')){
+                        console.log($(this).text());
+                        $('#active_reps').append('<option>'+$(this).text()+'</option>');
                         $(this).hide();
                         active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length -2;
                     }

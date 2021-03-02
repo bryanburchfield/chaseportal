@@ -50,6 +50,8 @@
 
 						<label class="checkbox toggle_active_reps pl-0 mt-4"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
+
+					<datalist id="active_reps"></datalist>
 				</div>
 			</div>
 
