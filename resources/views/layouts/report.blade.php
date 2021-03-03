@@ -20,7 +20,7 @@
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endif
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     @isset($cssfile)
         @foreach($cssfile as $css)
@@ -94,6 +94,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
     {{-- <script src="/js/datetimepicker.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script> --}}
     <script src="/js/multiselect_lib.js"></script>
     <script src="/js/multiselect.js"></script>
     <script src="/js/color-hash.js"></script>
@@ -123,6 +125,7 @@
     <script>
 
         $('.datetimepicker').bootstrapMaterialDatePicker({ format : '<?php echo $date_format;?>', currentDate : new Date(), shortTime : true });
+        $('.selectpicker').selectpicker();
 
         $(window).on('load', function() {
             $('.preloader').fadeOut('slow');

@@ -3111,6 +3111,11 @@ textarea.nobg_txtarea.form-control{
 .dtp .p10 > a{color:#eee;}
 .dtp-btn-ok.btn.btn-flat{background: $green;color:#fff;margin-left: 10px;}
 
+.dropdown-menu.inner{
+    overflow:hidden !important;
+}
+
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

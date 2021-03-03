@@ -3749,6 +3749,10 @@ span.input-group-text {
   margin-left: 10px;
 }
 
+.dropdown-menu.inner {
+  overflow: hidden !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
