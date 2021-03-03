@@ -42,11 +42,13 @@
 					<div class="form-group">
 						{!! Form::label('reps',  __('reports.rep')) !!}
 
-						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true">
+						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true">
 							@foreach($filters['reps'] as $rep)
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
+
+						<datalist id="active_reps"></datalist>
 
 						<label class="checkbox toggle_active_reps pl-0 mt-4 ml-0"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
