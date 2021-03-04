@@ -53,9 +53,9 @@ class InternalSpamCheckService
         Log::info('Pulling report');
         $this->saveReport();
 
-        // echo "Swap Numbers\n";
-        // Log::info('Swapping numbers');
-        // $this->swapNumbers();
+        echo "Swap Numbers\n";
+        Log::info('Swapping numbers');
+        $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -308,6 +308,10 @@ class InternalSpamCheckService
 
         $error = null;
         $replaced_by = null;
+
+        // bpb
+        $replaced_by = '1112223333';
+        return [$replaced_by, $error];
 
         try {
             $response = $client->get(
