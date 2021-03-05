@@ -38,23 +38,23 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-4 mb-2">
 					<div class="form-group">
 						{!! Form::label('reps',  __('reports.rep')) !!}
 
-						<select class="form-control selectpicker" id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true">
+						<select class="form-control multiselect" id="rep_select" multiple name="reps[]" data-live-search="true" data-actions-box="true">
 							@foreach($filters['reps'] as $rep)
 								<option class="{{ $rep['IsActive'] ? 'active_rep' : ''}}" value="{{$rep['RepName']}}" data-active="{{$rep['IsActive']}}">{{$rep['RepName']}}</option>
 							@endforeach
 						</select>
-
-						<datalist id="active_reps"></datalist>
 
 						<label class="checkbox toggle_active_reps pl-0 mt-4 ml-0"><input type="checkbox"> {{__('reports.show_active_reps')}}</label>
 					</div>
 
 					<datalist id="active_reps"></datalist>
 				</div>
+
+			    
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>

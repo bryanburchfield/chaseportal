@@ -48,7 +48,36 @@ $green: #33A09B;
     @include border-radius(0);
     color: lighten(#aaa, 5%);
     margin-top: 8px;
+    transition: border 0.5s ease;
+    padding-left: 0;
+
+    &:focus,&:active{
+        outline: none !important;
+        @include box-shadow(none !important);
+        border-bottom: 3px solid $green;
+
+        &:after{
+            transform-origin: center;
+        }
+    }
 }
+
+select.form-control{
+
+    &:focus, &:active{
+        outline:none !important;
+        box-shadow: none !important;
+    }
+}
+
+.btn{
+    &:focus, &:active{
+        outline:none !important;
+        box-shadow: none !important;
+    }
+}
+
+textarea.form-control{border:3px solid darken($blue, 2%);}
 
 .btn{
     &:focus, &:active{
@@ -2176,10 +2205,7 @@ h4.panel-title a{
 }
 
 .undoselection_btn{
-    color: #d9534f;
-    font-weight: 600;
-    position: relative;
-    top:9px;
+    @include base_style(null, #d9534f, $fw:600);
 }
 
 #editRecipModal .btn.btn-warning{background: $orange;border:none;}
@@ -3281,6 +3307,10 @@ textarea.nobg_txtarea.form-control{
 .table.dtp-picker-days > thead > tr > th{background:#ddd;}
 .dtp .p10 > a{color:#eee;}
 .dtp-btn-ok.btn.btn-flat{background: $green;color:#fff;margin-left: 10px;}
+
+.multiselect-container>li>a>label{padding-left: 10px !important;}
+.multiselect-container.dropdown-menu li{font-size: 14px;padding: 7px 0px !important;}
+.multiselect-container>li>a>label>input[type=checkbox]{margin-right: 5px;}
 
 /* ---------------------------------------------------
 MEDIAQUERIES

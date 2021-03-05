@@ -11,10 +11,10 @@
         @foreach(\App\Models\Kpi::getKpis() as $kpi)
 
         <div class="col-sm-12 opt" data-kpi="{{ $kpi->id }}">
-            <a href="#" class="kpi_trigger flt_lft"> {{ __('kpi.' . $kpi->name) }}</a>
+            <a href="#" class="kpi_trigger float-left"> {{ __('kpi.' . $kpi->name) }}</a>
 
             <div class="controls flt_rgt">
-                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm flt_lft"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
+                <a href="https://webdev.chasedatacorp.com/kpi/crons/cron_{{ $kpi->id}}.php?interval={{ $kpi->interval }}" class="run_kpi btn btn-default btn-sm float-left"><span class="glyphicon glyphicon-flash"></span> {{__('kpi.run_now')}}</a>
                 <label class="switch flt_rgt">
                     <input type="checkbox" {{ ($kpi->active) ? 'checked' : '' }} name="kpi_input">
                     <span></span>
@@ -25,7 +25,7 @@
                 <p>{{ __('kpi.desc_' . $kpi->name) }}</p>
                 <div class="row mt-3 options kpi_options_top">
                     <div class="col-sm-4">
-                        <h4 class="expand_dets flt_lft"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
+                        <h4 class="expand_dets float-left"><i class="glyphicon glyphicon-wrench exp"></i> {{__('kpi.options')}}</h4>
                         <div class="expanded_options clear card">
                             <form data-kpi="{{ $kpi->id }}" action="#" method="post" class="form adjust_interval fc_style">
                                 <div class="form-group">
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <h4 class="expand_dets flt_lft"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
+                        <h4 class="expand_dets float-left"><i class="glyphicon glyphicon-envelope"></i> {{__('kpi.recipients')}}</h4>
                         <div class="expanded_emails clear">
 
                         @forelse($kpi->recipients as $r)
@@ -58,8 +58,8 @@
                                     @endif
                                 </p>
                                 @if(!Auth::user()->isType('demo') || $r->user_id == Auth::user()->id)
-                                    <a class="edit_recip_glyph flt_lft" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
-                                    <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph flt_lft" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
+                                    <a class="edit_recip_glyph float-left" data-toggle="modal" data-target="#editRecipModal" href="#" data-recip="{{ $r->recipient_id }}" data-userid="{{$r->id}}" data-username="{{$r->name}}"><i class="fas fa-user-edit"></i></a>
+                                    <a data-toggle="modal" data-username="{{$r->name}}" data-target="#deleteRecipModal" class="remove_recip_glyph float-left" href="#" data-kpi="{{ $kpi->id }}" data-recip="{{ $r->id }}"><i class="fas fa-trash-alt"></i></a>
                                 @endif
                             </div>
                         @empty
@@ -79,8 +79,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('kpi.confirm_recipient_removal')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('kpi.confirm_recipient_removal')}}</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" class="user_id" name="user_id" value="">
@@ -89,11 +89,11 @@
                 <input type="hidden" class="kpi_id" name="kpi_id" value="">
                <h3>{{__('kpi.are_you_sure')}} <span class="username"></span> {{__('kpi.from_this_kpi')}}?</h3>
             </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
-            <button type="button" class="btn btn-danger remove_recip">{{__('kpi.remove_recipient')}}</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
+                <button type="button" class="btn btn-danger remove_recip">{{__('kpi.remove_recipient')}}</button>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 

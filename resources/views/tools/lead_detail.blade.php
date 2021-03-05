@@ -37,7 +37,7 @@
                             @if(!session('isApi'))
                                 @csrf
                                 <div class="input-group ">
-                                    <input type="text" class="form-control mt-0" placeholder="Search" name="id" name="search_value">
+                                    <input type="text" class="form-control mt-0 pl-3" placeholder="Search" name="id" name="search_value">
                                     <div class="input-group-btn">
                                         <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i> Search</button>
                                     </div>
@@ -71,24 +71,24 @@
                     @if ($lead)
                         <div class="col-sm-12 lead_details">
 
-                            <div class="bt bb mt-3 mb30 pt10 pb10">
-                                <div class="col-sm-3 mb10">
-                                    <h4 class="mb10">Lead ID</h4>
+                            <div class="bt pt-2 mt-3 mb-3 row d-flex justify-content-between">
+                                <div class="col-sm-3 mb-1 tac">
+                                    <h4 class="mb-1">Lead ID</h4>
                                     <p>{{ $lead->id }}</p>
                                 </div>
 
-                                <div class="col-sm-3 mb10">
-                                    <h4 class="mb10">Import Date</h4>
+                                <div class="col-sm-3 mb-1 tac">
+                                    <h4 class="mb-1">Import Date</h4>
                                     <p>{{ $lead->Date }}</p>
                                 </div>
 
-                                <div class="col-sm-3 mb10">
-                                    <h4 class="mb10">Phone</h4>
+                                <div class="col-sm-3 mb-1 tac">
+                                    <h4 class="mb-1">Phone</h4>
                                     <p>{{ $lead->PrimaryPhone }}</p>
                                 </div>
 
-                                <div class="col-sm-3 mb10">
-                                    <h4 class="mb10">Last Updated</h4>
+                                <div class="col-sm-3 mb-1 tac">
+                                    <h4 class="mb-1">Last Updated</h4>
                                     <p>{{ $lead->LastUpdated }}</p>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                         </div>
 
                                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                            <div class="panel-body">
+                                            <div class="panel-body pt-4">
                                                 <div class="lead_fields">
 
                                                     @can('accessAdmin')
@@ -300,11 +300,11 @@
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingTwo">
-                                            <h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Custom Fields</a></h4>
+                                            <h4 class="panel-title mb-5"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Custom Fields</a></h4>
                                         </div>
 
                                         <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
-                                            <div class="panel-body">
+                                            <div class="panel-body pt-4">
                                                 <div class="custom_fields">
                                                     @foreach($lead->customFields() as $field)
                                                         @can('accessAdmin')

@@ -30,7 +30,8 @@ class DncController extends Controller
     public function index()
     {
         $jsfile[] = 'tools.js';
-        $page['menuitem'] = 'tools';
+        $page['menuitem'] = 'dnc_importer';
+        $page['sidenav'] = 'tools';
         $page['type'] = 'page';
         $data = [
             'jsfile' => $jsfile,

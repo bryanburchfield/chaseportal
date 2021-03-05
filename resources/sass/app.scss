@@ -47,6 +47,18 @@ $green: #33A09B;
     border-bottom:3px solid #ddd;
     @include border-radius(0);
     margin-top: 8px;
+    transition: border 0.5s ease;
+    padding-left: 0;
+
+    &:focus,&:active{
+        outline: none !important;
+        @include box-shadow(none !important);
+        border-bottom: 3px solid $green;
+
+        &:after{
+            transform-origin: center;
+        }
+    }
 }
 
 select.form-control{
@@ -63,6 +75,8 @@ select.form-control{
         box-shadow: none !important;
     }
 }
+
+textarea.form-control{border:3px solid #ddd;}
 
 form.fc_style label{font-weight: 600;text-transform: uppercase;}
 
@@ -2073,8 +2087,6 @@ h4.panel-title a{
 
 .undoselection_btn{
     @include base_style(null, #d9534f, $fw:600);
-    position: relative;
-    top:9px;
 }
 
 p.name span.name{width: 150px;}
@@ -3111,11 +3123,10 @@ textarea.nobg_txtarea.form-control{
 .dtp .p10 > a{color:#eee;}
 .dtp-btn-ok.btn.btn-flat{background: $green;color:#fff;margin-left: 10px;}
 
-.dropdown-menu.inner{
-    overflow:hidden !important;
-}
-
-
+.dropdown-menu.inner{overflow:hidden !important;}
+.multiselect-container>li>a>label{padding-left: 10px !important;}
+.multiselect-container.dropdown-menu li{font-size: 14px;padding: 7px 0px !important;}
+.multiselect-container>li>a>label>input[type=checkbox]{margin-right: 5px;}
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

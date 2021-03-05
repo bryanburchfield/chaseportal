@@ -56,6 +56,22 @@ container {
   box-sizing: border-box;
 }
 
+select.form-control:focus,
+select.form-control:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+textarea.form-control {
+  border: 3px solid #1d2b40;
+}
+
 .btn:focus,
 .btn:active {
   outline: none !important;
@@ -1689,6 +1705,48 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 0;
   color: #b7b7b7;
   margin-top: 8px;
+  transition: border 0.5s ease;
+  padding-left: 0;
+}
+
+.fc_style .form-control:focus,
+.fc_style .form-control:active,
+.fc_style button.multiselect:focus,
+.fc_style button.multiselect:active,
+.fc_style select.form-control:focus,
+.fc_style select.form-control:active,
+.fc_style textarea.form-control:focus,
+.fc_style textarea.form-control:active,
+.tools .form-control:focus,
+.tools .form-control:active,
+.tools button.multiselect:focus,
+.tools button.multiselect:active,
+.tools select.form-control:focus,
+.tools select.form-control:active,
+.tools textarea.form-control:focus,
+.tools textarea.form-control:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom: 3px solid #33A09B;
+}
+
+.fc_style .form-control:focus:after,
+.fc_style .form-control:active:after,
+.fc_style button.multiselect:focus:after,
+.fc_style button.multiselect:active:after,
+.fc_style select.form-control:focus:after,
+.fc_style select.form-control:active:after,
+.fc_style textarea.form-control:focus:after,
+.fc_style textarea.form-control:active:after,
+.tools .form-control:focus:after,
+.tools .form-control:active:after,
+.tools button.multiselect:focus:after,
+.tools button.multiselect:active:after,
+.tools select.form-control:focus:after,
+.tools select.form-control:active:after,
+.tools textarea.form-control:focus:after,
+.tools textarea.form-control:active:after {
+  transform-origin: center;
 }
 
 .nav-tabs {
@@ -2693,8 +2751,6 @@ h4.panel-title a {
 .undoselection_btn {
   color: #d9534f;
   font-weight: 600;
-  position: relative;
-  top: 9px;
 }
 
 #editRecipModal .btn.btn-warning {
@@ -3955,6 +4011,32 @@ a.add_subcampaign:focus {
   border-radius: 0;
   color: #b7b7b7;
   margin-top: 8px;
+  transition: border 0.5s ease;
+  padding-left: 0;
+}
+
+.lead_fields_form input.form-control:focus,
+.lead_fields_form input.form-control:active,
+.lead_fields_form button.multiselect:focus,
+.lead_fields_form button.multiselect:active,
+.lead_fields_form select.form-control:focus,
+.lead_fields_form select.form-control:active,
+.lead_fields_form textarea.form-control:focus,
+.lead_fields_form textarea.form-control:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom: 3px solid #33A09B;
+}
+
+.lead_fields_form input.form-control:focus:after,
+.lead_fields_form input.form-control:active:after,
+.lead_fields_form button.multiselect:focus:after,
+.lead_fields_form button.multiselect:active:after,
+.lead_fields_form select.form-control:focus:after,
+.lead_fields_form select.form-control:active:after,
+.lead_fields_form textarea.form-control:focus:after,
+.lead_fields_form textarea.form-control:active:after {
+  transform-origin: center;
 }
 
 .search_form .input-group .form-control {
@@ -4013,6 +4095,19 @@ span.input-group-text {
   background: #33A09B;
   color: #fff;
   margin-left: 10px;
+}
+
+.multiselect-container > li > a > label {
+  padding-left: 10px !important;
+}
+
+.multiselect-container.dropdown-menu li {
+  font-size: 14px;
+  padding: 7px 0px !important;
+}
+
+.multiselect-container > li > a > label > input[type=checkbox] {
+  margin-right: 5px;
 }
 
 /* ---------------------------------------------------

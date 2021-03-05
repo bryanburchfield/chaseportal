@@ -1,11 +1,11 @@
 <!-- Edit Recipient Modal -->
 <div class="modal fade" id="editRecipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
 
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('general.edit_recip')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('general.edit_recip')}}</h4>
             </div>
 
             <div class="modal-body">
@@ -26,7 +26,7 @@
                     {!! Form::tel('phone', null, ['class'=>'form-control phone']) !!}
                 </div>
 
-                <div class="kpi_list"></div>
+                <div class="kpi_list mt-4"></div>
 
                 {!! Form::hidden('recipient_id', '', ['class'=>'recipient_id']) !!}
                 {!! Form::hidden('from_page', url()->current(), ['class'=>'from_page']) !!}
@@ -35,10 +35,10 @@
                     {!! Form::hidden('edit_form_submitted', '1', ['class'=>'edit_form_submitted']) !!}
                 @endif
 
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{__('general.cancel')}}</button>
-                {!! Form::submit(__('general.save'), ['class'=>'btn btn-warning btn-md mb0']) !!}
+                <button type="button" class="btn btn-default mr-1 mt-2" data-dismiss="modal">{{__('general.cancel')}}</button>
+                {!! Form::submit(__('general.save'), ['class'=>'btn btn-primary btn-md mb-0 mt-2']) !!}
 
-                <div class="alert alert-danger mt20 hidetilloaded"></div>
+                <div class="alert alert-danger mt-3 hidetilloaded"></div>
                 {!! Form::close() !!}
 
             </div>

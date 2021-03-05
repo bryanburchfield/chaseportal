@@ -123,7 +123,7 @@ var Master = {
                 $(this).val(Master.page_menuitem);
             });
         }
-
+        console.log('clicked');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -134,7 +134,7 @@ var Master = {
 
         var sidenav = $(this).data('path');
         $("html, body").animate({ scrollTop: 0 }, "slow");
-
+        console.log(sidenav);
         $.ajax({
             url: '/admin/load_sidenav',
             type: 'POST',
@@ -2517,28 +2517,24 @@ var Master = {
         });
     },
 
-    toggle_active_reps:function(){
-        var checked=0;
-        if($(this).is(':checked')){
-            checked=1;
-        }else{
-            checked=0;
+    toggle_active_reps: function () {
+        var checked = 0;
+        if ($(this).is(':checked')) {
+            checked = 1;
+        } else {
+            checked = 0;
         }
 
-        $('#active_reps').empty();
-
-        var active_cnt=0;
-        $(this).parent().prev().find('.dropdown-menu').find('li').each(function(index){
-
-            if(index>1){
-                if(checked){
-                    if(!$(this).hasClass('active_rep')){
+        var active_cnt = 0;
+        $(this).parent().prev().find('.dropdown-menu').find('li').each(function (index) {
+            if (index > 1) {
+                if (checked) {
+                    if (!$(this).hasClass('active_rep')) {
                         $(this).hide();
-                        active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length -2;
-                        $('#active_reps').append('<option>'+$(this).text()+'</option>');
+                        active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active').length - 2;
                     }
-                }else{
-                    active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active.active_rep').length -2;
+                } else {
+                    active_cnt = $(this).parent().parent().find('.multiselect-container.dropdown-menu li.active.active_rep').length - 2;
                     $(this).show();
                 }
             }
