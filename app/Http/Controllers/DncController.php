@@ -29,7 +29,8 @@ class DncController extends Controller
      */
     public function index()
     {
-        $jsfile[] = 'dncuploader.js';
+
+        $jsfile[] = 'tools.js';
         $page['menuitem'] = 'dnc_importer';
         $page['sidenav'] = 'tools';
         $page['type'] = 'page';

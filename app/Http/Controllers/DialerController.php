@@ -8,6 +8,7 @@ class DialerController extends Controller
     {
         $page['menuitem'] = 'server_status';
         $page['type'] = 'page';
+        $page['sidenav'] = 'tools';
         $data = [
             'page' => $page,
         ];
