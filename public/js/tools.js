@@ -21,6 +21,7 @@ var Tools = {
         $('body').on('click', '.remove_filter', this.remove_leadrule_filter);
         $('.delete_dnc').on('click', this.populate_dnc_modal);
         $('.reverse_dnc').on('click', this.populate_dnc_reversemodal);
+        $('.toggle_instruc, .toggle_instruc + h3').on('click', this.toggle_instructions);
 	},
 
 	get_leadrule_subcampaigns:function(){
@@ -417,6 +418,24 @@ var Tools = {
     populate_dnc_reversemodal:function(){
         var id = $(this).data('id');
         $('#reverseDNCModal .modal-footer').find('.btn-danger').val('reverse:'+id);
+    },
+
+    toggle_instructions:function(e){
+
+        if(e){
+            e.preventDefault();
+        }
+
+        that = $('a.toggle_instruc');
+        if(that.hasClass('collapsed')){
+            that.removeClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-up"></i>');
+        }else{
+            that.addClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-down"></i>');
+        }
+
+        that.parent().find('.instuc_div').slideToggle();
     },
 }
 
