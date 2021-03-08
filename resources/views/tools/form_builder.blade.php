@@ -178,6 +178,7 @@ select:required:invalid {
 
 									<div class="cloned-slides" id="cloned-slides"></div>
 								</div>
+						
 
 								<div class="row">
 									<div class="col-sm-12">

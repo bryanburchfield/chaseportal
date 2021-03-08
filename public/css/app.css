@@ -3878,6 +3878,10 @@ span.input-group-text {
   margin-right: 5px;
 }
 
+table#actions {
+  width: 100% !important;
+}
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */
