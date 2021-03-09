@@ -170,7 +170,7 @@ var Dashboard = {
 	            $('table#actions').DataTable().clear();
 	            $('table#actions').DataTable().destroy();
 
-                $('#actions tbody').append(actions_trs);
+              	$('#actions tbody').append(actions_trs);
                 $('table#actions').DataTable({
                 	"bDestroy": true,
                 	"responsive": true,

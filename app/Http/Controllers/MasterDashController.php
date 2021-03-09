@@ -109,7 +109,7 @@ class MasterDashController extends Controller
         $request->merge(['dashboard' => 'admindistinctagentdash']);
         $this->setDashboard($request);
 
-        $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
+        $this->cssfile[] = 'https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css';
 
         return $this->index($request);
     }
@@ -159,7 +159,7 @@ class MasterDashController extends Controller
         $request->merge(['dashboard' => 'compliancedash']);
         $this->setDashboard($request);
 
-        $this->cssfile[] = 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css';
+        $this->cssfile[] = 'https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css';
 
         return $this->index($request);
     }

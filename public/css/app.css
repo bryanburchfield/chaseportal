@@ -1003,6 +1003,15 @@ input[type='file'] {
   margin-bottom: 20px;
 }
 
+.card .card_table,
+.card .card_table2 {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 20px 10px;
+  background: #fff;
+}
+
 .card_table::-webkit-scrollbar,
 .card_table2::-webkit-scrollbar {
   width: 0px;
