@@ -16,11 +16,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha512-UyNhw5RNpQaCai2EdC+Js0QL4RlVmiq41DkmCJsRV3ZxipG2L0HhTqIf/H9Hp8ez2EnFlkBnjRGJU2stW3Lj+w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/bootstrap-material-datetimepicker.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    @isset($cssfile)
-        @foreach($cssfile as $css)
-            <link href="{{ $css }}" rel="stylesheet">
-        @endforeach
-    @endisset
     @auth
         @if(Auth::user()->theme == 'dark')
             <link href="/css/darktheme_app.css" rel="stylesheet" type="text/css"/>
@@ -28,6 +23,12 @@
             <link href="/css/app.css" rel="stylesheet" type="text/css"/>
         @endif
     @endauth
+
+    @isset($cssfile)
+        @foreach($cssfile as $css)
+            <link href="{{ $css }}" rel="stylesheet">
+        @endforeach
+    @endisset
     @guest
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endguest

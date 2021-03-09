@@ -199,6 +199,7 @@ var Dashboard = {
 	            	}
     	        });
 
+                $('table#actions').parent().parent().addClass('w-100');
                 $('table#actions').addClass('bs-select');
 
                 // fade out preloader here because .done is not working
