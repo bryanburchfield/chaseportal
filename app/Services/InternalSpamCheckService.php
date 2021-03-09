@@ -53,9 +53,9 @@ class InternalSpamCheckService
         Log::info('Pulling report');
         $this->saveReport();
 
-        echo "Swap Numbers\n";
-        Log::info('Swapping numbers');
-        $this->swapNumbers();
+        // echo "Swap Numbers\n";
+        // Log::info('Swapping numbers');
+        // $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -200,7 +200,7 @@ class InternalSpamCheckService
 
         SELECT * INTO #pamd FROM (
             SELECT CallerId, Subcampaign, COUNT(*) AS Cnt
-            FROM DialingResults
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
             AND CallDate < @enddate
@@ -292,7 +292,7 @@ class InternalSpamCheckService
         SET ConnectPct = (CAST(Connects AS NUMERIC(18,2)) / CAST(Dials AS NUMERIC(18,2))) * 100
         WHERE Dials > 0
 
-        SELECT Dialer, GroupId, GroupName, Phone AS CallerId, Description, Subcampaigns AS FlaggedByCarrier, Dials, ConnectPct
+        SELECT Dialer, GroupId, GroupName, Phone, Description, Subcampaigns AS FlaggedByCarrier, Dials, Connects, ConnectPct
         FROM #activebad
         ORDER BY Dialer, GroupId, Phone";
 
