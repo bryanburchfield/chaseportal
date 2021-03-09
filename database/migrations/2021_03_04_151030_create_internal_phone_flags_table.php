@@ -21,6 +21,9 @@ class CreateInternalPhoneFlagsTable extends Migration
             $table->smallInteger('dialer_numb');
             $table->string('phone', 15);
             $table->string('ring_group')->nullable();
+            $table->integer('dials')->nullable();
+            $table->integer('connects')->nullable();
+            $table->decimal('connect_pct')->nullable();
             $table->string('replaced_by', 15)->nullable();
             $table->string('swap_error')->nullable();
 

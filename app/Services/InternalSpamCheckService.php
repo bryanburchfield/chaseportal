@@ -83,6 +83,9 @@ class InternalSpamCheckService
                     'dialer_numb' => $rec['Dialer'],
                     'phone' => $phone,
                     'ring_group' => $rec['Description'],
+                    'dials' => $rec['Dials'],
+                    'connects' => $rec['Connects'],
+                    'connect_pct' => $rec['ConnectPct'],
                 ]);
             } catch (Exception $e) {
                 Log::error('Error creating InternalPhoneFlag: ' . $phone);
@@ -96,7 +99,7 @@ class InternalSpamCheckService
         $all_results = [];
 
         foreach (InternalPhoneFlag::where('run_date', $this->run_date)
-            ->orderBy('group_name')
+            ->orderBy('group_id')
             ->orderBy('phone')
             ->get() as $rec) {
 
@@ -136,43 +139,94 @@ class InternalSpamCheckService
         // Make list of groups to ignore
         $ignoreGroups = implode(',', $this->ignoreGroups);
 
-        $bind = [];
-        $bind['startdate1'] = $this->startdate->toDateTimeString();
-        $bind['startdate2'] = $bind['startdate1'];
+        // Have to hard-code what's considered 'system' for connect calculations
+        $system_codes = "
+'CR_BAD_NUMBER',
+'CR_BUSY',
+'CR_CEPT',
+'CR_CNCT/CON_CAD',
+'CR_CNCT/CON_PAMD',
+'CR_CNCT/CON_PVD',
+'CR_DISCONNECTED',
+'CR_DROPPED',
+'CR_ERROR',
+'CR_FAILED',
+'CR_FAXTONE',
+'CR_HANGUP',
+'CR_NOANS',
+'CR_NORB',
+'CR_UNFINISHED',
+'Inbound Transfer',
+'Inbound Voicemail',
+'PARKED',
+'SYS_CALLBACK',
+'Skip',
+'TRANSFERRED',
+'UNFINISHED',
+'UNKNOWN'
+        ";
 
         $sql = "SET NOCOUNT ON;
 
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+        DECLARE @lookBack  AS INT
+        DECLARE @excludeGroups table (GroupId int)
+        DECLARE @systemCodes table (CallStatus varchar(50))
+
+        SET @startdate = DATEADD(day, -1, CONVERT (date, SYSUTCDATETIME()))  -- midnight a day ago
+        SET @enddate   = SYSUTCDATETIME()                                    -- now
+        SET @lookBack  = 30                                                  -- days to look back in history to calc connect rate
+
         SELECT * INTO #busy FROM (
-            SELECT DISTINCT CallerId
+            SELECT DISTINCT CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
-            AND CallDate >= :startdate1
+          	AND CallDate >= @startdate
+	        AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND CallStatus = 'CR_BUSY'
         ) tmp
 
         SELECT * INTO #remotehangups FROM (
-            SELECT DISTINCT CallerId
+            SELECT DISTINCT CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
-            AND CallDate >= :startdate2
+            AND CallDate >= @startdate
+	        AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND sip_bye = 1
         ) tmp
 
-        SELECT DISTINCT CallerId INTO #bad FROM (
-            SELECT CallerId FROM #busy
-            UNION
-            SELECT CallerId FROM #remotehangups
+        SELECT * INTO #pamd FROM (
+            SELECT CallerId, Subcampaign, COUNT(*) AS Cnt
+            FROM DialingResults
+            WHERE GroupId = 2256969
+            AND CallDate >= @startdate
+            AND CallDate < @enddate
+            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND CallStatus = 'CR_CNCT/CON_PAMD'
+            AND Subcampaign = 'VERIZON'
+            GROUP BY CallerId, Subcampaign
+            HAVING COUNT(*) > 1
         ) tmp
 
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
+            SELECT CallerId, Subcampaign FROM #remotehangups
+            UNION
+            SELECT CallerId, Subcampaign FROM #pamd
+        ) tmp
+        GROUP BY CallerId
+
         SELECT * INTO #activebad FROM (
-            SELECT Dialer, GroupId, GroupName, Phone, Description FROM (";
+            SELECT Dialer, GroupId, GroupName, Phone, Description, Subcampaigns FROM (";
 
         $union = '';
-        foreach (Dialer::all() as $i => $dialer) {
+        foreach (Dialer::all() as $dialer) {
 
-            $sql .= " $union SELECT " . $dialer->dialer_numb . " as Dialer, O.GroupId, GroupName, O.Phone, I.Description
+            $sql .= " $union SELECT " . $dialer->dialer_numb . " as Dialer, O.GroupId, GroupName, O.Phone, I.Description, Subcampaigns
                 FROM [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O
                 INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = O.GroupId AND I.InboundSource = O.phone
                 INNER JOIN [" . $dialer->reporting_db . "].[dbo].[Groups] G ON G.GroupId = O.GroupId
@@ -186,20 +240,75 @@ class InternalSpamCheckService
 
         $sql .= ") tmp ) activebad
 
-        SELECT *
-        FROM #activebad";
+        ALTER TABLE #activebad ADD
+            Dials INT,
+            Connects INT,
+            ConnectPct DECIMAL(5,2)";
 
-        return $this->runSql($sql, $bind);
+        foreach (Dialer::all() as $dialer) {
+
+            $sql .= "
+                UPDATE #activebad
+                SET Dials = a.Dials
+                FROM (
+                    SELECT DR.CallerId, DR.GroupId, COUNT(*) as Dials
+                    FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR 
+                    INNER JOIN #activebad AB ON DR.GroupId = AB.GroupId AND DR.CallerId = AB.Phone AND AB.Dialer = " . $dialer->dialer_numb . "
+                    WHERE DR.CallDate >= DATEADD(day, -@lookBack, @enddate)
+                    AND DR.CallDate < @enddate
+                    AND DR.CallerId != ''
+                    AND DR.CallType IN (0,2)
+                    AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
+                    AND DR.GroupId NOT IN ($ignoreGroups)
+                    GROUP BY DR.CallerId, DR.GroupId
+                ) a
+                WHERE dialer = " . $dialer->dialer_numb . "
+                AND #activebad.GroupId = a.GroupId
+                AND #activebad.phone = a.CallerId
+
+                UPDATE #activebad
+                SET Connects = a.Connects
+                FROM (
+                    SELECT DR.CallerId, DR.GroupId, COUNT(*) as Connects
+                    FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR 
+                    INNER JOIN #activebad AB ON DR.GroupId = AB.GroupId AND DR.CallerId = AB.Phone AND AB.Dialer = " . $dialer->dialer_numb . "
+                    WHERE DR.CallDate >= DATEADD(day, -@lookBack, @enddate)
+                    AND DR.CallDate < @enddate
+                    AND DR.CallerId != ''
+                    AND DR.CallType IN (0,2)
+                    AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD','CR_CNCT/CON_PVD')
+                    AND DR.CallStatus NOT IN ($system_codes)
+                    AND DR.GroupId NOT IN ($ignoreGroups)
+                    GROUP BY DR.CallerId, DR.GroupId
+                ) a
+                WHERE dialer = " . $dialer->dialer_numb . "
+                AND #activebad.GroupId = a.GroupId
+                AND #activebad.phone = a.CallerId
+                ";
+        }
+
+        $sql .= "
+        UPDATE #activebad
+        SET ConnectPct = (CAST(Connects AS NUMERIC(18,2)) / CAST(Dials AS NUMERIC(18,2))) * 100
+        WHERE Dials > 0
+
+        SELECT Dialer, GroupId, GroupName, Phone AS CallerId, Description, Subcampaigns AS FlaggedByCarrier, Dials, ConnectPct
+        FROM #activebad
+        ORDER BY Dialer, GroupId, Phone";
+
+        return $this->runSql($sql);
     }
 
     private function makeCsv($results)
     {
         $headers = [
             'Dialer',
-            'GroupName',
             'GroupID',
+            'GroupName',
             'CallerID',
             'RingGroup',
+            'Dials30Days',
+            'ConnectPct',
             'Replaced By',
             'Error',
         ];
@@ -213,10 +322,12 @@ class InternalSpamCheckService
         foreach ($results as $rec) {
             $row = [
                 $rec->dialer_numb,
-                $rec->group_name,
                 $rec->group_id,
+                $rec->group_name,
                 $rec->phone,
                 $rec->ring_group,
+                $rec->dials,
+                $rec->connect_pct,
                 $rec->replaced_by,
                 $rec->swap_error,
             ];
