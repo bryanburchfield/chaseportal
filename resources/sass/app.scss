@@ -91,7 +91,7 @@ body, html {
 }
 
 body {
-    background: #efefef;
+    background: darken(#ECECEC, 5%);
     color: #595C63;
     font-size: 13px;
     font-family: 'Helvetica', 'Arial', sans-serif;
@@ -128,15 +128,13 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 1px solid #fff;
 }
 
-.mt100 {
-    margin-top: 100px;
-}
-
 .mt10 {margin-top: 10px;}
 .mt20 {margin-top: 20px;}
 .mt30 {margin-top: 30px;}
 .mt50 {margin-top: 50px;}
 .mt60{margin-top: 60px;}
+.mt100 {margin-top: 100px;}
+
 .mb0 {margin-bottom: 0 !important;}
 .mb5{margin-bottom: 5px;}
 .mb10 {margin-bottom: 10px !important;;}
@@ -216,7 +214,7 @@ input.logout_btn:hover {
 }
 
 .navbar {
-    padding: 13px 20px 0;
+    padding: 12px 20px 8px;
     border: none;
     @include base_style(#fff, null, bottom, 1px solid #abbdd8);  
     @include border-radius(0);
@@ -431,9 +429,10 @@ button, button:active, button:focus {
 
 #sidebarCollapse {
     @include gradient($green, #007f76, top, 0%, 100%);
-    
+    // @include transition(background, ease, 0.3s);
+
     &:hover {
-        background: #2d938f;
+        @include gradient($green, darken(#007f76,5%), top, 0%, 100%);
     }
 
     .fas, .fa{color: #fff;}
@@ -520,7 +519,7 @@ h1.fw600 {
 }
 
 div.container-fluid.bg {
-    @include gradient(#c9d2d6, #efefef, top, 0%, 7%);
+    @include gradient(#C6D0D4, darken(#ECECEC, 5%), top, 0%, 7%);
     min-height: 500px;
 }
 
@@ -535,6 +534,12 @@ div.container-fluid.bg {
             line-height: 10px;
         }
     }
+}
+
+.fas.fa-bell{
+    font-size: 18px;
+    position: relative;
+    top: 4px;
 }
 
 .navbar-default {
@@ -554,7 +559,8 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    @include gradient(#ffffff, #e2e2e0, top, 75%, 99%);
+    @include gradient(#4C4C4C, #333, top, 75%, 99%);
+    // background: #4C4C4C !important;
 }
 
 .navbar-header.home {
@@ -610,11 +616,21 @@ button.btn.btn-default {
         }
     }
 
+    button.btn.btn-default.dropdown-toggle{
+        @include gradient(#fff, #ccc, top, 0%, 100%);
+        border:1px solid #aaa;
+        @include transition(background, ease, 0.3s);
+
+        &:hover{
+            @include gradient(darken(#fff, 8%), darken(#ccc, 8%), top, 0%, 100%);
+        }
+    }
+
     .btn{
         @include border-radius(0);
         font-size: 14px;
     }
-    
+
     .btn.btn-primary {
         margin-bottom: 0;
         background: none;

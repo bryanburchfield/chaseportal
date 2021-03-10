@@ -10,7 +10,8 @@
            @if(Auth::user()->theme == 'dark')
                <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
            @else
-               <img src="/img/chase_text_logo.png" alt="" class="img-fluid text_logo float-left">
+                <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
+                {{-- <img src="/img/chase_text_logo.png" alt="" class="img-fluid text_logo float-left"> --}}
            @endif
        </div>
 

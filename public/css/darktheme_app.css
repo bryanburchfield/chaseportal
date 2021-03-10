@@ -771,6 +771,12 @@ div.container-fluid.bg {
   color: #eee;
 }
 
+.fas.fa-bell {
+  font-size: 18px;
+  position: relative;
+  top: 4px;
+}
+
 .navbar-right .btn.btn-default {
   margin-bottom: 0;
   margin-top: 21px;

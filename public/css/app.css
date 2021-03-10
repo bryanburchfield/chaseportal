@@ -87,7 +87,7 @@ html {
 }
 
 body {
-  background: #efefef;
+  background: #dfdfdf;
   color: #595C63;
   font-size: 13px;
   font-family: 'Helvetica', 'Arial', sans-serif;
@@ -180,10 +180,6 @@ h6 {
   border-top: 1px solid #fff;
 }
 
-.mt100 {
-  margin-top: 100px;
-}
-
 .mt10 {
   margin-top: 10px;
 }
@@ -202,6 +198,10 @@ h6 {
 
 .mt60 {
   margin-top: 60px;
+}
+
+.mt100 {
+  margin-top: 100px;
 }
 
 .mb0 {
@@ -371,7 +371,7 @@ input.logout_btn:hover {
 }
 
 .navbar {
-  padding: 13px 20px 0;
+  padding: 12px 20px 8px;
   border: none;
   background: #fff;
   border-bottom: 1px solid #abbdd8;
@@ -656,7 +656,9 @@ button:focus {
 }
 
 #sidebarCollapse:hover {
-  background: #2d938f;
+  background: #33A09B;
+  background: linear-gradient(to bottom, #33A09B 0%, #00665e 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#33A09B, endColorstr=#00665e,GradientType=0 );
 }
 
 #sidebarCollapse .fas,
@@ -756,9 +758,9 @@ h1.fw600 {
 }
 
 div.container-fluid.bg {
-  background: #c9d2d6;
-  background: linear-gradient(to bottom, #c9d2d6 0%, #efefef 7%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#c9d2d6, endColorstr=#efefef,GradientType=0 );
+  background: #C6D0D4;
+  background: linear-gradient(to bottom, #C6D0D4 0%, #dfdfdf 7%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#C6D0D4, endColorstr=#dfdfdf,GradientType=0 );
   min-height: 500px;
 }
 
@@ -773,6 +775,12 @@ div.container-fluid.bg {
 
 .navbar.dashboard .navbar-brand {
   line-height: 10px;
+}
+
+.fas.fa-bell {
+  font-size: 18px;
+  position: relative;
+  top: 4px;
 }
 
 .navbar-default {
@@ -792,9 +800,9 @@ div.container-fluid.bg {
 #content .navbar {
   z-index: 999;
   min-height: 55px;
-  background: #ffffff;
-  background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#ffffff, endColorstr=#e2e2e0,GradientType=0 );
+  background: #4C4C4C;
+  background: linear-gradient(to bottom, #4C4C4C 75%, #333 99%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#4C4C4C, endColorstr=#333,GradientType=0 );
 }
 
 .navbar-header.home {
@@ -859,6 +867,20 @@ button.btn.btn-default {
 .filters .dropdown-menu .dropdown-item.active,
 .filters .dropdown-menu .checkbox.active {
   background: #007bff;
+}
+
+.filters button.btn.btn-default.dropdown-toggle {
+  background: #fff;
+  background: linear-gradient(to bottom, #fff 0%, #ccc 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#fff, endColorstr=#ccc,GradientType=0 );
+  border: 1px solid #aaa;
+  transition: background, ease, 0.3s;
+}
+
+.filters button.btn.btn-default.dropdown-toggle:hover {
+  background: #ebebeb;
+  background: linear-gradient(to bottom, #ebebeb 0%, #b8b8b8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#ebebeb, endColorstr=#b8b8b8,GradientType=0 );
 }
 
 .filters .btn {
