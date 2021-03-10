@@ -53,6 +53,7 @@ class InternalSpamCheckService
         Log::info('Pulling report');
         $this->saveReport();
 
+        // bpb
         // echo "Swap Numbers\n";
         // Log::info('Swapping numbers');
         // $this->swapNumbers();
@@ -83,6 +84,7 @@ class InternalSpamCheckService
                     'dialer_numb' => $rec['Dialer'],
                     'phone' => $phone,
                     'ring_group' => $rec['Description'],
+                    'subcampaigns' => $rec['Subcampaigns'],
                     'dials' => $rec['Dials'],
                     'connects' => $rec['Connects'],
                     'connect_pct' => $rec['ConnectPct'],
@@ -292,7 +294,7 @@ class InternalSpamCheckService
         SET ConnectPct = (CAST(Connects AS NUMERIC(18,2)) / CAST(Dials AS NUMERIC(18,2))) * 100
         WHERE Dials > 0
 
-        SELECT Dialer, GroupId, GroupName, Phone, Description, Subcampaigns AS FlaggedByCarrier, Dials, Connects, ConnectPct
+        SELECT Dialer, GroupId, GroupName, Phone, Description, Subcampaigns, Dials, Connects, ConnectPct
         FROM #activebad
         ORDER BY Dialer, GroupId, Phone";
 
@@ -419,10 +421,6 @@ class InternalSpamCheckService
 
         $error = null;
         $replaced_by = null;
-
-        // bpb
-        $replaced_by = '1112223333';
-        return [$replaced_by, $error];
 
         try {
             $response = $client->get(
