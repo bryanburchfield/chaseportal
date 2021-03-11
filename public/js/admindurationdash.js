@@ -120,7 +120,6 @@ var Dashboard = {
 	                    $('<div class="alert alert-info no_data">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#call_status_table, #sales_per_hour_per_rep_graph');
 	                }
 
-
 					let callstatuses = [];
 
 					if (callstatuses_obj_keys.length) {

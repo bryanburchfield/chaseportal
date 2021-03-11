@@ -336,6 +336,7 @@ i, span {
     max-width: 300px;
     @include base_style(#efefef, #fff, left, 1px solid #ccc);
     @include transition(all, ease, 0.3s);
+    border-left: 1px solid #ccc;
 
     &.sb_open {
         min-width: 300px;
@@ -560,7 +561,6 @@ div.container-fluid.bg {
     z-index: 999;
     min-height: 55px;
     @include gradient(#4C4C4C, #333, top, 75%, 99%);
-    // background: #4C4C4C !important;
 }
 
 .navbar-header.home {
@@ -715,9 +715,9 @@ input[type='file'] {
         text-transform: uppercase;
         text-align: center;
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 800;
         margin-bottom: 10px;
-        color: $blue;
+        color: lighten($blue, 5%);
         letter-spacing: -.015em;
     }
 
@@ -1170,14 +1170,9 @@ h2.avg_cc, h2.avg_ct {
     margin-bottom: 0;
 }
 
-// div#dataTable_filter label {
-//     float: right;
-//     margin-bottom: 20px;
-// }
-
-// .dataTables_paginate .pagination {
-//     float: right;
-// }
+.card h1.title{
+    color: lighten($blue, 5%);
+}
 
 h2.card_title {
     text-transform: uppercase;

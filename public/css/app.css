@@ -523,6 +523,7 @@ span {
   color: #fff;
   border-bottom: 1px solid #ccc;
   transition: all, ease, 0.3s;
+  border-left: 1px solid #ccc;
 }
 
 #sidebar_nots.sb_open {
@@ -986,9 +987,9 @@ input[type='file'] {
   text-transform: uppercase;
   text-align: center;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 10px;
-  color: #203047;
+  color: #283c59;
   letter-spacing: -.015em;
 }
 
@@ -1485,6 +1486,10 @@ h2.avg_cc,
 h2.avg_ct {
   bottom: 0 !important;
   margin-bottom: 0;
+}
+
+.card h1.title {
+  color: #283c59;
 }
 
 h2.card_title {

@@ -7,15 +7,10 @@
             </button>
            @endif
 
-           @if(Auth::user()->theme == 'dark')
-               <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
-           @else
-                <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
-                {{-- <img src="/img/chase_text_logo.png" alt="" class="img-fluid text_logo float-left"> --}}
-           @endif
+           <img src="/img/text_logo_light.png" alt="" class="img-fluid text_logo float-left">
        </div>
 
-        <div class="filters col-xs-10 col-sm-6">
+        <div class="filters col-xs-10 col-sm-6 mt-1">
             
             @if(!session()->has('isSso'))
                 {!! Form::open(['method'=>'GET', 'action'=>'Auth\LoginController@logout', 'id'=> 'logout-form']) !!}
@@ -43,8 +38,8 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-right py-0 stop-propagation">
-                        <a class="dropdown-item" href="{{url('lang/en')}}">English</a>
-                        <a class="dropdown-item" href="{{url('lang/es')}}"> Español</a>
+                        <a class="dropdown-item py-2 px-3" href="{{url('lang/en')}}">English</a>
+                        <a class="dropdown-item py-2 px-3" href="{{url('lang/es')}}"> Español</a>
                     </div>
                 </div>
             @endif

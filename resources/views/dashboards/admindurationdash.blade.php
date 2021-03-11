@@ -79,16 +79,18 @@
 		            <div class="card_table">
 		                <h1 class="title">{{__('widgets.callstatus_by_minutes')}}</h1>
 		                <div class="flip_card_btn"></div>
-		                <table class="table table-condensed table-striped" id="call_status_table">
-		                    <thead>
-		                        <tr>
-		                            <th>{{__('widgets.call_status')}}</th>
-		                            <th>{{__('widgets.minutes')}}</th>
-		                            <th>{{__('widgets.count')}}</th>
-		                        </tr>
-		                    </thead>
-		                    <tbody></tbody>
-		                </table>
+		                <div class="table-responsive">
+		                	<table class="table table-condensed table-striped " id="call_status_table">
+		                	    <thead>
+		                	        <tr>
+		                	            <th>{{__('widgets.call_status')}}</th>
+		                	            <th>{{__('widgets.minutes')}}</th>
+		                	            <th>{{__('widgets.count')}}</th>
+		                	        </tr>
+		                	    </thead>
+		                	    <tbody></tbody>
+		                	</table>
+		                </div>
 		            </div>
 		        </div>
 		        <div class="back">
@@ -114,7 +116,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="card card-3b mbo" style="height: 330px">
-                <div class="card_table">
+                <div class="card_table p-0">
                     <h1 class="title">{{__('widgets.calls_by_campaign')}}</h1>
                     <table class="table table-condensed table-striped" id="calls_by_campaign">
                         <thead>

@@ -804,7 +804,7 @@ var Master = {
         for (var i = 0; i < obj.length; i++) {
             checked = obj[i].selected;
             if (checked) { checked = 'checked'; } else { checked = ''; }
-            campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"><span>' + obj[i].name + '</span></label></div>';
+            campaign_searchresults += '<div class="checkbox"><label class="campaign_label stop-propagation"><input class="campaign_group" required type="checkbox" ' + checked + ' value="' + obj[i].value + '" name="campaigns"> <span>' + obj[i].name + '</span></label></div>';
         }
 
         $('.filter_campaign').append(campaign_searchresults);
