@@ -8,7 +8,11 @@
 <div class="row">
     <div class="col-sm-12">
     	<a class="btn btn-default btn-primary flt_rgt" href="{{ action('ComplianceDashController@settingsIndex') }}">{{__('widgets.go_to_settings')}}</a>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-sm-12 remove_flex100">
     	<div class="table-responsive">
     		<table class="table table-striped agent_compliance_table">
     			<thead>

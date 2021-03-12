@@ -305,11 +305,11 @@ h6 {
 }
 
 .bt {
-  border-top: 1px solid #d8d8d8;
+  border-top: 1px solid #bfbfbf;
 }
 
 .bb {
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid #bfbfbf;
 }
 
 .green-text {
@@ -1275,7 +1275,7 @@ ul.dropdown-menu.filter_campaign {
 
 ul.dropdown-menu.filter_campaign .checkbox {
   padding: 5px 0 5px 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 
 .filters button {
@@ -2042,7 +2042,7 @@ label.switch > input.checked ~ span:after {
 
 h2 {
   color: #203047;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
   font-weight: 600;
   font-size: 26px;
   margin-bottom: 40px;
@@ -2051,7 +2051,7 @@ h2 {
 
 .opt {
   margin-bottom: 20px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid #bfbfbf;
   padding-bottom: 15px;
   overflow: auto;
 }
@@ -2224,14 +2224,18 @@ a.run_kpi.btn {
   bottom: 0px;
   clear: both;
   border: none;
-  background: #203047;
+  background: #E15B23;
   color: #fff;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
   display: block;
   text-align: left;
   padding-top: 7px;
   padding-bottom: 7px;
   font-size: 12px;
+}
+
+a.run_kpi.btn:hover {
+  background: #ce511c;
 }
 
 .glyphicon.glyphicon-refresh {
@@ -2317,14 +2321,14 @@ a.run_kpi.btn {
   z-index: 99999;
   top: 45px;
   background: #ededed;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   width: 100%;
 }
 
 .search_results h5 {
   padding: 8px 5px;
   font-weight: 600;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 
 .search_results h5:hover {
@@ -2686,7 +2690,7 @@ p.name i {
 }
 
 .divider {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #ccc;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -3132,7 +3136,7 @@ a.toggle_instruc {
 }
 
 .webhook_fields h3 {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
   font-weight: 600;
   padding-bottom: 5px;
 }
@@ -3343,7 +3347,7 @@ span.numb_notifications {
 }
 
 .report_info_columns h4 {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 
 .report_desc p {
@@ -3680,7 +3684,7 @@ a.add_subcampaign i {
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0);
   /* IE6-9 */
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
 }
 
 .breadcrumb .breadcrumb-item {

@@ -48,7 +48,7 @@
         <div class="col-sm-9 ">
             <div class="col-sm-12 p0">
                 <div class="card-3 card blue" id="logins_per_day">
-                    <h1 class="title">{{__('widgets.distinct_logins_per_day')}}</h1>
+                    <h1 class="title mb-4">{{__('widgets.distinct_logins_per_day')}}</h1>
                     <!-- three dot menu -->
                     <div class="card_dropdown mv_left">
                         <!-- three dots -->
@@ -75,8 +75,8 @@
             <div class="col-sm-12 p0">
                 <div class="card card-3b mbo" style="height: 345px">
                     <div class="card_table">
-                        <h1 class="title">{{__('widgets.actions_timestamps')}}</h1>
-                        <div class="table-responsive table-responsive-sm">
+                        <h1 class="title mb-4">{{__('widgets.actions_timestamps')}}</h1>
+                        <div class="table-responsive">
                             <table class="table table-condensed table-striped" id="actions">
                                 <thead>
                                     <tr>

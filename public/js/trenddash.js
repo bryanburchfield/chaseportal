@@ -856,6 +856,7 @@ var Dashboard = {
     },
 
     call_volume_type: function(){
+        console.log('clicked');
         if(this.inorout != undefined){
             inorout = Dashboard.inorout;
         }else{
@@ -874,8 +875,8 @@ var Dashboard = {
         
         Dashboard.inorout_toggled=true;  
         
-        $('.callvolume_inorout').siblings('.inandout').hide();
-        $('.callvolume_inorout').siblings('.inandout.'+Dashboard.inorout).show();
+        $('.callvolume_inorout').parent().siblings('.inandout').hide();
+        $('.callvolume_inorout').parent().siblings('.inandout.'+Dashboard.inorout).show();
 
         var inorout = Dashboard.inorout;
 
@@ -892,6 +893,7 @@ var Dashboard = {
             dataType: 'json',
             data: { inorout:inorout},
             success:function(response){
+                console.log(response);
             }
         }); 
     },

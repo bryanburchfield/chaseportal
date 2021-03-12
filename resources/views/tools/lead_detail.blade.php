@@ -71,7 +71,7 @@
                     @if ($lead)
                         <div class="col-sm-12 lead_details">
 
-                            <div class="bt pt-2 mt-3 mb-3 row d-flex justify-content-between">
+                            <div class="bt pt-4 mt-3 mb-3 row d-flex justify-content-between">
                                 <div class="col-sm-3 mb-1 tac">
                                     <h4 class="mb-1">Lead ID</h4>
                                     <p>{{ $lead->id }}</p>

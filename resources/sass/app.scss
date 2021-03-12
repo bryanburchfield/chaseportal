@@ -162,8 +162,8 @@ h1, h2, h3, h4, h5, h6 {
 .th_mw100{min-width: 100px;}
 .table>tbody> tr.p10 td{padding: 10px 8px;}
 .tac{text-align: center;}
-.bt{border-top: 1px solid #d8d8d8;}
-.bb{border-bottom: 1px solid #d8d8d8;}
+.bt{border-top: 1px solid darken(#ccc, 5%);}
+.bb{border-bottom: 1px solid darken(#ccc, 5%);}
 .green-text{color:$green;}
 
 .carb_mb30_mb {
@@ -981,7 +981,7 @@ ul.dropdown-menu.filter_campaign {
 
     .checkbox {
         padding: 5px 0 5px 10px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
     }
 }
 
@@ -1606,7 +1606,7 @@ label.switch > input.checked ~ span:after {
 }
 
 h2 {
-    @include base_style(null, $blue, bottom, 1px solid #ddd, 600);
+    @include base_style(null, $blue, bottom, 1px solid #ccc, 600);
     font-size: 26px;
     margin-bottom: 40px;
     padding-bottom: 10px;
@@ -1614,7 +1614,7 @@ h2 {
 
 .opt {
     margin-bottom: 20px;
-    border-bottom: 1px solid darken(#ddd,2%);
+    border-bottom: 1px solid darken(#ccc,5%);
     padding-bottom: 15px;
     overflow: auto;
 }
@@ -1761,12 +1761,16 @@ a.run_kpi.btn {
     bottom: 0px;
     clear: both;
     border: none;
-    @include base_style($blue, #fff, bottom, 1px solid #ddd);
+    @include base_style($orange, #fff, bottom, 1px solid #ccc);
     display: block;
     text-align: left;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 12px;
+
+    &:hover{
+        background: darken($orange, 5%);
+    }
 }
 
 .glyphicon.glyphicon-refresh {
@@ -1836,13 +1840,13 @@ a.run_kpi.btn {
     position: absolute;
     z-index: 99999;
     top: 45px;
-    @include base_style(#ededed, null, null, 1px solid #ddd);
+    @include base_style(#ededed, null, null, 1px solid #ccc);
     width: 100%;
     
     h5 {
         padding: 8px 5px;
         font-weight: 600;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
 
         &:hover {
             @include base_style($blue, #fff);
@@ -2151,7 +2155,7 @@ p.name i{margin-right: 5px;}
 .lang_select li a img{max-width: 25px;}
 
 .divider{
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ccc;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -2531,7 +2535,7 @@ a.toggle_instruc {
     label{margin-top: 10px;}
 
     h3{
-        border-bottom: 1px solid #ddd ;
+        border-bottom: 1px solid #ccc ;
         font-weight: 600;
         padding-bottom: 5px;
     }
@@ -2712,7 +2716,7 @@ span.numb_notifications{
 
 .report_info_columns{
     h4{
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
     }
 }
 
@@ -2998,7 +3002,7 @@ a.add_subcampaign{
     background: -webkit-linear-gradient(top, #ffffff 75%, #e2e2e0 99%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, #ffffff 75%, #e2e2e0 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e2e2e0', GradientType=0); /* IE6-9 */
-    border:1px solid #ddd;
+    border:1px solid #ccc;
 
     .breadcrumb-item{
         font-weight: 600;
