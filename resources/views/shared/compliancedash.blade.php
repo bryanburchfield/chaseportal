@@ -12,28 +12,30 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 remove_flex100">
-    	<div class="table-responsive">
-    		<table class="table table-striped agent_compliance_table">
-    			<thead>
-    				<tr>
-                        <th></th>
-    					<th class="th_mw100">{{__('widgets.rep')}}</th>
-    					<th>{{__('widgets.worked_time')}}</th>
-    					<th>{{__('widgets.paused_time')}}</th>
-    					<th>{{__('widgets.allowed_paused_time')}}</th>
-    					<th>{{__('widgets.total_time_worked')}}</th>
-    					<th>% {{__('widgets.worked')}}</th>
-    				</tr>
-    			</thead>
-    			<tbody></tbody>
-    		</table>
-    	</div>
+    <div class="col-sm-12">
+    	<div class="card">
+            <div class="table-responsive">
+                <table class="table table-striped agent_compliance_table">
+                    <thead>
+                        <tr>
+                             <th></th>
+                            <th class="th_mw100">{{__('widgets.rep')}}</th>
+                            <th>{{__('widgets.worked_time')}}</th>
+                            <th>{{__('widgets.paused_time')}}</th>
+                            <th>{{__('widgets.allowed_paused_time')}}</th>
+                            <th>{{__('widgets.total_time_worked')}}</th>
+                            <th>% {{__('widgets.worked')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>   
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-12 w99">
+    <div class="col-sm-12">
     	<div class="card card-12 mt-3">
 	    	<h1 class="title">{{__('widgets.adherence')}}</h1>
 	    	<div class="inbound" style="height:350px;">

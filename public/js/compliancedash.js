@@ -188,6 +188,8 @@ var Dashboard = {
                         }
                     });
 
+                    $('.table-responsive').find('.dataTables_wrapper').removeClass( 'form-inline' );
+
                     if (window.agent_worked_chart != undefined) {
                         window.agent_worked_chart.destroy();
                     }
