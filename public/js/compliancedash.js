@@ -154,13 +154,14 @@ var Dashboard = {
                     $('table.agent_compliance_table').DataTable().clear();
                     $('table.agent_compliance_table').DataTable().destroy();
                     $('.agent_compliance_table tbody').append(trs);
+
                     $('table.agent_compliance_table').DataTable({
                         fnDrawCallback: function(oSettings) {
                             if (oSettings._iDisplayLength >= oSettings.fnRecordsDisplay()) {
                               $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
                             }
                         },
-                        // "autoWidth":false,
+                        "autoWidth":true,
                         "bDestroy": true,
                         "responsive": true,
                         "language": {
@@ -189,7 +190,8 @@ var Dashboard = {
                     });
 
                     $('.table-responsive').find('.dataTables_wrapper').removeClass( 'form-inline' );
-
+                    // remove sorting from first column
+                    $('table.table thead').find('th').first().removeClass('sorting_asc');
                     if (window.agent_worked_chart != undefined) {
                         window.agent_worked_chart.destroy();
                     }

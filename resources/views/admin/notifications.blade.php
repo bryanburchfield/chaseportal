@@ -40,10 +40,10 @@
 							</div>
 
 							@if(!empty($feature_message->id))
-								<a href="{{action('FeatureMessageController@index')}}" class="cancel btn btn-secondary">Cancel</a>
+								<a href="{{action('FeatureMessageController@index')}}" class="cancel btn btn-secondary mt-0">Cancel</a>
 							@endif
 
-							<button type="submit" class="btn btn-primary mt10">{{__('general.submit')}}</button>
+							<button type="submit" class="btn btn-primary mt-0">{{__('general.submit')}}</button>
 
 							<br><br>
 

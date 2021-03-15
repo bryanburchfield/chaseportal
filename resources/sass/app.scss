@@ -560,7 +560,7 @@ div.container-fluid.bg {
 #content .navbar {
     z-index: 999;
     min-height: 55px;
-    @include gradient(#4C4C4C, #333, top, 75%, 99%);
+    @include gradient(#4C4C4C, lighten(#333,3%), top, 75%, 99%);
 }
 
 .navbar-header.home {
@@ -3155,6 +3155,7 @@ textarea.nobg_txtarea.form-control{
 table#actions{width: 100% !important;}
 
 .js__modal_link{width: 15px;}
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

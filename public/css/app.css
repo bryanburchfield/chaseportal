@@ -802,8 +802,8 @@ div.container-fluid.bg {
   z-index: 999;
   min-height: 55px;
   background: #4C4C4C;
-  background: linear-gradient(to bottom, #4C4C4C 75%, #333 99%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#4C4C4C, endColorstr=#333,GradientType=0 );
+  background: linear-gradient(to bottom, #4C4C4C 75%, #3b3b3b 99%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#4C4C4C, endColorstr=#3b3b3b,GradientType=0 );
 }
 
 .navbar-header.home {

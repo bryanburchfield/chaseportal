@@ -18,7 +18,7 @@
                 <table class="table table-striped agent_compliance_table">
                     <thead>
                         <tr>
-                             <th></th>
+                            <th></th>
                             <th class="th_mw100">{{__('widgets.rep')}}</th>
                             <th>{{__('widgets.worked_time')}}</th>
                             <th>{{__('widgets.paused_time')}}</th>
@@ -50,8 +50,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">{{__('widgets.agent_details')}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{{__('widgets.agent_details')}}</h4>
             </div>
 
             <div class="modal-body">
