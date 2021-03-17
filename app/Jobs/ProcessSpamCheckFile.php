@@ -21,13 +21,6 @@ class ProcessSpamCheckFile implements ShouldQueue
      */
     public $timeout = 7200;   // 2hrs
 
-    /**
-     * The queue connection that should handle the job.
-     *
-     * @var string
-     */
-    public $connection = 'spamcheck';
-
     protected $spamCheckBatch;
 
     /**
@@ -37,6 +30,7 @@ class ProcessSpamCheckFile implements ShouldQueue
      */
     public function __construct(SpamCheckBatch $spamCheckBatch)
     {
+        $this->connection = 'spamcheck';
         $this->spamCheckBatch = $spamCheckBatch;
     }
 
