@@ -187,6 +187,7 @@ class InternalSpamCheckService
           	AND CallDate >= @startdate
 	        AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Subcampaign != 'VERIZON'
             AND CallStatus = 'CR_BUSY'
         ) tmp
 
@@ -197,20 +198,41 @@ class InternalSpamCheckService
             AND CallDate >= @startdate
 	        AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
         ) tmp
 
-        SELECT * INTO #pamd FROM (
-            SELECT CallerId, Subcampaign, COUNT(*) AS Cnt
-            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+        SELECT * INTO #verizon FROM (
+            SELECT CallerId,
+                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
+                SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
+                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
+            FROM DialingResults
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
             AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
-            AND CallStatus = 'CR_CNCT/CON_PAMD'
             AND Subcampaign = 'VERIZON'
-            GROUP BY CallerId, Subcampaign
-            HAVING COUNT(*) > 1
+            GROUP BY CallerId
+        ) tmp
+
+        SELECT * INTO #pamd FROM (
+            SELECT CallerId, 'VERIZON' AS Subcampaign
+            FROM #verizon
+            WHERE (Pamd + Noans + Other) >= 3
+            AND Pamd >= Noans
+        ) tmp
+
+        SELECT * INTO #pamd4 FROM (
+            SELECT CallerId, 'VERIZON' AS Subcampaign
+            FROM #verizon
+            WHERE Pamd >= 4
+            AND Pamd < Noans
+            AND CallerId in (
+                SELECT CallerId FROM #remotehangups
+                UNION
+                SELECT CallerId FROM #busy
+            )
         ) tmp
 
         SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
@@ -219,7 +241,9 @@ class InternalSpamCheckService
             SELECT CallerId, Subcampaign FROM #remotehangups
             UNION
             SELECT CallerId, Subcampaign FROM #pamd
-        ) tmp
+            UNION
+            SELECT CallerId, Subcampaign FROM #pamd4
+            ) tmp
         GROUP BY CallerId
 
         SELECT * INTO #activebad FROM (
