@@ -14,6 +14,20 @@ class ProcessSpamCheckFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 7200;   // 2hrs
+
+    /**
+     * The queue connection that should handle the job.
+     *
+     * @var string
+     */
+    public $connection = 'spamcheck';
+
     protected $spamCheckBatch;
 
     /**
@@ -35,5 +49,15 @@ class ProcessSpamCheckFile implements ShouldQueue
     {
         $service = new SpamCheckService();
         $service->processFile($this->spamCheckBatch);
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(120);
     }
 }
