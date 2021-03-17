@@ -217,7 +217,7 @@ class SpamCheckController extends Controller
 
         if (!$now) {
             // Dispatch job to run in the background
-            ProcessSpamCheckFile::dispatch($spamCheckBatch);
+            ProcessSpamCheckFile::dispatch($spamCheckBatch)->onQueue('spamcheck');
 
             session()->flash('flash', trans('tools.processing_file_numb') . $spamCheckBatch->id);
         } else {

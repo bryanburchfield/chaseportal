@@ -41,6 +41,13 @@ return [
             'retry_after' => 90,
         ],
 
+        'spamcheck' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'spamcheck',
+            'retry_after' => 7320,  // 2hrs + 2 mins
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',
