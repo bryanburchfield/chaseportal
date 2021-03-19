@@ -122,7 +122,7 @@ class ShiftReport
             $bind['enddate1' . $i] = $endDate;
 
             $sql .= " $union SELECT
-         CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
+         CAST(CONVERT(datetimeoffset, dr.CallDate) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
          dr.CallStatus,
          IsNull(CASE
@@ -139,8 +139,8 @@ class ShiftReport
         WHERE dr.GroupId = :group_id$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-        AND dr.Date >= :startdate$i
-        AND dr.Date < :enddate$i
+        AND dr.CallDate >= :startdate$i
+        AND dr.CallDate < :enddate$i
         AND CallStatus in (
                     'CR_CNCT/CON_PAMD',
                     'CR_ERROR',
@@ -167,10 +167,10 @@ class ShiftReport
             }
 
             $sql .= "
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.CallDate) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName
         UNION
         SELECT
-         CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date) as Date,
+         CAST(CONVERT(datetimeoffset, dr.CallDate) AT TIME ZONE '$tz' as date) as Date,
          dr.Campaign,
          dr.CallStatus,
          IsNull(CASE
@@ -187,8 +187,8 @@ class ShiftReport
         WHERE dr.GroupId = :group_id1$i
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
-        AND dr.Date >= :startdate1$i
-        AND dr.Date < :enddate1$i
+        AND dr.CallDate >= :startdate1$i
+        AND dr.CallDate < :enddate1$i
         AND CallStatus not in (
                         'CR_CNCT/CON_PAMD',
                         'CR_ERROR',
@@ -215,7 +215,7 @@ class ShiftReport
             }
 
             $sql .= "
-        GROUP BY CAST(CONVERT(datetimeoffset, dr.Date) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName";
+        GROUP BY CAST(CONVERT(datetimeoffset, dr.CallDate) AT TIME ZONE '$tz' as date), dr.Campaign, dr.CallStatus, DI.Description, dt.TypeName";
 
             $union = 'UNION ALL';
         }

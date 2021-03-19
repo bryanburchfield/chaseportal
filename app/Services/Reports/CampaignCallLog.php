@@ -126,7 +126,7 @@ class CampaignCallLog
             $bind['enddate1' . $i] = $endDate;
 
             $sql .= " $union SELECT
-            CONVERT(datetimeoffset, DR.Date) AT TIME ZONE '$tz' as Date,
+            CONVERT(datetimeoffset, DR.CallDate) AT TIME ZONE '$tz' as Date,
             DR.Rep,
             DR.CallStatus,
             DI.Description,
@@ -134,8 +134,8 @@ class CampaignCallLog
             FROM [$db].[dbo].[DialingResults] DR
             LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :group_id1$i
-            AND DR.Date >= :startdate1$i
-            AND DR.Date < :enddate1$i
+            AND DR.CallDate >= :startdate1$i
+            AND DR.CallDate < :enddate1$i
             AND DR.CallStatus not in ('','CR_CNCT/CON_CAD','CR_CNCT/CON_PVD','CR_DISCONNECTED','SMS Delivered','SMS Received','Inbound')";
 
             if (!empty($campaigns)) {

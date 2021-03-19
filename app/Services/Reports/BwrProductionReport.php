@@ -235,8 +235,8 @@ class BwrProductionReport
 
             $sql .= "
             WHERE DR.GroupId = :group_id$i
-            AND DR.Date >= :startdate$i
-            AND DR.Date < :enddate$i
+            AND DR.CallDate >= :startdate$i
+            AND DR.CallDate < :enddate$i
             AND DR.Rep != ''
             AND DR.CallStatus NOT LIKE 'CR[_]%'
             AND DR.CallStatus NOT IN ('','Inbound','Inbound Voicemail','SMS Delivered','SMS Received')";

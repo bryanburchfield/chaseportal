@@ -110,7 +110,7 @@ class TransferAgent
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT DR.Date, DR.PreviousRep as Rep, DR.Rep as Closer, DR.Phone, DR.CallStatus, DI.Type
+            $sql .= " $union SELECT DR.CallDate as Date, DR.PreviousRep as Rep, DR.Rep as Closer, DR.Phone, DR.CallStatus, DI.Type
             FROM [$db].[dbo].[DialingResults] DR
             INNER JOIN Reps R ON R.GroupId = DR.GroupId AND R.RepName = DR.Rep
             INNER JOIN Reps PR ON PR.GroupId = DR.GroupId AND PR.RepName = DR.PreviousRep";
@@ -128,8 +128,8 @@ class TransferAgent
             $sql .= "
             LEFT JOIN Dispos DI ON DI.id = DR.DispositionId
             WHERE DR.GroupId = :group_id$i
-            AND DR.Date >= :startdate$i
-            AND DR.Date < :enddate$i
+            AND DR.CallDate >= :startdate$i
+            AND DR.CallDate < :enddate$i
             AND DR.Rep != DR.PreviousRep
             AND DR.LeadId != -1
             AND Duration > 0";

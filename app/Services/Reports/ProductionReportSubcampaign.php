@@ -132,8 +132,8 @@ class ProductionReportSubcampaign
             $sql .= "
                 LEFT JOIN [$db].[dbo].[Dispos] d ON d.id = dr.DispositionId
                 WHERE dr.GroupId = :group_id$i
-                AND dr.Date >= :startdate$i
-                AND dr.Date < :enddate$i
+                AND dr.CallDate >= :startdate$i
+                AND dr.CallDate < :enddate$i
                 AND (d.Type > 0 OR dr.CallStatus = 'UNFINISHED')";
 
             if (session('ssoRelativeCampaigns', 0)) {
@@ -183,8 +183,8 @@ class ProductionReportSubcampaign
 
             $sql .= "
             WHERE dr.GroupId = '''+CAST(:group_id1$i as varchar)+'''
-            AND dr.Date >= '''+CAST(:startdate1$i as nvarchar)+'''
-            AND dr.Date < '''+CAST(:enddate1$i as nvarchar)+'''
+            AND dr.CallDate >= '''+CAST(:startdate1$i as nvarchar)+'''
+            AND dr.CallDate < '''+CAST(:enddate1$i as nvarchar)+'''
             AND (d.Type > 0 OR dr.CallStatus = ''UNFINISHED'')";
 
             if (session('ssoRelativeCampaigns', 0)) {
@@ -245,8 +245,8 @@ class ProductionReportSubcampaign
 
             $sql .= "
             WHERE r.GroupId = :group_id2$i
-            AND r.Date >= :startdate2$i
-            AND r.Date < :enddate2$i
+            AND r.CallDate >= :startdate2$i
+            AND r.CallDate < :enddate2$i
             AND d.Type > 0
             GROUP BY r.Subcampaign, d.Type";
 

@@ -163,8 +163,8 @@ class ApnAgentSummary
 
             $sql .= "
                 WHERE r.GroupId = :group_id1$i
-                AND r.Date >= :startdate1$i
-                AND r.Date < :enddate1$i
+                AND r.CallDate >= :startdate1$i
+                AND r.CallDate < :enddate1$i
                 AND r.Duration > 0";
 
             if (session('ssoRelativeCampaigns', 0)) {

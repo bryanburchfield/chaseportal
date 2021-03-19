@@ -152,8 +152,8 @@ class AgentSummary
 
             $sql .= "
                 WHERE r.GroupId = :group_id1$i
-                AND r.Date >= :startdate1$i
-                AND r.Date < :enddate1$i
+                AND r.CallDate >= :startdate1$i
+                AND r.CallDate < :enddate1$i
                 AND r.CallStatus NOT IN ('Inbound', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
                 AND r.Duration > 0";
 
