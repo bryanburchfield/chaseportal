@@ -129,7 +129,7 @@ class SubcampaignSummary
             $bind['enddate' . $i] = $endDate;
 
             $sql .= " $union SELECT
-            CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
+            CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date,
             dr.Campaign,
             IsNull(dr.Subcampaign, '') as Subcampaign,
             dr.CallStatus as CallStatus,
@@ -138,8 +138,8 @@ class SubcampaignSummary
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
             LEFT JOIN [$db].[dbo].[Dispos] DI WITH(NOLOCK) ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
-            AND dr.Date >= :startdate$i
-            AND dr.Date < :enddate$i
+            AND dr.CallDate >= :startdate$i
+            AND dr.CallDate < :enddate$i
             AND dr.Campaign <> '_MANUAL_CALL_'
             AND dr.CallStatus IS NOT NULL
             AND dr.CallStatus NOT IN ('', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";
@@ -155,7 +155,7 @@ class SubcampaignSummary
             }
 
             $sql .= "
-            GROUP BY DI.Type, dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date)";
+            GROUP BY DI.Type, dr.Campaign, IsNull(dr.Subcampaign, ''), dr.CallStatus, CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date)";
 
             $union = 'UNION ALL';
         }

@@ -88,8 +88,8 @@ class CallsPerHour
 
         $timeZoneName = Auth::user()->tz;
 
-        $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName'),
-            CAST(CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
+        $xAxis = "DATEADD(HOUR, DATEPART(HOUR, CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$timeZoneName'),
+            CAST(CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$timeZoneName' AS DATE) AS DATETIME))";
 
         // convert to datetime strings
         $startDate = $fromDate->format('Y-m-d H:i:s');
@@ -163,8 +163,8 @@ class CallsPerHour
                     'CR_FAILED', 'CR_DISCONNECTED', 'CR_CNCT/CON_CAD',
                     'CR_CNCT/CON_PVD', '', 'Inbound', 'Inbound Voicemail')
                 AND DR.GroupId = :groupid
-                AND DR.Date >= :startdate
-                AND DR.Date < :enddate
+                AND DR.CallDate >= :startdate
+                AND DR.CallDate < :enddate
                 GROUP BY $xAxis
                 ORDER BY Date";
 
