@@ -22,7 +22,7 @@ class InternalSpamCheckMail extends Mailable implements ShouldQueue
     {
         $datepart = now()->timezone('UTC')->format('Y-m-d_') . $this->data['period'] .  '.csv';
 
-        $mainfilename = 'query2-' . $datepart;
+        $mainfilename = 'spamcheck-' . $datepart;
 
         return $this
             ->view('mail.internal_spam_check')

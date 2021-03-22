@@ -569,7 +569,7 @@
                     <td class="bg_dark email-section" style="text-align:center;">
                         <div class="heading-section heading-section-white">
                             <p>
-                                The attached Caller Ids have been flagged by our internal spam check (query2)
+                                The attached Caller Ids have been flagged by our internal spam check campaign
                             </p>
                         </div>
                     </td>

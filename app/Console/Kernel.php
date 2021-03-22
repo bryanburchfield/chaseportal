@@ -80,13 +80,7 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 InternalSpamCheckService::execute('morning');
             })
-                ->dailyAt('08:10')
-                ->timezone('America/New_York');
-
-            $schedule->call(function () {
-                InternalSpamCheckService::execute('afternoon');
-            })
-                ->dailyAt('12:30')
+                ->dailyAt('08:00')
                 ->timezone('America/New_York');
 
             $schedule->call(function () {

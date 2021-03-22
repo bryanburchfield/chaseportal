@@ -10,6 +10,7 @@ use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -168,18 +169,32 @@ class InternalSpamCheckService
 'UNKNOWN'
         ";
 
+        $bind = [
+            'enddate' => now()->toDateTimeString(),
+            'ratio' => 2.15,
+            'lookback' => 30,
+        ];
+
+        if (strtolower($this->period) == 'morning') {
+            $bind['startdate'] = today()->subDay(1)->toDateTimeString();
+        } else {
+            $bind['startdate'] = Carbon::parse('today 8am', 'America/New_York')->tz('UTC')->toDateTimeString();
+        }
+
         $sql = "SET NOCOUNT ON;
 
         DECLARE @startdate AS DATETIME
         DECLARE @enddate   AS DATETIME
         DECLARE @lookBack  AS INT
+        DECLARE @ratio     AS FLOAT
         DECLARE @excludeGroups table (GroupId int)
         DECLARE @systemCodes table (CallStatus varchar(50))
 
-        SET @startdate = DATEADD(day, -1, CONVERT (date, SYSUTCDATETIME()))  -- midnight a day ago
-        SET @enddate   = SYSUTCDATETIME()                                    -- now
-        SET @lookBack  = 30                                                  -- days to look back in history to calc connect rate
-
+        SET @startdate = :startdate
+        SET @enddate = :enddate
+        SET @ratio = :ratio
+        SET @lookBack = :lookback
+        
         SELECT * INTO #busy FROM (
             SELECT DISTINCT CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
@@ -191,27 +206,51 @@ class InternalSpamCheckService
             AND CallStatus = 'CR_BUSY'
         ) tmp
 
-        SELECT * INTO #remotehangups FROM (
-            SELECT DISTINCT CallerId, Subcampaign
+        SELECT * INTO #ratio FROM (
+            SELECT CallerId,
+            SUM(CASE WHEN callstatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
+            SUM(CASE WHEN sip_bye = 1 THEN 1 ELSE 0 END) AS RemoteHangup
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+            WHERE GroupId = 2256969
+            AND CallDate >= @startdate
+            AND CallDate < @enddate
+            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Subcampaign != 'VERIZON'
+            GROUP BY CallerId
+        ) tmp
+
+        SELECT * INTO #remotehangupdids FROM (
+            SELECT CallerId
+            FROM #ratio
+            WHERE RemoteHangup > 0
+            AND ROUND(CAST(Pamd AS float) / CAST(RemoteHangup AS float), 2) < @ratio
+        ) tmp
+
+        SELECT * INTO #remotehangups FROM (
+            SELECT DISTINCT DR.CallerId, Subcampaign
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults] DR
+            INNER JOIN #remotehangupdids D ON D.CallerId = DR.CallerId
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
 	        AND CallDate < @enddate
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
-        ) tmp
+        ) tmp";
 
+        if (strtolower($this->period) == 'morning') {
+
+            $sql .= "
         SELECT * INTO #verizon FROM (
             SELECT CallerId,
-                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
-                SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
-                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
-            FROM DialingResults
+                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' OR sip_bye = 1 THEN 1 ELSE 0 END) AS Pamd,
+                SUM(CASE WHEN CallStatus = 'CR_NOANS' AND sip_bye != 1 THEN 1 ELSE 0 END) AS Noans,
+                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') AND sip_bye != 1 THEN 1 ELSE 0 END) AS Other
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Campaign = 'VERIZON'
             AND Subcampaign = 'VERIZON'
             GROUP BY CallerId
         ) tmp
@@ -220,6 +259,7 @@ class InternalSpamCheckService
             SELECT CallerId, 'VERIZON' AS Subcampaign
             FROM #verizon
             WHERE (Pamd + Noans + Other) >= 3
+            AND Pamd > 1
             AND Pamd >= Noans
         ) tmp
 
@@ -245,7 +285,40 @@ class InternalSpamCheckService
             SELECT CallerId, Subcampaign FROM #pamd4
             ) tmp
         GROUP BY CallerId
+        ";
+        } else {  // not morning
 
+            $sql .= "
+        SELECT * INTO #pamd FROM (
+            SELECT id, CallerId, CallDate
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+            WHERE GroupId = 2256969
+            AND CallDate >= @startdate
+            AND CallDate < @enddate
+            AND Campaign = 'VERIZON'
+            AND Subcampaign = 'VERIZON'
+            AND (CallStatus = 'CR_CNCT/CON_PAMD' OR sip_bye = 1)
+        ) tmp
+
+        SELECT * INTO #verizon FROM (
+            SELECT DISTINCT P1.CallerId, 'VERIZON' AS Subcampaign
+            FROM #pamd P1
+            INNER JOIN #pamd P2 ON P2.CallerId = P1.CallerId AND P1.id != P2.id
+            WHERE P2.CallDate BETWEEN P1.CallDate AND DATEADD(ss,60,P1.CallDate)
+        ) tmp
+
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
+            SELECT CallerId, Subcampaign FROM #remotehangups
+            UNION
+            SELECT CallerId, Subcampaign FROM #verizon
+        ) tmp
+        GROUP BY CallerId
+            ";
+        }
+
+        $sql .= "
         SELECT * INTO #activebad FROM (
             SELECT Dialer, GroupId, GroupName, Phone, Description, Subcampaigns FROM (";
 
@@ -322,7 +395,7 @@ class InternalSpamCheckService
         FROM #activebad
         ORDER BY Dialer, GroupId, Phone";
 
-        return $this->runSql($sql);
+        return $this->runSql($sql, $bind);
     }
 
     private function makeCsv($results)
