@@ -243,9 +243,9 @@ class InternalSpamCheckService
             $sql .= "
         SELECT * INTO #verizon FROM (
             SELECT CallerId,
-                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' OR sip_bye = 1 THEN 1 ELSE 0 END) AS Pamd,
-                SUM(CASE WHEN CallStatus = 'CR_NOANS' AND sip_bye != 1 THEN 1 ELSE 0 END) AS Noans,
-                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') AND sip_bye != 1 THEN 1 ELSE 0 END) AS Other
+                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
+                SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
+                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
@@ -297,7 +297,7 @@ class InternalSpamCheckService
             AND CallDate < @enddate
             AND Campaign = 'VERIZON'
             AND Subcampaign = 'VERIZON'
-            AND (CallStatus = 'CR_CNCT/CON_PAMD' OR sip_bye = 1)
+            AND CallStatus = 'CR_CNCT/CON_PAMD'
         ) tmp
 
         SELECT * INTO #verizon FROM (
