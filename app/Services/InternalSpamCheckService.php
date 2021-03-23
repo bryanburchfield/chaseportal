@@ -175,7 +175,7 @@ class InternalSpamCheckService
         ];
 
         if (strtolower($this->period) == 'morning') {
-            $bind['startdate'] = today()->subDay(1)->toDateTimeString();
+            $bind['startdate'] = Carbon::parse('yesterday 5pm', 'America/New_York')->tz('UTC')->toDateTimeString();
         } else {
             $bind['startdate'] = Carbon::parse('today 8am', 'America/New_York')->tz('UTC')->toDateTimeString();
         }
