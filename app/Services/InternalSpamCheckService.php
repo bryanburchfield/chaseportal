@@ -54,10 +54,9 @@ class InternalSpamCheckService
         Log::info('Pulling report');
         $this->saveReport();
 
-        // bpb
-        // echo "Swap Numbers\n";
-        // Log::info('Swapping numbers');
-        // $this->swapNumbers();
+        echo "Swap Numbers\n";
+        Log::info('Swapping numbers');
+        $this->swapNumbers();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -446,11 +445,14 @@ class InternalSpamCheckService
 
         unlink($mainCsv);
 
-        $to = 'ahmed@chasedatacorp.com';
-        $cc = [
-            'g.sandoval@chasedatacorp.com',
-            'brandon.b@chasedatacorp.com'
-        ];
+        // bpb
+        $to = 'bburchfield@gmail.com';
+        $cc = [];
+        // $to = 'ahmed@chasedatacorp.com';
+        // $cc = [
+        //     'g.sandoval@chasedatacorp.com',
+        //     'brandon.b@chasedatacorp.com'
+        // ];
 
         // email report
         $message = [
@@ -473,7 +475,7 @@ class InternalSpamCheckService
 
         // read results from db
         foreach (InternalPhoneFlag::where('run_date', $this->run_date)
-            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereIn('dialer_numb', [7, 9, 24, 26])   // Supported servers by API
             ->whereNull('replaced_by')
             ->orderBy('dialer_numb')
             ->orderBy('phone')
