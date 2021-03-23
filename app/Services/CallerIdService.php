@@ -31,6 +31,8 @@ class CallerIdService
     private $yesterday;
     private $maxcount;
 
+    private $supported_dialers = [7, 9, 24, 26];
+
     // Groups to exclude
     private $ignoreGroups =
     [
@@ -83,17 +85,17 @@ class CallerIdService
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->save30DayReport();
 
-        echo "Checking flags\n";
-        Log::info('Checking flags');
-        $this->checkFlags();
+        // echo "Checking flags\n";
+        // Log::info('Checking flags');
+        // $this->checkFlags();
 
-        echo "Swap Numbers\n";
-        Log::info('Swapping numbers');
-        $this->swapNumbers();
+        // echo "Swap Numbers\n";
+        // Log::info('Swapping numbers');
+        // $this->swapNumbers();
 
-        echo "Check and re-swap numbers\n";
-        Log::info('Check and Re-swap Numbers');
-        $this->checkSwapped();
+        // echo "Check and re-swap numbers\n";
+        // Log::info('Check and Re-swap Numbers');
+        // $this->checkSwapped();
 
         echo "Creating report\n";
         Log::info('Creating report');
@@ -166,7 +168,7 @@ class CallerIdService
 
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('owned', 1)
-            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereIn('dialer_numb', $this->supported_dialers)
             ->where(function ($query) {
                 $query->where('ring_group', 'ilike', '%caller%id%call%back%')
                     ->orWhere('ring_group', 'ilike', '%nationwide%');
@@ -202,7 +204,7 @@ class CallerIdService
 
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('owned', 1)
-            ->whereNotIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereNotIn('dialer_numb', $this->supported_dialers)
             ->where(function ($query) {
                 $query->where('ring_group', 'ilike', '%caller%id%call%back%')
                     ->orWhere('ring_group', 'ilike', '%nationwide%');
@@ -548,7 +550,7 @@ class CallerIdService
         // read results from db
         foreach (PhoneFlag::where('run_date', $this->run_date)
             ->where('owned', 1)
-            ->whereIn('dialer_numb', [7, 24, 26])   // Supported servers by API
+            ->whereIn('dialer_numb', $this->supported_dialers)
             ->whereNull('replaced_by')
             ->where(function ($query) {
                 $query->where('ring_group', 'ilike', '%caller%id%call%back%')
