@@ -405,6 +405,7 @@ class InternalSpamCheckService
             'GroupName',
             'CallerID',
             'RingGroup',
+            'FlaggedByCarrier',
             'Dials30Days',
             'ConnectPct',
             'Replaced By',
@@ -424,6 +425,7 @@ class InternalSpamCheckService
                 $rec->group_name,
                 $rec->phone,
                 $rec->ring_group,
+                $rec->subcampaigns,
                 $rec->dials,
                 $rec->connect_pct,
                 $rec->replaced_by,
@@ -445,14 +447,11 @@ class InternalSpamCheckService
 
         unlink($mainCsv);
 
-        // bpb
-        $to = 'bburchfield@gmail.com';
-        $cc = [];
-        // $to = 'ahmed@chasedatacorp.com';
-        // $cc = [
-        //     'g.sandoval@chasedatacorp.com',
-        //     'brandon.b@chasedatacorp.com'
-        // ];
+        $to = 'ahmed@chasedatacorp.com';
+        $cc = [
+            'g.sandoval@chasedatacorp.com',
+            'brandon.b@chasedatacorp.com'
+        ];
 
         // email report
         $message = [
