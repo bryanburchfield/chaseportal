@@ -179,12 +179,12 @@ class CallerIdService
                         $query2
                             ->where('flagged', 1)
                             ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
-                    })
-                    ->orWhere(function ($query2) {
-                        $query2
-                            ->where('calls', '>=', $this->swap_dials)
-                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
+                // ->orWhere(function ($query2) {
+                //     $query2
+                //         ->where('calls', '>=', $this->swap_dials)
+                //         ->where('connect_ratio', '<', $this->swap_connectpct);
+                // });
             })
             ->orderBy('dialer_numb')
             ->orderBy('group_name')
@@ -215,12 +215,12 @@ class CallerIdService
                         $query2
                             ->where('flagged', 1)
                             ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
-                    })
-                    ->orWhere(function ($query2) {
-                        $query2
-                            ->where('calls', '>=', $this->swap_dials)
-                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
+                // ->orWhere(function ($query2) {
+                //     $query2
+                //         ->where('calls', '>=', $this->swap_dials)
+                //         ->where('connect_ratio', '<', $this->swap_connectpct);
+                // });
             })
             ->orderBy('dialer_numb')
             ->orderBy('group_name')
@@ -562,12 +562,12 @@ class CallerIdService
                         $query2
                             ->where('flagged', 1)
                             ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
-                    })
-                    ->orWhere(function ($query2) {
-                        $query2
-                            ->where('calls', '>=', $this->swap_dials)
-                            ->where('connect_ratio', '<', $this->swap_connectpct);
                     });
+                // ->orWhere(function ($query2) {
+                //     $query2
+                //         ->where('calls', '>=', $this->swap_dials)
+                //         ->where('connect_ratio', '<', $this->swap_connectpct);
+                // });
             })
             ->orderBy('dialer_numb')
             ->orderBy('phone')
