@@ -85,17 +85,17 @@ class CallerIdService
         $this->startdate = $this->enddate->copy()->subDay(30);
         $this->save30DayReport();
 
-        // echo "Checking flags\n";
-        // Log::info('Checking flags');
-        // $this->checkFlags();
+        echo "Checking flags\n";
+        Log::info('Checking flags');
+        $this->checkFlags();
 
-        // echo "Swap Numbers\n";
-        // Log::info('Swapping numbers');
-        // $this->swapNumbers();
+        echo "Swap Numbers\n";
+        Log::info('Swapping numbers');
+        $this->swapNumbers();
 
-        // echo "Check and re-swap numbers\n";
-        // Log::info('Check and Re-swap Numbers');
-        // $this->checkSwapped();
+        echo "Check and re-swap numbers\n";
+        Log::info('Check and Re-swap Numbers');
+        $this->checkSwapped();
 
         echo "Creating report\n";
         Log::info('Creating report');
