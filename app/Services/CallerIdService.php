@@ -42,11 +42,11 @@ class CallerIdService
     ];
 
     // Non-flagged swap params
-    private $swap_dials = 1000;
-    private $swap_connectpct = 10.8;
+    // private $swap_dials = 1000;
+    // private $swap_connectpct = 10.8;
 
-    // Don't swap if flagged and connect pct greater than
-    private $dont_swap_connectpct = 11.0;
+    // Don't swap if flagged and connect pct at least
+    private $dont_swap_connectpct = 15.0;
 
     public static function execute()
     {
@@ -178,7 +178,7 @@ class CallerIdService
                     ->where(function ($query2) {
                         $query2
                             ->where('flagged', 1)
-                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                            ->where('connect_ratio', '<', $this->dont_swap_connectpct);
                     });
                 // ->orWhere(function ($query2) {
                 //     $query2
@@ -214,7 +214,7 @@ class CallerIdService
                     ->where(function ($query2) {
                         $query2
                             ->where('flagged', 1)
-                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                            ->where('connect_ratio', '<', $this->dont_swap_connectpct);
                     });
                 // ->orWhere(function ($query2) {
                 //     $query2
@@ -561,7 +561,7 @@ class CallerIdService
                     ->where(function ($query2) {
                         $query2
                             ->where('flagged', 1)
-                            ->where('connect_ratio', '<=', $this->dont_swap_connectpct);
+                            ->where('connect_ratio', '<', $this->dont_swap_connectpct);
                     });
                 // ->orWhere(function ($query2) {
                 //     $query2
