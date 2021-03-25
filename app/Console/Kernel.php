@@ -84,6 +84,12 @@ class Kernel extends ConsoleKernel
                 ->timezone('America/New_York');
 
             $schedule->call(function () {
+                InternalSpamCheckService::execute('afternoon');
+            })
+                ->dailyAt('12:30')
+                ->timezone('America/New_York');
+
+            $schedule->call(function () {
                 InternalSpamCheckService::execute('evening');
             })
                 ->dailyAt('17:00')
