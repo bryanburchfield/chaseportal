@@ -33,8 +33,9 @@ class InternalSpamCheckService
 
     public static function execute($period)
     {
-        $caller_id_service = new InternalSpamCheckService();
-        $caller_id_service->runReport($period);
+        $spam_check_service = get_called_class();
+        $spam_check_service = new $spam_check_service;
+        $spam_check_service->runReport($period);
     }
 
     private function initialize()
@@ -235,87 +236,11 @@ class InternalSpamCheckService
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
-        ) tmp";
-
-        if (strtolower($this->period) == 'morning') {
-
-            $sql .= "
-        SELECT * INTO #verizon FROM (
-            SELECT CallerId,
-                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
-                SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
-                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
-            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
-            AND CallDate >= @startdate
-            AND CallDate < @enddate
-            AND Campaign = 'VERIZON'
-            AND Subcampaign = 'VERIZON'
-            GROUP BY CallerId
         ) tmp
-
-        SELECT * INTO #pamd FROM (
-            SELECT CallerId, 'VERIZON' AS Subcampaign
-            FROM #verizon
-            WHERE (Pamd + Noans + Other) >= 3
-            AND Pamd > 1
-            AND Pamd >= Noans
-        ) tmp
-
-        SELECT * INTO #pamd4 FROM (
-            SELECT CallerId, 'VERIZON' AS Subcampaign
-            FROM #verizon
-            WHERE Pamd >= 4
-            AND Pamd < Noans
-            AND CallerId in (
-                SELECT CallerId FROM #remotehangups
-                UNION
-                SELECT CallerId FROM #busy
-            )
-        ) tmp
-
-        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
-            SELECT CallerId, Subcampaign FROM #busy
-            UNION
-            SELECT CallerId, Subcampaign FROM #remotehangups
-            UNION
-            SELECT CallerId, Subcampaign FROM #pamd
-            UNION
-            SELECT CallerId, Subcampaign FROM #pamd4
-            ) tmp
-        GROUP BY CallerId
         ";
-        } else {  // not morning
 
-            $sql .= "
-        SELECT * INTO #pamd FROM (
-            SELECT id, CallerId, CallDate
-            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
-            AND CallDate >= @startdate
-            AND CallDate < @enddate
-            AND Campaign = 'VERIZON'
-            AND Subcampaign = 'VERIZON'
-            AND CallStatus = 'CR_CNCT/CON_PAMD'
-        ) tmp
 
-        SELECT * INTO #verizon FROM (
-            SELECT DISTINCT P1.CallerId, 'VERIZON' AS Subcampaign
-            FROM #pamd P1
-            INNER JOIN #pamd P2 ON P2.CallerId = P1.CallerId AND P1.id != P2.id
-            WHERE P2.CallDate BETWEEN P1.CallDate AND DATEADD(ss,60,P1.CallDate)
-        ) tmp
-
-        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
-            SELECT CallerId, Subcampaign FROM #busy
-            UNION
-            SELECT CallerId, Subcampaign FROM #remotehangups
-            UNION
-            SELECT CallerId, Subcampaign FROM #verizon
-        ) tmp
-        GROUP BY CallerId
-            ";
-        }
+        $sql .= $this->buildPeriodSql();
 
         $sql .= "
         SELECT * INTO #activebad FROM (
@@ -395,6 +320,106 @@ class InternalSpamCheckService
         ORDER BY Dialer, GroupId, Phone";
 
         return $this->runSql($sql, $bind);
+    }
+
+    private function buildPeriodSql()
+    {
+        $sql = '';
+
+        if (strtolower($this->period) == 'morning') {
+
+            $sql = "
+        SELECT * INTO #verizon FROM (
+            SELECT CallerId,
+                SUM(CASE WHEN CallStatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
+                SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
+                SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+            WHERE GroupId = 2256969
+            AND CallDate >= @startdate
+            AND CallDate < @enddate
+            AND Campaign = 'VERIZON'
+            AND Subcampaign = 'VERIZON'
+            GROUP BY CallerId
+        ) tmp
+
+        SELECT * INTO #pamd FROM (
+            SELECT CallerId, 'VERIZON' AS Subcampaign
+            FROM #verizon
+            WHERE (Pamd + Noans + Other) >= 3
+            AND Pamd > 1
+            AND Pamd >= Noans
+        ) tmp
+
+        SELECT * INTO #pamd4 FROM (
+            SELECT CallerId, 'VERIZON' AS Subcampaign
+            FROM #verizon
+            WHERE Pamd >= 4
+            AND Pamd < Noans
+            AND CallerId in (
+                SELECT CallerId FROM #remotehangups
+                UNION
+                SELECT CallerId FROM #busy
+            )
+        ) tmp
+
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
+            SELECT CallerId, Subcampaign FROM #remotehangups
+            UNION
+            SELECT CallerId, Subcampaign FROM #pamd
+            UNION
+            SELECT CallerId, Subcampaign FROM #pamd4
+            ) tmp
+        GROUP BY CallerId
+        ";
+        }
+
+        if (strtolower($this->period) == 'afternoon') {
+            $sql = "
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
+            SELECT CallerId, Subcampaign FROM #remotehangups
+        ) tmp
+        GROUP BY CallerId
+                ";
+        }
+
+        if (strtolower($this->period) == 'evening') {
+
+            $sql = "
+        SELECT * INTO #pamd FROM (
+            SELECT id, CallerId, CallDate
+            FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+            WHERE GroupId = 2256969
+            AND CallDate >= @startdate
+            AND CallDate < @enddate
+            AND Campaign = 'VERIZON'
+            AND Subcampaign = 'VERIZON'
+            AND CallStatus = 'CR_CNCT/CON_PAMD'
+        ) tmp
+
+        SELECT * INTO #verizon FROM (
+            SELECT DISTINCT P1.CallerId, 'VERIZON' AS Subcampaign
+            FROM #pamd P1
+            INNER JOIN #pamd P2 ON P2.CallerId = P1.CallerId AND P1.id != P2.id
+            WHERE P2.CallDate BETWEEN P1.CallDate AND DATEADD(ss,60,P1.CallDate)
+        ) tmp
+
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
+            SELECT CallerId, Subcampaign FROM #remotehangups
+            UNION
+            SELECT CallerId, Subcampaign FROM #verizon
+        ) tmp
+        GROUP BY CallerId
+            ";
+        }
+
+        return $sql;
     }
 
     private function makeCsv($results)
