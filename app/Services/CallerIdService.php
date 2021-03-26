@@ -632,7 +632,7 @@ class CallerIdService
                 'https://billing.chasedatacorp.com/DID.aspx',
                 [
                     'query' => [
-                        'Token' => '3DCE9183-CA9C-4D1A-8B23-171DFA8C4D4B',
+                        'Token' => config('chasedata.did_token'),
                         'Server' => 'dialer-' . sprintf('%02d', $dialer_numb, 2),
                         'Number' => $this->formatPhone($phone, 1),
                         'GroupId' => $group_id,
