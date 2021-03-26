@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\Mail\InternalSpamCheckMail;
-use App\Models\AreaCode;
 use App\Models\Dialer;
 use App\Models\InternalPhoneFlag;
+use App\Traits\PhoneTraits;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -18,6 +17,9 @@ class InternalSpamCheckService
 {
     use SqlServerTraits;
     use TimeTraits;
+    use PhoneTraits;
+
+    private $didSwapService;
 
     private $period;
     private $run_date;
@@ -42,6 +44,8 @@ class InternalSpamCheckService
     {
         $this->run_date = now();
         $this->startdate = today();
+
+        $this->didSwapService = new DidSwapService();
     }
 
     public function runReport($period)
@@ -75,7 +79,7 @@ class InternalSpamCheckService
                 continue;
             }
 
-            $phone = $this->formatPhone($rec['Phone']);
+            $phone = $this->formatPhoneElevenDigits($rec['Phone']);
 
             try {
                 InternalPhoneFlag::create([
@@ -106,8 +110,8 @@ class InternalSpamCheckService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            $rec['phone'] = $this->formatPhone($rec['phone'], true);
-            $rec['replaced_by'] = $this->formatPhone($rec['replaced_by'], true);
+            $rec['phone'] = $this->formatPhoneTenDigits($rec['phone']);
+            $rec['replaced_by'] = $this->formatPhoneTenDigits($rec['replaced_by']);
 
             $all_results[] = $rec;
         }
@@ -115,26 +119,6 @@ class InternalSpamCheckService
         $mainCsv = $this->makeCsv($all_results);
 
         $this->emailReport($mainCsv);
-    }
-
-    private function formatPhone($phone, $strip1 = false)
-    {
-        // Strip non-digits
-        $phone = preg_replace("/[^0-9]/", '', $phone);
-
-        if ($strip1) {
-            // Strip leading '1' if 11 digits
-            if (strlen($phone) == 11 && substr($phone, 0, 1) == '1') {
-                $phone = substr($phone, 1);
-            }
-        } else {
-            // Add leading '1' if 10 digits
-            if (strlen($phone) == 10) {
-                $phone = '1' . $phone;
-            }
-        }
-
-        return $phone;
     }
 
     private function runQuery()
@@ -495,8 +479,6 @@ class InternalSpamCheckService
 
     private function swapNumbers()
     {
-        $client = new Client();
-
         // read results from db
         foreach (InternalPhoneFlag::where('run_date', $this->run_date)
             ->whereIn('dialer_numb', [7, 9, 24, 26])   // Supported servers by API
@@ -505,88 +487,8 @@ class InternalSpamCheckService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            list($rec->replaced_by, $rec->swap_error) = $this->swapNumber($client, $rec->phone, $rec->dialer_numb, $rec->group_id);
+            list($rec->replaced_by, $rec->swap_error) = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
             $rec->save();
         }
-    }
-
-    private function swapNumber(Client $client, $phone, $dialer_numb, $group_id)
-    {
-        // try to replace with same NPA
-        list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id);
-
-        if (empty($replaced_by)) {
-
-            // Find area code record
-            $npa = substr($this->formatPhone($phone, true), 0, 3);
-            $areaCode = AreaCode::find($npa);
-
-            if ($areaCode) {
-                // get list of nearby same state npas
-                $alternates = $areaCode->alternateNpas();
-
-                // loop through till swap succeeds or errors
-                foreach ($alternates as $alternate) {
-                    list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id, $alternate->npa);
-                    if (!empty($replaced_by)) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        return [$replaced_by, $swap_error];
-    }
-
-    private function swapNumberNpa(Client $client, $phone, $dialer_numb, $group_id, $npa = null)
-    {
-        echo "Swapping $phone $npa\n";
-
-        $error = null;
-        $replaced_by = null;
-
-        try {
-            $response = $client->get(
-                'https://billing.chasedatacorp.com/DID.aspx',
-                [
-                    'query' => [
-                        'Token' => config('chasedata.did_token'),
-                        'Server' => 'dialer-' . sprintf('%02d', $dialer_numb, 2),
-                        'Number' => $this->formatPhone($phone, 1),
-                        'GroupId' => $group_id,
-                        'Action' => 'swap',
-                        'NPA' => $npa
-                    ]
-                ]
-            );
-        } catch (Exception $e) {
-            $error = 'Swap API failed: ' . $e->getMessage();
-        }
-
-        if (empty($error)) {
-            try {
-                $body = json_decode($response->getBody()->getContents());
-
-                if (isset($body->NewDID)) {
-                    if (!empty($body->NewDID)) {
-                        $replaced_by = $this->formatPhone($body->NewDID);
-                    } else {
-                        $error = 'No repalcement available';
-                    }
-                }
-                if (!empty($body->Error)) {
-                    $error = $body->Error;
-                }
-            } catch (Exception $e) {
-                $error = 'Could not swap number: ' . $e->getMessage();
-            }
-        }
-
-        // truncate error just in case
-        if (!empty($error)) {
-            $error = substr($error, 0, 190);
-        }
-
-        return [$replaced_by, $error];
     }
 }
