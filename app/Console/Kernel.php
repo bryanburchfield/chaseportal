@@ -11,6 +11,7 @@ use App\Services\CallerIdService;
 use App\Services\ContactsPlaybookService;
 use App\Services\CustomKpiService;
 use App\Services\DemoClientService;
+use App\Services\InternalSpamCheckService;
 use Illuminate\Support\Facades\App;
 
 class Kernel extends ConsoleKernel
@@ -72,6 +73,27 @@ class Kernel extends ConsoleKernel
             })
                 ->dailyAt('00:10')
                 ->timezone('UTC');
+        }
+
+        // Internal Spam Check Report (production only)
+        if (App::environment('production')) {
+            $schedule->call(function () {
+                InternalSpamCheckService::execute('morning');
+            })
+                ->dailyAt('08:00')
+                ->timezone('America/New_York');
+
+            $schedule->call(function () {
+                InternalSpamCheckService::execute('afternoon');
+            })
+                ->dailyAt('12:30')
+                ->timezone('America/New_York');
+
+            $schedule->call(function () {
+                InternalSpamCheckService::execute('evening');
+            })
+                ->dailyAt('17:00')
+                ->timezone('America/New_York');
         }
 
         // Custom KPI (production only)
