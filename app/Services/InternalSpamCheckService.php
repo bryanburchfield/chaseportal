@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Includes\ChaseDataDidApi;
 use App\Mail\InternalSpamCheckMail;
 use App\Models\Dialer;
 use App\Models\InternalPhoneFlag;
@@ -20,6 +21,7 @@ class InternalSpamCheckService
     use PhoneTraits;
 
     private $didSwapService;
+    private $chaseDataDidApi;
 
     private $period;
     private $run_date;
@@ -29,6 +31,7 @@ class InternalSpamCheckService
     private $ignoreGroups =
     [
         224195,
+        224802,
         236163,
         2256969,
     ];
@@ -46,6 +49,7 @@ class InternalSpamCheckService
         $this->startdate = today();
 
         $this->didSwapService = new DidSwapService();
+        $this->chaseDataDidApi = new ChaseDataDidApi();
     }
 
     public function runReport($period)
@@ -66,6 +70,14 @@ class InternalSpamCheckService
         echo "Creating report\n";
         Log::info('Creating report');
         $this->createReport();
+
+        echo "Clear test campaigns\n";
+        Log::info('Clear test campaigns');
+        $this->clearTestCampaigns();
+
+        echo "Load test campaigns\n";
+        Log::info('Load test campaigns');
+        $this->loadTestCampaigns();
 
         echo "Finished\n";
         Log::info('Finished');
@@ -154,7 +166,7 @@ class InternalSpamCheckService
         ";
 
         $bind = [
-            'enddate' => now()->toDateTimeString(),
+            'enddate' => $this->run_date->toDateTimeString(),
             'ratio' => 2.15,
             'lookback' => 30,
         ];
@@ -171,7 +183,6 @@ class InternalSpamCheckService
         DECLARE @enddate   AS DATETIME
         DECLARE @lookBack  AS INT
         DECLARE @ratio     AS FLOAT
-        DECLARE @excludeGroups table (GroupId int)
         DECLARE @systemCodes table (CallStatus varchar(50))
 
         SET @startdate = :startdate
@@ -490,5 +501,113 @@ class InternalSpamCheckService
             list($rec->replaced_by, $rec->swap_error) = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
             $rec->save();
         }
+    }
+
+    private function clearTestCampaigns()
+    {
+        $this->clearCampaign('TOP_1500_USED_DIDS');
+        $this->clearCampaign('VERIZON');
+    }
+
+    private function clearCampaign($campaign)
+    {
+        $ids = resultsToList($this->getCallerIds($campaign));
+
+        foreach ($ids as $id) {
+            if (!$this->chaseDataDidApi->deleteCallerId(7, $id)) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
+    }
+
+    private function getCallerIds($campaign)
+    {
+        $bind['campaign'] = $campaign;
+
+        $sql = "
+        SELECT id
+        FROM [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers]
+        WHERE GroupId = 2256969
+        AND Campaign = :campaign";
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function loadTestCampaigns()
+    {
+        $dids = array_keys(resultsToList($this->getTopDids()));
+
+        foreach ($dids as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'VERIZON')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
+    }
+
+    private function getTopDids()
+    {
+        $ignoreGroups = implode(',', $this->ignoreGroups);
+
+        $bind = [
+            'enddate' => $this->run_date->toDateTimeString(),
+            'mindials' => 250,
+        ];
+
+        switch (today()->dayOfWeek) {
+            case 0:  // sunday
+                $bind['startdate'] = today()->subDays(2)->toDateTimeString();
+                break;
+            case 1:  // monday
+                $bind['startdate'] = today()->subDays(3)->toDateTimeString();
+                break;
+            default:
+                $bind['startdate'] = today()->subDays(1)->toDateTimeString();
+        }
+
+        $sql = "
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+        DECLARE @minDials  INT
+
+        SET @startdate = :startdate
+        SET @enddate   = :enddate
+        SET @minDials  = :mindials
+
+        SELECT CallerId, SUM(Cnt) AS Cnt
+        FROM (";
+
+        $union = '';
+        foreach (Dialer::all() as $dialer) {
+
+            $sql .= " $union
+            SELECT CallerId, COUNT(*) AS Cnt
+            FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+            WHERE DR.CallDate >= @startdate
+            AND DR.CallDate < @enddate
+            AND DR.CallType = 0
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+            AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
+            AND O.Active = 1
+            AND DR.GroupId NOT IN ($ignoreGroups)
+            GROUP BY CallerId
+            ";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+        GROUP BY CallerId
+        HAVING SUM(Cnt) >= @minDials
+        ORDER BY CallerId";
+
+        return $this->runSql($sql, $bind);
     }
 }
