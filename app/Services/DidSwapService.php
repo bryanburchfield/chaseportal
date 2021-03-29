@@ -12,11 +12,22 @@ class DidSwapService
 
     private $chaseDataDidApi;
 
+    /**
+     * 
+     * @return void 
+     */
     public function __construct()
     {
         $this->chaseDataDidApi = new ChaseDataDidApi();
     }
 
+    /**
+     * 
+     * @param mixed $phone 
+     * @param mixed $dialer_numb 
+     * @param mixed $group_id 
+     * @return array 
+     */
     public function swapNumber($phone, $dialer_numb, $group_id)
     {
         // try to replace with same NPA

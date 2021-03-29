@@ -15,6 +15,10 @@ class ChaseDataDidApi
     private $token;
     public $error;
 
+    /**
+     * 
+     * @return void 
+     */
     public function __construct()
     {
         $this->client = new Client();
@@ -23,7 +27,15 @@ class ChaseDataDidApi
         $this->error = null;
     }
 
-    public function addCallerId($dialer_numb, $group_id, $phone, $campaign)
+    /**
+     * 
+     * @param mixed $dialer_numb 
+     * @param mixed $group_id 
+     * @param mixed $phone 
+     * @param mixed $campaign 
+     * @return bool 
+     */
+    public function addCallerId($dialer_numb, $group_id, $phone, $campaign, $spam_check = 1, $deter_spam = 1)
     {
         echo "Adding CallerId $phone\n";
 
@@ -40,8 +52,8 @@ class ChaseDataDidApi
                         'Number' => $this->formatPhoneTenDigits($phone),
                         'GroupId' => $group_id,
                         'CallerIdCampaign' => $campaign,
-                        'SpamCheck' => 1,
-                        'DeterSpam' => 1
+                        'SpamCheck' => $spam_check,
+                        'DeterSpam' => $deter_spam
                     ]
                 ]
             );
@@ -68,6 +80,12 @@ class ChaseDataDidApi
         return true;
     }
 
+    /**
+     * 
+     * @param mixed $dialer_numb 
+     * @param mixed $id 
+     * @return bool 
+     */
     public function deleteCallerId($dialer_numb, $id)
     {
         echo "Deleting CallerId $id\n";
@@ -109,6 +127,14 @@ class ChaseDataDidApi
         return true;
     }
 
+    /**
+     * 
+     * @param mixed $phone 
+     * @param mixed $dialer_numb 
+     * @param mixed $group_id 
+     * @param mixed|null $npa 
+     * @return mixed 
+     */
     public function swapCallerId($phone, $dialer_numb, $group_id, $npa = null)
     {
         echo "Swapping $phone $npa\n";
@@ -159,4 +185,13 @@ class ChaseDataDidApi
 
         return $replaced_by;
     }
+
+    // Functions not implemented:
+    // - search
+    // - insert
+    // - update
+    // - order
+    // - did-release
+    // - did-delete
+    // - callerid-update
 }
