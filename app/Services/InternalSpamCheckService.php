@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
+use App\Includes\ChaseDataDidApi;
 use App\Mail\InternalSpamCheckMail;
-use App\Models\AreaCode;
 use App\Models\Dialer;
 use App\Models\InternalPhoneFlag;
+use App\Traits\PhoneTraits;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -18,6 +18,10 @@ class InternalSpamCheckService
 {
     use SqlServerTraits;
     use TimeTraits;
+    use PhoneTraits;
+
+    private $didSwapService;
+    private $chaseDataDidApi;
 
     private $period;
     private $run_date;
@@ -27,6 +31,7 @@ class InternalSpamCheckService
     private $ignoreGroups =
     [
         224195,
+        224802,
         236163,
         2256969,
     ];
@@ -42,6 +47,9 @@ class InternalSpamCheckService
     {
         $this->run_date = now();
         $this->startdate = today();
+
+        $this->didSwapService = new DidSwapService();
+        $this->chaseDataDidApi = new ChaseDataDidApi();
     }
 
     public function runReport($period)
@@ -63,6 +71,14 @@ class InternalSpamCheckService
         Log::info('Creating report');
         $this->createReport();
 
+        echo "Clear test campaigns\n";
+        Log::info('Clear test campaigns');
+        $this->clearTestCampaigns();
+
+        echo "Load test campaigns\n";
+        Log::info('Load test campaigns');
+        $this->loadTestCampaigns();
+
         echo "Finished\n";
         Log::info('Finished');
     }
@@ -75,7 +91,7 @@ class InternalSpamCheckService
                 continue;
             }
 
-            $phone = $this->formatPhone($rec['Phone']);
+            $phone = $this->formatPhoneElevenDigits($rec['Phone']);
 
             try {
                 InternalPhoneFlag::create([
@@ -106,8 +122,8 @@ class InternalSpamCheckService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            $rec['phone'] = $this->formatPhone($rec['phone'], true);
-            $rec['replaced_by'] = $this->formatPhone($rec['replaced_by'], true);
+            $rec['phone'] = $this->formatPhoneTenDigits($rec['phone']);
+            $rec['replaced_by'] = $this->formatPhoneTenDigits($rec['replaced_by']);
 
             $all_results[] = $rec;
         }
@@ -115,26 +131,6 @@ class InternalSpamCheckService
         $mainCsv = $this->makeCsv($all_results);
 
         $this->emailReport($mainCsv);
-    }
-
-    private function formatPhone($phone, $strip1 = false)
-    {
-        // Strip non-digits
-        $phone = preg_replace("/[^0-9]/", '', $phone);
-
-        if ($strip1) {
-            // Strip leading '1' if 11 digits
-            if (strlen($phone) == 11 && substr($phone, 0, 1) == '1') {
-                $phone = substr($phone, 1);
-            }
-        } else {
-            // Add leading '1' if 10 digits
-            if (strlen($phone) == 10) {
-                $phone = '1' . $phone;
-            }
-        }
-
-        return $phone;
     }
 
     private function runQuery()
@@ -170,7 +166,7 @@ class InternalSpamCheckService
         ";
 
         $bind = [
-            'enddate' => now()->toDateTimeString(),
+            'enddate' => $this->run_date->toDateTimeString(),
             'ratio' => 2.15,
             'lookback' => 30,
         ];
@@ -187,7 +183,6 @@ class InternalSpamCheckService
         DECLARE @enddate   AS DATETIME
         DECLARE @lookBack  AS INT
         DECLARE @ratio     AS FLOAT
-        DECLARE @excludeGroups table (GroupId int)
         DECLARE @systemCodes table (CallStatus varchar(50))
 
         SET @startdate = :startdate
@@ -495,8 +490,6 @@ class InternalSpamCheckService
 
     private function swapNumbers()
     {
-        $client = new Client();
-
         // read results from db
         foreach (InternalPhoneFlag::where('run_date', $this->run_date)
             ->whereIn('dialer_numb', [7, 9, 24, 26])   // Supported servers by API
@@ -505,88 +498,116 @@ class InternalSpamCheckService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            list($rec->replaced_by, $rec->swap_error) = $this->swapNumber($client, $rec->phone, $rec->dialer_numb, $rec->group_id);
+            list($rec->replaced_by, $rec->swap_error) = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
             $rec->save();
         }
     }
 
-    private function swapNumber(Client $client, $phone, $dialer_numb, $group_id)
+    private function clearTestCampaigns()
     {
-        // try to replace with same NPA
-        list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id);
-
-        if (empty($replaced_by)) {
-
-            // Find area code record
-            $npa = substr($this->formatPhone($phone, true), 0, 3);
-            $areaCode = AreaCode::find($npa);
-
-            if ($areaCode) {
-                // get list of nearby same state npas
-                $alternates = $areaCode->alternateNpas();
-
-                // loop through till swap succeeds or errors
-                foreach ($alternates as $alternate) {
-                    list($replaced_by, $swap_error) = $this->swapNumberNpa($client, $phone, $dialer_numb, $group_id, $alternate->npa);
-                    if (!empty($replaced_by)) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        return [$replaced_by, $swap_error];
+        $this->clearCampaign('TOP_1500_USED_DIDS');
+        $this->clearCampaign('VERIZON');
     }
 
-    private function swapNumberNpa(Client $client, $phone, $dialer_numb, $group_id, $npa = null)
+    private function clearCampaign($campaign)
     {
-        echo "Swapping $phone $npa\n";
+        $ids = resultsToList($this->getCallerIds($campaign));
 
-        $error = null;
-        $replaced_by = null;
-
-        try {
-            $response = $client->get(
-                'https://billing.chasedatacorp.com/DID.aspx',
-                [
-                    'query' => [
-                        'Token' => config('chasedata.did_token'),
-                        'Server' => 'dialer-' . sprintf('%02d', $dialer_numb, 2),
-                        'Number' => $this->formatPhone($phone, 1),
-                        'GroupId' => $group_id,
-                        'Action' => 'swap',
-                        'NPA' => $npa
-                    ]
-                ]
-            );
-        } catch (Exception $e) {
-            $error = 'Swap API failed: ' . $e->getMessage();
-        }
-
-        if (empty($error)) {
-            try {
-                $body = json_decode($response->getBody()->getContents());
-
-                if (isset($body->NewDID)) {
-                    if (!empty($body->NewDID)) {
-                        $replaced_by = $this->formatPhone($body->NewDID);
-                    } else {
-                        $error = 'No repalcement available';
-                    }
-                }
-                if (!empty($body->Error)) {
-                    $error = $body->Error;
-                }
-            } catch (Exception $e) {
-                $error = 'Could not swap number: ' . $e->getMessage();
+        foreach ($ids as $id) {
+            if (!$this->chaseDataDidApi->deleteCallerId(7, $id)) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
             }
         }
+    }
 
-        // truncate error just in case
-        if (!empty($error)) {
-            $error = substr($error, 0, 190);
+    private function getCallerIds($campaign)
+    {
+        $bind['campaign'] = $campaign;
+
+        $sql = "
+        SELECT id
+        FROM [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers]
+        WHERE GroupId = 2256969
+        AND Campaign = :campaign";
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function loadTestCampaigns()
+    {
+        $dids = array_keys(resultsToList($this->getTopDids()));
+
+        foreach ($dids as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'VERIZON')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
+    }
+
+    private function getTopDids()
+    {
+        $ignoreGroups = implode(',', $this->ignoreGroups);
+
+        $bind = [
+            'enddate' => $this->run_date->toDateTimeString(),
+            'mindials' => 250,
+        ];
+
+        switch (today()->dayOfWeek) {
+            case 0:  // sunday
+                $bind['startdate'] = today()->subDays(2)->toDateTimeString();
+                break;
+            case 1:  // monday
+                $bind['startdate'] = today()->subDays(3)->toDateTimeString();
+                break;
+            default:
+                $bind['startdate'] = today()->subDays(1)->toDateTimeString();
         }
 
-        return [$replaced_by, $error];
+        $sql = "
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+        DECLARE @minDials  INT
+
+        SET @startdate = :startdate
+        SET @enddate   = :enddate
+        SET @minDials  = :mindials
+
+        SELECT CallerId, SUM(Cnt) AS Cnt
+        FROM (";
+
+        $union = '';
+        foreach (Dialer::all() as $dialer) {
+
+            $sql .= " $union
+            SELECT CallerId, COUNT(*) AS Cnt
+            FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
+            WHERE DR.CallDate >= @startdate
+            AND DR.CallDate < @enddate
+            AND DR.CallType = 0
+            AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
+            AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
+            AND O.Active = 1
+            AND DR.GroupId NOT IN ($ignoreGroups)
+            GROUP BY CallerId
+            ";
+
+            $union = 'UNION ALL';
+        }
+
+        $sql .= ") tmp
+        GROUP BY CallerId
+        HAVING SUM(Cnt) >= @minDials
+        ORDER BY CallerId";
+
+        return $this->runSql($sql, $bind);
     }
 }
