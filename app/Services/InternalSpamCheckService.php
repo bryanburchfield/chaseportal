@@ -27,6 +27,7 @@ class InternalSpamCheckService
     private $period;
     private $run_date;
     private $startdate;
+    private $did_count;
 
     // Groups to exclude
     private $ignoreGroups =
@@ -92,15 +93,15 @@ class InternalSpamCheckService
     {
         $results = $this->didQuery();
 
-        $did_count = count($results) ? $results[0]['Cnt'] : 0;
+        $this->did_count = count($results) ? $results[0]['Cnt'] : 0;
 
         try {
             InternalPhoneCount::create([
                 'run_date' => $this->run_date,
-                'did_count' => $did_count,
+                'did_count' => $this->did_count,
             ]);
         } catch (Exception $e) {
-            Log::error('Error creating InternalPhoneCount: ' . $did_count);
+            Log::error('Error creating InternalPhoneCount: ' . $this->did_count);
             Log::critical($e->getMessage());
         }
     }
@@ -532,7 +533,8 @@ class InternalSpamCheckService
             'mainCsv' => base64_encode($mainData),
             'url' => url('/') . '/',
             'startdate' => $this->startdate->toFormattedDateString(),
-            'period' => $this->period
+            'period' => $this->period,
+            'did_count' => $this->did_count
         ];
 
         Mail::to($to)
