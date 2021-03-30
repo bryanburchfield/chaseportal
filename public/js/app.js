@@ -345,6 +345,9 @@ axios.all = function all(promises) {
 };
 axios.spread = __webpack_require__(/*! ./helpers/spread */ "./node_modules/axios/lib/helpers/spread.js");
 
+// Expose isAxiosError
+axios.isAxiosError = __webpack_require__(/*! ./helpers/isAxiosError */ "./node_modules/axios/lib/helpers/isAxiosError.js");
+
 module.exports = axios;
 
 // Allow use of default import syntax in TypeScript
@@ -1349,6 +1352,29 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
+/***/ "./node_modules/axios/lib/helpers/isAxiosError.js":
+/*!********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/isAxiosError.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the payload is an error thrown by Axios
+ *
+ * @param {*} payload The value to test
+ * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+ */
+module.exports = function isAxiosError(payload) {
+  return (typeof payload === 'object') && (payload.isAxiosError === true);
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/lib/helpers/isURLSameOrigin.js":
 /*!***********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
@@ -2144,8 +2170,8 @@ var Channel = /*#__PURE__*/function () {
 
   }, {
     key: "stopListeningForWhisper",
-    value: function stopListeningForWhisper(event) {
-      return this.stopListening('.client-' + event);
+    value: function stopListeningForWhisper(event, callback) {
+      return this.stopListening('.client-' + event, callback);
     }
   }]);
 
@@ -2256,8 +2282,13 @@ var PusherChannel = /*#__PURE__*/function (_Channel) {
 
   }, {
     key: "stopListening",
-    value: function stopListening(event) {
-      this.subscription.unbind(this.eventFormatter.format(event));
+    value: function stopListening(event, callback) {
+      if (callback) {
+        this.subscription.unbind(this.eventFormatter.format(event), callback);
+      } else {
+        this.subscription.unbind(this.eventFormatter.format(event));
+      }
+
       return this;
     }
     /**
@@ -2446,18 +2477,21 @@ var SocketIoChannel = /*#__PURE__*/function (_Channel) {
 
     _this = _super.call(this);
     /**
-     * The event callbacks applied to the channel.
+     * The event callbacks applied to the socket.
      */
 
     _this.events = {};
+    /**
+     * User supplied callbacks for events on this channel.
+     */
+
+    _this.listeners = {};
     _this.name = name;
     _this.socket = socket;
     _this.options = options;
     _this.eventFormatter = new EventFormatter(_this.options.namespace);
 
     _this.subscribe();
-
-    _this.configureReconnector();
 
     return _this;
   }
@@ -2503,10 +2537,8 @@ var SocketIoChannel = /*#__PURE__*/function (_Channel) {
 
   }, {
     key: "stopListening",
-    value: function stopListening(event) {
-      var name = this.eventFormatter.format(event);
-      this.socket.removeListener(name);
-      delete this.events[name];
+    value: function stopListening(event, callback) {
+      this.unbindEvent(this.eventFormatter.format(event), callback);
       return this;
     }
     /**
@@ -2539,40 +2571,22 @@ var SocketIoChannel = /*#__PURE__*/function (_Channel) {
     value: function on(event, callback) {
       var _this2 = this;
 
-      var listener = function listener(channel, data) {
-        if (_this2.name == channel) {
-          callback(data);
-        }
-      };
+      this.listeners[event] = this.listeners[event] || [];
 
-      this.socket.on(event, listener);
-      this.bind(event, listener);
-    }
-    /**
-     * Attach a 'reconnect' listener and bind the event.
-     */
+      if (!this.events[event]) {
+        this.events[event] = function (channel, data) {
+          if (_this2.name === channel && _this2.listeners[event]) {
+            _this2.listeners[event].forEach(function (cb) {
+              return cb(data);
+            });
+          }
+        };
 
-  }, {
-    key: "configureReconnector",
-    value: function configureReconnector() {
-      var _this3 = this;
+        this.socket.on(event, this.events[event]);
+      }
 
-      var listener = function listener() {
-        _this3.subscribe();
-      };
-
-      this.socket.on('reconnect', listener);
-      this.bind('reconnect', listener);
-    }
-    /**
-     * Bind the channel's socket to an event and store the callback.
-     */
-
-  }, {
-    key: "bind",
-    value: function bind(event, callback) {
-      this.events[event] = this.events[event] || [];
-      this.events[event].push(callback);
+      this.listeners[event].push(callback);
+      return this;
     }
     /**
      * Unbind the channel's socket from all stored event callbacks.
@@ -2581,15 +2595,35 @@ var SocketIoChannel = /*#__PURE__*/function (_Channel) {
   }, {
     key: "unbind",
     value: function unbind() {
-      var _this4 = this;
+      var _this3 = this;
 
       Object.keys(this.events).forEach(function (event) {
-        _this4.events[event].forEach(function (callback) {
-          _this4.socket.removeListener(event, callback);
-        });
-
-        delete _this4.events[event];
+        _this3.unbindEvent(event);
       });
+    }
+    /**
+     * Unbind the listeners for the given event.
+     */
+
+  }, {
+    key: "unbindEvent",
+    value: function unbindEvent(event, callback) {
+      this.listeners[event] = this.listeners[event] || [];
+
+      if (callback) {
+        this.listeners[event] = this.listeners[event].filter(function (cb) {
+          return cb !== callback;
+        });
+      }
+
+      if (!callback || this.listeners[event].length === 0) {
+        if (this.events[event]) {
+          this.socket.removeListener(event, this.events[event]);
+          delete this.events[event];
+        }
+
+        delete this.listeners[event];
+      }
     }
   }]);
 
@@ -2597,7 +2631,7 @@ var SocketIoChannel = /*#__PURE__*/function (_Channel) {
 }(Channel);
 
 /**
- * This class represents a Socket.io presence channel.
+ * This class represents a Socket.io private channel.
  */
 
 var SocketIoPrivateChannel = /*#__PURE__*/function (_SocketIoChannel) {
@@ -2734,7 +2768,7 @@ var NullChannel = /*#__PURE__*/function (_Channel) {
 
   }, {
     key: "stopListening",
-    value: function stopListening(event) {
+    value: function stopListening(event, callback) {
       return this;
     }
     /**
@@ -3030,8 +3064,15 @@ var SocketIoConnector = /*#__PURE__*/function (_Connector) {
   _createClass(SocketIoConnector, [{
     key: "connect",
     value: function connect() {
+      var _this2 = this;
+
       var io = this.getSocketIO();
       this.socket = io(this.options.host, this.options);
+      this.socket.on('reconnect', function () {
+        Object.values(_this2.channels).forEach(function (channel) {
+          channel.subscribe();
+        });
+      });
       return this.socket;
     }
     /**
@@ -3106,11 +3147,11 @@ var SocketIoConnector = /*#__PURE__*/function (_Connector) {
   }, {
     key: "leave",
     value: function leave(name) {
-      var _this2 = this;
+      var _this3 = this;
 
       var channels = [name, 'private-' + name, 'presence-' + name];
       channels.forEach(function (name) {
-        _this2.leaveChannel(name);
+        _this3.leaveChannel(name);
       });
     }
     /**
@@ -3472,14 +3513,15 @@ var Echo = /*#__PURE__*/function () {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.20';
+  var VERSION = '4.17.21';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
 
   /** Error message constants. */
   var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.',
-      FUNC_ERROR_TEXT = 'Expected a function';
+      FUNC_ERROR_TEXT = 'Expected a function',
+      INVALID_TEMPL_VAR_ERROR_TEXT = 'Invalid `variable` option passed into `_.template`';
 
   /** Used to stand-in for `undefined` hash values. */
   var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -3612,10 +3654,11 @@ var Echo = /*#__PURE__*/function () {
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g,
       reHasRegExpChar = RegExp(reRegExpChar.source);
 
-  /** Used to match leading and trailing whitespace. */
-  var reTrim = /^\s+|\s+$/g,
-      reTrimStart = /^\s+/,
-      reTrimEnd = /\s+$/;
+  /** Used to match leading whitespace. */
+  var reTrimStart = /^\s+/;
+
+  /** Used to match a single whitespace character. */
+  var reWhitespace = /\s/;
 
   /** Used to match wrap detail comments. */
   var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,
@@ -3624,6 +3667,18 @@ var Echo = /*#__PURE__*/function () {
 
   /** Used to match words composed of alphanumeric characters. */
   var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+
+  /**
+   * Used to validate the `validate` option in `_.template` variable.
+   *
+   * Forbids characters which could potentially change the meaning of the function argument definition:
+   * - "()," (modification of function parameters)
+   * - "=" (default value)
+   * - "[]{}" (destructuring of function parameters)
+   * - "/" (beginning of a comment)
+   * - whitespace
+   */
+  var reForbiddenIdentifierChars = /[()=,{}\[\]\/\s]/;
 
   /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
@@ -4454,6 +4509,19 @@ var Echo = /*#__PURE__*/function () {
   }
 
   /**
+   * The base implementation of `_.trim`.
+   *
+   * @private
+   * @param {string} string The string to trim.
+   * @returns {string} Returns the trimmed string.
+   */
+  function baseTrim(string) {
+    return string
+      ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+      : string;
+  }
+
+  /**
    * The base implementation of `_.unary` without support for storing metadata.
    *
    * @private
@@ -4784,6 +4852,21 @@ var Echo = /*#__PURE__*/function () {
     return hasUnicode(string)
       ? unicodeToArray(string)
       : asciiToArray(string);
+  }
+
+  /**
+   * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+   * character of `string`.
+   *
+   * @private
+   * @param {string} string The string to inspect.
+   * @returns {number} Returns the index of the last non-whitespace character.
+   */
+  function trimmedEndIndex(string) {
+    var index = string.length;
+
+    while (index-- && reWhitespace.test(string.charAt(index))) {}
+    return index;
   }
 
   /**
@@ -15954,7 +16037,7 @@ var Echo = /*#__PURE__*/function () {
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
       }
-      value = value.replace(reTrim, '');
+      value = baseTrim(value);
       var isBinary = reIsBinary.test(value);
       return (isBinary || reIsOctal.test(value))
         ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
@@ -18326,6 +18409,12 @@ var Echo = /*#__PURE__*/function () {
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
+      // Throw an error if a forbidden character was found in `variable`, to prevent
+      // potential command injection attacks.
+      else if (reForbiddenIdentifierChars.test(variable)) {
+        throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+      }
+
       // Cleanup code by stripping empty strings.
       source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source)
         .replace(reEmptyStringMiddle, '$1')
@@ -18439,7 +18528,7 @@ var Echo = /*#__PURE__*/function () {
     function trim(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrim, '');
+        return baseTrim(string);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -18474,7 +18563,7 @@ var Echo = /*#__PURE__*/function () {
     function trimEnd(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimEnd, '');
+        return string.slice(0, trimmedEndIndex(string) + 1);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -20819,7 +20908,7 @@ process.umask = function() { return 0; };
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * Pusher JavaScript Library v7.0.1
+ * Pusher JavaScript Library v7.0.3
  * https://pusher.com/
  *
  * Copyright 2020, Pusher
@@ -21407,7 +21496,7 @@ var ScriptReceivers = new ScriptReceiverFactory('_pusher_script_', 'Pusher.Scrip
 
 // CONCATENATED MODULE: ./src/core/defaults.ts
 var Defaults = {
-    VERSION: "7.0.1",
+    VERSION: "7.0.3",
     PROTOCOL: 7,
     wsPort: 80,
     wssPort: 443,
