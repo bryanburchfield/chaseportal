@@ -524,7 +524,9 @@ class InternalSpamCheckService
         $to = 'ahmed@chasedatacorp.com';
         $cc = [
             'g.sandoval@chasedatacorp.com',
-            'brandon.b@chasedatacorp.com'
+            'brandon.b@chasedatacorp.com',
+            'dylan.farley@chasedatacorp.com',
+            'jonathan.gryczka@chasedatacorp.com'
         ];
 
         // email report
