@@ -571,6 +571,9 @@
                             <p>
                                 The attached Caller Ids have been flagged by our internal spam check campaign
                             </p>
+                            <p>
+                                Unique DIDs dialed during this period: {{ $data['did_count'] }}
+                            </p>
                         </div>
                     </td>
                 </tr><!-- end: tr -->
