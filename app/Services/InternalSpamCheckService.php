@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Includes\ChaseDataDidApi;
 use App\Mail\InternalSpamCheckMail;
 use App\Models\Dialer;
+use App\Models\InternalPhoneCount;
 use App\Models\InternalPhoneFlag;
 use App\Traits\PhoneTraits;
 use App\Traits\SqlServerTraits;
@@ -59,6 +60,10 @@ class InternalSpamCheckService
 
         $this->initialize();
 
+        echo "Counting CallerIds\n";
+        Log::info('Counting CallerIds');
+        $this->countCallerIds();
+
         echo "Pulling report\n";
         Log::info('Pulling report');
         $this->saveReport();
@@ -81,6 +86,58 @@ class InternalSpamCheckService
 
         echo "Finished\n";
         Log::info('Finished');
+    }
+
+    private function countCallerIds()
+    {
+        $results = $this->didQuery();
+
+        $did_count = count($results) ? $results[0]['Cnt'] : 0;
+
+        try {
+            InternalPhoneCount::create([
+                'run_date' => $this->run_date,
+                'did_count' => $did_count,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error creating InternalPhoneCount: ' . $did_count);
+            Log::critical($e->getMessage());
+        }
+    }
+
+    private function didQuery()
+    {
+        $bind = [
+            'startdate' => $this->getStartDate(),
+            'enddate' => $this->run_date->toDateTimeString(),
+        ];
+
+        $sql = "
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+
+        SET @startdate = :startdate
+        SET @enddate = :enddate
+
+        SELECT COUNT(DISTINCT CallerId) As Cnt
+        FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
+        WHERE GroupId = 2256969
+        AND CallDate >= @startdate
+        AND CallDate < @enddate
+        AND Campaign = 'TOP_1500_USED_DIDS'";
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function getStartDate()
+    {
+        if (strtolower($this->period) == 'morning') {
+            $startdate = Carbon::parse('yesterday 5pm', 'America/New_York')->tz('UTC')->toDateTimeString();
+        } else {
+            $startdate = Carbon::parse('today 8am', 'America/New_York')->tz('UTC')->toDateTimeString();
+        }
+
+        return $startdate;
     }
 
     private function saveReport()
@@ -166,16 +223,12 @@ class InternalSpamCheckService
         ";
 
         $bind = [
+            'startdate' => $this->getStartDate(),
             'enddate' => $this->run_date->toDateTimeString(),
             'ratio' => 2.15,
             'lookback' => 30,
         ];
 
-        if (strtolower($this->period) == 'morning') {
-            $bind['startdate'] = Carbon::parse('yesterday 5pm', 'America/New_York')->tz('UTC')->toDateTimeString();
-        } else {
-            $bind['startdate'] = Carbon::parse('today 8am', 'America/New_York')->tz('UTC')->toDateTimeString();
-        }
 
         $sql = "SET NOCOUNT ON;
 
