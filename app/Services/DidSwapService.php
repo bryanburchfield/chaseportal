@@ -11,6 +11,7 @@ class DidSwapService
     use PhoneTraits;
 
     private $chaseDataDidApi;
+    public $error;
 
     /**
      * 
@@ -19,6 +20,7 @@ class DidSwapService
     public function __construct()
     {
         $this->chaseDataDidApi = new ChaseDataDidApi();
+        $this->error = null;
     }
 
     /**
@@ -30,8 +32,15 @@ class DidSwapService
      */
     public function swapNumber($phone, $dialer_numb, $group_id)
     {
+        $this->error = null;
+
         // try to replace with same NPA
         $replaced_by = $this->chaseDataDidApi->swapCallerId($phone, $dialer_numb, $group_id);
+
+        if ($replaced_by === false) {
+            $this->error = $this->chaseDataDidApi->error;
+            return false;
+        }
 
         if (empty($replaced_by)) {
 
@@ -45,7 +54,13 @@ class DidSwapService
 
                 // loop through till swap succeeds or errors
                 foreach ($alternates as $alternate) {
-                    list($replaced_by, $swap_error) = $this->chaseDataDidApi->swapCallerId($phone, $dialer_numb, $group_id, $alternate->npa);
+                    $replaced_by = $this->chaseDataDidApi->swapCallerId($phone, $dialer_numb, $group_id, $alternate->npa);
+
+                    if ($replaced_by === false) {
+                        $this->error = $this->chaseDataDidApi->error;
+                        return false;
+                    }
+
                     if (!empty($replaced_by)) {
                         break;
                     }
@@ -53,9 +68,6 @@ class DidSwapService
             }
         }
 
-        // truncate error just in case
-        $error = substr($this->chaseDataDidApi->error, 0, 190);
-
-        return [$replaced_by, $error];
+        return $replaced_by;
     }
 }
