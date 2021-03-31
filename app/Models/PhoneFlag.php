@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class PhoneFlag extends Model
 {
@@ -10,4 +11,9 @@ class PhoneFlag extends Model
 
     public $timestamps = false;
     protected $guarded = [];
+
+    public function setSwapErrorAttribute($value)
+    {
+        $this->attributes['swap_error'] = Str::limit($value, 190, '');
+    }
 }

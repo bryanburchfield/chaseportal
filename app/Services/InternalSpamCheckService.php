@@ -555,7 +555,14 @@ class InternalSpamCheckService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            list($rec->replaced_by, $rec->swap_error) = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
+            $rec->swap_error = null;;
+            $rec->replaced_by = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
+
+            if ($rec->replaced_by === false) {
+                $rec->replaced_by = null;
+                $rec->swap_error = $this->didSwapService->error;
+            }
+
             $rec->save();
         }
     }
