@@ -530,7 +530,14 @@ class CallerIdService
             ->orderBy('phone')
             ->get() as $rec) {
 
-            list($rec->replaced_by, $rec->swap_error) = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
+            $rec->swap_error = null;;
+            $rec->replaced_by = $this->didSwapService->swapNumber($rec->phone, $rec->dialer_numb, $rec->group_id);
+
+            if ($rec->replaced_by === false) {
+                $rec->replaced_by = null;
+                $rec->swap_error = $this->didSwapService->error;
+            }
+
             $rec->save();
 
             try {
@@ -582,7 +589,13 @@ class CallerIdService
             // Replace them
             $replacements->transform(function ($item, $key) use ($attempt) {
 
-                list($replaced_by, $swap_error) = $this->didSwapService->swapNumber($item->replaced_by, $item->dialer_numb, $item->group_id);
+                $item->swap_error = null;
+                $replaced_by = $this->didSwapService->swapNumber($item->replaced_by, $item->dialer_numb, $item->group_id);
+
+                if ($replaced_by === false) {
+                    $replaced_by = null;
+                    $item->swap_error = $this->didSwapService->error;
+                }
 
                 // save to db
                 try {
@@ -602,7 +615,6 @@ class CallerIdService
 
                 $item->new_flags = null;
                 $item->replaced_by = $replaced_by;
-                $item->swap_error = $swap_error;
 
                 // update phone_flags
                 try {
