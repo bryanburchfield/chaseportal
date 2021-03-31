@@ -580,9 +580,9 @@ class CallerIdService
             Log::info('Swapped spammy: ' . $replacements->count());
 
             // Replace them
-            $replacements->transform(function ($item, $key) use ($client, $attempt) {
+            $replacements->transform(function ($item, $key) use ($attempt) {
 
-                list($replaced_by, $swap_error) = $this->didSwapService->swapNumber($client, $item->replaced_by, $item->dialer_numb, $item->group_id);
+                list($replaced_by, $swap_error) = $this->didSwapService->swapNumber($item->replaced_by, $item->dialer_numb, $item->group_id);
 
                 // save to db
                 try {
