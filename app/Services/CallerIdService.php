@@ -12,7 +12,6 @@ use App\Traits\PhoneTraits;
 use App\Traits\SqlServerTraits;
 use App\Traits\TimeTraits;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -580,8 +579,6 @@ class CallerIdService
 
     private function checkSwapped()
     {
-        $client = new Client();
-
         // make a list of new numbers
         $replacements = PhoneFlag::where('run_date', $this->run_date)
             ->whereNotNull('replaced_by')
