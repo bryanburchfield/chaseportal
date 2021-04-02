@@ -473,9 +473,6 @@ class ApnSubcampaignSummary
         FROM #SubcampaignSummary
         ORDER BY Campaign, Subcampaign, Date";
 
-        info($sql);
-        info($bind);
-
         return [$sql, $bind];
     }
 
