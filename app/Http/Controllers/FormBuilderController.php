@@ -18,6 +18,7 @@ class FormBuilderController extends Controller
     	$data=[
     		'page' => $page,
     		'jsfile' => ['portal_form_builder.js'],
+    		'cssfile'=>['//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css']
     	];
     	return view('tools.portal_form_builder')->with($data);
     }
