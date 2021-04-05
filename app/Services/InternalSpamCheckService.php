@@ -45,6 +45,13 @@ class InternalSpamCheckService
         $spam_check_service->runPeriod($period);
     }
 
+    public static function interim()
+    {
+        $spam_check_service = get_called_class();
+        $spam_check_service = new $spam_check_service;
+        $spam_check_service->runInterim();
+    }
+
     private function initialize()
     {
         $this->run_date = now();
@@ -84,6 +91,25 @@ class InternalSpamCheckService
         echo "Load test campaigns\n";
         Log::info('Load test campaigns');
         $this->loadTestCampaigns();
+
+        echo "Finished\n";
+        Log::info('Finished');
+    }
+
+    public function runInterim()
+    {
+        $this->period = 'interim';
+        Log::info('Starting Internal Spam Check - interim');
+
+        $this->initialize();
+
+        echo "Pulling report\n";
+        Log::info('Pulling report');
+        $this->saveInterimReport();
+
+        echo "Swap Numbers\n";
+        Log::info('Swapping numbers');
+        $this->swapNumbers();
 
         echo "Finished\n";
         Log::info('Finished');
@@ -145,6 +171,37 @@ class InternalSpamCheckService
     {
         // Save results to database
         foreach ($this->runQuery() as $rec) {
+            if (count($rec) == 0) {
+                continue;
+            }
+
+            $phone = $this->formatPhoneElevenDigits($rec['Phone']);
+
+            try {
+                InternalPhoneFlag::create([
+                    'run_date' => $this->run_date,
+                    'period' => $this->period,
+                    'group_id' => $rec['GroupId'],
+                    'group_name' => $rec['GroupName'],
+                    'dialer_numb' => $rec['Dialer'],
+                    'phone' => $phone,
+                    'ring_group' => $rec['Description'],
+                    'subcampaigns' => $rec['Subcampaigns'],
+                    'dials' => $rec['Dials'],
+                    'connects' => $rec['Connects'],
+                    'connect_pct' => $rec['ConnectPct'],
+                ]);
+            } catch (Exception $e) {
+                Log::error('Error creating InternalPhoneFlag: ' . $phone);
+                Log::critical($e->getMessage());
+            }
+        }
+    }
+
+    private function saveInterimReport()
+    {
+        // Save results to database
+        foreach ($this->runInterimQuery() as $rec) {
             if (count($rec) == 0) {
                 continue;
             }
@@ -271,6 +328,74 @@ class InternalSpamCheckService
         ";
 
         $sql .= $this->buildPeriodSql();
+        $sql .= $this->buildActiveDidsSql();
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function runInterimQuery()
+    {
+        // Make list of groups to ignore
+        $ignoreGroups = implode(',', $this->ignoreGroups);
+
+        $bind = [
+            'startdate' => $this->getLastFullRunDate(),
+            'enddate' => $this->run_date->toDateTimeString(),
+            'lookback' => 30,
+            'minhangups' => 4,
+        ];
+
+        $sql = "SET NOCOUNT ON;
+
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+        DECLARE @lookBack  AS INT
+        DECLARE @minHangups  AS INT
+        DECLARE @systemCodes table (CallStatus varchar(50))
+
+        SET @startdate = :startdate
+        SET @enddate = :enddate
+        SET @lookBack = :lookback
+        SET @minHangups = :minhangups";
+
+
+        $sql .= "        
+        SELECT * INTO #sipdids FROM (";
+
+        $union = '';
+
+        // dialer 26 doesn't have sip_bye column
+        foreach (Dialer::where('dialer_numb', '!=', 26)->get() as $dialer) {
+
+            $sql .= " $union
+                SELECT DR.id, CallerId, CallDate
+                FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
+                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O on O.Phone = DR.CallerId AND O.GroupId = DR.GroupId
+                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I on I.GroupId = O.GroupId AND I.InboundSource = O.Phone
+                WHERE O.Active = 1
+                AND (I.Description LIKE '%caller%id%call%back%' OR I.Description LIKE '%nationwide%')
+                AND CallDate >= @startdate
+                AND CallDate < @enddate
+                AND DR.GroupId NOT IN ($ignoreGroups)
+                AND CallType IN (0,2)
+                AND sip_bye = 1";
+
+            $union = 'UNION';
+        }
+
+        $sql .= "
+        ) tmp
+        SELECT * INTO #bad FROM (
+            SELECT DISTINCT S1.CallerId, 'LiveHangups' as Subcampaigns
+            FROM #sipdids S1
+            WHERE (SELECT count(*)
+                FROM #sipdids S2
+                WHERE S2.CallerId = S1.CallerId
+                AND S2.id != S1.id
+                AND S2.CallDate BETWEEN S1.CallDate AND DATEADD(ss,60,S1.CallDate)
+                ) >= @minHangups
+        ) tmp";
+
         $sql .= $this->buildActiveDidsSql();
 
         return $this->runSql($sql, $bind);
