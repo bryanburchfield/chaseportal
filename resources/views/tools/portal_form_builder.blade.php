@@ -19,7 +19,7 @@
 							<form id="target" class="form-horizontal">
 
 						    	<fieldset>
-						    		<div id="legend" class="component" rel="popover" title="Form Title" trigger="manual"
+						    		<div id="legend" class="component" title="Form Title" trigger="manual"
 							        data-content="
 								        <form class='form'>
 							        		<div class='form-group col-md-12'>
@@ -52,7 +52,7 @@
 
 										<div role="tabpanel" class="tab-pane active" id="elements">
 
-											<div class="form-group component" data-type="text" rel="popover" title="Text Input" trigger="manual"
+											<div class="form-group component" data-type="text" title="Text Input" trigger="manual"
 												data-content="
 												<form class='form'>
 												<div class='form-group col-md-12'>
@@ -70,7 +70,7 @@
 												</div>
 											</div>
 
-											<div class="form-group component" data-type="search" rel="popover" title="Search Input" trigger="manual"
+											<div class="form-group component" data-type="search" title="Search Input" trigger="manual"
 											data-content="
 												<form class='form'>
 												<div class='form-group col-md-12'>
@@ -89,7 +89,7 @@
 												</div>
 											</div>
 
-											<div class="form-group component" rel="popover" title="Search Input" trigger="manual"
+											<div class="form-group component" title="Search Input" trigger="manual"
 												data-content="
 												<form class='form'>
 												<div class='form-group col-md-12'>
@@ -114,7 +114,7 @@
 												</div>
 											</div>
 
-											<div class="form-group component" data-type="prep-text" rel="popover" title="Prepended Text Input" trigger="manual"
+											<div class="form-group component" data-type="prep-text" title="Prepended Text Input" trigger="manual"
 												data-content="
 												<form class='form'>
 												<div class='form-group col-md-12'>
