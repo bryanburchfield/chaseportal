@@ -776,7 +776,7 @@ class InternalSpamCheckService
                 $bind['startdate'] = today()->subDays(1)->toDateTimeString();
         }
 
-        $sql = "
+        $sql = "SET NOCOUNT ON
         DECLARE @startdate AS DATETIME
         DECLARE @enddate   AS DATETIME
         DECLARE @minDials  INT
@@ -808,6 +808,17 @@ class InternalSpamCheckService
 
             $union = 'UNION ALL';
         }
+
+        // Load all of Teldar's regardless
+        $sql .= "
+        UNION
+        SELECT O.Phone as CallerId, 99999 AS Cnt
+        FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
+        INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
+        WHERE I.GroupId = 1111
+        AND O.Active = 1
+        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
+        ";
 
         $sql .= ") tmp
         GROUP BY CallerId
