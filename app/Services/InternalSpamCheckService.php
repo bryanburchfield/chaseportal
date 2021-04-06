@@ -111,6 +111,10 @@ class InternalSpamCheckService
         Log::info('Swapping numbers');
         $this->swapNumbers();
 
+        echo "Remove from test campaigns\n";
+        Log::info('Remove from test campaigns');
+        $this->removeFromTestCampaigns();
+
         echo "Finished\n";
         Log::info('Finished');
     }
@@ -270,6 +274,34 @@ class InternalSpamCheckService
             'lookback' => 30,
         ];
 
+        $sql = $this->buildInitSql();
+        $sql .= $this->buildBusySql();
+        $sql .= $this->buildHangupSql();
+        $sql .= $this->buildPeriodSql();
+        $sql .= $this->buildActiveDidsSql();
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function runInterimQuery()
+    {
+        $bind = [
+            'startdate' => $this->getLastFullRunDate(),
+            'enddate' => $this->run_date->toDateTimeString(),
+            'ratio' => 2.15,
+            'lookback' => 30,
+        ];
+
+        $sql = $this->buildInitSql();
+        $sql .= $this->buildHangupSql();
+        $sql .= $this->buildPeriodSql();
+        $sql .= $this->buildActiveDidsSql();
+
+        return $this->runSql($sql, $bind);
+    }
+
+    private function buildInitSql()
+    {
         $sql = "SET NOCOUNT ON;
 
         DECLARE @startdate AS DATETIME
@@ -280,9 +312,16 @@ class InternalSpamCheckService
 
         SET @startdate = :startdate
         SET @enddate = :enddate
-        SET @ratio = :ratio
         SET @lookBack = :lookback
-        
+        SET @ratio = :ratio
+        ";
+
+        return $sql;
+    }
+
+    private function buildBusySql()
+    {
+        $sql = "
         SELECT * INTO #busy FROM (
             SELECT DISTINCT CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
@@ -292,8 +331,14 @@ class InternalSpamCheckService
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND Subcampaign != 'VERIZON'
             AND CallStatus = 'CR_BUSY'
-        ) tmp
+        ) tmp";
 
+        return $sql;
+    }
+
+    private function buildHangupSql()
+    {
+        $sql = "
         SELECT * INTO #ratio FROM (
             SELECT CallerId,
             SUM(CASE WHEN callstatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
@@ -324,81 +369,9 @@ class InternalSpamCheckService
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
-        ) tmp
-        ";
-
-        $sql .= $this->buildPeriodSql();
-        $sql .= $this->buildActiveDidsSql();
-
-        return $this->runSql($sql, $bind);
-    }
-
-    private function runInterimQuery()
-    {
-        // Make list of groups to ignore
-        $ignoreGroups = implode(',', $this->ignoreGroups);
-
-        $bind = [
-            'startdate' => $this->getLastFullRunDate(),
-            'enddate' => $this->run_date->toDateTimeString(),
-            'lookback' => 30,
-            'minhangups' => 4,
-        ];
-
-        $sql = "SET NOCOUNT ON;
-
-        DECLARE @startdate AS DATETIME
-        DECLARE @enddate   AS DATETIME
-        DECLARE @lookBack  AS INT
-        DECLARE @minHangups  AS INT
-        DECLARE @systemCodes table (CallStatus varchar(50))
-
-        SET @startdate = :startdate
-        SET @enddate = :enddate
-        SET @lookBack = :lookback
-        SET @minHangups = :minhangups";
-
-
-        $sql .= "        
-        SELECT * INTO #sipdids FROM (";
-
-        $union = '';
-
-        // dialer 26 doesn't have sip_bye column
-        foreach (Dialer::where('dialer_numb', '!=', 26)->get() as $dialer) {
-
-            $sql .= " $union
-                SELECT DR.id, CallerId, CallDate
-                FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
-                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O on O.Phone = DR.CallerId AND O.GroupId = DR.GroupId
-                INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I on I.GroupId = O.GroupId AND I.InboundSource = O.Phone
-                WHERE O.Active = 1
-                AND (I.Description LIKE '%caller%id%call%back%' OR I.Description LIKE '%nationwide%')
-                AND CallDate >= @startdate
-                AND CallDate < @enddate
-                AND DR.GroupId NOT IN ($ignoreGroups)
-                AND CallType IN (0,2)
-                AND sip_bye = 1";
-
-            $union = 'UNION';
-        }
-
-        $sql .= "
-        ) tmp
-        SELECT * INTO #bad FROM (
-            SELECT DISTINCT S1.CallerId, 'LiveHangups' as Subcampaigns
-            FROM #sipdids S1
-            WHERE (SELECT count(*)
-                FROM #sipdids S2
-                WHERE S2.CallerId = S1.CallerId
-                AND S2.id != S1.id
-                AND S2.CallDate BETWEEN S1.CallDate AND DATEADD(ss,60,S1.CallDate)
-                ) >= @minHangups
         ) tmp";
 
-        $sql .= $this->buildActiveDidsSql();
-
-        return $this->runSql($sql, $bind);
+        return $sql;
     }
 
     private function buildPeriodSql()
@@ -496,6 +469,15 @@ class InternalSpamCheckService
         ) tmp
         GROUP BY CallerId
             ";
+        }
+
+        if (strtolower($this->period) == 'interim') {
+            $sql = "
+        SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #remotehangups
+        ) tmp
+        GROUP BY CallerId
+                ";
         }
 
         return $sql;
@@ -717,12 +699,37 @@ class InternalSpamCheckService
 
     private function clearCampaign($campaign)
     {
-        $ids = resultsToList($this->getCallerIds($campaign));
+        $ids = $this->getCallerIds($campaign);
 
-        foreach ($ids as $id) {
-            if (!$this->chaseDataDidApi->deleteCallerId(7, $id)) {
+        foreach ($ids as $rec) {
+            if (!$this->chaseDataDidApi->deleteCallerId(7, $rec['id'])) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
+    }
+
+    private function removeFromTestCampaigns()
+    {
+        $this->removeFromTestCampaign('TOP_1500_USED_DIDS');
+        $this->removeFromTestCampaign('VERIZON');
+    }
+
+    private function removeFromTestCampaign($campaign)
+    {
+        $ids = $this->getCallerIds($campaign);
+        $to_remove = InternalPhoneFlag::where('run_date', $this->run_date)->pluck('phone');
+
+        $to_remove->transform(function ($item) {
+            return $this->formatPhoneTenDigits($item);
+        });
+
+        foreach ($ids as $rec) {
+            if (in_array($rec['Phone'], $to_remove->toArray())) {
+                if (!$this->chaseDataDidApi->deleteCallerId(7, $rec['id'])) {
+                    Log::error($this->chaseDataDidApi->error);
+                    echo $this->chaseDataDidApi->error . "\n";
+                }
             }
         }
     }
@@ -732,7 +739,7 @@ class InternalSpamCheckService
         $bind['campaign'] = $campaign;
 
         $sql = "
-        SELECT id
+        SELECT id, Phone
         FROM [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers]
         WHERE GroupId = 2256969
         AND Campaign = :campaign";

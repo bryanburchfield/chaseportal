@@ -78,6 +78,11 @@ class Kernel extends ConsoleKernel
         // Internal Spam Check Report (production only)
         if (App::environment('production')) {
             $schedule->call(function () {
+                InternalSpamCheckService::interim();
+            })
+                ->everyTenMinutes();
+
+            $schedule->call(function () {
                 InternalSpamCheckService::execute('morning');
             })
                 ->dailyAt('08:00')
