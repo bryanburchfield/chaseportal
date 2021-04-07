@@ -3066,22 +3066,43 @@ textarea.nobg_txtarea.form-control{
 }
 
 // portal form builder
+#elements, #properties, #rendered{
+    background: #fff !important;
+
+    .form-group{
+        .form-control{
+            background: #eee;
+        }
+    }
+
+}
 
 #elements{
-    .component {cursor: pointer;}
+
     input {cursor: move;}
     textarea {resize: vertical;}
 
     .component{
+        cursor: pointer;
         background: #ccc;
         border:1px solid darken(#ccc, 5%);
         color:#333;
         text-align: center;
         padding: 10px 20px;
         margin-bottom: 3px;
+        width: 100%;
 
-        &:hover{
-            cursor:move;
+        & > :hover, &:active, &:focus{
+            cursor:move !important;
+        }
+    }
+}
+
+.portal_form_builder.nav-tabs{
+    li.active{
+        a{
+            background: $green;
+            color:#fff;
         }
     }
 }
@@ -3089,6 +3110,14 @@ textarea.nobg_txtarea.form-control{
 .dropzone{
     border:1px solid darken(#ccc, 5%);
     text-align: center;
+}
+
+#target{
+    .component{
+        &:hover{
+            cursor:move !important;
+        }
+    }
 }
 
 .form_preview{
@@ -3100,8 +3129,8 @@ textarea.nobg_txtarea.form-control{
 
 #temp{
     width: 500px;
-    background: white;
-    border: 1px dotted #ccc;
+    background: darken(#eee,2%);
+    border: 1px solid #ccc;
     border-radius: 10px;
 }
 
@@ -3127,9 +3156,6 @@ textarea.nobg_txtarea.form-control{
 
 #source{min-height: 500px;}
 #components {min-height: 500px;}
-.popover {z-index: 9999999;}
-.popover .control-group {cursor: default;}
-.popover input {cursor: text;}
 
 .temp{
     width: 100%;
@@ -3220,8 +3246,24 @@ form .popover form {width: 230px;overflow: auto;}
             margin-right: 10px;
         }
     }
-    
+
+    .form-control{margin-bottom: 10px;}
 }
+
+label.col-lg-3.control-label.valtype {text-align: left;}
+label.col-md-4.control-label.valtype {text-align: right;}
+
+// select#color{
+//     option.default{background: #ddd !important;}
+//     option.primary{background: #337ab7 !important; color:#fff !important;}
+//     option.info{background: #5bc0de !important;}
+//     option.success{background: #5cb85c  !important;}
+//     option.warning{background: #f0ad4e !important;}
+//     option.danger{background: #d9534f !important;}
+
+//     option{&:hover,&:focus, &:active, &:checked {background:#333 !important; color:#ddd !important;}}
+// }
+
 
 /* ---------------------------------------------------
 MEDIAQUERIES

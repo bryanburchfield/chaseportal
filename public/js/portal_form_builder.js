@@ -3,11 +3,12 @@ var PORTAL_FORM_BUILDER = {
 
 	init:function(){
 		$('#target').on('click', '.form-group.component', this.open_props_form);
-		$('form').delegate('.component', 'mousedown', this.drag_element);
-		$('#target').delegate('.component', 'click', this.add_vals);
-		$("#navtab").delegate("#sourcetab", "click", this.generateHTML);
+		$('form').on('mousedown', '.component', this.drag_element);
+		$('#target').on('click', '.component', this.add_vals);
+		$("#navtab").on("click", '#sourcetab', this.generateHTML);
 	},
 
+	// open properties form in tab panel that was in popover 
 	open_props_form(){
 		$('.nav-tabs a[href="#properties"]').tab('show')
 		var form = $(this).data('content');
@@ -40,10 +41,10 @@ var PORTAL_FORM_BUILDER = {
 
 	    var delayed = setTimeout(function(){
 	    	if(type === "main"){
-	        	$temp = $("<form class='form-horizontal col-md-6' id='temp'></form>").append($this.clone());
+	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
 	    	}else {
 		        if($this.attr("id") !== "legend"){
-		        	$temp = $("<form class='form-horizontal col-md-6' id='temp'></form>").append($this);
+		        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this);
 		        }
 		    }
 
@@ -149,74 +150,79 @@ var PORTAL_FORM_BUILDER = {
 
 	add_vals(e){
     	e.preventDefault();
-    	$(".popover").hide();
+    	// $(".popover").hide();
     	var $active_component = $(this);
-    	$active_component.popover("show");
+    	console.log($active_component);
+    	// $active_component.popover("show");
     	var valtypes = $active_component.find(".valtype");
     	$.each(valtypes, function(i,e){
     		var valID ="#" + $(e).attr("data-valtype");
     		var val;
     		if(valID ==="#placeholder"){
         		val = $(e).attr("placeholder");
-        		$(".popover " + valID).val(val);
+        		console.log(val);
+        		$(".elements #properties form " + valID).val(val);
     		}else if(valID ==="#href"){
         		val = $(e).attr("href");
-        		$(".popover " + valID).val(val);
+        		$(".elements #properties form " + valID).val(val);
     		}else if(valID ==="#src"){
         		val = $(e).attr("src");
-        		$(".popover " + valID).val(val);
+        		$(".elements #properties form " + valID).val(val);
     		}else if(valID==="#checkbox"){
         		val = $(e).attr("checked");
-        		$(".popover " + valID).attr("checked",val);
+        		$(".elements #properties form " + valID).attr("checked",val);
     		}else if(valID==="#option"){
         		val = $.map($(e).find("option"), function(e,i){return $(e).text()});
         		val = val.join("\n")
-    			$(".popover "+valID).text(val);
+    			$(".elements #properties form "+valID).text(val);
     		}else if(valID==="#checkboxes"){
         		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
         		val = val.join("\n")
-    			$(".popover "+valID).text(val);
+    			$(".elements #properties form "+valID).text(val);
     		}else if(valID==="#radios"){
         		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
         		val = val.join("\n");
-        		$(".popover "+valID).text(val);
-        		$(".popover #name").val($(e).find("input").attr("name"));
+        		$(".elements #properties form "+valID).text(val);
+        		$(".elements #properties form #name").val($(e).find("input").attr("name"));
     		}else if(valID==="#inline-checkboxes"){
         		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
         		val = val.join("\n")
-        		$(".popover "+valID).text(val);
+        		$(".elements #properties form "+valID).text(val);
     		}else if(valID==="#inline-radios"){
         		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
         		val = val.join("\n")
-        		$(".popover "+valID).text(val);
-        		$(".popover #name").val($(e).find("input").attr("name"));
+        		$(".elements #properties form "+valID).text(val);
+        		$(".elements #properties form #name").val($(e).find("input").attr("name"));
     		}else if(valID==="#button") {
         		val = $(e).text();
         		var type = $(e).find("button").attr("class").split(" ").filter(function(e){return e.match(/btn-.*/)});
-        		$(".popover #color option").attr("selected", null);
+        		$(".elements #properties form #color option").attr("selected", null);
+
+        		console.log(type);
 	        	if(type.length === 0){
-	        		$(".popover #color #default").attr("selected", "selected");
+	        		$(".elements #properties form #color #default").attr("selected", "selected");
 	        	}else {
-	        		$(".popover #color #"+type[0]).attr("selected", "selected");
+	        		$(".elements #properties form #color #"+type[0]).attr("selected", "selected");
 	        	}
 
 	        	val = $(e).find(".btn").text();
-        		$(".popover #button").val(val);
+        		$(".elements #properties form  #button").val(val);
     		}else {
         		val = $(e).text();
-        		$(".popover " + valID).val(val);
+        		$(".elements #properties form  " + valID).val(val);
       		}
     	});
 
-		$(".popover").delegate(".btn-danger", "click", function(e){
+		$('.elements #properties form').on('click', '.btn.cancel_edit', function(e){
 			e.preventDefault();
-			$active_component.popover("hide");
+			$('.nav-tabs a[href="#elements"]').tab('show')
+			// PORTAL_FORM_BUILDER.add_vals()
 		});
 
-		$(".popover").delegate(".btn-info", "click", function(e){
+		$('.elements #properties form').on('click', '.btn.save_edit', function(e){
 			e.preventDefault();
-			var inputs = $(".popover input");
-			inputs.push($(".popover textarea")[0]);
+			var inputs = $('.elements #properties form input');
+			inputs.push($('.elements #properties form textarea')[0]);
 
 			$.each(inputs, function(i,e){
 				var vartype = $(e).attr("id");
@@ -251,7 +257,7 @@ var PORTAL_FORM_BUILDER = {
 	        		});
 	        		$(value).append("\n  ")
 	    		} else if (vartype==="radios"){
-	        		var group_name = $(".popover #name").val();
+	        		var group_name = $(".elements #properties form #name").val();
 	        		var radios = $(e).val().split("\n");
 	        		$(value).html("\n      <!-- Multiple Radios -->");
 	        		$.each(radios, function(i,e){
@@ -266,30 +272,32 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).html("\n      <!-- Inline Checkboxes -->");
 	        		$.each(checkboxes, function(i,e){
 	        			if(e.length > 0){
-	            			$(value).append('\n      <label class="checkbox inline">\n        <input type="checkbox" value="'+e+'">\n        '+e+'\n      </label>');
+	            			$(value).append('\n      <label class="checkbox-inline"><input type="checkbox" value="'+e+'">\n        '+e+'\n</label>');
 	          			}
 	        		});
 	        		$(value).append("\n  ")
 	    		}else if (vartype==="inline-radios"){
 	        		var radios = $(e).val().split("\n");
-	        		var group_name = $(".popover #name").val();
+	        		var group_name = $(".elements #properties form #name").val();
 	        		$(value).html("\n      <!-- Inline Radios -->");
 	        		$.each(radios, function(i,e){
 	          			if(e.length > 0){
-	            			$(value).append('\n      <label class="radio inline">\n        <input type="radio" value="'+e+'" name="'+group_name+'">\n        '+e+'\n      </label>');
+	            			$(value).append('\n      <label class="radio-inline"><input type="radio" name="'+group_name+'" value="'+e+'">\n        '+e+'\n</label>');
 	          			}
 	        		});
 	        		$(value).append("\n  ")
 	          		$($(value).find("input")[0]).attr("checked", true)
 	    		}else if (vartype === "button"){
-	        		var type =  $(".popover #color option:selected").attr("id");
+	    			console.log(vartype);
+	        		var type =  $(".elements #properties form #color option:selected").attr("id");
 	        		$(value).find("button").text($(e).val()).attr("class", "btn "+type);
 	    		}else {
 	        		$(value).text($(e).val());
 	      		}
 
 	    		$active_component.popover("hide");
-	    		
+
+	    		PORTAL_FORM_BUILDER.save_edit();
 	    		PORTAL_FORM_BUILDER.generateHTML();
 	    	});
 	    });
@@ -311,6 +319,11 @@ var PORTAL_FORM_BUILDER = {
 	    $($temptxt).find(".component").removeClass("component");
 	    $($temptxt).find("form").attr({"id":  null, "style": null});
 	    $("#source").val($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
+	},
+
+	save_edit:function(){
+		console.log('save ran');
+		$('.nav-tabs a[href="#elements"]').tab('show');
 	}
 }
 
@@ -326,5 +339,9 @@ $(document).ready(function(){
 		if(e.keyCode === 27){
 			$(".popover").hide();
 		}
+	});
+
+	$('pre').each(function(i, block) {
+	    hljs.highlightBlock(block);
 	});
 });
