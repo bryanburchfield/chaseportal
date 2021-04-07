@@ -342,7 +342,7 @@ class InternalSpamCheckService
         SELECT * INTO #ratio FROM (
             SELECT CallerId,
             SUM(CASE WHEN callstatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
-            SUM(CASE WHEN sip_bye = 1 THEN 1 ELSE 0 END) AS RemoteHangup
+            SUM(CASE WHEN sip_bye = 1 AND route != '' THEN 1 ELSE 0 END) AS RemoteHangup
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
@@ -369,6 +369,7 @@ class InternalSpamCheckService
             AND Campaign = 'TOP_1500_USED_DIDS'
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
+            AND route != ''
         ) tmp";
 
         return $sql;
