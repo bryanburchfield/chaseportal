@@ -3422,10 +3422,17 @@ textarea.nobg_txtarea.form-control{
 
     .form-group{
         .form-control{
+            background: #fff;
+        }
+    }
+}
+
+#properties, #rendered{
+    .form-group{
+        .form-control{
             background: #eee;
         }
     }
-
 }
 
 #elements{
@@ -3466,6 +3473,7 @@ textarea.nobg_txtarea.form-control{
 #target{
     .component{
         &:hover{
+            border:1px solid $green;
             cursor:move !important;
         }
     }
