@@ -3416,6 +3416,206 @@ textarea.nobg_txtarea.form-control{
     
 }
 
+// portal form builder
+#elements, #properties, #rendered{
+    background: #fff !important;
+
+    .form-group{
+        .form-control{
+            background: #eee;
+        }
+    }
+
+}
+
+#elements{
+
+    input {cursor: move;}
+    textarea {resize: vertical;}
+
+    .component{
+        cursor: pointer;
+        background: #ccc;
+        border:1px solid darken(#ccc, 5%);
+        color:#333;
+        text-align: center;
+        padding: 10px 20px;
+        margin-bottom: 3px;
+        width: 100%;
+
+        & > :hover, &:active, &:focus{
+            cursor:move !important;
+        }
+    }
+}
+
+.portal_form_builder.nav-tabs{
+    li.active{
+        a{
+            background: $green;
+            color:#fff;
+        }
+    }
+}
+
+.dropzone{
+    border:1px solid darken(#ccc, 5%);
+    text-align: center;
+}
+
+#target{
+    .component{
+        &:hover{
+            cursor:move !important;
+        }
+    }
+}
+
+.form_preview{
+    margin-top: 50px;
+    background: #333;
+    min-height: 250px;
+    padding: 20px;
+}
+
+#temp{
+    width: 500px;
+    background: darken(#eee,2%);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+#target{
+    min-height: 200px;
+    padding: 20px 10px;
+    background: #fff;
+    border: 1px solid #bfbfbf;
+
+    .form-control{
+        background: #eee;
+    }
+}
+
+.popover-content form {
+    margin: 0 auto;
+    width: 213px;
+}
+.popover-content form .btn{
+    margin-right: 10px;
+    margin-top: 12px;
+}
+
+#source{min-height: 500px;}
+#components {min-height: 500px;}
+
+.temp{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    position: absolute;
+    z-index: 999999;
+    top: 0;
+    overflow-x: hidden;
+    left: 0;
+}
+
+.temp form {
+    padding: 8px 4px;
+    border: 1px dotted #ccc;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 0px 30px #999;
+    -webkit-transition: -webkit-transform 0.1s ease-out;
+    overflow: hidden;
+}
+
+#render{
+    min-height: 500px;
+    font-family: monospace;
+}
+
+form .popover .controls {margin-left: 0;}
+form .popover .control-label {text-align: left;}
+form .popover form {width: 230px;overflow: auto;}
+.popover-content form .btn{margin-right: 10px}
+
+.target:after{
+    float:left;
+    content: " ";
+    height: 77px; 
+    margin-top: 3px;
+    background: #f0f0f0;
+    width: 100%;
+    border: 1px dashed #ccc;
+}
+
+#target, #input, #radioscheckboxes, #select, #buttons {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#target fieldset{
+    width: 100%;
+    overflow: hidden;
+    min-height: 400px;
+    padding: 5px;
+    padding-bottom: 30px;
+
+    p{
+        padding-top: 80px;
+        font-size: 20px;
+        font-weight: 600;
+        color:#888;
+    }
+
+    legend{
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+}
+
+.tab-pane{
+    border:1px solid darken(#ddd, 5%);
+    background: #ddd;
+    padding: 20px;
+    overflow: auto;
+}
+
+.form-horizontal .form-group{
+    padding: 12px 0;
+    margin: 0;
+}
+
+.tab-pane .form{
+    .form-group{
+        .btn{
+            margin-top: 12px;
+            margin-right: 10px;
+        }
+    }
+
+    .form-control{margin-bottom: 10px;}
+}
+
+label.col-lg-3.control-label.valtype {text-align: left;}
+label.col-md-4.control-label.valtype {text-align: right;}
+
+// select#color{
+//     option.default{background: #ddd !important;}
+//     option.primary{background: #337ab7 !important; color:#fff !important;}
+//     option.info{background: #5bc0de !important;}
+//     option.success{background: #5cb85c  !important;}
+//     option.warning{background: #f0ad4e !important;}
+//     option.danger{background: #d9534f !important;}
+
+//     option{&:hover,&:focus, &:active, &:checked {background:#333 !important; color:#ddd !important;}}
+// }
+
+
 /* ---------------------------------------------------
 MEDIAQUERIES
 ----------------------------------------------------- */

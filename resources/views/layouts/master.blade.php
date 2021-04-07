@@ -89,6 +89,8 @@
     <script src="{{ asset('/js/summernote.min.js') }}"></script>
     @endisset
     
+    <script scr="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
     @isset($jsfile)
     @foreach($jsfile as $js)
     <script src="/js/{{ $js }}" type="text/javascript"></script>

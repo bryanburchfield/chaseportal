@@ -9,6 +9,8 @@ Route::prefix('tools')->group(function () {
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     });
 
+    Route::get('portal_form_builder', 'FormBuilderController@portal_form_builder');
+
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
