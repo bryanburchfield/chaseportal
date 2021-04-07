@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 
 class FormBuilderController extends Controller
 {
-    public function index()
-    {	
 
+    public function portal_form_builder(){
     	$page = [
     	    'menuitem' => 'form_builder',
     	    'sidenav' => 'tools',
