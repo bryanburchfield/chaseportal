@@ -16,7 +16,7 @@ class AddPeriodToInternalPhoneFlags extends Migration
     public function up()
     {
         Schema::connection('phoneflags')->table('internal_phone_flags', function (Blueprint $table) {
-            $table->string('period', 20)->after('run_date');
+            $table->string('period', 20)->after('run_date')->nullable();
         });
 
         // update existing recs
