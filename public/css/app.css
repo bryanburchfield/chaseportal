@@ -3695,6 +3695,12 @@ textarea.nobg_txtarea.form-control {
   background: #fff;
 }
 
+#elements .tab-pane,
+#properties .tab-pane,
+#rendered .tab-pane {
+  border: 1px solid #ccc;
+}
+
 #properties .form-group .form-control,
 #rendered .form-group .form-control {
   background: #eee;
@@ -3733,6 +3739,7 @@ textarea.nobg_txtarea.form-control {
 .dropzone {
   border: 1px solid #bfbfbf;
   text-align: center;
+  position: relative;
 }
 
 #target .component:hover {
@@ -3741,14 +3748,24 @@ textarea.nobg_txtarea.form-control {
 }
 
 .form_preview {
+  display: none;
   margin-top: 50px;
   background: #333;
-  min-height: 250px;
+  min-height: 400px;
   padding: 20px;
+  overflow: auto;
+  color: #88F860;
+}
+
+.form_preview #source {
+  min-height: 400px;
+  background: none;
+  border: none;
+  font-family: monospace;
 }
 
 #temp {
-  width: 500px;
+  max-width: 650px;
   background: #e9e9e9;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -3773,10 +3790,6 @@ textarea.nobg_txtarea.form-control {
 .popover-content form .btn {
   margin-right: 10px;
   margin-top: 12px;
-}
-
-#source {
-  min-height: 500px;
 }
 
 #components {
@@ -3804,25 +3817,15 @@ textarea.nobg_txtarea.form-control {
   overflow: hidden;
 }
 
-#render {
-  min-height: 500px;
-  font-family: monospace;
-}
-
-form .popover .controls {
+form .tab-content .controls {
   margin-left: 0;
 }
 
-form .popover .control-label {
+form .tab-content .control-label {
   text-align: left;
 }
 
-form .popover form {
-  width: 230px;
-  overflow: auto;
-}
-
-.popover-content form .btn {
+.tab-content form .btn {
   margin-right: 10px;
 }
 
@@ -3887,6 +3890,11 @@ form .popover form {
 
 .tab-pane .form .form-control {
   margin-bottom: 10px;
+}
+
+.tab-pane .checkbox,
+.tab-pane .radio {
+  padding-left: 20px !important;
 }
 
 label.col-lg-3.control-label.valtype {
