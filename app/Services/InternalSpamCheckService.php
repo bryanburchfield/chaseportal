@@ -92,6 +92,10 @@ class InternalSpamCheckService
         Log::info('Load test campaigns');
         $this->loadTestCampaigns();
 
+        echo "Set completed_at\n";
+        Log::info('Set completed_at');
+        $this->setCompletedAt();
+
         echo "Finished\n";
         Log::info('Finished');
     }
@@ -100,6 +104,14 @@ class InternalSpamCheckService
     {
         $this->period = 'interim';
         Log::info('Starting Internal Spam Check - interim');
+
+        echo "Check if report is running\n";
+        Log::info('Check if report is running');
+        if ($this->isRunning()) {
+            echo "Currently running\n";
+            Log::info('Currently running');
+            return;
+        }
 
         $this->initialize();
 
@@ -134,6 +146,30 @@ class InternalSpamCheckService
             Log::error('Error creating InternalPhoneCount: ' . $this->did_count);
             Log::critical($e->getMessage());
         }
+    }
+
+    private function isRunning()
+    {
+        $internal_phone_count = InternalPhoneCount::latest('run_date')->first();
+
+        if (!$internal_phone_count) {
+            return false;
+        }
+
+        return empty($internal_phone_count->completed_at);
+    }
+
+    private function setCompletedAt()
+    {
+        $internal_phone_count = InternalPhoneCount::where('run_date', $this->run_date)->first();
+
+        if (!$internal_phone_count) {
+            Log::error('Cant find InternalPhoneCount: ' . $this->did_count);
+            return;
+        }
+
+        $internal_phone_count->completed_at = now();
+        $internal_phone_count->save();
     }
 
     private function didQuery()
