@@ -788,14 +788,29 @@ class InternalSpamCheckService
 
     private function loadTestCampaigns()
     {
-        $dids = array_keys(resultsToList($this->getTopDids()));
+        // load most used DIDs into both test campaigns
+        $topdids = array_keys(resultsToList($this->getTopDids()));
 
-        foreach ($dids as $did) {
+        foreach ($topdids as $did) {
             if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
             if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'VERIZON')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
+
+        // load all Teldar DIDs
+        $teldardids = array_keys(resultsToList($this->getTeldarDids()));
+
+        // remove any that were top dids
+        $diff = array_diff($teldardids, $topdids);
+
+        // load into top1500 campaign
+        foreach ($diff as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
@@ -855,22 +870,25 @@ class InternalSpamCheckService
             $union = 'UNION ALL';
         }
 
-        // Load all of Teldar's regardless
-        $sql .= "
-        UNION
-        SELECT O.Phone as CallerId, 99999 AS Cnt
-        FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
-        INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId = 1111
-        AND O.Active = 1
-        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
-        ";
-
         $sql .= ") tmp
         GROUP BY CallerId
         HAVING SUM(Cnt) >= @minDials
         ORDER BY CallerId";
 
         return $this->runSql($sql, $bind);
+    }
+
+    private function getTeldarDids()
+    {
+        $sql = "SET NOCOUNT ON
+
+        SELECT O.Phone as CallerId
+        FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
+        INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
+        WHERE I.GroupId = 1111
+        AND O.Active = 1
+        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
+
+        return $this->runSql($sql);
     }
 }
