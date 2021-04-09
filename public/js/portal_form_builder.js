@@ -42,14 +42,7 @@ var PORTAL_FORM_BUILDER = {
 
 	    var delayed = setTimeout(function(){
 	    	if(type === "main"){
-
-				// $this.parent().remove();
-				$this = $($this).find('.hidetilloaded');
-				console.log($($this).html());
-				//.wrap('<div class="col-sm-6"></div>')
-		    	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($($this).html());
-
-	        	// $temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
+	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
 	    	}else {
 		        if($this.attr("id") !== "legend"){
 		        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this);

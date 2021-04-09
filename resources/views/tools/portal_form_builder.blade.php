@@ -43,17 +43,6 @@
 												>
 
 												<!-- Text input-->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class=" control-label valtype" for="input01" data-valtype='label'>Text input</label>
-														<div class="">
-															<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
-														</div>
-													</div>
-												</div>
-												
-
-												<!-- Text input-->
 												<label class="col-md-4 col-lg-3 control-label valtype" for="input01" data-valtype='label'>Text input</label>
 												<div class="col-md-8 col-lg-9">
 													<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
