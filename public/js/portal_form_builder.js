@@ -1,6 +1,8 @@
 
 var PORTAL_FORM_BUILDER = {
 
+	active_tab:'#inputs',
+
 	init:function(){
 		$('#target').on('click', '.form-group.component', this.open_props_form);
 		$('form').on('mousedown', '.component', this.drag_element);
@@ -8,7 +10,7 @@ var PORTAL_FORM_BUILDER = {
 		$("#navtab").on("click", '#sourcetab', this.generateHTML);
 	},
 
-	// open properties form in tab panel that was in popover 
+	// open properties form in tab panel
 	open_props_form(){
 		$('.nav-tabs a[href="#properties"]').tab('show')
 		var form = $(this).data('content');
@@ -17,7 +19,6 @@ var PORTAL_FORM_BUILDER = {
 	},
 
 	drag_element(md){
-	    $(".popover").remove();
 
 	    md.preventDefault();
 	    var tops = [];
@@ -71,13 +72,13 @@ var PORTAL_FORM_BUILDER = {
 
 	        	$temp.css({"top"      : mm_mouseY - half_box_height + "px",
 	        		"left"      : mm_mouseX - half_box_width  + "px"});
-
+	        	console.log(half_box_width);
 	        	if ( mm_mouseX > tar_pos.left &&
-	        		mm_mouseX < tar_pos.left + $target.width() + $temp.width()/2 &&
+	        		mm_mouseX < tar_pos.left + $target.width() + $temp.width() &&
 	        		mm_mouseY > tar_pos.top &&
-	        		mm_mouseY < tar_pos.top + $target.height() + $temp.height()/2
+	        		mm_mouseY < tar_pos.top + $target.height() + $temp.height()
 	        	){
-	            	$("#target").css("background-color", "#fafdff");
+	            	$("#target").css("background-color", "#fff");
 	            	$target_component.css({"border-top" : "1px solid white", "border-bottom" : "none"});
 	            	tops = $.grep($target_component, function(e){
 	            		return ($(e).position().top -  mm_mouseY + half_box_height > 0 && $(e).attr("id") !== "legend");
@@ -86,7 +87,7 @@ var PORTAL_FORM_BUILDER = {
 	            	$(tops[0]).css("border-top", "1px solid #22aaff");
 	            }else{
 	            	if($target_component.length > 0){
-	                	$($target_component[$target_component.length - 1]).css("border-bottom", "1px solid #22aaff");
+	                	$($target_component[$target_component.length - 1]).css("border-bottom", "1px solid 22aaff");
 	            	}
 	            }
 	        	}else{
@@ -123,11 +124,9 @@ var PORTAL_FORM_BUILDER = {
 	            	tops = [];
 	        	}
 
-		        //clean up & add popover
 		        $target.css("background-color", "#fff");
 		        $(document).undelegate("body", "mousemove");
 		        $("body").undelegate("#temp","mouseup");
-		        // $("#target .component").popover({trigger: "manual"});
 		        $temp.remove();
 		        PORTAL_FORM_BUILDER.generateHTML();
 	    	});
@@ -150,17 +149,13 @@ var PORTAL_FORM_BUILDER = {
 
 	add_vals(e){
     	e.preventDefault();
-    	// $(".popover").hide();
     	var $active_component = $(this);
-    	console.log($active_component);
-    	// $active_component.popover("show");
     	var valtypes = $active_component.find(".valtype");
     	$.each(valtypes, function(i,e){
     		var valID ="#" + $(e).attr("data-valtype");
     		var val;
     		if(valID ==="#placeholder"){
         		val = $(e).attr("placeholder");
-        		console.log(val);
         		$(".elements #properties form " + valID).val(val);
     		}else if(valID ==="#href"){
         		val = $(e).attr("href");
@@ -213,12 +208,14 @@ var PORTAL_FORM_BUILDER = {
       		}
     	});
 
+    	/// CANCEL EDIT
 		$('.elements #properties form').on('click', '.btn.cancel_edit', function(e){
 			e.preventDefault();
 			$('.nav-tabs a[href="#elements"]').tab('show')
 			// PORTAL_FORM_BUILDER.add_vals()
 		});
 
+		/// SAVE EDIT
 		$('.elements #properties form').on('click', '.btn.save_edit', function(e){
 			e.preventDefault();
 			var inputs = $('.elements #properties form input');
@@ -295,14 +292,15 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).text($(e).val());
 	      		}
 
-	    		$active_component.popover("hide");
-
-	    		PORTAL_FORM_BUILDER.save_edit();
 	    		PORTAL_FORM_BUILDER.generateHTML();
+	    		console.log(PORTAL_FORM_BUILDER.active_tab);
+	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');
+	    		
 	    	});
 	    });
 	},
 
+	/// GENERATE CODE
 	generateHTML(){
 	    var $temptxt = $("<div>").html($("#build").html());
 	    $($temptxt).find(".component").attr({"title": null,
@@ -318,30 +316,16 @@ var PORTAL_FORM_BUILDER = {
 		$($temptxt).find(".valtype").attr("data-valtype", null).removeClass("valtype");
 	    $($temptxt).find(".component").removeClass("component");
 	    $($temptxt).find("form").attr({"id":  null, "style": null});
+	    $('.form_preview').show();
 	    $("#source").val($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
 	},
-
-	save_edit:function(){
-		console.log('save ran');
-		$('.nav-tabs a[href="#elements"]').tab('show');
-	}
 }
 
 $(document).ready(function(){
 
 	PORTAL_FORM_BUILDER.init();
 
-	//activate legend popover
-	// $("#target .component").popover({trigger: "manual"});
-
-	/// close popover from escape key
-	$(document).keyup(function(e) {
-		if(e.keyCode === 27){
-			$(".popover").hide();
-		}
-	});
-
-	$('pre').each(function(i, block) {
-	    hljs.highlightBlock(block);
-	});
+	$('.nav-tabs a').on('click', function(){
+		PORTAL_FORM_BUILDER.active_tab = $(this).attr('href');
+	});	
 });

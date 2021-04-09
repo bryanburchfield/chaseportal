@@ -3425,6 +3425,10 @@ textarea.nobg_txtarea.form-control{
             background: #fff;
         }
     }
+
+    .tab-pane{
+        border:1px solid #ccc;
+    }
 }
 
 #properties, #rendered{
@@ -3468,6 +3472,7 @@ textarea.nobg_txtarea.form-control{
 .dropzone{
     border:1px solid darken(#ccc, 5%);
     text-align: center;
+    position: relative;
 }
 
 #target{
@@ -3480,14 +3485,24 @@ textarea.nobg_txtarea.form-control{
 }
 
 .form_preview{
+    display: none;
     margin-top: 50px;
     background: #333;
-    min-height: 250px;
+    min-height: 400px;
     padding: 20px;
+    overflow: auto;
+    color:#88F860;
+
+    #source{
+        min-height: 400px;
+        background: none; 
+        border:none;
+        font-family: monospace;
+    }
 }
 
 #temp{
-    width: 500px;
+    max-width: 650px;
     background: darken(#eee,2%);
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -3513,7 +3528,6 @@ textarea.nobg_txtarea.form-control{
     margin-top: 12px;
 }
 
-#source{min-height: 500px;}
 #components {min-height: 500px;}
 
 .temp{
@@ -3537,15 +3551,10 @@ textarea.nobg_txtarea.form-control{
     overflow: hidden;
 }
 
-#render{
-    min-height: 500px;
-    font-family: monospace;
-}
-
-form .popover .controls {margin-left: 0;}
-form .popover .control-label {text-align: left;}
-form .popover form {width: 230px;overflow: auto;}
-.popover-content form .btn{margin-right: 10px}
+form .tab-content .controls {margin-left: 0;}
+form .tab-content .control-label {text-align: left;}
+// form .tab-content form {width: 230px;overflow: auto;}
+.tab-content form .btn{margin-right: 10px}
 
 .target:after{
     float:left;
@@ -3609,19 +3618,13 @@ form .popover form {width: 230px;overflow: auto;}
     .form-control{margin-bottom: 10px;}
 }
 
+.tab-pane{
+    .checkbox, .radio{padding-left: 20px  !important; }
+}
+
 label.col-lg-3.control-label.valtype {text-align: left;}
 label.col-md-4.control-label.valtype {text-align: right;}
 
-// select#color{
-//     option.default{background: #ddd !important;}
-//     option.primary{background: #337ab7 !important; color:#fff !important;}
-//     option.info{background: #5bc0de !important;}
-//     option.success{background: #5cb85c  !important;}
-//     option.warning{background: #f0ad4e !important;}
-//     option.danger{background: #d9534f !important;}
-
-//     option{&:hover,&:focus, &:active, &:checked {background:#333 !important; color:#ddd !important;}}
-// }
 
 
 /* ---------------------------------------------------
