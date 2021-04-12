@@ -17,7 +17,7 @@ class AreaCode extends Model
 
     public function nearbyAreaCodes()
     {
-        return $this->hasMany('App\NearbyAreaCode', 'source_npa');
+        return $this->hasMany('App\Models\NearbyAreaCode', 'source_npa');
     }
 
     public function alternateNpas()

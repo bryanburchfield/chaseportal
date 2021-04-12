@@ -19,6 +19,6 @@ class SpamCheckBatchDetail extends Model
 
     public function spamcCheckBatch()
     {
-        return $this->belongsTo('App\Models\SpamcCheckBatch');
+        return $this->belongsTo('App\Models\SpamCheckBatch');
     }
 }

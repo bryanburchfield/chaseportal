@@ -15,11 +15,11 @@ class NearbyAreaCode extends Model
 
     public function sourceAreaCode()
     {
-        return $this->belongsTo('App\AreaCode', 'source_npa', 'npa');
+        return $this->belongsTo('App\Models\AreaCode', 'source_npa', 'npa');
     }
 
     public function nearbyAreaCode()
     {
-        return $this->belongsTo('App\AreaCode', 'nearby_npa', 'npa');
+        return $this->belongsTo('App\Models\AreaCode', 'nearby_npa', 'npa');
     }
 }
