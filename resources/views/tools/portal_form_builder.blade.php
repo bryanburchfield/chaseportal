@@ -44,18 +44,17 @@
 												<!-- Text input-->
 												<div class="hidetilloaded">
 													<div class="col-sm-6">
-														<label class=" control-label valtype" for="input01" data-valtype='label'>Text input</label>
-														<div class="">
+														<div class="form-group">
+															<label class=" control-label valtype" for="input01" data-valtype='label'>Text input</label>
 															<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
 														</div>
 													</div>
 												</div>
 												
-
 												<div class="draggable">
 													<!-- Text input-->
-													<label class="col-md-4 col-lg-3 control-label valtype" for="input01" data-valtype='label'>Text input</label>
-													<div class="col-md-8 col-lg-9">
+													<div class="form-group">
+													<label class="control-label valtype" for="input01" data-valtype='label'>Text input</label>
 														<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
 													</div>
 												</div>
@@ -72,10 +71,22 @@
 												</form>" data-html="true" 
 												>
 
-												<!-- Text input-->
-												<label class="col-md-4 col-lg-3 control-label valtype" for="input01" data-valtype='label'>Password input</label>
-												<div class="col-md-8 col-lg-9">
-													<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+												<!-- Password input-->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class=" control-label valtype" for="input01" data-valtype='label'>Password input</label>
+															<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+														</div>
+													</div>
+												</div>
+												
+												<div class="draggable">
+													<!-- Password input-->
+													<div class="form-group">
+													<label class="control-label valtype" for="input01" data-valtype='label'>Password input</label>
+														<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+													</div>
 												</div>
 											</div>
 
@@ -90,11 +101,25 @@
 												</form>" data-html="true" 
 												>
 
+												<!-- Textarea-->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class=" control-label valtype" for="input01" data-valtype='label'>Password input</label>
+															<div class="textarea">
+																<textarea class="form-control valtype" data-valtype="checkbox" /> </textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+
 												<!-- Textarea -->
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Textarea</label>
-												<div class="col-md-8 col-lg-9">
-													<div class="textarea">
-														<textarea class="form-control valtype" data-valtype="checkbox" /> </textarea>
+												<div class="draggable">
+													<div class="form-group">
+														<label class="control-label valtype" data-valtype="label">Textarea</label>
+														<div class="textarea">
+															<textarea class="form-control valtype" data-valtype="checkbox" /> </textarea>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -113,9 +138,19 @@
 												</form>" data-html="true" 
 												>
 
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="control-label valtype" data-valtype="label">Prepended text</label>
+														<div class="input-group">
+															<span class="input-group-addon valtype" data-valtype="prepend">^_^</span>
+															<input class="form-control valtype" placeholder="placeholder" id="prependedInput" type="text" data-valtype="placeholder">
+														</div>
+													</div>
+												</div>
+
 												<!-- Prepended text-->
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Prepended text</label>
-												<div class="col-md-8 col-lg-9">
+												<div class="draggable">
+													<label class="control-label valtype" data-valtype="label">Prepended text</label>
 													<div class="input-group">
 														<span class="input-group-addon valtype" data-valtype="prepend">^_^</span>
 														<input class="form-control valtype" placeholder="placeholder" id="prependedInput" type="text" data-valtype="placeholder">
@@ -138,14 +173,30 @@
 												</div>
 												</form>" data-html="true"
 												>
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
-												<div class="col-md-8 col-lg-9 valtype" data-valtype="inline-radios">
-
-													<!-- Inline Radios -->
-													<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
-													<label class="radio-inline"><input type="radio" name="optradio">2</label>
-													<label class="radio-inline"><input type="radio" name="optradio">3</label>
+												
+												<!-- Inline Radios -->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
+														<div class="valtype form-group" data-valtype="inline-radios">
+															<!-- Inline Radios -->
+															<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
+															<label class="radio-inline"><input type="radio" name="optradio">2</label>
+															<label class="radio-inline"><input type="radio" name="optradio">3</label>
+														</div>
+													</div>
 												</div>
+
+												<!-- Inline Radios -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
+													<div class="valtype form-group" data-valtype="inline-radios">
+														<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
+														<label class="radio-inline"><input type="radio" name="optradio">2</label>
+														<label class="radio-inline"><input type="radio" name="optradio">3</label>
+													</div>
+												</div>
+
 											</div>
 
 											<div class="form-group component" rel="popover" title="Multiple Radios" trigger="manual"
@@ -161,20 +212,39 @@
 												</div>
 												</form>" data-html="true"
 												>
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Radio buttons</label>
-												<div class="col-md-8 col-lg-9 valtype" data-valtype="radios">
 
-													<!-- Multiple Radios -->
-													<label class="radio">
-														<input type="radio" value="Option one" name="group" checked="checked">
-														Option one
-													</label>
-													<label class="radio">
-														<input type="radio" value="Option two" name="group">
-														Option two
-													</label>
+												<!-- Multiple Radios -->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="control-label valtype" data-valtype="label">Radio buttons</label>
+														<div class="valtype" data-valtype="radios">
+															<label class="radio">
+																<input type="radio" value="Option one" name="group" checked="checked">
+																Option one
+															</label>
+															<label class="radio">
+																<input type="radio" value="Option two" name="group">
+																Option two
+															</label>
+														</div>
+													</div>
 												</div>
 
+												<!-- Multiple Radios -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Radio buttons</label>
+													<div class="col-md-8 col-lg-9 valtype" data-valtype="radios">
+
+														<label class="radio">
+															<input type="radio" value="Option one" name="group" checked="checked">
+															Option one
+														</label>
+														<label class="radio">
+															<input type="radio" value="Option two" name="group">
+															Option two
+														</label>
+													</div>
+												</div>
 											</div>
 
 											<div class="form-group component" title="Inline Checkboxes"
@@ -188,12 +258,27 @@
 												</div>
 												</form>" data-html="true"
 												>
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline Checkboxes</label>
 
-												<div class="col-md-8 col-lg-9 valtype" data-valtype="inline-checkboxes">
-													<label class="checkbox-inline"><input type="checkbox" value="">1</label>
-													<label class="checkbox-inline"><input type="checkbox" value="">2</label>
-													<label class="checkbox-inline"><input type="checkbox" value="">3</label>
+												<!-- Inline Checkboxes -->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline Checkboxes</label>
+														<div class="valtype" data-valtype="inline-checkboxes">
+															<label class="checkbox-inline"><input type="checkbox" value="">1</label>
+															<label class="checkbox-inline"><input type="checkbox" value="">2</label>
+															<label class="checkbox-inline"><input type="checkbox" value="">3</label>
+														</div>
+													</div>
+												</div>
+
+												<!-- Inline Checkboxes -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline Checkboxes</label>
+													<div class="valtype" data-valtype="inline-checkboxes">
+														<label class="checkbox-inline"><input type="checkbox" value="">1</label>
+														<label class="checkbox-inline"><input type="checkbox" value="">2</label>
+														<label class="checkbox-inline"><input type="checkbox" value="">3</label>
+													</div>
 												</div>
 											</div>
 
@@ -209,20 +294,41 @@
 												</div>
 												</form>" data-html="true"
 												>
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Checkboxes</label>
-												<div class="col-md-8 col-lg-9 valtype" data-valtype="checkboxes">
 
-													<!-- Multiple Checkboxes -->
-													<label class="checkbox">
-														<input type="checkbox" value="Option one">
-														Option one
-													</label>
-													<label class="checkbox">
-														<input type="checkbox" value="Option two">
-														Option two
-													</label>
+												<!-- Multiple Checkboxes -->
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="control-label valtype" data-valtype="label">Checkboxes</label>
+														<div class=" valtype" data-valtype="checkboxes">
+
+															<label class="checkbox">
+																<input type="checkbox" value="Option one">
+																Option one
+															</label>
+															<label class="checkbox">
+																<input type="checkbox" value="Option two">
+																Option two
+															</label>
+														</div>
+													</div>
 												</div>
 
+												<!-- Multiple Checkboxes -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Checkboxes</label>
+													<div class="col-md-8 col-lg-9 valtype" data-valtype="checkboxes">
+
+														<!-- Multiple Checkboxes -->
+														<label class="checkbox">
+															<input type="checkbox" value="Option one">
+															Option one
+														</label>
+														<label class="checkbox">
+															<input type="checkbox" value="Option two">
+															Option two
+														</label>
+													</div>
+												</div>
 											</div>
 										</div>
 

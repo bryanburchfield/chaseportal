@@ -3148,6 +3148,12 @@ textarea.nobg_txtarea.form-control{
         border:none;
         font-family: monospace;
     }
+
+    .form-control{
+        background: #222;
+        border:1px solid #000;
+        color:#ccc;
+    }
 }
 
 #temp{
@@ -3244,6 +3250,10 @@ form .tab-content .control-label {text-align: left;}
     }
 }
 
+#target{
+    text-align: left !important;
+}
+
 .tab-pane{
     border:1px solid darken(#ddd, 5%);
     background: #ddd;
@@ -3252,7 +3262,7 @@ form .tab-content .control-label {text-align: left;}
 }
 
 .form-horizontal .form-group{
-    padding: 12px 0;
+    padding: 6px 0;
     margin: 0;
 }
 
@@ -3272,8 +3282,14 @@ form .tab-content .control-label {text-align: left;}
 }
 
 label.col-lg-3.control-label.valtype {text-align: left;}
-label.col-md-4.control-label.valtype {text-align: right;}
 
+.draggable{
+    .form-group{
+        label{
+            text-align: left;
+        }
+    }
+}
 
 
 /* ---------------------------------------------------

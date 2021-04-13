@@ -47,8 +47,10 @@ var PORTAL_FORM_BUILDER = {
 				// $this = $($this).find('.hidetilloaded');
 				// console.log($($this).html());
 				//.wrap('<div class="col-sm-6"></div>')
-		    	// $temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($($this).html());
+		    	// $temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.find('.draggable > div').clone());
+		    	console.log($this);
 
+		    	/////
 	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
 	    	}else {
 		        if($this.attr("id") !== "legend"){
@@ -123,6 +125,7 @@ var PORTAL_FORM_BUILDER = {
 	            	if(tops.length > 0){
 	             		$($temp.html()).insertBefore(tops[0]);
 	            	}else {
+	            		// append in form builder dropzone
 	             	$("#target fieldset").append($temp.append("\n\n\ \ \ \ ").html());
 	            	}
 	         	}else{
@@ -297,16 +300,19 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).text($(e).val());
 	      		}
 
-	    		PORTAL_FORM_BUILDER.generateHTML();
-	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');
-	    		
+	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');	    		
 	    	});
+
+	    	PORTAL_FORM_BUILDER.generateHTML();
 	    });
 	},
 
 	/// GENERATE CODE
 	generateHTML(){
+		// get HTML of elements dragged to the dropzone
 	    var $temptxt = $("<div>").html($("#build").html());
+	    console.log($temptxt);
+
 	    $($temptxt).find(".component").attr({"title": null,
 	    	"data-original-title":null,
 	    	"data-type": null,
@@ -317,18 +323,25 @@ var PORTAL_FORM_BUILDER = {
 	    	"style": null
 	    });
 		
-		// $('.hidetilloaded div').unwrap();
-
-		console.log($temptxt.html());
-
 		$($temptxt).find(".valtype").attr("data-valtype", null).removeClass("valtype");
-	    $($temptxt).find(".component").removeClass("component");
-	    $($temptxt).find(".component .draggable").remove();
-	    $($temptxt).find(".component .hidetilloaded").removeClass('hidetilloaded');
-	    $($temptxt).find("form").attr({"id":  null, "style": null});
-	    $('.form_preview').show();
-	    $("#source").html($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
+		$($temptxt).find(".component").removeClass("component");
+		$($temptxt).find("form").attr({"id":  null, "style": null});
+	    
+	    PORTAL_FORM_BUILDER.generatePreview();
 	},
+
+	generatePreview(){
+		var $temptxt = $("#build").html();
+		$($temptxt).find(".component .hidetilloaded");
+
+		var html = '';
+		$('#build .hidetilloaded').each(function(){
+			html+=$(this).html();
+		});
+
+		$("#source").html(html.replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));		
+		$('.form_preview').show();
+	}
 }
 
 $(document).ready(function(){
