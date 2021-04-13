@@ -21,7 +21,6 @@
 						    <li role="presentation"><a href="#selects" aria-controls="selects" role="tab" data-toggle="tab">Select</a></li>
 						    <li role="presentation"><a href="#buttons" aria-controls="buttons" role="tab" data-toggle="tab">Buttons</a></li>
 						    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">Properties</a></li>
-						    {{-- <li role="presentation"><a href="#rendered" aria-controls="rendered" role="tab" data-toggle="tab">Rendered</a></li> --}}
 						</ul>
 
 				    	<div class="elements draggable_elements">
@@ -43,9 +42,22 @@
 												>
 
 												<!-- Text input-->
-												<label class="col-md-4 col-lg-3 control-label valtype" for="input01" data-valtype='label'>Text input</label>
-												<div class="col-md-8 col-lg-9">
-													<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class=" control-label valtype" for="input01" data-valtype='label'>Text input</label>
+														<div class="">
+															<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+														</div>
+													</div>
+												</div>
+												
+
+												<div class="draggable">
+													<!-- Text input-->
+													<label class="col-md-4 col-lg-3 control-label valtype" for="input01" data-valtype='label'>Text input</label>
+													<div class="col-md-8 col-lg-9">
+														<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
+													</div>
 												</div>
 											</div>
 
@@ -337,7 +349,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="form_preview">
-							<textarea id="source" class="col-md-12" readonly></textarea>
+							<div id="source"></div>
+							{{-- <textarea id="source" class="col-md-12" readonly></textarea> --}}
 						</div>
 					</div>
 				</div>

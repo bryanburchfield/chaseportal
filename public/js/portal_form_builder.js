@@ -42,6 +42,13 @@ var PORTAL_FORM_BUILDER = {
 
 	    var delayed = setTimeout(function(){
 	    	if(type === "main"){
+
+				// $this.parent().remove();
+				// $this = $($this).find('.hidetilloaded');
+				// console.log($($this).html());
+				//.wrap('<div class="col-sm-6"></div>')
+		    	// $temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($($this).html());
+
 	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
 	    	}else {
 		        if($this.attr("id") !== "legend"){
@@ -72,7 +79,7 @@ var PORTAL_FORM_BUILDER = {
 
 	        	$temp.css({"top"      : mm_mouseY - half_box_height + "px",
 	        		"left"      : mm_mouseX - half_box_width  + "px"});
-	        	console.log(half_box_width);
+
 	        	if ( mm_mouseX > tar_pos.left &&
 	        		mm_mouseX < tar_pos.left + $target.width() + $temp.width() &&
 	        		mm_mouseY > tar_pos.top &&
@@ -193,7 +200,6 @@ var PORTAL_FORM_BUILDER = {
         		var type = $(e).find("button").attr("class").split(" ").filter(function(e){return e.match(/btn-.*/)});
         		$(".elements #properties form #color option").attr("selected", null);
 
-        		console.log(type);
 	        	if(type.length === 0){
 	        		$(".elements #properties form #color #default").attr("selected", "selected");
 	        	}else {
@@ -285,7 +291,6 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).append("\n  ")
 	          		$($(value).find("input")[0]).attr("checked", true)
 	    		}else if (vartype === "button"){
-	    			console.log(vartype);
 	        		var type =  $(".elements #properties form #color option:selected").attr("id");
 	        		$(value).find("button").text($(e).val()).attr("class", "btn "+type);
 	    		}else {
@@ -293,7 +298,6 @@ var PORTAL_FORM_BUILDER = {
 	      		}
 
 	    		PORTAL_FORM_BUILDER.generateHTML();
-	    		console.log(PORTAL_FORM_BUILDER.active_tab);
 	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');
 	    		
 	    	});
@@ -313,11 +317,17 @@ var PORTAL_FORM_BUILDER = {
 	    	"style": null
 	    });
 		
+		// $('.hidetilloaded div').unwrap();
+
+		console.log($temptxt.html());
+
 		$($temptxt).find(".valtype").attr("data-valtype", null).removeClass("valtype");
 	    $($temptxt).find(".component").removeClass("component");
+	    $($temptxt).find(".component .draggable").remove();
+	    $($temptxt).find(".component .hidetilloaded").removeClass('hidetilloaded');
 	    $($temptxt).find("form").attr({"id":  null, "style": null});
 	    $('.form_preview').show();
-	    $("#source").val($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
+	    $("#source").html($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
 	},
 }
 
