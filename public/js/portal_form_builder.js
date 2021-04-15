@@ -4,7 +4,7 @@ var PORTAL_FORM_BUILDER = {
 	active_tab:'#inputs',
 
 	init:function(){
-		$('#target').on('click', '.form-group.component', this.open_props_form);
+		$('#target').on('click', '.form-group.component, #legend', this.open_props_form);
 		$('form').on('mousedown', '.component', this.drag_element);
 		$('#target').on('click', '.component', this.add_vals);
 		$("#navtab").on("click", '#sourcetab', this.generateHTML);
@@ -16,6 +16,7 @@ var PORTAL_FORM_BUILDER = {
 		var form = $(this).data('content');
 		$('#properties').empty();
 		$('#properties').append(form);
+
 	},
 
 	drag_element(md){
@@ -72,7 +73,7 @@ var PORTAL_FORM_BUILDER = {
 
 	        	$temp.css({"top"      : mm_mouseY - half_box_height + "px",
 	        		"left"      : mm_mouseX - half_box_width  + "px"});
-	        	console.log(half_box_width);
+
 	        	if ( mm_mouseX > tar_pos.left &&
 	        		mm_mouseX < tar_pos.left + $target.width() + $temp.width() &&
 	        		mm_mouseY > tar_pos.top &&
@@ -116,6 +117,7 @@ var PORTAL_FORM_BUILDER = {
 	            	if(tops.length > 0){
 	             		$($temp.html()).insertBefore(tops[0]);
 	            	}else {
+	            		// append in form builder dropzone
 	             	$("#target fieldset").append($temp.append("\n\n\ \ \ \ ").html());
 	            	}
 	         	}else{
@@ -193,7 +195,6 @@ var PORTAL_FORM_BUILDER = {
         		var type = $(e).find("button").attr("class").split(" ").filter(function(e){return e.match(/btn-.*/)});
         		$(".elements #properties form #color option").attr("selected", null);
 
-        		console.log(type);
 	        	if(type.length === 0){
 	        		$(".elements #properties form #color #default").attr("selected", "selected");
 	        	}else {
@@ -240,9 +241,12 @@ var PORTAL_FORM_BUILDER = {
 	    		} else if (vartype==="option"){
 	        		var options = $(e).val().split("\n");
 	        		$(value).html("");
+	        		console.log(options);
+	        		// $(value).append($('<option value="">').text('Select One'));
 	      			$.each(options, function(i,e){
-	        			$(value).append("\n      ");
-	        			$(value).append($("<option>").text(e));
+	        			// $(value).append("\n      ");
+	        			$(value).append($('<option value='+e+'>').text(e));
+	        			console.log(e);
 	        		});
 	    		}else if (vartype==="checkboxes"){
 	        		var checkboxes = $(e).val().split("\n");
@@ -285,24 +289,29 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).append("\n  ")
 	          		$($(value).find("input")[0]).attr("checked", true)
 	    		}else if (vartype === "button"){
-	    			console.log(vartype);
-	        		var type =  $(".elements #properties form #color option:selected").attr("id");
-	        		$(value).find("button").text($(e).val()).attr("class", "btn "+type);
+	        		var btn_type =  $(".elements #properties form #color option:selected").attr("id");
+	        		var btn_size =  $(".elements #properties form #btn_size option:selected").attr("id");
+	        		$(value).find("button").text($(e).val()).attr("class", "btn "+btn_type + " " + btn_size);
+
+	    		}else if(vartype==="select-basic"){
+	    			console.log('test');
+	    			console.log($(this).find('select option').html());
 	    		}else {
 	        		$(value).text($(e).val());
 	      		}
 
-	    		PORTAL_FORM_BUILDER.generateHTML();
-	    		console.log(PORTAL_FORM_BUILDER.active_tab);
-	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');
-	    		
+	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');	    		
 	    	});
+
+	    	PORTAL_FORM_BUILDER.generateHTML();
 	    });
 	},
 
 	/// GENERATE CODE
 	generateHTML(){
+		// get HTML of elements dragged to the dropzone
 	    var $temptxt = $("<div>").html($("#build").html());
+
 	    $($temptxt).find(".component").attr({"title": null,
 	    	"data-original-title":null,
 	    	"data-type": null,
@@ -314,11 +323,26 @@ var PORTAL_FORM_BUILDER = {
 	    });
 		
 		$($temptxt).find(".valtype").attr("data-valtype", null).removeClass("valtype");
-	    $($temptxt).find(".component").removeClass("component");
-	    $($temptxt).find("form").attr({"id":  null, "style": null});
-	    $('.form_preview').show();
-	    $("#source").val($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));
+		$($temptxt).find(".component").removeClass("component");
+		$($temptxt).find("form").attr({"id":  null, "style": null});
+	    
+	    PORTAL_FORM_BUILDER.generatePreview();
 	},
+
+	generatePreview(){
+		var $temptxt = $("#build").html();
+		$($temptxt).find(".component .hidetilloaded");
+
+		// form heading
+		var html = '<h2>'+$('#build legend.valtype').text()+'</h2>';
+
+		$('#build .hidetilloaded').each(function(){
+			html+=$(this).html();
+		});
+
+		$("#source").html(html.replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));		
+		$('.form_preview #source').show();
+	}
 }
 
 $(document).ready(function(){
