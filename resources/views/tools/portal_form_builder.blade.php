@@ -51,8 +51,8 @@
 													</div>
 												</div>
 												
+												<!-- Text input-->
 												<div class="draggable">
-													<!-- Text input-->
 													<div class="form-group">
 													<label class="control-label valtype" for="input01" data-valtype='label'>Text input</label>
 														<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
@@ -75,7 +75,7 @@
 												<div class="hidetilloaded">
 													<div class="col-sm-6">
 														<div class="form-group">
-															<label class=" control-label valtype" for="input01" data-valtype='label'>Password input</label>
+															<label class="control-label valtype" for="input01" data-valtype='label'>Password input</label>
 															<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
 														</div>
 													</div>
@@ -177,12 +177,14 @@
 												<!-- Inline Radios -->
 												<div class="hidetilloaded">
 													<div class="col-sm-6">
-														<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
-														<div class="valtype form-group" data-valtype="inline-radios">
-															<!-- Inline Radios -->
-															<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
-															<label class="radio-inline"><input type="radio" name="optradio">2</label>
-															<label class="radio-inline"><input type="radio" name="optradio">3</label>
+														<div class="form-group">
+															<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
+															<div class="valtype form-group" data-valtype="inline-radios">
+																<!-- Inline Radios -->
+																<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
+																<label class="radio-inline"><input type="radio" name="optradio">2</label>
+																<label class="radio-inline"><input type="radio" name="optradio">3</label>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -348,14 +350,33 @@
 												>
 
 												<!-- Select Basic -->
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Select - Basic</label>
-												<div class="col-md-8 col-lg-9">
-													<select class="form-control input-md valtype" data-valtype="option">
-														<option>Enter</option>
-														<option>Your</option>
-														<option>Options</option>
-														<option>Here!</option>
-													</select>
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="control-label valtype" data-valtype="select-basic">Select - Basic</label>
+														<div>
+															<select class="form-control input-md valtype" data-valtype="option">
+																<option value="">Select One</option>
+																<option value="">Enter</option>
+																<option value="">Your</option>
+																<option value="">Options</option>
+																<option value="">Here!</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<!-- Select Basic -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Select - Basic</label>
+													<div class="col-md-8 col-lg-9">
+														<select class="form-control input-md valtype" data-valtype="option">
+															<option value="">Select One</option>
+															<option value="">Enter</option>
+															<option value="">Your</option>
+															<option value="">Options</option>
+															<option value="">Here!</option>
+														</select>
+													</div>
 												</div>
 											</div>
 
@@ -373,17 +394,35 @@
 												>
 
 												<!-- Select Multiple -->
-												<label class="col-md-4 control-label valtype" data-valtype="label">Select - Multiple</label>
-												<div class="col-md-4">
-													<select class="form-control input-md valtype" multiple="multiple" data-valtype="option">
-														<option>Enter</option>
-														<option>Your</option>
-														<option>Options</option>
-														<option>Here!</option>
-													</select>
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<label class="control-label valtype" data-valtype="label">Select - Multiple</label>
+														<div>
+															<select class="form-control input-md valtype" multiple="multiple" data-valtype="option">
+																<option value="">Select One</option>
+																<option value="">Enter</option>
+																<option value="">Your</option>
+																<option value="">Options</option>
+																<option value="">Here!</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<!-- Select Multiple -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Select - Multiple</label>
+													<div class="col-md-8 col-lg-9">
+														<select class="form-control input-md valtype" multiple="multiple" data-valtype="option">
+															<option value="">Select One</option>
+															<option value="">Enter</option>
+															<option value="">Your</option>
+															<option value="">Options</option>
+															<option value="">Here!</option>
+														</select>
+													</div>
 												</div>
 											</div>
-
 										</div>
 
 										<div role="tabpanel" class="tab-pane" id="buttons">
@@ -392,7 +431,7 @@
 												data-content="
 												<form class='form'>
 												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
+												
 												<label class='control-label'>Button Text</label> <input class='form-control' type='text' name='label' id='button'>
 												<label class='control-label' id=''>Type: </label>
 												<select class='form-control input-md' id='color'>
@@ -403,16 +442,33 @@
 												<option id='btn-warning'>Orange</option>
 												<option id='btn-danger'>Red</option>
 												</select>
+												<label class='control-label' id=''>Size: </label>
+												<select class='form-control input-md' id='btn_size'>
+												<option id='btn-sm'>Small</option>
+												<option id='btn-md'>Medium</option>
+												<option id='btn-lg'>Large</option>
+												</select>
 												<hr/>
 												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger save_edit'>Cancel</button>
 												</div>
 												</form>" data-html="true"
 												>
-												<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Button</label>
 
 												<!-- Button -->
-												<div class="col-md-8 col-lg-9 valtype"  data-valtype="button">
-													<button class='btn btn-success'>Button</button>
+												<div class="hidetilloaded">
+													<div class="col-sm-6">
+														<div class="valtype" data-valtype="button">
+															<button class='btn btn-success'>Button</button>
+														</div>
+													</div>
+												</div>
+
+												<!-- Button -->
+												<div class="draggable">
+													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Button</label>
+													<div class="col-md-8 col-lg-9 valtype"  data-valtype="button">
+														<button class='btn btn-success'>Button</button>
+													</div>
 												</div>
 											</div>
 
@@ -429,6 +485,7 @@
 
 				    <div class="col-sm-7">
 				    	<div class="dropzone" id="build">
+
 				    		<form id="target" class="form-horizontal">
 
 				    	    	<fieldset>

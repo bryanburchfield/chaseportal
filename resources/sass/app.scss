@@ -3127,39 +3127,46 @@ textarea.nobg_txtarea.form-control{
 #target{
     .component{
         &:hover{
-            border:1px solid $green;
+            // border:1px solid $green;
             cursor:move !important;
         }
     }
 }
 
 .form_preview{
-    display: none;
-    margin-top: 50px;
-    background: #333;
-    min-height: 400px;
+    background: #fff;
+    border:1px solid #ddd;
     padding: 20px;
-    overflow: auto;
-    color:#88F860;
 
     #source{
+        display: none;
+        background: #eee;
+        border: 1px solid #ddd;
         min-height: 400px;
-        background: none; 
-        border:none;
-        font-family: monospace;
-    }
+        padding: 20px;
+        overflow: auto;
 
-    .form-control{
-        background: #222;
-        border:1px solid #000;
-        color:#ccc;
+        h2{
+            background: #203047;
+            color: #fff;
+            font-weight: 600;
+            font-size: 22px;
+            padding: 5px 8px;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .form-control{
+            background: #fff;
+            color:#555;
+        }
     }
 }
 
 #temp{
     max-width: 650px;
     background: darken(#eee,2%);
-    border: 1px solid #ccc;
+    border: 1px dotted #ccc;
     border-radius: 10px;
 }
 
@@ -3256,8 +3263,8 @@ form .tab-content .control-label {text-align: left;}
 
 .tab-pane{
     border:1px solid darken(#ddd, 5%);
-    background: #ddd;
-    padding: 20px;
+    background: lighten( #ddd,3%);
+    padding: 10px;
     overflow: auto;
 }
 

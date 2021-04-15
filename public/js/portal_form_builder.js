@@ -4,7 +4,7 @@ var PORTAL_FORM_BUILDER = {
 	active_tab:'#inputs',
 
 	init:function(){
-		$('#target').on('click', '.form-group.component', this.open_props_form);
+		$('#target').on('click', '.form-group.component, #legend', this.open_props_form);
 		$('form').on('mousedown', '.component', this.drag_element);
 		$('#target').on('click', '.component', this.add_vals);
 		$("#navtab").on("click", '#sourcetab', this.generateHTML);
@@ -16,6 +16,7 @@ var PORTAL_FORM_BUILDER = {
 		var form = $(this).data('content');
 		$('#properties').empty();
 		$('#properties').append(form);
+
 	},
 
 	drag_element(md){
@@ -42,15 +43,6 @@ var PORTAL_FORM_BUILDER = {
 
 	    var delayed = setTimeout(function(){
 	    	if(type === "main"){
-
-				// $this.parent().remove();
-				// $this = $($this).find('.hidetilloaded');
-				// console.log($($this).html());
-				//.wrap('<div class="col-sm-6"></div>')
-		    	// $temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.find('.draggable > div').clone());
-		    	console.log($this);
-
-		    	/////
 	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
 	    	}else {
 		        if($this.attr("id") !== "legend"){
@@ -249,9 +241,12 @@ var PORTAL_FORM_BUILDER = {
 	    		} else if (vartype==="option"){
 	        		var options = $(e).val().split("\n");
 	        		$(value).html("");
+	        		console.log(options);
+	        		// $(value).append($('<option value="">').text('Select One'));
 	      			$.each(options, function(i,e){
-	        			$(value).append("\n      ");
-	        			$(value).append($("<option>").text(e));
+	        			// $(value).append("\n      ");
+	        			$(value).append($('<option value='+e+'>').text(e));
+	        			console.log(e);
 	        		});
 	    		}else if (vartype==="checkboxes"){
 	        		var checkboxes = $(e).val().split("\n");
@@ -294,8 +289,13 @@ var PORTAL_FORM_BUILDER = {
 	        		$(value).append("\n  ")
 	          		$($(value).find("input")[0]).attr("checked", true)
 	    		}else if (vartype === "button"){
-	        		var type =  $(".elements #properties form #color option:selected").attr("id");
-	        		$(value).find("button").text($(e).val()).attr("class", "btn "+type);
+	        		var btn_type =  $(".elements #properties form #color option:selected").attr("id");
+	        		var btn_size =  $(".elements #properties form #btn_size option:selected").attr("id");
+	        		$(value).find("button").text($(e).val()).attr("class", "btn "+btn_type + " " + btn_size);
+
+	    		}else if(vartype==="select-basic"){
+	    			console.log('test');
+	    			console.log($(this).find('select option').html());
 	    		}else {
 	        		$(value).text($(e).val());
 	      		}
@@ -311,7 +311,6 @@ var PORTAL_FORM_BUILDER = {
 	generateHTML(){
 		// get HTML of elements dragged to the dropzone
 	    var $temptxt = $("<div>").html($("#build").html());
-	    console.log($temptxt);
 
 	    $($temptxt).find(".component").attr({"title": null,
 	    	"data-original-title":null,
@@ -334,13 +333,15 @@ var PORTAL_FORM_BUILDER = {
 		var $temptxt = $("#build").html();
 		$($temptxt).find(".component .hidetilloaded");
 
-		var html = '';
+		// form heading
+		var html = '<h2>'+$('#build legend.valtype').text()+'</h2>';
+
 		$('#build .hidetilloaded').each(function(){
 			html+=$(this).html();
 		});
 
 		$("#source").html(html.replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));		
-		$('.form_preview').show();
+		$('.form_preview #source').show();
 	}
 }
 
