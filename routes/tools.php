@@ -12,7 +12,8 @@ Route::prefix('tools')->group(function () {
     // must be logged in to access any of these
     Route::group(['middleware' => 'auth'], function () {
 
-        Route::get('portal_form_builder', 'FormBuilderController@portal_form_builder');
+        Route::get('portal_form_builder', 'FormBuilderController@portalFormBuilder');
+        Route::get('formbuilder/{type}', 'FormBuilderController@getFormElement');
 
         Route::get('/lead_detail/{lead?}', 'LeadsController@leadDetail');
         Route::post('/get_lead', 'LeadsController@getLead');

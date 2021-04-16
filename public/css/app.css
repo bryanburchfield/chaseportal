@@ -3685,6 +3685,25 @@ textarea.nobg_txtarea.form-control {
 
 /* PORTAL FORM BUILDER */
 
+#builder_content {
+  min-height: 300px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 10px 20px;
+  overflow: auto;
+}
+
+#builder_content .controls .form-control {
+  background: #eee;
+}
+
+#builder_content .close {
+  color: #d9534f;
+  position: relative;
+  left: 13px;
+  bottom: 3px;
+}
+
 #content_form_name {
   cursor: pointer;
 }
@@ -3694,6 +3713,10 @@ textarea.nobg_txtarea.form-control {
   color: #3a87ad;
   background: #d9edf7;
   opacity: 0.5;
+}
+
+.dropzone .tab-pane {
+  background: #fff;
 }
 
 .content-hover legend {
@@ -3713,35 +3736,73 @@ input[type=text] {
 
 /* COMPONENTS */
 
+#components-container div.col-xs-6 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 .component {
   cursor: move;
   padding: 10px;
-  border: 1px solid #fff;
+  border: 1px solid #ccc;
+  border-left: 5px solid #ccc;
+  background: #fff;
+  margin: 0;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+
+.component h4 {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.component h4 i {
+  padding-right: 10px;
+}
+
+.component.form-group.ui-draggable {
+  max-width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  border-left: 5px solid #ccc;
 }
 
 .component:hover {
-  background: #fafafa !important;
-  border: 1px solid #eee;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#f9f9f9+0,e8e8e8+100 */
+  background: #f9f9f9;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #f9f9f9 0%, #e8e8e8 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#f9f9f9", endColorstr="#e8e8e8",GradientType=0 );
+  /* IE6-9 */
 }
 
 .component-drag {
-  border: 1px solid #eee;
-  border-radius: 4px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  border-left: 5px solid #ccc;
   padding: 10px;
-  background: #FFF;
+  background: #fff;
 }
 
 /* ELEMENTS */
 
 .element {
   cursor: move;
-  padding: 10px;
-  border: 1px solid #fff;
+  padding: 10px 25px;
+  border: 1px solid #ddd;
+  background: #fbfbfb;
+  margin-bottom: 10px;
 }
 
 .element:hover {
-  background: #fafafa;
-  border: 1px solid #eee;
+  background: #f2f2f2;
+  border: 1px solid #33A09B;
 }
 
 .element-placeholder {
@@ -3750,6 +3811,18 @@ input[type=text] {
   background: #d9edf7;
   min-height: 50px;
   opacity: 0.5;
+}
+
+.elements {
+  background: #e6e6e6;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.elements h3 {
+  color: #203047;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 /* ---------------------------------------------------
@@ -4167,7 +4240,7 @@ pre.appended_code {
     padding: 20px 15px 0 15px;
   }
 
-  #builder_content .navbar {
+  #content .navbar {
     height: 65px;
   }
 

@@ -14,120 +14,216 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 	            <div class="row">
-	                <div class="col-sm-6 col-md-6">
-	                    <h1>Form Builder</h1>
-	                    <hr>
-	                    <div class="tabbable">
-	                        <ul class="nav nav-tabs">
-	                            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
-	                            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
-	                        </ul>
 
-	                        <div class="tab-content">
-	                            <div class="tab-pane active" id="editor-tab">
-	                                <form id="builder_content" class="form-horizontal form-horizontal">
-	                                    <fieldset id="content_form_name">
-	                                        <legend>Form Name</legend>
-	                                    </fieldset>
-	                                </form>
-	                            </div>
+	            	<div class="col-sm-8">
+	            	    <h2>Form Builder</h2>
+	            	    <hr>
+	            	    <div class="tabbable">
+	            	        <ul class="nav nav-tabs">
+	            	            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
+	            	            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
+	            	        </ul>
 
-	                            <div class="tab-pane" id="source-tab">
-	                                <textarea id="source"></textarea>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
+	            	        <div class="tab-content dropzone">
+	            	            <div class="tab-pane active" id="editor-tab">
+	            	                <form id="builder_content" class="form-horizontal">
+	            	                    <fieldset id="content_form_name" class="mt10 mb20">
+	            	                        <legend>Form Name</legend>
+	            	                    </fieldset>
+	            	                </form>
+	            	            </div>
 
-	                <div class="col-sm-6 col-md-6">
-	                    <h1>Components</h1>
-	                    <hr>
-	                    <div id="components-container" class="form-horizontal">
-	                        <div class="component form-group" data-type="text">
-	                            <label class="control-label col-sm-4" for="text_input">Text Input</label>
-	                            <div class="controls col-sm-8">
-	                                <input type="text" name="" id="text_input" placeholder="placeholder" class="form-control">
-	                            </div>
-	                        </div>
+	            	            <div class="tab-pane" id="source-tab">
+	            	                <textarea id="source"></textarea>
+	            	            </div>
+	            	        </div>
+	            	    </div>
+	            	</div>
 
-	                        <div class="component form-group" data-type="textarea">
-	                            <label class="control-label col-sm-4" for="textarea">Textarea</label>
-	                            <div class="controls col-sm-8">
-	                                <textarea name="" class="form-control" id="textarea" placeholder="placeholder"></textarea>
-	                            </div>
-	                        </div>
+	            	<div class="col-sm-4 mt30">
+	            	    <div class="elements">
+	            	    	<h3>Fields</h3>
+	            	    	<hr>
+	            	    	<div id="components-container" class="form-horizontal">
 
-	                        <div class="component form-group" data-type="select_basic">
-	                            <label class="control-label col-sm-4" for="select_basic">Select - Basic</label>
-	                            <div class="controls col-sm-8">
-	                                <select class="form-control" name="" id="select_basic">
-	                                    <option value="1">Option 1</option>
-	                                    <option value="2">Option 2</option>
-	                                    <option value="3">Option 3</option>
-	                                </select>
-	                            </div>
-	                        </div>
+	            	    		{{-- <div class="component">
+	            	    			<div class="form-group" data-type="text">
+	            	    			    <label class="control-label col-sm-4" for="text_input">Text Input</label>
+	            	    			    <div class="controls col-sm-8">
+	            	    			        <input type="text" name="" disabled id="text_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div> --}}
 
-	                        <div class="component form-group" data-type="select_multiple">
-	                            <label class="control-label col-sm-4" for="select_multiple">Select - Multiple</label>
-	                            <div class="controls col-sm-8">
-	                                <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
-	                                    <option value="1">Option 1</option>
-	                                    <option value="2">Option 2</option>
-	                                    <option value="3">Option 3</option>
-	                                </select>
-	                            </div>
-	                        </div>
+	            	    		{{-- TEXT INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-font"></i>Text Input</h4>
+	            	    			</div>
+	            	    		</div>
 
-	                        <div class="component form-group" data-type="checkbox">
-	                            <label class="control-label col-sm-4">Checkboxes</label>
-	                            <div class="controls col-sm-8">
-	                                <div class="checkbox"><label class="" for="checkbox_1">
-	                                    <input type="checkbox" name="checkbox" id="checkbox_1">
-	                                    Option 1
-	                                </label></div>
-	                                <div class="checkbox"><label class="" for="checkbox_2">
-	                                    <input type="checkbox" name="checkbox" id="checkbox_2">
-	                                    Option 2
-	                                </label></div>
-	                                <div class="checkbox"><label class="" for="checkbox_3">
-	                                    <input type="checkbox" name="checkbox" id="checkbox_3">
-	                                    Option 3
-	                                </label></div>
-	                            </div>
-	                        </div>
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="text">
+	            	    			    <label class="control-label" for="text_input">Text Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="text" name="" disabled id="text_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- TEXT INPUT --}}
+	            	    	    
+	            	    	    {{-- TEXTAREA --}}
+	            	    	    <div class="col-xs-6">
+	            	    	    	<div class="component">
+	            	    	    		<h4><i class="fas fa-paragraph"></i>Textarea</h4>
+	            	    	    	</div>
+	            	    	    </div>
 
-	                        <div class="component form-group" data-type="radio">
-	                            <label class="control-label col-sm-4">Radio Buttons</label>
-	                            <div class="controls col-sm-8">
-	                                <div class="radio"><label class="" for="radio_1">
-	                                    <input type="radio" name="radio" id="radio_1">
-	                                    Option 1
-	                                </label></div>
-	                                <div class="radio"><label class="" for="radio_2">
-	                                    <input type="radio" name="radio" id="radio_2">
-	                                    Option 2
-	                                </label></div>
-	                                <div class="radio"><label class="" for="radio_3">
-	                                    <input type="radio" name="radio" id="radio_3">
-	                                    Option 3
-	                                </label></div>
-	                            </div>
-	                        </div>
+	            	    	    <div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="textarea">
+		            	    	        <label class="control-label" for="textarea">Textarea</label>
+		            	    	        <div class="controls">
+		            	    	            <textarea name="" class="form-control" id="textarea" placeholder="placeholder"></textarea>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- TEXTAREA --}}
 
-	                        <div class="component form-group" data-type="static_text">
-	                            <label class="control-label col-sm-4">Static Text</label>
-	                            <div class="controls col-sm-8">
-	                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-	                            </div>
-	                        </div>
 
-	                        <div class="form-actions component" data-type="submit">
-	                            <button type="submit" class="btn btn-primary">Save changes</button>
-	                            <button type="button" class="btn btn-default" onclick="javascript:window.history.back();">Cancel</button>
-	                        </div>
-	                    </div>
-	                </div>
+		            	    	{{-- SELECT BASIC --}}
+		            	    	<div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-caret-square-down"></i>Select - Basic</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="select_basic">
+		            	    	        <label class="control-label" for="select_basic">Select - Basic</label>
+		            	    	        <div class="controls">
+		            	    	            <select class="form-control" name="" id="select_basic">
+		            	    	                <option value="1">Option 1</option>
+		            	    	                <option value="2">Option 2</option>
+		            	    	                <option value="3">Option 3</option>
+		            	    	            </select>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- SELECT BASIC --}}
+
+
+		            	    	{{-- SELECT MULTIPLE --}}
+		            	    	<div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-caret-square-down"></i>Select - Multiple</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="select_multiple">
+		            	    	        <label class="control-label" for="select_multiple">Select - Multiple</label>
+		            	    	        <div class="controls">
+		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
+		            	    	                <option value="1">Option 1</option>
+		            	    	                <option value="2">Option 2</option>
+		            	    	                <option value="3">Option 3</option>
+		            	    	            </select>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+	            	    	    {{-- SELECT MULTIPLE --}}
+
+	            	    	    {{-- CHECKBOXES --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-square"></i>Checkboxes</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="checkbox">
+		            	    	        <label class="control-label">Checkboxes</label>
+		            	    	        <div class="controls">
+		            	    	            <div class="checkbox"><label class="" for="checkbox_1">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_1">
+		            	    	                Option 1
+		            	    	            </label></div>
+		            	    	            <div class="checkbox"><label class="" for="checkbox_2">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_2">
+		            	    	                Option 2
+		            	    	            </label></div>
+		            	    	            <div class="checkbox"><label class="" for="checkbox_3">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_3">
+		            	    	                Option 3
+		            	    	            </label></div>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+	            	    	    {{-- CHECKBOXES --}}
+
+	            	    	    {{-- RADIO --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-circle"></i>Radio Buttons</h4>
+		            	    		</div>
+		            	    	</div>
+	            	    	    
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="radio">
+		            	    	        <label class="control-label">Radio Buttons</label>
+		            	    	        <div class="controls">
+		            	    	            <div class="radio"><label class="" for="radio_1">
+		            	    	                <input type="radio" name="radio" id="radio_1">
+		            	    	                Option 1
+		            	    	            </label></div>
+		            	    	            <div class="radio"><label class="" for="radio_2">
+		            	    	                <input type="radio" name="radio" id="radio_2">
+		            	    	                Option 2
+		            	    	            </label></div>
+		            	    	            <div class="radio"><label class="" for="radio_3">
+		            	    	                <input type="radio" name="radio" id="radio_3">
+		            	    	                Option 3
+		            	    	            </label></div>
+		            	    	        </div>
+		            	    	    </div>
+	            	    	    </div>
+	            	    	    {{-- RADIO --}}
+
+
+	            	    	    {{-- BUTTON --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-plus-square"></i>Button</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="button">
+		            	    	        <input type="submit" class="btn btn-primary" value="Submit">
+		            	    	    </div>
+	            	    	    </div>
+
+
+	            	    	    <div class="component form-group" data-type="static_text">
+	            	    	        <label class="control-label">Static Text</label>
+	            	    	        <div class="controls">
+	            	    	            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	            	    	        </div>
+	            	    	    </div>
+
+	            	    	    <div class="form-actions component" data-type="submit">
+	            	    	        <button type="submit" class="btn btn-primary">Save changes</button>
+	            	    	        <button type="button" class="btn btn-default" onclick="javascript:window.history.back();">Cancel</button>
+	            	    	    </div>
+	            	    	</div>
+	            	    </div>
+	            	</div>
+
+	            	
+
+	                
+
+	                
 	            </div>
 	        </div>
 
