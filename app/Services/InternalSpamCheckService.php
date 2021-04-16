@@ -191,7 +191,7 @@ class InternalSpamCheckService
         WHERE GroupId = 2256969
         AND CallDate >= @startdate
         AND CallDate < @enddate
-        AND Campaign = 'TOP_1500_USED_DIDS'";
+        AND Campaign IN ('TOP_1500_USED_DIDS', 'ALL ACTIVE')";
 
         return $this->runSql($sql, $bind);
     }
@@ -364,7 +364,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
           	AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
             AND Subcampaign != 'VERIZON'
             AND CallStatus = 'CR_BUSY'
         ) tmp";
@@ -383,7 +383,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
             AND Subcampaign != 'VERIZON'
             GROUP BY CallerId
         ) tmp
@@ -402,7 +402,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign = 'TOP_1500_USED_DIDS'
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
             AND route != ''
@@ -734,6 +734,7 @@ class InternalSpamCheckService
     {
         $this->clearCampaign('TOP_1500_USED_DIDS');
         $this->clearCampaign('VERIZON');
+        $this->clearCampaign('ALL ACTIVE');
     }
 
     private function clearCampaign($campaign)
@@ -752,6 +753,7 @@ class InternalSpamCheckService
     {
         $this->removeFromTestCampaign('TOP_1500_USED_DIDS');
         $this->removeFromTestCampaign('VERIZON');
+        $this->removeFromTestCampaign('ALL ACTIVE');
     }
 
     private function removeFromTestCampaign($campaign)
@@ -788,7 +790,7 @@ class InternalSpamCheckService
 
     private function loadTestCampaigns()
     {
-        // load most used DIDs into both test campaigns
+        // load most used DIDs into test campaigns
         $topdids = array_keys(resultsToList($this->getTopDids()));
 
         foreach ($topdids as $did) {
@@ -802,7 +804,6 @@ class InternalSpamCheckService
             }
         }
 
-        // load all Teldar DIDs
         $teldardids = array_keys(resultsToList($this->getTeldarDids()));
 
         // remove any that were top dids
@@ -815,9 +816,34 @@ class InternalSpamCheckService
                 echo $this->chaseDataDidApi->error . "\n";
             }
         }
+
+        // free some memory
+        $topdids = null;
+        $teldardids = null;
+        $diff = null;
+
+        // Load lesser used DIDs into a different test campaign
+        $bottomdids = array_keys(resultsToList($this->getBottomDids()));
+
+        foreach ($bottomdids as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'ALL ACTIVE')) {
+                Log::error($this->chaseDataDidApi->error);
+                echo $this->chaseDataDidApi->error . "\n";
+            }
+        }
     }
 
     private function getTopDids()
+    {
+        return $this->useDidsQuery(true);
+    }
+
+    private function getBottomDids()
+    {
+        return $this->useDidsQuery(false);
+    }
+
+    private function useDidsQuery($top)
     {
         $ignoreGroups = implode(',', $this->ignoreGroups);
 
@@ -825,6 +851,8 @@ class InternalSpamCheckService
             'enddate' => $this->run_date->toDateTimeString(),
             'mindials' => 250,
         ];
+
+        $operator = $top ? '>=' : '<';
 
         switch (today()->dayOfWeek) {
             case 0:  // sunday
@@ -872,7 +900,7 @@ class InternalSpamCheckService
 
         $sql .= ") tmp
         GROUP BY CallerId
-        HAVING SUM(Cnt) >= @minDials
+        HAVING SUM(Cnt) $operator @minDials
         ORDER BY CallerId";
 
         return $this->runSql($sql, $bind);
