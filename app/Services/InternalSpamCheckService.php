@@ -849,10 +849,9 @@ class InternalSpamCheckService
 
         $bind = [
             'enddate' => $this->run_date->toDateTimeString(),
-            'mindials' => 250,
+            'mindials' => 150,
+            'maxdials' => 250,
         ];
-
-        $operator = $top ? '>=' : '<';
 
         switch (today()->dayOfWeek) {
             case 0:  // sunday
@@ -869,10 +868,12 @@ class InternalSpamCheckService
         DECLARE @startdate AS DATETIME
         DECLARE @enddate   AS DATETIME
         DECLARE @minDials  INT
+        DECLARE @maxDials  INT
 
         SET @startdate = :startdate
         SET @enddate   = :enddate
         SET @minDials  = :mindials
+        SET @maxDials  = :maxdials
 
         SELECT CallerId, SUM(Cnt) AS Cnt
         FROM (";
@@ -900,8 +901,17 @@ class InternalSpamCheckService
         }
 
         $sql .= ") tmp
-        GROUP BY CallerId
-        HAVING SUM(Cnt) $operator @minDials
+        GROUP BY CallerId";
+
+        if ($top) {
+            $sql .= "
+            HAVING SUM(Cnt) >= @maxDials";
+        } else {
+            $sql .= "
+            HAVING SUM(Cnt) >= @minDials AND SUM(Cnt) < @maxDials";
+        }
+
+        $sql .= "
         ORDER BY CallerId";
 
         return $this->runSql($sql, $bind);
