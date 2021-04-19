@@ -191,7 +191,7 @@ class InternalSpamCheckService
         WHERE GroupId = 2256969
         AND CallDate >= @startdate
         AND CallDate < @enddate
-        AND Campaign IN ('TOP_1500_USED_DIDS', 'ALL ACTIVE')";
+        AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')";
 
         return $this->runSql($sql, $bind);
     }
@@ -364,7 +364,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
           	AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
             AND Subcampaign != 'VERIZON'
             AND CallStatus = 'CR_BUSY'
         ) tmp";
@@ -383,7 +383,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
             AND Subcampaign != 'VERIZON'
             GROUP BY CallerId
         ) tmp
@@ -402,7 +402,7 @@ class InternalSpamCheckService
             WHERE GroupId = 2256969
             AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE')
+            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
             AND Subcampaign != 'VERIZON'
             AND sip_bye = 1
             AND route != ''
@@ -735,6 +735,7 @@ class InternalSpamCheckService
         $this->clearCampaign('TOP_1500_USED_DIDS');
         $this->clearCampaign('VERIZON');
         $this->clearCampaign('ALL ACTIVE');
+        $this->clearCampaign('TELDAR');
     }
 
     private function clearCampaign($campaign)
@@ -754,6 +755,7 @@ class InternalSpamCheckService
         $this->removeFromTestCampaign('TOP_1500_USED_DIDS');
         $this->removeFromTestCampaign('VERIZON');
         $this->removeFromTestCampaign('ALL ACTIVE');
+        $this->removeFromTestCampaign('TELDAR');
     }
 
     private function removeFromTestCampaign($campaign)
@@ -804,23 +806,21 @@ class InternalSpamCheckService
             }
         }
 
+        // free some memory
+        $topdids = null;
+
         $teldardids = array_keys(resultsToList($this->getTeldarDids()));
 
-        // remove any that were top dids
-        $diff = array_diff($teldardids, $topdids);
-
-        // load into top1500 campaign
-        foreach ($diff as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
+        // load into TELDAR campaign
+        foreach ($teldardids as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TELDAR')) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
         }
 
         // free some memory
-        $topdids = null;
         $teldardids = null;
-        $diff = null;
 
         // Load lesser used DIDs into a different test campaign
         $bottomdids = array_keys(resultsToList($this->getBottomDids()));
@@ -849,10 +849,9 @@ class InternalSpamCheckService
 
         $bind = [
             'enddate' => $this->run_date->toDateTimeString(),
-            'mindials' => 250,
+            'mindials' => 150,
+            'maxdials' => 250,
         ];
-
-        $operator = $top ? '>=' : '<';
 
         switch (today()->dayOfWeek) {
             case 0:  // sunday
@@ -869,10 +868,12 @@ class InternalSpamCheckService
         DECLARE @startdate AS DATETIME
         DECLARE @enddate   AS DATETIME
         DECLARE @minDials  INT
+        DECLARE @maxDials  INT
 
         SET @startdate = :startdate
         SET @enddate   = :enddate
         SET @minDials  = :mindials
+        SET @maxDials  = :maxdials
 
         SELECT CallerId, SUM(Cnt) AS Cnt
         FROM (";
@@ -892,6 +893,7 @@ class InternalSpamCheckService
             AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
             AND O.Active = 1
             AND DR.GroupId NOT IN ($ignoreGroups)
+            AND DR.GroupId != 1111   -- Teldar
             GROUP BY CallerId
             ";
 
@@ -899,8 +901,17 @@ class InternalSpamCheckService
         }
 
         $sql .= ") tmp
-        GROUP BY CallerId
-        HAVING SUM(Cnt) $operator @minDials
+        GROUP BY CallerId";
+
+        if ($top) {
+            $sql .= "
+            HAVING SUM(Cnt) >= @maxDials";
+        } else {
+            $sql .= "
+            HAVING SUM(Cnt) >= @minDials AND SUM(Cnt) < @maxDials";
+        }
+
+        $sql .= "
         ORDER BY CallerId";
 
         return $this->runSql($sql, $bind);
