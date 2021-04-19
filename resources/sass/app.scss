@@ -107,6 +107,7 @@ h1, h2, h3, h4, h5, h6 {
 .mb20 {margin-bottom: 20px;}
 .mb30 {margin-bottom: 30px;}
 .mb42 {margin-bottom: 42px;}
+.ml10{margin-left: 10px;}
 .mr10 {margin-right: 10px;}
 .mr20{margin-right: 20px;}
 
@@ -3069,7 +3070,7 @@ textarea.nobg_txtarea.form-control{
 
 #builder_content {
     min-height: 300px;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
     border-radius: 4px;
     padding: 10px 20px;
     overflow: auto;
@@ -3137,6 +3138,7 @@ input[type=text] {
     margin: 0;
     margin-top: 10px;
     @include border-radius(3px);
+    min-width: 160px;
 
     h4{
         font-weight: 600;
@@ -3164,7 +3166,6 @@ input[type=text] {
     background: -webkit-linear-gradient(top,  rgba(249,249,249,1) 0%,rgba(232,232,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom,  rgba(249,249,249,1) 0%,rgba(232,232,232,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#e8e8e8',GradientType=0 ); /* IE6-9 */
-
 }
 
 .component-drag {
@@ -3179,14 +3180,22 @@ input[type=text] {
 .element {
     cursor: move;
     padding: 10px 25px;
-    border: 1px solid #ddd;
-    background: lighten(#eee, 5%);
+    border: 2px solid darken(#ddd,2%);
+    // Needs latest Compass, add '@import "compass"' to your scss
+    // Permalink - use to edit and share this gradient:
+    // https://colorzilla.com/gradient-editor/#f9f9f9+0,ededed+100
+    background-color: rgb(249,249,249); // Old browsers
+    @include filter-gradient(#f9f9f9, #ededed, vertical); // IE6-9
+    @include background-image(linear-gradient(top,  rgba(249,249,249,1) 0%,rgba(237,237,237,1) 100%));
+
     margin-bottom: 10px;
+    @include border-radius(3px);
 }
 
-.element:hover {
-    background: darken(#fafafa,3%);
-    border: 1px solid $green;
+.element:hover, .element.active {
+    background: darken(#fafafa,5%);
+    border: 2px solid lighten($green,10%);
+    @include border-radius(3px);
 }
 
 .element-placeholder {
@@ -3197,16 +3206,53 @@ input[type=text] {
     opacity: 0.5;
 }
 
-.elements{
+.elements, .options{
     background: darken(#eee,3%);
     border:1px solid #ccc;
     padding: 10px;
+    min-height: 300px;
+    position: relative;
+    z-index: 999999;
 
     h3{
         color:$blue;
         font-weight: 600;
         margin-bottom: 10px;
+        margin-top: 10px;
+        margin-left: 10px;
     }
+
+    a.back{
+        float: right;
+        color: lighten(#337ab7,8%);
+        font-size: 22px;
+        margin-top: 5px;
+
+        &:hover{
+            color: lighten(#337ab7,15%);
+        }
+    }
+
+    .option_vals, .options{
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        clear: both;
+        background: #fff;
+
+        .form-control{
+            background: #eee;
+        }
+
+        .btn{
+            float: right;
+        }
+    }
+}
+
+.options h3{
+    float: left;
 }
 
 /* ---------------------------------------------------

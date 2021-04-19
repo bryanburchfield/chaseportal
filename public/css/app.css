@@ -163,6 +163,10 @@ h6 {
   margin-bottom: 42px;
 }
 
+.ml10 {
+  margin-left: 10px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -3687,7 +3691,7 @@ textarea.nobg_txtarea.form-control {
 
 #builder_content {
   min-height: 300px;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px 20px;
   overflow: auto;
@@ -3750,6 +3754,7 @@ input[type=text] {
   margin: 0;
   margin-top: 10px;
   border-radius: 3px;
+  min-width: 160px;
 }
 
 .component h4 {
@@ -3795,14 +3800,21 @@ input[type=text] {
 .element {
   cursor: move;
   padding: 10px 25px;
-  border: 1px solid #ddd;
-  background: #fbfbfb;
+  border: 2px solid #d8d8d8;
+  background-color: #f9f9f9;
+  *zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr="#FFF9F9F9", endColorstr="#FFEDEDED");
+  background-image: -owg-linear-gradient(top, #f9f9f9 0%, #ededed 100%);
+  background-image: linear-gradient(top, #f9f9f9 0%, #ededed 100%);
   margin-bottom: 10px;
+  border-radius: 3px;
 }
 
-.element:hover {
-  background: #f2f2f2;
-  border: 1px solid #33A09B;
+.element:hover,
+.element.active {
+  background: #ededed;
+  border: 2px solid #43c3bd;
+  border-radius: 3px;
 }
 
 .element-placeholder {
@@ -3813,16 +3825,64 @@ input[type=text] {
   opacity: 0.5;
 }
 
-.elements {
+.elements,
+.options {
   background: #e6e6e6;
   border: 1px solid #ccc;
   padding: 10px;
+  min-height: 300px;
+  position: relative;
+  z-index: 999999;
 }
 
-.elements h3 {
+.elements h3,
+.options h3 {
   color: #203047;
   font-weight: 600;
   margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.elements a.back,
+.options a.back {
+  float: right;
+  color: #478ecc;
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+.elements a.back:hover,
+.options a.back:hover {
+  color: #63a0d4;
+}
+
+.elements .option_vals,
+.elements .options,
+.options .option_vals,
+.options .options {
+  overflow-y: auto;
+  overflow-x: hidden;
+  clear: both;
+  background: #fff;
+}
+
+.elements .option_vals .form-control,
+.elements .options .form-control,
+.options .option_vals .form-control,
+.options .options .form-control {
+  background: #eee;
+}
+
+.elements .option_vals .btn,
+.elements .options .btn,
+.options .option_vals .btn,
+.options .options .btn {
+  float: right;
+}
+
+.options h3 {
+  float: left;
 }
 
 /* ---------------------------------------------------

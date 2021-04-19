@@ -14,51 +14,21 @@
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt20">
 	            <div class="row">
-
-	            	<div class="col-sm-8">
-	            	    <h2>Form Builder</h2>
-	            	    <hr>
-	            	    <div class="tabbable">
-	            	        <ul class="nav nav-tabs">
-	            	            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
-	            	            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
-	            	        </ul>
-
-	            	        <div class="tab-content dropzone">
-	            	            <div class="tab-pane active" id="editor-tab">
-	            	                <form id="builder_content" class="form-horizontal">
-	            	                    <fieldset id="content_form_name" class="mt10 mb20">
-	            	                        <legend>Form Name</legend>
-	            	                    </fieldset>
-	            	                </form>
-	            	            </div>
-
-	            	            <div class="tab-pane" id="source-tab">
-	            	                <textarea id="source"></textarea>
-	            	            </div>
-	            	        </div>
-	            	    </div>
-	            	</div>
+					<div class="col-sm-12">
+						<h2>Form Builder</h2>
+						<hr>
+					</div>	
 
 	            	<div class="col-sm-4 mt30">
 	            	    <div class="elements">
 	            	    	<h3>Fields</h3>
-	            	    	<hr>
-	            	    	<div id="components-container" class="form-horizontal">
 
-	            	    		{{-- <div class="component">
-	            	    			<div class="form-group" data-type="text">
-	            	    			    <label class="control-label col-sm-4" for="text_input">Text Input</label>
-	            	    			    <div class="controls col-sm-8">
-	            	    			        <input type="text" name="" disabled id="text_input" placeholder="placeholder" class="form-control">
-	            	    			    </div>
-	            	    			</div>
-	            	    		</div> --}}
+	            	    	<div id="components-container" class="form-horizontal">
 
 	            	    		{{-- TEXT INPUT --}}
 	            	    		<div class="col-xs-6">
 	            	    			<div class="component">
-	            	    				<h4><i class="fas fa-font"></i>Text Input</h4>
+	            	    				<h4><i class="fas fa-font"></i> Text Input</h4>
 	            	    			</div>
 	            	    		</div>
 
@@ -71,11 +41,45 @@
 	            	    			</div>
 	            	    		</div>
 	            	    		{{-- TEXT INPUT --}}
-	            	    	    
+
+	            	    		{{-- PHONE INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-phone"></i> Phone Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="phone_text">
+	            	    			    <label class="control-label" for="text_input">Phone Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- PHONE INPUT --}}
+
+	            	    		{{-- EMAIL INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-envelope"></i> Email Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="email_text">
+	            	    			    <label class="control-label" for="text_input">Email Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="email" name="" disabled id="email_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- EMAIL INPUT --}}
+
 	            	    	    {{-- TEXTAREA --}}
 	            	    	    <div class="col-xs-6">
 	            	    	    	<div class="component">
-	            	    	    		<h4><i class="fas fa-paragraph"></i>Textarea</h4>
+	            	    	    		<h4><i class="fas fa-paragraph"></i> Textarea</h4>
 	            	    	    	</div>
 	            	    	    </div>
 
@@ -93,7 +97,7 @@
 		            	    	{{-- SELECT BASIC --}}
 		            	    	<div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="fas fa-caret-square-down"></i>Select - Basic</h4>
+		            	    			<h4><i class="fas fa-caret-square-down"></i> Select - Basic</h4>
 		            	    		</div>
 		            	    	</div>
 
@@ -115,7 +119,7 @@
 		            	    	{{-- SELECT MULTIPLE --}}
 		            	    	<div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="far fa-caret-square-down"></i>Select - Multiple</h4>
+		            	    			<h4><i class="far fa-caret-square-down"></i> Select - Multiple</h4>
 		            	    		</div>
 		            	    	</div>
 
@@ -136,7 +140,7 @@
 	            	    	    {{-- CHECKBOXES --}}
 	            	    	    <div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="far fa-square"></i>Checkboxes</h4>
+		            	    			<h4><i class="far fa-square"></i> Checkboxes</h4>
 		            	    		</div>
 		            	    	</div>
 
@@ -164,7 +168,7 @@
 	            	    	    {{-- RADIO --}}
 	            	    	    <div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="far fa-circle"></i>Radio Buttons</h4>
+		            	    			<h4><i class="far fa-circle"></i> Radio Buttons</h4>
 		            	    		</div>
 		            	    	</div>
 	            	    	    
@@ -193,7 +197,7 @@
 	            	    	    {{-- BUTTON --}}
 	            	    	    <div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="fas fa-plus-square"></i>Button</h4>
+		            	    			<h4><i class="fas fa-plus-square"></i> Button</h4>
 		            	    		</div>
 		            	    	</div>
 
@@ -202,27 +206,57 @@
 		            	    	        <input type="submit" class="btn btn-primary" value="Submit">
 		            	    	    </div>
 	            	    	    </div>
+	            	    	    {{-- BUTTON --}}
 
+	            	    	    {{-- STATIC TEXT --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-subscript"></i> Static Text</h4>
+		            	    		</div>
+		            	    	</div>
 
-	            	    	    <div class="component form-group" data-type="static_text">
-	            	    	        <label class="control-label">Static Text</label>
-	            	    	        <div class="controls">
-	            	    	            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-	            	    	        </div>
-	            	    	    </div>
-
-	            	    	    <div class="form-actions component" data-type="submit">
-	            	    	        <button type="submit" class="btn btn-primary">Save changes</button>
-	            	    	        <button type="button" class="btn btn-default" onclick="javascript:window.history.back();">Cancel</button>
-	            	    	    </div>
+	            	    	    <div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="static_text">
+		            	    	        <label class="control-label">Static Text</label>
+		            	    	        <div class="controls">
+		            	    	            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- STATIC TEXT --}}
 	            	    	</div>
+	            	    </div>
+
+	            	    <div class="options hidetilloaded">
+	            	    	<h3>Options</h3>
+	            	    	<a href="#" class="back"><i class="fas fa-chevron-circle-left"></i></a>
+
+	            	    	<div class="option_vals"></div>
 	            	    </div>
 	            	</div>
 
-	            	
+	            	<div class="col-sm-8">	            	   
+	            	    <div class="tabbable">
+	            	        <ul class="nav nav-tabs">
+	            	            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
+	            	            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
+	            	        </ul>
 
-	                
+	            	        <div class="tab-content dropzone">
+	            	            <div class="tab-pane active" id="editor-tab">
+	            	                <form id="builder_content" class="form-horizontal">
+	            	                    <fieldset id="content_form_name" class="mt10 mb20">
+	            	                        <legend>Form Name</legend>
+	            	                    </fieldset>
+	            	                </form>
+	            	            </div>
 
+	            	            <div class="tab-pane" id="source-tab">
+	            	                <textarea id="source"></textarea>
+	            	            </div>
+	            	        </div>
+	            	    </div>
+	            	</div>
 	                
 	            </div>
 	        </div>
@@ -233,7 +267,7 @@
 </div>
 
 
-<!-- Options Modal -->
+{{-- <!-- Options Modal -->
     <div class="modal fade" id="options_modal" tabindex="-1" role="dialog" aria-labelledby="options_modal_label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -248,7 +282,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 @include('shared.reportmodal')
 @endsection

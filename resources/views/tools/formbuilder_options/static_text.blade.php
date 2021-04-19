@@ -15,4 +15,7 @@
             </span>
         </div>
     </div>
+
+    <button type="button" class="btn btn-primary mb0 mt10 ml10" id="save_options">Save changes</button>
+    <button type="button" class="btn btn-default mt10" id="cancel_options" tabindex="-1">Cancel</button>
 </div>
