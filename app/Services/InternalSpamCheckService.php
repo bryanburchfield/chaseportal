@@ -894,6 +894,7 @@ class InternalSpamCheckService
             AND O.Active = 1
             AND DR.GroupId NOT IN ($ignoreGroups)
             AND DR.GroupId != 1111   -- Teldar
+            AND DR.GroupId != 224849 -- Fast Pass Lane
             GROUP BY CallerId
             ";
 
@@ -924,7 +925,7 @@ class InternalSpamCheckService
         SELECT O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId = 1111
+        WHERE I.GroupId IN (1111, 224849)  -- Teldar, Fast Pass Lane
         AND O.Active = 1
         AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
 
