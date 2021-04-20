@@ -19,7 +19,7 @@
 						<hr>
 					</div>	
 
-	            	<div class="col-sm-4 mt30">
+	            	<div class="col-sm-4 mt30 elements_col">
 	            	    <div class="elements">
 	            	    	<h3>Fields</h3>
 
@@ -42,6 +42,23 @@
 	            	    		</div>
 	            	    		{{-- TEXT INPUT --}}
 
+	            	    		{{-- PASSWORD INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-key"></i> Password Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="password_input">
+	            	    			    <label class="control-label" for="password_input">Password Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="password" name="" disabled id="password_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- PASSWORD INPUT --}}
+
 	            	    		{{-- PHONE INPUT --}}
 	            	    		<div class="col-xs-6">
 	            	    			<div class="component">
@@ -50,10 +67,10 @@
 	            	    		</div>
 
 	            	    		<div class="component hidetilloaded">
-	            	    			<div class="form-group" data-type="phone_text">
-	            	    			    <label class="control-label" for="text_input">Phone Input</label>
+	            	    			<div class="form-group" data-type="phone_input">
+	            	    			    <label class="control-label" for="phone_input">Phone Input</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="placeholder" class="form-control">
+	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -67,10 +84,10 @@
 	            	    		</div>
 
 	            	    		<div class="component hidetilloaded">
-	            	    			<div class="form-group" data-type="email_text">
-	            	    			    <label class="control-label" for="text_input">Email Input</label>
+	            	    			<div class="form-group" data-type="email_input">
+	            	    			    <label class="control-label" for="email_input">Email Input</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="email" name="" disabled id="email_input" placeholder="placeholder" class="form-control">
+	            	    			        <input type="email" name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -218,9 +235,7 @@
 	            	    	    <div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="static_text">
 		            	    	        <label class="control-label">Static Text</label>
-		            	    	        <div class="controls">
-		            	    	            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-		            	    	        </div>
+		            	    	        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 		            	    	    </div>
 		            	    	</div>
 		            	    	{{-- STATIC TEXT --}}
@@ -258,6 +273,12 @@
 	            	    </div>
 	            	</div>
 	                
+	            </div>
+
+	            <div class="row">
+	            	<div class="col-sm-12">
+	            		<div class="form_preview"><div id="source"></div></div>
+	            	</div>
 	            </div>
 	        </div>
 

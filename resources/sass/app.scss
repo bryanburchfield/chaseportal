@@ -3210,9 +3210,9 @@ input[type=text] {
     background: darken(#eee,3%);
     border:1px solid #ccc;
     padding: 10px;
-    min-height: 300px;
+    min-height: 350px;
     position: relative;
-    z-index: 999999;
+    z-index: 999;
 
     h3{
         color:$blue;
@@ -3253,6 +3253,36 @@ input[type=text] {
 
 .options h3{
     float: left;
+}
+
+.form_preview {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+
+    #source{
+        display: none;
+        background: #eee;
+        border: 1px solid #ddd;
+        min-height: 400px;
+        padding: 20px;
+        overflow: auto;
+
+        h2, legend {
+            background: #203047;
+            color: #fff;
+            font-weight: 600;
+            font-size: 22px;
+            padding: 5px 8px;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .form_preview #source .form-control {
+            background: #fff;
+            color: #555;
+        }
+    }
 }
 
 /* ---------------------------------------------------

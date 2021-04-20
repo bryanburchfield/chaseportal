@@ -3830,9 +3830,9 @@ input[type=text] {
   background: #e6e6e6;
   border: 1px solid #ccc;
   padding: 10px;
-  min-height: 300px;
+  min-height: 350px;
   position: relative;
-  z-index: 999999;
+  z-index: 999;
 }
 
 .elements h3,
@@ -3883,6 +3883,37 @@ input[type=text] {
 
 .options h3 {
   float: left;
+}
+
+.form_preview {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+.form_preview #source {
+  display: none;
+  background: #eee;
+  border: 1px solid #ddd;
+  min-height: 400px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.form_preview #source h2,
+.form_preview #source legend {
+  background: #203047;
+  color: #fff;
+  font-weight: 600;
+  font-size: 22px;
+  padding: 5px 8px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.form_preview #source .form_preview #source .form-control {
+  background: #fff;
+  color: #555;
 }
 
 /* ---------------------------------------------------
