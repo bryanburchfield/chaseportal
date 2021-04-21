@@ -3192,6 +3192,10 @@ input[type=text] {
     @include border-radius(3px);
 }
 
+.elements_col{
+    position: relative;
+}
+
 .element:hover, .element.active {
     background: darken(#fafafa,5%);
     border: 2px solid lighten($green,10%);
@@ -3259,9 +3263,9 @@ input[type=text] {
     background: #fff;
     border: 1px solid #ddd;
     padding: 20px;
+    display: none;
 
     #source{
-        display: none;
         background: #eee;
         border: 1px solid #ddd;
         min-height: 400px;

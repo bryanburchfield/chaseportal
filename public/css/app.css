@@ -3810,6 +3810,10 @@ input[type=text] {
   border-radius: 3px;
 }
 
+.elements_col {
+  position: relative;
+}
+
 .element:hover,
 .element.active {
   background: #ededed;
@@ -3889,10 +3893,10 @@ input[type=text] {
   background: #fff;
   border: 1px solid #ddd;
   padding: 20px;
+  display: none;
 }
 
 .form_preview #source {
-  display: none;
   background: #eee;
   border: 1px solid #ddd;
   min-height: 400px;

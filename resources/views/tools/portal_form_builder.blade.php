@@ -12,7 +12,7 @@
 		@include('shared.navbar')
 
 		<div class="container-fluid bg dashboard p20">
-			<div class="container-full mt20">
+			<div class="container-full mt50">
 	            <div class="row">
 					<div class="col-sm-12">
 						<h2>Form Builder</h2>
@@ -275,9 +275,9 @@
 	                
 	            </div>
 
-	            <div class="row">
+	            <div class="row mt50">
 	            	<div class="col-sm-12">
-	            		<div class="form_preview"><div id="source"></div></div>
+	            		<div class="form_preview mt50"><div id="source"></div></div>
 	            	</div>
 	            </div>
 	        </div>
