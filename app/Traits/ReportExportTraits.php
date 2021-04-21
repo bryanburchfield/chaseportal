@@ -83,14 +83,25 @@ trait ReportExportTraits
 
             array_walk($headers, [&$this, 'outputCsv'], $outstream);
 
-            $pdo = DB::connection('sqlsrv')->getPdo();
-            $sth = $pdo->prepare($sql);
-            $sth->execute($bind);
+            // $sql can be an sql string or query object
+            if (is_object($sql)) {
+                $sql->chunk(500, function ($rows) use ($outstream) {
+                    foreach ($rows as $row) {
+                        $row = $this->processRow($row->toArray());
+                        $row = [$row];
+                        array_walk($row, [&$this, 'outputCsv'], $outstream);
+                    }
+                });
+            } else {
+                $pdo = DB::connection('sqlsrv')->getPdo();
+                $sth = $pdo->prepare($sql);
+                $sth->execute($bind);
 
-            while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
-                $row = $this->processRow($row);
-                $row = [$row];
-                array_walk($row, [&$this, 'outputCsv'], $outstream);
+                while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
+                    $row = $this->processRow($row);
+                    $row = [$row];
+                    array_walk($row, [&$this, 'outputCsv'], $outstream);
+                }
             }
 
             fclose($outstream);
