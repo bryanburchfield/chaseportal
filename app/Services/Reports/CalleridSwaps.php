@@ -69,9 +69,22 @@ class CalleridSwaps
         } else {
             $this->params['totrows'] = $results[0]['totrows'];
 
+            $clean_count = $results[0]['clean_count'];
+            $flagged_count = $results[0]['flagged_count'];
+
             foreach ($results as &$rec) {
                 $rec = $this->processRow($rec);
             }
+            $results[] = [
+                'Date' => 'Clean: ' . number_format($clean_count),
+                'phone' => 'Flagged: ' . number_format($flagged_count),
+                'ring_group' => 'Total: ' .  number_format($this->params['totrows']),
+                'owned' => '',
+                'calls' => '',
+                'connect_ratio' => '',
+                'flagged' => '',
+                'replaced_by' => '',
+            ];
 
             $this->params['totpages'] = floor($this->params['totrows'] / $this->params['pagesize']);
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
@@ -82,7 +95,9 @@ class CalleridSwaps
 
     public function processRow($rec)
     {
-        // remove tot count
+        // remove tots
+        array_pop($rec);
+        array_pop($rec);
         array_pop($rec);
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
@@ -120,6 +135,8 @@ class CalleridSwaps
             $query->where('phone', '1' . $this->params['phone']);
         }
 
+        $clean_count = (clone ($query))->where('flagged', 0)->count();
+        $flagged_count = (clone ($query))->where('flagged', 1)->count();
         $count = $query->count();
 
         $query->select([
@@ -131,6 +148,8 @@ class CalleridSwaps
             'connect_ratio',
             'flagged',
             'replaced_by',
+            DB::raw($clean_count . ' AS clean_count'),
+            DB::raw($flagged_count . ' AS flagged_count'),
             DB::raw($count . ' AS totrows')
         ]);
 
