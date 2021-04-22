@@ -39,6 +39,7 @@ return [
     'callbacks' => 'Call Backs',
     'caller_id' => 'Caller ID Tracking',
     'callerid' => 'Caller ID',
+    'callerid_swaps' => 'Caller ID Swaps',
     'calls' => 'Calls',
     'calls_by_caller_ID' => 'Calls by Caller ID',
     'calls_per_hour' => 'Calls Per Hour',
