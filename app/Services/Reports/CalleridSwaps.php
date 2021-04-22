@@ -20,6 +20,8 @@ class CalleridSwaps
         $this->params['reportName'] = 'reports.callerid_swaps';
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
+        $this->params['flag_type'] = '';
+        $this->params['phone'] = '';
         $this->params['columns'] = [
             'Date' => 'reports.date',
             'phone' => 'reports.phone',
@@ -36,6 +38,11 @@ class CalleridSwaps
     {
         $filters = [
             'db_list' => Auth::user()->getDatabaseArray(),
+            'flag_type' => [
+                '' =>  trans('general.all'),
+                'flagged' => trans('reports.only_flagged'),
+                'clean' => trans('reports.only_clean'),
+            ],
         ];
 
         return $filters;
@@ -99,8 +106,19 @@ class CalleridSwaps
 
         $query = PhoneFlag::where('group_id', Auth::user()->group_id)
             ->where('run_date', '>=', $startDate)
-            ->where('run_date', '<=', $endDate)
-            ->where('replaced_by', '!=', '');
+            ->where('run_date', '<=', $endDate);
+
+        if ($this->params['flag_type'] == 'flagged') {
+            $query->where('flagged', 1);
+        }
+
+        if ($this->params['flag_type'] == 'clean') {
+            $query->where('flagged', 0);
+        }
+
+        if (!empty($this->params['phone'])) {
+            $query->where('phone', '1' . $this->params['phone']);
+        }
 
         $count = $query->count();
 
@@ -143,6 +161,14 @@ class CalleridSwaps
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        if (!empty($request->flag_type)) {
+            $this->params['flag_type'] = $request->flag_type;
+        }
+
+        if (!empty($request->phone)) {
+            $this->params['phone'] = $request->phone;
+        }
 
         // Save params to session
         $this->saveSessionParams();

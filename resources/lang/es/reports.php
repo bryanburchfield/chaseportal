@@ -139,6 +139,8 @@ return [
     'name' => 'Nombre',
     'npa' => 'NPA',
     'npa_city' => 'Ciudad Principal',
+    'only_clean' => 'Solo Limpio',
+    'only_flagged' => 'Solo Marcado',
     'optional' => 'Opcional',
     'outbound' => 'Saliente',
     'outbound_pct' => 'Saliente%',

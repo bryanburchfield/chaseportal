@@ -4,6 +4,7 @@ return [
     'actiontaken' => 'Action Taken',
     'admin_dashboard' => 'Admin Dashboard',
     'agents' => 'Agents',
+    'all' => 'All',
     'all_campaigns' => 'All Campaigns',
     'and' => 'And',
     'auto_report_settings' => 'Automated Reports Settings',
