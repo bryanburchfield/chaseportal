@@ -18,6 +18,7 @@ class CalleridSwaps
         $this->initilaizeParams();
 
         $this->params['reportName'] = 'reports.callerid_swaps';
+        $this->params['hasTotals'] = true;
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
         $this->params['flag_type'] = '';
@@ -100,7 +101,8 @@ class CalleridSwaps
         array_pop($rec);
         array_pop($rec);
 
-        $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+        $tz = Auth::user()->ianaTz;
+        $rec['Date'] = Carbon::parse($rec['Date'])->tz($tz)->isoFormat('L LT');
 
         // Strip leading 1
         $rec['phone'] = substr($rec['phone'], 1);
