@@ -25,7 +25,7 @@ class InternalSpamCheckService
     const TOPDIDCAMP = 'TOP_1500_USED_DIDS';
     const BOTTOMDIDCAMP = 'ALL ACTIVE';
     const VERIZONCAMP = 'VERIZON';
-    const SPECIALCAMP = 'TELDAR';
+    const SPECIALCAMP = 'FAST TRACK';
 
     private $didSwapService;
     private $chaseDataDidApi;
@@ -810,10 +810,10 @@ class InternalSpamCheckService
         // free some memory
         $topdids = null;
 
-        $teldardids = array_keys(resultsToList($this->getTeldarDids()));
+        $specialdids = array_keys(resultsToList($this->getSpecialDids()));
 
         // load into Special campaign
-        foreach ($teldardids as $did) {
+        foreach ($specialdids as $did) {
             if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::SPECIALCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
@@ -821,7 +821,7 @@ class InternalSpamCheckService
         }
 
         // free some memory
-        $teldardids = null;
+        $specialdids = null;
 
         // Load lesser used DIDs into a different test campaign
         $bottomdids = array_keys(resultsToList($this->getBottomDids()));
@@ -919,7 +919,7 @@ class InternalSpamCheckService
         return $this->runSql($sql, $bind);
     }
 
-    private function getTeldarDids()
+    private function getSpecialDids()
     {
         $sql = "SET NOCOUNT ON
 
