@@ -39,6 +39,20 @@
                 </div>
             </div>
 
+            <div class="col-sm-4">
+                <div class="form-group">
+                    {!! Form::label('flag_type', __('reports.flag_type')) !!}
+                    {!! Form::select('flag_type', $filters['flag_type'], null, ['class' => 'form-control', 'id' => 'flag_type']) !!}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    {!! Form::label('phone', __('general.phone') . ' (' . __('reports.optional') . ')') !!}
+                    {!! Form::tel('phone', null, ['class' => 'form-control', 'required' => false]) !!}
+                </div>
+            </div>
+
         </div>
 
         <div class="alert alert-danger report_errors"></div>

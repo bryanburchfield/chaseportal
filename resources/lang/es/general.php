@@ -5,6 +5,7 @@ return [
     'admin_dashboard' => 'Panel de Administración',
     'agents' => 'Agentes',
     'all_campaigns' => 'Todas las Campañas',
+    'all' => 'Todas',
     'and' => 'Y',
     'auto_report_settings' => 'Configuración de Informes Automatizados',
     'auto_reports' => 'Reportes Automatizados',

@@ -157,6 +157,8 @@ return [
     'name' => 'Name',
     'npa' => 'NPA',
     'npa_city' => 'Major City',
+    'only_flagged' => 'Only Flagged',
+    'only_clean' => 'Only Clean',
     'optional' => 'Optional',
     'outbound' => 'Outbound',
     'outbound_pct' => 'Outbound%',
