@@ -60,7 +60,7 @@ class CalleridSwaps
             $this->params['totpages'] = 1;
             $this->params['curpage'] = 1;
         } else {
-            $this->params['totrows'] = $results[0]['totRows'];
+            $this->params['totrows'] = $results[0]['totrows'];
 
             foreach ($results as &$rec) {
                 $rec = $this->processRow($rec);
@@ -79,6 +79,10 @@ class CalleridSwaps
         array_pop($rec);
 
         $rec['Date'] = Carbon::parse($rec['Date'])->isoFormat('L LT');
+
+        // Strip leading 1
+        $rec['phone'] = substr($rec['phone'], 1);
+        $rec['replaced_by'] = substr($rec['replaced_by'], 1);
 
         return $rec;
     }
@@ -109,7 +113,7 @@ class CalleridSwaps
             'connect_ratio',
             'flagged',
             'replaced_by',
-            DB::raw($count . ' AS totRows')
+            DB::raw($count . ' AS totrows')
         ]);
 
         // Check params
