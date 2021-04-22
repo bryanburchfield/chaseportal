@@ -41,7 +41,7 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    {!! Form::label('flag_type', __('reports.flag_type')) !!}
+                    {!! Form::label('flag_type', __('general.include')) !!}
                     {!! Form::select('flag_type', $filters['flag_type'], null, ['class' => 'form-control', 'id' => 'flag_type']) !!}
                 </div>
             </div>

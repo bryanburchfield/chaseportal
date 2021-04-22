@@ -36,6 +36,7 @@ return [
     'first' => 'Primera',
     'forgot_pw' => 'Olvidaste Contraseña',
     'full_name' => 'Nombre completo',
+    'include' => 'Incluir',
     'interaction' => 'Interacción',
     'kpi_settings' => 'Configuración de KPIs',
     'last' => 'Última',

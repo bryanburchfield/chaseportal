@@ -36,6 +36,7 @@ return [
     'first' => 'First',
     'forgot_pw' => 'Forgot Your Password',
     'full_name' => 'Full Name',
+    'include' => 'Include',
     'interaction' => 'Interaction',
     'kpi_settings' => 'KPI Settings',
     'last' => 'Last',
