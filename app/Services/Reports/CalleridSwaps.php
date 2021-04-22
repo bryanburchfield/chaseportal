@@ -45,7 +45,7 @@ class CalleridSwaps
     {
         return [
             'columns' => $this->params['columns'],
-            'paragraphs' => 1,
+            'paragraphs' => 3,
         ];
     }
 
