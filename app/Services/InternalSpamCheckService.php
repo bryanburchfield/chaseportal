@@ -44,6 +44,14 @@ class InternalSpamCheckService
         self::TESTGROUP,
     ];
 
+    // Groups for special campaign
+    private $specialGroups =
+    [
+        1111,   // 24 Teldar
+        224577, // 07 I Life and Health Insurance Services
+        224849, // 07 DIMC
+    ];
+
     public static function execute($period)
     {
         $spam_check_service = get_called_class();
@@ -847,6 +855,7 @@ class InternalSpamCheckService
     private function useDidsQuery($top)
     {
         $ignoreGroups = implode(',', $this->ignoreGroups);
+        $specialGroups = implode(',', $this->specialGroups);
 
         $bind = [
             'enddate' => $this->run_date->toDateTimeString(),
@@ -893,9 +902,7 @@ class InternalSpamCheckService
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
             AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
             AND O.Active = 1
-            AND DR.GroupId NOT IN ($ignoreGroups)
-            AND DR.GroupId != 1111   -- Teldar
-            AND DR.GroupId != 224849 -- DIMC
+            AND DR.GroupId NOT IN ($ignoreGroups,$specialGroups)
             GROUP BY CallerId
             ";
 
@@ -926,14 +933,14 @@ class InternalSpamCheckService
         SELECT O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId = 1111  -- Teldar
+        WHERE I.GroupId = 1111
         AND O.Active = 1
         AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
         UNION
         SELECT O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-07].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId = 224849  -- DIMC
+        WHERE I.GroupId IN (224577,224849,224945)
         AND O.Active = 1
         AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
 
