@@ -343,6 +343,7 @@ class InternalSpamCheckService
         ];
 
         $sql = $this->buildInitSql();
+        $sql .= $this->buildBusySql();
         $sql .= $this->buildHangupSql();
         $sql .= $this->buildPeriodSql();
         $sql .= $this->buildActiveDidsSql();
@@ -520,6 +521,8 @@ class InternalSpamCheckService
         if (strtolower($this->period) == 'interim') {
             $sql = "
         SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
             SELECT CallerId, Subcampaign FROM #remotehangups
         ) tmp
         GROUP BY CallerId
