@@ -21,6 +21,12 @@ class InternalSpamCheckService
     use TimeTraits;
     use PhoneTraits;
 
+    const TESTGROUP = 2256969;
+    const TOPDIDCAMP = 'TOP_1500_USED_DIDS';
+    const BOTTOMDIDCAMP = 'ALL ACTIVE';
+    const VERIZONCAMP = 'VERIZON';
+    const SPECIALCAMP = 'FAST TRACK';
+
     private $didSwapService;
     private $chaseDataDidApi;
 
@@ -35,7 +41,15 @@ class InternalSpamCheckService
         224195,
         224802,
         236163,
-        2256969,
+        self::TESTGROUP,
+    ];
+
+    // Groups for special campaign
+    private $specialGroups =
+    [
+        1111,   // 24 Teldar
+        224577, // 07 I Life and Health Insurance Services
+        224849, // 07 DIMC
     ];
 
     public static function execute($period)
@@ -188,10 +202,10 @@ class InternalSpamCheckService
 
         SELECT COUNT(DISTINCT CallerId) As Cnt
         FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-        WHERE GroupId = 2256969
+        WHERE GroupId = " . self::TESTGROUP . "
         AND CallDate >= @startdate
         AND CallDate < @enddate
-        AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')";
+        AND Campaign IN ('" . self::TOPDIDCAMP . "','" . self::BOTTOMDIDCAMP . "','" . self::VERIZONCAMP . "','" . self::SPECIALCAMP . "')";
 
         return $this->runSql($sql, $bind);
     }
@@ -329,6 +343,7 @@ class InternalSpamCheckService
         ];
 
         $sql = $this->buildInitSql();
+        $sql .= $this->buildBusySql();
         $sql .= $this->buildHangupSql();
         $sql .= $this->buildPeriodSql();
         $sql .= $this->buildActiveDidsSql();
@@ -361,11 +376,10 @@ class InternalSpamCheckService
         SELECT * INTO #busy FROM (
             SELECT DISTINCT CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
+            WHERE GroupId = " . self::TESTGROUP . "
           	AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
-            AND Subcampaign != 'VERIZON'
+            AND Campaign IN ('" . self::TOPDIDCAMP . "','" . self::BOTTOMDIDCAMP . "','" . self::SPECIALCAMP . "')
             AND CallStatus = 'CR_BUSY'
         ) tmp";
 
@@ -380,11 +394,10 @@ class InternalSpamCheckService
             SUM(CASE WHEN callstatus = 'CR_CNCT/CON_PAMD' THEN 1 ELSE 0 END) AS Pamd,
             SUM(CASE WHEN sip_bye = 1 AND route != '' THEN 1 ELSE 0 END) AS RemoteHangup
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
+            WHERE GroupId = " . self::TESTGROUP . "
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
-            AND Subcampaign != 'VERIZON'
+            AND Campaign IN ('" . self::TOPDIDCAMP . "','" . self::BOTTOMDIDCAMP . "','" . self::SPECIALCAMP . "')
             GROUP BY CallerId
         ) tmp
 
@@ -399,11 +412,10 @@ class InternalSpamCheckService
             SELECT DISTINCT DR.CallerId, Subcampaign
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults] DR
             INNER JOIN #remotehangupdids D ON D.CallerId = DR.CallerId
-            WHERE GroupId = 2256969
+            WHERE GroupId = " . self::TESTGROUP . "
             AND CallDate >= @startdate
 	        AND CallDate < @enddate
-            AND Campaign IN ('TOP_1500_USED_DIDS','ALL ACTIVE','TELDAR')
-            AND Subcampaign != 'VERIZON'
+            AND Campaign IN ('" . self::TOPDIDCAMP . "','" . self::BOTTOMDIDCAMP . "','" . self::SPECIALCAMP . "')
             AND sip_bye = 1
             AND route != ''
         ) tmp";
@@ -424,11 +436,10 @@ class InternalSpamCheckService
                 SUM(CASE WHEN CallStatus = 'CR_NOANS' THEN 1 ELSE 0 END) AS Noans,
                 SUM(CASE WHEN CallStatus NOT IN ('CR_CNCT/CON_PAMD','CR_NOANS') THEN 1 ELSE 0 END) AS Other
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
+            WHERE GroupId = " . self::TESTGROUP . "
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign = 'VERIZON'
-            AND Subcampaign = 'VERIZON'
+            AND Campaign = '" . self::VERIZONCAMP . "'
             GROUP BY CallerId
         ) tmp
 
@@ -482,11 +493,10 @@ class InternalSpamCheckService
         SELECT * INTO #pamd FROM (
             SELECT id, CallerId, CallDate
             FROM [PowerV2_Reporting_Dialer-07].[dbo].[DialingResults]
-            WHERE GroupId = 2256969
+            WHERE GroupId = " . self::TESTGROUP . "
             AND CallDate >= @startdate
             AND CallDate < @enddate
-            AND Campaign = 'VERIZON'
-            AND Subcampaign = 'VERIZON'
+            AND Campaign = '" . self::VERIZONCAMP . "'
             AND CallStatus = 'CR_CNCT/CON_PAMD'
         ) tmp
 
@@ -511,6 +521,8 @@ class InternalSpamCheckService
         if (strtolower($this->period) == 'interim') {
             $sql = "
         SELECT CallerId, string_agg(Subcampaign, ',') AS Subcampaigns INTO #bad FROM (
+            SELECT CallerId, Subcampaign FROM #busy
+            UNION
             SELECT CallerId, Subcampaign FROM #remotehangups
         ) tmp
         GROUP BY CallerId
@@ -732,10 +744,10 @@ class InternalSpamCheckService
 
     private function clearTestCampaigns()
     {
-        $this->clearCampaign('TOP_1500_USED_DIDS');
-        $this->clearCampaign('VERIZON');
-        $this->clearCampaign('ALL ACTIVE');
-        $this->clearCampaign('TELDAR');
+        $this->clearCampaign(self::TOPDIDCAMP);
+        $this->clearCampaign(self::BOTTOMDIDCAMP);
+        $this->clearCampaign(self::VERIZONCAMP);
+        $this->clearCampaign(self::SPECIALCAMP);
     }
 
     private function clearCampaign($campaign)
@@ -752,10 +764,10 @@ class InternalSpamCheckService
 
     private function removeFromTestCampaigns()
     {
-        $this->removeFromTestCampaign('TOP_1500_USED_DIDS');
-        $this->removeFromTestCampaign('VERIZON');
-        $this->removeFromTestCampaign('ALL ACTIVE');
-        $this->removeFromTestCampaign('TELDAR');
+        $this->removeFromTestCampaign(self::TOPDIDCAMP);
+        $this->removeFromTestCampaign(self::BOTTOMDIDCAMP);
+        $this->removeFromTestCampaign(self::VERIZONCAMP);
+        $this->removeFromTestCampaign(self::SPECIALCAMP);
     }
 
     private function removeFromTestCampaign($campaign)
@@ -784,7 +796,7 @@ class InternalSpamCheckService
         $sql = "
         SELECT id, Phone
         FROM [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers]
-        WHERE GroupId = 2256969
+        WHERE GroupId = " . self::TESTGROUP . "
         AND Campaign = :campaign";
 
         return $this->runSql($sql, $bind);
@@ -796,11 +808,11 @@ class InternalSpamCheckService
         $topdids = array_keys(resultsToList($this->getTopDids()));
 
         foreach ($topdids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TOP_1500_USED_DIDS')) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::TOPDIDCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
-            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'VERIZON')) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::VERIZONCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
@@ -809,24 +821,24 @@ class InternalSpamCheckService
         // free some memory
         $topdids = null;
 
-        $teldardids = array_keys(resultsToList($this->getTeldarDids()));
+        $specialdids = array_keys(resultsToList($this->getSpecialDids()));
 
-        // load into TELDAR campaign
-        foreach ($teldardids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'TELDAR')) {
+        // load into Special campaign
+        foreach ($specialdids as $did) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::SPECIALCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
         }
 
         // free some memory
-        $teldardids = null;
+        $specialdids = null;
 
         // Load lesser used DIDs into a different test campaign
         $bottomdids = array_keys(resultsToList($this->getBottomDids()));
 
         foreach ($bottomdids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, 2256969, $did, 'ALL ACTIVE')) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::BOTTOMDIDCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
@@ -846,6 +858,7 @@ class InternalSpamCheckService
     private function useDidsQuery($top)
     {
         $ignoreGroups = implode(',', $this->ignoreGroups);
+        $specialGroups = implode(',', $this->specialGroups);
 
         $bind = [
             'enddate' => $this->run_date->toDateTimeString(),
@@ -892,9 +905,7 @@ class InternalSpamCheckService
             AND DR.CallStatus NOT IN ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')
             AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
             AND O.Active = 1
-            AND DR.GroupId NOT IN ($ignoreGroups)
-            AND DR.GroupId != 1111   -- Teldar
-            AND DR.GroupId != 224849 -- Fast Pass Lane
+            AND DR.GroupId NOT IN ($ignoreGroups,$specialGroups)
             GROUP BY CallerId
             ";
 
@@ -918,14 +929,21 @@ class InternalSpamCheckService
         return $this->runSql($sql, $bind);
     }
 
-    private function getTeldarDids()
+    private function getSpecialDids()
     {
         $sql = "SET NOCOUNT ON
 
         SELECT O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId IN (1111, 224849)  -- Teldar, Fast Pass Lane
+        WHERE I.GroupId = 1111
+        AND O.Active = 1
+        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
+        UNION
+        SELECT O.Phone as CallerId
+        FROM [PowerV2_Reporting_Dialer-07].[dbo].[InboundSources] I
+        INNER JOIN [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
+        WHERE I.GroupId IN (224577,224849,224945)
         AND O.Active = 1
         AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
 
