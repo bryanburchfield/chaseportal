@@ -101,6 +101,7 @@ return [
     'event' => 'Evento',
     'firstname' => 'Nombre',
     'flagged' => 'Marcado',
+    'flagged_by' => 'Marcado Por',
     'from' => 'Desde',
     'group_duration' => 'Duración del Grupo',
     'group_id' => 'Grupo',

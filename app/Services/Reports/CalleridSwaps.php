@@ -28,10 +28,10 @@ class CalleridSwaps
             'Date' => 'reports.date',
             'phone' => 'reports.phone',
             'ring_group' => 'reports.description',
-            'owned' => 'reports.owned',
             'calls' => 'reports.calls',
             'connect_ratio' => 'reports.connectpct',
             'flagged' => 'reports.flagged',
+            'flagged_by' => 'reports.flagged_by',
             'replaced_by' => 'reports.replaced_by',
         ];
     }
@@ -81,10 +81,10 @@ class CalleridSwaps
                 'Date' => 'Clean: ' . number_format($clean_count),
                 'phone' => 'Flagged: ' . number_format($flagged_count),
                 'ring_group' => 'Total: ' .  number_format($this->params['totrows']),
-                'owned' => '',
                 'calls' => '',
                 'connect_ratio' => '',
                 'flagged' => '',
+                'flagged_by' => '',
                 'replaced_by' => '',
             ];
 
@@ -156,6 +156,7 @@ class CalleridSwaps
             'calls',
             'connect_ratio',
             'flagged',
+            DB::raw('Network AS flagged_by'),
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
             DB::raw($flagged_count . ' AS flagged_count'),
@@ -169,6 +170,7 @@ class CalleridSwaps
             'dials AS calls',
             'connect_pct AS connect_ratio',
             DB::raw('1 AS flagged'),
+            DB::raw('Internal AS flagged_by'),
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
             DB::raw($flagged_count . ' AS flagged_count'),
