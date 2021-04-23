@@ -183,7 +183,7 @@ class CalleridSwaps
                 $unionQuery->orderBy($col, $dir);
             }
         } else {
-            $unionQuery->orderBy('run_date')->orderBy('phone');
+            $unionQuery->orderBy('Date')->orderBy('phone');
         }
 
         if (!$all) {
