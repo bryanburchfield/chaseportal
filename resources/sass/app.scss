@@ -3075,12 +3075,6 @@ textarea.nobg_txtarea.form-control{
     padding: 10px 20px;
     overflow: auto;
 
-    .controls {
-        .form-control{
-            background: #eee;
-        }
-    }
-
     .close{
         color:#d9534f;
         position: relative;
@@ -3115,10 +3109,6 @@ textarea.nobg_txtarea.form-control{
     border: 1px solid #d9edf7;
 }
 
-/* RANDOM BOOTSTAP FIX BECAUSE INPUT HEIGHT IS SET AT 30px ?!?! */
-input[type=text] {
-    height: auto;
-}
 
 /* COMPONENTS */
 
@@ -3183,13 +3173,17 @@ input[type=text] {
     border: 2px solid darken(#ddd,2%);
     // Needs latest Compass, add '@import "compass"' to your scss
     // Permalink - use to edit and share this gradient:
-    // https://colorzilla.com/gradient-editor/#f9f9f9+0,ededed+100
-    background-color: rgb(249,249,249); // Old browsers
-    @include filter-gradient(#f9f9f9, #ededed, vertical); // IE6-9
-    @include background-image(linear-gradient(top,  rgba(249,249,249,1) 0%,rgba(237,237,237,1) 100%));
+    // https://colorzilla.com/gradient-editor/#f2f2f2+0,e2e2e2+100
+    background-color: rgb(242,242,242); // Old browsers
+    @include filter-gradient(#f2f2f2, #e2e2e2, vertical); // IE6-9
+    @include background-image(linear-gradient(top,  rgba(242,242,242,1) 0%,rgba(226,226,226,1) 100%));
 
     margin-bottom: 10px;
     @include border-radius(3px);
+
+    .form-control{
+        background: #fff;
+    }
 }
 
 .elements_col{
@@ -3265,7 +3259,7 @@ input[type=text] {
     padding: 20px;
     display: none;
 
-    #source{
+    form{
         background: #eee;
         border: 1px solid #ddd;
         min-height: 400px;
@@ -3286,6 +3280,13 @@ input[type=text] {
             background: #fff;
             color: #555;
         }
+    }
+
+    form.form-horizontal {
+        background: #eee;
+        border: 1px solid #ccc;
+        overflow: auto;
+        padding: 12px;
     }
 }
 

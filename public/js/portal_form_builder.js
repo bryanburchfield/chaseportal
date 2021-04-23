@@ -1,12 +1,19 @@
 $(function() {
 
-	var dropzone_height=300;
+	///////////
+	// update source when element is dragged
+	// add inline radios / checkboxes
+	// add disabled attribute to elements in the form prview / dropzone
+	// remove disabled attributes from " " " " " "
+
+	///////////
 
     var FORM_BUILDER = {
         el: null,
         method: "POST",
         action: "",
         delimeter: '=',
+        dropzone_height:300,
 
         // set current element
         setElement: function(el) {
@@ -34,7 +41,6 @@ $(function() {
             return content
                     .replace(/\t/, '')
                     .replace('element',  '')
-                    .replace('ui-draggable', 'col-sm-6')
                     .replace(/<div class="close">.<\/div>/g, '')
                     .replace(/ data-(.+)="(.+)"/g, '');
         },
@@ -46,36 +52,35 @@ $(function() {
                             "class=\"form-horizontal\">\n" +
                             $("#builder_content").html() +
                             "\n</form>";
-
             
-            FORM_BUILDER.generatePreview(content);
 
             source.setValue(this.cleanContent(content));
             source.autoFormatRange(
                 { line: 0, ch: 0 },
                 { line: source.lastLine() + 1, ch: 0 }
             );
+
+            FORM_BUILDER.generatePreview();
         },
 
         generatePreview: function(){
 
-        	var code = $("#builder_content").html();
-        	console.log(code);
-    		// $($temptxt).find(".component .hidetilloaded");
+        	var source_code = "<form method=\"" + this.method + "\" " +
+        	                "action=\"" + this.action + "\">" +
+        	                $("#builder_content").html() +
+        	                "\n</form>";
 
-    		// // form heading
-    		// var html = '<h2>'+$('#build legend.valtype').text()+'</h2>';
+        	source_code=source_code
+	        	.replaceAll('ui-draggable element', 'col-sm-6')
+        		.replaceAll('<div class="controls">', '')
+        		.replace(/<div class="close">.<\/div>/g, '')
+        	;
 
-    		// $('#build .hidetilloaded').each(function(){
-    		// 	html+=$(this).html();
-    		// });
-
-    		// $("#source").html(html.replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));		
-    		$('.form_preview').html(code).show();
+    		$('.form_preview').html(source_code).show();
         },
 
-        // ADD COMPONENT TO DROPZONE
-        addComponent: function(component) {
+        // add component to dropzone
+        add_component: function(component) {
             component
             .parent()
             .next()
@@ -88,8 +93,17 @@ $(function() {
             .appendTo("#builder_content")
             .find('.form-control').removeAttr('disabled');
 
-            // dropzone_height = $('form#builder_content').outerHeight(true);
+            FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
             this.updateSource();
+        },
+
+        // remove component from dropzone
+        remove_component:function(component){
+        	$(component).parent().fadeOut('200', function() {
+        	    $(component).remove();
+        	    FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
+        	    FORM_BUILDER.updateSource();
+        	});
         },
 
         // load element options
@@ -585,7 +599,6 @@ $(function() {
         },
 
         //button options
-
         button:{
         	prefix: '.options_button_',
 
@@ -615,21 +628,16 @@ $(function() {
         }
     })
     .on('click', function(e) {
-        FORM_BUILDER.addComponent($(this));
+        FORM_BUILDER.add_component($(this));
     });
 
     // remove element when clicking close button
     $(document).on('click', '.element > .close', function(e) {
         e.stopPropagation();
-
-        $(this).parent().fadeOut('200', function() {
-            $(this).remove();
-        });
-
-        FORM_BUILDER.generatePreview();
+        FORM_BUILDER.remove_component($(this));
     });
 
-    // elements are components that have been added to the dropzone/ clicking and element opens options panel
+    // elements are components that have been added to the dropzone/ clicking an element opens options panel
     $(document).on('click', '.element', function(e) {
         FORM_BUILDER.loadOptions.call(this, $(this).find('.form-group').data('type'));
     });
@@ -644,6 +652,7 @@ $(function() {
         // call corresponding save method to process entered variables
         FORM_BUILDER[type].set();
         goBackUnfocus();
+        FORM_BUILDER.generatePreview();
     });
 
     // go back to elements panel
@@ -652,7 +661,7 @@ $(function() {
     	goBackUnfocus();
     });
 
-    // cance and go back to elements panel
+    // cancel and go back to elements panel
     $('.options').on('click', 'button#cancel_options', function(e){
     	e.preventDefault();
     	goBackUnfocus();
@@ -682,7 +691,7 @@ $(function() {
         accept: '.component',
         hoverClass: 'content-hover',
         drop: function(e, ui) {
-            FORM_BUILDER.addComponent(ui.draggable);
+            FORM_BUILDER.add_component(ui.draggable);
         }
     })
     .sortable({
@@ -716,11 +725,13 @@ $(function() {
     var $sidebar   = $(".elements_col"), 
         $window    = $(window),
         offset     = $sidebar.offset(),
-        topPadding = 15,
-        dropzone_height = $('form#builder_content').outerHeight(true);
+        topPadding = 15
+    ;
+    
+    FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
         
     $window.scroll(function() {
-    	if($window.scrollTop() >= dropzone_height) {
+    	if($window.scrollTop() >= FORM_BUILDER.dropzone_height) {
             $sidebar.stop().animate({
                 marginTop: 0
             });
