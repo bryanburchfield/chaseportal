@@ -2,6 +2,7 @@
 
 namespace App\Services\Reports;
 
+use App\Models\InternalPhoneFlag;
 use App\Models\PhoneFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -121,31 +122,37 @@ class CalleridSwaps
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $query = PhoneFlag::where('group_id', Auth::user()->group_id)
+        $phoneFlagQuery = PhoneFlag::where('group_id', Auth::user()->group_id)
+            ->where('run_date', '>=', $startDate)
+            ->where('run_date', '<=', $endDate);
+
+        $internalPhoneFlagQuery = InternalPhoneFlag::where('group_id', Auth::user()->group_id)
             ->where('run_date', '>=', $startDate)
             ->where('run_date', '<=', $endDate);
 
         if ($this->params['flag_type'] == 'flagged') {
-            $query->where('flagged', 1);
+            $phoneFlagQuery->where('flagged', 1);
         }
 
         if ($this->params['flag_type'] == 'clean') {
-            $query->where('flagged', 0);
+            $phoneFlagQuery->where('flagged', 0);
         }
 
         if (!empty($this->params['phone'])) {
-            $query->where('phone', '1' . $this->params['phone']);
+            $phoneFlagQuery->where('phone', '1' . $this->params['phone']);
+            $internalPhoneFlagQuery->where('phone', '1' . $this->params['phone']);
         }
 
-        $clean_count = (clone ($query))->where('flagged', 0)->count();
-        $flagged_count = (clone ($query))->where('flagged', 1)->count();
-        $count = $query->count();
+        $clean_count = (clone ($phoneFlagQuery))->where('flagged', 0)->count();
 
-        $query->select([
+        $flagged_count = (clone ($phoneFlagQuery))->where('flagged', 1)->count() + $internalPhoneFlagQuery->count();
+
+        $count = $phoneFlagQuery->count() + $internalPhoneFlagQuery->count();
+
+        $phoneFlagQuery->select([
             'run_date AS Date',
             'phone',
             'ring_group',
-            'owned',
             'calls',
             'connect_ratio',
             'flagged',
@@ -155,21 +162,36 @@ class CalleridSwaps
             DB::raw($count . ' AS totrows')
         ]);
 
+        $internalPhoneFlagQuery->select([
+            'run_date AS Date',
+            'phone',
+            'ring_group',
+            'dials AS calls',
+            'connect_poct AS connect_ratio',
+            DB::raw('1 AS flagged'),
+            'replaced_by',
+            DB::raw($clean_count . ' AS clean_count'),
+            DB::raw($flagged_count . ' AS flagged_count'),
+            DB::raw($count . ' AS totrows')
+        ]);
+
+        $unionQuery = $phoneFlagQuery->union($internalPhoneFlagQuery);
+
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
             foreach ($this->params['orderby'] as $col => $dir) {
-                $query->orderBy($col, $dir);
+                $unionQuery->orderBy($col, $dir);
             }
         } else {
-            $query->orderBy('run_date')->orderBy('phone');
+            $unionQuery->orderBy('run_date')->orderBy('phone');
         }
 
         if (!$all) {
-            $query->skip(($this->params['curpage'] - 1) * $this->params['pagesize'])
+            $unionQuery->skip(($this->params['curpage'] - 1) * $this->params['pagesize'])
                 ->take($this->params['pagesize']);
         }
 
-        return [$query, null];
+        return [$unionQuery, null];
     }
 
     private function processInput(Request $request)
