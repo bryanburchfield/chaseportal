@@ -167,7 +167,7 @@ class CalleridSwaps
             'phone',
             'ring_group',
             'dials AS calls',
-            'connect_poct AS connect_ratio',
+            'connect_pct AS connect_ratio',
             DB::raw('1 AS flagged'),
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
