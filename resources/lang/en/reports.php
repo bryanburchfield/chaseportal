@@ -119,6 +119,7 @@ return [
     'event' => 'Event',
     'firstname' => 'First',
     'flagged' => 'Flagged',
+    'flagged_by' => 'Flagged By',
     'from' => 'From',
     'group_duration' => 'Group Duration',
     'group_id' => 'Group',
