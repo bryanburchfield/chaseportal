@@ -26,6 +26,8 @@ class InternalSpamCheckService
     const BOTTOMDIDCAMP = 'ALL ACTIVE';
     const VERIZONCAMP = 'VERIZON';
     const SPECIALCAMP = 'FAST TRACK';
+    const MINDIALS = 100;    // Min dials to get into the bottom DID campaign
+    const MAXDIALS = 250;    // Min dials to get into the top DID campaign
 
     private $didSwapService;
     private $chaseDataDidApi;
@@ -862,8 +864,8 @@ class InternalSpamCheckService
 
         $bind = [
             'enddate' => $this->run_date->toDateTimeString(),
-            'mindials' => 150,
-            'maxdials' => 250,
+            'mindials' => self::MINDIALS,
+            'maxdials' => self::MAXDIALS,
         ];
 
         switch (today()->dayOfWeek) {
