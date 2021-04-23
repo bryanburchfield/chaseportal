@@ -29,6 +29,13 @@
     @guest
         <link href="/css/app.css" rel="stylesheet" type="text/css"/>
     @endguest
+
+    @isset($override_app_cssfile)
+        @foreach($override_app_cssfile as $css)
+            <link href="/css/{{ $css }}" rel="stylesheet">
+        @endforeach
+    @endisset
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
     {{-- <link href="/css/jquery-ui.min.css" rel="stylesheet"> --}}

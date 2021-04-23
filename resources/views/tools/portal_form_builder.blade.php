@@ -13,511 +13,274 @@
 
 		<div class="container-fluid bg dashboard p20">
 			<div class="container-full mt50">
-				<div class="row">
-					<div class="col-sm-5">
-						<ul class="nav nav-tabs portal_form_builder" role="tablist">
-						    <li role="presentation" class="active"><a href="#inputs" aria-controls="inputs" role="tab" data-toggle="tab">Inputs</a></li>
-						    <li role="presentation"><a href="#radio_check" aria-controls="radio_check" role="tab" data-toggle="tab">Radio/Checkboxes</a></li>
-						    <li role="presentation"><a href="#selects" aria-controls="selects" role="tab" data-toggle="tab">Select</a></li>
-						    <li role="presentation"><a href="#buttons" aria-controls="buttons" role="tab" data-toggle="tab">Buttons</a></li>
-						    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">Properties</a></li>
-						</ul>
-
-				    	<div class="elements draggable_elements">
-				    		<form class="form-horizontal" id="components">
-								<fieldset>
-									<div class="tab-content elements">
-
-										<div role="tabpanel" class="tab-pane active" id="inputs">
-
-											<div class="form-group component" data-type="text" title="Text Input"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control mb-4' type='text' name='label' id='label'>
-												<label class='control-label'>Placeholder</label> <input type='text' name='placeholder' id='placeholder' class='form-control mb-4'>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true" 
-												>
-
-												<!-- Text input-->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label class=" control-label valtype" for="input01" data-valtype='label'>Text input</label>
-															<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
-														</div>
-													</div>
-												</div>
-												
-												<!-- Text input-->
-												<div class="draggable">
-													<div class="form-group">
-													<label class="control-label valtype" for="input01" data-valtype='label'>Text input</label>
-														<input type="text" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" data-type="text" title="Password Input"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control mb-4' type='text' name='label' id='label'>
-												<label class='control-label'>Placeholder</label> <input type='text' name='placeholder' id='placeholder' class='form-control mb-4'>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true" 
-												>
-
-												<!-- Password input-->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label class="control-label valtype" for="input01" data-valtype='label'>Password input</label>
-															<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
-														</div>
-													</div>
-												</div>
-												
-												<div class="draggable">
-													<!-- Password input-->
-													<div class="form-group">
-													<label class="control-label valtype" for="input01" data-valtype='label'>Password input</label>
-														<input type="password" placeholder="placeholder" class="form-control input-md valtype" data-valtype="placeholder" >
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" title="Textarea"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true" 
-												>
-
-												<!-- Textarea-->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label class=" control-label valtype" for="input01" data-valtype='label'>Password input</label>
-															<div class="textarea">
-																<textarea class="form-control valtype" data-valtype="checkbox" /> </textarea>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<!-- Textarea -->
-												<div class="draggable">
-													<div class="form-group">
-														<label class="control-label valtype" data-valtype="label">Textarea</label>
-														<div class="textarea">
-															<textarea class="form-control valtype" data-valtype="checkbox" /> </textarea>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" data-type="prep-text" title="Prepended Text Input"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control mb-4' type='text' name='label' id='label'>
-												<label class='control-label'>Prepend</label> <input type='text' name='prepend' id='prepend' class='form-control mb-4'>
-												<label class='control-label'>Placeholder</label> <input type='text' name='placeholder' id='placeholder' class='form-control mb-4'>
-												<label class='control-label'>Help Text</label> <input type='text' name='help' id='help' class='form-control mb-4'>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true" 
-												>
-
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="control-label valtype" data-valtype="label">Prepended text</label>
-														<div class="input-group">
-															<span class="input-group-addon valtype" data-valtype="prepend">^_^</span>
-															<input class="form-control valtype" placeholder="placeholder" id="prependedInput" type="text" data-valtype="placeholder">
-														</div>
-													</div>
-												</div>
-
-												<!-- Prepended text-->
-												<div class="draggable">
-													<label class="control-label valtype" data-valtype="label">Prepended text</label>
-													<div class="input-group">
-														<span class="input-group-addon valtype" data-valtype="prepend">^_^</span>
-														<input class="form-control valtype" placeholder="placeholder" id="prependedInput" type="text" data-valtype="placeholder">
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div role="tabpanel" class="tab-pane" id="radio_check">
-
-											<div class="form-group component" title="Inline radioes"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<label class='control-label'>Group Name Attribute</label> <input class='form-control' type='text' name='name' id='name'>
-												<textarea class='form-control' style='min-height: 200px' id='inline-radios'></textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-												
-												<!-- Inline Radios -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
-															<div class="valtype form-group" data-valtype="inline-radios">
-																<!-- Inline Radios -->
-																<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
-																<label class="radio-inline"><input type="radio" name="optradio">2</label>
-																<label class="radio-inline"><input type="radio" name="optradio">3</label>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<!-- Inline Radios -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline radios</label>
-													<div class="valtype form-group" data-valtype="inline-radios">
-														<label class="radio-inline"><input type="radio" name="optradio" checked>1</label>
-														<label class="radio-inline"><input type="radio" name="optradio">2</label>
-														<label class="radio-inline"><input type="radio" name="optradio">3</label>
-													</div>
-												</div>
-
-											</div>
-
-											<div class="form-group component" rel="popover" title="Multiple Radios" trigger="manual"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<label class='control-label'>Group Name Attribute</label> <input class='form-control' type='text' name='name' id='name'>
-												<label class='control-label'>Options: </label>
-												<textarea class='form-control' style='min-height: 200px' id='radios'></textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Multiple Radios -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="control-label valtype" data-valtype="label">Radio buttons</label>
-														<div class="valtype" data-valtype="radios">
-															<label class="radio">
-																<input type="radio" value="Option one" name="group" checked="checked">
-																Option one
-															</label>
-															<label class="radio">
-																<input type="radio" value="Option two" name="group">
-																Option two
-															</label>
-														</div>
-													</div>
-												</div>
-
-												<!-- Multiple Radios -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Radio buttons</label>
-													<div class="col-md-8 col-lg-9 valtype" data-valtype="radios">
-
-														<label class="radio">
-															<input type="radio" value="Option one" name="group" checked="checked">
-															Option one
-														</label>
-														<label class="radio">
-															<input type="radio" value="Option two" name="group">
-															Option two
-														</label>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" title="Inline Checkboxes"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<textarea class='form-control' style='min-height: 200px' id='inline-checkboxes'></textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Inline Checkboxes -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline Checkboxes</label>
-														<div class="valtype" data-valtype="inline-checkboxes">
-															<label class="checkbox-inline"><input type="checkbox" value="">1</label>
-															<label class="checkbox-inline"><input type="checkbox" value="">2</label>
-															<label class="checkbox-inline"><input type="checkbox" value="">3</label>
-														</div>
-													</div>
-												</div>
-
-												<!-- Inline Checkboxes -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Inline Checkboxes</label>
-													<div class="valtype" data-valtype="inline-checkboxes">
-														<label class="checkbox-inline"><input type="checkbox" value="">1</label>
-														<label class="checkbox-inline"><input type="checkbox" value="">2</label>
-														<label class="checkbox-inline"><input type="checkbox" value="">3</label>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" title="Multiple Checkboxes" trigger="manual"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<label class='control-label'>Options: </label>
-												<textarea class='form-control' style='min-height: 200px' id='checkboxes'> </textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Multiple Checkboxes -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="control-label valtype" data-valtype="label">Checkboxes</label>
-														<div class=" valtype" data-valtype="checkboxes">
-
-															<label class="checkbox">
-																<input type="checkbox" value="Option one">
-																Option one
-															</label>
-															<label class="checkbox">
-																<input type="checkbox" value="Option two">
-																Option two
-															</label>
-														</div>
-													</div>
-												</div>
-
-												<!-- Multiple Checkboxes -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Checkboxes</label>
-													<div class="col-md-8 col-lg-9 valtype" data-valtype="checkboxes">
-
-														<!-- Multiple Checkboxes -->
-														<label class="checkbox">
-															<input type="checkbox" value="Option one">
-															Option one
-														</label>
-														<label class="checkbox">
-															<input type="checkbox" value="Option two">
-															Option two
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div role="tabpanel" class="tab-pane" id="selects">
-
-											<div class="form-group component" title="Select"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control mb-4' type='text' name='label' id='label'>
-												<label class='control-label'>Options: </label>
-												<textarea class='form-control mb-4' style='min-height: 200px' id='option'> </textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Select Basic -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="control-label valtype" data-valtype="select-basic">Select - Basic</label>
-														<div>
-															<select class="form-control input-md valtype" data-valtype="option">
-																<option value="">Select One</option>
-																<option value="">Enter</option>
-																<option value="">Your</option>
-																<option value="">Options</option>
-																<option value="">Here!</option>
-															</select>
-														</div>
-													</div>
-												</div>
-
-												<!-- Select Basic -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Select - Basic</label>
-													<div class="col-md-8 col-lg-9">
-														<select class="form-control input-md valtype" data-valtype="option">
-															<option value="">Select One</option>
-															<option value="">Enter</option>
-															<option value="">Your</option>
-															<option value="">Options</option>
-															<option value="">Here!</option>
-														</select>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group component" rel="popover" title="Search Input" trigger="manual"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												<label class='control-label'>Label Text</label> <input class='form-control' type='text' name='label' id='label'>
-												<label class='control-label'>Options: </label>
-												<textarea class='form-control' style='min-height: 200px' id='option'></textarea>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Select Multiple -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<label class="control-label valtype" data-valtype="label">Select - Multiple</label>
-														<div>
-															<select class="form-control input-md valtype" multiple="multiple" data-valtype="option">
-																<option value="">Select One</option>
-																<option value="">Enter</option>
-																<option value="">Your</option>
-																<option value="">Options</option>
-																<option value="">Here!</option>
-															</select>
-														</div>
-													</div>
-												</div>
-
-												<!-- Select Multiple -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Select - Multiple</label>
-													<div class="col-md-8 col-lg-9">
-														<select class="form-control input-md valtype" multiple="multiple" data-valtype="option">
-															<option value="">Select One</option>
-															<option value="">Enter</option>
-															<option value="">Your</option>
-															<option value="">Options</option>
-															<option value="">Here!</option>
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div role="tabpanel" class="tab-pane" id="buttons">
-
-											<div class="form-group component" title="Buttons"
-												data-content="
-												<form class='form'>
-												<div class='form-group col-md-12'>
-												
-												<label class='control-label'>Button Text</label> <input class='form-control' type='text' name='label' id='button'>
-												<label class='control-label' id=''>Type: </label>
-												<select class='form-control input-md' id='color'>
-												<option id='btn-default'>White</option>
-												<option id='btn-primary'>Orange</option>
-												<option id='btn-info'>Blue</option>
-												<option id='btn-success'>Green</option>
-												<option id='btn-warning'>Orange</option>
-												<option id='btn-danger'>Red</option>
-												</select>
-												<label class='control-label' id=''>Size: </label>
-												<select class='form-control input-md' id='btn_size'>
-												<option id='btn-sm'>Small</option>
-												<option id='btn-md'>Medium</option>
-												<option id='btn-lg'>Large</option>
-												</select>
-												<hr/>
-												<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger save_edit'>Cancel</button>
-												</div>
-												</form>" data-html="true"
-												>
-
-												<!-- Button -->
-												<div class="hidetilloaded">
-													<div class="col-sm-6">
-														<div class="valtype" data-valtype="button">
-															<button class='btn btn-success'>Button</button>
-														</div>
-													</div>
-												</div>
-
-												<!-- Button -->
-												<div class="draggable">
-													<label class="col-md-4 col-lg-3 control-label valtype" data-valtype="label">Button</label>
-													<div class="col-md-8 col-lg-9 valtype"  data-valtype="button">
-														<button class='btn btn-success'>Button</button>
-													</div>
-												</div>
-											</div>
-
-										</div>
-										<div role="tabpanel" class="tab-pane" id="properties">
-											<h2>Properties</h2>
-										</div>
-									</div>
-									
-								</fieldset>
-							</form>
-				    	</div>
-				    </div>		
-
-				    <div class="col-sm-7">
-				    	<div class="dropzone" id="build">
-
-				    		<form id="target" class="form-horizontal">
-
-				    	    	<fieldset>
-				    	    		<div id="legend" class="component" title="Form Title"
-				    		        data-content="
-				    			        <form class='form'>
-				    		        		<div class='form-group col-md-12'>
-				    		            		<label class='control-label'>Title</label> <input class='form-control mb-4' type='text' name='title' id='text'>
-				    		            		<hr/>
-				    		            	<button class='btn btn-info save_edit'>Save</button><button class='btn btn-danger cancel_edit'>Cancel</button>
-				    		          		</div>
-				    		        	</form>" data-html="true"
-				    		        	>
-				    		        	<legend class="valtype" data-valtype="text">Form Name</legend>
-
-				    		        	<p>Drop form elements here</p>
-				    	      		</div>
-				    	    	</fieldset>
-				    		</form>
-				    	</div>
-				    </div>				   
-				</div>
-
-				<div class="row">
+	            <div class="row">
 					<div class="col-sm-12">
-						<div class="form_preview">
-							<div id="source"></div>
-							{{-- <textarea id="source" class="col-md-12" readonly></textarea> --}}
-						</div>
-					</div>
-				</div>
-			</div>
+						<h2>Form Builder</h2>
+						<hr>
+					</div>	
+
+	            	<div class="col-sm-4 mt30 elements_col">
+	            	    <div class="elements">
+	            	    	<h3>Fields</h3>
+
+	            	    	<div id="components-container" class="form-horizontal">
+
+	            	    		{{-- TEXT INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-font"></i> Text Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="text">
+	            	    			    <label class="control-label" for="text_input">Text Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="text" name="" disabled id="text_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- TEXT INPUT --}}
+
+	            	    		{{-- PASSWORD INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-key"></i> Password Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="password_input">
+	            	    			    <label class="control-label" for="password_input">Password Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="password" name="" disabled id="password_input" placeholder="placeholder" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- PASSWORD INPUT --}}
+
+	            	    		{{-- PHONE INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-phone"></i> Phone Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="phone_input">
+	            	    			    <label class="control-label" for="phone_input">Phone Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- PHONE INPUT --}}
+
+	            	    		{{-- EMAIL INPUT --}}
+	            	    		<div class="col-xs-6">
+	            	    			<div class="component">
+	            	    				<h4><i class="fas fa-envelope"></i> Email Input</h4>
+	            	    			</div>
+	            	    		</div>
+
+	            	    		<div class="component hidetilloaded">
+	            	    			<div class="form-group" data-type="email_input">
+	            	    			    <label class="control-label" for="email_input">Email Input</label>
+	            	    			    <div class="controls">
+	            	    			        <input type="email" name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
+	            	    			    </div>
+	            	    			</div>
+	            	    		</div>
+	            	    		{{-- EMAIL INPUT --}}
+
+	            	    	    {{-- TEXTAREA --}}
+	            	    	    <div class="col-xs-6">
+	            	    	    	<div class="component">
+	            	    	    		<h4><i class="fas fa-paragraph"></i> Textarea</h4>
+	            	    	    	</div>
+	            	    	    </div>
+
+	            	    	    <div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="textarea">
+		            	    	        <label class="control-label" for="textarea">Textarea</label>
+		            	    	        <div class="controls">
+		            	    	            <textarea name="" class="form-control" id="textarea" placeholder="placeholder"></textarea>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- TEXTAREA --}}
+
+
+		            	    	{{-- SELECT BASIC --}}
+		            	    	<div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-caret-square-down"></i> Select - Basic</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="select_basic">
+		            	    	        <label class="control-label" for="select_basic">Select - Basic</label>
+		            	    	        <div class="controls">
+		            	    	            <select class="form-control" name="" id="select_basic">
+		            	    	                <option value="1">Option 1</option>
+		            	    	                <option value="2">Option 2</option>
+		            	    	                <option value="3">Option 3</option>
+		            	    	            </select>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- SELECT BASIC --}}
+
+
+		            	    	{{-- SELECT MULTIPLE --}}
+		            	    	<div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-caret-square-down"></i> Select - Multiple</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="select_multiple">
+		            	    	        <label class="control-label" for="select_multiple">Select - Multiple</label>
+		            	    	        <div class="controls">
+		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
+		            	    	                <option value="1">Option 1</option>
+		            	    	                <option value="2">Option 2</option>
+		            	    	                <option value="3">Option 3</option>
+		            	    	            </select>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+	            	    	    {{-- SELECT MULTIPLE --}}
+
+	            	    	    {{-- CHECKBOXES --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-square"></i> Checkboxes</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="checkbox">
+		            	    	        <label class="control-label">Checkboxes</label>
+		            	    	        <div class="controls">
+		            	    	            <div class="checkbox"><label class="" for="checkbox_1">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_1">
+		            	    	                Option 1
+		            	    	            </label></div>
+		            	    	            <div class="checkbox"><label class="" for="checkbox_2">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_2">
+		            	    	                Option 2
+		            	    	            </label></div>
+		            	    	            <div class="checkbox"><label class="" for="checkbox_3">
+		            	    	                <input type="checkbox" name="checkbox" id="checkbox_3">
+		            	    	                Option 3
+		            	    	            </label></div>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+	            	    	    {{-- CHECKBOXES --}}
+
+	            	    	    {{-- RADIO --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-circle"></i> Radio Buttons</h4>
+		            	    		</div>
+		            	    	</div>
+	            	    	    
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="radio">
+		            	    	        <label class="control-label">Radio Buttons</label>
+		            	    	        <div class="controls">
+		            	    	            <div class="radio"><label class="" for="radio_1">
+		            	    	                <input type="radio" name="radio" id="radio_1">
+		            	    	                Option 1
+		            	    	            </label></div>
+		            	    	            <div class="radio"><label class="" for="radio_2">
+		            	    	                <input type="radio" name="radio" id="radio_2">
+		            	    	                Option 2
+		            	    	            </label></div>
+		            	    	            <div class="radio"><label class="" for="radio_3">
+		            	    	                <input type="radio" name="radio" id="radio_3">
+		            	    	                Option 3
+		            	    	            </label></div>
+		            	    	        </div>
+		            	    	    </div>
+	            	    	    </div>
+	            	    	    {{-- RADIO --}}
+
+
+	            	    	    {{-- BUTTON --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-plus-square"></i> Button</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="button">
+		            	    	        <input type="submit" class="btn btn-primary" value="Submit">
+		            	    	    </div>
+	            	    	    </div>
+	            	    	    {{-- BUTTON --}}
+
+	            	    	    {{-- STATIC TEXT --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-subscript"></i> Static Text</h4>
+		            	    		</div>
+		            	    	</div>
+
+	            	    	    <div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="static_text">
+		            	    	        <label class="control-label">Static Text</label>
+		            	    	        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		            	    	    </div>
+		            	    	</div>
+		            	    	{{-- STATIC TEXT --}}
+	            	    	</div>
+	            	    </div>
+
+	            	    <div class="options hidetilloaded">
+	            	    	<h3>Options</h3>
+	            	    	<a href="#" class="back"><i class="fas fa-chevron-circle-left"></i></a>
+
+	            	    	<div class="option_vals"></div>
+	            	    </div>
+	            	</div>
+
+	            	<div class="col-sm-8">	            	   
+	            	    <div class="tabbable">
+	            	        <ul class="nav nav-tabs">
+	            	            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
+	            	            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
+	            	        </ul>
+
+	            	        <div class="tab-content dropzone">
+	            	            <div class="tab-pane active" id="editor-tab">
+	            	                <form id="builder_content" class="form-horizontal">
+	            	                    <fieldset id="content_form_name" class="mt10 mb20">
+	            	                        <legend>Form Name</legend>
+	            	                    </fieldset>
+	            	                </form>
+	            	            </div>
+
+	            	            <div class="tab-pane" id="source-tab">
+	            	                <textarea id="source"></textarea>
+	            	            </div>
+	            	        </div>
+	            	    </div>
+	            	</div>
+	                
+	            </div>
+
+	            <div class="row mt50">
+	            	<div class="col-sm-12">
+	            		<div class="form_preview mt50"><div id="source"></div></div>
+	            	</div>
+	            </div>
+	        </div>
 		</div>
 	</div>
 	@include('shared.notifications_bar')

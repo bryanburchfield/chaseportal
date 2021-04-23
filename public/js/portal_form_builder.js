@@ -1,355 +1,744 @@
+$(function() {
 
-var PORTAL_FORM_BUILDER = {
+	///////////
+	// update source when element is dragged
+	// add inline radios / checkboxes
+	// add disabled attribute to elements in the form prview / dropzone
+	// remove disabled attributes from " " " " " "
 
-	active_tab:'#inputs',
+	///////////
 
-	init:function(){
-		$('#target').on('click', '.form-group.component, #legend', this.open_props_form);
-		$('form').on('mousedown', '.component', this.drag_element);
-		$('#target').on('click', '.component', this.add_vals);
-		$("#navtab").on("click", '#sourcetab', this.generateHTML);
-	},
+    var FORM_BUILDER = {
+        el: null,
+        method: "POST",
+        action: "",
+        delimeter: '=',
+        dropzone_height:300,
 
-	// open properties form in tab panel
-	open_props_form(){
-		$('.nav-tabs a[href="#properties"]').tab('show')
-		var form = $(this).data('content');
-		$('#properties').empty();
-		$('#properties').append(form);
+        // set current element
+        setElement: function(el) {
+            this.el = el;
+        },
 
-	},
+        // get current element
+        getElement: function() {
+            return this.el;
+        },
 
-	drag_element(md){
+        // clean value to be used in name
+        cleanName: function(name) {
+            if (name === undefined || name.length === 0) return '';
 
-	    md.preventDefault();
-	    var tops = [];
-	    var mouseX = md.pageX;
-	    var mouseY = md.pageY;
-	    var $temp;
-	    var timeout;
-	    var $this = $(this);
-	    var delays = {
-	    	main: 0,
-	    	form: 120
-	    }
-	    
-	    var type;
+            return name
+                    .trim()
+                    .replace(/ /g, '_')
+                    .replace(/\W/g, '')
+                    .toLowerCase();
+        },
 
-	    if($this.parent().parent().parent().parent().attr("id") === "components"){
-	    	type = "main";
-	    }else {
-	    	type = "form";
-	    }
+        // sanitize HTML content
+        cleanContent: function(content) {
+            return content
+                    .replace(/\t/, '')
+                    .replace('element',  '')
+                    .replace(/<div class="close">.<\/div>/g, '')
+                    .replace(/ data-(.+)="(.+)"/g, '');
+        },
 
-	    var delayed = setTimeout(function(){
-	    	if(type === "main"){
-	        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this.clone());
-	    	}else {
-		        if($this.attr("id") !== "legend"){
-		        	$temp = $("<form class='form-horizontal col-md-12' id='temp'></form>").append($this);
-		        }
-		    }
+        // update source code
+        updateSource: function() {
+            var content =   "<form method=\"" + this.method + "\" " +
+                            "action=\"" + this.action + "\" " +
+                            "class=\"form-horizontal\">\n" +
+                            $("#builder_content").html() +
+                            "\n</form>";
+            
 
-		    $("body").append($temp);
+            source.setValue(this.cleanContent(content));
+            source.autoFormatRange(
+                { line: 0, ch: 0 },
+                { line: source.lastLine() + 1, ch: 0 }
+            );
 
-		    $temp.css(
-		    	{
-			    	"position" : "absolute",
-			        "top"      : mouseY - ($temp.height()/2) + "px",
-			    	"left"     : mouseX - ($temp.width()/2) + "px",
-			        "opacity"  : "0.9"
-			    }
-			).show()
+            FORM_BUILDER.generatePreview();
+        },
 
-	    	var half_box_height = ($temp.height()/2);
-	    	var half_box_width = ($temp.width()/2);
-	    	var $target = $("#target");
-	    	var tar_pos = $target.position();
-	    	var $target_component = $("#target .component");
+        generatePreview: function(){
 
-		    $(document).delegate("body", "mousemove", function(mm){
-		    	var mm_mouseX = mm.pageX;
-		        var mm_mouseY = mm.pageY;
+        	var source_code = "<form method=\"" + this.method + "\" " +
+        	                "action=\"" + this.action + "\">" +
+        	                $("#builder_content").html() +
+        	                "\n</form>";
 
-	        	$temp.css({"top"      : mm_mouseY - half_box_height + "px",
-	        		"left"      : mm_mouseX - half_box_width  + "px"});
+        	source_code=source_code
+	        	.replaceAll('ui-draggable element', 'col-sm-6')
+        		.replaceAll('<div class="controls">', '')
+        		.replace(/<div class="close">.<\/div>/g, '')
+        	;
 
-	        	if ( mm_mouseX > tar_pos.left &&
-	        		mm_mouseX < tar_pos.left + $target.width() + $temp.width() &&
-	        		mm_mouseY > tar_pos.top &&
-	        		mm_mouseY < tar_pos.top + $target.height() + $temp.height()
-	        	){
-	            	$("#target").css("background-color", "#fff");
-	            	$target_component.css({"border-top" : "1px solid white", "border-bottom" : "none"});
-	            	tops = $.grep($target_component, function(e){
-	            		return ($(e).position().top -  mm_mouseY + half_box_height > 0 && $(e).attr("id") !== "legend");
-	            	});
-	            if (tops.length > 0){
-	            	$(tops[0]).css("border-top", "1px solid #22aaff");
-	            }else{
-	            	if($target_component.length > 0){
-	                	$($target_component[$target_component.length - 1]).css("border-bottom", "1px solid 22aaff");
-	            	}
-	            }
-	        	}else{
-	           		$("#target").css("background-color", "#fff");
-	            	$target_component.css({"border-top" : "1px solid white", "border-bottom" : "none"});
-	            	$target.css("background-color", "#fff");
-	        	}
-	    	});
+    		$('.form_preview').html(source_code).show();
+        },
 
-	    	$("body").delegate("#temp", "mouseup", function(mu){
-	        	mu.preventDefault();
-	        	var mu_mouseX = mu.pageX;
-	        	var mu_mouseY = mu.pageY;
-	        	var tar_pos = $target.position();
+        // add component to dropzone
+        add_component: function(component) {
+            component
+            .parent()
+            .next()
+            .clone()
+            .removeClass('component')
+            .removeClass('hidetilloaded')
+            .addClass('element')
+            .removeAttr('id')
+            .prepend('<div class="close">&times;</div>')
+            .appendTo("#builder_content")
+            .find('.form-control').removeAttr('disabled');
 
-	        	$("#target .component").css({"border-top" : "1px solid white", "border-bottom" : "none"});
+            FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
+            this.updateSource();
+        },
 
-	        	// acting only if mouse is in right place
-	       		if (mu_mouseX + half_box_width > tar_pos.left &&
-	        		mu_mouseX - half_box_width < tar_pos.left + $target.width() &&
-	        		mu_mouseY + half_box_height > tar_pos.top &&
-	        	mu_mouseY - half_box_height < tar_pos.top + $target.height()
-	        	){
-	            	$temp.attr("style", null);
-	            	// where to add
-	            	if(tops.length > 0){
-	             		$($temp.html()).insertBefore(tops[0]);
-	            	}else {
-	            		// append in form builder dropzone
-	             	$("#target fieldset").append($temp.append("\n\n\ \ \ \ ").html());
-	            	}
-	         	}else{
-	            	// no add
-	            	$("#target .component").css({"border-top" : "1px solid white", "border-bottom" : "none"});
-	            	tops = [];
-	        	}
+        // remove component from dropzone
+        remove_component:function(component){
+        	$(component).parent().fadeOut('200', function() {
+        	    $(component).remove();
+        	    FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
+        	    FORM_BUILDER.updateSource();
+        	});
+        },
 
-		        $target.css("background-color", "#fff");
-		        $(document).undelegate("body", "mousemove");
-		        $("body").undelegate("#temp","mouseup");
-		        $temp.remove();
-		        PORTAL_FORM_BUILDER.generateHTML();
-	    	});
-	    }, delays[type]);
+        // load element options
+        loadOptions: function(type) {
+            var $el = $(this),
+                options = $(".options"),
+                content = options.find('.option_vals');
 
-	    $(document).mouseup(function () {
-	    	clearInterval(delayed);
-	     	return false;
-	    });
+            $('#builder_content .element').removeClass('active');
+            $(this).addClass('active');
 
-	    $(this).mouseout(function () {
-	    	clearInterval(delayed);
-	    	return false;
-	    });
+            // fail if no type set
+            if (! type) {
+                return false;
+            }
 
-	    if($('#target fieldset .component').length){
-	    	$(' #target fieldset').find('p').remove();
-	    }
-	},
+            return $.get('formbuilder/' + type , function(data) {            	
 
-	add_vals(e){
+                if (data === undefined) {
+                    return false;
+                }
+
+                // set options panel type
+                options.data('type', type);
+
+                // load relevant options
+                content.html(data);
+
+                // set selected element to clicked element
+                // this removes the need to generate unique
+                // id's for every created element at they are
+                // passed instead of referenced
+                FORM_BUILDER.setElement($el);
+
+                // add current options into fields and do any
+                // necessary preprocessing
+
+                FORM_BUILDER[type].get();
+
+                // show options panel
+                $('.elements').hide();
+                options.show();
+
+                return true;
+            });
+        },
+
+        // form title options
+        title: {
+            // options class prefix
+            prefix: '.options_title_',
+
+            // get title options
+            get: function() {
+                var el = FORM_BUILDER.getElement(),
+                    legend = el.find('legend');
+
+                $(this.prefix + 'name')
+                .val(legend.text())
+                .focus();
+            },
+
+            // set title options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    legend = el.find('legend');
+
+                legend.text($(this.prefix+'name').val());
+            }
+        },
+
+        // text input options
+        text: {
+            // options class prefix
+            prefix: '.options_text_',
+
+            // get text options
+            get: function() {
+                var el = FORM_BUILDER.getElement();
+                $(this.prefix + 'name').val(el.find('input[type=text]').attr('name'));
+                $(this.prefix + 'label').val(el.find('label').text());
+                $(this.prefix + 'placeholder').val(el.find('input[type=text]').attr('placeholder'));
+            },
+
+            // set text options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    input = el.find('input[type=text]'),
+                    label = el.find('label'),
+                    name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+                input.attr('name', name);
+                label.text($(this.prefix + 'label').val()).attr('for', name);
+                input.attr('placeholder', $(this.prefix + 'placeholder').val()).attr('id', name);
+            }
+        },
+
+        password_input:{
+        	// options class prefix
+        	prefix: '.options_password_',
+
+        	// get text options
+        	get: function() {
+        	    var el = FORM_BUILDER.getElement();
+        	    $(this.prefix + 'name').val(el.find('input[type=password]').attr('name'));
+        	    $(this.prefix + 'label').val(el.find('label').text());
+        	    $(this.prefix + 'placeholder').val(el.find('input[type=password]').attr('placeholder'));
+        	},
+
+        	// set text options
+        	set: function() {
+        	    var el = FORM_BUILDER.getElement(),
+        	        input = el.find('input[type=password]'),
+        	        label = el.find('label'),
+        	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+        	    input.attr('name', name);
+        	    label.text($(this.prefix + 'label').val()).attr('for', name);
+        	    input.attr('placeholder', $(this.prefix + 'placeholder').val()).attr('id', name);
+        	}
+        },
+
+        phone_input:{
+        	// options class prefix
+        	prefix: '.options_text_',
+
+        	// get phone text options
+        	get: function() {
+        	    var el = FORM_BUILDER.getElement();
+        	    $(this.prefix + 'name').val(el.find('input[type=tel]').attr('name'));
+        	    $(this.prefix + 'label').val(el.find('label').text());
+        	    $(this.prefix + 'placeholder').val(el.find('input[type=tel]').attr('placeholder'));
+        	},
+
+        	// set phone text options
+        	set: function() {
+        	    var el = FORM_BUILDER.getElement(),
+        	        input = el.find('input[type=tel]'),
+        	        label = el.find('label'),
+        	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+        	    input.attr('name', name);
+        	    label.text($(this.prefix + 'label').val()).attr('for', name);
+        	    input.attr('placeholder', $(this.prefix + 'placeholder').val()).attr('id', name);
+        	}
+        },
+
+        email_input:{
+        	// options class prefix
+        	prefix: '.options_text_',
+
+        	// get email text options
+        	get: function() {
+        	    var el = FORM_BUILDER.getElement();
+        	    $(this.prefix + 'name').val(el.find('input[type=email]').attr('name'));
+        	    $(this.prefix + 'label').val(el.find('label').text());
+        	    $(this.prefix + 'placeholder').val(el.find('input[type=email]').attr('placeholder'));
+        	},
+
+        	// set email text options
+        	set: function() {
+        	    var el = FORM_BUILDER.getElement(),
+        	        input = el.find('input[type=email]'),
+        	        label = el.find('label'),
+        	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+        	    input.attr('name', name);
+        	    label.text($(this.prefix + 'label').val()).attr('for', name);
+        	    input.attr('placeholder', $(this.prefix + 'placeholder').val()).attr('id', name);
+        	}
+        },
+
+        // textarea options
+        textarea: {
+            // options class prefix
+            prefix: '.options_textarea_',
+
+            // get textarea options
+            get: function() {
+                var el = FORM_BUILDER.getElement();
+
+                $(this.prefix + 'name').val('');
+                $(this.prefix + 'label').val(el.find('label').text());
+                $(this.prefix + 'placeholder').val(el.find('textarea').attr('placeholder'));
+            },
+
+            // set textarea options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    textarea = el.find('textarea'),
+                    label = el.find('label');
+
+                textarea.attr('name', FORM_BUILDER.cleanName($(this.prefix + 'name').val()));
+                label.text($(this.prefix + 'label').val());
+                textarea.attr('placeholder', $(this.prefix + 'placeholder').val());
+            }
+        },
+
+        // basic select box options
+        select_basic: {
+            // options class prefix
+            prefix: '.options_select_basic_',
+
+            // get basic select options
+            get: function() {
+                var el = FORM_BUILDER.getElement(),
+                    list_options = '',
+                    split = FORM_BUILDER.delimeter;
+
+                // loop through each select option
+                el.find('select > option').each(function(key, val) {
+                    // if value and display text are equal
+                    // dont bother showing value
+                    var val_and_split = FORM_BUILDER.cleanName($(val).text()) == $(val).val() ?
+                                        '' :
+                                        ($(val).val() + split);
+
+                    // add option to list
+                    list_options += val_and_split + $(val).text()+"\n";
+                });
+
+                $(this.prefix + 'name').val('');
+                $(this.prefix + 'label').val(el.find('label').text());
+                $(this.prefix + 'options').val(list_options);
+            },
+
+            // set basic select options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    select = el.find('select'),
+                    label = el.find('label'),
+                    split = FORM_BUILDER.delimeter,
+
+                    // textarea options
+                    options_blob = $(this.prefix + 'options').val(),
+
+                    // split options by line break
+                    select_options = options_blob.replace(/\r\n/, "\n").split("\n"),
+
+                    // options buffer
+                    list_options = "\n";
+
+                // loop through each option
+                $.each(select_options, function(key, val) {
+                    if (val.length > 0) {
+                        // if delimiter found, split val into array value -> display
+                        if(val.indexOf(split) !== -1) {
+                            var opt = val.split(split);
+
+                            list_options += "<option value=\"" + opt[0] + "\">" + opt[1] + "</option>\n";
+                        } else {
+                            list_options += "<option value=\"" + FORM_BUILDER.cleanName(val) + "\">" + val + "</option>\n";
+                        }
+                    }
+                });
+
+                select.attr('name', FORM_BUILDER.cleanName($(this.prefix + 'name').val()));
+                label.text($(this.prefix + 'label').val());
+                select.html(list_options);
+            }
+        },
+
+        // multi select box options
+        select_multiple: {
+            // options class prefix
+            prefix: '.options_select_multiple_',
+
+            // get multiple select options
+            get: function() {
+                var el = FORM_BUILDER.getElement(),
+                    list_options = '',
+                    split = FORM_BUILDER.delimeter;
+
+                // loop through each select option
+                el.find('select > option').each(function(key, val) {
+                    // if value and display text are equal
+                    // dont bother showing value
+                    var val_and_split = FORM_BUILDER.cleanName($(val).text()) == $(val).val() ?
+                                        '' :
+                                        ($(val).val() + split);
+
+                    // add option to list
+                    list_options += val_and_split + $(val).text()+"\n";
+                });
+
+                $(this.prefix + 'name').val('');
+                $(this.prefix + 'label').val(el.find('label').text());
+                $(this.prefix + 'options').val(list_options);
+            },
+
+            // set multiple select options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    select = el.find('select'),
+                    label = el.find('label'),
+                    split = FORM_BUILDER.delimeter,
+
+                    // textarea options
+                    options_blob = $(this.prefix + 'options').val(),
+
+                    // split options by line break
+                    select_options = options_blob.replace(/\r\n/, "\n").split("\n"),
+
+                    // options buffer
+                    list_options = "\n";
+
+                // loop through each option
+                $.each(select_options, function(key, val) {
+                    if (val.length > 0) {
+                        // if delimiter found, split val into array value -> display
+                        if(val.indexOf(split) !== -1) {
+                            var opt = val.split(split);
+
+                            list_options += "<option value=\"" + opt[0] + "\">" + opt[1] + "</option>\n";
+                        } else {
+                            list_options += "<option value=\"" + FORM_BUILDER.cleanName(val) + "\">" + val + "</option>\n";
+                        }
+                    }
+                });
+
+                select.attr('name', FORM_BUILDER.cleanName($(this.prefix + 'name').val()) + '[]');
+                label.text($(this.prefix + 'label').val());
+                select.html(list_options);
+            }
+        },
+
+        // checkbox options
+        checkbox: {
+            // options class prefix
+            prefix: '.options_checkbox_',
+
+            // get checkbox options
+            get: function() {
+                var el = FORM_BUILDER.getElement(),
+                    list_options = '',
+                    split = FORM_BUILDER.delimeter;
+
+                // loop through each select option
+                el.find('input[type=checkbox]').each(function(key, val) {
+                    // if checkbox has value that isn't just "on", show it
+                    var val_and_split = $(this).val().length > 0 && $(this).val() !== 'on' ?
+                                        $(this).val()+split :
+                                        '';
+
+                    list_options += val_and_split + $(this).closest('label').text().trim() + "\n";
+                });
+
+                $(this.prefix + 'name').val('');
+                $(this.prefix + 'label').val(el.find('label:first').text());
+                $(this.prefix + 'options').val(list_options);
+            },
+
+            // set checkbox options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    label = el.find('label:first'),
+                    split = FORM_BUILDER.delimeter,
+
+                    // textarea options
+                    options_blob = $(this.prefix + 'options').val(),
+
+                    // split options by line break
+                    checkbox_options = options_blob.replace(/\r\n/, "\n").split("\n"),
+
+                    // element name
+                    name = FORM_BUILDER.cleanName($(this.prefix + 'name').val()),
+
+                    // options buffer
+                    list_options = "\n";
+
+                // loop through each option
+                $.each(checkbox_options, function(key, val) {
+                    var id = name + '_' + key;
+
+                    if (val.length > 0) {
+                        // if delimiter found, split val into array value -> display
+                        if( val.indexOf(split) !== -1) {
+                            var opt = val.split(split);
+
+                            list_options += "<div class=\"checkbox\"><label for=\"" + id + "\">\n" +
+                                            "<input type=\"checkbox\" name=\"" + name + "\" " +
+                                            "id=\"" + id + "\" " +
+                                            "value=\"" + opt[0] + "\">\n" +
+                                            opt[1] + "\n" +
+                                            "</label></div>\n";
+                        } else {
+                            list_options += "<div class=\"checkbox\"><label for=\"" + id + "\">\n" +
+                                            "<input type=\"checkbox\" name=\"" + name + "\" " +
+                                            "id=\"" + id + "\" " +
+                                            "value=\"" + FORM_BUILDER.cleanName(val) + "\">\n" +
+                                            val + "\n" +
+                                            "</label></div>\n";
+                        }
+                    }
+                });
+
+                label.text($(this.prefix + 'label').val());
+                el.find('.controls').html(list_options);
+            }
+        },
+
+        // radio buttons options
+        radio: {
+            // options class prefix
+            prefix: '.options_radio_',
+
+            // get radio buttons options
+            get: function() {
+                var el = FORM_BUILDER.getElement(),
+                    list_options = '',
+                    split = FORM_BUILDER.delimeter;
+
+                // loop through each select option
+                el.find('input[type=radio]').each(function(key, val) {
+                    // if radio has value that isn't just "on", show it
+                    var val_and_split = $(this).val().length > 0 && $(this).val() !== 'on' ?
+                                        $(this).val() + split :
+                                        '';
+
+                    list_options += val_and_split + $(this).closest('label').text().trim() + "\n";
+                });
+
+                $(this.prefix + 'name').val('');
+                $(this.prefix + 'label').val(el.find('label:first').text());
+                $(this.prefix + 'options').val(list_options);
+            },
+
+            // set radio button options
+            set: function() {
+                var el = FORM_BUILDER.getElement(),
+                    label = el.find('label:first'),
+                    split = FORM_BUILDER.delimeter,
+
+                    // textarea options
+                    options_blob = $(this.prefix + 'options').val(),
+
+                    // split options by line break
+                    radio_options = options_blob.replace(/\r\n/, "\n").split("\n"),
+
+                    // element name
+                    name = FORM_BUILDER.cleanName($(this.prefix + 'name').val()),
+
+                    // options buffer
+                    list_options = "\n";
+
+                // loop through each option
+                $.each(radio_options, function(key, val) {
+                    var id = name+'_'+key;
+
+                    if (val.length > 0) {
+                        // if delimiter found, split val into array value -> display
+                        if (val.indexOf(split) !== -1) {
+                            var opt = val.split(split);
+
+                            list_options += "<div class=\"radio\"><label for=\"" + id + "\">\n" +
+                                            "<input type=\"radio\" name=\"" + name + "\" " +
+                                            "id=\"" + id + "\" " +
+                                            "value=\"" + opt[0] + "\">\n" +
+                                            opt[1] + "\n" +
+                                            "</label></div>\n";
+                        } else {
+                            list_options += "<div class=\"radio\"><label for=\"" + id + "\">\n" +
+                                            "<input type=\"radio\" name=\"" + name + "\" " +
+                                            "id=\"" + id + "\" " +
+                                            "value=\"" + FORM_BUILDER.cleanName(val) + "\">\n" +
+                                            val + "\n" +
+                                            "</label></div>\n";
+                        }
+                    }
+                });
+
+                label.text($(this.prefix + 'label').val());
+                el.find('.controls').html(list_options);
+            }
+        },
+
+        // static text options
+        static_text: {
+            prefix: '.options_static_text_',
+
+            get: function() {
+                var el = FORM_BUILDER.getElement();
+
+                $(this.prefix + 'label').val(el.find('label').text());
+                $(this.prefix + 'text').val(el.find('.form-group p').html().trim());
+            },
+
+            set: function() {
+                var el = FORM_BUILDER.getElement();
+                el.find('label').text($(this.prefix + 'label').val());
+                el.find('.form-group p').html($(this.prefix + 'text').val());
+            }
+        },
+
+        //button options
+        button:{
+        	prefix: '.options_button_',
+
+        	// get text options
+        	get: function() {
+        	    var el = FORM_BUILDER.getElement();
+        	    $(this.prefix + 'label').val(el.find('input[type=submit]').val());
+        	    $(this.prefix + 'color').val(el.find('input[type=submit]').attr('class').split(' ')[1]);
+        	    $(this.prefix + 'size').val(el.find('input[type=submit]').attr('class').split(' ')[2]);
+        	},
+
+        	// set text options
+        	set: function() {
+        	    var el = FORM_BUILDER.getElement();
+        	    el.find('input[type=submit]').val($(this.prefix+'label').val());
+        	    el.find('input[type=submit]').removeClass();
+        	    el.find('input[type=submit]').addClass('btn '+ $(this.prefix+'color').val() +' '+ $(this.prefix+'size').val());
+        	}
+        },
+    };
+
+    //  make form elements components that can be dragged or clicked
+    $(".component")
+    .draggable({
+        helper: function(e) {
+            return $(this).clone().addClass('component-drag');
+        }
+    })
+    .on('click', function(e) {
+        FORM_BUILDER.add_component($(this));
+    });
+
+    // remove element when clicking close button
+    $(document).on('click', '.element > .close', function(e) {
+        e.stopPropagation();
+        FORM_BUILDER.remove_component($(this));
+    });
+
+    // elements are components that have been added to the dropzone/ clicking an element opens options panel
+    $(document).on('click', '.element', function(e) {
+        FORM_BUILDER.loadOptions.call(this, $(this).find('.form-group').data('type'));
+    });
+
+    // save option values
+    $(".options").on('click', '#save_options', function() {
+
+        var options = $(".options"),
+            content = options.find('.option_vals'),
+            type = options.data('type');
+
+        // call corresponding save method to process entered variables
+        FORM_BUILDER[type].set();
+        goBackUnfocus();
+        FORM_BUILDER.generatePreview();
+    });
+
+    // go back to elements panel
+    $('.options .back').on('click', function(e){
     	e.preventDefault();
-    	var $active_component = $(this);
-    	var valtypes = $active_component.find(".valtype");
-    	$.each(valtypes, function(i,e){
-    		var valID ="#" + $(e).attr("data-valtype");
-    		var val;
-    		if(valID ==="#placeholder"){
-        		val = $(e).attr("placeholder");
-        		$(".elements #properties form " + valID).val(val);
-    		}else if(valID ==="#href"){
-        		val = $(e).attr("href");
-        		$(".elements #properties form " + valID).val(val);
-    		}else if(valID ==="#src"){
-        		val = $(e).attr("src");
-        		$(".elements #properties form " + valID).val(val);
-    		}else if(valID==="#checkbox"){
-        		val = $(e).attr("checked");
-        		$(".elements #properties form " + valID).attr("checked",val);
-    		}else if(valID==="#option"){
-        		val = $.map($(e).find("option"), function(e,i){return $(e).text()});
-        		val = val.join("\n")
-    			$(".elements #properties form "+valID).text(val);
-    		}else if(valID==="#checkboxes"){
-        		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
-        		val = val.join("\n")
-    			$(".elements #properties form "+valID).text(val);
-    		}else if(valID==="#radios"){
-        		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
-        		val = val.join("\n");
-        		$(".elements #properties form "+valID).text(val);
-        		$(".elements #properties form #name").val($(e).find("input").attr("name"));
-    		}else if(valID==="#inline-checkboxes"){
-        		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
-        		val = val.join("\n")
-        		$(".elements #properties form "+valID).text(val);
-    		}else if(valID==="#inline-radios"){
-        		val = $.map($(e).find("label"), function(e,i){return $(e).text().trim()});
-        		val = val.join("\n")
-        		$(".elements #properties form "+valID).text(val);
-        		$(".elements #properties form #name").val($(e).find("input").attr("name"));
-    		}else if(valID==="#button") {
-        		val = $(e).text();
-        		var type = $(e).find("button").attr("class").split(" ").filter(function(e){return e.match(/btn-.*/)});
-        		$(".elements #properties form #color option").attr("selected", null);
+    	goBackUnfocus();
+    });
 
-	        	if(type.length === 0){
-	        		$(".elements #properties form #color #default").attr("selected", "selected");
-	        	}else {
-	        		$(".elements #properties form #color #"+type[0]).attr("selected", "selected");
-	        	}
+    // cancel and go back to elements panel
+    $('.options').on('click', 'button#cancel_options', function(e){
+    	e.preventDefault();
+    	goBackUnfocus();
+    });
 
-	        	val = $(e).find(".btn").text();
-        		$(".elements #properties form  #button").val(val);
-    		}else {
-        		val = $(e).text();
-        		$(".elements #properties form  " + valID).val(val);
-      		}
-    	});
+    // remove active class from element, show elements panel, hide options panel
+    function goBackUnfocus(){
+		$('#builder_content .element').removeClass('active');
+		$('.elements').show();
+	    $('.options').hide();
+    }
 
-    	/// CANCEL EDIT
-		$('.elements #properties form').on('click', '.btn.cancel_edit', function(e){
-			e.preventDefault();
-			$('.nav-tabs a[href="#elements"]').tab('show')
-			// PORTAL_FORM_BUILDER.add_vals()
-		});
+    //prevent default of form elements
+    $(document).on('click', '.element > input, .element > textarea, .element > label', function(e) {
+        e.preventDefault();
+    });
 
-		/// SAVE EDIT
-		$('.elements #properties form').on('click', '.btn.save_edit', function(e){
-			e.preventDefault();
-			var inputs = $('.elements #properties form input');
-			inputs.push($('.elements #properties form textarea')[0]);
+    // random bug makes options modal load when certain components are clicked. prevent this!
+    // $(".component > input, .component > textarea, .component > label, .checkbox, .radio").on('click', function(e) {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    // });
 
-			$.each(inputs, function(i,e){
-				var vartype = $(e).attr("id");
-				var value = $active_component.find('[data-valtype="'+vartype+'"]')
-				if(vartype==="placeholder"){
-					$(value).attr("placeholder", $(e).val());
-				}else if (vartype==="href"){
-					$($active_component.find('a')).attr("href", $(e).val());
-				}else if (vartype==="src"){
-					$(value).attr("src", $(e).val());
-				} else if (vartype==="checkbox"){
-					if($(e).is(":checked")){
-						$(value).attr("checked", true);
-					}
-					else{
-						$(value).attr("checked", false);
-					}
-	    		} else if (vartype==="option"){
-	        		var options = $(e).val().split("\n");
-	        		$(value).html("");
-	        		console.log(options);
-	        		// $(value).append($('<option value="">').text('Select One'));
-	      			$.each(options, function(i,e){
-	        			// $(value).append("\n      ");
-	        			$(value).append($('<option value='+e+'>').text(e));
-	        			console.log(e);
-	        		});
-	    		}else if (vartype==="checkboxes"){
-	        		var checkboxes = $(e).val().split("\n");
-	        		$(value).html("\n      <!-- Multiple Checkboxes -->");
-	        		$.each(checkboxes, function(i,e){
-	        			if(e.length > 0){
-	            			$(value).append('\n      <label class="checkbox">\n        <input type="checkbox" value="'+e+'">\n        '+e+'\n      </label>');
-	        			}
-	        		});
-	        		$(value).append("\n  ")
-	    		} else if (vartype==="radios"){
-	        		var group_name = $(".elements #properties form #name").val();
-	        		var radios = $(e).val().split("\n");
-	        		$(value).html("\n      <!-- Multiple Radios -->");
-	        		$.each(radios, function(i,e){
-	          			if(e.length > 0){
-	            			$(value).append('\n      <label class="radio">\n        <input type="radio" value="'+e+'" name="'+group_name+'">\n        '+e+'\n      </label>');
-	        			}
-	        		});
-	        		$(value).append("\n  ")
-	        		$($(value).find("input")[0]).attr("checked", true)
-	    		}else if (vartype==="inline-checkboxes"){
-	        		var checkboxes = $(e).val().split("\n");
-	        		$(value).html("\n      <!-- Inline Checkboxes -->");
-	        		$.each(checkboxes, function(i,e){
-	        			if(e.length > 0){
-	            			$(value).append('\n      <label class="checkbox-inline"><input type="checkbox" value="'+e+'">\n        '+e+'\n</label>');
-	          			}
-	        		});
-	        		$(value).append("\n  ")
-	    		}else if (vartype==="inline-radios"){
-	        		var radios = $(e).val().split("\n");
-	        		var group_name = $(".elements #properties form #name").val();
-	        		$(value).html("\n      <!-- Inline Radios -->");
-	        		$.each(radios, function(i,e){
-	          			if(e.length > 0){
-	            			$(value).append('\n      <label class="radio-inline"><input type="radio" name="'+group_name+'" value="'+e+'">\n        '+e+'\n</label>');
-	          			}
-	        		});
-	        		$(value).append("\n  ")
-	          		$($(value).find("input")[0]).attr("checked", true)
-	    		}else if (vartype === "button"){
-	        		var btn_type =  $(".elements #properties form #color option:selected").attr("id");
-	        		var btn_size =  $(".elements #properties form #btn_size option:selected").attr("id");
-	        		$(value).find("button").text($(e).val()).attr("class", "btn "+btn_type + " " + btn_size);
+    // dropzone accepts components and converts them to elements / makes them sortable
+    $("#builder_content")
+    .droppable({
+        accept: '.component',
+        hoverClass: 'content-hover',
+        drop: function(e, ui) {
+            FORM_BUILDER.add_component(ui.draggable);
+        }
+    })
+    .sortable({
+        placeholder: "element-placeholder",
+        start: function(e, ui) {
+            ui.item.popover('hide');
+        }
+    })
+    .disableSelection();
 
-	    		}else if(vartype==="select-basic"){
-	    			console.log('test');
-	    			console.log($(this).find('select option').html());
-	    		}else {
-	        		$(value).text($(e).val());
-	      		}
+    //  change form title by clicking the legend
+    $("#content_form_name").on('click', function(e) {
+        FORM_BUILDER.loadOptions.call(this, 'title');
+    });
 
-	    		$('.nav-tabs a[href="'+PORTAL_FORM_BUILDER.active_tab+'"]').tab('show');	    		
-	    	});
+    // create codemirror instance & assign to global var source
+    source = CodeMirror.fromTextArea(document.getElementById("source"), {
+        lineNumbers: true,
+        tabMode: 'indent',
+        mode: { name: 'htmlmixed' }
+    });
 
-	    	PORTAL_FORM_BUILDER.generateHTML();
-	    });
-	},
+    // hack to sort random bug with codemirror & bootstrap tabs not playing nicely
+    $("a[href=#source-tab]").on('click', function(e) {
+        setTimeout(function() {
+            FORM_BUILDER.updateSource();
+            source.refresh();
+        }, 1);
+    });
 
-	/// GENERATE CODE
-	generateHTML(){
-		// get HTML of elements dragged to the dropzone
-	    var $temptxt = $("<div>").html($("#build").html());
-
-	    $($temptxt).find(".component").attr({"title": null,
-	    	"data-original-title":null,
-	    	"data-type": null,
-	    	"data-content": null,
-	    	"rel": null,
-	    	"trigger":null,
-	    	"data-html":null,
-	    	"style": null
-	    });
-		
-		$($temptxt).find(".valtype").attr("data-valtype", null).removeClass("valtype");
-		$($temptxt).find(".component").removeClass("component");
-		$($temptxt).find("form").attr({"id":  null, "style": null});
-	    
-	    PORTAL_FORM_BUILDER.generatePreview();
-	},
-
-	generatePreview(){
-		var $temptxt = $("#build").html();
-		$($temptxt).find(".component .hidetilloaded");
-
-		// form heading
-		var html = '<h2>'+$('#build legend.valtype').text()+'</h2>';
-
-		$('#build .hidetilloaded').each(function(){
-			html+=$(this).html();
-		});
-
-		$("#source").html(html.replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g,"\n"));		
-		$('.form_preview #source').show();
-	}
-}
-
-$(document).ready(function(){
-
-	PORTAL_FORM_BUILDER.init();
-
-	$('.nav-tabs a').on('click', function(){
-		PORTAL_FORM_BUILDER.active_tab = $(this).attr('href');
-	});	
+    var $sidebar   = $(".elements_col"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 15
+    ;
+    
+    FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
+        
+    $window.scroll(function() {
+    	if($window.scrollTop() >= FORM_BUILDER.dropzone_height) {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }else if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top
+            });
+        }
+    });
 });

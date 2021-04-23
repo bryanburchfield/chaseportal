@@ -1,39 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Dialer;
 use Illuminate\Http\Request;
+use View;
 
 class FormBuilderController extends Controller
 {
-    public function index()
-    {
-        $jsfile[] = 'formbuilder.js';
-        $page['menuitem'] = 'form_builder';
-        $page['sidenav'] = 'tools';
-        $page['type'] = 'page';
-        $data = [
-            'jsfile' => $jsfile,
-            'page' => $page,
-            'dbs' => $this->dbs(),
-        ];
+    public function portalFormBuilder()
+    {	
 
-        return view('tools.form_builder')->with($data);
-    }
-
-    private function dbs()
-    {
-        $dbs = ['' => trans('general.select_one')];
-
-        foreach (Dialer::orderBy('dialer_numb')->get() as $dialer) {
-            $dbs[$dialer->reporting_db] = $dialer->reporting_db;
-        }
-
-        return $dbs;
-	}
-
-    public function portal_form_builder(){
     	$page = [
     	    'menuitem' => 'form_builder',
     	    'sidenav' => 'tools',
@@ -42,9 +17,14 @@ class FormBuilderController extends Controller
 
     	$data=[
     		'page' => $page,
-    		'jsfile' => ['portal_form_builder.js'],
-    		'cssfile'=>['//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css']
+    		'override_app_cssfile'=> ['codemirror.css'],
+    		'jsfile' => ['jquery-ui.min-1.10.js', 'portal_form_builder.js', 'codemirror.min.js', 'formatting.js'],
     	];
     	return view('tools.portal_form_builder')->with($data);
+    }
+
+    public function getFormElement(Request $request)
+    {
+        return View::make('tools.formbuilder_options.' .$request->type)->render();
     }
 }
