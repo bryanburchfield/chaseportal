@@ -3076,7 +3076,7 @@ textarea.nobg_txtarea.form-control{
     overflow: auto;
 
     .close{
-        color:#d9534f;
+        color:darken(#d9534f,5%);
         position: relative;
         left: 13px;
         bottom: 3px;

@@ -34,9 +34,9 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="text">
-	            	    			    <label class="control-label" for="text_input">Text Input</label>
+	            	    			    <label class="control-label" for="text_input">Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="text" name="" disabled id="text_input" placeholder="placeholder" class="form-control">
+	            	    			        <input type="text" name="" disabled id="text_input" placeholder="" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -51,9 +51,9 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="password_input">
-	            	    			    <label class="control-label" for="password_input">Password Input</label>
+	            	    			    <label class="control-label" for="password_input">Password Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="password" name="" disabled id="password_input" placeholder="placeholder" class="form-control">
+	            	    			        <input type="password" name="" disabled id="password_input" placeholder="" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -68,7 +68,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="phone_input">
-	            	    			    <label class="control-label" for="phone_input">Phone Input</label>
+	            	    			    <label class="control-label" for="phone_input">Phone Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
 	            	    			    </div>
@@ -85,7 +85,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="email_input">
-	            	    			    <label class="control-label" for="email_input">Email Input</label>
+	            	    			    <label class="control-label" for="email_input">Email Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="email" name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
 	            	    			    </div>
@@ -102,9 +102,9 @@
 
 	            	    	    <div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="textarea">
-		            	    	        <label class="control-label" for="textarea">Textarea</label>
+		            	    	        <label class="control-label" for="textarea">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <textarea name="" class="form-control" id="textarea" placeholder="placeholder"></textarea>
+		            	    	            <textarea name="" class="form-control" id="textarea" placeholder=""></textarea>
 		            	    	        </div>
 		            	    	    </div>
 		            	    	</div>
@@ -120,7 +120,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="select_basic">
-		            	    	        <label class="control-label" for="select_basic">Select - Basic</label>
+		            	    	        <label class="control-label" for="select_basic">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <select class="form-control" name="" id="select_basic">
 		            	    	                <option value="1">Option 1</option>
@@ -142,7 +142,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="select_multiple">
-		            	    	        <label class="control-label" for="select_multiple">Select - Multiple</label>
+		            	    	        <label class="control-label" for="select_multiple">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
 		            	    	                <option value="1">Option 1</option>
@@ -163,7 +163,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="checkbox">
-		            	    	        <label class="control-label">Checkboxes</label>
+		            	    	        <label class="control-label">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <div class="checkbox"><label class="" for="checkbox_1">
 		            	    	                <input type="checkbox" name="checkbox" id="checkbox_1">
@@ -191,7 +191,7 @@
 	            	    	    
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="radio">
-		            	    	        <label class="control-label">Radio Buttons</label>
+		            	    	        <label class="control-label">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <div class="radio"><label class="" for="radio_1">
 		            	    	                <input type="radio" name="radio" id="radio_1">
@@ -220,7 +220,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="button">
-		            	    	        <input type="submit" class="btn btn-primary" value="Submit">
+		            	    	        <input type="submit" class="btn btn-primary" disabled value="Submit">
 		            	    	    </div>
 	            	    	    </div>
 	            	    	    {{-- BUTTON --}}
@@ -254,6 +254,7 @@
 	            	    <div class="tabbable">
 	            	        <ul class="nav nav-tabs">
 	            	            <li class="active"><a href="#editor-tab" data-toggle="tab">Editor</a></li>
+	            	            <li><a href="#preview-tab" data-toggle="tab">Preview</a></li>
 	            	            <li><a href="#source-tab" data-toggle="tab">Source</a></li>
 	            	        </ul>
 
@@ -266,22 +267,18 @@
 	            	                </form>
 	            	            </div>
 
+	            	            <div class="tab-pane" id="preview-tab">
+	            	                <div class="form_preview mt50"><div class="source"></div></div>
+	            	            </div>
+
 	            	            <div class="tab-pane" id="source-tab">
 	            	                <textarea id="source"></textarea>
 	            	            </div>
 	            	        </div>
 	            	    </div>
 	            	</div>
-	                
-	            </div>
-
-	            <div class="row mt50">
-	            	<div class="col-sm-12">
-	            		<div class="form_preview mt50"><div id="source"></div></div>
-	            	</div>
 	            </div>
 	        </div>
-
 		</div>
 	</div>
 	@include('shared.notifications_bar')

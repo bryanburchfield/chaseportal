@@ -3,9 +3,8 @@ $(function() {
 	///////////
 	// update source when element is dragged
 	// add inline radios / checkboxes
-	// add disabled attribute to elements in the form prview / dropzone
-	// remove disabled attributes from " " " " " "
-
+	// add disabled attribute to elements in the form preview / dropzone
+	// remove disabled attributes from elements in the form prview / dropzone
 	///////////
 
     var FORM_BUILDER = {
@@ -41,6 +40,7 @@ $(function() {
             return content
                     .replace(/\t/, '')
                     .replace('element',  '')
+                    .replaceAll('disabled="" ', '')
                     .replace(/<div class="close">.<\/div>/g, '')
                     .replace(/ data-(.+)="(.+)"/g, '');
         },
@@ -73,6 +73,7 @@ $(function() {
         	source_code=source_code
 	        	.replaceAll('ui-draggable element', 'col-sm-6')
         		.replaceAll('<div class="controls">', '')
+                .replaceAll('disabled', '')
         		.replace(/<div class="close">.<\/div>/g, '')
         	;
 
@@ -90,8 +91,8 @@ $(function() {
             .addClass('element')
             .removeAttr('id')
             .prepend('<div class="close">&times;</div>')
-            .appendTo("#builder_content")
-            .find('.form-control').removeAttr('disabled');
+            .appendTo("#builder_content");
+            // .find('.form-control').removeAttr('disabled');
 
             FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
             this.updateSource();
@@ -679,25 +680,26 @@ $(function() {
         e.preventDefault();
     });
 
-    // random bug makes options modal load when certain components are clicked. prevent this!
-    // $(".component > input, .component > textarea, .component > label, .checkbox, .radio").on('click', function(e) {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    // });
-
     // dropzone accepts components and converts them to elements / makes them sortable
     $("#builder_content")
     .droppable({
         accept: '.component',
         hoverClass: 'content-hover',
         drop: function(e, ui) {
+            console.log('Dropped');
             FORM_BUILDER.add_component(ui.draggable);
         }
     })
     .sortable({
         placeholder: "element-placeholder",
         start: function(e, ui) {
+            console.log('Sorted');
+
             ui.item.popover('hide');
+            setTimeout(function() {
+               FORM_BUILDER.updateSource();
+               source.refresh();
+           }, 1);
         }
     })
     .disableSelection();
@@ -722,6 +724,7 @@ $(function() {
         }, 1);
     });
 
+    // scroll elements sidebar / stop at bottom of preview tab-panel
     var $sidebar   = $(".elements_col"), 
         $window    = $(window),
         offset     = $sidebar.offset(),
