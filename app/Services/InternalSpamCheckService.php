@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Includes\ChaseDataDidApi;
 use App\Mail\InternalSpamCheckMail;
 use App\Models\Dialer;
+use App\Models\InternalCampaignPhone;
 use App\Models\InternalPhoneCount;
 use App\Models\InternalPhoneFlag;
 use App\Traits\PhoneTraits;
@@ -807,43 +808,66 @@ class InternalSpamCheckService
     private function loadTestCampaigns()
     {
         // load most used DIDs into test campaigns
-        $topdids = array_keys(resultsToList($this->getTopDids()));
+        $topdids = $this->getTopDids();
 
-        foreach ($topdids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::TOPDIDCAMP)) {
+        foreach ($topdids as $topdid) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $topdid['CallerId'], self::TOPDIDCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
-            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::VERIZONCAMP)) {
+            $this->saveLoadedDid($topdid, self::TOPDIDCAMP);
+
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $topdid['CallerId'], self::VERIZONCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
+            $this->saveLoadedDid($topdid, self::VERIZONCAMP);
         }
 
         // free some memory
         $topdids = null;
 
-        $specialdids = array_keys(resultsToList($this->getSpecialDids()));
+        $specialdids = $this->getSpecialDids();
 
         // load into Special campaign
-        foreach ($specialdids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::SPECIALCAMP)) {
+        foreach ($specialdids as $specialdid) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $specialdid['CallerId'], self::SPECIALCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
+            $this->saveLoadedDid($specialdid, self::SPECIALCAMP);
         }
 
         // free some memory
         $specialdids = null;
 
         // Load lesser used DIDs into a different test campaign
-        $bottomdids = array_keys(resultsToList($this->getBottomDids()));
+        $bottomdids = $this->getBottomDids();
 
-        foreach ($bottomdids as $did) {
-            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $did, self::BOTTOMDIDCAMP)) {
+        foreach ($bottomdids as $bottomdid) {
+            if (!$this->chaseDataDidApi->addCallerId(7, self::TESTGROUP, $bottomdid['CallerId'], self::BOTTOMDIDCAMP)) {
                 Log::error($this->chaseDataDidApi->error);
                 echo $this->chaseDataDidApi->error . "\n";
             }
+            $this->saveLoadedDid($bottomdid, self::BOTTOMDIDCAMP);
+        }
+    }
+
+    public function saveLoadedDid($didrec, $campaign)
+    {
+        $phone = $this->formatPhoneElevenDigits($didrec['CallerId']);
+
+        try {
+            InternalCampaignPhone::create([
+                'run_date' => $this->run_date,
+                'campaign' => $campaign,
+                'dialer_numb' => $didrec['Dialer'],
+                'group_id' => $didrec['GroupId'],
+                'phone' => $phone,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error creating InternalCampaignPhone');
+            Log::critical($e->getMessage());
         }
     }
 
@@ -890,14 +914,14 @@ class InternalSpamCheckService
         SET @minDials  = :mindials
         SET @maxDials  = :maxdials
 
-        SELECT CallerId, SUM(Cnt) AS Cnt
+        SELECT GroupId, Dialer, CallerId, SUM(Cnt) AS Cnt
         FROM (";
 
         $union = '';
         foreach (Dialer::all() as $dialer) {
 
             $sql .= " $union
-            SELECT CallerId, COUNT(*) AS Cnt
+            SELECT DR.GroupId, " . $dialer->dialer_numb . " as Dialer, CallerId, COUNT(*) AS Cnt
             FROM [" . $dialer->reporting_db . "].[dbo].[DialingResults] DR
             INNER JOIN [" . $dialer->reporting_db . "].[dbo].[InboundSources] I ON I.GroupId = DR.GroupId AND I.InboundSource = DR.CallerId
             INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = DR.GroupId AND O.Phone = DR.CallerId
@@ -908,14 +932,14 @@ class InternalSpamCheckService
             AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
             AND O.Active = 1
             AND DR.GroupId NOT IN ($ignoreGroups,$specialGroups)
-            GROUP BY CallerId
+            GROUP BY DR.GroupId, CallerId
             ";
 
             $union = 'UNION ALL';
         }
 
         $sql .= ") tmp
-        GROUP BY CallerId";
+        GROUP BY GroupId, Dialer, CallerId";
 
         if ($top) {
             $sql .= "
@@ -926,7 +950,7 @@ class InternalSpamCheckService
         }
 
         $sql .= "
-        ORDER BY CallerId";
+        ORDER BY GroupId, Dialer, CallerId";
 
         return $this->runSql($sql, $bind);
     }
@@ -935,14 +959,14 @@ class InternalSpamCheckService
     {
         $sql = "SET NOCOUNT ON
 
-        SELECT O.Phone as CallerId
+        SELECT O.GroupId, 24 as Dialer, O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
         WHERE I.GroupId = 1111
         AND O.Active = 1
         AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
         UNION
-        SELECT O.Phone as CallerId
+        SELECT O.GroupId, 7 as Dialer, O.Phone as CallerId
         FROM [PowerV2_Reporting_Dialer-07].[dbo].[InboundSources] I
         INNER JOIN [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
         WHERE I.GroupId IN (224577,224849,224945)
