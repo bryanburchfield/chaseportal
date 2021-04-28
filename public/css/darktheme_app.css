@@ -148,6 +148,10 @@ h6 {
   margin-bottom: 42px;
 }
 
+.ml10 {
+  margin-left: 10px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -3926,6 +3930,270 @@ textarea.nobg_txtarea.form-control {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+hr.dk_theme {
+  border-top: 1px solid #253752;
+}
+
+/* PORTAL FORM BUILDER */
+
+#builder_content {
+  min-height: 300px;
+  border: 1px solid #182435;
+  border-radius: 4px;
+  padding: 10px 20px;
+  overflow: auto;
+}
+
+#builder_content .close {
+  color: #d9534f;
+  position: relative;
+  left: 13px;
+  bottom: 3px;
+  text-shadow: none;
+}
+
+#builder_content legend {
+  color: #ccc;
+}
+
+#content_form_name {
+  cursor: pointer;
+}
+
+.content-hover {
+  border: 1px dashed #3a87ad !important;
+  color: #3a87ad;
+  background: #d9edf7;
+  opacity: 0.5;
+}
+
+.dropzone .tab-pane {
+  background: #203047;
+  border: 1px soliddarken(#203047, 5%);
+}
+
+.content-hover legend {
+  color: #3a87ad;
+  border-color: -moz-use-text-color -moz-use-text-color #3a87ad;
+}
+
+.content-hover .element {
+  border: 1px solid #d9edf7;
+}
+
+/* COMPONENTS */
+
+#components-container div.col-xs-6 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.component {
+  cursor: move;
+  padding: 10px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+  background: #203047;
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
+  margin: 0;
+  margin-top: 10px;
+  border-radius: 3px;
+  min-width: 160px;
+}
+
+.component h4 {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.component h4 i {
+  padding-right: 5px;
+}
+
+.component.form-group.ui-draggable {
+  max-width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 3px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+}
+
+.component:hover {
+  background: #1b293c;
+  background: linear-gradient(to bottom, #1b293c 0%, #040609 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1b293c, endColorstr=#040609,GradientType=0 );
+}
+
+.component-drag {
+  border-radius: 3px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+  padding: 10px;
+  background: #203047;
+}
+
+/* ELEMENTS */
+
+.element {
+  cursor: move;
+  padding: 10px 25px;
+  border: 2px solid #131d2b;
+  background: #203047;
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.element .form-control {
+  background: #1d2b40 !important;
+  border: none;
+  color: #b7b7b7;
+}
+
+.elements_col {
+  position: relative;
+}
+
+.element:hover,
+.element.active {
+  background: #1b293c;
+  background: linear-gradient(to bottom, #1b293c 0%, #040609 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1b293c, endColorstr=#040609,GradientType=0 );
+  border: 2px solid #43c3bd;
+  border-radius: 3px;
+}
+
+.element-placeholder {
+  border: 1px dashed #3a87ad;
+  color: #3a87ad;
+  background: #d9edf7;
+  min-height: 50px;
+  opacity: 0.5;
+}
+
+.elements,
+.options {
+  background: #1b293c;
+  border: 1px solid #182435;
+  padding: 10px;
+  min-height: 400px;
+  position: relative;
+  z-index: 999;
+}
+
+.elements h3,
+.options h3 {
+  color: #ddd;
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.elements a.back,
+.options a.back {
+  float: right;
+  color: #478ecc;
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+.elements a.back:hover,
+.options a.back:hover {
+  color: #63a0d4;
+}
+
+.elements .option_vals,
+.elements .options,
+.options .option_vals,
+.options .options {
+  overflow-y: auto;
+  overflow-x: hidden;
+  clear: both;
+  background: #121a27;
+}
+
+.elements .option_vals .form-control,
+.elements .options .form-control,
+.options .option_vals .form-control,
+.options .options .form-control {
+  color: #ccc;
+  border: 1px solid #101824;
+  background: #1d2b40 !important;
+}
+
+.elements .option_vals .btn,
+.elements .options .btn,
+.options .option_vals .btn,
+.options .options .btn {
+  float: right;
+}
+
+.elements .btn-default,
+.options .btn-default {
+  background: #ccc;
+  background: linear-gradient(to bottom, #ccc 0%, #bbb 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#ccc, endColorstr=#bbb,GradientType=0 );
+  color: #333;
+}
+
+.elements .btn-default:hover,
+.elements .btn-default:active,
+.elements .btn-default:focus,
+.options .btn-default:hover,
+.options .btn-default:active,
+.options .btn-default:focus {
+  color: #333 !important;
+  background: #e0e0e0;
+  background: linear-gradient(to bottom, #e0e0e0 0%, #cfcfcf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#e0e0e0, endColorstr=#cfcfcf,GradientType=0 );
+}
+
+.options h3 {
+  float: left;
+}
+
+.form_preview {
+  background: #1b293c;
+  border: 1px solid #182435;
+  padding: 20px;
+  display: none;
+}
+
+.form_preview form {
+  background: #eee;
+  border: 1px solid #ddd;
+  min-height: 400px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.form_preview form h2,
+.form_preview form legend {
+  background: #203047;
+  color: #fff;
+  font-weight: 600;
+  font-size: 22px;
+  padding: 5px 8px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.form_preview form .form_preview #source .form-control {
+  background: #fff;
+  color: #555;
+}
+
+.form_preview form.form-horizontal {
+  background: #eee;
+  border: 1px solid #ccc;
+  overflow: auto;
+  padding: 12px;
 }
 
 /* ---------------------------------------------------

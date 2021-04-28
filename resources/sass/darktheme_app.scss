@@ -93,6 +93,7 @@ h1, h2, h3, h4, h5, h6 {
 .mb20 {margin-bottom: 20px;}
 .mb30 {margin-bottom: 30px;}
 .mb42 {margin-bottom: 42px;}
+.ml10{margin-left: 10px;}
 .mr10 {margin-right: 10px;}
 .mr20{margin-right: 20px;}
 
@@ -3211,6 +3212,242 @@ textarea.nobg_txtarea.form-control{
     background: none !important;
     border: none !important;
     @include box-shadow(none !important);
+}
+
+hr.dk_theme{
+    border-top: 1px solid lighten($blue,3%);
+}
+
+/* PORTAL FORM BUILDER */
+
+#builder_content {
+    min-height: 300px;
+    border: 1px solid darken($blue,5%);
+    border-radius: 4px;
+    padding: 10px 20px;
+    overflow: auto;
+
+    .close{
+        color:#d9534f;
+        position: relative;
+        left: 13px;
+        bottom: 3px;
+        @include text-shadow(none);
+    }
+
+    legend{
+        color:#ccc;
+    }
+}
+
+#content_form_name {
+    cursor: pointer;
+}
+
+.content-hover {
+    border: 1px dashed #3a87ad !important;
+    color: #3a87ad;
+    background: #d9edf7;
+    opacity: 0.5;
+}
+
+.dropzone{
+    .tab-pane{
+        background: $blue;
+        border:1px soliddarken($blue,5%);
+    }
+}
+
+.content-hover legend {
+    color: #3a87ad;
+    border-color: -moz-use-text-color -moz-use-text-color #3a87ad;
+}
+
+.content-hover .element {
+    border: 1px solid #d9edf7;
+}
+
+/* COMPONENTS */
+
+#components-container{
+    div.col-xs-6{
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+.component {
+    cursor: move;
+    padding: 10px;
+    border:1px solid darken($blue, 8%);
+    border-left:5px solid darken($blue, 8%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    margin: 0;
+    margin-top: 10px;
+    @include border-radius(3px);
+    min-width: 160px;
+
+    h4{
+        font-weight: 600;
+        font-size: 13px;
+
+        i{
+            padding-right: 5px;
+        }
+    }
+}
+
+.component.form-group.ui-draggable {
+    max-width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    @include border-radius(3px);
+    border:1px solid darken($blue, 8%);
+    border-left:5px solid darken($blue, 8%);
+}
+
+.component:hover {
+     @include gradient(darken(#203047,3%), darken(#090d14, 3%), top, 0%, 100%);
+}
+
+.component-drag {
+    @include border-radius(3px);
+     border:1px solid darken($blue, 8%);
+    border-left:5px solid darken($blue, 8%);
+    padding: 10px;
+    background: $blue;
+}
+
+/* ELEMENTS */
+.element {
+    cursor: move;
+    padding: 10px 25px;
+    border:2px solid darken($blue, 8%);
+    @include gradient(#203047, #090d14, top, 0%, 100%);
+    @include border-radius(3px);
+    margin-bottom: 10px;
+    
+    .form-control{
+        background: #1d2b40 !important;
+        border: none;
+        color: #b7b7b7;
+    }
+}
+
+.elements_col{
+    position: relative;
+}
+
+.element:hover, .element.active {
+    @include gradient(darken(#203047,3%), darken(#090d14,3%), top, 0%, 100%);
+    border: 2px solid lighten($green,10%);
+    @include border-radius(3px);
+}
+
+.element-placeholder {
+    border: 1px dashed #3a87ad;
+    color: #3a87ad;
+    background: #d9edf7;
+    min-height: 50px;
+    opacity: 0.5;
+}
+
+.elements, .options{
+    background: darken($blue,3%);
+    border:1px solid darken($blue,5%);
+    padding: 10px;
+    min-height: 400px;
+    position: relative;
+    z-index: 999;
+
+    h3{
+        color:#ddd;
+        font-weight: 600;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    a.back{
+        float: right;
+        color: lighten(#337ab7,8%);
+        font-size: 22px;
+        margin-top: 5px;
+
+        &:hover{
+            color: lighten(#337ab7,15%);
+        }
+    }
+
+    .option_vals, .options{
+
+        overflow-y: auto;
+        overflow-x: hidden;
+        clear: both;
+        background: darken(#1d2b40,7%);
+
+        .form-control{
+            color:#ccc;
+            border:1px solid darken($blue, 10%);
+            background: #1d2b40 !important;
+        }
+
+        .btn{
+            float: right;
+        }
+    }
+
+    .btn-default{
+        @include gradient(#ccc, #bbb, top, 0%, 100%);
+        // @include base_style(null, #eee, null, 1px solid darken(#23354e,10%));  
+        color:#333;
+
+        &:hover, &:active, &:focus{
+            color:#333 !important;
+            @include gradient(lighten(#ccc,8%), lighten(#bbb, 8%), top, 0%, 100%);
+        }
+    }
+}
+
+.options h3{
+    float: left;
+}
+
+.form_preview {
+    background: #1b293c;
+    border: 1px solid darken($blue, 5%);
+    padding: 20px;
+    display: none;
+
+    form{
+        background: #eee;
+        border: 1px solid #ddd;
+        min-height: 400px;
+        padding: 20px;
+        overflow: auto;
+
+        h2, legend {
+            background: #203047;
+            color: #fff;
+            font-weight: 600;
+            font-size: 22px;
+            padding: 5px 8px;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .form_preview #source .form-control {
+            background: #fff;
+            color: #555;
+        }
+    }
+
+    form.form-horizontal {
+        background: #eee;
+        border: 1px solid #ccc;
+        overflow: auto;
+        padding: 12px;
+    }
 }
 
 /* ---------------------------------------------------

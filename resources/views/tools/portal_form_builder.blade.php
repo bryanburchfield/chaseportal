@@ -16,7 +16,7 @@
 	            <div class="row">
 					<div class="col-sm-12">
 						<h2>Form Builder</h2>
-						<hr>
+						<hr class="dk_theme">
 					</div>	
 
 	            	<div class="col-sm-4 mt30 elements_col">
@@ -36,7 +36,7 @@
 	            	    			<div class="form-group" data-type="text">
 	            	    			    <label class="control-label" for="text_input">Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="text" name="" disabled id="text_input" placeholder="" class="form-control">
+	            	    			        <input type="text" name="" field-name="" disabled id="text_input" placeholder="" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -53,7 +53,7 @@
 	            	    			<div class="form-group" data-type="password_input">
 	            	    			    <label class="control-label" for="password_input">Password Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="password" name="" disabled id="password_input" placeholder="" class="form-control">
+	            	    			        <input type="password" name="" field-name="" disabled id="password_input" placeholder="" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -70,7 +70,7 @@
 	            	    			<div class="form-group" data-type="phone_input">
 	            	    			    <label class="control-label" for="phone_input">Phone Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="tel" name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
+	            	    			        <input type="tel" name="" field-name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -87,7 +87,7 @@
 	            	    			<div class="form-group" data-type="email_input">
 	            	    			    <label class="control-label" for="email_input">Email Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="email" name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
+	            	    			        <input type="email" name="" field-name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -104,12 +104,11 @@
 		            	    	    <div class="form-group" data-type="textarea">
 		            	    	        <label class="control-label" for="textarea">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <textarea name="" class="form-control" id="textarea" placeholder=""></textarea>
+		            	    	            <textarea name="" field-name="" class="form-control" id="textarea" placeholder=""></textarea>
 		            	    	        </div>
 		            	    	    </div>
 		            	    	</div>
 		            	    	{{-- TEXTAREA --}}
-
 
 		            	    	{{-- SELECT BASIC --}}
 		            	    	<div class="col-xs-6">
@@ -122,7 +121,7 @@
 		            	    	    <div class="form-group" data-type="select_basic">
 		            	    	        <label class="control-label" for="select_basic">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select class="form-control" name="" id="select_basic">
+		            	    	            <select class="form-control" name="" field-name="" id="select_basic">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -131,7 +130,6 @@
 		            	    	    </div>
 		            	    	</div>
 		            	    	{{-- SELECT BASIC --}}
-
 
 		            	    	{{-- SELECT MULTIPLE --}}
 		            	    	<div class="col-xs-6">
@@ -144,7 +142,7 @@
 		            	    	    <div class="form-group" data-type="select_multiple">
 		            	    	        <label class="control-label" for="select_multiple">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
+		            	    	            <select name="" field-name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -182,6 +180,25 @@
 		            	    	</div>
 	            	    	    {{-- CHECKBOXES --}}
 
+	            	    	     {{-- INLINE CHECKBOXES --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="far fa-square"></i> Inline-Checkboxes</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="inline_checkbox">
+		            	    	        <label class="control-label">Label</label>
+		            	    	        <div class="controls">
+		            	    	            <label class="checkbox-inline"><input type="checkbox" value="">Option 1</label>
+		            	    	            <label class="checkbox-inline"><input type="checkbox" value="">Option 2</label>
+		            	    	            <label class="checkbox-inline"><input type="checkbox" value="">Option 3</label>
+		            	    	        </div>
+		            	    	    </div>
+		            	    	</div>
+	            	    	    {{-- INLINE CHECKBOXES --}}
+
 	            	    	    {{-- RADIO --}}
 	            	    	    <div class="col-xs-6">
 		            	    		<div class="component">
@@ -210,20 +227,30 @@
 	            	    	    </div>
 	            	    	    {{-- RADIO --}}
 
-
-	            	    	    {{-- BUTTON --}}
+	            	    	    {{-- INLINE RADIO --}}
 	            	    	    <div class="col-xs-6">
 		            	    		<div class="component">
-		            	    			<h4><i class="fas fa-plus-square"></i> Button</h4>
+		            	    			<h4><i class="far fa-dot-circle"></i> Inline Radio</h4>
 		            	    		</div>
 		            	    	</div>
-
+	            	    	    
 		            	    	<div class="component hidetilloaded">
-		            	    	    <div class="form-group" data-type="button">
-		            	    	        <input type="submit" class="btn btn-primary" disabled value="Submit">
+		            	    	    <div class="form-group" data-type="inline_radio">
+		            	    	        <label class="control-label">Label</label>
+		            	    	        <div class="controls">
+		            	    	            <label class="radio-inline">
+		            	    	                <input type="radio" name="optradio" checked>Option 1
+		            	    	            </label>
+		            	    	            <label class="radio-inline">
+		            	    	                <input type="radio" name="optradio">Option 2
+		            	    	            </label>
+		            	    	            <label class="radio-inline">
+		            	    	                <input type="radio" name="optradio">Option 3
+		            	    	            </label>
+		            	    	        </div>
 		            	    	    </div>
 	            	    	    </div>
-	            	    	    {{-- BUTTON --}}
+	            	    	    {{-- INLINE RADIO --}}
 
 	            	    	    {{-- STATIC TEXT --}}
 	            	    	    <div class="col-xs-6">
@@ -239,6 +266,20 @@
 		            	    	    </div>
 		            	    	</div>
 		            	    	{{-- STATIC TEXT --}}
+
+		            	    	{{-- BUTTON --}}
+	            	    	    <div class="col-xs-6">
+		            	    		<div class="component">
+		            	    			<h4><i class="fas fa-plus-square"></i> Button</h4>
+		            	    		</div>
+		            	    	</div>
+
+		            	    	<div class="component hidetilloaded">
+		            	    	    <div class="form-group" data-type="button">
+		            	    	        <input type="submit" class="btn btn-primary" disabled value="Submit">
+		            	    	    </div>
+	            	    	    </div>
+	            	    	    {{-- BUTTON --}}
 	            	    	</div>
 	            	    </div>
 
@@ -268,7 +309,7 @@
 	            	            </div>
 
 	            	            <div class="tab-pane" id="preview-tab">
-	            	                <div class="form_preview mt50"><div class="source"></div></div>
+	            	                <div class="form_preview"><div class="source"></div></div>
 	            	            </div>
 
 	            	            <div class="tab-pane" id="source-tab">

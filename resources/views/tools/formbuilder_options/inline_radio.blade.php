@@ -1,22 +1,22 @@
-<div class="options options-checkbox form-horizontal">
+<div class="options options-inline_radio form-horizontal">
     <div class="form-group">
         <label class="control-label col-sm-3">Name</label>
         <div class="controls col-sm-9">
-            <input type="text" class="options_checkbox_name form-control" placeholder="Name">
+            <input type="text" class="options_inline_radio_name form-control" placeholder="Name">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-3">Label</label>
         <div class="controls col-sm-9">
-            <input type="text" class="options_checkbox_label form-control" placeholder="Label">
+            <input type="text" class="options_inline_radio_label form-control" placeholder="Label">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-3">Options</label>
         <div class="controls col-sm-9">
-            <textarea class="options_checkbox_options form-control" placeholder="Options"></textarea>
+            <textarea class="options_inline_radio_options form-control" placeholder="Options"></textarea>
             <span class="help-block">
                 Enter each option on a new line. If you want the value to be different to the displayed 
                 text, enter the value followed by '=' and the option text. Eg: value_1=Option 1.
