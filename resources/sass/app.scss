@@ -3481,7 +3481,7 @@ textarea.nobg_txtarea.form-control{
     overflow: auto;
 
     .close{
-        color:#d9534f;
+        color:darken(#d9534f,5%);
         position: relative;
         left: 13px;
         bottom: 3px;
@@ -3537,10 +3537,10 @@ textarea.nobg_txtarea.form-control{
 
     h4{
         font-weight: 600;
-        font-size: 14px;
+        font-size: 13px;
 
         i{
-            padding-right: 10px;
+            padding-right: 5px;
         }
     }
 }
@@ -3613,7 +3613,7 @@ textarea.nobg_txtarea.form-control{
     background: darken(#eee,3%);
     border:1px solid #ccc;
     padding: 10px;
-    min-height: 350px;
+    min-height: 400px;
     position: relative;
     z-index: 999;
 

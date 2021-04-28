@@ -4101,7 +4101,7 @@ textarea.nobg_txtarea.form-control {
 }
 
 #builder_content .close {
-  color: #d9534f;
+  color: #d43f3a;
   position: relative;
   left: 13px;
   bottom: 3px;
@@ -4152,11 +4152,11 @@ textarea.nobg_txtarea.form-control {
 
 .component h4 {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .component h4 i {
-  padding-right: 10px;
+  padding-right: 5px;
 }
 
 .component.form-group.ui-draggable {
@@ -4231,7 +4231,7 @@ textarea.nobg_txtarea.form-control {
   background: #e6e6e6;
   border: 1px solid #ccc;
   padding: 10px;
-  min-height: 350px;
+  min-height: 400px;
   position: relative;
   z-index: 999;
 }

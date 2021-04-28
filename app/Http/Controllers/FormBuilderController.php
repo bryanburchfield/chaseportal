@@ -10,7 +10,7 @@ class FormBuilderController extends Controller
     {	
 
     	$page = [
-    	    'menuitem' => 'form_builder',
+    	    'menuitem' => 'portal_form_builder',
     	    'sidenav' => 'tools',
     	    'type' => 'other',
     	];

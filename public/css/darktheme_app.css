@@ -152,6 +152,10 @@ h6 {
   margin-right: 5px;
 }
 
+.ml10 {
+  margin-left: 10px;
+}
+
 .mr10 {
   margin-right: 10px;
 }
@@ -4022,6 +4026,9 @@ div.col-sm-5.five-two {
 }
 
 .getleaddetails {
+  /* PORTAL FORM BUILDER */
+  /* COMPONENTS */
+  /* ELEMENTS */
   /* ---------------------------------------------------
   MEDIAQUERIES
   ----------------------------------------------------- */
@@ -4225,6 +4232,264 @@ div.col-sm-5.five-two {
   min-width: 100px;
   max-width: 100px;
   left: 0px;
+}
+
+.getleaddetails hr.dk_theme {
+  border-top: 1px solid #253752;
+}
+
+.getleaddetails #builder_content {
+  min-height: 300px;
+  border: 1px solid #182435;
+  border-radius: 4px;
+  padding: 10px 20px;
+  overflow: auto;
+}
+
+.getleaddetails #builder_content .close {
+  color: #d9534f;
+  position: relative;
+  left: 13px;
+  bottom: 3px;
+  text-shadow: none;
+}
+
+.getleaddetails #builder_content legend {
+  color: #ccc;
+}
+
+.getleaddetails #content_form_name {
+  cursor: pointer;
+}
+
+.getleaddetails .content-hover {
+  border: 1px dashed #3a87ad !important;
+  color: #3a87ad;
+  background: #d9edf7;
+  opacity: 0.5;
+}
+
+.getleaddetails .dropzone .tab-pane {
+  background: #203047;
+  border: 1px soliddarken(#203047, 5%);
+}
+
+.getleaddetails .content-hover legend {
+  color: #3a87ad;
+  border-color: -moz-use-text-color -moz-use-text-color #3a87ad;
+}
+
+.getleaddetails .content-hover .element {
+  border: 1px solid #d9edf7;
+}
+
+.getleaddetails #components-container div.col-xs-6 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.getleaddetails .component {
+  cursor: move;
+  padding: 10px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+  background: #203047;
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
+  margin: 0;
+  margin-top: 10px;
+  border-radius: 3px;
+  min-width: 160px;
+}
+
+.getleaddetails .component h4 {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.getleaddetails .component h4 i {
+  padding-right: 5px;
+}
+
+.getleaddetails .component.form-group.ui-draggable {
+  max-width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 3px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+}
+
+.getleaddetails .component:hover {
+  background: #1b293c;
+  background: linear-gradient(to bottom, #1b293c 0%, #040609 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1b293c, endColorstr=#040609,GradientType=0 );
+}
+
+.getleaddetails .component-drag {
+  border-radius: 3px;
+  border: 1px solid #131d2b;
+  border-left: 5px solid #131d2b;
+  padding: 10px;
+  background: #203047;
+}
+
+.getleaddetails .element {
+  cursor: move;
+  padding: 10px 25px;
+  border: 2px solid #131d2b;
+  background: #203047;
+  background: linear-gradient(to bottom, #203047 0%, #090d14 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#203047, endColorstr=#090d14,GradientType=0 );
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.getleaddetails .element .form-control {
+  background: #1d2b40 !important;
+  border: none;
+  color: #b7b7b7;
+}
+
+.getleaddetails .elements_col {
+  position: relative;
+}
+
+.getleaddetails .element:hover,
+.getleaddetails .element.active {
+  background: #1b293c;
+  background: linear-gradient(to bottom, #1b293c 0%, #040609 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#1b293c, endColorstr=#040609,GradientType=0 );
+  border: 2px solid #43c3bd;
+  border-radius: 3px;
+}
+
+.getleaddetails .element-placeholder {
+  border: 1px dashed #3a87ad;
+  color: #3a87ad;
+  background: #d9edf7;
+  min-height: 50px;
+  opacity: 0.5;
+}
+
+.getleaddetails .elements,
+.getleaddetails .options {
+  background: #1b293c;
+  border: 1px solid #182435;
+  padding: 10px;
+  min-height: 400px;
+  position: relative;
+  z-index: 999;
+}
+
+.getleaddetails .elements h3,
+.getleaddetails .options h3 {
+  color: #ddd;
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.getleaddetails .elements a.back,
+.getleaddetails .options a.back {
+  float: right;
+  color: #478ecc;
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+.getleaddetails .elements a.back:hover,
+.getleaddetails .options a.back:hover {
+  color: #63a0d4;
+}
+
+.getleaddetails .elements .option_vals,
+.getleaddetails .elements .options,
+.getleaddetails .options .option_vals,
+.getleaddetails .options .options {
+  overflow-y: auto;
+  overflow-x: hidden;
+  clear: both;
+  background: #121a27;
+}
+
+.getleaddetails .elements .option_vals .form-control,
+.getleaddetails .elements .options .form-control,
+.getleaddetails .options .option_vals .form-control,
+.getleaddetails .options .options .form-control {
+  color: #ccc;
+  border: 1px solid #101824;
+  background: #1d2b40 !important;
+}
+
+.getleaddetails .elements .option_vals .btn,
+.getleaddetails .elements .options .btn,
+.getleaddetails .options .option_vals .btn,
+.getleaddetails .options .options .btn {
+  float: right;
+}
+
+.getleaddetails .elements .btn-default,
+.getleaddetails .options .btn-default {
+  background: #ccc;
+  background: linear-gradient(to bottom, #ccc 0%, #bbb 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#ccc, endColorstr=#bbb,GradientType=0 );
+  color: #333;
+}
+
+.getleaddetails .elements .btn-default:hover,
+.getleaddetails .elements .btn-default:active,
+.getleaddetails .elements .btn-default:focus,
+.getleaddetails .options .btn-default:hover,
+.getleaddetails .options .btn-default:active,
+.getleaddetails .options .btn-default:focus {
+  color: #333 !important;
+  background: #e0e0e0;
+  background: linear-gradient(to bottom, #e0e0e0 0%, #cfcfcf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=#e0e0e0, endColorstr=#cfcfcf,GradientType=0 );
+}
+
+.getleaddetails .options h3 {
+  float: left;
+}
+
+.getleaddetails .form_preview {
+  background: #1b293c;
+  border: 1px solid #182435;
+  padding: 20px;
+  display: none;
+}
+
+.getleaddetails .form_preview form {
+  background: #eee;
+  border: 1px solid #ddd;
+  min-height: 400px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.getleaddetails .form_preview form h2,
+.getleaddetails .form_preview form legend {
+  background: #203047;
+  color: #fff;
+  font-weight: 600;
+  font-size: 22px;
+  padding: 5px 8px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.getleaddetails .form_preview form .form_preview #source .form-control {
+  background: #fff;
+  color: #555;
+}
+
+.getleaddetails .form_preview form.form-horizontal {
+  background: #eee;
+  border: 1px solid #ccc;
+  overflow: auto;
+  padding: 12px;
 }
 
 @media handheld, only screen and (min-width: 920px) {
