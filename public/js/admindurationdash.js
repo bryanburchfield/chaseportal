@@ -310,6 +310,21 @@ var Dashboard = {
 	            	$('<div class="alert alert-info no_data top45">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#calls_by_campaign');
 	            }
 
+	            ///// CALLS BY REP TABLE
+                $('#calls_by_rep tbody').empty();
+
+                var calls_by_rep_trs='';
+                if(response.call_volume.reps.length){
+	                for (var i=0; i < response.call_volume.reps.length; i++) {
+	                    calls_by_rep_trs+= '<tr class="results"><td>'+response.call_volume.reps[i].Rep+'</td><td>'+Master.formatNumber(response.call_volume.reps[i].Count)+'</td><td>'+Master.convertSecsToHrsMinsSecs(response.call_volume.reps[i].Seconds)+'</td></tr>';
+	                }
+
+	                calls_by_rep_trs+= '<tr class="results"><td><b>Total</b></td><td><b>'+Master.formatNumber(response.call_volume.total_calls)+'</b></td><td><b>'+Master.convertSecsToHrsMinsSecs(response.call_volume.total_seconds)+'</b></td></tr>';
+	                $('#calls_by_rep tbody').append(calls_by_rep_trs);
+	            }else{
+	            	$('<div class="alert alert-info no_data top45">' + Lang.get('js_msgs.no_data') + '</div>').insertBefore('#calls_by_rep');
+	            }
+
 	            // fade out preloader here because .done is not working
 	            $('.preloader').fadeOut('slow');
 	            Dashboard.resizeDivs();

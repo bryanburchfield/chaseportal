@@ -32,6 +32,7 @@ return [
     'calls' => 'Calls',
     'calls_answered' => 'Calls Answered',
     'calls_by_campaign' => 'Calls by Campaign',
+    'calls_by_rep' => 'Calls by Rep',
     'calls_minutes_per_day' => 'Calls and Minutes Per Day',
     'calls_offered' => 'Calls Offered',
     'callstatus_by_minutes' => 'Call Status by Minutes',

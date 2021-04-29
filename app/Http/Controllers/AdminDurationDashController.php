@@ -48,6 +48,7 @@ class AdminDurationDashController extends Controller
 
         // Initialize return vars
         $campaigns = [];
+        $reps = [];
         $callstatuses = [];
         $dates = [];
         $total_calls = 0;
@@ -65,6 +66,7 @@ class AdminDurationDashController extends Controller
                 $system_pct += $rec['cnt'];
             }
 
+            // Campaign stats
             if (!isset($campaigns[$rec['Campaign']])) {
                 $campaigns[$rec['Campaign']]['Campaign'] = $rec['Campaign'];
                 $campaigns[$rec['Campaign']]['Seconds'] = 0;
@@ -72,6 +74,15 @@ class AdminDurationDashController extends Controller
             }
             $campaigns[$rec['Campaign']]['Seconds'] += $rec['secs'];
             $campaigns[$rec['Campaign']]['Count'] += $rec['cnt'];
+
+            // Rep stats
+            if (!isset($reps[$rec['Rep']])) {
+                $reps[$rec['Rep']]['Rep'] = $rec['Rep'];
+                $reps[$rec['Rep']]['Seconds'] = 0;
+                $reps[$rec['Rep']]['Count'] = 0;
+            }
+            $reps[$rec['Rep']]['Seconds'] += $rec['secs'];
+            $reps[$rec['Rep']]['Count'] += $rec['cnt'];
 
             if (!isset($callstatuses[$rec['CallStatus']])) {
                 $callstatuses[$rec['CallStatus']]['Minutes'] = 0;
@@ -104,6 +115,7 @@ class AdminDurationDashController extends Controller
 
         // Sort
         ksort($campaigns, SORT_NATURAL | SORT_FLAG_CASE);
+        ksort($reps, SORT_NATURAL | SORT_FLAG_CASE);
         ksort($dates);
         uasort($callstatuses, function ($a, $b) {
             return $b['Minutes'] <=> $a['Minutes'];
@@ -129,8 +141,20 @@ class AdminDurationDashController extends Controller
         }
         $campaigns = $ret_camps;
 
+        // Convert rep array to numeric index
+        $ret_reps = [];
+        $i = 0;
+        foreach ($reps as $rec) {
+            $ret_reps[$i]['Rep'] = $rec['Rep'];
+            $ret_reps[$i]['Count'] = $rec['Count'];
+            $ret_reps[$i]['Seconds'] = $rec['Seconds'];
+            $i++;
+        }
+        $reps = $ret_reps;
+
         return ['call_volume' => [
             'campaigns' => $campaigns,
+            'reps' => $reps,
             'callstatuses' => $callstatus_ret,
             'dates' => $dates,
             'total_calls' => $total_calls,
@@ -160,7 +184,7 @@ class AdminDurationDashController extends Controller
             'todate' => $endDate,
         ];
 
-        $sql = "SELECT CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date, Campaign, CallStatus, COUNT(*) cnt, SUM(Duration) secs
+        $sql = "SELECT CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date, Campaign, Rep, CallStatus, COUNT(*) cnt, SUM(Duration) secs
             FROM DialingResults DR
             WHERE GroupId = :groupid
             AND CallDate >= :fromdate
@@ -172,7 +196,7 @@ class AdminDurationDashController extends Controller
         $sql .= " $where";
         $bind = array_merge($bind, $extrabind);
 
-        $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, CallStatus";
+        $sql .= " GROUP BY CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date), Campaign, Rep, CallStatus";
 
         return $this->runSql($sql, $bind);
     }
