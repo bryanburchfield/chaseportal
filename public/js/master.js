@@ -1950,12 +1950,6 @@ var Master = {
                     backgroundColor: chartColors.orange,
                     fillOpacity: .5,
                     data: response.extras.system
-                },
-                {
-                    label: Lang.get('js_msgs.total'),
-                    backgroundColor: chartColors.blue,
-                    fillOpacity: .5,
-                    data: response.extras.total
                 }
             ]
         };
