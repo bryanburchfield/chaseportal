@@ -47,6 +47,7 @@ return [
     'calltype' => 'Call Type',
     'campaign' => 'Campaign',
     'campaign_call_log' => 'Campaign Call Log',
+    'campaign_contact' => 'Campaign Contact',
     'campaign_summary' => 'Campaign Summary',
     'campaign_usage' => 'Campaign Usage',
     'cepts' => 'Operator Disconnects',
