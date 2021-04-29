@@ -59,6 +59,13 @@
 					</div>
 				</div>
 
+                <div class="col-sm-4">
+					<div class="form-group">
+						{!! Form::label('did_divisor', __('reports.did_divisor')) !!}
+                        {!! Form::text('did_divisor', $filters['did_divisor'], ['class'=>'form-control', 'required' => true]) !!}
+					</div>
+				</div>
+
 			</div>
 
 			<div class="alert alert-danger report_errors"></div>
