@@ -1,12 +1,5 @@
 $(function() {
 
-	///////////
-	// update source when element is dragged
-	// add inline radios / checkboxes
-	// add disabled attribute to elements in the form preview / dropzone
-	// remove disabled attributes from elements in the form prview / dropzone
-	///////////
-
     var FORM_BUILDER = {
         el: null,
         method: "POST",

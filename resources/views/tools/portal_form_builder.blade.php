@@ -104,7 +104,7 @@
 		            	    	    <div class="form-group" data-type="textarea">
 		            	    	        <label for="textarea">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <textarea name="" field-name="" class="form-control" id="textarea" placeholder=""></textarea>
+		            	    	            <textarea name="" class="form-control" id="textarea" placeholder=""></textarea>
 		            	    	        </div>
 		            	    	    </div>
 		            	    	</div>
@@ -121,7 +121,7 @@
 		            	    	    <div class="form-group" data-type="select_basic">
 		            	    	        <label for="select_basic">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select class="form-control" name="" field-name="" id="select_basic">
+		            	    	            <select class="form-control" name="" id="select_basic">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -142,7 +142,7 @@
 		            	    	    <div class="form-group" data-type="select_multiple">
 		            	    	        <label for="select_multiple">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select name="" field-name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
+		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -280,10 +280,6 @@
 		            	    	    </div>
 	            	    	    </div>
 	            	    	    {{-- BUTTON --}}
-
-	            	    	    <div class="col-xs-6">
-	            	    	    	<a href="#" class="btn btn-primary download_file mt10 ml10">Download Source</a>
-	            	    	    </div>
 	            	    	</div>
 	            	    </div>
 
