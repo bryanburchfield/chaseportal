@@ -34,7 +34,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="text">
-	            	    			    <label class="control-label" for="text_input">Label</label>
+	            	    			    <label for="text_input">Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="text" name="" field-name="" disabled id="text_input" placeholder="" class="form-control">
 	            	    			    </div>
@@ -51,7 +51,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="password_input">
-	            	    			    <label class="control-label" for="password_input">Password Label</label>
+	            	    			    <label for="password_input">Password Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="password" name="" field-name="" disabled id="password_input" placeholder="" class="form-control">
 	            	    			    </div>
@@ -68,7 +68,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="phone_input">
-	            	    			    <label class="control-label" for="phone_input">Phone Label</label>
+	            	    			    <label for="phone_input">Phone Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="tel" name="" field-name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
 	            	    			    </div>
@@ -85,7 +85,7 @@
 
 	            	    		<div class="component hidetilloaded">
 	            	    			<div class="form-group" data-type="email_input">
-	            	    			    <label class="control-label" for="email_input">Email Label</label>
+	            	    			    <label for="email_input">Email Label</label>
 	            	    			    <div class="controls">
 	            	    			        <input type="email" name="" field-name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
 	            	    			    </div>
@@ -102,7 +102,7 @@
 
 	            	    	    <div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="textarea">
-		            	    	        <label class="control-label" for="textarea">Label</label>
+		            	    	        <label for="textarea">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <textarea name="" field-name="" class="form-control" id="textarea" placeholder=""></textarea>
 		            	    	        </div>
@@ -119,7 +119,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="select_basic">
-		            	    	        <label class="control-label" for="select_basic">Label</label>
+		            	    	        <label for="select_basic">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <select class="form-control" name="" field-name="" id="select_basic">
 		            	    	                <option value="1">Option 1</option>
@@ -140,7 +140,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="select_multiple">
-		            	    	        <label class="control-label" for="select_multiple">Label</label>
+		            	    	        <label for="select_multiple">Label</label>
 		            	    	        <div class="controls">
 		            	    	            <select name="" field-name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
 		            	    	                <option value="1">Option 1</option>
@@ -161,7 +161,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="checkbox">
-		            	    	        <label class="control-label">Label</label>
+		            	    	        <label>Label</label>
 		            	    	        <div class="controls">
 		            	    	            <div class="checkbox"><label class="" for="checkbox_1">
 		            	    	                <input type="checkbox" name="checkbox" id="checkbox_1">
@@ -189,7 +189,7 @@
 
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="inline_checkbox">
-		            	    	        <label class="control-label">Label</label>
+		            	    	        <label>Label</label>
 		            	    	        <div class="controls">
 		            	    	            <label class="checkbox-inline"><input type="checkbox" value="">Option 1</label>
 		            	    	            <label class="checkbox-inline"><input type="checkbox" value="">Option 2</label>
@@ -208,7 +208,7 @@
 	            	    	    
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="radio">
-		            	    	        <label class="control-label">Label</label>
+		            	    	        <label>Label</label>
 		            	    	        <div class="controls">
 		            	    	            <div class="radio"><label class="" for="radio_1">
 		            	    	                <input type="radio" name="radio" id="radio_1">
@@ -236,7 +236,7 @@
 	            	    	    
 		            	    	<div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="inline_radio">
-		            	    	        <label class="control-label">Label</label>
+		            	    	        <label>Label</label>
 		            	    	        <div class="controls">
 		            	    	            <label class="radio-inline">
 		            	    	                <input type="radio" name="optradio" checked>Option 1
@@ -261,7 +261,7 @@
 
 	            	    	    <div class="component hidetilloaded">
 		            	    	    <div class="form-group" data-type="static_text">
-		            	    	        <label class="control-label">Static Text</label>
+		            	    	        <label>Static Text</label>
 		            	    	        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 		            	    	    </div>
 		            	    	</div>

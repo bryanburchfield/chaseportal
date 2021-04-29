@@ -39,11 +39,12 @@ $(function() {
         cleanContent: function(content) {
             return content
                     .replace(/\t/, '')
-                    .replace('form-horizontal', '')
+                    .replace('class="form-horizontal"', '')
+                    .replace('class="mt10 mb20"', '')
                     .replaceAll('disabled="" ', '')
                     .replaceAll('ui-draggable element', 'col-sm-6')
                     .replace(/<div class="close">.<\/div>/g, '')
-                    .replace(/<div class="controls"><\/div>/g, '')
+                    // .replaceAll(/<div class="controls"><\/div>/g, '')
                     .replace(/ data-(.+)="(.+)"/g, '');
         },
 
