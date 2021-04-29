@@ -1916,7 +1916,8 @@ span.selected_campaign {
 .bwr_production_report table thead th a,
 .calls_per_hour table thead th a,
 .transfer_agent table thead th a,
-.apn_subcampaign_summary table thead th a {
+.apn_subcampaign_summary table thead th a,
+.lead_inventory_sub table thead th a {
   display: none;
 }
 
