@@ -280,6 +280,10 @@
 		            	    	    </div>
 	            	    	    </div>
 	            	    	    {{-- BUTTON --}}
+
+	            	    	    <div class="col-xs-6">
+	            	    	    	<a href="#" class="btn btn-primary download_file mt10 ml10">Download Source</a>
+	            	    	    </div>
 	            	    	</div>
 	            	    </div>
 

@@ -906,8 +906,35 @@ $(function() {
         }
     });
 
-    $('.download_file').on('click', function(){
-        console.log('Download File');
+    $('.download_file').on('click', function(e){
+        e.preventDefault();
+
+        var elem = document.createElement('a');
+        elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(get_html()));
+        elem.setAttribute('download', 'index.html');
+
+        elem.style.display = 'none';
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
     });
+
+    function get_html(){
+         var source =   '<!DOCTYPE html>'+"\n"+
+                        '<html>'+"\n"+
+                        '<head>'+"\n"+
+                            '<meta charset="utf-8">'+"\n"+
+                            '<meta http-equiv="X-UA-Compatible" content="IE=edge">'+"\n"+
+                            '<meta name="viewport" content="width=device-width, initial-scale=1">'+"\n"+
+                            '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap-theme.css" crossorigin="anonymous" />'+"\n"+
+                            +"\n"+
+                            '<form method=" + this.method + " ' +
+                            'action=" + this.action + " ' +
+                            'class="form-horizontal">' +
+                            $("#builder_content").html() +
+                            '\n</form>';
+        // console.log(content);
+        return source;
+    }
 
 });
