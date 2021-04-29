@@ -112,6 +112,7 @@ var Master = {
         $('.switch.client_input input').on('click', this.toggle_active_client);
         $('#sidebar').on('click', '.update_nav_link', this.update_sidenav);
         $('#sidebar').on('click', '.back_to_sidenav', this.update_sidenav);
+        $('.toggle_instruc, .toggle_instruc + h3').on('click', this.toggle_instructions);
 	},
 
     update_sidenav:function(e){
@@ -2571,6 +2572,25 @@ var Master = {
 
             }
         });
+    },
+
+    // toggle instructions on tools/dnc_importer & admin/spam_check
+    toggle_instructions:function(e){
+
+        if(e){
+            e.preventDefault();
+        }
+
+        that = $('a.toggle_instruc');
+        if(that.hasClass('collapsed')){
+            that.removeClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-up"></i>');
+        }else{
+            that.addClass('collapsed');
+            that.empty().append('<i class="fas fa-angle-down"></i>');
+        }
+
+        that.parent().find('.instuc_div').slideToggle();
     }
 }
 
@@ -2615,6 +2635,10 @@ $(document).ready(function () {
 
     if($('.sso #group_id').val() == '-1'){
         $('.sso #group_id').parent().addClass('has-error');
+    }
+
+    if($('.spam_check_table tbody tr, .dnc_table tbody tr').length){
+        Master.toggle_instructions();
     }
 
 });

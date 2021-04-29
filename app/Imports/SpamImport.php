@@ -2,7 +2,8 @@
 
 namespace App\Imports;
 
-use App\Models\SpamCheckBatch;
+use App\Http\Controllers\SpamCheckController;
+use App\Models\SpamCheckBatchDetail;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -12,12 +13,15 @@ abstract class SpamImport implements ToModel, WithChunkReading, WithBatchInserts
     protected $spam_check_batch_id;
     protected $column;
     protected $rows = 0;
+    protected $spamCheckController;
 
 
     public function __construct($spam_check_batch_id, $column)
     {
         $this->spam_check_batch_id = $spam_check_batch_id;
         $this->column = $column;
+
+        $this->spamCheckController = new SpamCheckController;
     }
 
     public function model(array $row)
@@ -32,19 +36,17 @@ abstract class SpamImport implements ToModel, WithChunkReading, WithBatchInserts
         $record['spam_check_batch_id'] = $this->spam_check_batch_id;
         $record['line'] = $this->rows + $this->header_adjustment;
 
-        // strip non-digits from phone number
-        $record['phone'] = preg_replace("/[^0-9]/", '', $row[$this->column]);
+        // sometimes newlines get imported
+        $record['phone'] = str_replace('_x000D_', '', $row[$this->column]);
 
-        // Vary basic validation
-        if (strlen($record['phone']) < 7) {
-            $record['succeeded'] = false;
-            $record['error'] = trans('tools.invalid_phone');
-        } else {
-            $record['succeeded'] = null;
-            $record['error'] = null;
+        // validate number
+        $record['error'] = null;
+        if (!$this->spamCheckController->validNaPhone($record['phone'])) {
+            $record['error'] = 'Invalid phone number';
         }
+        $record['succeeded'] = empty($record['error']);
 
-        return new SpamCheckBatch($record);
+        return new SpamCheckBatchDetail($record);
     }
 
     /**

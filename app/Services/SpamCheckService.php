@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Api;
 use App\Models\PhoneFlag;
+use App\Models\SpamCheckBatch;
 use App\Models\SpamCheckBatchDetail;
 use Exception;
 use GuzzleHttp\Client;
@@ -57,6 +58,26 @@ class SpamCheckService
         } catch (Exception $e) {
             Log::error('Truespam trim error: ' . $e->getMessage());
         }
+    }
+
+    public function processFile(SpamCheckBatch $spamCheckBatch)
+    {
+        if (!empty($spamCheckBatch->proccess_started_at)) {
+            abort(404);
+        }
+
+        foreach ($spamCheckBatch->spamCheckBatchDetails->all() as $detail) {
+            if ($detail->succeeded && !$detail->checked) {
+                $detail->flags = $this->checkNumber($detail->phone);
+                $detail->flagged = !empty($detail->flags);
+                $detail->checked = 1;
+
+                $detail->save();
+            }
+        }
+
+        $spamCheckBatch->processed_at = now();
+        $spamCheckBatch->save();
     }
 
     public function checkNumber($phone, $check_all = false)
