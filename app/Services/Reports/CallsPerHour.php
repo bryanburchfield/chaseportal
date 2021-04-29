@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class CallsPerHour
 {
@@ -78,7 +77,7 @@ class CallsPerHour
             $this->params['totpages'] += floor($this->params['totrows'] / $this->params['pagesize']) == ($this->params['totrows'] / $this->params['pagesize']) ? 0 : 1;
         }
 
-        return $this->getPage($results);
+        return $this->getPage($results, $all);
     }
 
     public function makeQuery($all)

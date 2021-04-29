@@ -434,7 +434,6 @@ var Master = {
             },
 
             success:function(response){
-
                 var subcampaigns='<option value=""> Select One</option>';
                 for(var i=0; i<response.subcampaigns.length;i++){
                     subcampaigns+='<option value="'+response.subcampaigns[i]+'">'+response.subcampaigns[i]+'</option>';
