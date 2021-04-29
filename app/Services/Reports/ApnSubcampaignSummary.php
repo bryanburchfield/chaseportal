@@ -152,15 +152,15 @@ class ApnSubcampaignSummary
             FROM ( SELECT
               dr.Campaign,
               IsNull(dr.Subcampaign, '') as Subcampaign,
-              CAST(CONVERT(datetimeoffset, Date) AT TIME ZONE '$tz' as date) as Date,
+              CAST(CONVERT(datetimeoffset, CallDate) AT TIME ZONE '$tz' as date) as Date,
               dr.CallStatus as CallStatus,
               IsNull(Di.Type,0) as [Type],
               CASE WHEN dr.Duration >= :threshold$i THEN 1 ELSE 0 END as OverThreshold
             FROM [$db].[dbo].[DialingResults] dr WITH(NOLOCK)
             LEFT JOIN [$db].[dbo].[Dispos] DI ON DI.id = dr.DispositionId
             WHERE dr.GroupId = :group_id$i
-            AND dr.Date >= :startdate$i
-            AND dr.Date < :enddate$i
+            AND dr.CallDate >= :startdate$i
+            AND dr.CallDate < :enddate$i
             AND dr.Campaign <> '_MANUAL_CALL_'
             AND dr.CallStatus IS NOT NULL
             AND dr.CallStatus not in ('', 'CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";

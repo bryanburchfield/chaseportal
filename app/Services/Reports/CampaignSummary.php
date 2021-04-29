@@ -144,8 +144,8 @@ class CampaignSummary
 
             $sql .= "
         WHERE dr.GroupId = :group_id$i
-        AND dr.Date >= :startdate$i
-        AND dr.Date < :enddate$i
+        AND dr.CallDate >= :startdate$i
+        AND dr.CallDate < :enddate$i
         AND dr.Campaign <> '_MANUAL_CALL_'
         AND IsNull(CallStatus, '') <> ''
         AND CallStatus not in ('CR_CNCT/CON_CAD', 'CR_CNCT/CON_PVD')";

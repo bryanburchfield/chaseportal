@@ -87,7 +87,7 @@ class MissedCalls
             $bind['startdate' . $i] = $startDate;
             $bind['enddate' . $i] = $endDate;
 
-            $sql .= " $union SELECT DR.Phone, Max(DR.Date) as MaxDate, COUNT(DR.Phone) as MissedCalls,
+            $sql .= " $union SELECT DR.Phone, Max(DR.CallDate) as MaxDate, COUNT(DR.Phone) as MissedCalls,
             LD.FirstName, LD.LastName
             FROM [$db].[dbo].[DialingResults] DR
             CROSS APPLY (
@@ -101,8 +101,8 @@ class MissedCalls
             WHERE DR.CallType IN (1,11)
             AND DR.CallStatus IN ('CR_HANGUP', 'Inbound Voicemail')
             AND Duration > 0
-            AND DR.Date >= :startdate$i
-            AND DR.Date < :enddate$i
+            AND DR.CallDate >= :startdate$i
+            AND DR.CallDate < :enddate$i
             AND DR.GroupId = :group_id$i";
 
             if (session('ssoRelativeCampaigns', 0)) {
@@ -134,16 +134,16 @@ class MissedCalls
                 MP.MissedCalls,
                 MP.FirstName,
                 MP.LastName,
-                DR.Date,
+                DR.CallDate as Date,
                 DR.CallStatus
             FROM #MissedPhones MP
             CROSS APPLY (
-                SELECT TOP 1 Date, CallStatus
+                SELECT TOP 1 CallDate, CallStatus
                 FROM [$db].[dbo].[DialingResults]
                 WHERE Phone = MP.Phone
                 AND GroupId = :group_id1$i
-                AND Date >= MP.MaxDate
-                ORDER BY Date DESC
+                AND CallDate >= MP.MaxDate
+                ORDER BY CallDate DESC
             ) DR";
 
             $union = 'UNION';

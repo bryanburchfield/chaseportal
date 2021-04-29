@@ -191,7 +191,7 @@ class AgentAnalysis
             $bind['enddate2' . $i] = $endDate;
 
             $sql .= " $union SELECT
-                CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date,
+                CAST(CONVERT(datetimeoffset, r.CallDate) AT TIME ZONE '$tz' as date) as Date,
                 r.Campaign,
                 r.Rep,
                 d.Type,
@@ -207,8 +207,8 @@ class AgentAnalysis
 
             $sql .= "
             WHERE r.GroupId = :group_id2$i
-            AND r.Date >= :startdate2$i
-            AND r.Date < :enddate2$i
+            AND r.CallDate >= :startdate2$i
+            AND r.CallDate < :enddate2$i
             AND d.Type > 0";
 
             if (session('ssoRelativeCampaigns', 0)) {
@@ -222,7 +222,7 @@ class AgentAnalysis
             }
 
             $sql .= "
-            GROUP BY CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date), r.Campaign, r.Rep, d.Type";
+            GROUP BY CAST(CONVERT(datetimeoffset, r.CallDate) AT TIME ZONE '$tz' as date), r.Campaign, r.Rep, d.Type";
 
             $union = 'UNION ALL';
         }
@@ -241,13 +241,13 @@ class AgentAnalysis
             SET CallBacks += a.CallBacks
             FROM (SELECT r.Rep, r.Campaign,
                     COUNT(r.id) as CallBacks,
-                    CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date) as Date
+                    CAST(CONVERT(datetimeoffset, r.CallDate) AT TIME ZONE '$tz' as date) as Date
                     FROM [$db].[dbo].[DialingResults] r WITH(NOLOCK)
                     WHERE r.GroupId = :group_id3$i
                     AND r.CallStatus = 'AGENTSPCB'
-                    AND r.Date >= :startdate3$i
-                    AND r.Date < :enddate3$i
-                GROUP BY r.Rep, r.Campaign, r.GroupId, CAST(CONVERT(datetimeoffset, r.Date) AT TIME ZONE '$tz' as date)) a
+                    AND r.CallDate >= :startdate3$i
+                    AND r.CallDate < :enddate3$i
+                GROUP BY r.Rep, r.Campaign, r.GroupId, CAST(CONVERT(datetimeoffset, r.CallDate) AT TIME ZONE '$tz' as date)) a
             WHERE #AgentAnalysis.Campaign = a.Campaign
             AND #AgentAnalysis.Rep = a.Rep
             AND #AgentAnalysis.Date = a.Date;

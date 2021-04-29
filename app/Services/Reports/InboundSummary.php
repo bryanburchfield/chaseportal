@@ -151,8 +151,8 @@ class InboundSummary
                 LEFT JOIN #SelectedSource S on S.SourceName = dr.CallerId
                 WHERE dr.GroupId = :group_id$i
                 AND dr.CallType = 1
-                AND dr.Date >= :startdate$i
-                AND dr.Date < :enddate$i
+                AND dr.CallDate >= :startdate$i
+                AND dr.CallDate < :enddate$i
                 $where";
 
             if (session('ssoRelativeCampaigns', 0)) {

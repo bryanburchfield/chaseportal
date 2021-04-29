@@ -235,8 +235,8 @@ class BwrOmni
 
         $sql .= "
                 WHERE DR.GroupId = :group_id2
-                AND DR.Date >= :startdate
-                AND DR.Date < :enddate";
+                AND DR.CallDate >= :startdate
+                AND DR.CallDate < :enddate";
 
         if (session('ssoRelativeCampaigns', 0)) {
             $sql .= " AND DR.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(:ssousercamp, 1))";
