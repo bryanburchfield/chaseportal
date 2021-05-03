@@ -3828,7 +3828,7 @@ textarea.nobg_txtarea.form-control {
   background: #e6e6e6;
   border: 1px solid #ccc;
   padding: 10px;
-  min-height: 400px;
+  min-height: 510px;
   position: relative;
   z-index: 999;
 }

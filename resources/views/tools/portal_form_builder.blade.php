@@ -36,7 +36,7 @@
 	            	    			<div class="form-group" data-type="text">
 	            	    			    <label for="text_input">Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="text" name="" field-name="" disabled id="text_input" placeholder="" class="form-control">
+	            	    			        <input type="text" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -53,7 +53,7 @@
 	            	    			<div class="form-group" data-type="password_input">
 	            	    			    <label for="password_input">Password Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="password" name="" field-name="" disabled id="password_input" placeholder="" class="form-control">
+	            	    			        <input type="password" name="" control="input" field-name="" disabled id="password_input" placeholder="" class="form-control control-input">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -70,7 +70,7 @@
 	            	    			<div class="form-group" data-type="phone_input">
 	            	    			    <label for="phone_input">Phone Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="tel" name="" field-name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control">
+	            	    			        <input type="tel" name="" control="input" field-name="" disabled id="phone_input" placeholder="555-123-1234" class="form-control control-input">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -87,7 +87,7 @@
 	            	    			<div class="form-group" data-type="email_input">
 	            	    			    <label for="email_input">Email Label</label>
 	            	    			    <div class="controls">
-	            	    			        <input type="email" name="" field-name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control">
+	            	    			        <input type="email" name="" control="input" field-name="" disabled id="email_input" placeholder="ex:johndoe@gmail.com" class="form-control control-input">
 	            	    			    </div>
 	            	    			</div>
 	            	    		</div>
@@ -104,7 +104,7 @@
 		            	    	    <div class="form-group" data-type="textarea">
 		            	    	        <label for="textarea">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <textarea name="" class="form-control" id="textarea" placeholder=""></textarea>
+		            	    	            <textarea name="" class="form-control control-input" id="textarea" control="textarea" placeholder=""></textarea>
 		            	    	        </div>
 		            	    	    </div>
 		            	    	</div>
@@ -121,7 +121,7 @@
 		            	    	    <div class="form-group" data-type="select_basic">
 		            	    	        <label for="select_basic">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select class="form-control" name="" id="select_basic">
+		            	    	            <select class="form-control control-select" name="" id="select_basic">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -142,7 +142,7 @@
 		            	    	    <div class="form-group" data-type="select_multiple">
 		            	    	        <label for="select_multiple">Label</label>
 		            	    	        <div class="controls">
-		            	    	            <select name="" class="form-control" id="select_multiple" multiple="multiple" size="3">
+		            	    	            <select name="" class="form-control control-select" id="select_multiple" multiple="multiple" size="3">
 		            	    	                <option value="1">Option 1</option>
 		            	    	                <option value="2">Option 2</option>
 		            	    	                <option value="3">Option 3</option>
@@ -280,7 +280,116 @@
 		            	    	    </div>
 	            	    	    </div>
 	            	    	    {{-- BUTTON --}}
+
+	            	    	    <div class="col-xs-12 bt mt20 p0">
+	            	    	    	<h3>Prebuilts</h3>
+
+	            	    	    	{{-- FULL ADDRESS TEMPLATE --}}
+    		            	    	<div class="template_contents">
+	    	            	    	    <div class="col-xs-6">
+	    		            	    		<div class="component template">
+	    		            	    			<h4><i class="fas fa-home"></i> Address</h4>
+	    		            	    		</div>
+	    		            	    	</div>
+
+	    		            	    	@include('tools.formbuilder_options.shared.full_address')
+
+    		            	    	</div>
+    		            	    	{{-- FULL ADDRESS TEMPLATE --}}
+
+    	            	    	    {{-- BASIC INFO TEMPLATE --}}
+    	            	    	    <div class="template_contents">
+	    	            	    	    <div class="col-xs-6">
+	    		            	    		<div class="component template">
+	    		            	    			<h4><i class="fas fa-home"></i> Basic Info</h4>
+	    		            	    		</div>
+	    		            	    	</div>
+
+	    		            	    	{{--  CLIENT ID  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">Client ID</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="text" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  CLIENT ID  --}}
+
+			            	    		{{--  FIRST NAME  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">First Name</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="text" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  FIRST NAME  --}}
+
+			            	    		{{--  LAST NAME  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">Last Name</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="text" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  LAST NAME  --}}
+
+			            	    		{{--  PRIMARY PHONE  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">Primary Phone</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="tel" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  PRIMARY PHONE  --}}
+
+			            	    		@include('tools.formbuilder_options.shared.full_address')
+
+			            	    		{{--  CAMPAIGN  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">Campaign</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="tel" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  CAMPAIGN  --}}
+
+			            	    		{{--  SUBCAMPAIGN  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">SubCampaign</label>
+			            	    			    <div class="controls">
+			            	    			        <input type="tel" name="" control="input" field-name="" disabled id="text_input" placeholder="" class="form-control control-input">
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  SUBCAMPAIGN  --}}
+
+			            	    		{{--  NOTES  --}}
+	    		            	    	<div class="component hidetilloaded template_component">
+			            	    			<div class="form-group" data-type="text">
+			            	    			    <label for="text_input">Notes</label>
+			            	    			    <div class="controls">
+			            	    			        <textarea name="" class="form-control control-input" id="textarea" control="textarea" placeholder=""></textarea>
+			            	    			    </div>
+			            	    			</div>
+			            	    		</div>
+			            	    		{{--  NOTES  --}}
+
+	    		            	    </div>
+    		            	    	{{-- BASIC INFO TEMPLATE --}}
+
+	            	    	    </div>
 	            	    	</div>
+
 	            	    </div>
 
 	            	    <div class="options hidetilloaded">

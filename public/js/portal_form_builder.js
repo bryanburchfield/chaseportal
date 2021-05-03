@@ -6,6 +6,7 @@ $(function() {
         action: "",
         delimeter: '=',
         dropzone_height:300,
+        valid_options:false,
 
         // set current element
         setElement: function(el) {
@@ -36,6 +37,7 @@ $(function() {
                     .replace('class="mt10 mb20"', '')
                     .replaceAll('disabled="" ', '')
                     .replaceAll('ui-draggable element', 'col-sm-6')
+                    .replaceAll('template_component', '')
                     .replace(/<div class="close">.<\/div>/g, '')
                     // .replaceAll(/<div class="controls"><\/div>/g, '')
                     .replace(/ data-(.+)="(.+)"/g, '');
@@ -49,8 +51,8 @@ $(function() {
                             $("#builder_content").html() +
                             "\n</form>";
             
-
             source.setValue(this.cleanContent(content));
+
             source.autoFormatRange(
                 { line: 0, ch: 0 },
                 { line: source.lastLine() + 1, ch: 0 }
@@ -78,17 +80,31 @@ $(function() {
 
         // add component to dropzone
         add_component: function(component) {
-            component
-            .parent()
-            .next()
-            .clone()
-            .removeClass('component')
-            .removeClass('hidetilloaded')
-            .addClass('element')
-            .removeAttr('id')
-            .prepend('<div class="close">&times;</div>')
-            .appendTo("#builder_content");
-            // .find('.form-control').removeAttr('disabled');
+
+            // prebuilt templates
+            if($(component).hasClass('template')){
+                component
+                .parent()
+                .siblings('.template_component')
+                .clone()
+                .removeClass('component')
+                .removeClass('hidetilloaded')
+                .addClass('element')
+                .removeAttr('id')
+                .prepend('<div class="close">&times;</div>')
+                .appendTo("#builder_content");
+            }else{
+                component
+                .parent()
+                .next()
+                .clone()
+                .removeClass('component')
+                .removeClass('hidetilloaded')
+                .addClass('element')
+                .removeAttr('id')
+                .prepend('<div class="close">&times;</div>')
+                .appendTo("#builder_content");
+            }
 
             FORM_BUILDER.dropzone_height = $('form#builder_content').outerHeight(true);
             this.updateSource();
@@ -749,6 +765,24 @@ $(function() {
 
             set: function() {
                 var el = FORM_BUILDER.getElement();
+                
+                var options=[];
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'text').val());
+                console.log(options);
+
+                for (var i=0; i<options.length; i++) {
+                    console.log(options[i]);
+                    if(options[i] == ''){
+                        FORM_BUILDER.valid_options=true;
+                        return false;
+                    }
+                }
+
+                $('.options ').append('<div class="alert alert-danger">Please fill out everything</div>');
+                
+                console.log(FORM_BUILDER.valid_options);
+
                 el.find('label').text($(this.prefix + 'label').val());
                 el.find('.form-group p').html($(this.prefix + 'text').val());
             }
@@ -805,10 +839,17 @@ $(function() {
             content = options.find('.option_vals'),
             type = options.data('type');
 
-        // call corresponding save method to process entered variables
-        FORM_BUILDER[type].set();
-        goBackUnfocus();
-        FORM_BUILDER.generatePreview();
+        // options.find('.option_vals').each(function(){
+        //     console.log($(this).find('.form-control').val());
+        // });
+
+        if(!FORM_BUILDER.valid_options){
+            // call corresponding save method to process entered variables
+            FORM_BUILDER[type].set();
+            goBackUnfocus();
+            FORM_BUILDER.generatePreview();
+        }
+
     });
 
     // go back to elements panel
@@ -841,15 +882,12 @@ $(function() {
         accept: '.component',
         hoverClass: 'content-hover',
         drop: function(e, ui) {
-            console.log('Dropped');
             FORM_BUILDER.add_component(ui.draggable);
         }
     })
     .sortable({
         placeholder: "element-placeholder",
         start: function(e, ui) {
-            console.log('Sorted');
-
             ui.item.popover('hide');
             setTimeout(function() {
                FORM_BUILDER.updateSource();
@@ -898,19 +936,6 @@ $(function() {
                 marginTop: $window.scrollTop() - offset.top
             });
         }
-    });
-
-    $('.download_file').on('click', function(e){
-        e.preventDefault();
-
-        var elem = document.createElement('a');
-        elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(get_html()));
-        elem.setAttribute('download', 'index.html');
-
-        elem.style.display = 'none';
-        document.body.appendChild(elem);
-        elem.click();
-        document.body.removeChild(elem);
     });
 
     function get_html(){
