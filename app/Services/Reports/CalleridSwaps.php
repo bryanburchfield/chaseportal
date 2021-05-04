@@ -132,11 +132,13 @@ class CalleridSwaps
         $startDate = $fromDate->format('Y-m-d H:i:s');
         $endDate = $toDate->format('Y-m-d H:i:s');
 
-        $phoneFlagQuery = PhoneFlag::where('group_id', Auth::user()->group_id)
+        $phoneFlagQuery = PhoneFlag::query()
+            ->where('group_id', Auth::user()->group_id)
             ->where('run_date', '>=', $startDate)
             ->where('run_date', '<=', $endDate);
 
-        $internalPhoneFlagQuery = InternalPhoneFlag::where('group_id', Auth::user()->group_id)
+        $internalPhoneFlagQuery = InternalPhoneFlag::query()
+            ->where('group_id', Auth::user()->group_id)
             ->where('run_date', '>=', $startDate)
             ->where('run_date', '<=', $endDate);
 
@@ -156,13 +158,14 @@ class CalleridSwaps
         // get counts before we do anything else
         switch ($this->params['flag_source']) {
             case 'internal':
-                $unionQuery = $internalPhoneFlagQuery;
+                $unionQuery = (clone $internalPhoneFlagQuery)->select(['flagged', 'replaced_by']);
                 break;
             case 'network':
-                $unionQuery = $phoneFlagQuery;
+                $unionQuery = (clone $phoneFlagQuery)->select(['flagged', 'replaced_by']);
                 break;
             default:
-                $unionQuery = $phoneFlagQuery->union($internalPhoneFlagQuery);
+                $unionQuery = (clone $internalPhoneFlagQuery)->select(['flagged', 'replaced_by'])
+                    ->unionAll((clone $phoneFlagQuery)->select(['flagged', 'replaced_by']));
         };
 
         $clean_count = (clone ($unionQuery))->where('flagged', 0)->count();
