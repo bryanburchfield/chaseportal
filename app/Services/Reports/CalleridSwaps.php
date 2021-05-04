@@ -156,22 +156,24 @@ class CalleridSwaps
         }
 
         // get counts before we do anything else
-        switch ($this->params['flag_source']) {
-            case 'internal':
-                $unionQuery = (clone $internalPhoneFlagQuery)->select([DB::raw('1 AS flagged'), 'replaced_by']);
-                break;
-            case 'network':
-                $unionQuery = (clone $phoneFlagQuery)->select(['flagged', 'replaced_by']);
-                break;
-            default:
-                $unionQuery = (clone $internalPhoneFlagQuery)->select([DB::raw('1 AS flagged'), 'replaced_by'])
-                    ->unionAll((clone $phoneFlagQuery)->select(['flagged', 'replaced_by']));
+        $clean_count = 0;
+        $flagged_count = 0;
+        $swapped_count = 0;
+        $count = 0;
+
+        if ($this->params['flag_source'] == 'network' || empty($this->params['flag_source'])) {
+            $clean_count += (clone ($phoneFlagQuery))->where('flagged', 0)->count();
+            $flagged_count += (clone ($phoneFlagQuery))->where('flagged', 1)->count();
+            $swapped_count += (clone ($phoneFlagQuery))->where('replaced_by', '!=', '')->count();
+            $count += $phoneFlagQuery->count();
         };
 
-        $clean_count = (clone ($unionQuery))->where('flagged', 0)->count();
-        $flagged_count = (clone ($unionQuery))->where('flagged', 1)->count();
-        $swapped_count = (clone ($unionQuery))->where('replaced_by', '!=', '')->count();
-        $count = $unionQuery->count();
+        if ($this->params['flag_source'] == 'internal' || empty($this->params['flag_source'])) {
+            $internalCount = $internalPhoneFlagQuery->count();
+            $flagged_count += $internalCount;
+            $swapped_count += (clone ($internalPhoneFlagQuery))->where('replaced_by', '!=', '')->count();
+            $count += $internalCount;
+        };
 
         $phoneFlagQuery->select([
             'run_date AS Date',
