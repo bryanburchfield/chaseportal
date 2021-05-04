@@ -22,6 +22,7 @@ class CalleridSwaps
         $this->params['hasTotals'] = true;
         $this->params['fromdate'] = '';
         $this->params['todate'] = '';
+        $this->params['flag_source'] = '';
         $this->params['flag_type'] = '';
         $this->params['phone'] = '';
         $this->params['columns'] = [
@@ -40,6 +41,11 @@ class CalleridSwaps
     {
         $filters = [
             'db_list' => Auth::user()->getDatabaseArray(),
+            'flag_source' => [
+                '' =>  trans('general.all'),
+                'internal' => trans('reports.mobile_network'),
+                'network' => trans('reports.api_network'),
+            ],
             'flag_type' => [
                 '' =>  trans('general.all'),
                 'flagged' => trans('reports.only_flagged'),
@@ -109,6 +115,9 @@ class CalleridSwaps
         $rec['phone'] = substr($rec['phone'], 1);
         $rec['replaced_by'] = substr($rec['replaced_by'], 1);
 
+        // Convert flagged to yes/no
+        $rec['flagged'] = $rec['flagged'] ? 'Yes' : 'No';
+
         return $rec;
     }
 
@@ -177,7 +186,16 @@ class CalleridSwaps
             DB::raw($count . ' AS totrows')
         ]);
 
-        $unionQuery = $phoneFlagQuery->union($internalPhoneFlagQuery);
+        switch ($this->params['flag_source']) {
+            case 'internal':
+                $unionQuery = $internalPhoneFlagQuery;
+                break;
+            case 'network':
+                $unionQuery = $phoneFlagQuery;
+                break;
+            default:
+                $unionQuery = $phoneFlagQuery->union($internalPhoneFlagQuery);
+        };
 
         // Check params
         if (!empty($this->params['orderby']) && is_array($this->params['orderby'])) {
@@ -206,6 +224,10 @@ class CalleridSwaps
 
         // Check report filters
         $this->checkDateRangeFilters($request);
+
+        if (!empty($request->flag_source)) {
+            $this->params['flag_source'] = $request->flag_source;
+        }
 
         if (!empty($request->flag_type)) {
             $this->params['flag_type'] = $request->flag_type;
