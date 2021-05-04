@@ -27,6 +27,7 @@ Route::prefix('dashboards')->group(function () {
         Route::post('reports/update_report', 'ReportController@updateReport');
         Route::post('reports/get_campaigns', 'ReportController@getCampaigns');
         Route::post('reports/get_subcampaigns', 'ReportController@getSubcampaigns');
+        Route::post('reports/get_campaigns_many_groups', 'ReportController@getCampaignsManyGroups');
         Route::get('reports/report_export/{report}/{format}', 'ReportController@exportReport');
         Route::get('reports/{report}', 'ReportController@index');
         Route::post('reports/{report}', 'ReportController@runReport');
