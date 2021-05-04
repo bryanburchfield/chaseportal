@@ -158,13 +158,13 @@ class CalleridSwaps
         // get counts before we do anything else
         switch ($this->params['flag_source']) {
             case 'internal':
-                $unionQuery = (clone $internalPhoneFlagQuery)->select(['flagged', 'replaced_by']);
+                $unionQuery = (clone $internalPhoneFlagQuery)->select([DB::raw('1 AS flagged'), 'replaced_by']);
                 break;
             case 'network':
                 $unionQuery = (clone $phoneFlagQuery)->select(['flagged', 'replaced_by']);
                 break;
             default:
-                $unionQuery = (clone $internalPhoneFlagQuery)->select(['flagged', 'replaced_by'])
+                $unionQuery = (clone $internalPhoneFlagQuery)->select([DB::raw('1 AS flagged'), 'replaced_by'])
                     ->unionAll((clone $phoneFlagQuery)->select(['flagged', 'replaced_by']));
         };
 
