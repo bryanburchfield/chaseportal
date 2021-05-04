@@ -41,6 +41,13 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
+                    {!! Form::label('flag_source', __('reports.network_type')) !!}
+                    {!! Form::select('flag_source', $filters['flag_source'], null, ['class' => 'form-control', 'id' => 'flag_source']) !!}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
                     {!! Form::label('flag_type', __('general.include')) !!}
                     {!! Form::select('flag_type', $filters['flag_type'], null, ['class' => 'form-control', 'id' => 'flag_type']) !!}
                 </div>
