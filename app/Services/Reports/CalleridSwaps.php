@@ -108,6 +108,7 @@ class CalleridSwaps
         array_pop($rec);
         array_pop($rec);
         array_pop($rec);
+        array_pop($rec);
 
         $tz = Auth::user()->ianaTz;
         $rec['Date'] = Carbon::parse($rec['Date'])->tz($tz)->isoFormat('L LT');
