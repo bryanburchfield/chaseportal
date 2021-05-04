@@ -183,7 +183,7 @@ class CalleridSwaps
             'calls',
             'connect_ratio',
             'flagged',
-            DB::raw('\'Network\' AS flagged_by'),
+            DB::raw('\'Network API\' AS flagged_by'),
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
             DB::raw($flagged_count . ' AS flagged_count'),
