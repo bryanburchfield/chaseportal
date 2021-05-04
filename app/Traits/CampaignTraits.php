@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Dialer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,36 @@ trait CampaignTraits
             AND Subcampaign != ''";
 
             $union = ' UNION';
+        }
+
+        $results = resultsToList($this->runSql($sql, $bind));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
+    }
+
+    public function getAllCampaignsManyGroups(int $dialer_numb, array $groups)
+    {
+        $dialer = Dialer::where('dialer_numb', $dialer_numb)->first();
+
+        if (!$dialer) {
+            return [];
+        }
+
+        $db = $dialer->reporting_db;
+
+        $sql = '';
+        $bind = [];
+        $union = '';
+        foreach ($groups as $i => $group) {
+            $bind['groupid' . $i] = $group;
+
+            $sql .= "$union SELECT CampaignName AS Campaign
+                FROM [$db].[dbo].[Campaigns]
+                WHERE GroupId = :groupid$i
+                AND CampaignName != ''";
+            $union = 'UNION';
         }
 
         $results = resultsToList($this->runSql($sql, $bind));

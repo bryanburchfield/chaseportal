@@ -3,13 +3,14 @@
 namespace App\Services\Reports;
 
 use App\Models\Dialer;
+use App\Traits\CampaignTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Traits\ReportTraits;
 
 class GroupDuration
 {
-    use ReportTraits;
+    use ReportTraits, CampaignTraits;
 
     public function __construct()
     {
@@ -18,6 +19,7 @@ class GroupDuration
         $this->params['reportName'] = 'reports.group_duration';
         $this->params['dialer'] = '';
         $this->params['groups'] = [];
+        $this->params['campaigns'] = [];
         $this->params['columns'] = [
             'GroupId' => 'reports.group_id',
             'GroupName' => 'reports.name',
@@ -257,6 +259,10 @@ SELECT * FROM #GroupStatistics";
         } else {
             $this->params['dialer'] = Auth::user()->dialer->reporting_db;
             $this->params['groups'] = [Auth::user()->group_id];
+        }
+
+        if (!empty($request->campaigns)) {
+            $this->params['campaigns'] = $request->campaigns;
         }
 
         // Save params to session
