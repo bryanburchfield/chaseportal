@@ -79,6 +79,7 @@ class CalleridSwaps
 
             $clean_count = $results[0]['clean_count'];
             $flagged_count = $results[0]['flagged_count'];
+            $swapped_count = $results[0]['swapped_count'];
 
             foreach ($results as &$rec) {
                 $rec = $this->processRow($rec);
@@ -86,8 +87,8 @@ class CalleridSwaps
             $results[] = [
                 'Date' => 'Clean: ' . number_format($clean_count),
                 'phone' => 'Flagged: ' . number_format($flagged_count),
-                'ring_group' => 'Total: ' .  number_format($this->params['totrows']),
-                'calls' => '',
+                'ring_group' => 'Swapped: ' .  number_format($this->params['swapped_count']),
+                'calls' => 'Total: ' .  number_format($this->params['totrows']),
                 'connect_ratio' => '',
                 'flagged' => '',
                 'flagged_by' => '',
@@ -152,11 +153,22 @@ class CalleridSwaps
             $internalPhoneFlagQuery->where('phone', '1' . $this->params['phone']);
         }
 
-        $clean_count = (clone ($phoneFlagQuery))->where('flagged', 0)->count();
+        // get counts before we do anything else
+        switch ($this->params['flag_source']) {
+            case 'internal':
+                $unionQuery = $internalPhoneFlagQuery;
+                break;
+            case 'network':
+                $unionQuery = $phoneFlagQuery;
+                break;
+            default:
+                $unionQuery = $phoneFlagQuery->union($internalPhoneFlagQuery);
+        };
 
-        $flagged_count = (clone ($phoneFlagQuery))->where('flagged', 1)->count() + $internalPhoneFlagQuery->count();
-
-        $count = $phoneFlagQuery->count() + $internalPhoneFlagQuery->count();
+        $clean_count = (clone ($unionQuery))->where('flagged', 0)->count();
+        $flagged_count = (clone ($unionQuery))->where('flagged', 1)->count();
+        $swapped_count = (clone ($unionQuery))->where('replaced_by', '!=', '')->count();
+        $count = $unionQuery->count();
 
         $phoneFlagQuery->select([
             'run_date AS Date',
@@ -169,6 +181,7 @@ class CalleridSwaps
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
             DB::raw($flagged_count . ' AS flagged_count'),
+            DB::raw($swapped_count . ' AS swapped_count'),
             DB::raw($count . ' AS totrows')
         ]);
 
@@ -179,10 +192,11 @@ class CalleridSwaps
             'dials AS calls',
             'connect_pct AS connect_ratio',
             DB::raw('1 AS flagged'),
-            DB::raw('\'Internal\' AS flagged_by'),
+            'subcampaigns AS flagged_by',
             'replaced_by',
             DB::raw($clean_count . ' AS clean_count'),
             DB::raw($flagged_count . ' AS flagged_count'),
+            DB::raw($swapped_count . ' AS swapped_count'),
             DB::raw($count . ' AS totrows')
         ]);
 
