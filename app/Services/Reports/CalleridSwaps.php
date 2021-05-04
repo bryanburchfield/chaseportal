@@ -87,7 +87,7 @@ class CalleridSwaps
             $results[] = [
                 'Date' => 'Clean: ' . number_format($clean_count),
                 'phone' => 'Flagged: ' . number_format($flagged_count),
-                'ring_group' => 'Swapped: ' .  number_format($this->params['swapped_count']),
+                'ring_group' => 'Swapped: ' .  number_format($swapped_count),
                 'calls' => 'Total: ' .  number_format($this->params['totrows']),
                 'connect_ratio' => '',
                 'flagged' => '',
