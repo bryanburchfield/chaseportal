@@ -6,7 +6,7 @@ $(function() {
         action: "",
         delimeter: '=',
         dropzone_height:300,
-        valid_options:false,
+        valid_options:true,
 
         // set current element
         setElement: function(el) {
@@ -182,6 +182,11 @@ $(function() {
                 var el = FORM_BUILDER.getElement(),
                     legend = el.find('legend');
 
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+
+                FORM_BUILDER.validate_options(options);
+
                 legend.text($(this.prefix+'name').val());
             }
         },
@@ -205,6 +210,13 @@ $(function() {
                     input = el.find('input[type=text]'),
                     label = el.find('label'),
                     name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'placeholder').val());
+
+                FORM_BUILDER.validate_options(options);
 
                 input.attr('name', name);
                 input.attr('field-name', name);
@@ -232,6 +244,13 @@ $(function() {
         	        label = el.find('label'),
         	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
 
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'placeholder').val());
+
+                FORM_BUILDER.validate_options(options);
+
         	    input.attr('name', name);
                 input.attr('field-name', name);
         	    label.text($(this.prefix + 'label').val()).attr('for', name);
@@ -257,6 +276,13 @@ $(function() {
         	        input = el.find('input[type=tel]'),
         	        label = el.find('label'),
         	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'placeholder').val());
+
+                FORM_BUILDER.validate_options(options);
 
         	    input.attr('name', name);
                 input.attr('field-name', name);
@@ -284,6 +310,13 @@ $(function() {
         	        label = el.find('label'),
         	        name = FORM_BUILDER.cleanName($(this.prefix + 'name').val());
 
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'placeholder').val());
+
+                FORM_BUILDER.validate_options(options);
+
         	    input.attr('name', name);
                 input.attr('field-name', name);
         	    label.text($(this.prefix + 'label').val()).attr('for', name);
@@ -310,6 +343,13 @@ $(function() {
                 var el = FORM_BUILDER.getElement(),
                     textarea = el.find('textarea'),
                     label = el.find('label');
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'placeholder').val());
+
+                FORM_BUILDER.validate_options(options);
 
                 textarea.attr('field-name', FORM_BUILDER.cleanName($(this.prefix + 'name').val()));
                 textarea.attr('name', FORM_BUILDER.cleanName($(this.prefix + 'name').val()));
@@ -361,6 +401,13 @@ $(function() {
 
                     // options buffer
                     list_options = "\n";
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
 
                 // loop through each option
                 $.each(select_options, function(key, val) {
@@ -427,6 +474,13 @@ $(function() {
                     // options buffer
                     list_options = "\n";
 
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
+
                 // loop through each option
                 $.each(select_options, function(key, val) {
                     if (val.length > 0) {
@@ -491,6 +545,13 @@ $(function() {
 
                     // options buffer
                     list_options = "\n";
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
 
                 // loop through each option
                 $.each(checkbox_options, function(key, val) {
@@ -569,6 +630,13 @@ $(function() {
                     // options buffer
                     list_options = "\n";
 
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
+
                 // loop through each option
                 $.each(checkbox_options, function(key, val) {
                     var id = name + '_' + key;
@@ -643,6 +711,13 @@ $(function() {
 
                     // options buffer
                     list_options = "\n";
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
 
                 // loop through each option
                 $.each(radio_options, function(key, val) {
@@ -720,6 +795,14 @@ $(function() {
 
                     // options buffer
                     list_options = "\n";
+
+                var options=[];
+                options.push($(this.prefix + 'name').val());
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'options').val());
+
+                FORM_BUILDER.validate_options(options);
+
                 // loop through each option
                 $.each(radio_options, function(key, val) {
                     var id = name+'_'+key;
@@ -769,20 +852,9 @@ $(function() {
                 var options=[];
                 options.push($(this.prefix + 'label').val());
                 options.push($(this.prefix + 'text').val());
-                console.log(options);
 
-                for (var i=0; i<options.length; i++) {
-                    console.log(options[i]);
-                    if(options[i] == ''){
-                        FORM_BUILDER.valid_options=true;
-                        return false;
-                    }
-                }
-
-                $('.options ').append('<div class="alert alert-danger">Please fill out everything</div>');
+                FORM_BUILDER.validate_options(options);
                 
-                console.log(FORM_BUILDER.valid_options);
-
                 el.find('label').text($(this.prefix + 'label').val());
                 el.find('.form-group p').html($(this.prefix + 'text').val());
             }
@@ -803,11 +875,41 @@ $(function() {
         	// set text options
         	set: function() {
         	    var el = FORM_BUILDER.getElement();
+                
+                var options=[];
+                options.push($(this.prefix + 'label').val());
+                options.push($(this.prefix + 'color option:selected').val());
+                options.push($(this.prefix + 'size option:selected').val());
+
+                FORM_BUILDER.validate_options(options);
+
         	    el.find('input[type=submit]').val($(this.prefix+'label').val());
         	    el.find('input[type=submit]').removeClass();
         	    el.find('input[type=submit]').addClass('btn '+ $(this.prefix+'color').val() +' '+ $(this.prefix+'size').val());
         	}
         },
+
+        validate_options:function(options){
+            FORM_BUILDER.valid_options=true;
+
+            $('.options ').find('.alert').remove();
+            
+            for (var i=0; i<options.length; i++) {
+                if(options[i] == '' || options[i] == undefined){
+                    FORM_BUILDER.valid_options=false;
+                    break;
+                }
+            }
+
+            if(FORM_BUILDER.valid_options){
+                console.log('if ran');
+                goBackUnfocus();
+                FORM_BUILDER.generatePreview();
+            }else{
+                console.log('else ran');
+                $('<div class="alert alert-danger">Missing field values</div>').insertBefore('.option_vals .options .btn-primary ').parent();
+            }
+        }
     };
 
     //  make form elements components that can be dragged or clicked
@@ -836,19 +938,10 @@ $(function() {
     $(".options").on('click', '#save_options', function() {
 
         var options = $(".options"),
-            content = options.find('.option_vals'),
-            type = options.data('type');
+                content = options.find('.option_vals'),
+                type = options.data('type');
 
-        // options.find('.option_vals').each(function(){
-        //     console.log($(this).find('.form-control').val());
-        // });
-
-        if(!FORM_BUILDER.valid_options){
-            // call corresponding save method to process entered variables
-            FORM_BUILDER[type].set();
-            goBackUnfocus();
-            FORM_BUILDER.generatePreview();
-        }
+        FORM_BUILDER[type].set();
 
     });
 

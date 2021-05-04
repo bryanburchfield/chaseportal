@@ -21,9 +21,12 @@
 
 	            	<div class="col-sm-4 mt30 elements_col">
 	            	    <div class="elements">
-	            	    	<h3>Fields</h3>
+	            	    	<div class="cb mb20">
+	            	    		<h3 class="flt_lft">Fields</h3>
+	            	    		<a href="#" class="btn btn-sm btn-info flt_rgt mt10">Save</a>
+	            	    	</div>
 
-	            	    	<div id="components-container" class="form-horizontal">
+	            	    	<div id="components-container" class="form-horizontal cb mt20">
 
 	            	    		{{-- TEXT INPUT --}}
 	            	    		<div class="col-xs-6">
@@ -267,19 +270,81 @@
 		            	    	</div>
 		            	    	{{-- STATIC TEXT --}}
 
-		            	    	{{-- BUTTON --}}
-	            	    	    <div class="col-xs-6">
-		            	    		<div class="component">
-		            	    			<h4><i class="fas fa-plus-square"></i> Button</h4>
-		            	    		</div>
-		            	    	</div>
+	            	    	    <div class="col-xs-12 submit_btns cb p0 mt20">
+	            	    	    	<h4 class="ml10"><b>Submit Buttons</b></h4>
 
-		            	    	<div class="component hidetilloaded">
-		            	    	    <div class="form-group" data-type="button">
-		            	    	        <input type="submit" class="btn btn-primary" disabled value="Submit">
+		            	    	    {{-- SUBMIT BUTTON --}}
+		            	    	    <div class="col-xs-6">
+			            	    		<div class="component">
+			            	    			<h4><i class="fas fa-plus-square"></i> Submit</h4>
+			            	    		</div>
+			            	    	</div>
+
+			            	    	<div class="component hidetilloaded">
+			            	    	    <div class="form-group" data-type="button">
+			            	    	        <input type="submit" class="control-submit btn btn-primary" control="submit" action="submit" disabled value="Submit">
+			            	    	    </div>
 		            	    	    </div>
+		            	    	    {{-- SUBMIT BUTTON --}}
+
+		            	    	    {{-- SUBMIT & NAV EMAIL BUTTON --}}
+		            	    	    <div class="col-xs-6">
+			            	    		<div class="component">
+			            	    			<h4><i class="fas fa-plus-square"></i> Submit &amp; Email</h4>
+			            	    		</div>
+			            	    	</div>
+
+			            	    	<div class="component hidetilloaded">
+			            	    	    <div class="form-group" data-type="button">
+			            	    	        <input type="submit" control="submit" action="submit_and_navigate_and_email" navigate-to="SCRIPT NAME" email-to="EMAIL ADDRESS OR FORM FIELD" email-template="SCRIPT NAME" value="Submit and Email" class="control-navigate-submit-email btn btn-primary">
+			            	    	    </div>
+		            	    	    </div>
+		            	    	    {{-- SUBMIT & NAV EMAIL BUTTON --}}
+
+		            	    	    {{-- SUBMIT & NAVIGATE BUTTON --}}
+		            	    	    <div class="col-xs-6">
+			            	    		<div class="component">
+			            	    			<h4><i class="fas fa-plus-square"></i> Submit &amp; Navigate</h4>
+			            	    		</div>
+			            	    	</div>
+
+			            	    	<div class="component hidetilloaded">
+			            	    	    <div class="form-group" data-type="button">
+			            	    	        <input type="submit" control="submit" action="submit_and_navigate" navigate-to="SCRIPT NAME" value="Submit and Navigate" class="control-navigate-submit btn btn-primary">
+			            	    	    </div>
+		            	    	    </div>
+		            	    	    {{-- SUBMIT & NAVIGATE BUTTON --}}
+
+		            	    	    {{-- SUBMIT EMAIL BUTTON --}}
+		            	    	    <div class="col-xs-6">
+			            	    		<div class="component">
+			            	    			<h4><i class="fas fa-plus-square"></i> Submit Email</h4>
+			            	    		</div>
+			            	    	</div>
+
+			            	    	<div class="component hidetilloaded">
+			            	    	    <div class="form-group" data-type="button">
+			            	    	        <input type="submit" control="submit" action="submit_and_email" email-to="EMAIL ADDRESS OR FORM FIELD" value="Submit and Email" class="control-submit-email btn btn-primary">
+			            	    	    </div>
+		            	    	    </div>
+		            	    	    {{-- SUBMIT EMAIL BUTTON --}}
+
+		            	    	    {{-- SUBMIT & EMAIL TEMPLATE BUTTON --}}
+		            	    	    <div class="col-xs-6">
+			            	    		<div class="component">
+			            	    			<h4><i class="fas fa-plus-square"></i> Submit &amp; Email Template</h4>
+			            	    		</div>
+			            	    	</div>
+
+			            	    	<div class="component hidetilloaded">
+			            	    	    <div class="form-group" data-type="button">
+			            	    	        <input type="submit" control="submit" action="submit_and_email_template" email-to="EMAIL ADDRESS OR FORM FIELD" email-template="SCRIPT NAME" value="Submit and Email" class="control-submit-email-template btn btn-primary">
+			            	    	    </div>
+		            	    	    </div>
+		            	    	    {{-- SUBMIT & EMAIL TEMPLATE BUTTON --}}
+
+		            	    	    
 	            	    	    </div>
-	            	    	    {{-- BUTTON --}}
 
 	            	    	    <div class="col-xs-12 bt mt20 p0">
 	            	    	    	<h3>Prebuilts</h3>

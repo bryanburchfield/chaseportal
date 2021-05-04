@@ -12,7 +12,7 @@
             <select class="options_button_color form-control">
                 <option value="btn-info">Blue</option>
                 <option value="btn-success">Green</option>
-                <option value="btn-warning">Orange</option>
+                <option value="btn-warning" selected>Orange</option>
                 <option value="btn-danger">Red</option>
             </select>
         </div>
@@ -23,7 +23,7 @@
         <div class="controls col-sm-9">
             <select class="options_button_size form-control">
                 <option value="btn-sm">Small</option>
-                <option value="btn-md">Medium</option>
+                <option value="btn-md" selected>Medium</option>
                 <option value="btn-lg">Large</option>
             </select>
         </div>

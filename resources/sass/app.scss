@@ -3204,11 +3204,13 @@ textarea.nobg_txtarea.form-control{
     opacity: 0.5;
 }
 
+div#components-container{clear:both;}
+
 .elements, .options{
     background: darken(#eee,3%);
     border:1px solid #ccc;
     padding: 10px;
-    min-height: 510px;
+    min-height: 660px;
     position: relative;
     z-index: 999;
 
