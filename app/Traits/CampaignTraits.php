@@ -111,20 +111,15 @@ trait CampaignTraits
 
         $db = $dialer->reporting_db;
 
-        $sql = '';
-        $bind = [];
-        $union = '';
-        foreach ($groups as $i => $group) {
-            $bind['groupid' . $i] = $group;
+        // force all the groups to ints
+        $group_list = implode(',', array_map('intval', array_values($groups)));
 
-            $sql .= "$union SELECT CampaignName AS Campaign
+        $sql = "SELECT CampaignName AS Campaign
                 FROM [$db].[dbo].[Campaigns]
-                WHERE GroupId = :groupid$i
+                WHERE GroupId in ($group_list)
                 AND CampaignName != ''";
-            $union = 'UNION';
-        }
 
-        $results = resultsToList($this->runSql($sql, $bind));
+        $results = resultsToList($this->runSql($sql));
 
         ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
