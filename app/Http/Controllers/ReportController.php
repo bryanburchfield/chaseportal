@@ -241,8 +241,8 @@ class ReportController extends Controller
 
     public function getCampaignsManyGroups(Request $request)
     {
-        $dialier_numb = $request->dialer;
-        $groups = $request->groups;
+        $dialier_numb = (int)$request->dialer;
+        $groups = (array)$request->groups;
 
         $results = $this->reportservice->report->getAllCampaignsManyGroups($dialier_numb, $groups);
 
