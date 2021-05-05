@@ -37,12 +37,6 @@ class GroupDuration
 
     public function getFilters()
     {
-        // Bail if user not allowed here
-        if (!(Auth::User()->isType('superadmin') ||
-            Auth::User()->reportPermissions()->where('report_name', 'group_duration')->exists())) {
-            abort(404);
-        }
-
         $dialers = [];
         foreach (Dialer::pluck('reporting_db')->all() as $dialer) {
             $dialers[$dialer] = $dialer;
@@ -67,12 +61,6 @@ class GroupDuration
 
     private function executeReport($all = false)
     {
-        // Bail if user not allowed here (exports start here)
-        if (!(Auth::User()->isType('superadmin') ||
-            Auth::User()->reportPermissions()->where('report_name', 'group_duration')->exists())) {
-            abort(404);
-        }
-
         // set db based on input
         $curr_db = Auth::user()->dialer->reporting_db;
         Auth::user()->dialer->reporting_db = $this->params['dialer'];
@@ -115,14 +103,17 @@ class GroupDuration
         $bind = [];
         $bind['startdate'] = $startDate;
         $bind['enddate'] = $endDate;
+        $bind['ssouser'] = session('ssoUsername');
 
         $sql = "SET NOCOUNT ON;
 
         DECLARE @startdate AS DATETIME
-        DECLARE @enddate   AS DATETIME
+        DECLARE @enddate AS DATETIME
+        DECLARE @ssouser AS VARCHAR(50)
 
         SET @startdate = :startdate
         SET @enddate = :enddate
+        SET @ssouser = :ssouser
 
         CREATE TABLE #GroupStatistics
         (
@@ -167,7 +158,17 @@ class GroupDuration
             (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
             FROM DialingResults dr WITH(NOLOCK)
             WHERE dr.CallDate >= @startdate
-            AND dr.CallDate < @enddate
+            AND dr.CallDate < @enddate";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(@ssouser, 1))";
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(@ssouser))";
+        }
+
+        $sql .= "
             GROUP BY dr.GroupId) t
         WHERE #GroupStatistics.GroupId = t.GroupId
 
@@ -178,7 +179,17 @@ class GroupDuration
             FROM DialingResults dr WITH(NOLOCK)
             WHERE dr.CallDate >= @startdate
             AND dr.CallDate < @enddate
-            AND CallType = 1
+            AND CallType = 1";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(@ssouser, 1))";
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(@ssouser))";
+        }
+
+        $sql .= "
             GROUP BY dr.GroupId) t
         WHERE #GroupStatistics.GroupId = t.GroupId
 
@@ -189,7 +200,17 @@ class GroupDuration
             FROM DialingResults dr WITH(NOLOCK)
             WHERE dr.CallDate >= @startdate
             AND dr.CallDate < @enddate
-            AND CallType = 2
+            AND CallType = 2";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(@ssouser, 1))";
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(@ssouser))";
+        }
+
+        $sql .= "
             GROUP BY dr.GroupId) t
         WHERE #GroupStatistics.GroupId = t.GroupId
 
@@ -200,7 +221,17 @@ class GroupDuration
             FROM DialingResults dr WITH(NOLOCK)
             WHERE dr.CallDate >= @startdate
             AND dr.CallDate < @enddate
-            AND CallType = 4
+            AND CallType = 4";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(@ssouser, 1))";
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(@ssouser))";
+        }
+
+        $sql .= "
             GROUP BY dr.GroupId) t
         WHERE #GroupStatistics.GroupId = t.GroupId
 
@@ -220,7 +251,17 @@ class GroupDuration
                     AND IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP')
                     AND dr.CallDate >= @startdate
                     AND dr.CallDate < @enddate
-                    AND dr.CallType NOT IN (6, 7, 8)
+                    AND dr.CallType NOT IN (6, 7, 8)";
+
+        if (session('ssoRelativeCampaigns', 0)) {
+            $sql .= " AND dr.Campaign IN (SELECT CampaignName FROM dbo.GetAllRelativeCampaigns(@ssouser, 1))";
+        }
+
+        if (session('ssoRelativeReps', 0)) {
+            $sql .= " AND dr.Rep IN (SELECT RepName FROM dbo.GetAllRelativeReps(@ssouser))";
+        }
+
+        $sql .= "
                     GROUP BY
                         CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120),
                         dr.Rep, dr.GroupId) t
@@ -247,7 +288,7 @@ class GroupDuration
         // Check report filters
         $this->checkDateRangeFilters($request);
 
-        if (Auth::User()->isType('superadmin')) {
+        if (Auth::User()->isType('superadmin') || session('isSsoSuperadmin', 0)) {
             if (empty($request->dialer)) {
                 $this->errors->add('dialer.required', trans('reports.errdialerrequired'));
             } else {
