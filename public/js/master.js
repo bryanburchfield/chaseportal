@@ -1224,7 +1224,7 @@ var Master = {
         // e.stopPropagation();
         
         var groups=[];
-        var dialer='';
+        var dialer;
         var report = $('form.report_filter_form').attr('id');
         
         $('#group_select').next('ul').find('.checkbox').each(function(){
@@ -1236,8 +1236,7 @@ var Master = {
         if ($('#dialer').find('option:selected').length == 1 && $('#dialer').find('option:selected').val() != undefined) {
             dialer = $('#dialer').val();
         }
-        
-        var dialer='PowerV2_Reporting_Dialer-07';
+
         if (groups != '' && dialer != '') {
             // $('.inline_preloader.hidetilloaded').show();
             
@@ -1246,8 +1245,6 @@ var Master = {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             });
-            console.log(dialer);
-            console.log(typeof(dialer));
 
             $.ajax({
                 url: '/dashboards/reports/get_campaigns_many_groups',
@@ -1503,6 +1500,8 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
+        console.log(form_data);
 
         $.ajax({
             url: '/dashboards/reports/update_report',

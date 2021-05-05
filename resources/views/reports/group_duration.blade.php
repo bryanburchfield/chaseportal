@@ -42,7 +42,7 @@
 
 						<div class="form-group">
 							{!! Form::label('dialer', __('reports.dialer')) !!}
-							{!! Form::select("dialer[]", [null=>__('general.select_one')] + $filters['dialers'], null, ["class" => "form-control multiselect", 'id'=> 'dialer']) !!}
+							{!! Form::select("dialer[]", [null=>__('general.select_one')] + $filters['dialers'], null, ["class" => "form-control", 'id'=> 'dialer']) !!}
 						</div>
 					</div>
 					
