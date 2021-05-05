@@ -1220,7 +1220,8 @@ var Master = {
 
     // populate campaign multi-select based on dialer and groups
     query_camps_from_dialer_and_groups: function () {
-        
+        $('.preloader.hidetilloaded').show();
+
         var groups=[];
         var dialer;
 
@@ -1256,6 +1257,8 @@ var Master = {
 
                 success: function (response) {
 
+                    $('.preloader.hidetilloaded').hide();
+                    $('#campaign_select').parent().show();
                     $('#campaign_select').empty();
                     var camps_select;
                     for (var i = 0; i < response.campaigns.length; i++) {

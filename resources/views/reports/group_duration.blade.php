@@ -61,7 +61,9 @@
 					</div>
 
 					<div class="col-sm-4">
-						<div class="form-group">
+						<div class="hidetilloaded preloader"><i class="fa fa-spinner fa-spin mr10"></i></div>
+
+						<div class="form-group hidetilloaded">
 							{!! Form::label('campaigns', __('reports.campaign')) !!}
 							{!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 						</div>
