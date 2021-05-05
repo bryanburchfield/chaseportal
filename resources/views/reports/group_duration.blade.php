@@ -61,7 +61,7 @@
 					</div>
 
 					<div class="col-sm-4">
-						<div class="hidetilloaded preloader"><i class="fa fa-spinner fa-spin mr10"></i></div>
+						<div class="hidetilloaded inline_preloader"><i class="fa fa-spinner fa-spin mr10"></i></div>
 
 						<div class="form-group hidetilloaded">
 							{!! Form::label('campaigns', __('reports.campaign')) !!}

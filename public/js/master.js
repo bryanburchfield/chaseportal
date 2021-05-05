@@ -87,7 +87,7 @@ var Master = {
 
         // group_duration report
         //$('#call_details #campaign_select, #lead_npa #campaign_select').on('change', this.toggle_subcamps);
-        $('#group_select').next('ul').on('click', '.checkbox', this.query_camps_from_dialer_and_groups);
+        $('#group_select').next('ul').on('click', '.groups', this.query_camps_from_dialer_and_groups);
 
         /// tool handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
@@ -1220,24 +1220,26 @@ var Master = {
 
     // populate campaign multi-select based on dialer and groups
     query_camps_from_dialer_and_groups: function () {
-        $('.preloader.hidetilloaded').show();
-
+        // e.preventDefault();
+        // e.stopPropagation();
+        
         var groups=[];
         var dialer;
-
+        var report = $('form.report_filter_form').attr('id');
+        
         $('#group_select').next('ul').find('.checkbox').each(function(){
             if ($(this).find('input').is(':checked')) {
                 groups.push($(this).find('input').val());
             }
-        })
-
-       if ($('#dialer').find('option:selected').length == 1 && $('#dialer').find('option:selected').val() != undefined) {
+        });
+        
+        if ($('#dialer').find('option:selected').length == 1 && $('#dialer').find('option:selected').val() != undefined) {
             dialer = $('#dialer').val();
-            var report = $('form.report_filter_form').attr('id');
         }
 
         if (groups != '' && dialer != '') {
-
+            // $('.inline_preloader.hidetilloaded').show();
+            
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1256,8 +1258,8 @@ var Master = {
                 },
 
                 success: function (response) {
+                    console.log(response);
 
-                    $('.preloader.hidetilloaded').hide();
                     $('#campaign_select').parent().show();
                     $('#campaign_select').empty();
                     var camps_select;
