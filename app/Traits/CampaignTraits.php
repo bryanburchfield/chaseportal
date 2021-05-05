@@ -101,9 +101,9 @@ trait CampaignTraits
         return $results;
     }
 
-    public function getAllCampaignsManyGroups(int $dialer_numb, array $groups)
+    public function getAllCampaignsManyGroups(string $reporting_db, array $groups)
     {
-        $dialer = Dialer::where('dialer_numb', $dialer_numb)->first();
+        $dialer = Dialer::where('reporting_db', $reporting_db)->first();
 
         if (!$dialer) {
             return [];
