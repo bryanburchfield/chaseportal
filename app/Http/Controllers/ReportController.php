@@ -239,6 +239,16 @@ class ReportController extends Controller
         return ['subcampaigns' => array_values($results)];
     }
 
+    public function getCampaignsManyGroups(Request $request)
+    {
+        $reporting_db = $request->dialer;
+        $groups = (array)$request->groups;
+
+        $results = $this->reportservice->report->getAllCampaignsManyGroups($reporting_db, $groups);
+
+        return ['campaigns' => array_values($results)];
+    }
+
     /**
      * Return all automated report records
      * We may add some conditionals later

@@ -3,12 +3,15 @@ if($('#ecoverme_lead_export').length){
 	$('#call_status_select ').multiselect('select', 'Client Sold');
 }
 
-$('#group_select').next('ul').on('click', '.select_all_groups', function(){
+$('#group_select').next('ul').on('click', '.select_all_groups', function(e){
+	console.log('reports.js ran');
+	// e.stopPropagation();
 	if($(this).is(':checked')){
 		$(this).parent().parent().siblings().find('input').prop("checked", true);
 	}else{
 		$(this).parent().parent().siblings().find('input').prop("checked", false);
 	}
+	Master.query_camps_from_dialer_and_groups();
 });
 
 $('#group_duration #dialer').on('change', function(){

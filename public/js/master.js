@@ -85,6 +85,10 @@ var Master = {
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
 
+        // group_duration report
+        //$('#call_details #campaign_select, #lead_npa #campaign_select').on('change', this.toggle_subcamps);
+        $('#group_select').next('ul').on('click', '.groups', this.query_camps_from_dialer_and_groups);
+
         /// tool handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.add_esp').on('submit', this.add_esp);
@@ -1214,6 +1218,68 @@ var Master = {
         }
     },
 
+    // populate campaign multi-select based on dialer and groups
+    query_camps_from_dialer_and_groups: function () {
+        // e.preventDefault();
+        // e.stopPropagation();
+        
+        var groups=[];
+        var dialer;
+        var report = $('form.report_filter_form').attr('id');
+        
+        $('#group_select').next('ul').find('.checkbox').each(function(){
+            if ($(this).find('input').is(':checked')) {
+                groups.push($(this).find('input').val());
+            }
+        });
+        
+        if ($('#dialer').find('option:selected').length == 1 && $('#dialer').find('option:selected').val() != undefined) {
+            dialer = $('#dialer').val();
+        }
+
+        if (groups != '' && dialer != '') {
+            // $('.inline_preloader.hidetilloaded').show();
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/dashboards/reports/get_campaigns_many_groups',
+                type: 'POST',
+                dataType: 'json',
+                async: false, /////////////////////// use async when rebuilding multi select menus
+                data: {
+                    report: report,
+                    groups: groups,
+                    dialer: dialer
+                },
+
+                success: function (response) {
+                    console.log(response);
+
+                    $('#campaign_select').parent().show();
+                    $('#campaign_select').empty();
+                    var camps_select;
+                    for (var i = 0; i < response.campaigns.length; i++) {
+                        camps_select += '<option value="' + response.campaigns[i] + '">' + response.campaigns[i] + '</option>';
+                    }
+
+                    $('#campaign_select').append(camps_select);
+                    $("#campaign_select").multiselect('rebuild');
+                    $("#campaign_select").multiselect('refresh');
+
+                    $('#' + report + ' #campaign_select')
+                        .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
+                        .multiselect('selectAll', true)
+                        .multiselect('updateButtonText');
+                }
+            });
+        }
+    },
+
     pdf_download_warning: function (e) {
         e.preventDefault();
         var tot_rows = parseInt($('.totrows').val());
@@ -1434,6 +1500,8 @@ var Master = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
+
+        console.log(form_data);
 
         $.ajax({
             url: '/dashboards/reports/update_report',

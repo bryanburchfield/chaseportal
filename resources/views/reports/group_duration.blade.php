@@ -39,6 +39,7 @@
 
 				@can('accessSuperAdmin')
 					<div class="col-sm-4">
+
 						<div class="form-group">
 							{!! Form::label('dialer', __('reports.dialer')) !!}
 							{!! Form::select("dialer", [null=>__('general.select_one')] + $filters['dialers'], null, ["class" => "form-control", 'id'=> 'dialer']) !!}
@@ -47,6 +48,7 @@
 					
 					<div class="col-sm-4">
 						<div class="form-group">
+
 							<div class="dropdown mb20">
 								<label>{{__('tools.group_select')}}</label>
 								<button class="btn btn-default dropdown-toggle myselect" type="button" id="group_select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -55,6 +57,15 @@
 								</button>
 								<ul class="dropdown-menu group_select stop-propagation" aria-labelledby="group_select"></ul>
 							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-4">
+						<div class="hidetilloaded inline_preloader"><i class="fa fa-spinner fa-spin mr10"></i></div>
+
+						<div class="form-group hidetilloaded">
+							{!! Form::label('campaigns', __('reports.campaign')) !!}
+							{!! Form::select("campaigns[]", [], null, ["class" => "form-control multiselect", 'id'=> 'campaign_select','multiple'=>true]) !!}
 						</div>
 					</div>
 				@endcan

@@ -28,6 +28,7 @@
                         'campaign_contact' => __('reports.campaign_contact'),
                         'campaign_summary' => __('reports.campaign_summary'),
                         'campaign_usage' => __('reports.campaign_usage'),
+                        'group_duration' => __('reports.group_duration'),
                         'inbound_summary' => __('reports.inbound_summary'),
                         'lead_inventory' => __('reports.lead_inventory'),
                         'lead_inventory_sub' => __('reports.lead_inventory_sub'),
@@ -65,17 +66,6 @@
                     if (!Auth::User()->isDemo()) {
                         $reports['call_details'] = __('reports.call_details');
                         $reports['text_details'] = __('reports.text_details');
-                    }
-                    
-                    // Group Duration report is for superusers and users in the report_permissions table
-                    if (
-                        Auth::User()->isType('superadmin') ||
-                        Auth::User()
-                            ->reportPermissions()
-                            ->where('report_name', 'group_duration')
-                            ->exists()
-                    ) {
-                        $reports['group_duration'] = __('reports.group_duration');
                     }
                     
                     asort($reports);

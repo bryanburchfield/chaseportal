@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Dialer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +95,31 @@ trait CampaignTraits
         }
 
         $results = resultsToList($this->runSql($sql, $bind));
+
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $results;
+    }
+
+    public function getAllCampaignsManyGroups(string $reporting_db, array $groups)
+    {
+        $dialer = Dialer::where('reporting_db', $reporting_db)->first();
+
+        if (!$dialer) {
+            return [];
+        }
+
+        $db = $dialer->reporting_db;
+
+        // force all the groups to ints
+        $group_list = implode(',', array_map('intval', array_values($groups)));
+
+        $sql = "SELECT CampaignName AS Campaign
+                FROM [$db].[dbo].[Campaigns]
+                WHERE GroupId in ($group_list)
+                AND CampaignName != ''";
+
+        $results = resultsToList($this->runSql($sql));
 
         ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
