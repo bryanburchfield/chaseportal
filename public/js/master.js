@@ -1235,9 +1235,6 @@ var Master = {
             var report = $('form.report_filter_form').attr('id');
         }
 
-        console.log(groups);
-        console.log(dialer);
-
         if (groups != '' && dialer != '') {
 
             $.ajaxSetup({
@@ -1259,21 +1256,20 @@ var Master = {
 
                 success: function (response) {
 
-                    console.log(response);
-                    // $('#campaign_select').empty();
-                    // var camps_select;
-                    // for (var i = 0; i < response.campaigns.length; i++) {
-                    //     camps_select += '<option value="' + response.campaigns[i] + '">' + response.campaigns[i] + '</option>';
-                    // }
+                    $('#campaign_select').empty();
+                    var camps_select;
+                    for (var i = 0; i < response.campaigns.length; i++) {
+                        camps_select += '<option value="' + response.campaigns[i] + '">' + response.campaigns[i] + '</option>';
+                    }
 
-                    // $('#campaign_select').append(camps_select);
-                    // $("#campaign_select").multiselect('rebuild');
-                    // $("#campaign_select").multiselect('refresh');
+                    $('#campaign_select').append(camps_select);
+                    $("#campaign_select").multiselect('rebuild');
+                    $("#campaign_select").multiselect('refresh');
 
-                    // $('#' + report + ' #campaign_select')
-                    //     .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
-                    //     .multiselect('selectAll', true)
-                    //     .multiselect('updateButtonText');
+                    $('#' + report + ' #campaign_select')
+                        .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
+                        .multiselect('selectAll', true)
+                        .multiselect('updateButtonText');
                 }
             });
         }
