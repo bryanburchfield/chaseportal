@@ -1237,7 +1237,7 @@ var Master = {
             dialer = $('#dialer').val();
         }
         
-
+        var dialer='PowerV2_Reporting_Dialer-07';
         if (groups != '' && dialer != '') {
             // $('.inline_preloader.hidetilloaded').show();
             
@@ -1246,6 +1246,7 @@ var Master = {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             });
+            console.log(dialer);
             console.log(typeof(dialer));
 
             $.ajax({
