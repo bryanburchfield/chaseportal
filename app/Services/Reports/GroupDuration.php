@@ -113,122 +113,125 @@ class GroupDuration
         $groups = implode(',', $this->params['groups']);
 
         $bind = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            $bind['startdate' . $i] = $startDate;
-            $bind['enddate' . $i] = $endDate;
-        }
+        $bind['startdate'] = $startDate;
+        $bind['enddate'] = $endDate;
 
         $sql = "SET NOCOUNT ON;
+
+        DECLARE @startdate AS DATETIME
+        DECLARE @enddate   AS DATETIME
+
+        SET @startdate = :startdate
+        SET @enddate = :enddate
+
+        CREATE TABLE #GroupStatistics
+        (
+            GroupId int PRIMARY KEY,
+            GroupName varchar(50),
+            Duration int DEFAULT 0,
+            InboundNumbers int DEFAULT 0,
+            TollFreeNumbers int DEFAULT 0,
+            Inbound int DEFAULT 0,
+            Manuals int DEFAULT 0,
+            Conference int DEFAULT 0,
+            MaxSeats int DEFAULT 0,
+            AvgSeats int DEFAULT 0,
+            RealAvgSeats int DEFAULT 0
+        )
         
-CREATE TABLE #GroupStatistics
-(
-    GroupId int PRIMARY KEY,
-    GroupName varchar(50),
-    Duration int DEFAULT 0,
-    InboundNumbers int DEFAULT 0,
-    TollFreeNumbers int DEFAULT 0,
-    Inbound int DEFAULT 0,
-    Manuals int DEFAULT 0,
-    Conference int DEFAULT 0,
-    MaxSeats int DEFAULT 0,
-    AvgSeats int DEFAULT 0,
-    RealAvgSeats int DEFAULT 0
-)
+        INSERT #GroupStatistics (GroupId, GroupName)
+        SELECT g.GroupId, g.GroupName
+        FROM Groups g
+        WHERE g.GroupId IN ($groups)
 
-INSERT #GroupStatistics (GroupId, GroupName)
-SELECT g.GroupId, g.GroupName
-FROM Groups g
-WHERE g.GroupId IN ($groups)
-
-UPDATE #GroupStatistics
-    SET InboundNumbers = t.Numbers
-FROM
-    (SELECT i.GroupId, COUNT(*) as Numbers
-    FROM InboundSources i
-    GROUP BY i.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics
-    SET TollFreeNumbers = t.Numbers
-FROM
-    (SELECT i.GroupId, COUNT(*) as Numbers
-    FROM InboundSources i
-    WHERE LEFT(InboundSource, 3) IN ('800', '888', '877', '866', '855', '844')
-    GROUP BY i.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics
-    SET Duration = t.Duration
-FROM
-    (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
-    FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate1
-    AND dr.CallDate < :enddate1
-    GROUP BY dr.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics
-    SET Inbound = t.Duration
-FROM
-    (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
-    FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate2
-    AND dr.CallDate < :enddate2
-    AND CallType = 1
-    GROUP BY dr.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics
-    SET Manuals = t.Duration
-FROM
-    (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
-    FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate3
-    AND dr.CallDate < :enddate3
-    AND CallType = 2
-    GROUP BY dr.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics
-    SET Conference = t.Duration
-FROM
-    (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
-    FROM DialingResults dr WITH(NOLOCK)
-    WHERE dr.CallDate >= :startdate4
-    AND dr.CallDate < :enddate4
-    AND CallType = 4
-    GROUP BY dr.GroupId) t
-WHERE #GroupStatistics.GroupId = t.GroupId
-
-UPDATE #GroupStatistics SET
-    MaxSeats = j.MaxSeats,
-    RealAvgSeats = j.AvgSeats
-FROM
-    (SELECT s.GroupId, MAX(s.Seats) as MaxSeats, AVG(s.Seats) as AvgSeats
-    FROM
-        (SELECT t.GroupId, t.CallTime, count(*) as Seats
+        UPDATE #GroupStatistics
+            SET InboundNumbers = t.Numbers
         FROM
-            (SELECT
-                CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120) as CallTime,
-                dr.Rep, dr.GroupId
+            (SELECT i.GroupId, COUNT(*) as Numbers
+            FROM InboundSources i
+            GROUP BY i.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
+
+        UPDATE #GroupStatistics
+            SET TollFreeNumbers = t.Numbers
+        FROM
+            (SELECT i.GroupId, COUNT(*) as Numbers
+            FROM InboundSources i
+            WHERE LEFT(InboundSource, 3) IN ('800', '888', '877', '866', '855', '844')
+            GROUP BY i.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
+
+        UPDATE #GroupStatistics
+            SET Duration = t.Duration
+        FROM
+            (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
             FROM DialingResults dr WITH(NOLOCK)
-            WHERE IsNull(dr.Rep, '') <> ''
-            AND IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP')
-            AND dr.CallDate >= :startdate5
-            AND dr.CallDate < :enddate5
-            AND dr.CallType NOT IN (6, 7, 8)
-            GROUP BY
-                CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120),
-                dr.Rep, dr.GroupId) t
-        GROUP BY t.GroupId, t.CallTime) s
-    GROUP BY s.GroupId) j
-WHERE #GroupStatistics.GroupId = j.GroupId
+            WHERE dr.CallDate >= @startdate
+            AND dr.CallDate < @enddate
+            GROUP BY dr.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
 
-UPDATE #GroupStatistics SET
-    AvgSeats = (MaxSeats + RealAvgSeats) / 2
+        UPDATE #GroupStatistics
+            SET Inbound = t.Duration
+        FROM
+            (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
+            FROM DialingResults dr WITH(NOLOCK)
+            WHERE dr.CallDate >= @startdate
+            AND dr.CallDate < @enddate
+            AND CallType = 1
+            GROUP BY dr.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
 
-SELECT * FROM #GroupStatistics";
+        UPDATE #GroupStatistics
+            SET Manuals = t.Duration
+        FROM
+            (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
+            FROM DialingResults dr WITH(NOLOCK)
+            WHERE dr.CallDate >= @startdate
+            AND dr.CallDate < @enddate
+            AND CallType = 2
+            GROUP BY dr.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
+
+        UPDATE #GroupStatistics
+            SET Conference = t.Duration
+        FROM
+            (SELECT dr.GroupId, sum(dr.Duration)/60 as Duration
+            FROM DialingResults dr WITH(NOLOCK)
+            WHERE dr.CallDate >= @startdate
+            AND dr.CallDate < @enddate
+            AND CallType = 4
+            GROUP BY dr.GroupId) t
+        WHERE #GroupStatistics.GroupId = t.GroupId
+
+        UPDATE #GroupStatistics SET
+            MaxSeats = j.MaxSeats,
+            RealAvgSeats = j.AvgSeats
+        FROM
+            (SELECT s.GroupId, MAX(s.Seats) as MaxSeats, AVG(s.Seats) as AvgSeats
+            FROM
+                (SELECT t.GroupId, t.CallTime, count(*) as Seats
+                FROM
+                    (SELECT
+                        CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120) as CallTime,
+                        dr.Rep, dr.GroupId
+                    FROM DialingResults dr WITH(NOLOCK)
+                    WHERE IsNull(dr.Rep, '') <> ''
+                    AND IsNull(dr.CallStatus, '') NOT IN ('', 'Inbound Voicemail', 'CR_HANGUP')
+                    AND dr.CallDate >= @startdate
+                    AND dr.CallDate < @enddate
+                    AND dr.CallType NOT IN (6, 7, 8)
+                    GROUP BY
+                        CONVERT(varchar(19), dateadd(minute, datediff(minute,0, CONVERT(datetimeoffset, Date) AT TIME ZONE '$timeZoneName') / 15 * 15, 0),120),
+                        dr.Rep, dr.GroupId) t
+                GROUP BY t.GroupId, t.CallTime) s
+            GROUP BY s.GroupId) j
+        WHERE #GroupStatistics.GroupId = j.GroupId
+
+        UPDATE #GroupStatistics SET
+            AvgSeats = (MaxSeats + RealAvgSeats) / 2
+
+        SELECT * FROM #GroupStatistics";
 
         return [$sql, $bind];
     }
