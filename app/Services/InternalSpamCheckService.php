@@ -53,6 +53,7 @@ class InternalSpamCheckService
         1111,   // 24 Teldar
         224577, // 07 I Life and Health Insurance Services
         224849, // 07 DIMC
+        225088, // 09 Silverlake Holdings LLC
     ];
 
     public static function execute($period)
