@@ -85,6 +85,10 @@ var Master = {
         $('.btn.disable').on('click', this.preventDefault);
         $('.add_btn_loader').on('click', this.add_btn_loader);
 
+        // group_duration report
+        //$('#call_details #campaign_select, #lead_npa #campaign_select').on('change', this.toggle_subcamps);
+        $('#group_select').next('ul').on('click', '.checkbox', this.query_camps_from_dialer_and_groups);
+
         /// tool handlers
         $('.save_leadrule_update').on('click', this.save_leadrule_update);
         $('.add_esp').on('submit', this.add_esp);
@@ -1209,6 +1213,67 @@ var Master = {
                         .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
                         .multiselect('selectAll', true)
                         .multiselect('updateButtonText');
+                }
+            });
+        }
+    },
+
+    // populate campaign multi-select based on dialer and groups
+    query_camps_from_dialer_and_groups: function () {
+        
+        var groups=[];
+        var dialer;
+
+        $('#group_select').next('ul').find('.checkbox').each(function(){
+            if ($(this).find('input').is(':checked')) {
+                groups.push($(this).find('input').val());
+            }
+        })
+
+       if ($('#dialer').find('option:selected').length == 1 && $('#dialer').find('option:selected').val() != undefined) {
+            dialer = $('#dialer').val();
+            var report = $('form.report_filter_form').attr('id');
+        }
+
+        console.log(groups);
+        console.log(dialer);
+
+        if (groups != '' && dialer != '') {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/dashboards/reports/get_campaigns_many_groups',
+                type: 'POST',
+                dataType: 'json',
+                async: false, /////////////////////// use async when rebuilding multi select menus
+                data: {
+                    report: report,
+                    groups: groups,
+                    dialer: dialer
+                },
+
+                success: function (response) {
+
+                    console.log(response);
+                    // $('#campaign_select').empty();
+                    // var camps_select;
+                    // for (var i = 0; i < response.campaigns.length; i++) {
+                    //     camps_select += '<option value="' + response.campaigns[i] + '">' + response.campaigns[i] + '</option>';
+                    // }
+
+                    // $('#campaign_select').append(camps_select);
+                    // $("#campaign_select").multiselect('rebuild');
+                    // $("#campaign_select").multiselect('refresh');
+
+                    // $('#' + report + ' #campaign_select')
+                    //     .multiselect({ nonSelectedText: Lang.get('js_msgs.select_campaign'), })
+                    //     .multiselect('selectAll', true)
+                    //     .multiselect('updateButtonText');
                 }
             });
         }
