@@ -951,28 +951,33 @@ class InternalSpamCheckService
         }
 
         $sql .= "
-        ORDER BY GroupId, Dialer, CallerId";
+        ORDER BY CallerId";
 
         return $this->runSql($sql, $bind);
     }
 
     private function getSpecialDids()
     {
-        $sql = "SET NOCOUNT ON
+        $specialGroups = implode(',', $this->specialGroups);
 
-        SELECT O.GroupId, 24 as Dialer, O.Phone as CallerId
-        FROM [PowerV2_Reporting_Dialer-24].[dbo].[InboundSources] I
-        INNER JOIN [PowerV2_Reporting_Dialer-24].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId = 1111
-        AND O.Active = 1
-        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')
-        UNION
-        SELECT O.GroupId, 7 as Dialer, O.Phone as CallerId
-        FROM [PowerV2_Reporting_Dialer-07].[dbo].[InboundSources] I
-        INNER JOIN [PowerV2_Reporting_Dialer-07].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
-        WHERE I.GroupId IN (224577,224849,224945)
-        AND O.Active = 1
-        AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
+        $sql = "SET NOCOUNT ON";
+
+        $sql = "
+        SELECT GroupId, Dialer, CallerId
+        FROM (";
+
+        $union = '';
+        foreach (Dialer::all() as $dialer) {
+            $sql .= " $union SELECT O.GroupId," . $dialer->dialer_numb . " as Dialer, O.Phone as CallerId
+            FROM [" . $dialer->reporting_db . "].[dbo].[InboundSources] I
+            INNER JOIN [" . $dialer->reporting_db . "].[dbo].[OwnedNumbers] O ON O.GroupId = I.GroupId AND O.Phone = I.InboundSource
+            WHERE I.GroupId IN ($specialGroups)
+            AND O.Active = 1
+            AND (I.Description like '%caller%id%call%back%' or I.Description like '%nationwide%')";
+
+            $union = 'UNION';
+        }
+        $sql .= ") tmp ORDER BY CallerId";
 
         return $this->runSql($sql);
     }
