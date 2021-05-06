@@ -192,7 +192,6 @@ class CallsPerHour
             'DropRate' => 0,
             'TalkTime' => 0,
             'ContactRatio' => 0,
-            'Contacts' => 0,
         ];
         $final = [];
         $this->extras['Date'] = [];
@@ -238,7 +237,6 @@ class CallsPerHour
             $totals['Inbound'] += $data['Inbound'];
             $totals['Outbound'] += $data['Outbound'];
             $totals['TalkTime'] += $rec['TalkTime'];  // raw number
-            $totals['Contacts'] += $rec['Contacts'];  // raw number
         }
 
         if ($totals['TotalCalls'] > 0) {
